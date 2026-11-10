@@ -48,6 +48,28 @@ def local_notice(ko: str, en: str, token: str = "accent", *, icon: str = ft.Icon
     )
 
 
+# The simulated-data cause for Signals, Quant Lab and Portfolio (owner UI review, 2026-11-10): the same
+# statement in both languages. The provider's own message goes under it, in the keyboard-reachable
+# expandable of `ui.ficc_widgets.synthetic_notice`, never in a hover-only tooltip.
+SYNTHETIC_CAUSE_KO = ("시세 제공처 키가 없거나 제공처가 응답하지 않아 모의 가격 경로(GBM)로 계산했습니다. "
+                      "아래 결과는 화면 시연용이며 실제 시장 판단 근거가 아닙니다.")
+SYNTHETIC_CAUSE_EN = ("No keyed provider answered and Yahoo did not either, so a simulated GBM path was used. "
+                      "The results below are a demonstration, not a market read.")
+
+
+def synthetic_banner(histories) -> Optional[ft.Control]:
+    """The loud simulated-data banner for the SYNTHETIC series among `histories` (None when there is
+    none): which symbols, the cause, and each provider note folded underneath."""
+    from ui.ficc_widgets import synthetic_notice
+    synth = [h for h in histories if str(h.source).upper() == "SYNTHETIC"]
+    if not synth:
+        return None
+    names = ", ".join(h.symbol for h in synth)
+    detail = "\n".join(f"{h.symbol}: {h.note}" if len(synth) > 1 else str(h.note) for h in synth if h.note)
+    return synthetic_notice(f"합성 데이터({names}): {SYNTHETIC_CAUSE_KO}",
+                            f"Synthetic data ({names}): {SYNTHETIC_CAUSE_EN}", detail)
+
+
 def local_stat(label: str, ko_value: str, en_value: str, *, token: str = "text",
                tooltip: str = "") -> ft.Container:
     """`stat` whose value carries words (e.g. 'normal', 'inf') authored in both languages."""

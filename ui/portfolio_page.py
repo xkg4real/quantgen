@@ -33,7 +33,7 @@ from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
 from ui.narrative_sections import korean, localized
 from quantgen_desktop.bonds_portfolio_narrative import portfolio_korean, portfolio_scope_korean
-from ui.build_widgets import local_notice, provenance_chips
+from ui.build_widgets import local_notice, provenance_chips, synthetic_banner
 from ui.components import LocalText, card, chip, data_table, empty_state, notice, section, stat
 import ui.qcharts as qcharts
 
@@ -75,11 +75,13 @@ def _cap_ko(p) -> str:
 
 
 def _scope_ko(ports, selected: str) -> str:
-    """Korean twin of `portfolio_disclosure(...)["summary"]`, same facts in the same order."""
+    """Korean twin of `portfolio_disclosure(...)["summary"]`, same facts in the same order. The last
+    sentence is conditional, as in English ("With different caps, ..."): with the default cap 1.0 every
+    row uses the same 100% bound and the comparison is like for like."""
     return (f"선택한 목적함수({_KO(_OBJ_LABELS[selected])})의 종목당 상한은 {_cap_ko(ports[selected])}입니다. "
-            "요청한 상한은 선택한 목적함수에만 적용되고, 다른 목적함수 행과 효율적 투자선·무작위 포트폴리오 "
+            "요청한 상한은 선택한 목적함수에만 적용되고, 다른 목적함수 행과 효율적 프런티어·무작위 포트폴리오 "
             "점은 종목당 100% 상한으로 계산합니다. 모두 공매도 없이 전액 투자하며, 동일 비중은 각 비중을 "
-            "1/N으로 고정합니다. 상한이 서로 다르므로 효율적 투자선과 같은 조건의 비교가 아닙니다.")
+            "1/N으로 고정합니다. 상한이 서로 다르면 효율적 프런티어와 같은 조건의 비교가 아닙니다.")
 
 
 def _bar(fraction: float, token: str) -> ft.Control:
@@ -220,14 +222,9 @@ def build_portfolio_page(page: ft.Page,
 
             synth = [h.symbol for h in hists if h.source == "SYNTHETIC"]
             blocks: list[ft.Control] = []
-            if synth:
-                blocks.append(local_notice(
-                    f"{', '.join(synth)}: 합성 데이터입니다. 시세 제공자가 응답하지 않아 모의 가격 경로로 "
-                    "계산했으므로, 이 비중은 화면 시연용이며 실제 배분 제안이 아닙니다.",
-                    f"Synthetic data for {', '.join(synth)} — no provider is "
-                    "configured for them. Weights on simulated series are a "
-                    "demonstration, not an allocation.", "error",
-                    icon=ft.Icons.SCIENCE_OUTLINED))
+            banner = synthetic_banner(hists)
+            if banner is not None:
+                blocks.append(banner)
             mixed = convention_warning(hists)
             if mixed:
                 blocks.append(notice(mixed, "error", icon=ft.Icons.ERROR_OUTLINE))

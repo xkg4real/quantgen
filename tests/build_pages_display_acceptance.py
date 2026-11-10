@@ -198,10 +198,10 @@ class BuildPagesDisplayTests(unittest.TestCase):
             portfolio_page.build_portfolio_page: {"Optimize": "최적화 실행",
                                                   "Symbols (comma separated)": "종목 (쉼표로 구분)",
                                                   "Max weight/asset": "종목당 최대 비중 (0~1)",
-                                                  "Risk-free %": "무위험 금리 (%)", "Max Sharpe": "샤프 지수 최대화"},
+                                                  "Risk-free %": "무위험 금리 (%)", "Max Sharpe": "최대 샤프 지수"},
             quant_lab_page.build_quant_lab_page: {"Simulate": "모의실험 실행", "Horizon (sessions)": "기간 (거래일)",
                                                   "Target price (optional)": "목표 가격 (선택)"},
-            settings_page.build_settings_page: {"Quant analysis providers": "분석용 데이터 제공자",
+            settings_page.build_settings_page: {"Quant analysis providers": "분석용 데이터 제공처",
                                                 "Test FICC data access": "FICC 데이터 연결 확인"},
         }
         for build, pairs in expected.items():
@@ -222,7 +222,7 @@ class BuildPagesDisplayTests(unittest.TestCase):
         translate_controls(root, LocaleContext("ko_KR"))
         ko = texts(root)
         self.assertTrue(any(t.startswith("비중이 큰 종목은") for t in ko))
-        self.assertTrue(any("선택한 목적함수(샤프 지수 최대화)의 종목당 상한은 50.00%" in t for t in ko))
+        self.assertTrue(any("선택한 목적함수(최대 샤프 지수)의 종목당 상한은 50.00%" in t for t in ko))
         self.assertIn("50.00%", ko)                      # the cap column in the comparison table
         translate_controls(root, LocaleContext("en_US"))
         en = texts(root)
@@ -234,8 +234,149 @@ class BuildPagesDisplayTests(unittest.TestCase):
         blocks = ft.Column(_grade_blocks(_lab_grade("SPY")))
         translate_controls(blocks, LocaleContext("ko_KR"))
         found = flat_texts([blocks])
-        self.assertIn("M9 검증 관문: 불합격 · FAIL", found)          # the code stays visible
+        self.assertIn("M9 검증 게이트: 미달 · FAIL", found)          # the code stays visible
         self.assertTrue(any(t.startswith("Kupiec 99% VaR: 통과 · PASS") for t in found))
+
+    # ------------------------------------------------------------------ review findings, 2026-11-10 (second pass)
+    def quant_lab_run(self, hist):
+        from tests.mc_bootstrap_disclosure_acceptance import result
+        from core.research.runs import SessionResearch
+        with patch.object(quant_lab_page, "session_for", return_value=SessionResearch()), \
+             patch.object(quant_lab_page, "load_history", return_value=hist), \
+             patch.object(quant_lab_page, "run_monte_carlo", return_value=result("gbm")), \
+             patch.object(quant_lab_page, "_lab_grade", return_value=None), \
+             patch.object(quant_lab_page, "analysis_panel", side_effect=panel):
+            root = quant_lab_page.build_quant_lab_page(page())
+            root.controls[1].controls[3].value = "zero"
+            button(root, "Simulate").on_click(None)
+        return root
+
+    def signals_run(self, hist):
+        with patch.object(signals_page, "load_history", return_value=hist), \
+             patch.object(signals_page, "analysis_panel", side_effect=panel):
+            root = signals_page.build_signals_page(page())
+            button(root, "Analyze").on_click(None)
+        return root
+
+    def test_synthetic_notices_keep_the_provider_message_one_keyboard_step_away(self):
+        """Finding 2: the cause in both languages, the provider's own message in an ExpansionTile."""
+        from ui.build_widgets import SYNTHETIC_CAUSE_EN, SYNTHETIC_CAUSE_KO
+        portfolio, _ = self.optimized_portfolio()
+        for name, root, note in (("signals", self.signals_run(history()), "Injected synthetic fixture"),
+                                 ("quant_lab", self.quant_lab_run(history()), "Injected synthetic fixture"),
+                                 ("portfolio", portfolio, None)):
+            with self.subTest(page=name):
+                tiles = [c for c in walk(root) if isinstance(c, ft.ExpansionTile)
+                         and "Provider message" in str(getattr(c.title, "value", ""))]
+                self.assertEqual(len(tiles), 1)
+                folded = texts(ft.Column(tiles[0].controls))
+                self.assertTrue(folded and all(t.strip() for t in folded))
+                if note:
+                    self.assertEqual(folded, [note])
+                banner = next(c for c in walk(root) if isinstance(c, ft.Column) and tiles[0] in c.controls)
+                self.assertFalse(any(getattr(c, "tooltip", None) for c in walk(banner)))   # not hover-only
+                translate_controls(root, LocaleContext("ko_KR"))
+                self.assertTrue(any(SYNTHETIC_CAUSE_KO in t for t in texts(root)))
+                self.assertIn("제공처 메시지 (시뮬레이션 데이터로 계산한 이유)", texts(root))
+                translate_controls(root, LocaleContext("en_US"))
+                self.assertTrue(any(SYNTHETIC_CAUSE_EN in t for t in texts(root)))
+                self.assertFalse(any("마우스" in t for t in texts(root)))
+
+    def test_signals_summary_is_neutral_about_the_comparison_and_states_its_period(self):
+        """Finding 3: beating buy-and-hold is not a gain; the period and the one-backtest caveat show."""
+        from dataclasses import replace
+        from core.quant.backtest import run_backtest
+        from core.quant.signals import compute_signals
+        from ui.components import colour_for
+        hist = history()
+        report = compute_signals(hist)
+        real = run_backtest(hist, strategy="ma_cross", params={"fast": 20, "slow": 50}, cost_bps=10)
+        for total, bench, token in ((-0.05, -0.10, "error"), (0.08, 0.12, "success"), (0.0, -0.01, "text")):
+            with self.subTest(total=total, bench=bench):
+                bt = replace(real, total_return=total, bench_return=bench)
+                card_ = signals_page._summary(report, bt, hist)
+                chips = [c for c in walk(card_) if isinstance(c, ft.Container) and isinstance(c.content, ft.Text)
+                         and c.content.value in ("beats buy & hold", "trails buy & hold")]
+                self.assertEqual(len(chips), 1)
+                self.assertEqual(chips[0].border.top.color, colour_for("muted"))
+                values = texts(card_)
+                tile = next(c for c in walk(card_) if isinstance(c, ft.Column) and c.controls
+                            and getattr(c.controls[0], "value", None) == "Strategy return")
+                self.assertEqual(tile.controls[1].color, colour_for(token))
+                self.assertIn(f"Period: {hist.first_date} to {hist.last_date}. One historical backtest; not a "
+                              "statistical test or out-of-sample validation.", values)
+                translate_controls(card_, LocaleContext("ko_KR"))
+                self.assertIn(f"기간: {hist.first_date} ~ {hist.last_date}. 한 구간의 과거 백테스트이며 통계 검정이나 "
+                              "표본 외 검증이 아닙니다.", texts(card_))
+
+    def test_portfolio_scope_sentence_is_conditional_and_names_the_objectives_in_korean(self):
+        """Findings 6 and 7."""
+        out = output_fixture("max_sharpe", 1.0)
+        ko = portfolio_page._scope_ko(out.portfolios, "max_sharpe")
+        self.assertIn("상한이 서로 다르면 효율적 프런티어와 같은 조건의 비교가 아닙니다.", ko)
+        self.assertNotIn("다르므로", ko)
+        self.assertNotIn("투자선", ko)
+        root = portfolio_page.build_portfolio_page(page())
+        translate_controls(root, LocaleContext("ko_KR"))
+        options = [o.text for o in next(c for c in walk(root) if isinstance(c, ft.Dropdown)
+                                         and c.label == "목적함수").options]
+        self.assertEqual(options, ["최대 샤프 지수", "최소 변동성", "리스크 패리티(위험 균등)", "동일 비중"])
+        ko_text = LocaleContext("ko_KR").text
+        self.assertEqual(ko_text("Efficient frontier"), "효율적 프런티어")
+        optimized, _ = self.optimized_portfolio()
+        translate_controls(optimized, LocaleContext("ko_KR"))
+        shown = texts(optimized)
+        self.assertIn("최대 샤프 지수 포트폴리오", shown)
+        for name in ("최대 샤프 지수", "최소 변동성", "리스크 패리티(위험 균등)", "동일 비중"):
+            self.assertIn(name, shown)                     # the comparison table
+
+    def test_vocabulary_provider_gate_verdicts_and_igarch(self):
+        """Findings 8, 9 and 11."""
+        from core.ui_page_messages import build_pages
+        from ui.build_widgets import SYNTHETIC_CAUSE_KO
+        for word in ("제공자", "공급사", "제공업체", "관문"):
+            self.assertFalse([k for k, v in build_pages.EN_TO_KO.items() if word in v], word)
+            for module in (signals_page, portfolio_page, quant_lab_page, settings_page):
+                self.assertNotIn(word, __import__("inspect").getsource(module), (word, module.__name__))
+        self.assertIn("제공처", SYNTHETIC_CAUSE_KO)
+        self.assertEqual(quant_lab_page._WORD_KO, {"PASS": "통과 · PASS", "FAIL": "미달 · FAIL",
+                                                   "NOT RUN": "미실행 · NOT_RUN"})
+        self.assertEqual(quant_lab_page._DECISION_KO["INSUFFICIENT_DATA"], "데이터 부족 · INSUFFICIENT_DATA")
+        ko_text = LocaleContext("ko_KR").text
+        self.assertEqual(ko_text("an integrated variance is not excluded at 95%: the sample cannot pin down where "
+                                 "vol settles"),
+                         "95% 수준에서 지속성 1(충격이 사라지지 않는 IGARCH형 분산)을 배제할 수 없습니다. "
+                         "이 표본으로는 변동성이 결국 어디에 자리 잡을지 정할 수 없습니다")
+        self.assertIn("게이트", ko_text("SMOKE · vendor data, not an official close, not a card run · gates nothing"))
+
+    def test_kis_probe_says_key_not_set_without_a_request_and_shows_details(self):
+        """Finding 10: no key is not a failed check; every detail is visible text, not a tooltip."""
+        unavailable = {"ok": False, "detail": "KISUnavailable: Set KIS_APP_KEY and KIS_APP_SECRET to enable KIS"}
+        cases = (
+            ({"etf": unavailable, "bonds": unavailable},
+             ["KIS: 키 미설정 (요청을 보내지 않음)"], ["KIS: Key not set (no request sent)"]),
+            ({"etf": {"ok": True, "detail": "10450.2"}, "bonds": {"ok": False, "detail": "KISError: HTTP 500"}},
+             ["ETF: 정상", "장내 채권: 확인 실패"], ["ETF: ok", "Bonds: Check failed"]),
+        )
+        for probe, ko_chips, en_chips in cases:
+            with self.subTest(probe=list(probe)), patch("data.kis_markets.KISMarkets") as kis:
+                kis.return_value.probe.return_value = probe
+                root = settings_page.build_settings_page(page())
+                button(root, "Test KIS asset domains").on_click(None)
+                host = next(c for c in walk(root) if isinstance(c, ft.Row)
+                            and any("KIS" in str(getattr(t, "value", "")) or "ETF" in str(getattr(t, "value", ""))
+                                    for t in walk(c) if isinstance(t, ft.Text)) and c.wrap)
+                translate_controls(host, LocaleContext("ko_KR"))
+                shown = texts(host)
+                for label in ko_chips:
+                    self.assertIn(label, shown)
+                details = {r["detail"] for r in probe.values()}
+                for detail in details:                                 # visible, not hover-only
+                    self.assertIn(LocaleContext("ko_KR").text(detail), shown)
+                self.assertFalse(any(getattr(c, "tooltip", None) for c in walk(host)))
+                translate_controls(host, LocaleContext("en_US"))
+                for text in en_chips + sorted(details):
+                    self.assertIn(text, texts(host))
 
     def test_execution_and_rules_sentences_with_numbers(self):
         from core.rules import Comparator, OrderKind, PriceCondition, Rule, Side, SizeMode
