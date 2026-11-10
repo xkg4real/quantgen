@@ -292,6 +292,7 @@ class ToolPane(QWidget):
         # The folded paragraph is secondary: closed by default, so it does not ask to stay visible.
         narrative_widget.setProperty('reading_help_keep_visible', False)
         self.result_reading_layout.addWidget(FullTextFold(narrative_widget))
+        narrative_widget.retranslate()  # it was reparented through the fold before the fold joined the window
         self.result_reading.show()
         self.has_result = True
         self.status.setText('계산 완료 · 출처·관측일·가정을 확인하세요. 공식 검증 판정은 별도입니다.')

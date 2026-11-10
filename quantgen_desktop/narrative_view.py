@@ -17,7 +17,7 @@ from __future__ import annotations
 from typing import Mapping, Sequence, Union
 
 from PyQt6.QtCore import QEvent, Qt
-from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
 Sections = Sequence[tuple[str, Sequence[str]]]
 Variant = Union[str, Sections]
@@ -35,13 +35,23 @@ def sections_for(text: str, language: str, *, terms: bool = True) -> list[tuple[
     return organise(text, language)
 
 
+class NarrativeLine(QLabel):
+    """A heading or bullet whose text is already in its language variant.
+
+    Deliberately not a `UiLabel`: callers and tests find a narrative by its `UiLabel.source_text`, and
+    `LanguageController` skips widgets marked `qg_literal`, so no catalogue lookup rewrites a line."""
+
+    def __init__(self, text: str, role: str = ""):
+        super().__init__(text)
+        self.setTextFormat(Qt.TextFormat.PlainText)
+        self.setWordWrap(True)
+        self.setProperty("role", role)
+        self.setProperty("qg_literal", True)
+        self.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+
+
 def _literal_label(text: str, role: str = ""):
-    """A label whose text is already in its language: no catalogue lookup may rewrite it."""
-    from .app import label
-    widget = label(text, role)
-    widget.localized_text = {"en": text, "ko": text}
-    widget.retranslate()
-    return widget
+    return NarrativeLine(text, role)
 
 
 class NarrativeView(QWidget):
@@ -118,18 +128,16 @@ class NarrativeView(QWidget):
 
     def lines(self, language: str | None = None) -> list[str]:
         """The shown bullets (tests and accessibility)."""
-        from .localization import UiLabel
         page = self._pages.get(language or self.language())
         if page is None:
             return []
-        return [w.text() for w in page.findChildren(UiLabel) if w.property("narrative_line")]
+        return [w.text() for w in page.findChildren(NarrativeLine) if w.property("narrative_line")]
 
     def headings(self, language: str | None = None) -> list[str]:
-        from .localization import UiLabel
         page = self._pages.get(language or self.language())
         if page is None:
             return []
-        return [w.text() for w in page.findChildren(UiLabel) if w.property("narrative_heading")]
+        return [w.text() for w in page.findChildren(NarrativeLine) if w.property("narrative_heading")]
 
     # LanguageController.apply calls this hook on every widget after a language change.
     def _reserve_text_space(self):

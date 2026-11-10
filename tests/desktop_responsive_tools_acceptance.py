@@ -94,7 +94,8 @@ class ResponsiveToolTests(unittest.TestCase):
                     view=pane.narrative_view
                     x=view.mapTo(scroll.viewport(),QPoint(0,0)).x()
                     self.assertGreaterEqual(x,0);self.assertLessEqual(x+view.width(),scroll.viewport().width())
-                    lines=[l for l in view.findChildren(UiLabel) if l.isVisible() and l.property('narrative_line')]
+                    from quantgen_desktop.narrative_view import NarrativeLine
+                    lines=[l for l in view.findChildren(NarrativeLine) if l.isVisible() and l.property('narrative_line')]
                     self.assertTrue(lines)
                     for line in lines:
                         self.assertGreaterEqual(line.height()+2,line.heightForWidth(line.width()))

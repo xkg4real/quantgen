@@ -95,6 +95,8 @@ class LanguageController(QObject):
                 with QSignalBlocker(widget):
                     if isinstance(widget, UiLabel):
                         widget.retranslate()
+                    elif widget.property('qg_literal'):
+                        pass  # text already in its language (narrative_view.NarrativeLine)
                     elif isinstance(widget, QLabel):
                         self._text(widget, 'text', widget.text(), widget.setText)
                     elif isinstance(widget, QAbstractButton):
