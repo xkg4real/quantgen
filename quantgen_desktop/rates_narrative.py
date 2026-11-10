@@ -103,6 +103,9 @@ def swap_korean(r):
     return ' '.join(lines)
 
 
+_VEGA_UNITS_KO = {'per 1bp normal vol': '정규 변동성 1bp당', 'per 1 vol-pt Black vol': 'Black 변동성 1%p당'}
+
+
 def swaption_korean(r):
     s = r.swaption
     model = 'Bachelier' if r.model == 'bachelier' else 'Black-76'
@@ -114,7 +117,8 @@ def swaption_korean(r):
         f"{model}, {vol}에서 명목금액 {_money(s.notional)}에 프리미엄 {_money(r.premium)} "
         f"(명목금액의 {r.premium_bp:.1f}bp)입니다.",
         f"선도금리 bp당 델타 {_money(r.delta,signed=True)}, bp 제곱당 감마 {_money(r.gamma,signed=True)}, "
-        f"베가 {_money(r.vega)} {r.vega_unit}, 하루 가치 감소 {_money(-r.theta_1d)}입니다.",
+        f"베가 {_money(r.vega)} ({_VEGA_UNITS_KO.get(r.vega_unit, r.vega_unit)}), "
+        f"하루 가치 감소 {_money(-r.theta_1d)}입니다.",
     ]
     if math.isfinite(r.other_model_vol):
         other = (f'{r.other_model_vol*100:.1f}% Black' if r.model == 'bachelier'
