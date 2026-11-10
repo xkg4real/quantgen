@@ -467,6 +467,7 @@ class WatchCard(QFrame):
             self.price.setText("—")
             self.change.setText("")
             set_tone(self.change, "")
+            self.change.hide()  # an empty delta pill showed as a blank grey box
             if self.result is None:
                 self._state(_text(ctx, "시장 화면을 열면 불러옵니다.", "Loads when Markets is shown."))
             else:
@@ -483,6 +484,7 @@ class WatchCard(QFrame):
         text, tone = _change_text(pct)
         self.change.setText(text)
         set_tone(self.change, tone)
+        self.change.setVisible(bool(text))  # no change, no empty grey pill
         self.render_chart()
         # Not shown as text: provider and observation date (owner request). They stay in the tooltip.
         source = str(getattr(snapshot, "source", "") or "")
@@ -982,6 +984,7 @@ class StockView(QWidget):
         text, tone = _change_text(pct)
         self.change.setText(text)
         set_tone(self.change, tone)
+        self.change.setVisible(bool(text))  # no change, no empty grey pill
 
     def _clear_sections(self):
         for panel in self.section_panels:

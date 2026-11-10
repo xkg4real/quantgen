@@ -85,10 +85,12 @@ class MarketTabsTests(unittest.TestCase):
             self.assertFalse([t for t in shown if t in ('데이터 출처', 'Data source', 'Curve source')], name)
             if hasattr(pane, 'source') and isinstance(pane.source, QComboBox) and name not in ('macro', 'macro_records'):
                 self.assertTrue(pane.source.isHidden(), name)
-        # The hidden combos keep their automatic value for requests and fixtures.
+        # The hidden combos keep their automatic value for requests and fixtures. The derivatives board
+        # is chosen like the Flet page (owner issues 04/12): KIS with keys, else the labelled synthetic demo.
+        import config
         self.assertEqual([w.rates.source.currentData(), w.fx.source.currentData(), w.derivatives.source.currentData(),
                           w.crypto.source.currentData(), w.krx.source.currentData(), w.bonds.source.currentData()],
-                         ['auto', 'auto', 'kis', 'live', 'gateway', 'auto'])
+                         ['auto', 'auto', 'kis' if config.kis_ready() else 'synthetic', 'live', 'gateway', 'auto'])
         self.assertTrue(w.macro.source.isHidden())
         self.assertFalse(w.macro_records.source.isHidden())  # artifact set, not a data provider
         self.assertEqual(w.macro_records.source_label.text(), '기록 묶음')

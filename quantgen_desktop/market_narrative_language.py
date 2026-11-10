@@ -175,3 +175,59 @@ def market_variants(out, kind):
     if out.narrative != author(out.data): return None
     render = {'etf': etf_korean, 'crypto': crypto_korean, 'derivatives': derivatives_korean}[kind]
     return {'en': out.narrative, 'ko': render(out.data)}
+
+
+# --------------------------------------------------------------------------------------------------
+# Owner UI port (issues 07, 11, 14; 2026-11-10): what the Korean window shows. The functions above
+# keep every number and identifier of the English text (tests compare them); the screen reads the
+# identifiers they leave behind by their Korean names. Display only: exports keep the originals.
+# --------------------------------------------------------------------------------------------------
+import re as _re
+
+VERDICT_KO = {'PASS': '통과', 'REVISE': '보완 필요', 'REJECT': '기각', 'INSUFFICIENT_DATA': '데이터 부족',
+              'NOT_RUN': '미실행'}
+STATIC_CHECKS_KO = {'call_vertical': '콜 수직 스프레드', 'call_butterfly': '콜 버터플라이',
+                    'put_vertical': '풋 수직 스프레드', 'put_butterfly': '풋 버터플라이'}
+_ENGINES = {'gbm': 'GBM', 'garch_t': 'GARCH-t'}
+_PHRASES = (
+    (_re.compile(r'Simulated series \(GBM, μ=([^,]+), σ=([^)]+)\) — no market data provider was used\.?'),
+     r'GBM(μ=\1, σ=\2)으로 시뮬레이션한 합성 시계열이며 시장 데이터 제공처를 쓰지 않았습니다.'),
+    (_re.compile(r'KIS credentials are not configured; '), 'KIS 인증 정보가 설정되지 않음: '),
+    (_re.compile(r'FMP_API_KEY is not configured; '), 'FMP_API_KEY가 설정되지 않음: '),
+    (_re.compile(r'no rejection of a unit root \(the expected null\)'), '단위근을 기각하지 못함(예상된 귀무가설)'),
+    (_re.compile(r'mean-reverting at 5 %'), '5% 수준에서 평균회귀'),
+    (_re.compile(r'synthetic front(?:는|은)?'), lambda m: '합성 최근월물' + ('은' if m[0] != 'synthetic front' else '')),
+    (_re.compile(r'(?<=다)\.\.(?=\s|$)'), '.'),
+    (_re.compile(r'\(assumed\)'), '(가정)'),
+    (_re.compile(r'\((gbm|garch_t),'), lambda m: '(' + _ENGINES[m[1]] + ','),
+    (_re.compile(r'(?<![A-Za-z_])not run(?![A-Za-z_])'), '미실행'),
+)
+
+
+def _card_names():
+    from core.research.strategy_display import CARDS
+    return {card: text.name[0] for card, text in CARDS.items()}
+
+
+def display_korean(text):
+    """The Korean text as the window shows it: study-card ids by their names (issue 07), static checks,
+    verdict codes and provider notes in Korean words, each code kept beside its meaning (issue 14), and
+    the identifiers `ui.narrative_sections.ko_terms` knows (as the Flet pages show them). None stays None."""
+    if not isinstance(text, str) or not text:
+        return text
+    from ui.narrative_sections import ko_terms
+    for pattern, replacement in _PHRASES:
+        text = pattern.sub(replacement, text)
+    names = _card_names()
+    text = _re.sub(r'(?<![A-Za-z0-9_])(' + '|'.join(sorted(map(_re.escape, names), key=len, reverse=True))
+                   + r')(?![A-Za-z0-9_])', lambda m: names[m[1]], text)
+    text = _re.sub(r'(?<![A-Za-z_])(' + '|'.join(STATIC_CHECKS_KO) + r')(?![A-Za-z_])',
+                   lambda m: STATIC_CHECKS_KO[m[1]], text)
+    text = _re.sub(r'(?<![A-Za-z_(])(' + '|'.join(VERDICT_KO) + r')(?![A-Za-z_)])',
+                   lambda m: f'{VERDICT_KO[m[1]]}({m[1]})', text)
+    return ko_terms(text)
+
+
+def display_variants(variants):
+    """`market_variants` with the Korean side as the window shows it (`display_korean`)."""
+    return None if variants is None else {**variants, 'ko': display_korean(variants['ko'])}
