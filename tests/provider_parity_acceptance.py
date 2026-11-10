@@ -88,8 +88,12 @@ def env_without(*names):
                 os.environ[n] = v
 
 
+_TMP_ROOTS: list[Path] = []
+
+
 def tmp() -> Path:
     root = Path(tempfile.mkdtemp(prefix="pp_test_")).resolve()
+    _TMP_ROOTS.append(root)              # removed by _remove_tmp_roots() when the case that made it ends
     assert not pc.inside_git_worktree(root), f"{root} lies inside a git work tree; set TMPDIR elsewhere"
     assert not pc.in_synced_folder(root), f"{root} lies inside a OneDrive folder; set TMPDIR elsewhere"
     return root
@@ -2485,11 +2489,21 @@ def test_the_root_readme_and_run_all_do_not_name_this_suite():
 # --------------------------------------------------------------------------- #
 def _guarded(fn):
     def run():
-        with no_network():
-            fn()
+        try:
+            with no_network():
+                fn()
+        finally:
+            _remove_tmp_roots()
     run.__name__ = fn.__name__
     run.__doc__ = fn.__doc__
     return run
+
+
+def _remove_tmp_roots() -> None:
+    """Delete the folders tmp() made for the case that just ran, pass or fail, so a run leaves nothing in the
+    temp folder (a run of the suite used to leave more than a hundred pp_test_ folders behind)."""
+    while _TMP_ROOTS:
+        shutil.rmtree(_TMP_ROOTS.pop(), ignore_errors=True)
 
 
 def tests():

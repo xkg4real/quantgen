@@ -563,7 +563,7 @@
     "tests/packaging_policy_acceptance.py": "936034aeaab8d118f83fce8728897650acc2f306cb5405172fef4893fef0b04f",
     "tests/paper_live_acceptance.py": "0694c446b175336efcb126e53147a95b9c6d93356f81357d95d8b568d4032e06",
     "tests/portfolio_scope_acceptance.py": "0600d54a8407a79eceaf0fb29d35f5f541ab1f013d033863dc249259dff4a834",
-    "tests/provider_parity_acceptance.py": "da72adbd8fffb116bf03b938f6290559f0d3c2043a8740db5214a7f34c1c56f9",
+    "tests/provider_parity_acceptance.py": "dfe435c41481b3b1b8786c98b1d917f050c45afd9d497731b51d516b7d4357f8",
     "tests/qscore_acceptance.py": "52d0c74fd0e5455b3d333618e011e5a6d7372e4521b750986ff15a30a78559ac",
     "tests/qt_fixture_cleanup.py": "56b1c3ee6e6def041b391d40d3c7d40faa8bab0b3856901f671522c6121fdf04",
     "tests/quant_acceptance.py": "1b6d042dbd01d5bf78773b836a132b22409013ac61f8f46138e3bd4a5b7f6f08",
@@ -677,162 +677,162 @@
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
       "source_digest": "3e9eae8311a3bfaa40f29f5a79e708563aac0f26fae4fc3270a140904a433766",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.581623+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.280322+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
       "source_digest": "3e9eae8311a3bfaa40f29f5a79e708563aac0f26fae4fc3270a140904a433766",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.584937+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.282902+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
       "source_digest": "939dfc58b9d2a7a5add140adb7eb51cfce59ced1785ac1154f2496c53c14ed3e",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.587123+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.285300+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
       "source_digest": "ba3e16d1a62ffcc0d8ea60d5fb65b626f234c38ed0fcd534718cbdeb7eff438d",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.589462+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.287338+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
       "source_digest": "8c76cd6cfd5fde9fbc809adf5a7f9c1c9446da836082e70bfd9003b5a1802fd8",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.591268+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.289449+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
       "source_digest": "077ae4bbb3b187ac8eef44ce8c18e4e092e043faaf9a4e8773766b2f53cbd05d",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.593240+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.291483+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
       "source_digest": "3e9eae8311a3bfaa40f29f5a79e708563aac0f26fae4fc3270a140904a433766",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.595005+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.293643+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "8": {
       "document_sha256": "50659615e7a2ad431f0ba7c6d124c6da1d1fc63b1ee67b7392362d8e79344f26",
       "source_digest": "077ae4bbb3b187ac8eef44ce8c18e4e092e043faaf9a4e8773766b2f53cbd05d",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.596922+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.295589+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
       "source_digest": "6876f732def0fb2cdb318d13d63cd3ad358a02e4d125c14ec77b65a3c09750ed",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.598663+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.297434+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
       "source_digest": "4908ccd819712cbcb4cc3303f158e3e5df35514b9b0b2469f51c867e39d3fb3f",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.601226+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.299167+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
       "source_digest": "1fd00e3a6c58efb69d6804c34493b30bc582c2953278d2269fb9ba396b0ec2f0",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.603071+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.301081+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "caf1cf85438837eb67c2fa4698684bfd411760129420ec419c71c971b56a4391",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.604789+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "source_digest": "19ce77bf0218eaff314862bbde7e0b3ab1f24179505f4146df31a9d7e7338c5b",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.302753+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
       "source_digest": "6876f732def0fb2cdb318d13d63cd3ad358a02e4d125c14ec77b65a3c09750ed",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.606494+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.304779+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
       "source_digest": "6876f732def0fb2cdb318d13d63cd3ad358a02e4d125c14ec77b65a3c09750ed",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.608208+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.307097+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
       "source_digest": "6876f732def0fb2cdb318d13d63cd3ad358a02e4d125c14ec77b65a3c09750ed",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.610206+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.308917+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
       "source_digest": "c52ed55d738d11b4a9e6d7207f253d2cc731955d12399d7ed8a7c34601a719bd",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.611934+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.310809+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
       "source_digest": "077ae4bbb3b187ac8eef44ce8c18e4e092e043faaf9a4e8773766b2f53cbd05d",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.614089+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.312579+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
       "source_digest": "3e9eae8311a3bfaa40f29f5a79e708563aac0f26fae4fc3270a140904a433766",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.616036+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.316907+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
       "source_digest": "c6b95e1d7552f7ae972db72c47e72b9f8fe20e4059be3a1efe96d106bb7902e4",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.617976+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.318809+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
       "source_digest": "3e9eae8311a3bfaa40f29f5a79e708563aac0f26fae4fc3270a140904a433766",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 96cca1f (PR 101, reference-data prep) into the provider parity branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T21:15:39.619797+00:00",
-      "source_commit": "73ec25c6d56c6d306a86ef191cb4af959960912b"
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity test suite now removes the temp folders it creates; test file only, tool unchanged",
+      "reviewed_at": "2026-11-10T21:16:44.320765+00:00",
+      "source_commit": "2f6faa7e98dcd4cb7ccb5f143542308b2122f1e6"
     }
   }
 }
