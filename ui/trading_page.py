@@ -26,6 +26,54 @@ from core.engine.evaluator import Outcome
 from core.engine.state import EngineMode
 from core.theme import RADII, active
 from ui.components import card, chip, empty_state, notice, section
+# Owner UI review (2026-11-10): Korean captions. This file is add-only against the pre-v2 backup
+# (tests/macro_m5_integration.py), so fixed English strings are translated by the page catalogue
+# (core/ui_page_messages/build_pages.py) and sentences with numbers by the patterns below, applied
+# to each composed view by `localize_tree`. No existing line changes.
+from ui.build_widgets import localize_tree
+from core.i18n import LocaleContext
+
+_MODE_KO = {"DISARMED": "작동 해제", "ARMED": "작동 중", "HALTED": "긴급 정지됨"}   # the code stays visible
+_VENUE_KO = {"open": "개장", "closed": "휴장", "unknown": "알 수 없음", "holiday": "공휴일 휴장"}
+TRADING_KO = (
+    (r"(DISARMED|ARMED|HALTED)", lambda m: f"{_MODE_KO[m[1]]} · {m[1]}"),
+    (r"Stopped because of (.+?)\. (.*)", "정지 사유: {1}. {2}"),
+    (r"Evaluating every (\d+)s · last pass (.+)", "{1}초마다 평가 · 마지막 평가 {2}"),
+    (r"No quote for (\S+) on (\d+) recent pass\(es\)(: .*)?\. Its rules are not being evaluated; the engine halts "
+     r"once a rule that needs it has missed more than (.+)\.",
+     "최근 {2}번의 평가에서 {1} 시세를 받지 못했습니다{3}. 이 종목의 규칙은 평가하지 않으며, 이 시세가 필요한 "
+     "규칙이 {4}회를 넘게 놓치면 엔진이 정지합니다."),
+    (r"of (\d+) saved", "저장된 규칙 {1}개 중"),
+    (r"(\d+) open · (\d+) filled", "미체결 {1} · 체결 {2}"),
+    (r"(\S+) (open|closed|unknown|holiday) · (\d+) rules?",
+     lambda m: f"{m[1]} {_VENUE_KO[m[2]]} · 규칙 {m[3]}개"),
+    (r"Open simulated orders \((\d+)\)", "모의 미체결 주문 ({1}건)"),
+    (r"(.+) · (\w+) · triggered at (.+)", "{1} · {2} · 발동 가격 {3}"),
+    (r"(\d+)s open", "{1}초째 미체결"),
+    (r"(\d+) rule\(s\) saved, but none is active\. Confirm and activate a rule before arming\.",
+     "저장된 규칙 {1}개 중 활성화된 규칙이 없습니다. 작동을 시작하기 전에 규칙을 확인하고 활성화하세요."),
+    (r"Exchange calendar data has expired for (.+)\. Holidays are no longer recognised on those venues\.",
+     "{1} 거래소 휴장일 자료가 만료되었습니다. 이 시장들의 휴장일을 더 이상 인식하지 못합니다."),
+    (r"Exchange calendar data runs out in (\d+) days \((\S+) first\)\. Regenerate with "
+     r"pkg_tools/generate_calendars\.py\.",
+     "거래소 휴장일 자료가 {1}일 뒤 끝납니다 ({2}부터). pkg_tools/generate_calendars.py로 다시 만드세요."),
+    (r"Evaluated (\d+) decision\(s\)\.", "판단 {1}건을 평가했습니다."),
+    (r"Acknowledge the halt \((.+)\) before arming\. This program never re-arms itself\.",
+     "작동을 시작하기 전에 정지({1})를 확인하세요. 이 프로그램은 스스로 다시 작동하지 않습니다."),
+    (r"Filled at (.+)\.", "{1}에 체결 처리했습니다."),
+    (r"Order is already (\w+)\.", "이미 {1} 상태인 주문입니다."),
+)
+
+
+def _toast_text(page, message: str) -> str:
+    """The SnackBar is shown outside the localized view tree, so its text is localized here."""
+    text = ft.Text(message)
+    localize_tree(text, TRADING_KO)
+    ctx = getattr(page, "qg_locale", None) or LocaleContext("en_US")
+    if callable(getattr(text, "render_locale", None)):
+        text.render_locale(ctx)
+        return text.value
+    return ctx.text(message)
 
 MODE_STYLE: dict[EngineMode, tuple[str, str, str]] = {
     EngineMode.DISARMED: ("DISARMED", "muted", ft.Icons.PAUSE_CIRCLE_OUTLINE),
@@ -59,6 +107,7 @@ def build_trading_page(page: ft.Page, runtime, *,
 
     def refresh(_e=None) -> None:
         body.controls = _compose()
+        localize_tree(body, TRADING_KO)
         try:
             page.update()
         except Exception:
@@ -73,6 +122,7 @@ def build_trading_page(page: ft.Page, runtime, *,
 
     # -- actions -------------------------------------------------------------
     def toast(message: str, token: str = "accent") -> None:
+        message = _toast_text(page, message)
         page.show_dialog(ft.SnackBar(ft.Text(message, color=pal.text),
                               bgcolor=pal.surface_2))
 

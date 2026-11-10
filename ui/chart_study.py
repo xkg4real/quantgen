@@ -10,15 +10,28 @@ from core.theme import active, token_names
 
 def study_row(chart, reading):
     return ft.ResponsiveRow([
-        ft.Container(chart, col={'xs':12, 'md':8}),
-        ft.Container(reading, col={'xs':12, 'md':4}),
+        ft.Container(chart, col={'xs':12, 'xl':8}),
+        ft.Container(reading, col={'xs':12, 'xl':4}),
     ], spacing=18, run_spacing=18, vertical_alignment=ft.CrossAxisAlignment.START)
 
 
-def figure_image(figure):
+# PNG pixels per logical pixel (owner UI review 2026-11-10: blurry charts). A chart is drawn at twice its
+# design resolution and shown no wider than its design width, so it is sharp on high-density screens and
+# only ever scaled down, never up.
+SCALE=2
+
+
+def figure_png(figure):
+    """(PNG bytes, width px, height px) of the figure at SCALE times its own dpi."""
     buffer=BytesIO()
-    figure.savefig(buffer, format='png', bbox_inches='tight', facecolor=figure.get_facecolor())
-    return 'data:image/png;base64,'+base64.b64encode(buffer.getvalue()).decode('ascii')
+    figure.savefig(buffer, format='png', bbox_inches='tight', facecolor=figure.get_facecolor(),
+                   dpi=figure.dpi*SCALE)
+    data=buffer.getvalue()
+    return data,int.from_bytes(data[16:20],'big'),int.from_bytes(data[20:24],'big')   # IHDR width, height
+
+
+def figure_image(figure):
+    return 'data:image/png;base64,'+base64.b64encode(figure_png(figure)[0]).decode('ascii')
 
 
 def recolour_figure(figure, old, new):
@@ -45,41 +58,102 @@ def recolour_figure(figure, old, new):
             if value is not None:setter(value)
 
 
+READING_KEYS=('meaning','look','interpret','limit')
+
+
+def _language(ctx):
+    return 'ko' if getattr(ctx,'language','en')=='ko' else 'en'
+
+
+def _close(figure):
+    import matplotlib.pyplot as plt
+    plt.close(figure)
+
+
 class FigureStudy(ft.Column):
-    def __init__(self, figure, *, expand=True):
+    """A chart image beside its reading panel.
+
+    The panel uses chart-specific guidance when the figure carries `_qg_reading`
+    ({'meaning'|'look'|'interpret'|'limit': (Korean, English)}); otherwise it falls back to
+    the figure's own title, axis labels and legend. With `factory(ctx) -> figure` the chart
+    itself is redrawn in the page language when the locale changes (same data, same palette).
+    """
+    def __init__(self, figure, *, expand=True, factory=None):
         super().__init__(spacing=12, expand=expand)
-        self.figure=figure
+        self.factory=factory
         self.palette=getattr(figure,'_qg_palette',active())
         self.ctx=LocaleContext()
+        self.figure_language=getattr(figure,'_qg_language',None)
+        # At most the design width (SCALE_DOWN inside a left-aligned frame): a narrow column shrinks the chart,
+        # a wide one leaves it at its own size instead of stretching it to the card.
+        self.image=ft.Image(src='',fit=ft.BoxFit.SCALE_DOWN,filter_quality=ft.FilterQuality.HIGH)
+        self.frame=ft.Container(self.image,alignment=ft.Alignment.TOP_LEFT)
+        self._use(figure)
+        self.render_locale(self.ctx)
+
+    def _paint(self, figure):
+        data,width,_height=figure_png(figure)
+        self.image.src='data:image/png;base64,'+base64.b64encode(data).decode('ascii')
+        self.image.width=width/SCALE                  # the design width in logical pixels
+
+    def _use(self, figure):
+        self.figure=figure
         axes=[ax for ax in figure.axes if ax.get_label()!='<colorbar>']
         self.chart_title=' · '.join(filter(None,(ax.get_title(loc='left') or ax.get_title() for ax in axes)))
         self.axis_text=' · '.join(dict.fromkeys(x for ax in axes for x in (ax.get_xlabel(),ax.get_ylabel()) if x))
-        self.legend_text=' · '.join(dict.fromkeys(text.get_text() for ax in axes if ax.get_legend() for text in ax.get_legend().get_texts()))
-        self.image=ft.Image(src=figure_image(figure),fit=ft.BoxFit.CONTAIN,
-            semantics_label=self.chart_title or 'QUANTGEN chart',expand=True)
-        self.render_locale(self.ctx)
+        legends=[ax.get_legend() for ax in axes if ax.get_legend()]+list(getattr(figure,'legends',()))
+        self.legend_text=' · '.join(dict.fromkeys(text.get_text() for legend in legends for text in legend.get_texts()))
+        self.reading=getattr(figure,'_qg_reading',None) or {}
+        self._paint(figure)
+        self.image.semantics_label=self.chart_title or 'QUANTGEN chart'
 
     @property
     def src(self):
         """Keep the inline-image inspection contract of the chart factories."""
         return self.image.src
 
+    def _relocalise(self, language):
+        """Redraw the figure in `language` through the factory; the current palette is kept."""
+        try:
+            fresh=self.factory(self.ctx)
+        except Exception:                      # the chart already rendered once; keep it rather than fail
+            return
+        drawn=getattr(fresh,'_qg_palette',self.palette)
+        if drawn!=self.palette:recolour_figure(fresh,drawn,self.palette)
+        fresh._qg_palette=self.palette
+        self.figure_language=language
+        self._use(fresh)
+        _close(fresh)
+
     def render_locale(self, ctx):
         self.ctx=ctx;p=self.palette
-        def text(value,size=13,muted=False):
-            return ft.Text(value,size=size,color=p.muted if muted else p.text,selectable=True)
-        details=[(ctx.t('meaning'),self.chart_title or ctx.t('chart_result')),
-                 (ctx.t('look'),self.axis_text or ctx.t('chart_axes')),
-                 (ctx.t('interpret'),self.legend_text or ctx.t('chart_compare')),
-                 (ctx.t('limit'),ctx.t('chart_limits'))]
-        reading=ft.Container(ft.Column([ft.Column([text(f'{i:02}  {heading}',12,True),text(body)],spacing=6)
-            for i,(heading,body) in enumerate(details,1)],spacing=18),padding=18,
+        language=_language(ctx)
+        if self.factory is not None and language!=self.figure_language:
+            self._relocalise(language)
+        def text(value,size=13,muted=False,weight=None,literal=False):
+            return ft.Text(value,size=size,color=p.muted if muted else p.text,selectable=True,weight=weight,
+                           data={'qg_literal_value':True} if literal else None)
+        fallback={'meaning':self.chart_title or ctx.t('chart_result'),
+                  'look':self.axis_text or ctx.t('chart_axes'),
+                  'interpret':self.legend_text or ctx.t('chart_compare'),
+                  'limit':ctx.t('chart_limits')}
+        details=[]
+        for key in READING_KEYS:
+            authored=self.reading.get(key)
+            if authored:
+                details.append((ctx.t(key),authored[0] if language=='ko' else authored[1],True))
+            else:
+                details.append((ctx.t(key),fallback[key],False))
+        reading=ft.Container(ft.Column([ft.Column([text(f'{i:02}  {heading}',12,True,ft.FontWeight.W_600),
+                                                   text(body,literal=literal)],spacing=6)
+            for i,(heading,body,literal) in enumerate(details,1)],spacing=18),padding=18,
             bgcolor=p.surface_2,border=ft.Border.all(1,p.border),border_radius=12)
-        self.controls=[study_row(self.image,reading)]
+        self.controls=[study_row(self.frame,reading)]
 
     def render_theme(self, palette):
         if palette==self.palette:return
         recolour_figure(self.figure,self.palette,palette)
         self.palette=palette
-        self.image.src=figure_image(self.figure)
+        self.figure._qg_palette=palette
+        self._paint(self.figure)
         self.render_locale(self.ctx)

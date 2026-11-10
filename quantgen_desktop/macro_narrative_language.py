@@ -20,10 +20,10 @@ PAIRS = {
     'risk-on': '위험 선호', 'risk-off': '위험 회피', 'neutral': '중립',
     'strong': '강세', 'weak': '약세', 'range': '횡보',
     'rising': '상승', 'falling': '하락', 'stable': '안정',
-    'UST 2y': '미국채 2y', 'UST 10y': '미국채 10y', 'UST 30y': '미국채 30y',
-    '10y real (TIPS)': '10y 실질금리 (TIPS)', '10y breakeven': '10y 기대 인플레이션',
+    'UST 2y': '미국채 2년', 'UST 10y': '미국채 10년', 'UST 30y': '미국채 30년',
+    '10y real (TIPS)': '10년 실질금리 (TIPS)', '10y breakeven': '10년 기대 인플레이션',
     'Fed funds': '연방기금금리', 'Broad USD': '광의 USD 지수',
-    '10y note future': '10y 미국채 선물', 'Gold': '금',
+    '10y note future': '10년 미국채 선물', 'Gold': '금',
     'Rate and spread changes are in bp; other changes use their original units. These descriptions do not change validation gates or positions.':
     '금리·스프레드의 변화는 bp, 다른 지표의 변화는 원 단위입니다. 분류는 설명용이며 검증 게이트나 포지션을 바꾸지 않습니다.',
 }
@@ -56,9 +56,9 @@ def summary_korean(text):
             (CURVE_REGIMES, RISK_REGIMES, DOLLAR_REGIMES, TREND_REGIMES, TREND_REGIMES))):
         return text
     return (f'[설명용 관측 — 국면 모형이 아님 (P19)] 수익률곡선 {word(c)} '
-            f'(20거래일: 10y {ten}bp, 2s10s {slope}bp); {word(risk)} '
-            f'(VIX/HY z {z}); 달러 {word(usd)} (1m {pct}%); '
-            f'기대 인플레이션 {word(be)}, 실질금리 {word(real)} (1m {bc}bp / {rc}bp).')
+            f'(20거래일: 10년 {ten}bp, 2년·10년 금리차 {slope}bp); {word(risk)} '
+            f'(VIX/HY z {z}); 달러 {word(usd)} (1개월 {pct}%); '
+            f'기대 인플레이션 {word(be)}, 실질금리 {word(real)} (1개월 {bc}bp / {rc}bp).')
 
 
 def sheet_note_korean(text):
@@ -96,9 +96,9 @@ def macro_korean(output):
 
     if output.request.tool == 'sheet':
         lines = [
-            f'{s.as_of} 기준: UST 2y {level(r("DGS2"))}, 10y {level(r("DGS10"))}, '
-            f'30y {level(r("DGS30"))}, 2s10s {level(r("T10Y2Y"))}; '
-            f'10y 실질금리 {level(r("DFII10"))}, 기대 인플레이션 {level(r("T10YIE"))}; SOFR {level(r("SOFR"))}.',
+            f'{s.as_of} 기준: 미국채 2년 {level(r("DGS2"))}, 10년 {level(r("DGS10"))}, '
+            f'30년 {level(r("DGS30"))}, 2년·10년 금리차 {level(r("T10Y2Y"))}; '
+            f'10년 실질금리 {level(r("DFII10"))}, 기대 인플레이션 {level(r("T10YIE"))}; SOFR {level(r("SOFR"))}.',
             f'신용: IG OAS {level(r("BAMLC0A0CM"))}, HY OAS {level(r("BAMLH0A0HYM2"))}. '
             f'달러지수 {level(r("DTWEXBGS"))}, VIX {level(r("VIXCLS"))}, WTI {level(r("DCOILWTICO"))}.',
             summary_korean(s.regime.summary),
@@ -117,8 +117,8 @@ def macro_korean(output):
                         key=lambda x: abs(x.chg_1d / (x.last - x.chg_1d)) if x.last != x.chg_1d else 0.,
                         reverse=True)[:3]
         lines = [
-            f'{s.as_of} 일일 관측. 금리: 2y {level(r("DGS2"))} (하루 {chg(r("DGS2"))}, '
-            f'한 주 {chg(r("DGS2"), "chg_1w")}), 10y {level(r("DGS10"))} '
+            f'{s.as_of} 일일 관측. 금리: 2년 {level(r("DGS2"))} (하루 {chg(r("DGS2"))}, '
+            f'한 주 {chg(r("DGS2"), "chg_1w")}), 10년 {level(r("DGS10"))} '
             f'({chg(r("DGS10"))}, {chg(r("DGS10"), "chg_1w")}), 2s10s {level(r("T10Y2Y"))} '
             f'({chg(r("T10Y2Y"))}); 20거래일 수익률곡선 관측(설명용, 국면 모형 아님, P19)은 {word(s.regime.curve)}입니다.',
             f'위험 관측은 {word(s.regime.risk)}: VIX {level(r("VIXCLS"))} ({chg(r("VIXCLS"))}), '
@@ -141,8 +141,8 @@ def macro_korean(output):
             lines.append(f'듀레이션: 미국 10년 국채금리는 {level(ten)}, {sd(ten.z_1y)}이며 '
                          f'한 주(5거래일) 동안 {chg(ten, "chg_1w")} 변했습니다.')
         if slope is not None:
-            lines.append(f'곡선: 미국 국채곡선의 기울기인 2s10s(10y 빼기 2y)는 {slope.last / i.BP:+.0f}bp, '
-                         f'21거래일 변화는 {chg(slope, "chg_1m")}입니다. 2s10s 분류는 '
+            lines.append(f'곡선: 미국 국채곡선의 기울기인 2년·10년 금리차(10년 빼기 2년)는 {slope.last / i.BP:+.0f}bp, '
+                         f'21거래일 변화는 {chg(slope, "chg_1m")}입니다. 2년·10년 금리차 분류는 '
                          f'20거래일 동안 {word(s.regime.curve)}입니다 '
                          '(금리 하락·상승에 따른 bull·bear, 2s10s 확대·축소에 따른 가팔라짐·평탄화, 각각 5bp 초과).')
         if usd is not None:

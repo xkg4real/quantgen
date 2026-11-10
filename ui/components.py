@@ -124,7 +124,7 @@ def stat(label: str, value: str, *, token: str = "text", tooltip: str = "") -> f
     pal = active()
     return ft.Container(
         ft.Column([
-            ft.Text(label, size=10, color=pal.muted),
+            ft.Text(label, size=11, color=pal.muted),
             ft.Text(value, size=16, weight=ft.FontWeight.W_600,
                     color=getattr(pal, token, pal.text)),
         ], spacing=2),
@@ -262,3 +262,86 @@ def open_path(path) -> Optional[ft.Control]:
         except Exception:
             pass
     return ft.Text(f"Not found or could not be opened: {p}", size=12, color=active().muted, selectable=True)
+
+
+# --------------------------------------------------------------------------- #
+# Locale-aware text and grouped number inputs (owner UI review, 2026-11-10).
+# --------------------------------------------------------------------------- #
+class LocalText(ft.Text):
+    """Text whose Korean and English wording are both authored at the call site.
+
+    Use it for dynamic sentences (numbers interpolated into words) that the static
+    catalogue cannot match exactly. The page's locale is applied by
+    `ui.localization.translate_controls` through `render_locale`; the value is
+    marked literal so the catalogue never rewrites it a second time.
+    """
+
+    def __init__(self, ko: str, en: str, **kwargs):
+        data = dict(kwargs.pop("data", None) or {})
+        data["qg_literal_value"] = True
+        super().__init__(en, data=data, **kwargs)
+        self.qg_ko, self.qg_en = ko, en
+
+    def render_locale(self, ctx) -> None:
+        self.ctx = ctx
+        self.value = self.qg_ko if getattr(ctx, "language", "en") == "ko" else self.qg_en
+
+
+def parse_number(text) -> float:
+    """Parse a user-typed number that may carry thousands separators.
+
+    Accepts '1,000,000', '1 000 000', '1_000_000', '+2.5', '−3' (U+2212). Raises
+    ValueError for anything else, exactly like `float` does for bad input, so the
+    callers' existing error handling keeps working.
+    """
+    s = str(text if text is not None else "").strip()
+    s = s.replace("−", "-").replace(",", "").replace("_", "").replace(" ", "").replace(" ", "")
+    if not s:
+        raise ValueError("empty number")
+    return float(s)
+
+
+def group_digits(text) -> str:
+    """'1000000' -> '1,000,000'; '1234.5' -> '1,234.5'. Non-numbers come back unchanged."""
+    s = str(text if text is not None else "").strip()
+    try:
+        value = parse_number(s)
+    except ValueError:
+        return s
+    if not math.isfinite(value):
+        return s
+    body = s.replace("−", "-").replace(",", "").replace("_", "").replace(" ", "").replace(" ", "")
+    sign = "-" if body.startswith("-") else ""
+    body = body.lstrip("+-")
+    whole, dot, frac = body.partition(".")
+    if not whole.isdigit() or (frac and not frac.isdigit()):
+        return s
+    grouped = f"{int(whole):,}"
+    return f"{sign}{grouped}{dot}{frac}"
+
+
+def number_field(label: str, value="", *, width: Optional[int] = None, **kwargs) -> ft.TextField:
+    """A TextField that shows thousands separators (1,000,000) once editing ends.
+
+    Read it with `parse_number(field.value)`; plain `float(field.value)` fails on
+    the separators. Typing is never rewritten mid-keystroke, only on blur/submit.
+    """
+    kwargs.setdefault("border_radius", RADII["md"])
+    kwargs.setdefault("text_align", ft.TextAlign.RIGHT)
+    field = ft.TextField(label=label, value=group_digits(value), width=width, **kwargs)
+    user_blur, user_submit = field.on_blur, field.on_submit
+
+    def regroup(e=None, chained=None):
+        grouped = group_digits(field.value)
+        if grouped != field.value:
+            field.value = grouped
+            try:
+                field.update()
+            except Exception:  # not yet mounted (tests build pages without a session)
+                pass
+        if chained:
+            chained(e)
+
+    field.on_blur = lambda e: regroup(e, user_blur)
+    field.on_submit = lambda e: regroup(e, user_submit)
+    return field

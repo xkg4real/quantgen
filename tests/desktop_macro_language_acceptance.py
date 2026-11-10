@@ -138,7 +138,7 @@ class MacroLanguageTests(unittest.TestCase):
                     self.assertEqual(numbers(as_of.text()),numbers(as_of.source_text))
                     self.assertEqual(pane.tables['Descriptive read'].item(0,0).text(),PAIRS[out.sheet.regime.curve] if language=='ko' else out.sheet.regime.curve)
                     self.assertEqual(numeric_table.item(0,0).text(),PAIRS['rates'] if language=='ko' else 'rates')
-                    self.assertEqual(numeric_table.item(4,1).text(), '10y 실질금리 (TIPS)' if language == 'ko' else '10y real (TIPS)')
+                    self.assertEqual(numeric_table.item(4,1).text(), '10년 실질금리 (TIPS)' if language == 'ko' else '10y real (TIPS)')
                     self.assertEqual(numeric_table.item(17,1).text(), '금' if language == 'ko' else 'Gold')
                     chart = pane.charts['1y z-scores · descriptive only']
                     self.assertEqual(chart.display_label(17), '금 · SYNTHETIC' if language == 'ko' else 'Gold · SYNTHETIC')
