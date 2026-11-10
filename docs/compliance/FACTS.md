@@ -687,6 +687,22 @@ Gothic A1 기반 hinted TTF400/500/600과 별도 QG Symbols를 동봉하여 작�
 
 [제품 범위·검증 기록](../product/LOOKAHEAD_LA02_PART1_2026-11-10.md)에 따라 실제 자료 시험은 ⑨-2 고정 파일이 md5와 함께 등록되거나 소유자가 KRX 달력 범위를 넓히기 전까지 NOT_RUN입니다. 이 변경은 연구 수치·판정·게이트 패키지 정의를 바꾸지 않습니다. I-05(LA-07, LA-30 필요)는 이 범위에 없습니다. 기존 사실/실패 이력과 `review-required`·공개 준비 `BLOCKED`, 운영자/법률/계약/라이선스/동의·실제 API/공급사/Windows 사용자 검증·파일럿·게시/배포 조건 및 선택적 GPT/Gemini 추가 심사 `NOT_PERFORMED`를 유지합니다.
 
+<a id="lookahead-la02-part2-2026-11-10"></a>
+## 미래 정보 누출 감사 LA-02 2부: 남은 기준 데이터 시험 본문 — 2026-11-10
+
+2026-11-04 감사(`7749450`의 `docs/nautilus_bridge/LOOKAHEAD_AUDIT_2026-11-04.md` LA-02)에 대한 ⑨-1/2/c 범위입니다. 1부(`8e88814`, PR #96)가 `LA02_REMAINING`에 남긴 13곳 가운데 9곳을 전환합니다. 근거는 소유자 결정 L-2(`docs/nautilus_bridge/OWNER_RULINGS_LOG.md:546`)와 2026-11-10 소유자 답 "전부 승인합니노."입니다. 바뀐 것은 시험 파일 다섯 개와 이 기록뿐입니다. 앱·`core/`·`data/`·`ui/`·`docs/*.py`·동결 하네스 소스·`goldens.csv`·`ACQUISITION.csv`·`MANIFEST.csv`·`tests/macro_registry.csv`·`qa/acceptance_results.json`·원장·카드·달력 파일은 바꾸지 않았습니다.
+
+| 항목 | 확인한 동작과 한계 |
+| --- | --- |
+| 바뀐 시험 | 전환한 곳은 G-POST-01 M1 행 두 곳(`macro_m1_pit.py`, `macro_m1_fixtures.py`), Yahoo ^KS11(F13)의 T-PRINT-01, G-STALE-01·T-STALE-01, T-MISS-01 CPI, 서명 파일의 T-CLOSE-02, T-VT-01, T-LABEL-01, T-B5-01입니다. 데이터와 무관한 NotRun이나 "not implemented" 실패 대신 관문, 선언한 형식의 파싱, `_check_*` 본문을 차례로 실행합니다. T-CLOSE-02와 G-STALE-01은 서명 달력의 거부와 적용 범위 공백을 파일에서 계산해 OWNER NotRun 사유로 적습니다. T-CLOSE-02는 소유자 서명 `kr_sessions` 행의 누락도 적습니다. 기다릴 것이 없으면 본문 안에서 난 적용 범위·서명 오류는 FAIL입니다. T-B5-01은 제품 B5 하네스 `docs/vol_backtest.spec_form`을 읽기 전용으로 호출합니다 |
+| 기대값 출처 | 숫자는 모두 사양 줄이나 `goldens.csv` 행(읽기만)에서 옵니다. G-POST-01 M1 8행(L5819-5834); 5,251.87·-5.96%(L5631); G-STALE-01 schedule-aware 열, 1% 이하, VIXCLS 0%(L1963, L5901-5908); S11/cpi_yoy_aug2026 3.353% ±0.01pp(L5624); T-CLOSE-02 조항(L2096, L5618 등); rv20 0.2882, vt 0.694, 라벨 사분위·백분위(G-POST-01, L5673, L1565); 원점 2,594, 초과율 4.70%, PIT p 0.107, PASS(G-B5-01, L5642, L5801). 사양 해석은 소유자 질문으로 기록했습니다. 그 예는 G-STALE-01 schedule-aware 열을 원천 예외 목록 없는 비율로 읽는 것, 공급사 가격을 소수 둘째 자리에서 비교하는 것, 백분위에 같은 값을 포함하는 것, 원점 개수 규약입니다. v1.2 규칙 열, 나이 중앙값·최댓값, 미국 라벨 수치, B5의 다른 줄은 출력만 하거나 단언하지 않습니다 |
+| 선언한 파일 형식 | ACQUISITION.csv와 사양에 열 정의가 없어 시험이 선언합니다. F13·F14·F16은 `close` 열(1부 F01과 같은 형식), F27은 `code`와 `close`의 긴 형식, F18은 FRED id 이름의 값 열, F07은 `VIXCLS` 열을 씁니다. 출처 값은 `docs/macro_fixtures.REFERENCE_FILES`와 같습니다. 남은 충돌이 둘 있습니다. 제품 리더 `docs/vol_backtest.fixture_lines`는 F13을 `value` 열로 읽습니다. 생성기 `calendar_available_at`은 등록되지 않은 KS11·KRWX·GSPC·005930을 거부하므로 F13·F14·F16·F27을 지금 형태로 만들 수 없습니다(코드 읽기, 생성기는 실행하지 않음). 이 범위에서는 제품 코드를 바꾸지 않으므로 둘 다 ⑨-2 소유자 질문으로 남겼습니다 |
+| 통과·실패 시연 | 새 시연 시험 9개(`test_ids` 없음)가 지어낸 메모리 데이터로 각 본문의 PASS와 값 조항별 FAIL을 보이며, 각 FAIL은 해당 조항의 메시지를 확인합니다. 실제 KRX·Yahoo·FRED·QX 자료는 쓰지 않았습니다 |
+| 래칫 | 9곳을 `LA02_REMAINING`에서 `LA02_CONVERTED`와 `LA02_CONVERTED_FLOOR`로 옮겼습니다(전환 13개, 남은 4개, 합계 17개). `LA02_SITES`는 그대로입니다. 바닥 크기 검사는 고정값 4 대신 `LA02_FLOOR_SIZE = 13`을 씁니다. 남은 곳은 T-FIX-01(저장소 밖 위원회 보관본), T-REGIME-01 전 구간(기대값 파일의 ACQUISITION 행), I-05(LA-07·LA-30 선행), G-REF-01(제품 R-11 재현 하네스가 없고 1997년부터의 서명 달력이 있어야 함)입니다 |
+| 실행 범위 | 감사 훅 실행기(`docs/asset_expansion/cache`·`.env`·`~/.nextgen` 접근과 socket 연결 거부)로 다섯 모듈의 시험 129개를 ID별로 실행했습니다. 결과는 PASS 94, NOT_RUN 35, FAIL 0이며 거부 기록은 없습니다. 캐시를 읽는 기존 시험 2개(`test_stale_01_schedule_aware_clauses_and_local_smoke`, `test_g_b5_02_spy_refdata_with_smoke_on_local_cache`)는 실행하지 않았으므로, 두 모듈 전체 실행은 캐시에 닿습니다. 통합 변이 9개를 메모리에서만 적용해 모두 잡았고 작업 트리 파일은 쓰지 않았습니다. `tests/run_all.py`, 매크로 모듈 전체, `macro_m9_lab`, `macro_m8_pipeline`, registry 동기 시험은 실행하지 않았습니다(test_ids 정적 대조만). Windows·CI 확인은 하지 않았습니다 |
+
+[제품 범위·검증 기록](../product/LOOKAHEAD_LA02_PART2_2026-11-10.md)에 따라 전환한 9곳은 오늘 모두 NOT_RUN입니다. 8곳은 고정 파일이 MANIFEST.csv에 없어 REFDATA입니다. T-CLOSE-02는 OWNER로, 서명 `holidays_KRX`(2026-27)와 `holidays_JPX`(2025년부터)의 적용 범위와 소유자 서명 `kr_sessions` 행(1997-06-07 토요일 종가, 2015-11-12 수능일 창)을 기다립니다. 파일이 들어와도 G-STALE-01은 서명 NYSE·CBOE·KRX 달력이 2015-12-04부터 덮을 때까지 OWNER입니다. 이 변경은 연구 수치·판정·게이트 패키지 정의를 바꾸지 않습니다. 기존 사실/실패 이력과 `review-required`·공개 준비 `BLOCKED`, 운영자/법률/계약/라이선스/동의·실제 API/공급사/Windows 사용자 검증·파일럿·게시/배포 조건 및 선택적 GPT/Gemini 추가 심사 `NOT_PERFORMED`를 유지합니다.
+
 <a id="adoption-strategy-checks-2026-11-10"></a>
 ## 새 모델 채택 기준의 전략 비교 줄 — 2026-11-10
 

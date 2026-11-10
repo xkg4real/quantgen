@@ -7,16 +7,21 @@ test itself (signer "TEST-FIXTURE (not an owner sign-off)"); the library never w
 files under core/calendars/data/ are read only to check their signing state (a draft is refused, an owner-signed file
 is complete), and by the two REFDATA bodies on the KRX official closes (T-PRINT-01, T-SAT-01; look-ahead audit LA-02,
 part 1): they read the listed fixture through `require_fixture` and use the shipped KRX clock files only when those load
-and cover the fixture's dates (otherwise NotRun "OWNER: ...", computed from the files). No module global is patched.
+and cover the fixture's dates (otherwise NotRun "OWNER: ...", computed from the files). T-CLOSE-02 on the signed files
+(LA-02, part 2) runs its clauses on the shipped set once every file they read loads and covers their days and the
+owner-signed kr_sessions rows they read exist (otherwise NotRun "OWNER: ...", computed from the files). No module
+global is patched.
 """
 from __future__ import annotations
 
 import copy
 import csv
+import dataclasses
 import io
 import math
 import statistics
 import tempfile
+import types
 from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -541,18 +546,431 @@ def test_close02_effective_dated_clocks():
 test_close02_effective_dated_clocks.test_ids = ["T-CLOSE-02"]
 
 
+# T-CLOSE-02 on the owner-signed files (look-ahead audit LA-02, part 2). The signed files each clause of `_check_close02`
+# reads (core.calendars.clocks and regime), the days it reads them on, and the kr_sessions rows it reads on its last day
+# that the owner signs from the KRX notice. A KR clause reads holidays_KRX from 1 January of its year (the first trading
+# day check, clocks._is_first_trading_day). The spec gives neither the pre-2016 CSAT window nor the Saturday close: both
+# come from the KRX notice and are owner-signed at M1 (spec L2013, L2015, L2063, L2067), and the shipped kr_sessions.yaml
+# records both rows as absent, so the two clauses that read them wait for them. A random_end_extension row is not waited
+# for: the signed file states that no extension is assumed, and the conditional-era bound is asserted with whatever
+# extensions the file records. CRYPTO and an unknown market read no file.
+_CLOSE02_KR = ("kr_sessions", "holidays_KRX")
+CLOSE02_NEEDS = (
+    ("KR 2016-07-29 / 2016-08-01 close and bound", _CLOSE02_KR, date(2016, 1, 1), date(2016, 8, 1), ()),
+    ("KR 2026-01-02 .. 2026-10-05 sessions and non-sessions", _CLOSE02_KR, date(2026, 1, 1), date(2026, 10, 5), ()),
+    ("KR 2015-06-12 / 2015-06-15 random-end bound", _CLOSE02_KR, date(2015, 1, 1), date(2015, 6, 15), ()),
+    ("KR 2014-06-02 conditional random-end bound", _CLOSE02_KR, date(2014, 1, 1), date(2014, 6, 2), ()),
+    ("KR CSAT 2025-11-13", _CLOSE02_KR, date(2025, 1, 1), date(2025, 11, 13), ()),
+    ("KR pre-2016 CSAT 2015-11-12", _CLOSE02_KR, date(2015, 1, 1), date(2015, 11, 12), ("csat_window",)),
+    ("KR Saturday 1997-06-07", _CLOSE02_KR, date(1997, 1, 1), date(1997, 6, 7), ("saturday_close",)),
+    ("KR regime tag 1997-06-07", ("kr_regime_tags",), date(1997, 6, 7), date(1997, 6, 7), ()),
+    ("KR 1999-03-02 lunch break and closing call", _CLOSE02_KR, date(1999, 1, 1), date(1999, 3, 2), ()),
+    ("US 2025-07-03 .. 2026-11-27 closes", ("holidays_NYSE",), date(2025, 7, 3), date(2026, 11, 27), ()),
+    ("JP 2024-10-28 .. 2024-11-05 close", ("holidays_JPX",), date(2024, 10, 28), date(2024, 11, 5), ()),
+    ("JP / CN / HK / TW 2026-10-08 closes", ("holidays_JPX", "holidays_SSE", "holidays_HKEX", "holidays_TWSE",
+                                             "market_closes"), date(2026, 10, 8), date(2026, 10, 8), ()),
+)
+CLOSE02_FILES = tuple(dict.fromkeys(f for _clause, files, *_rest in CLOSE02_NEEDS for f in files))
+
+
+def _close02_waiting(live: CalendarSet) -> list[str]:
+    """Each refusal, coverage gap and missing owner-signed kr_sessions row among what the T-CLOSE-02 clauses read
+    (CLOSE02_NEEDS), computed from `live`; empty when the clauses can run."""
+    out = []
+    for clause, files, lo, hi, kinds in CLOSE02_NEEDS:
+        for f in files:
+            why = live.refusal(f)
+            if why is not None:
+                out.append(f"{clause}: {f}.yaml refused ({why})")
+            elif not (live.file(f).covers(lo) and live.file(f).covers(hi)):
+                cf = live.file(f)
+                out.append(f"{clause}: {f}.yaml v{cf.version} covers {cf.covers_from}..{cf.covers_to}, needs {lo}..{hi}")
+        if kinds and live.refusal("kr_sessions") is None:
+            kr = live.file("kr_sessions")
+            on_day = store.effective_rows(kr.rows, hi)
+            out += [f"{clause}: kr_sessions.yaml v{kr.version} has no signed {kind} row effective on {hi}"
+                    for kind in kinds if not any(r.get("kind") == kind for r in on_day)]
+    return out
+
+
+def _close02_is(got, want, what: str) -> None:
+    assert got == want, f"T-CLOSE-02: {what} is {got}, not {want}"
+
+
+def _close02_raises(fn, exc, what: str) -> None:
+    try:
+        fn()
+    except exc:
+        return
+    except Exception as other:                          # noqa: BLE001
+        raise AssertionError(f"T-CLOSE-02: {what} raised {type(other).__name__} ({other}), not {exc.__name__}") from None
+    raise AssertionError(f"T-CLOSE-02: {what} did not raise {exc.__name__}")
+
+
+def _at(d: date, hhmm: str, tz: str) -> datetime:
+    return datetime.combine(d, time.fromisoformat(hhmm), tzinfo=ZoneInfo(tz)).astimezone(UTC)
+
+
+def _check_close02(cal: CalendarSet, clk=clocks) -> None:
+    """T-CLOSE-02 (spec L2096 and the refined row L5618; rule 1 at L2010-L2016 and L1289; other markets L2021-L2023) on
+    `cal`: the clauses of test_close02_effective_dated_clocks, plus the 2026-10-02 bound of L2096. A clause the spec
+    states by value is asserted at that value. Where the spec defers to the signed calendar (the pre-2016 CSAT window,
+    the Saturday close, a conditional random-end extension, the lunch-break window, the HKEX close), the expected value
+    is read from `cal`'s signed rows, as the synthetic test reads its fixture file. `clk` is core.calendars.clocks; the
+    FAIL demonstrations pass a wrong clock. Run once nothing is waiting (`_close02_waiting`): a CalendarCoverageError or
+    CalendarUnsigned raised here is a FAIL."""
+    D, B = clk.decision_time_utc, clk.close_print_bound_utc
+    kr = cal.file("kr_sessions")
+
+    def signed(kind: str, d: date) -> list[dict]:
+        return [r for r in store.effective_rows(kr.rows, d) if r.get("kind") == kind]
+
+    def extension_s(d: date) -> int:
+        return sum(int(r["extension_s"]) for r in kr.rows
+                   if r.get("kind") == "random_end_extension" and r.get("session_date") == d.isoformat())
+
+    # KRX close 15:00 KST (06:00Z) through 2016-07-31 and 15:30 KST (06:30Z) from 2016-08-01; the bound is the close
+    # + 30 s from 2015-06-15: 06:00:30Z through 2016-07-29, 06:30:30Z from 2016-08-01 (spec L2096, L5618, L2010, L2012)
+    _close02_is(D("KR", date(2016, 7, 29), cal=cal), U(2016, 7, 29, 6, 0), "decision_time_utc('KR', 2016-07-29) (spec L2096)")
+    _close02_is(D("KR", date(2016, 8, 1), cal=cal), U(2016, 8, 1, 6, 30), "decision_time_utc('KR', 2016-08-01) (spec L2096)")
+    _close02_is(B("KR", date(2016, 7, 29), cal=cal), U(2016, 7, 29, 6, 0, 30),
+                "close_print_bound_utc('KR', 2016-07-29) (spec L2096)")
+    _close02_is(B("KR", date(2016, 8, 1), cal=cal), U(2016, 8, 1, 6, 30, 30),
+                "close_print_bound_utc('KR', 2016-08-01) (spec L5618)")
+    _close02_is(B("KR", date(2026, 10, 2), cal=cal), U(2026, 10, 2, 6, 30, 30),
+                "close_print_bound_utc('KR', 2026-10-02) (spec L2096)")
+    _close02_is(B("KR", date(2015, 6, 15), cal=cal), U(2015, 6, 15, 6, 0, 30),
+                "close_print_bound_utc('KR', 2015-06-15), the first unconditional random-end day (spec L5618)")
+    # before 2015-06-15: the scheduled close (06:00Z) + the 30 s print tolerance, plus any extension the KRX notice
+    # records for the session, read from the signed file (spec L5618, L2012)
+    for d in (date(2015, 6, 12), date(2014, 6, 2)):
+        _close02_is(B("KR", d, cal=cal), U(d.year, d.month, d.day, 6, 0) + timedelta(seconds=30 + extension_s(d)),
+                    f"close_print_bound_utc('KR', {d}), conditional random end with {extension_s(d)} s signed (spec L5618)")
+    # CSAT day: close 07:30Z, bound 07:30:30Z (spec L2096, L5618)
+    _close02_is(D("KR", date(2025, 11, 13), cal=cal), U(2025, 11, 13, 7, 30),
+                "decision_time_utc('KR', 2025-11-13), a CSAT day (spec L2096)")
+    _close02_is(B("KR", date(2025, 11, 13), cal=cal), U(2025, 11, 13, 7, 30, 30),
+                "close_print_bound_utc('KR', 2025-11-13), a CSAT day (spec L2096)")
+    # a pre-2016 CSAT date returns the signed calendar's close and bound (spec L2096): the close of the signed
+    # csat_window row (the config window where the set has none, as on the synthetic set; the shipped set waits for the
+    # row), and that close + 30 s (spec L5618)
+    d = date(2015, 11, 12)
+    window = [r["window_kst"] for r in signed("csat_window", d)] or [
+        store.effective_config(cal.market_config("KR")["csat_session_kst"], d, "calendars.KR.csat_session_kst")["window"]]
+    want = _at(d, window[0][1], KST)
+    _close02_is(D("KR", d, cal=cal), want, "decision_time_utc('KR', 2015-11-12), a pre-2016 CSAT date (spec L2096)")
+    _close02_is(B("KR", d, cal=cal), want + timedelta(seconds=30),
+                "close_print_bound_utc('KR', 2015-11-12), a pre-2016 CSAT date (spec L2096, L5618)")
+    # a non-holiday Saturday before 1998-12-12 is a session with the signed Saturday close; its bound is that close
+    # + 30 s + any signed extension (conditional era); the regime tag says so (spec L2096, L2015, L5618, L2039)
+    sat = date(1997, 6, 7)
+    assert sat.weekday() == 5 and clk.is_session("KR", sat, cal=cal), \
+        "T-CLOSE-02: the Saturday 1997-06-07 is not a KR session (spec L2015, L5618)"
+    closes = [r["close_kst"] for r in signed("saturday_close", sat)]
+    want = _at(sat, closes[0], KST) if len(closes) == 1 else f"one signed saturday_close row ({len(closes)})"
+    _close02_is(D("KR", sat, cal=cal), want, "decision_time_utc('KR', 1997-06-07), the signed Saturday close (spec L2015)")
+    _close02_is(B("KR", sat, cal=cal), want + timedelta(seconds=30 + extension_s(sat)),
+                "close_print_bound_utc('KR', 1997-06-07), a Saturday (spec L2096, L5618)")
+    _close02_is("saturday" in clk.session("KR", sat, cal=cal).flags, True, "session('KR', 1997-06-07) flag 'saturday'")
+    _close02_is(regime.regime_tags("KR", sat, cal=cal)["saturday_session"], True,
+                "regime_tags('KR', 1997-06-07)['saturday_session'] (spec L2039)")
+    # a non-session raises NotASession and never rolls forward (spec L2087): the 2026-10-05 holiday (L2096), a Sunday
+    _close02_raises(lambda: D("KR", date(2026, 10, 5), cal=cal), NotASession,
+                    "decision_time_utc('KR', 2026-10-05) (spec L2096)")
+    _close02_raises(lambda: D("KR", date(2026, 10, 4), cal=cal), NotASession,
+                    "decision_time_utc('KR', 2026-10-04), a Sunday (spec L2087)")
+    # NYSE: early closes at 13:00 ET (18:00Z in EST on 2026-11-27, 17:00Z in EDT on 2025-07-03), the bound + 30 s
+    # (spec L2096, L2021); Thanksgiving 2026-11-26 is no session (L1340: the NYSE is closed on that weekday)
+    _close02_is(D("US", date(2026, 11, 27), cal=cal), U(2026, 11, 27, 18, 0), "decision_time_utc('US', 2026-11-27) (spec L2096)")
+    _close02_is(D("US", date(2025, 7, 3), cal=cal), U(2025, 7, 3, 17, 0), "decision_time_utc('US', 2025-07-03) (spec L2096)")
+    _close02_is(B("US", date(2026, 10, 1), cal=cal), U(2026, 10, 1, 20, 0, 30),
+                "close_print_bound_utc('US', 2026-10-01) (spec L2096)")
+    _close02_raises(lambda: D("US", date(2026, 11, 26), cal=cal), NotASession,
+                    "decision_time_utc('US', 2026-11-26), Thanksgiving (spec L1340, L2087)")
+    # sessions: KRX 09:00-15:30, closing auction 15:20-15:30, no lunch break after 2000-05, unconditional random end
+    # (spec L1289, L2010-L2012, L2016); the first session of the year opens at 10:00 (L2014); before 2016-08-01 the
+    # closing call is 14:50-15:00 (L2011) and a 1999 session has the signed lunch break (L2016: until May-2000); a CSAT
+    # day from 2016-08-01 opens at 10:00 with the 16:20-16:30 closing call (L2013, L2064)
+    s = clk.session("KR", date(2026, 10, 2), cal=cal)
+    _close02_is((s.open_local, s.close_local, s.closing_call_local, s.lunch_break_local, (s.random_end or {}).get("kind"),
+                 s.open_utc), (time(9, 0), time(15, 30), (time(15, 20), time(15, 30)), None, "unconditional",
+                               U(2026, 10, 2, 0, 0)),
+                "session('KR', 2026-10-02) (open, close, closing call, lunch break, random end, open_utc; spec L1289)")
+    first = clk.session("KR", date(2026, 1, 2), cal=cal)
+    _close02_is(("first_trading_day" in first.flags, first.open_local), (True, time(10, 0)),
+                "session('KR', 2026-01-02), the first session of 2026 (spec L2014)")
+    old = clk.session("KR", date(1999, 3, 2), cal=cal)
+    lunch = [tuple(time.fromisoformat(t) for t in r["window_kst"]) for r in signed("lunch_break", date(1999, 3, 2))]
+    _close02_is((old.lunch_break_local, old.closing_call_local),
+                (lunch[0] if len(lunch) == 1 else "one signed lunch break", (time(14, 50), time(15, 0))),
+                "session('KR', 1999-03-02) (lunch break, closing call; spec L2016, L2011)")
+    csat = clk.session("KR", date(2025, 11, 13), cal=cal)
+    _close02_is(("csat" in csat.flags, csat.open_local, csat.closing_call_local),
+                (True, time(10, 0), (time(16, 20), time(16, 30))), "session('KR', 2025-11-13), a CSAT day (spec L2013, L2064)")
+    _close02_is(clk.session("US", date(2026, 11, 27), cal=cal).flags, frozenset({"early_close"}),
+                "session('US', 2026-11-27) flags (spec L2021)")
+    # other markets: TSE 15:00 JST (06:00Z) through 2024-11-04 and 15:30 JST (06:30Z) from 2024-11-05, bound + 0 s
+    # (spec L2022, L2070); SSE 15:00 CST (07:00Z) and TWSE 13:30 TST (05:30Z) (L2023, L1967); HKEX from its signed notice
+    # row, at 16:00 HKT (08:00Z) or later (L2023, L1967). The old TSE close is read on the last TSE session of
+    # 2024-10-28..2024-11-04 in `cal` (2024-11-04 on the synthetic set; the synthetic test's date, which may be a TSE
+    # holiday on the signed file)
+    jp_old = next((day for day in (date(2024, 11, 4) - timedelta(days=k) for k in range(8))
+                   if clk.is_session("JP", day, cal=cal)), None)
+    _close02_is(D("JP", jp_old, cal=cal) if jp_old else "no TSE session in 2024-10-28..2024-11-04",
+                U(jp_old.year, jp_old.month, jp_old.day, 6, 0) if jp_old else "a TSE session",
+                f"decision_time_utc('JP', {jp_old}), the last TSE session through 2024-11-04 (spec L2022)")
+    _close02_is(D("JP", date(2024, 11, 5), cal=cal), U(2024, 11, 5, 6, 30), "decision_time_utc('JP', 2024-11-05) (spec L2022)")
+    d = date(2026, 10, 8)
+    _close02_is(B("JP", d, cal=cal), D("JP", d, cal=cal), "close_print_bound_utc('JP', 2026-10-08) (spec L2070: + 0 s)")
+    _close02_is(D("CN", d, cal=cal), U(2026, 10, 8, 7, 0), "decision_time_utc('CN', 2026-10-08) (spec L2023)")
+    _close02_is(D("TW", d, cal=cal), U(2026, 10, 8, 5, 30), "decision_time_utc('TW', 2026-10-08) (spec L2023)")
+    hk = [r for r in store.effective_rows(cal.file("market_closes").rows, d) if r.get("kind") == "close"
+          and r.get("market") == "HK"]
+    hk_close = D("HK", d, cal=cal)
+    _close02_is(hk_close, _at(d, hk[0]["close_local"], hk[0]["tz"]) if len(hk) == 1 else f"one signed HK row ({len(hk)})",
+                "decision_time_utc('HK', 2026-10-08), the signed HKEX close (spec L2023)")
+    assert hk_close >= U(2026, 10, 8, 8, 0), \
+        f"T-CLOSE-02: decision_time_utc('HK', 2026-10-08) is {hk_close}, before 16:00 HKT (08:00Z; spec L1967)"
+    # outside the signed coverage: CalendarCoverageError (an OPS HALT), never NotASession (spec L2090)
+    before = min(kr.covers_from, cal.file("holidays_KRX").covers_from) - timedelta(days=1)
+    _close02_raises(lambda: D("KR", before, cal=cal), CalendarCoverageError,
+                    f"decision_time_utc('KR', {before}), before the signed coverage (spec L2090)")
+    # CRYPTO closes its daily bar at 00:00:00Z on d+1 (spec L5505, T-CRYPTO-01); an unknown market is refused
+    _close02_is(D("CRYPTO", date(2026, 10, 2), cal=cal), U(2026, 10, 3),
+                "decision_time_utc('CRYPTO', 2026-10-02) (spec L5505)")
+    _close02_raises(lambda: D("EU", date(2026, 10, 2), cal=cal), KeyError, "decision_time_utc('EU', 2026-10-02)")
+
+
 def test_close02_on_the_real_signed_files_is_owner_input():
-    """The same assertions on the shipped files need the owner's signed KR and US clock files, with KRX rows back to the
-    2015, 2016 and 2025 golden dates."""
+    """T-CLOSE-02 on the owner-signed files (core.calendars CalendarSet over core/calendars/data): NOT_RUN (OWNER) names
+    every refusal, coverage gap and missing owner-signed kr_sessions row among what its clauses read (CLOSE02_NEEDS),
+    computed from the files; once none is waiting, the clauses run on the signed set and PASS or FAIL on `_check_close02`
+    (look-ahead audit LA-02, part 2: it used to be NOT_RUN whatever the files held). A coverage or signing error raised
+    inside the clauses is then a FAIL."""
     live = CalendarSet()
-    unsigned = [f"{f}.yaml" for f in store.MARKET_FILES["KR"] + store.MARKET_FILES["US"] if live.refusal(f) is not None]
-    waiting = (f"unsigned: {', '.join(unsigned)}" if unsigned else
-               f"holidays_KRX.yaml covers from {live.file('holidays_KRX').covers_from}; the goldens need 2015, 2016, 2025")
-    raise NotRun("OWNER: T-CLOSE-02 on the real KRX/NYSE files waits for the owner's sign-off (Saturday closes, pre-2016 "
-                 f"CSAT window, CSAT dates, random-end extensions; {waiting})")
+    waiting = _close02_waiting(live)
+    if waiting:
+        raise NotRun("OWNER: T-CLOSE-02 on the signed calendars waits for " + "; ".join(waiting))
+    _check_close02(live)
 
 
 test_close02_on_the_real_signed_files_is_owner_input.test_ids = ["T-CLOSE-02"]
+
+
+def close02_signed_set() -> CalendarSet:
+    """Only the files CLOSE02_NEEDS names, from fixture_docs(), plus a signed csat_window row for the pre-2016 CSAT date
+    2015-11-12 (10:00-16:10 KST, invented, so that the signed row and not the config window must govern): nothing that
+    T-CLOSE-02 reads is waiting. A file the clauses read that the list does not name is missing here."""
+    docs = {k: v for k, v in fixture_docs().items() if k in CLOSE02_FILES}
+    docs["kr_sessions"]["rows"].append(_row(kind="csat_window", window_kst=["10:00", "16:10"], effective_from="2015-11-12",
+                                            effective_to="2015-11-12"))
+    return fixture_set("close02_signed", docs)
+
+
+def _close02_docs_set(key: str, edit) -> CalendarSet:
+    """The CLOSE02_FILES of fixture_docs() with `edit(docs)` applied, signed in a temp dir: a wrong calendar file."""
+    docs = {k: v for k, v in fixture_docs().items() if k in CLOSE02_FILES}
+    edit(docs)
+    return fixture_set(f"close02_{key}", docs)
+
+
+def _close02_config_set(market: str, key: str, value) -> CalendarSet:
+    """fixture_set()'s files under a calendars config whose `market.key` is `value`: a wrong config (nothing patched)."""
+    base = fixture_set()
+    cfg = copy.deepcopy(base.config)
+    cfg[market][key] = value
+    return CalendarSet(base.data_dir, config=cfg)
+
+
+def _clocks_with(**fns) -> types.SimpleNamespace:
+    """core.calendars.clocks with the named functions replaced: a wrong clock, for the FAIL demonstrations."""
+    names = ("decision_time_utc", "close_print_bound_utc", "is_session", "session")
+    return types.SimpleNamespace(**{**{n: getattr(clocks, n) for n in names}, **fns})
+
+
+def test_close02_body_passes_and_fails_on_invented_calendars():
+    """LA-02 part 2: the T-CLOSE-02 body on the signed files can PASS and can FAIL. `_check_close02` passes on the
+    synthetic set (signed in a temp dir by this module; not the owner's files) and on a set holding only the files
+    CLOSE02_NEEDS names plus a signed pre-2016 csat_window row, where nothing is waiting (and that row, not the config
+    window, sets the close); with a TSE holiday on 2024-11-04 the old TSE close is read on 2024-11-01. It fails, naming
+    the clause, on a calendar config, a calendar file or a clock that is wrong for that clause: each KR close and bound, the
+    conditional-era bound with and without the signed extension, the CSAT and pre-2016 CSAT close and bound, the
+    Saturday session, close, bound, flag and regime tag, the two KR non-sessions, the NYSE early closes, bound and
+    holiday, the session contents, the TSE, SSE, TWSE and HKEX closes, the coverage error, CRYPTO and an unknown market.
+    The waiting list is exact on the synthetic sets (a KR clause needs holidays_KRX from 1 January of its year), and the
+    real test's NOT_RUN reason is the list computed from the shipped files."""
+    cal = fixture_set()
+    _check_close02(cal)
+    assert _close02_waiting(cal) == ["KR pre-2016 CSAT 2015-11-12: kr_sessions.yaml v1.0.0-fixture has no signed "
+                                     "csat_window row effective on 2015-11-12"], _close02_waiting(cal)
+    signed = close02_signed_set()
+    assert _close02_waiting(signed) == [], _close02_waiting(signed)
+    _check_close02(signed)
+    assert clocks.decision_time_utc("KR", date(2015, 11, 12), cal=signed) == U(2015, 11, 12, 7, 10)    # the row governs
+    # a TSE holiday on 2024-11-04: the old TSE close is read on 2024-11-01, the last session through 2024-11-04
+    _check_close02(_close02_docs_set("jpx1104", lambda docs: docs["holidays_JPX"]["rows"].append(_hol(date(2024, 11, 4)))))
+    # the waiting list: holidays_KRX cut to 2026-27 (the shipped span), and holidays_KRX / kr_regime_tags unsigned
+    gap = "holidays_KRX.yaml v1.0.0-fixture covers 2026-01-01..2027-12-31, needs"
+    assert _close02_waiting(krx_short_set()) == [
+        f"KR 2016-07-29 / 2016-08-01 close and bound: {gap} 2016-01-01..2016-08-01",
+        f"KR 2015-06-12 / 2015-06-15 random-end bound: {gap} 2015-01-01..2015-06-15",
+        f"KR 2014-06-02 conditional random-end bound: {gap} 2014-01-01..2014-06-02",
+        f"KR CSAT 2025-11-13: {gap} 2025-01-01..2025-11-13",
+        f"KR pre-2016 CSAT 2015-11-12: {gap} 2015-01-01..2015-11-12",
+        "KR pre-2016 CSAT 2015-11-12: kr_sessions.yaml v1.0.0-fixture has no signed csat_window row effective on 2015-11-12",
+        f"KR Saturday 1997-06-07: {gap} 1997-01-01..1997-06-07",
+        f"KR 1999-03-02 lunch break and closing call: {gap} 1999-01-01..1999-03-02"], _close02_waiting(krx_short_set())
+    # a KR clause reads holidays_KRX from 1 January of its year (the first-session check): a file from 2016-06-01 is a
+    # gap for the 2016 clause, and the clauses on it raise CalendarCoverageError
+    def from_june_2016(docs):
+        krx = docs["holidays_KRX"]
+        krx["covers"]["from"] = "2016-06-01"
+        krx["rows"] = [r for r in krx["rows"] if r["date"] >= "2016-06-01"]
+    june = _close02_docs_set("krx_2016_06", from_june_2016)
+    assert ("KR 2016-07-29 / 2016-08-01 close and bound: holidays_KRX.yaml v1.0.0-fixture covers 2016-06-01..2027-12-31, "
+            "needs 2016-01-01..2016-08-01") in _close02_waiting(june), _close02_waiting(june)
+    _raises(lambda: _check_close02(june), CalendarCoverageError)
+    refused = [w for w in _close02_waiting(drafts_set()) if " refused (" in w]
+    assert [w.split(": ")[0] for w in refused] == [c for c, files, *_ in CLOSE02_NEEDS
+                                                  if {"holidays_KRX", "kr_regime_tags"} & set(files)], refused
+    assert all("signed_off_by is empty" in w for w in refused), refused
+    live = CalendarSet()
+    waiting = _close02_waiting(live)
+    if waiting:
+        reason = _raises(test_close02_on_the_real_signed_files_is_owner_input, NotRun).reason
+        assert reason == "OWNER: T-CLOSE-02 on the signed calendars waits for " + "; ".join(waiting), reason
+    # FAIL: one wrong config, file or clock per clause; the message names the clause
+    cond, unc = copy.deepcopy(cal.config["KR"]["random_end"])
+
+    def span(entry, lo=None, hi=None, **kw):
+        out = {k: v for k, v in entry.items() if k not in ("from", "to")}
+        out.update({k: v for k, v in (("from", lo), ("to", hi)) if v}, **kw)
+        return out
+
+    def random_end(*entries):
+        return _close02_config_set("KR", "random_end", list(entries))
+
+    def drop(file_id, pred):
+        def edit(docs):
+            docs[file_id]["rows"] = [r for r in docs[file_id]["rows"] if not pred(r)]
+        return edit
+
+    def set_close(market, hhmm):
+        def edit(docs):
+            for r in docs["market_closes"]["rows"]:
+                if r.get("market") == market:
+                    r["close_local"] = hhmm
+        return edit
+
+    def regime_sat(docs):
+        for r in docs["kr_regime_tags"]["rows"]:
+            if r["tag"] == "saturday_session":
+                r.update({"effective_from": "1995-01-01", "effective_to": "1997-06-06"} if r["value"] else
+                         {"effective_from": "1997-06-07"})
+
+    def regular_open(docs):
+        for r in docs["kr_sessions"]["rows"]:
+            if r["kind"] == "regular_open":
+                r["open_kst"] = "09:10"
+
+    def open_sunday(docs):
+        docs["holidays_KRX"]["rows"].append(_hol(date(2026, 10, 4), "open"))
+
+    def weekday_close_on_saturday(m, d, cal=None):                  # a clock that falls back to the weekday close
+        return U(d.year, d.month, d.day, 6, 0) if m == "KR" and d.weekday() == 5 else clocks.decision_time_utc(m, d, cal=cal)
+
+    def no_flags(market):
+        def session(m, d, cal=None):
+            s = clocks.session(m, d, cal=cal)
+            return dataclasses.replace(s, flags=frozenset()) if m == market else s
+        return session
+
+    def coverage_as_not_a_session(m, d, cal=None):
+        try:
+            return clocks.decision_time_utc(m, d, cal=cal)
+        except CalendarCoverageError as exc:
+            raise NotASession(str(exc)) from None
+
+    def wrong_markets(m, d, cal=None):
+        if m in ("CRYPTO", "EU"):
+            return U(d.year, d.month, d.day)
+        return clocks.decision_time_utc(m, d, cal=cal)
+
+    hol = lambda d: lambda r: r["date"] == d                        # noqa: E731
+    cases = (
+        (_close02_config_set("KR", "close_kst", [{"to": "2016-07-28", "time": "15:00"}, {"from": "2016-07-29", "time": "15:30"}]),
+         clocks, "decision_time_utc('KR', 2016-07-29) (spec L2096) is 2016-07-29 06:30:00+00:00"),
+        (_close02_config_set("KR", "close_kst", [{"to": "2016-08-01", "time": "15:00"}, {"from": "2016-08-02", "time": "15:30"}]),
+         clocks, "decision_time_utc('KR', 2016-08-01) (spec L2096) is 2016-08-01 06:00:00+00:00"),
+        (random_end(cond, span(unc, "2015-06-15", max_s=45)), clocks, "close_print_bound_utc('KR', 2016-07-29) (spec L2096)"),
+        (random_end(cond, span(unc, "2015-06-15", "2016-07-31"), span(unc, "2016-08-01", max_s=45)), clocks,
+         "close_print_bound_utc('KR', 2016-08-01) (spec L5618)"),
+        (random_end(cond, span(unc, "2015-06-15", "2026-09-30"), span(unc, "2026-10-01", max_s=45)), clocks,
+         "close_print_bound_utc('KR', 2026-10-02) (spec L2096)"),
+        (random_end(span(cond, None, "2015-06-15", print_tolerance_s=20), span(unc, "2015-06-16")), clocks,
+         "close_print_bound_utc('KR', 2015-06-15), the first unconditional"),
+        (random_end(span(cond, None, "2015-06-14", print_tolerance_s=20), unc), clocks,
+         "close_print_bound_utc('KR', 2015-06-12), conditional random end with 0 s signed"),
+        (random_end(span(cond, None, "2013-12-31"), span(unc, "2014-01-01")), clocks,
+         "close_print_bound_utc('KR', 2014-06-02), conditional random end with 45 s signed (spec L5618) is "
+         "2014-06-02 06:00:30+00:00, not 2014-06-02 06:01:15+00:00"),
+        (_close02_docs_set("csat2025", drop("kr_sessions", lambda r: r.get("date") == "2025-11-13")), clocks,
+         "decision_time_utc('KR', 2025-11-13), a CSAT day"),
+        (random_end(cond, span(unc, "2015-06-15", "2025-11-12"), span(unc, "2025-11-13", "2025-11-13", max_s=45),
+                    span(unc, "2025-11-14")), clocks, "close_print_bound_utc('KR', 2025-11-13), a CSAT day"),
+        (_close02_docs_set("csat2015", drop("kr_sessions", lambda r: r.get("date") == "2015-11-12")), clocks,
+         "decision_time_utc('KR', 2015-11-12), a pre-2016 CSAT date"),
+        (random_end(cond, span(unc, "2015-06-15", "2015-11-11"), span(unc, "2015-11-12", "2015-11-12", max_s=45),
+                    span(unc, "2015-11-13")), clocks, "close_print_bound_utc('KR', 2015-11-12), a pre-2016 CSAT date"),
+        (_close02_config_set("KR", "saturday_sessions_before", "1995-01-01"), clocks,
+         "the Saturday 1997-06-07 is not a KR session"),
+        (cal, _clocks_with(decision_time_utc=weekday_close_on_saturday),
+         "decision_time_utc('KR', 1997-06-07), the signed Saturday close (spec L2015) is 1997-06-07 06:00:00+00:00"),
+        (random_end(span(cond, None, "1997-06-06"), span(cond, "1997-06-07", "1997-06-07", print_tolerance_s=20),
+                    span(cond, "1997-06-08", "2015-06-14"), unc), clocks, "close_print_bound_utc('KR', 1997-06-07)"),
+        (cal, _clocks_with(session=no_flags("KR")), "session('KR', 1997-06-07) flag 'saturday' is False"),
+        (_close02_docs_set("regime_sat", regime_sat), clocks, "regime_tags('KR', 1997-06-07)['saturday_session']"),
+        (_close02_docs_set("hol1005", drop("holidays_KRX", hol("2026-10-05"))), clocks,
+         "decision_time_utc('KR', 2026-10-05) (spec L2096) did not raise NotASession"),
+        (_close02_docs_set("sun1004", open_sunday), clocks, "decision_time_utc('KR', 2026-10-04), a Sunday (spec L2087) did not"),
+        (_close02_docs_set("nyse1127", drop("holidays_NYSE", hol("2026-11-27"))), clocks,
+         "decision_time_utc('US', 2026-11-27) (spec L2096) is 2026-11-27 21:00:00+00:00"),
+        (_close02_docs_set("nyse0703", drop("holidays_NYSE", hol("2025-07-03"))), clocks,
+         "decision_time_utc('US', 2025-07-03) (spec L2096) is 2025-07-03 20:00:00+00:00"),
+        (_close02_config_set("US", "close_print_bound_s", 45), clocks, "close_print_bound_utc('US', 2026-10-01)"),
+        (_close02_docs_set("nyse1126", drop("holidays_NYSE", hol("2026-11-26"))), clocks,
+         "decision_time_utc('US', 2026-11-26), Thanksgiving (spec L1340, L2087) did not raise NotASession"),
+        (_close02_docs_set("open0910", regular_open), clocks, "session('KR', 2026-10-02) (open, close"),
+        (_close02_config_set("KR", "first_trading_day_open_kst", "10:30"), clocks, "session('KR', 2026-01-02)"),
+        (_close02_docs_set("nolunch", drop("kr_sessions", lambda r: r["kind"] == "lunch_break")), clocks,
+         "session('KR', 1999-03-02) (lunch break, closing call; spec L2016, L2011) is (None,"),
+        (_close02_config_set("KR", "closing_call_kst", [{"to": "2016-07-31", "window": ["14:40", "15:00"]},
+                                                         {"from": "2016-08-01", "window": ["15:20", "15:30"]}]), clocks,
+         "session('KR', 1999-03-02) (lunch break, closing call"),
+        (_close02_config_set("KR", "csat_closing_call_kst", [{"to": "2016-07-31", "window": "from_krx_notice"},
+                                                             {"from": "2016-08-01", "window": ["16:10", "16:30"]}]), clocks,
+         "session('KR', 2025-11-13), a CSAT day"),
+        (cal, _clocks_with(session=no_flags("US")), "session('US', 2026-11-27) flags (spec L2021) is frozenset()"),
+        (_close02_config_set("JP", "close_jst", [{"to": "2024-11-03", "time": "15:00"}, {"from": "2024-11-04", "time": "15:30"}]),
+         clocks, "decision_time_utc('JP', 2024-11-04), the last TSE session through 2024-11-04 (spec L2022)"),
+        (_close02_config_set("JP", "close_jst", [{"to": "2024-11-05", "time": "15:00"}, {"from": "2024-11-06", "time": "15:30"}]),
+         clocks, "decision_time_utc('JP', 2024-11-05) (spec L2022)"),
+        (_close02_config_set("JP", "close_print_bound_s", 30), clocks, "close_print_bound_utc('JP', 2026-10-08)"),
+        (_close02_docs_set("cn1530", set_close("CN", "15:30")), clocks, "decision_time_utc('CN', 2026-10-08) (spec L2023)"),
+        (_close02_docs_set("tw1345", set_close("TW", "13:45")), clocks, "decision_time_utc('TW', 2026-10-08) (spec L2023)"),
+        (_close02_docs_set("hk1550", set_close("HK", "15:50")), clocks,
+         "decision_time_utc('HK', 2026-10-08) is 2026-10-08 07:50:00+00:00, before 16:00 HKT"),
+        (cal, _clocks_with(decision_time_utc=coverage_as_not_a_session),
+         "decision_time_utc('KR', 1994-12-31), before the signed coverage (spec L2090) raised NotASession"),
+        (cal, _clocks_with(decision_time_utc=wrong_markets), "decision_time_utc('CRYPTO', 2026-10-02) (spec L5505)"),
+    )
+    for wrong, clk, needle in cases:
+        e = _raises(lambda: _check_close02(wrong, clk), AssertionError)
+        assert f"T-CLOSE-02: {needle}" in str(e), (needle, str(e))
+    eu = _clocks_with(decision_time_utc=lambda m, d, cal=None: U(d.year, d.month, d.day) if m == "EU"
+                      else clocks.decision_time_utc(m, d, cal=cal))
+    e = _raises(lambda: _check_close02(cal, eu), AssertionError)
+    assert "T-CLOSE-02: decision_time_utc('EU', 2026-10-02) did not raise KeyError" in str(e), str(e)
 
 
 def test_print01_intraday_print_is_never_a_close():

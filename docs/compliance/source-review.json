@@ -279,7 +279,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "276beb00bc90b6d4cba87d33ba7891f139f74b792e98295d5f29fe0b644cd258",
+    "docs/compliance/FACTS.md": "642ee21860c85b53450d1a4f88dd5d0d9e6f26a8867b824b15ddb382c814aea2",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -318,6 +318,7 @@
     "docs/product/LETF_STUDY_SCOPE_2026-10-30.md": "486c09251d18d105fd4397b9d3e2aec393fc420565ccb84650375aefe7044618",
     "docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md": "9ccc09cc2982dc78907e71cd596b980115efa4f8d05d0aeef340db91dc73864e",
     "docs/product/LOOKAHEAD_LA02_PART1_2026-11-10.md": "f4ce44fcfc95c76213c6df187e2444a7fc860bf6d72aa6e514ef11917e38a44f",
+    "docs/product/LOOKAHEAD_LA02_PART2_2026-11-10.md": "296ac9169a84487df44ac60a634056094e378b374bca8afdc88f859096e4699a",
     "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "71dffdb67f3b38ed8b726f273c8651a8a65ec832cdfedc84ba5431bebaca2494",
     "docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md": "9cf84bb4371950a1aa5741a5ca2f5784471749e818d5362b23262ebb37aff579",
     "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md": "6cc0846354f34cfec6f4c70199cc74dfa17de083d7e980f9c98608549175033c",
@@ -500,13 +501,13 @@
     "tests/macro_m0_rules.py": "7cb91771c62286132b269f71ac2c2c351548ff844d6bc474b1e4abcc65a09219",
     "tests/macro_m0_schemas.py": "ef2870b7170a9a56b642c55cd509d5e2438efd2698ef52656aec28300fd66aa1",
     "tests/macro_m1_books.py": "e940009e977b4b45f44025b3e91e9bbd0db8b87986b7ff0f0282c08e468f3bd0",
-    "tests/macro_m1_calendars.py": "6a966c14154dacbfae56e2dfcb7de6999b29a7b3c0817d117aae9ee5abc36224",
-    "tests/macro_m1_fixtures.py": "600f3c1892432b7875110035894e2e746c513d621b2abc70dca04a75ebf53bbc",
+    "tests/macro_m1_calendars.py": "0989ccf585918fb33418cd365a25eda69dc0f0ca3485797b369c70fedf086db6",
+    "tests/macro_m1_fixtures.py": "c1cedafab1e1776e4e679e7d56f296c62b74cbb2318f98f44d290609fbc21a8e",
     "tests/macro_m1_integration.py": "4a370e688d1fa8a5130ed470f8148712da8c8852144f9e07a60954bc286e7680",
-    "tests/macro_m1_pit.py": "ff67c5ada20e57d794b8848c8f0d6727f920d33ebae73c2f15d85b0d71dbb954",
+    "tests/macro_m1_pit.py": "1a94e7a7bd9288ef93d8a949a3fc4f4a16e3ff0306cec82c7dc3f8d8d5601cb9",
     "tests/macro_m2_costed.py": "754a2af2fac98fb245dc6c0c6c53b23e978d4db1c0dff7ec224d712730c143f3",
-    "tests/macro_m2_risk.py": "8e215f0907d0892baa2d8b53ad2c487fb8471125d5a23228049dd7bfa5d5aaa1",
-    "tests/macro_m3_estimators.py": "15ae23faa6b3c313771ad286985098f30fe868a485848c4e6a8e83925d8fdddb",
+    "tests/macro_m2_risk.py": "1cfacfd792c7e3a52b58a972a76d86cd4378ec60d866ff5ec1fab0cb07d626a8",
+    "tests/macro_m3_estimators.py": "12ed300305471469a1685731a588ea3d4cea83c49d9b61a38ad163e90827bffc",
     "tests/macro_m4_integration.py": "b3cb2979c31e0450cbbf1be01c9088e87a0ef4b1882ae8adba9b95218222918d",
     "tests/macro_m4_sleeves.py": "a14f5eec30de07244b572ee1585890a03a963eb71389082ce2432e87db8b8bc3",
     "tests/macro_m5_books.py": "66f09499042dd365a4908cee882f4c5e4d5bb26d54865ef49ac9c8e9b9048a6d",
@@ -650,163 +651,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "cdcdf23b0bb0c0f9f92649f9c82257b3732fbd24683f9c9fb8e703538be69ed3",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.124143+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "7f3dd692d8986af42c92b9fefaa50d94e460646779b7b0d6378b9f431fe544c0",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.691009+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "cdcdf23b0bb0c0f9f92649f9c82257b3732fbd24683f9c9fb8e703538be69ed3",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.127119+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "7f3dd692d8986af42c92b9fefaa50d94e460646779b7b0d6378b9f431fe544c0",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.693312+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "26c750e1cb91d2bb2e5c7a735094e4e0c050612e21a2c4610b17f97aa1a5ca2e",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.129308+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "1c03da7d185babdb5ab2ca7a4c60dbb550dc1f0c6ff32a73fc7edc2c4d334935",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.695583+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "d53533dac244771ae9c9a9a56459869a35b1b5165ab34faaebaca0056a028927",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.131418+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "666e61643dda0a0d6d7ecd0a3881b5e7f8188a767a1a551a9b458a2f8724a34f",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.697502+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "aa411445b2e336f2eb99cdc2b2aa1209377f235fd1640bbd93ae9d7ef7d5b602",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.133585+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "e0562848fa17c03d404600218c732595ca0a6e58235af8ca25397cbb29b95f83",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.699580+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "6da57b32ba30d5b76dd822077bb1b897e218c89460db5f49572d636efb627db4",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.135548+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "ab06d0e0d6a64aacb9553cc0bd71616ed4422645a5258bedb7531054fc499a37",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.701269+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "7": {
       "document_sha256": "78cdfba4ec2d3876436aa95f7127cd91b5937e036b450f77286250e98be492ae",
-      "source_digest": "cdcdf23b0bb0c0f9f92649f9c82257b3732fbd24683f9c9fb8e703538be69ed3",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.137634+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "7f3dd692d8986af42c92b9fefaa50d94e460646779b7b0d6378b9f431fe544c0",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.702948+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "6da57b32ba30d5b76dd822077bb1b897e218c89460db5f49572d636efb627db4",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.139608+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "ab06d0e0d6a64aacb9553cc0bd71616ed4422645a5258bedb7531054fc499a37",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.704527+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "1049d4b3b16ceb74791f6b544d5ec1d5fa69db15c0dc859b8d08578716e82d72",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.141550+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "939b50851bfcb097be08ab6bec06f88a832e2de087e3e1cec1126f2de7d975ad",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.706312+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "63073aeb94048061c45c42fb837058e5c0f2d26db0240177119b6fd7a116b51a",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.143632+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "fdad6ea4b1c36ef893ac1dd2f4b1ff650e85f5b5918fd4ed904587c18019ecd0",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.708089+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "4dff2b4ca498f7a08310076566784a995859a15bb735b7d8c50a971f7a564c86",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.145415+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "64f6fdc7a76799f42c129cebbb969d89fb2cb7580a9284c698fa0255a5dd634f",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.710053+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "8f89d768dfeaf623ee2dc5ed6f3f361cd8d567f85a8c76cd8962d35d1eff072d",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.147383+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "dae3546847fb027635dae6ec11cf0dd10ccf4a8828dcf9ab0adc735621e1f8ae",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.711692+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "1049d4b3b16ceb74791f6b544d5ec1d5fa69db15c0dc859b8d08578716e82d72",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.149528+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "939b50851bfcb097be08ab6bec06f88a832e2de087e3e1cec1126f2de7d975ad",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.716205+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "1049d4b3b16ceb74791f6b544d5ec1d5fa69db15c0dc859b8d08578716e82d72",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.151246+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "939b50851bfcb097be08ab6bec06f88a832e2de087e3e1cec1126f2de7d975ad",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.718500+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "1049d4b3b16ceb74791f6b544d5ec1d5fa69db15c0dc859b8d08578716e82d72",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.152972+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "939b50851bfcb097be08ab6bec06f88a832e2de087e3e1cec1126f2de7d975ad",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.720152+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "59ca2f49861a5a8cd75ce4ed4c2e087f022a29cb5932948ed4f804834bc954af",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.154860+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "56626c01fb0d3bd8bd89b13faa36cac9fc0c93b4757ea07831da9f65310b70a7",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.721977+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "6da57b32ba30d5b76dd822077bb1b897e218c89460db5f49572d636efb627db4",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.157748+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "ab06d0e0d6a64aacb9553cc0bd71616ed4422645a5258bedb7531054fc499a37",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.723567+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "cdcdf23b0bb0c0f9f92649f9c82257b3732fbd24683f9c9fb8e703538be69ed3",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.159733+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "7f3dd692d8986af42c92b9fefaa50d94e460646779b7b0d6378b9f431fe544c0",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.725586+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "bcc4335a80542dcfe2b745947de8748860475854735eb445d325c979a309fbc0",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.161733+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "6271347e045b70cf53060f9fd8cccd68aa34cfc7d6758f68f45520ecc6ed3905",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.727256+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     },
     "20": {
       "document_sha256": "cdd145c4cc4efc03215ca3f43fe0b988588ea2b92d8c1fbb7274b8326db52343",
-      "source_digest": "cdcdf23b0bb0c0f9f92649f9c82257b3732fbd24683f9c9fb8e703538be69ed3",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.163462+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "7f3dd692d8986af42c92b9fefaa50d94e460646779b7b0d6378b9f431fe544c0",
+      "reviewed_by": "Claude LA-02 part 2 review",
+      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T14:38:23.728899+00:00",
+      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
     }
   }
 }
