@@ -6,9 +6,9 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c
 next_ids: ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-11T02:25:00+09:00
+updated_at: 2026-11-11T02:40:00+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: owner
 work_branch: main
 work_commit: 5f1ead5
 uncommitted_changes: no
@@ -91,6 +91,7 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 
 ## 6. 다음 할 일 (순서대로)
 
+0. 2026-11-11 02:40 KST 소유자에게 아래 질문을 정리해 보고했고 답을 기다립니다(waiting_on: owner). 남은 next_ids(⑨-3a 다음 단위, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c)는 모두 소유자 결정·외부 검토·UI 범위 제한(UI는 PR89 범위만) 중 하나에 걸려 있습니다.
 1. 소유자 질문 정리 보고: LA-02 2부 레이아웃(F13/F14/F16 `close`, F27 long form, F18 열 이름)·달력 서명 범위(1997/2015~)·미등록 시계열(KS11·GSPC·KRWX·005930; 생성기 거부)·`docs/vol_backtest.fixture_lines`의 F13 obs_date/value 불일치, ledger N_raw 뜻, ⑨-4 Q1~Q5·Q7, 설계 0b(P-01)·Q12, I-05용 LA-30 자료, 실시간 주문 전 M-12.
 2. 답에 따라: ⑨-4 다음 단위, R3 Lab UI(허용됨), 실시간 주문 안전 설계.
 3. #98이 병합되면 UI 변경 결과를 1107 페이지 UI 항목에 반영(소유자 지시: 다른 세션 UI 보고 시 반영).
