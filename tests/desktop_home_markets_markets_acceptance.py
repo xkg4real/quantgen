@@ -13,6 +13,7 @@ import re
 import threading
 import time
 import unittest
+from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 from unittest.mock import Mock, patch
 
@@ -53,6 +54,17 @@ def us_batch(fetched_at=NOW):
                                   "2026-11-10", estimated_value=True, closes=(p * 0.9, p * 0.95, p))
                     for c, p, x, v in rows)
     return R.Batch("us", records, "daily", fetched_at.isoformat())
+
+
+def us_cap_batch(fetched_at=NOW):
+    """US market cap as the loader leaves it: NVIDIA stated by KIS (price-detail), Apple computed from Yahoo
+    shares x its price, JPMorgan's share count unreadable."""
+    base = us_batch(fetched_at)
+    got = {r.member.code: r for r in base.records}
+    records = (R.computed_cap(got["AAPL"], 1.484e10, source="Yahoo Finance", as_of="2026-10-17"),
+               R.with_cap(got["NVDA"], 4.4e12, basis="provider", source="KIS", as_of="2026-11-11T05:19:00+00:00"),
+               R.without_cap(got["JPM"], "no_shares"))
+    return replace(base, records=records, caps="ok", cap_reasons=("fmp_plan",))
 
 
 class FakeLoader:
@@ -198,11 +210,78 @@ class MarketsPageTests(Base):
         self.assertEqual(self.shown_rows()[0].value.text(), "$36.0B")
         self.assertTrue(self.shown_rows()[0].spark.isVisible())  # daily closes give a sparkline cheaply
         self.board.category_buttons["cap"].click(); self.app.processEvents()
-        self.assertEqual(self.shown_rows(), [])
-        self.assertIn("시가총액은 KIS", self.board.empty.text())
+        self.assertEqual(self.shown_rows(), [])  # this fixture loader sought no market cap, and says so
+        self.assertEqual(self.board.empty.text(), "이 시세에는 시가총액이 없습니다.")
         shown = " ".join(self.page_text())
         self.assertNotIn("Yahoo", shown)
         self.assertFalse(re.search(r"\d{4}-\d{2}-\d{2}", shown), shown)  # dates stay in tooltips
+
+    def test_us_market_cap_ranks_the_figures_found_and_says_where_they_came_from(self):
+        # Owner 2026-11-11: "아니 미국 시총 자료 찾으세요". The explanation gives way to the list.
+        self.board.loader = FakeLoader({"kr": kr_batch(), "us": us_cap_batch()})
+        self.board.market_buttons["us"].click(); self.board.category_buttons["cap"].click(); self.load()
+        rows = self.shown_rows()
+        self.assertEqual(self.names(), ["엔비디아", "애플", "JP모건"])
+        self.assertEqual([(r.rank.text(), r.value.text()) for r in rows], [("1", "$4.4T"), ("2", "$3.4T"), ("", "—")])
+        self.assertFalse(self.board.empty.isVisible())
+        self.assertEqual(self.board.head_value.text(), "시가총액(계산값)")
+        self.assertEqual(rows[1].value.toolTip(), "상장주식수 148.4억주 (Yahoo Finance, 2026-10-17) × 가격 $226.13 = $3.4T")
+        self.assertEqual(rows[0].value.toolTip(), "KIS 제공 시가총액 · 2026-11-11 14:19 (한국 시간) 기준")
+        self.assertEqual(rows[2].value.toolTip(), "상장주식수를 읽지 못했습니다.")
+        self.assertIn("Yahoo Finance", self.board.head_value.toolTip())
+        self.assertIn("시가총액(계산값) = 상장주식수 × 표시 가격", self.board.footnote.text())
+        self.assertIn("1개 종목은 시가총액을 읽지 못해 순위 없이 맨 아래에 둡니다.", self.board.footnote.text())
+        shown = " ".join(self.page_text())
+        self.assertNotIn("Yahoo", shown); self.assertNotIn("FMP", shown)  # providers and dates in tooltips only
+        self.assertFalse(re.search(r"\d{4}-\d{2}-\d{2}", shown), shown)
+        self.board.set_sector("bio")  # no US bio stock in the fixture: nothing ranked, so no '—' rows either
+        self.assertEqual((self.shown_rows(), self.board.empty.text()), ([], "이 목록에는 시가총액을 읽은 종목이 없습니다."))
+        self.board.set_sector("")
+        self.window.set_language("en"); self.app.processEvents()
+        rows = self.shown_rows()
+        self.assertEqual(self.board.head_value.text(), "Market cap (computed)")
+        self.assertEqual([r.value.text() for r in rows], ["$4.4T", "$3.4T", "—"])
+        self.assertEqual(rows[1].value.toolTip(), "Shares outstanding 14.8B (Yahoo Finance, 2026-10-17) × price $226.13 = $3.4T.")
+        self.assertEqual(rows[0].value.toolTip(), "KIS market cap, stated 2026-11-11 14:19 KST.")
+        self.assertIn("No market cap for 1 of these stocks", self.board.footnote.text())
+        self.assertEqual([t for t in self.page_text() if re.search("[가-힣]", t)], [])
+        self.board.category_buttons["value"].click(); self.app.processEvents()
+        self.assertEqual(self.board.head_value.text(), "Trading value")
+        self.assertEqual(len(self.shown_rows()), 3)
+        self.assertNotIn("market cap", self.board.footnote.text().lower())
+        self.window.set_language("ko"); self.app.processEvents()
+        # The domestic path is unchanged: KIS's own figure, the plain heading, rows without a cap left out.
+        self.board.market_buttons["kr"].click(); self.board.category_buttons["cap"].click(); self.load()
+        self.assertEqual(self.board.head_value.text(), "시가총액")
+        self.assertEqual(self.shown_rows()[0].value.toolTip(), "")
+        no_cap = kr_batch()
+        self.board.batches["kr"] = replace(no_cap, records=tuple(replace(r, market_cap=None) for r in no_cap.records))
+        self.board.render()
+        self.assertEqual(self.shown_rows(), [])
+        self.assertIn("시가총액은 KIS", self.board.empty.text())  # the domestic explanation stays
+        self.assertEqual(self.board.loader.calls, ["us", "kr"])
+
+    def test_us_market_cap_says_why_when_none_could_be_read(self):
+        base = us_batch()
+        none = replace(base, records=tuple(R.without_cap(r, "error") for r in base.records), caps="none",
+                       cap_reasons=("kis_off", "fmp_no_key", "yahoo_unreachable"))
+        self.board.loader = FakeLoader({"us": none})
+        self.board.market_buttons["us"].click(); self.board.category_buttons["cap"].click(); self.load()
+        self.assertEqual(self.shown_rows(), [])
+        self.assertEqual(self.board.empty.text(),
+                         "미국 시가총액을 읽지 못했습니다. KIS가 연결되어 있지 않습니다. FMP_API_KEY가 설정되어 있지 않습니다. "
+                         "Yahoo Finance에 연결하지 못했습니다.")
+        self.window.set_language("en"); self.app.processEvents()
+        self.assertEqual(self.board.empty.text(),
+                         "Could not read US market cap. KIS is not connected. FMP_API_KEY is not set. "
+                         "Yahoo Finance could not be reached.")
+        plan = replace(none, cap_reasons=("kis_none", "fmp_plan", "yahoo_timeout"))
+        self.board.batches["us"] = plan; self.board.render()
+        self.assertEqual(self.board.empty.text(), "Could not read US market cap. KIS returned no usable market cap. "
+                                                  "The FMP plan does not include batch quotes. "
+                                                  "Yahoo Finance did not answer in time.")
+        self.board.category_buttons["volume"].click(); self.app.processEvents()
+        self.assertEqual(len(self.shown_rows()), 3)  # the quotes themselves are kept
 
     def test_failures_and_empty_answers_say_so(self):
         self.board.loader = FakeLoader({"kr": RuntimeError("raw provider text"), "us": R.Batch("us", (), "none", NOW.isoformat())})
@@ -359,8 +438,8 @@ class AutomaticRefreshTests(Base):
 
 
 class FakeService:
-    def __init__(self, ready=True, fail=()):
-        self.ready, self.fail, self.calls = ready, set(fail), []
+    def __init__(self, ready=True, fail=(), no_detail=()):
+        self.ready, self.fail, self.no_detail, self.calls = ready, set(fail), set(no_detail), []
 
     def _get(self, path, tr_id, params):
         config_paths = config.KIS_QUOTATION_ALLOWLIST
@@ -369,6 +448,11 @@ class FakeService:
         code = params.get("FID_INPUT_ISCD") or params.get("SYMB")
         if code in self.fail or "*" in self.fail:
             raise RuntimeError("KIS said no")
+        if tr_id == "HHDFS76200200":  # overseas price-detail: market cap and listed shares
+            if code in self.no_detail:
+                raise RuntimeError("no detail")
+            return {"output": {"last": "100.5", "tomv": "1507500000000", "shar": "15000000000", "curr": "USD",
+                               "perx": "30.10", "pbrx": "40.20"}}
         if tr_id == "FHKST01010100":
             return {"output": {"stck_prpr": "70000", "prdy_vrss": "700", "prdy_vrss_sign": "2", "prdy_ctrt": "1.01",
                                "acml_vol": "1000", "acml_tr_pbmn": "70000000", "hts_avls": "4200"}}
@@ -423,6 +507,61 @@ class LoaderTests(Base):
             self.assertEqual((live.mode, live.fallback), ("kis", False))
         self.assertEqual(daily_batch("kr", members[:1], fetch=lambda s: [], workers=2).mode, "none")
 
+    def test_kis_price_detail_market_cap_in_the_paced_us_batch(self):
+        # Owner approval 2026-11-11 ("승인."): KIS overseas price-detail added to the read-only allowlist.
+        self.assertIn("/uapi/overseas-price/v1/quotations/price-detail", config.KIS_QUOTATION_ALLOWLIST)
+        members = (member("AAPL"), member("TSM"), member("JPM"))
+        service, sleeps, ticks, details, moment = FakeService(no_detail={"JPM"}), [], iter(range(100)), {}, [0.0]
+        batch = kis_batch(service, "us", members, sleep=sleeps.append, clock=lambda: next(ticks) * 0.01,
+                          per_second=20, details=details, now=lambda: moment[0])
+        self.assertEqual([c[1] for c in service.calls],
+                         ["HHDFS00000300", "HHDFS76200200", "HHDFS00000300", "HHDFS00000300", "HHDFS76200200"])
+        self.assertEqual(service.calls[1][2], {"AUTH": "", "EXCD": "NAS", "SYMB": "AAPL"})
+        self.assertEqual(len(sleeps), 4)  # every request, detail included, through the same 20/s pacing
+        got = {r.member.code: r for r in batch.records}
+        self.assertEqual(set(got), {"AAPL", "TSM", "JPM"})  # a failed detail costs no quote
+        self.assertEqual((got["AAPL"].market_cap, got["AAPL"].cap_basis, got["AAPL"].cap_source),
+                         (1507500000000.0, "provider", "KIS"))
+        self.assertEqual((got["TSM"].market_cap, got["JPM"].market_cap), (None, None))  # ADR not asked; JPM failed
+        moment[0] = 299.0
+        kis_batch(service, "us", members, sleep=sleeps.append, details=details, now=lambda: moment[0])
+        self.assertEqual([c[1] for c in service.calls[5:]], ["HHDFS00000300"] * 3)  # details reused for 5 min
+        moment[0] = 301.0
+        again = kis_batch(service, "us", members, sleep=sleeps.append, details=details, now=lambda: moment[0])
+        self.assertEqual(service.calls[-1][1], "HHDFS76200200")
+        self.assertEqual(again.records[0].cap_source, "KIS")
+        plain = kis_batch(FakeService(), "us", members[:1], sleep=sleeps.append)  # no details: price only
+        self.assertEqual((plain.records[0].market_cap, plain.records[0].cap_basis), (None, ""))
+
+    def test_us_fetch_adds_market_caps_after_the_quotes_and_kr_is_unchanged(self):
+        from core.market.market_cap import MarketCapSource, SharesCache
+        asked = []
+
+        def shares(symbol):
+            asked.append(symbol)
+            return 1.5e10, "2026-10-31"
+        caps = MarketCapSource(fmp_key=lambda: "", yahoo_fetch=shares, cache=SharesCache(None))
+        loader = ProductionRankingLoader(service_factory=lambda: FakeService(ready=True), caps=caps)
+        us = loader("us", (member("AAPL"), member("TSM")))
+        apple, tsmc = us.records
+        self.assertEqual((us.mode, us.caps, us.cap_reasons), ("kis", "ok", ("fmp_no_key",)))
+        self.assertEqual((apple.market_cap, apple.cap_basis, apple.cap_source), (1507500000000.0, "provider", "KIS"))
+        self.assertEqual((tsmc.market_cap, tsmc.cap_missing), (None, "adr"))
+        self.assertEqual(asked, [])  # KIS stated it: Yahoo is not asked
+        no_detail = ProductionRankingLoader(service_factory=lambda: FakeService(ready=True, no_detail={"AAPL"}),
+                                            caps=caps)("us", (member("AAPL"),))
+        self.assertEqual((no_detail.records[0].market_cap, no_detail.records[0].cap_basis, no_detail.cap_reasons),
+                         (1.5e10 * 100.5, "computed", ("kis_none", "fmp_no_key")))  # Yahoo shares x KIS last
+        self.assertEqual(asked, ["AAPL"])
+        kr = loader("kr", R.DOMESTIC[:2])
+        self.assertEqual((kr.caps, [r.cap_basis for r in kr.records], asked), ("", ["", ""], ["AAPL"]))
+        self.assertEqual([c[1] for c in loader.service().calls[3:]], ["FHKST01010100"] * 2)  # domestic: no detail
+        self.assertEqual(loader("us", (member("AAPL"),), cancelled=lambda: True).caps, "")  # stopped: not sought
+        broken = ProductionRankingLoader(service_factory=lambda: FakeService(ready=True),
+                                         caps=Mock(side_effect=RuntimeError("provider text")))
+        kept = broken("us", (member("AAPL"),))
+        self.assertEqual((len(kept.records), kept.caps), (1, "none"))  # a market-cap failure keeps the quotes
+
     def test_window_constructs_no_kis_service_and_fetches_nothing_with_refresh_off(self):
         window = ResearchWindow(auto_refresh=False, locale="en_US",
                                 market_loader=Mock(side_effect=AssertionError("Provider forbidden")))
@@ -435,6 +574,7 @@ class LoaderTests(Base):
         loader = window.markets_view.rankings.loader
         self.assertIsInstance(loader, ProductionRankingLoader)
         self.assertIsNone(loader._service)  # its KIS service is built on the first fetch only
+        self.assertIsNone(loader._caps)     # and so is the US market-cap step
         self.assertEqual(window.markets_view.rankings.batches, {})
         self.assertFalse(window.markets_view.rankings.jobs.busy)
         window.hide()

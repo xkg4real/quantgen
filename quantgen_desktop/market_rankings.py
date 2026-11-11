@@ -11,6 +11,12 @@ Data, off the UI thread and only while the list is visible with automatic refres
   every call process-wide); refreshed every `LIVE_REFRESH_SECONDS` during the session.
 * otherwise (or when KIS answers nothing): the Yahoo daily path, labelled "delayed · daily"; trading value is
   close x volume (an estimate, said so in the note). Refreshed every `IDLE_REFRESH_SECONDS`.
+* US market cap (owner 2026-11-11, "아니 미국 시총 자료 찾으세요"), inside the same US fetch, in this order:
+  KIS's overseas ``price-detail`` market cap in the KIS batch when KIS is configured (allowlisted with the
+  owner's approval, "승인."; at most every `DETAIL_SECONDS` per stock); then (`core.market.market_cap`)
+  FMP's stated figure from one batch request when FMP_API_KEY is set and the plan allows it; otherwise Yahoo
+  share counts (cached a day) x the row's price, headed "시가총액(계산값)". A stock whose figure could not be
+  read is listed last without a rank and shows '—'; when none could be read the list says why instead.
 One fetch serves every category of its group ('kr' or 'us'): switching category re-ranks the cached quotes.
 
 The source state is always shown ("KIS 실시간" only for KIS quotes during the regular session; "지연·일별";
@@ -41,6 +47,7 @@ IDLE_REFRESH_SECONDS = 300     # KIS outside the session, and delayed daily bars
 RETRY_SECONDS = 60             # after a failed fetch
 LIVE_STALE_SECONDS = 3 * LIVE_REFRESH_SECONDS  # a KIS list older than this is not called real-time
 KIS_MAX_PER_SECOND = 20
+DETAIL_SECONDS = IDLE_REFRESH_SECONDS  # a US stock's KIS price-detail (market cap) is asked at most this often
 DAILY_WORKERS = 4
 DAILY_PERIOD = "1mo"
 DOMESTIC_PRICE = ("/uapi/domestic-stock/v1/quotations/inquire-price", "FHKST01010100")
@@ -58,24 +65,37 @@ def _utc_now():
 
 # Loading ----------------------------------------------------------------------------------------
 def kis_batch(service, group, members, *, cancelled=None, progress=None, sleep=time.sleep, clock=time.monotonic,
-              per_second=KIS_MAX_PER_SECOND):
-    """One allowlisted KIS quote per member, at most `per_second` a second; failures stay per stock."""
+              per_second=KIS_MAX_PER_SECOND, details=None, now=time.monotonic):
+    """One allowlisted KIS quote per member, at most `per_second` a second; failures stay per stock.
+
+    With `details` (a dict the caller keeps between fetches), a US member also gets KIS's overseas
+    ``price-detail`` answer for its market cap (owner approval 2026-11-11), through the same pacing, at most
+    once per `DETAIL_SECONDS` per stock (the answer is reused in between, with its own received time). A
+    price-detail failure never costs the price quote. ADRs are not asked (`rankings.ADR_CODES`).
+    """
     records, failures = [], []
-    gap, last = 1.0 / per_second, None
+    gap, last = 1.0 / per_second, [None]
+
+    def paced(path, tr_id, params):
+        if last[0] is not None:
+            wait = gap - (clock() - last[0])
+            if wait > 0:
+                sleep(wait)
+        last[0] = clock()
+        return service._get(path, tr_id, params)
+
     for index, member in enumerate(members):
         if cancelled is not None and cancelled():
             break
-        if last is not None:
-            wait = gap - (clock() - last)
-            if wait > 0:
-                sleep(wait)
-        last = clock()
         try:
             if member.market == "US":
-                payload = service._get(*OVERSEAS_PRICE, {"AUTH": "", "EXCD": member.exchange, "SYMB": member.code})
-                records.append(R.parse_kis_overseas(member, payload.get("output")))
+                params = {"AUTH": "", "EXCD": member.exchange, "SYMB": member.code}
+                record = R.parse_kis_overseas(member, paced(*OVERSEAS_PRICE, params).get("output"))
+                if details is not None and member.code not in R.ADR_CODES:
+                    record = _with_detail(record, details, lambda: paced(*_overseas_detail(), params), now)
+                records.append(record)
             else:
-                payload = service._get(*DOMESTIC_PRICE, {"FID_COND_MRKT_DIV_CODE": "J", "FID_INPUT_ISCD": member.code})
+                payload = paced(*DOMESTIC_PRICE, {"FID_COND_MRKT_DIV_CODE": "J", "FID_INPUT_ISCD": member.code})
                 records.append(R.parse_kis_domestic(member, payload.get("output")))
         except Exception as exc:  # the class name is the whole record; provider text may hold URLs
             failures.append((member.code, type(exc).__name__))
@@ -83,6 +103,25 @@ def kis_batch(service, group, members, *, cancelled=None, progress=None, sleep=t
             progress(index + 1, len(members))
     return R.Batch(group, tuple(records), "kis" if records else "none", _utc_now().isoformat(timespec="seconds"),
                    tuple(failures))
+
+
+def _overseas_detail():
+    from data.kis_workspace import OVERSEAS_PRICE_DETAIL
+    return OVERSEAS_PRICE_DETAIL
+
+
+def _with_detail(record, details, fetch, now):
+    """`record` with KIS's market cap from a price-detail answer at most `DETAIL_SECONDS` old."""
+    code, moment = record.member.code, now()
+    kept = details.get(code)
+    if kept is None or not 0 <= moment - kept[0] < DETAIL_SECONDS:
+        try:
+            output = fetch().get("output")
+        except Exception:  # remembered as nothing, and asked again after DETAIL_SECONDS
+            output = None
+        kept = (moment, output, _utc_now().isoformat(timespec="seconds"))
+        details[code] = kept
+    return R.with_kis_detail(record, kept[1], received_at=kept[2])
 
 
 def _yahoo_candidates(member):
@@ -138,13 +177,17 @@ def daily_batch(group, members, *, fetch=None, cancelled=None, progress=None, wo
 
 class ProductionRankingLoader:
     """KIS quotes when KIS is configured; otherwise, or when KIS answers nothing, delayed daily bars.
+    US KIS quotes carry KIS's market cap (price-detail); the stocks still without one get theirs from `caps`
+    (`core.market.market_cap.MarketCapSource`: FMP, then Yahoo shares x price).
 
     Nothing is constructed or fetched until the first call (a window with automatic refresh off never calls).
     """
 
-    def __init__(self, *, service_factory=None, fetch=None):
+    def __init__(self, *, service_factory=None, fetch=None, caps=None):
         self._factory, self._fetch = service_factory, fetch
         self._service = None
+        self._caps = caps
+        self._details = {}            # US code -> (when, KIS price-detail output, received at), see kis_batch
         self._lock = threading.Lock()
 
     def service(self):
@@ -157,10 +200,27 @@ class ProductionRankingLoader:
                     self._service = MarketDataService()
             return self._service
 
+    def market_caps(self):
+        with self._lock:
+            if self._caps is None:
+                from core.market.market_cap import MarketCapSource
+                self._caps = MarketCapSource()
+            return self._caps
+
     def __call__(self, group, members, cancelled=None, progress=None):
+        batch = self._quotes(group, members, cancelled, progress)
+        if group != "us" or not batch.records or (cancelled is not None and cancelled()):
+            return batch
+        try:
+            return self.market_caps()(batch, cancelled=cancelled, progress=progress)
+        except Exception:  # a market-cap failure must not cost the quotes
+            return replace(batch, caps="none")
+
+    def _quotes(self, group, members, cancelled, progress):
         service = self.service()
         if getattr(service, "ready", False):
-            batch = kis_batch(service, group, members, cancelled=cancelled, progress=progress)
+            batch = kis_batch(service, group, members, cancelled=cancelled, progress=progress,
+                              details=self._details if group == "us" else None)
             if batch.records or (cancelled is not None and cancelled()):
                 return batch
             daily = daily_batch(group, members, fetch=self._fetch, cancelled=cancelled, progress=progress)
@@ -304,12 +364,12 @@ class RankRow(QFrame):
             widget.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             layout.addWidget(widget)
 
-    def show_row(self, row, *, language, dark, category, spark):
+    def show_row(self, row, *, language, dark, category, spark, value_tip=""):
         from .typography import TONE_COLORS, set_tone
         self.row = row
         record, member = row.record, row.record.member
         name = member.label(language)
-        self.rank.setText(str(row.rank))
+        self.rank.setText(str(row.rank) if row.rank else "")  # 0: no figure, listed after the ranked rows
         self.mark.set_identity(member.code, mark_name(name))
         self.mark.setAccessibleName(name)
         self.mark.setToolTip(f"{name} · {member.code}")
@@ -323,11 +383,13 @@ class RankRow(QFrame):
         kind, unit = R.value_unit(category, member.group)
         figure = {"value": record.trading_value, "volume": record.volume, "cap": record.market_cap}[kind]
         self.value.setText(R.compact(figure, unit, language))
+        self.value.setToolTip(value_tip)
         tones = TONE_COLORS[bool(dark)]
         closes = record.closes
         self.spark.set_values(closes, tones["up"] if len(closes) > 1 and closes[-1] >= closes[0] else tones["down"])
         self.spark.setVisible(spark)
-        self.setAccessibleName(f"{row.rank}. {name} {self.price.text()} {self.change.text()}")
+        place = f"{row.rank}. " if row.rank else ""
+        self.setAccessibleName(f"{place}{name} {self.price.text()} {self.change.text()} {self.value.text()}")
 
     def _open(self):
         if self.row is not None:
@@ -513,6 +575,7 @@ class RankingBoard(QFrame):
             widget.setFixedWidth(width)
             widget.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             header.addWidget(widget)
+        self.head_value.setWordWrap(True)  # "Market cap (computed)" takes two lines in the figure column
         layout.addLayout(header)
         self.list_layout = QVBoxLayout()
         self.list_layout.setContentsMargins(0, 0, 0, 0)
@@ -718,20 +781,24 @@ class RankingBoard(QFrame):
         for key, button in self.market_buttons.items():
             button.setChecked(key == self.market)
         batch = self.batches.get(group)
+        # US market cap: a stock whose figure could not be read is listed last, unranked, as '—'.
+        missing = "last" if self.category == "cap" and group == "us" else "omit"
         rows = R.rank(batch.records, self.category, market=self.market, sector=self.sector,
-                      limit=self.limit) if batch is not None else []
+                      limit=self.limit, missing=missing) if batch is not None else []
         self.ranked = rows
         spark = self.width() >= SPARK_MIN_WIDTH and any(len(row.record.closes) > 1 for row in rows)
         self.head_spark.setVisible(spark and bool(rows))
         kind, _unit = R.value_unit(self.category, group)
-        self.head_value.setText(R.text(R.CATEGORIES, kind, lang))
+        self.head_value.setText(R.cap_label(rows, lang) if kind == "cap" else R.text(R.CATEGORIES, kind, lang))
+        self.head_value.setToolTip(self._cap_heading_tip(rows) if kind == "cap" else "")
         while len(self.rows) < len(rows):
             row = RankRow()
             row.opened.connect(self.open_requested)
             self.rows.append(row)
             self.list_layout.addWidget(row)
         for widget, row in zip(self.rows, rows):
-            widget.show_row(row, language=lang, dark=self.dark, category=self.category, spark=spark)
+            widget.show_row(row, language=lang, dark=self.dark, category=self.category, spark=spark,
+                            value_tip=self._cap_tip(row.record) if kind == "cap" else "")
             widget.show()
         for widget in self.rows[len(rows):]:
             widget.hide()
@@ -753,6 +820,8 @@ class RankingBoard(QFrame):
             return self._t("Not loaded yet. Press Refresh to load the list.")
         if not batch.records:
             return self._t("Could not load quotes. Trying again shortly.")
+        if self.category == "cap" and self.group() == "us":
+            return self._us_cap_empty(batch)
         if self.category == "cap":
             return self._t("Market cap comes with KIS quotes of domestic stocks only; the data shown has none.")
         if self.category == "gainers":
@@ -761,12 +830,59 @@ class RankingBoard(QFrame):
             return self._t("No stock in this list is down.")
         return self._t("No stocks match these filters.")
 
+    # US market cap ------------------------------------------------------------------------------
+    def _us_cap_empty(self, batch):
+        """Why the US market-cap list is empty: the providers' reasons when none could be read."""
+        if batch.caps == "none":
+            parts = [self._t("Could not read US market cap.")]
+            parts += [self._t(CAP_REASON_TEXT[key]) for key in batch.cap_reasons if key in CAP_REASON_TEXT]
+            return " ".join(parts)
+        if batch.caps == "ok":
+            return self._t("No stock in this list has a market cap.")
+        return self._t("These quotes came without market cap.")
+
+    def _cap_tip(self, record):
+        """Where one row's market cap came from (tooltip; provider names and dates stay out of the list)."""
+        lang = self._lang()
+        if record.cap_basis == "computed":
+            return self._t("Shares outstanding {shares} ({source}, {day}) × price {price} = {cap}.",
+                           shares=R.compact(record.shares, "shares", lang), source=record.cap_source,
+                           day=record.cap_as_of or "—", price=R.price_text(record.price, record.member.currency),
+                           cap=R.compact(record.market_cap, "usd", lang))
+        if record.cap_basis == "provider":
+            return self._t("{source} market cap, stated {when} KST.", source=record.cap_source,
+                           when=_kst(record.cap_as_of))
+        if record.cap_missing == "adr":
+            return self._t("ADR: the share count is not per ADR, so no market cap is computed.")
+        if record.cap_missing:
+            return self._t("The share count could not be read.")
+        return ""
+
+    def _cap_heading_tip(self, rows):
+        computed = sorted({row.record.cap_source for row in rows if row.record.cap_basis == "computed"})
+        stated = sorted({row.record.cap_source for row in rows if row.record.cap_basis == "provider"})
+        parts = []
+        if computed:
+            parts.append(self._t("Computed: shares outstanding × the price in the row; share counts from {source}, "
+                                 "kept for a day.", source=", ".join(computed)))
+        if stated:
+            parts.append(self._t("Stated by {source}.", source=", ".join(stated)))
+        return " ".join(parts)
+
     def _footnote(self, batch):
         listed = {member.code for member in R.universe(self.market, self.sector)}
         parts = [self._t("Ranked among {count} major stocks, not the whole market. Open a row for its chart.",
                          count=len(listed))]
         if batch is not None and batch.mode == "daily":
             parts.append(self._t("Delayed · daily: the last daily bar; trading value is close × volume, estimated."))
+        if self.category == "cap" and self.group() == "us":
+            if any(row.record.cap_basis == "computed" for row in self.ranked):
+                parts.append(self._t("Market cap (computed) = shares outstanding × the price shown; "
+                                     "share counts are refreshed daily."))
+            unranked = sum(1 for row in self.ranked if not row.rank)
+            if unranked:
+                parts.append(self._t("No market cap for {count} of these stocks; listed last without a rank.",
+                                     count=unranked))
         failed = [code for code, _error in (batch.failures if batch is not None else ()) if code in listed]
         if failed:
             parts.append(self._t("Could not load {count} of these stocks.", count=len(failed)))
@@ -839,6 +955,29 @@ class RankingBoard(QFrame):
 def _parse(stamp):
     value = datetime.fromisoformat(str(stamp).replace("Z", "+00:00"))
     return value if value.tzinfo is not None else value.replace(tzinfo=timezone.utc)
+
+
+def _kst(stamp):
+    """'2026-11-11 14:20' (Korea time) from a UTC ISO stamp; '—' when there is none."""
+    from zoneinfo import ZoneInfo
+    try:
+        return _parse(stamp).astimezone(ZoneInfo("Asia/Seoul")).strftime("%Y-%m-%d %H:%M")
+    except (TypeError, ValueError):
+        return "—"
+
+
+# Why a US batch has no market cap (`rankings.CAP_REASONS`), as said under the empty list.
+CAP_REASON_TEXT = {
+    "kis_off": "KIS is not connected.",
+    "kis_none": "KIS returned no usable market cap.",
+    "fmp_no_key": "FMP_API_KEY is not set.",
+    "fmp_plan": "The FMP plan does not include batch quotes.",
+    "fmp_failed": "FMP did not answer.",
+    "yahoo_missing": "yfinance is not installed.",
+    "yahoo_unreachable": "Yahoo Finance could not be reached.",
+    "yahoo_empty": "Yahoo Finance returned no share counts.",
+    "yahoo_timeout": "Yahoo Finance did not answer in time.",
+}
 
 
 __all__ = ["RankingBoard", "RankRow", "Sparkline", "ProductionRankingLoader", "kis_batch", "daily_batch",

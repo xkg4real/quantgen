@@ -1,15 +1,27 @@
 """Ranked lists for Markets, pure logic (owner request 2026-11-11, point 5: Toss-style "실시간 차트").
 
 The curated universe, the ranking per category/market/sector, the provider-answer parsers and the compact
-figures. Fixture records only; nothing here touches the network or Qt.
+figures; and US market cap (owner 2026-11-11, "아니 미국 시총 자료 찾으세요": FMP's stated figure, else
+Yahoo share counts x the row price, cached a day). Fixture records and injected fake providers only;
+nothing here touches the network or Qt, and the share-count cache writes to a temporary folder.
 """
+import json
+from dataclasses import replace
+from pathlib import Path
 import re
+import tempfile
+import threading
+import time
 import unittest
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
+from types import SimpleNamespace
+from unittest.mock import patch
 
+from core.market import market_cap as MC
 from core.market import rankings as R
 from core.market.models import Instrument
 from core.market.symbols import lookup
+from data.fmp.quote_client import FMPError, FMPPlanError
 
 
 def member(code):
@@ -32,7 +44,9 @@ class UniverseTests(unittest.TestCase):
                                         ("cap", "Market cap", "시가총액")))
         self.assertEqual(R.MARKET_KEYS, ("kr", "kospi", "kosdaq", "us"))
         self.assertEqual({k for k, _e, _k in R.STATES}, {"live", "closed", "stale", "daily", "none"})
-        for table in (R.CATEGORIES, R.MARKETS, R.SECTORS, R.STATES, R.COLUMNS):
+        self.assertEqual(R.CAP_LABELS, (("provider", "Market cap", "시가총액"),
+                                        ("computed", "Market cap (computed)", "시가총액(계산값)")))
+        for table in (R.CATEGORIES, R.MARKETS, R.SECTORS, R.STATES, R.COLUMNS, R.CAP_LABELS):
             for key, en, ko in table:
                 self.assertFalse(re.search("[가-힣]", en), en)
                 self.assertTrue(re.search("[가-힣]", ko) or ko.isascii(), ko)
@@ -199,6 +213,379 @@ class DisplayTests(unittest.TestCase):
         self.assertFalse(R.session_open("kr", datetime(2026, 11, 14, 2, 0, tzinfo=timezone.utc)))   # Saturday
         self.assertTrue(R.session_open("us", datetime(2026, 11, 11, 16, 0, tzinfo=timezone.utc)))   # 11:00 ET
         self.assertFalse(R.session_open("us", datetime(2026, 11, 11, 2, 0, tzinfo=timezone.utc)))
+
+
+# US market cap ---------------------------------------------------------------------------------------
+STATED = "2026-11-11T05:19:00+00:00"
+SHARES = {"AAPL": (1.484e10, "2026-10-17"), "NVDA": (2.43e10, "2026-10-31"), "MSFT": (7.43e9, "2026-10-24"),
+          "JPM": (2.75e9, "2026-10-31")}
+
+
+def us_record(code, price, mode="daily"):
+    return R.QuoteRecord(member(code), price, 0.0, 0.0, 1e6, price * 1e6, None,
+                         "KIS" if mode == "kis" else "Yahoo Finance", mode, "2026-11-10")
+
+
+def us_batch(*pairs, mode="daily"):
+    return R.Batch("us", tuple(us_record(code, price, mode) for code, price in pairs), mode,
+                   "2026-11-11T05:20:00+00:00")
+
+
+class Clock:
+    def __init__(self, now=1_800_000_000.0):
+        self.now = now
+
+    def __call__(self):
+        return self.now
+
+
+class FakeYahoo:
+    """Share counts by Yahoo symbol; `fail` raise like an unreachable host, `gate` holds every answer."""
+
+    def __init__(self, shares=None, fail=(), gate=None, pause=0.0):
+        self.shares, self.fail, self.gate, self.pause = dict(SHARES if shares is None else shares), set(fail), gate, pause
+        self.calls, self.running, self.peak = [], 0, 0
+        self.lock = threading.Lock()
+
+    def __call__(self, symbol):
+        with self.lock:
+            self.calls.append(symbol)
+            self.running += 1
+            self.peak = max(self.peak, self.running)
+        try:
+            if self.gate is not None:
+                self.gate.wait(5)
+            time.sleep(self.pause)
+            if symbol in self.fail:
+                raise ConnectionError("SSLError: certificate verify failed")
+            return self.shares.get(symbol)
+        finally:
+            with self.lock:
+                self.running -= 1
+
+
+def source(*, key="", fmp=None, yahoo=None, folder=None, clock=None, **kw):
+    clock = clock or Clock()
+    return MC.MarketCapSource(fmp_key=lambda: key, fmp_fetch=fmp or (lambda symbols, key: {}),
+                              yahoo_fetch=yahoo or FakeYahoo(), cache=MC.SharesCache(folder, clock=clock),
+                              clock=clock, **kw)
+
+
+def by_code(batch):
+    return {r.member.code: r for r in batch.records}
+
+
+class MarketCapTests(unittest.TestCase):
+    def test_fmp_states_the_cap_for_the_whole_universe_in_one_request(self):
+        asked, clock, yahoo = [], Clock(), FakeYahoo()
+
+        def fmp(symbols, *, key):
+            asked.append((tuple(symbols), key))
+            return {"AAPL": (3.4e12, STATED), "nvda": (4.4e12, STATED), "TSM": (1.5e12, STATED)}
+        caps = source(key="k", fmp=fmp, yahoo=yahoo, clock=clock)
+        batch = us_batch(("AAPL", 226.13), ("NVDA", 180.2), ("MSFT", 500.0), ("TSM", 290.0))
+        out = caps(batch)
+        got = by_code(out)
+        self.assertEqual(asked, [(("AAPL", "NVDA", "MSFT", "TSM"), "k")])  # one batch request
+        self.assertEqual((got["AAPL"].market_cap, got["AAPL"].cap_basis, got["AAPL"].cap_source, got["AAPL"].cap_as_of),
+                         (3.4e12, "provider", "FMP", STATED))
+        self.assertEqual((got["NVDA"].market_cap, got["TSM"].cap_basis), (4.4e12, "provider"))  # an ADR's stated cap
+        self.assertEqual((got["MSFT"].cap_basis, got["MSFT"].market_cap), ("computed", 7.43e9 * 500.0))
+        self.assertEqual(yahoo.calls, ["MSFT"])  # only what FMP did not state
+        self.assertEqual((out.caps, out.cap_reasons), ("ok", ("kis_off",)))  # daily bars: KIS not in use
+        self.assertEqual([r.price for r in out.records], [r.price for r in batch.records])  # quotes untouched
+        clock.now += MC.PROVIDER_TTL_SECONDS - 1
+        caps(batch)
+        self.assertEqual(len(asked), 1)  # at most one FMP request per five minutes
+        clock.now += 2
+        caps(batch)
+        self.assertEqual(len(asked), 2)
+        domestic = R.Batch("kr", (record(SAMSUNG, cap=6e14),), "kis", "")
+        self.assertIs(caps(domestic), domestic)  # the domestic path is not touched
+
+    def test_fmp_refusals_fall_back_to_yahoo_and_are_not_retried_every_refresh(self):
+        for error, reason, wait in ((FMPPlanError("HTTP 402"), "fmp_plan", MC.PLAN_RETRY_SECONDS),
+                                    (FMPError("HTTP 500"), "fmp_failed", MC.FMP_RETRY_SECONDS),
+                                    (None, "fmp_failed", MC.FMP_RETRY_SECONDS)):
+            with self.subTest(reason=reason, error=error):
+                asked, clock = [], Clock()
+
+                def fmp(symbols, *, key):
+                    asked.append(1)
+                    if error is not None:
+                        raise error
+                    return {}  # an answer with no usable figure
+                caps = source(key="k", fmp=fmp, clock=clock)
+                out = caps(us_batch(("AAPL", 226.13)))
+                self.assertEqual((out.caps, out.cap_reasons, out.records[0].cap_basis), ("ok", ("kis_off", reason), "computed"))
+                clock.now += wait - 1
+                self.assertEqual(caps(us_batch(("AAPL", 226.13))).cap_reasons, ("kis_off", reason))
+                self.assertEqual(len(asked), 1)
+                clock.now += 2
+                caps(us_batch(("AAPL", 226.13)))
+                self.assertEqual(len(asked), 2)
+
+    def test_yahoo_share_counts_times_the_row_price_cached_for_a_day(self):
+        with tempfile.TemporaryDirectory() as folder:
+            clock, yahoo = Clock(), FakeYahoo()
+            caps = source(yahoo=yahoo, folder=folder, clock=clock)
+            out = caps(us_batch(("AAPL", 226.13), ("TSM", 290.0), mode="kis"))  # KIS last price
+            apple, tsmc = out.records
+            self.assertAlmostEqual(apple.market_cap, 1.484e10 * 226.13)
+            self.assertEqual((apple.cap_basis, apple.cap_source, apple.cap_as_of, apple.shares),
+                             ("computed", "Yahoo Finance", "2026-10-17", 1.484e10))
+            self.assertEqual((tsmc.market_cap, tsmc.cap_missing), (None, "adr"))  # shares not per ADR: no figure
+            self.assertEqual(yahoo.calls, ["AAPL"])
+            self.assertEqual((out.caps, out.cap_reasons), ("ok", ("kis_none", "fmp_no_key")))  # KIS quotes, no KIS cap
+            stored = json.loads((Path(folder) / "SHARES_YFINANCE_AAPL.json").read_text("utf-8"))
+            self.assertEqual((stored["shares"], stored["as_of"], stored["source"], stored["ts"]),
+                             (1.484e10, "2026-10-17", "Yahoo Finance", clock.now))
+            daily = caps(us_batch(("AAPL", 210.0)))  # the daily close when that is the row's price
+            self.assertAlmostEqual(daily.records[0].market_cap, 1.484e10 * 210.0)
+            self.assertEqual(yahoo.calls, ["AAPL"])  # memory hit
+            # A restart within 24 hours reads the file; after 24 hours the count is asked again.
+            clock.now += 23 * 3600
+            later = FakeYahoo()
+            restarted = source(yahoo=later, folder=folder, clock=clock)
+            self.assertEqual(restarted(us_batch(("AAPL", 220.0))).records[0].cap_as_of, "2026-10-17")
+            self.assertEqual(later.calls, [])
+            clock.now += 2 * 3600
+            restarted(us_batch(("AAPL", 220.0)))
+            self.assertEqual(later.calls, ["AAPL"])
+        memory_only = MC.SharesCache(None, clock=Clock())
+        memory_only.put("AAPL", 1e9, "2026-10-31")
+        self.assertEqual((memory_only.get("aapl"), memory_only.path("AAPL")), ((1e9, "2026-10-31"), None))
+        broken = Path(tempfile.mkdtemp()) / "SHARES_YFINANCE_AAPL.json"
+        broken.write_text("{not json", "utf-8")
+        self.assertIsNone(MC.SharesCache(broken.parent, clock=Clock()).get("AAPL"))  # unreadable: fetch again
+
+    def test_partial_failure_keeps_the_rest_ranked_and_failed_stocks_wait(self):
+        clock = Clock()
+        yahoo = FakeYahoo({**SHARES, "JPM": None}, fail={"MSFT"})
+        caps = source(yahoo=yahoo, clock=clock)
+        batch = us_batch(("AAPL", 226.13), ("NVDA", 180.2), ("MSFT", 500.0), ("JPM", 301.5))
+        out = caps(batch)
+        got = by_code(out)
+        self.assertEqual((got["MSFT"].market_cap, got["MSFT"].cap_missing), (None, "error"))
+        self.assertEqual((got["JPM"].market_cap, got["JPM"].cap_missing), (None, "no_shares"))
+        self.assertEqual(out.caps, "ok")
+        rows = R.rank(out.records, "cap", market="us", missing="last")
+        self.assertEqual([(r.rank, r.record.member.code) for r in rows], [(1, NVDA), (2, APPLE), (0, "MSFT"), (0, "JPM")])
+        self.assertEqual([r.value for r in rows[2:]], [None, None])
+        self.assertEqual([r.record.member.code for r in R.rank(out.records, "cap", market="us")], [NVDA, APPLE])
+        self.assertEqual(R.rank(out.records, "gainers", market="us", missing="last"), [])  # change lists unaffected
+        caps(batch)
+        self.assertEqual(sorted(yahoo.calls), ["AAPL", "JPM", "MSFT", "NVDA"])  # failures wait, hits are cached
+        clock.now += MC.FAILURE_RETRY_SECONDS + 1
+        caps(batch)
+        self.assertEqual(sorted(yahoo.calls[4:]), ["JPM", "MSFT"])
+
+    def test_none_read_says_why(self):
+        batch = us_batch(("AAPL", 226.13), ("NVDA", 180.2), ("TSM", 290.0))
+        cases = (({"yahoo": FakeYahoo(fail=set(SHARES))}, ("kis_off", "fmp_no_key", "yahoo_unreachable")),
+                 ({"yahoo": FakeYahoo({})}, ("kis_off", "fmp_no_key", "yahoo_empty")),
+                 ({"yahoo": FakeYahoo(), "yahoo_ready": lambda: False}, ("kis_off", "fmp_no_key", "yahoo_missing")),
+                 ({"key": "k", "fmp": Mock402(), "yahoo": FakeYahoo(fail=set(SHARES))}, ("kis_off", "fmp_plan", "yahoo_unreachable")))
+        for kwargs, reasons in cases:
+            with self.subTest(reasons=reasons):
+                out = source(**kwargs)(batch)
+                self.assertEqual((out.caps, out.cap_reasons), ("none", reasons))
+                self.assertTrue(all(r.market_cap is None for r in out.records))
+                self.assertTrue(set(reasons) <= set(R.CAP_REASONS))
+                self.assertEqual(R.rank(out.records, "cap", market="us", missing="last"), [])  # empty: says why
+
+    def test_bounded_workers_and_a_deadline_that_never_blocks_the_list(self):
+        many = {m.code: (1e9 + i, "2026-10-31") for i, m in enumerate(R.US)}
+        yahoo = FakeYahoo(many, pause=0.02)
+        caps = source(yahoo=yahoo, workers=8)
+        out = caps(R.Batch("us", tuple(us_record(m.code, 100.0) for m in R.US), "daily", ""))
+        self.assertLessEqual(yahoo.peak, 4)  # never more than four requests at once
+        self.assertEqual(sum(1 for r in out.records if r.market_cap), len(R.US) - len(R.ADR_CODES))
+        gate = threading.Event()
+        slow = FakeYahoo(gate=gate)
+        caps = source(yahoo=slow, deadline=0.2)
+        heard = []
+        start = time.monotonic()
+        out = caps(us_batch(("AAPL", 226.13)), progress=lambda done, total: heard.append((done, total)))
+        self.assertLess(time.monotonic() - start, 2.0)
+        self.assertEqual((out.caps, out.cap_reasons, out.records[0].cap_missing),
+                         ("none", ("kis_off", "fmp_no_key", "yahoo_timeout"), "timeout"))
+        self.assertEqual(caps(us_batch(("AAPL", 226.13))).records[0].cap_missing, "timeout")
+        self.assertEqual(slow.calls, ["AAPL"])  # still in flight: not asked twice
+        gate.set()
+        end = time.monotonic() + 5
+        while caps.cache.get("AAPL") is None and time.monotonic() < end:
+            time.sleep(0.01)
+        late = caps(us_batch(("AAPL", 226.13)))  # the late answer was kept for this refresh
+        self.assertEqual((late.caps, late.records[0].cap_basis, slow.calls), ("ok", "computed", ["AAPL"]))
+        self.assertEqual(heard, [])
+        held = threading.Event()
+        stop = source(yahoo=FakeYahoo(gate=held))
+        self.assertEqual(stop(us_batch(("AAPL", 1.0)), cancelled=lambda: True).records[0].cap_missing, "timeout")
+        held.set()
+
+    def test_record_helpers_units_and_labels(self):
+        apple = us_record(APPLE, 226.13)
+        computed = R.computed_cap(apple, 1.6e10, source="Yahoo Finance", as_of="2026-10-17")
+        self.assertAlmostEqual(computed.market_cap, 1.6e10 * 226.13)
+        stated = R.with_cap(apple, 3.6e12, basis="provider", source="FMP", as_of=STATED)
+        for value, ko, en in ((3.6e12, "$3.6T", "$3.6T"), (computed.market_cap, "$3.6T", "$3.6T"),
+                              (4.512e11, "$451.2B", "$451.2B")):
+            self.assertEqual((R.compact(value, "usd", "ko"), R.compact(value, "usd", "en")), (ko, en))
+        self.assertEqual((R.compact(1.484e10, "shares", "ko"), R.compact(1.484e10, "shares", "en")),
+                         ("148.4억주", "14.8B"))
+        self.assertEqual((R.cap_label([computed, stated], "ko"), R.cap_label([computed], "en")),
+                         ("시가총액(계산값)", "Market cap (computed)"))
+        self.assertEqual((R.cap_label([stated], "ko"), R.cap_label([], "en")), ("시가총액", "Market cap"))
+        self.assertEqual(R.cap_label(R.rank((computed,), "cap", market="us"), "ko"), "시가총액(계산값)")
+        missing = R.without_cap(computed, "no_shares")
+        self.assertEqual((missing.market_cap, missing.cap_basis, missing.shares, missing.cap_missing),
+                         (None, "", None, "no_shares"))
+        for bad in (0, -1, None, float("nan")):
+            with self.assertRaises(ValueError):
+                R.computed_cap(apple, bad, source="Yahoo Finance", as_of="")
+        with self.assertRaises(ValueError):
+            R.computed_cap(us_record("TSM", 290.0), 5.2e9, source="Yahoo Finance", as_of="")
+        with self.assertRaises(ValueError):
+            R.with_cap(apple, 1.0, basis="guess", source="")
+        with self.assertRaises(ValueError):
+            R.rank((computed,), "cap", missing="maybe")
+        # Domestic records are as KIS gave them: no basis, ranked and left out as before.
+        self.assertEqual(R.parse_kis_domestic(member(SAMSUNG), {"stck_prpr": "1", "hts_avls": "5"}).cap_basis, "")
+
+
+class KISDetailTests(unittest.TestCase):
+    """KIS overseas price-detail (HHDFS76200200), allowlisted with the owner's approval 2026-11-11 ("승인.")."""
+
+    DETAIL = {"last": "226.1300", "tomv": "3355769200000", "shar": "14840000000", "curr": "USD", "perx": "34.10",
+              "pbrx": "51.20", "t_xprc": "331000", "t_rate": "1463.80"}
+
+    def test_tomv_is_used_only_when_it_agrees_with_listed_shares_times_last(self):
+        self.assertEqual(R.parse_kis_overseas_detail(self.DETAIL), (3355769200000.0, 1.484e10))
+        self.assertEqual(R.parse_kis_overseas_detail({**self.DETAIL, "curr": ""}), (3355769200000.0, 1.484e10))
+        refused = ({**self.DETAIL, "tomv": "3355769200"},             # thousand-fold unit: refused, not rescaled
+                   {**self.DETAIL, "tomv": str(3355769200000 * 1463.8)},  # won
+                   {**self.DETAIL, "curr": "KRW"}, {**self.DETAIL, "shar": ""}, {**self.DETAIL, "tomv": "0"},
+                   {**self.DETAIL, "last": "x"}, {}, None, "junk")
+        for output in refused:
+            with self.subTest(output=output):
+                self.assertEqual(R.parse_kis_overseas_detail(output), (None, None))
+        self.assertEqual(R.parse_kis_overseas_detail({**self.DETAIL, "tomv": "3000000000000"})[0], 3e12)  # 11% off: kept
+
+    def test_record_gets_kis_stated_cap_but_never_for_an_adr(self):
+        apple = us_record(APPLE, 226.13, "kis")
+        stated = R.with_kis_detail(apple, self.DETAIL, received_at="2026-11-11T05:20:00+00:00")
+        self.assertEqual((stated.market_cap, stated.cap_basis, stated.cap_source, stated.cap_as_of, stated.shares),
+                         (3355769200000.0, "provider", "KIS", "2026-11-11T05:20:00+00:00", 1.484e10))
+        self.assertEqual(R.cap_label([stated], "ko"), "시가총액")
+        self.assertIs(R.with_kis_detail(apple, {}, received_at=""), apple)
+        tsmc = us_record("TSM", 290.0, "kis")
+        self.assertIs(R.with_kis_detail(tsmc, {**self.DETAIL, "last": "290", "shar": "5186000000",
+                                              "tomv": str(5186000000 * 290)}), tsmc)
+
+    def test_kis_figures_are_kept_and_only_the_rest_go_to_fmp_and_yahoo(self):
+        asked, yahoo = [], FakeYahoo()
+
+        def fmp(symbols, *, key):
+            asked.append(tuple(symbols))
+            return {"NVDA": (4.4e12, STATED)}
+        caps = source(key="k", fmp=fmp, yahoo=yahoo)
+        kis = us_batch(("AAPL", 226.13), ("NVDA", 180.2), ("MSFT", 500.0), mode="kis")
+        kis = replace(kis, records=(R.with_kis_detail(kis.records[0], self.DETAIL, received_at=STATED),)
+                      + kis.records[1:])
+        out = caps(kis)
+        got = by_code(out)
+        self.assertEqual([got[c].cap_source for c in ("AAPL", "NVDA", "MSFT")], ["KIS", "FMP", "Yahoo Finance"])
+        self.assertEqual((asked, yahoo.calls), ([("NVDA", "MSFT")], ["MSFT"]))
+        self.assertEqual((out.caps, out.cap_reasons), ("ok", ()))
+        everything = replace(kis, records=tuple(R.with_cap(r, 1e12, basis="provider", source="KIS", as_of=STATED)
+                                                for r in kis.records))
+        self.assertEqual((caps(everything).caps, len(asked), len(yahoo.calls)), ("ok", 1, 1))  # nothing else asked
+
+
+class Mock402:
+    def __call__(self, symbols, *, key):
+        raise FMPPlanError("HTTP 402")
+
+
+class Response:
+    def __init__(self, status, payload):
+        self.status_code, self.payload = status, payload
+
+    def json(self):
+        if isinstance(self.payload, Exception):
+            raise self.payload
+        return self.payload
+
+
+class ProviderCallTests(unittest.TestCase):
+    def test_fmp_batch_quote_request_and_answers(self):
+        asked = []
+        stamp = int(datetime(2026, 11, 11, 5, 19, tzinfo=timezone.utc).timestamp())
+
+        def get(url, params, timeout):
+            asked.append((url, dict(params), timeout))
+            return Response(200, [{"symbol": "AAPL", "marketCap": 3.4e12, "price": 226.1, "timestamp": stamp},
+                                  {"symbol": "XYZ", "marketCap": None}, {"symbol": "BAD", "marketCap": -5}, "junk"])
+        out = MC.fmp_batch(["AAPL", "XYZ", "BAD"], key="sekret", base_url="https://fmp.test/stable/", timeout=3, get=get)
+        self.assertEqual(out, {"AAPL": (3.4e12, STATED)})
+        self.assertEqual(asked, [("https://fmp.test/stable/batch-quote", {"symbols": "AAPL,XYZ,BAD", "apikey": "sekret"}, 3)])
+        for status, payload, error in ((402, [], FMPPlanError), (403, [], FMPPlanError), (429, [], FMPError),
+                                       (200, {"Error Message": "Restricted Endpoint: upgrade"}, FMPPlanError),
+                                       (200, {"Error Message": "Invalid API KEY"}, FMPError),
+                                       (200, ValueError("html"), FMPError), (200, "text", FMPError)):
+            with self.subTest(status=status, payload=payload):
+                with self.assertRaises(error):
+                    MC.fmp_batch(["AAPL"], key="k", get=lambda url, params, timeout: Response(status, payload))
+
+        def down(url, params, timeout):
+            raise ConnectionError("https://fmp.test/stable/batch-quote?apikey=sekret failed")
+        with self.assertRaises(FMPError) as caught:
+            MC.fmp_batch(["AAPL"], key="sekret", get=down)
+        self.assertNotIn("sekret", str(caught.exception))
+
+    def test_yahoo_share_count_through_the_yfinance_handle(self):
+        import pandas as pd
+        index = pd.to_datetime(["2026-07-31", "2026-10-17", "2026-10-31"]).tz_localize("America/New_York")
+        series = pd.Series([1.49e10, 1.484e10, float("nan")], index=index)
+        asked = []
+
+        class Ticker:
+            def __init__(self, symbol):
+                asked.append(symbol)
+
+            def get_shares_full(self, start=None, end=None):
+                asked.append(start)
+                return series
+        with patch("core.ficc.data._yf", SimpleNamespace(Ticker=Ticker)):
+            self.assertEqual(MC.yahoo_shares("AAPL"), (1.484e10, "2026-10-17"))  # the newest valid count
+            self.assertTrue(MC._yahoo_installed())
+        self.assertEqual(asked[0], "AAPL")
+        start = date.fromisoformat(asked[1])
+        self.assertEqual((datetime.now(timezone.utc).date() - start).days, MC.SHARES_WINDOW_DAYS)
+        self.assertEqual(MC.latest_shares(series.to_frame("shares")), (1.484e10, "2026-10-17"))
+        for empty in (None, pd.Series(dtype=float), pd.DataFrame(), pd.Series([0.0, float("nan")], index=index[:2])):
+            self.assertIsNone(MC.latest_shares(empty))
+        with patch("core.ficc.data._yf", None):
+            with self.assertRaises(ModuleNotFoundError):
+                MC.yahoo_shares("AAPL")
+            self.assertFalse(MC._yahoo_installed())
+            caps = MC.MarketCapSource(fmp_key=lambda: "", cache=MC.SharesCache(None))
+            self.assertEqual(caps(us_batch(("AAPL", 1.0))).cap_reasons, ("kis_off", "fmp_no_key", "yahoo_missing"))
+
+    def test_production_cache_is_the_history_cache_directory_never_the_repository(self):
+        import config
+        repository = Path(__file__).resolve().parents[1]
+        with tempfile.TemporaryDirectory() as folder, \
+                patch.object(config, "ficc_cache_dir", return_value=Path(folder)), \
+                patch.object(config, "FICC_CACHE_TTL_SECONDS", 6 * 3600.0):
+            caps = MC.MarketCapSource(fmp_key=lambda: "", yahoo_fetch=FakeYahoo())
+            caps(us_batch(("AAPL", 226.13)))
+            self.assertTrue((Path(folder) / "SHARES_YFINANCE_AAPL.json").is_file())
+            with patch.object(config, "FICC_CACHE_TTL_SECONDS", 0.0):
+                self.assertIsNone(MC._default_directory())  # the history cache switched off: memory only
+        self.assertFalse(list(repository.glob("SHARES_YFINANCE_*.json")))
+        self.assertNotIn(str(repository), str(config.ficc_cache_dir().resolve()))  # ~/.nextgen/ficc_cache
 
 
 if __name__ == "__main__":

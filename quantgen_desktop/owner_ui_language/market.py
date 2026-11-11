@@ -124,4 +124,31 @@ PAIRS = {
     '{source} daily bars, last bar {day}; trading value estimated as close × volume.':
         '{source} 일봉 · 마지막 봉 {day} · 거래대금은 종가×거래량 추정',
     '{source} current quotes, received {when} KST.': '{source} 현재가 · {when} (한국 시간) 수신',
+    # US market cap in the ranked list (owner 2026-11-11, "아니 미국 시총 자료 찾으세요";
+    # core/market/market_cap.py). The column heading is core/market/rankings.py CAP_LABELS.
+    'Could not read US market cap.': '미국 시가총액을 읽지 못했습니다.',
+    'KIS is not connected.': 'KIS가 연결되어 있지 않습니다.',
+    'KIS returned no usable market cap.': 'KIS에서 쓸 수 있는 시가총액을 받지 못했습니다.',
+    'FMP_API_KEY is not set.': 'FMP_API_KEY가 설정되어 있지 않습니다.',
+    'The FMP plan does not include batch quotes.': 'FMP 요금제에 여러 종목 일괄 시세 조회가 포함되어 있지 않습니다.',
+    'FMP did not answer.': 'FMP가 응답하지 않았습니다.',
+    'yfinance is not installed.': 'yfinance가 설치되어 있지 않습니다.',
+    'Yahoo Finance could not be reached.': 'Yahoo Finance에 연결하지 못했습니다.',
+    'Yahoo Finance returned no share counts.': 'Yahoo Finance에서 상장주식수를 받지 못했습니다.',
+    'Yahoo Finance did not answer in time.': 'Yahoo Finance가 제때 응답하지 않았습니다.',
+    'No stock in this list has a market cap.': '이 목록에는 시가총액을 읽은 종목이 없습니다.',
+    'These quotes came without market cap.': '이 시세에는 시가총액이 없습니다.',
+    'Market cap (computed) = shares outstanding × the price shown; share counts are refreshed daily.':
+        '시가총액(계산값) = 상장주식수 × 표시 가격이며, 상장주식수는 하루 한 번 갱신합니다.',
+    'No market cap for {count} of these stocks; listed last without a rank.':
+        '{count}개 종목은 시가총액을 읽지 못해 순위 없이 맨 아래에 둡니다.',
+    'Shares outstanding {shares} ({source}, {day}) × price {price} = {cap}.':
+        '상장주식수 {shares} ({source}, {day}) × 가격 {price} = {cap}',
+    '{source} market cap, stated {when} KST.': '{source} 제공 시가총액 · {when} (한국 시간) 기준',
+    'ADR: the share count is not per ADR, so no market cap is computed.':
+        'ADR은 상장주식수가 ADR 단위가 아니어서 시가총액을 계산하지 않습니다.',
+    'The share count could not be read.': '상장주식수를 읽지 못했습니다.',
+    'Computed: shares outstanding × the price in the row; share counts from {source}, kept for a day.':
+        '계산값: 상장주식수 × 행의 가격 · 상장주식수 출처 {source}, 하루 보관',
+    'Stated by {source}.': '{source} 제공 수치',
 }

@@ -11,6 +11,11 @@ allowed sources already return:
   accumulated trading value; market cap for domestic stocks (``hts_avls``, in 100 million won).
 * the Yahoo daily path: the last daily bar's close, change against the previous close and volume. Trading
   value is then close x volume, an estimate, and the rows are labelled delayed/daily. Yahoo has no market cap.
+* US market cap (owner 2026-11-11, "아니 미국 시총 자료 찾으세요"; KIS route approved the same day, "승인."):
+  first KIS's overseas ``price-detail`` (``tomv``, checked against ``shar`` x ``last``; basis 'provider',
+  source KIS) inside the KIS batch; then `core.market.market_cap`: FMP's stated figure (basis 'provider')
+  or the Yahoo share count x the row's price (basis 'computed'). A stock whose figure could not be read
+  keeps none.
 
 The lists are therefore "the N major stocks below, ranked", never a whole-market ranking; the screen says so.
 
@@ -19,7 +24,7 @@ here; a KIS quote that names its representative market, or a Yahoo answer under 
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import date, datetime, timezone
 import math
 
@@ -29,7 +34,9 @@ __all__ = ("CATEGORIES", "CATEGORY_KEYS", "MARKETS", "MARKET_KEYS", "SECTORS", "
            "DOMESTIC", "US", "QuoteRecord", "Batch", "RankedRow", "group_of", "universe", "members_of", "member_for",
            "sectors_in", "rank", "ranking_value", "value_unit", "parse_kis_domestic", "parse_kis_overseas",
            "record_from_bars", "drop_stale", "compact", "price_text", "change_text", "source_state",
-           "session_open", "text", "STALE_GAP_DAYS")
+           "session_open", "text", "STALE_GAP_DAYS", "CAP_LABELS", "CAP_REASONS", "ADR_CODES", "with_cap",
+           "computed_cap", "without_cap", "cap_label", "parse_kis_overseas_detail", "with_kis_detail",
+           "KIS_CAP_TOLERANCE")
 
 # (key, English, Korean). The interface contract between the native UI areas pins CATEGORIES exactly.
 CATEGORIES = (("value", "Trading value", "거래대금"), ("volume", "Volume", "거래량"),
@@ -51,6 +58,17 @@ STATES = (("live", "KIS real-time", "KIS 실시간"), ("closed", "KIS · market 
 COLUMNS = (("rank", "Rank", "순위"), ("stock", "Stock", "종목"), ("price", "Price", "현재가"),
            ("change", "Change", "등락률"))
 STALE_GAP_DAYS = 5     # a daily bar this much older than the newest one in its batch is a halted/stale quote
+# Market-cap basis: a provider's stated figure, or shares outstanding x the row's price. The column heading
+# says which ('시가총액(계산값)' whenever a computed figure is shown).
+CAP_LABELS = (("provider", "Market cap", "시가총액"), ("computed", "Market cap (computed)", "시가총액(계산값)"))
+# Why a US batch has no market cap at all (`Batch.cap_reasons`, in the order tried). The board words them.
+CAP_REASONS = ("kis_off", "kis_none", "fmp_no_key", "fmp_plan", "fmp_failed", "yahoo_missing", "yahoo_unreachable",
+               "yahoo_empty", "yahoo_timeout")
+# US members quoted as ADRs. A share count need not be stated per ADR (TSMC: ordinary shares, five to an ADR),
+# so shares x the ADR price, or a cap that only agrees with it, could overstate the cap five-fold; ADRs take
+# FMP's stated figure or none.
+ADR_CODES = frozenset({"TSM"})
+KIS_CAP_TOLERANCE = 0.25   # KIS 'tomv' must lie within 25% of 'shar' x 'last' to be used
 
 _EXCHANGE_NAMES = {"NAS": ("NASDAQ", "나스닥"), "NYS": ("NYSE", "뉴욕"), "AMS": ("NYSE American", "아멕스")}
 
@@ -242,6 +260,11 @@ class QuoteRecord:
     estimated_value: bool = False  # trading value = close x volume
     closes: tuple = ()            # recent daily closes when the answer carried them (sparkline)
     market: str = ""              # observed listing market when the answer named it
+    cap_basis: str = ""           # '' as the quote gave it (KIS domestic), 'provider' or 'computed' (US)
+    cap_source: str = ""          # who stated the cap ('KIS', 'FMP') or the share count ('Yahoo Finance')
+    cap_as_of: str = ""           # provider: when the figure was stated/received (UTC ISO); computed: share-count date
+    shares: float | None = None   # the share count used (computed) or stated with the cap (KIS)
+    cap_missing: str = ""         # sought but not found: 'adr', 'no_shares', 'error', 'timeout'
 
     @property
     def listing(self):
@@ -258,6 +281,8 @@ class Batch:
     failures: tuple = ()          # (code, error class name) per member that returned nothing usable
     stale: tuple = ()             # codes left out because their daily bar is older than the batch's
     fallback: bool = False        # KIS was configured but no quote came back; the daily path answered
+    caps: str = ""                # US market cap: '' not sought, 'ok' some rows have one, 'none' none read
+    cap_reasons: tuple = ()       # CAP_REASONS keys when caps == 'none' (or a provider was passed over)
 
 
 @dataclass(frozen=True)
@@ -293,15 +318,21 @@ def _finite(value):
     return value is not None and isinstance(value, (int, float)) and math.isfinite(value)
 
 
-def rank(records, category, *, market="kr", sector="", limit=30):
+def rank(records, category, *, market="kr", sector="", limit=30, missing="omit"):
     """Ranked rows for one category, market key and optional sector.
 
     Trading value, volume and market cap: largest first, rows without the figure (or with zero) left out.
     Top gainers: rising stocks only, largest rise first; top losers: falling stocks only, largest fall first.
     Ties keep a stable order by code.
+
+    `missing="last"` (trading value, volume, market cap): rows without the figure follow the ranked ones,
+    unranked (rank 0, value None), so a stock whose figure could not be read is shown as '—' rather than
+    silently dropped. Only when at least one row is ranked; otherwise the list is empty and says why.
     """
     if category not in CATEGORY_KEYS:
         raise ValueError(f"Unknown category {category!r}")
+    if missing not in ("omit", "last"):
+        raise ValueError(f"Unknown missing rule {missing!r}")
     group = group_of(market)
     pool = [r for r in records if r.member.group == group
             and (market in ("kr", "us") or r.listing == market.upper())
@@ -316,7 +347,11 @@ def rank(records, category, *, market="kr", sector="", limit=30):
     else:
         keyed = [(v, r) for v, r in keyed if _finite(v) and v > 0]
         keyed.sort(key=lambda item: (-item[0], item[1].member.code))
-    return [RankedRow(index + 1, record, value) for index, (value, record) in enumerate(keyed[:max(0, int(limit))])]
+    rows = [RankedRow(index + 1, record, value) for index, (value, record) in enumerate(keyed[:max(0, int(limit))])]
+    if missing == "last" and rows and category not in ("gainers", "losers"):
+        ranked = {id(r) for _v, r in keyed}
+        rows += [RankedRow(0, r, None) for r in pool if id(r) not in ranked]
+    return rows
 
 
 # Parsing provider answers -----------------------------------------------------------------------
@@ -387,6 +422,41 @@ def parse_kis_overseas(member, output, *, received_at=None):
                        received_at or _utc_now())
 
 
+def parse_kis_overseas_detail(output):
+    """(market cap, listed shares) from the ``output`` of the KIS overseas ``price-detail`` quote
+    (HHDFS76200200), or (None, None) when it cannot be trusted.
+
+    Unit assumption, checked on every answer: KIS names ``tomv`` 시가총액 and ``shar`` 상장주수 without a unit.
+    ``tomv`` is taken to be in the quote currency ``curr`` (USD on NAS/NYS/AMS), the unit of ``last`` that
+    `parse_kis_overseas` already reads as dollars; the won conversions are the separate ``t_x*``/``p_x*``
+    fields (``t_xprc`` = last x ``t_rate``), not used here. ``tomv`` must agree with ``shar`` x ``last``
+    within `KIS_CAP_TOLERANCE`, else neither figure is used: a thousand-fold unit (or won) shows up as a
+    mismatch and is refused, never rescaled. A currency other than USD is refused.
+    """
+    if not isinstance(output, dict):
+        return None, None
+    currency = str(output.get("curr") or "").strip().upper()
+    if currency and currency != "USD":
+        return None, None
+    cap, shares, last = _number(output.get("tomv")), _number(output.get("shar")), _number(output.get("last"))
+    if not all(value is not None and value > 0 for value in (cap, shares, last)):
+        return None, None
+    if abs(cap / (shares * last) - 1) > KIS_CAP_TOLERANCE:
+        return None, None
+    return cap, shares
+
+
+def with_kis_detail(record, output, *, received_at=""):
+    """`record` with KIS's stated market cap (basis 'provider', source 'KIS') when the price-detail answer
+    passes `parse_kis_overseas_detail`; unchanged otherwise, and always for an ADR."""
+    if record.member.code in ADR_CODES:
+        return record
+    cap, shares = parse_kis_overseas_detail(output)
+    if cap is None:
+        return record
+    return with_cap(record, cap, basis="provider", source="KIS", as_of=received_at, shares=shares)
+
+
 def record_from_bars(member, bars, *, source="Yahoo Finance", market="", sparkline=20):
     """A delayed record from daily bars ``(date, open, high, low, close, volume)``, oldest first.
 
@@ -429,6 +499,39 @@ def drop_stale(records, gap_days=STALE_GAP_DAYS):
     newest = max(days.values())
     stale = tuple(code for code, day in days.items() if (newest - day).days >= gap_days)
     return tuple(r for r in records if r.member.code not in stale), stale
+
+
+# Market cap -----------------------------------------------------------------------------------
+def with_cap(record, cap, *, basis, source, as_of="", shares=None):
+    """`record` with a market cap and where it came from; a missing or non-positive figure is refused."""
+    if basis not in ("provider", "computed"):
+        raise ValueError(f"Unknown market-cap basis {basis!r}")
+    if not _finite(cap) or cap <= 0:
+        raise ValueError("Market cap must be a positive number")
+    return replace(record, market_cap=float(cap), cap_basis=basis, cap_source=str(source), cap_as_of=str(as_of),
+                   shares=float(shares) if shares is not None else None, cap_missing="")
+
+
+def computed_cap(record, shares, *, source, as_of):
+    """Shares outstanding x the record's own price (KIS last or the daily close); never for an ADR."""
+    if record.member.code in ADR_CODES:
+        raise ValueError("A share count is not per ADR")
+    if not _finite(shares) or shares <= 0:
+        raise ValueError("Share count must be a positive number")
+    return with_cap(record, float(shares) * record.price, basis="computed", source=source, as_of=as_of,
+                    shares=shares)
+
+
+def without_cap(record, reason):
+    """`record` with no market cap, and why ('adr', 'no_shares', 'error', 'timeout')."""
+    return replace(record, market_cap=None, cap_basis="", cap_source="", cap_as_of="", shares=None,
+                   cap_missing=str(reason))
+
+
+def cap_label(rows, language):
+    """The heading of the market-cap column: '시가총액(계산값)' when any row shown is computed."""
+    computed = any(getattr(row, "record", row).cap_basis == "computed" for row in rows)
+    return text(CAP_LABELS, "computed" if computed else "provider", language)
 
 
 # Display ------------------------------------------------------------------------------------
