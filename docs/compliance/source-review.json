@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "a3dd8d9b57b786bbfeb6def42ecab5200cad641ad6f905e09e56b2d5c4fd2b85",
+    ".github/workflows/runtime-smoke.yml": "8012efd37fa4e2b1d022b409f5b78813be0316ecadf78e8830ba71fe4b61dfe4",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -287,7 +287,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "4371eb9978ed4c042e4cc834b52ee69a13fd6deb04ec302c119c43ad2edc1b88",
+    "docs/compliance/FACTS.md": "3fe7239987f7682ba5714a40a9021b30f556b019adc84407411b7c003227baad",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -341,7 +341,8 @@
     "docs/product/PILOT_OWNER_RUN_2026-11-11.md": "2b51b0f1cd2daef301877e0f685bc2d0a67f2bd77412b76a8a05f840bdc35065",
     "docs/product/PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md": "057e7c88ceb8d238c24cd269b3805a67108aa6d715a070859b965996d28735ab",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
-    "docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md": "5510ffc40d0cf3f586bf7db7b8fdc9bb197add7b1ec2711b5c8b56e2b7870da3",
+    "docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md": "49fdeac25819c8a7296374ee4daf0e373f30d41f23dc10220854a403fcdc8e67",
+    "docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md": "783e45c2ff9828cd8616e2f3b7a7112d769082fa29d18d2cefabe55f1b278abc",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
@@ -566,7 +567,8 @@
     "tests/packaging_policy_acceptance.py": "936034aeaab8d118f83fce8728897650acc2f306cb5405172fef4893fef0b04f",
     "tests/paper_live_acceptance.py": "0694c446b175336efcb126e53147a95b9c6d93356f81357d95d8b568d4032e06",
     "tests/portfolio_scope_acceptance.py": "0600d54a8407a79eceaf0fb29d35f5f541ab1f013d033863dc249259dff4a834",
-    "tests/provider_parity_acceptance.py": "5ce767b8c36d0f87d89b380450266e228cca57c276489a544275e686b8509479",
+    "tests/provider_parity_acceptance.py": "edaa2a4894e5f02bb06cd91cdd495be0767c4c917f69f33125378d5128399b7b",
+    "tests/provider_parity_btc_diagnose_acceptance.py": "8abd5898c1338d51764b4b876afeb0c4ce7f6972270c86b9fbb15da803fe7369",
     "tests/qscore_acceptance.py": "52d0c74fd0e5455b3d333618e011e5a6d7372e4521b750986ff15a30a78559ac",
     "tests/qt_fixture_cleanup.py": "56b1c3ee6e6def041b391d40d3c7d40faa8bab0b3856901f671522c6121fdf04",
     "tests/quant_acceptance.py": "1b6d042dbd01d5bf78773b836a132b22409013ac61f8f46138e3bd4a5b7f6f08",
@@ -627,7 +629,8 @@
     "tools/paper/selfcheck.py": "4beb757ebe8835b257655b0466c0a5df78385e332ce108cd37bd535622245ea1",
     "tools/paper/study.py": "893e864e2184d4a09d67ecafa487994021dd91e4a7ac93788c7da0d5985b2a6e",
     "tools/provider_parity/__init__.py": "e4660d4a5f42e868621d4b27be7f4b3efd78bba4b584c64fab21e145f817ade3",
-    "tools/provider_parity/parity_check.py": "f2fe72cdee6344076fd6dfec8943259f44bc52445c66cdaf482a19e269770184",
+    "tools/provider_parity/btc_diagnose.py": "f9e7146bc86f0062c45dd582e19b686344794274d6d20614399cefb53e01e5fa",
+    "tools/provider_parity/parity_check.py": "f56caeb4076c3679db1b8c801ea2f9eb356541684fd94a5947011c826c9b2b21",
     "tools/sign_calendars.py": "2908e084ea1ea41d8439d7cf7aec7095de901d78782876356c6fe62dce5a6d7f",
     "tools/status/__init__.py": "029709c7d3b9b69d44f7b2d8e4d8459e9d6a0f31b5cc5769c60f1de927025099",
     "tools/status/data_readiness.py": "d8cfea410cbedee6c55cfa7d283e9dd313d74e9cb8770e3aadf656d2498c4115",
@@ -679,163 +682,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "2b0ae824b68fa2574a8f9dc9e4f220f8b617bac7467805cc06d643573705e51b",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.828963+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "bcc3c14d7172ff45732ba056319fc7a7b09762db15b35c8366a311937fd8354b",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.675902+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "2b0ae824b68fa2574a8f9dc9e4f220f8b617bac7467805cc06d643573705e51b",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.831300+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "bcc3c14d7172ff45732ba056319fc7a7b09762db15b35c8366a311937fd8354b",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.678680+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "81cedccc21925bdc9dab3e4a9b8596fbdced6048ac1c64847c261a0add92d9d4",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.834115+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "36f313c2b69ce3738ff06579f7a425e1dde2043831705bc323cec7e733318e1b",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.681318+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "3870cf83eb5c9cdf1f26a971d35aac68bf7e2f12b5920d61b22fe591aa496853",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.836026+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "173c31d88a18f62432a11724f299f6c9f1a6c2113227c72065fe1ddfd0ffec6a",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.683884+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "56a865b9d7096031e1afad33f23930a73083eff88f20fefc1d61e690deacb614",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.837804+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "62ffa7438db7640b13e7071c331053fba70b42d97ceb8bd3b355e1bc346100d6",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.685973+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "b68d453a73652f489143c43be5ff3cf9eacc3c6a4ee4dfe4f21fdc8ea3bb5d25",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.840227+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "363daaa9839ec2bb76fc29e81f2341b99e488061afcfd1146e7aa356acf53ac7",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.687925+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
-      "source_digest": "2b0ae824b68fa2574a8f9dc9e4f220f8b617bac7467805cc06d643573705e51b",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.842089+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "bcc3c14d7172ff45732ba056319fc7a7b09762db15b35c8366a311937fd8354b",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.690454+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "8": {
       "document_sha256": "50659615e7a2ad431f0ba7c6d124c6da1d1fc63b1ee67b7392362d8e79344f26",
-      "source_digest": "b68d453a73652f489143c43be5ff3cf9eacc3c6a4ee4dfe4f21fdc8ea3bb5d25",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.844434+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "363daaa9839ec2bb76fc29e81f2341b99e488061afcfd1146e7aa356acf53ac7",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.692611+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "1c3cac6d1bf0291e700630a6897a558092a04479af6e14fd0988b367b500d5ed",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.846269+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "9a0ee17fededd8453be649093166c9b33fb8a88da2559848d3d5eaa6f7ecf32c",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.694816+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "8bd292962df22290d083d67b5eff774adf6ec6cc8e6548e54ca8120eccaa0703",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.848571+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "6bfdd786bd9ae4e9392303b5eafed285164c3bd9263c1e2d633f75740209bb3d",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.697230+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "d2d416e177a5f5f8fab1368846889a81a4699f113eeafa28843b03497a181b5e",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.850436+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "3c397e4d54387240604352c0de65fc78bbbf20ecf4c865231a6a9fd36e46d74f",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.699102+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "a7be91ff0dff7199e2403aa0fa1a769c48f869b34866ae13721b1976f73cf3bf",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.852856+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "8dcd3af0f944d98a0cbe399d344ff065f094bf7eed3f4f4d8d7cd79885866f16",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.700923+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
-      "source_digest": "1c3cac6d1bf0291e700630a6897a558092a04479af6e14fd0988b367b500d5ed",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.854630+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "9a0ee17fededd8453be649093166c9b33fb8a88da2559848d3d5eaa6f7ecf32c",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.703385+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
-      "source_digest": "1c3cac6d1bf0291e700630a6897a558092a04479af6e14fd0988b367b500d5ed",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.857062+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "9a0ee17fededd8453be649093166c9b33fb8a88da2559848d3d5eaa6f7ecf32c",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.705292+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
-      "source_digest": "1c3cac6d1bf0291e700630a6897a558092a04479af6e14fd0988b367b500d5ed",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.858823+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "9a0ee17fededd8453be649093166c9b33fb8a88da2559848d3d5eaa6f7ecf32c",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.707142+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "e11428df5cb9e3d9d97959a49488dbeff17abb579f0c0d07e5b1b0b2852fc6b8",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.860582+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "4872b8aac49804034fe90b0b045b022a4ccafc10eea85649a8a4b20ba6ddedc8",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.709747+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "b68d453a73652f489143c43be5ff3cf9eacc3c6a4ee4dfe4f21fdc8ea3bb5d25",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.862954+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "363daaa9839ec2bb76fc29e81f2341b99e488061afcfd1146e7aa356acf53ac7",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.712207+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "2b0ae824b68fa2574a8f9dc9e4f220f8b617bac7467805cc06d643573705e51b",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.864661+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "bcc3c14d7172ff45732ba056319fc7a7b09762db15b35c8366a311937fd8354b",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.714219+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
-      "source_digest": "137098769aa88041c7c7901d425e3c6fbb6f38f402e41d98060e8f660c2d6e0b",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.867915+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "434167bfe89784426d2724e3c4718b958ec66f30f5c90cadbd9d29de7949cb14",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.716541+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "2b0ae824b68fa2574a8f9dc9e4f220f8b617bac7467805cc06d643573705e51b",
-      "reviewed_by": "Claude pilot and closing preparation documents",
-      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
-      "reviewed_at": "2026-11-11T06:11:06.870508+00:00",
-      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
+      "source_digest": "bcc3c14d7172ff45732ba056319fc7a7b09762db15b35c8366a311937fd8354b",
+      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
+      "review_note": "Owner rulings SPY-가 and BTC-나 of 2026-11-11 at 3a90bc1: the provider parity tool's fmp fetch pages back (second fixed version 4096caa, same destination and items sent, up to 12 requests instead of one); new read-only script tools/provider_parity/btc_diagnose.py (no request, no file written; console statistics only) with its test module; rerun guide docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md; fixed values updated in the first Korean guide; CI path filter and unittest command appended; FACTS provider parity section updated with four rows. No numbered policy document changed: 08 was read again and its provider parity paragraphs still hold; the diagnostic's statistics leave the owner's PC only when the owner pastes them into the chat, by ruling BTC-나, recorded in FACTS.",
+      "reviewed_at": "2026-11-11T09:44:32.718509+00:00",
+      "source_commit": "3a90bc13d858a06f85dc8c6ceb9fb415069fa4a8"
     }
   }
 }
