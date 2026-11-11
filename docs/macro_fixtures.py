@@ -306,22 +306,29 @@ def _content_hash(values: list[str]) -> str:
 
 # The reference date column (review of PR #101, R3; review of PR #107, F1): the header cell named `date` in any letter
 # case (the declared close layout writes `date`, Yahoo `Date`, FRED's older files `DATE`), else FRED's
-# `observation_date` (core/ficc/data.py reads FRED rows by either name), wherever it stands, so a long-form file with
-# `code` before `date` is read by its `date`; two cells of one such name are refused. A header with no such cell falls
-# back to its first column, as the generator read every file before R3 (Ken French's raw daily files leave the first
-# header cell blank; the layouts of the other reference files have never been checked). `fixture_rows` reads a
-# reference file as UTF-8 with any leading byte order mark dropped (Excel's "CSV UTF-8" writes one), so the mark hides
-# no column name and is never part of the first cell.
+# `observation_date` (core/ficc/data.py reads FRED rows by either name), blanks around the name ignored, wherever it
+# stands, so a long-form file with `code` before `date` is read by its `date`; two cells of one such name are refused.
+# A header with no such cell falls back to its first column, as the generator read every file before R3 (Ken French's
+# raw daily files leave the first header cell blank; the layouts of the other reference files have never been
+# checked); a header with two such cells (Date,DATE), which that generator read by its first column, stays refused,
+# and a header whose first column holds dates while a later one is named date is read by the later one.
+# `fixture_rows` reads a reference file as UTF-8 with any leading byte order mark dropped (Excel's "CSV UTF-8" writes
+# one), so the mark hides no column name and is never part of the first cell (that generator copied it into the
+# fixture's first header cell).
 DATE_COLUMN_NAMES = ("date", "observation_date")
 # A date cell, surrounding blanks ignored, is either the date written YYYY-MM-DD, alone or followed by 'T' or a space
 # and a time of day (HH:MM, :SS and a fraction optional, then Z or a UTC offset optional, as pandas writes a
 # timestamp), or exactly eight digits YYYYMMDD (ISO 8601's basic form, as Ken French's daily files write it; the
-# generator before R3 read it through date.fromisoformat on Python 3.11 and later), read as that calendar date. The
-# observation date is the date as written; the time is not read. Anything else is refused with the reference file and
-# line: a trailing character (2026-09-301, 2026-09-30xyz), a week date (2026-W40-3), another separator (2026/10/02), a
-# blank, six digits (a YYYYMM month), a time after YYYYMMDD, an impossible date (2026-13-01, 20261301). The date cell
-# is copied into the fixture as written, like every reference cell; obs_date and session_date are written YYYY-MM-DD,
-# and the readers of the fixtures read those.
+# generator before R3 read it through date.fromisoformat on Python 3.11 and later), read as that calendar date. Every
+# digit of either form is an ASCII digit 0-9. The observation date is the date as written; the time is not read.
+# Anything else is refused with the reference file and line: a trailing character (2026-09-301, 2026-09-30xyz), a week
+# date (2026-W40-3), another separator (2026/10/02), a blank, six digits (a YYYYMM month), a time after YYYYMMDD, an
+# impossible date (2026-13-01, 20261301), digits of another script (full-width, Arabic-Indic). The generator before
+# R3 read the first ten characters of the cell through date.fromisoformat, so it also read, with the right date, a
+# week date (2026-W40-2, 2026W402) and times this rule does not take (2026-09-29T16, 2026-09-29 16:00:00 EST,
+# 2026-09-29T24:00, 20260929T1600); like 2026-09-301, which the same cut read as 2026-09-30, they stay refused. No real
+# reference file has been checked for any of these shapes. The date cell is copied into the fixture as written, like
+# every reference cell; obs_date and session_date are written YYYY-MM-DD, and the readers of the fixtures read those.
 _DATE_CELL = re.compile(r"([0-9]{4}-[0-9]{2}-[0-9]{2})(?:[T ](?:[01][0-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9](?:\.[0-9]+)?)?"
                         r"(?:Z|[+-](?:[01][0-9]|2[0-3]):?[0-5][0-9])?)?")
 _BASIC_DATE_CELL = re.compile(r"([0-9]{4})([0-9]{2})([0-9]{2})")

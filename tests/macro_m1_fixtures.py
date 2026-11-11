@@ -1794,7 +1794,10 @@ def test_macro_fixtures_finds_the_date_column_by_name():
     a cell written YYYYMMDD (date.fromisoformat takes it on Python 3.11 and later). Now such a header falls back to
     its first column, so `code,day,close` is refused at its first row naming `code` as the first column, and a cell
     of exactly eight digits YYYYMMDD is read as that date; every other shape above stays refused
-    (test_macro_fixtures_reads_the_first_column_and_basic_dates_as_before_r3 covers the fallback)."""
+    (test_macro_fixtures_reads_the_first_column_and_basic_dates_as_before_r3 covers the fallback). Since the fallback,
+    a date name the lookup failed to recognise would pass unseen where it stands first, so `observation_date` and
+    ` Date ` (blanks around the name) are also tested where they are not first; and a YYYYMMDD cell written in
+    full-width digits is refused (only ASCII digits are read)."""
     from core.calendars import clocks as K
     from tests.macro_m1_calendars import fixture_set, read_close_layout
     days = K.sessions_between("KR", date(2026, 9, 28), GPOST_DAY, cal=fixture_set())
@@ -1842,8 +1845,9 @@ def test_macro_fixtures_finds_the_date_column_by_name():
         out_bom = Path(tmp) / "out_bom"
         generate("\ufeff" + code_first, out_bom)
         assert (out_bom / name).read_bytes() == (out_cd / name).read_bytes()
-        # an undeclared file: Yahoo's `Date`, FRED's `DATE` and `observation_date`, a byte order mark, the date last;
-        # with both `date` and `observation_date` the date is read from `date`
+        # an undeclared file: Yahoo's `Date`, FRED's `DATE` and `observation_date` (first, and last, where the first
+        # column cannot stand in for it), a byte order mark, the date last, the name with blanks around it; with both
+        # `date` and `observation_date` the date is read from `date`
         src = Path(tmp) / "plain.csv"
 
         def obs_dates(text):
@@ -1853,19 +1857,25 @@ def test_macro_fixtures_finds_the_date_column_by_name():
                                             available_at=_available_at)
             return [r["obs_date"] for r in rows]
         for head, body in (("Date,Close", "{d},4.1"), ("DATE,DGS10", "{d},4.1"), ("observation_date,DGS10", "{d},4.1"),
-                           ("\ufeffdate,value", "{d},4.1"), ("value,Date", "4.1,{d}"),
+                           ("DGS10,observation_date", "4.1,{d}"), ("\ufeffdate,value", "{d},4.1"),
+                           ("value,Date", "4.1,{d}"), ("value, Date ", "4.1,{d}"),
                            ("observation_date,date,value", "2026-01-02,{d},4.1")):
             assert obs_dates(head + "\n" + "".join(body.format(d=d) + "\n" for d in days[:2])) == [
                 d.isoformat() for d in days[:2]], head
         # a date cell is YYYY-MM-DD, alone or followed by 'T' or a space and a time (as pandas writes a timestamp), or
-        # exactly eight digits YYYYMMDD (F1): the date as written. Anything else is refused with the file and line, the
-        # week date Python's own ISO parser also takes (2026-W40-3) included
+        # exactly eight ASCII digits YYYYMMDD (F1): the date as written. Anything else is refused with the file and
+        # line, the week date Python's own ISO parser also takes (2026-W40-3) and full-width digits (which the regular
+        # expression class \d would take) included; so are the week dates and the times after the date that the
+        # generator before R3 read through its first ten characters (2026W404, 2026-10-01T16, ... EST, T24:00)
         for cell in ("2026-10-01 00:00:00", "2026-10-01T00:00:00Z", "2026-10-01 00:00:00+09:00", " 2026-10-01 ",
                      "2026-10-01T23:59:59.5-04:00", "20261001", " 20261001 "):
             assert obs_dates(f"DATE,DGS10\n2026-09-30,4.1\n{cell},4.2\n") == ["2026-09-30", "2026-10-01"], cell
+        wide = "".join(chr(0xFF10 + int(c)) for c in "20261001")             # 20261001 in full-width digits
         for cell in ("not-a-date", "2026-10-011", "2026-W40-4", "2026-10-01Tjunk", "2026-10-01 25:00", "2026-13-01",
                      "2026-10-01x", "2026-10-01xyz", "2026/10/01", "", "202610011", "2026101", "202610", "20261301",
-                     "20261032", "20261001T00:00", "20261001 00:00:00", "2026-1001", "+20261001"):
+                     "20261032", "20261001T00:00", "20261001 00:00:00", "2026-1001", "+20261001", wide,
+                     f"{wide[:4]}-{wide[4:6]}-{wide[6:]}", "2026W404", "2026-10-01T16", "2026-10-01 16:00:00 EST",
+                     "2026-10-01T24:00", "20261001T1600"):
             _refused(lambda: obs_dates(f"DATE,DGS10\n2026-09-30,4.1\n{cell},4.2\n"), ValueError,
                      f"plain.csv line 3: date '{cell}' in column 'DATE' is not an ISO date written YYYY-MM-DD "
                      "(a time may follow after 'T' or a space) or YYYYMMDD")

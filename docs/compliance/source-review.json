@@ -287,7 +287,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "6042b93d30c4ce5192d5affb1ebb2c3bb133f04aedd5f2f572058d1731158f18",
+    "docs/compliance/FACTS.md": "0f4282d82417259fb2a2514e3e9c5e9d07b1c3834353460ea87e3842f42a772d",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -524,7 +524,7 @@
     "tests/macro_m0_schemas.py": "ef2870b7170a9a56b642c55cd509d5e2438efd2698ef52656aec28300fd66aa1",
     "tests/macro_m1_books.py": "e940009e977b4b45f44025b3e91e9bbd0db8b87986b7ff0f0282c08e468f3bd0",
     "tests/macro_m1_calendars.py": "eae070f4744fa5185c3cdc4be3ac7f22cee65bbe2aab2ce1a77fceb55ae8e2e8",
-    "tests/macro_m1_fixtures.py": "e5951603fb9152807b96d0c6810924b7ebf07e1061d3e9ec83db92ff099968fa",
+    "tests/macro_m1_fixtures.py": "cf52b1f49331c1c0b111c9476dc5d3b6d03e510c4e3b58a8f197fd5247520545",
     "tests/macro_m1_integration.py": "fc6a4190481f1dddafbe40daae4a6b905fd686da36ff5eef070b5aeb3036502f",
     "tests/macro_m1_pit.py": "47c7f40fa275632785e7edb59067bdb8b8c74bd3dac67cf7117d2589b37dd8ed",
     "tests/macro_m2_costed.py": "754a2af2fac98fb245dc6c0c6c53b23e978d4db1c0dff7ec224d712730c143f3",
@@ -683,163 +683,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "3c279833c832b107e5af9bd4d839d2022f2faa08877a4b8e127daf58822e393b",
+      "source_digest": "a859c491ba5cd6b9dd8b9b454af225330d198ac91553e6e50f98a2c5c2d04d95",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.266323+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.407129+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "3c279833c832b107e5af9bd4d839d2022f2faa08877a4b8e127daf58822e393b",
+      "source_digest": "a859c491ba5cd6b9dd8b9b454af225330d198ac91553e6e50f98a2c5c2d04d95",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.268994+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.409571+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "68fc4000f2abe7e6768325093392cfbfda131cc09037d22cb703234c2b1c00ed",
+      "source_digest": "9d0775a4e8f9cea98772d9bbc89356ae5ad4c165cd664badfd30b23d0618738c",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.271170+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.411923+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "45b1ea950c972aa597e737975e6555353fb63bc4abeb463c1b36ad7a2801de26",
+      "source_digest": "290b9f6e841bf9f6405998fbb4ef56dc96779c448b541df29b1307fbced01c3b",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.273136+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.413936+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "fd5420decf3295094a93c28b04979ea55cb487c7e0b38f9bb61f79ce7716abe3",
+      "source_digest": "6409440ff7cfe1f1f1036b7b189cebe106c256a5c89f60c8970893d9e4d12575",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.275690+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.415946+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "e37e1ba8141caea4dc4a044b36aa42ec1febe8fd51a550e02499b414b0a1f173",
+      "source_digest": "19b59bdc558c2b73d970caa6a4886a322e5d2d835e950f8db83abb6145a76887",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.277543+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.417833+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
-      "source_digest": "3c279833c832b107e5af9bd4d839d2022f2faa08877a4b8e127daf58822e393b",
+      "source_digest": "a859c491ba5cd6b9dd8b9b454af225330d198ac91553e6e50f98a2c5c2d04d95",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.280076+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.419802+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "8": {
       "document_sha256": "50659615e7a2ad431f0ba7c6d124c6da1d1fc63b1ee67b7392362d8e79344f26",
-      "source_digest": "e37e1ba8141caea4dc4a044b36aa42ec1febe8fd51a550e02499b414b0a1f173",
+      "source_digest": "19b59bdc558c2b73d970caa6a4886a322e5d2d835e950f8db83abb6145a76887",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.282016+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.421815+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "e4cd6fc19c197bc0f3bff9e17e3b037fa2d6de0bb64e9474ea0f6c2f35498b52",
+      "source_digest": "04ce27fed02f1921b4757ab5607246ff72b220ec7500948c485ca9bad1a86909",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.283910+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.423949+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "40bb10007281719c8487cc6e18cf767464732c343b2585d1ee9d7da4ab8e2d26",
+      "source_digest": "76e4d18f13d585ed2a640a743e3bd1185e14b4768deab736fc46466689aba938",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.285801+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.425807+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "fd929b910a69ec124daca414531f6f891023ffbe70fae45357b4e0dbdacc1885",
+      "source_digest": "6de7c01c23f2fee9b223b6cc2a83b09bcbf20528cc87dcb8b23c0213d7131a0d",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.288898+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.427910+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "8926db635c452deb1d0556b1b9cb9b49e861aa1b8db7473a75992a77a60b6fdd",
+      "source_digest": "1c64b46f4018b212e10e08505cd2a4d8dd6c28b403e459f201f6d567f9f4131f",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Test-only change for document 12: tests/macro_m1_fixtures.py checks that a reference header read by the offline fixture generator carries no byte order mark (why its date-column lookup no longer strips one; review of PR 107, finding F9) and writes two byte order marks in test strings as escapes instead of raw characters. 12-claims was read again: no app screen, performance figure, financial claim or user-facing text changes; the generator is a developer tool run on synthetic files in these tests.",
-      "reviewed_at": "2026-11-11T16:31:09.387230+00:00",
-      "source_commit": "36e7e7e434ca226f9ae6128008e0dc3c1809b641"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.429706+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
-      "source_digest": "e4cd6fc19c197bc0f3bff9e17e3b037fa2d6de0bb64e9474ea0f6c2f35498b52",
+      "source_digest": "04ce27fed02f1921b4757ab5607246ff72b220ec7500948c485ca9bad1a86909",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.292819+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.431608+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
-      "source_digest": "e4cd6fc19c197bc0f3bff9e17e3b037fa2d6de0bb64e9474ea0f6c2f35498b52",
+      "source_digest": "04ce27fed02f1921b4757ab5607246ff72b220ec7500948c485ca9bad1a86909",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.294903+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.433560+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
-      "source_digest": "e4cd6fc19c197bc0f3bff9e17e3b037fa2d6de0bb64e9474ea0f6c2f35498b52",
+      "source_digest": "04ce27fed02f1921b4757ab5607246ff72b220ec7500948c485ca9bad1a86909",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.296950+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.435466+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "a2ca02347d7c8b343aab9d8c77b19722994519f25c43162c58084f641e5cb5c7",
+      "source_digest": "202f94a04bd5d56569c942b293e24d58a7dffc7cfe438debacfdcca517d296af",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.299122+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.437243+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "e37e1ba8141caea4dc4a044b36aa42ec1febe8fd51a550e02499b414b0a1f173",
+      "source_digest": "19b59bdc558c2b73d970caa6a4886a322e5d2d835e950f8db83abb6145a76887",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.301219+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.438943+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "3c279833c832b107e5af9bd4d839d2022f2faa08877a4b8e127daf58822e393b",
+      "source_digest": "a859c491ba5cd6b9dd8b9b454af225330d198ac91553e6e50f98a2c5c2d04d95",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.302982+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.440689+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
-      "source_digest": "e855087f37283e0bfa764c67f0b6297010f9886180d17a278b73ddbbbe440a9e",
+      "source_digest": "0fb090d2cfdfb6d83216da36e241660fb0ec762fe693706f91b5c8a731958a08",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.304884+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.442669+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "3c279833c832b107e5af9bd4d839d2022f2faa08877a4b8e127daf58822e393b",
+      "source_digest": "a859c491ba5cd6b9dd8b9b454af225330d198ac91553e6e50f98a2c5c2d04d95",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T16:07:33.306968+00:00",
-      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
+      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T17:04:38.445146+00:00",
+      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
     }
   }
 }
