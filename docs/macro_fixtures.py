@@ -358,6 +358,16 @@ def _date_column(src: Path, fields: list[str]) -> str:
     return fields[0]
 
 
+def _add_note(exc: BaseException, note: str) -> None:
+    """Add `note` to `exc` without changing its type, args or str(): `exc.add_note` (Python 3.11 and later), which the
+    traceback prints under the message. pyproject.toml allows Python 3.10, which has no add_note: there the note is
+    kept in `exc.__notes__` as 3.11 keeps it, but the 3.10 traceback does not print it."""
+    if hasattr(exc, "add_note"):
+        exc.add_note(note)
+    else:
+        exc.__notes__ = [*getattr(exc, "__notes__", ()), note]
+
+
 def _atomic_write(path: Path, data: str | bytes) -> None:
     """`data` (text is written as UTF-8 with its own line ends) to a temporary file beside `path`, renamed over it."""
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -520,6 +530,12 @@ def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_s
                 obs_utc, avail_utc = available_at(sid, obs, value_status)
             except NoFXDayClose as exc:                    # a KRW=X row on a weekend: named with its file and line
                 raise NoFXDayClose(f"{where}: {exc}; no fixture is written") from None
+            except Exception as exc:
+                # every other refusal of the same call (NotASession, CalendarUnsigned, CalendarCoverageError, a
+                # KeyError, ...; review of PR #107, F4) keeps its type and str() and gains the file and line as a note
+                _add_note(exc, f"reference row: {where}, date {cell!r} in column {date_col!r}, series {sid}; no "
+                               "fixture is written")
+                raise
             row = dict(raw)
             row.update({"series_id": sid, "obs_date": obs.isoformat(), "session_date": obs.isoformat(), "obs_utc": _iso(obs_utc),
                         "available_at_utc": _iso(avail_utc), "available_at_source": available_at_source,

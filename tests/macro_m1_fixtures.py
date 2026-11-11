@@ -1934,6 +1934,72 @@ def test_macro_fixtures_reads_the_first_column_and_basic_dates_as_before_r3():
         assert read["basic"][1] == [d.isoformat() for d in days]
 
 
+def test_macro_fixtures_names_the_reference_row_of_every_calendar_refusal():
+    """Review of PR #107, F4: of the refusals `available_at` raises for a reference row, only NoFXDayClose was
+    re-raised with the reference file and line; a KS11 row on a day that is not a KRX session (NotASession), a date
+    outside the calendar's coverage (CalendarCoverageError), an id neither registered nor declared (KeyError) and a
+    value_status other than the declared one (ValueError) named only the series and the date. Now each reaches the
+    caller with the type and str() `available_at` gave it, plus a note naming the reference file, the line, the date
+    cell and the series, which the traceback prints under the message (Python 3.11 and later); `generate` writes
+    nothing. NoFXDayClose keeps its own message with the file and line, and gets no note."""
+    import sys
+    import traceback
+    from core.calendars.adapter import CalendarClocks
+    from core.calendars.store import CalendarCoverageError, NotASession
+    from core.ficc import contracts
+    from tests.macro_m1_calendars import fixture_set
+    registry = contracts.default_registry()
+    clk = CalendarClocks(registry, cal=fixture_set())
+    available_at = MF.calendar_available_at(registry, clk)
+    good, saturday, early = date(2026, 10, 1), date(2026, 10, 3), date(1980, 1, 3)
+    with tempfile.TemporaryDirectory() as tmp:
+        src = Path(tmp) / "reference.csv"
+
+        def stamped(sid, status, days):
+            src.write_text("date,close\n" + "".join(f"{d},{100 + i}\n" for i, d in enumerate(days)), encoding="utf-8")
+            return MF.fixture_rows(src, series_id=sid, value_status=status, available_at_source="calendar_bound",
+                                   retrieved_at_utc=REFERENCE_RETRIEVED, available_at=available_at, columns=("close",))
+
+        def direct(sid, status, day, exc_type):
+            try:
+                available_at(sid, day, status)
+            except exc_type as exc:
+                return str(exc)
+            raise AssertionError(f"available_at({sid}, {day}) did not raise {exc_type.__name__}")
+        for sid, status, days, exc_type in (("KS11", "vendor_close", (good, saturday), NotASession),
+                                            ("KS11", "vendor_close", (early,), CalendarCoverageError),
+                                            ("NOPE", "vendor_close", (good,), KeyError),
+                                            ("KS11", "official_close", (good,), ValueError)):
+            day, line = days[-1], len(days) + 1
+            note = (f"reference row: reference.csv line {line}, date '{day}' in column 'date', series {sid}; no "
+                    "fixture is written")
+            try:
+                stamped(sid, status, days)
+                raise AssertionError(f"{sid} {day}: not refused")
+            except exc_type as exc:
+                assert type(exc) is exc_type and str(exc) == direct(sid, status, day, exc_type), (sid, day, exc)
+                assert getattr(exc, "__notes__", None) == [note], (sid, day, getattr(exc, "__notes__", None))
+                if sys.version_info >= (3, 11):
+                    assert note in "".join(traceback.format_exception(exc)), (sid, day)
+        # NoFXDayClose: its message names the file and line as before, and no note repeats them
+        exc = _refused(lambda: stamped("KRWX", "vendor_close", (good, saturday)), MF.NoFXDayClose,
+                       f"reference.csv line 3: KRWX: FX {saturday} is a Saturday", "no fixture is written")
+        assert getattr(exc, "__notes__", None) is None
+        # through `generate` on the real calendar function: refused, the reference file and line named, nothing written
+        ref, out = Path(tmp) / "ref", Path(tmp) / "out"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+        (ref / _reference_row("F13")[1]).write_text(f"date,close\n2026-09-30,100\n{good},101\n{saturday},102\n",
+                                                    encoding="utf-8")
+        try:
+            _calendar_generator(("F13",), ref, out)
+            raise AssertionError("a KS11 row on a Saturday must be refused")
+        except NotASession as exc:
+            assert exc.__notes__ == [f"reference row: {FILE_OF['F13']} line 4, date '{saturday}' in column 'date', "
+                                     "series KS11; no fixture is written"]
+        assert not out.exists()
+
+
 def test_macro_fixtures_copies_result_tables_byte_for_byte():
     """R5: a result table was read as text and written with LF line ends, so a CRLF table was not copied byte for
     byte although REFERENCE_FILES says it is, and a byte that is not UTF-8 stopped the run. Now the bytes are copied:
