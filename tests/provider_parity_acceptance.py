@@ -3,8 +3,9 @@
 Synthetic series and mocked HTTP only: every test runs with socket connects and the tool's own HTTP layer patched to
 raise, so a test that reached the network would fail (the one case that runs the tool's HTTP function replaces
 `urlopen`). No real price, rate, pilot table or key is read; every file is written into a fresh folder under the
-system temp dir. In the repository the suite reads the tool, its guide, the owner's Korean run guide, results/RULINGS.md
-(the documents are held to the tool) and the CI workflow, each of which is in that workflow's path filter. It does
+system temp dir. In the repository the suite reads the tool, the diagnostic script (for its sha256), the tool's guide,
+the owner's two Korean guides (the first run and the rerun), results/RULINGS.md (the documents are held to the tool)
+and the CI workflow, each of which is in that workflow's path filter. It does
 not read docs/compliance/FACTS.md (`python -m tools.compliance.check --check` holds that file), the root README.md or
 tests/run_all.py: none of the three starts the workflow, so a case on them could fail on main unseen.
 
@@ -21,7 +22,8 @@ tool's own HTTP function with `urlopen` replaced; COMPUTES against the checks (s
 (letter case, links, nested folders, OneDrive); a fetch record's sha256 and, for each series, its window; the blank
 and non-positive cells of a provider file (kept for the cash rate, dropped for SPY and BTC-USD); what a failed run
 prints and leaves; a cp949 console; UTF-8 and LF in every file the tool writes; the tool run as the owner runs it
-(`python -B -m ...`); every statement of the fixed tool commit and sha256.
+(`python -B -m ...`); every statement of the fixed tool commit and sha256, for the two fixed versions the tool has
+had; the fmp page-back of the second version; the rerun guide's tool lines, run as written.
 """
 from __future__ import annotations
 
@@ -33,6 +35,7 @@ import io
 import json
 import os
 import re
+import shlex
 import shutil
 import socket
 import subprocess
@@ -59,7 +62,9 @@ NOW = datetime(2026, 11, 5, 12, 0, 0, tzinfo=timezone.utc)
 REAL_URLLIB_GET = pc.urllib_get            # the tool's own HTTP function, kept before `no_network` replaces it
 GUIDE = ROOT / "tools" / "provider_parity" / "README.md"
 KO_GUIDE = ROOT / "docs" / "product" / "PROVIDER_PARITY_OWNER_RUN_2026-11-11.md"
+RERUN_GUIDE = ROOT / "docs" / "product" / "PROVIDER_PARITY_RERUN_2026-11-11.md"
 RULINGS = ROOT / "results" / "RULINGS.md"
+DIAGNOSTIC = ROOT / "tools" / "provider_parity" / "btc_diagnose.py"
 WORKFLOW = ROOT / ".github" / "workflows" / "runtime-smoke.yml"
 FMP_KEY, KIS_KEY, KIS_SECRET = "fmpKEY-7f3a9c", "kisAPPKEY-51d2", "kisSECRET-88e0"
 
@@ -2537,16 +2542,30 @@ def test_an_output_folder_inside_onedrive_is_refused():
 def test_the_guide_matches_the_tool_and_says_what_is_not_settled():
     """The owner follows the guide, so it is held to the tool: the number of cases, and the notes a reader needs on
     what the tool leaves out and what a WITHHELD, a refused or a failed run means. The Korean guide's stop point
-    names the tool's page-back note in the tool's own words. The fixed commit and sha256 have their own case below."""
+    names the tool's page-back note in the tool's own words, and so does the rerun guide for the fmp note and for
+    each failure line it quotes: every such phrase is also in the tool's source. The fixed commit and sha256 have
+    their own case below."""
     flat = " ".join(GUIDE.read_text(encoding="utf-8").split())
     assert f"{len(tests())} cases on synthetic series" in flat, len(tests())
     for phrase in ("signed NYSE calendar. That check is not built",             # the draft's 4.1 clause, left out
                    "`n_common` near 80 % of `n_a`",                             # a date label one day off
                    "`weekend dates` must be 0", "`has_fetch_record`", "LEFT BEHIND", "OneDrive",
                    "kis paging stopped at", "does not cover the table's window",
+                   "fmp paging stopped at", "; request <n> of the page-back",
+                   f"the budget of {pc.FMP_MAX_REQUESTS} requests ran out", "an answer brought no earlier date",
+                   "fmp gave one date two different values in two answers",
+                   f"more than {pc.FMP_REACHED_DAYS} days after the first requested date",
                    "is not registered in `tests/run_all.py`"):
         assert phrase in flat, phrase
     assert "kis paging stopped at" in KO_GUIDE.read_text(encoding="utf-8")
+    rerun, source = RERUN_GUIDE.read_text(encoding="utf-8"), Path(pc.__file__).read_text(encoding="utf-8")
+    for phrase in ("fmp paging stopped at", "an answer brought no earlier date", "of the page-back",
+                   "fmp gave one date two different values in two answers",
+                   "fmp answered with a message instead of rows", "the output folder must be new",
+                   "FMP_API_KEY is not set (--env-file or the environment)", "cannot be read (FileNotFoundError)"):
+        assert phrase in rerun and (phrase in source or phrase.replace("FMP_API_KEY", "{name}") in source), phrase
+    assert f"the budget of {pc.FMP_MAX_REQUESTS} requests ran out" in rerun and "requests ran out" in source
+    assert f"요청 횟수 {pc.FMP_MAX_REQUESTS}번" in rerun and "SELFTEST PASS checks=11 failures=0" in rerun
 
 
 # --------------------------------------------------------------------------- #
@@ -2694,25 +2713,40 @@ def test_a_kis_page_back_that_stops_short_says_where_and_why_above_the_result_li
 
 
 def test_every_statement_of_the_fixed_commit_and_sha256_agrees_with_the_tool_file():
-    """Owner ruling P1 fixes the tool by commit and sha256, and the owner pastes both from the documents: the guide's
-    two lines and its `$fixed`, the Korean guide's `$fixed`, `$sha` and table row, and results/RULINGS.md. Each
-    statement is found exactly once, every sha256 is this tool file's, and every commit is one and the same 40-hex
-    id, so a change to the tool, or to one statement alone, fails here until all of them are right again. Not held
-    here: that the id is the commit that last changed the tool (CI checks out a single commit), and the two prose
-    records (docs/nautilus_bridge/OWNER_RULINGS_LOG.md, the tool's row of docs/compliance/FACTS.md), which are
+    """Owner ruling P1 fixes the tool by commit and sha256, and the owner pastes both from the documents. The tool
+    has had two fixed versions: the first made the three runs of record of 2026-11-11, and the ruling SPY-가 of that
+    day made the second (the fmp page-back). This case reads as current the statements of these fixed shapes, each
+    found exactly once: the guide's two lines and its `$fixed`; in each Korean guide (the first run and the rerun)
+    `$fixed`, `$sha` and the table row; results/RULINGS.md's two `Tool ... fixed` lines. Every current sha256 is this
+    tool file's and every current commit is one and the same 40-hex id, so a change to the tool, or to one statement
+    alone, fails here until all of them are right again.
+
+    The first version's values are history. They stand in the guide, in the first Korean guide and in RULINGS.md
+    (the runs of record were made with that version), only on a line that says `first fixed version` or `첫 고정
+    버전`, and never in a current statement. The diagnostic script's sha256 is stated in RULINGS.md and in the rerun
+    guide, once each, and is that file's. No other 40-hex or 64-hex value stands in the four documents, so a stray
+    or mistyped copy of any of these values fails too.
+
+    Not held here: that the id is the commit that last changed the tool (CI checks out a single commit), and the two
+    prose records (docs/nautilus_bridge/OWNER_RULINGS_LOG.md, the tool's rows of docs/compliance/FACTS.md), which are
     checked by hand whenever the values change."""
-    guide, ko, rulings = (p.read_text(encoding="utf-8") for p in (GUIDE, KO_GUIDE, RULINGS))
-    commits = {"guide line": re.findall(r"^Tool commit fixed by the owner ruling: (.+)$", guide, flags=re.M),
-               "guide $fixed": re.findall(r'^\$fixed = "([^"]*)"', guide, flags=re.M),
-               "Korean guide $fixed": re.findall(r'^\$fixed = "([^"]*)"', ko, flags=re.M),
-               "Korean guide table": re.findall(r"도구 커밋 `([^`]*)`", ko),
-               "RULINGS.md": re.findall(r"^- Tool commit fixed: `([^`]*)`", rulings, flags=re.M)}
-    shas = {"guide line": re.findall(r"^Tool sha256 fixed by the owner ruling: (.+)$", guide, flags=re.M),
-            "Korean guide $sha": re.findall(r'^\$sha = "([^"]*)"', ko, flags=re.M),
-            "Korean guide table": re.findall(r"도구 파일 sha256 `([^`]*)`", ko),
+    docs = {"guide": GUIDE, "Korean guide": KO_GUIDE, "rerun guide": RERUN_GUIDE, "RULINGS.md": RULINGS}
+    text = {name: path.read_text(encoding="utf-8") for name, path in docs.items()}
+    commits = {"guide line": re.findall(r"^Tool commit fixed by the owner ruling: (.+)$", text["guide"], flags=re.M),
+               "guide $fixed": re.findall(r'^\$fixed = "([^"]*)"', text["guide"], flags=re.M),
+               "RULINGS.md": re.findall(r"^- Tool commit fixed: `([^`]*)`", text["RULINGS.md"], flags=re.M)}
+    shas = {"guide line": re.findall(r"^Tool sha256 fixed by the owner ruling: (.+)$", text["guide"], flags=re.M),
             "RULINGS.md": re.findall(r"^- Tool sha256 fixed \(`tools/provider_parity/parity_check\.py`\): `([^`]*)`",
-                                     rulings, flags=re.M)}
-    for kind, stated in (("commit", commits), ("sha256", shas)):
+                                     text["RULINGS.md"], flags=re.M)}
+    for name in ("Korean guide", "rerun guide"):
+        commits[f"{name} $fixed"] = re.findall(r'^\$fixed = "([^"]*)"', text[name], flags=re.M)
+        commits[f"{name} table"] = re.findall(r"도구 커밋 `([^`]*)`", text[name])
+        shas[f"{name} $sha"] = re.findall(r'^\$sha = "([^"]*)"', text[name], flags=re.M)
+        shas[f"{name} table"] = re.findall(r"도구 파일 sha256 `([^`]*)`", text[name])
+    diagnostic = {"RULINGS.md": re.findall(r"`tools/provider_parity/btc_diagnose\.py`, sha256 `([^`]*)`",
+                                           text["RULINGS.md"]),
+                  "rerun guide": re.findall(r"진단 스크립트 sha256 `([^`]*)`", text["rerun guide"])}
+    for kind, stated in (("commit", commits), ("sha256", shas), ("diagnostic sha256", diagnostic)):
         for place, found in stated.items():
             assert len(found) == 1, f"{place}: the fixed {kind} is stated {len(found)} times"
     tool_sha = hashlib.sha256(Path(pc.__file__).read_bytes()).hexdigest()
@@ -2721,6 +2755,21 @@ def test_every_statement_of_the_fixed_commit_and_sha256_agrees_with_the_tool_fil
     commit = commits["RULINGS.md"][0]
     assert re.fullmatch(r"[0-9a-f]{40}", commit), commit
     assert {found[0] for found in commits.values()} == {commit}, commits
+    diagnostic_sha = hashlib.sha256(DIAGNOSTIC.read_bytes()).hexdigest()
+    wrong = {place: found[0] for place, found in diagnostic.items() if found[0] != diagnostic_sha}
+    assert not wrong, f"a sha256 that is not the diagnostic script's ({diagnostic_sha}): {wrong}"
+    # the first version is history: said to be so on its own line, kept on record, never current
+    assert commit != FIRST_TOOL_COMMIT and tool_sha != FIRST_TOOL_SHA256
+    for name, body in text.items():
+        for line in body.splitlines():
+            if FIRST_TOOL_COMMIT in line or FIRST_TOOL_SHA256 in line:
+                assert re.search(r"first fixed version|첫 고정 버전", line, flags=re.I), (name, line[:80])
+        if name != "rerun guide":
+            assert FIRST_TOOL_COMMIT in body and FIRST_TOOL_SHA256 in body, f"{name}: the first version is not kept"
+        known = {commit, tool_sha, diagnostic_sha, FIRST_TOOL_COMMIT, FIRST_TOOL_SHA256}
+        other = [x for x in re.findall(r"(?<![0-9a-f])(?:[0-9a-f]{40}|[0-9a-f]{64})(?![0-9a-f])", body)
+                 if x not in known]
+        assert not other, f"{name}: a 40-hex or 64-hex value that is none of the recorded ones: {other}"
 
 
 def test_every_repository_file_this_suite_reads_starts_the_ci_workflow():
@@ -2731,7 +2780,7 @@ def test_every_repository_file_this_suite_reads_starts_the_ci_workflow():
     is why no case reads them; the case does not hold the rest of the filter, which belongs to other suites."""
     listed = re.search(r"^    paths: \[(.*)\]$", WORKFLOW.read_text(encoding="utf-8"), flags=re.M).group(1)
     paths = re.findall(r"'([^']+)'", listed)
-    for path in (Path(pc.__file__), GUIDE, KO_GUIDE, RULINGS, WORKFLOW, Path(__file__)):
+    for path in (Path(pc.__file__), DIAGNOSTIC, GUIDE, KO_GUIDE, RERUN_GUIDE, RULINGS, WORKFLOW, Path(__file__)):
         rel = path.resolve().relative_to(ROOT).as_posix()
         assert rel in paths or any(p.endswith("/**") and rel.startswith(p[:-2]) for p in paths), rel
 
@@ -2740,7 +2789,8 @@ def test_every_repository_file_this_suite_reads_starts_the_ci_workflow():
 # Owner ruling SPY-가 of 2026-11-11: the fmp fetch pages back when an answer holds only the most recent rows
 # --------------------------------------------------------------------------- #
 FMP_FIRST, FMP_LAST = "2009-12-04", "2017-01-06"     # what a fetch for SPY_WIN requests: start - 31 days, end + 7 days
-# The tool file of the three runs of record of 2026-11-11 (the first fixed version); the page-back changed its bytes.
+# The tool of the three runs of record of 2026-11-11 (the first fixed version); the page-back changed its bytes.
+FIRST_TOOL_COMMIT = "5202482e3c24de871b8483608b8a03beb07abe1e"
 FIRST_TOOL_SHA256 = "f2fe72cdee6344076fd6dfec8943259f44bc52445c66cdaf482a19e269770184"
 
 
@@ -3094,6 +3144,153 @@ def test_fmp_capped_provider_passes_end_to_end_where_one_answer_alone_was_withhe
     assert check_of(s, "fmp", "coverage")["n_a_outside_b_span"] == 0
     assert check_of(s, "fmp", "returns_same_convention")["outcome"] == "PASS"
     assert s["tool"]["sha256"] == pc.tool_sha256()
+
+
+# --------------------------------------------------------------------------- #
+# The rerun guide (docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md): its tool lines, run as written
+# --------------------------------------------------------------------------- #
+RERUN_WIN = {"spy": ("2004-12-01", "2026-09-25"), "btc": ("2014-09-17", "2026-09-25")}     # the two pilot tables
+
+
+def guide_blocks(path: Path) -> list[str]:
+    """The ```powershell blocks of a guide, in order."""
+    return re.findall(r"```powershell\n(.*?)\n```", path.read_text(encoding="utf-8"), flags=re.S)
+
+
+def guide_argv(line: str, variables: dict[str, str]) -> list[str]:
+    """A guide line as an argument list: each `$name` and each quoted literal in `variables` replaced, the Windows
+    path separator turned, and the quotes read as a shell reads them."""
+    for name, value in variables.items():
+        line = line.replace(name, value)
+    assert "$" not in line, line
+    return shlex.split(line.replace("\\", "/"))
+
+
+class RerunWorld:
+    """The owner's PC after the first sitting, in synthetic form and with the two pilot tables' own windows: a fake
+    research clone with both tables (under the names the guide uses) and their pinned files, and under
+    `quantgen/provider_parity` the fetch folders the rerun guide reads again. Those were made with the tool as it is
+    here and their records then given the first fixed version's sha256, as on the owner's PC. kis has no bar before
+    2007-08-21 and coinbase none before 2015-07-20, as in the runs of record. `fmp` answers with the most recent
+    5,000 rows of a span."""
+
+    def __init__(self):
+        self.root = tmp()
+        self.rc, self.q = self.root / "QUANTGEN", self.root / "quantgen"
+        (self.rc / ".git").mkdir(parents=True)
+        (self.rc / "synthetic").mkdir()
+        tables = self.rc / "docs" / "nautilus_bridge" / "registration"
+        tables.mkdir(parents=True)
+        self.spy = spy_like(seed=3, lo="2004-06-01", hi="2026-11-06")
+        self.btc = btc_like(seed=13, lo="2014-09-01", hi="2026-10-20")
+        for name, series, header, days, values in (
+                ("pilot1_E1_spy.json", "spy", "Date,yf_SPY", self.spy[0], self.spy[2]),
+                ("pilot2_C3_btcusd.json", "btc", "Date,yf_BTC-USD", *self.btc[:2])):
+            symbol, _, _, file = pc.PINNED[series]
+            data = pinned_text(header, days, values).encode("utf-8")
+            (self.rc / "synthetic" / file).write_bytes(data)
+            (tables / name).write_text(json.dumps(
+                {"schema": pc.TABLE_SCHEMA, "symbol": symbol, "start": RERUN_WIN[series][0],
+                 "end": RERUN_WIN[series][1], "prices_file": f"synthetic/{file}",
+                 "prices_md5": hashlib.md5(data).hexdigest(), "rf_file": None, "rf_md5": None}), encoding="utf-8")
+        self.keys = key_file(self.root)
+        # what the guide's lines name, and what stands for it here ("$rc\.env" is the owner's own file: never made)
+        self.variables = {'"$rc\\.env"': f'"{self.keys}"', "$rc": str(self.rc), "$q": str(self.q)}
+        self.fmp = FakeHttp(self._fmp)
+        with env_without(*pc.KEY_NAMES):
+            for series, provider, kw in (("spy", "kis", dict(kis_get=self._kis)),
+                                         ("spy", "yahoo_now", dict(yf_download=self._yf)),
+                                         ("btc", "coinbase", dict(http=FakeHttp(self._coinbase))),
+                                         ("btc", "bitstamp", dict(http=FakeHttp(self._bitstamp)))):
+                folder = self.q / "provider_parity" / f"fetch1-{series}-{provider}"
+                code, out = capture(lambda: pc.run(
+                    ["fetch", "--series", series, "--provider", provider, "--start", RERUN_WIN[series][0], "--end",
+                     RERUN_WIN[series][1], "--out", str(folder), "--env-file", str(self.keys)], now=NOW, **kw))
+                assert code == 0, out
+                meta = json.loads((folder / "meta.json").read_text(encoding="utf-8"))
+                meta["tool"]["sha256"] = FIRST_TOOL_SHA256
+                (folder / "meta.json").write_text(json.dumps(meta, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+
+    def _fmp(self, url, params):
+        days, _, adj, _ = self.spy
+        assert url == pc.FMP_URL and params["apikey"] == FMP_KEY, params
+        return ok_json([{"symbol": "SPY", "date": days[i], "adjClose": round(float(adj[i]) * 0.987, 6)}
+                        for i in reversed(in_span(days, params["from"], params["to"])[-5000:])])
+
+    def _kis(self, path, tr_id, params):
+        days, raw, _, _ = self.spy
+        end = f"{params['BYMD'][:4]}-{params['BYMD'][4:6]}-{params['BYMD'][6:]}"
+        idx = [i for i, d in enumerate(days) if "2007-08-21" <= d <= end][-100:]
+        return {"rt_cd": "0", "output2": [{"xymd": days[i].replace("-", ""), "clos": f"{raw[i]:.4f}"}
+                                          for i in reversed(idx)]}
+
+    def _yf(self, symbol, start, end):
+        days, _, adj, _ = self.spy
+        idx = [i for i, d in enumerate(days) if start <= d < end]
+        return pd.DataFrame({"Close": [adj[i] * 0.99 for i in idx]}, index=pd.to_datetime([days[i] for i in idx]))
+
+    def _coinbase(self, url, params):
+        days, _, venue = self.btc
+        idx = [i for i in in_span(days, params["start"][:10], params["end"][:10]) if days[i] >= "2015-07-20"]
+        return ok_json([[pc._unix(days[i]), 0, 0, 0, round(float(venue[i]), 2), 1.0] for i in reversed(idx)])
+
+    def _bitstamp(self, url, params):
+        days, _, venue = self.btc
+        lo, hi = pc._iso_from_unix(int(params["start"])), pc._iso_from_unix(int(params["end"]))
+        return ok_json({"data": {"pair": "BTC/USD", "ohlc": [{"timestamp": str(pc._unix(days[i])),
+                                                              "close": f"{venue[i]:.2f}"}
+                                                             for i in in_span(days, lo, hi)]}})
+
+    def tool_line(self, line: str, module: str = "parity_check") -> list[str]:
+        """The arguments of a guide line that starts the tool (or the diagnostic), after `python -B -m <module>`."""
+        argv = guide_argv(line, self.variables)
+        assert argv[:4] == ["python", "-B", "-m", f"tools.provider_parity.{module}"], argv[:4]
+        return argv[4:]
+
+
+def test_the_rerun_guide_s_tool_lines_run_as_written_after_a_synthetic_first_sitting():
+    """The owner pastes the rerun guide's lines as they stand, so the lines that start the tool are taken from the
+    guide file and run here, on a synthetic copy of the first sitting with the two tables' own windows. Every
+    PowerShell block of the guide is one line with no `&&`, no line continuation and no `<...>` left to fill but
+    the one of step 1. Step 9 (selftest) ends as the guide says. Step 10 fetches fmp into `fetch2-spy-fmp`: two
+    requests, a first date of 2004-11-01 for the first requested 2004-10-31 (a Sunday), no note, which is what the
+    guide's stop point asks for. Step 11 compares the new fmp file with the kis and yahoo_now files of the first
+    sitting, whose fetch records name the first fixed version's sha256, into `compare2-spy`: PASS, with kis WITHHELD
+    on coverage inside the summary, as the guide says is normal. The lines that only call git or copy a file are not
+    run here."""
+    blocks = guide_blocks(RERUN_GUIDE)
+    assert len(blocks) == 20 and all("\n" not in b and "&&" not in b and not b.rstrip().endswith(("`", "\\"))
+                                     for b in blocks), [b[:40] for b in blocks if "\n" in b]
+    assert [b for b in blocks if "<" in b] == ['$rc = "<연구 클론 폴더의 전체 경로>"'], blocks[:1]
+    assert blocks[1] == '$q = Join-Path $env:LOCALAPPDATA "quantgen"' and blocks[2] == 'cd "$q\\pp_clone"', blocks[:3]
+    tool = [b for b in blocks if b.startswith("python -B -m tools.provider_parity.parity_check ")]
+    w = RerunWorld()
+    assert [w.tool_line(b)[0] for b in tool] == ["selftest", "fetch", "compare"], tool
+    code, out = capture(lambda: pc.run(w.tool_line(tool[0]), now=NOW))
+    assert code == 0 and last_line(out) == "SELFTEST PASS checks=11 failures=0", out
+    pp = w.q / "provider_parity"
+    with env_without(*pc.KEY_NAMES):
+        code, out = capture(lambda: pc.run(w.tool_line(tool[1]), now=NOW, http=w.fmp))
+    asked = [(p["from"], p["to"]) for _, p in w.fmp.calls]
+    assert asked == [("2004-10-31", "2026-10-02"), ("2004-10-31", "2007-08-05")], asked
+    assert code == 0 and out.splitlines()[-2:] == [
+        "rows 5720, first 2004-11-01, last 2026-10-02, weekend dates 0",
+        f"FETCH spy fmp OK exit=0 csv={pp / 'fetch2-spy-fmp' / 'spy_fmp.csv'}"], out
+    assert FMP_KEY not in out and FMP_KEY not in all_text(pp / "fetch2-spy-fmp")
+    code, out = capture(lambda: pc.run(w.tool_line(tool[2]), now=NOW))
+    assert code == 0 and last_line(out) == f"PARITY spy PASS exit=0 summary={pp / 'compare2-spy' / 'summary.json'}", out
+    s = json.loads((pp / "compare2-spy" / "summary.json").read_text(encoding="utf-8"))
+    assert s["window"] == {"start": "2004-12-01", "end": "2026-09-25"} and s["tool"]["sha256"] == pc.tool_sha256()
+    assert {p["provider"]: (p["outcome"], p["has_fetch_record"]) for p in s["pairs"]} == {
+        "fmp": ("PASS", True), "kis": ("WITHHELD", True), "yahoo_now": ("PASS", True)}, s["pairs"]
+    assert check_of(s, "kis", "coverage")["first_date"] == "2007-08-21"
+    assert check_of(s, "fmp", "coverage")["n_a_outside_b_span"] == 0 and s["n_a_outside_evidence_spans"] == 0
+    for folder in ("fetch1-spy-kis", "fetch1-spy-yahoo_now"):
+        meta = json.loads((pp / folder / "meta.json").read_text(encoding="utf-8"))
+        assert meta["tool"]["sha256"] == FIRST_TOOL_SHA256 != pc.tool_sha256(), folder
+    # the folder names the copy step and the result table of the guide use
+    text = RERUN_GUIDE.read_text(encoding="utf-8")
+    assert '"$q\\provider_parity\\compare2-spy\\summary.json"' in text and "fetch2-spy-fmp\\spy_fmp.csv" in text
 
 
 # --------------------------------------------------------------------------- #

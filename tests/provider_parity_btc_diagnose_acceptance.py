@@ -8,8 +8,8 @@ maximum of the level difference).
 Synthetic series only, built the way tests/provider_parity_acceptance.py builds them (its helpers are imported): a
 fake research clone with a pilot table and a synthetic pinned file in a fresh folder under the system temp dir, and
 synthetic provider files. Every case runs with socket connects patched to raise. No real price, pilot table, cache
-file, `.env` or key is read. In the repository the suite reads the script, the tool, the helper suite and the CI
-workflow, each of which is on that workflow's path filter.
+file, `.env` or key is read. In the repository the suite reads the script, the tool, the helper suite, the rerun
+guide (its step 18 is run as written) and the CI workflow, each of which is on that workflow's path filter.
 
     python -B -m unittest tests.provider_parity_btc_diagnose_acceptance -v
     python -B -m tests.provider_parity_btc_diagnose_acceptance          # the same cases, one PASS or FAIL line each
@@ -692,14 +692,44 @@ def test_it_runs_as_a_module_from_the_clone_root_as_the_owner_runs_it():
     assert code == 2 and lines == [] and "usage:" in err and "Traceback" not in err, (lines, err)
 
 
+def test_the_rerun_guide_s_diagnostic_line_runs_as_written_and_prints_what_the_guide_says():
+    """The owner pastes step 18 of the rerun guide as it stands, so the line is taken from the guide file and run
+    here on the synthetic first sitting of the provider parity suite: the pilot 2 table's own window, the coinbase
+    and bitstamp files in their `fetch1-...` folders, each beside a fetch record that names the first fixed
+    version's sha256. It prints 82 lines, the number the guide tells the owner to expect and to paste (13 calendar
+    years, 2014 to 2026), begins and ends as the guide says, and every line starts with one of the words the guide
+    lists. The guide's two failure lines are the script's own."""
+    line = [b for b in base.guide_blocks(base.RERUN_GUIDE) if "btc_diagnose" in b]
+    assert len(line) == 1 and line[0].endswith(" --owner-run"), line
+    w = base.RerunWorld()
+    code, out = base.capture(lambda: bd.run(w.tool_line(line[0], "btc_diagnose")))
+    lines = out.splitlines()
+    assert code == 0 and len(lines) == 82 and lines[-1] == "BTCDIAG OK exit=0", out
+    assert lines[1].startswith("window start=2014-09-17 end=2026-09-25 late_from=2017-01-01 "), lines[1]
+    assert lines[2:5] == ["common pinned-coinbase days=4086", "common pinned-bitstamp days=4392",
+                          "common coinbase-bitstamp days=4086"], lines[2:5]
+    assert all(sum(bool(shape.fullmatch(x)) for shape in ALLOWED) == 1 for x in lines)
+    guide = base.RERUN_GUIDE.read_text(encoding="utf-8")
+    assert guide.count("82줄") >= 3 and "13개 연도" in guide, guide.count("82줄")
+    for said in ("`BTCDIAG 1 tool_sha256=<64자> script_sha256=<64자>`", "`BTCDIAG OK exit=0`",
+                 "`BTCDIAG REFUSED exit=2`", "`BTCDIAG ERROR exit=4`"):
+        assert said in guide, said
+    kinds = sorted({x.split()[0] for x in lines[1:-1]})
+    assert kinds == ["common", "levels", "returns", "split", "venues", "window"], kinds
+    assert all(f"`{kind}`" in guide for kind in kinds), kinds
+    code, out = base.capture(lambda: bd.run(w.tool_line(line[0].replace("--pair bitstamp", "--pair binance"),
+                                                        "btc_diagnose")))
+    assert code == 2 and base.last_line(out) == "BTCDIAG REFUSED exit=2", out
+
+
 def test_every_repository_file_this_suite_reads_starts_the_ci_workflow():
     """CI runs this suite only for a pull request that touches a path on the filter of runtime-smoke.yml, and runs
     it by name. Every repository file the suite reads is on that filter (the script, the tool, the suite whose
-    helpers it imports, this file and the workflow), so none can change without the suite running, and the
-    workflow's unittest command names this module."""
+    helpers it imports, this file, the workflow and the rerun guide), so none can change without the suite running,
+    and the workflow's unittest command names this module."""
     workflow = base.WORKFLOW.read_text(encoding="utf-8")
     paths = re.findall(r"'([^']+)'", re.search(r"^    paths: \[(.*)\]$", workflow, flags=re.M).group(1))
-    for path in (SCRIPT, Path(pc.__file__), Path(base.__file__), Path(__file__), base.WORKFLOW):
+    for path in (SCRIPT, Path(pc.__file__), Path(base.__file__), Path(__file__), base.WORKFLOW, base.RERUN_GUIDE):
         rel = path.resolve().relative_to(ROOT).as_posix()
         assert rel in paths or any(p.endswith("/**") and rel.startswith(p[:-2]) for p in paths), rel
     assert paths.count("tests/provider_parity_btc_diagnose_acceptance.py") == 1, paths
