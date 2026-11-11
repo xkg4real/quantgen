@@ -5,11 +5,11 @@ from: claude
 task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d
-next_ids: ⑤-2/e, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-11T17:00:00+09:00
+next_ids: ⑤-2/e, ⑤-2/f, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-11T17:06:00+09:00
 stale_after_hours: 3
-waiting_on: owner
-work_branch: main
+waiting_on: none
+work_branch: claude/provider-parity-spy-rerun-20261111
 work_commit: fbe493d
 uncommitted_changes: no
 pr: none
@@ -119,6 +119,22 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - **B:** Q1 REJECT(잠정 표시), Q2 게이트와 같은 분산 값으로 판정·SE_null은 참고 줄, Q3 검정력 부족이면 이겨도 자료 부족, Q4 DM으로 판정·Clark–West 참고 줄, Q5 12항목 필수·Claude 초안·소유자 커밋·R-FAM/L-FAM 병기, Q7 60/40은 21거래일 리밸런싱·실제 거래분 비용. 다음 단위 ⑨-4/2/c(결과 조립).
 - **C:** 0b 채택 방침만 기록. Q12 = 7개 파일(`core/quant/strategies.py`, `validate.py`, `history.py`, `gate_ledger.py`, `core/research/strategy_workflow.py`, `core/quant/optimize.py`, `core/quant/risk.py`). Q13·Q14·Q16·Q17·Q18 기본값. 화면은 네이티브만(UI-D1), Flet 작업(Q19 포함) 안 함, PC 화면은 시안 먼저 + UI 세션 이식과 ⑦-2 병합 뒤. Q22의 잘라내기 여부는 2026-12 말 전에 따로 질문. 다음 단위 ⑨-3a/recorder/1(화면 없음, 결정 9 조건: run_family 안에서 PNL_COMPUTED보다 낮은 PROGRESS를 쓰지 않음).
 - **D:** 주문 한도 수치(1회 100만 원/5%, 하루 10건·300만 원/15%, 손실 중지 40만 원/2%, 종목 비중 20%/400만 원, 가격 이탈 3%·시세 15초·지정가만, 09:00~15:20, 모의 20거래일·30건 등)를 기본값으로 승인. **실거래는 켜지지 않음.** 순서: 안전 설계 문서 보고 → ⑦-2 병합 뒤 구현 → 모의투자 → 결과 보고 → 소유자의 실거래 전환 승인. D-14 법률 자문은 소유자가 의뢰.
+
+### 소유자 판정: SPY-가, BTC-나 (2026-11-11 17:06 KST) — 가장 최신
+
+소유자 답(2026-11-11 17:1x KST, 원문 두 줄):
+
+> SPY-가-승인, BTC-나-승인
+> 그리고 BTC-나 에 따라 문제의 원인 파악 완료 후 자동으로 해결 및 pilot 2 진행해주세요
+
+Claude가 받은 뜻(소유자에게 그대로 알림):
+- **SPY-가:** 도구의 fmp 수신을 여러 번 요청해 이어 받도록 고침(kis처럼 뒤로 넘기며 받기) → 새 고정 커밋·sha256(둘째 버전, 첫 버전 `5202482`·`f2fe72cd…0184`는 11-11 기록 실행 3건의 버전으로 남김) → 소유자가 fmp만 새 폴더에 다시 받고 SPY 대조를 한 번 더 → 이 판정이 스펙 10.5가 요구하는 "나중 실행 인정" 판정. 첫 실행(WITHHELD)과 요약은 그대로 둠.
+- **BTC-나:** Pilot 2 전에 원인 확인. 가격이 아닌 통계(연도별 불일치 일수, 수준 차이의 99번째 백분위·최댓값)만 PC 밖으로 나가는 것을 허용. Claude가 소유자 PC용 읽기 전용 진단 스크립트 `tools/provider_parity/btc_diagnose.py`를 만듦(고정된 도구의 판독 함수만 사용, 연도보다 자세한 날짜·가격·일별 차이는 출력하지 않음).
+- **둘째 줄("자동으로 해결 및 pilot 2 진행"):** 원인이 고정 파일·등록 표·코드 지문 아래 코드를 바꾸지 않고 설명되면, 불일치와 원인을 기록하고 BTC 관문을 이 판정으로 통과한 것으로 봄(다시 묻지 않음). 고정 파일·표·코드를 바꿔야 하는 원인이면 자동으로 하지 않고 보고 후 판정을 받음(`owner_confirmed`가 무효가 되므로). Pilot 2는 소유자 PC에서 소유자가 실행하며 Pilot 1의 hard 패리티 통과가 조건(러너 R-11).
+
+진행(⑤-2/f): 워크플로가 도는 중. 워크트리 `scratchpad/pp2`, 브랜치 `claude/provider-parity-spy-rerun-20261111`(main `fbe493d`에서, push 전). 판정 원문과 선택지 표 원문은 `scratchpad/rulings_1111_spy_btc.md`에 모아 두었고 워크플로가 `OWNER_RULINGS_LOG.md` 새 절과 `results/RULINGS.md`에 옮깁니다. 산출물: (1) `fetch_fmp` 수정과 시험, (2) `btc_diagnose.py`와 시험 모듈 `tests/provider_parity_btc_diagnose_acceptance.py`, (3) 결정 기록·README·FACTS·새 안내서 `docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md`(A: SPY 재수신·재대조, B: BTC 진단 실행), (4) 새 고정값 기록과 기준선. 그 뒤 독립 검증 3관점 → 수정.
+
+워크플로가 끝난 뒤 순서: 결과 검토 → push → PR → CI(Runtime 약 30분) + 캐시 없는 전체 실행 → 병합 → **main을 실행 브랜치에 병합**(실행 브랜치 `claude/provider-parity-runs-20261111`은 소유자 커밋 `0b397f7`이 위에 있으므로 병합 커밋으로 올림, 소유자는 `pp_clone`에서 `git pull --ff-only`) → 소유자에게 새 안내서와 새 고정값 전달 → 소유자: SPY 재수신·재대조·push, BTC 진단 출력 붙여넣기 → Claude: SPY 둘째 요약 판독(PASS면 Pilot 1 관문 통과), BTC 진단 판독과 원인 기록 → 관문 판정을 `results/RULINGS.md`에 기록 → Pilot 1 안내(`docs/product/PILOT_OWNER_RUN_2026-11-11.md`). Pilot 1 전에 연구 클론의 추적되지 않는 폴더 `.agents/`·`quantgen/` 처리도 필요(소유자에게 폴더 안 이름 목록을 요청함).
 
 ### ⑤-2/d 완료: 소유자 PC 대조 결과와 판독 (2026-11-11 17:00 KST) — 가장 최신
 
