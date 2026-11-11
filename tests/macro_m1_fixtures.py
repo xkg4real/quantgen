@@ -2057,7 +2057,7 @@ def test_macro_fixtures_copies_result_tables_byte_for_byte():
                             ("a byte order mark and CRLF", b"\xef\xbb\xbfitem,value\r\nF20,1\r\n")):
             (ref / rel).write_bytes(data)
             staged, real = [], MF._atomic_write
-            MF._atomic_write = lambda path, data: (staged.append(Path(path)), real(path, data))[1]
+            MF._atomic_write = lambda path, data, **kw: (staged.append(Path(path)), real(path, data, **kw))[1]
             try:
                 rows = MF.generate(ref, out, retrieved_at_utc=REFERENCE_RETRIEVED, licence="test licence",
                                    owner="package D", available_at=_available_at, only=("F20",))
@@ -2286,9 +2286,17 @@ def test_macro_fixtures_final_write_fsyncs_each_file_before_its_rename():
     is renamed over its destination (watched by wrapping os.fsync and os.replace and matching files by inode); a
     failing file fsync fails the run and is undone like any other error. On POSIX each destination directory is then
     fsynced, best effort: a directory fsync that fails does not fail the run; on Windows (os.name 'nt') no directory
-    is opened. What a power loss can still leave is stated in `MF._commit` and is not demonstrated here."""
+    is opened. What a power loss can still leave is stated in `MF._commit` and is not demonstrated here. Verifier
+    round: an exception other than an OSError in the directory fsyncs (a Ctrl+C) comes after the last rename, so it
+    reaches the caller and undoes nothing, as the docstring now says; and `_atomic_write` synced every file it wrote,
+    each data fixture `generate` stages in a directory it deletes included (one file and one directory fsync per
+    data fixture, which protect nothing). Now the staging write passes durable=False, which skips both: a run that
+    writes F13 makes one file fsync (the fixture's final write) where it made two, and on POSIX two directory fsyncs
+    (the new output directory and its parent) where it made three."""
     import os
     import stat
+    from core.calendars import clocks as K
+    from tests.macro_m1_calendars import fixture_set
     events: list = []
     real_fsync, real_replace, real_open, real_name = os.fsync, os.replace, os.open, os.name
 
@@ -2341,6 +2349,38 @@ def test_macro_fixtures_final_write_fsyncs_each_file_before_its_rename():
             if kind == "file":
                 assert {p.name: p.read_bytes() for p in out.iterdir()} == before
         assert (out / "a.csv").read_bytes() == b"a3\n"
+        # a Ctrl+C in the directory fsyncs, after the last rename: it reaches the caller, and nothing is undone
+        if os.name != "nt":
+            def interrupted(fd):
+                if stat.S_ISDIR(os.fstat(fd).st_mode):
+                    raise KeyboardInterrupt
+                return real_fsync(fd)
+            os.fsync = interrupted
+            try:
+                MF._commit([(out / "a.csv", b"a4\n"), (out / "MANIFEST.csv", b"m4\n")])
+                raise AssertionError("the KeyboardInterrupt of the directory fsync did not reach the caller")
+            except KeyboardInterrupt:
+                pass
+            finally:
+                os.fsync = real_fsync
+            assert {p.name: p.read_bytes() for p in out.iterdir()} == {"a.csv": b"a4\n", "b.csv": b"b\n",
+                                                                       "MANIFEST.csv": b"m4\n", "c.csv": b"c\n"}
+        # `generate` stages a data fixture with durable=False: neither the staged copy nor the staging directory is
+        # synced, and the final write syncs the fixture and its directories as above
+        days = K.sessions_between("KR", date(2026, 9, 21), GPOST_DAY, cal=fixture_set())
+        ref, fresh = Path(tmp) / "ref", Path(tmp) / "out2"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+        (ref / _reference_row("F13")[1]).write_text(_invented_reference("F13", days), encoding="utf-8")
+        writes, synced, real_write = [], [], MF._atomic_write
+        MF._atomic_write = lambda path, data, **kw: (writes.append(kw), real_write(path, data, **kw))[1]
+        os.fsync = lambda fd: (synced.append(stat.S_ISDIR(os.fstat(fd).st_mode)), real_fsync(fd))[1]
+        try:
+            _calendar_generator(("F13",), ref, fresh)
+        finally:
+            MF._atomic_write, os.fsync = real_write, real_fsync
+        assert writes == [{"durable": False}] and [p.name for p in fresh.iterdir()] == [FILE_OF["F13"]]
+        assert synced.count(False) == 1 and synced.count(True) == (0 if os.name == "nt" else 2), synced
         # Windows: no directory is opened for an fsync
         opened: list = []
         os.open = lambda *args, **kwargs: opened.append(args) or real_open(*args, **kwargs)

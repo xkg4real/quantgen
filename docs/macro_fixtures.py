@@ -375,21 +375,26 @@ def _add_note(exc: BaseException, note: str) -> None:
         exc.__notes__ = [*getattr(exc, "__notes__", ()), note]
 
 
-def _atomic_write(path: Path, data: str | bytes) -> None:
-    """`data` (text is written as UTF-8 with its own line ends) to a temporary file beside `path`, flushed and
-    fsynced (`os.fsync`), then renamed over it; on POSIX the directory is then fsynced too (`_fsync_dir`)."""
+def _atomic_write(path: Path, data: str | bytes, *, durable: bool = True) -> None:
+    """`data` (text is written as UTF-8 with its own line ends) to a temporary file beside `path`, then renamed over
+    it. With `durable` (the default: `freeze`'s manifest, the undo of `_commit`), the temporary file is flushed and
+    fsynced (`os.fsync`) before the rename and, on POSIX, the directory after it (`_fsync_dir`). `generate` stages
+    its data fixtures with durable=False: a staged copy is at most read back by the same process (`check_fixture`,
+    close-type fixtures only) and is deleted with the staging directory, so a sync protects nothing there."""
     path.parent.mkdir(parents=True, exist_ok=True)
     fd, tmp = tempfile.mkstemp(dir=path.parent, prefix=path.name, suffix=".tmp")
     try:
         with os.fdopen(fd, "wb") as fh:
             fh.write(data.encode("utf-8") if isinstance(data, str) else data)
-            fh.flush()
-            os.fsync(fh.fileno())
+            if durable:
+                fh.flush()
+                os.fsync(fh.fileno())
         os.replace(tmp, path)
     finally:
         if os.path.exists(tmp):
             os.unlink(tmp)
-    _fsync_dir(path.parent)
+    if durable:
+        _fsync_dir(path.parent)
 
 
 def _fsync_dir(path: Path) -> None:
@@ -451,22 +456,27 @@ def _commit(items: list[tuple[Path, bytes]]) -> None:
     F2), and the bytes of each file it replaces are read; a failure in any of these steps removes the temporary files
     and the directories this run created (F6) and changes nothing else. Then each temporary file is renamed over its
     destination (`os.replace`, one rename per file). If a rename fails (on Windows, a destination open in another
-    program, the manifest included), the files already renamed get their earlier bytes back, the files this run
-    created are removed, the temporary files are deleted, the directories this run created are removed again, and
-    the error is raised: every destination is as it was. After the last rename, on POSIX only, each destination
-    directory and the parent of each directory this run created is fsynced, best effort (`_fsync_dir`: a failure
-    there does not fail the run; Windows has no directory fsync).
+    program, the manifest included), or any other exception (a Ctrl+C included) stops `_commit` before its last
+    rename is done, the files already renamed get their earlier bytes back, the files this run created are removed,
+    the temporary files are deleted, the directories this run created are removed again, and the error is raised:
+    every destination is as it was. After the last rename the write is complete. Then, on POSIX only, each
+    destination directory and the parent of each directory this run created is fsynced, best effort (`_fsync_dir`:
+    an OSError opening or syncing a directory is ignored; Windows has no directory fsync); any other exception
+    there, a Ctrl+C included, reaches the caller and undoes nothing: every file already holds its new bytes.
     What remains possible. A reader during the renames can see new and earlier files mixed. If the undo itself fails
     (a file locked in that instant), FinalWriteIncomplete names each file left changed. If the process is stopped
-    during the renames (killed, power lost; a Ctrl+C is an error like any other and is undone), no undo runs: some
-    files hold their new bytes, others their earlier bytes, the manifest may lack the rows of fixtures already
-    renamed, and a temporary file `<name>*.tmp` may remain. After a power loss, each file holds its earlier bytes or
-    its new bytes, whole, as far as the disk honours fsync and the file system keeps a rename atomic (POSIX file
-    systems do; Windows does not promise it): the new bytes are on disk before the rename, but a rename not yet on
-    disk when the power goes (any rename before the directory fsync; on Windows any rename) can be lost, and the
-    renames that survive need not be the earlier ones, so the manifest can survive with rows for fixtures that came
-    back with their earlier bytes or not at all (the fixture gate, tests/notrun.require_fixture, then refuses those by
-    md5). The manifest is renamed last, so whenever the write fails or is undone, the manifest holds no new row."""
+    with no exception raised in it (killed, power lost), no undo runs: stopped before the renames, it has changed no
+    destination but can leave temporary files `<name>*.tmp` and directories it created; stopped during the renames,
+    some files hold their new bytes, others their earlier bytes, the manifest may lack the rows of fixtures already
+    renamed, and temporary files and directories it created may remain. After a power loss, each file holds its
+    earlier bytes or its new bytes, whole, as far as the disk honours fsync and the file system keeps a rename atomic
+    across a crash (the common journaling file systems, such as ext4 and XFS, do; POSIX promises the atomicity only
+    to other processes, and Windows does not promise it): the new bytes are on disk before the rename, but a rename
+    not yet on disk when the power goes (any rename before the directory fsync; on Windows any rename) can be lost,
+    and the renames that survive need not be the earlier ones, so the manifest can survive with rows for fixtures
+    that came back with their earlier bytes or not at all (the fixture gate, tests/notrun.require_fixture, then
+    refuses those: a file that is not there as absent, one with its earlier bytes by md5). The manifest is renamed
+    last, so whenever the write fails or is undone, the manifest holds no new row."""
     dests = [dest for dest, _data in items]
     first: dict[str, Path] = {}                             # each directory entry written, by its first spelling
     repeated: list[str] = []
@@ -643,10 +653,10 @@ def generate(ref_dir: Path, out_dir: Path, *, retrieved_at_utc: datetime, licenc
     `out_dir` is touched (L5492; review of PR #101, R1), and the rows the manifest lacks are appended to it by
     `freeze`'s rule in the same final write as the fixtures, as its last file (R4): a fixture is never left in
     `out_dir` without its manifest row because the manifest could not be written. Every file is built in memory
-    first (a data fixture is also written to a temporary directory, where `check_fixture` reads the close-type
-    ones; a result table, which no check reads, is not), and `out_dir` is written from those bytes only after the
-    last file passed, by `_commit`: a refused run leaves `out_dir` and the manifest as they were, and `_commit`
-    says what a failure of the final write can leave."""
+    first (a data fixture is also written, unsynced, to a temporary directory, where `check_fixture` reads the
+    close-type ones; a result table, which no check reads, is not), and `out_dir` is written from those bytes only
+    after the last file passed, by `_commit`: a refused run leaves `out_dir` and the manifest as they were, and
+    `_commit` says what a failure of the final write can leave."""
     return _generate(ref_dir, out_dir, retrieved_at_utc=retrieved_at_utc, licence=licence, owner=owner,
                      available_at=available_at, check_fixture=check_fixture, only=only, manifest=manifest)[0]
 
@@ -674,7 +684,7 @@ def _generate(ref_dir: Path, out_dir: Path, *, retrieved_at_utc: datetime, licen
                                             available_at=available_at, columns=CLOSE_FILES.get(fid, ()), series=ids,
                                             min_rows=CLOSE_MIN_ROWS.get(fid, 1) if fid in CLOSE_FILES else 0)
                 data = fixture_text(fields, rows).encode("utf-8")
-                _atomic_write(staged, data)
+                _atomic_write(staged, data, durable=False)     # at most read below, then deleted: not synced
                 dates = [r["obs_date"] for r in rows]        # ISO dates: the first and last observation of the file,
                 span = f"{min(dates)}..{max(dates)}" if rows else ""   # also of a long-form file grouped by code
                 rule = f"{value_status}; available_at_source = {source}"
