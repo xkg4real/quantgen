@@ -192,8 +192,9 @@ class StockDetailTests(unittest.TestCase):
         chart, side = view.chart_column.geometry(), view.side.geometry()
         self.assertTrue(view.side.isVisible())
         self.assertGreaterEqual(side.x(), chart.right() + 12)          # the column sits beside the chart
-        self.assertTrue(340 <= side.width() <= 380, side.width())
-        self.assertGreaterEqual(chart.width(), 780)
+        # Owner 2026-11-12 "차트 가로넓이 살짝만 더넓혀보자": column 335-360 (was 340-380) and page sides 16 (was 24).
+        self.assertTrue(335 <= side.width() <= 360, side.width())
+        self.assertGreaterEqual(chart.width(), 800)
         self.assertGreaterEqual(self.pane.chart.height(), 700)          # most of the window height
         self.assertEqual(chart.height(), body.height())
         self.assertLess(view.toolbar.geometry().bottom(), body.geometry().top())

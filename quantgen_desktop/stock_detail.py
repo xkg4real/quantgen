@@ -50,7 +50,7 @@ SETTINGS_PREFIX = "markets/detail/"
 DEFAULT_STUDIES = ("sma", "volume_ma", "rsi")
 SEARCH_WIDE, SEARCH_NARROW = 200, 140   # spec 2.1 / 2.2
 NAME_ROOM, NAME_LEAST = 200, 120        # toolbar room the stock's name is given before other controls give way
-PAGE_SIDE = 24           # the page's side margins while a stock is open (spec 2; the app's pages use 32)
+PAGE_SIDE = 16           # the page's side margins while a stock is open (owner 2026-11-12: a little more chart width; was 24)
 SIDE_GAP = 12
 CHART_ROOM = 640         # with the rail open the chart would get less than this beside the column: the rail folds
 CHART_MIN = 300          # the chart's least width beside the column (the column narrows first)
@@ -572,7 +572,9 @@ class DetailBody(QWidget):
 
     def side_width(self, width=None):
         width = self.width() if width is None else width
-        return 380 if width >= 1320 else 360 if width >= 1120 else 340 if width >= 940 else 320
+        # Owner 2026-11-12 "차트 가로넓이 살짝만 더넓혀보자": with PAGE_SIDE 16 (was 24) the chart gains about 30-36 px over the
+        # earlier 380/360/340/320 column; the column stays wide enough that picker names and guide cards do not wrap further.
+        return 360 if width >= 1320 else 350 if width >= 1120 else 335 if width >= 940 else 320
 
     def side_shown(self):
         return self.side_pref and not self.focus
