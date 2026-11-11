@@ -825,10 +825,12 @@ Claude가 이 결과를 보고하면서 올린 선택지입니다(원문).
   - 파일럿 2 자체는 소유자가 소유자 PC에서 실행합니다. 파일럿 1이 필수 일치 검사를 모두 통과한 뒤에만 시작됩니다(러너가
     이 조건을 강제합니다, R-11).
 - **Claude가 이렇게 반영합니다:**
-  - fmp 수신만 고친 도구를 두 번째 고정 버전으로 적습니다: 도구 커밋 `(다음 커밋에서 기록)`, 도구
-    파일(`tools/provider_parity/parity_check.py`) sha256 `(다음 커밋에서 기록)`. 허용치, 공급사 목록, 판정 규칙, 요약
+  - fmp 수신만 고친 도구를 두 번째 고정 버전으로 적습니다: 도구 커밋
+    `4096caa56438825ac66367d1d2eccb5deb68189a`, 도구 파일(`tools/provider_parity/parity_check.py`) sha256
+    `f56caeb4076c3679db1b8c801ea2f9eb356541684fd94a5947011c826c9b2b21`. 허용치, 공급사 목록, 판정 규칙, 요약
     필드는 기록 실행 세 번 때와 같습니다.
-  - 진단 스크립트는 `tools/provider_parity/btc_diagnose.py`이고 sha256은 `(다음 커밋에서 기록)`입니다. 파일을 쓰지 않고
+  - 진단 스크립트는 `tools/provider_parity/btc_diagnose.py`이고 sha256은
+    `f9e7146bc86f0062c45dd582e19b686344794274d6d20614399cefb53e01e5fa`입니다. 파일을 쓰지 않고
     인터넷을 쓰지 않으며, 가격·수익률·연도보다 자세한 날짜는 찍지 않습니다.
   - 소유자가 따라 할 순서는 `docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md`에 있습니다. 판정의 영문 기록은
     `results/RULINGS.md`에, 도구 설명은 `tools/provider_parity/README.md`에 적습니다.

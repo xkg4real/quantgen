@@ -41,8 +41,8 @@ verbatim in `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` and in `results/RULINGS.
 The tool has had two fixed versions. The two lines below are the second, the one every run from now on is made with:
 
 ```
-Tool commit fixed by the owner ruling: (recorded by the next commit)
-Tool sha256 fixed by the owner ruling: (recorded by the next commit)
+Tool commit fixed by the owner ruling: 4096caa56438825ac66367d1d2eccb5deb68189a
+Tool sha256 fixed by the owner ruling: f56caeb4076c3679db1b8c801ea2f9eb356541684fd94a5947011c826c9b2b21
 ```
 
 - The second fixed version follows the owner's ruling of 2026-11-11 on the first SPY run ("SPY-가-승인", verbatim in
@@ -64,7 +64,7 @@ an owner ruling (spec 10.5, Tool).
 
 ```powershell
 $rc = "<the research clone>"                         # read only: the tables, the pinned files and its .env
-$fixed = "(recorded by the next commit)"
+$fixed = "4096caa56438825ac66367d1d2eccb5deb68189a"
 $origin = git -C $rc remote get-url origin
 git clone --branch claude/provider-parity-runs-20261111 --single-branch $origin "$env:LOCALAPPDATA\quantgen\pp_clone"
 cd "$env:LOCALAPPDATA\quantgen\pp_clone"

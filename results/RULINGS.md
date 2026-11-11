@@ -81,8 +81,8 @@ What follows (how Claude takes "SPY-가-승인"):
   date, brings no earlier date, or twelve requests are spent. Nothing else in the tool changes: thresholds, providers,
   outcome rules and summary fields are those of the three runs of record.
 - The changed tool is the second fixed version:
-- Tool commit fixed: `(recorded by the next commit)`
-- Tool sha256 fixed (`tools/provider_parity/parity_check.py`): `(recorded by the next commit)`
+- Tool commit fixed: `4096caa56438825ac66367d1d2eccb5deb68189a`
+- Tool sha256 fixed (`tools/provider_parity/parity_check.py`): `f56caeb4076c3679db1b8c801ea2f9eb356541684fd94a5947011c826c9b2b21`
 - "Reaches" means an earliest date at most 7 days after the first requested date, which is 31 days before the
   table's start and need not be a session. A fetch that stops later than that still ends `OK` and says where and why
   on the line above; the owner does not compare such a file (the guide's stop point).
@@ -119,7 +119,7 @@ What follows (how Claude takes "BTC-나-승인" and the second line):
   ruling, to "only `summary.json` leaves the owner's machine" (spec 10.5, Outputs) and to 10.5.2, which keeps an exact
   extreme out of the summary. No price, no return and no date finer than a calendar year leaves.
 - Claude wrote a read-only diagnostic for the owner's PC that prints only such statistics:
-  `tools/provider_parity/btc_diagnose.py`, sha256 `(recorded by the next commit)`. It reads the pinned file and the
+  `tools/provider_parity/btc_diagnose.py`, sha256 `f9e7146bc86f0062c45dd582e19b686344794274d6d20614399cefb53e01e5fa`. It reads the pinned file and the
   coinbase and bitstamp files of the first sitting through the fixed tool's own readers, writes no file and makes no
   network call. What it computes are kinds the exception to 3.9 names (differences between two providers' series:
   counts, percentiles, extreme); coinbase against bitstamp involves no pinned data. The owner runs it once and pastes
