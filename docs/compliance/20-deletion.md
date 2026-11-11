@@ -75,6 +75,10 @@ KIS 종목 마스터의 원본 줄(`_MASTER_CACHE`)과 검색 색인, 관심종�
 
 새 QSettings 항목 `ui/sidebar_collapsed`, `markets/detail/indicators`, `markets/detail/period`, `markets/detail/sections`, `markets/detail/side`는 화면 선호이며 종목·가격·검색어를 담지 않습니다. 기존 QSettings 항목과 같이 앱 안 삭제 버튼은 없고 모의 장부 초기화로도 지워지지 않습니다. 종목 상세 화면의 "최근 본 종목"(최대 8개)과 순위 목록·시가총액 응답(KIS 현재가상세 응답과 FMP 일괄 시세 포함)은 프로세스 메모리에만 있으며 앱을 끄면 사라지지만, 보안 소거나 제공처 요청 기록의 삭제를 뜻하지 않습니다. [07번](07-data-minimization.md) 절과 [변경 사실](FACTS.md#ui-d7-d8-uscap-2026-11-11)을 따릅니다.
 
+### 2026-11-11 시장 페이지(UI-D10)
+
+새 QSettings 항목은 없습니다. 각 시장의 기준(분류·하위 시장·업종·검색어·조건)과 코인 목록 응답은 프로세스 메모리에만 있으며 앱을 끄면 사라집니다(보안 소거나 제공처 요청 기록의 삭제를 뜻하지 않음). 시장 페이지의 지수 띠는 연구 Home 카드와 같은 경로라 응답을 기존 FICC 캐시 폴더(`config.ficc_cache_dir()`)에 계열마다 JSON으로 남길 수 있습니다: `YFINANCE__KS11_400.json`·`YFINANCE__KQ11_400.json`·`YFINANCE__GSPC_400.json`·`YFINANCE__IXIC_400.json`·`YFINANCE_BTC-USD_400.json`·`YFINANCE_ETH-USD_400.json`(코스닥·나스닥 종합·이더리움은 새 파일, 나머지는 Home과 같은 파일). 내용은 저장 시각과 공개 지수·코인의 날짜·종가뿐이며 이용자가 입력하거나 고른 값이 아닙니다. 다만 저장 시각은 그 기기에서 어느 시장 페이지를 마지막으로 언제 열었는지를 남길 수 있으므로, 기기 자료 정리 요청에서는 아래 지도의 FICC 캐시 행 범위에 함께 넣습니다. 자동 삭제는 없고 다음 저장 때 덮어쓰며, `NEXTGEN_FICC_CACHE_TTL`이 0 이하이면 파일을 쓰지 않습니다. 운영자에게 전송되는 경로는 없습니다. [07번](07-data-minimization.md) 절과 [변경 사실](FACTS.md#ui-d10-markets-2026-11-11)을 따릅니다.
+
 ## 정책 또는 구현 기준
 
 ### 삭제 범위 지도
@@ -86,7 +90,7 @@ KIS 종목 마스터의 원본 줄(`_MASTER_CACHE`)과 검색 색인, 관심종�
 | KIS `_APPROVAL_CACHE`·시세 화면 메모리 | 서버 주소·인증정보 지문별 승인키, snapshot·선택 조건·대기 tick. 새 차트 파일 저장 없음 | 23시간은 승인키 재사용 기준. 연결 중지·브라우저 종료가 전역 캐시 제거·원격 철회를 보장하지 않음. 실제 프로세스·공유 범위·로그·복사본을 확인하여 기존 Bearer 파일과 별도로 처리 |
 | `config.trading_dir()` | 규칙·메모·개정 이력, 모의주문·판정·상태 저장 | `NEXTGEN_TRADING_DIR` 재정의 가능. `.nextgen` 경로는 TRADEGEN 등 다른 프로그램과 공유할 수 있으므로 디렉터리 통째 삭제 금지 |
 | `config.macro_dir()` | 매크로 상태·거버넌스·알림·운영자 기명 기록 가능 | `QUANTGEN_MACRO_DIR` 재정의 가능. 변경 불가 연구 원장과 개인 식별기록의 범위·권한·보존근거를 따로 판단 |
-| `config.ficc_cache_dir()` | 시장 시계열·조회 대상 캐시. 2026-11-11부터 미국 상장주식수 `SHARES_YFINANCE_<기호>.json`(고정 종목, 저장 시각 포함) | `NEXTGEN_FICC_CACHE` 재정의 가능. 공개 시장 데이터와 개인의 조회·경로정보를 구분. TTL 만료를 삭제 완료로 기록하지 않음 |
+| `config.ficc_cache_dir()` | 시장 시계열·조회 대상 캐시. 2026-11-11부터 미국 상장주식수 `SHARES_YFINANCE_<기호>.json`(고정 종목, 저장 시각 포함)과 시장 페이지 지수 띠의 계열별 `YFINANCE_<기호>_400.json`(고정 6계열, 기호의 `^`는 `_`, 저장 시각 포함) | `NEXTGEN_FICC_CACHE` 재정의 가능. 공개 시장 데이터와 개인의 조회·경로정보를 구분. TTL 만료를 삭제 완료로 기록하지 않음 |
 | `~/.nextgen/dart_corp_codes.json` | 공시 법인코드 캐시 | 기업 공개자료가 중심이지만 공유 위치와 요청 범위 확인 |
 | Qt `QSettings("QUANTGEN", "QUANTGEN")` | `ui/language`·`ui/locale`·`ui/theme`·`ui/sidebar_collapsed`·`markets/watchlist`(관심종목의 자산 구분·코드·거래소, 최대 20개)·`markets/detail/*`(켠 지표·기간·섹션 접힘·오른쪽 열) 등 애플리케이션 설정. 실제 저장 방식은 OS에 따름 | 설정 이름·소유 범위를 확인하고 필요한 항목만 처리. 모의 초기화로 제거되지 않으며 설정 전체/다른 앱의 저장소를 추정 삭제하지 않음 |
 | 세션 메모리·화면 | 계산 결과·AI 질문·계좌조회 결과 등 | 진행 중 작업·엔진을 안전히 중지하고 세션 종료. 화면에서 사라졌다는 이유만으로 영구 삭제 완료 선언 금지 |

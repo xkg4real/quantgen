@@ -85,6 +85,8 @@ Macro·Rates·FX·Bonds·Structuring은 기존 `auto` 경로(키 없이 FRED·Ya
 
 ### 2026-11-11 시장 순위 목록·미국 시가총액·연구 Home·종목 상세 화면(UI-D7·UI-D8)
 
+> 2026-11-11 UI-D10 대체: 아래 KIS·FMP·Yahoo 항목의 미국 묶음 요청은 이제 "미국" 시장 버튼이 아니라 "미국 주식" 페이지가 보일 때 일어나고, Yahoo 항목의 "순위 목록이 보이는 묶음(국내 81 또는 미국 54종목)"에 코인 페이지의 고정 코인 15개가 더해졌습니다. 시장 페이지마다 지수 띠가 Yahoo 일별 종가 두 계열을 요청합니다. 아래 “2026-11-11 시장 페이지” 절을 따릅니다.
+
 - **KIS 해외 현재가상세(새 허용 경로):** `/uapi/overseas-price/v1/quotations/price-detail`(TR `HHDFS76200200`)을 소유자 승인(2026-11-11, "승인.")으로 `config.KIS_QUOTATION_ALLOWLIST`에 더해 읽기 전용 시세 경로는 32개입니다(이전 31개). 기존 Bearer 토큰으로 GET하며 보내는 값은 거래소 코드(`EXCD`)·종목 기호(`SYMB`)와 빈 `AUTH`입니다. 시장 순위 목록의 미국 묶음에서만, 미국 54종목 중 ADR(TSM)을 뺀 종목마다 5분에 한 번 부르고 응답 중 `tomv`(시가총액)·`shar`(상장주식수)·`last`·`curr`만 씁니다. `tomv`의 단위는 응답에 적혀 있지 않아 `curr`(USD)로 가정하고 `shar`×`last`와 25% 안에서 맞을 때만 쓰며, 맞지 않으면 환산하지 않고 버립니다. 계좌·주문 경로와 KIS 순위 API는 추가하지 않았습니다([설정](../../config.py), [조회 어댑터](../../data/kis_workspace.py) `OVERSEAS_PRICE_DETAIL`, [목록](../../quantgen_desktop/market_rankings.py) `kis_batch`).
 - **KIS 현재가(기존 경로):** 순위 목록은 국내 81종목에 기존 `inquire-price`(FHKST01010100)를, 미국 54종목에 기존 해외 `price`(HHDFS00000300)를 종목마다 기존 시세 서비스로 요청합니다(목록 쪽 초당 최대 20건, KIS 클라이언트의 전역 간격 제한은 그대로). 목록이 보이고 자동 갱신이 켜진 동안 정규장 45초, 그 밖 300초마다 다시 요청하므로 KIS 호출 수가 늘어나며, 미국 묶음에는 현재가상세 최대 53건이 5분마다 더해집니다.
 - **FMP batch-quote:** `FMP_API_KEY`가 설정되면 KIS 값이 없는 미국 종목의 기호를 쉼표로 묶어 `GET {FMP_BASE_URL}/batch-quote?symbols=…&apikey=…`(기본 `https://financialmodelingprep.com/stable`)를 한 번 보냅니다. 키는 기존 인벤토리처럼 쿼리 문자열에 들어가며 오류 글에서는 가립니다. 응답 중 `marketCap`과 시각만 쓰고, 같은(또는 더 적은) 종목 묶음은 5분 동안 다시 묻지 않습니다. KIS 값이 없는 종목이 지난 요청보다 늘면 5분 안이라도 다시 보냅니다. 요금제가 일괄 조회를 거절하면(HTTP 402·403) 하루, 그 밖 실패는 30분 동안 묻지 않지만, 이 대기와 Yahoo 실패 종목의 30분 대기는 실행 중 메모리 기준이라 앱을 다시 켜면 다시 묻습니다. 엔진의 FMP 시세 조회와 같은 요금제 한도를 씁니다([시가총액](../../core/market/market_cap.py) `fmp_batch`·`MarketCapSource._provider`).
@@ -94,6 +96,15 @@ Macro·Rates·FX·Bonds·Structuring은 기존 `auto` 경로(키 없이 FRED·Ya
 - **표시 권리:** 순위 목록·시가총액·차트는 [권리 목록](../../core/research/display_rights.json)의 `kis_krx`·`fmp` `rights_conditional`, `yahoo` `rights_replace` 판정을 그대로 따릅니다. 이 변경이 상업 표시·파생값(계산 시가총액)·재배포 권리를 확정하지 않습니다.
 
 새 패키지·SDK는 없습니다(`pyproject.toml`, `requirements.txt` 변경 없음). 실제 KIS·FMP·Yahoo 응답, `tomv`·`shar`의 단위, FMP 요금제의 일괄 조회 허용 범위, 호출 한도는 확인하지 않았으며 `NOT_VERIFIED`, `review-required`, 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#ui-d7-d8-uscap-2026-11-11)
+
+### 2026-11-11 시장 페이지: 국내 주식·미국 주식·코인(UI-D10)
+
+- **Yahoo Finance(yfinance), 코인 목록:** 새 제공처·호스트는 없습니다. 코인 페이지가 보이고 자동 갱신이 켜졌을 때(또는 새로고침) 저장소에 고정한 15개(BTC·ETH·XRP·BNB·SOL·DOGE·ADA·TRX·AVAX·LINK·DOT·LTC·BCH·XLM·ETC)의 `<기호>-USD`를 기존 순위 목록 일별 경로(`Ticker.history`, 1개월·일별, 10초 제한)로 동시 4건씩 요청하고, 보이는 동안 5분마다(묶음이 실패하면 1분 뒤) 다시 요청합니다. 보내는 것은 기호와 기간뿐이고 키·계좌 정보는 없습니다. 응답 중 날짜·종가·거래량만 쓰며 거래량은 달러 거래대금으로 읽습니다. KIS·CoinGecko·Upbit·Binance에는 묻지 않습니다. 아래 인벤토리의 CoinGecko 함수(코인 시가총액)는 앱 경로에서 부르지 않으므로 코인 시가총액은 표시하지 않습니다([순위 목록](../../quantgen_desktop/market_rankings.py) `daily_batch`·`ProductionRankingLoader`, [경로](../../core/market/routing.py) `_yahoo_frame`).
+- **Yahoo Finance(yfinance), 지수 띠:** 시장 페이지마다 두 계열(`^KS11`·`^KQ11`, `^GSPC`·`^IXIC`, `BTC-USD`·`ETH-USD`)을 연구 Home 카드와 같은 FICC 경로(`yf.download`, `period=2y`, 기호마다 한 번)로 요청하며 `^KQ11`·`^IXIC`·`ETH-USD`는 앱이 새로 요청하는 계열입니다. 띠가 보이고 자동 갱신이 켜졌을 때와 새로고침 때만, 같은 시장은 30분 안에 다시 요청하지 않고 FICC 캐시가 유효하면 요청하지 않습니다. 실패는 정한 이유 코드만 남깁니다([지수 띠](../../quantgen_desktop/market_summary.py), [Home](../../quantgen_desktop/home_view.py) `load_market_history`).
+- **KIS·FMP:** 경로·허용목록(32개)·요청 내용은 위 절과 같고, 미국 현재가·현재가상세·FMP 일괄 시세는 "미국 주식" 페이지가 보일 때만 요청합니다. 검색·분류·조건·하위 시장·업종은 받은 값을 다시 거를 뿐 제공처에 새 요청을 만들지 않습니다. 다른 시장의 종목을 열면 그 아래 목록은 종목 화면이 덮은 동안 요청하지 않고 돌아올 때 요청합니다.
+- **표시 권리:** 코인 값과 지수 값은 [권리 목록](../../core/research/display_rights.json)의 `yahoo` `rights_replace` 판정을 그대로 따릅니다. Yahoo 코인 거래량을 달러 거래대금으로 표시하는 것, 지수 이름·값(코스닥·나스닥 종합 포함)의 상업 표시·재배포 권리는 확인하지 않았습니다.
+
+새 패키지·SDK는 없습니다. 실제 Yahoo 응답(코인 거래량의 단위, 하루 경계, 새 계열의 응답 여부)과 호출 한도는 확인하지 않았으며 `NOT_VERIFIED`, `review-required`, 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#ui-d10-markets-2026-11-11)
 
 ## 정책 또는 구현 기준
 
@@ -108,7 +119,7 @@ Macro·Rates·FX·Bonds·Structuring은 기존 `auto` 경로(키 없이 FRED·Ya
 | 금융감독원 OpenDART | 공시·재무·법인코드 조회 | 공시 조회 조건과 `crtfc_key` 쿼리 | 법인코드 JSON 캐시. 공개 공시의 이용 조건 및 키 로그 제거 확인 |
 | 한국거래소 KRX | Open API 시장 데이터; 레거시 CSV 코드 존재 | `AUTH_KEY` 헤더와 조회 조건; 레거시 OTP·다운로드 요청 | 현 코드의 레거시 URL은 HTTP이며 접근 거절 처리 존재. 배포에서 사용할 경로를 확정하고 전송 보호·계약 확인 |
 | FRED / pandas-datareader | 금리·거시 시계열 조회 | 시계열 ID와 기간; 현재 경로는 API 키 불필요 | 시계열별 원권리자가 다를 수 있음. FRED 접근권을 모든 시계열 상업 이용권으로 간주하지 않음 |
-| Yahoo Finance / yfinance | 주가·환율·선물·지수 이력. 2026-11-11부터 미국 종목 상장주식수(`get_shares_full`, 시장 순위 목록의 시가총액 계산값) | 티커와 기간; 앱이 별도 계좌 키를 요구하지 않음 | 라이브러리 내부 세션·쿠키·보관 위치는 설치 버전과 실제 실행으로 확인. 상장주식수는 FICC 캐시 폴더의 `SHARES_YFINANCE_<기호>.json`에 24시간 재사용 기준으로 저장. 서비스 약관·데이터 이용권 별도 검토 |
+| Yahoo Finance / yfinance | 주가·환율·선물·지수 이력. 2026-11-11부터 미국 종목 상장주식수(`get_shares_full`, 시장 순위 목록의 시가총액 계산값), 같은 날 UI-D10부터 코인 페이지의 고정 코인 15개 일별 값(`<기호>-USD`, 보이는 동안 5분마다)과 시장 페이지 지수 띠의 일별 종가(`^KS11`·`^KQ11`·`^GSPC`·`^IXIC`·`BTC-USD`·`ETH-USD`) | 티커와 기간; 앱이 별도 계좌 키를 요구하지 않음 | 라이브러리 내부 세션·쿠키·보관 위치는 설치 버전과 실제 실행으로 확인. 상장주식수는 FICC 캐시 폴더의 `SHARES_YFINANCE_<기호>.json`에 24시간 재사용 기준으로 저장. 지수 띠 응답은 같은 폴더의 계열별 JSON(`YFINANCE__KQ11_400.json` 등), 코인 목록은 메모리만. 서비스 약관·데이터 이용권 별도 검토 |
 | Goldman Sachs Marquee / gs-quant | 로컬 계산 및 선택 세션·가격 조회 | 로컬 분석은 네트워크가 필요하지 않음. 선택 연결은 `GS_CLIENT_ID`·`GS_CLIENT_SECRET`와 `run_analytics` 범위 사용 | 오프라인 함수와 원격 세션 구분. 호출별 상품 파라미터·제공 데이터 이용 조건 확인 |
 | Upbit 공개 API | 가상자산 시세·일봉 | 종목·기간·조회 조건, API 키 불필요 | 공개 데이터 이용약관·호출 제한·상업 표시 및 재배포 범위 확인 |
 | Upbit 계좌 API | 선택 잔액 조회 `GET /v1/accounts` | 접근 키로 만든 JWT 전송; 통화·기준통화·잔액·잠금 수량·평균 매수가 수신, 총수량·원화평가액 계산 | 보유 통화의 종목을 Upbit 공개 시세 API에 추가 전송하여 평가. 계좌정보는 개인정보 처리 목록에 포함. 자산조회 권한만 사용. Flet는 키 설정 후 Refresh에서 조회하고, 네이티브는 기본 OFF 선택 사용 |
