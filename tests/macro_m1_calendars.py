@@ -334,7 +334,8 @@ def _kospi_closes(text: str) -> list[dict]:
 # `read_close_layout`, so one rule holds for all of them:
 #   - a close is a finite number > 0; a blank or "." cell (FRED's missing-value marker) is no close, and the file is
 #     refused at that line: the generator writes one row per reference row, so a close file has no missing-value row;
-#   - no date repeats (in F27, no date and code pair) and rows are in date order;
+#   - no date repeats (in F27, no date and code pair) and rows are in date order (in F27, the long form, the dates of
+#     each code: a file in date order and a file grouped by code are read alike; review of PR #101, R2);
 #   - obs_date = session_date, written YYYY-MM-DD;
 #   - obs_utc and available_at_utc are written YYYY-MM-DDTHH:MM:SSZ, zero-padded as the generator writes them (no
 #     fractional seconds, no other separator), and available_at_utc is not before obs_utc;
@@ -379,6 +380,7 @@ def read_close_layout(fid: str, text: str) -> list[dict]:
     assert not missing, f"{name}: declared columns {missing} absent (header {reader.fieldnames})"
     rows: list[dict] = []
     seen: set = set()
+    last: dict = {}                                     # the last date of each code (F27), or of the file
     for line, raw in enumerate(reader, start=2):
         where = f"{name} line {line}"
         assert raw["series_id"] in series and (raw["value_status"], raw["available_at_source"]) == (status, source), (
@@ -401,9 +403,10 @@ def read_close_layout(fid: str, text: str) -> list[dict]:
         assert avail >= obs, f"{where}: available_at_utc {raw['available_at_utc']} before obs_utc {raw['obs_utc']}"
         if key:
             assert raw[key] in series, f"{where}: {key} {raw[key]!r} not in {series}"
-        k = (d, raw[key]) if key else d
-        assert (not rows or rows[-1]["date"] <= d) and k not in seen, f"{where}: rows out of date order or repeated"
+        k, group = ((d, raw[key]), raw[key]) if key else (d, None)
+        assert (group not in last or last[group] <= d) and k not in seen, f"{where}: rows out of date order or repeated"
         seen.add(k)
+        last[group] = d
         rows.append({"date": d, "close": close, "series_id": raw["series_id"], "obs_utc": obs, "available_at_utc": avail,
                      **({key: raw[key]} if key else {})})
     assert rows, f"{name}: no rows"
@@ -427,6 +430,64 @@ def close_layout_text(fid: str, rows) -> str:
                       obs.astimezone(UTC).strftime(CLOSE_LAYOUT_INSTANT), avail.astimezone(UTC).strftime(CLOSE_LAYOUT_INSTANT),
                       source, status))
     return buf.getvalue()
+
+
+def test_close_layout_long_form_date_order_is_per_code():
+    """Review of PR #101, R2: the long form (F27) is in date order code by code, not over the whole file. The reader
+    refused a file grouped by code (every row of 005930, then every row of 000660) at its first 000660 row, although
+    each code's dates are in order and no date and code pair repeats; the generator refused the same file. Now a file
+    in date order and the same rows grouped by code are both read, row for row in file order, and the rows of each code
+    are the same. Still refused, naming the file and line: a code's dates out of order (in either row order), a repeated
+    date and code pair, and a code that is not one of the file's ids. A one-series file (F13) keeps one date order for
+    the whole file."""
+    days = [date(2026, 9, 28) + timedelta(days=i) for i in range(5) if (date(2026, 9, 28) + timedelta(days=i)).weekday() < 5]
+    codes = ("005930", "000660")
+
+    def stamp(d):
+        close = datetime(d.year, d.month, d.day, 6, 30, tzinfo=UTC)
+        return close, close + timedelta(seconds=30)
+
+    def text(order):
+        return close_layout_text("F27", [(d, 1000.0 + 10 * days.index(d) + codes.index(c), *stamp(d), c)
+                                         for d, c in order])
+    by_date = [(d, c) for d in days for c in codes]
+    by_code = [(d, c) for c in codes for d in days]
+    got = {}
+    for label, order in (("by date", by_date), ("by code", by_code)):
+        rows = read_close_layout("F27", text(order))
+        assert [(r["date"], r["code"]) for r in rows] == order, label             # file order, nothing reordered
+        got[label] = {c: [(r["date"], r["close"]) for r in rows if r["code"] == c] for c in codes}
+        assert all([d for d, _ in got[label][c]] == days for c in codes), label
+    assert got["by date"] == got["by code"]
+    name = close_layout_file("F27")[0]
+
+    def refused(order, needle):
+        try:
+            read_close_layout("F27", text(order))
+        except AssertionError as exc:
+            assert needle in str(exc), (needle, str(exc))
+            return
+        raise AssertionError(f"expected a refusal naming {needle!r}")
+    # a code's dates out of order: the third 000660 row swapped with the fourth, in either row order
+    swap = by_code[:7] + [by_code[8], by_code[7]] + by_code[9:]
+    refused(swap, f"{name} line 10: rows out of date order or repeated")
+    swap = by_date[:5] + [by_date[7], by_date[6], by_date[5]] + by_date[8:]
+    refused(swap, f"{name} line 9: rows out of date order or repeated")
+    refused(by_code[:6] + [by_code[5]] + by_code[6:], f"{name} line 8: rows out of date order or repeated")
+    bad = text(by_code).replace(",000660,", ",005935,", 1)
+    try:
+        read_close_layout("F27", bad)
+        raise AssertionError("an unknown code must be refused")
+    except AssertionError as exc:
+        assert f"{name} line {2 + len(days)}: code '005935' not in ('005930', '000660')" in str(exc), str(exc)
+    # one series: one order for the whole file
+    f13 = close_layout_text("F13", [(d, 7000.0 + i, *stamp(d)) for i, d in enumerate(days)])
+    head, *body = f13.rstrip("\n").split("\n")
+    try:
+        read_close_layout("F13", "\n".join([head, body[1], body[0], *body[2:]]) + "\n")
+        raise AssertionError("F13 out of date order must be refused")
+    except AssertionError as exc:
+        assert f"{close_layout_file('F13')[0]} line 3: rows out of date order or repeated" in str(exc), str(exc)
 
 
 # Owner ruling 4 of 2026-11-11 (docs/nautilus_bridge/OWNER_RULINGS_LOG.md, the answers to the 14 remaining decisions,

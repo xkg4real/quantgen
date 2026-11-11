@@ -558,7 +558,8 @@ test_t_pbo_01_noise_control_reproduces.test_ids = ["T-PBO-01"]
 #                                                           other columns (the market caps) are not read
 # Every row carries the series_id, value_status and available_at_source that docs/macro_fixtures.REFERENCE_FILES gives
 # its file (F27: either of its two series ids), obs_date = session_date (ISO), and obs_utc / available_at_utc written
-# YYYY-MM-DDTHH:MM:SSZ. F01, F13 and F16 hold one row per date and F27 one per code and date, in date order. One reader,
+# YYYY-MM-DDTHH:MM:SSZ. F01, F13 and F16 hold one row per date and F27 one per code and date, in date order (F27: the
+# dates of each code; a file grouped by code is in order too, review of PR #101, R2). One reader,
 # tests.macro_m1_calendars.read_close_layout, reads the four files here and in the other part 2 bodies. A price is
 # compared as owner ruling 4 of 2026-11-11 sets it (tests.macro_m1_calendars.price_as_compared; an owner-approved
 # exception to spec L5735, Level 1 `price` "prices exact"): the Yahoo vendor closes of F13 and F16 rounded to two
@@ -1612,6 +1613,130 @@ def test_macro_fixtures_writes_nothing_when_refused_and_only_the_selected_files(
             rc = MF.main(argv, clocks=clk)                                # no --only: the whole set, as before
         assert rc == 2 and f"{len(MF.REFERENCE_FILES) - 4} file(s) missing" in buf.getvalue(), buf.getvalue()
         assert sorted(p.name for p in out4.iterdir()) == sorted(names) and len(load_manifest(manifest4)) == 3
+
+
+# --------------------------------------------------------------------------- #
+# Code review of PR #101 (96cca1f), findings R1 to R5 (⑨-1/2/d/2). Each test below failed on that commit.
+# --------------------------------------------------------------------------- #
+def _calendar_generator(only, ref: Path, out: Path, **kw):
+    """`generate` over the synthetic signed calendars with the real calendar function and the post-close check."""
+    from core.calendars.adapter import CalendarClocks
+    from core.ficc import contracts
+    from tests.macro_m1_calendars import fixture_set
+    registry = contracts.default_registry()
+    clk = CalendarClocks(registry, cal=fixture_set())
+    return MF.generate(ref, out, retrieved_at_utc=kw.pop("retrieved_at_utc", REFERENCE_RETRIEVED), licence="test licence",
+                       owner="package D", available_at=MF.calendar_available_at(registry, clk),
+                       check_fixture=MF.calendar_check_fixture(registry, clk), only=only, **kw)
+
+
+def test_macro_fixtures_long_form_date_order_is_per_code():
+    """R2: the long form (F27) is in date order code by code. The generator refused a file grouped by code (every row
+    of 005930, then every row of 000660) at its first 000660 row, and so did the reader (tests/macro_m1_calendars
+    .test_close_layout_long_form_date_order_is_per_code). No consumer of F27 rows reads them by position: both
+    G-POST-01 sites pick a row by code and date. The one thing that did was the manifest `span`, taken from the first
+    and last row. Now F27 in date order and grouped by code are both written, row for row in the reference order, and
+    the reader takes either with the same rows per code; the span is the file's first and last observation, also when
+    the codes end on different days. Still refused, naming the file and line, with the last good generation left as
+    it was: a code's dates out of order, a repeated date and code pair, a code that is not one of the file's ids."""
+    from core.calendars import clocks as K
+    from tests.macro_m1_calendars import fixture_set, read_close_layout
+    days = K.sessions_between("KR", date(2026, 9, 21), GPOST_DAY, cal=fixture_set())
+    codes = tuple(_reference_row("F27")[2].split(";"))
+    name, n = FILE_OF["F27"], len(days)
+    with tempfile.TemporaryDirectory() as tmp:
+        ref, out = Path(tmp) / "ref", Path(tmp) / "out"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+
+        def generate(pairs):
+            (ref / _reference_row("F27")[1]).write_text("date,code,close\n" + "".join(
+                f"{d},{c},{1000 + 10 * days.index(d) + (c == codes[1])}\n" for d, c in pairs), encoding="utf-8")
+            return _calendar_generator(("F27",), ref, out)
+        by_date = [(d, c) for d in days for c in codes]
+        by_code = [(d, c) for c in codes for d in days]
+        read = {}
+        for label, pairs in (("by date", by_date), ("by code", by_code)):
+            rows = generate(pairs)
+            assert [r["span"] for r in rows] == [f"{days[0]}..{days[-1]}"], (label, rows)
+            got = read_close_layout("F27", (out / name).read_text(encoding="utf-8"))
+            assert [(r["date"], r["code"], r["series_id"]) for r in got] == [(d, c, c) for d, c in pairs], label
+            read[label] = sorted((r["code"], r["date"], r["close"], r["obs_utc"], r["available_at_utc"]) for r in got)
+        assert read["by date"] == read["by code"] and len(read["by code"]) == 2 * n
+        short = [(d, codes[0]) for d in days] + [(d, codes[1]) for d in days[:-2]]      # 000660 ends two sessions early
+        assert [r["span"] for r in generate(short)] == [f"{days[0]}..{days[-1]}"]
+        before = (out / name).read_bytes()
+        for pairs, needle in (
+                (by_code[:n + 2] + [by_code[n + 3], by_code[n + 2]] + by_code[n + 4:],
+                 f"{name} line {n + 5}: rows out of date order or repeated"),
+                (by_code[:n + 1] + [by_code[n]] + by_code[n + 1:], f"{name} line {n + 3}: rows out of date order or repeated"),
+                ([(d, "005935" if i == n else c) for i, (d, c) in enumerate(by_code)],
+                 f"{name} line {n + 2}: code '005935' is not one of the file's series ('005930', '000660')")):
+            _refused(lambda: generate(pairs), ValueError, needle)
+            assert (out / name).read_bytes() == before
+
+
+def test_macro_fixtures_finds_the_date_column_by_name():
+    """R3: the observation date was read from the first column whatever its name, and parsed unguarded, so F27 with
+    `code` before `date`, or a malformed or blank date, ended in a bare "Invalid isoformat string" with no file or
+    line. Now the date column is the header cell named `date` in any letter case, or FRED's `observation_date` (the
+    names core/ficc/data.py reads FRED rows by), wherever it stands; a leading byte order mark does not hide it. F27
+    with `code` first is written with its columns unchanged and in their order, stamped as the same rows with `date`
+    first. A date that is not ISO (2026/10/02, blank, a short row), a header with no date column and a header with two
+    are refused naming the reference file (and the line), and nothing is written."""
+    from core.calendars import clocks as K
+    from tests.macro_m1_calendars import fixture_set, read_close_layout
+    days = K.sessions_between("KR", date(2026, 9, 28), GPOST_DAY, cal=fixture_set())
+    codes = tuple(_reference_row("F27")[2].split(";"))
+    name = FILE_OF["F27"]
+    with tempfile.TemporaryDirectory() as tmp:
+        ref = Path(tmp) / "ref"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+
+        def generate(text, out):
+            (ref / _reference_row("F27")[1]).write_text(text, encoding="utf-8")
+            return _calendar_generator(("F27",), ref, out)
+        pairs = [(d, c) for d in days for c in codes]
+        code_first = "code,date,close\n" + "".join(f"{c},{d},{1000 + i}\n" for i, (d, c) in enumerate(pairs))
+        date_first = "date,code,close\n" + "".join(f"{d},{c},{1000 + i}\n" for i, (d, c) in enumerate(pairs))
+        out_cd, out_dc = Path(tmp) / "out_cd", Path(tmp) / "out_dc"
+        generate(code_first, out_cd)
+        generate(date_first, out_dc)
+        text_cd, text_dc = ((o / name).read_text(encoding="utf-8") for o in (out_cd, out_dc))
+        assert text_cd.split("\n", 1)[0].split(",")[:3] == ["code", "date", "close"]    # columns unchanged, in order
+        got_cd, got_dc = read_close_layout("F27", text_cd), read_close_layout("F27", text_dc)
+        assert [(r["date"], r["code"]) for r in got_cd] == pairs and got_cd == got_dc
+        # refusals name the file and the line; nothing is written
+        out = Path(tmp) / "out"
+        lines = code_first.rstrip("\n").split("\n")
+        n = len(lines)
+        for text, needle in (
+                (code_first.replace(f",{days[2]},", f",{days[2].strftime('%Y/%m/%d')},", 1),
+                 f"{name} line 6: date '{days[2].strftime('%Y/%m/%d')}' in column 'date' is not an ISO date"),
+                ("\n".join(lines[:3] + [lines[3].replace(f",{days[1]},", ",,")] + lines[4:]) + "\n",
+                 f"{name} line 4: date '' in column 'date' is not an ISO date"),
+                (code_first + "005930\n", f"{name} line {n + 1}: date None in column 'date' is not an ISO date"),
+                (code_first.replace("code,date,close", "code,day,close", 1),
+                 f"{name}: no date column in the reference header ['code', 'day', 'close']"),
+                (code_first.replace("code,date,close", "code,date,close,Date", 1),
+                 f"{name}: more than one date column ['date', 'Date']")):
+            _refused(lambda: generate(text, out), ValueError, needle)
+            assert not out.exists(), needle
+        # an undeclared file: Yahoo's `Date`, FRED's `DATE` and `observation_date`, a byte order mark, the date last
+        src = Path(tmp) / "plain.csv"
+        for head, body in (("Date,Close", "{d},4.1"), ("DATE,DGS10", "{d},4.1"), ("observation_date,DGS10", "{d},4.1"),
+                           ("\ufeffdate,value", "{d},4.1"), ("value,Date", "4.1,{d}")):
+            src.write_text(head + "\n" + "".join(body.format(d=d) + "\n" for d in days[:2]), encoding="utf-8")
+            _fields, rows = MF.fixture_rows(src, series_id="DGS10", value_status="first_release",
+                                            available_at_source="calendar_bound", retrieved_at_utc=REFERENCE_RETRIEVED,
+                                            available_at=_available_at)
+            assert [r["obs_date"] for r in rows] == [d.isoformat() for d in days[:2]], head
+        src.write_text("DATE,DGS10\n2026-10-01,4.1\nnot-a-date,4.2\n", encoding="utf-8")
+        _refused(lambda: MF.fixture_rows(src, series_id="DGS10", value_status="first_release",
+                                         available_at_source="calendar_bound", retrieved_at_utc=REFERENCE_RETRIEVED,
+                                         available_at=_available_at), ValueError,
+                 "plain.csv line 3: date 'not-a-date' in column 'DATE' is not an ISO date")
 
 
 # --------------------------------------------------------------------------- #

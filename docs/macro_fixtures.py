@@ -106,7 +106,8 @@ REFERENCE_SERIES = _reference_series()
 # declared, so stamping it is still refused. CLOSE_FILES is every file read in the close layout. For each of them
 # `fixture_rows` applies the rules the readers apply after the freeze, before anything is written, so a file a reader
 # would refuse is refused here with the reference file and line named: a close is a finite number > 0; rows are in
-# date order and no date repeats (F27: no date and code pair repeats, and every code is one of the file's series).
+# date order and no date repeats (F27, long form: the dates of each code are in order, so a file in date order and a
+# file grouped by code are both accepted; no date and code pair repeats, and every code is one of the file's series).
 CLOSE_FILES: dict[str, tuple[str, ...]] = {"F01": ("close",), "F15": ("close",), **CLOSE_LAYOUT}
 # docs/vol_backtest.fixture_closes reads these two (docs/vol_backtest.FIXTURES) and needs two closes for one return;
 # every other close file holds at least one row.
@@ -229,6 +230,30 @@ def _content_hash(values: list[str]) -> str:
     return hashlib.md5("\x1f".join(values).encode("utf-8")).hexdigest()
 
 
+# The reference date column, found by its name and never by its position (review of PR #101, R3): a header cell named
+# `date` in any letter case (the declared close layout writes `date`, Yahoo `Date`, FRED's older files `DATE`), else
+# FRED's `observation_date` (core/ficc/data.py reads FRED rows by either name). A leading UTF-8 byte order mark on the
+# first cell does not hide it.
+DATE_COLUMN_NAMES = ("date", "observation_date")
+
+
+def _date_column(src: Path, fields: list[str]) -> str:
+    """The one header cell of `fields` that names the date (DATE_COLUMN_NAMES, in that order of preference); a
+    ValueError naming the reference file and header when there is none or more than one."""
+    def norm(field: str) -> str:
+        return field.lstrip("\ufeff").strip().lower()
+    for name in DATE_COLUMN_NAMES:
+        found = [f for f in fields if norm(f) == name]
+        if len(found) == 1:
+            return found[0]
+        if found:
+            raise ValueError(f"{src.name}: more than one date column {found} in the reference header {fields}; no "
+                             "fixture is written")
+    raise ValueError(f"{src.name}: no date column in the reference header {fields} (a column named date in any letter "
+                     "case, or FRED's observation_date); the generator never takes a column by its position, so no "
+                     "fixture is written")
+
+
 def _atomic_write(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     fd, tmp = tempfile.mkstemp(dir=path.parent, prefix=path.name, suffix=".tmp")
@@ -249,10 +274,12 @@ def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_s
     layout names `close` is held to the rules its readers apply (tests/macro_m1_calendars.read_close_layout,
     docs/vol_backtest.fixture_closes), so that no row they refuse is written: a close is a finite number > 0, and rows
     are in date order with no date twice. A long-form file (its layout names `code`) may repeat a date, never a date
-    and code pair; every code is one of `series`, the file's ids; and each row is stamped with its own code as its
+    and code pair, and its date order is that of each code: rows in date order and rows grouped by code are both in
+    order; every code is one of `series`, the file's ids; and each row is stamped with its own code as its
     series_id (owner rulings 1 and 2 of 2026-11-11: F27 carries `code`, `series_id` and `close`, and 000660 is a
     reference series of its own). Every other row carries `series_id`. A file with fewer than `min_rows` rows is
-    refused. Each refusal is a ValueError naming the reference file and, for a row, its line."""
+    refused. The observation date is read from the column named by `_date_column` (never by position) and must be an
+    ISO date. Each refusal is a ValueError naming the reference file and, for a row, its line."""
     if value_status not in VALUE_STATUSES or available_at_source not in AVAILABLE_AT_SOURCES:
         raise ValueError(f"{src.name}: value_status {value_status!r} / available_at_source {available_at_source!r}")
     close_rules, long_form = "close" in columns, "code" in columns
@@ -267,16 +294,21 @@ def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_s
         if absent:
             raise ValueError(f"{src.name}: declared columns {absent} absent from the reference header {fields}; the "
                              "generator copies a reference file's columns unchanged and renames none")
-        date_col = fields[0]
+        date_col = _date_column(src, fields)
         rows = []
         seen: set = set()
-        last = date.min
+        last: dict = {}                                  # the last date of each code (long form), or of the file
         retrieved = _iso(retrieved_at_utc)
         for line, raw in enumerate(reader, start=2):
-            obs = date.fromisoformat(raw[date_col].strip()[:10])
+            where = f"{src.name} line {line}"
+            cell = raw.get(date_col)
+            try:
+                obs = date.fromisoformat((cell or "").strip()[:10])
+            except ValueError:
+                raise ValueError(f"{where}: date {cell!r} in column {date_col!r} is not an ISO date (YYYY-MM-DD); "
+                                 "no fixture is written") from None
             sid = series_id
             if close_rules:
-                where = f"{src.name} line {line}"
                 try:
                     close = float((raw["close"] or "").strip())
                 except ValueError:
@@ -288,12 +320,12 @@ def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_s
                     sid = raw["code"]
                     if sid not in series:
                         raise ValueError(f"{where}: code {sid!r} is not one of the file's series {series}")
-                key = (obs, sid) if long_form else obs
-                if obs < last or key in seen:
+                key, group = ((obs, sid), sid) if long_form else (obs, None)
+                if obs < last.get(group, date.min) or key in seen:
                     raise ValueError(f"{where}: rows out of date order or repeated; no reader accepts the file, so no "
                                      "fixture is written")
                 seen.add(key)
-                last = obs
+                last[group] = obs
             obs_utc, avail_utc = available_at(sid, obs, value_status)
             row = dict(raw)
             row.update({"series_id": sid, "obs_date": obs.isoformat(), "session_date": obs.isoformat(), "obs_utc": _iso(obs_utc),
@@ -342,7 +374,8 @@ def generate(ref_dir: Path, out_dir: Path, *, retrieved_at_utc: datetime, licenc
                                             min_rows=CLOSE_MIN_ROWS.get(fid, 1) if fid in CLOSE_FILES else 0)
                 text = fixture_text(fields, rows)
                 _atomic_write(staged, text)
-                span = f"{rows[0]['obs_date']}..{rows[-1]['obs_date']}" if rows else ""
+                dates = [r["obs_date"] for r in rows]        # ISO dates: the first and last observation of the file,
+                span = f"{min(dates)}..{max(dates)}" if rows else ""   # also of a long-form file grouped by code
                 rule = f"{value_status}; available_at_source = {source}"
                 if check_fixture is not None and value_status in ("official_close", "vendor_close", "live_snapshot"):
                     check_fixture(staged)
