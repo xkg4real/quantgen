@@ -89,6 +89,28 @@ class WatchlistAlignmentTests(unittest.TestCase):
                 if unit:
                     self.assertLessEqual(QFontMetrics(delegate.unit_font(item.font())).horizontalAdvance(unit), slot)
 
+    def test_columns_fit_figures_in_the_face_the_delegate_draws(self):
+        """Figures are drawn with font_policy.number_font (owner UI-D5); widths must be measured with it too.
+        A wider number face (here: the same face at 1.6x size) must widen the columns, not elide."""
+        from PyQt6.QtGui import QFont
+        import quantgen_desktop.font_policy as policy
+        real = policy.number_font
+
+        def wide(base):
+            font = QFont(real(base)); font.setPixelSize(round((base.pixelSize() if base.pixelSize() > 0 else 13) * 1.6))
+            return font
+        table, delegate = self.panel.table, self.panel.cell_delegate
+        with patch.object(policy, "number_font", side_effect=wide):
+            self.panel._fit_columns()
+            for column in NUMERIC_COLUMNS:
+                slot = delegate.unit_widths.get(column, 0)
+                for row in range(table.rowCount()):
+                    item = table.item(row, column)
+                    number, _, _ = _split_number(item.text())
+                    needed = QFontMetrics(wide(item.font())).horizontalAdvance(number) + 2 * CELL_PADDING + (
+                        slot + UNIT_GAP if slot else 0)
+                    self.assertLessEqual(needed, table.columnWidth(column), (row, column, item.text()))
+
     def test_score_title_sits_over_its_values(self):
         header = self.panel.table.horizontalHeader()
         left, title_width = header._group_geometry()

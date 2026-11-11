@@ -1030,9 +1030,13 @@ class WatchlistPanel(QWidget):
                 if item is None or not item.text():
                     continue
                 number, unit, _ = _split_number(item.text()) if column in NUMERIC_COLUMNS else (item.text(), "", False)
-                numbers.append(QFontMetrics(item.font()).horizontalAdvance(number))
+                # Measure with the face the delegate draws in: figures use number_font (owner UI-D5),
+                # whose digits can be wider than the text face's ('…4.27T KRW' was cut otherwise).
+                from .font_policy import number_font
+                face = number_font(item.font()) if column in NUMERIC_COLUMNS else item.font()
+                numbers.append(QFontMetrics(face).horizontalAdvance(number))
                 if unit and column in UNIT_COLUMNS:
-                    units.append(QFontMetrics(_CellDelegate.unit_font(item.font())).horizontalAdvance(unit) + 1)
+                    units.append(QFontMetrics(_CellDelegate.unit_font(face)).horizontalAdvance(unit) + 1)
             slot = max(units)
             self.cell_delegate.unit_widths[column] = slot
             label = self.table.horizontalHeaderItem(column)
