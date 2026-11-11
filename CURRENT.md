@@ -5,12 +5,12 @@ from: claude
 task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d
-next_ids: ⑤-2/b, ⑨-3a/series-files/3, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-11T07:25:00+09:00
+next_ids: ⑤-2/b, ⑨-3a/series-files/3, ⑥-1/prep, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-11T11:51:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/provider-parity-tool-20261111
-work_commit: ba8b400
+work_commit: b92275f
 uncommitted_changes: no
 pr: 102
 usage_weekly_pct: unknown
@@ -119,6 +119,18 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - **B:** Q1 REJECT(잠정 표시), Q2 게이트와 같은 분산 값으로 판정·SE_null은 참고 줄, Q3 검정력 부족이면 이겨도 자료 부족, Q4 DM으로 판정·Clark–West 참고 줄, Q5 12항목 필수·Claude 초안·소유자 커밋·R-FAM/L-FAM 병기, Q7 60/40은 21거래일 리밸런싱·실제 거래분 비용. 다음 단위 ⑨-4/2/c(결과 조립).
 - **C:** 0b 채택 방침만 기록. Q12 = 7개 파일(`core/quant/strategies.py`, `validate.py`, `history.py`, `gate_ledger.py`, `core/research/strategy_workflow.py`, `core/quant/optimize.py`, `core/quant/risk.py`). Q13·Q14·Q16·Q17·Q18 기본값. 화면은 네이티브만(UI-D1), Flet 작업(Q19 포함) 안 함, PC 화면은 시안 먼저 + UI 세션 이식과 ⑦-2 병합 뒤. Q22의 잘라내기 여부는 2026-12 말 전에 따로 질문. 다음 단위 ⑨-3a/recorder/1(화면 없음, 결정 9 조건: run_family 안에서 PNL_COMPUTED보다 낮은 PROGRESS를 쓰지 않음).
 - **D:** 주문 한도 수치(1회 100만 원/5%, 하루 10건·300만 원/15%, 손실 중지 40만 원/2%, 종목 비중 20%/400만 원, 가격 이탈 3%·시세 15초·지정가만, 09:00~15:20, 모의 20거래일·30건 등)를 기본값으로 승인. **실거래는 켜지지 않음.** 순서: 안전 설계 문서 보고 → ⑦-2 병합 뒤 구현 → 모의투자 → 결과 보고 → 소유자의 실거래 전환 승인. D-14 법률 자문은 소유자가 의뢰.
+
+### 현재 상태 (2026-11-11 11:51 KST) — 이 절이 가장 최신입니다
+
+- **중단과 재개:** 2026-11-11 07:37 KST 무렵 하위 작업자들이 "out of usage credits"로 멈췄습니다(PR #102 검증 2개, 파일럿 준비 워크플로 전체). 소유자가 11:4x KST에 "Try again"이라고 해서 재개했습니다. 다시 멈추면 아래 상태에서 이어받으면 됩니다.
+- **⑤-2/b, [PR #102](https://github.com/xkg4real/quantgen/pull/102):** head `b92275f` push됨(11:50 KST). 커밋 3개: `5202482`(/code-review 지적 F1~F7 수정, 시험 114개), `74397da`(고정값 다시 기록), `b92275f`(compliance 기준선). **고정값이 바뀌었습니다:** 도구 커밋 `5202482e3c24de871b8483608b8a03beb07abe1e`, 도구 파일 sha256 `f2fe72cdee6344076fd6dfec8943259f44bc52445c66cdaf482a19e269770184`(위 P1 항목의 `49a3a67`·`d651795e…` 값은 병합 전에 교체됨, 실행 기록 없음). 다섯 곳(도구 README, 한국어 안내서, `results/RULINGS.md`, `OWNER_RULINGS_LOG.md` 마지막 절, FACTS 행)이 같은 값인지 확인함(`sha256sum tools/provider_parity/parity_check.py`).
+  - 남은 것: 독립 검증 2관점(도구 동작, 고정값·기록)이 다시 도는 중 → 지적이 있으면 수정 후 고정값 재기록 → CI(Runtime 약 30분 + Compliance) → `b92275f` 캐시 없는 전체 실행(`scratchpad/par2.json`, 기준 `prep.json` 769/895) → 병합(expectedHeadSha, 트리 확인) → 실행 브랜치 생성(`git push origin origin/main:refs/heads/claude/provider-parity-runs-20261111`, `git branch -r --contains 5202482`) → 원장 `--done "⑤-2/b | ..."` → Notion → 소유자에게 "시작해도 됩니다".
+- **⑨-3a/series-files/3:** 브랜치 `claude/series-files-followup-20261111` head `45af437` push됨, PR 없음. 커밋: `a45f216`·`63adcf8`(PR #100 /code-review 수정과 그 검증 수정), `89b751b`(기준선), `45af437`(결정 기록 "전부승인" 절). `89b751b` 캐시 없는 전체 실행 769/895, 기준 대비 추가 0·제거 0·변경 0. 다음: PR #102 병합 뒤 main을 합침(`docs/compliance/FACTS.md`는 양쪽 유지, `source-review.json`은 한쪽을 받고 `--refresh-baseline`, `OWNER_RULINGS_LOG.md` 끝은 P1 절 다음에 "전부승인" 절) → PR → CI → 병합 → 원장 → Notion.
+- **⑥-1/prep (6·7번 준비, 소유자 우선 요청):** 워크플로가 도는 중. 워크트리 `scratchpad/pilotprep`(브랜치 `claude/pilot-prep-20261111`, main `96cca1f`에서, 아직 커밋·push 없음)와 `scratchpad/reh`(로컬 브랜치 `scratch/step10-rehearsal`, 연구 head `8a8c247`, **절대 push 금지**). 산출물 3개(모두 `docs/product/`): `PILOT_OWNER_RUN_2026-11-11.md`(소유자용 한국어 실행 순서표: 준비 점검 → Pilot 1 → Pilot 2 → Windows 전체 검사 → 병합 4줄), `PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md`(Claude·GPT용 판독 점검표와 Step 10 마감 기록 틀, 병합 뒤 정리 목록), `STEP10_MERGE_REHEARSAL_2026-11-11.md`(main을 연구 브랜치에 합치는 리허설 기록. 지금 충돌 5개: `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`, `qa/research_status.json`, `quantgen_desktop/bonds_portfolio_narrative.py`, `ui/bonds_page.py`, `ui/qcharts.py`). 워크플로가 끝나면: 리허설 커밋의 캐시 없는 전체 실행을 돌려 기록의 PENDING 줄을 채움 → main 합침 → 기준선 → push → PR(문서만이라 Compliance CI) → 병합 → 원장.
+  - 이 워크플로가 다시 죽으면: 경로 조사 결과 `scratchpad/pilot_path_1111.json`(단계 S1~S13과 연구 브랜치 근거 줄)의 내용이 위 세 문서의 뼈대입니다. 연구 브랜치 근거: `docs/nautilus_bridge/RUNBOOK_windows.md`, 스펙 `docs/superpowers/specs/2026-10-26-nautilus-bridge-design.md`(Step 8·9·10은 1631~1633행 부근, 10.3~10.5는 1656~1777행, 거부 코드 1263~1303행), `tools/nautilus/runner.py`. Pilot 1 명령: `python -B -m tools.nautilus.runner --table docs/nautilus_bridge/registration/pilot1_E1_spy.json --of-record`.
+- **⑨-1/2/d/2 (PR #101 `/code-review high`, 병합 뒤 검토, 미수정 5건, 모두 `docs/macro_fixtures.py`):** (R1, 418행) `generate`가 out_dir을 쓴 뒤에 `freeze`가 md5를 비교해, 거부(FixtureChanged)되기 전에 동결 파일이 이미 덮어써짐 → 최종 쓰기 전에 manifest와 비교. (R2, 292행과 `tests/macro_m1_calendars.py` 405행) 긴 형식 F27이 종목별로 묶여 있으면 날짜 순서 위반으로 거부 → 종목별 순서 허용을 생성기와 판독기 양쪽에. (R3, 270·276행) 날짜 열을 첫 열로 가정, 날짜 파싱 오류에 파일·줄 없음. (R4, 358행) 최종 복사가 전부 아니면 전무가 아님. (R5, 350행) 결과표를 `read_text`로 읽어 CRLF가 LF로 바뀜(바이트 그대로 복사가 아님). ⑨-1/2/e(KRW=X 뉴욕 17:00 스탬프, A-1)와 같은 파일이라 같은 PR에서 고칩니다. 기준 자료 파일이 저장소에 없어 지금까지 결과에는 영향 없음.
+- **아직 시작하지 않은 승인된 단위:** ⑨-1/2/e, ⑨-4/2/c(채택 결과 조립, B Q1~Q3), ⑨-3a/recorder/1(화면 없는 기록기 본체, Q12 7개 파일, 결정 9 조건), 주문 모듈 안전 설계 문서(문서만, 코드는 ⑦-2 병합 뒤), §10 남은 36개 묶음.
+- 하위 작업자 지시문 규칙: 저장소 전체 `find`·`ls -R`·경로 없는 `git ls-files` 금지, 검색은 `git grep ... ':!docs/asset_expansion/cache'`만(소유자: "규칙은 꼭 지키자").
 
 ## 6. 다음 할 일 (순서대로)
 
