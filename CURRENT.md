@@ -4,15 +4,15 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings
 next_ids: ⑤-2/g, ⑤-2/e, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-11T23:40:00+09:00
+updated_at: 2026-11-11T23:41:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: main
-work_commit: b97646d
+work_commit: 6285430
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/106
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -123,7 +123,7 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 ### 소유자 판정 "전부승인합노." — 파일럿·마감·병합 결정 27건 (2026-11-11 23:40 KST) — 가장 최신
 
 - 결정표(27행 + 13a)를 23:3x KST에 소유자에게 파일로 보냈고, 소유자가 원문 그대로 "전부승인합노."라고 답했습니다. 결정표 정의대로 모든 행의 `가`(13a 포함, S4 넣음)입니다.
-- 기록: PR #106 (`claude/owner-rulings-pilot-close-20261111`, 커밋 `8e44708`). 결정표 `docs/product/DECISIONS_PILOT_CLOSE_MERGE_2026-11-11.md`(sha256 `7c95de59478f8a4379cbaf237f8ce243a9017b14dbeb0f1818c58cb16547f3ea`), `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` 맨 끝 절, R·K·H 세 문서에 가리키는 줄. CI 통과 시 병합하고 원장 `⑥-1/rulings`.
+- 기록: PR #106 병합 완료(main `6285430`, 트리 = head `8e44708`, Compliance 성공). 원장 `⑥-1/rulings`. 결정표 `docs/product/DECISIONS_PILOT_CLOSE_MERGE_2026-11-11.md`(sha256 `7c95de59478f8a4379cbaf237f8ce243a9017b14dbeb0f1818c58cb16547f3ea`), `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` 맨 끝 절, R·K·H 세 문서에 가리키는 줄. CI 통과 시 병합하고 원장 `⑥-1/rulings`.
 - 앞으로의 일에 바로 걸리는 결정: 7(F 첫머리에서 합친 상태를 Windows 전체 검사, FAIL 0·행 수 일치·nautilus 57 PASS면 이어서 병합, README 표 전체와 상태 요약은 병합 직후 main PR), 8(병합 전 확인 문장 새로 받음), 10(P2 네 종류의 push 포함), 11(후속 세션은 한 줄 승인 필요), 13·13a(병합 커밋 안: 충돌 풀이+F1~F5+한글 문구+상태 요약; 뒤: S1~S4+기준선, 검토자 Claude; 보고 후 바로 push), 16(이 세션이 대화 기록에서 보조 작업자 순회 2회의 날짜와 출력 찾아 기록).
 - 정해지지 않은 것: 노션 1107 페이지 복원, BTC 진단 판독(BTC-나 규칙 그대로), 2번(그때 다시), 8번 문장 자체, 19번 최종 처리, 21번 배너 문구.
 - 병행 중: ⑨-1/2/e + ⑨-1/2/d/2 구현(스크래치 `fx` 워크트리, 로컬 커밋 4개, 아직 push 전). 이 브랜치도 `OWNER_RULINGS_LOG.md`와 `source-review.json`을 고치므로 PR #106 병합 뒤 main을 합치고 기준선을 다시 만들어야 합니다.
