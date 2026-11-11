@@ -3086,6 +3086,32 @@ def test_fmp_a_failed_or_empty_answer_on_the_first_and_on_a_later_request():
                                      "FETCH spy fmp REFUSED exit=2 csv=-"], out
 
 
+def test_fmp_rows_without_an_iso_date_fail_the_fetch_in_the_older_words():
+    """An older rule, held through the page-back: a row whose date is not an ISO calendar date fails the fetch as
+    `a row without an ISO date`, and nothing is written. The page-back reads the earliest date of each answer, so
+    an answer with no date it can read must end the page-back quietly and leave the refusal to that rule, on the
+    first request (one request, as before the page-back existed) and on a later one. An answer that mixes such a
+    row with dated rows is paged back like any other and then refused by the same rule. No value is printed."""
+    def no_dates(k, rows):
+        return [{**r, "date": f"day {n}"} for n, r in enumerate(rows)]
+
+    def none_on_the_second(k, rows):
+        return no_dates(k, rows) if k == 1 else rows
+
+    def one_bad(bad):
+        return lambda k, rows: rows[:5] + [{**rows[5], "date": bad}] + rows[6:] if k == 0 else rows
+    for cap, change, n_requests in ((None, no_dates, 1), (1000, no_dates, 1), (1000, none_on_the_second, 2),
+                                    (1000, one_bad("03/01/2016"), 2), (1000, one_bad("2016-02-30"), 2),
+                                    (1000, one_bad(""), 2), (None, one_bad("2016-02-30"), 1)):
+        http = capped_fmp(cap, change=change)
+        code, out, folder, meta = fmp_fetch(http)
+        case = (cap, change.__name__, n_requests)
+        assert code == 4 and len(http.calls) == n_requests and not folder.exists(), (case, len(http.calls), out)
+        assert out.splitlines()[-2:] == ["UNAVAILABLE: a row without an ISO date",
+                                         "FETCH spy fmp UNAVAILABLE fetch_failed exit=4 csv=-"], (case, out)
+        assert "Traceback" not in out and "ERROR" not in out and "day " not in out and "2016-02-30" not in out, out
+
+
 def test_fmp_capped_provider_passes_end_to_end_where_one_answer_alone_was_withheld():
     """The owner's SPY run of 2026-11-11 and the second run the ruling allows, on a synthetic table. fmp answers
     with the most recent 1,000 rows, kis has nothing before 2012-03-01 and yahoo_now (vintage) is whole. With one
