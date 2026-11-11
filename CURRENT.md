@@ -4,15 +4,15 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d
-next_ids: ⑤-2/b, ⑨-3a/series-files/3, ⑥-1/prep, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-11T11:51:00+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b
+next_ids: ⑤-2/d, ⑤-2/e, ⑤-2/b/2, ⑨-3a/series-files/3, ⑥-1/prep, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-11T12:22:00+09:00
 stale_after_hours: 3
-waiting_on: none
-work_branch: claude/provider-parity-tool-20261111
-work_commit: b92275f
+waiting_on: owner
+work_branch: claude/series-files-followup-20261111
+work_commit: 45af437
 uncommitted_changes: no
-pr: 102
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -119,6 +119,15 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - **B:** Q1 REJECT(잠정 표시), Q2 게이트와 같은 분산 값으로 판정·SE_null은 참고 줄, Q3 검정력 부족이면 이겨도 자료 부족, Q4 DM으로 판정·Clark–West 참고 줄, Q5 12항목 필수·Claude 초안·소유자 커밋·R-FAM/L-FAM 병기, Q7 60/40은 21거래일 리밸런싱·실제 거래분 비용. 다음 단위 ⑨-4/2/c(결과 조립).
 - **C:** 0b 채택 방침만 기록. Q12 = 7개 파일(`core/quant/strategies.py`, `validate.py`, `history.py`, `gate_ledger.py`, `core/research/strategy_workflow.py`, `core/quant/optimize.py`, `core/quant/risk.py`). Q13·Q14·Q16·Q17·Q18 기본값. 화면은 네이티브만(UI-D1), Flet 작업(Q19 포함) 안 함, PC 화면은 시안 먼저 + UI 세션 이식과 ⑦-2 병합 뒤. Q22의 잘라내기 여부는 2026-12 말 전에 따로 질문. 다음 단위 ⑨-3a/recorder/1(화면 없음, 결정 9 조건: run_family 안에서 PNL_COMPUTED보다 낮은 PROGRESS를 쓰지 않음).
 - **D:** 주문 한도 수치(1회 100만 원/5%, 하루 10건·300만 원/15%, 손실 중지 40만 원/2%, 종목 비중 20%/400만 원, 가격 이탈 3%·시세 15초·지정가만, 09:00~15:20, 모의 20거래일·30건 등)를 기본값으로 승인. **실거래는 켜지지 않음.** 순서: 안전 설계 문서 보고 → ⑦-2 병합 뒤 구현 → 모의투자 → 결과 보고 → 소유자의 실거래 전환 승인. D-14 법률 자문은 소유자가 의뢰.
+
+### ⑤-2/b 완료와 소유자 실행 대기 (2026-11-11 12:22 KST) — 아래 "현재 상태" 절보다 새 내용입니다
+
+- **⑤-2/b 완료:** [PR #102](https://github.com/xkg4real/quantgen/pull/102) 병합, main `9fc3817`(트리 = head `b92275f`). Runtime 42948682493 6/6·Compliance 42948682508 성공, 시험 114개, 캐시 없는 전체 실행 769/895(main `96cca1f`와 같음, 추가 0·제거 0·변경 0). 독립 검증 2관점: blocker·major 0건.
+- **고정값(확정):** 도구 커밋 `5202482e3c24de871b8483608b8a03beb07abe1e`, `tools/provider_parity/parity_check.py`의 sha256 `f2fe72cdee6344076fd6dfec8943259f44bc52445c66cdaf482a19e269770184`. 실행 브랜치 `claude/provider-parity-runs-20261111`을 main `9fc3817`에서 만들어 push했고 `git branch -r --contains 5202482`로 확인했습니다.
+- **소유자에게 "시작해도 됩니다"를 알렸습니다.** 안내서: main의 `docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md`(PowerShell 34단계, 15~20분 추정). `waiting_on: owner`는 이 실행을 뜻합니다. 그동안 아래 다른 단위는 계속 진행합니다.
+- **⑤-2/d (소유자 PC 실행):** 소유자가 수신 9번, 대조 3번을 돌리고 요약 `results/PP-.../summary.json`을 실행 브랜치에 push합니다. 채팅으로는 수신 마지막 두 줄씩 18줄, PARITY 3줄, 31단계 `git status --short`, 33단계 push 출력 마지막 두 줄을 보냅니다(안내서 5절).
+- **⑤-2/e (판독과 관문):** `git fetch origin claude/provider-parity-runs-20261111` 뒤 `git show origin/claude/provider-parity-runs-20261111:results/<run_id>/summary.json`만 읽습니다(`detail.json`·CSV는 PC 밖으로 나오지 않음). 시계열별 첫 PASS·FAIL·WITHHELD가 기록 실행이고 REFUSED·ERROR는 실행이 아닙니다. 관문(스펙 10.5): SPY와 DGS3MO가 PASS이거나 PASS가 아닌 시계열마다 소유자 판정이 `results/RULINGS.md`에 원문으로 적혀 있으면 Pilot 1 가능, BTC-USD는 Pilot 2 전에 같은 규칙. PASS가 아니면 선택지 3개(불일치를 기록하고 진행 / 원인을 찾을 때까지 보류 / 자료 교체)를 정리해 드립니다. 자료 교체는 러너 고정값과 표가 바뀌어 `owner_confirmed`가 무효가 되고 Step 7A 일부를 다시 해야 합니다. Binance 짝은 이력이 2017-08부터라 WITHHELD가 예상됩니다(소유자 결정 대기 항목).
+- **⑤-2/b/2 (후속, 시험만):** 검증에서 나온 minor 2건. (1) 수신 기간 거부 시험이 금리(rf)만 다룸 → spy(fmp)와 btc(coinbase)에 늦은 시작·이른 끝을 추가. (2) 공급사 파일의 빈 값·0 값 처리(`read_provider`의 keep_blanks)를 붙잡는 시험이 없음 → rf에 0.00 구간, spy에 빈 값 사례 추가. **도구 파일은 건드리지 않습니다**(고정값 유지). 워크플로의 수정 작업자가 워크트리 `scratchpad/parity`에서 작업 중이며, 끝나면 main에서 새 브랜치를 만들어 그 커밋을 옮기고 PR로 올립니다(시험 수가 바뀌면 README·안내서·FACTS의 "114"도 함께).
 
 ### 현재 상태 (2026-11-11 11:51 KST) — 이 절이 가장 최신입니다
 
