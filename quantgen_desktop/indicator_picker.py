@@ -14,14 +14,49 @@ import math
 
 from PyQt6.QtCore import QRectF, QSize, Qt, pyqtSignal
 from PyQt6.QtGui import QColor, QPainter
-from PyQt6.QtWidgets import (QAbstractButton, QFrame, QHBoxLayout, QLineEdit, QPushButton, QSizePolicy, QVBoxLayout,
-                             QWidget)
+from PyQt6.QtWidgets import (QAbstractButton, QFrame, QHBoxLayout, QLineEdit, QPushButton, QSizePolicy,
+                             QVBoxLayout, QWidget)
 
 from core.i18n import LocaleContext
 from .stock_detail_side import FoldHeader
-from .stock_detail_style import icon, label, numbers, set_prop, text
+from .stock_detail_style import ClampLabel, ElidedLabel, icon, label, numbers, polite, set_prop, text
 
 STARTER = ("sma", "volume_ma", "rsi")
+
+
+class NameLine(QWidget):
+    """Line 1 of a picker row: name, place and the value with its one-word state ('89,902 · 선 아래'). The name
+    keeps its whole width first; the value gives back its state word (down to the bare number) before the name
+    is elided."""
+
+    def __init__(self):
+        super().__init__()
+        self.row = QHBoxLayout(self)
+        self.row.setContentsMargins(0, 0, 0, 0)
+        self.row.setSpacing(6)
+        self.name = ElidedLabel("pickName")
+        self.name.setMinimumWidth(40)
+        self.row.addWidget(self.name, 1)
+        self.place = label("place")
+        self.row.addWidget(self.place, 0, Qt.AlignmentFlag.AlignVCenter)
+        self.value = numbers(ElidedLabel("pickValue", align=Qt.AlignmentFlag.AlignRight))
+        self.value.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)   # width set by fit()
+        self.row.addWidget(self.value, 0, Qt.AlignmentFlag.AlignVCenter)
+
+    def fit(self):
+        choices = self.value._choices or ("",)
+        metrics = self.value.fontMetrics()
+        full, bare = (metrics.horizontalAdvance(choices[0]) + 2, metrics.horizontalAdvance(choices[-1]) + 2)
+        spacing = self.row.spacing()
+        room = self.width() - spacing - (self.place.sizeHint().width() + spacing if not self.place.isHidden() else 0)
+        name = self.name.fontMetrics().horizontalAdvance(self.name.text()) + 2
+        width = full if name + full <= room else max(bare, room - name)
+        if self.value.width() != width or self.value.minimumWidth() != width:
+            self.value.setFixedWidth(width)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.fit()
 
 
 def _lang(ctx):
@@ -96,33 +131,27 @@ class PickerRow(QFrame):
         outer = QVBoxLayout(self)
         outer.setContentsMargins(0, 0, 0, 0)
         outer.setSpacing(0)
+        # Spec 5.1: line 1 is the name, where it appears (가격 위 / 거래량 위 / 아래 패널) and the value now with a
+        # one-word state; line 2, the full width beside ⓘ and the switch, is the description or the reason
+        # (up to two lines, the rest in the tooltip).
         line = QWidget()
-        line.setFixedHeight(56)
+        line.setMinimumHeight(56)
+        self.line = line
         row = QHBoxLayout(line)
-        row.setContentsMargins(4, 0, 6, 0)
+        row.setContentsMargins(4, 7, 6, 7)
         row.setSpacing(10)
         self.bar = ColorBar()
         row.addWidget(self.bar)
         names = QVBoxLayout()
         names.setContentsMargins(0, 0, 0, 0)
-        names.setSpacing(1)
-        self.name = label("pickName")
-        self.name.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
-        self.name.setMinimumWidth(40)
-        names.addWidget(self.name)
-        # Second line: where it appears (on price / on volume / own panel), then the description or the reason.
-        second = QHBoxLayout()
-        second.setSpacing(6)
-        self.place = label("place")
-        second.addWidget(self.place, 0, Qt.AlignmentFlag.AlignVCenter)
-        self.desc = label("pickDesc")
-        self.desc.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
-        second.addWidget(self.desc, 1)
-        names.addLayout(second)
+        names.setSpacing(2)
+        self.first = NameLine()
+        self.name, self.place, self.value = self.first.name, self.first.place, self.first.value
+        names.addWidget(self.first)
+        self.desc = ClampLabel("pickDesc", lines=2)
+        self.desc.setProperty("keepTip", True)
+        names.addWidget(self.desc)
         row.addLayout(names, 1)
-        self.value = numbers(label("pickValue"))
-        self.value.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-        row.addWidget(self.value)
         self.info = QPushButton()
         self.info.setProperty("sd", "mini")
         self.info.setCheckable(True)
@@ -151,8 +180,6 @@ class PickerRow(QFrame):
         wrap.setContentsMargins(18, 0, 6, 8)
         wrap.addWidget(self.guide)
         outer.addLayout(wrap)
-        self._full_desc = ""
-        self._full_name = ""
 
     def _guide_toggled(self, on):
         self.guide.setVisible(on)
@@ -172,7 +199,8 @@ class PickerRow(QFrame):
         return self.switch.isChecked()
 
     def mouseReleaseEvent(self, event):
-        if event.button() == Qt.MouseButton.LeftButton and self.switch.isEnabled() and event.position().y() <= 56:
+        if event.button() == Qt.MouseButton.LeftButton and self.switch.isEnabled() and \
+                event.position().y() <= self.line.height():
             self.switch.click()
             return
         super().mouseReleaseEvent(event)
@@ -192,35 +220,23 @@ class PickerRow(QFrame):
         super().focusOutEvent(event)
         set_prop(self, "focusRing", False)
 
-    def resizeEvent(self, event):
-        super().resizeEvent(event)
-        self._elide()
-
-    def _elide(self):
-        width = max(40, self.desc.width())
-        shown = self.desc.fontMetrics().elidedText(self._full_desc, Qt.TextElideMode.ElideRight, width)
-        self.desc.setText(shown)
-        room = max(40, self.name.width())
-        fitted = self.name.fontMetrics().elidedText(self._full_name, Qt.TextElideMode.ElideRight, room)
-        if fitted != self.name.text():
-            self.name.setText(fitted)
-        self.name.setToolTip(self._full_name if fitted != self._full_name else "")
-
-    def show_state(self, *, language, dark, color, value, reason, guide, reading, place):
+    def show_state(self, *, language, dark, color, value, reason, guide, reading, place, state=""):
         from core.education.study_guide import availability_text
         self.reason = reason
         self.bar.set_color(color)
-        self._full_name = self.spec.name(language)
-        self.name.setText(self._full_name)
+        self.name.setText(self.spec.name(language))
         self.place.setText(place)
-        first = guide.what.split(". ")[0]
-        self._full_desc = availability_text(reason, language) if reason else (first if first.endswith(".") else first + ".")
-        self.desc.setToolTip((availability_text(reason, language) if reason else guide.what))
+        what = polite(guide.what, language)
+        why = polite(availability_text(reason, language), language) if reason else ""
+        first = what.split(". ")[0]
+        self.desc.setText(why or (first if first.endswith(".") else first + "."))
+        self.desc.setToolTip(why or what)
         set_prop(self.desc, "reason", "true" if reason else "false")
         set_prop(self.name, "dim", "true" if reason else "false")
-        self._elide()
-        self.value.setText(value)
-        self.value.setVisible(bool(value))
+        shown = f"{value} · {state}" if value and value != "—" and state else value
+        self.value.set_choices([shown, value] if shown != value else [value])
+        self.value.setVisible(bool(shown))
+        self.first.fit()
         self.switch.setEnabled(not reason or self.switch.isChecked())
         self.switch.colors = (color, "#C9CCC2" if not dark else "#4A5C52", "#FFFFFF")
         self.switch.update()
@@ -228,13 +244,14 @@ class PickerRow(QFrame):
         name = self.spec.name(language)
         self.info.setToolTip(text(language, "picker_info", name=name))
         self.info.setAccessibleName(text(language, "picker_info", name=name))
-        state = text(language, "picker_state_on" if self.is_checked() else "picker_state_off")
-        self.setAccessibleName(text(language, "picker_row_name", name=name, state=state, place=place,
-                                    value=value or "—"))
+        switched = text(language, "picker_state_on" if self.is_checked() else "picker_state_off")
+        self.setAccessibleName(text(language, "picker_row_name", name=name, state=switched, place=place,
+                                    value=shown or "—"))
         self.switch.setAccessibleName(name)
         heads = ("picker_guide_what", "picker_guide_how", "picker_guide_caution", "picker_guide_now",
                  "picker_guide_params")
-        bodies = (guide.what, guide.how, guide.caution, reading, guide.params)
+        bodies = tuple(polite(part, language) for part in (guide.what, guide.how, guide.caution, reading,
+                                                           guide.params))
         for (head, body), key, content in zip(self.guide_parts, heads, bodies):
             head.setText(text(language, key))
             body.setText(content)
@@ -428,11 +445,12 @@ class IndicatorPicker(QWidget):
     def render(self):
         from core.education import indicators as engine
         from core.education.study_guide import category_name, disclaimer, format_value, guide, study_reading
+        from core.market.detail_model import study_state
         from core.market.presentation import study_colors
         lang = _lang(self.ctx)
         self.count.setText(text(lang, "picker_on", count=len(self.selected)))
         self.off_button.setVisible(bool(self.selected))
-        self.disclaimer.setText(disclaimer(lang))
+        self.disclaimer.setText(polite(disclaimer(lang), lang))
         bars, asset, interval, supply = self.context if self.context else (None, "domestic_stock", "1d", None)
         has_volume = bool(bars is not None and any(math.isfinite(v) for v in bars.volume))
         visible = self.isVisible()
@@ -448,7 +466,7 @@ class IndicatorPicker(QWidget):
                 color = colors[spec.lines[0].id]
                 place = text(lang, "place_price" if spec.panel == "price" else "place_volume"
                              if spec.panel == "volume" else "place_panel")
-                value, reading = "", ""
+                value, reading, state = "", "", ""
                 if visible and bars is not None and len(bars) and not reason:
                     try:
                         values = engine.compute_study(key, bars, supply=supply)
@@ -460,13 +478,15 @@ class IndicatorPicker(QWidget):
                             value = self.price_format(raw)
                         else:
                             value = format_value(line.kind, raw, lang)
+                        code = study_state(key, values, bars)
+                        state = text(lang, f"word_{code}") if code else ""
                         if row.guide.isVisible() or row.info.isChecked():
                             reading = study_reading(key, bars, -1, language=lang, values=values, supply=supply)
                     except Exception:
                         value = ""
                 row.set_checked(key in self.selected)
                 row.show_state(language=lang, dark=self.dark, color=color, value=value, reason=reason,
-                               guide=guide(key, lang), reading=reading, place=place)
+                               guide=guide(key, lang), reading=reading, place=place, state=state)
         panels = sum(1 for k in self.selected if not engine.study(k).overlay)
         if self.panel_limit is not None and panels > self.panel_limit:
             self.limit_note.setText(text(lang, "picker_panel_limit", count=self.panel_limit))

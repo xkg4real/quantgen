@@ -21,7 +21,7 @@ from core.i18n import LocaleContext
 from core.theme import DARK, LIGHT
 from .company_identity import CompanyMark
 from .jobs import Jobs
-from .stock_detail_style import chevron, label, numbers, set_prop, text
+from .stock_detail_style import ElidedLabel, chevron, label, numbers, set_prop, text
 
 FOLD_VISIBLE = 4          # owner: each section shows 3-4 key figures, the rest folded
 WATCH_VISIBLE = 6
@@ -53,10 +53,8 @@ class FoldHeader(QFrame):
         row.addWidget(self.title, 0, Qt.AlignmentFlag.AlignVCenter)
         self.count = label("foldCount")
         row.addWidget(self.count, 0, Qt.AlignmentFlag.AlignVCenter)
-        row.addStretch(1)
-        self.digest = label("digest")
-        self.digest.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
-        self.digest.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        # The digest takes all the room after the title (right-aligned), so it is cut only when it must be.
+        self.digest = ElidedLabel("digest", align=Qt.AlignmentFlag.AlignRight)
         row.addWidget(self.digest, 1)
         self._paint_arrow()
 
@@ -134,7 +132,8 @@ class FoldSection(QWidget):
         self.note = label("rowNote", wrap=True)
         body.addWidget(self.note)
         layout.addWidget(self.body)
-        self._widgets = []
+        self._widgets = []   # what the grid shows now
+        self._made = []      # row labels this section created (rebuilt on each fill)
 
     def set_title(self, title):
         self.title.setText(title)
@@ -159,22 +158,36 @@ class FoldSection(QWidget):
         self._fill()
 
     def set_rows(self, entries, *, note="", ctx=None, dark=None):
+        """Replace the rows. Widget entries marked `sdOwned` belong to this section from here on: they are
+        deleted when a later set_rows drops them, never while they are still entries (folding and '더 보기'
+        only hide and show them)."""
         if ctx is not None:
             self.ctx = ctx
         if dark is not None:
             self.dark = bool(dark)
-        self._entries, self._note = list(entries), note
+        entries = list(entries)
+        for old in self._entries:
+            if isinstance(old, QWidget) and not any(old is entry for entry in entries):
+                self.rows.removeWidget(old)
+                old.hide()
+                if old.property("sdOwned"):
+                    old.setParent(None)
+                    old.deleteLater()
+        self._entries, self._note = entries, note
         self._fill()
 
     def _fill(self):
-        for widget in self._widgets:
+        # Row labels made here are rebuilt on every fill; widget entries are only taken out of the grid.
+        for widget in self._made:
             self.rows.removeWidget(widget)
-            if widget.property("sdOwned"):
-                widget.hide()
-                widget.setParent(None)
-                widget.deleteLater()
-            else:
-                widget.hide()
+            widget.hide()
+            widget.setParent(None)
+            widget.deleteLater()
+        self._made = []
+        for entry in self._entries:
+            if isinstance(entry, QWidget):
+                self.rows.removeWidget(entry)
+                entry.hide()
         self._widgets = []
         lang = _lang(self.ctx)
         shown = self._entries if self.expanded else self._entries[:FOLD_VISIBLE]
@@ -194,11 +207,10 @@ class FoldSection(QWidget):
             if entry.hint:
                 name.setToolTip(entry.hint)
                 value.setToolTip(entry.hint)
-            for widget in (name, value):
-                widget.setProperty("sdOwned", True)
             self.rows.addWidget(name, index, 0)
             self.rows.addWidget(value, index, 1)
             self._widgets += [name, value]
+            self._made += [name, value]
         extra = len(self._entries) - FOLD_VISIBLE
         self.more.setVisible(extra > 0)
         self.more.setText(text(lang, "less") if self.expanded else text(lang, "more", count=extra))
@@ -207,12 +219,14 @@ class FoldSection(QWidget):
         self._digest()
 
     def _digest(self):
-        """Two figures on the folded header, so a closed section still says something."""
+        """Up to two figures on the folded header, so a closed section still says something; the label elides
+        its end, never its start, and drops the second figure first when both do not fit."""
         if self.head.is_open or not self._entries:
-            self.head.digest.setText("")
+            self.head.digest.set_choices(())
             return
         values = [e for e in self._entries if not isinstance(e, QWidget)][:2]
-        self.head.digest.setText(" · ".join(f"{e.label} {e.value}" for e in values))
+        parts = [f"{e.label} {e.value}" for e in values]
+        self.head.digest.set_choices([" · ".join(parts[:n]) for n in range(len(parts), 0, -1)])
 
     def set_theme(self, dark):
         self.dark = bool(dark)
@@ -511,7 +525,11 @@ class CompactWatchlist(QWidget):
             QTimer.singleShot(0, self.refresh)
 
     def hideEvent(self, event):
+        # A running batch stops after its current card (load_cards checks between cards); what it loaded is kept
+        # and the rest is due again when the column shows.
         self.poll_timer.stop()
+        if self._cancel is not None:
+            self._cancel.set()
         super().hideEvent(event)
 
     def stop(self):

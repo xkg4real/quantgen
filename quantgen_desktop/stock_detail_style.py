@@ -43,6 +43,190 @@ def label(sd="", *, wrap=False, selectable=False):
     return widget
 
 
+class ElidedLabel(QLabel):
+    """One line that keeps its whole text (text() is the first, fullest choice) and paints the longest choice
+    that fits, eliding the end of the last one when none fits (never the start). The tooltip carries the full
+    text while it is cut."""
+
+    def __init__(self, sd="", *, align=Qt.AlignmentFlag.AlignLeft):
+        super().__init__()
+        self.setTextFormat(Qt.TextFormat.PlainText)
+        self.setProperty("qg_literal", True)
+        if sd:
+            self.setProperty("sd", sd)
+        self.setAlignment(align | Qt.AlignmentFlag.AlignVCenter)
+        self.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
+        self._choices = ()
+        self.shown = ""
+
+    def setText(self, value):
+        self._choices = (value,) if value else ()
+        super().setText(value)
+
+    def set_choices(self, choices):
+        self._choices = tuple(choice for choice in choices if choice)
+        super().setText(self._choices[0] if self._choices else "")
+        self.update()
+
+    def fitted(self, width=None):
+        width = self.contentsRect().width() if width is None else width
+        metrics = self.fontMetrics()
+        for choice in self._choices:
+            if metrics.horizontalAdvance(choice) <= width:
+                return choice
+        return metrics.elidedText(self._choices[-1], Qt.TextElideMode.ElideRight, width) if self._choices else ""
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setFont(self.font())
+        painter.setPen(self.palette().color(self.foregroundRole()))
+        self.shown = self.fitted()
+        painter.drawText(self.contentsRect(), int(self.alignment()), self.shown)
+        painter.end()
+        cut = self.shown != self.text()
+        if (self.toolTip() == self.text()) != cut:
+            self.setToolTip(self.text() if cut else "")
+
+
+class ClampLabel(QLabel):
+    """Wrapped text clamped to `lines` lines; the last line is elided. The full text is the tooltip when cut."""
+
+    def __init__(self, sd="", *, lines=2):
+        super().__init__()
+        self.setTextFormat(Qt.TextFormat.PlainText)
+        self.setProperty("qg_literal", True)
+        if sd:
+            self.setProperty("sd", sd)
+        self.lines = lines
+        self.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
+
+    def setText(self, value):
+        super().setText(value)
+        self.updateGeometry()
+
+    def _layout(self, width):
+        """The lines shown at `width` (the last one elided) and whether the text was cut."""
+        from PyQt6.QtGui import QTextLayout, QTextOption
+        content = self.text()
+        if not content or width <= 0:
+            return [], False
+        layout = QTextLayout(content, self.font())
+        option = QTextOption()
+        option.setWrapMode(QTextOption.WrapMode.WrapAtWordBoundaryOrAnywhere)
+        layout.setTextOption(option)
+        layout.beginLayout()
+        spans = []
+        while True:
+            line = layout.createLine()
+            if not line.isValid():
+                break
+            line.setLineWidth(width)
+            spans.append((line.textStart(), line.textLength()))
+        layout.endLayout()
+        metrics = self.fontMetrics()
+        shown = [content[start:start + length].rstrip() for start, length in spans[:self.lines]]
+        cut = len(spans) > self.lines
+        if cut:
+            start = spans[self.lines - 1][0]
+            shown[-1] = metrics.elidedText(content[start:].replace("\n", " "), Qt.TextElideMode.ElideRight, width)
+        return shown, cut
+
+    def sizeHint(self):
+        width = self.width() if self.width() > 0 else 200
+        lines = max(1, len(self._layout(width)[0]))
+        return QSize(width, lines * self.fontMetrics().lineSpacing() + 2)
+
+    def minimumSizeHint(self):
+        return QSize(40, self.sizeHint().height())
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.updateGeometry()
+
+    def paintEvent(self, event):
+        rect = self.contentsRect()
+        shown, cut = self._layout(rect.width())
+        painter = QPainter(self)
+        painter.setFont(self.font())
+        painter.setPen(self.palette().color(self.foregroundRole()))
+        step = self.fontMetrics().lineSpacing()
+        for index, line in enumerate(shown):
+            painter.drawText(QRectF(rect.x(), rect.y() + index * step, rect.width(), step),
+                             int(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter), line)
+        painter.end()
+        tip = self.text() if cut else ""
+        if self.toolTip() != tip and not self.property("keepTip"):
+            self.setToolTip(tip)
+
+
+# 합니다체 -> 해요체 (owner wording rule for this view; the engine's readings and guides are written formally).
+# Exact forms first: irregular verbs and contractions the general rules below would get wrong.
+_POLITE_WORDS = {
+    "아닙니다": "아니에요", "합니다": "해요", "됩니다": "돼요", "봅니다": "봐요", "둡니다": "둬요", "줍니다": "줘요",
+    "보여줍니다": "보여줘요", "보여 줍니다": "보여 줘요", "나타냅니다": "나타내요", "그립니다": "그려요",
+    "흔들립니다": "흔들려요", "뒤집힙니다": "뒤집혀요", "커집니다": "커져요", "이뤄집니다": "이뤄져요",
+    "이루어집니다": "이루어져요", "올라갑니다": "올라가요", "오갑니다": "오가요", "셉니다": "세요",
+    "벗어납니다": "벗어나요", "바뀝니다": "바뀌어요", "머뭅니다": "머물러요", "다릅니다": "달라요",
+    "다가갑니다": "다가가요", "넘어갑니다": "넘어가요", "넘나듭니다": "넘나들어요", "쉽습니다": "쉬워요",
+    "어렵습니다": "어려워요", "가깝습니다": "가까워요", "읽습니다": "읽어요", "늦습니다": "늦어요",
+    "있습니다": "있어요", "없습니다": "없어요", "않습니다": "않아요", "같습니다": "같아요", "높습니다": "높아요",
+    "낮습니다": "낮아요", "잦습니다": "잦아요", "많습니다": "많아요", "적습니다": "적어요", "작습니다": "작아요",
+    "좋습니다": "좋아요", "넓습니다": "넓어요", "좁습니다": "좁아요", "깁니다": "길어요", "짧습니다": "짧아요",
+    "큽니다": "커요", "씁니다": "써요", "냅니다": "내요", "납니다": "나요", "갑니다": "가요", "옵니다": "와요",
+    "삽니다": "사요", "팝니다": "팔아요", "지납니다": "지나요", "움직입니다": "움직여요", "보입니다": "보여요",
+    "쌓입니다": "쌓여요", "줄어듭니다": "줄어들어요", "늘어납니다": "늘어나요", "나뉩니다": "나뉘어요",
+    "바꿉니다": "바꿔요", "모읍니다": "모아요", "채웁니다": "채워요", "맞춥니다": "맞춰요", "그칩니다": "그쳐요",
+}
+_HA_SUFFIX = ("합니다",)          # 필요합니다 -> 필요해요, 표시합니다 -> 표시해요
+_FINAL = lambda ch: "가" <= ch <= "힣" and (ord(ch) - 0xAC00) % 28 != 0
+_DIGIT_FINAL = {"0": True, "1": True, "2": False, "3": True, "4": False, "5": False, "6": True, "7": True,
+                "8": True, "9": False}
+
+
+def _copula(before):
+    """'이에요' or '예요' after the text `before` (a noun, a number, a percent sign or a closing bracket)."""
+    for ch in reversed(before.rstrip(")]’'\" ")):
+        if "가" <= ch <= "힣":
+            return "이에요" if _FINAL(ch) else "예요"
+        if ch.isdigit():
+            return "이에요" if _DIGIT_FINAL[ch] else "예요"
+        if ch == "%":
+            return "예요"
+        if ch.isalpha():
+            return "예요" if ch.lower() in "aeiouy" else "이에요"
+    return "이에요"
+
+
+def _polite_word(match):
+    word, start, source = match.group(0), match.start(), match.string
+    if word in _POLITE_WORDS:
+        return _POLITE_WORDS[word]
+    stem = word[:-2]                                     # without '니다'
+    if stem.endswith("입"):                               # noun + 입니다
+        noun = stem[:-1]
+        before = noun if noun else source[:start]
+        return noun + _copula(before)
+    if word.endswith(_HA_SUFFIX):                        # X합니다
+        return word[:-3] + "해요"
+    if stem.endswith("습") and len(stem) >= 2:
+        prior = stem[-2]
+        jong = (ord(prior) - 0xAC00) % 28 if "가" <= prior <= "힣" else -1
+        if jong == 20:                                   # ㅆ: past tense 했습니다/컸습니다 -> 했어요/컸어요
+            return stem[:-1] + "어요"
+        exact = _POLITE_WORDS.get(stem[-2:] + "니다")
+        if exact:
+            return stem[:-2] + exact
+    return word
+
+
+def polite(value, language="ko"):
+    """Korean text in 해요체 (the engine and the stock profile write 합니다체); other languages unchanged."""
+    import re
+    if language != "ko" or not value or "니다" not in value:
+        return value
+    return re.sub(r"[가-힣]*니다", _polite_word, value)
+
+
 def rich(sd=""):
     widget = QLabel()
     widget.setTextFormat(Qt.TextFormat.RichText)
@@ -76,7 +260,8 @@ def chevron(direction, dark, size=14):
 
 
 def icon(kind, color, size=18):
-    """Painted toolbar icons: pause, play, info, focus, unfocus, panel, refresh, left, right, minus, plus, close."""
+    """Painted toolbar icons: pause, play, info, focus, unfocus, panel, refresh, left, right, minus, plus, more,
+    close."""
     ratio = 2
     pixmap = QPixmap(size * ratio, size * ratio)
     pixmap.setDevicePixelRatio(ratio)
@@ -133,6 +318,10 @@ def icon(kind, color, size=18):
         p.drawLine(QPointF(s * .28, s / 2), QPointF(s * .72, s / 2))
         if kind == "plus":
             p.drawLine(QPointF(s / 2, s * .28), QPointF(s / 2, s * .72))
+    elif kind == "more":
+        p.setBrush(QColor(color))
+        for x in (s * .28, s * .5, s * .72):
+            p.drawEllipse(QPointF(x, s / 2), .9, .9)
     elif kind == "close":
         p.drawLine(QPointF(s * .32, s * .32), QPointF(s * .68, s * .68))
         p.drawLine(QPointF(s * .68, s * .32), QPointF(s * .32, s * .68))
@@ -162,6 +351,10 @@ def sheet(p, dark):
       QLabel[sd='chip'][tone='success'] {{ color: {p.success}; background: {p.accent_soft}; }}
       QLabel[sd='chip'][tone='warning'] {{ color: {p.warning}; background: {t['flat_tint']}; }}
       QLabel[sd='chip'][tone='error'] {{ color: {p.error}; background: {t['up_tint']}; }}
+      QLabel[sd='stateInline'] {{ font-size: 12px; font-weight: 500; color: {p.muted}; }}
+      QLabel[sd='stateInline'][tone='success'] {{ color: {p.success}; }}
+      QLabel[sd='stateInline'][tone='warning'] {{ color: {p.warning}; }}
+      QLabel[sd='stateInline'][tone='error'] {{ color: {p.error}; }}
       QPushButton[sd='tool'] {{ padding: 0; min-width: 34px; max-width: 34px; min-height: 34px; max-height: 34px;
                                 border: 0; border-radius: 9px; background: transparent; }}
       QPushButton[sd='tool']:hover {{ background: {p.accent_soft}; }}
@@ -288,4 +481,4 @@ def sheet(p, dark):
 
 
 __all__ = ["text", "numbers", "label", "rich", "repolish", "set_prop", "line_color", "chevron", "icon", "icon_size",
-           "sheet"]
+           "sheet", "ElidedLabel", "ClampLabel", "polite"]

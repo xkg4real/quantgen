@@ -25,9 +25,9 @@ import json
 import math
 
 from PyQt6.QtCore import QEvent, QObject, QPoint, QSize, QTimer, Qt, pyqtSignal, pyqtSlot
-from PyQt6.QtGui import QPainter, QPalette
-from PyQt6.QtWidgets import (QCheckBox, QComboBox, QFrame, QHBoxLayout, QLabel, QLineEdit, QPushButton, QScrollArea,
-                             QSizePolicy, QVBoxLayout, QWidget)
+from PyQt6.QtGui import QPalette
+from PyQt6.QtWidgets import (QCheckBox, QComboBox, QFrame, QHBoxLayout, QLineEdit, QMenu, QPushButton, QScrollArea,
+                             QSizePolicy, QStyledItemDelegate, QVBoxLayout, QWidget)
 
 from core.i18n import LocaleContext
 from core.market.models import Instrument
@@ -35,11 +35,17 @@ from core.theme import DARK, LIGHT
 from .company_identity import CompanyMark
 from .jobs import Jobs
 from .stock_detail_side import FoldSection, RightColumn
-from .stock_detail_style import icon, icon_size, label, numbers, rich, set_prop, sheet, text
+from .stock_detail_style import (ElidedLabel, icon, icon_size, label, numbers, polite, rich, set_prop, sheet,
+                                 text)
+
+from core.market.detail_model import DEFAULT_PERIOD
 
 SETTINGS_PREFIX = "markets/detail/"
 DEFAULT_STUDIES = ("sma", "volume_ma", "rsi")
-SIDE_GAP = 16
+SEARCH_WIDE, SEARCH_NARROW = 200, 140   # spec 2.1 / 2.2
+NAME_ROOM, NAME_LEAST = 200, 120        # toolbar room the stock's name is given before other controls give way
+PAGE_SIDE = 24           # the page's side margins while a stock is open (spec 2; the app's pages use 32)
+SIDE_GAP = 12
 MIN_CHART = 560          # narrower than this beside the column: the column opens over the chart instead
 OVERLAY_ROW = 24
 
@@ -51,6 +57,20 @@ def _lang(ctx):
 def _esc(value):
     from html import escape
     return escape(str(value))
+
+
+def valid_studies(keys):
+    """Registry keys of `keys` in order, without duplicates; unknown keys are dropped."""
+    from core.education.indicators import study
+    out = []
+    for key in keys:
+        try:
+            name = study(str(key)).key
+        except ValueError:
+            continue
+        if name not in out:
+            out.append(name)
+    return tuple(out)
 
 
 def panel_name(spec, lang):
@@ -65,6 +85,88 @@ def panel_name(spec, lang):
     return spec.short
 
 
+# Profile rows in this view ------------------------------------------------------------------------
+# Owner: the folded 주요 지표 shows the key figures; open, high, low and volume repeat the chart's strip and the
+# symbol card, so they follow behind "더 보기".
+KEY_FIGURE_ORDER = (("시가총액 (계산값)", "Market cap (computed)"), ("PER",), ("EPS",), ("업종", "Sector"),
+                    ("거래량", "Volume"), ("시가", "Open"), ("고가", "High"), ("저가", "Low"),
+                    ("상장 주식 수", "Listed shares"))
+_SCALE = {"K": 1e3, "M": 1e6, "B": 1e9, "T": 1e12}
+
+
+def key_figures_first(rows):
+    def rank(item):
+        index, row = item
+        place = next((i for i, labels in enumerate(KEY_FIGURE_ORDER) if row.label in labels), len(KEY_FIGURE_ORDER))
+        return place, index
+    return [row for _, row in sorted(enumerate(rows), key=rank)]
+
+
+def _trim(number_text):
+    return number_text.rstrip("0").rstrip(".") if "." in number_text else number_text
+
+
+def korean_amount(value):
+    """A large number in Korean units: 480.3조, 4,803억, 871만."""
+    size = abs(value)
+    if size >= 1e12:
+        shown = _trim(f"{size / 1e12:,.1f}") + "조"
+    elif size >= 1e8:
+        shown = (f"{size / 1e8:,.0f}" if size >= 1e10 else _trim(f"{size / 1e8:,.1f}")) + "억"
+    elif size >= 1e4:
+        shown = f"{size / 1e4:,.0f}만"
+    else:
+        shown = _trim(f"{size:,.2f}")
+    return ("−" if value < 0 else "") + shown
+
+
+def korean_value(value):
+    """'80,295 KRW' -> '80,295원', '480.3T KRW' -> '480.3조원', '9M주' -> '900만주' (the profile writes the
+    compact English suffixes and the ISO currency code in both languages)."""
+    import re
+    match = re.fullmatch(r"([+−-]?)([\d,]+(?:\.\d+)?)([KMBT]?)\s*(KRW|주)?", value.strip())
+    if match is None or not (match.group(3) or match.group(4) == "KRW"):
+        return value
+    sign, digits, scale, unit = match.groups()
+    unit = {"KRW": "원", "주": "주"}.get(unit or "", "")
+    sign = "−" if sign in ("−", "-") else sign
+    if not scale:
+        return f"{sign}{digits}{unit}"
+    return sign + korean_amount(float(digits.replace(",", "")) * _SCALE[scale]) + unit
+
+
+def korean_times(hint):
+    """Times in a profile tooltip in Korea time ('2026. 11. 10. AM 6:00:00 UTC' -> '2026. 11. 10. 15:00 (한국시간)')
+    and 'KRW' as 원."""
+    import re
+    from datetime import datetime, timedelta, timezone
+
+    def kst(match):
+        year, month, day, half, hour, minute = match.groups()
+        hour = int(hour) % 12 + (12 if half in ("PM", "오후") else 0)
+        try:
+            moment = datetime(int(year), int(month), int(day), hour, int(minute), tzinfo=timezone.utc)
+        except ValueError:
+            return match.group(0)
+        local = moment.astimezone(timezone(timedelta(hours=9)))
+        return f"{local.year}. {local.month}. {local.day}. {local:%H:%M} (한국시간)"
+    hint = re.sub(r"(\d{4})\. (\d{1,2})\. (\d{1,2})\. (AM|PM|오전|오후) (\d{1,2}):(\d{2})(?::\d{2})? UTC", kst, hint)
+    return re.sub(r"(\d) KRW", r"\1원", hint)
+
+
+def display_row(row, lang):
+    """A stock profile row as this view shows it: a typographic minus, Korean units and Korea time in the Korean
+    window, and 해요체 tooltips. The profile itself (reports, exports) is unchanged."""
+    import re
+    from core.research.stock_profile import ProfileRow
+    value = re.sub(r"(?<![\w.])-(?=\d)", "−", str(row.value))
+    hint = str(row.hint or "")
+    if lang == "ko":
+        value = korean_value(value)
+        hint = polite(korean_times(hint), lang)
+    return ProfileRow(row.label, value, row.tone, hint)
+
+
 class PageLock(QObject):
     """Owner 2026-11-11: while a stock is open the app page never scrolls. The view is sized to the page
     viewport and the page is held at the view's top; wheel events that reach the page are dropped and any other
@@ -77,6 +179,8 @@ class PageLock(QObject):
         self.target = 0
         self._policy = None
         self._pinning = False
+        self._value = None      # the page position before the stock opened (Back returns to it)
+        self._margins = None    # the page's side margins, narrowed to PAGE_SIDE while locked (spec 2: 24 + 24)
 
     def _find(self):
         parent = self.view.parentWidget()
@@ -95,9 +199,16 @@ class PageLock(QObject):
         if scroll is not self.scroll:
             self.release()
             self.scroll, self.bar = scroll, scroll.verticalScrollBar()
+            self._value = self.bar.value()
             self._policy = (scroll.verticalScrollBarPolicy(), scroll.horizontalScrollBarPolicy())
             scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
             scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            layout = scroll.widget().layout() if scroll.widget() is not None else None
+            if layout is not None:
+                margins = layout.contentsMargins()
+                self._margins = (layout, margins.left(), margins.top(), margins.right(), margins.bottom())
+                layout.setContentsMargins(min(PAGE_SIDE, margins.left()), margins.top(),
+                                          min(PAGE_SIDE, margins.right()), margins.bottom())
             self.bar.valueChanged.connect(self._repin)
             self.bar.rangeChanged.connect(self._range)
             scroll.viewport().installEventFilter(self)
@@ -151,16 +262,151 @@ class PageLock(QObject):
             self.bar.rangeChanged.disconnect(self._range)
         except (TypeError, RuntimeError):
             pass
+        bar, value = self.bar, self._value
         try:
             self.scroll.viewport().removeEventFilter(self)
             if self._policy is not None:
                 self.scroll.setVerticalScrollBarPolicy(self._policy[0])
                 self.scroll.setHorizontalScrollBarPolicy(self._policy[1])
+            if self._margins is not None:
+                layout, *margins = self._margins
+                layout.setContentsMargins(*margins)
         except RuntimeError:
             pass
         self.scroll = self.bar = None
+        self._margins = self._value = None
         self.view.setMinimumHeight(0)
         self.view.setMaximumHeight(16777215)
+        if value is not None:
+            # The chart usually holds the focus. Hiding it would pass the focus on to the next widget of the page,
+            # and the page scrolls to show that widget; with nothing focused the page stays where it is put.
+            from PyQt6.QtWidgets import QApplication
+            focused = QApplication.focusWidget()
+            if focused is not None and (focused is self.view or self.view.isAncestorOf(focused)):
+                focused.clearFocus()
+            self._restore(bar, value)
+
+    def _restore(self, bar, value):
+        """Back returns the page to where it was before the stock opened. The list's height comes back over the
+        next layout passes, so the position is set again each time the range grows, until it is reached, the
+        page is moved by someone else (a newly chosen list scrolling to its top) or a stock opens again."""
+        placed = []
+
+        def done():
+            try:
+                bar.rangeChanged.disconnect(place)
+            except (TypeError, RuntimeError):
+                pass
+
+        def place(*_):
+            try:
+                if self.scroll is not None or (placed and bar.value() != placed[-1]):
+                    done()
+                    return
+                bar.setValue(value)
+                placed.append(bar.value())
+                if bar.value() == value:
+                    done()
+            except RuntimeError:
+                pass
+
+        bar.rangeChanged.connect(place)
+        place()
+        QTimer.singleShot(1500, done)
+
+
+INTERVAL_GROUPS = (("group_live", ("1tick", "10tick", "100tick", "1s", "5s", "10s", "30s")),
+                   ("group_minutes", ("1m", "3m", "5m", "15m", "30m", "60m")),
+                   ("group_daily", ("1d", "1w", "1M")))
+
+
+class IntervalDelegate(QStyledItemDelegate):
+    """Spec 4.4: the interval list under group captions (체결 기준 · 분봉 · 일·주·월); a caption is drawn above
+    the first deliverable interval of its group."""
+    HEAD = 22
+
+    def __init__(self, combo, caption_for):
+        super().__init__(combo)
+        self.combo, self.caption_for = combo, caption_for
+
+    def caption(self, row):
+        data = self.combo.itemData(row)
+        model = self.combo.model()
+        for key, members in INTERVAL_GROUPS:
+            if data in members:
+                rows = [r for r in range(self.combo.count()) if self.combo.itemData(r) in members
+                        and model.item(r).isEnabled()]
+                return self.caption_for(key) if rows and rows[0] == row else ""
+        return ""
+
+    def sizeHint(self, option, index):
+        size = super().sizeHint(option, index)
+        size.setHeight(max(size.height(), 28) + (self.HEAD if self.caption(index.row()) else 0))
+        return size
+
+    def paint(self, painter, option, index):
+        from PyQt6.QtWidgets import QStyleOptionViewItem
+        caption = self.caption(index.row())
+        if caption:
+            painter.save()
+            font = painter.font()
+            font.setPixelSize(11)
+            painter.setFont(font)
+            painter.setPen(option.palette.color(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Text))
+            head = option.rect.adjusted(10, 0, -6, 0)
+            head.setHeight(self.HEAD)
+            painter.drawText(head, int(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom), caption)
+            painter.restore()
+            option = QStyleOptionViewItem(option)
+            option.rect.setTop(option.rect.top() + self.HEAD)
+        super().paint(painter, option, index)
+
+
+class IntervalCombo(QComboBox):
+    """The toolbar's interval menu: what the routers cannot deliver for this stock is left out of the list
+    (the shared model keeps it disabled for the pane's own form). Its width follows the interval shown, not
+    the longest of the 16 names."""
+
+    def __init__(self):
+        super().__init__()
+        self.currentIndexChanged.connect(lambda _index: self.updateGeometry())
+
+    def sizeHint(self):
+        # Qt's own hint fits the longest name plus the frame, padding and arrow; keep that chrome around the
+        # name shown instead.
+        hint = super().sizeHint()
+        metrics = self.fontMetrics()
+        longest = max((metrics.horizontalAdvance(self.itemText(row)) for row in range(self.count())), default=0)
+        chrome = max(46, hint.width() - longest)
+        return QSize(max(72, metrics.horizontalAdvance(self.currentText()) + chrome), hint.height())
+
+    def minimumSizeHint(self):
+        return self.sizeHint()
+
+    def showPopup(self):
+        model, view = self.model(), self.view()
+        for row in range(self.count()):
+            item = model.item(row)
+            view.setRowHidden(row, item is not None and not item.isEnabled())
+        super().showPopup()
+
+
+class ChartColumn(QFrame):
+    """The chart and its period bar. It holds the keyboard focus while the chart itself is hidden (loading, empty
+    or failed), so the arrows, +/−, 0 and Shift+F already belong to the chart the moment a stock opens; the chart
+    takes the focus over when it appears."""
+
+    def __init__(self, view):
+        super().__init__()
+        self.view = view
+        self.setObjectName("sdChartColumn")
+        self.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
+
+    def keyPressEvent(self, event):
+        if self.view.chart_key(event):
+            event.accept()
+            return
+        super().keyPressEvent(event)
 
 
 class DetailBody(QWidget):
@@ -215,27 +461,19 @@ class DetailBody(QWidget):
         self.relayout()
 
 
-class FitLabel(QLabel):
-    """One line that keeps its whole text (text() is the full name) but paints it elided when squeezed."""
+class FitLabel(ElidedLabel):
+    """The stock's name: keeps its whole text (text() is the full name), asks for its full width and paints it
+    elided only when the toolbar cannot give that much."""
 
     def __init__(self):
         super().__init__()
-        self.setTextFormat(Qt.TextFormat.PlainText)
-        self.setProperty("qg_literal", True)
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
 
-    def minimumSizeHint(self):
-        hint = super().minimumSizeHint()
-        return QSize(min(hint.width(), 64), hint.height())
+    def sizeHint(self):
+        return QSize(self.fontMetrics().horizontalAdvance(self.text()) + 2, super().sizeHint().height())
 
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setFont(self.font())
-        painter.setPen(self.palette().color(QPalette.ColorRole.WindowText))
-        shown = self.fontMetrics().elidedText(self.text(), Qt.TextElideMode.ElideRight, self.contentsRect().width())
-        painter.drawText(self.contentsRect(), int(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter), shown)
-        painter.end()
-        self.setToolTip(self.text() if shown != self.text() else "")
+    def minimumSizeHint(self):
+        return QSize(min(self.sizeHint().width(), 64), super().minimumSizeHint().height())
 
 
 class OhlcStrip(QFrame):
@@ -294,6 +532,15 @@ class ChartOverlays(QObject):
         notice = QHBoxLayout(self.notice)
         notice.setContentsMargins(0, 0, 0, 0)
         notice.setSpacing(6)
+        # A wheel turn over the chart changes nothing (owner 2026-11-11); for a moment the keys are named instead.
+        self.wheel_label = label("notice")
+        self.wheel_label.hide()
+        notice.addWidget(self.wheel_label)
+        self.wheel_timer = QTimer(self)
+        self.wheel_timer.setSingleShot(True)
+        self.wheel_timer.setInterval(2600)
+        self.wheel_timer.timeout.connect(self.refresh)
+        self.chart.wheel_ignored.connect(self.wheel_turned)
         self.hidden_label = label("notice")
         notice.addWidget(self.hidden_label)
         self.latest_button = QPushButton()
@@ -304,6 +551,12 @@ class ChartOverlays(QObject):
         notice.addWidget(self.latest_button)
         for widget in (self.ohlc, self.legend, self.notice):
             widget.hide()
+
+    def wheel_turned(self):
+        first = not self.wheel_timer.isActive()
+        self.wheel_timer.start()
+        if first:
+            self.refresh()
 
     def _head(self, key):
         head = self.heads.get(key)
@@ -386,8 +639,12 @@ class ChartOverlays(QObject):
         set_prop(strip.values["c"], "tone", tone)
         strip.change.setToolTip(text(lang, "term_change"))
         volume = candle.volume
-        strip.values["v"].setText(compact(volume) if volume is not None else "—")
-        full = f"{volume:,.0f}" if volume is not None else "—"
+        # Korean units in the Korean view, like the legend's volume average and the right column (871만, not 8.71M).
+        if volume is None or not math.isfinite(volume):
+            strip.values["v"].setText("—")
+        else:
+            strip.values["v"].setText(korean_amount(volume) if lang == "ko" else compact(volume))
+        full = f"{volume:,.0f}" if volume is not None and math.isfinite(volume) else "—"
         strip.keys["v"].setText(text(lang, "v"))
         for widget in (strip.keys["v"], strip.values["v"]):
             widget.setToolTip(text(lang, "term_volume", full=full))
@@ -405,7 +662,7 @@ class ChartOverlays(QObject):
             colors = study_colors(key, dark)
             if key in layout.unavailable:
                 chips.append(f'<span style="color:{colors[spec.lines[0].id]}">●</span>&ensp;{_esc(spec.name(lang))} '
-                             f'<span style="color:{view.palette.muted}">— {_esc(availability_short(layout.unavailable[key], lang))}</span>')
+                             f'<span style="color:{view.palette.muted}">— {_esc(polite(availability_short(layout.unavailable[key], lang), lang))}</span>')
                 continue
             try:
                 readout = line_readout(key, bars, cursor, language=lang, supply=pane.supply)
@@ -416,7 +673,16 @@ class ChartOverlays(QObject):
                                for line, (name, value) in zip(spec.lines, readout))
             chips.append(f'<span style="color:{colors[spec.lines[0].id]}">●</span>&ensp;{parts}')
             tips.append(spec.name(lang))
-        self.legend_label.setText("&nbsp;&nbsp;&nbsp;".join(chips))
+        # One row: the chips that fit, then '외 n개' for the rest (their names in the tooltip), never a cut word.
+        room = int(width) - 8
+        for count in range(len(chips), 0, -1):
+            rest = len(chips) - count
+            more = (f'&nbsp;&nbsp;<span style="color:{view.palette.muted}">'
+                    f'{_esc(text(lang, "legend_more", count=rest))}</span>') if rest else ""
+            self.legend_label.setText("&nbsp;&nbsp;&nbsp;".join(chips[:count]) + more)
+            if self.legend_label.sizeHint().width() <= room:
+                break
+        self.legend_label.setToolTip(" · ".join(tips) if len(tips) > 1 else "")
         self.legend.setVisible(bool(chips))
         if chips:
             self.legend.setGeometry(int(layout.plot_left), 32, int(width), 22)
@@ -432,7 +698,7 @@ class ChartOverlays(QObject):
             if key in layout.unavailable:
                 head.title.setText(f'<span style="color:{colors[spec.lines[0].id]}">●</span>&ensp;'
                                    f'<b>{_esc(panel_name(spec, lang))}</b>')
-                reading = availability_short(layout.unavailable[key], lang)
+                reading = polite(availability_short(layout.unavailable[key], lang), lang)
                 head.full = text(lang, "panel_info", name=name) + "\n" + reading
             else:
                 try:
@@ -440,12 +706,10 @@ class ChartOverlays(QObject):
                     reading = study_reading(key, bars, cursor, language=lang, supply=pane.supply)
                 except Exception:
                     readout, reading = (), ""
-                values_html = " ".join(f'<span style="color:{colors[line.id]}">'
-                                       f'{_esc(view.study_value(key, line, cursor, value))}</span>'
-                                       for line, (_, value) in zip(spec.lines, readout))
                 head.title.setText(f'<span style="color:{colors[spec.lines[0].id]}">●</span>&ensp;'
-                                   f'<b>{_esc(panel_name(spec, lang))}</b>&nbsp; {values_html}')
-                head.full = reading
+                                   f'<b>{_esc(panel_name(spec, lang))}</b>&nbsp; '
+                                   f'{view.values_html(key, spec, readout, cursor, colors)}')
+                head.full = polite(reading, lang)
             head.reading.setText(head.reading.fontMetrics().elidedText(
                 head.full.replace("\n", " "), Qt.TextElideMode.ElideRight, max(40, int(width) - head.title.sizeHint().width() - 90)))
             head.reading.setToolTip(head.full)
@@ -462,15 +726,20 @@ class ChartOverlays(QObject):
         for key, head in self.heads.items():
             if key not in shown:
                 head.hide()
-        # Notices at the top right of the price pane.
+        # Notices at the top right of the price pane; the hidden panels are named.
         hidden = len(layout.hidden_panels)
-        self.hidden_label.setText(text(lang, "hidden_panels", count=hidden))
+        names = ", ".join(engine.study(key).name(lang) for key in layout.hidden_panels)
+        self.hidden_label.setText(text(lang, "hidden_panels", count=hidden, names=names))
+        self.hidden_label.setToolTip(text(lang, "hidden_panels_tip", names=names) if hidden else "")
         self.hidden_label.setVisible(bool(hidden))
         panned = pane._end is not None
         self.latest_button.setText(text(lang, "to_latest"))
         self.latest_button.setToolTip(text(lang, "to_latest_tip"))
         self.latest_button.setVisible(panned)
-        if hidden or panned:
+        wheel = self.wheel_timer.isActive()
+        self.wheel_label.setText(text(lang, "wheel_hint"))
+        self.wheel_label.setVisible(wheel)
+        if hidden or panned or wheel:
             self.notice.adjustSize()
             size = self.notice.sizeHint()
             self.notice.setGeometry(int(layout.plot_right - size.width() - 8), int(layout.price[0] + 4),
@@ -527,11 +796,30 @@ class PeriodBar(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        width = self.width()
-        self.hint.setVisible(width >= 980)
+        self.fit()
+
+    def fit(self):
+        """Keep the period chips; then, as room allows, the zoom buttons, '기본 보기', the pan arrows and the
+        key hint '← → 이동 · + − 확대' (the wheel no longer moves the chart, so the keys are named on the bar
+        whenever it fits; spec 4.1)."""
+        layout = self.layout()
+        margins = layout.contentsMargins()
+        spacing = layout.spacing()
+        room = self.width() - margins.left() - margins.right()
+        chips = sum(button.sizeHint().width() + spacing for button in self.buttons.values())
+        zoom = sum(button.sizeHint().width() + spacing for button in (self.zoom_out, self.zoom_in))
+        reset = self.reset.sizeHint().width() + spacing + 4
+        pan = sum(button.sizeHint().width() + spacing for button in (self.left, self.right))
+        hint = self.hint.sizeHint().width() + spacing + 8
+        used = chips + zoom + 16
+        show_reset = used + reset <= room
+        used += reset if show_reset else 0
+        show_pan = used + pan <= room
+        used += pan if show_pan else 0
+        self.reset.setVisible(show_reset)
         for button in (self.left, self.right):
-            button.setVisible(width >= 700)
-        self.reset.setVisible(width >= 620)
+            button.setVisible(show_pan)
+        self.hint.setVisible(used + hint <= room)
 
 
 class NotesPopover(QFrame):
@@ -565,7 +853,7 @@ class NotesPopover(QFrame):
         facts = pane.feed_facts()
         self.title.setText(text(lang, "notes_title"))
         lines = [facts["status"], facts["notice"], facts["availability"], facts["note"]]
-        self.body.setText("\n\n".join(line for line in dict.fromkeys(lines) if line))
+        self.body.setText(polite("\n\n".join(line for line in dict.fromkeys(lines) if line), lang))
         self.poll.setText(text(lang, "notes_poll"))
         self.poll.blockSignals(True)
         self.poll.setChecked(pane.poll_button.isChecked())
@@ -604,9 +892,9 @@ class StockDetailView(QWidget):
         self._bars_cache = (None, None)
         self._side_snapshot = None
         self._rail_before = None
-        self._compact = self._narrow = self._tiny = None
+        self._compact, self._level = False, 0
         self.studies = self._stored_studies()
-        self.period = self._setting("period", "6M")
+        self.period = self._stored_period()   # the last period chip; an interval choice leaves it as it was
         self.jobs = Jobs(self)
         self.jobs.succeeded.connect(self._profile_loaded)
         self.jobs.failed.connect(self._profile_failed)
@@ -616,8 +904,7 @@ class StockDetailView(QWidget):
         root.setContentsMargins(0, 12, 0, 12)
         root.setSpacing(10)
         root.addWidget(self._build_toolbar())
-        self.chart_column = QFrame()
-        self.chart_column.setObjectName("sdChartColumn")
+        self.chart_column = ChartColumn(self)
         column = QVBoxLayout(self.chart_column)
         column.setContentsMargins(0, 0, 0, 0)
         column.setSpacing(4)
@@ -662,15 +949,24 @@ class StockDetailView(QWidget):
         chart.rendered.connect(self._chart_rendered)
         chart.q_score_changed.connect(self._render_qscore)
         chart.age_timer.timeout.connect(self._render_state)
+        # Loading and failing change the feed mode without a render: the chip and card follow the mode itself.
+        chart.feed_state_changed.connect(self._feed_state_changed)
         # One overlay pass per event-loop turn: a render emits both layout_changed and rendered.
         self.overlay_timer = QTimer(self)
         self.overlay_timer.setSingleShot(True)
         self.overlay_timer.setInterval(0)
         self.overlay_timer.timeout.connect(self.overlays.refresh)
-        chart.chart.layout_changed.connect(lambda _layout: self.overlay_timer.start())
-        store.changed.connect(self._sync_watch)
+        # (Bound methods, not lambdas: Qt drops them with this view, the shared pane outlives it.)
+        chart.chart.layout_changed.connect(self._chart_layout_changed)
+        store.changed.connect(self._watch_changed)
         self.set_theme(False)
         self.set_locale(self.ctx)
+
+    def _feed_state_changed(self, _mode):
+        self._render_state()
+
+    def _chart_layout_changed(self, _layout):
+        self.overlay_timer.start()
 
     # Construction ----------------------------------------------------------------------------
     def _build_toolbar(self):
@@ -692,11 +988,22 @@ class StockDetailView(QWidget):
         names = QVBoxLayout()
         names.setSpacing(0)
         names.setContentsMargins(0, 0, 0, 0)
+        self.names_box = names
         self.name = FitLabel()
         self.name.setProperty("sd", "name")
-        self.code = label("code")
         names.addWidget(self.name)
-        names.addWidget(self.code)
+        code_row = QHBoxLayout()
+        code_row.setContentsMargins(0, 0, 0, 0)
+        code_row.setSpacing(8)
+        self.code_row = code_row
+        self.code = label("code")
+        code_row.addWidget(self.code)
+        # Narrow windows: the market state moves under the name instead of leaving the toolbar.
+        self.state_inline = label("stateInline")
+        self.state_inline.hide()
+        code_row.addWidget(self.state_inline)
+        code_row.addStretch(1)
+        names.addLayout(code_row)
         row.addLayout(names)
         row.addSpacing(6)
         self.state_chip = label("chip")
@@ -705,9 +1012,8 @@ class StockDetailView(QWidget):
         self.search = QLineEdit()
         self.search.setObjectName("sdSearch")
         self.search.setClearButtonEnabled(True)
-        self.search.setMinimumWidth(120)
-        self.search.setMaximumWidth(240)
-        self.search.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        self.search.setFixedWidth(SEARCH_WIDE)
+        self.search.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         self.search.returnPressed.connect(self._search_submit)
         row.addWidget(self.search)
         self.completer = None
@@ -718,12 +1024,14 @@ class StockDetailView(QWidget):
             self.completer.chosen.connect(self._search_chosen)
         else:
             self.search.hide()
-        self.interval_combo = QComboBox()
+        self.interval_combo = IntervalCombo()
         self.interval_combo.setObjectName("sdInterval")
         self.interval_combo.setProperty("qg_literal", True)
         self.interval_combo.setModel(self.chart.interval.model())
         self.interval_combo.setCurrentIndex(self.chart.interval.currentIndex())
-        self.interval_combo.setMinimumWidth(84)
+        self.interval_combo.view().setMinimumWidth(190)   # the popup lists the names at full width
+        self.interval_combo.setItemDelegate(IntervalDelegate(self.interval_combo,
+                                                             lambda key: text(_lang(self.ctx), key)))
         self.interval_combo.activated.connect(self._interval_chosen)
         self.chart.interval.currentIndexChanged.connect(self._sync_interval)
         row.addWidget(self.interval_combo)
@@ -738,13 +1046,19 @@ class StockDetailView(QWidget):
         self.watch_button.setProperty("qg_literal", True)
         self.watch_button.clicked.connect(self._toggle_watch)
         row.addWidget(self.watch_button)
-        self.refresh_button, self.pause_button, self.notes_button, self.focus_button, self.side_button = (
-            QPushButton() for _ in range(5))
-        for button in (self.refresh_button, self.pause_button, self.notes_button, self.focus_button, self.side_button):
+        tools = QHBoxLayout()
+        tools.setContentsMargins(0, 0, 0, 0)
+        tools.setSpacing(2)
+        self.tools_box = tools
+        self.refresh_button, self.pause_button, self.notes_button, self.focus_button, self.side_button, \
+            self.more_button = (QPushButton() for _ in range(6))
+        for button in (self.refresh_button, self.pause_button, self.notes_button, self.more_button,
+                       self.focus_button, self.side_button):
             button.setProperty("sd", "tool")
             button.setProperty("qg_literal", True)
             button.setIconSize(icon_size(18))
-            row.addWidget(button)
+            tools.addWidget(button)
+        row.addLayout(tools)
         self.focus_button.setCheckable(True)
         self.side_button.setCheckable(True)
         self.refresh_button.clicked.connect(self.refresh)
@@ -752,6 +1066,14 @@ class StockDetailView(QWidget):
         self.notes_button.clicked.connect(self._show_notes)
         self.focus_button.clicked.connect(lambda checked: self.set_focus_mode(checked))
         self.side_button.clicked.connect(lambda checked: self.set_side_shown(checked))
+        # Spec 2.3, under 1000px: stop/reconnect and the data notes move into a ⋯ menu.
+        self.more_menu = QMenu(self.more_button)
+        self.more_pause = self.more_menu.addAction("")
+        self.more_pause.triggered.connect(self._pause_clicked)
+        self.more_notes = self.more_menu.addAction("")
+        self.more_notes.triggered.connect(lambda: self._show_notes(anchor=self.more_button))
+        self.more_button.clicked.connect(self._show_more)
+        self.more_button.hide()
         return bar
 
     # Settings --------------------------------------------------------------------------------
@@ -772,28 +1094,35 @@ class StockDetailView(QWidget):
         else:
             settings.setValue(SETTINGS_PREFIX + key, value)
 
-    def _stored_studies(self):
-        raw = self._setting("indicators", None)
+    def _stored_json(self, key, kind):
+        """A JSON setting of the given type, or None. Saved settings are shared by every build of the app, so a
+        value written by another version (a renamed study, a number where a list belongs) is never trusted."""
+        raw = self._setting(key, None)
         try:
-            keys = tuple(json.loads(raw)) if isinstance(raw, str) else None
+            value = json.loads(raw) if isinstance(raw, str) else None
         except ValueError:
-            keys = None
-        return keys if keys is not None else DEFAULT_STUDIES
+            return None
+        return value if isinstance(value, kind) else None
+
+    def _stored_studies(self):
+        keys = self._stored_json("indicators", list)
+        if keys is None:
+            return DEFAULT_STUDIES
+        chosen = valid_studies(keys)
+        # Every stored key unknown (another build's names): the starter set instead of an empty chart.
+        return chosen if chosen or not keys else DEFAULT_STUDIES
+
+    def _stored_period(self):
+        from core.market.detail_model import DEFAULT_PERIOD, PERIOD_KEYS
+        value = self._setting("period", DEFAULT_PERIOD)
+        return value if value in PERIOD_KEYS else DEFAULT_PERIOD
 
     def _section_open(self, key, default):
-        raw = self._setting("sections", None)
-        try:
-            states = json.loads(raw) if isinstance(raw, str) else {}
-        except ValueError:
-            states = {}
+        states = self._stored_json("sections", dict) or {}
         return bool(states.get(key, default))
 
     def _section_toggled(self, key, is_open):
-        raw = self._setting("sections", None)
-        try:
-            states = json.loads(raw) if isinstance(raw, str) else {}
-        except ValueError:
-            states = {}
+        states = self._stored_json("sections", dict) or {}
         states[key] = bool(is_open)
         self._remember("sections", json.dumps(states))
 
@@ -814,7 +1143,7 @@ class StockDetailView(QWidget):
         if self.chart._studies is None:
             self.chart.set_indicators(self.studies)
         if self.chart.period is None and self.chart.snapshot is None:
-            self.chart.apply_period(self.period if self.period in self.periods.buttons else "6M")
+            self.chart.apply_period(self.period if self.period in self.periods.buttons else DEFAULT_PERIOD)
         self._sync_interval()
         self.chart.show()
 
@@ -843,10 +1172,10 @@ class StockDetailView(QWidget):
         self.chart.symbol.setText(instrument.code)
         self.chart.supply = None
         self._routable = None
-        self.chart.apply_period(self.period if self.period_reason(self.period) == "" else "6M")
+        self.chart.apply_period(self.opening_period())
         self._clear_sections()
         self.render_header()
-        self._sync_watch()
+        self._watch_changed()
         self.side.watchlist.set_current(instrument)
         lang = _lang(self.ctx)
         self.profile_status.setText("" if instrument.asset in ("domestic_stock", "overseas_stock") else
@@ -859,6 +1188,8 @@ class StockDetailView(QWidget):
             # Opening a stock loads its chart and details; with automatic refresh off (tests) both stay explicit.
             self.chart.refresh(manual=True)
             self.load_profile()
+        # Focus leaves the search box or row the stock was opened from now, and again after the page settles.
+        self.focus_chart()
         QTimer.singleShot(0, self.focus_chart)
 
     def _open(self, instrument):
@@ -870,6 +1201,14 @@ class StockDetailView(QWidget):
     def _search_chosen(self, listing):
         self.search.clear()
         self._open(Instrument(listing.asset, listing.code, listing.exchange))
+
+    def focus_search(self):
+        """The rail's 검색 and Home's 'add to watchlist' while a stock is open: focus the toolbar search."""
+        if self.completer is None or not self.search.isVisible():
+            return False
+        self.search.setFocus(Qt.FocusReason.OtherFocusReason)
+        self.search.selectAll()
+        return True
 
     def _search_submit(self):
         query = self.search.text().strip()
@@ -884,7 +1223,15 @@ class StockDetailView(QWidget):
             self._search_chosen(listing)
 
     def focus_chart(self):
-        if self.chart.chart.isVisible():
+        """Keyboard focus to the chart, or to its column while the chart is hidden (loading, empty, failed), so
+        the arrows never go to the search box or row the stock was opened from (spec 4.1)."""
+        target = self.chart.chart if self.chart.chart.isVisible() else self.chart_column
+        if target.isVisible():
+            target.setFocus(Qt.FocusReason.OtherFocusReason)
+
+    def _chart_appeared(self):
+        """The chart became visible while its column held the focus for it: hand the focus on."""
+        if self.chart.chart.isVisible() and self.chart_column.hasFocus():
             self.chart.chart.setFocus(Qt.FocusReason.OtherFocusReason)
 
     # Profile -----------------------------------------------------------------------------------
@@ -970,6 +1317,7 @@ class StockDetailView(QWidget):
     def _chart_rendered(self):
         if self.instrument is None:
             return
+        self._chart_appeared()
         self.overlay_timer.start()
         self._sync_periods()
         self._render_state()
@@ -997,16 +1345,7 @@ class StockDetailView(QWidget):
     # Indicators --------------------------------------------------------------------------------
     def set_studies(self, keys):
         """The picker, a reading row or a panel's × changed the selection: draw it and remember it."""
-        from core.education.indicators import study
-        out = []
-        for key in keys:
-            try:
-                name = study(key).key
-            except ValueError:
-                continue
-            if name not in out:
-                out.append(name)
-        self.studies = tuple(out)
+        self.studies = valid_studies(keys)
         self._remember("indicators", json.dumps(list(self.studies)))
         if tuple(self.picker.selected) != self.studies:
             self.picker.set_selected(self.studies)
@@ -1032,8 +1371,14 @@ class StockDetailView(QWidget):
         row = group.rows[key]
         row.open_guide(True)
         self.picker.render()
-        QTimer.singleShot(0, lambda: self.side.indicator_scroll.ensureWidgetVisible(row, 0, 40))
+        QTimer.singleShot(0, lambda: self._reveal(row))
         self.guide_requested.emit(key)
+
+    def _reveal(self, row):
+        """Scroll the indicator page down to `row`; the page never scrolls sideways (it has no horizontal bar)."""
+        scroll = self.side.indicator_scroll
+        scroll.ensureWidgetVisible(row, 0, 40)
+        scroll.horizontalScrollBar().setValue(0)
 
     def show_indicators(self):
         if self.body.focus:
@@ -1057,10 +1402,19 @@ class StockDetailView(QWidget):
         return self._routable or ()
 
     def period_reason(self, key):
-        from core.market.detail_model import period_reason
+        """'' when the period chip can be used for the open stock, else a reason code ('unknown' for anything
+        that is not a period key, such as None)."""
+        from core.market.detail_model import PERIOD_KEYS, period_reason
+        if key not in PERIOD_KEYS:
+            return "unknown"
         if self.instrument is None:
             return ""
         return period_reason(key, self.instrument, self.routable())
+
+    def opening_period(self):
+        """The period a newly opened stock starts with: the last chip chosen, when this stock can use it."""
+        from core.market.detail_model import DEFAULT_PERIOD
+        return self.period if self.period_reason(self.period) == "" else DEFAULT_PERIOD
 
     def choose_period(self, key):
         if self.period_reason(key):
@@ -1086,8 +1440,9 @@ class StockDetailView(QWidget):
     def _interval_chosen(self, index):
         interval = self.interval_combo.itemData(index)
         if interval:
+            # The chart leaves its period (no chip is highlighted); `self.period` keeps the last chip, which the
+            # next stock opens with.
             self.chart.set_interval(interval)
-            self.period = None
             self._sync_periods()
         self.focus_chart()
 
@@ -1096,6 +1451,8 @@ class StockDetailView(QWidget):
             self.interval_combo.blockSignals(True)
             self.interval_combo.setCurrentIndex(self.chart.interval.currentIndex())
             self.interval_combo.blockSignals(False)
+            self.interval_combo.updateGeometry()
+            self._fit_toolbar()
 
     def interval_name(self, interval):
         lang = _lang(self.ctx)
@@ -1119,12 +1476,21 @@ class StockDetailView(QWidget):
             self.chart.refresh(manual=True)
         self._render_state()
 
-    def _show_notes(self):
+    def _show_notes(self, *_, anchor=None):
+        button = anchor if anchor is not None else self.notes_button
         self.notes.fill()
-        anchor = self.notes_button.mapToGlobal(QPoint(self.notes_button.width() - self.notes.width(),
-                                                      self.notes_button.height() + 6))
-        self.notes.move(anchor)
+        place = button.mapToGlobal(QPoint(button.width() - self.notes.width(), button.height() + 6))
+        self.notes.move(place)
         self.notes.show()
+
+    def _show_more(self):
+        """⋯ (narrow windows): stop or reconnect, and the data notes."""
+        lang = _lang(self.ctx)
+        facts = self.chart.feed_facts()
+        streaming = facts["streaming"] or facts["polling"] or facts["busy"] or facts["auto"]
+        self.more_pause.setText(text(lang, "pause" if streaming else "resume"))
+        self.more_notes.setText(text(lang, "notes"))
+        self.more_menu.popup(self.more_button.mapToGlobal(QPoint(0, self.more_button.height() + 4)))
 
     def set_focus_mode(self, on):
         """⤢ / Shift+F: collapse the window's rail and hide the right column; off restores both."""
@@ -1177,21 +1543,71 @@ class StockDetailView(QWidget):
         super().resizeEvent(event)
         self._fit_toolbar()
 
+    # Toolbar compaction (spec 2.3), applied one step at a time until the stock's name has its room:
+    # 1 the star drops its words, 2 back keeps only its arrow, 3 the search narrows to 140, 4 stop/reconnect and
+    # the data notes move into ⋯, 5 the company mark goes, 6 the market state moves under the name. Only when the
+    # name would still get less than NAME_LEAST: 7 the search, 8 the Indicators button give way (the column and
+    # its tab remain).
+    LEVELS = 8
+
+    def _apply_level(self, level):
+        self._level = level
+        self._compact = level >= 1
+        lang = _lang(self.ctx)
+        self.back_button.setText("←" if level >= 2 else text(lang, "back"))
+        self.search.setFixedWidth(SEARCH_NARROW if level >= 3 else SEARCH_WIDE)
+        menu = level >= 4
+        self.pause_button.setVisible(not menu)
+        self.notes_button.setVisible(not menu)
+        self.more_button.setVisible(menu)
+        self.mark.setVisible(level < 5 and self.instrument is not None and
+                             self.instrument.asset in ("domestic_stock", "overseas_stock"))
+        inline = level >= 6
+        self.state_chip.setVisible(not inline)
+        self.state_inline.setVisible(inline and bool(self.state_inline.text()))
+        self.search.setVisible(self.completer is not None and level < 7)
+        self.indicators_button.setVisible(level < 8)
+        self._sync_watch()
+
+    def _toolbar_need(self):
+        """Width the toolbar's controls ask for, without the stock's name (the layout's own sums: hidden
+        widgets and spacers take no spacing)."""
+        row = self.toolbar.layout()
+        total, items = 0, 0
+        for index in range(row.count()):
+            item = row.itemAt(index)
+            widget, inner, spacer = item.widget(), item.layout(), item.spacerItem()
+            if widget is not None:
+                if not widget.isHidden():
+                    total += max(widget.sizeHint().width(), widget.minimumWidth())
+                    items += 1
+            elif inner is self.names_box:
+                code = self.code.sizeHint().width()
+                if not self.state_inline.isHidden():
+                    code += self.code_row.spacing() + self.state_inline.sizeHint().width()
+                total += code
+                items += 1
+            elif inner is self.tools_box:
+                shown = [inner.itemAt(i).widget() for i in range(inner.count())]
+                shown = [w for w in shown if w is not None and not w.isHidden()]
+                total += sum(w.sizeHint().width() for w in shown) + inner.spacing() * max(0, len(shown) - 1)
+                items += 1
+            elif spacer is not None and spacer.expandingDirections() == Qt.Orientation(0):
+                total += spacer.sizeHint().width()
+        return total + row.spacing() * max(0, items - 1)
+
     def _fit_toolbar(self):
-        """Narrower windows keep the controls that matter: the star drops its words under 1180px; under 900px
-        the toolbar search (the list's search is one click back) and the Indicators button (the column toggle and
-        its tab remain) give way; the state chip stays down to 640px."""
         scroll = self.lock.scroll
         width = scroll.viewport().width() - self._side_margins() if scroll is not None else self.width()
-        compact = width < (1180 if _lang(self.ctx) == "ko" else 1280)  # English labels are longer
-        narrow, tiny = width < 900, width < 640
-        if (compact, narrow, tiny) == (self._compact, self._narrow, self._tiny):
+        if width <= 0:
             return
-        self._compact, self._narrow, self._tiny = compact, narrow, tiny
-        self.search.setVisible(self.completer is not None and not narrow)
-        self.indicators_button.setVisible(not narrow)
-        self.state_chip.setVisible(not tiny)
-        self._sync_watch()
+        full = self.name.fontMetrics().horizontalAdvance(self.name.text()) + 4
+        code = self.code.sizeHint().width()
+        for level in range(self.LEVELS + 1):
+            self._apply_level(level)
+            least = NAME_ROOM if level < 6 else NAME_LEAST
+            if self._toolbar_need() - code + max(code, min(full, least)) <= width:
+                break
 
     def _side_margins(self):
         """The page margins around this view (the view is laid out inside the page's content)."""
@@ -1230,7 +1646,11 @@ class StockDetailView(QWidget):
             self.watch_toggled.emit(self.instrument, False)
         elif self.store.add(self.instrument):
             self.watch_toggled.emit(self.instrument, True)
+        self._watch_changed()
+
+    def _watch_changed(self):
         self._sync_watch()
+        self._fit_toolbar()   # ☆ 관심종목 추가 and ★ 관심종목 differ in width
 
     def _sync_watch(self):
         lang = _lang(self.ctx)
@@ -1267,6 +1687,19 @@ class StockDetailView(QWidget):
             return fallback
         return self.price_text(value) if math.isfinite(value) else "—"
 
+    def values_html(self, key, spec, readout, index, colors):
+        """A study's values at `index` for a panel header: a study with one line shows its number (the panel
+        title names it); with more lines every number carries its line's name ('MACD −593 · 신호선 −182 ·
+        막대 −411'), so signal and histogram, +DI and −DI are never guessed (spec 6.1)."""
+        parts = []
+        for line, (name, value) in zip(spec.lines, readout):
+            shown = _esc(self.study_value(key, line, index, value))
+            if len(spec.lines) == 1:
+                parts.append(f'<span style="color:{colors[line.id]}">{shown}</span>')
+            else:
+                parts.append(f'<span style="color:{colors[line.id]}">{_esc(name)}</span> {shown}')
+        return " · ".join(parts)
+
     def _current_price(self):
         """(price, change %, change) from a live trade, the chart's quote, the profile or the last candle."""
         if self._live_price is not None:
@@ -1296,11 +1729,13 @@ class StockDetailView(QWidget):
             from core.research.stock_profile import display_name
             name = display_name(self.profile, lang) or name
         self.mark.set_identity(instrument.code, name)
-        self.mark.setVisible(instrument.asset in ("domestic_stock", "overseas_stock"))
+        self.mark.setVisible(self._level < 5 and instrument.asset in ("domestic_stock", "overseas_stock"))
         self.mark.setAccessibleName(name)
         place = instrument.exchange or ("KRX" if instrument.asset == "domestic_stock" else "")
         self.code.setText(f"{instrument.code} · {place}" if place else instrument.code)
-        self.name.setText(name)
+        if self.name.text() != name:
+            self.name.setText(name)
+            self._fit_toolbar()
         card.name.setText(name)
         sector = ""
         if self.profile is not None:
@@ -1336,8 +1771,13 @@ class StockDetailView(QWidget):
         facts = self.chart.feed_facts()
         state = quote_state(self.instrument, source=facts["source"], mode=facts["mode"], has_data=facts["has_data"],
                             last_trade_at=facts["last_trade_at"], market_time=facts["market_time"])
-        self.state_chip.setText(text(lang, f"state_{state.code}"))
+        chip = text(lang, f"state_{state.code}")
+        changed = chip != self.state_chip.text()
+        self.state_chip.setText(chip)
         set_prop(self.state_chip, "tone", state.tone)
+        self.state_inline.setText(self.state_chip.text())
+        set_prop(self.state_inline, "tone", state.tone)
+        self.state_inline.setVisible(self._level >= 6)
         line = text(lang, f"state_{state.code}_long", age=state.age if state.age is not None else "—")
         if facts["last_received"] and facts["has_data"]:
             from core.market.detail_model import _age
@@ -1361,13 +1801,15 @@ class StockDetailView(QWidget):
                 key = ""
             if key and key != f"state_{state.code}_long":
                 tip += "\n" + text(lang, key).lstrip("● ")
-        for widget in (self.state_chip, card_state, self.price, self.change):
+        for widget in (self.state_chip, self.state_inline, card_state, self.price, self.change):
             widget.setToolTip(tip)
         streaming = facts["streaming"] or facts["polling"] or facts["busy"] or facts["auto"]
         self.pause_button.setIcon(icon("pause" if streaming else "play", self.palette.muted))
         tip = text(lang, "pause" if streaming else "resume")
         self.pause_button.setToolTip(tip)
         self.pause_button.setAccessibleName(tip)
+        if changed:
+            self._fit_toolbar()   # the chip's words changed width
 
     def _render_qscore(self):
         chip = self.side.card.qscore
@@ -1375,7 +1817,7 @@ class StockDetailView(QWidget):
         chip.setVisible(shown is not None)
         if shown is not None:
             chip.setText(shown[0])
-            chip.setToolTip(shown[1])
+            chip.setToolTip(polite(shown[1], _lang(self.ctx)))
 
     def _clear_sections(self):
         for section in self.side.sections.values():
@@ -1402,8 +1844,11 @@ class StockDetailView(QWidget):
         self.section_panels = []
         for key, (sources, title) in groups.items():
             panel = self.side.sections[key]
-            rows = [row for source in sources if source in by_key for row in by_key[source].rows]
-            notes = " · ".join(dict.fromkeys(by_key[s].note for s in sources if s in by_key and by_key[s].note))
+            rows = [display_row(row, lang) for source in sources if source in by_key for row in by_key[source].rows]
+            if key == "key_figures":
+                rows = key_figures_first(rows)
+            notes = " · ".join(dict.fromkeys(polite(by_key[s].note, lang) for s in sources
+                                             if s in by_key and by_key[s].note))
             panel.set_title(text(lang, title))
             panel.set_rows(rows, note=notes, ctx=self.ctx, dark=self.dark)
             panel.setVisible(bool(rows))
@@ -1412,9 +1857,11 @@ class StockDetailView(QWidget):
         technical = self.side.sections["technical"]
         technical.set_title(text(lang, "section_technical"))
         entries = self._technical_rows()
-        extra = [row for source in ("indicators", "signals") if source in by_key for row in by_key[source].rows]
-        notes = " · ".join(dict.fromkeys(by_key[s].note for s in ("signals",) if s in by_key and by_key[s].note))
-        technical.set_rows([*entries, *extra], note=notes, ctx=self.ctx, dark=self.dark)
+        # The profile's own indicator rows (SMA 20, EMA 12, …) repeat the studies above, so only its composite
+        # score follows them, with a plain note instead of the signals pane's internal one.
+        extra = [display_row(row, lang) for row in by_key["signals"].rows] if "signals" in by_key else []
+        technical.set_rows([*entries, *extra], note=text(lang, "signals_note") if extra else "", ctx=self.ctx,
+                           dark=self.dark)
         technical.setVisible(True)
         order = ["key_figures", "range", "risk", "technical", "supply"]
         self.section_panels = [self.side.sections[k] for k in order if self.side.sections[k].isVisibleTo(self.side)
@@ -1423,8 +1870,9 @@ class StockDetailView(QWidget):
         if unavailable is not None and unavailable.rows:
             items = " · ".join(row.label for row in unavailable.rows)
             self.side.unavailable.setText(text(lang, "unavailable", items=items))
-            self.side.unavailable.setToolTip("\n".join(f"{row.label}: {row.value}" + (f" — {row.hint}" if row.hint else "")
-                                                       for row in unavailable.rows))
+            self.side.unavailable.setToolTip("\n".join(
+                f"{row.label}: {row.value}" + (f" — {polite(row.hint, lang)}" if row.hint else "")
+                for row in unavailable.rows))
             self.side.unavailable.show()
         else:
             self.side.unavailable.hide()
@@ -1464,14 +1912,15 @@ class StockDetailView(QWidget):
                                              has_volume=has_volume)
                 if reason:
                     head.setText(f'<span style="color:{color}">●</span>&ensp;{_esc(spec.name(lang))}')
-                    reading_label.setText(availability_text(reason, lang))
+                    reading_label.setText(polite(availability_text(reason, lang), lang))
                 else:
                     readout = line_readout(key, bars, -1, language=lang, supply=self.chart.supply)
                     values = " · ".join(f"{_esc(n)} {_esc(self.study_value(key, line, len(bars) - 1, v))}"
                                         for line, (n, v) in zip(spec.lines, readout))
                     head.setText(f'<span style="color:{color}">●</span>&ensp;{_esc(spec.name(lang))}'
                                  f'&nbsp;&nbsp;<span style="font-weight:400">{values}</span>')
-                    reading_label.setText(study_reading(key, bars, -1, language=lang, supply=self.chart.supply))
+                    reading_label.setText(polite(study_reading(key, bars, -1, language=lang,
+                                                               supply=self.chart.supply), lang))
             head.setWordWrap(True)
             layout.addWidget(head)
             layout.addWidget(reading_label)
@@ -1606,7 +2055,7 @@ class StockDetailView(QWidget):
                 elif name == "pct":
                     fields["pct"] = f"{value:.1f}%"
                 elif name == "rsi":
-                    fields["rsi"] = f"{value:.0f}"
+                    fields["rsi"] = f"{value:.1f}"          # as the RSI panel prints it
                 elif name == "ratio":
                     fields["ratio"] = f"{value:.1f}"
                 else:
@@ -1650,6 +2099,11 @@ class StockDetailView(QWidget):
             button.setAccessibleName(text(lang, tip))
         periods.reset.setText(text(lang, "reset"))
         periods.reset.setToolTip(text(lang, "reset_tip"))
+        periods.fit()
+        self.more_button.setIcon(icon("more", p.muted))
+        self.more_button.setToolTip(text(lang, "more_tools"))
+        self.more_button.setAccessibleName(text(lang, "more_tools"))
+        self._fit_toolbar()
         self.chart.chart.setAccessibleName(text(lang, "chart_name"))
         self.side.stock_tab.setText(text(lang, "tab_stock"))
         self.side.indicators_tab.setText(text(lang, "tab_indicators"))
@@ -1657,8 +2111,6 @@ class StockDetailView(QWidget):
     def set_locale(self, ctx):
         self.ctx = ctx
         lang = _lang(ctx)
-        self._compact = None
-        self._fit_toolbar()
         self.chart.chart.months = text(lang, "months")
         if self.completer is not None:
             self.completer.set_locale(ctx)
@@ -1706,10 +2158,14 @@ class StockDetailView(QWidget):
         QTimer.singleShot(0, self.lock.engage)
 
     def hideEvent(self, event):
+        self.notes.hide()
+        if event.spontaneous():
+            # The window was minimised: the stock is still open, so focus mode and the page lock stay as they are.
+            super().hideEvent(event)
+            return
         if self.body.focus:
             self.set_focus_mode(False)
         self.lock.release()
-        self.notes.hide()
         super().hideEvent(event)
 
 

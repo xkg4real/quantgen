@@ -356,11 +356,18 @@ class MarketsPageTests(Base):
         self.view.open_instrument(member("005930").instrument)
         self.window.activateWindow(); self.app.processEvents()
         self.assertTrue(self.view.show_category("search")); self.app.processEvents()
-        self.assertTrue(self.view.search.hasFocus())
+        # UI-D8: the stock screen locks the page, so its own toolbar search (on screen) takes the focus and the
+        # stock stays open; the list's search bar sits above the locked page.
+        self.assertTrue(self.view.stock.search.hasFocus())
+        self.assertTrue(self.view.stock.search.isVisible())
         self.assertTrue(self.view.showing_stock())  # the search keeps the page that is shown
         self.view.stock.back_button.click(); self.app.processEvents()
         self.assertFalse(self.view.showing_stock())
-        self.assertEqual(self.view.stock.back_button.text(), "← 실시간 차트")
+        # UI-D8 toolbar compaction (spec 2.3): in this 1000x700 window the back button keeps only its arrow; its
+        # name stays in the tooltip and the accessible name.
+        back = self.view.stock.back_button
+        self.assertIn(back.text(), ("←", "← 실시간 차트"))
+        self.assertEqual((back.toolTip(), back.accessibleName()), ("실시간 차트로 돌아가기", "실시간 차트로 돌아가기"))
         with self.assertRaises(ValueError):
             self.view.show_category("popular")
         self.board.rows[0].setFocus()

@@ -42,6 +42,7 @@ class MarketChartSvg(QSvgWidget):
     """
     cursor_changed = pyqtSignal(int)
     layout_changed = pyqtSignal(object)   # detail_svg.ChartLayout after each detail redraw (None when empty)
+    wheel_ignored = pyqtSignal()          # detail: a wheel turn that changed nothing (the screen names the keys)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -156,6 +157,7 @@ class MarketChartSvg(QSvgWidget):
         nothing at all (accepted, so the page does not scroll either); elsewhere the page scrolls."""
         if self.detail:
             event.accept()
+            self.wheel_ignored.emit()
             return
         event.ignore()
 
@@ -388,6 +390,25 @@ class MarketChartPane(QWidget):
             layout.addWidget(field)
         self.empty_state = self._label()
         layout.addWidget(self.empty_state)
+        # Stock screen only (spec 10): a failed first load shows a retry button and what was tried under the text.
+        self.empty_actions = QWidget()
+        actions = QVBoxLayout(self.empty_actions)
+        actions.setContentsMargins(24, 4, 24, 0)
+        actions.setSpacing(10)
+        actions.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
+        self.empty_retry = QPushButton()
+        self.empty_retry.setProperty("sd", "text")
+        self.empty_retry.setProperty("qg_literal", True)
+        self.empty_retry.clicked.connect(lambda: self.refresh(manual=True))
+        actions.addWidget(self.empty_retry, 0, Qt.AlignmentFlag.AlignHCenter)
+        self.empty_tried = self._label()
+        self.empty_tried.setProperty("role", "muted")
+        self.empty_tried.setProperty("qg_literal", True)
+        self.empty_tried.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
+        self.empty_tried.setMaximumWidth(560)
+        actions.addWidget(self.empty_tried, 0, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.empty_actions)
+        self.empty_actions.hide()
         self.chart = MarketChartSvg()
         self.chart.zoom_handler = self.zoom
         self.chart.key_handler = self.chart_key
@@ -590,6 +611,7 @@ class MarketChartPane(QWidget):
             layout.setStretchFactor(self.chart, 1)
             self.empty_state.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self.empty_state.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+            self.empty_actions.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
             self.chart.set_detail(True)
             self._configure_intervals()
         self.render()
@@ -1120,6 +1142,8 @@ class MarketChartPane(QWidget):
     @pyqtSlot(bool)
     def _busy(self, busy):
         self.load_button.setEnabled(not busy)
+        if getattr(self, "empty_retry", None) is not None:
+            self.empty_retry.setEnabled(not busy)
         self.stream_button.setEnabled(not busy and self._stream is None)
         self.stop_button.setEnabled(busy or self._stream is not None or self.poll_timer.isActive())
         if not busy and self._restart_pending and not self.input_timer.isActive():
@@ -1311,9 +1335,40 @@ class MarketChartPane(QWidget):
             except (ValueError, TypeError):
                 pass
         self.status.setText(text)
+        self._render_empty()
         if self._emitted_mode != self._mode:
             self._emitted_mode = self._mode
             self.feed_state_changed.emit(self._mode)
+
+    def _render_empty(self):
+        """The centred text when there is no candle to draw, kept in step with the feed mode: refresh() and
+        _failed() change the mode without a full render, so this also runs from _render_status. On the stock
+        screen a failed load adds a retry button and what was tried (spec 10)."""
+        if getattr(self, "empty_actions", None) is None:
+            return
+        from core.market.models import LIVE_INTERVALS
+        has_candles = bool(self.snapshot and self.snapshot.candles)
+        live_only = self.interval.currentData() in LIVE_INTERVALS
+        waiting = self.snapshot is not None and live_only
+        hint = getattr(self, "empty_hint", None)
+        failed = self.detail and not has_candles and self._mode in ("error", "stale") and not waiting
+        if not has_candles and self.detail and hint is not None:
+            self.empty_state.setText(hint(self._mode, waiting))
+        elif not has_candles:
+            self.empty_state.setText(self._text(
+                "연결 이후의 첫 체결을 기다리고 있어요. 체결이 도착하면 틱·초봉이 차례로 그려집니다. 장이 닫혀 있거나 거래가 없으면 기다릴 수 있어요." if waiting else
+                "종목과 봉 주기를 고른 뒤 ‘조회 / 새로고침’을 누르세요. 지원되는 종목은 체결 연결과 갱신까지 자동으로 시작합니다. 지표는 지금 선택해도 좋아요.",
+                "Waiting for the first received trade. Tick/second candles grow as trades arrive; a closed or quiet market may take time." if waiting else
+                "Choose an instrument and interval, then Load / refresh. Supported instruments connect and update automatically. You can select indicators now."))
+        if self.detail:
+            self.empty_state.setAlignment((Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignBottom) if failed
+                                          else Qt.AlignmentFlag.AlignCenter)
+        self.empty_retry.setText(self._text("다시 시도", "Try again"))
+        self.empty_retry.setEnabled(not self.jobs.busy)
+        from .stock_detail_style import polite
+        self.empty_tried.setText(polite(self._status_detail, self.ctx.language) if failed else "")
+        self.empty_tried.setVisible(failed and bool(self._status_detail))
+        self.empty_actions.setVisible(failed)
 
     def move_cursor(self, value):
         if self.snapshot is None or not self.snapshot.candles:
@@ -1378,10 +1433,16 @@ class MarketChartPane(QWidget):
         if self.snapshot and "Live gap" in self.snapshot.note:
             notices.append(self._text("체결 공백이 있어 일부 봉이 불완전합니다. 조회 / 새로고침으로 다시 연결하세요.",
                                       "Some trades were missed; affected candles are incomplete. Load / refresh to reconnect."))
-        if self.snapshot and "Partial history:" in self.snapshot.note:
+        # Spec 4.3: "전체" asks for more months than almost any stock has, so its partial-history notice is
+        # suppressed; the data note keeps the count (the stock screen's ⓘ).
+        if self.snapshot and "Partial history:" in self.snapshot.note and not (self.detail and self.period == "ALL"):
             notices.append(self._text(f"요청한 {self.snapshot.request.limit}개 중 {len(self.snapshot.candles)}개 봉을 받았어요.",
                                       f"Received {len(self.snapshot.candles)} of {self.snapshot.request.limit} requested bars."))
-        self.feed_notice.setText(("  ·  " if self.detail else "\n").join(notices))
+        notice = ("  ·  " if self.detail else "\n").join(notices)
+        if self.detail and self.ctx.language == "ko":
+            from .stock_detail_style import polite
+            notice = polite(notice)   # the stock screen speaks 해요체 (owner wording rule, UI-D8 spec 6)
+        self.feed_notice.setText(notice)
         self.feed_notice.setVisible(bool(notices))
         self.poll_button.setEnabled(not live_only)
         self.bar_count.setToolTip(self._text("틱·초봉은 수신한 봉의 보관 개수입니다.", "For tick/second charts, this limits retained received bars."))
@@ -1389,16 +1450,7 @@ class MarketChartPane(QWidget):
         self.empty_state.setVisible(not has_candles)
         self.chart.setVisible(has_candles)
         self._show(self.cursor_slider, has_candles)
-        hint = getattr(self, "empty_hint", None)
-        if not has_candles and self.detail and hint is not None:
-            self.empty_state.setText(hint(self._mode, self.snapshot is not None and live_only))
-        elif not has_candles:
-            waiting = self.snapshot is not None and live_only
-            self.empty_state.setText(self._text(
-                "연결 이후의 첫 체결을 기다리고 있어요. 체결이 도착하면 틱·초봉이 차례로 그려집니다. 장이 닫혀 있거나 거래가 없으면 기다릴 수 있어요." if waiting else
-                "종목과 봉 주기를 고른 뒤 ‘조회 / 새로고침’을 누르세요. 지원되는 종목은 체결 연결과 갱신까지 자동으로 시작합니다. 지표는 지금 선택해도 좋아요.",
-                "Waiting for the first received trade. Tick/second candles grow as trades arrive; a closed or quiet market may take time." if waiting else
-                "Choose an instrument and interval, then Load / refresh. Supported instruments connect and update automatically. You can select indicators now."))
+        self._render_empty()
         if self.snapshot is None:
             return
         snapshot = self.snapshot

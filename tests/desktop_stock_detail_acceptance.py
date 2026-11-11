@@ -10,6 +10,9 @@ Covered: layout regions (large chart left, one right column), the page lock, the
 panning through `end`, the period chips, the folding indicator picker with availability reasons, beginner readings
 that follow the selected candle in Korean and English, the right column scrolling by itself, focus mode, honest
 market state, no fetch with automatic refresh off, and language/theme switches without a refetch (dark included).
+Review fixes: an interval choice then another stock, '더 보기' through refreshes, unchecked saved settings, chart
+focus on open, the loading and failed-load panels, the 전체 notice, Back's page position, the rail's search and the
+side watchlist stopping when hidden.
 Offline: every provider is a fake; HTTP and Yahoo attempts fail the test.
 """
 from __future__ import annotations
@@ -320,6 +323,7 @@ class StockDetailTests(unittest.TestCase):
     def test_indicator_picker_folds_toggles_and_explains_availability(self):
         from core.education.indicators import STUDIES, CATEGORIES
         from core.education.study_guide import availability_text, guide
+        from quantgen_desktop.stock_detail_style import polite
         self.open(profile=False)
         view, picker = self.view, self.view.picker
         view.show_indicators(); self.settle()
@@ -344,7 +348,9 @@ class StockDetailTests(unittest.TestCase):
         # Availability: VWAP on a daily chart, supply/demand before the profile's KIS rows arrive.
         self.assertEqual(rows["vwap"].reason, "intraday_only")
         self.assertFalse(rows["vwap"].switch.isEnabled())
-        self.assertEqual(rows["vwap"].desc.toolTip(), availability_text("intraday_only", "ko"))
+        # The view shows the engine's formal reasons in 해요체 (owner wording rule, spec 6).
+        self.assertEqual(rows["vwap"].desc.toolTip(), polite(availability_text("intraday_only", "ko")))
+        self.assertTrue(rows["vwap"].desc.toolTip().endswith("표시해요."))
         self.assertEqual(rows["investor_flow"].reason, "no_supply_data")
         view.load_profile()
         self.wait(lambda: view.profile is not None and not view.jobs.busy)
@@ -354,7 +360,8 @@ class StockDetailTests(unittest.TestCase):
         rows["rsi"].info.click(); self.settle(2)
         self.assertTrue(rows["rsi"].guide.isVisible())
         texts = [body.text() for _, body in rows["rsi"].guide_parts]
-        self.assertEqual(texts[:3], [guide("rsi", "ko").what, guide("rsi", "ko").how, guide("rsi", "ko").caution])
+        self.assertEqual(texts[:3], [polite(guide("rsi", "ko").what), polite(guide("rsi", "ko").how),
+                                     polite(guide("rsi", "ko").caution)])
         self.assertTrue(texts[3])
         # A panel's x turns it off; its info button opens that guide.
         view.overlays.heads["stoch"].off.click(); self.settle(2)
@@ -372,20 +379,27 @@ class StockDetailTests(unittest.TestCase):
 
     def test_readings_follow_the_selected_candle_in_both_languages(self):
         from core.education.study_guide import study_reading
+        from quantgen_desktop.stock_detail_style import polite
         self.open()
         p, view = self.pane, self.view
         bars = view.engine_bars()
         head = view.overlays.heads["rsi"]
         self.assertTrue(head.isVisible())
         n = len(bars)
-        self.assertEqual(head.full, study_reading("rsi", bars, n - 1, language="ko", supply=p.supply))
+        # The engine writes 합니다체; the view shows its readings in 해요체 (owner wording rule, spec 6). English as is.
+        self.assertEqual(head.full, polite(study_reading("rsi", bars, n - 1, language="ko", supply=p.supply)))
+        self.assertNotIn("니다", head.full)
         p.move_cursor(n - 40); self.settle(2)
-        self.assertEqual(head.full, study_reading("rsi", bars, n - 40, language="ko", supply=p.supply))
+        self.assertEqual(head.full, polite(study_reading("rsi", bars, n - 40, language="ko", supply=p.supply)))
         self.assertIn(p.snapshot.candles[n - 40].timestamp[:10], view.overlays.ohlc.date.text())
         self.assertIn("시가", view.overlays.ohlc.keys["o"].text())
         self.assertIn("처음 거래된 가격", view.overlays.ohlc.keys["o"].toolTip())
+        from quantgen_desktop.stock_detail import korean_amount
+        volume = p.snapshot.candles[n - 40].volume
+        self.assertEqual(view.overlays.ohlc.values["v"].text(), korean_amount(volume))     # 만, as the legend
         calls = len(self.service.calls)
         self.window.set_language("en"); self.settle()
+        self.assertRegex(view.overlays.ohlc.values["v"].text(), r"^[\d.,]+[KMB]?$")
         self.assertEqual(head.full, study_reading("rsi", bars, n - 40, language="en", supply=p.supply))
         overlay_texts = [view.overlays.ohlc, view.overlays.legend, head]
         hangul = [t for w in overlay_texts for t in self.visible_texts(w) if HANGUL.search(t)]
@@ -495,6 +509,12 @@ class StockDetailTests(unittest.TestCase):
         from core.theme import DARK
         self.open()
         self.view.watch_button.click(); self.view.watch_button.click()
+        # The column's cards load once with automatic loading on, so a refetch on the switch would be counted.
+        watchlist = self.view.side.watchlist
+        watchlist.auto_load = True
+        self.assertTrue(watchlist.refresh(manual=True))
+        self.wait(lambda: not watchlist.jobs.busy); self.settle()
+        self.assertGreater(len(self.card_calls), 0)
         counts = (len(self.service.calls), len(self.profiles), len(self.card_calls))
         svg_before = self.pane.chart.layout_info
         self.window.set_language("en"); self.settle()
@@ -514,6 +534,174 @@ class StockDetailTests(unittest.TestCase):
         self.window.set_language("ko"); self.window.theme.setCurrentIndex(0); self.settle()
         self.assertEqual(self.view.side.sections["key_figures"].title.text(), "주요 지표")
         self.assertEqual((len(self.service.calls), len(self.profiles), len(self.card_calls)), counts)
+
+    # Review fixes (2026-11-11): crash paths, focus, empty states, notices, page position, search ----------------
+    def slot_errors(self):
+        """Exceptions raised inside Qt slots (PyQt6 aborts the app on them): collected instead, for the test."""
+        errors = []
+        hook = patch("sys.excepthook", side_effect=lambda kind, value, tb: errors.append(f"{kind.__name__}: {value}"))
+        hook.start(); self.addCleanup(hook.stop)
+        return errors
+
+    def test_an_interval_choice_then_another_stock_opens_with_the_last_period_chip(self):
+        errors = self.slot_errors()
+        self.open(profile=False)
+        combo = self.view.interval_combo
+        index = combo.findData("1w")
+        combo.setCurrentIndex(index); self.view._interval_chosen(index); self.settle()
+        self.assertIsNone(self.pane.period)                 # the chart left its period: no chip is lit
+        self.assertEqual(self.view.period, "6M")            # the last chip is kept for the next stock
+        self.window.markets_view.open_instrument(HYNIX); self.settle()
+        self.assertEqual((self.view.instrument, self.pane.period), (HYNIX, "6M"))
+        self.view.side.watchlist.render()
+        row = self.view.side.watchlist.watch.rows[("domestic_stock", "005930", "")]
+        QTest.mouseClick(row, Qt.MouseButton.LeftButton); self.settle()
+        self.assertEqual(self.view.instrument, SAMSUNG)
+        self.assertEqual(errors, [])
+
+    def test_more_in_a_section_keeps_its_reading_blocks_through_every_refresh(self):
+        from PyQt6 import sip
+        errors = self.slot_errors()
+        self.open()
+        self.view.set_studies(("sma", "volume_ma", "rsi", "macd", "stoch", "adx")); self.settle()
+        tech = self.view.side.sections["technical"]
+        tech.set_open(True); self.settle(2)
+        self.assertTrue(tech.more.isVisible())
+        blocks = [entry for entry in tech._entries if not hasattr(entry, "label")]
+        tech.more.click(); self.settle()
+        self.assertFalse(any(sip.isdeleted(block) for block in blocks))
+        self.assertTrue(all(block.isVisibleTo(tech) for block in blocks))
+        self.view._refresh_side(force=True); self.settle()      # a new snapshot or tick
+        self.view.side.set_page(1); self.settle(); self.view.side.set_page(0); self.settle()
+        self.view.picker.rows()["cci"].switch.click(); self.settle()
+        self.window.set_language("en"); self.settle(); self.window.set_language("ko"); self.settle()
+        tech = self.view.side.sections["technical"]
+        if tech.more.isVisible():
+            tech.more.click(); self.settle()                   # 접기
+        self.window.markets_view.open_instrument(HYNIX); self.settle()
+        self.view.set_studies(()); self.settle()
+        self.view.set_studies(("rsi",)); self.settle()
+        self.assertEqual(errors, [])
+
+    def test_saved_settings_from_another_build_are_checked(self):
+        from quantgen_desktop.stock_detail import StockDetailView
+        errors = self.slot_errors()
+        view = self.view
+        for raw, expected in (('["sma", "renamed_study"]', ("sma",)), ("5", ("sma", "volume_ma", "rsi")),
+                              ("not json", ("sma", "volume_ma", "rsi")), ('["gone"]', ("sma", "volume_ma", "rsi"))):
+            self.settings.setValue("markets/detail/indicators", raw)
+            self.assertEqual(view._stored_studies(), expected, raw)
+        for raw in ("bogus", "5", None):
+            self.settings.setValue("markets/detail/period", raw)
+            self.assertEqual(view._stored_period(), "6M", raw)
+        self.settings.setValue("markets/detail/sections", "[1, 2]")
+        self.assertTrue(view._section_open("risk", True))
+        # A window built over the worst of them still opens stocks.
+        self.settings.setValue("markets/detail/indicators", "5")
+        self.settings.setValue("markets/detail/period", "bogus")
+        other = StockDetailView(self.pane, store=self.store, auto_load=False)
+        self.assertEqual((other.studies, other.period), (("sma", "volume_ma", "rsi"), "6M"))
+        other.deleteLater(); self.settle()
+        self.settings.setValue("markets/detail/indicators", '["sma", "renamed_study"]')
+        self.view.studies = self.view._stored_studies()
+        self.open()
+        self.assertEqual(self.pane.period, "6M")
+        self.assertEqual(errors, [])
+
+    def test_opening_a_stock_gives_the_chart_the_keys(self):
+        markets = self.window.markets_view
+        markets.search.setFocus(); self.settle()
+        self.view.auto_load = True
+        markets.open_instrument(SAMSUNG); self.settle()
+        self.assertIn(APP.focusWidget(), (self.view.chart_column, self.pane.chart))   # even while loading
+        self.wait(lambda: self.pane.snapshot is not None and not self.pane.jobs.busy and not self.view.jobs.busy)
+        self.settle()
+        self.assertIs(APP.focusWidget(), self.pane.chart)
+        before = self.pane._cursor
+        QTest.keyClick(APP.focusWidget(), Qt.Key.Key_Left); self.settle(2)
+        QTest.keyClick(APP.focusWidget(), Qt.Key.Key_Plus); self.settle(2)
+        self.assertEqual(self.pane._cursor, before - 1)
+        self.assertEqual(markets.search.text(), "")             # nothing was typed into the hidden search box
+        self.view.search.setFocus(); self.settle()
+        self.view.side.watchlist.render()
+        row = self.view.side.watchlist.watch.rows[("domestic_stock", "000660", "")]
+        row.setFocus(); QTest.keyClick(row, Qt.Key.Key_Return); self.settle()
+        self.assertEqual(self.view.instrument, HYNIX)
+        self.assertIn(APP.focusWidget(), (self.view.chart_column, self.pane.chart))
+        self.wait(lambda: not self.pane.jobs.busy and not self.view.jobs.busy
+                  and not self.view.side.watchlist.jobs.busy)
+
+    def test_loading_and_a_failed_load_show_their_own_chart_panel(self):
+        import threading
+        self.window.markets_view.open_instrument(SAMSUNG); self.settle()
+        self.assertIn("↺", self.pane.empty_state.text())
+        gate, load = threading.Event(), self.service.load
+        self.service.load = lambda request: (gate.wait(5), load(request))[1]
+        self.pane.refresh(manual=True); self.settle()
+        self.assertEqual(self.pane.empty_state.text(), "차트를 불러오는 중…")
+        self.assertEqual(self.view.state_chip.text(), "불러오는 중…")
+        gate.set(); self.wait(lambda: not self.pane.jobs.busy); self.pane.stop(); self.settle()
+
+        def offline(request):
+            raise RuntimeError("offline")
+        self.service.load = offline
+        self.window.markets_view.open_instrument(KAKAO); self.settle()
+        self.pane.refresh(manual=True); self.wait(lambda: not self.pane.jobs.busy); self.settle()
+        self.assertEqual(self.pane.empty_state.text(), "시세를 불러오지 못했어요.")
+        self.assertTrue(self.pane.empty_retry.isVisible())
+        self.assertEqual(self.pane.empty_retry.text(), "다시 시도")
+        self.assertIn("KIS", self.pane.empty_tried.text())         # what was tried
+        self.assertNotIn("불러오지 않았어요", self.pane.empty_state.text())
+        self.service.load = load
+        self.pane.empty_retry.click(); self.wait(lambda: not self.pane.jobs.busy); self.settle()
+        self.assertIsNotNone(self.pane.snapshot)
+        self.assertFalse(self.pane.empty_actions.isVisible())
+
+    def test_the_all_period_hides_the_partial_history_notice(self):
+        from dataclasses import replace
+        load = self.service.load
+        self.service.load = lambda request: replace(load(request), note="Partial history: 120 of 400")
+        self.open(profile=False)
+        self.assertIn("요청한", self.pane.feed_notice.text())         # other periods keep it
+        self.view.periods.buttons["ALL"].click(); self.wait(lambda: not self.pane.jobs.busy); self.settle()
+        self.assertEqual(self.pane.period, "ALL")
+        self.assertNotIn("요청한", self.pane.feed_notice.text())
+
+    def test_back_returns_the_list_to_where_it_was(self):
+        from PyQt6.QtWidgets import QWidget
+        page = self.window.stack.currentWidget()
+        filler = QWidget(); filler.setFixedHeight(3000)            # a long ranking list
+        self.window.markets_view.layout().addWidget(filler); self.settle()
+        bar = page.verticalScrollBar()
+        bar.setValue(600); self.settle()
+        self.assertEqual(bar.value(), 600)
+        self.open(load=False, profile=False)
+        self.assertEqual(bar.value(), self.view.lock.target)
+        self.view.back_button.click(); self.settle()
+        self.assertEqual(bar.value(), 600)
+
+    def test_the_rail_search_reaches_a_visible_search_while_a_stock_is_open(self):
+        self.open(load=False, profile=False)
+        markets = self.window.markets_view
+        scroll = self.window.stack.currentWidget()
+        for size in ((1440, 900), (1000, 700)):
+            self.window.resize(*size); self.settle()
+            self.view.chart_column.setFocus(); self.settle()
+            self.assertTrue(markets.show_category("search")); self.settle()
+            focused = APP.focusWidget()
+            self.assertTrue(markets.showing_stock())
+            self.assertIs(focused, self.view.search, size)
+            rect = focused.rect().translated(focused.mapTo(scroll.viewport(), QPoint()))
+            self.assertTrue(scroll.viewport().rect().contains(rect), (size, rect))
+
+    def test_the_side_watchlist_stops_loading_when_hidden(self):
+        watch = self.view.side.watchlist
+        self.open(load=False, profile=False)
+        import threading
+        watch._cancel = threading.Event()
+        cancel = watch._cancel
+        self.view.back_button.click(); self.settle()
+        self.assertTrue(cancel.is_set())
 
 
 if __name__ == "__main__":

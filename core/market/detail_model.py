@@ -266,12 +266,15 @@ def now_summary(bars, *, volume=None):
     """(trend, strength, movement, trading) SummaryRows for core.education.indicators.Bars at the last bar.
 
     trend: close against SMA20 and SMA60 (above_both, below_both, mixed_up, mixed_down, short; 'wait' when
-    there are fewer than 20 bars). strength: RSI14 zone (high >= 70, upper 50-70, lower 30-50, low <= 30,
-    wait). movement: ATR14 as % of the close and its place among the last 120 values (small < 20th percentile,
+    there are fewer than 20 bars). strength: RSI14 by the same rule as the RSI panel's reading
+    (core.education.study_guide): 'high' at 70 or more and 'low' at 30 or less as displayed; in between
+    'even' when rises and falls were about the same size, else 'upper' / 'lower' (rises / falls larger) with
+    '_more' or '_much' as the engine's ratio grows (its 'slightly', 'plainly' and 'much'); 'wait' without RSI. movement: ATR14 as % of the close and its place among the last 120 values (small < 20th percentile,
     large > 80th, usual; wait). trading: `volume` (VolumeRatio) ratio (low < 0.7, usual, high > 1.3; short when
     the average needs more sessions; none without volume).
     """
     from core.education.indicators import compute_study
+    from core.education.study_guide import _degree, _ratio, _shown
     n = len(bars)
     close = bars.close[-1] if n else math.nan
     rows = []
@@ -290,8 +293,21 @@ def now_summary(bars, *, volume=None):
     if not math.isfinite(rsi):
         rows.append(SummaryRow("strength", "wait", {"needed": 15, "have": n}, "rsi"))
     else:
-        code = "high" if rsi >= 70 else "low" if rsi <= 30 else "upper" if rsi >= 50 else "lower"
-        rows.append(SummaryRow("strength", code, {"rsi": rsi}, "rsi"))
+        # One rule with the RSI panel's reading, so the card and the panel never say 'slightly' and 'much' of
+        # the same number: the band follows the displayed value, the words the ratio of rises to falls.
+        shown = _shown(rsi)
+        ratio, ratio_text = _ratio(rsi)
+        degree = 3 if not ratio_text else _degree(ratio)
+        if shown >= 70:
+            code = "high"
+        elif shown <= 30:
+            code = "low"
+        elif degree == 0:
+            code = "even"
+        else:
+            code = ("upper" if rsi >= 50 else "lower") + ("", "", "_more", "_much")[degree]
+        rows.append(SummaryRow("strength", code, {"rsi": shown, "ratio": ratio if ratio_text else math.inf},
+                               "rsi"))
     atr = compute_study("atr", bars)["ATR"] if n else ()
     last = atr[-1] if n else math.nan
     if not (n and math.isfinite(last) and close):
@@ -316,6 +332,85 @@ def now_summary(bars, *, volume=None):
     return tuple(rows)
 
 
+# One-word state of a study for the picker's value column (spec 5.1: "71,800 · 선 위", "64.2 · 보통") ---------
+# key: (line, high level, low level); at or above high is 'high', at or below low is 'low', else 'middle'.
+_LEVELS = {"rsi": ("RSI14", 70, 30), "stoch": ("STOCH_K", 80, 20), "stochrsi": ("STOCHRSI_K", 80, 20),
+           "mfi": ("MFI", 80, 20), "cci": ("CCI", 100, -100), "williams": ("WILLR", -20, -80),
+           "disparity": ("DISPARITY", 105, 95), "psychology": ("PSY", 75, 25)}
+_BANDS = {"bb": ("BB_UPPER", "BB_LOWER"), "envelope": ("ENV_UPPER", "ENV_LOWER"),
+          "keltner": ("KC_UPPER", "KC_LOWER"), "donchian": ("DC_UPPER", "DC_LOWER")}
+STATE_CODES = ("high", "middle", "low", "above", "below", "fast_above", "fast_below", "signal_above",
+               "signal_below", "cloud_above", "cloud_in", "cloud_below", "dots_below", "dots_above", "band_above",
+               "band_in", "band_below", "trend_clear", "trend_weak", "volume_more", "volume_usual", "volume_less")
+
+
+def _value(values, line, index):
+    try:
+        value = float(values[line][index])
+    except (KeyError, IndexError, TypeError, ValueError):
+        return None
+    return value if math.isfinite(value) else None
+
+
+def study_state(key, values, bars, index=-1):
+    """A one-word state code (STATE_CODES) of `key` at bar `index`, or '' when the study has none (ATR, OBV,
+    band width, flows, …) or a value is missing. `values` is core.education.indicators.compute_study output."""
+    try:
+        close = float(bars.close[index])
+    except (AttributeError, IndexError, TypeError, ValueError):
+        return ""
+    if not math.isfinite(close):
+        return ""
+    if key in _LEVELS:
+        line, high, low = _LEVELS[key]
+        value = _value(values, line, index)
+        if value is None:
+            return ""
+        value = float(f"{value:.1f}")   # as displayed, like the panel's reading
+        return "high" if value >= high else "low" if value <= low else "middle"
+    if key in ("sma", "vwap"):
+        value = _value(values, "SMA20" if key == "sma" else "VWAP", index)
+        return "" if value is None or value == close else "above" if close > value else "below"
+    if key == "ema":
+        fast, slow = _value(values, "EMA12", index), _value(values, "EMA26", index)
+        return "" if None in (fast, slow) or fast == slow else "fast_above" if fast > slow else "fast_below"
+    if key == "macd":
+        histogram = _value(values, "HISTOGRAM", index)
+        return "" if not histogram else "signal_above" if histogram > 0 else "signal_below"
+    if key == "ichimoku":
+        a, b = _value(values, "SPAN_A", index), _value(values, "SPAN_B", index)
+        if None in (a, b):
+            return ""
+        return "cloud_above" if close > max(a, b) else "cloud_below" if close < min(a, b) else "cloud_in"
+    if key == "psar":
+        sar = _value(values, "SAR", index)
+        return "" if sar is None else "dots_below" if sar < close else "dots_above"
+    if key == "adx":
+        adx = _value(values, "ADX", index)
+        return "" if adx is None else "trend_clear" if adx >= 20 else "trend_weak"
+    if key == "percent_b":
+        position = _value(values, "PERCENT_B", index)
+        if position is None:
+            return ""
+        return "band_above" if position > 1 else "band_below" if position < 0 else "band_in"
+    if key in _BANDS:
+        upper, lower = (_value(values, line, index) for line in _BANDS[key])
+        if None in (upper, lower):
+            return ""
+        return "band_above" if close > upper else "band_below" if close < lower else "band_in"
+    if key == "volume_ma":
+        average = _value(values, "VOLUME_MA", index)
+        try:
+            volume = float(bars.volume[index])
+        except (IndexError, TypeError, ValueError):
+            return ""
+        if not average or not math.isfinite(volume):
+            return ""
+        ratio = volume / average
+        return "volume_more" if ratio >= 1.3 else "volume_less" if ratio <= 0.7 else "volume_usual"
+    return ""
+
+
 __all__ = ["PERIODS", "PERIOD_KEYS", "DEFAULT_PERIOD", "period_request", "visible_for", "window",
            "routable_intervals", "period_reason", "QuoteState", "quote_state", "venue_of", "VolumeRatio",
-           "volume_vs_average", "SummaryRow", "now_summary"]
+           "volume_vs_average", "SummaryRow", "now_summary", "study_state", "STATE_CODES"]

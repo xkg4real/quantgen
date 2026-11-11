@@ -131,9 +131,27 @@ class SearchZoomTests(unittest.TestCase):
         cls.app = QApplication.instance() or QApplication([])
 
     def setUp(self):
-        deny = patch('requests.sessions.Session.request', side_effect=AssertionError('Network forbidden'))
-        deny.start(); self.addCleanup(deny.stop)
-        self.window = ResearchWindow(auto_refresh=False, locale='ko_KR', market_loader=Mock(), connections_runner=Mock())
+        # Yahoo goes through curl_cffi, not requests: its seam is denied as well. The stock screen's refresh button
+        # also loads the details and the right column's watchlist, so both get offline fakes.
+        for target in ('requests.sessions.Session.request', 'core.market.routing._yahoo_frame'):
+            deny = patch(target, side_effect=AssertionError('Network forbidden'))
+            deny.start(); self.addCleanup(deny.stop)
+        self.card_calls, self.profiles = [], []
+        test = self
+
+        class CardRouter:
+            last_attempts = ()
+
+            def load(self, request):
+                test.card_calls.append(request)
+                return fixture(request)
+
+        def profile_loader(instrument):
+            self.profiles.append(instrument)
+            raise LookupError('offline fixture')
+
+        self.window = ResearchWindow(auto_refresh=False, locale='ko_KR', market_loader=Mock(), connections_runner=Mock(),
+                                     card_router_factory=CardRouter, profile_loader=profile_loader)
         self.window.resize(1360, 940); self.window.show(); self.window.navigate('markets')
         self.addCleanup(self.window.deleteLater); self.addCleanup(self.window.hide)
         self.service = FakeService(); self.streams = []
@@ -173,6 +191,10 @@ class SearchZoomTests(unittest.TestCase):
         self.assertEqual(self.service.calls[0].instrument.symbol, 'NAS:AAPL')
         self.assertEqual((self.service.calls[0].interval, self.service.calls[0].limit), ('1d', 400))
         self.assertTrue(self.streams and self.streams[0].started)
+        # The details and the right column's prices came from the injected fakes, never a provider.
+        self.wait(lambda: not stock.jobs.busy and not stock.side.watchlist.jobs.busy)
+        self.assertEqual(self.profiles, [Instrument('overseas_stock', 'AAPL', 'NAS')])
+        self.assertIn(Instrument('overseas_stock', 'AAPL', 'NAS'), [r.instrument for r in self.card_calls])
         # Owner, 2026-11-04: no provider or time line; the US delay notice stays (12-claims) in the state chip
         # (or its tooltip when the market is closed), and the source and times remain in the price tooltip.
         self.assertFalse(p.provenance.isVisible()); self.assertFalse(p.times.isVisible())

@@ -835,6 +835,13 @@ class MarketsWorkspace(QWidget):
         to the list; the search keeps whatever page is shown.
         """
         if key == "search":
+            if self.showing_stock():
+                # The stock screen locks the page, so the list's search bar above it cannot be reached: its
+                # toolbar search takes the focus instead (a stock chosen there opens in place). Without one the
+                # list comes back with its search bar.
+                if self.stock.focus_search():
+                    return True
+                self.show_rankings()
             self._scroll_to_top()
             self.search.setFocus(Qt.FocusReason.OtherFocusReason)
             self.search.selectAll()

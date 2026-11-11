@@ -168,7 +168,7 @@ class VolumeAndSummaryTests(unittest.TestCase):
         rows = now_summary(bars, volume=volume_vs_average(data))
         self.assertEqual([row.topic for row in rows], ["trend", "strength", "movement", "trading"])
         self.assertIn(rows[0].code, ("above_both", "below_both", "mixed_up", "mixed_down"))
-        self.assertIn(rows[1].code, ("high", "upper", "lower", "low"))
+        self.assertIn(rows[1].code, STRENGTH_CODES[:-1])
         self.assertIn(rows[2].code, ("small", "usual", "large"))
         self.assertIn(rows[3].code, ("low", "usual", "high"))
         self.assertEqual([row.study for row in rows], ["sma", "rsi", "atr", "volume_ma"])
@@ -179,13 +179,55 @@ class VolumeAndSummaryTests(unittest.TestCase):
     def test_summary_text_covers_every_code_in_both_languages(self):
         from quantgen_desktop.owner_ui_language.stock import TEXT
         codes = {"trend": ("above_both", "below_both", "mixed_up", "mixed_down", "short", "wait"),
-                 "strength": ("high", "upper", "lower", "low", "wait"),
+                 "strength": STRENGTH_CODES,
                  "movement": ("small", "usual", "large", "wait"),
                  "trading": ("low", "usual", "high", "short", "none")}
         for topic, names in codes.items():
             for code in names:
                 en, ko = TEXT[f"now_{topic}_{code}"]
                 self.assertEqual(set(re.findall(r"{(\w+)}", en)), set(re.findall(r"{(\w+)}", ko)), code)
+
+
+    def test_the_now_card_and_the_rsi_panel_say_the_same_of_one_number(self):
+        """Integrator 2026-11-11: at RSI 31.1 the panel said '훨씬' and the card '조금'. Both now follow the engine's
+        rule: the band by the displayed value, the words by the ratio of rises to falls."""
+        from core.education.indicators import bars_from_closes, compute_study
+        from core.education.study_guide import study_reading
+        from core.market.detail_model import now_summary
+        from quantgen_desktop.owner_ui_language.stock import TEXT
+        from quantgen_desktop.stock_detail_style import polite
+        seen = set()
+        for gain in (0.2, 0.4, 0.45, 0.5, 0.55, 0.6, 0.7, 0.8, 1.0, 1.3, 1.6, 2.0, 2.4, 3.0, 5.0):
+            closes, price = [], 100.0
+            for i in range(80):
+                price *= 1 + (0.01 * gain if i % 2 == 0 else -0.01)
+                closes.append(price)
+            n = len(closes)
+            bars = bars_from_closes(closes)
+            rsi = compute_study("rsi", bars)["RSI14"][-1]
+            row = now_summary(bars)[1]
+            seen.add(row.code)
+            reading = polite(study_reading("rsi", bars, n - 1, language="ko"))
+            card = TEXT[f"now_strength_{row.code}"][1]
+            self.assertIn(f"RSI {row.values['rsi']:.1f}", reading)
+            if row.code in ("high", "low"):
+                self.assertIn("훨씬", reading, rsi)
+                self.assertIn("훨씬", card)
+            elif row.code == "even":
+                self.assertIn("비슷했어요", reading, rsi)
+            else:
+                suffix = row.code.split("_")[1] if "_" in row.code else ""
+                size = {"much": "훨씬 컸어요", "more": " 더 컸어요", "": "조금 더 컸어요"}[suffix]
+                self.assertIn(size, reading, (rsi, row.code))
+                self.assertIn(size.strip(), card, row.code)
+                if suffix == "more":
+                    self.assertNotIn("조금 더", reading)
+                    self.assertNotIn("훨씬", reading)
+        self.assertGreaterEqual(len(seen), 5, seen)
+
+
+STRENGTH_CODES = ("high", "upper_much", "upper_more", "upper", "even", "lower", "lower_more", "lower_much", "low",
+                  "wait")
 
 
 class RendererTests(unittest.TestCase):
