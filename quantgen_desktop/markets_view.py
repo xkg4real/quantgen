@@ -41,8 +41,8 @@ RETRY_SECONDS = (60, 120, 300, 900)
 STALE_DAYS = 7
 CARD_BARS = 120
 # Owner, 2026-11-11: watchlist cards looked flat ("좌우를 줄이고 상하 살짝 늘려줘"): four columns on a
-# wide page and a taller sparkline.
-CARD_CHART_HEIGHT = 150
+# wide page and a taller sparkline; raised again the same day (210px).
+CARD_CHART_HEIGHT = 210  # owner 2026-11-11 (2nd): still "위아래로 납작해" at 150; about 3:2 on a 300px card
 
 
 def card_columns(width):
