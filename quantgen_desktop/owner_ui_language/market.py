@@ -188,4 +188,69 @@ PAIRS = {
         '시가총액(계산값) = KIS 응답의 상장주식수 × 현재가입니다.',
     "No usable market cap for {count} of these stocks; listed last without a rank (each row's tooltip says why).":
         '{count}개 종목은 쓸 수 있는 시가총액이 없어 순위 없이 맨 아래에 둡니다(이유는 각 값의 설명에 있습니다).',
+    # Market pages (owner ruling UI-D10, 2026-11-11: 국내 주식 / 미국 주식 / 코인 in the rail; the ranking categories as
+    # each market's criteria; quantgen_desktop/market_rankings.py, market_summary.py, core/market/screen.py).
+    # Whole sentences only here: short or generic templates ('Open {name}', '{count} results') would rewrite
+    # unrelated text anywhere in the window, so they are in PAGE_TEXT below, used by the market page alone.
+    "Coins are not ranked by units traded: one coin is worth very different amounts from another. See trading value.":
+        '코인은 종류마다 1개의 값이 크게 달라 거래 개수로는 순위를 매기지 않습니다. 거래대금을 보세요.',
+    'No source this app uses states coin market cap, so coins are not ranked by it.':
+        '이 앱이 쓰는 자료에는 코인 시가총액이 없어 시가총액 순위를 매기지 않습니다.',
+    'Find in {market}: name, code, sector': '{market}에서 찾기 · 이름, 코드, 업종',
+    'Find coins: name or symbol': '코인 찾기 · 이름이나 기호',
+    'Search within {market}': '{market} 안에서 찾기',
+    'Conditions: {count} set': '조건 {count}개 적용 중',
+    'Narrow this list by change, trading value or market cap.': '등락률, 거래대금, 시가총액으로 목록을 좁힙니다.',
+    'The lower bound is above the upper bound.': '최소가 최대보다 큽니다. 두 값을 맞추면 적용합니다.',
+    'Clear conditions': '조건 지우기',
+    'Remove this filter': '이 조건 지우기',
+    'Remove filter: {name}': '조건 지우기: {name}',
+    'Outside this list:': '목록 밖에서 찾은 종목',
+    'Nothing in this list matches ‘{text}’.': '이 목록에는 ‘{text}’에 맞는 종목이 없습니다.',
+    'Coins have no stock screen yet, so this row opens nothing.':
+        '코인은 아직 종목 화면이 없어 눌러도 열리지 않습니다.',
+    'Ranked among {count} major coins, not the whole market. Prices in US dollars.':
+        '주요 코인 {count}개 안에서 매긴 순위이며 전체 시장 순위가 아닙니다. 가격은 미국 달러입니다.',
+    "Delayed · daily: Yahoo Finance daily bars by UTC day, today's still moving; trading value is Yahoo's daily "
+    "dollar volume.":
+        '지연·일별: Yahoo Finance 일별 값(UTC 날짜 기준, 오늘 값은 아직 움직이는 중)이며 거래대금은 Yahoo가 주는 '
+        '하루 달러 거래대금입니다.',
+    '{source} daily bars by UTC day, last bar {day} (still moving today); prices and trading value in US dollars as '
+    'Yahoo states them.':
+        '{source} 일별 값 · UTC 날짜 기준 · 마지막 {day} (오늘 값은 아직 움직이는 중) · 가격과 거래대금은 Yahoo가 '
+        '주는 미국 달러 값',
+    # The index strip (market_summary.py).
+    '{source} daily close, last {day}; during the session the last value can still be moving.':
+        '{source} 일별 종가 · 마지막 {day} · 장중에는 마지막 값이 아직 움직이는 중일 수 있습니다.',
+    "US dollars; a coin's day is the UTC calendar day.": '미국 달러 · 코인의 하루는 UTC 날짜 기준입니다.',
+    'Could not load this index ({code}).': '이 지수를 불러오지 못했습니다 ({code}).',
+    'Index and coin figures are Yahoo Finance daily closes, read with a delay; not live.':
+        '지수와 코인 값은 Yahoo Finance 일별 종가를 늦게 받아 온 것이며 실시간이 아닙니다.',
 }
+
+# Short words and templates of the market pages (UI-D10), (English, Korean) by key. Not merged into the window's
+# catalogue: as global pairs they would also rewrite unrelated text ('Any', 'Open Interest').
+PAGE_TEXT = {
+    "conditions": ("Conditions", "조건"),
+    "loading": ("Loading…", "불러오는 중…"),
+    "coin": ("Coin", "코인"),
+    "min": ("min", "최소"),
+    "max": ("max", "최대"),
+    "any": ("Any", "제한 없음"),
+    "or_more": ("{value} or more", "{value} 이상"),
+    "between": ("{name} {low} to {high}", "{name} {low} ~ {high}"),
+    "at_least": ("{name} at least {value}", "{name} {value} 이상"),
+    "at_most": ("{name} at most {value}", "{name} {value} 이하"),
+    "results": ("{count} results", "{count}개 종목"),
+    "coin_results": ("{count} coins", "코인 {count}개"),
+    "clear_all": ("Clear all", "모두 지우기"),
+    "open": ("Open {name}", "{name} 열기"),
+    "no_coin": ("No coin in this list matches '{text}'.", "이 목록에는 '{text}'에 맞는 코인이 없습니다."),
+    "not_found": ("No stock matches '{text}'. Check the name or enter its code.",
+                  "'{text}'에 맞는 종목을 찾지 못했습니다. 이름을 고치거나 종목 코드를 입력하세요."),
+}
+
+# The market pages' index strip (market_summary.py): Yahoo symbol -> (English, Korean).
+INDEX_NAMES = {"^KS11": ("KOSPI", "코스피"), "^KQ11": ("KOSDAQ", "코스닥"), "^GSPC": ("S&P 500", "S&P 500"),
+               "^IXIC": ("Nasdaq Composite", "나스닥 종합"), "BTC-USD": ("Bitcoin", "비트코인"),
+               "ETH-USD": ("Ethereum", "이더리움")}

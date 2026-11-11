@@ -27,6 +27,13 @@ allowed sources already return:
 
 The lists are therefore "the N major stocks below, ranked", never a whole-market ranking; the screen says so.
 
+Coins (owner ruling UI-D10, 2026-11-11: 국내 주식 / 미국 주식 / 코인 as the Markets sub-menu): a fixed universe of
+major coins (`CRYPTO`, group 'crypto') read only through the Yahoo daily path the app already uses for stocks
+(keyless, ``BTC-USD`` and so on; no new host, no KIS endpoint). Prices are in US dollars. Yahoo states a coin's
+daily volume in US dollars, so it is the coin's trading value as stated (not estimated), and no coin count is
+derived from it: ranking coins by count would compare 1 BTC with 1 DOGE. No source the app uses states a coin's
+market cap, so coins have none. A coin has no `Instrument` (the stock screen cannot open it).
+
 Pure: no Qt, no network, nothing read on import. Universe as of 2026-11 (listing market per stock as curated
 here; a KIS quote that names its representative market, or a Yahoo answer under the other suffix, overrides it).
 """
@@ -39,7 +46,7 @@ import math
 from core.market.models import Instrument
 
 __all__ = ("CATEGORIES", "CATEGORY_KEYS", "MARKETS", "MARKET_KEYS", "SECTORS", "STATES", "POLL_SECONDS", "COLUMNS",
-           "Member",
+           "Member", "GROUPS", "CRYPTO", "crypto_symbol",
            "DOMESTIC", "US", "QuoteRecord", "Batch", "RankedRow", "group_of", "universe", "members_of", "member_for",
            "sectors_in", "rank", "ranking_value", "value_unit", "parse_kis_domestic", "parse_kis_overseas",
            "record_from_bars", "drop_stale", "compact", "price_text", "change_text", "source_state",
@@ -54,6 +61,7 @@ CATEGORY_KEYS = tuple(key for key, _en, _ko in CATEGORIES)
 MARKETS = (("kr", "All Korea", "국내 전체"), ("kospi", "KOSPI", "코스피"), ("kosdaq", "KOSDAQ", "코스닥"),
            ("us", "US", "미국"))
 MARKET_KEYS = tuple(key for key, _en, _ko in MARKETS)
+GROUPS = ("kr", "us", "crypto")   # one fetch per group; 'crypto' is also its own market key (`group_of`)
 SECTORS = (("semis", "Semiconductors", "반도체"), ("battery", "Batteries", "2차전지"), ("auto", "Autos", "자동차"),
            ("bio", "Bio & healthcare", "바이오·헬스케어"), ("finance", "Financials", "금융"),
            ("tech", "Tech & electronics", "IT·전자"), ("internet", "Internet & games", "인터넷·게임"),
@@ -89,7 +97,7 @@ KIS_CAP_TOLERANCE = 0.25   # KIS 'tomv' ('hts_avls') must lie within 25% of 'sha
                            # 'stck_prpr') of the same answer to be used
 KIS_DOMESTIC_CAP_UNIT = 1e8  # 'hts_avls' read as 100 million won; KIS states no unit, so every answer is checked
 
-_EXCHANGE_NAMES = {"NAS": ("NASDAQ", "나스닥"), "NYS": ("NYSE", "뉴욕"), "AMS": ("NYSE American", "아멕스")}
+_EXCHANGE_NAMES = {"NAS": ("NASDAQ", "나스닥"), "NYS": ("NYSE", "NYSE"), "AMS": ("NYSE American", "아멕스")}
 
 
 def text(table, key, language):
@@ -103,31 +111,38 @@ def text(table, key, language):
 @dataclass(frozen=True)
 class Member:
     code: str
-    market: str          # 'KOSPI', 'KOSDAQ' or 'US'
-    sector: str          # a SECTORS key
+    market: str          # 'KOSPI', 'KOSDAQ', 'US' or 'CRYPTO'
+    sector: str          # a SECTORS key ('' for a coin)
     name_ko: str
     name_en: str
     exchange: str = ""   # KIS overseas exchange code for US members ('NAS', 'NYS')
+    aliases: tuple = ()  # other names a search should find ('엑스알피' for XRP)
 
     @property
     def group(self):
-        return "us" if self.market == "US" else "kr"
+        return {"US": "us", "CRYPTO": "crypto"}.get(self.market, "kr")
 
     @property
     def instrument(self):
+        """The stock screen's instrument; None for a coin (`core.market.models` has no coin asset)."""
+        if self.market == "CRYPTO":
+            return None
         if self.market == "US":
             return Instrument("overseas_stock", self.code, self.exchange)
         return Instrument("domestic_stock", self.code)
 
     @property
     def currency(self):
-        return "USD" if self.market == "US" else "KRW"
+        return "KRW" if self.group == "kr" else "USD"
 
     def label(self, language):
         return self.name_ko if language == "ko" else self.name_en
 
     def place(self, language, market=None):
-        """'KOSPI'/'코스피' for a domestic member (its observed market when known), the exchange for a US one."""
+        """'KOSPI'/'코스피' for a domestic member (its observed market when known), the exchange for a US one,
+        '' for a coin."""
+        if self.market == "CRYPTO":
+            return ""
         if self.market == "US":
             names = _EXCHANGE_NAMES.get(self.exchange, (self.exchange, self.exchange))
             return names[1] if language == "ko" else names[0]
@@ -229,18 +244,37 @@ _US = (
     ("NYS", "F", "auto", "포드", "Ford Motor"),
 )
 US = tuple(Member(code, "US", sector, ko, en, exchange) for exchange, code, sector, ko, en in _US)
+
+# Major coins, read as Yahoo's '<code>-USD' daily bars (`crypto_symbol`). (code, Korean, English, other names)
+_CRYPTO = (
+    ("BTC", "비트코인", "Bitcoin", ()), ("ETH", "이더리움", "Ethereum", ()),
+    ("XRP", "리플", "XRP", ("엑스알피", "Ripple")), ("BNB", "BNB", "BNB", ("바이낸스코인", "Binance Coin")),
+    ("SOL", "솔라나", "Solana", ()), ("DOGE", "도지코인", "Dogecoin", ()), ("ADA", "에이다", "Cardano", ("카르다노",)),
+    ("TRX", "트론", "TRON", ()), ("AVAX", "아발란체", "Avalanche", ()), ("LINK", "체인링크", "Chainlink", ()),
+    ("DOT", "폴카닷", "Polkadot", ()), ("LTC", "라이트코인", "Litecoin", ()),
+    ("BCH", "비트코인캐시", "Bitcoin Cash", ()), ("XLM", "스텔라루멘", "Stellar", ("스텔라",)),
+    ("ETC", "이더리움클래식", "Ethereum Classic", ()),
+)
+CRYPTO = tuple(Member(code, "CRYPTO", "", ko, en, aliases=aliases) for code, ko, en, aliases in _CRYPTO)
 _BY_KEY = {(m.instrument.asset, m.code, m.exchange): m for m in DOMESTIC + US}
 
 
+def crypto_symbol(member):
+    """Yahoo's daily-bar ticker for a coin, priced in US dollars."""
+    return f"{member.code}-USD"
+
+
 def group_of(market):
-    """'kr' for the domestic list keys (one fetch serves all three), 'us' for the US one."""
+    """'kr' for the domestic list keys (one fetch serves all three), 'us' for the US one, 'crypto' for coins."""
+    if market == "crypto":
+        return "crypto"
     if market not in MARKET_KEYS:
         raise ValueError(f"Unknown market {market!r}")
     return "us" if market == "us" else "kr"
 
 
 def members_of(group):
-    return US if group == "us" else DOMESTIC
+    return {"us": US, "crypto": CRYPTO}.get(group, DOMESTIC)
 
 
 def universe(market, sector=""):
@@ -258,7 +292,7 @@ def member_for(instrument):
 
 
 def sectors_in(market):
-    """Sector keys present in a market's universe, in SECTORS order."""
+    """Sector keys present in a market's universe, in SECTORS order (none for coins)."""
     present = {m.sector for m in universe(market)}
     return tuple(key for key, _en, _ko in SECTORS if key in present)
 
@@ -331,7 +365,7 @@ def ranking_value(record, category):
 
 def value_unit(category, group):
     """What the right-hand column shows: ('trading value' | 'volume' | 'market cap', unit for `compact`)."""
-    money = "usd" if group == "us" else "krw"
+    money = "krw" if group == "kr" else "usd"
     if category == "volume":
         return "volume", "shares"
     if category == "cap":
@@ -360,7 +394,7 @@ def rank(records, category, *, market="kr", sector="", limit=30, missing="omit")
         raise ValueError(f"Unknown missing rule {missing!r}")
     group = group_of(market)
     pool = [r for r in records if r.member.group == group
-            and (market in ("kr", "us") or r.listing == market.upper())
+            and (market in GROUPS or r.listing == market.upper())
             and (not sector or r.member.sector == sector)]
     keyed = [(ranking_value(r, category), r) for r in pool]
     if category == "gainers":
@@ -536,7 +570,9 @@ def with_kis_detail(record, output, *, received_at=""):
 def record_from_bars(member, bars, *, source="Yahoo Finance", market="", sparkline=20):
     """A delayed record from daily bars ``(date, open, high, low, close, volume)``, oldest first.
 
-    The change is the last close against the previous one; trading value is close x volume (estimated).
+    The change is the last close against the previous one; trading value is close x volume (estimated). A coin's
+    bar volume is Yahoo's daily trading value in US dollars: it is the trading value as stated, and the record
+    keeps no unit count (`volume` None).
     """
     rows = []
     for bar in bars:
@@ -552,9 +588,13 @@ def record_from_bars(member, bars, *, source="Yahoo Finance", market="", sparkli
         raise ValueError("Fewer than two usable daily bars")
     (day, close, volume), previous = rows[-1], rows[-2][1]
     change = close - previous
-    value = close * volume if volume else None
+    if member.group == "crypto":
+        value, volume, estimated = (volume or None), None, False
+    else:
+        value = close * volume if volume else None
+        estimated = value is not None
     return QuoteRecord(member, close, change, change / previous * 100, volume, value, None, source, "daily", day,
-                       estimated_value=value is not None,
+                       estimated_value=estimated,
                        closes=tuple(row[1] for row in rows[-max(2, int(sparkline)):]), market=market)
 
 
@@ -640,7 +680,9 @@ def compact(value, unit, language):
 def price_text(value, currency):
     if not _finite(value):
         return "—"
-    return f"${value:,.2f}" if currency == "USD" else f"{value:,.0f}"
+    if currency == "USD":
+        return f"${value:,.4f}" if abs(value) < 1 else f"${value:,.2f}"  # a coin under a dollar keeps its cents' digits
+    return f"{value:,.0f}"
 
 
 def change_text(pct):
@@ -653,7 +695,9 @@ def change_text(pct):
 
 
 def session_open(group, moment=None):
-    """Whether the group's market is in its regular session now (holiday calendars included)."""
+    """Whether the group's market is in its regular session now (holiday calendars included); coins always trade."""
+    if group == "crypto":
+        return True
     from core.markets import is_open
     moment = moment or datetime.now(timezone.utc)
     return bool(is_open("US" if group == "us" else "KRX", moment))

@@ -93,7 +93,7 @@ class OperationFixTests(unittest.TestCase):
         w.navigate('markets'); settle(self.app)
         scroll = w.stack.currentWidget().verticalScrollBar()
         self.assertGreater(scroll.maximum(), 0)
-        kind = w.markets_view.kind
+        kind = w.markets_view.rankings.sector_box  # UI-D10: the page's selector (no kind selector any more)
         before = (kind.currentIndex(), w.theme.currentIndex())
         scroll.setValue(0)
         wheel(self.app, kind); wheel(self.app, w.theme)

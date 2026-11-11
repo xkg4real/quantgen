@@ -1,11 +1,17 @@
-"""Markets as Toss-style real-time ranked lists (owner request 2026-11-11, point 5; decision UI-D7).
+"""Markets as one page per market with Toss-style ranked lists (owner 2026-11-11, point 5; UI-D7; UI-D10).
 
 Owner: "시장 UI에는 토스증권처럼 실시간 차트를 다양한 분류기준으로 조회할수있게 변경해봐" and "시장 누르면 하위 UI로
-종목 고를수있게" (the rail's sub-menu calls `markets_view.show_category(key)`). The watchlist chart cards moved
-to Research Home; Markets keeps the stock search and the one-stock screen.
+종목 고를수있게". Owner ruling UI-D10: "시장에서 그냥 국장 미장 코인 이런걸 하부ui로 두고, 너가 지금 하부ui로 깔아놓은건
+해당 시장의 하부ui 선택하고 차후에 검색기준으로 저걸 쓸수있게 구현하면 좋을 거 같은데, 공간 잘써서 센스있게해봐": the rail
+calls `markets_view.show_market(key)` (국내 주식 / 미국 주식 / 코인); inside a market's page the categories rank the
+list and, with the header search, the sub-market, the sector and the 조건 row, narrow it (`core.market.screen`).
+Tests that pinned the UI-D7 page (title "실시간 차트", the 국내 전체·코스피·코스닥·미국 buttons) were updated: the
+sub-market is a filter inside a market page and the market is chosen in the rail. The watchlist chart cards moved
+to Research Home; Markets keeps the one-stock screen.
 
 Offline: the ranking loader is a fake; HTTP and Yahoo attempts fail the test unless a test patches Yahoo
-with fixture bars; KIS is a fake service whose paths are checked against the frozen allowlist.
+with fixture bars; KIS is a fake service whose paths are checked against the frozen allowlist; the index strip's
+production loader is patched to fail the test, and strips that load are given fixture series.
 """
 import inspect
 import os
@@ -25,10 +31,10 @@ with patch.object(dotenv, "load_dotenv", return_value=False):
     from quantgen_desktop.market_rankings import (IDLE_REFRESH_SECONDS, LIVE_REFRESH_SECONDS,
                                                   ProductionRankingLoader, RankingBoard, board_stylesheet,
                                                   daily_batch, kis_batch)
-    from quantgen_desktop.markets_view import RANKING_CATEGORIES, MarketsWorkspace, WatchlistGrid
+    from quantgen_desktop.markets_view import MARKET_PAGES, RANKING_CATEGORIES, MarketsWorkspace, WatchlistGrid
 from PyQt6.QtCore import Qt
 from PyQt6.QtTest import QTest
-from PyQt6.QtWidgets import QApplication, QLabel, QPushButton
+from PyQt6.QtWidgets import QApplication, QComboBox, QLabel, QPushButton
 from core.i18n import LocaleContext
 from core.market import rankings as R
 from core.market.directory import SymbolDirectory
@@ -66,6 +72,13 @@ def kis_domestic(code, price, **fields):
     out = {"stck_prpr": str(price), "prdy_vrss": "0", "prdy_vrss_sign": "3", "prdy_ctrt": "0.00", "acml_vol": "1000",
            "acml_tr_pbmn": "1000000", **fields}
     return R.parse_kis_domestic(member(code), out, received_at=NOW.isoformat())
+
+
+def every_domestic(fetched_at=NOW):
+    """Every domestic member with a KIS quote: a list that runs past the fold of the smallest window."""
+    at = fetched_at.isoformat()
+    return R.Batch("kr", tuple(R.QuoteRecord(m, 10000.0 + i, 10.0, 0.1 + i / 100, 1e5 + i, 1e10 - i * 1e7, None, "KIS",
+                                             "kis", at) for i, m in enumerate(R.DOMESTIC)), "kis", at)
 
 
 def us_batch(fetched_at=NOW):
@@ -118,6 +131,12 @@ class Base(unittest.TestCase):
         for target in ("requests.sessions.Session.request", "core.market.routing._yahoo_frame"):
             deny = patch(target, side_effect=AssertionError("Network forbidden"))
             deny.start(); self.addCleanup(deny.stop)
+        # The index strip's production series (yfinance does not go through requests): never in a test.
+        series = patch("quantgen_desktop.market_summary.production_series",
+                       side_effect=AssertionError("Index series forbidden"))
+        self.production_series = series.start(); self.addCleanup(series.stop)
+        yf = patch("core.ficc.data._yf", None)
+        yf.start(); self.addCleanup(yf.stop)
 
     def wait(self, predicate, seconds=5):
         end = time.monotonic() + seconds
@@ -126,7 +145,9 @@ class Base(unittest.TestCase):
         self.assertTrue(predicate())
 
 
-class MarketsPageTests(Base):
+class WindowBase(Base):
+    """A Korean window on Markets with a fake ranking loader; nothing loads by itself."""
+
     def setUp(self):
         super().setUp()
         self.provider = Mock(side_effect=AssertionError("Provider forbidden"))
@@ -160,11 +181,16 @@ class MarketsPageTests(Base):
         return [w.text() for w in [*page.findChildren(QLabel), *page.findChildren(QPushButton)]
                 if w.isVisible() and w.text()]
 
+
+class MarketsPageTests(WindowBase):
     def test_interface_contract_and_page_structure(self):
         self.assertEqual(RANKING_CATEGORIES, (("value", "Trading value", "거래대금"), ("volume", "Volume", "거래량"),
                                               ("gainers", "Top gainers", "급상승"), ("losers", "Top losers", "급하락"),
                                               ("cap", "Market cap", "시가총액")))
-        self.assertTrue(callable(self.view.show_category) and callable(self.view.showing_stock))
+        self.assertEqual(MARKET_PAGES, (("kr", "Korean stocks", "국내 주식"), ("us", "US stocks", "미국 주식"),
+                                        ("crypto", "Crypto", "코인")))
+        self.assertTrue(callable(self.view.show_market) and callable(self.view.show_category)
+                        and callable(self.view.showing_stock))
         self.assertIsInstance(self.view, MarketsWorkspace)
         self.assertEqual(list(inspect.signature(WatchlistGrid).parameters),
                          ["store", "router_factory", "name_fn", "locale", "auto_load"])
@@ -172,9 +198,19 @@ class MarketsPageTests(Base):
         self.assertIs(self.view.pages.currentWidget(), self.board)
         self.assertTrue(self.view.search.isVisible())
         self.assertIs(self.window.current_market_pane(), self.board)  # ResearchWindow keeps working
+        # UI-D10: no page title, description paragraph or separate search card; the header names the market.
+        page = self.window.stack.currentWidget().widget()
+        self.assertEqual([w.text() for w in page.findChildren(QLabel)
+                          if w.isVisible() and w.property("role") in ("title", "muted")], [])
+        shown = self.page_text()
+        self.assertNotIn("시장", shown); self.assertNotIn("실시간 차트", shown)
+        self.assertFalse([w for w in page.findChildren(QComboBox) if w.isVisible() and w.findData("bond") >= 0])
+        self.assertEqual(self.board.heading.text(), "국내 주식")
         self.assertEqual([b.text() for b in self.board.category_buttons.values()],
                          ["거래대금", "거래량", "급상승", "급하락", "시가총액"])
-        self.assertEqual([b.text() for b in self.board.market_buttons.values()], ["국내 전체", "코스피", "코스닥", "미국"])
+        self.assertEqual([b.text() for b in self.board.sub_buttons.values()], ["전체", "코스피", "코스닥"])
+        self.assertFalse(self.board.summary_section.isVisible())  # nothing loaded, nothing loads: no empty strip
+        self.assertFalse(self.board.conditions_section.isVisible())
         self.assertEqual(self.board.badge.text(), "자료 없음")
         self.assertIn("아직 불러오지 않았습니다", self.board.empty.text())
         self.assertEqual((self.loader.calls, self.board.tick.isActive()), ([], False))  # automatic refresh off
@@ -200,7 +236,7 @@ class MarketsPageTests(Base):
         self.assertEqual(self.shown_rows()[0].value.text(), "605.0조")
         self.board.category_buttons["volume"].click()
         self.assertEqual(self.shown_rows()[0].value.text(), "2,000만주")
-        self.board.market_buttons["kosdaq"].click(); self.app.processEvents()
+        self.board.sub_buttons["kosdaq"].click(); self.app.processEvents()
         self.assertEqual(self.names(), ["에코프로비엠", "알테오젠"])
         self.board.set_sector("bio")
         self.assertEqual(self.names(), ["알테오젠"])
@@ -210,7 +246,7 @@ class MarketsPageTests(Base):
     def test_source_state_and_refresh_age_are_always_shown(self):
         self.load()
         self.assertEqual(self.board.badge.text(), "KIS 조회 · 45초마다")  # REST polling, never "실시간"
-        self.assertEqual(self.board.heading.text(), "실시간 차트")  # the owner's page name stays
+        self.assertEqual(self.board.heading.text(), "국내 주식")  # UI-D10: the market's name heads its page
         self.assertIn("45초마다 조회(REST 요청이며 체결 수신이 아닙니다)", self.board.badge.toolTip())
         self.assertEqual(self.board.caption.text(), "방금 갱신")
         self.clock.now = NOW + timedelta(seconds=12); self.board._render_status()
@@ -221,7 +257,7 @@ class MarketsPageTests(Base):
         self.board.render()
         self.assertEqual(self.board.badge.text(), "KIS · 장 마감")
         self.assertIn("KIS", self.board.badge.toolTip()); self.assertIn("2026-11-11 14:20:00", self.board.badge.toolTip())
-        self.board.market_buttons["us"].click(); self.app.processEvents()
+        self.view.show_market("us"); self.app.processEvents()
         self.assertEqual(self.board.badge.text(), "자료 없음")  # not loaded yet, and nothing loads by itself
         self.assertEqual(self.loader.calls, ["kr"])
         self.load()
@@ -241,7 +277,7 @@ class MarketsPageTests(Base):
     def test_us_market_cap_ranks_the_figures_found_and_says_where_they_came_from(self):
         # Owner 2026-11-11: "아니 미국 시총 자료 찾으세요". The explanation gives way to the list.
         self.board.loader = FakeLoader({"kr": kr_batch(), "us": us_cap_batch()})
-        self.board.market_buttons["us"].click(); self.board.category_buttons["cap"].click(); self.load()
+        self.view.show_market("us"); self.board.category_buttons["cap"].click(); self.load()
         rows = self.shown_rows()
         self.assertEqual(self.names(), ["엔비디아", "애플", "JP모건"])
         self.assertEqual([(r.rank.text(), r.value.text()) for r in rows], [("1", "$4.4T"), ("2", "$3.4T"), ("", "—")])
@@ -273,7 +309,7 @@ class MarketsPageTests(Base):
         self.assertNotIn("market cap", self.board.footnote.text().lower())
         self.window.set_language("ko"); self.app.processEvents()
         # Domestic: KIS's figure, checked against listed shares x price of the same answer (the tooltip says so).
-        self.board.market_buttons["kr"].click(); self.board.category_buttons["cap"].click(); self.load()
+        self.view.show_market("kr"); self.board.category_buttons["cap"].click(); self.load()
         self.assertEqual(self.board.head_value.text(), "시가총액")
         self.assertEqual(self.shown_rows()[0].value.toolTip(),
                          "KIS 제공 시가총액(hts_avls를 1억 원 단위로 읽음) · 2026-11-11 14:20 (한국 시간) 기준 · "
@@ -291,7 +327,7 @@ class MarketsPageTests(Base):
         polled = replace(base, mode="kis", records=tuple(replace(r, mode="kis", source="KIS", as_of=NOW.isoformat())
                                                          for r in base.records))
         self.board.batches["us"] = polled
-        self.board.market_buttons["us"].click(); self.app.processEvents()
+        self.view.show_market("us"); self.app.processEvents()
         self.assertEqual(self.board.badge.text(), "KIS 무료 시세 · 45초마다 조회")
         self.assertEqual(self.board.badge.property("state"), "polled_us")
         tip = self.board.badge.toolTip()
@@ -313,7 +349,8 @@ class MarketsPageTests(Base):
 
     def test_market_buttons_show_the_windows_focus_ring_without_changing_their_look(self):
         # 2026-11-11 compliance follow-up (14-contrast, 15-keyboard): the list's own [tool='true'] rule set
-        # `border` with no :focus rule, and the closer sheet hid the window's 2px focus ring.
+        # `border` with no :focus rule, and the closer sheet hid the window's 2px focus ring. UI-D10: these are
+        # the sub-market buttons of each market page now.
         from core.theme import DARK, LIGHT
         for colors, dark in ((LIGHT, False), (DARK, True)):
             rule = re.search(r"QPushButton\[tool='true'\]:focus \{([^}]*)\}", board_stylesheet(colors, dark))
@@ -323,8 +360,9 @@ class MarketsPageTests(Base):
         for theme in (0, 1):
             self.window.theme.setCurrentIndex(theme); self.app.processEvents()
             accent = (DARK if theme else LIGHT).accent
-            for key in ("kr", "kospi", "kosdaq", "us"):
-                button = self.board.market_buttons[key]
+            for page, key in (("kr", ""), ("kr", "kospi"), ("kr", "kosdaq"), ("us", ""), ("us", "NAS"), ("us", "NYS")):
+                self.board.set_page(page); self.app.processEvents()
+                button = self.board.sub_buttons[key]
                 self.board.category_buttons["value"].setFocus(Qt.FocusReason.TabFocusReason); self.app.processEvents()
                 plain, size = accent_pixels(button, accent), button.size()
                 if not button.isChecked():
@@ -338,9 +376,10 @@ class MarketsPageTests(Base):
     def test_chips_and_market_buttons_are_radio_groups_for_the_keyboard(self):
         # Reviewer 2026-11-11 (15-keyboard): both rows are exclusive QButtonGroups, so Tab stops only at the
         # selected chip and the selected market button, and the arrow keys move focus and select; an unselected
-        # chip never gets keyboard focus (the docs say so instead of calling them ordinary Tab stops).
+        # chip never gets keyboard focus (the docs say so instead of calling them ordinary Tab stops). UI-D10: the
+        # market buttons are the page's sub-market filter (전체·코스피·코스닥); the 조건 toggle follows the sector.
         self.window.activateWindow(); self.app.processEvents()
-        chips, markets = self.board.category_buttons, self.board.market_buttons
+        chips, markets = self.board.category_buttons, self.board.sub_buttons
 
         def tab_from(widget, count=3):
             widget.setFocus(Qt.FocusReason.TabFocusReason); self.app.processEvents()
@@ -349,13 +388,15 @@ class MarketsPageTests(Base):
                 QTest.keyClick(self.app.focusWidget(), Qt.Key.Key_Tab); self.app.processEvents()
                 seen.append(self.app.focusWidget())
             return seen
-        self.assertEqual(tab_from(self.board.refresh_button), [chips["value"], markets["kr"], self.board.sector_box])
+        self.assertEqual(tab_from(self.board.refresh_button, 4),
+                         [chips["value"], markets[""], self.board.sector_box, self.board.conditions_button])
+        self.assertEqual(tab_from(self.board.search, 1), [self.board.refresh_button])
         self.assertEqual(tab_from(self.board.refresh_button, 1), [chips["value"]])
         QTest.keyClick(chips["value"], Qt.Key.Key_Right); self.app.processEvents()
         self.assertEqual((self.board.category, self.app.focusWidget()), ("volume", chips["volume"]))
         self.assertTrue(chips["volume"].isChecked())
-        self.assertEqual(tab_from(chips["volume"], 1), [markets["kr"]])
-        QTest.keyClick(markets["kr"], Qt.Key.Key_Right); self.app.processEvents()
+        self.assertEqual(tab_from(chips["volume"], 1), [markets[""]])
+        QTest.keyClick(markets[""], Qt.Key.Key_Right); self.app.processEvents()
         self.assertEqual((self.board.market, self.app.focusWidget()), ("kospi", markets["kospi"]))
         self.assertEqual(tab_from(self.board.refresh_button),
                          [chips["volume"], markets["kospi"], self.board.sector_box])
@@ -440,7 +481,7 @@ class MarketsPageTests(Base):
         none = replace(base, records=tuple(R.without_cap(r, "error") for r in base.records), caps="none",
                        cap_reasons=("kis_off", "fmp_no_key", "yahoo_unreachable"))
         self.board.loader = FakeLoader({"us": none})
-        self.board.market_buttons["us"].click(); self.board.category_buttons["cap"].click(); self.load()
+        self.view.show_market("us"); self.board.category_buttons["cap"].click(); self.load()
         self.assertEqual(self.shown_rows(), [])
         self.assertEqual(self.board.empty.text(),
                          "미국 시가총액을 읽지 못했습니다. KIS가 연결되어 있지 않습니다. FMP_API_KEY가 설정되어 있지 않습니다. "
@@ -469,10 +510,10 @@ class MarketsPageTests(Base):
         self.assertFalse(self.board.due())  # retried after RETRY_SECONDS, not on every tick
         self.clock.now = NOW + timedelta(seconds=61)
         self.assertTrue(self.board.due())
-        self.board.market_buttons["us"].click(); self.load()
+        self.view.show_market("us"); self.load()
         self.assertEqual(self.board.badge.text(), "자료 없음")
         self.board.loader = FakeLoader({"kr": kr_batch()})
-        self.board.market_buttons["kr"].click(); self.load()
+        self.view.show_market("kr"); self.load()
         self.assertIn("1개 종목은 불러오지 못했습니다", self.board.footnote.text())  # HLB failed in the fixture
         self.board.loader = FakeLoader({"kr": RuntimeError("late")})
         self.clock.now = NOW + timedelta(minutes=2)
@@ -495,6 +536,7 @@ class MarketsPageTests(Base):
         self.view.show_category("value")
         self.assertEqual(heard, ["losers", "value"])
         scroll = self.window.stack.currentWidget().verticalScrollBar()
+        self.board.loader = FakeLoader({"kr": every_domestic()})
         self.load()
         self.window.resize(1000, 700)  # the minimum window: the list runs past the fold
         for _ in range(5):
@@ -507,6 +549,8 @@ class MarketsPageTests(Base):
         self.view.show_category("search")
         self.assertEqual(scroll.value(), 0)
         self.view.show_category("value")
+        self.board.loader = FakeLoader({"kr": kr_batch()})
+        self.load()
         row = self.shown_rows()[0]
         QTest.mouseClick(row, Qt.MouseButton.LeftButton); self.app.processEvents()
         self.assertTrue(self.view.showing_stock())
@@ -547,7 +591,7 @@ class MarketsPageTests(Base):
         self.board.rows[0].setFocus()
         QTest.keyClick(self.board.rows[0], Qt.Key.Key_Return); self.app.processEvents()
         self.assertTrue(self.view.showing_stock())
-        self.assertEqual(self.loader.calls, ["kr"])
+        self.assertEqual(self.loader.calls, [])
 
     def test_language_and_theme_switch_without_refetching(self):
         from core.theme import DARK
@@ -567,6 +611,285 @@ class MarketsPageTests(Base):
         self.window.set_language("ko"); self.app.processEvents()
         self.assertEqual(self.names()[0], "SK하이닉스")
         self.assertEqual(self.loader.calls, ["kr"])
+
+
+def crypto_batch(fetched_at=NOW):
+    """Coins as the Yahoo daily path leaves them (`record_from_bars`): dollar volume as trading value."""
+    rows = (("BTC", 96123.5, 95000.0, 4.1e10), ("ETH", 3412.8, 3480.0, 2.2e10), ("XRP", 2.31, 2.2, 6.1e9),
+            ("DOGE", 0.3812, 0.37, 3.2e9))
+    records = tuple(R.record_from_bars(next(m for m in R.CRYPTO if m.code == code),
+                                       [("2026-11-09", 1, 1, 1, before, volume), ("2026-11-10", 1, 1, 1, last, volume)])
+                    for code, last, before, volume in rows)
+    return R.Batch("crypto", records, "daily", fetched_at.isoformat())
+
+
+def fixture_series(symbol, source="yfinance", days=400):
+    """Index and coin daily closes for the strip, as `core.ficc.data.load_series` answers them."""
+    from types import SimpleNamespace
+    base = {"^KS11": 2600.0, "^KQ11": 750.0, "^GSPC": 5800.0, "^IXIC": 18700.0, "BTC-USD": 96000.0,
+            "ETH-USD": 3400.0}[symbol]
+    dates = tuple(f"2026-10-{day:02d}" for day in range(1, 31))
+    return SimpleNamespace(source="YFINANCE", dates=dates, values=tuple(base * (1 + i / 1000) for i in range(30)))
+
+
+class MarketPageTests(WindowBase):
+    """Owner ruling UI-D10: markets in the rail; criteria and search per market; a compact page."""
+
+    def setUp(self):
+        super().setUp()
+        self.loader = FakeLoader({"kr": kr_batch(), "us": us_batch(), "crypto": crypto_batch()})
+        self.board.loader = self.loader
+        self.series = Mock(side_effect=fixture_series)
+        self.board.summary.loader = self.series
+
+    def test_show_market_switches_pages_and_each_keeps_its_own_criteria(self):
+        heard = []
+        self.view.market_changed.connect(heard.append)
+        self.assertEqual((self.view.current_market(), self.board.heading.text()), ("kr", "국내 주식"))
+        self.assertTrue(self.window.market_sections["kr"].isChecked())
+        self.assertTrue(self.view.show_market("us")); self.app.processEvents()
+        self.assertEqual((heard, self.board.page, self.board.heading.text()), (["us"], "us", "미국 주식"))
+        self.assertTrue(self.window.market_sections["us"].isChecked())  # the rail follows the page
+        self.assertEqual([b.text() for b in self.board.sub_buttons.values()], ["전체", "나스닥", "NYSE"])
+        self.assertEqual(self.board.search.placeholderText(), "미국 주식에서 찾기 · 이름, 코드, 업종")
+        self.load()
+        self.board.category_buttons["gainers"].click()
+        self.board.sub_buttons["NYS"].click(); self.app.processEvents()
+        self.assertEqual(self.names(), ["JP모건"])  # NYSE only, rising only
+        self.view.show_market("kr"); self.load()
+        self.assertEqual((self.board.category, self.board.sub), ("value", ""))  # Korea keeps its own criteria
+        self.view.show_market("us")
+        self.assertEqual((self.board.category, self.board.sub, self.names()), ("gainers", "NYS", ["JP모건"]))
+        # Earlier callers: a category ranks the shown market; a market key shows that market.
+        self.assertTrue(self.view.show_category("losers"))
+        self.assertEqual((self.board.page, self.board.category), ("us", "losers"))
+        self.assertTrue(self.view.show_category("crypto"))
+        self.assertEqual(self.board.page, "crypto")
+        with self.assertRaises(ValueError):
+            self.view.show_market("jp")
+        # A stock opened over a market keeps that market highlighted; Back returns to its list.
+        self.view.show_market("us"); self.board.set_sub(""); self.board.set_category("value")
+        QTest.mouseClick(self.shown_rows()[0], Qt.MouseButton.LeftButton); self.app.processEvents()
+        self.assertTrue(self.view.showing_stock())
+        self.window.navigate("markets")
+        self.assertTrue(self.window.market_sections["us"].isChecked())
+        self.view.open_instrument(member("005930").instrument)  # a Korean stock from elsewhere (Home's cards)
+        self.view.stock.back_button.click(); self.app.processEvents()
+        self.assertEqual((self.board.page, self.view.showing_stock()), ("kr", False))
+        self.assertEqual(self.loader.calls, ["us", "kr"])
+
+    def test_search_category_and_conditions_combine(self):
+        self.load()
+        self.view.search.setText("반도체"); self.app.processEvents()  # a sector's name finds its stocks
+        self.assertEqual(self.names(), ["SK하이닉스", "삼성전자"])  # ranked by trading value
+        chips = [c for c in self.board.filter_chips if c.isVisible()]
+        self.assertEqual([c.text() for c in chips], ["‘반도체’  ×"])
+        self.assertEqual(self.board.count.text(), "2개 종목")
+        self.board.category_buttons["gainers"].click(); self.app.processEvents()
+        self.assertEqual(self.names(), ["삼성전자"])  # the same search, ranked by the rise
+        self.board.category_buttons["value"].click()
+        self.board.conditions_button.click(); self.app.processEvents()
+        self.assertTrue(self.board.conditions_section.isVisible())
+        self.assertEqual(self.board.conditions_button.text(), "조건")
+        low, high = self.board.condition_controls["change"]
+        low.setFocus(); QTest.keyClicks(low, "0"); self.app.processEvents()
+        self.assertEqual(self.names(), ["삼성전자"])  # change at least 0%
+        box = self.board.condition_controls["value"][0]
+        self.assertEqual([box.itemText(i) for i in range(box.count())],
+                         ["제한 없음", "100억 이상", "500억 이상", "1,000억 이상", "5,000억 이상"])
+        self.view.search.setText(""); self.app.processEvents()
+        box.setCurrentIndex(box.findData(5e11)); self.app.processEvents()
+        self.assertEqual(self.names(), ["삼성전자", "카카오"])  # 0% or more, trading value 5,000억 or more
+        self.assertEqual([c.text() for c in self.board.filter_chips if c.isVisible()],
+                         ["등락률 0% 이상  ×", "거래대금 5,000억 이상  ×"])
+        self.assertEqual(self.board.conditions_button.text(), "조건 2")
+        high.setFocus(); QTest.keyClicks(high, "-1"); self.app.processEvents()
+        self.assertTrue(high.property("invalid"))  # a low bound above the high one is not applied
+        self.assertEqual(self.names(), ["삼성전자", "카카오"])
+        high.clear(); QTest.keyClicks(high, "2"); self.app.processEvents()
+        self.assertEqual(self.names(), ["삼성전자"])
+        next(c for c in self.board.filter_chips if c.isVisible()).click(); self.app.processEvents()
+        self.assertEqual((low.text(), high.text()), ("", ""))  # one click removes that condition
+        self.assertEqual(self.names(), ["SK하이닉스", "삼성전자", "카카오"])
+        self.view.search.setText("카카"); self.app.processEvents()
+        self.assertEqual(self.names(), ["카카오"])
+        self.board.clear_button.click(); self.app.processEvents()  # 모두 지우기: search and conditions
+        self.assertEqual((self.view.search.text(), self.board.screen.limits), ("", ()))
+        self.assertEqual(len(self.names()), 6)
+        self.view.search.setText("없는이름"); self.app.processEvents()
+        self.assertEqual(self.board.empty.text(), "이 목록에는 ‘없는이름’에 맞는 종목이 없습니다.")
+        self.view.search.setText("현대"); self.app.processEvents()
+        QTest.keyClick(self.view.search, Qt.Key.Key_Return); self.app.processEvents()
+        self.assertEqual(self.view.stock.instrument, member("005380").instrument)  # one match: Enter opens it
+        self.view.show_rankings()
+        self.assertEqual(self.view.search.text(), "현대")  # the narrowed list is still there on return
+        self.view.search.setText("101W12"); self.app.processEvents()  # a derivative's code: offered, not guessed
+        offered = [b for b in self.board.other_buttons if b.isVisible()]
+        self.assertEqual([b.text() for b in offered], ["국내 파생 101W12"])
+        self.assertFalse(self.view.showing_stock())
+        offered[0].click(); self.app.processEvents()
+        self.assertEqual(self.view.stock.instrument.asset, "domestic_future")
+        self.assertEqual(self.loader.calls, ["kr"])  # narrowing and opening never refetch
+
+    def test_a_new_condition_is_one_more_row_of_data(self):
+        from core.market import screen as S
+        extra = S.Condition("volume", "Volume", "거래량", "min", "money", lambda r: r.volume, pages=("kr",),
+                            steps={"kr": (5e6, 1e7)})
+        with patch.object(S, "CONDITIONS", S.CONDITIONS + (extra,)), \
+                patch.object(S, "CONDITION_KEYS", S.CONDITION_KEYS + ("volume",)):
+            board = RankingBoard(loader=FakeLoader({"kr": kr_batch()}), locale=LocaleContext("ko_KR"),
+                                 auto_load=False, clock=Clock(), open_fn=lambda group, now: True)
+            self.addCleanup(board.deleteLater)
+            board.resize(1200, 900); board.show()
+            self.assertTrue(board.refresh(manual=True))
+            self.wait(lambda: not board.jobs.busy and "kr" in board.batches)
+            self.app.processEvents()
+            box = board.condition_controls["volume"][0]  # built from the table, no code of its own
+            self.assertEqual(board.condition_names["volume"].text(), "거래량")
+            box.setCurrentIndex(box.findData(1e7)); self.app.processEvents()
+            # volume 1,000만 or more, ranked by trading value
+            self.assertEqual([r.name.full for r in board.rows if r.isVisible()], ["삼성전자", "카카오"])
+            board.set_page("us")
+            self.assertFalse(board.condition_groups["volume"].isVisibleTo(board))  # Korea only, as its table says
+
+    def test_coin_market_degrades_cleanly(self):
+        self.view.show_market("crypto"); self.load()
+        self.assertEqual(self.board.heading.text(), "코인")
+        self.assertEqual(self.board.badge.text(), "지연·일별")  # Yahoo daily bars, never live
+        self.assertEqual(self.names(), ["비트코인", "이더리움", "리플", "도지코인"])
+        top = self.shown_rows()[0]
+        self.assertEqual((top.price.text(), top.value.text(), top.code.full), ("$96,123.50", "$41.0B", "BTC"))
+        self.assertEqual(self.shown_rows()[3].price.text(), "$0.3812")
+        for key in ("volume", "cap"):
+            chip = self.board.category_buttons[key]
+            self.assertFalse(chip.isEnabled(), key)
+            self.assertTrue(chip.toolTip(), key)  # and says why
+        self.assertIn("코인 시가총액이 없어", self.board.category_buttons["cap"].toolTip())
+        self.assertFalse(any(b.isVisible() for b in self.board.sub_buttons.values()))
+        self.assertFalse(self.board.sector_box.isVisible())
+        self.board.conditions_button.click(); self.app.processEvents()
+        self.assertFalse(self.board.condition_groups["cap"].isVisible())
+        self.assertTrue(self.board.condition_groups["value"].isVisible())
+        self.board.set_category("cap")  # set from code all the same: the list says why instead of ranking nothing
+        self.assertEqual(self.board.empty.text(), "이 앱이 쓰는 자료에는 코인 시가총액이 없어 시가총액 순위를 매기지 않습니다.")
+        self.board.set_category("gainers")
+        self.assertEqual(self.names(), ["리플", "도지코인", "비트코인"])  # +5.00%, +3.03%, +1.18%
+        row = self.shown_rows()[0]
+        self.assertIn("코인은 아직 종목 화면이 없어", row.toolTip())
+        QTest.mouseClick(row, Qt.MouseButton.LeftButton); self.app.processEvents()
+        row.setFocus(); QTest.keyClick(row, Qt.Key.Key_Return); self.app.processEvents()
+        self.assertFalse(self.view.showing_stock())  # nothing opens, nothing breaks
+        self.view.search.setText("엑스알피"); self.app.processEvents()
+        self.assertEqual(self.names(), ["리플"])
+        QTest.keyClick(self.view.search, Qt.Key.Key_Return); self.app.processEvents()
+        self.assertFalse(self.view.showing_stock())
+        self.assertIn("UTC", self.board.badge.toolTip()); self.assertIn("Yahoo Finance", self.board.badge.toolTip())
+        shown = " ".join(self.page_text())
+        self.assertNotIn("Yahoo", " ".join(t for t in self.page_text() if "지연·일별:" not in t))
+        self.assertFalse(re.search(r"\d{4}-\d{2}-\d{2}", shown), shown)
+        self.board.batches["crypto"] = R.Batch("crypto", (), "none", NOW.isoformat()); self.board.render()
+        self.assertEqual((self.board.badge.text(), self.shown_rows()), ("자료 없음", []))
+        self.assertEqual(self.loader.calls, ["crypto"])
+
+    def test_index_strip_loads_with_refresh_and_says_delayed(self):
+        self.assertFalse(self.board.summary_section.isVisible())
+        self.board.refresh_button.click()
+        self.wait(lambda: not self.board.jobs.busy and not self.board.summary.jobs.busy and "kr" in self.board.batches)
+        self.app.processEvents()
+        self.assertTrue(self.board.summary_section.isVisible())
+        tiles = [t for t in self.board.summary.tiles.values() if t.isVisible()]
+        self.assertEqual([(t.name.text(), t.value.text(), t.change.text()) for t in tiles],
+                         [("코스피", "2,675.40", "+0.10%"), ("코스닥", "771.75", "+0.10%")])
+        self.assertIn("Yahoo Finance", tiles[0].toolTip()); self.assertIn("2026-10-30", tiles[0].toolTip())
+        self.assertTrue(self.board.summary.state.isVisible())  # the list is KIS-polled, the strip is daily: said
+        self.assertEqual(self.board.summary.state.text(), "지연·일별")
+        self.assertEqual([c.args[0] for c in self.series.call_args_list], ["^KS11", "^KQ11"])
+        self.view.show_market("crypto")
+        self.board.refresh_button.click()
+        self.wait(lambda: not self.board.jobs.busy and not self.board.summary.jobs.busy
+                  and "crypto" in self.board.batches)
+        self.app.processEvents()
+        names = [t.name.text() for t in self.board.summary.tiles.values() if t.isVisible()]
+        self.assertEqual(names, ["비트코인", "이더리움"])
+        self.assertFalse(self.board.summary.state.isVisible())  # the header already says 지연·일별
+        self.series.side_effect = RuntimeError("provider text")  # a failed reload keeps the closes shown
+        self.board.summary.refresh(manual=True)
+        self.wait(lambda: not self.board.summary.jobs.busy)
+        self.app.processEvents()
+        self.assertEqual(self.board.summary.tiles["BTC-USD"].value.text(), "$98,784.00")
+        self.view.show_market("us"); self.board.summary.refresh(manual=True)
+        self.wait(lambda: not self.board.summary.jobs.busy)
+        self.app.processEvents()
+        tile = self.board.summary.tiles["^GSPC"]
+        self.assertEqual(tile.value.text(), "—")
+        self.assertIn("provider_unavailable", tile.toolTip()); self.assertNotIn("provider text", tile.toolTip())
+        self.production_series.assert_not_called()
+
+    def test_language_switch_refetches_nothing(self):
+        self.load()
+        self.board.summary.refresh(manual=True)
+        self.wait(lambda: not self.board.summary.jobs.busy)
+        self.board.set_limit("change", 0, None)
+        self.board.set_conditions_open(True)
+        series_calls = self.series.call_count
+        self.window.set_language("en"); self.app.processEvents()
+        self.assertEqual(self.board.heading.text(), "Korean stocks")
+        self.assertEqual([c.text() for c in self.board.filter_chips if c.isVisible()], ["Change at least 0%  ×"])
+        self.assertEqual(self.board.condition_names["value"].text(), "Trading value")
+        self.assertEqual(self.board.conditions_button.text(), "Conditions 1")
+        self.assertEqual([t.name.text() for t in self.board.summary.tiles.values() if t.isVisible()],
+                         ["KOSPI", "KOSDAQ"])
+        self.assertEqual([b.text() for b in self.window.market_sections.values()],
+                         ["Korean stocks", "US stocks", "Crypto"])
+        self.assertEqual([t for t in self.page_text() if re.search("[가-힣]", t)], [])
+        self.window.set_language("ko"); self.app.processEvents()
+        self.assertEqual([b.text() for b in self.window.market_sections.values()], ["국내 주식", "미국 주식", "코인"])
+        self.assertEqual((self.loader.calls, self.series.call_count), (["kr"], series_calls))
+
+    def test_every_control_shows_the_windows_focus_ring(self):
+        from core.theme import DARK, LIGHT
+        self.load()
+        self.board.set_limit("change", 0, None)
+        self.board.set_conditions_open(True)
+        self.window.activateWindow(); self.app.processEvents()
+        for theme in (0, 1):
+            self.window.theme.setCurrentIndex(theme); self.app.processEvents()
+            accent = (DARK if theme else LIGHT).accent
+            sheet = self.board.styleSheet()
+            for selector in ("QLineEdit#marketSearch:focus", "QPushButton#conditionsToggle:focus",
+                             "QLineEdit#condEdit:focus", "QComboBox#condBox:focus",
+                             "QPushButton[filterChip='true']:focus", "QPushButton[textButton='true']:focus",
+                             "QPushButton#otherStock:focus", "QPushButton#rankRefresh:focus"):
+                self.assertIn(f"{selector} {{ border: 2px solid {accent}", sheet, selector)
+            chip = next(c for c in self.board.filter_chips if c.isVisible())
+            for widget in (self.board.search, self.board.conditions_button, chip,
+                           self.board.condition_controls["change"][0], self.board.condition_controls["value"][0],
+                           self.board.conditions_clear):
+                self.board.refresh_button.setFocus(Qt.FocusReason.TabFocusReason); self.app.processEvents()
+                plain, size = accent_pixels(widget, accent), widget.size()
+                widget.setFocus(Qt.FocusReason.TabFocusReason); self.app.processEvents()
+                self.assertTrue(widget.hasFocus(), widget)
+                self.assertGreater(accent_pixels(widget, accent), plain + widget.width(), widget)
+                self.assertEqual(widget.size(), size, widget)  # the ring does not resize the control
+        self.window.theme.setCurrentIndex(0); self.app.processEvents()
+        # Keyboard path through the 조건 row: Tab from the toggle reaches its fields, then the active chips.
+        self.board.conditions_button.setFocus(Qt.FocusReason.TabFocusReason)
+        seen = []
+        for _ in range(5):
+            QTest.keyClick(self.app.focusWidget(), Qt.Key.Key_Tab); self.app.processEvents()
+            seen.append(self.app.focusWidget())
+        low, high = self.board.condition_controls["change"]
+        self.assertEqual(seen[:4], [low, high, self.board.condition_controls["value"][0],
+                                    self.board.condition_controls["cap"][0]])
+        QTest.keyClick(self.board.conditions_button, Qt.Key.Key_Space); self.app.processEvents()
+
+    def test_refresh_off_fetches_nothing_on_any_market(self):
+        for key in ("kr", "us", "crypto"):
+            self.window.open_market_section(key); self.app.processEvents()
+            self.assertFalse(self.board.jobs.busy or self.board.summary.jobs.busy, key)
+            self.assertFalse(self.board.summary_section.isVisible(), key)
+        self.assertEqual((self.loader.calls, self.series.call_count), ([], 0))
+        self.production_series.assert_not_called()
 
 
 class AutomaticRefreshTests(Base):

@@ -1,4 +1,13 @@
-"""Markets "real-time charts": Toss-style ranked lists (owner request 2026-11-11, point 5).
+"""Markets pages: one page per market with Toss-style ranked lists (owner request 2026-11-11, point 5; UI-D10).
+
+Owner ruling UI-D10 (2026-11-11): "시장에서 그냥 국장 미장 코인 이런걸 하부ui로 두고, 너가 지금 하부ui로 깔아놓은건 해당
+시장의 하부ui 선택하고 차후에 검색기준으로 저걸 쓸수있게 구현하면 좋을 거 같은데, 공간 잘써서 센스있게해봐". The rail
+lists 국내 주식 / 미국 주식 / 코인 (`core.market.screen.PAGES`); `RankingBoard` is that market's page: one compact
+header row (market name, data state, a search scoped to this market, refresh), a slim index strip
+(`market_summary.MarketSummary`), a criteria row (the ranking categories as chips, the sub-market, the sector and a
+"조건" control that opens beginner conditions: 등락률 range, 거래대금 at least, 시가총액 at least), chips for the
+active search and conditions with one-click clear, then the list using the width. Search, category, sub-market,
+sector and conditions combine through `core.market.screen.Screen` (criteria as data). Each market keeps its own.
 
 Owner: "시장 UI에는 토스증권처럼 실시간 차트를 다양한 분류기준으로 조회할수있게 변경해봐". The list ranks the
 curated universe of `core.market.rankings` (KIS ranking endpoints are not on the frozen allowlist) by trading
@@ -18,6 +27,10 @@ Data, off the UI thread and only while the list is visible with automatic refres
   ("시가총액(계산값)") when KIS states no figure; a refused or missing figure is listed last as '—', with why.
 * otherwise (or when KIS answers nothing): the Yahoo daily path, labelled "delayed · daily"; trading value is
   close x volume (an estimate, said so in the note). Refreshed every `IDLE_REFRESH_SECONDS`.
+* coins: only the Yahoo daily path (``BTC-USD`` and so on; `rankings.CRYPTO`), "지연·일별", US dollars; Yahoo
+  states a coin's daily volume in dollars, so that is its trading value (not estimated). Coins are not ranked by
+  units traded or by market cap (no source the app uses states one); those chips are disabled and say why. A coin
+  row opens nothing (the stock screen has no coin instrument) and its tooltip says so.
 * US market cap (owner 2026-11-11, "아니 미국 시총 자료 찾으세요"), inside the same US fetch, in this order:
   KIS's overseas ``price-detail`` market cap in the KIS batch when KIS is configured (allowlisted with the
   owner's approval, "승인."; at most every `DETAIL_SECONDS` per stock); then (`core.market.market_cap`)
@@ -39,14 +52,16 @@ import math
 import threading
 import time
 
-from PyQt6.QtCore import QPointF, QTimer, Qt, pyqtSignal, pyqtSlot
-from PyQt6.QtGui import QColor, QPainter, QPainterPath, QPen
-from PyQt6.QtWidgets import (QButtonGroup, QComboBox, QFrame, QHBoxLayout, QLabel, QPushButton, QSizePolicy,
-                             QVBoxLayout, QWidget)
+from PyQt6.QtCore import QLocale, QPointF, QTimer, Qt, pyqtSignal, pyqtSlot
+from PyQt6.QtGui import QColor, QDoubleValidator, QPainter, QPainterPath, QPen
+from PyQt6.QtWidgets import (QBoxLayout, QButtonGroup, QComboBox, QFrame, QHBoxLayout, QLabel, QLineEdit, QPushButton,
+                             QSizePolicy, QVBoxLayout, QWidget)
 
 from core.i18n import LocaleContext
 from core.market import rankings as R
+from core.market import screen as S
 from core.theme import DARK, LIGHT
+from .category_picker import CategoryFlow
 from .company_identity import CompanyMark
 from .jobs import Jobs
 
@@ -136,6 +151,8 @@ def _with_detail(record, details, fetch, now):
 
 def _yahoo_candidates(member):
     """(Yahoo symbol, listing market it implies), curated market first."""
+    if member.market == "CRYPTO":
+        return ((R.crypto_symbol(member), ""),)
     if member.market == "US":
         from core.market.routing import yahoo_symbols
         return tuple((symbol, "") for symbol in yahoo_symbols(member.instrument))
@@ -188,7 +205,8 @@ def daily_batch(group, members, *, fetch=None, cancelled=None, progress=None, wo
 class ProductionRankingLoader:
     """KIS quotes when KIS is configured; otherwise, or when KIS answers nothing, delayed daily bars.
     US KIS quotes carry KIS's market cap (price-detail); the stocks still without one get theirs from `caps`
-    (`core.market.market_cap.MarketCapSource`: FMP, then Yahoo shares x price).
+    (`core.market.market_cap.MarketCapSource`: FMP, then Yahoo shares x price). Coins ('crypto') are read only
+    as Yahoo daily bars.
 
     Nothing is constructed or fetched until the first call (a window with automatic refresh off never calls).
     """
@@ -227,6 +245,8 @@ class ProductionRankingLoader:
             return replace(batch, caps="none")
 
     def _quotes(self, group, members, cancelled, progress):
+        if group == "crypto":  # coins: Yahoo daily only; KIS is never asked (nor constructed) for them
+            return daily_batch(group, members, fetch=self._fetch, cancelled=cancelled, progress=progress)
         service = self.service()
         if getattr(service, "ready", False):
             batch = kis_batch(service, group, members, cancelled=cancelled, progress=progress,
@@ -308,9 +328,9 @@ class ElidedLabel(QLabel):
 class Sparkline(QWidget):
     """Recent daily closes as one thin line in the row's rise/fall tone; no axes, nothing inferred."""
 
-    def __init__(self):
+    def __init__(self, width=SPARK_WIDTH, height=30):
         super().__init__()
-        self.setFixedSize(SPARK_WIDTH, 30)
+        self.setFixedSize(width, height)
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
         self.values, self.color = (), QColor("#646E68")
 
@@ -374,18 +394,25 @@ class RankRow(QFrame):
             widget.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             layout.addWidget(widget)
 
-    def show_row(self, row, *, language, dark, category, spark, value_tip=""):
+    def show_row(self, row, *, language, dark, category, spark, value_tip="", closed_tip=""):
+        """`closed_tip`: why this row opens nothing (a coin); '' for a row that opens the stock's screen."""
         from .typography import TONE_COLORS, set_tone
         self.row = row
         record, member = row.record, row.record.member
         name = member.label(language)
         self.rank.setText(str(row.rank) if row.rank else "")  # 0: no figure, listed after the ranked rows
-        self.mark.set_identity(member.code, mark_name(name))
+        # A coin's mark is its symbol's letter (B, E, X): two Hangul syllables of '비트코인' would read as a company.
+        self.mark.set_identity(member.code, member.code if member.group == "crypto" else mark_name(name))
         self.mark.setAccessibleName(name)
         self.mark.setToolTip(f"{name} · {member.code}")
         self.mark.set_theme(DARK if dark else LIGHT)
         self.name.set_full(name)
-        self.code.set_full(f"{member.code} · {member.place(language, record.market)}")
+        place = member.place(language, record.market)
+        self.code.set_full(f"{member.code} · {place}" if place else member.code)
+        self.setCursor(Qt.CursorShape.PointingHandCursor if member.instrument is not None and not closed_tip
+                       else Qt.CursorShape.ArrowCursor)
+        self.setToolTip(closed_tip)
+        self.setAccessibleDescription(closed_tip)
         self.price.setText(R.price_text(record.price, member.currency))
         text, tone = R.change_text(record.change_pct)
         self.change.setText(text or "—")
@@ -402,8 +429,8 @@ class RankRow(QFrame):
         self.setAccessibleName(f"{place}{name} {self.price.text()} {self.change.text()} {self.value.text()}")
 
     def _open(self):
-        if self.row is not None:
-            self.opened.emit(self.row.record.member.instrument)
+        if self.row is not None and self.row.record.member.instrument is not None:
+            self.opened.emit(self.row.record.member.instrument)  # a coin has no instrument: nothing opens
 
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton and self.rect().contains(event.position().toPoint()):
@@ -426,25 +453,31 @@ def blend(first, second, share=0.5):
 
 
 def board_stylesheet(palette, dark):
-    """Local rules for the list (the window stylesheet is area S's); the closer sheet wins in Qt.
+    """Local rules for the market page (the window stylesheet is area S's); the closer sheet wins in Qt.
 
     Owner, 2026-11-11 ("구획 선을 연하게 ... 한칸한칸 공간을 넓게"): no outlined boxes here. Chips, the
     refresh button and the sector selector are soft surface fills without borders; rows are separated by
-    whitespace; the one rule under the filters is the border colour blended half way into the background.
+    whitespace; the one rule above the list is the border colour blended half way into the background. The index
+    tiles are the page surface with that hairline; the conditions row is a soft surface_2 band.
 
     A rule here that sets `border` hides the window's `:focus` ring (the closer sheet wins whatever the
-    selector), so every focusable control styled here has its own `:focus` rule: the market buttons
-    (국내 전체·코스피·코스닥·미국) take the window's 2px `accent` ring, their padding 2px smaller while focused
-    so the button keeps its size and the unfocused look is unchanged.
+    selector), so every focusable control styled here has its own `:focus` rule with the window's 2px `accent`
+    ring: the sub-market buttons (전체·코스피·코스닥, 전체·나스닥·NYSE) with their padding 2px smaller while focused
+    so the button keeps its size, and the search, the 조건 toggle, the condition fields, the filter chips and the
+    text buttons the same way.
     """
     from .typography import TONE_COLORS
     p, t = palette, TONE_COLORS[bool(dark)]
     line = blend(p.border, p.bg)
+    chip_line = blend(p.accent, p.accent_soft, 0.6)
     return f"""
+          QFrame#marketBoard {{ background: transparent; border: 0; }}
+          QWidget#boardSection {{ background: transparent; }}
           QPushButton[chip='true'] {{ padding: 7px 16px; min-height: 18px; border: 0; border-radius: 16px;
                                      background: {p.surface_2}; color: {p.text}; }}
           QPushButton[chip='true']:hover {{ background: {p.accent_soft}; }}
           QPushButton[chip='true']:checked {{ background: {p.accent}; color: {p.on_accent}; }}
+          QPushButton[chip='true']:disabled {{ background: transparent; color: {p.muted}; }}
           QPushButton[chip='true']:focus {{ border: 2px solid {p.accent}; }}
           QPushButton[tool='true'] {{ background: transparent; border: 0; border-bottom: 2px solid transparent;
                                      padding: {TOOL_PADDING[0]}px {TOOL_PADDING[1]}px; }}
@@ -459,9 +492,50 @@ def board_stylesheet(palette, dark):
           QPushButton#rankRefresh:focus {{ border: 2px solid {p.accent}; }}
           QComboBox#rankSector {{ border: 0; border-radius: 8px; background: {p.surface_2}; }}
           QComboBox#rankSector:focus {{ border: 2px solid {p.accent}; }}
+          QLineEdit#marketSearch {{ min-height: 22px; padding: 6px 14px; border: 1px solid {line}; border-radius: 18px;
+                                   background: {p.surface}; font-size: 14px; }}
+          QLineEdit#marketSearch:focus {{ border: 2px solid {p.accent}; padding: 5px 13px; }}
+          QPushButton#conditionsToggle {{ border: 0; border-radius: 8px; padding: 6px 12px; background: {p.surface_2};
+                                         color: {p.text}; }}
+          QPushButton#conditionsToggle:hover {{ background: {p.accent_soft}; }}
+          QPushButton#conditionsToggle:checked {{ background: {p.accent_soft}; color: {p.accent}; }}
+          QPushButton#conditionsToggle:focus {{ border: 2px solid {p.accent}; padding: 4px 10px; }}
+          QFrame#conditionsPanel {{ background: {p.surface_2}; border: 0; border-radius: 14px; }}
+          QFrame#conditionsPanel QWidget#condGroup {{ background: transparent; }}
+          QLineEdit#condEdit {{ min-height: 20px; padding: 4px 8px; border: 1px solid {line}; border-radius: 8px;
+                               background: {p.surface}; }}
+          QLineEdit#condEdit:focus {{ border: 2px solid {p.accent}; padding: 3px 7px; }}
+          QLineEdit#condEdit[invalid='true'] {{ border: 1px solid {t['up']}; }}
+          QComboBox#condBox {{ border: 1px solid {line}; border-radius: 8px; background: {p.surface}; }}
+          QComboBox#condBox:focus {{ border: 2px solid {p.accent}; }}
+          QPushButton[filterChip='true'] {{ padding: 6px 12px 6px 14px; min-height: 16px; border: 1px solid {chip_line};
+                                           border-radius: 13px; background: {p.accent_soft}; color: {p.accent}; }}
+          QPushButton[filterChip='true']:hover {{ border: 1px solid {p.accent}; }}
+          QPushButton[filterChip='true']:focus {{ border: 2px solid {p.accent}; padding: 5px 11px 5px 13px; }}
+          QPushButton[textButton='true'] {{ border: 0; border-radius: 6px; padding: 5px 8px; background: transparent;
+                                           color: {p.muted}; }}
+          QPushButton[textButton='true']:hover {{ color: {p.text}; background: {p.accent_soft}; }}
+          QPushButton[textButton='true']:focus {{ border: 2px solid {p.accent}; padding: 3px 6px; }}
+          QPushButton#otherStock {{ border: 1px solid {line}; border-radius: 13px; padding: 6px 12px; min-height: 16px;
+                                   background: {p.surface}; color: {p.text}; }}
+          QPushButton#otherStock:hover {{ background: {p.accent_soft}; }}
+          QPushButton#otherStock:focus {{ border: 2px solid {p.accent}; padding: 5px 11px; }}
+          QFrame#summaryTile {{ background: {p.surface}; border: 1px solid {line}; border-radius: 12px; }}
           QFrame#rankRow {{ background: transparent; border: 0; border-radius: 12px; }}
           QFrame#rankRow:hover, QFrame#rankRow:focus {{ background: {p.accent_soft}; }}
           QFrame#rankDivider {{ background: {line}; border: 0; min-height: 1px; max-height: 1px; }}
+          QLabel[rk='page'] {{ font-size: 24px; font-weight: 600; letter-spacing: -0.6px; }}
+          QLabel[rk='age'], QLabel[rk='count'], QLabel[rk='hint'] {{ font-size: 13px; font-weight: 400;
+                                                                    color: {p.muted}; letter-spacing: -0.1px; }}
+          QLabel[rk='condName'] {{ font-size: 13px; font-weight: 500; letter-spacing: -0.1px; }}
+          QLabel[rk='condUnit'] {{ font-size: 13px; color: {p.muted}; }}
+          QLabel[rk='sumName'] {{ font-size: 13px; font-weight: 500; color: {p.muted}; letter-spacing: -0.1px; }}
+          QLabel[rk='sumValue'] {{ font-size: 15px; font-weight: 600; letter-spacing: 0px; }}
+          QLabel[rk='sumChange'] {{ font-size: 13px; font-weight: 600; letter-spacing: 0px; color: {t['flat']}; }}
+          QLabel[rk='sumChange'][tone='up'] {{ color: {t['up']}; }}
+          QLabel[rk='sumChange'][tone='down'] {{ color: {t['down']}; }}
+          QLabel[rk='sumState'] {{ font-size: 12px; font-weight: 500; color: {p.warning}; padding: 3px 10px;
+                                  border-radius: 9px; background: {t['flat_tint']}; letter-spacing: -0.1px; }}
           QLabel[rk='rank'] {{ font-size: 16px; font-weight: 600; color: {p.accent}; letter-spacing: 0px; }}
           QLabel[rk='name'] {{ font-size: 15px; font-weight: 500; letter-spacing: -0.2px; }}
           QLabel[rk='code'] {{ font-size: 12px; font-weight: 400; color: {p.muted}; letter-spacing: -0.1px; }}
@@ -481,22 +555,55 @@ def board_stylesheet(palette, dark):
         """
 
 
+CRITERIA_WIDE = 940            # below this page width the filters wrap under the category chips
+SEARCH_WIDTHS = (320, 220)     # the header search: wide page, narrow page
+FILTER_POOL = 1 + len(S.CONDITIONS)   # filter chips: the search text, then one per condition
+OTHERS_LIMIT = 4               # stocks outside the curated list offered under the search
+
+
+def _section(top=0):
+    """A transparent block that adds its own top gap only while shown (no gap left behind when hidden)."""
+    widget = QWidget()
+    widget.setObjectName("boardSection")
+    layout = QVBoxLayout(widget)
+    layout.setContentsMargins(0, top, 0, 0)
+    layout.setSpacing(8)
+    return widget, layout
+
+
+def _number(text):
+    """A typed bound ('-3', '+5', '2.5', '−1'), or None when empty or not a number."""
+    text = str(text or "").strip().replace("−", "-").replace(",", "")
+    if text in ("", "-", "+", ".", "-.", "+."):
+        return None
+    try:
+        value = float(text)
+    except ValueError:
+        return None
+    return value if math.isfinite(value) else None
+
+
 class RankingBoard(QFrame):
-    """Category chips, market and sector filters, and the ranked list with its source state."""
+    """One market's page: header row, index strip, criteria, conditions, active filters and the ranked list."""
     open_requested = pyqtSignal(object)
+    listing_requested = pyqtSignal(object)  # a search suggestion outside the curated list
     loaded = pyqtSignal(str)
     category_changed = pyqtSignal(str)      # a chip click or set_category() changed the list shown
+    page_changed = pyqtSignal(str)          # set_page() showed another market
     _progress = pyqtSignal(int, int, int)   # epoch, done, total; emitted on the worker thread, queued here
 
-    def __init__(self, *, loader=None, locale=None, auto_load=True, clock=None, open_fn=None, limit=LIST_LIMIT):
+    def __init__(self, *, loader=None, locale=None, auto_load=True, clock=None, open_fn=None, limit=LIST_LIMIT,
+                 summary_loader=None):
         super().__init__()
-        self.setObjectName("panel")
-        self.setProperty("card", "rankings")
+        from .market_summary import MarketSummary
+        self.setObjectName("marketBoard")
         self.loader, self.auto_load, self.limit = loader, auto_load, limit
         self.ctx, self.dark = locale or LocaleContext("ko_KR"), False
         self.clock = clock or _utc_now
         self.open_fn = open_fn or R.session_open
-        self.category, self.market, self.sector = "value", "kr", ""
+        self.page = "kr"
+        self.screens = {page: S.Screen(page) for page in S.PAGE_KEYS}  # each market keeps its own criteria
+        self.others_fn = None        # (text, page) -> [(label, payload)]: stocks outside the curated list
         self.batches = {}            # group -> Batch: one fetch serves every category of its group
         self.ranked = []
         self._attempted = {}         # group -> when the last fetch failed outright
@@ -505,6 +612,8 @@ class RankingBoard(QFrame):
         self._loading = None         # (group, done, total) while a fetch runs
         self._job_group, self._job_started = None, None
         self._epoch, self._cancel, self._pending, self._stopped = 0, None, False, False
+        self._syncing = self._syncing_edits = False
+        self._wide = None
         self.jobs = Jobs(self)
         self.jobs.succeeded.connect(self._loaded)
         self.jobs.failed.connect(self._failed)
@@ -515,27 +624,46 @@ class RankingBoard(QFrame):
         self.tick.timeout.connect(self._tick)
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(24, 22, 24, 20)
-        layout.setSpacing(14)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        # Header row: market name, data state, search within this market, refresh.
         head = QHBoxLayout()
         head.setSpacing(10)
-        self.heading = _label("heading")
+        self.heading = _label(rk="page")
         head.addWidget(self.heading, 0, Qt.AlignmentFlag.AlignVCenter)
-        head.addStretch(1)
+        head.addSpacing(6)
         self.badge = _label(rk="badge")
         head.addWidget(self.badge, 0, Qt.AlignmentFlag.AlignVCenter)
-        self.caption = _label("caption")
+        self.caption = _label(rk="age")
         head.addWidget(self.caption, 0, Qt.AlignmentFlag.AlignVCenter)
+        head.addStretch(1)
+        self.search = QLineEdit()
+        self.search.setObjectName("marketSearch")
+        self.search.setClearButtonEnabled(True)
+        self.search.setProperty("qg_literal", True)
+        self.search.setFixedWidth(SEARCH_WIDTHS[0])
+        self.search.textChanged.connect(self.set_query)
+        head.addWidget(self.search, 0, Qt.AlignmentFlag.AlignVCenter)
         self.refresh_button = QPushButton()
         self.refresh_button.setObjectName("rankRefresh")
         self.refresh_button.setProperty("qg_literal", True)
-        self.refresh_button.clicked.connect(lambda: self.refresh(manual=True))
-        head.addWidget(self.refresh_button)
+        self.refresh_button.clicked.connect(self._refresh_all)
+        head.addWidget(self.refresh_button, 0, Qt.AlignmentFlag.AlignVCenter)
         layout.addLayout(head)
-        layout.addSpacing(6)
 
+        # Index strip (hidden while it has nothing to show).
+        self.summary_section, summary_layout = _section(14)
+        self.summary = MarketSummary(loader=summary_loader, locale=self.ctx, auto_load=auto_load)
+        self.summary.changed.connect(self._sync_summary)
+        summary_layout.addWidget(self.summary)
+        layout.addWidget(self.summary_section)
+        layout.addSpacing(18)
+
+        # Criteria row: how the list is ranked (chips), then the filters. Wraps to two lines when narrow.
+        self.criteria = QBoxLayout(QBoxLayout.Direction.LeftToRight)
+        self.criteria.setSpacing(24)
         chips = QHBoxLayout()
-        chips.setSpacing(8)
+        chips.setSpacing(6)
         self.category_group = QButtonGroup(self)
         self.category_group.setExclusive(True)
         self.category_buttons = {}
@@ -548,23 +676,24 @@ class RankingBoard(QFrame):
             self.category_group.addButton(button)
             self.category_buttons[key] = button
             chips.addWidget(button)
-        chips.addStretch(1)
-        layout.addLayout(chips)
-
+        chips.addStretch(1)  # chips keep their natural width when the filters wrap under them
+        self.criteria.addLayout(chips)
         filters = QHBoxLayout()
         filters.setSpacing(4)
-        self.market_group = QButtonGroup(self)
-        self.market_group.setExclusive(True)
-        self.market_buttons = {}
-        for key, _en, _ko in R.MARKETS:
-            button = QPushButton()
-            button.setCheckable(True)
-            button.setProperty("tool", True)
-            button.setProperty("qg_literal", True)
-            button.clicked.connect(lambda checked=False, k=key: self.set_market(k))
-            self.market_group.addButton(button)
-            self.market_buttons[key] = button
-            filters.addWidget(button)
+        self.sub_groups, self._sub_buttons = {}, {}
+        for page in S.PAGE_KEYS:
+            group = QButtonGroup(self)
+            group.setExclusive(True)
+            self.sub_groups[page], self._sub_buttons[page] = group, {}
+            for key, _en, _ko in S.SUBS[page]:
+                button = QPushButton()
+                button.setCheckable(True)
+                button.setProperty("tool", True)
+                button.setProperty("qg_literal", True)
+                button.clicked.connect(lambda checked=False, k=key: self.set_sub(k))
+                group.addButton(button)
+                self._sub_buttons[page][key] = button
+                filters.addWidget(button)
         filters.addStretch(1)
         self.sector_box = QComboBox()
         self.sector_box.setObjectName("rankSector")
@@ -572,12 +701,130 @@ class RankingBoard(QFrame):
         self.sector_box.setMinimumWidth(150)
         self.sector_box.currentIndexChanged.connect(self._sector_changed)
         filters.addWidget(self.sector_box)
-        layout.addLayout(filters)
-        layout.addSpacing(10)  # about 24-32px between the controls and the list (owner 2026-11-11)
+        filters.addSpacing(4)
+        self.conditions_button = QPushButton()
+        self.conditions_button.setObjectName("conditionsToggle")
+        self.conditions_button.setProperty("qg_literal", True)
+        self.conditions_button.setCheckable(True)
+        self.conditions_button.setLayoutDirection(Qt.LayoutDirection.RightToLeft)  # the chevron after the text
+        self.conditions_button.toggled.connect(self._conditions_toggled)
+        filters.addWidget(self.conditions_button)
+        self.criteria.addLayout(filters, 1)
+        layout.addLayout(self.criteria)
+
+        # Conditions row (조건): built from core.market.screen.CONDITIONS, so a new condition needs no UI code.
+        self.conditions_section, conditions_layout = _section(12)
+        self.conditions_panel = QFrame()
+        self.conditions_panel.setObjectName("conditionsPanel")
+        panel = QHBoxLayout(self.conditions_panel)
+        panel.setContentsMargins(18, 12, 12, 12)
+        panel.setSpacing(12)
+        flow_host = QWidget()
+        flow_host.setObjectName("condGroup")
+        self.condition_flow = CategoryFlow(flow_host)
+        self.condition_flow.setSpacing(28)
+        self.condition_groups, self.condition_names, self.condition_controls = {}, {}, {}
+        for item in S.CONDITIONS:
+            group = QWidget()
+            group.setObjectName("condGroup")
+            row = QHBoxLayout(group)
+            row.setContentsMargins(0, 0, 0, 0)
+            row.setSpacing(6)
+            name = _label(rk="condName")
+            row.addWidget(name)
+            row.addSpacing(4)
+            if item.kind == "range":
+                low, high = QLineEdit(), QLineEdit()
+                validator = QDoubleValidator(-1000.0, 100000.0, 2, self)
+                validator.setNotation(QDoubleValidator.Notation.StandardNotation)
+                validator.setLocale(QLocale.c())
+                for edit in (low, high):
+                    edit.setObjectName("condEdit")
+                    edit.setProperty("qg_literal", True)
+                    edit.setFixedWidth(72)
+                    edit.setAlignment(Qt.AlignmentFlag.AlignRight)
+                    edit.setValidator(validator)
+                    edit.textEdited.connect(lambda _text, k=item.key: self._range_edited(k))
+                between = _label(rk="condUnit")
+                between.setText("~")
+                unit_low, unit_high = _label(rk="condUnit"), _label(rk="condUnit")
+                unit_low.setText("%")
+                unit_high.setText("%")
+                for widget in (low, unit_low, between, high, unit_high):
+                    row.addWidget(widget)
+                self.condition_controls[item.key] = (low, high)
+            else:
+                box = QComboBox()
+                box.setObjectName("condBox")
+                box.setProperty("qg_literal", True)
+                box.setMinimumWidth(130)
+                box.currentIndexChanged.connect(lambda _index, k=item.key: self._minimum_chosen(k))
+                row.addWidget(box)
+                self.condition_controls[item.key] = (box,)
+            self.condition_flow.addWidget(group)
+            self.condition_groups[item.key], self.condition_names[item.key] = group, name
+        panel.addWidget(flow_host, 1)
+        self.conditions_clear = QPushButton()
+        self.conditions_clear.setProperty("textButton", True)
+        self.conditions_clear.setProperty("qg_literal", True)
+        self.conditions_clear.clicked.connect(self.clear_conditions)
+        panel.addWidget(self.conditions_clear, 0, Qt.AlignmentFlag.AlignVCenter)
+        conditions_layout.addWidget(self.conditions_panel)
+        self.conditions_section.hide()
+        layout.addWidget(self.conditions_section)
+
+        # Active search and conditions as chips, one click each to remove; a count; stocks outside the list.
+        self.active_section, active_layout = _section(14)
+        chips_row = QHBoxLayout()
+        chips_row.setSpacing(6)
+        self.filter_chips = []
+        for _ in range(FILTER_POOL):
+            chip = QPushButton()
+            chip.setProperty("filterChip", True)
+            chip.setProperty("qg_literal", True)
+            chip.clicked.connect(lambda checked=False, c=chip: self._chip_clicked(c))
+            chip.hide()
+            chips_row.addWidget(chip)
+            self.filter_chips.append(chip)
+        self.clear_button = QPushButton()
+        self.clear_button.setProperty("textButton", True)
+        self.clear_button.setProperty("qg_literal", True)
+        self.clear_button.clicked.connect(self.clear_filters)
+        chips_row.addWidget(self.clear_button)
+        chips_row.addStretch(1)
+        self.count = _label(rk="count")
+        chips_row.addWidget(self.count, 0, Qt.AlignmentFlag.AlignVCenter)
+        active_layout.addLayout(chips_row)
+        others_row = QHBoxLayout()
+        others_row.setSpacing(6)
+        self.others_label = _label(rk="hint")
+        others_row.addWidget(self.others_label)
+        self.other_buttons = []
+        for _ in range(OTHERS_LIMIT):
+            button = QPushButton()
+            button.setObjectName("otherStock")
+            button.setProperty("qg_literal", True)
+            button.clicked.connect(lambda checked=False, b=button: self._other_clicked(b))
+            button.hide()
+            others_row.addWidget(button)
+            self.other_buttons.append(button)
+        others_row.addStretch(1)
+        self.others_host = QWidget()
+        self.others_host.setObjectName("boardSection")
+        self.others_host.setLayout(others_row)
+        others_row.setContentsMargins(0, 0, 0, 0)
+        active_layout.addWidget(self.others_host)
+        self.message = _label("caption", wrap=True)
+        self.message.hide()
+        active_layout.addWidget(self.message)
+        self.active_section.hide()
+        layout.addWidget(self.active_section)
+        layout.addSpacing(20)
 
         divider = QFrame()
         divider.setObjectName("rankDivider")
         layout.addWidget(divider)
+        layout.addSpacing(8)
         header = QHBoxLayout()
         header.setContentsMargins(*ROW_MARGINS[:1], 0, ROW_MARGINS[2], 0)
         header.setSpacing(ROW_SPACING)
@@ -598,6 +845,7 @@ class RankingBoard(QFrame):
             header.addWidget(widget)
         self.head_value.setWordWrap(True)  # "Market cap (computed)" takes two lines in the figure column
         layout.addLayout(header)
+        layout.addSpacing(4)
         self.list_layout = QVBoxLayout()
         self.list_layout.setContentsMargins(0, 0, 0, 0)
         self.list_layout.setSpacing(2)
@@ -606,7 +854,7 @@ class RankingBoard(QFrame):
         self.empty = _label(rk="empty", wrap=True)
         self.empty.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.empty)
-        layout.addSpacing(10)
+        layout.addSpacing(12)
         self.footnote = _label("caption", wrap=True)
         layout.addWidget(self.footnote)
         self.set_theme(False)
@@ -622,27 +870,90 @@ class RankingBoard(QFrame):
     def _lang(self):
         return "ko" if self.ctx.language == "ko" else "en"
 
+    def _p(self, key, **fields):
+        """A short word or template of the market page (owner_ui_language.market.PAGE_TEXT), in the window language."""
+        from .owner_ui_language.market import PAGE_TEXT
+        english, korean = PAGE_TEXT[key]
+        template = korean if self.ctx.language == "ko" else english
+        return template.format(**fields) if fields else template
+
     # Selection --------------------------------------------------------------------------------
+    @property
+    def screen(self):
+        """The shown market's criteria (`core.market.screen.Screen`)."""
+        return self.screens[self.page]
+
+    def _set_screen(self, screen):
+        self.screens[screen.page] = screen
+
+    @property
+    def category(self):
+        return self.screen.category
+
+    @property
+    def sector(self):
+        return self.screen.sector
+
+    @property
+    def sub(self):
+        return self.screen.sub
+
+    @property
+    def query(self):
+        return self.screen.text
+
+    @property
+    def market(self):
+        """The list key of `rankings.MARKETS` (or 'crypto') for what is shown, as the earlier market buttons named it."""
+        return self.sub if self.page == "kr" and self.sub else self.page
+
+    @property
+    def sub_buttons(self):
+        """The shown market's sub-market buttons, by `screen.SUBS` key ('' is the whole market)."""
+        return self._sub_buttons[self.page]
+
     def group(self):
-        return R.group_of(self.market)
+        return R.group_of(self.page)
+
+    def set_page(self, page):
+        """Show one market's page (`screen.PAGE_KEYS`); its criteria are kept from its last visit."""
+        if page not in S.PAGE_KEYS:
+            raise ValueError(f"Unknown market page {page!r}")
+        changed, group_before = page != self.page, self.group()
+        self.page = page
+        self.summary.set_page(page)
+        self._fill_sectors()
+        self._sync_search()
+        self.render()
+        if changed:
+            self.page_changed.emit(page)
+        if self.group() != group_before and self.isVisible() and self.auto_load:
+            QTimer.singleShot(0, self.refresh)
+        return True
+
+    def set_market(self, key):
+        """Earlier list keys: 'kr', 'kospi', 'kosdaq', 'us' (and 'crypto'): the market page and its sub-market."""
+        R.group_of(key)  # refuses an unknown key
+        page = key if key in S.PAGE_KEYS else "kr"
+        self.set_page(page)
+        self.set_sub(key if key in ("kospi", "kosdaq") else "")
+        return True
+
+    def set_sub(self, key):
+        if key not in {k for k, _en, _ko in S.SUBS[self.page]} | {""}:
+            raise ValueError(f"Sub-market {key!r} is not in {self.page!r}")
+        self._set_screen(replace(self.screen, sub=key))
+        self.render()
+        return True
 
     def set_category(self, key):
         if key not in R.CATEGORY_KEYS:
             raise ValueError(f"Unknown ranking category {key!r}")
-        changed, self.category = key != self.category, key
+        changed = key != self.category
+        self._set_screen(replace(self.screen, category=key))
         self.render()
         if changed:
             self.category_changed.emit(key)
-        return True
-
-    def set_market(self, key):
-        group_before = self.group()
-        R.group_of(key)  # refuses an unknown key
-        self.market = key
-        self._fill_sectors()
-        self.render()
-        if self.group() != group_before and self.isVisible() and self.auto_load:
-            QTimer.singleShot(0, self.refresh)
         return True
 
     def set_sector(self, key):
@@ -652,7 +963,9 @@ class RankingBoard(QFrame):
         self.sector_box.setCurrentIndex(index)
 
     def _sector_changed(self, _index):
-        self.sector = self.sector_box.currentData() or ""
+        if self._syncing:
+            return
+        self._set_screen(replace(self.screen, sector=self.sector_box.currentData() or ""))
         self.render()
 
     def _fill_sectors(self):
@@ -660,13 +973,93 @@ class RankingBoard(QFrame):
         self.sector_box.blockSignals(True)
         self.sector_box.clear()
         self.sector_box.addItem(self._t("All sectors"), "")
-        for key in R.sectors_in(self.market):
+        for key in R.sectors_in(self.page):
             self.sector_box.addItem(R.text(R.SECTORS, key, lang), key)
         index = max(0, self.sector_box.findData(keep))
         self.sector_box.setCurrentIndex(index)
-        self.sector = self.sector_box.currentData() or ""
         self.sector_box.blockSignals(False)
         self.sector_box.setAccessibleName(self._t("Sector"))
+        self.sector_box.setVisible(bool(R.sectors_in(self.page)))
+
+    def set_query(self, text):
+        """Narrow the shown market's list to names, codes or sectors matching `text` (the header search)."""
+        text = str(text or "")
+        if text == self.query:
+            return
+        self.message.hide()  # a 'not found' message belongs to the text it answered
+        self._set_screen(replace(self.screen, text=text))
+        self._sync_search()
+        self.render()
+
+    def _sync_search(self):
+        if self.search.text() != self.query:
+            self.search.blockSignals(True)
+            self.search.setText(self.query)
+            self.search.blockSignals(False)
+
+    def set_limit(self, key, low=None, high=None):
+        """Set one condition of the shown market (`screen.CONDITIONS`); no bound clears it."""
+        self._set_screen(self.screen.with_limit(key, low, high))
+        self.render()
+
+    def clear_conditions(self):
+        self._set_screen(self.screen.cleared())
+        self.render()
+
+    def clear_filters(self):
+        """One click: the search text and every condition of this market (category, market and sector stay)."""
+        self._set_screen(replace(self.screen.cleared(), text=""))
+        self._sync_search()
+        self.render()
+
+    def set_conditions_open(self, shown):
+        self.conditions_button.setChecked(bool(shown))
+
+    def _conditions_toggled(self, shown):
+        self.conditions_section.setVisible(bool(shown))
+        self._render_conditions_button()
+
+    def _range_edited(self, key):
+        low_edit, high_edit = self.condition_controls[key]
+        low, high = _number(low_edit.text()), _number(high_edit.text())
+        bad = low is not None and high is not None and low > high
+        for edit in (low_edit, high_edit):
+            if bool(edit.property("invalid")) != bad:
+                edit.setProperty("invalid", bad)
+                _repolish(edit)
+            edit.setToolTip(self._t("The lower bound is above the upper bound.") if bad else "")
+        if bad:
+            return  # the list keeps the last valid range until the bounds agree
+        self._set_screen(self.screen.with_limit(key, low, high))
+        self._syncing_edits = True
+        try:
+            self.render()
+        finally:
+            self._syncing_edits = False
+
+    def _minimum_chosen(self, key):
+        if self._syncing:
+            return
+        box = self.condition_controls[key][0]
+        value = box.currentData()
+        self._set_screen(self.screen.with_limit(key, value if value else None))
+        self.render()
+
+    def _chip_clicked(self, chip):
+        key = chip.property("filterKey")
+        if key == "text":
+            self.set_query("")
+        elif key:
+            self.set_limit(key)
+
+    def _other_clicked(self, button):
+        payload = getattr(button, "payload", None)
+        if payload is not None:
+            self.listing_requested.emit(payload)
+
+    def _refresh_all(self):
+        self.refresh(manual=True)
+        self.summary.refresh(manual=True)
 
     # Loading ----------------------------------------------------------------------------------
     def due(self, group=None, now=None):
@@ -792,44 +1185,191 @@ class RankingBoard(QFrame):
 
     # Presentation -----------------------------------------------------------------------------
     def set_locale(self, ctx):
+        """Every text in the new language from what is already loaded: never a fetch."""
         self.ctx = ctx
-        lang = self._lang()
-        self.heading.setText(self._t("Real-time charts"))
-        for key, button in self.category_buttons.items():
-            button.setText(R.text(R.CATEGORIES, key, lang))
-        for key, button in self.market_buttons.items():
-            button.setText(R.text(R.MARKETS, key, lang))
-        # A bare 'Refresh' pair would retranslate every other Refresh button in the window.
-        self.refresh_button.setText("새로고침" if lang == "ko" else "Refresh")
-        self.refresh_button.setAccessibleName(self._t("Refresh the ranked list"))
-        self.head_rank.setText(R.text(R.COLUMNS, "rank", lang))
-        self.head_stock.setText(R.text(R.COLUMNS, "stock", lang))
-        self.head_price.setText(R.text(R.COLUMNS, "price", lang))
-        self.head_change.setText(R.text(R.COLUMNS, "change", lang))
+        self.summary.set_locale(ctx)
         self._fill_sectors()
         self.render()
 
     def set_theme(self, dark):
         self.dark = bool(dark)
         self.setStyleSheet(board_stylesheet(DARK if self.dark else LIGHT, self.dark))
+        self.summary.set_theme(self.dark)
         self.render()
 
-    def render(self):
-        lang, group = self._lang(), self.group()
+    def _sync_summary(self):
+        self.summary_section.setVisible(self.summary.wanted())
+        # The strip's "지연·일별" is said once: not again beside the header badge when the list is daily too.
+        self.summary.state.setVisible(self.summary.has_data() and self.state() != "daily")
+
+    def _render_chrome(self):
+        """Labels, chips and filters for the shown market, in the window language."""
+        lang, page, screen = self._lang(), self.page, self.screen
+        name = S.page_text(page, lang)
+        self.heading.setText(name)
+        self.heading.setAccessibleName(name)
+        if self._wide is False:  # a narrow page keeps the short form; the full one is the accessible description
+            self.search.setPlaceholderText(self._t("Search within {market}", market=name))
+        else:
+            self.search.setPlaceholderText(self._t("Find in {market}: name, code, sector", market=name)
+                                           if page != "crypto" else self._t("Find coins: name or symbol"))
+        self.search.setAccessibleName(self._t("Search within {market}", market=name))
+        # A bare 'Refresh' pair would retranslate every other Refresh button in the window.
+        self.refresh_button.setText("새로고침" if lang == "ko" else "Refresh")
+        self.refresh_button.setAccessibleName(self._t("Refresh the ranked list"))
         for key, button in self.category_buttons.items():
-            button.setChecked(key == self.category)
-        for key, button in self.market_buttons.items():
-            button.setChecked(key == self.market)
+            button.setText(R.text(R.CATEGORIES, key, lang))
+            note = S.category_note(page, key)
+            button.setEnabled(not note)
+            button.setToolTip(self._t(note) if note else "")
+            button.setChecked(key == screen.category)
+        for each, buttons in self._sub_buttons.items():
+            for key, button in buttons.items():
+                button.setText(S.sub_text(each, key, lang))
+                button.setChecked(each == page and key == screen.sub)
+                button.setVisible(each == page)
+        self._syncing = True
+        try:
+            index = self.sector_box.findData(screen.sector)
+            if index >= 0 and index != self.sector_box.currentIndex():
+                self.sector_box.setCurrentIndex(index)
+        finally:
+            self._syncing = False
+        self.head_rank.setText(R.text(R.COLUMNS, "rank", lang))
+        self.head_stock.setText(self._p("coin") if page == "crypto" else R.text(R.COLUMNS, "stock", lang))
+        self.head_price.setText(R.text(R.COLUMNS, "price", lang))
+        self.head_change.setText(R.text(R.COLUMNS, "change", lang))
+        self._render_conditions()
+        self._render_conditions_button()
+
+    def _render_conditions_button(self):
+        from PyQt6.QtGui import QIcon
+        from .typography import icon_dir
+        count = len(self.screen.limits)
+        word = self._p("conditions")
+        self.conditions_button.setText(f"{word} {count}" if count else word)
+        shown = self.conditions_button.isChecked()
+        theme = "dark" if self.dark else "light"
+        self.conditions_button.setIcon(QIcon(f"{icon_dir()}/chevron-{'up' if shown else 'down'}-{theme}.svg"))
+        self.conditions_button.setAccessibleName(
+            self._t("Conditions: {count} set", count=count) if count else word)
+        self.conditions_button.setToolTip(self._t("Narrow this list by change, trading value or market cap."))
+
+    def _render_conditions(self):
+        """The condition controls of the shown market, holding its current limits (signals held back)."""
+        lang, page, screen = self._lang(), self.page, self.screen
+        self._syncing = True
+        try:
+            for item in S.CONDITIONS:
+                group = self.condition_groups[item.key]
+                group.setVisible(item.available(page))
+                self.condition_names[item.key].setText(item.label(lang))
+                low, high = screen.limit(item.key)
+                controls = self.condition_controls[item.key]
+                if item.kind == "range":
+                    for edit, value, hint in ((controls[0], low, self._p("min")), (controls[1], high, self._p("max"))):
+                        edit.setPlaceholderText(hint)
+                        edit.setAccessibleName(f"{item.label(lang)} {hint} %")
+                        if not getattr(self, "_syncing_edits", False) and _number(edit.text()) != value:
+                            edit.setText("" if value is None else f"{value:g}")
+                    continue
+                box = controls[0]
+                steps = tuple(float(step) for step in item.steps.get(page, ()))
+                if low is not None and float(low) not in steps:
+                    steps = tuple(sorted(steps + (float(low),)))  # a bound set from code is shown as itself
+                filled = (page, lang, steps)
+                if getattr(box, "filled", None) != filled:  # refilled only when its market or language changes
+                    box.clear()
+                    box.addItem(self._p("any"), 0.0)
+                    for step in steps:
+                        box.addItem(self._p("or_more", value=S.threshold_text(step, item.unit, page, lang)), step)
+                    box.filled = filled
+                index = box.findData(float(low)) if low is not None else 0
+                if box.currentIndex() != index:
+                    box.setCurrentIndex(index)
+                box.setAccessibleName(item.label(lang))
+            self.conditions_clear.setText(self._t("Clear conditions"))
+            self.conditions_clear.setEnabled(bool(screen.limits))
+        finally:
+            self._syncing = False
+        self.condition_flow.invalidate()
+
+    def _limit_text(self, item, low, high):
+        lang, page = self._lang(), self.page
+        name = item.label(lang)
+        fmt = lambda value: S.threshold_text(value, item.unit, page, lang)
+        if low is not None and high is not None:
+            return self._p("between", name=name, low=fmt(low), high=fmt(high))
+        if low is not None:
+            return self._p("at_least", name=name, value=fmt(low))
+        return self._p("at_most", name=name, value=fmt(high))
+
+    def _render_active(self, rows):
+        """Chips for the search text and each condition; one-click clear; how many rows remain."""
+        screen = self.screen
+        chips = []
+        if screen.text.strip():
+            chips.append(("text", f"‘{screen.text.strip()}’"))
+        chips += [(item.key, self._limit_text(item, low, high)) for item, low, high in screen.active()]
+        for index, chip in enumerate(self.filter_chips):
+            if index < len(chips):
+                key, text = chips[index]
+                chip.setProperty("filterKey", key)
+                chip.setText(f"{text}  ×")
+                chip.setAccessibleName(self._t("Remove filter: {name}", name=text))
+                chip.setToolTip(self._t("Remove this filter"))
+                chip.show()
+            else:
+                chip.setProperty("filterKey", "")
+                chip.hide()
+        self.clear_button.setText(self._p("clear_all"))
+        self.clear_button.setVisible(len(chips) > 1)
+        ranked = sum(1 for row in rows if row.rank)
+        self.count.setText(self._p("coin_results" if self.page == "crypto" else "results", count=ranked))
+        self.count.setVisible(bool(chips) and self.batches.get(self.group()) is not None)
+        others = self._others()
+        for button, other in zip(self.other_buttons, others + [None] * (len(self.other_buttons) - len(others))):
+            button.payload = other[1] if other else None
+            button.setText(other[0] if other else "")
+            button.setAccessibleName(self._p("open", name=other[0]) if other else "")
+            button.setVisible(other is not None)
+        self.others_label.setText(self._t("Outside this list:"))
+        self.others_host.setVisible(bool(others))
+        self.active_section.setVisible(bool(chips) or bool(others) or self.message.isVisibleTo(self))
+
+    def _others(self):
+        """Stocks of this market outside the curated list that the search text names (the symbol directory)."""
+        text = self.query.strip()
+        if not text or self.others_fn is None:
+            return []
+        try:
+            found = list(self.others_fn(text, self.page) or ())
+        except Exception:  # the directory is optional; a failure only drops the suggestions
+            return []
+        listed = {(m.code, m.exchange) for m in R.members_of(self.group())}
+        listed |= {(m.code, "") for m in R.members_of(self.group())}
+        return [item for item in found if (getattr(item[1], "code", ""), getattr(item[1], "exchange", "")) not in listed
+                ][:OTHERS_LIMIT]
+
+    def say(self, text):
+        """A short message under the filters (the search's 'not found'); '' hides it."""
+        self.message.setText(text)
+        self.message.setVisible(bool(text))
+        self.active_section.setVisible(bool(text) or any(c.isVisibleTo(self) for c in self.filter_chips)
+                                       or self.others_host.isVisibleTo(self))
+
+    def render(self):
+        lang, group, screen = self._lang(), self.group(), self.screen
+        self._render_chrome()
         batch = self.batches.get(group)
         # Market cap: a stock whose figure could not be read (US) or was refused (domestic: KIS's hts_avls
         # disagreed with listed shares x price, or could not be checked) is listed last, unranked, as '—'.
-        missing = "last" if self.category == "cap" else "omit"
-        rows = R.rank(batch.records, self.category, market=self.market, sector=self.sector,
-                      limit=self.limit, missing=missing) if batch is not None else []
+        missing = "last" if screen.category == "cap" else "omit"
+        rows = screen.apply(batch.records, limit=self.limit, missing=missing) if batch is not None else []
         self.ranked = rows
         spark = self.width() >= SPARK_MIN_WIDTH and any(len(row.record.closes) > 1 for row in rows)
         self.head_spark.setVisible(spark and bool(rows))
-        kind, _unit = R.value_unit(self.category, group)
+        kind, _unit = R.value_unit(screen.category, group)
         self.head_value.setText(R.cap_label(rows, lang) if kind == "cap" else R.text(R.CATEGORIES, kind, lang))
         self.head_value.setToolTip(self._cap_heading_tip(rows) if kind == "cap" else "")
         while len(self.rows) < len(rows):
@@ -837,9 +1377,10 @@ class RankingBoard(QFrame):
             row.opened.connect(self.open_requested)
             self.rows.append(row)
             self.list_layout.addWidget(row)
+        closed = self._t("Coins have no stock screen yet, so this row opens nothing.") if self.page == "crypto" else ""
         for widget, row in zip(self.rows, rows):
-            widget.show_row(row, language=lang, dark=self.dark, category=self.category, spark=spark,
-                            value_tip=self._cap_tip(row.record) if kind == "cap" else "")
+            widget.show_row(row, language=lang, dark=self.dark, category=screen.category, spark=spark,
+                            value_tip=self._cap_tip(row.record) if kind == "cap" else "", closed_tip=closed)
             widget.show()
         for widget in self.rows[len(rows):]:
             widget.hide()
@@ -848,9 +1389,14 @@ class RankingBoard(QFrame):
         self.empty.setText("" if rows else self._empty_text(batch))
         self.empty.setVisible(not rows)
         self.footnote.setText(self._footnote(batch))
+        self._render_active(rows)
+        self._sync_summary()
         self._render_status()
 
     def _empty_text(self, batch):
+        note = S.category_note(self.page, self.category)
+        if note:
+            return self._t(note)
         if self._loading is not None and self._loading[0] == self.group():
             return self._t("Loading quotes…")
         if batch is None:
@@ -861,6 +1407,10 @@ class RankingBoard(QFrame):
             return self._t("Not loaded yet. Press Refresh to load the list.")
         if not batch.records:
             return self._t("Could not load quotes. Trying again shortly.")
+        if self.query.strip() and not any(replace(self.screen, limits=()).matches(r) for r in batch.records):
+            return self._t("Nothing in this list matches ‘{text}’.", text=self.query.strip())
+        if self.screen.limits:
+            return self._t("No stocks match these filters.")
         if self.category == "cap" and self.group() == "us":
             return self._us_cap_empty(batch)
         if self.category == "cap":
@@ -885,7 +1435,7 @@ class RankingBoard(QFrame):
     # Domestic market cap ------------------------------------------------------------------------
     def _kr_cap_empty(self, batch):
         """Why the domestic market-cap list is empty: the daily path has none; KIS figures were refused."""
-        listed = {member.code for member in R.universe(self.market, self.sector)}
+        listed = {member.code for member in self.screen.members(text=False)}
         records = [r for r in batch.records if r.member.code in listed]
         reasons = [r.cap_missing for r in records if r.cap_missing]
         if not records:
@@ -946,10 +1496,17 @@ class RankingBoard(QFrame):
         return " ".join(parts)
 
     def _footnote(self, batch):
-        listed = {member.code for member in R.universe(self.market, self.sector)}
-        parts = [self._t("Ranked among {count} major stocks, not the whole market. Open a row for its chart.",
-                         count=len(listed))]
-        if batch is not None and batch.mode == "daily":
+        listed = {member.code for member in self.screen.members(text=False)}
+        if self.page == "crypto":
+            parts = [self._t("Ranked among {count} major coins, not the whole market. Prices in US dollars.",
+                             count=len(listed))]
+            if batch is not None and batch.records:
+                parts.append(self._t("Delayed · daily: Yahoo Finance daily bars by UTC day, today's still moving; "
+                                     "trading value is Yahoo's daily dollar volume."))
+        else:
+            parts = [self._t("Ranked among {count} major stocks, not the whole market. Open a row for its chart.",
+                             count=len(listed))]
+        if batch is not None and batch.mode == "daily" and self.page != "crypto":
             parts.append(self._t("Delayed · daily: the last daily bar; trading value is close × volume, estimated."))
         if self.category == "cap" and self.group() == "kr" and self.ranked:
             if any(row.record.cap_basis == "provider" for row in self.ranked):
@@ -1025,6 +1582,10 @@ class RankingBoard(QFrame):
         sources = sorted({r.source for r in batch.records})
         if batch.mode == "daily":
             days = sorted({r.as_of for r in batch.records})
+            if batch.group == "crypto":
+                return self._t("{source} daily bars by UTC day, last bar {day} (still moving today); prices and "
+                               "trading value in US dollars as Yahoo states them.",
+                               source=", ".join(sources), day=days[-1] if days else "—")
             return self._t("{source} daily bars, last bar {day}; trading value estimated as close × volume.",
                            source=", ".join(sources), day=days[-1] if days else "—")
         from zoneinfo import ZoneInfo
@@ -1042,7 +1603,15 @@ class RankingBoard(QFrame):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        spark = event.size().width() >= SPARK_MIN_WIDTH
+        width = event.size().width()
+        wide = width >= CRITERIA_WIDE
+        if wide != self._wide:
+            self._wide = wide
+            self.criteria.setDirection(QBoxLayout.Direction.LeftToRight if wide else QBoxLayout.Direction.TopToBottom)
+            self.criteria.setSpacing(24 if wide else 12)
+            self.search.setFixedWidth(SEARCH_WIDTHS[0] if wide else SEARCH_WIDTHS[1])
+            self._render_chrome()
+        spark = width >= SPARK_MIN_WIDTH
         if spark != (event.oldSize().width() >= SPARK_MIN_WIDTH):
             self.render()
 

@@ -1,7 +1,8 @@
 """Left rail chrome: the hide/show toggle, the Markets sub-menu and keyboard moves (owner 2026-11-11, UI-D7).
 
-Owner points 2 and 3: clicking Markets shows sub-items to pick what to look at (the real-time chart
-categories and stock search), and the rail can be hidden to give the page the full width. The window
+Owner points 2 and 3: clicking Markets shows sub-items to pick what to look at, and the rail can be hidden to
+give the page the full width. Owner ruling UI-D10 (2026-11-11): the sub-items are the markets, 국내 주식 / 미국 주식
+/ 코인 (`core.market.screen.PAGES`); the ranking categories moved into each market's page. The window
 (`app.ResearchWindow`) owns the state; this module holds the pieces that do not need the window:
 the section list, the painted toggle icons and the rail's arrow-key handling.
 """
@@ -11,21 +12,20 @@ from PyQt6.QtCore import QEvent, QObject, QPointF, QRectF, Qt
 from PyQt6.QtGui import QColor, QIcon, QPainter, QPainterPath, QPen, QPixmap
 from PyQt6.QtWidgets import QPushButton, QScrollArea
 
-# The Markets page's real-time chart categories (interface contract: markets_view.RANKING_CATEGORIES).
-# Used only until that constant exists; the Korean display text is in owner_ui_language/common.py.
-FALLBACK_CATEGORIES = (("value", "Trading value"), ("volume", "Volume"), ("gainers", "Top gainers"),
-                       ("losers", "Top losers"), ("cap", "Market cap"))
-SEARCH_SECTION = ("search", "Stock search")
 SETTINGS_KEY = "ui/sidebar_collapsed"
 
 
 def market_sections():
-    """(key, English title) for each Markets sub-item: the five categories, then stock search."""
-    try:
-        from .markets_view import RANKING_CATEGORIES as categories
-    except ImportError:
-        categories = FALLBACK_CATEGORIES
-    return tuple((row[0], row[1]) for row in categories) + (SEARCH_SECTION,)
+    """(key, English title) for each Markets sub-item: the markets (interface contract with the Markets page:
+    `markets_view.MARKET_PAGES`, the table of `core.market.screen.PAGES`)."""
+    from core.market.screen import PAGES
+    return tuple((key, english) for key, english, _korean in PAGES)
+
+
+def market_section_text(key, language):
+    """A Markets sub-item's text in the window language ('국내 주식', 'US stocks')."""
+    from core.market.screen import page_text
+    return page_text(key, "ko" if language == "ko" else "en")
 
 
 def stored_flag(store, key=SETTINGS_KEY):
@@ -178,5 +178,5 @@ class RailKeys(QObject):
         return True
 
 
-__all__ = ["FALLBACK_CATEGORIES", "SEARCH_SECTION", "SETTINGS_KEY", "KEYBOARD_FOCUS", "market_sections",
+__all__ = ["SETTINGS_KEY", "KEYBOARD_FOCUS", "market_sections", "market_section_text",
            "stored_flag", "toggle_icon", "stop_icon", "icon_button", "set_focus_ring", "RailKeys"]

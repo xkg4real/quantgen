@@ -1,6 +1,9 @@
 """Left rail: hide/show with memory, the Markets sub-menu and keyboard use (owner 2026-11-11, UI-D7 points 2-3).
 
 Owner: "시장 누르면 하위 UI로 종목 고를수있게 바꿔주고, 왼쪽 UI화면들 숨기는 기능도 필요해. 공간이슈때문에".
+Owner ruling UI-D10 (2026-11-11): "시장에서 그냥 국장 미장 코인 이런걸 하부ui로 두고, ..." — the sub-menu lists the
+markets (국내 주식 / 미국 주식 / 코인) and calls `markets_view.show_market(key)`; the five ranking categories and
+stock search it listed under UI-D7 are now inside each market's page (these tests pinned them; updated for UI-D10).
 Offline: provider requests raise, dotenv loading is patched off, no jobs run.
 """
 import os
@@ -26,9 +29,9 @@ from quantgen_desktop import shell_rail
 from quantgen_desktop.typography import (RAIL_COLLAPSED_WIDTH, SIDEBAR_WIDTH_RANGE, mix, rail_stylesheet,
                                          window_stylesheet)
 
-SECTION_KEYS = ("value", "volume", "gainers", "losers", "cap", "search")
-ENGLISH = ("Trading value", "Volume", "Top gainers", "Top losers", "Market cap", "Stock search")
-KOREAN = ("거래대금", "거래량", "급상승", "급하락", "시가총액", "종목 검색")
+SECTION_KEYS = ("kr", "us", "crypto")
+ENGLISH = ("Korean stocks", "US stocks", "Crypto")
+KOREAN = ("국내 주식", "미국 주식", "코인")
 
 
 class ShellRailTests(unittest.TestCase):
@@ -161,7 +164,7 @@ class ShellRailTests(unittest.TestCase):
         self.assertFalse(w.paper_halt_strip.isVisible())
         self.assertFalse(w.paper_halt.isEnabled())
 
-    # Owner point 2: Markets opens sub-items to pick what to look at.
+    # Owner point 2 and ruling UI-D10: Markets opens one sub-item per market.
     def test_markets_sub_menu_shows_only_for_markets_and_calls_the_page(self):
         w = self.window()
         self.assertEqual(tuple(w.market_sections), SECTION_KEYS)
@@ -177,7 +180,7 @@ class ShellRailTests(unittest.TestCase):
         for route in w.nav:
             w.navigate(route)
             self.assertEqual(w.market_submenu.isVisible(), route == "markets", route)
-        w.markets_view.show_category = Mock()
+        w.markets_view.show_market = Mock()
         for key in SECTION_KEYS:
             w.navigate("tools")
             w.market_sections[key].click()
@@ -185,69 +188,68 @@ class ShellRailTests(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertEqual(w.stack.currentIndex(), w.route_indices["markets"])
                 self.assertTrue(w.nav["markets"].isChecked())
-                w.markets_view.show_category.assert_called_with(key)
+                w.markets_view.show_market.assert_called_with(key)
                 self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], [key])
                 self.assertTrue(w.market_submenu.isVisible())
-        self.assertEqual(w.markets_view.show_category.call_count, len(SECTION_KEYS))
-        w.market_sections["cap"].click()  # clicking the selected item keeps it selected
-        self.assertTrue(w.market_sections["cap"].isChecked())
-        with self.assertRaises(ValueError):
-            w.open_market_section("rankings")
+        self.assertEqual(w.markets_view.show_market.call_count, len(SECTION_KEYS))
+        w.market_sections["crypto"].click()  # clicking the selected item keeps it selected
+        self.assertTrue(w.market_sections["crypto"].isChecked())
+        for old in ("rankings", "value", "search"):  # the UI-D7 categories are no longer rail items
+            with self.assertRaises(ValueError):
+                w.open_market_section(old)
 
     def test_sections_follow_the_markets_page_contract(self):
         w = self.window(show=False)
-        try:
-            from quantgen_desktop.markets_view import RANKING_CATEGORIES
-        except ImportError:  # until the Markets page publishes its categories
-            RANKING_CATEGORIES = shell_rail.FALLBACK_CATEGORIES
-        self.assertEqual(tuple(w.market_sections), tuple(row[0] for row in RANKING_CATEGORIES) + ("search",))
-        self.assertEqual(tuple(row[1] for row in RANKING_CATEGORIES), ENGLISH[:5])
+        from quantgen_desktop.markets_view import MARKET_PAGES
+        self.assertEqual(tuple(w.market_sections), tuple(row[0] for row in MARKET_PAGES))
+        self.assertEqual(tuple(row[1] for row in MARKET_PAGES), ENGLISH)
+        self.assertEqual(tuple(row[2] for row in MARKET_PAGES), KOREAN)
+        self.assertEqual(shell_rail.market_sections(), tuple(zip(SECTION_KEYS, ENGLISH)))
 
     def test_highlight_follows_what_markets_shows(self):
         w = self.window()
         view = w.markets_view
-        view.show_category = Mock()
         w.navigate("markets")
-        # The Markets page reports its default category (trading value) on the first visit.
-        self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], ["value"])
-        view.current_category = lambda: "losers"  # the page may report its own category
+        # The Markets page reports its default market (국내 주식) on the first visit.
+        self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], ["kr"])
+        view.rankings.set_page("crypto")  # the page's own change (signal) moves the highlight
+        self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], ["crypto"])
+        view.current_market = lambda: "us"  # the page may report its own market
         w.navigate("home")
         w.navigate("markets")
-        self.assertTrue(w.market_sections["losers"].isChecked())
-        view.showing_stock = lambda: True  # one stock's screen belongs to stock search
+        self.assertTrue(w.market_sections["us"].isChecked())
+        view.showing_stock = lambda: True  # a stock's screen keeps the market it was opened over
         w.navigate("markets")
-        self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], ["search"])
-        view.current_category = lambda: None  # the page reports nothing: the last choice is kept
+        self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], ["us"])
+        view.current_market = lambda: None  # the page reports nothing: the last choice is kept
         view.showing_stock = lambda: False
-        w.market_sections["volume"].click()
+        w.market_sections["kr"].click()
         w.navigate("guide")
         w.navigate("markets")  # back on Markets: the last choice stays highlighted
-        self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], ["volume"])
+        self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], ["kr"])
 
-    def test_highlight_follows_the_page_when_it_announces_its_category(self):
+    def test_highlight_follows_the_page_when_it_announces_its_market(self):
         class Page(QObject):
-            category_changed = pyqtSignal(str)
+            market_changed = pyqtSignal(str)
 
         w = self.window(show=False)
         page = Page()
         w.connect_market_sections(page)
-        page.category_changed.emit("cap")
-        self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], ["cap"])
-        page.category_changed.emit("search")
-        self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], ["search"])
+        page.market_changed.emit("crypto")
+        self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], ["crypto"])
+        page.market_changed.emit("us")
+        self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], ["us"])
         w.connect_market_sections(object())  # a page without the signal is fine
 
-    def test_search_works_before_the_page_has_categories(self):
+    def test_a_page_without_markets_still_opens(self):
         w = self.window()
         real = w.markets_view
         stub = SimpleNamespace(showing_stock=lambda: False, search=Mock())
         w.markets_view = stub
         try:
-            w.open_market_section("search")
-            stub.search.setFocus.assert_called_once()
-            w.open_market_section("value")  # no category view yet: Markets opens, nothing fails
+            w.open_market_section("us")  # no market pages yet: Markets opens, nothing fails
             self.assertEqual(w.stack.currentIndex(), w.route_indices["markets"])
-            self.assertTrue(w.market_sections["value"].isChecked())
+            self.assertTrue(w.market_sections["us"].isChecked())
         finally:
             w.markets_view = real
 
@@ -274,7 +276,7 @@ class ShellRailTests(unittest.TestCase):
     # Keyboard: arrows walk the rail, Return opens, the ring shows for keyboard focus only.
     def test_rail_keyboard_walk_and_focus_ring(self):
         w = self.window()
-        w.markets_view.show_category = Mock()
+        w.markets_view.show_market = Mock()
         home = w.nav["home"]
         home.setFocus(Qt.FocusReason.TabFocusReason)
         self.settle()
@@ -290,15 +292,16 @@ class ShellRailTests(unittest.TestCase):
         self.assertEqual(w.stack.currentIndex(), w.route_indices["markets"])
         self.assertTrue(w.market_submenu.isVisible())
         QTest.keyClick(markets, Qt.Key.Key_Down)
-        value = w.market_sections["value"]
-        self.assertTrue(value.hasFocus())
-        QTest.keyClick(value, Qt.Key.Key_Down)
-        QTest.keyClick(w.market_sections["volume"], Qt.Key.Key_Enter)
-        w.markets_view.show_category.assert_called_with("volume")
-        self.assertTrue(w.market_sections["volume"].isChecked())
-        QTest.keyClick(w.market_sections["volume"], Qt.Key.Key_Space)
-        w.markets_view.show_category.assert_called_with("volume")
-        QTest.keyClick(w.market_sections["volume"], Qt.Key.Key_End)
+        korea = w.market_sections["kr"]
+        self.assertTrue(korea.hasFocus())
+        QTest.keyClick(korea, Qt.Key.Key_Down)
+        QTest.keyClick(w.market_sections["us"], Qt.Key.Key_Enter)
+        w.markets_view.show_market.assert_called_with("us")
+        self.assertTrue(w.market_sections["us"].isChecked())
+        QTest.keyClick(w.market_sections["us"], Qt.Key.Key_Down)
+        QTest.keyClick(w.market_sections["crypto"], Qt.Key.Key_Space)
+        w.markets_view.show_market.assert_called_with("crypto")
+        QTest.keyClick(w.market_sections["crypto"], Qt.Key.Key_End)
         self.assertTrue(w.nav["system"].hasFocus())
         QTest.keyClick(w.nav["system"], Qt.Key.Key_Home)
         self.assertTrue(w.sidebar_hide.hasFocus())
@@ -327,7 +330,9 @@ class ShellRailTests(unittest.TestCase):
         w.navigate("markets")
         self.settle()
         bar = w.rail_scroll.verticalScrollBar()
-        self.assertGreater(bar.maximum(), 0)  # nav + sub-menu do not fit; bottom controls stay pinned
+        # UI-D10: three market sub-items instead of six; the rail scrolls only if it must, and the bottom
+        # controls stay pinned either way.
+        self.assertGreaterEqual(bar.maximum(), 0)
         for widget in (w.paper_halt, w.theme, w.language):
             self.assertTrue(w.sidebar.rect().contains(QRect(widget.mapTo(w.sidebar, QPoint(0, 0)), widget.size())))
         last = w.nav["system"]
@@ -341,7 +346,7 @@ class ShellRailTests(unittest.TestCase):
     # Light and dark: the rail's own containers never paint the page background over the sidebar surface.
     def test_light_and_dark_rail_surfaces_and_rules(self):
         w = self.window()
-        w.markets_view.show_category = Mock()
+        w.markets_view.show_market = Mock()
         w.navigate("markets")
         for index, palette in ((0, LIGHT), (1, DARK)):
             w.theme.setCurrentIndex(index)
@@ -368,8 +373,8 @@ class ShellRailTests(unittest.TestCase):
                 # Sub-items: airy text rows, no box (no background) unless keyboard-focused.
                 for button in w.market_sections.values():
                     self.assertGreaterEqual(button.height(), 30)
-                checked = w.market_sections["value"]
-                w.open_market_section("value")
+                checked = w.market_sections["kr"]
+                w.open_market_section("kr")
                 self.settle()
                 spot = checked.mapTo(w.sidebar, checked.rect().center())
                 self.assertEqual(QColor(w.sidebar.grab().toImage().pixel(spot.x() + 40, spot.y())).name(),

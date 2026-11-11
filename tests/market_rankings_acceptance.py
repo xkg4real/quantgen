@@ -17,6 +17,7 @@ import time
 import unittest
 from datetime import date, datetime, timedelta, timezone
 from types import SimpleNamespace
+import unittest.mock
 from unittest.mock import patch
 
 from core.market import market_cap as MC
@@ -27,7 +28,7 @@ from data.fmp.quote_client import FMPError, FMPPlanError
 
 
 def member(code):
-    return next(m for m in R.DOMESTIC + R.US if m.code == code)
+    return next(m for m in R.DOMESTIC + R.US + R.CRYPTO if m.code == code)
 
 
 def record(code, *, price=100.0, pct=0.0, volume=None, value=None, cap=None, mode="kis", as_of="2026-11-11",
@@ -699,6 +700,157 @@ class ProviderCallTests(unittest.TestCase):
                 self.assertIsNone(MC._default_directory())  # the history cache switched off: memory only
         self.assertFalse(list(repository.glob("SHARES_YFINANCE_*.json")))
         self.assertNotIn(str(repository), str(config.ficc_cache_dir().resolve()))  # ~/.nextgen/ficc_cache
+
+
+class CoinUniverseTests(unittest.TestCase):
+    """Owner ruling UI-D10: coins from the data the app already uses (keyless Yahoo daily), in US dollars."""
+
+    def test_coins_are_a_market_of_their_own_with_no_stock_instrument(self):
+        self.assertGreaterEqual(len(R.CRYPTO), 10)
+        self.assertEqual(R.CRYPTO[0].code, "BTC")
+        self.assertEqual(len({m.code for m in R.CRYPTO}), len(R.CRYPTO))
+        for m in R.CRYPTO:
+            with self.subTest(code=m.code):
+                self.assertEqual((m.group, m.currency, m.instrument, m.place("ko"), m.sector),
+                                 ("crypto", "USD", None, "", ""))
+                self.assertEqual(R.crypto_symbol(m), f"{m.code}-USD")
+                self.assertTrue(m.name_ko and m.name_en)
+                self.assertFalse(re.search("[가-힣]", m.name_en))
+        self.assertEqual((R.group_of("crypto"), R.members_of("crypto"), R.universe("crypto")),
+                         ("crypto", R.CRYPTO, R.CRYPTO))
+        self.assertEqual(R.sectors_in("crypto"), ())
+        self.assertEqual(R.value_unit("value", "crypto"), ("value", "usd"))
+        self.assertTrue(R.session_open("crypto"))  # coins trade every day
+        self.assertEqual(R.MARKET_KEYS, ("kr", "kospi", "kosdaq", "us"))  # the earlier list keys are unchanged
+        self.assertIsNone(R.member_for(Instrument("overseas_stock", "BTC", "NAS")))
+
+    def test_yahoo_coin_volume_is_dollar_trading_value_never_a_unit_count(self):
+        btc = R.CRYPTO[0]
+        record = R.record_from_bars(btc, [("2026-11-09", 1, 1, 1, 95000.0, 3.0e10),
+                                          ("2026-11-10", 1, 1, 1, 96123.5, 4.1e10)])
+        self.assertEqual((record.trading_value, record.volume, record.estimated_value), (4.1e10, None, False))
+        self.assertAlmostEqual(record.change_pct, (96123.5 / 95000 - 1) * 100)
+        self.assertEqual(record.closes, (95000.0, 96123.5))
+        self.assertEqual([r.record.member.code for r in R.rank((record,), "value", market="crypto")], ["BTC"])
+        self.assertEqual(R.rank((record,), "volume", market="crypto"), [])  # no count, never ranked by it
+        stock = R.record_from_bars(member(SAMSUNG), [("2026-11-09", 1, 1, 1, 100.0, 10.0),
+                                                    ("2026-11-10", 1, 1, 1, 101.0, 20.0)])
+        self.assertEqual((stock.trading_value, stock.volume, stock.estimated_value), (2020.0, 20.0, True))
+        self.assertEqual((R.price_text(0.38124, "USD"), R.price_text(96123.5, "USD")), ("$0.3812", "$96,123.50"))
+
+    def test_daily_path_asks_yahoo_for_the_dollar_pair_and_never_kis(self):
+        from quantgen_desktop.market_rankings import ProductionRankingLoader
+        asked = []
+
+        def fetch(symbol):
+            asked.append(symbol)
+            if symbol == "ETH-USD":
+                return []
+            return [("2026-11-09", 1, 1, 1, 10.0, 5.0), ("2026-11-10", 1, 1, 1, 11.0, 6.0)]
+        factory = unittest.mock.Mock(side_effect=AssertionError("KIS is never constructed for coins"))
+        batch = ProductionRankingLoader(service_factory=factory, fetch=fetch,
+                                        caps=unittest.mock.Mock(side_effect=AssertionError("no caps")))(
+            "crypto", R.CRYPTO[:3])
+        self.assertEqual(sorted(asked), ["BTC-USD", "ETH-USD", "XRP-USD"])
+        self.assertEqual((batch.group, batch.mode), ("crypto", "daily"))
+        self.assertEqual([r.member.code for r in batch.records], ["BTC", "XRP"])
+        self.assertEqual(batch.failures, (("ETH", "LookupError"),))  # degraded per coin, said in the footnote
+        factory.assert_not_called()
+        self.assertEqual(R.source_state(batch, open_now=True), "daily")
+
+
+class ScreenTests(unittest.TestCase):
+    """Owner ruling UI-D10: the categories are each market's ranking and search criteria (core.market.screen)."""
+
+    def setUp(self):
+        from core.market import screen as S
+        self.S = S
+        self.records = (
+            record(SAMSUNG, price=102300, pct=1.5, volume=1.5e7, value=1.5e12, cap=6.05e14),
+            record(HYNIX, price=520000, pct=-2.0, volume=3.0e6, value=1.6e12, cap=3.8e14),
+            record("042700", price=135400, pct=3.8, volume=1.0e6, value=5.7e11, cap=1.3e13),
+            record(KAKAO, price=40000, pct=4.2, volume=2.0e7, value=8.0e11, cap=1.8e13),
+            record(ECOPRO, price=150000, pct=-6.5, volume=1.0e6, value=1.5e11, cap=None),
+            record("240810", price=40000, pct=5.3, volume=2.0e6, value=3.2e10, cap=2.0e12, market="KOSDAQ"),
+            record(APPLE, price=226.1, pct=0.8, volume=4.0e7, value=9.0e9, cap=3.4e12),
+            record("JPM", price=301.5, pct=2.7, volume=9.0e6, value=2.7e9, cap=8.3e11),
+        )
+
+    def codes(self, rows):
+        return [row.record.member.code for row in rows]
+
+    def test_pages_and_sub_markets(self):
+        S = self.S
+        self.assertEqual(S.PAGES, (("kr", "Korean stocks", "국내 주식"), ("us", "US stocks", "미국 주식"),
+                                   ("crypto", "Crypto", "코인")))
+        self.assertEqual([k for k, _e, _k in S.SUBS["kr"]], ["", "kospi", "kosdaq"])
+        self.assertEqual([k for k, _e, _k in S.SUBS["us"]], ["", "NAS", "NYS"])
+        self.assertEqual(S.SUBS["crypto"], ())
+        self.assertEqual({m.exchange for m in R.US}, {"NAS", "NYS"})  # the data has these two exchanges
+        self.assertEqual((S.page_text("crypto", "ko"), S.sub_text("us", "NAS", "ko")), ("코인", "나스닥"))
+
+    def test_text_category_sub_market_sector_and_conditions_combine(self):
+        S = self.S
+        screen = S.Screen("kr", "gainers", text="반도체")  # a sector's name finds its stocks
+        self.assertEqual(self.codes(screen.apply(self.records)), ["240810", "042700", SAMSUNG])
+        self.assertEqual(self.codes(replace(screen, category="value").apply(self.records)),
+                         [HYNIX, SAMSUNG, "042700", "240810"])
+        self.assertEqual(self.codes(replace(screen, sub="kospi").apply(self.records)), ["042700", SAMSUNG])
+        narrowed = screen.with_limit("change", 2, None).with_limit("value", 1e11)
+        self.assertEqual(self.codes(narrowed.apply(self.records)), ["042700"])
+        self.assertEqual(narrowed.limits, (("change", 2.0, None), ("value", 1e11, None)))
+        self.assertEqual(self.codes(narrowed.without("value").apply(self.records)), ["240810", "042700"])
+        self.assertEqual(narrowed.cleared().limits, ())
+        self.assertEqual(self.codes(S.Screen("kr", "value", text="ㅅㅅㅈㅈ").apply(self.records)), [SAMSUNG])
+        self.assertEqual(self.codes(S.Screen("kr", "value", text="hynix").apply(self.records)), [HYNIX])
+        self.assertEqual(self.codes(S.Screen("kr", "value", text="035720").apply(self.records)), [KAKAO])
+        self.assertEqual(self.codes(S.Screen("kr", "cap", sector="battery").apply(self.records)), [])  # no cap
+        self.assertEqual(self.codes(S.Screen("kr", "cap").with_limit("cap", 1e14).apply(self.records)),
+                         [SAMSUNG, HYNIX])
+        # A missing figure never passes a condition on it (unknown is not "at least").
+        self.assertNotIn(ECOPRO, self.codes(S.Screen("kr", "value").with_limit("cap", 1).apply(self.records)))
+        self.assertEqual(self.codes(S.Screen("kr", "losers").with_limit("change", None, -3).apply(self.records)),
+                         [ECOPRO])
+        us = S.Screen("us", "value")
+        self.assertEqual(self.codes(us.apply(self.records)), [APPLE, "JPM"])  # only the market's own records
+        self.assertEqual(self.codes(replace(us, sub="NYS").apply(self.records)), ["JPM"])
+        self.assertEqual(self.codes(replace(us, text="애플").apply(self.records)), [APPLE])
+        self.assertEqual(len(S.Screen("kr", text="반도체").members()), len(R.universe("kr", "semis")))
+
+    def test_a_new_condition_is_a_row_of_data(self):
+        S = self.S
+        extra = S.Condition("volume", "Volume", "거래량", "min", "money", lambda r: r.volume, pages=("kr",),
+                            steps={"kr": (1e7,)})
+        with patch.object(S, "CONDITIONS", S.CONDITIONS + (extra,)), \
+                patch.object(S, "CONDITION_KEYS", S.CONDITION_KEYS + ("volume",)):
+            screen = S.Screen("kr", "value").with_limit("volume", 1e7).with_limit("change", 0)
+            self.assertEqual(screen.limits, (("change", 0.0, None), ("volume", 1e7, None)))  # table order
+            self.assertEqual(self.codes(screen.apply(self.records)), [SAMSUNG, KAKAO])
+            self.assertEqual([c.key for c in screen.conditions()], ["change", "value", "cap", "volume"])
+            self.assertEqual([c.key for c in S.Screen("crypto").conditions()], ["change", "value"])
+            with self.assertRaises(ValueError):
+                S.Screen("us").with_limit("volume", 1)  # its table says Korea only
+
+    def test_what_a_market_cannot_do_is_refused_or_said(self):
+        S = self.S
+        for bad in (dict(page="jp"), dict(page="kr", category="popular"), dict(page="kr", sub="NAS"),
+                    dict(page="crypto", sector="semis"), dict(page="crypto", limits=(("cap", 1.0, None),)),
+                    dict(page="kr", limits=(("change", 5.0, 1.0),)), dict(page="kr", limits=(("change", None, None),))):
+            with self.subTest(bad=bad), self.assertRaises(ValueError):
+                S.Screen(**bad)
+        self.assertTrue(S.category_note("crypto", "volume") and S.category_note("crypto", "cap"))
+        self.assertEqual((S.category_note("crypto", "value"), S.category_note("kr", "cap")), ("", ""))
+        coin = R.record_from_bars(R.CRYPTO[0], [("2026-11-09", 1, 1, 1, 1.0, 5.0), ("2026-11-10", 1, 1, 1, 2.0, 6.0)])
+        self.assertEqual(S.Screen("crypto", "cap").apply((coin,)), [])
+        self.assertEqual(len(S.Screen("crypto", "gainers").apply((coin,))), 1)
+
+    def test_thresholds_read_as_people_say_them(self):
+        t = self.S.threshold_text
+        self.assertEqual([t(v, "money", "kr", "ko") for v in (1e10, 5e10, 1e11, 5e11, 1e12, 1e13, 1e14)],
+                         ["100억", "500억", "1,000억", "5,000억", "1조", "10조", "100조"])
+        self.assertEqual([t(v, "money", "kr", "en") for v in (1e11, 1e12)], ["₩100B", "₩1T"])
+        self.assertEqual([t(v, "money", "us", "ko") for v in (1e8, 5e8, 1e9, 1e12)], ["$100M", "$500M", "$1B", "$1T"])
+        self.assertEqual([t(v, "pct", "kr", "ko") for v in (-3, 0, 2.5)], ["−3%", "0%", "+2.5%"])
 
 
 if __name__ == "__main__":

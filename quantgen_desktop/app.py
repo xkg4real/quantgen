@@ -385,8 +385,9 @@ class ResearchWindow(QMainWindow):
         return shown
 
     def make_market_submenu(self):
-        """Owner 2026-11-11 (UI-D7 point 2): Markets opens indented sub-items in the rail, the five
-        real-time chart categories and stock search. Shown only while Markets is the page."""
+        """Owner 2026-11-11 (UI-D7 point 2; ruling UI-D10): Markets opens indented sub-items in the rail, one per
+        market (국내 주식, 미국 주식, 코인). Shown only while Markets is the page. The buttons carry their text in the
+        window's language (`retitle_market_sections`): the English "Crypto" means 가상자산 elsewhere in the app."""
         self.market_submenu = QWidget()
         self.market_submenu.setObjectName("marketSubmenu")
         self.market_submenu.setAccessibleName("Markets sections")
@@ -399,13 +400,21 @@ class ResearchWindow(QMainWindow):
             button = QPushButton(title)
             button.setCheckable(True)
             button.setProperty("subnav", True)
+            button.setProperty("qg_literal", True)
             button.setAccessibleName(title)
             button.setCursor(Qt.CursorShape.PointingHandCursor)
             button.clicked.connect(lambda checked=False, k=key: self.open_market_section(k))
             column.addWidget(button)
             self.market_sections[key] = button
+        self.retitle_market_sections()
         self.market_submenu.hide()
         return self.market_submenu
+
+    def retitle_market_sections(self):
+        for key, button in self.market_sections.items():
+            title = shell_rail.market_section_text(key, self.ui_language)
+            button.setText(title)
+            button.setAccessibleName(title)
 
     def rail_buttons(self):
         """The rail's buttons in visual order (the arrow keys walk them)."""
@@ -417,27 +426,22 @@ class ResearchWindow(QMainWindow):
         return buttons + [self.sidebar_show, self.paper_halt_strip]
 
     def open_market_section(self, key):
-        """A Markets sub-item: open Markets on that real-time chart category, or on stock search."""
+        """A Markets sub-item: open Markets on that market's page (국내 주식, 미국 주식 or 코인)."""
         if key not in self.market_sections:
             raise ValueError(f"Unknown Markets section: {key!r}")
         self.navigate("markets")
         view = self.markets_view
-        if hasattr(view, "show_category"):
-            view.show_category(key)
-        elif key == "search" and hasattr(view, "search"):
-            view.search.setFocus(Qt.FocusReason.OtherFocusReason)
+        if hasattr(view, "show_market"):
+            view.show_market(key)
         self.sync_market_section(key)
 
     def sync_market_section(self, key=None):
-        """Highlight the sub-item for what Markets shows: the given key, a stock screen as search, the
-        page's own category when it reports one, else the last choice."""
+        """Highlight the sub-item for the market Markets shows: the given key, else the page's own market (also
+        while a stock's screen is open over it), else the last choice."""
         view = getattr(self, "markets_view", None)
         if key is None and view is not None:
-            if view.showing_stock():
-                key = "search"
-            else:
-                current = getattr(view, "current_category", None)
-                key = current() if callable(current) else None
+            current = getattr(view, "current_market", None)
+            key = current() if callable(current) else None
         if key is None:
             key = self.market_section
         self.market_section = key if key in self.market_sections else None
@@ -445,9 +449,9 @@ class ResearchWindow(QMainWindow):
             button.setChecked(name == self.market_section)
 
     def connect_market_sections(self, view):
-        """Follow the Markets page's own category changes when it announces them (an optional
-        `category_changed(str)` signal); otherwise the highlight follows the rail and navigate()."""
-        signal = getattr(view, "category_changed", None)
+        """Follow the Markets page's own market changes when it announces them (an optional
+        `market_changed(str)` signal); otherwise the highlight follows the rail and navigate()."""
+        signal = getattr(view, "market_changed", None)
         if signal is not None and hasattr(signal, "connect"):
             signal.connect(lambda key: self.sync_market_section(key or None))
 
@@ -520,8 +524,9 @@ class ResearchWindow(QMainWindow):
         # Owner 2026-11-11: light section lines need roomy blocks ("한칸한칸 공간을 넓게").
         layout.setContentsMargins(32, 28, 32, 36)
         layout.setSpacing(24)
-        layout.addWidget(label(title, "title"))
-        layout.addWidget(label(subtitle, "muted"))
+        if title is not None:
+            layout.addWidget(label(title, "title"))
+            layout.addWidget(label(subtitle, "muted"))
         scroll.setWidget(content)
         self.stack.addWidget(scroll)
         return layout
@@ -632,20 +637,17 @@ class ResearchWindow(QMainWindow):
         layout.addStretch()
 
     def make_markets(self):
-        """Markets (owner, 2026-11-11 point 5): Toss-style real-time ranked lists, stock search and one
-        screen per stock. The watchlist chart cards moved to Research Home (make_home)."""
+        """Markets: one page per market (owner ruling UI-D10, 2026-11-11: 국내 주식 / 미국 주식 / 코인 in the rail),
+        each a compact header with its own search, an index strip, the ranking categories as criteria and the
+        list; one screen per stock. No page title or description paragraph: the market page's header names it.
+        The watchlist chart cards moved to Research Home (make_home)."""
         from .market_chart import MarketChartPane
         from .market_rankings import ProductionRankingLoader
+        from .market_summary import production_series
         from .markets_view import DirectoryLoader, MarketsWorkspace, WatchlistStore
         from core.market.directory import default_directory
-        layout = self.page("Markets", "실시간 차트와 종목 한 화면 보기")
-        self.market_subtitle = layout.itemAt(1).widget()
-        self.market_subtitle.localized_text = {
-            "ko": "거래대금·거래량·급상승·급하락·시가총액 순위로 주요 종목을 보고, 종목 코드나 이름으로 검색하거나 "
-                  "순위의 종목을 눌러 그 종목의 모든 것을 한 화면에서 확인합니다.",
-            "en": "Major stocks ranked by trading value, volume, gains, losses and market cap; search a stock by "
-                  "code or name, or open one from the list, to see everything about it on one screen."}
-        self.market_subtitle.retranslate()
+        layout = self.page(None, None)
+        layout.setContentsMargins(32, 24, 32, 36)
         # Owner, 2026-11-04: no indicator board (UI-7) and no asset-class tab strip (UI-8) here.
         self.market_chart = MarketChartPane(locale=self.ctx)
         self.market_chart.setProperty("reading_help_keep_visible", True)
@@ -656,12 +658,14 @@ class ResearchWindow(QMainWindow):
         if self.watchlist_store is None:
             self.watchlist_store = WatchlistStore(self.language_store)
         # Ranked quotes: an injected loader (tests: window.ranking_loader before make_markets, or
-        # markets_view.rankings.loader after) or KIS/Yahoo constructed on first use.
+        # markets_view.rankings.loader after) or KIS/Yahoo constructed on first use. The index strip reads Home's
+        # Yahoo daily path unless window.summary_loader (a core.ficc.data.load_series-like callable) is injected.
         self.markets_view = MarketsWorkspace(
             self.market_chart, store=self.watchlist_store, directory=self.symbol_directory,
             directory_loader=self.directory_loader,
             ranking_loader=getattr(self, "ranking_loader", None) or ProductionRankingLoader(),
             profile_loader=self.profile_loader or _ProductionProfileLoader(),
+            summary_loader=getattr(self, "summary_loader", None) or production_series,
             locale=self.ctx, auto_load=self.auto_refresh)
         self.markets_view.setProperty("reading_help_keep_visible", True)
         layout.addWidget(self.markets_view)
@@ -1149,6 +1153,7 @@ class ResearchWindow(QMainWindow):
             self.language_store.setValue("ui/language", self.ui_language)
             self.language_store.setValue("ui/locale", str(self.ctx.locale))
         self.localizer.apply()
+        self.retitle_market_sections()
         self.fit_sidebar()
 
         if hasattr(self, 'reading_help'):

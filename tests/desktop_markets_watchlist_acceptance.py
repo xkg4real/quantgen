@@ -233,8 +233,14 @@ class MarketsWatchlistTests(unittest.TestCase):
         self.assertFalse(self.view.showing_stock()); self.assertTrue(self.view.message.isVisible())
         self.view.search.setText("123456"); self.view.submit(); self.app.processEvents()
         self.assertEqual(self.view.stock.instrument, Instrument("domestic_stock", "123456"))
-        self.view.kind.setCurrentIndex(self.view.kind.findData("domestic_future"))
+        # UI-D10: no kind selector on the compact page; a derivative's code typed in 국내 주식's search is offered
+        # under the list as that kind, and opens only when chosen.
+        self.view.show_rankings()
         self.view.search.setText("101W12"); self.view.submit(); self.app.processEvents()
+        self.assertFalse(self.view.showing_stock())
+        offer = next(b for b in self.view.rankings.other_buttons if b.isVisible())
+        self.assertEqual(offer.text(), "국내 파생 101W12")
+        offer.click(); self.app.processEvents()
         self.assertEqual(self.view.stock.instrument.asset, "domestic_future")
         self.assertEqual(self.window.market_chart.asset.currentData(), "domestic_future")
         self.assertIn("주식에만", self.view.stock.profile_status.text())
