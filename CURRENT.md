@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d
 next_ids: ⑤-2/e, ⑤-2/f, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-11T18:01:00+09:00
+updated_at: 2026-11-11T20:36:00+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: ci
 work_branch: claude/provider-parity-spy-rerun-20261111
-work_commit: 8e36aa0
+work_commit: c70426c
 uncommitted_changes: no
-pr: none
+pr: 105
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -119,6 +119,16 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - **B:** Q1 REJECT(잠정 표시), Q2 게이트와 같은 분산 값으로 판정·SE_null은 참고 줄, Q3 검정력 부족이면 이겨도 자료 부족, Q4 DM으로 판정·Clark–West 참고 줄, Q5 12항목 필수·Claude 초안·소유자 커밋·R-FAM/L-FAM 병기, Q7 60/40은 21거래일 리밸런싱·실제 거래분 비용. 다음 단위 ⑨-4/2/c(결과 조립).
 - **C:** 0b 채택 방침만 기록. Q12 = 7개 파일(`core/quant/strategies.py`, `validate.py`, `history.py`, `gate_ledger.py`, `core/research/strategy_workflow.py`, `core/quant/optimize.py`, `core/quant/risk.py`). Q13·Q14·Q16·Q17·Q18 기본값. 화면은 네이티브만(UI-D1), Flet 작업(Q19 포함) 안 함, PC 화면은 시안 먼저 + UI 세션 이식과 ⑦-2 병합 뒤. Q22의 잘라내기 여부는 2026-12 말 전에 따로 질문. 다음 단위 ⑨-3a/recorder/1(화면 없음, 결정 9 조건: run_family 안에서 PNL_COMPUTED보다 낮은 PROGRESS를 쓰지 않음).
 - **D:** 주문 한도 수치(1회 100만 원/5%, 하루 10건·300만 원/15%, 손실 중지 40만 원/2%, 종목 비중 20%/400만 원, 가격 이탈 3%·시세 15초·지정가만, 09:00~15:20, 모의 20거래일·30건 등)를 기본값으로 승인. **실거래는 켜지지 않음.** 순서: 안전 설계 문서 보고 → ⑦-2 병합 뒤 구현 → 모의투자 → 결과 보고 → 소유자의 실거래 전환 승인. D-14 법률 자문은 소유자가 의뢰.
+
+### PR #105 올림 (2026-11-11 20:36 KST) — 가장 최신
+
+- [PR #105](https://github.com/xkg4real/quantgen/pull/105), 브랜치 `claude/provider-parity-spy-rerun-20261111`, head `c70426c`(main `fbe493d` 위, 충돌 없음). **병합은 반드시 병합 커밋으로**(squash 금지): 안내서가 도구 커밋이 실행 브랜치의 조상인지 확인합니다.
+- **둘째 고정값(확정, 검토 뒤 값):** 도구 커밋 `1be43ec191ce73bc4fbc7357a4b3438aca0e4bb1`, `tools/provider_parity/parity_check.py` sha256 `78dd1f508c713f9be138466bf69f5dd92d8bfdcc3afacfa37b21fc4bf28ca80c`. 진단 스크립트 `tools/provider_parity/btc_diagnose.py` sha256 `1e44f3a791dd8c13a667bf46cda2933c7bb0810ac6f7bcaae884a16cc71bc6ea`. 위 "주간 사용량 98%로 중단" 절에 적은 `4096caa`·`f56caeb4…` 값은 검토에서 도구가 다시 바뀌어 폐기됐습니다(그 값으로 한 실행 없음). 첫 버전 `5202482`·`f2fe72cd…0184`는 11-11 기록 실행 3건의 버전으로 남습니다.
+- 내용: `fetch_fmp`만 변경(응답이 첫 요청 날짜에 못 미치면 `to`를 받은 가장 이른 날짜로 다시 요청, 날짜로 병합, 같은 날짜의 값이 다르면 수신 실패, 최대 8회 요청), `btc_diagnose.py`와 시험 모듈, 판정 기록, 새 안내서 `docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md`(18단계: pull → 새 고정값 확인 → fmp를 `fetch2-spy-fmp`에 재수신 → 멈춤 지점 → `compare2-spy` 대조(kis·yahoo_now는 `fetch1` 파일 그대로) → 요약 push → BTC 진단).
+- 검증: 독립 검토 3관점 26건(major 6) 모두 반영. 시험 128 + 18 통과, selftest PASS, compliance 정합성 PASS. 검토 뒤 바뀐 최종 도구와 안내서 전 과정 재실행을 다시 독립 점검하는 워크플로가 도는 중(읽기 전용, 결과에 blocker·major가 있으면 고친 뒤 고정값을 다시 기록해야 함). CI와 캐시 없는 전체 실행(`scratchpad/pp2.json`, 기준 `sf4.json` 769/895)도 도는 중.
+- **BTC 관문 판독 규칙(결과를 보기 전에 `results/RULINGS.md`에 적어 둠):** 진단 출력이 "각 거래소가 자기 날에만 어긋나고 고정 파일은 다른 거래소와 맞는다"(3번 경우)를 보이면 원인 확인으로 보고 관문 자동 통과. "고정 파일이 두 거래소와 따로 논다"(4번)나 그 밖(5번)이면 원인을 가를 수 없으므로 숫자를 보고하고 소유자에게 묻습니다. 소유자 둘째 줄의 조건 "원인 파악 완료 후"를 따른 해석이며, 소유자에게 이 좁힘을 알려야 합니다(아직 안 알림).
+- 병합 뒤 순서: main을 실행 브랜치에 병합해 push(`git merge-base --is-ancestor 1be43ec… <실행 브랜치>`와 도구 sha256 확인) → 원장 `⑤-2/f` → Notion(REMAINING WORK. 1107 페이지는 보관 상태라 소유자에게 복원 여부를 물어 둠) → 소유자에게 새 안내서와 새 고정값 전달.
+- 소유자 PC: 연구 클론의 `.agents`·`quantgen` 폴더를 소유자가 클론 밖으로 옮겼고 `git status --porcelain --untracked-files=all`이 빈 출력임을 확인받았습니다(19:2x KST).
 
 ### 재개 (2026-11-11 18:01 KST) — 가장 최신
 
