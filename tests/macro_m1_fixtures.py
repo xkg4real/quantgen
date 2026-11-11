@@ -1954,7 +1954,9 @@ def test_macro_fixtures_names_the_reference_row_of_every_calendar_refusal():
     value_status other than the declared one (ValueError) named only the series and the date. Now each reaches the
     caller with the type and str() `available_at` gave it, plus a note naming the reference file, the line, the date
     cell and the series, which the traceback prints under the message (Python 3.11 and later); `generate` writes
-    nothing. NoFXDayClose keeps its own message with the file and line, and gets no note."""
+    nothing. NoFXDayClose keeps its own message with the file and line, and gets no note. A refusal raised from another
+    error keeps that cause: KS11 on clocks that lack the KR market is the KeyError `available_at` raises from the
+    clocks' own KeyError, which stays its __cause__ (the note is added and the same exception raised again)."""
     import sys
     import traceback
     from core.calendars.adapter import CalendarClocks
@@ -1994,6 +1996,27 @@ def test_macro_fixtures_names_the_reference_row_of_every_calendar_refusal():
                 assert getattr(exc, "__notes__", None) == [note], (sid, day, getattr(exc, "__notes__", None))
                 if sys.version_info >= (3, 11):
                     assert note in "".join(traceback.format_exception(exc)), (sid, day)
+        # a refusal raised from another error keeps its cause: the clocks lack the KR market (as a calendar set
+        # without it would), so KS11 is refused with the KeyError `available_at` raises from the clocks' KeyError
+
+        class NoKR:
+            def __getattr__(self, name):
+                return getattr(clk, name)
+
+            def decision_time_utc(self, market, day):
+                if market == "KR":
+                    raise KeyError("KR: no calendar in this set")
+                return clk.decision_time_utc(market, day)
+        src.write_text(f"date,close\n{good},100\n", encoding="utf-8")
+        no_kr = MF.calendar_available_at(registry, NoKR())
+        exc = _refused(lambda: MF.fixture_rows(src, series_id="KS11", value_status="vendor_close",
+                                               available_at_source="calendar_bound",
+                                               retrieved_at_utc=REFERENCE_RETRIEVED, available_at=no_kr,
+                                               columns=("close",)),
+                       KeyError, "KS11: no market calendar for its REFERENCE_FILES market 'KR'")
+        assert type(exc.__cause__) is KeyError and exc.__cause__.args == ("KR: no calendar in this set",), exc.__cause__
+        assert exc.__notes__ == [f"reference row: reference.csv line 2, date '{good}' in column 'date', series KS11; "
+                                 "no fixture is written"]
         # NoFXDayClose: its message names the file and line as before, and no note repeats them
         exc = _refused(lambda: stamped("KRWX", "vendor_close", (good, saturday)), MF.NoFXDayClose,
                        f"reference.csv line 3: KRWX: FX {saturday} is a Saturday", "no fixture is written")

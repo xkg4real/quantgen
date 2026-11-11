@@ -540,7 +540,11 @@ def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_s
     observation date is read from the column `_date_column` picks (the one named date in any letter case or
     observation_date, else the first column) and is the date of a cell written YYYY-MM-DD, alone or followed by a
     time (`_DATE_CELL`), or written YYYYMMDD (`_BASIC_DATE_CELL`); the cell itself is copied unchanged and obs_date
-    is written YYYY-MM-DD. Each refusal is a ValueError naming the reference file and, for a row, its line."""
+    is written YYYY-MM-DD. Each refusal of the file or of a row's cells is a ValueError naming the reference file and,
+    for a row, its line. A refusal of `available_at` for a row (NotASession, CalendarCoverageError, CalendarUnsigned, a
+    KeyError, a ValueError, ...) keeps its own type, message and cause, and carries the reference file, the line, the
+    date cell and the series as a note (`_add_note`; review of PR #107, F4); NoFXDayClose is raised again with the
+    file and line in its message."""
     if value_status not in VALUE_STATUSES or available_at_source not in AVAILABLE_AT_SOURCES:
         raise ValueError(f"{src.name}: value_status {value_status!r} / available_at_source {available_at_source!r}")
     close_rules, long_form = "close" in columns, "code" in columns
