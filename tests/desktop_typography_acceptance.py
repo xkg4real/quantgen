@@ -31,9 +31,8 @@ from quantgen_desktop.typography import (NAV_PADDING, SIDEBAR_WIDTH_RANGE, TONE_
 
 ROOT = Path(__file__).resolve().parents[1]
 SYMBOL_FILES = ("qg-symbols.otf", "qg-symbols-medium.otf", "qg-symbols-semibold.otf")
-# Owner UI-D5 (2026-11-11): text in IBM Plex Sans KR; QG Interface (Pretendard OTF) draws figures and is
-# the first fallback, QG Symbols the last. A shown character must be in one of them.
-FONT_FILES = ("IBMPlexSansKR-Regular.ttf", "IBMPlexSansKR-Medium.ttf", "IBMPlexSansKR-SemiBold.ttf")
+# Owner UI-D6 (2026-11-11): text and figures in QG Interface (Pretendard OTF), QG Symbols the fallback.
+FONT_FILES = ("qg-interface.otf", "qg-interface-medium.otf", "qg-interface-semibold.otf")
 NUMBER_FILES = ("qg-interface.otf", "qg-interface-medium.otf", "qg-interface-semibold.otf")
 SVG = "{http://www.w3.org/2000/svg}"
 
@@ -277,7 +276,7 @@ class WindowTypographyTests(unittest.TestCase):
             self.app.processEvents()
 
     def test_bundled_family_is_registered(self):
-        self.assertEqual(self.family, "IBM Plex Sans KR")  # owner UI-D5; figures stay QG Interface
+        self.assertEqual(self.family, "QG Interface")  # owner UI-D6 (plan A dropped)
 
     def test_sidebar_is_thinner_and_every_nav_label_fits_in_both_languages(self):
         w = self.window
@@ -333,7 +332,8 @@ class WindowTypographyTests(unittest.TestCase):
         sheet = w.styleSheet()
         self.assertNotRegex(sheet, r"font-weight:\s*(700|800|900|bold)")
         self.assertFalse("QGraphicsDropShadowEffect" in Path(desktop.__file__).read_text(encoding="utf-8"))
-        expected = {"title": (30, 600), "heading": (18, 600), "caption": (14, 500), "number": (32, 600),
+        # Owner UI-D6 (2026-11-11, font mockup N3): section headings 600→500 and captions 500→400.
+        expected = {"title": (30, 600), "heading": (18, 500), "caption": (14, 400), "number": (32, 600),
                     "brand": (17, 600), "": (15, 400)}
         seen = {}
         for widget in w.findChildren(QLabel):
@@ -346,7 +346,8 @@ class WindowTypographyTests(unittest.TestCase):
             probe = label("MARKETS", role)
             probe.setParent(w.stack.currentWidget().widget())
             probe.ensurePolished()
-            self.assertEqual((probe.font().pixelSize(), probe.font().weight()), (size, 600), role)
+            weight = 500 if role == "cardTitle" else 600  # owner UI-D6 (N3): card titles one step lighter
+            self.assertEqual((probe.font().pixelSize(), probe.font().weight()), (size, weight), role)
         for button in w.nav.values():
             button.ensurePolished()
             self.assertEqual(button.font().pixelSize(), 14)

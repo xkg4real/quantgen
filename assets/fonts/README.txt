@@ -1,16 +1,9 @@
-Owner decision UI-D5 (2026-11-11, font mockup plan A): the native desktop app draws text in
-IBM Plex Sans KR and keeps figures in QG Interface (quantgen_desktop/font_policy.py).
-  IBM Plex Sans KR 400/500/600, unmodified, from google/fonts main ofl/ibmplexsanskr
-  (downloaded 2026-11-11 through raw.githubusercontent.com; license OFL-IBMPlexSansKR.txt, SIL OFL
-  1.1, Copyright 2017 IBM Corp. with Reserved Font Name "Plex"; shipped unmodified, so not renamed).
-  All 11,172 modern Hangul syllables; TrueType hints present; no mu/sigma (QG Interface draws them).
-  IBMPlexSansKR-Regular.ttf  SHA256 53750379270312368cf7641901f43a98dd892e3d9d5798cf25cdc245c85c71c0  2797100 bytes
-  IBMPlexSansKR-Medium.ttf   SHA256 4a7130f56ce50bf10f9d383f624e50bad2c80bebc63e51f4269ece2c7d919166  2866736 bytes
-  IBMPlexSansKR-SemiBold.ttf SHA256 823c1956adf56c27c06b062725dfce23f266e4fd1366290f2957c8407482a817  2854744 bytes
-QG Interface (the Pretendard-derived OTFs under LEGACY FLET FONT PROVENANCE below) draws figures
-in the native app, is its first fallback, and stays the Flet font and the Flet chart PNG font
-(ui/qcharts.py; owner decision UI-D4). The hinted Gothic A1 TTFs below keep the family name
-QG Interface and stay in this folder unused, for rollback only.
+Owner decision UI-D6 (2026-11-11, second font mockup round, plan N3): the native desktop app
+uses the Pretendard-derived QG Interface OTFs described under LEGACY FLET FONT PROVENANCE below for
+text and figures, with tighter tracking and one-step-lighter text weights set in
+quantgen_desktop/typography.py. The Flet app and its chart PNGs (ui/qcharts.py) use the same OTFs.
+Plan A (IBM Plex Sans KR, UI-D5) was applied and dropped the same day; its files were removed. The
+hinted Gothic A1 TTFs below keep the family name QG Interface and stay unused, for rollback only.
 
 Earlier native desktop fonts (2026-11-07, now unused): hinted Gothic A1, renamed QG Interface (400/500/600).
 Pinned Google Fonts ref38411257417e616c5d4daa1b9e91a3dbcebe1c2e:

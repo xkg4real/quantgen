@@ -176,8 +176,7 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
 
     def test_company_names_keep_full_accessible_text_in_compact_rows(self):
         from PyQt6.QtGui import QFont, QFontDatabase, QFontMetrics
-        # Names are text: the production text face (owner UI-D5). Prices keep QG Interface (test below).
-        path = Path(__file__).resolve().parents[1] / "assets/fonts/IBMPlexSansKR-Regular.ttf"
+        path = Path(__file__).resolve().parents[1] / "assets/fonts/qg-interface.otf"  # production face (UI-D6)
         font_id = QFontDatabase.addApplicationFont(str(path))
         families = QFontDatabase.applicationFontFamilies(font_id)
         self.assertTrue(families)

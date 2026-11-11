@@ -11,8 +11,8 @@ app** (`quantgen_desktop/`, `python -m quantgen_desktop`, `Start-QUANTGEN-Deskto
 screen issues there, even when the owner's screenshot shows the Flet app (`main.py`, `ui/*.py`),
 which is kept but is not the base for new UI work. The owner's 14 issues of 2026-11-10 follow
 Claude's fixes (PR #98) ported to native; the rest of the native UI keeps GPT's PR #89 compact
-layout helpers; fonts: text in IBM Plex Sans KR, figures in `assets/fonts/qg-interface*.otf` (Pretendard-derived;
-owner decision UI-D5, `quantgen_desktop/font_policy.py`). Before any UI
+layout helpers; font: `assets/fonts/qg-interface*.otf` (Pretendard-derived) with the tracking and weights of owner
+decision UI-D6 (`quantgen_desktop/typography.py`). Before any UI
 work, read the owner-decision block at the top of `UI_SESSION_CURRENT.md` and the `⑬-2/` rows of
 `LEDGER.md` on the `handoff` branch, so two agents never change different apps or the same screen.
 

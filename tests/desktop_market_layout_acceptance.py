@@ -24,7 +24,7 @@ class NativeMarketLayoutTests(unittest.TestCase):
     def setUpClass(cls):
         cls.app = QApplication.instance() or QApplication([])
         cls.original_font = cls.app.font()
-        font = Path(__file__).resolve().parents[1] / "assets/fonts/IBMPlexSansKR-Regular.ttf"  # owner UI-D5 text face
+        font = Path(__file__).resolve().parents[1] / "assets/fonts/qg-interface.otf"  # production face (owner UI-D6)
         cls.font_id = QFontDatabase.addApplicationFont(str(font))
         families = QFontDatabase.applicationFontFamilies(cls.font_id)
         if families:

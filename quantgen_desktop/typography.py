@@ -181,7 +181,6 @@ def window_stylesheet(p, dark: bool) -> str:
           QLabel[role='delta'][tone='down'], QFrame#panel QLabel[role='delta'][tone='down'] {{ color: {t['down']}; background: {t['down_tint']}; }}
           QLabel[role='brand'] {{ font-size: 17px; font-weight: 600; letter-spacing: 0.15px; color: {p.accent}; }}
           QLabel[role='number'] {{ font-size: 32px; font-weight: 600; letter-spacing: -0.6px; font-family: "QG Interface"; }}
-          /* Owner UI-D5 (2026-11-11): text in IBM Plex Sans KR, figures kept in QG Interface (font_policy). */
           QLabel[role='muted'], QLabel[role='caption'] {{ color: {p.muted}; }}
           QLabel[role='caption'] {{ font-size: 14px; font-weight: 500; }}
           QToolTip {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; padding: 7px 10px; font-size: 14px; font-weight: 400; }}
@@ -211,7 +210,24 @@ def window_stylesheet(p, dark: bool) -> str:
           QListWidget#guideSuggestions::item {{ border-radius: 9px; color: transparent; }}
           QListWidget#guideSuggestions::item:selected, QListWidget#guideSuggestions::item:hover {{ background: {p.accent_soft}; }}
           QPushButton[chip='true'] {{ padding: 6px 12px; border-radius: 15px; font-weight: 500; }}
-{controls}        """
+{controls}          /* Owner UI-D6 (2026-11-11, font mockup N3 "Pretendard 차분"): tighter tracking and every text
+             weight one step lighter. Kept last: later rules of equal specificity override the ones above. */
+          QLabel {{ letter-spacing: -0.2px; }}
+          QLabel[role='title'] {{ letter-spacing: -0.9px; }}
+          QLabel[role='heading'], QLabel#watchlistTitle {{ font-weight: 500; letter-spacing: -0.36px; }}
+          QLabel[role='cardTitle'], QLabel#watchlistDetailTitle {{ font-weight: 500; letter-spacing: -0.2px; }}
+          QLabel[qgRole='verdictTitle'] {{ letter-spacing: -0.4px; }}
+          QLabel[role='caption'], QLabel[role='muted'], QLabel[role='eyebrow'] {{ letter-spacing: -0.14px; }}
+          QLabel[role='caption'] {{ font-weight: 400; }}
+          QTableWidget, QHeaderView, QHeaderView::section {{ letter-spacing: -0.1px; }}
+          QHeaderView::section {{ font-weight: 500; }}
+          QPushButton, QTabBar::tab, QLineEdit, QComboBox {{ font-weight: 400; letter-spacing: -0.1px; }}
+          QPushButton[nav='true'] {{ font-weight: 400; }}
+          QPushButton[nav='true']:checked, QPushButton[tool='true']:checked {{ font-weight: 600; }}
+          QPushButton[primary='true'] {{ font-weight: 500; }}
+          QLabel[role='price'], QLabel[role='delta'], QFrame#panel QLabel[role='delta'] {{ letter-spacing: 0px; }}
+          QTabBar::tab {{ font-weight: 400; }}
+        """
 
 
 __all__ = ["TONES", "TONE_COLORS", "PANEL_DEPTH", "RAIL_MARGINS", "RAIL_SPACING", "NAV_PADDING",

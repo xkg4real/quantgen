@@ -1,4 +1,4 @@
-"""The native fonts by role (owner UI-D5) and compact controls preserve user operations."""
+"""The native font and type (owner UI-D6) and compact controls preserve user operations."""
 import os
 os.environ.setdefault('QT_QPA_PLATFORM','offscreen')
 import unittest
@@ -19,29 +19,42 @@ class CompactUiTests(unittest.TestCase):
         cls.app=QApplication.instance() or QApplication([]);load_interface_fonts(cls.app)
     def settle(self):
         for _ in range(8):self.app.processEvents()
-    def test_text_and_number_faces_have_real_weights_and_all_modern_hangul(self):
-        """Owner UI-D5 (2026-11-11, font mockup plan A): text in IBM Plex Sans KR (unmodified OFL TrueType
-        files), figures kept in QG Interface (the Pretendard-derived CFF OTF). Each has real 400/500/600
-        faces and all 11,172 modern Hangul syllables; the Gothic A1 TTFs stay unused, for rollback."""
-        from quantgen_desktop.font_policy import INTERFACE_FAMILY, NUMBER_FILES, NUMBER_FAMILY, number_font
-        for files, outline in ((INTERFACE_FILES, 'glyf'), (NUMBER_FILES, 'CFF ')):
-            for filename, weight in zip(files, (400, 500, 600)):
-                with TTFont(ROOT/'assets/fonts'/filename) as face:
-                    self.assertEqual(face['OS/2'].usWeightClass, weight)
-                    self.assertIn(outline, face)
-                    cmap = face.getBestCmap()
-                    for code in range(0xAC00, 0xD7A4): self.assertIn(code, cmap)
+    def test_interface_face_has_real_weights_and_all_modern_hangul(self):
+        """Owner UI-D6 (2026-11-11, second font mockup round, N3): text and figures in QG Interface, the
+        Pretendard-derived CFF OTF, with real 400/500/600 faces and all 11,172 modern Hangul syllables.
+        Plan A (IBM Plex Sans KR) was dropped; the Gothic A1 TTFs stay unused, for rollback only."""
+        from quantgen_desktop.font_policy import INTERFACE_FAMILY, NUMBER_FAMILY, number_font
+        self.assertEqual((INTERFACE_FAMILY, NUMBER_FAMILY), ('QG Interface', 'QG Interface'))
+        for filename, weight in zip(INTERFACE_FILES, (400, 500, 600)):
+            self.assertTrue(filename.endswith('.otf'), filename)
+            with TTFont(ROOT/'assets/fonts'/filename) as face:
+                self.assertEqual(face['OS/2'].usWeightClass, weight)
+                self.assertIn('CFF ', face)
+                cmap = face.getBestCmap()
+                for code in range(0xAC00, 0xD7A4): self.assertIn(code, cmap)
         for weight in (400, 500, 600):
             font = QFont(self.app.font()); font.setWeight(QFont.Weight(weight))
-            text, figures = QRawFont.fromFont(font), QRawFont.fromFont(number_font(font))
-            self.assertEqual(text.familyName(), INTERFACE_FAMILY); self.assertEqual(text.weight(), weight)
-            self.assertTrue(text.fontTable('glyf'))
-            self.assertEqual(figures.familyName(), NUMBER_FAMILY); self.assertTrue(figures.fontTable('CFF '))
-        self.assertTrue((ROOT/'assets/fonts/OFL-IBMPlexSansKR.txt').read_text().startswith(
-            'Copyright © 2017 IBM Corp. with Reserved Font Name "Plex"'))
+            raw = QRawFont.fromFont(font)
+            self.assertEqual(raw.familyName(), INTERFACE_FAMILY); self.assertEqual(raw.weight(), weight)
+            self.assertTrue(raw.fontTable('CFF '))
+            self.assertEqual(QRawFont.fromFont(number_font(font)).familyName(), NUMBER_FAMILY)
+        self.assertFalse(list((ROOT/'assets/fonts').glob('IBMPlexSansKR-*')))
         for kept in ('qg-interface.ttf', 'qg-interface-medium.ttf', 'qg-interface-semibold.ttf'):
             self.assertTrue((ROOT/'assets/fonts'/kept).is_file(), kept)
-            self.assertNotIn(kept, INTERFACE_FILES + NUMBER_FILES)
+            self.assertNotIn(kept, INTERFACE_FILES)
+
+    def test_type_follows_owner_plan_n3(self):
+        """UI-D6: section headings and card titles 500, captions 400, buttons/menu 400 (selected menu and
+        tool 600), primary button 500, table headers 500; tighter tracking, figures at their own tracking."""
+        from quantgen_desktop.typography import window_stylesheet
+        from core.theme import LIGHT
+        css = window_stylesheet(LIGHT, False)
+        n3 = css[css.index('Owner UI-D6'):]
+        for rule in ("QLabel[role='heading'], QLabel#watchlistTitle {{ font-weight: 500; letter-spacing: -0.36px; }}",
+                     "QLabel[role='caption'] {{ font-weight: 400; }}", "QHeaderView::section {{ font-weight: 500; }}",
+                     "QPushButton[nav='true']:checked, QPushButton[tool='true']:checked {{ font-weight: 600; }}",
+                     "QLabel[role='price'], QLabel[role='delta'], QFrame#panel QLabel[role='delta'] {{ letter-spacing: 0px; }}"):
+            self.assertIn(rule.replace('{{', '{').replace('}}', '}'), n3)
     def test_categories_and_forms_reflow_preserving_keyboard_and_request(self):
         with patch('quantgen_desktop.jobs.Jobs.start',side_effect=AssertionError('unexpected request')):
             w=ResearchWindow(auto_refresh=False,language='ko');self.addCleanup(delete_owned_widget,w)

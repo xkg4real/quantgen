@@ -195,3 +195,7 @@ Home 실시간 시세 표는 본문을 13px 한 크기로 맞추고 머리글은
 ### 2026-11-11 글꼴 A안(UI-D5)
 
 네이티브 글자는 IBM Plex Sans KR, 숫자(지표 큰 숫자·가격·등락 알약·숫자만 있는 표 칸·관심종목 숫자 열·차트 눈금)는 QG Interface(Pretendard 파생)로 그립니다. 글자 크기·굵기(400/500/600)와 색상 토큰은 바꾸지 않았습니다. Plex에 없는 μ·σ는 QG Interface가 대신 그리며, 화면 문자열이 세 글꼴(Plex, QG Interface, QG Symbols) 중 하나에 있는지 [시험](../../tests/desktop_typography_acceptance.py)이 확인합니다. Plex TTF에는 TrueType 힌트가 있지만 실제 Windows 화면의 선명도는 확인하지 않았습니다. [변경 사실](FACTS.md#owner-ui-native-2026-11-11)
+
+### 2026-11-11 글꼴 N3(UI-D6)
+
+네이티브 글자와 숫자 모두 QG Interface(Pretendard 파생)로 되돌리고, 소유자가 고른 N3 설정을 [글자 규칙](../../quantgen_desktop/typography.py) 끝에 둡니다: 자간(제목 -0.9px, 소제목 -0.36px, 본문 -0.2px, 설명 -0.14px, 표·버튼 -0.1px, 가격·등락은 0), 소제목·카드 제목 600→500, 설명 글 500→400, 버튼·메뉴 500→400(선택된 메뉴·도구 600 유지), 기본 버튼 600→500, 표 머리글 600→500. 크기와 색상 토큰은 바꾸지 않았습니다. 가벼운 굵기는 위계를 약하게 만들 수 있어 판정 배너·페이지 제목·큰 숫자는 600을 유지합니다. 위 "글꼴 A안(UI-D5)" 절은 같은 날 대체되었습니다. 실제 Windows 화면은 확인하지 않았습니다. [변경 사실](FACTS.md#owner-ui-native-2026-11-11)
