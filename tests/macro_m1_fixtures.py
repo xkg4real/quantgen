@@ -2218,6 +2218,36 @@ def test_macro_fixtures_final_write_refuses_a_destination_named_twice():
         assert (kept / "a.csv").read_bytes() == b"earlier\n"
 
 
+def test_macro_fixtures_final_write_removes_every_directory_it_made():
+    """Review of PR #107, F6: `MF._commit` created the destination directories before its guarded block, so when a
+    later one could not be created (no permission, a file holding the name) the error left the directories already
+    created for the earlier destinations behind. Now each directory is created inside the guarded block and recorded
+    as soon as it exists: with the second destination's directory refused (simulated by patching Path.mkdir), the
+    error reaching the caller is that PermissionError and every directory the run created is removed, the existing
+    ones kept. A file standing where a directory would go is refused the same way."""
+    real = Path.mkdir
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        (root / "kept").mkdir()
+        first, second = root / "new1" / "deep", root / "kept" / "new2" / "deeper"
+
+        def mkdir(self, *args, **kwargs):
+            if self == second:
+                raise PermissionError(13, "simulated: the directory cannot be created", str(self))
+            return real(self, *args, **kwargs)
+        Path.mkdir = mkdir
+        try:
+            _refused(lambda: MF._commit([(first / "a.csv", b"a\n"), (second / "b.csv", b"b\n")]), PermissionError,
+                     "simulated: the directory cannot be created")
+        finally:
+            Path.mkdir = real
+        assert [p.name for p in root.iterdir()] == ["kept"] and list((root / "kept").iterdir()) == []
+        (root / "blocker").write_bytes(b"a file\n")
+        _refused(lambda: MF._commit([(first / "a.csv", b"a\n"), (root / "blocker" / "c.csv", b"c\n")]), OSError)
+        assert sorted(p.name for p in root.iterdir()) == ["blocker", "kept"]
+        assert (root / "blocker").read_bytes() == b"a file\n"
+
+
 # --------------------------------------------------------------------------- #
 # docs/kis_quote_check.py (TASK-M1-01; T-RO-02 record clause)
 # --------------------------------------------------------------------------- #

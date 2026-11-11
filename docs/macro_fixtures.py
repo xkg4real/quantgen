@@ -381,6 +381,23 @@ def _atomic_write(path: Path, data: str | bytes) -> None:
             os.unlink(tmp)
 
 
+def _make_dirs(path: Path, made: list[Path]) -> None:
+    """Create the directory `path` and its missing parents, the outermost first, appending each directory this call
+    creates to `made` as soon as it exists (a directory another process creates meanwhile is not appended)."""
+    missing = []
+    while not path.exists():
+        missing.append(path)
+        path = path.parent
+    for d in reversed(missing):
+        try:
+            d.mkdir()
+        except FileExistsError:
+            if not d.is_dir():
+                raise
+            continue
+        made.append(d)
+
+
 class FinalWriteIncomplete(OSError):
     """The final write failed part way and could not be undone in full; `.left` names every file (or temporary file,
     or directory) left in another state than before the run."""
@@ -396,12 +413,14 @@ def _commit(items: list[tuple[Path, bytes]]) -> None:
     """Write `items` ((destination path, bytes)) in their order, all or nothing as far as the file system allows
     (review of PR #101, R4). `generate` passes the fixtures and, last, the manifest with its new rows, so a fixture is
     never left in place without its manifest row. A destination named twice is refused with a ValueError naming it
-    before anything is written (review of PR #107, F5). Every file is first written whole to a temporary file beside
-    its destination, and the bytes of each file it replaces are read; a failure there changes nothing. Then each
-    temporary file is renamed over its destination (`os.replace`, one rename per file). If a rename fails (on Windows, a
-    destination open in another program, the manifest included), the files already renamed get their earlier bytes
-    back, the files this run created are removed, the temporary files are deleted, a directory this run created is
-    removed again, and the error is raised: every destination is as it was. What remains possible: each file is
+    before anything is written (review of PR #107, F5). The missing destination directories are created, then every
+    file is written whole to a temporary file beside its destination, and the bytes of each file it replaces are
+    read; a failure in any of these steps removes the temporary files and the directories this run created (F6) and
+    changes nothing else. Then each temporary file is renamed over its destination (`os.replace`, one rename per
+    file). If a rename fails (on Windows, a destination open in another program, the manifest included), the files
+    already renamed get their earlier bytes back, the files this run created are removed, the temporary files are
+    deleted, the directories this run created are removed again, and the error is raised: every destination is as it
+    was. What remains possible: each file is
     always whole, either its earlier bytes or its new bytes, never a mix; but if the process is stopped during the
     renames (killed, power lost) no undo runs, so some files hold their new bytes, other files their earlier bytes,
     the manifest may lack the rows of fixtures already renamed, and a temporary file `<name>*.tmp` may remain; a
@@ -420,18 +439,14 @@ def _commit(items: list[tuple[Path, bytes]]) -> None:
     if repeated:
         raise ValueError(f"the final write names {', '.join(repeated)} more than once (one temporary file and one "
                          "rename per destination); nothing is written")
-    made: list[Path] = []                                   # directories this run creates
-    for parent in dict.fromkeys(dest.parent for dest in dests):
-        p = parent
-        while not p.exists() and p not in made:
-            made.append(p)
-            p = p.parent
-        parent.mkdir(parents=True, exist_ok=True)
+    made: list[Path] = []                                   # directories this run created
     before: dict[Path, bytes | None] = {}
     temps: dict[Path, str] = {}
     done: list[Path] = []
     dest = dests[0] if dests else Path()
     try:
+        for dest in dests:                                  # 0. the missing directories, each recorded once made
+            _make_dirs(dest.parent, made)
         for dest, data in items:                            # 1. every new file, whole, beside its destination
             before[dest] = dest.read_bytes() if dest.exists() else None
             fd, temps[dest] = tempfile.mkstemp(dir=dest.parent, prefix=dest.name, suffix=".tmp")
