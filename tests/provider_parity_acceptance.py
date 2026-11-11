@@ -18,9 +18,10 @@ Covered: every outcome (PASS, FAIL, WARN, WITHHELD, REFUSED, ERROR) for SPY, BTC
 cut-off in fetch and compare; md5 refusal; the 10.5.2 summary allow-list; that no key value is ever printed or
 written; every fetcher over a fake transport, against request parameters, epoch seconds and rows typed by hand; the
 tool's own HTTP function with `urlopen` replaced; COMPUTES against the checks (selftest); where the tool may write
-(letter case, links, nested folders, OneDrive); a fetch record's sha256 and window; what a failed run prints and leaves;
-a cp949 console; UTF-8 and LF in every file the tool writes; the tool run as the owner runs it (`python -B -m ...`);
-every statement of the fixed tool commit and sha256.
+(letter case, links, nested folders, OneDrive); a fetch record's sha256 and, for each series, its window; the blank
+and non-positive cells of a provider file (kept for the cash rate, dropped for SPY and BTC-USD); what a failed run
+prints and leaves; a cp949 console; UTF-8 and LF in every file the tool writes; the tool run as the owner runs it
+(`python -B -m ...`); every statement of the fixed tool commit and sha256.
 """
 from __future__ import annotations
 
@@ -435,7 +436,9 @@ def test_spy_gaps_below_ex_gap_min_are_rounding_noise_not_dividends():
 
 def test_spy_provider_lacking_half_a_percent_of_sessions_fails_the_calendar_not_coverage():
     """coverage_min 0.99 for SPY: a provider that has 99.5% of A's sessions inside its span is evaluated, and the
-    sessions it lacks then fail the calendar check with their dates: FAIL, not WITHHELD."""
+    sessions it lacks then fail the calendar check with their dates: FAIL, not WITHHELD. A row of the provider's file
+    whose close is blank, zero or negative is a session it lacks as well: the row is dropped on reading, as such a
+    row of the pinned file is, so the calendar check names its date and no return is computed from the cell."""
     d0, _, adj0, _ = SPY
     lacking = [i for i in range(len(d0)) if i % 200 == 100 and d0[i] >= SPY_WIN[0]]
     keep = [i for i in range(len(d0)) if i not in set(lacking)]
@@ -446,6 +449,21 @@ def test_spy_provider_lacking_half_a_percent_of_sessions_fails_the_calendar_not_
     assert cov["outcome"] == "PASS" and cov["coverage_ok"] and cov["n_a"] - cov["n_common"] == len(lacking) == 9, cov
     assert cal["outcome"] == "FAIL" and cal["only_a"] == [d0[i] for i in lacking] and cal["n_only_b"] == 0, cal
     assert code == 1 and s["outcome"] == "FAIL", out
+    cells = {"2012-03-01": "", "2013-05-15": "0.0", "2014-08-20": "-1.5"}
+    lines = provider_text(d0, adj0 * 0.987, 6).splitlines(keepends=True)
+    for day, cell in cells.items():
+        lines[d0.index(day) + 1] = f"{day},{cell}\n"
+    code, out, s, _ = w.compare([("fmp", w.file("fmp_cells.csv", "".join(lines)))])
+    cov, cal = check_of(s, "fmp", "coverage"), check_of(s, "fmp", "calendar")
+    assert cov["coverage_ok"] and cov["n_b"] == cov["n_common"] == cov["n_a"] - 3, cov
+    assert cal["outcome"] == "FAIL" and cal["only_a"] == sorted(cells) and cal["n_only_b"] == 0, cal
+    same = check_of(s, "fmp", "returns_same_convention")
+    assert same["outcome"] == "PASS" and same["n_over_tol"] == 0 and same["n_days"] == cov["n_common"] - 1, same
+    assert code == 1 and s["outcome"] == "FAIL", out
+    # the same file without the three rows gives the same checks: an unusable cell and a missing row are one thing
+    gone = [x for x in lines if x[:10] not in cells]
+    code, out, s2, _ = w.compare([("fmp", w.file("fmp_rows_gone.csv", "".join(gone)))])
+    assert len(gone) == len(lines) - 3 and code == 1 and s2["pairs"][0]["checks"] == s["pairs"][0]["checks"], out
 
 
 def test_spy_split_shaped_jump_in_a_fails_the_series_by_integrity_alone():
@@ -823,13 +841,24 @@ def test_btc_seven_missing_days_in_a_fail_two_warn():
 
 
 def test_btc_outage_days_of_a_provider_warn_the_pair_and_pass_the_series():
+    """A day the provider's file lacks is a calendar WARN with its date. A row whose close is blank, zero or negative
+    is such a day too: it is dropped on reading, as such a row of the pinned file is, and the checks are those of
+    the file without the row."""
     d, _, v = BTC
     keep = [i for i in range(len(d)) if i not in (100, 400, 900)]
-    code, _, s, _ = btc_run(btc_world(), [d[i] for i in keep], v[keep])
+    w = btc_world()
+    code, _, s, _ = btc_run(w, [d[i] for i in keep], v[keep])
     cal = check_of(s, "coinbase", "calendar")
     pair = s["pairs"][0]
     assert code == 0 and s["outcome"] == "PASS" and pair["outcome"] == "WARN", pair
     assert cal["outcome"] == "WARN" and cal["only_a"] == [d[100], d[400], d[900]], cal
+    lines = provider_text(d, v, 2).splitlines(keepends=True)
+    for i, cell in ((100, ""), (400, "0.00"), (900, "-1.00")):
+        lines[i + 1] = f"{d[i]},{cell}\n"
+    code, out, s2, _ = w.compare([("coinbase", w.file("btc_cells.csv", "".join(lines)))])
+    cov = check_of(s2, "coinbase", "coverage")
+    assert cov["n_b"] == len(d) - 3 == cov["n_common"] and check_of(s2, "coinbase", "calendar") == cal, cov
+    assert code == 0 and s2["outcome"] == "PASS" and s2["pairs"][0]["checks"] == pair["checks"], out
 
 
 def test_btc_level_dislocations_fail():
@@ -1084,18 +1113,45 @@ def test_rf_provider_missing_published_values_inside_its_span():
 
 def test_rf_blank_in_b_where_a_has_a_value_is_listed_like_a_missing_row():
     """A provider that carries the row but no value (H.15 prints ND, FRED a dot) lacks that value as much as one
-    without the row: both are listed under value_a_absent_b, as a WARN."""
+    without the row: both are listed under value_a_absent_b, as a WARN. The blank row is still a row of the
+    provider's file (`n_b` counts it). A rate of 0.00 or below zero is a published value and no blank: a provider
+    file keeps it as the pinned file does and it is compared. It is not dropped the way a close that is not
+    positive is dropped for SPY and BTC-USD, which would leave the provider short of A's values and end the series
+    WITHHELD on coverage."""
     days, vals, hol = RF
     b_days, b_vals = rf_b(vals)
+    read = [d for d in b_days if d >= "2009-12-04"]                 # compare reads from the window start - 31 days
     nd = [i for i, d in enumerate(b_days) if d >= "2012-06-01"][:3]
     cells = ["" if i in nd else f"{v:.2f}" for i, v in enumerate(b_vals)]
     text = "date,value\n" + "".join(f"{d},{c}\n" for d, c in zip(b_days, cells))
     w = rf_world()
     code, out, s, _ = w.compare([("treasury", w.file("rf_nd.csv", text))])
-    bl = check_of(s, "treasury", "blanks")
+    bl, cov = check_of(s, "treasury", "blanks"), check_of(s, "treasury", "coverage")
     assert bl["outcome"] == "WARN" and bl["value_a_absent_b"] == [b_days[i] for i in nd], bl
-    assert bl["n_blank_a_value_b"] == 0 and check_of(s, "treasury", "coverage")["coverage_ok"], s["pairs"][0]
+    assert bl["n_blank_a_value_b"] == 0 and cov["coverage_ok"] and cov["n_b"] == len(read), s["pairs"][0]
+    assert check_of(s, "treasury", "values")["n_common_values"] == len(read) - 3, s["pairs"][0]
     assert code == 0 and s["outcome"] == "PASS" and s["pairs"][0]["outcome"] == "WARN", out
+    # sixty days at 0.00 and three below zero, in the pinned file and the provider's alike
+    assert float(vals.min()) > 0.0              # the plain synthetic rate never reaches zero: this part holds the rule
+    low = vals.copy()
+    at = [i for i, d in enumerate(days) if d >= "2014-03-03" and i not in hol][:63]
+    low[at[:60]], low[at[60:]] = 0.0, -0.02
+    b_days, b_vals = rf_b(low)
+    written = dict(x.split(",") for x in provider_text(b_days, b_vals, 2).splitlines())
+    assert [written[days[i]] for i in (at[0], at[59], at[60], at[62])] == ["0.00", "0.00", "-0.02", "-0.02"]
+    w = rf_world(low)
+    code, out, s, _ = rf_run(w, b_days, b_vals)
+    v, bl, cov = (check_of(s, "treasury", cid) for cid in ("values", "blanks", "coverage"))
+    assert code == 0 and s["outcome"] == "PASS" and s["pairs"][0]["outcome"] == "PASS", out
+    assert v["n_common_values"] == cov["n_b"] == cov["n_common"] == len(read) and v["n_off_by_tol"] == 0, (v, cov)
+    assert bl["outcome"] == "PASS" and bl["n_value_a_absent_b"] == 0 and bl["n_blank_a_value_b"] == 0, bl
+    assert [c["outcome"] for c in s["integrity"]] == ["PASS", "PASS"], s["integrity"]
+    # a provider that prints 0.01 where A published 0.00 is off by a whole basis point: the zero is a value compared
+    off = b_vals.copy()
+    off[b_days.index(days[at[0]])] = 0.01
+    code, out, s, _ = rf_run(w, b_days, off)
+    v = check_of(s, "treasury", "values")
+    assert code == 1 and v["n_off_by_tol"] == 1 and v["n_common_values"] == len(read), v
 
 
 def test_rf_late_starting_provider_five_values_pass():
@@ -2541,38 +2597,62 @@ def test_a_fetch_made_for_a_window_that_does_not_cover_the_table_s_is_refused_be
     and the series would end WITHHELD, a run of record. So a file beside a fetch record whose window starts after
     the table's start or ends before the table's end is REFUSED, with both windows named and nothing written. A
     record for the table's window or a wider one is taken (the file is cut to the table's window either way). For
-    the cash rate the table's window is meant, not the 31 days of seed the tool reads before it."""
-    w = rf_world()
-    for start, end, taken in ((RF_WIN[0], RF_WIN[1], True), ("2009-06-01", "2017-06-30", True),
-                              ("2015-01-05", RF_WIN[1], False), (RF_WIN[0], "2011-12-30", False),
-                              ("2010-01-05", RF_WIN[1], False), (RF_WIN[0], "2016-12-29", False)):
-        code, out, folder = fetch("rf", "treasury", start=start, end=end, http=FakeHttp(treasury_handler))
-        assert code == 0, out
+    the cash rate the table's window is meant, not the 31 days of seed the tool reads before it. The rule is one
+    rule for all three series, so each has a late start and an early end here, among them the slip it is for: SPY
+    fetched with BTC-USD's start, BTC-USD with SPY's end. The last value of each refused line below is the exit code
+    the same bytes give once no record lies beside them: 3 is the WITHHELD the refusal prevents; 0 is a file that
+    still passes, because it reaches the table's window through the 31 days before and 7 after that every fetch
+    adds or, for BTC-USD, because it starts inside the 471 days a late provider is allowed (there the slip would
+    pass unseen, on less evidence). None marks a record that is taken."""
+    worlds = {"rf": rf_world(), "spy": spy_world(), "btc": btc_world()}
+    table = {"rf": RF_WIN, "spy": SPY_WIN, "btc": BTC_WIN}
+    handler = {"treasury": treasury_handler, "fmp": fmp_handler, "coinbase": coinbase_handler}
+    keys = key_file(tmp())
+    exact = {}
+    for series, provider, start, end, loose_code in (
+            ("rf", "treasury", RF_WIN[0], RF_WIN[1], None), ("rf", "treasury", "2009-06-01", "2017-06-30", None),
+            ("rf", "treasury", "2015-01-05", RF_WIN[1], 3), ("rf", "treasury", RF_WIN[0], "2011-12-30", 3),
+            ("rf", "treasury", "2010-01-05", RF_WIN[1], 0), ("rf", "treasury", RF_WIN[0], "2016-12-29", 0),
+            ("spy", "fmp", SPY_WIN[0], SPY_WIN[1], None), ("spy", "fmp", "2009-07-01", "2017-06-30", None),
+            ("spy", "fmp", BTC_WIN[0], SPY_WIN[1], 3), ("spy", "fmp", SPY_WIN[0], "2011-12-30", 3),
+            ("spy", "fmp", "2010-01-05", SPY_WIN[1], 0), ("spy", "fmp", SPY_WIN[0], "2016-12-29", 0),
+            ("btc", "coinbase", BTC_WIN[0], BTC_WIN[1], None), ("btc", "coinbase", "2014-06-01", "2020-06-30", None),
+            ("btc", "coinbase", "2017-06-01", BTC_WIN[1], 3), ("btc", "coinbase", BTC_WIN[0], SPY_WIN[1], 3),
+            ("btc", "coinbase", "2016-01-01", BTC_WIN[1], 0), ("btc", "coinbase", BTC_WIN[0], "2019-12-30", 0)):
+        w, win, name, case = worlds[series], table[series], f"{series}_{provider}.csv", (series, start, end)
+        code, out, folder = fetch(series, provider, start=start, end=end, http=FakeHttp(handler[provider]),
+                                  env_file=keys if provider == "fmp" else None)
+        assert code == 0, (case, out)
         meta = json.loads((folder / "meta.json").read_text(encoding="utf-8"))
-        assert meta["window"] == {"start": start, "end": end}, meta["window"]
-        code, out, s, path = w.compare([("treasury", folder / "rf_treasury.csv")])
-        if taken:
-            assert code == 0 and s["outcome"] == "PASS" and s["pairs"][0]["has_fetch_record"] is True, (start, end, out)
-            assert s["window"] == {"start": RF_WIN[0], "end": RF_WIN[1]}, s["window"]
+        assert meta["window"] == {"start": start, "end": end}, (case, meta["window"])
+        code, out, s, path = w.compare([(provider, folder / name)])
+        if loose_code is None:
+            assert code == 0 and s["outcome"] == "PASS" and s["pairs"][0]["has_fetch_record"] is True, (case, out)
+            assert s["window"] == {"start": win[0], "end": win[1]}, (case, s["window"])
+            exact.setdefault(series, (folder, meta))
             continue
-        assert code == 2 and s is None and not path.exists(), (start, end, out)
+        assert code == 2 and s is None and not path.exists(), (case, out)
         assert out.splitlines()[-2] == (
-            f"REFUSED: rf_treasury.csv: its fetch record's window {start}..{end} does not cover the table's window "
-            f"{RF_WIN[0]}..{RF_WIN[1]}; fetch again with the table's --start and --end into a new folder"), out
-        assert last_line(out) == "PARITY rf REFUSED exit=2 summary=-", out
+            f"REFUSED: {name}: its fetch record's window {start}..{end} does not cover the table's window "
+            f"{win[0]}..{win[1]}; fetch again with the table's --start and --end into a new folder"), (case, out)
+        assert last_line(out) == f"PARITY {series} REFUSED exit=2 summary=-", (case, out)
         # the same bytes with no record beside them are compared, and the summary says they had none
-        loose = w.file(f"loose_{start}_{end}.csv", (folder / "rf_treasury.csv").read_text(encoding="utf-8"))
-        code, out, s, _ = w.compare([("treasury", loose)])
-        assert code in (0, 3) and s["pairs"][0]["has_fetch_record"] is False, out
+        loose = w.file(f"loose_{start}_{end}.csv", (folder / name).read_text(encoding="utf-8"))
+        code, out, s, _ = w.compare([(provider, loose)])
+        assert code == loose_code and s["pairs"][0]["has_fetch_record"] is False, (case, out)
+        assert s["outcome"] == ("WITHHELD" if loose_code else "PASS"), (case, s["outcome"])
     # a record that names no window cannot show what it was fetched for
-    code, out, folder = fetch("rf", "treasury", start=RF_WIN[0], end=RF_WIN[1], http=FakeHttp(treasury_handler))
-    meta = json.loads((folder / "meta.json").read_text(encoding="utf-8"))
-    for window in (None, {"start": RF_WIN[0]}, {"start": RF_WIN[0], "end": 20161230}, "2010-01-04..2016-12-30",
-                   {"start": "0", "end": "9"}):
-        (folder / "meta.json").write_text(json.dumps({**meta, "window": window}), encoding="utf-8")
-        code, out, s, path = w.compare([("treasury", folder / "rf_treasury.csv")])
-        assert code == 2 and s is None and not path.exists(), (window, out)
-        assert "its fetch record names no window" in out, (window, out)
+    for series, (folder, meta) in exact.items():
+        w, win, provider = worlds[series], table[series], meta["provider"]
+        assert meta["window"] == {"start": win[0], "end": win[1]}, (series, meta["window"])
+        for window in (None, {"start": win[0]}, {"start": win[0], "end": int(win[1].replace("-", ""))},
+                       f"{win[0]}..{win[1]}", {"start": "0", "end": "9"}):
+            (folder / "meta.json").write_text(json.dumps({**meta, "window": window}), encoding="utf-8")
+            code, out, s, path = w.compare([(provider, folder / f"{series}_{provider}.csv")])
+            assert code == 2 and s is None and not path.exists(), (series, window, out)
+            assert "its fetch record names no window" in out, (series, window, out)
+            assert last_line(out) == f"PARITY {series} REFUSED exit=2 summary=-", out
+    assert sorted(exact) == ["btc", "rf", "spy"], sorted(exact)
 
 
 def test_a_kis_page_back_that_stops_short_says_where_and_why_above_the_result_line():
