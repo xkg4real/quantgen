@@ -369,16 +369,38 @@ def _add_note(exc: BaseException, note: str) -> None:
 
 
 def _atomic_write(path: Path, data: str | bytes) -> None:
-    """`data` (text is written as UTF-8 with its own line ends) to a temporary file beside `path`, renamed over it."""
+    """`data` (text is written as UTF-8 with its own line ends) to a temporary file beside `path`, flushed and
+    fsynced (`os.fsync`), then renamed over it; on POSIX the directory is then fsynced too (`_fsync_dir`)."""
     path.parent.mkdir(parents=True, exist_ok=True)
     fd, tmp = tempfile.mkstemp(dir=path.parent, prefix=path.name, suffix=".tmp")
     try:
         with os.fdopen(fd, "wb") as fh:
             fh.write(data.encode("utf-8") if isinstance(data, str) else data)
+            fh.flush()
+            os.fsync(fh.fileno())
         os.replace(tmp, path)
     finally:
         if os.path.exists(tmp):
             os.unlink(tmp)
+    _fsync_dir(path.parent)
+
+
+def _fsync_dir(path: Path) -> None:
+    """fsync the directory `path`, so that the renames into it reach the disk, on POSIX only: Windows cannot open a
+    directory with os.open, so nothing is done there. Best effort: a directory that cannot be opened or synced is
+    left as it is and never fails the run, whose files are already in place."""
+    if os.name == "nt":
+        return
+    try:
+        fd = os.open(path, os.O_RDONLY)
+    except OSError:
+        return
+    try:
+        os.fsync(fd)
+    except OSError:
+        pass
+    finally:
+        os.close(fd)
 
 
 def _make_dirs(path: Path, made: list[Path]) -> None:
@@ -414,19 +436,26 @@ def _commit(items: list[tuple[Path, bytes]]) -> None:
     (review of PR #101, R4). `generate` passes the fixtures and, last, the manifest with its new rows, so a fixture is
     never left in place without its manifest row. A destination named twice is refused with a ValueError naming it
     before anything is written (review of PR #107, F5). The missing destination directories are created, then every
-    file is written whole to a temporary file beside its destination, and the bytes of each file it replaces are
-    read; a failure in any of these steps removes the temporary files and the directories this run created (F6) and
-    changes nothing else. Then each temporary file is renamed over its destination (`os.replace`, one rename per
-    file). If a rename fails (on Windows, a destination open in another program, the manifest included), the files
-    already renamed get their earlier bytes back, the files this run created are removed, the temporary files are
-    deleted, the directories this run created are removed again, and the error is raised: every destination is as it
-    was. What remains possible: each file is
-    always whole, either its earlier bytes or its new bytes, never a mix; but if the process is stopped during the
-    renames (killed, power lost) no undo runs, so some files hold their new bytes, other files their earlier bytes,
-    the manifest may lack the rows of fixtures already renamed, and a temporary file `<name>*.tmp` may remain; a
-    reader during the renames can see that mix; and if the undo itself fails (a file locked in that instant),
-    FinalWriteIncomplete names each file left changed. The manifest is renamed last, so whenever the write fails or
-    is undone, the manifest holds no new row."""
+    file is written whole to a temporary file beside its destination, flushed and fsynced (`os.fsync`, F2), and the
+    bytes of each file it replaces are read; a failure in any of these steps removes the temporary files and the
+    directories this run created (F6) and changes nothing else. Then each temporary file is renamed over its
+    destination (`os.replace`, one rename per file). If a rename fails (on Windows, a destination open in another
+    program, the manifest included), the files already renamed get their earlier bytes back, the files this run
+    created are removed, the temporary files are deleted, the directories this run created are removed again, and
+    the error is raised: every destination is as it was. After the last rename, on POSIX only, each destination
+    directory and the parent of each directory this run created is fsynced, best effort (`_fsync_dir`: a failure
+    there does not fail the run; Windows has no directory fsync).
+    What remains possible. A reader during the renames can see new and earlier files mixed. If the undo itself fails
+    (a file locked in that instant), FinalWriteIncomplete names each file left changed. If the process is stopped
+    during the renames (killed, power lost; a Ctrl+C is an error like any other and is undone), no undo runs: some
+    files hold their new bytes, others their earlier bytes, the manifest may lack the rows of fixtures already
+    renamed, and a temporary file `<name>*.tmp` may remain. After a power loss, each file holds its earlier bytes or
+    its new bytes, whole, as far as the disk honours fsync and the file system keeps a rename atomic (POSIX file
+    systems do; Windows does not promise it): the new bytes are on disk before the rename, but a rename not yet on
+    disk when the power goes (any rename before the directory fsync; on Windows any rename) can be lost, and the
+    renames that survive need not be the earlier ones, so the manifest can survive with rows for fixtures that came
+    back with their earlier bytes or not at all (the fixture gate, tests/notrun.require_fixture, then refuses those by
+    md5). The manifest is renamed last, so whenever the write fails or is undone, the manifest holds no new row."""
     dests = [dest for dest, _data in items]
     first: dict[str, Path] = {}                             # each destination, however spelled, by its first spelling
     repeated: list[str] = []
@@ -447,11 +476,13 @@ def _commit(items: list[tuple[Path, bytes]]) -> None:
     try:
         for dest in dests:                                  # 0. the missing directories, each recorded once made
             _make_dirs(dest.parent, made)
-        for dest, data in items:                            # 1. every new file, whole, beside its destination
+        for dest, data in items:                            # 1. every new file, whole and synced, beside its dest.
             before[dest] = dest.read_bytes() if dest.exists() else None
             fd, temps[dest] = tempfile.mkstemp(dir=dest.parent, prefix=dest.name, suffix=".tmp")
             with os.fdopen(fd, "wb") as fh:
                 fh.write(data)
+                fh.flush()
+                os.fsync(fh.fileno())
         for dest in dests:                                  # 2. one rename per file, the manifest last
             os.replace(temps[dest], dest)
             del temps[dest]
@@ -482,6 +513,8 @@ def _commit(items: list[tuple[Path, bytes]]) -> None:
         if left:
             raise FinalWriteIncomplete(dest, exc, left) from exc
         raise
+    for d in dict.fromkeys([*(dest.parent for dest in dests), *(m.parent for m in made)]):
+        _fsync_dir(d)                                       # 4. the renames on disk (POSIX), best effort
 
 
 def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_source: str, retrieved_at_utc: datetime,

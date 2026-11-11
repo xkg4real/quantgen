@@ -2198,6 +2198,78 @@ def test_macro_fixtures_final_write_is_all_or_nothing():
             r["md5"] for r in generate(Path(tmp) / "check") if r["file"] == n13)   # the new bytes, whole
 
 
+def test_macro_fixtures_final_write_fsyncs_each_file_before_its_rename():
+    """Review of PR #107, F2: `MF._commit` and `MF._atomic_write` renamed their temporary files with neither flush nor
+    fsync, while the docstring promised whole files after a power loss. Now every temporary file is fsynced before it
+    is renamed over its destination (watched by wrapping os.fsync and os.replace and matching files by inode); a
+    failing file fsync fails the run and is undone like any other error. On POSIX each destination directory is then
+    fsynced, best effort: a directory fsync that fails does not fail the run; on Windows (os.name 'nt') no directory
+    is opened. What a power loss can still leave is stated in `MF._commit` and is not demonstrated here."""
+    import os
+    import stat
+    events: list = []
+    real_fsync, real_replace, real_open, real_name = os.fsync, os.replace, os.open, os.name
+
+    def key(st):
+        return st.st_dev, st.st_ino
+
+    def fsync(fd):
+        st = os.fstat(fd)
+        events.append(("fsync", key(st), stat.S_ISDIR(st.st_mode)))
+        return real_fsync(fd)
+
+    def replace(src, dst, *args, **kwargs):
+        events.append(("replace", key(os.stat(src)), Path(dst).name))
+        return real_replace(src, dst, *args, **kwargs)
+    with tempfile.TemporaryDirectory() as tmp:
+        out = Path(tmp) / "new" / "out"
+        os.fsync, os.replace = fsync, replace
+        try:
+            MF._commit([(out / "a.csv", b"a\n"), (out / "b.csv", b"b\n"), (out / "MANIFEST.csv", b"m\n")])
+            MF._atomic_write(out / "c.csv", b"c\n")
+        finally:
+            os.fsync, os.replace = real_fsync, real_replace
+        assert {p.name: p.read_bytes() for p in out.iterdir()} == {"a.csv": b"a\n", "b.csv": b"b\n",
+                                                                   "MANIFEST.csv": b"m\n", "c.csv": b"c\n"}
+        renames = [(i, k, name) for i, (kind, k, name) in enumerate(events) if kind == "replace"]
+        assert [name for *_i, name in renames] == ["a.csv", "b.csv", "MANIFEST.csv", "c.csv"]
+        for i, k, name in renames:
+            assert ("fsync", k, False) in events[:i], f"{name}: renamed before its bytes were fsynced"
+        if os.name != "nt":                                 # the directory after the final write's last rename
+            assert ("fsync", key(os.stat(out)), True) in events[renames[2][0] + 1:renames[3][0]], events
+        # a failing file fsync fails the run before any rename; a failing directory fsync does not fail it
+
+        def failing(kind):
+            def fn(fd):
+                if stat.S_ISDIR(os.fstat(fd).st_mode) == (kind == "directory"):
+                    raise OSError(5, f"simulated: the {kind} cannot be synced")
+                return real_fsync(fd)
+            return fn
+        before = {p.name: p.read_bytes() for p in out.iterdir()}
+        for kind in ("file", "directory"):
+            os.fsync = failing(kind)
+            try:
+                if kind == "file":
+                    _refused(lambda: MF._commit([(out / "a.csv", b"a2\n"), (out / "d.csv", b"d\n")]), OSError,
+                             "simulated: the file cannot be synced")
+                else:
+                    MF._commit([(out / "a.csv", b"a3\n")])
+            finally:
+                os.fsync = real_fsync
+            if kind == "file":
+                assert {p.name: p.read_bytes() for p in out.iterdir()} == before
+        assert (out / "a.csv").read_bytes() == b"a3\n"
+        # Windows: no directory is opened for an fsync
+        opened: list = []
+        os.open = lambda *args, **kwargs: opened.append(args) or real_open(*args, **kwargs)
+        os.name = "nt"
+        try:
+            MF._fsync_dir(out)
+        finally:
+            os.open, os.name = real_open, real_name
+        assert opened == []
+
+
 def test_macro_fixtures_final_write_refuses_a_destination_named_twice():
     """Review of PR #107, F5: `MF._commit` kept its temporary files in a table keyed by destination, so two items with
     one destination lost the first temporary file from the table: the first rename put the second item's bytes in
