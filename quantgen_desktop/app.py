@@ -12,8 +12,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from yaml import YAMLError
 
-from PyQt6.QtCore import Qt, QTimer, pyqtSlot, QByteArray, QSettings
-from PyQt6.QtGui import QFont, QFontDatabase, QFontMetrics, QIcon
+from PyQt6.QtCore import Qt, QTimer, pyqtSlot, QByteArray, QSettings, QSize
+from PyQt6.QtGui import QFont, QFontDatabase, QFontMetrics, QIcon, QKeySequence, QShortcut
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFileDialog,
     QFrame, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QMainWindow,
@@ -47,7 +47,7 @@ from .localization import UiLabel, LanguageController, CAPTION_ROLE
 from .translations import display
 from .chart_study import CurrentPageTabs
 from .macro_records import execute_macro_records
-from . import typography
+from . import shell_rail, typography
 
 log = logging.getLogger(__name__)
 
@@ -214,20 +214,46 @@ class ResearchWindow(QMainWindow):
         sidebar = QFrame()
         sidebar.setObjectName("sidebar")
         self.sidebar = sidebar
+        self.sidebar_collapsed = False
         # Owner 2026-11-04: a thinner rail, sized from its widest label (fit_sidebar).
         sidebar.setFixedWidth(typography.SIDEBAR_WIDTH_RANGE[1])
-        rail = QVBoxLayout(sidebar)
+        shell = QVBoxLayout(sidebar)
+        shell.setContentsMargins(0, 0, 0, 0)
+        shell.setSpacing(0)
+        # Owner 2026-11-11 (UI-D7 point 3): the rail hides to a thin strip (toggle, Ctrl+B) and the
+        # choice is remembered. railPanel is the full rail, railStrip the hidden state.
+        self.rail_panel = QWidget()
+        self.rail_panel.setObjectName("railPanel")
+        rail = QVBoxLayout(self.rail_panel)
         rail.setContentsMargins(*typography.RAIL_MARGINS)
         rail.setSpacing(typography.RAIL_SPACING)
         brand = QHBoxLayout()
+        brand.setSpacing(typography.BRAND_SPACING)
         icon = QSvgWidget(str(application_root()/"assets/branding/f1-symbol.svg"))
         self.brand_symbol = icon
         self.brand_symbol_svg = (application_root()/"assets/branding/f1-symbol.svg").read_bytes()
-        icon.setFixedSize(38, 38)
+        icon.setFixedSize(typography.BRAND_SYMBOL_SIZE, typography.BRAND_SYMBOL_SIZE)
         brand.addWidget(icon)
-        brand.addWidget(label("QUANTGEN", "brand", wrap=False))
+        self.brand_label = label("QUANTGEN", "brand", wrap=False)
+        brand.addWidget(self.brand_label)
+        brand.addStretch(1)
+        self.sidebar_hide = shell_rail.icon_button("Hide menu", "Hide menu (Ctrl+B)", typography.RAIL_TOGGLE_SIZE)
+        self.sidebar_hide.clicked.connect(lambda: self.set_sidebar_collapsed(True))
+        brand.addWidget(self.sidebar_hide)
         rail.addLayout(brand)
         rail.addSpacing(10)
+        # Nav and the Markets sub-menu scroll inside the rail when the window is short; the paper
+        # stop, theme and language stay pinned at the bottom.
+        self.rail_scroll = QScrollArea()
+        self.rail_scroll.setObjectName("railScroll")
+        self.rail_scroll.setWidgetResizable(True)
+        self.rail_scroll.setFrameShape(QFrame.Shape.NoFrame)
+        self.rail_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        nav_host = QWidget()
+        nav_host.setObjectName("railNav")
+        nav_column = QVBoxLayout(nav_host)
+        nav_column.setContentsMargins(0, 0, 0, 0)
+        nav_column.setSpacing(typography.RAIL_SPACING)
         self.stack = QStackedWidget()
         self.nav = {}
         routes = (("home", "Research Home"), ("markets", "Markets"), ("tools", "Analysis tools"),
@@ -240,13 +266,18 @@ class ResearchWindow(QMainWindow):
             b.setCheckable(True)
             b.setProperty("nav", True)
             b.clicked.connect(lambda checked=False, r=route:self.navigate(r))
-            rail.addWidget(b)
+            nav_column.addWidget(b)
             self.nav[route] = b
-        rail.addStretch()
+            if route == "markets":
+                nav_column.addWidget(self.make_market_submenu())
+        nav_column.addStretch(1)
+        self.rail_scroll.setWidget(nav_host)
+        rail.addWidget(self.rail_scroll, 1)
+        rail.addSpacing(6)
         self.paper_halt = QPushButton('모의 엔진 긴급 정지')
         self.paper_halt.setEnabled(False)
-        self.paper_halt.clicked.connect(lambda: self.paper_session.runtime.halt() if self.paper_session.runtime else None)
-        self.paper_session.changed.connect(lambda: self.paper_halt.setEnabled(self.paper_session.runtime is not None))
+        self.paper_halt.clicked.connect(self.halt_paper_engine)
+        self.paper_session.changed.connect(self.paper_engine_changed)
         rail.addWidget(self.paper_halt)
         self.theme = QComboBox()
         self.theme.addItems(["Light", "Dark"])
@@ -262,6 +293,31 @@ class ResearchWindow(QMainWindow):
         self.language.setCurrentIndex(self.language.findData(self.ui_language))
         self.language.currentIndexChanged.connect(lambda: self.set_language(self.language.currentData()))
         rail.addWidget(self.language)
+        shell.addWidget(self.rail_panel)
+        self.rail_strip = QWidget()
+        self.rail_strip.setObjectName("railStrip")
+        strip = QVBoxLayout(self.rail_strip)
+        _, top, _, bottom = typography.RAIL_MARGINS
+        # The show toggle sits where the hide toggle was: centred on the brand row's height.
+        strip.setContentsMargins(0, top + (typography.BRAND_SYMBOL_SIZE - typography.RAIL_TOGGLE_SIZE) // 2, 1, bottom)
+        strip.setSpacing(typography.RAIL_SPACING + 4)
+        self.sidebar_show = shell_rail.icon_button("Show menu", "Show menu (Ctrl+B)", typography.RAIL_TOGGLE_SIZE)
+        self.sidebar_show.clicked.connect(lambda: self.set_sidebar_collapsed(False))
+        strip.addWidget(self.sidebar_show, 0, Qt.AlignmentFlag.AlignHCenter)
+        # The paper engine's emergency stop stays one click away while the engine runs.
+        self.paper_halt_strip = shell_rail.icon_button("Stop paper engine", "Stop paper engine",
+                                                       typography.RAIL_TOGGLE_SIZE)
+        self.paper_halt_strip.clicked.connect(self.halt_paper_engine)
+        self.paper_halt_strip.hide()
+        strip.addWidget(self.paper_halt_strip, 0, Qt.AlignmentFlag.AlignHCenter)
+        strip.addStretch(1)
+        shell.addWidget(self.rail_strip)
+        self.rail_strip.hide()
+        self.rail_keys = shell_rail.RailKeys(self.rail_buttons, self)
+        for button in self.rail_buttons():
+            self.rail_keys.watch(button)
+        self.sidebar_shortcut = QShortcut(QKeySequence("Ctrl+B"), self)
+        self.sidebar_shortcut.activated.connect(self.toggle_sidebar)
         outer.addWidget(sidebar)
         outer.addWidget(self.stack, 1)
         self.make_home()
@@ -273,12 +329,15 @@ class ResearchWindow(QMainWindow):
         self.make_library()
         self.make_system()
         self.attach_symbol_searches()
+        self.connect_market_sections(self.markets_view)
         self.setup_live_watchlist()
         self.change_theme(self.theme.currentIndex())
         self.navigate("home")
         self.localizer = LanguageController(self)
         self.refresh_views()
         self.fit_sidebar()
+        if shell_rail.stored_flag(self.language_store):
+            self.set_sidebar_collapsed(True, remember=False)
         from .reading_panel import install_reading_help
         self.reading_help = install_reading_help(self)
         if auto_refresh:
@@ -299,7 +358,9 @@ class ResearchWindow(QMainWindow):
 
         Measured at the checked nav font (14px / 600) plus the nav padding, the rail
         margins and a little air, never below what the paper-halt button and the
-        theme/language selectors need, and clamped to SIDEBAR_WIDTH_RANGE.
+        theme/language selectors, the brand row (with its hide toggle) or the widest
+        Markets sub-item need, and clamped to SIDEBAR_WIDTH_RANGE. A hidden rail keeps
+        that width for later and shows the RAIL_COLLAPSED_WIDTH strip.
         """
         left, _, right, _ = typography.RAIL_MARGINS
         frame = self.sidebar.frameWidth() + 1  # right-hand border
@@ -310,10 +371,145 @@ class ResearchWindow(QMainWindow):
         needed = widest + 2 * typography.NAV_PADDING[1] + typography.NAV_SLACK
         for widget in (self.paper_halt, self.theme, self.language):
             needed = max(needed, widget.sizeHint().width())
+        self.brand_label.ensurePolished()
+        needed = max(needed, typography.BRAND_SYMBOL_SIZE + 2 * typography.BRAND_SPACING
+                     + self.brand_label.sizeHint().width() + typography.RAIL_TOGGLE_SIZE)
+        sub_metrics = QFontMetrics(typography.scaled_font(font, 13, 600))
+        sub_widest = max(sub_metrics.horizontalAdvance(b.text()) for b in self.market_sections.values())
+        needed = max(needed, sub_widest + typography.SUBNAV_INDENT + 3 + 2 * typography.SUBNAV_PADDING[1] + 8)
         width = max(low, min(high, needed + left + right + frame))
-        if self.sidebar.width() != width or self.sidebar.minimumWidth() != width:
-            self.sidebar.setFixedWidth(width)
-        return width
+        self.sidebar_expanded_width = width
+        shown = typography.RAIL_COLLAPSED_WIDTH if self.sidebar_collapsed else width
+        if self.sidebar.width() != shown or self.sidebar.minimumWidth() != shown:
+            self.sidebar.setFixedWidth(shown)
+        return shown
+
+    def make_market_submenu(self):
+        """Owner 2026-11-11 (UI-D7 point 2): Markets opens indented sub-items in the rail, the five
+        real-time chart categories and stock search. Shown only while Markets is the page."""
+        self.market_submenu = QWidget()
+        self.market_submenu.setObjectName("marketSubmenu")
+        self.market_submenu.setAccessibleName("Markets sections")
+        column = QVBoxLayout(self.market_submenu)
+        column.setContentsMargins(typography.SUBNAV_INDENT, 1, 0, 3)
+        column.setSpacing(0)
+        self.market_sections = {}
+        self.market_section = None
+        for key, title in shell_rail.market_sections():
+            button = QPushButton(title)
+            button.setCheckable(True)
+            button.setProperty("subnav", True)
+            button.setAccessibleName(title)
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
+            button.clicked.connect(lambda checked=False, k=key: self.open_market_section(k))
+            column.addWidget(button)
+            self.market_sections[key] = button
+        self.market_submenu.hide()
+        return self.market_submenu
+
+    def rail_buttons(self):
+        """The rail's buttons in visual order (the arrow keys walk them)."""
+        buttons = [self.sidebar_hide]
+        for route, button in self.nav.items():
+            buttons.append(button)
+            if route == "markets":
+                buttons.extend(self.market_sections.values())
+        return buttons + [self.sidebar_show, self.paper_halt_strip]
+
+    def open_market_section(self, key):
+        """A Markets sub-item: open Markets on that real-time chart category, or on stock search."""
+        if key not in self.market_sections:
+            raise ValueError(f"Unknown Markets section: {key!r}")
+        self.navigate("markets")
+        view = self.markets_view
+        if hasattr(view, "show_category"):
+            view.show_category(key)
+        elif key == "search" and hasattr(view, "search"):
+            view.search.setFocus(Qt.FocusReason.OtherFocusReason)
+        self.sync_market_section(key)
+
+    def sync_market_section(self, key=None):
+        """Highlight the sub-item for what Markets shows: the given key, a stock screen as search, the
+        page's own category when it reports one, else the last choice."""
+        view = getattr(self, "markets_view", None)
+        if key is None and view is not None:
+            if view.showing_stock():
+                key = "search"
+            else:
+                current = getattr(view, "current_category", None)
+                key = current() if callable(current) else None
+        if key is None:
+            key = self.market_section
+        self.market_section = key if key in self.market_sections else None
+        for name, button in self.market_sections.items():
+            button.setChecked(name == self.market_section)
+
+    def connect_market_sections(self, view):
+        """Follow the Markets page's own category changes when it announces them (an optional
+        `category_changed(str)` signal); otherwise the highlight follows the rail and navigate()."""
+        signal = getattr(view, "category_changed", None)
+        if signal is not None and hasattr(signal, "connect"):
+            signal.connect(lambda key: self.sync_market_section(key or None))
+
+    def set_sidebar_collapsed(self, collapsed, *, remember=True):
+        """Hide the rail to a thin strip, or show it again, keeping the page and its scroll position."""
+        collapsed = bool(collapsed)
+        page = self.stack.currentWidget()
+        bar = page.verticalScrollBar() if isinstance(page, QScrollArea) else None
+        position = bar.value() if bar is not None else None
+        focus = QApplication.focusWidget()
+        keep_focus = focus is not None and (focus is self.sidebar or self.sidebar.isAncestorOf(focus))
+        ring = keep_focus and bool(focus.property("focusRing"))  # read before hiding clears it
+        self.sidebar_collapsed = collapsed
+        self.rail_panel.setVisible(not collapsed)
+        self.rail_strip.setVisible(collapsed)
+        self.fit_sidebar()
+        if remember and self.language_store is not None:
+            self.language_store.setValue(shell_rail.SETTINGS_KEY, collapsed)
+        if keep_focus:  # a keyboard user stays on the toggle, with its ring if it had one
+            reason = Qt.FocusReason.TabFocusReason if ring else Qt.FocusReason.OtherFocusReason
+            (self.sidebar_show if collapsed else self.sidebar_hide).setFocus(reason)
+        if bar is not None:
+            # The page reflows to its new width now and once more after queued layout requests.
+            self._page_position = (bar, position)
+            self.centralWidget().layout().activate()
+            self.restore_page_position(final=False)
+            QTimer.singleShot(0, self.restore_page_position)
+        return collapsed
+
+    def restore_page_position(self, final=True):
+        pending = getattr(self, "_page_position", None)
+        if not pending:
+            return
+        if final:
+            self._page_position = None
+        bar, position = pending
+        try:
+            bar.setValue(min(position, bar.maximum()))
+        except RuntimeError:  # the window closed before the deferred pass
+            pass
+
+    def toggle_sidebar(self):
+        return self.set_sidebar_collapsed(not self.sidebar_collapsed)
+
+    def halt_paper_engine(self):
+        if self.paper_session.runtime:
+            self.paper_session.runtime.halt()
+
+    def paper_engine_changed(self):
+        running = self.paper_session.runtime is not None
+        self.paper_halt.setEnabled(running)
+        self.paper_halt_strip.setVisible(running)
+
+    def apply_rail_theme(self, palette, dark):
+        """The rail's own sheet (typography.rail_stylesheet) and its painted icons for a theme."""
+        self.sidebar.setStyleSheet(typography.rail_stylesheet(palette, dark))
+        size = QSize(18, 18)
+        for button, rail_open in ((self.sidebar_hide, True), (self.sidebar_show, False)):
+            button.setIcon(shell_rail.toggle_icon(palette.muted, rail_open=rail_open))
+            button.setIconSize(size)
+        self.paper_halt_strip.setIcon(shell_rail.stop_icon(typography.tone_colors(palette)["up"]))
+        self.paper_halt_strip.setIconSize(QSize(16, 16))
 
     def page(self, title, subtitle):
         scroll = QScrollArea()
@@ -718,6 +914,9 @@ class ResearchWindow(QMainWindow):
             self.home_feed.stop()
         self.stack.setCurrentIndex(self.route_indices[route])
         for name, button in self.nav.items(): button.setChecked(name == route)
+        self.market_submenu.setVisible(route == 'markets')
+        if route == 'markets':
+            self.sync_market_section()
 
     def setup_live_watchlist(self):
         from .watchlist_live import WatchlistLiveController
@@ -856,6 +1055,7 @@ class ResearchWindow(QMainWindow):
         from core.market.models import Instrument
         self.navigate('markets')
         self.markets_view.open_instrument(Instrument('domestic_stock', symbol))
+        self.sync_market_section()
         scroll = self.stack.widget(self.route_indices['markets'])
         QTimer.singleShot(0, lambda: scroll.verticalScrollBar().setValue(0))
 
@@ -1105,6 +1305,7 @@ class ResearchWindow(QMainWindow):
             symbol = symbol.replace(b'#194C40', b'#E5EEE8').replace(b'fill="#E5EEE8"', b'fill="#A9C6BD"')
         self.brand_symbol.load(QByteArray(symbol))
         p = self.colors = DARK if index else LIGHT
+        self.apply_rail_theme(p, bool(index))
         self.watchlist.set_theme(p)
         self.markets_view.set_theme(bool(index))
         for completer in getattr(self, 'symbol_completers', ()):

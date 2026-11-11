@@ -38,6 +38,14 @@ RAIL_SPACING = 5
 NAV_PADDING = (9, 14)        # vertical, horizontal
 NAV_SLACK = 20               # breathing room beyond the widest label
 SIDEBAR_WIDTH_RANGE = (168, 208)
+# Owner 2026-11-11 (UI-D7 points 2-3): the rail hides to a thin strip, and Markets opens an indented
+# sub-menu. Brand row = symbol + wordmark + the hide toggle; the strip keeps only the show toggle.
+RAIL_COLLAPSED_WIDTH = 48
+RAIL_TOGGLE_SIZE = 26
+BRAND_SYMBOL_SIZE = 32
+BRAND_SPACING = 6
+SUBNAV_INDENT = 14           # from the nav buttons' left edge to the sub-menu guide line
+SUBNAV_PADDING = (7, 12)     # vertical, horizontal (after the 2px guide line): airy rows
 
 
 def is_dark(palette) -> bool:
@@ -150,6 +158,51 @@ def popup_stylesheet(p, dark: bool) -> str:
         """
 
 
+def mix(base, other, amount: float) -> str:
+    """`amount` of the way from colour `base` toward `other` (0 = base, 1 = other), as #rrggbb."""
+    a, b = QColor(base), QColor(other)
+    channels = (round(x + (y - x) * amount) for x, y in ((a.red(), b.red()), (a.green(), b.green()), (a.blue(), b.blue())))
+    return "#{:02x}{:02x}{:02x}".format(*channels)
+
+
+def rail_stylesheet(p, dark: bool) -> str:
+    """The left rail's own sheet, set on QFrame#sidebar (owner 2026-11-11, UI-D7 points 2-3).
+
+    A widget's own sheet wins over the window sheet, so the rail is styled here without touching
+    window_stylesheet. Owner, same day: "모든 화면들의 구획 선을 연하게 ... 한칸한칸 공간을 넓게": the
+    rail's right edge is a near-surface line (the surface/background difference does the separating),
+    and the Markets sub-items are airy text rows on a faint guide line, with no boxes: the selected one
+    turns accent (text and its piece of the guide line).
+
+    The rail's containers are transparent so the sidebar surface shows through. Focus follows the
+    `focusRing` property (shell_rail.RailKeys: keyboard focus only), not :focus, so nothing lingers after
+    a mouse click or when the window opens. Nav buttons keep their size: a 2px transparent border with
+    2px less padding equals the window rule's NAV_PADDING, and only its colour changes for focus.
+    """
+    nav_v, nav_h = NAV_PADDING
+    sub_v, sub_h = SUBNAV_PADDING
+    edge, guide = mix(p.surface, p.border, 0.45), mix(p.surface, p.border, 0.8)
+    return f"""
+          QFrame#sidebar {{ background: {p.surface}; border: 0; border-right: 1px solid {edge}; }}
+          QWidget#railPanel, QWidget#railStrip, QWidget#railNav, QWidget#marketSubmenu, QScrollArea#railScroll,
+          QScrollArea#railScroll > QWidget {{ background: transparent; }}
+          QPushButton[nav='true'] {{ border: 2px solid transparent; padding: {nav_v - 2}px {nav_h - 2}px; }}
+          QPushButton[nav='true'][focusRing='true'] {{ border-color: {p.accent}; }}
+          QPushButton[nav='true'][focusRing='true']:checked {{ border-color: {p.accent_soft}; }}
+          QPushButton[railIcon='true'] {{ padding: 0; border: 1px solid transparent; border-radius: 8px; background: transparent; }}
+          QPushButton[railIcon='true']:hover {{ background: {p.accent_soft}; }}
+          QPushButton[railIcon='true'][focusRing='true'] {{ border-color: {p.accent}; background: {p.accent_soft}; }}
+          QPushButton[subnav='true'] {{ text-align: left; padding: {sub_v}px {sub_h}px; min-height: 18px; border: 0;
+                                       border-left: 2px solid {guide}; border-radius: 0; background: transparent;
+                                       color: {p.muted}; font-size: 13px; font-weight: 400; letter-spacing: -0.1px; }}
+          QPushButton[subnav='true']:hover {{ color: {p.text}; }}
+          QPushButton[subnav='true']:checked {{ color: {p.accent}; border-left-color: {p.accent}; font-weight: 600; }}
+          QPushButton[subnav='true'][focusRing='true'] {{ color: {p.text}; background: {p.accent_soft}; border-left-color: {p.accent};
+                                                         border-top-right-radius: 6px; border-bottom-right-radius: 6px; }}
+          QPushButton[subnav='true'][focusRing='true']:checked {{ color: {p.accent}; }}
+        """
+
+
 def window_stylesheet(p, dark: bool) -> str:
     """The research window stylesheet.
 
@@ -231,5 +284,7 @@ def window_stylesheet(p, dark: bool) -> str:
 
 
 __all__ = ["TONES", "TONE_COLORS", "PANEL_DEPTH", "RAIL_MARGINS", "RAIL_SPACING", "NAV_PADDING",
-           "NAV_SLACK", "SIDEBAR_WIDTH_RANGE", "is_dark", "tone_colors", "tone_for", "set_tone",
-           "scaled_font", "window_stylesheet", "controls_stylesheet", "popup_stylesheet", "icon_dir"]
+           "NAV_SLACK", "SIDEBAR_WIDTH_RANGE", "RAIL_COLLAPSED_WIDTH", "RAIL_TOGGLE_SIZE", "BRAND_SYMBOL_SIZE",
+           "BRAND_SPACING", "SUBNAV_INDENT", "SUBNAV_PADDING", "is_dark", "tone_colors", "tone_for", "set_tone",
+           "scaled_font", "mix", "window_stylesheet", "rail_stylesheet", "controls_stylesheet",
+           "popup_stylesheet", "icon_dir"]
