@@ -35,14 +35,16 @@ def candles(n, *, start=date(2025, 1, 2), step=1, intraday=False, volume=True):
 class PeriodTests(unittest.TestCase):
     def test_period_requests_and_windows(self):
         from core.market.detail_model import PERIOD_KEYS, period_request, visible_for
-        self.assertEqual(PERIOD_KEYS, ("1D", "5D", "1M", "3M", "6M", "YTD", "1Y", "5Y", "ALL"))
+        # Owner R-D9-2 (2026-11-11) added the yearly interval: 10Y takes the monthly candles, 전체 the yearly ones.
+        self.assertEqual(PERIOD_KEYS, ("1D", "5D", "1M", "3M", "6M", "YTD", "1Y", "5Y", "10Y", "ALL"))
         requests = {key: period_request(key, SAMSUNG) for key in PERIOD_KEYS}
         self.assertEqual(requests["1D"], ("1m", 400))
         self.assertEqual(requests["5D"], ("15m", 140))
         for key in ("1M", "3M", "6M", "YTD", "1Y"):
             self.assertEqual(requests[key], ("1d", 400))  # daily periods share one request: no reload between them
         self.assertEqual(requests["5Y"], ("1w", 400))
-        self.assertEqual(requests["ALL"], ("1M", 500))
+        self.assertEqual(requests["10Y"], ("1M", 200))
+        self.assertEqual(requests["ALL"], ("1Y", 50))
         for key in PERIOD_KEYS:
             self.assertEqual(period_request(key, BOND), ("1d", 100))  # KIS bond history is at most 100 bars
         with self.assertRaises(ValueError):
@@ -86,12 +88,14 @@ class PeriodTests(unittest.TestCase):
 
         kis = ("1m", "3m", "5m", "15m", "30m", "60m", "1d", "1w", "1M")
         yahoo = Provider(True, ("1d", "1w", "1M"))
-        self.assertEqual(routable_intervals(Router(Provider(True), (yahoo,)), SAMSUNG, supported=kis), kis)
+        # The yearly interval comes with the monthly one (built from it, never requested from a provider).
+        self.assertEqual(routable_intervals(Router(Provider(True), (yahoo,)), SAMSUNG, supported=kis), kis + ("1Y",))
         offline = routable_intervals(Router(Provider(False), (yahoo,)), SAMSUNG, supported=kis)
-        self.assertEqual(offline, ("1d", "1w", "1M"))
+        self.assertEqual(offline, ("1d", "1w", "1M", "1Y"))
         self.assertEqual(routable_intervals(Router(Provider(False)), SAMSUNG, supported=kis), ())
         self.assertEqual(period_reason("1D", SAMSUNG, offline), "needs_kis")
         self.assertEqual(period_reason("6M", SAMSUNG, offline), "")
+        self.assertEqual(period_reason("ALL", SAMSUNG, offline), "")
         self.assertEqual(period_reason("5Y", BOND, ("1d",)), "bond_daily")
         self.assertEqual(period_reason("1Y", BOND, ("1d",)), "")
 
@@ -346,6 +350,141 @@ class ProfileRowsTests(unittest.TestCase):
                         tuple((d, nan(r), nan(q)) for d, r, q in profile.values["short_selling"]["daily"]))
         values = compute_study("short_ratio", bars_from_candles(data), supply=supply)
         self.assertAlmostEqual(values["SHORT_RATIO"][-1], 2.5)
+
+
+class YearlyIntervalTests(unittest.TestCase):
+    """Owner 2026-11-11 (R-D9-2): "몇분, 일, 주 월, 년" — yearly candles from the monthly history, no new endpoint."""
+
+    def monthly(self, first=(2023, 3), last=(2026, 11), missing_volume=None):
+        out, (year, month) = [], first
+        i = 0
+        while (year, month) <= last:
+            base = 100 + i
+            volume = None if (year, month) == missing_volume else 1000.0 + i
+            out.append(Candle(f"{year}-{month:02d}-01", base, base + 5 + (i % 3), base - 4, base + 1, volume))
+            i += 1
+            year, month = (year + 1, 1) if month == 12 else (year, month + 1)
+        return tuple(out)
+
+    def test_yearly_candles_fold_the_months_and_say_which_years_are_partial(self):
+        from core.market.detail_model import load_chart, yearly_span
+        months = self.monthly()
+
+        class Router:
+            requests = []
+
+            def load(self, request):
+                self.requests.append(request)
+                return MarketSnapshot(request, months, None, "2026-11-10T06:00:00+00:00", "KIS REST",
+                                      "Partial history: 45/500 requested bars (provider window or paging limit).")
+        router = Router()
+        request = ChartRequest(SAMSUNG, "1Y", 50)
+        snapshot = load_chart(router, request)
+        self.assertEqual(router.requests, [ChartRequest(SAMSUNG, "1M", 500)])   # the monthly history only
+        self.assertIs(snapshot.request, request)
+        self.assertEqual([c.timestamp for c in snapshot.candles], ["2023-01-01", "2024-01-01", "2025-01-01", "2026-01-01"])
+        year = [c for c in months if c.timestamp.startswith("2024")]
+        candle = snapshot.candles[1]
+        self.assertEqual((candle.open, candle.close), (year[0].open, year[-1].close))
+        self.assertEqual((candle.high, candle.low), (max(c.high for c in year), min(c.low for c in year)))
+        self.assertEqual(candle.volume, sum(c.volume for c in year))
+        # Honest about partial years: the history starts in March 2023, and 2026 runs to November.
+        self.assertEqual(yearly_span(snapshot), {2023: (3, 12), 2026: (1, 11)})
+        self.assertIn("requested monthly bars", snapshot.note)
+        # A month without volume leaves its year's volume unknown, never a smaller invented sum.
+        router2 = Router()
+        months = self.monthly(missing_volume=(2025, 6))
+        self.assertIsNone(load_chart(router2, request).candles[2].volume)
+        # Other intervals pass straight through.
+        daily = ChartRequest(SAMSUNG, "1d", 400)
+        self.assertEqual(load_chart(router2, daily).request, daily)
+
+    def test_yearly_live_bucket_and_axis_label(self):
+        from core.market.detail_svg import cursor_label, render
+        from core.market.live import bucket
+        self.assertEqual(bucket("2026-11-10T10:00:00+09:00", "1Y"), "2026-01-01")
+        self.assertEqual(cursor_label("2026-01-01", False, "1Y"), "2026")
+        self.assertEqual(cursor_label("2026-11-01", False, "1M"), "2026-11")
+        years = tuple(Candle(f"{y}-01-01", 100 + y % 7, 110 + y % 7, 95, 104, 1e6) for y in range(1990, 2027))
+        svg, layout = render(MarketSnapshot(ChartRequest(SAMSUNG, "1Y", 50), years), studies=("sma", "rsi"),
+                             width=900, height=600)
+        self.assertIn(">2026<", svg)
+        self.assertEqual(layout.stop - layout.start, len(years))
+
+
+class ShortGuideTests(unittest.TestCase):
+    """Owner 2026-11-11 (R-D9-3): the guide is a short card; its texts are short in both languages."""
+    INTERVALS = ("1m", "5m", "60m", "1d", "1w", "1M", "1Y")
+
+    def bars(self, interval, n=260):
+        from core.education.indicators import Bars
+        if interval.endswith("m"):
+            stamps = tuple((datetime(2026, 11, 9, 9, 0) + timedelta(minutes=i)).isoformat() for i in range(n))
+        else:
+            stamps = tuple((date(2020, 1, 2) + timedelta(days=i)).isoformat() for i in range(n))
+        close = tuple(100 + 10 * math.sin(i / 9) + i * .05 for i in range(n))
+        return Bars(stamps, close, tuple(c + 1 for c in close), tuple(c - 1 for c in close), close,
+                    tuple(1e6 + 1e4 * math.sin(i) for i in range(n)), interval)
+
+    def test_every_study_has_short_fields_within_their_limits(self):
+        from core.education.indicators import STUDIES, study
+        from core.education.study_guide import (CAUTION_MAX, CUE_MAX, CUES_MAX, GAUGES, ONE_LINER_MAX, SHORT,
+                                                short_guide)
+        self.assertEqual(set(SHORT), {spec.key for spec in STUDIES})
+        for spec in STUDIES:
+            for language in ("ko", "en"):
+                with self.subTest(study=spec.key, language=language):
+                    short = short_guide(spec.key, language)
+                    self.assertTrue(0 < len(short.one_liner) <= ONE_LINER_MAX, short.one_liner)
+                    self.assertTrue(1 <= len(short.cues) <= CUES_MAX)
+                    for cue in short.cues:
+                        self.assertTrue(0 < len(cue) <= CUE_MAX, cue)
+                    self.assertTrue(0 < len(short.caution) <= CAUTION_MAX, short.caution)
+                    if language == "ko":
+                        self.assertNotIn("니다", short.one_liner + short.caution)   # 해요체 on the screen
+                        self.assertNotIn("봉", short.one_liner + short.caution + "".join(short.cues))
+                    else:
+                        self.assertIsNone(HANGUL.search(short.one_liner + short.caution + "".join(short.cues)))
+        for key, gauge in GAUGES.items():
+            lines = {line.id for line in study(key).lines}
+            names = [name for name in gauge[1:] if isinstance(name, str)]
+            self.assertTrue(set(names) <= lines, (key, names))
+
+    def test_readings_and_guides_never_say_bong_and_read_every_interval(self):
+        from core.education.indicators import STUDIES, Supply, compute_study
+        from core.education.study_guide import gauge_value, guide, short_reading, study_reading
+        days = [(date(2020, 1, 2) + timedelta(days=i)).isoformat() for i in range(260)]
+        supply = Supply(tuple((d, 1000.0 * (i % 5 - 2), -500.0, 300.0) for i, d in enumerate(days)),
+                        tuple((d, 2.0 + i % 3, 1000.0) for i, d in enumerate(days)))
+        for interval in self.INTERVALS:
+            bars = self.bars(interval)
+            for spec in STUDIES:
+                with self.subTest(interval=interval, study=spec.key):
+                    text = guide(spec.key, "ko", interval)
+                    self.assertNotIn("봉", text.what + text.how + text.caution)
+                    self.assertNotRegex(text.what + text.how + text.caution, r"\{\w+")   # every unit word filled
+                    values = compute_study(spec.key, bars, supply=supply)
+                    for index in (5, -1):
+                        long = study_reading(spec.key, bars, index, language="ko", values=values, supply=supply)
+                        brief = short_reading(spec.key, bars, index, language="ko", values=values, supply=supply)
+                        self.assertNotIn("봉", long + brief)
+                        self.assertNotIn("니다", brief)
+                        self.assertLessEqual(len(brief), 44, brief)
+                        english = short_reading(spec.key, bars, index, language="en", values=values, supply=supply)
+                        self.assertIsNone(HANGUL.search(english), english)
+                    gauge = gauge_value(spec.key, values, bars)
+                    if gauge is not None:
+                        self.assertIn(gauge[0], ("scale", "band", "offset", "zero", "ratio"))
+                        self.assertTrue(math.isfinite(gauge[1]))
+        # The words follow the interval.
+        rsi = lambda interval: study_reading("rsi", self.bars(interval), -1, language="ko")
+        self.assertIn("최근 14일 동안", rsi("1d"))
+        self.assertIn("최근 14주 동안", rsi("1w"))
+        self.assertIn("최근 14개월 동안", rsi("1M"))
+        self.assertIn("최근 14년 동안", rsi("1Y"))
+        self.assertIn("최근 14분 동안", rsi("1m"))
+        self.assertIn("최근 14개 5분 구간 동안", rsi("5m"))
+        self.assertIn("최근 20주", guide("sma", "ko", "1w").what)
 
 
 if __name__ == "__main__":

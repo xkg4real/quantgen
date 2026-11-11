@@ -207,20 +207,26 @@ class StockDetailTests(unittest.TestCase):
         self.assertEqual(page.verticalScrollBar().value(), view.lock.target)
         page.verticalScrollBar().setValue(0)                            # e.g. a deferred scroll-to-top
         self.assertEqual(page.verticalScrollBar().value(), view.lock.target)
-        # 1000x700: the column opens over the chart from the toolbar instead of squeezing it.
-        self.window.resize(1000, 700); self.settle()
+        # 1000x700 (owner R-D9-1, replacing the overlay column): the column stays beside the chart and never over
+        # it; the rail folds while the stock is shown to make room and comes back as it was.
+        self.assertFalse(self.window.sidebar_collapsed)
+        self.window.resize(1000, 700); self.settle(); self.settle()
+        self.assertTrue(view.side.isVisible())
+        self.assertFalse(view.side.geometry().intersects(view.chart_column.geometry()))
+        self.assertGreaterEqual(view.side.x(), view.chart_column.geometry().right() + 12)
+        self.assertTrue(self.window.sidebar_collapsed)
+        self.assertGreaterEqual(view.chart_column.width(), 540)
+        view.side_button.click(); self.settle()                         # hidden: the chart takes the width
         self.assertFalse(view.side.isVisible())
         self.assertEqual(view.chart_column.width(), body.width())
         view.side_button.click(); self.settle()
         self.assertTrue(view.side.isVisible())
-        self.assertTrue(view.side.geometry().intersects(view.chart_column.geometry()))
-        QTest.keyClick(self.pane.chart, Qt.Key.Key_Escape); self.settle()
-        self.assertFalse(view.side.isVisible())
         self.assertEqual(view.height(), page.viewport().height())
-        # Leaving the stock restores the list's own scrolling.
+        # Leaving the stock restores the list's own scrolling and the owner's rail.
         view.back_button.click(); self.settle()
         self.assertEqual(page.verticalScrollBarPolicy(), Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.assertEqual(view.lock.scroll, None)
+        self.assertFalse(self.window.sidebar_collapsed)
 
     def test_wheel_over_the_chart_does_nothing_and_only_the_right_column_scrolls(self):
         self.open()
@@ -251,14 +257,20 @@ class StockDetailTests(unittest.TestCase):
         self.assertEqual((p.period, p.visible_bars.value(), p._end, p._cursor), ("6M", 126, None, n - 1))
         self.assertTrue(self.view.periods.buttons["6M"].isChecked())
         chart.setFocus()
-        p.move_cursor(n - 126)                     # the window's first candle
-        QTest.keyClick(chart, Qt.Key.Key_Left)     # one more to the left pans the window by one bar
-        self.assertEqual((p._cursor, p._end, chart.end, p.visible_bars.value()), (n - 127, n - 2, n - 2, 126))
+        # Owner: "좌우화살표로 차트 좌우 확인할수있게" (review 2026-11-11: at 6개월 nothing moved until the 126th
+        # press). Each ← moves the chart itself one step at once, the selection with it.
+        QTest.keyClick(chart, Qt.Key.Key_Left)
+        self.assertEqual((p._cursor, p._end, chart.end, p.visible_bars.value()), (n - 2, n - 2, n - 2, 126))
+        self.assertEqual(chart.layout_info.stop - 1, n - 2)
         self.assertFalse(self.view.periods.buttons["6M"].isChecked())  # a manual pan leaves the period's view
-        QTest.keyClick(chart, Qt.Key.Key_Left, Qt.KeyboardModifier.ShiftModifier)
-        self.assertEqual((p._end, p._cursor), (n - 12, n - 137))
+        QTest.keyClick(chart, Qt.Key.Key_Left, Qt.KeyboardModifier.ShiftModifier)   # Shift: ten steps
+        self.assertEqual((p._end, p._cursor), (n - 12, n - 12))
         self.assertEqual(chart.layout_info.stop - 1, n - 12)
+        QTest.keyClick(chart, Qt.Key.Key_Right)
+        self.assertEqual((p._end, p._cursor), (n - 11, n - 11))
         QTest.keyClick(chart, Qt.Key.Key_Home)
+        self.assertEqual((p._cursor, p.window()), (0, (0, 126)))
+        QTest.keyClick(chart, Qt.Key.Key_Left)                          # at the start: nothing further left
         self.assertEqual((p._cursor, p.window()), (0, (0, 126)))
         QTest.keyClick(chart, Qt.Key.Key_End)
         self.assertEqual((p._cursor, p._end), (n - 1, None))
@@ -356,13 +368,20 @@ class StockDetailTests(unittest.TestCase):
         self.wait(lambda: view.profile is not None and not view.jobs.busy)
         self.settle()
         self.assertEqual(rows["investor_flow"].reason, "")
-        # ⓘ unfolds the beginner guide with the reading now.
+        # ⓘ unfolds the beginner guide as a short card (owner R-D9-3): the reading now first, the long texts
+        # behind 자세히.
+        from core.education.study_guide import short_guide, short_reading, study_reading
         rows["rsi"].info.click(); self.settle(2)
-        self.assertTrue(rows["rsi"].guide.isVisible())
-        texts = [body.text() for _, body in rows["rsi"].guide_parts]
-        self.assertEqual(texts[:3], [polite(guide("rsi", "ko").what), polite(guide("rsi", "ko").how),
-                                     polite(guide("rsi", "ko").caution)])
-        self.assertTrue(texts[3])
+        card = rows["rsi"].guide
+        self.assertTrue(card.isVisible())
+        bars = view.engine_bars()
+        self.assertEqual(card.headline.text(), short_reading("rsi", bars, -1, language="ko", supply=self.pane.supply))
+        self.assertEqual(card.one_liner.text(), short_guide("rsi", "ko").one_liner)
+        self.assertFalse(card.details.isVisible())
+        self.assertEqual(card.long_texts[0], polite(study_reading("rsi", bars, -1, language="ko", supply=self.pane.supply)))
+        self.assertIn(polite(guide("rsi", "ko").caution), card.long_texts)
+        card.more.click(); self.settle(2)
+        self.assertTrue(card.details.isVisible())
         # A panel's x turns it off; its info button opens that guide.
         view.overlays.heads["stoch"].off.click(); self.settle(2)
         self.assertNotIn("stoch", view.studies)
@@ -702,6 +721,235 @@ class StockDetailTests(unittest.TestCase):
         cancel = watch._cancel
         self.view.back_button.click(); self.settle()
         self.assertTrue(cancel.is_set())
+
+    # UI-D9 (owner 2026-11-11 ~19:45/19:55 KST): nothing covers the chart, plain time words, short guide cards --------
+    def visible_widgets(self, root):
+        from PyQt6.QtWidgets import QWidget
+        return [w for w in [root, *root.findChildren(QWidget)] if w.isVisible() and w.width() > 0 and w.height() > 0]
+
+    def all_texts(self, root):
+        """Every text the screen can show under `root`: labels, buttons, tooltips, accessible names, placeholders
+        and every item of the interval menu (shown or in its list)."""
+        from PyQt6.QtWidgets import QComboBox, QLineEdit
+        out = []
+        for widget in self.visible_widgets(root):
+            for value in (widget.toolTip(), widget.accessibleName()):
+                if value:
+                    out.append(TAGS.sub("", value))
+            if isinstance(widget, (QLabel, QAbstractButton)) and widget.text():
+                out.append(TAGS.sub("", widget.text()))
+            if isinstance(widget, QLineEdit) and widget.placeholderText():
+                out.append(widget.placeholderText())
+            if isinstance(widget, QComboBox):
+                out += [widget.itemText(i) for i in range(widget.count())]
+        from quantgen_desktop.stock_detail_style import text
+        out += [text("ko", key) for key in ("group_minutes", "group_daily")]
+        return out
+
+    def assert_plain_korean(self, root, where):
+        """No '봉' (owner R-D9-2) and one register, 해요체 (no 합니다체, no '…음' sentence endings)."""
+        texts = self.all_texts(root)
+        self.assertTrue(texts, where)
+        self.assertEqual([t for t in texts if "봉" in t], [], where)
+        self.assertEqual([t for t in texts if "니다" in t], [], where)
+        self.assertEqual([t for t in texts if re.search(r"(수 있음|아님|없었음|높음|낮음)(\s*[.)]|\s·|$)", t)], [], where)
+
+    def test_nothing_covers_the_chart_at_any_size_or_column_state(self):
+        """R-D9-1: for each window size and right-column state, no widget but the chart's own band texts meets the
+        chart below its header band; the band texts stay in their bands; the column never meets the chart."""
+        from core.market.detail_svg import HEADER, PANEL_HEAD
+        from PyQt6.QtCore import QRect
+        self.open()
+        view, chart = self.view, self.pane.chart
+        view.set_studies(("sma", "bb", "volume_ma", "rsi", "macd", "stoch", "adx", "cci")); self.settle()
+        overlays = view.overlays
+        band_widgets = [overlays.ohlc, overlays.legend, overlays.notice]
+
+        def check(where):
+            self.settle(3)
+            layout = chart.layout_info
+            self.assertIsNotNone(layout, where)
+            origin = chart.mapTo(self.window, QPoint(0, 0))
+            protected = QRect(origin.x(), origin.y() + HEADER, chart.width(), chart.height() - HEADER)
+            heads = [h for h in overlays.heads.values() if h.isVisible()]
+            own = set(band_widgets) | set(heads)
+            for widget in self.visible_widgets(self.window):
+                if widget is chart or widget.isAncestorOf(chart) or widget.window() is not self.window:
+                    continue
+                if any(widget is o or o.isAncestorOf(widget) for o in own):
+                    continue
+                rect = QRect(widget.mapTo(self.window, QPoint(0, 0)), widget.size())
+                self.assertFalse(rect.intersects(protected), (where, type(widget).__name__, widget.objectName(),
+                                                              widget.property("sd"), rect, protected))
+            for widget in band_widgets:
+                if widget.isVisible():
+                    self.assertLessEqual(widget.geometry().bottom(), HEADER, (where, widget.geometry()))
+            panels = {key: (top, bottom) for key, top, bottom in layout.panels}
+            for key, head in overlays.heads.items():
+                if head.isVisible():
+                    top, _ = panels[key]
+                    self.assertGreaterEqual(head.geometry().top(), top, where)
+                    self.assertLessEqual(head.geometry().bottom(), top + PANEL_HEAD, where)
+                    self.assertLessEqual(head.geometry().right(), layout.width, where)
+            if view.side.isVisible():
+                self.assertFalse(view.side.geometry().intersects(view.chart_column.geometry()), where)
+
+        for size in ((1000, 700), (1280, 800), (1440, 900), (1920, 1080)):
+            self.window.resize(*size); self.settle(); self.settle()
+            view.set_side_shown(False); check((size, "hidden"))
+            view.set_side_shown(True); view.side.set_page(0); check((size, "stock tab"))
+            view.explain("rsi"); check((size, "indicator tab with a guide"))
+            view.picker.rows()["rsi"].guide.set_open(True); check((size, "guide unfolded"))
+            self.pane.pan(-15); check((size, "panned: the latest button"))
+            self.pane.follow_latest()
+            view.set_focus_mode(True); check((size, "focus"))
+            view.set_focus_mode(False)
+            self.assertGreaterEqual(view.chart_column.width(), 540, size)
+
+    def test_intervals_are_plain_time_words_with_a_yearly_one(self):
+        """R-D9-2: the menu reads 1분 … 60분, 일, 주, 월, 년; 년 is built from the monthly history."""
+        from core.market.detail_model import yearly_span
+        self.open(profile=False)
+        combo = self.view.interval_combo
+        names = [combo.itemText(i) for i in range(combo.count())]
+        self.assertEqual(names, ["1분", "3분", "5분", "15분", "30분", "60분", "일", "주", "월", "년"])
+        self.assertEqual(combo.currentText(), "일")
+        index = combo.findData("1Y")
+        combo.setCurrentIndex(index); self.view._interval_chosen(index)
+        self.wait(lambda: not self.pane.jobs.busy and self.pane.snapshot is not None
+                  and self.pane.snapshot.request.interval == "1Y")
+        self.settle()
+        self.assertEqual((self.service.calls[-1].interval, self.service.calls[-1].limit), ("1M", 500))
+        self.assertEqual(combo.currentText(), "년")
+        years = self.pane.snapshot.candles
+        self.assertEqual(len({c.timestamp[:4] for c in years}), len(years))
+        self.assertTrue(all(c.timestamp.endswith("-01-01") for c in years))
+        last = int(years[-1].timestamp[:4])
+        if yearly_span(self.pane.snapshot).get(last):
+            self.assertIn("진행 중", self.view.overlays.ohlc.date.text())   # the running year says so
+        self.assertIn("년 단위", self.view.overlays.ohlc.title.text())
+        self.window.set_language("en"); self.settle()
+        self.assertEqual([combo.itemText(i) for i in range(combo.count())],
+                         ["1 min", "3 min", "5 min", "15 min", "30 min", "60 min", "Day", "Week", "Month", "Year"])
+        self.window.set_language("ko"); self.settle()
+        # 전체 draws the yearly candles, 10년 the monthly ones.
+        self.view.periods.buttons["10Y"].click(); self.wait(lambda: not self.pane.jobs.busy); self.settle()
+        self.assertEqual(self.pane.snapshot.request.interval, "1M")
+        self.view.periods.buttons["ALL"].click(); self.wait(lambda: not self.pane.jobs.busy); self.settle()
+        self.assertEqual(self.pane.snapshot.request.interval, "1Y")
+
+    def test_no_bong_and_one_register_on_the_korean_screen_in_every_state(self):
+        """R-D9-2: '봉' appears in no Korean text of the stock screen: each interval, the picker with guides open
+        and unfolded, many studies, the notes, every folded section opened, and the empty, loading and failed
+        chart."""
+        from core.education.indicators import STUDIES
+        from core.market.detail_model import routable_intervals
+        view = self.view
+        self.window.markets_view.open_instrument(SAMSUNG); self.settle()
+        self.assert_plain_korean(view, "not loaded")
+        self.open()
+        for key in ("key_figures", "range", "risk", "technical", "supply"):
+            section = view.side.sections[key]
+            section.set_open(True)
+            if section.more.isVisible() and not section.expanded:
+                section.more.click()
+        view.side.watchlist.recent_group.set_open(True)
+        self.settle()
+        self.assert_plain_korean(view, "loaded, every section open")
+        view._show_notes(); self.settle()
+        self.assertTrue(view.notes.isVisible())
+        self.assert_plain_korean(view, "data notes")
+        combo = view.interval_combo
+        for index in range(combo.count()):
+            if not combo.model().item(index).isEnabled():
+                continue
+            combo.setCurrentIndex(index); view._interval_chosen(index)
+            self.wait(lambda: not self.pane.jobs.busy); self.settle()
+            self.assert_plain_korean(view, combo.itemData(index))
+        view.choose_period("6M"); self.wait(lambda: not self.pane.jobs.busy); self.settle()
+        view.set_studies(tuple(spec.key for spec in STUDIES)); self.settle()
+        self.assert_plain_korean(view, "every study on")
+        for key in ("rsi", "bb", "macd", "investor_flow", "vwap"):
+            view.explain(key); self.settle(2)
+            view.picker.rows()[key].guide.set_open(True); self.settle(2)
+        self.assert_plain_korean(view, "picker with guides open and unfolded")
+        view.side.set_page(0)
+        tech = view.side.sections["technical"]
+        for entry in tech._entries:
+            card = getattr(entry, "findChild", None) and entry.findChildren(QAbstractButton)
+            for button in card or ():
+                if button.isCheckable() and button.isVisible():
+                    button.setChecked(True)
+        self.settle()
+        self.assert_plain_korean(view, "reading rows unfolded")
+        self.pane.pan(-20); self.chart_wheel(); self.settle()
+        self.assert_plain_korean(view, "notices")
+
+        def offline(request):
+            raise RuntimeError("offline")
+        self.service.load = offline
+        self.window.markets_view.open_instrument(KAKAO); self.settle()
+        self.pane.refresh(manual=True); self.wait(lambda: not self.pane.jobs.busy); self.settle()
+        self.assertTrue(self.pane.empty_retry.isVisible())
+        self.assert_plain_korean(view, "failed load")
+
+    def chart_wheel(self):
+        self.wheel(self.pane.chart)
+
+    def test_guide_cards_are_short_and_the_column_explains_its_figures(self):
+        """R-D9-3: a folded guide card shows the reading, the pill, a gauge, one line, cue chips and one caution,
+        about three lines of text and none of the old section headings; reviewer findings on the column."""
+        from core.education.study_guide import short_guide
+        from quantgen_desktop.stock_detail_style import text
+        self.open()
+        view = self.view
+        old_heads = ("무엇인가요", "어떻게 보나요", "주의", "지금 읽기", "설정")
+        for key in ("rsi", "bb", "macd", "sma", "volume_ma"):
+            view.explain(key); self.settle(2)
+            card = view.picker.rows()[key].guide
+            self.assertTrue(card.isVisible(), key)
+            shown = [t for t in self.visible_texts(card)]
+            self.assertFalse([t for t in shown if t.strip() in old_heads], key)
+            self.assertTrue(card.headline.text(), key)
+            self.assertTrue(card.gauge.isVisible(), key)
+            self.assertEqual([c.text() for c in card.cues.chips if c.text()], list(short_guide(key, "ko").cues))
+            lines = sum(round(w.height() / w.fontMetrics().lineSpacing()) for w in (card.headline, card.one_liner,
+                                                                                   card.caution) if w.isVisible())
+            self.assertLessEqual(lines, 4, key)
+            self.assertFalse(card.details.isVisible())
+        # Picker rows keep the whole name in a 320px column; the place moves to line 2 instead.
+        self.window.resize(1000, 700); self.settle(); self.settle()
+        view.show_indicators(); self.settle()
+        for group in view.picker.groups.values():
+            group.set_open(True)
+        self.settle(3)
+        for key, row in view.picker.rows().items():
+            if row.isVisible():
+                self.assertEqual(row.name.fitted(), row.name.text(), key)   # rows out of view are not painted
+        self.window.resize(1440, 900); self.settle()
+        # 기술 지표: the studies' rows and one composite score with its scale, no sub-scores or verdict.
+        tech = view.side.sections["technical"]
+        rows = [e for e in tech._entries if hasattr(e, "label")]
+        self.assertEqual([r.label for r in rows], [text("ko", "signals_label")])
+        self.assertIn("−100~100", rows[0].hint)
+        # Figures explain themselves; no internal engine name.
+        hints = {row.label: row.hint for key in ("key_figures", "risk")
+                 for row in view.side.sections[key]._entries if hasattr(row, "label")}
+        for label_text, start in (("PER", "PER —"), ("EPS", "EPS —"), ("1일 VaR 95%", "위험가치(VaR)"),
+                                  ("1일 CVaR 95%", "조건부 VaR(CVaR)")):
+            self.assertTrue(hints[label_text].startswith(start), (label_text, hints[label_text]))
+        self.assertFalse([h for h in hints.values() if "gs_quant" in h or "계산 엔진" in h])
+        # Register and pointers: the full watchlist, the Q-SCORE chip, the key hint.
+        self.assertEqual(text("ko", "watch_full", limit=20), "관심종목은 20개까지 담을 수 있어요.")
+        self.assertNotIn("?", text("ko", "qscore_tip"))
+        self.assertEqual(view.periods.hint.text(), "← → 이동 · + 확대 · − 축소")
+        self.assertNotIn("⤢", text("ko", "picker_panel_limit", count=3) + text("ko", "hidden_panels_tip", names="x"))
+        # The English legend shows the volume average in the strip's unit.
+        self.window.set_language("en"); self.settle()
+        legend = TAGS.sub("", view.overlays.legend_label.text())
+        self.assertRegex(legend, r"Volume MA 20 [\d.]+M")
+        self.window.set_language("ko"); self.settle()
+        self.assertRegex(TAGS.sub("", view.overlays.legend_label.text()), r"거래량 평균 20 [\d,]+만")
 
 
 if __name__ == "__main__":

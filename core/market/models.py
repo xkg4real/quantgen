@@ -11,7 +11,10 @@ TICK_INTERVALS = ("1tick", "10tick", "100tick")
 SECOND_INTERVALS = ("1s", "5s", "10s", "30s")
 LIVE_INTERVALS = TICK_INTERVALS + SECOND_INTERVALS
 HISTORY_INTERVALS = ("1m", "3m", "5m", "15m", "30m", "60m", "1d", "1w", "1M")
-INTERVALS = LIVE_INTERVALS + HISTORY_INTERVALS
+# Built by the app from another interval's history, never requested from a provider (owner 2026-11-11, R-D9-2:
+# yearly candles come from the monthly history; core.market.detail_model.load_chart).
+DERIVED_INTERVALS = ("1Y",)
+INTERVALS = LIVE_INTERVALS + HISTORY_INTERVALS + DERIVED_INTERVALS
 
 
 def utc_now() -> str:

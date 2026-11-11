@@ -808,7 +808,7 @@ class _Writer:
         if self.provider("quote").lower().startswith("yahoo"):
             data = self.p.values.get("key_figures") or {}
             bar = str(data.get("market_time") or self.p.as_of)
-            return ("Yahoo Finance · " + self.t("지연·수정 전 일봉 ", "delayed, unadjusted daily bar ")
+            return ("Yahoo Finance · " + self.t("지연·수정 전 일별 시세 ", "delayed, unadjusted daily bar ")
                     + self.day(bar) + "\n" + self.history_hint())
         return self.source_hint("quote", "현재가 조회", "quote")
 
@@ -836,9 +836,9 @@ class _Writer:
         p = self.p
         note = self.basis() + self.t(f" · {len(p.candles)}거래일", f" · {len(p.candles)} sessions")
         if p.stale:
-            note += self.t(f" · 마지막 일봉 {self.day(p.as_of)}, 오래된 자료", f" · last bar {self.day(p.as_of)}, stale")
+            note += self.t(f" · 마지막 거래일 {self.day(p.as_of)}, 오래된 자료", f" · last bar {self.day(p.as_of)}, stale")
         elif p.today is not None and p.as_of == p.today.isoformat():
-            note += self.t(" · 오늘 일봉은 장중 잠정값일 수 있음", " · today's bar may be provisional")
+            note += self.t(" · 오늘 값은 장중 잠정값일 수 있음", " · today's bar may be provisional")
         return note
 
 
@@ -852,7 +852,7 @@ def _key_figures(w):
     if data.get("basis") == "quote":
         where = w.quote_hint()
     else:
-        where = w.history_hint(w.t(f"마지막 일봉 {w.day(data.get('date'))}", f"Last daily bar {w.day(data.get('date'))}"))
+        where = w.history_hint(w.t(f"마지막 거래일 {w.day(data.get('date'))}", f"Last daily bar {w.day(data.get('date'))}"))
     rows = []
     for key, labels in (("open", ("시가", "Open")), ("high", ("고가", "High")), ("low", ("저가", "Low"))):
         if data.get(key) is not None:
@@ -975,7 +975,7 @@ def _indicator_rows(w):
     data = w.p.values.get("indicators")
     if not data or "date" not in data:
         return ()
-    hint = w.history_hint(w.t(f"{w.day(data['date'])} 일봉 기준", f"As of the {w.day(data['date'])} daily bar"))
+    hint = w.history_hint(w.t(f"{w.day(data['date'])} 종가 기준", f"As of the {w.day(data['date'])} daily bar"))
     rows = []
     for key, labels, price_like in _INDICATORS:
         if data.get(key) is not None:
@@ -1121,5 +1121,5 @@ def headline(profile, lang) -> ProfileRow:
     if profile.price_basis == "quote":
         hint = w.quote_hint()
     else:
-        hint = w.history_hint(w.t(f"마지막 일봉 종가 {w.day(profile.as_of)}", f"Last daily close {w.day(profile.as_of)}"))
+        hint = w.history_hint(w.t(f"마지막 거래일 종가 {w.day(profile.as_of)}", f"Last daily close {w.day(profile.as_of)}"))
     return ProfileRow(label, value, tone, hint)

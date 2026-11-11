@@ -29,6 +29,8 @@ def bucket(timestamp: str, interval: str) -> str:
         day -= timedelta(days=day.weekday())
     elif interval == "1M":
         day = day.replace(day=1)
+    elif interval == "1Y":
+        day = day.replace(month=1, day=1)
     return day.isoformat()
 
 

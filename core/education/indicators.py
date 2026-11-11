@@ -198,7 +198,7 @@ CATEGORIES = ('trend', 'momentum', 'volatility', 'volume', 'supply')
 CATEGORY_NAMES = {'trend': ('추세', 'Trend'), 'momentum': ('모멘텀', 'Momentum'),
                   'volatility': ('변동성', 'Volatility'), 'volume': ('거래량', 'Volume'),
                   'supply': ('수급', 'Supply and demand')}
-DAILY_INTERVALS = ('1d', '1w', '1M')
+DAILY_INTERVALS = ('1d', '1w', '1M', '1Y')
 # What a study needs from the data: 'close'; 'ohlc' (high/low too); 'volume';
 # 'ohlcv'; 'intraday' (ohlcv on intraday bars); 'kis_flows' / 'kis_shorts' (KIS
 # investor-trade-by-stock-daily / daily-short-sale rows, domestic daily charts).
@@ -289,9 +289,9 @@ STUDIES = (
                                         _L('KC_LOWER', '켈트너 아래', 'Keltner lower')),
           '켈트너 채널', 'Keltner channel', 'KC 20·2·10',
           (('period', 20), ('multiplier', 2.0), ('atr_period', 10)), needs='ohlc'),
-    Study('donchian', 'trend', 'price', (_L('DC_UPPER', '돈치안 20봉 최고', 'Donchian 20 high'),
+    Study('donchian', 'trend', 'price', (_L('DC_UPPER', '돈치안 20 최고', 'Donchian 20 high'),
                                          _L('DC_MIDDLE', '돈치안 중간', 'Donchian middle', style='dash'),
-                                         _L('DC_LOWER', '돈치안 20봉 최저', 'Donchian 20 low')),
+                                         _L('DC_LOWER', '돈치안 20 최저', 'Donchian 20 low')),
           '돈치안 채널', 'Donchian channel', 'DC 20', (('period', 20),), needs='ohlc'),
     # Momentum ----------------------------------------------------------------------
     Study('rsi', 'momentum', 'rsi', (_L('RSI14', 'RSI 14', 'RSI 14', 'index'),),

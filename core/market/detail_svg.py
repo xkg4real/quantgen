@@ -189,10 +189,16 @@ def _stamp(candle):
     return str(getattr(candle, "timestamp", ""))
 
 
-def cursor_label(stamp, intraday):
+def cursor_label(stamp, intraday, interval="1d"):
+    """The selected candle's time on the axis: date and clock for minutes, the date for days and weeks, the
+    month for monthly candles and the year for yearly ones."""
     stamp = str(stamp)
     if intraday and len(stamp) >= 16:
         return f"{stamp[5:7]}/{stamp[8:10]} {stamp[11:16]}"
+    if interval == "1Y":
+        return stamp[:4]
+    if interval == "1M":
+        return stamp[:7]
     return stamp[:10]
 
 
@@ -254,7 +260,7 @@ def render(snapshot, *, studies=(), cursor=None, end=None, visible=120, width=90
     request = getattr(snapshot, "request", None)
     interval = getattr(request, "interval", "1d")
     asset = getattr(getattr(request, "instrument", None), "asset", "domestic_stock")
-    intraday = interval not in ("1d", "1w", "1M")
+    intraday = interval not in ("1d", "1w", "1M", "1Y")
     if isinstance(supply, dict):
         supply = engine.supply_from_rows(supply.get("flows") or (), supply.get("shorts") or ())
     keys = []
@@ -451,7 +457,7 @@ def render(snapshot, *, studies=(), cursor=None, end=None, visible=120, width=90
     # Time axis and cursor.
     line(plot_left, axis_top, width, axis_top, mix(colors["border"], bg, 0.15))
     cursor_x = x(selected - start)
-    cursor_text = cursor_label(_stamp(candles[selected]), intraday)
+    cursor_text = cursor_label(_stamp(candles[selected]), intraday, interval)
     cursor_w = _text_width(cursor_text) + 16
     for tx, label, _major in time_ticks:
         if abs(tx - cursor_x) < cursor_w / 2 + _text_width(label) / 2 + 6:
@@ -519,7 +525,8 @@ def _study_panel(parts, spec, window, x, count, step, plot_top, plot_bottom, plo
     else:
         candidates = finite + [float(r) for r in spec.references]
         low, high = (min(candidates), max(candidates)) if candidates else (0.0, 1.0)
-        pad = (high - low) * .1 or max(abs(high) * .01, 1e-6)
+        # Nothing computed yet (too little history): a plain ±1 frame, not ±1e-06 labels.
+        pad = (high - low) * .1 or max(abs(high) * .01, 1e-6 if finite else 1.0)
         low, high = low - pad, high + pad
     if high == low:
         high += 1
@@ -529,7 +536,7 @@ def _study_panel(parts, spec, window, x, count, step, plot_top, plot_bottom, plo
     if spec.bounds and len(references) >= 2:
         band_top, band_bottom = sy(references[-1]), sy(references[0])
         rect(plot_left, band_top, plot_right - plot_left, band_bottom - band_top, palette[spec.lines[0].id], 0.05)
-    fitted = [] if spec.bounds else [v for v in nice_ticks(low, high, 2)[0] if v not in references]
+    fitted = [] if spec.bounds or not finite else [v for v in nice_ticks(low, high, 2)[0] if v not in references]
     for value in fitted:
         line(plot_left, sy(value), plot_right, sy(value), grid)
     for value in references:

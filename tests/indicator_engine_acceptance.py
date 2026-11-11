@@ -686,7 +686,8 @@ class GuideTests(unittest.TestCase):
         self.assertIn('사라는 뜻이 아니라', cold)
         self.assertIn("not 'sell'", G.study_reading('rsi', rising, -1, language='en'))
         self.assertIn('conventionally', G.study_reading('rsi', rising, -1, language='en'))
-        self.assertIn('최근 14개 봉', G.study_reading('rsi', replace(rising, interval='5m'), -1))
+        # Owner 2026-11-11 (R-D9-2): no '봉' in Korean; minute charts count their own periods.
+        self.assertIn('최근 14개 5분 구간', G.study_reading('rsi', replace(rising, interval='5m'), -1))
         self.assertIn('최근 14주', G.study_reading('rsi', replace(rising, interval='1w'), -1))
         self.assertIn('관례', G.study_reading('stoch', rising, -1))
         self.assertIn('이격도', G.study_reading('disparity', rising, -1))
@@ -695,7 +696,7 @@ class GuideTests(unittest.TestCase):
         self.assertIn('구름 위', G.study_reading('ichimoku', E.bars_from_closes([100 * 1.01 ** i for i in range(90)]), -1))
 
     def test_warmup_unavailable_and_missing_data_say_why(self):
-        self.assertIn('최소 15개 봉이 필요합니다', G.study_reading('rsi', self.bars, 3))
+        self.assertIn('최소 15일의 자료가 필요합니다', G.study_reading('rsi', self.bars, 3))   # R-D9-2: no '봉'
         self.assertIn('at least 77 bars', G.study_reading('ichimoku', self.bars, 10, language='en'))
         self.assertEqual(G.study_reading('vwap', self.bars, -1), G.availability_text('intraday_only', 'ko'))
         self.assertEqual(G.study_reading('investor_flow', self.bars, -1), G.availability_text('no_supply_data', 'ko'))
@@ -854,10 +855,10 @@ class RenderingTests(unittest.TestCase):
     def test_unavailable_studies_say_why_instead_of_drawing(self):
         texts = lambda svg: ' '.join(t.text or '' for t in ET.fromstring(svg).iter(SVG + 'text'))
         daily = texts(chart_svg(self.snap, indicators=('vwap', 'investor_flow'), language='ko'))
-        self.assertIn('VWAP — 분봉 전용', daily)
+        self.assertIn('VWAP — 분 단위 차트 전용', daily)   # R-D9-2: no '봉'
         self.assertIn('수급 자료 없음', daily)
         overseas = snapshot(self.rows, asset='overseas')
-        self.assertIn('국내 주식 일봉 전용', texts(chart_svg(overseas, indicators=('short_ratio',), language='ko',
+        self.assertIn('국내 주식 · 일 단위 전용', texts(chart_svg(overseas, indicators=('short_ratio',), language='ko',
                                                        supply=self.supply)))
         minute = snapshot(self.rows[:120], '1m')
         drawn = ET.fromstring(chart_svg(minute, indicators=('vwap',), language='en'))
@@ -942,7 +943,7 @@ class VerifierDefectTests(unittest.TestCase):
                    tuple(closes), (1000.0,) * n)
         self.assertAlmostEqual(E.compute_study('stoch', b)['STOCH_K'][-1], 30.0)
         ko, en = both('stoch', b)
-        self.assertIn('이번 봉 종가만 보면 범위의 90% 높이', ko)
+        self.assertIn('이날 종가만 보면 범위의 90% 높이', ko)   # R-D9-2: '이번 봉' is '이날' on a daily chart
         self.assertIn('This bar’s close alone is 90% of the way up', en)
         self.assertNotIn('30% 높이에서 마감', ko)
         self.assertNotIn('finished 30%', en)
@@ -955,7 +956,7 @@ class VerifierDefectTests(unittest.TestCase):
         self.assertAlmostEqual(E.compute_study('stoch', b)['STOCH_K'][-1], 80.0)
         ko, en = both('stoch', b)
         self.assertIn('꼭대기 근처', ko)
-        self.assertIn('이번 봉 종가만 보면 범위의 40% 높이', ko)
+        self.assertIn('이날 종가만 보면 범위의 40% 높이', ko)
         # StochRSI: this bar's own position is the unsmoothed one (k_smooth = 1).
         bars = bars_of(walk(160, seed=5))
         raw = E.compute_study('stochrsi', bars, k_smooth=1)['STOCHRSI_K']
@@ -963,7 +964,7 @@ class VerifierDefectTests(unittest.TestCase):
         index = max(range(40, 160), key=lambda j: abs(raw[j] - slow[j]))
         self.assertGreater(abs(raw[index] - slow[index]), 10)
         ko, en = both('stochrsi', bars, index)
-        self.assertIn(f'이번 봉 RSI만 보면 범위의 {raw[index]:.0f}% 높이', ko)
+        self.assertIn(f'이날 RSI만 보면 범위의 {raw[index]:.0f}% 높이', ko)
         self.assertIn(f'This bar’s RSI alone is {raw[index]:.0f}% of the way up', en)
 
     def test_defect_3_zero_volume_never_prints_nan(self):
@@ -1060,7 +1061,7 @@ class VerifierDefectTests(unittest.TestCase):
         order = {'조금 더': 1, '더': 2, '훨씬': 3}
         self.assertEqual([order[w] for w in words], sorted(order[w] for w in words))
         mfi = G.study_reading('mfi', bars, -1, values=faked('mfi', bars, 'MFI', 79.0))
-        self.assertIn('훨씬 많았습니다(내린 봉의 3.8배)', mfi)
+        self.assertIn('훨씬 많았습니다(내린 날의 3.8배)', mfi)   # R-D9-2: '봉' is the day on a daily chart
         self.assertIn('far more', G.study_reading('mfi', bars, -1, language='en', values=faked('mfi', bars, 'MFI', 79.0)))
         # The conventional band always matches the number printed at the start of the reading.
         sweep = lambda *centres, step=.001, width=.1: np.concatenate(
@@ -1156,7 +1157,7 @@ class VerifierDefectTests(unittest.TestCase):
         self.assertIn('20-week', G.study_reading('disparity', E.bars_from_closes(rising, interval='1w'), -1, language='en'))
         self.assertIn('20일 이격도는 흔히 105 이상을 과열', G.study_reading('disparity', E.bars_from_closes(rising), -1))
         minute = G.study_reading('disparity', E.bars_from_closes(rising, interval='5m'), -1)
-        self.assertIn('20개 봉 이격도', minute)
+        self.assertIn('20개 5분 구간 이격도', minute)   # R-D9-2: no '봉'
         self.assertNotIn('20일 이격도는 흔히', minute)
 
     def test_defect_11c_vwap_session_survives_midnight_in_a_night_session(self):

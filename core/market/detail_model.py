@@ -13,9 +13,11 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import math
 
-DAILY = ("1d", "1w", "1M")
+DAILY = ("1d", "1w", "1M", "1Y")
 # key: (interval, bars requested). Daily periods share one 1d x 400 request, so switching among them never
 # reloads; 400 = 252 sessions shown for 1Y plus the warm-up of a 120-bar average (Ichimoku needs 78).
+# Owner 2026-11-11 (R-D9-2): the intervals are minutes, day, week, month and year, and a chip leads to each of
+# the longer ones: 5Y weekly, 10Y monthly, 전체 yearly (built from the monthly history, see load_chart).
 PERIODS = (
     ("1D", "1m", 400),
     ("5D", "15m", 140),
@@ -25,11 +27,13 @@ PERIODS = (
     ("YTD", "1d", 400),
     ("1Y", "1d", 400),
     ("5Y", "1w", 400),
-    ("ALL", "1M", 500),
+    ("10Y", "1M", 200),
+    ("ALL", "1Y", 50),
 )
 PERIOD_KEYS = tuple(key for key, _, _ in PERIODS)
 DEFAULT_PERIOD = "6M"
-_SHOWN = {"1M": 22, "3M": 63, "6M": 126, "1Y": 252, "5Y": 261}
+_SHOWN = {"1M": 22, "3M": 63, "6M": 126, "1Y": 252, "5Y": 261, "10Y": 120}
+YEARLY_MONTHS = 500      # monthly bars a yearly chart is built from (the ChartRequest maximum, about 41 years)
 MIN_VISIBLE = 20
 BOND_BARS = 100          # KIS bond history is at most 100 daily bars
 VOLUME_SESSIONS = 30
@@ -102,7 +106,7 @@ def routable_intervals(router, instrument, *, paper=False, supported=None):
     except Exception:
         ready = False
     if ready:
-        return supported
+        return with_derived(supported)
     from core.market.models import ChartRequest
     out = []
     for interval in supported:
@@ -117,7 +121,76 @@ def routable_intervals(router, instrument, *, paper=False, supported=None):
                     break
             except Exception:
                 continue
+    return with_derived(out)
+
+
+def with_derived(intervals):
+    """`intervals` plus the yearly interval when the monthly one is among them (yearly candles are built from the
+    monthly history; nothing new is requested from a provider)."""
+    intervals = tuple(intervals)
+    return intervals + ("1Y",) if "1M" in intervals and "1Y" not in intervals else intervals
+
+
+# Yearly candles (owner 2026-11-11, R-D9-2: "몇분, 일, 주 월, 년") ------------------------------------------------
+_YEARLY_NOTE = "Yearly candles from monthly history: first month {first}, last month {last}."
+
+
+def yearly_candles(candles):
+    """Yearly candles from monthly (or daily) ones, ascending: the first open, the highest high, the lowest low,
+    the last close and the summed volume (None when any month's volume is unknown), stamped YYYY-01-01."""
+    from core.market.models import Candle
+    years = {}
+    for candle in candles or ():
+        years.setdefault(str(candle.timestamp)[:4], []).append(candle)
+    out = []
+    for year in sorted(years):
+        rows = years[year]
+        volumes = [c.volume for c in rows]
+        volume = None if any(v is None for v in volumes) else float(sum(volumes))
+        out.append(Candle(f"{year}-01-01", rows[0].open, max(c.high for c in rows), min(c.low for c in rows),
+                          rows[-1].close, volume))
     return tuple(out)
+
+
+def yearly_snapshot(monthly, request):
+    """A snapshot for the yearly `request` built from the `monthly` snapshot. The note says which months the first
+    and the last year cover (a listing that began mid-year, or a year still in progress); `yearly_span` reads it."""
+    from dataclasses import replace
+    candles = tuple(monthly.candles or ())
+    years = yearly_candles(candles)[-request.limit:]
+    note = str(monthly.note or "")
+    if years:
+        first = next(c for c in candles if str(c.timestamp)[:4] == years[0].timestamp[:4])
+        note = (note + " " if note else "") + _YEARLY_NOTE.format(first=str(first.timestamp)[:7],
+                                                                  last=str(candles[-1].timestamp)[:7])
+    note = note.replace(f"/{monthly.request.limit} requested bars", f"/{monthly.request.limit} requested monthly bars")
+    return replace(monthly, request=request, candles=years, note=note)
+
+
+def yearly_span(snapshot):
+    """{year: (first month, last month)} of a yearly snapshot's partial years: the first year when its history
+    starts after January, the last when it has not reached December. Empty for other snapshots."""
+    import re
+    match = re.search(r"Yearly candles from monthly history: first month (\d{4})-(\d{2}), last month (\d{4})-(\d{2})",
+                      str(getattr(snapshot, "note", "") or ""))
+    if match is None:
+        return {}
+    first_year, first_month, last_year, last_month = (int(x) for x in match.groups())
+    out = {}
+    if first_month > 1:
+        out[first_year] = (first_month, 12 if first_year != last_year else last_month)
+    if last_month < 12:
+        out[last_year] = (first_month if first_year == last_year else 1, last_month)
+    return out
+
+
+def load_chart(router, request):
+    """`router.load(request)`, or for the yearly interval the monthly history folded into years."""
+    if getattr(request, "interval", "") != "1Y":
+        return router.load(request)
+    from core.market.models import ChartRequest
+    monthly = ChartRequest(request.instrument, "1M", YEARLY_MONTHS, adjusted=request.adjusted)
+    return yearly_snapshot(router.load(monthly), request)
 
 
 def period_reason(key, instrument, intervals):
@@ -412,5 +485,6 @@ def study_state(key, values, bars, index=-1):
 
 
 __all__ = ["PERIODS", "PERIOD_KEYS", "DEFAULT_PERIOD", "period_request", "visible_for", "window",
-           "routable_intervals", "period_reason", "QuoteState", "quote_state", "venue_of", "VolumeRatio",
+           "routable_intervals", "with_derived", "yearly_candles", "yearly_snapshot", "yearly_span", "load_chart",
+           "period_reason", "QuoteState", "quote_state", "venue_of", "VolumeRatio",
            "volume_vs_average", "SummaryRow", "now_summary", "study_state", "STATE_CODES"]

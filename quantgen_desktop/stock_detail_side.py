@@ -165,9 +165,10 @@ class FoldSection(QWidget):
             self.ctx = ctx
         if dark is not None:
             self.dark = bool(dark)
+        from PyQt6 import sip
         entries = list(entries)
         for old in self._entries:
-            if isinstance(old, QWidget) and not any(old is entry for entry in entries):
+            if isinstance(old, QWidget) and not sip.isdeleted(old) and not any(old is entry for entry in entries):
                 self.rows.removeWidget(old)
                 old.hide()
                 if old.property("sdOwned"):
@@ -184,6 +185,8 @@ class FoldSection(QWidget):
             widget.setParent(None)
             widget.deleteLater()
         self._made = []
+        from PyQt6 import sip
+        self._entries = [entry for entry in self._entries if not (isinstance(entry, QWidget) and sip.isdeleted(entry))]
         for entry in self._entries:
             if isinstance(entry, QWidget):
                 self.rows.removeWidget(entry)
@@ -703,8 +706,22 @@ class NowRow(QFrame):
         self.topic.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.topic.setFixedWidth(64)
         row.addWidget(self.topic, 0, Qt.AlignmentFlag.AlignTop)
+        # The reading's first sentence, then what it means in a quieter line (owner R-D9-3: no walls of text).
+        lines = QVBoxLayout()
+        lines.setContentsMargins(0, 0, 0, 0)
+        lines.setSpacing(3)
         self.sentence = numbers(label("body", wrap=True))
-        row.addWidget(self.sentence, 1)
+        lines.addWidget(self.sentence)
+        self.detail = numbers(label("nowDetail", wrap=True))
+        lines.addWidget(self.detail)
+        row.addLayout(lines, 1)
+
+    def set_reading(self, value):
+        import re
+        parts = re.split(r"(?<=[.])\s+", str(value or ""), maxsplit=1)
+        self.sentence.setText(parts[0])
+        self.detail.setText(parts[1] if len(parts) > 1 else "")
+        self.detail.setVisible(len(parts) > 1)
 
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton and self.study:

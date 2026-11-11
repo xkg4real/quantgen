@@ -22,8 +22,9 @@ _ASSETS = (
     ("bond", "장내채권", "Exchange-traded bond", "KR103502GC66"),
 )
 _EXCHANGES = ("NAS", "NYS", "AMS", "HKS", "TSE", "SHS", "SZS", "HSX", "HNX")
+# Owner 2026-11-11 (R-D9-2): plain time words, never '봉' ("몇분, 일, 주 월, 년"); 1Y is built from the monthly history.
 _INTERVAL_NAMES = {"1m": "1분", "3m": "3분", "5m": "5분", "15m": "15분", "30m": "30분",
-                   "60m": "60분", "1d": "일봉", "1w": "주봉", "1M": "월봉",
+                   "60m": "60분", "1d": "일", "1w": "주", "1M": "월", "1Y": "년",
                    "1tick": "1틱", "10tick": "10틱", "100tick": "100틱",
                    "1s": "1초", "5s": "5초", "10s": "10초", "30s": "30초"}
 
@@ -446,13 +447,13 @@ class MarketChartPane(QWidget):
 
     def _indicator_explanation(self, key):
         descriptions = {
-            "sma": ("이동평균 · 최근 20개 봉의 평균 가격입니다. 가격 위·아래에서 흐름을 비교해 보세요. 변화에 늦게 반응할 수 있어요.",
+            "sma": ("이동평균 · 최근 20개 값의 평균 가격입니다. 가격 위·아래에서 흐름을 비교해 보세요. 변화에 늦게 반응할 수 있어요.",
                     "Moving average · Mean closing price of 20 bars. Compare price above or below the line to read the trend; it can lag."),
-            "ema": ("지수이평 · 최근 가격에 더 무게를 둔 12·26개 봉의 평균입니다. 두 선의 방향과 간격을 보세요. 빠른 반응만큼 잘못된 전환 신호도 늘 수 있어요.",
+            "ema": ("지수이평 · 최근 가격에 더 무게를 둔 12·26개 값의 평균입니다. 두 선의 방향과 간격을 보세요. 빠른 반응만큼 잘못된 전환 신호도 늘 수 있어요.",
                     "EMA · Averages over 12/26 bars give recent prices more weight. Compare the lines' direction and gap; faster response can mean more false turns."),
-            "bollinger": ("볼린저 · 최근 20개 봉의 변동 폭을 보여줍니다. 밴드가 벌어지면 가격 변화가 커진 구간이에요. 경계에 닿아도 반전이 보장되지는 않아요.",
+            "bollinger": ("볼린저 · 최근 20개 값의 변동 폭을 보여줍니다. 밴드가 벌어지면 가격 변화가 커진 구간이에요. 경계에 닿아도 반전이 보장되지는 않아요.",
                           "Bollinger · Bands show price variation over 20 bars. Wider bands mean more variation; touching an edge does not guarantee a reversal."),
-            "rsi": ("RSI · 최근 14개 봉의 상승·하락 강도를 0~100으로 비교합니다. 70·30선을 참고하되, 강한 흐름에서는 높거나 낮은 값이 오래 이어질 수 있어요.",
+            "rsi": ("RSI · 최근 14개 값의 상승·하락 강도를 0~100으로 비교합니다. 70·30선을 참고하되, 강한 흐름에서는 높거나 낮은 값이 오래 이어질 수 있어요.",
                     "RSI · Compares gains and losses over 14 bars on a 0–100 scale. Watch 70/30, but strong trends can stay high or low."),
             "macd": ("MACD · 빠른 평균과 느린 평균의 차이로 흐름 변화를 봅니다. 아래 두 선과 막대의 방향을 함께 보세요. 횡보에서는 잦은 교차가 생길 수 있어요.",
                      "MACD · The gap between fast and slow averages shows changes in momentum. Read both lines and the bars; sideways prices can cause repeated crossings."),
@@ -481,12 +482,12 @@ class MarketChartPane(QWidget):
         if self.ctx.language != "ko":
             return availability_note(instrument)
         return {
-            "domestic_stock": "KRX 시장 · 마지막 봉은 아직 변할 수 있어요. 진행 중인 분봉 거래량은 공급자 값이 확정되기 전까지 표시하지 않습니다. 빈 시간에 가짜 봉을 만들지 않아요.",
-            "domestic_future": "국내 선물·옵션 · 만기 종목과 일치하는 시장을 선택하세요. 가격은 포인트 등 계약별 시세 단위이며 일반 원화 현금 금액이 아닙니다. 마지막 봉은 변할 수 있어요.",
-            "bond": "채권 이력은 최대 100개 일봉이며 과거 분봉 조회는 지원하지 않습니다. 가격은 액면 10,000원 기준입니다.",
-            "overseas_future": "해외선물 가격은 검증된 종목 마스터의 가격 배율을 적용합니다. 공급자 시각 기준이 검증되지 않은 분봉은 제공하지 않습니다. CME·SGX 시세는 별도 이용 권한이 필요합니다.",
-            "overseas_stock": ("미국 무료 Nasdaq 시장센터 시세 · 지연 0분. 유료 통합 시세와 거래 범위·가격이 다를 수 있어요. 과거 분봉은 정규장만 포함하며 시가는 다음 날 정정될 수 있습니다."
-                               if instrument.exchange in ("NAS", "NYS", "AMS") else "해외 무료 시세 · 15분 지연. 과거 분봉은 정규장만 포함합니다."),
+            "domestic_stock": "KRX 시장 · 마지막 값은 아직 변할 수 있어요. 진행 중인 분 단위 거래량은 공급자 값이 확정되기 전까지 표시하지 않습니다. 빈 시간을 가짜 값으로 채우지 않아요.",
+            "domestic_future": "국내 선물·옵션 · 만기 종목과 일치하는 시장을 선택하세요. 가격은 포인트 등 계약별 시세 단위이며 일반 원화 현금 금액이 아닙니다. 마지막 값은 변할 수 있어요.",
+            "bond": "채권 이력은 최대 100거래일이며 과거 분 단위 조회는 지원하지 않습니다. 가격은 액면 10,000원 기준입니다.",
+            "overseas_future": "해외선물 가격은 검증된 종목 마스터의 가격 배율을 적용합니다. 공급자 시각 기준이 검증되지 않은 분 단위 자료는 제공하지 않습니다. CME·SGX 시세는 별도 이용 권한이 필요합니다.",
+            "overseas_stock": ("미국 무료 Nasdaq 시장센터 시세 · 지연 0분. 유료 통합 시세와 거래 범위·가격이 다를 수 있어요. 과거 분 단위 자료는 정규장만 포함하며 시가는 다음 날 정정될 수 있습니다."
+                               if instrument.exchange in ("NAS", "NYS", "AMS") else "해외 무료 시세 · 15분 지연. 과거 분 단위 자료는 정규장만 포함합니다."),
         }[instrument.asset]
 
     def _data_note(self, note, instrument):
@@ -496,21 +497,26 @@ class MarketChartPane(QWidget):
         from data.kis_workspace import availability_note
         note = note.replace(availability_note(instrument), self._availability_text(instrument))
         translations = {
-            "Received executions only: tick/second bars begin when the stream connects. Historical tick/second bars are unavailable; gaps are not filled. The first/current bar can be partial; volume is received trade volume, not session volume.": "틱·초봉은 연결 이후 받은 체결만 모읍니다. 과거 틱·초봉은 제공하지 않으며 빈 구간을 채우지 않습니다. 첫 봉·현재 봉은 일부 체결만 포함할 수 있고, 거래량은 수신한 체결의 합계입니다.",
+            "Received executions only: tick/second bars begin when the stream connects. Historical tick/second bars are unavailable; gaps are not filled. The first/current bar can be partial; volume is received trade volume, not session volume.": "틱·초 단위는 연결 이후 받은 체결만 모읍니다. 과거 틱·초 자료는 제공하지 않으며 빈 구간을 채우지 않습니다. 첫 구간·현재 구간은 일부 체결만 포함할 수 있고, 거래량은 수신한 체결의 합계입니다.",
             "Current quote unavailable; waiting for a valid streaming execution.": "현재가 조회 불가 · 정상 체결 수신을 기다립니다.",
-            "Clock-aligned aggregation of observed minute bars; missing minutes are not filled.": "관측된 분봉을 시각 구간에 맞춰 묶습니다. 없는 분봉은 채우지 않습니다.",
-            "Live gap: some executions were not received; affected bars are partial. No missing trades are reconstructed.": "체결 공백 · 일부 체결을 받지 못해 해당 봉이 불완전합니다. 누락된 거래는 만들어 채우지 않습니다.",
-            "Live gap: missing trades may affect OHLC and minute-bar volume. Reload history to reconcile.": "체결 공백 · 가격·분봉 거래량에 누락이 있을 수 있습니다. 다시 조회해 이력을 맞추세요.",
+            "Clock-aligned aggregation of observed minute bars; missing minutes are not filled.": "관측된 1분 자료를 시각 구간에 맞춰 묶습니다. 없는 분은 채우지 않습니다.",
+            "Clock-aligned aggregation of observed one-minute bars; first/latest bars can be partial.": "관측된 1분 자료를 시각 구간에 맞춰 묶습니다. 처음과 마지막 구간은 일부만 담길 수 있습니다.",
+            "Live gap: some executions were not received; affected bars are partial. No missing trades are reconstructed.": "체결 공백 · 일부 체결을 받지 못해 해당 구간이 불완전합니다. 누락된 거래는 만들어 채우지 않습니다.",
+            "Live gap: missing trades may affect OHLC and minute-bar volume. Reload history to reconcile.": "체결 공백 · 가격·분 단위 거래량에 누락이 있을 수 있습니다. 다시 조회해 이력을 맞추세요.",
             "REST snapshot; quote timestamp convention unverified.": "시점 조회 · 시세 시각 기준 미검증.",
             "REST snapshot; market timestamp not provided.": "시점 조회 · 공급자가 시장 시각을 제공하지 않습니다.",
             "Yahoo Finance fallback: unadjusted OHLC, delayed; not a KIS quote. Live trade updates and Q-SCORE use KIS only.": "Yahoo Finance 대체 자료 · 수정 전 시가·고가·저가·종가, 지연 시세이며 KIS 시세가 아닙니다. 실시간 체결 갱신과 Q-SCORE는 KIS 자료만 씁니다.",
         }
         for original, translated in translations.items():
             note = note.replace(original, translated)
+        note = re.sub(r"Partial history: (\d+)/(\d+) requested monthly bars \(provider window or paging limit\)\.",
+                      r"부분 이력 · 요청한 \2개월 중 \1개월만 조회됐습니다(공급자 조회 범위·페이지 한도).", note)
         note = re.sub(r"Partial history: (\d+)/(\d+) requested bars \(provider window or paging limit\)\.",
-                      r"부분 이력 · 요청한 \2개 중 \1개 봉만 조회됐습니다(공급자 조회 범위·페이지 한도).", note)
+                      r"부분 이력 · 요청한 \2개 중 \1개만 조회됐습니다(공급자 조회 범위·페이지 한도).", note)
+        note = re.sub(r"Yearly candles from monthly history: first month (\d{4})-(\d{2}), last month (\d{4})-(\d{2})\.",
+                      r"년 단위는 월 자료를 해마다 묶었습니다(첫 달 \1-\2, 마지막 달 \3-\4).", note)
         return re.sub(r"Partial history: (\d+)/(\d+) requested bars\.",
-                      r"부분 이력 · 요청한 \2개 중 \1개 봉만 조회됐습니다.", note)
+                      r"부분 이력 · 요청한 \2개 중 \1개만 조회됐습니다.", note)
 
     def _restart_after_inputs(self):
         if not self._restart_pending or self.jobs.busy:
@@ -536,13 +542,13 @@ class MarketChartPane(QWidget):
         self.advanced_button.setText(self._text("데이터 설명 · 수신 설정", "Data notes · updates"))
         self.indicator_title.setText(self._text("기술지표", "Indicators"))
         self.guide_button.setText(self._text("차트 읽는 법 ?", "How to read this ?"))
-        self.zoom_label.setText(self._text("표시 봉 수", "Visible bars"))
-        self.chart_help.setText(self._text("봉 하나는 선택한 기간의 가격입니다. 아래 거래량은 거래된 수량이에요.",
+        self.zoom_label.setText(self._text("표시 개수", "Visible bars"))
+        self.chart_help.setText(self._text("캔들 하나는 선택한 시간 단위의 가격입니다. 아래 거래량은 거래된 수량이에요.",
                                          "Each candle shows prices over one interval. Volume below shows how much traded."))
         self.guide.setText(self._text(
-            "봉의 몸통은 시작·마지막 가격, 위아래 꼬리는 최고·최저 가격입니다. 빨강은 시작보다 상승, 파랑은 하락을 뜻해요. "
-            "마지막 봉은 체결마다 바뀔 수 있어요. 틱봉은 체결 횟수, 초·분봉은 시간을 기준으로 묶습니다. "
-            "틱·초봉은 연결 이후 받은 체결부터 쌓이며 빈 시간을 가짜 봉으로 채우지 않아요. "
+            "캔들의 몸통은 시작·마지막 가격, 위아래 꼬리는 최고·최저 가격입니다. 빨강은 시작보다 상승, 파랑은 하락을 뜻해요. "
+            "마지막 캔들은 체결마다 바뀔 수 있어요. 틱 단위는 체결 횟수, 초·분 단위는 시간을 기준으로 묶습니다. "
+            "틱·초 단위는 연결 이후 받은 체결부터 쌓이며 빈 시간을 가짜 캔들로 채우지 않아요. "
             "차트에 마우스를 올리거나 좌우 방향키로 값을 살펴보세요. 지표를 다시 누르면 숨길 수 있어요. 지표는 투자 판단의 참고자료입니다.",
             "The candle body runs from open to close; wicks show the high and low. Red closes above the open, blue below. "
             "The latest candle can change with each trade. Tick candles group a number of trades; second and minute candles group time. "
@@ -555,7 +561,7 @@ class MarketChartPane(QWidget):
             button.setAccessibleName(self._text(*names[key]) + self._text(" 표시 / 숨기기", " show / hide"))
             button.setToolTip(self._indicator_explanation(key))
         for label, ko, en in zip(self.form_labels,
-                ("자산", "종목 코드", "시장 구분", "봉 주기", "조회 봉 수"),
+                ("자산", "종목 코드", "시장 구분", "시간 단위", "조회 개수"),
                 ("Asset", "Instrument code", "Market", "Interval", "History bars")):
             label.setText(self._text(ko, en))
         self._search_mode()
@@ -572,12 +578,12 @@ class MarketChartPane(QWidget):
         if self.asset.currentData() == "domestic_future" and self.exchange.count():
             self.exchange.setItemText(0, self._text("자동 · 지수선물", "Auto · index future"))
         for control, ko, en in ((self.asset,"자산 선택","Select asset"), (self.symbol,"종목 코드","Instrument code"),
-                (self.exchange,"시장 구분","Market division"), (self.interval,"차트 봉 주기","Chart interval"),
-                (self.bar_count,"조회 봉 수","History bars"), (self.visible_bars,"표시 봉 수","Visible bars"),
+                (self.exchange,"시장 구분","Market division"), (self.interval,"차트 시간 단위","Chart interval"),
+                (self.bar_count,"조회 개수","History bars"), (self.visible_bars,"표시 개수","Visible bars"),
                 (self.cursor_slider,"캔들 선택 · 좌우 방향키","Select candle · left / right arrows")):
             control.setAccessibleName(self._text(ko, en))
         self.limitations.setText(self._text(
-            "체결 수신은 장 운영과 이용 권한에 따라 달라집니다. 해외 시세는 지연될 수 있어요. 지표 계산에 필요한 봉이 부족하면 —로 표시합니다. 화면을 벗어나면 수신을 멈춥니다.",
+            "체결 수신은 장 운영과 이용 권한에 따라 달라집니다. 해외 시세는 지연될 수 있어요. 지표 계산에 필요한 자료가 부족하면 —로 표시합니다. 화면을 벗어나면 수신을 멈춥니다.",
             "Trade delivery depends on market hours and access; overseas data may be delayed. Indicators show — until enough bars arrive. Updates stop when you leave this screen."))
         self.render()
 
@@ -665,6 +671,19 @@ class MarketChartPane(QWidget):
         self.render()
         return True
 
+    def go_first(self):
+        """Home: the earliest loaded candles, the selection on the first one."""
+        if not self.snapshot or not self.snapshot.candles:
+            return False
+        start, stop = self.window()
+        visible = stop - start
+        n = len(self.snapshot.candles)
+        self._end = None if visible >= n else visible - 1
+        self._cursor = 0
+        self.period_view = False if self._end is not None else self.period_view
+        self.render()
+        return True
+
     def follow_latest(self):
         """End: back to the latest bar, following live data."""
         if not self.snapshot or not self.snapshot.candles:
@@ -738,20 +757,19 @@ class MarketChartPane(QWidget):
         return True
 
     def chart_key(self, event):
-        """Owner 2026-11-11: left/right arrows move the selected candle (the window pans at its edges), with
-        Shift they pan 10 bars; Home/End go to the first loaded / latest bar, +/- zoom and 0 restores the view."""
+        """Owner 2026-11-11: "좌우화살표로 차트 좌우 확인할수있게" — ←/→ move the chart itself one step (Shift: ten),
+        the selected candle moving with it; when every loaded candle is already in view they move the selection
+        instead. Home/End go to the first loaded / the latest data, +/- zoom and 0 restores the view."""
         key, shift = event.key(), bool(event.modifiers() & Qt.KeyboardModifier.ShiftModifier)
         if self.snapshot is None or not self.snapshot.candles:
             return False
         if key in (Qt.Key.Key_Left, Qt.Key.Key_Right):
             direction = 1 if key == Qt.Key.Key_Right else -1
-            if shift:
-                self.pan(10 * direction)
-            else:
-                self.move_cursor(self._cursor + direction)
+            if not self.pan((10 if shift else 1) * direction):
+                self.move_cursor(self._cursor + (10 if shift else 1) * direction)
             return True
         if key == Qt.Key.Key_Home:
-            self.move_cursor(0)
+            self.go_first()
             return True
         if key == Qt.Key.Key_End:
             self.follow_latest()
@@ -973,7 +991,8 @@ class MarketChartPane(QWidget):
         try:
             instrument = Instrument(self.asset.currentData(), self.symbol.text(),
                                     self.exchange.currentData() or "")
-            supported = supported_intervals(instrument, paper=self._paper())
+            from core.market.detail_model import with_derived
+            supported = with_derived(supported_intervals(instrument, paper=self._paper()))
             if self.detail:
                 # The stock screen offers only what a ready provider can deliver (KIS, else Yahoo daily).
                 from core.market.detail_model import routable_intervals
@@ -1059,7 +1078,8 @@ class MarketChartPane(QWidget):
         self._render_status()
         # Attempts travel with the result: the router runs one job at a time on this pane's Jobs.
         router = self.router
-        return self.jobs.start(lambda: (epoch, request, router.load(request), tuple(router.last_attempts)))
+        from core.market.detail_model import load_chart   # the yearly interval is built from the monthly history
+        return self.jobs.start(lambda: (epoch, request, load_chart(router, request), tuple(router.last_attempts)))
 
     @pyqtSlot(object)
     def _loaded(self, result):
@@ -1356,8 +1376,8 @@ class MarketChartPane(QWidget):
             self.empty_state.setText(hint(self._mode, waiting))
         elif not has_candles:
             self.empty_state.setText(self._text(
-                "연결 이후의 첫 체결을 기다리고 있어요. 체결이 도착하면 틱·초봉이 차례로 그려집니다. 장이 닫혀 있거나 거래가 없으면 기다릴 수 있어요." if waiting else
-                "종목과 봉 주기를 고른 뒤 ‘조회 / 새로고침’을 누르세요. 지원되는 종목은 체결 연결과 갱신까지 자동으로 시작합니다. 지표는 지금 선택해도 좋아요.",
+                "연결 이후의 첫 체결을 기다리고 있어요. 체결이 도착하면 틱·초 단위 캔들이 차례로 그려집니다. 장이 닫혀 있거나 거래가 없으면 기다릴 수 있어요." if waiting else
+                "종목과 시간 단위를 고른 뒤 ‘조회 / 새로고침’을 누르세요. 지원되는 종목은 체결 연결과 갱신까지 자동으로 시작합니다. 지표는 지금 선택해도 좋아요.",
                 "Waiting for the first received trade. Tick/second candles grow as trades arrive; a closed or quiet market may take time." if waiting else
                 "Choose an instrument and interval, then Load / refresh. Supported instruments connect and update automatically. You can select indicators now."))
         if self.detail:
@@ -1423,21 +1443,25 @@ class MarketChartPane(QWidget):
                            if self.exchange.currentData() in ("NAS", "NYS", "AMS") else self._text(
                                       "해외 무료 시세 · 15분 지연", "Free overseas feed · 15-minute delay"))
         if live_only:
-            notices.append(self._text("틱·초봉은 연결 이후 받은 체결만 표시해요. 첫 봉·현재 봉은 부분 구간이며 거래량은 받은 체결의 합계입니다.",
+            notices.append(self._text("틱·초 단위는 연결 이후 받은 체결만 표시해요. 첫 캔들·현재 캔들은 부분 구간이며 거래량은 받은 체결의 합계입니다.",
                                       "Tick/second bars use received trades from connection onward. First/current bars may be partial; volume is the received trade total."))
             if self.snapshot and self.snapshot.candles and self.interval.currentData().endswith("tick"):
                 candle = self.snapshot.candles[-1]
                 target = int(self.interval.currentData()[:-4])
-                notices.append(self._text(f"현재 봉 · 수신 체결 {candle.trade_count or 0}/{target}회",
+                notices.append(self._text(f"현재 캔들 · 수신 체결 {candle.trade_count or 0}/{target}회",
                                           f"Current candle · {candle.trade_count or 0}/{target} received trades"))
         if self.snapshot and "Live gap" in self.snapshot.note:
-            notices.append(self._text("체결 공백이 있어 일부 봉이 불완전합니다. 조회 / 새로고침으로 다시 연결하세요.",
+            notices.append(self._text("체결 공백이 있어 일부 구간이 불완전합니다. 조회 / 새로고침으로 다시 연결하세요.",
                                       "Some trades were missed; affected candles are incomplete. Load / refresh to reconnect."))
         # Spec 4.3: "전체" asks for more months than almost any stock has, so its partial-history notice is
         # suppressed; the data note keeps the count (the stock screen's ⓘ).
-        if self.snapshot and "Partial history:" in self.snapshot.note and not (self.detail and self.period == "ALL"):
-            notices.append(self._text(f"요청한 {self.snapshot.request.limit}개 중 {len(self.snapshot.candles)}개 봉을 받았어요.",
-                                      f"Received {len(self.snapshot.candles)} of {self.snapshot.request.limit} requested bars."))
+        if self.snapshot and "Partial history:" in self.snapshot.note and not (self.detail and self.period == "ALL") \
+                and self.snapshot.request.interval != "1Y":
+            from core.education.study_guide import unit_count
+            interval, limit = self.snapshot.request.interval, self.snapshot.request.limit
+            received = len(self.snapshot.candles)
+            notices.append(self._text(f"요청한 {unit_count(interval, limit)} 중 {unit_count(interval, received)}만 받았어요.",
+                                      f"Received {received} of {limit} requested bars."))
         notice = ("  ·  " if self.detail else "\n").join(notices)
         if self.detail and self.ctx.language == "ko":
             from .stock_detail_style import polite
@@ -1445,7 +1469,7 @@ class MarketChartPane(QWidget):
         self.feed_notice.setText(notice)
         self.feed_notice.setVisible(bool(notices))
         self.poll_button.setEnabled(not live_only)
-        self.bar_count.setToolTip(self._text("틱·초봉은 수신한 봉의 보관 개수입니다.", "For tick/second charts, this limits retained received bars."))
+        self.bar_count.setToolTip(self._text("틱·초 단위는 수신한 캔들의 보관 개수입니다.", "For tick/second charts, this limits retained received bars."))
         has_candles = bool(self.snapshot and self.snapshot.candles)
         self.empty_state.setVisible(not has_candles)
         self.chart.setVisible(has_candles)
@@ -1476,7 +1500,7 @@ class MarketChartPane(QWidget):
         n = len(snapshot.candles)
         if not n:
             self.reading.clear()
-            self.indicator_reading.setText(self._text("지표는 실제 수신한 봉이 충분히 쌓인 뒤 표시돼요.", "Indicators appear once enough actual bars have arrived."))
+            self.indicator_reading.setText(self._text("지표는 실제 수신한 캔들이 충분히 쌓인 뒤 표시돼요.", "Indicators appear once enough actual bars have arrived."))
             return
         start, stop = self.window()
         self._cursor = max(start, min(stop - 1, self._cursor))

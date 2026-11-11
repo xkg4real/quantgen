@@ -219,12 +219,24 @@ def _polite_word(match):
     return word
 
 
+# Noun endings the profile's notes and the engine's asides use ('…수 있음', '(… 높음)'), at the end of a sentence,
+# an aside or a dotted part only: a label such as '자료 없음' stays as it is.
+_NOUN_ENDINGS = {"수 있음": "수 있어요", "아님": "아니에요", "없었음": "없었어요", "높음": "높아요", "낮음": "낮아요",
+                 "같음": "같아요"}
+
+
 def polite(value, language="ko"):
-    """Korean text in 해요체 (the engine and the stock profile write 합니다체); other languages unchanged."""
+    """Korean text in 해요체 (the engine and the stock profile write 합니다체 and noun endings); other languages
+    unchanged."""
     import re
-    if language != "ko" or not value or "니다" not in value:
+    if language != "ko" or not value:
         return value
-    return re.sub(r"[가-힣]*니다", _polite_word, value)
+    if "니다" in value:
+        value = re.sub(r"[가-힣]*니다", _polite_word, value)
+    if "음" in value:
+        value = re.sub(r"(수 있음|아님|없었음|높음|낮음|같음)(?=$|[)\].\n]| ·)",
+                       lambda match: _NOUN_ENDINGS[match.group(1)], value)
+    return value
 
 
 def rich(sd=""):
@@ -441,6 +453,7 @@ def sheet(p, dark):
       QLabel[sd='state'][tone='error'] {{ color: {p.error}; }}
       QLabel[sd='small'] {{ font-size: 12px; color: {p.muted}; }}
       QLabel[sd='body'] {{ font-size: 13px; color: {p.text}; }}
+      QLabel[sd='nowDetail'] {{ font-size: 12px; color: {p.muted}; }}
       QLabel[sd='topic'] {{ font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 8px;
                             color: {p.accent}; background: {p.accent_soft}; }}
       QLabel[sd='qscore'] {{ font-size: 12px; font-weight: 500; padding: 3px 9px; border-radius: 9px;
@@ -477,6 +490,21 @@ def sheet(p, dark):
       QLabel[sd='guideText'] {{ font-size: 13px; color: {p.text}; }}
       QFrame#sdNotes {{ background: {p.surface}; border: 1px solid {line}; border-radius: 12px; }}
       QFrame#sdNotes QLabel {{ font-size: 13px; }}
+      QFrame[sd='guideCard'] {{ background: {soft}; border: 0; border-radius: 14px; }}
+      QFrame[sd='guideCompact'] {{ background: transparent; border: 0; }}
+      QLabel[sd='guideReading'] {{ font-size: 16px; font-weight: 600; color: {p.text}; letter-spacing: -0.3px; }}
+      QLabel[sd='guideReadingSmall'] {{ font-size: 14px; font-weight: 500; color: {p.text}; letter-spacing: -0.2px; }}
+      QLabel[sd='guideOne'] {{ font-size: 13px; color: {p.muted}; }}
+      QLabel[sd='guideCaution'] {{ font-size: 12px; color: {p.muted}; }}
+      QLabel[sd='guideLong'] {{ font-size: 13px; color: {p.text}; }}
+      QLabel[sd='cue'] {{ font-size: 12px; font-weight: 500; padding: 3px 8px; border-radius: 10px;
+                          color: {p.text}; background: {p.surface}; border: 1px solid {line}; }}
+      QLabel[sd='pill'] {{ font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 10px;
+                           color: {p.text}; background: {p.surface}; border: 1px solid {line}; }}
+      QLabel[sd='pill'][tone='up'] {{ color: {t['up']}; background: {t['up_tint']}; border-color: {t['up_tint']}; }}
+      QLabel[sd='pill'][tone='down'] {{ color: {t['down']}; background: {t['down_tint']}; border-color: {t['down_tint']}; }}
+      QLabel[sd='limitNote'] {{ font-size: 12px; color: {p.warning}; background: {t['flat_tint']}; border-radius: 9px; }}
+      QFrame[sd='notesBox'] {{ background: {soft}; border: 0; border-radius: 12px; }}
     """
 
 

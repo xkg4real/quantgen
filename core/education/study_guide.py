@@ -33,27 +33,27 @@ PARAM_NAMES = {
     'deviations': ('표준편차 배수', 'deviations'),
 }
 AVAILABILITY = {
-    'intraday_only': ('VWAP는 하루 안의 거래로 계산하므로 분봉 차트에서만 표시합니다.',
+    'intraday_only': ('VWAP는 하루 안의 거래로 계산하므로 분 단위 차트에서만 표시합니다.',
                       'VWAP is computed within one trading day, so it is shown on intraday charts only.'),
     'needs_volume': ('이 종목·주기는 거래량 자료가 없어 계산할 수 없습니다.',
                      'This chart has no reported volume, so the study cannot be computed.'),
-    'domestic_daily_only': ('국내 주식 일봉 차트에서만 볼 수 있습니다(한국투자증권 수급 자료).',
+    'domestic_daily_only': ('국내 주식의 일 단위 차트에서만 볼 수 있습니다(한국투자증권 수급 자료).',
                             'Available on daily charts of Korean stocks only (KIS supply and demand data).'),
     'no_supply_data': ('수급 자료를 아직 받지 못했습니다. 한국투자증권(KIS) 연결이 설정되어 있어야 합니다.',
                        'Supply and demand data has not been received. A KIS connection must be configured.'),
 }
 # Short forms for a chart label.
 AVAILABILITY_SHORT = {
-    'intraday_only': ('분봉 전용', 'intraday charts only'),
+    'intraday_only': ('분 단위 차트 전용', 'intraday charts only'),
     'needs_volume': ('거래량 자료 없음', 'no volume data'),
-    'domestic_daily_only': ('국내 주식 일봉 전용', 'Korean stocks, daily charts only'),
+    'domestic_daily_only': ('국내 주식 · 일 단위 전용', 'Korean stocks, daily charts only'),
     'no_supply_data': ('수급 자료 없음 · KIS 연결 필요', 'no supply data · KIS connection needed'),
 }
 
 # key: ((what, how, caution) in Korean, (what, how, caution) in English)
 GUIDE = {
     'sma': (
-        ('최근 20개 봉(일봉이면 20거래일) 종가의 단순 평균을 이은 선입니다. 들쭉날쭉한 가격을 부드럽게 만들어 큰 방향을 보여줍니다.',
+        ('최근 {n20} 종가의 단순 평균을 이은 선입니다. 들쭉날쭉한 가격을 부드럽게 만들어 큰 방향을 보여줍니다.',
          '가격이 선 위에 있으면 최근 평균보다 높게, 아래에 있으면 낮게 거래되고 있다는 뜻입니다. 선이 오르막이면 평균 가격이 오르는 중입니다.',
          '평균선은 이미 지난 가격으로 만들어져 늘 한발 늦습니다. 옆으로 움직이는 장에서는 가격이 선을 자주 넘나듭니다.'),
         ('A line joining the plain average of the last 20 closes (20 sessions on a daily chart). It smooths the zigzags to show the broader direction.',
@@ -67,16 +67,16 @@ GUIDE = {
          'The fast line above the slow line means the recent move is stronger than the longer one. A crossing shows a change that has already happened.',
          'Reacting faster than a simple average also means reacting to more noise.')),
     'macd': (
-        ('빠른 지수평균(12)에서 느린 지수평균(26)을 뺀 값입니다. 신호선은 그 값의 9개 봉 지수평균, 막대는 둘의 차이입니다.',
+        ('빠른 지수평균(12)에서 느린 지수평균(26)을 뺀 값입니다. 신호선은 그 값의 {n9} 지수평균, 막대는 둘의 차이입니다.',
          '0선 위면 단기 평균이 장기 평균보다 높은 상태입니다. MACD가 신호선 위에 있으면(막대가 위쪽) 최근 오름 속도가 붙는 쪽으로 읽습니다.',
          '가격 단위에 따라 숫자 크기가 달라 다른 종목과 그대로 비교할 수 없습니다. 횡보장에서는 교차가 잦습니다.'),
         ('The fast exponential average (12) minus the slow one (26). The signal line is its 9-bar exponential average; the bars are the difference.',
          'Above zero, the short average is above the long one. MACD above its signal line (bars above zero) reads as upward momentum building.',
          'Its size depends on the price scale, so do not compare it across instruments. Sideways markets produce frequent crossings.')),
     'ichimoku': (
-        ('일본에서 만든 추세 지표로 전환선(9)·기준선(26)·후행스팬과, 두 선행스팬 사이의 구름으로 이루어집니다. 선행스팬은 현재 봉을 포함해 26번째 봉 위치(오른쪽으로 25봉)에, 후행스팬은 같은 거리만큼 왼쪽에 그립니다.',
+        ('일본에서 만든 추세 지표로 전환선(9)·기준선(26)·후행스팬과, 두 선행스팬 사이의 구름으로 이루어집니다. 선행스팬은 지금을 포함해 26번째 자리(오른쪽으로 {n25} 뒤)에, 후행스팬은 같은 거리만큼 왼쪽에 그립니다.',
          '가격이 구름 위면 상승 흐름, 아래면 하락 흐름, 구름 안이면 방향이 뚜렷하지 않은 구간으로 보는 것이 관례입니다. 처음에는 전환선과 기준선의 위아래부터 보세요.',
-         '선이 많아 처음엔 복잡합니다. 마지막 봉 오른쪽으로 뻗는 미래 구름은 이 차트에 그리지 않습니다.'),
+         '선이 많아 처음엔 복잡합니다. 마지막 {noun} 오른쪽으로 뻗는 미래 구름은 이 차트에 그리지 않습니다.'),
         ('A Japanese trend study: conversion line (9), base line (26), lagging span and a cloud between two leading spans. Leading spans are drawn on the 26th bar counting the current one (25 bars right); the lagging span the same distance left.',
          'By convention, price above the cloud reads as an uptrend, below as a downtrend, and inside as no clear direction. Start with which of the conversion and base lines is on top.',
          'There are many lines at first. The future cloud to the right of the last bar is not drawn on this chart.')),
@@ -88,105 +88,105 @@ GUIDE = {
          'Dots below price trail an upward move; dots above trail a downward move. When price touches the dots they flip to the other side.',
          'In sideways markets the dots flip often. It is easiest to read when a move is clear.')),
     'adx': (
-        ('ADX는 방향과 상관없이 추세가 얼마나 뚜렷한지를 0~100으로, +DI와 −DI는 오르는 힘과 내리는 힘을 보여줍니다(14개 봉, Wilder 방식).',
+        ('ADX는 방향과 상관없이 추세가 얼마나 뚜렷한지를 0~100으로, +DI와 −DI는 오르는 힘과 내리는 힘을 보여줍니다(최근 {n14}, Wilder 방식).',
          'ADX가 25 이상이면 추세가 뚜렷하다고, 20 아래면 뚜렷한 추세가 없다고 보는 관례가 있습니다. 방향은 +DI와 −DI 중 어느 쪽이 위인지로 봅니다.',
          'ADX가 높다는 것은 추세가 강하다는 뜻일 뿐 오른다는 뜻이 아닙니다. 하락 추세에서도 ADX는 올라갑니다.'),
         ('ADX shows how clear a trend is on a 0 to 100 scale, whatever its direction; +DI and −DI show the upward and downward pressure (14 bars, Wilder).',
          'By convention ADX of 25 or more marks a clear trend and below 20 no clear trend. The direction is whichever of +DI and −DI is on top.',
          'A high ADX means a strong trend, not a rising price. ADX also rises in downtrends.')),
     'envelope': (
-        ('20개 봉 이동평균의 위아래 5% 지점에 선을 그린 띠입니다.',
+        ('{n20} 이동평균의 위아래 5% 지점에 선을 그린 띠입니다.',
          '가격이 위 선 근처면 평균보다 5% 가까이 올라 있고, 아래 선 근처면 5% 가까이 내려 있다는 뜻입니다.',
          '5%는 정해진 규칙이 아니라 흔히 쓰는 기본값입니다. 변동이 큰 종목은 띠를 자주 벗어납니다.'),
         ('A band drawn 5% above and below the 20-bar moving average.',
          'Price near the upper line is about 5% above its average; near the lower line, about 5% below.',
          'Five percent is a common default, not a rule. Volatile instruments leave the band often.')),
     'keltner': (
-        ('20개 봉 지수평균을 중심으로, 평균 변동폭(ATR 10)의 2배만큼 위아래에 그린 띠입니다.',
+        ('{n20} 지수평균을 중심으로, 평균 변동폭(ATR 10)의 2배만큼 위아래에 그린 띠입니다.',
          '띠 위로 나가면 평소 변동폭에 비해 크게 올랐다는 뜻, 아래로 나가면 크게 내렸다는 뜻입니다.',
          '가격이 띠 밖에 오래 머물 수 있습니다. 띠를 벗어난 것 자체가 되돌림을 뜻하지는 않습니다.'),
         ('A band around the 20-bar exponential average, two average true ranges (ATR 10) above and below.',
          'Leaving the band upward means a large rise for the usual range; downward, a large fall.',
          'Price can stay outside for a long time. Leaving the band does not by itself mean a pullback.')),
     'donchian': (
-        ('최근 20개 봉(현재 봉 포함)의 최고가와 최저가를 이은 띠입니다. 가운데 선은 둘의 중간입니다.',
-         '가격이 위 선에 닿으면 20개 봉 중 최고가와 같거나 새로 쓴 것이고, 아래 선에 닿으면 최저가와 같거나 새로 쓴 것입니다.',
+        ('최근 {n20}(지금 포함)의 최고가와 최저가를 이은 띠입니다. 가운데 선은 둘의 중간입니다.',
+         '가격이 위 선에 닿으면 최근 {n20} 중 최고가와 같거나 새로 쓴 것이고, 아래 선에 닿으면 최저가와 같거나 새로 쓴 것입니다.',
          '최고가·최저가를 새로 썼다고 그 방향으로 계속 간다는 보장은 없습니다.'),
         ('A band joining the highest high and lowest low of the last 20 bars (current bar included), with their midpoint.',
          'Touching the upper line matches or sets a 20-bar high; touching the lower line matches or sets a 20-bar low.',
          'A new high or low does not guarantee the move continues.')),
     'rsi': (
-        ('최근 14개 봉 동안 오른 폭과 내린 폭을 비교해 0~100으로 나타낸 값입니다(Wilder 방식).',
+        ('최근 {n14} 동안 오른 폭과 내린 폭을 비교해 0~100으로 나타낸 값입니다(Wilder 방식).',
          '50보다 높으면 오른 폭이 더 컸고, 낮으면 내린 폭이 더 컸습니다. 70 이상은 과매수, 30 이하는 과매도라고 부르는 관례가 있습니다.',
          '강한 상승장에서는 RSI가 70 위에 오래 머물 수 있습니다. 과매수는 많이 올랐다는 뜻이지 곧 떨어진다는 뜻이 아닙니다.'),
         ('Compares the size of rises and falls over the last 14 bars on a 0 to 100 scale (Wilder).',
          'Above 50 the rises were larger; below 50 the falls were. By convention 70 or more is called overbought and 30 or less oversold.',
          'In strong rallies RSI can stay above 70 for long. Overbought means it rose a lot, not that it is about to fall.')),
     'stoch': (
-        ('지금 종가가 최근 14개 봉의 최고가·최저가 범위에서 어디쯤인지를 0~100으로 나타냅니다. %K는 3개 봉 평균, %D는 %K의 3개 봉 평균입니다.',
-         '100에 가까우면 최근 몇 봉의 종가가 범위 꼭대기 근처, 0에 가까우면 바닥 근처에서 마감했다는 뜻입니다. 80 이상을 과매수, 20 이하를 과매도로 부르는 관례가 있습니다.',
+        ('지금 종가가 최근 {n14}의 최고가·최저가 범위에서 어디쯤인지를 0~100으로 나타냅니다. %K는 {n3} 평균, %D는 %K의 {n3} 평균입니다.',
+         '100에 가까우면 최근 종가가 범위 꼭대기 근처, 0에 가까우면 바닥 근처에서 마감했다는 뜻입니다. 80 이상을 과매수, 20 이하를 과매도로 부르는 관례가 있습니다.',
          '범위 안의 위치일 뿐 가격이 싸거나 비싸다는 판정이 아닙니다. 추세가 강하면 한쪽 끝에 오래 붙어 있습니다.'),
         ('Where the close sits within the high-low range of the last 14 bars, 0 to 100. %K is a 3-bar average and %D a 3-bar average of %K.',
          'Near 100 the recent closes finished near the top of the range; near 0, near the bottom. By convention 80 or more is overbought and 20 or less oversold.',
          'It is a position in a range, not a verdict that price is cheap or dear. In strong trends it stays at one end.')),
     'stochrsi': (
-        ('RSI 값에 스토캐스틱을 한 번 더 적용한 지표입니다. 지금 RSI가 최근 14개 봉 RSI 범위의 어디쯤인지 0~100으로 보여줍니다.',
+        ('RSI 값에 스토캐스틱을 한 번 더 적용한 지표입니다. 지금 RSI가 최근 {n14} RSI 범위의 어디쯤인지 0~100으로 보여줍니다.',
          '80 이상이면 RSI가 최근 범위 꼭대기 근처, 20 이하면 바닥 근처라는 뜻으로 읽는 것이 관례입니다.',
          'RSI보다 훨씬 민감해 0과 100 사이를 자주 오갑니다. 다른 지표와 함께 보조로 보는 것이 일반적입니다.'),
         ('A stochastic applied to RSI: where today’s RSI sits within its own 14-bar range, 0 to 100.',
          'By convention 80 or more reads as RSI near the top of its recent range and 20 or less near the bottom.',
          'It is far more sensitive than RSI and swings between 0 and 100 often. It is usually read alongside other studies.')),
     'cci': (
-        ('평균가격(고가·저가·종가의 평균)이 20개 봉 평균에서 얼마나 떨어져 있는지를 평소 벗어나는 정도와 비교한 값입니다.',
+        ('평균가격(고가·저가·종가의 평균)이 {n20} 평균에서 얼마나 떨어져 있는지를 평소 벗어나는 정도와 비교한 값입니다.',
          '+100 위면 평소보다 크게 위로, −100 아래면 크게 아래로 벗어난 상태로 보는 관례가 있습니다. 0 근처는 평균 가까이에 있다는 뜻입니다.',
          '위아래 한계가 없어 강한 추세에서는 ±200을 넘기도 합니다.'),
         ('How far the typical price (mean of high, low and close) is from its 20-bar average, compared with its usual deviation.',
          'By convention above +100 is an unusually large move up and below −100 down. Near 0 price is close to its average.',
          'It has no upper or lower limit and passes ±200 in strong trends.')),
     'williams': (
-        ('지금 종가가 최근 14개 봉 최고가에서 얼마나 내려와 있는지를 0~−100으로 나타냅니다. 스토캐스틱을 뒤집어 놓은 모양입니다.',
+        ('지금 종가가 최근 {n14} 최고가에서 얼마나 내려와 있는지를 0~−100으로 나타냅니다. 스토캐스틱을 뒤집어 놓은 모양입니다.',
          '−20 위(0에 가까움)면 범위 꼭대기 근처, −80 아래면 바닥 근처에서 마감했다는 뜻이며 각각 과매수·과매도로 부르는 관례가 있습니다.',
          '범위 안의 위치일 뿐입니다. 추세가 강하면 한쪽 끝에 오래 머뭅니다.'),
         ('How far the close is below the highest high of the last 14 bars, from 0 to −100: a stochastic turned upside down.',
          'Above −20 (near 0) the bar closed near the top of the range; below −80 near the bottom. By convention these are called overbought and oversold.',
          'It is only a position in a range. In strong trends it stays at one end.')),
     'roc': (
-        ('지금 종가가 12개 봉 전 종가보다 몇 % 변했는지 보여줍니다.',
-         '0 위면 12개 봉 전보다 올랐고 0 아래면 내렸습니다. 0에서 멀수록 변화가 컸습니다.',
+        ('지금 종가가 {n12} 전 종가보다 몇 % 변했는지 보여줍니다.',
+         '0 위면 {n12} 전보다 올랐고 0 아래면 내렸습니다. 0에서 멀수록 변화가 컸습니다.',
          '비교하는 시작점 하루의 가격에 따라 값이 크게 달라질 수 있습니다.'),
         ('The percent change of the close from 12 bars ago.',
          'Above 0 price is higher than 12 bars ago; below 0, lower. The further from 0, the larger the change.',
          'The value depends heavily on the single starting price it compares with.')),
     'disparity': (
-        ('지금 종가가 20개 봉 이동평균의 몇 %인지 나타냅니다(종가 ÷ 이동평균 × 100). 국내에서 많이 쓰는 지표입니다.',
+        ('지금 종가가 {n20} 이동평균의 몇 %인지 나타냅니다(종가 ÷ 이동평균 × 100). 국내에서 많이 쓰는 지표입니다.',
          '100이면 평균과 같고 105면 평균보다 5% 위입니다. 20일 이격도는 흔히 105 이상을 과열, 95 이하를 침체로 보는 관례가 있습니다.',
          '알맞은 기준은 종목의 변동성에 따라 다릅니다. 기준을 넘었다고 곧 평균으로 돌아온다는 보장은 없습니다.'),
         ('The close as a percent of its 20-bar moving average (close ÷ average × 100), widely used in Korea.',
          '100 equals the average; 105 is 5% above it. For the 20-day version 105 or more is conventionally called overheated and 95 or less depressed.',
          'Sensible levels depend on the instrument’s volatility. Crossing a level does not mean a return to the average.')),
     'psychology': (
-        ('최근 10개 봉 가운데 앞 봉보다 오른 봉이 몇 %인지 나타냅니다(국내에서 많이 쓰는 투자심리선).',
-         '75% 이상이면 오른 봉이 대부분이라 과열, 25% 이하면 내린 봉이 대부분이라 침체로 보는 관례가 있습니다.',
+        ('최근 {n10} 가운데 {prev}보다 오른 {noun:이} 몇 %인지 나타냅니다(국내에서 많이 쓰는 투자심리선).',
+         '75% 이상이면 오른 {noun:이} 대부분이라 과열, 25% 이하면 내린 {noun:이} 대부분이라 침체로 보는 관례가 있습니다.',
          '오르내린 횟수만 세고 크기는 보지 않습니다. 조금 오른 날도 크게 오른 날과 똑같이 셉니다.'),
         ('The share of the last 10 bars that closed above the previous bar (the psychological line, popular in Korea).',
          'By convention 75% or more, mostly up bars, is called overheated and 25% or less, mostly down bars, depressed.',
          'It counts rises, not their size: a small rise counts the same as a large one.')),
     'bb': (
-        ('20개 봉 평균을 중심으로, 같은 기간 가격이 흩어진 정도(표준편차)의 2배만큼 위아래로 그린 띠입니다.',
+        ('{n20} 평균을 중심으로, 같은 기간 가격이 흩어진 정도(표준편차)의 2배만큼 위아래로 그린 띠입니다.',
          '가격이 위 밴드에 가까우면 최근 범위의 위쪽, 아래 밴드에 가까우면 아래쪽에 있다는 뜻입니다. 띠가 좁아지면 가격 움직임이 잦아든 것입니다.',
          '밴드 밖으로 나간 가격은 한동안 그 밖에서 움직일 수 있습니다. 이 띠는 미래 가격의 범위를 약속하지 않습니다.'),
         ('A band two standard deviations of the last 20 closes above and below their average.',
          'Price near the upper band sits high in its recent range; near the lower band, low. A narrowing band means price movement has calmed.',
          'Price can keep moving outside a band for a while. The band does not promise a range for future prices.')),
     'atr': (
-        ('한 봉 동안 가격이 평균적으로 얼마나 움직였는지를 가격 단위로 보여줍니다. 앞 봉 종가와의 갭도 포함합니다(14개 봉, Wilder 방식).',
+        ('{one} 동안 가격이 평균적으로 얼마나 움직였는지를 가격 단위로 보여줍니다. 바로 앞 종가와의 갭도 포함합니다(최근 {n14}, Wilder 방식).',
          '숫자가 클수록 출렁임이 크다는 뜻입니다. 종가 대비 %로 바꿔 보면 다른 종목과 비교하기 쉽습니다.',
          '방향은 알려주지 않습니다. 크게 오를 때와 크게 내릴 때 모두 커집니다.'),
         ('How much price typically moved in one bar, in price units, including gaps from the previous close (14 bars, Wilder).',
          'Larger means bigger swings. As a percent of the close it is easier to compare across instruments.',
          'It has no direction: it grows in sharp rises and sharp falls alike.')),
     'percent_b': (
-        ('종가가 볼린저 밴드(20개 봉, 2배)의 어디에 있는지를 숫자로 나타냅니다. 0은 아래 밴드, 0.5는 가운데, 1은 위 밴드입니다.',
+        ('종가가 볼린저 밴드({n20}, 2배)의 어디에 있는지를 숫자로 나타냅니다. 0은 아래 밴드, 0.5는 가운데, 1은 위 밴드입니다.',
          '1보다 크면 위 밴드 밖, 0보다 작으면 아래 밴드 밖에 있다는 뜻입니다.',
          '밴드 밖으로 나갔다고 곧 안으로 돌아온다는 보장은 없습니다.'),
         ('Where the close sits in the Bollinger band (20 bars, 2 deviations): 0 is the lower band, 0.5 the middle, 1 the upper band.',
@@ -200,42 +200,42 @@ GUIDE = {
          'Falling values mean price movement has calmed; rising values, that it has grown. A very narrow band is conventionally called a squeeze.',
          'Width tells you the size of movement, never its direction.')),
     'volume_ma': (
-        ('최근 20개 봉 거래량의 평균을 거래량 막대 위에 선으로 그립니다.',
-         '막대가 선보다 길면 평소보다 거래가 많았던 봉입니다. 가격이 크게 움직인 날 거래도 함께 많았는지 확인할 때 봅니다.',
-         '아직 끝나지 않은 마지막 봉은 거래가 쌓이는 중이라 막대가 작게 보일 수 있습니다.'),
+        ('최근 {n20} 거래량의 평균을 거래량 막대 위에 선으로 그립니다.',
+         '막대가 선보다 길면 평소보다 거래가 많았던 {noun}입니다. 가격이 크게 움직인 날 거래도 함께 많았는지 확인할 때 봅니다.',
+         '아직 끝나지 않은 마지막 {noun:은} 거래가 쌓이는 중이라 막대가 작게 보일 수 있습니다.'),
         ('The average volume of the last 20 bars, drawn as a line over the volume bars.',
          'A bar taller than the line traded more than usual. Use it to check whether a large price move came with heavy trading.',
          'The last, still-forming bar is accumulating trades and can look small.')),
     'obv': (
-        ('오른 봉의 거래량은 더하고 내린 봉의 거래량은 빼서 누적한 값입니다(이 차트의 첫 봉을 0으로 시작).',
-         '숫자 자체보다 방향을 봅니다. OBV가 오르면 오른 봉의 거래가 더 많았다는 뜻입니다.',
-         '시작점에 따라 숫자가 달라지므로 다른 종목이나 기간과 값을 비교하지 않습니다. 거래량을 모르는 봉은 비워 둡니다.'),
+        ('오른 {noun}의 거래량은 더하고 내린 {noun}의 거래량은 빼서 누적한 값입니다(이 차트의 첫 {noun:을} 0으로 시작).',
+         '숫자 자체보다 방향을 봅니다. OBV가 오르면 오른 {noun}의 거래가 더 많았다는 뜻입니다.',
+         '시작점에 따라 숫자가 달라지므로 다른 종목이나 기간과 값을 비교하지 않습니다. 거래량을 모르는 {noun:은} 비워 둡니다.'),
         ('A running total that adds volume on up bars and subtracts it on down bars (starting from 0 at this chart’s first bar).',
          'Read its direction, not its level. A rising OBV means more volume traded on up bars.',
          'Its level depends on the starting bar, so do not compare values across instruments or periods. Bars with unknown volume are left blank.')),
     'mfi': (
-        ('거래량을 반영한 RSI입니다. 최근 14개 봉 동안 평균가격이 오른 봉과 내린 봉의 거래대금을 비교해 0~100으로 나타냅니다.',
+        ('거래량을 반영한 RSI입니다. 최근 {n14} 동안 평균가격이 오른 {noun:과} 내린 {noun}의 거래대금을 비교해 0~100으로 나타냅니다.',
          '80 이상은 돈이 오르는 쪽으로 많이 몰렸다(과매수), 20 이하는 내리는 쪽으로 많이 몰렸다(과매도)고 보는 관례가 있습니다.',
          '가격 × 거래량으로 계산한 추정치이며 실제로 누가 샀고 팔았는지는 알려주지 않습니다.'),
         ('A volume-weighted RSI: money flow on bars whose typical price rose versus fell over the last 14 bars, 0 to 100.',
          'By convention 80 or more means money flowed heavily into rising bars (overbought) and 20 or less into falling bars (oversold).',
          'It is an estimate from price times volume and does not show who actually bought or sold.')),
     'vwap': (
-        ('오늘 장 시작부터 지금까지 거래된 가격을 거래량으로 가중 평균한 값입니다. 분봉 차트에서만 계산하며 날짜가 바뀌면 다시 시작합니다.',
+        ('오늘 장 시작부터 지금까지 거래된 가격을 거래량으로 가중 평균한 값입니다. 분 단위 차트에서만 계산하며 날짜가 바뀌면 다시 시작합니다.',
          '현재가가 VWAP 위면 오늘 거래된 평균 단가보다 높게, 아래면 낮게 거래되고 있다는 뜻입니다.',
-         '장 초반에는 거래가 적어 VWAP가 크게 흔들립니다. 일봉 이상의 차트에는 표시하지 않습니다.'),
+         '장 초반에는 거래가 적어 VWAP가 크게 흔들립니다. 일 단위 이상의 차트에는 표시하지 않습니다.'),
         ('The average price traded today, weighted by volume, from the open until now. Computed on intraday charts only; it restarts each day.',
          'Price above VWAP trades above today’s average traded price; below, under it.',
          'Early in the session few trades make it jumpy. It is not shown on daily or longer charts.')),
     'investor_flow': (
-        ('외국인·기관·개인이 하루 동안 산 주식 수에서 판 주식 수를 뺀 값(순매수)을 차트 기간 동안 누적한 선입니다. 한국투자증권(KIS) 자료이며 국내 주식 일봉에서만 볼 수 있습니다.',
+        ('외국인·기관·개인이 하루 동안 산 주식 수에서 판 주식 수를 뺀 값(순매수)을 차트 기간 동안 누적한 선입니다. 한국투자증권(KIS) 자료이며 국내 주식의 일 단위 차트에서만 볼 수 있습니다.',
          '선이 오르면 그 투자자가 산 양이 많았고, 내리면 판 양이 많았다는 뜻입니다. 누가 꾸준히 사고 누가 파는지 비교해 보세요.',
          '순매수는 이미 끝난 거래의 기록입니다. 누군가 샀다는 사실이 가격이 오른다는 뜻은 아니며, 장중 수치는 장 마감 후 확정치와 다를 수 있습니다.'),
         ('Shares bought minus shares sold (net buying) by foreign, institutional and individual investors, added up over the chart. KIS data, Korean stocks on daily charts only.',
          'A rising line means that group bought more than it sold; a falling line, the reverse. Compare who keeps buying and who keeps selling.',
          'Net buying records trades that are over. Someone buying does not mean the price will rise, and intraday figures can differ from the final ones.')),
     'short_ratio': (
-        ('그날 거래량 가운데 공매도(빌린 주식을 판 거래)가 차지한 비율입니다. 한국투자증권(KIS) 자료이며 국내 주식 일봉에서만 볼 수 있습니다.',
+        ('그날 거래량 가운데 공매도(빌린 주식을 판 거래)가 차지한 비율입니다. 한국투자증권(KIS) 자료이며 국내 주식의 일 단위 차트에서만 볼 수 있습니다.',
          '비율이 평소보다 높으면 하락에 대비하거나 위험을 줄이려는 거래가 늘었다는 뜻일 수 있습니다. 최근 평균과 비교해 보세요.',
          '공매도는 헤지 등 여러 이유로 이뤄집니다. 비율이 높다고 주가가 떨어진다는 뜻은 아닙니다.'),
         ('The share of the day’s volume that was short selling (selling borrowed shares). KIS data, Korean stocks on daily charts only.',
@@ -271,11 +271,14 @@ def params_text(key, language='ko', **params):
     return ' · '.join(f'{PARAM_NAMES[name][index]} {_plain(values[name])}' for name, _ in spec.params)
 
 
-def guide(key, language='ko'):
-    """Name, category, parameters and the one-line what / how / caution of a study."""
+def guide(key, language='ko', interval='1d'):
+    """Name, category, parameters and the what / how / caution of a study; the Korean text names its periods in
+    the words of `interval` ('최근 14일', '최근 14주')."""
     spec = study(key)
     lang = _lang(language)
     what, how, caution = GUIDE[spec.key][0 if lang == 'ko' else 1]
+    if lang == 'ko':
+        what, how, caution = (fill_units(part, interval) for part in (what, how, caution))
     return StudyGuide(spec.key, spec.name(lang), category_name(spec.category, lang), params_text(spec.key, lang),
                       what, how, caution)
 
@@ -346,38 +349,97 @@ def _price(value):
     return format_value('price', value)
 
 
-# Units by bar interval -----------------------------------------------------------------
+# Units by interval ----------------------------------------------------------------------
+# Owner 2026-11-11 (R-D9-2): the Korean text names time in plain words, never '봉': '14일', '14주', '14개월',
+# '14년', '14분', '14개 5분 구간'. (counter, English plural, unused, the period before, English singular)
 _UNITS = {'1d': ('일', 'days', '거래일', '전날', 'day'), '1w': ('주', 'weeks', '주', '전주', 'week'),
-          '1M': ('개월', 'months', '개월', '전달', 'month')}
+          '1M': ('개월', 'months', '개월', '전달', 'month'), '1Y': ('년', 'years', '년', '전년', 'year')}
+# One period as a noun ('오른 날', '오른 주'), 'this one' ('이날 종가') and one period's length ('하루 동안').
+_NOUNS = {'1d': ('날', '이날', '하루'), '1w': ('주', '이 주', '한 주'), '1M': ('달', '이 달', '한 달'),
+          '1Y': ('해', '이 해', '한 해')}
+_JOSA = {'이': ('이', '가'), '은': ('은', '는'), '을': ('을', '를'), '과': ('과', '와'), '으로': ('으로', '로')}
+
+
+def josa(word, particle):
+    """`word` followed by the Korean particle that fits its last sound ('날이', '주가', '구간을', '해를')."""
+    with_final, without = _JOSA[particle]
+    last = next((ch for ch in reversed(str(word)) if not ch.isspace()), '')
+    if '가' <= last <= '힣':
+        jong = (ord(last) - 0xAC00) % 28
+        final = jong != 0 and not (particle == '으로' and jong == 8)
+    elif last.isdigit():
+        final = last in '013678'
+    else:
+        final = False
+    return f'{word}{with_final if final else without}'
+
+
+def _minutes(interval):
+    text = str(interval or '')
+    return int(text[:-1]) if text.endswith('m') and text[:-1].isdigit() else None
 
 
 class _Say:
-    """Language and bar-interval wording for one reading."""
+    """Language and interval wording for one reading (`bars` may also be an interval string)."""
 
     def __init__(self, bars, language):
         self.lang = _lang(language)
         self.ko = self.lang == 'ko'
-        unit = _UNITS.get(getattr(bars, 'interval', ''), None)
+        interval = bars if isinstance(bars, str) else getattr(bars, 'interval', '')
+        unit = _UNITS.get(interval, None)
         self.daily = unit is not None
-        self.unit = unit or ('개 봉', 'bars', '개 봉', '앞 봉', 'bar')
+        self.minutes = _minutes(interval)
+        self.unit = unit or ('개 구간', 'bars', '개 구간', '앞 구간', 'bar')
+        if interval in _NOUNS:
+            self.noun, self.this, self.one = _NOUNS[interval]
+        elif self.minutes:
+            self.noun, self.this, self.one = '구간', f'이 {self.minutes}분 구간', f'{self.minutes}분'
+        else:
+            self.noun, self.this, self.one = '구간', '이 구간', '한 구간'
+        self.at = '이날' if interval == '1d' else f'{self.this}에'   # 'when': 이날 / 이 주에 / 이 5분 구간에
 
     def n(self, count):
-        """'14일' / '14개 봉' / '14 days' / '14 bars'."""
-        return f'{count}{self.unit[0]}' if self.ko else f'{count} {self.unit[1]}'
+        """'14일' / '14주' / '14분' / '14개 5분 구간' / '14 days' / '14 bars'."""
+        if not self.ko:
+            return f'{count} {self.unit[1]}'
+        if self.daily:
+            return f'{count}{self.unit[0]}'
+        if self.minutes == 1:
+            return f'{count}분'
+        if self.minutes:
+            return f'{count}개 {self.minutes}분 구간'
+        return f'{count}개 구간'
 
     def count_subject(self, count):
-        """'7일이' / '7주가' / '7개 봉이' (Korean subject particle after the counter)."""
-        return f'{count}{self.unit[0]}' + ('가' if self.unit[0] == '주' else '이')
+        """'7일이' / '7주가' / '7개 구간이' (Korean subject particle after the counter)."""
+        word = self.n(count) if self.daily or self.minutes == 1 else f'{count}개 {self.noun}'
+        return josa(word, '이')
 
     def ago(self, count):
-        return f'{count}{self.unit[0]} 전' if self.ko else f'{count} {self.unit[1]} ago'
+        return f'{self.n(count)} 전' if self.ko else f'{count} {self.unit[1]} ago'
 
     def avg(self, count):
         """'20일 평균' / '20-day average'."""
-        return f'{count}{self.unit[0]} 평균' if self.ko else f'{count}-{self.unit[4]} average'
+        return f'{self.n(count)} 평균' if self.ko else f'{count}-{self.unit[4]} average'
 
     def __call__(self, ko, en):
         return ko if self.ko else en
+
+
+_FILL = re.compile(r'\{(n\d+|noun|this|one|prev)(?::(이|은|을|과|으로))?\}')
+
+
+def fill_units(text, interval='1d'):
+    """Korean guide text with its unit words for `interval`: {n20} -> '20일', {noun} -> '날', {this} -> '이날',
+    {one} -> '하루', {prev} -> '전날'; '{noun:이}' adds the particle that fits ('날이', '주가')."""
+    say = _Say(interval, 'ko')
+
+    def word(match):
+        name, particle = match.group(1), match.group(2)
+        value = (say.n(int(name[1:])) if name[1:].isdigit() else
+                 {'noun': say.noun, 'this': say.this, 'one': say.one, 'prev': say.unit[3]}[name])
+        return josa(value, particle) if particle else value
+    return _FILL.sub(word, text)
 
 
 def _at(values, line, index):
@@ -459,7 +521,7 @@ def _read_ema(v, i, c, b, s, say, p):
     for back in range(1, 4):
         a, z = _at(v, 'EMA12', i - back), _at(v, 'EMA26', i - back)
         if a is not None and z is not None and (a - z) * (fast - slow) < 0:
-            return text + ' ' + say(f'최근 {back + 1}개 봉 사이에 두 선이 교차했습니다. 교차는 이미 일어난 변화를 보여줄 뿐입니다.',
+            return text + ' ' + say(f'최근 {say.n(back + 1)} 사이에 두 선이 교차했습니다. 교차는 이미 일어난 변화를 보여줄 뿐입니다.',
                                     f'The lines crossed within the last {back + 1} bars; a crossing shows a change that already happened.')
     return text
 
@@ -494,11 +556,11 @@ def _read_ichimoku(v, i, c, b, s, say, p):
                     'Price is inside the cloud, conventionally a stretch without a clear direction.')
     if tenkan != kijun:
         lines = say(f'전환선이 기준선보다 {"위" if tenkan > kijun else "아래"}에 있습니다'
-                    f'(최근 {p["conversion"]}개 봉의 중간값이 {p["base"]}개 봉 중간값보다 {"높음" if tenkan > kijun else "낮음"}).',
+                    f'(최근 {say.n(p["conversion"])}의 중간값이 {say.n(p["base"])} 중간값보다 {"높음" if tenkan > kijun else "낮음"}).',
                     f'The conversion line is {"above" if tenkan > kijun else "below"} the base line '
                     f'(the {p["conversion"]}-bar midpoint is {"higher" if tenkan > kijun else "lower"} than the {p["base"]}-bar one).')
     else:
-        lines = say(f'전환선과 기준선이 같은 높이에 있습니다(최근 {p["conversion"]}개 봉의 중간값과 {p["base"]}개 봉 중간값이 같음).',
+        lines = say(f'전환선과 기준선이 같은 높이에 있습니다(최근 {say.n(p["conversion"])}의 중간값과 {say.n(p["base"])} 중간값이 같음).',
                     f'The conversion line is level with the base line (the {p["conversion"]}-bar midpoint equals the {p["base"]}-bar one).')
     if a == bb:
         color = say('선행스팬 1과 2가 같아 구름 두께가 없습니다.', 'Span A equals span B, so the cloud has no thickness.')
@@ -524,7 +586,7 @@ def _read_psar(v, i, c, b, s, say, p):
                    f'The SAR dot ({_price(sar)}) is level with the close but counts as {"below" if below else "above"} '
                    f'price: it is trailing {"an upward" if below else "a downward"} move.')
     if i >= 1 and math.isfinite(side[i - 1]) and side[i - 1] != side[i]:
-        text += ' ' + say('이번 봉에서 점이 반대편으로 넘어왔습니다. 흐름이 바뀌었다고 보는 관례가 있지만 횡보장에서는 자주 뒤집힙니다.',
+        text += ' ' + say(f'{say.at} 점이 반대편으로 넘어왔습니다. 흐름이 바뀌었다고 보는 관례가 있지만 횡보장에서는 자주 뒤집힙니다.',
                           'The dots flipped sides on this bar. By convention that marks a change of move, but in sideways markets flips are frequent.')
     return text
 
@@ -596,22 +658,22 @@ def _read_donchian(v, i, c, b, s, say, p):
     new_high = n > 1 and b[1][i] > float(np.max(b[1][earlier]))
     new_low = n > 1 and b[2][i] < float(np.min(b[2][earlier]))
     if new_high and new_low:
-        return say(f'이번 봉에서 최근 {say.n(n)} 중 최고가와 최저가를 모두 새로 썼습니다. 범위가 위아래로 넓어졌을 뿐 방향을 알려주지는 않습니다.',
+        return say(f'{say.at} 최근 {say.n(n)} 중 최고가와 최저가를 모두 새로 썼습니다. 범위가 위아래로 넓어졌을 뿐 방향을 알려주지는 않습니다.',
                    f'This bar set both a new high and a new low for the last {say.n(n)}: the range widened both ways, which shows no direction.')
     if new_high:
-        return say(f'이번 봉에서 최근 {say.n(n)} 중 최고가를 새로 썼습니다. 그 방향으로 계속 간다는 보장은 없습니다.',
+        return say(f'{say.at} 최근 {say.n(n)} 중 최고가를 새로 썼습니다. 그 방향으로 계속 간다는 보장은 없습니다.',
                    f'This bar set a new high for the last {say.n(n)}. That does not guarantee the move continues.')
     if new_low:
-        return say(f'이번 봉에서 최근 {say.n(n)} 중 최저가를 새로 썼습니다. 그 방향으로 계속 간다는 보장은 없습니다.',
+        return say(f'{say.at} 최근 {say.n(n)} 중 최저가를 새로 썼습니다. 그 방향으로 계속 간다는 보장은 없습니다.',
                    f'This bar set a new low for the last {say.n(n)}. That does not guarantee the move continues.')
     where = (c[i] - lower) / (upper - lower) * 100
     text = say(f'종가가 최근 {say.n(n)} 가격 범위의 바닥에서 {where:.0f}% 높이에 있습니다.',
                f'The close sits {where:.0f}% of the way up the range of the last {say.n(n)}.')
     if n > 1 and b[1][i] == upper:
-        text = say(f'이번 봉 고가가 최근 {say.n(n)} 최고가와 같습니다(새로 쓴 것은 아님). ',
+        text = say(f'{say.this} 고가가 최근 {say.n(n)} 최고가와 같습니다(새로 쓴 것은 아님). ',
                    f'This bar’s high matched the highest high of the last {say.n(n)} (a tie, not a new high). ') + text
     elif n > 1 and b[2][i] == lower:
-        text = say(f'이번 봉 저가가 최근 {say.n(n)} 최저가와 같습니다(새로 쓴 것은 아님). ',
+        text = say(f'{say.this} 저가가 최근 {say.n(n)} 최저가와 같습니다(새로 쓴 것은 아님). ',
                    f'This bar’s low matched the lowest low of the last {say.n(n)} (a tie, not a new low). ') + text
     return text
 
@@ -693,7 +755,7 @@ def _read_stoch(v, i, c, b, s, say, p):
     high, low = float(np.max(b[1][window])), float(np.min(b[2][window]))
     raw = 100 * (c[i] - low) / (high - low) if high > low else 50.0
     text = _smoothed_position(say, k, raw, p['k_smooth'], say.n(n), '가격', 'price', '종가', 'the close’s',
-                              '이번 봉 종가', 'This bar’s close')
+                              f'{say.this} 종가', 'This bar’s close')
     ks, ds = _shown(k), _shown(d)
     if ks != ds:
         return text + ' ' + say(f'%K가 %D({_fmt(d)})보다 {"위에 있어 범위 안 위치가 올라가는" if ks > ds else "아래에 있어 범위 안 위치가 내려가는"} 중입니다.',
@@ -710,7 +772,7 @@ def _read_stochrsi(v, i, c, b, s, say, p):
     # Like the stochastic, %K averages the raw position of RSI over k_smooth bars.
     raw = _raw_position(rsi_line(c[:i + 1], p['rsi_period']), i, n)
     text = _smoothed_position(say, k, raw, p['k_smooth'], say.n(n), 'RSI', 'RSI', 'RSI의', 'RSI’s',
-                              '이번 봉 RSI', 'This bar’s RSI')
+                              f'{say.this} RSI', 'This bar’s RSI')
     return text + ' ' + say('매우 민감한 지표라 값이 자주 크게 바뀝니다.', 'It is very sensitive and swings often.')
 
 
@@ -819,7 +881,7 @@ def _read_atr(v, i, c, b, s, say, p):
     if x == 0:
         return say(f'ATR 0: 최근 {say.n(p["period"])} 동안 가격이 전혀 움직이지 않았습니다(고가·저가·종가가 모두 같음).',
                    f'ATR 0: price did not move at all over the last {say.n(p["period"])} (high, low and close all equal).')
-    text = say(f'ATR {_price(x)}: 최근 {say.n(p["period"])} 동안 한 봉에 평균 {_price(x)}(종가의 {x / c[i] * 100:.1f}%)만큼 움직였습니다.',
+    text = say(f'ATR {_price(x)}: 최근 {say.n(p["period"])} 동안 {say.one}에 평균 {_price(x)}(종가의 {x / c[i] * 100:.1f}%)만큼 움직였습니다.',
                f'ATR {_price(x)}: over the last {say.n(p["period"])} price moved about {_price(x)} per bar ({x / c[i] * 100:.1f}% of the close).')
     before = _at(v, 'ATR', i - 20)
     if before:
@@ -870,18 +932,18 @@ def _read_bandwidth(v, i, c, b, s, say, p):
 def _read_volume_ma(v, i, c, b, s, say, p):
     volume, average = b[4][i], _at(v, 'VOLUME_MA', i)
     if not math.isfinite(volume):
-        return say('이 봉의 거래량은 제공되지 않았습니다.', 'This bar’s volume was not reported.')
+        return say(f'{say.this}의 거래량은 제공되지 않았습니다.', 'This bar’s volume was not reported.')
     n = p['period']
     if not average or average <= 0:
         # KIS reports a trading halt as volume 0: there is no average to compare with.
         if volume == 0:
-            return say(f'이번 봉을 포함해 최근 {say.n(n)} 동안 거래량이 0입니다(거래정지 등으로 거래가 없었을 수 있습니다).',
+            return say(f'{josa(say.this, "을")} 포함해 최근 {say.n(n)} 동안 거래량이 0입니다(거래정지 등으로 거래가 없었을 수 있습니다).',
                        f'Volume was 0 on this bar and throughout the last {say.n(n)} (for example during a trading halt).')
-        return say(f'이번 봉 거래량은 {_quantity(volume, say.lang)}이지만 {say.avg(n)}이 0이라 배수로 비교할 수 없습니다.',
+        return say(f'{say.this} 거래량은 {_quantity(volume, say.lang)}이지만 {say.avg(n)}이 0이라 배수로 비교할 수 없습니다.',
                    f'This bar’s volume is {_quantity(volume, say.lang)}, but the {say.avg(n)} is 0, so there is no multiple to compare.')
     ratio = volume / average
     shown = _shown(ratio)
-    text = say(f'이번 봉 거래량은 {say.avg(n)}의 {_fmt(ratio)}배입니다.',
+    text = say(f'{say.this} 거래량은 {say.avg(n)}의 {_fmt(ratio)}배입니다.',
                f'This bar’s volume is {_fmt(ratio)}× the {say.avg(n)}.')
     if shown >= 2:
         text += ' ' + say('평소보다 거래가 크게 늘었습니다.', 'Trading was much heavier than usual.')
@@ -894,10 +956,10 @@ def _read_obv(v, i, c, b, s, say, p):
     now = _at(v, 'OBV', i)
     back = next((j for j in range(i - 20, -1, -1) if _at(v, 'OBV', j) is not None), None) if i >= 20 else None
     if back is None:
-        return say(f'OBV {_quantity(now, say.lang)}: 방향을 보려면 20개 봉 이상이 필요합니다.',
+        return say(f'OBV {_quantity(now, say.lang)}: 방향을 보려면 {say.n(20)} 이상의 자료가 필요합니다.',
                    f'OBV {_quantity(now, say.lang)}: at least 20 bars are needed to read its direction.')
     change, move = now - _at(v, 'OBV', back), c[i] - c[back]
-    text = say(f'최근 {say.n(i - back)} 동안 OBV가 {"늘었습니다. 오른 봉의 거래량이 내린 봉보다 많았습니다" if change > 0 else "줄었습니다. 내린 봉의 거래량이 오른 봉보다 많았습니다" if change < 0 else "그대로입니다"}.',
+    text = say(f'최근 {say.n(i - back)} 동안 OBV가 {f"늘었습니다. 오른 {say.noun}의 거래량이 내린 {say.noun}보다 많았습니다" if change > 0 else f"줄었습니다. 내린 {say.noun}의 거래량이 오른 {say.noun}보다 많았습니다" if change < 0 else "그대로입니다"}.',
                f'Over the last {say.n(i - back)} OBV {"rose: more volume traded on up bars than on down bars" if change > 0 else "fell: more volume traded on down bars than on up bars" if change < 0 else "was unchanged"}.')
     if change * move < 0:
         text += ' ' + say('같은 기간 가격은 반대로 움직였습니다. 가격과 거래량 흐름이 엇갈리는 것을 다이버전스라고 부르는 관례가 있습니다.',
@@ -914,14 +976,14 @@ def _read_mfi(v, i, c, b, s, say, p):
     degree = 3 if not ratio_text else _degree(ratio)
     rising = x >= 50
     if degree == 0:
-        head = say(f'MFI {_fmt(x)}: 최근 {n} 동안 오른 봉과 내린 봉의 거래대금이 비슷했습니다.',
+        head = say(f'MFI {_fmt(x)}: 최근 {n} 동안 오른 {josa(say.noun, "과")} 내린 {say.noun}의 거래대금이 비슷했습니다.',
                    f'MFI {_fmt(x)}: over the last {n} money on rising and falling bars was about equal.')
     else:
         big, small = say(('오른', '내린') if rising else ('내린', '오른'), ('rising', 'falling') if rising else ('falling', 'rising'))
         size = say(('조금 더', '더', '훨씬')[degree - 1], ('slightly more', 'more', 'far more')[degree - 1])
-        detail = say(f'{small} 봉의 {ratio_text}배' if ratio_text else f'{small} 봉의 거래대금은 없었음',
+        detail = say(f'{small} {say.noun}의 {ratio_text}배' if ratio_text else f'{small} {say.noun}의 거래대금은 없었음',
                      f'{ratio_text}× as much' if ratio_text else f'none on {small} bars')
-        head = say(f'MFI {_fmt(x)}: 최근 {n} 동안 {big} 봉의 거래대금이 {small} 봉보다 {size} 많았습니다({detail}).',
+        head = say(f'MFI {_fmt(x)}: 최근 {n} 동안 {big} {say.noun}의 거래대금이 {small} {say.noun}보다 {size} 많았습니다({detail}).',
                    f'MFI {_fmt(x)}: over the last {n} {size} money traded on {big} bars than on {small} ones ({detail}).')
     shown = _shown(x)
     if shown >= 80:
@@ -939,12 +1001,12 @@ def _read_vwap(v, i, c, b, s, say, p):
     day = b[6][session_start_index(b[6])[i]][:10]
     side = _side(d, 2)
     if side:
-        return say(f'이 봉의 종가가 {day} 장 VWAP({_price(x)})보다 {_fmt(abs(d), 2)}% {"위" if side > 0 else "아래"}에 있습니다. '
-                   f'그 장 시작부터 이 봉까지 거래된 평균 단가보다 {"높게" if side > 0 else "낮게"} 끝났다는 뜻입니다.',
+        return say(f'{say.this}의 종가가 {day} 장 VWAP({_price(x)})보다 {_fmt(abs(d), 2)}% {"위" if side > 0 else "아래"}에 있습니다. '
+                   f'그 장 시작부터 {say.this}까지 거래된 평균 단가보다 {"높게" if side > 0 else "낮게"} 끝났다는 뜻입니다.',
                    f'This bar closed {_fmt(abs(d), 2)}% {"above" if side > 0 else "below"} the VWAP of the {day} session '
                    f'({_price(x)}): {"above" if side > 0 else "below"} the average price traded from that session’s open to this bar.')
-    return say(f'이 봉의 종가가 {day} 장 VWAP({_price(x)})와 {"같습니다" if d == 0 else "거의 같습니다"}. '
-               f'그 장 시작부터 이 봉까지 거래된 평균 단가와 {"같은" if d == 0 else "거의 같은"} 값에서 끝났다는 뜻입니다.',
+    return say(f'{say.this}의 종가가 {day} 장 VWAP({_price(x)})와 {"같습니다" if d == 0 else "거의 같습니다"}. '
+               f'그 장 시작부터 {say.this}까지 거래된 평균 단가와 {"같은" if d == 0 else "거의 같은"} 값에서 끝났다는 뜻입니다.',
                f'This bar closed {"at" if d == 0 else "almost at"} the VWAP of the {day} session ({_price(x)}): '
                f'{"at" if d == 0 else "almost at"} the average price traded from that session’s open to this bar.')
 
@@ -1031,12 +1093,12 @@ def study_reading(key, bars, index, *, language='ko', values=None, supply=None, 
     needed = reading_lines(spec.key)
     if spec.category != 'supply' and not all(_at(values, line, i) is not None for line in needed):
         if spec.needs in ('volume', 'ohlcv') and not math.isfinite(bars.volume[i]):
-            return say('이 봉의 거래량이 없어 계산하지 않았습니다.', 'This bar has no reported volume, so it was not computed.')
+            return say(f'{say.this}의 거래량이 없어 계산하지 않았습니다.', 'This bar has no reported volume, so it was not computed.')
         first = warmup(spec.key) if not params else None
         if first is not None and i < first:
-            return say(f'{spec.ko}: 아직 계산할 수 없습니다. 최소 {first + 1}개 봉이 필요합니다(이 봉은 {i + 1}번째).',
+            return say(f'{spec.ko}: 아직 계산할 수 없습니다. 최소 {say.n(first + 1)}의 자료가 필요합니다(지금은 {i + 1}번째).',
                        f'{spec.en}: not available yet. It needs at least {first + 1} bars (this is bar {i + 1}).')
-        return say(f'{spec.ko}: 이 봉에서는 값을 계산할 수 없습니다.', f'{spec.en}: no value at this bar.')
+        return say(f'{spec.ko}: {say.this}의 값은 계산할 수 없습니다.', f'{spec.en}: no value at this bar.')
     arrays = bars.arrays()
     data = (arrays[0], arrays[1], arrays[2], arrays[3], arrays[4], bars.dates, bars.timestamps)
     merged = {**spec.defaults, **params}
@@ -1052,3 +1114,428 @@ def line_readout(key, bars, index, *, language='ko', values=None, supply=None, *
     if values is None:
         values = compute_study(spec.key, bars, supply=supply, **params)
     return tuple((line.name(lang), format_value(line.kind, _at(values, line.id, i), lang)) for line in spec.lines)
+
+
+# Short guide cards (owner 2026-11-11, R-D9-3: "글밥이 너무 많아보이잖아") ----------------------------------------
+# The screen shows a guide as a card: the reading now in one short sentence, a small gauge where it helps, one
+# muted line of what the study is, two or three cue chips and at most one short caution; the long texts above
+# (GUIDE, study_reading) sit behind '자세히'. These short texts are written for the screen in 해요체.
+ONE_LINER_MAX, CUE_MAX, CUES_MAX, CAUTION_MAX = 40, 16, 3, 50
+# key: ((one-liner, cues, caution) in Korean, (one-liner, cues, caution) in English)
+SHORT = {
+    'sma': (('최근 종가의 평균을 이은 선이에요', ('선 위 · 평균보다 높게', '선 아래 · 평균보다 낮게', '오르막 · 평균이 올라요'),
+             '지난 가격으로 만들어 늘 한발 늦어요'),
+            ('The average of recent closes, as a line', ('Above: above avg', 'Below: below avg', 'Rising: avg up'),
+             'Built from past prices, so it always lags.')),
+    'ema': (('최근 가격에 무게를 더 둔 평균선 두 개예요', ('빠른 선 위 · 최근 강함', '빠른 선 아래 · 최근 약함', '교차 · 흐름이 바뀐 뒤'),
+             '단순 평균보다 빠른 만큼 잡음에도 흔들려요'),
+            ('Two averages weighted to recent prices', ('Fast above: up', 'Fast below: down', 'Cross = turned'),
+             'Faster than a simple average, so noisier.')),
+    'macd': (('두 평균의 차이로 흐름의 속도를 봐요', ('0 위 · 단기 평균이 위', '막대 위 · 오르는 힘', '막대 아래 · 내리는 힘'),
+              '종목마다 숫자 크기가 달라 서로 비교하지 않아요'),
+             ('Gap between a fast and a slow average', ('Above 0: fast up', 'Bars > 0: up', 'Bars < 0: down'),
+              'Its size depends on price; never compare stocks.')),
+    'ichimoku': (('구름과 여러 선으로 추세를 보는 지표예요', ('구름 위 · 상승 흐름', '구름 안 · 방향 약함', '구름 아래 · 하락 흐름'),
+                  '선이 많아요. 처음엔 가격과 구름만 보세요'),
+                 ('A cloud and lines that frame the trend', ('Above: uptrend', 'Inside: unclear', 'Below: downtrend'),
+                  'Many lines: start with price and the cloud.')),
+    'psar': (('가격 위아래 점으로 지금 흐름을 따라가요', ('점이 아래 · 오름 흐름', '점이 위 · 내림 흐름', '닿으면 반대로 넘어가요'),
+              '옆으로 움직일 때는 점이 자주 뒤집혀요'),
+             ('Dots that trail the current move', ('Dots below: up', 'Dots above: down', 'Touch: they flip'),
+              'In sideways markets the dots flip often.')),
+    'adx': (('추세가 얼마나 뚜렷한지 0~100으로 봐요', ('25 이상 · 추세 뚜렷', '20 아래 · 추세 약함', '+DI 위 · 오르는 힘'),
+             'ADX가 높아도 오른다는 뜻은 아니에요'),
+            ('How clear a trend is, from 0 to 100', ('25+: clear trend', 'Under 20: weak', '+DI on top: up'),
+             'A high ADX means a strong trend, not a rise.')),
+    'envelope': (('평균선 위아래 5%에 그린 띠예요', ('위 선 근처 · 5% 위', '아래 선 근처 · 5% 아래', '띠 밖 · 크게 벗어남'),
+                  '5%는 규칙이 아니라 흔한 기본값이에요'),
+                 ('A band 5% above and below the average', ('Near top: +5%', 'Near bottom: −5%', 'Outside: far off'),
+                  'Five percent is a common default, not a rule.')),
+    'keltner': (('평소 변동폭의 2배 너비로 그린 띠예요', ('위로 벗어남 · 크게 오름', '아래로 벗어남 · 크게 내림', '띠 안 · 평소 범위'),
+                 '띠 밖에 오래 머물 수도 있어요'),
+                ('A band two average ranges wide', ('Above: big rise', 'Below: big fall', 'Inside: usual'),
+                 'Price can stay outside for a long time.')),
+    'donchian': (('최근 최고가와 최저가를 이은 띠예요', ('위 선 · 최근 최고가', '아래 선 · 최근 최저가', '가운데 · 둘의 중간'),
+                  '새 고가가 계속 오른다는 보장은 없어요'),
+                 ('A band from the recent high to the low', ('Top: its high', 'Bottom: its low', 'Middle: halfway'),
+                  'A new high does not mean the rise continues.')),
+    'rsi': (('오른 폭과 내린 폭을 0~100으로 비교해요', ('70 이상 · 많이 오름', '30 이하 · 많이 내림', '50 위 · 오른 폭 우세'),
+             '높다고 곧 내린다는 뜻은 아니에요'),
+            ('Rises against falls, on a 0–100 scale', ('70+: rose a lot', 'Under 30: fell', 'Above 50: rises'),
+             'High does not mean a fall is near.')),
+    'stoch': (('종가가 최근 범위의 어디쯤인지 0~100으로 봐요', ('80 이상 · 꼭대기 근처', '20 이하 · 바닥 근처', '%K가 위 · 올라가는 중'),
+               '범위 안 위치일 뿐 싸다·비싸다가 아니에요'),
+              ('Where the close sits in its recent range', ('80+: near top', 'Under 20: bottom', '%K over %D: up'),
+               'A position in a range, not cheap or dear.')),
+    'stochrsi': (('RSI가 최근 범위의 어디쯤인지 0~100으로 봐요', ('80 이상 · 꼭대기 근처', '20 이하 · 바닥 근처'),
+                  '매우 민감해요. 다른 지표와 함께 보세요'),
+                 ('Where RSI sits in its own recent range', ('80+: near top', 'Under 20: bottom'),
+                  'Very sensitive: read it with other studies.')),
+    'cci': (('평균가격이 평균에서 얼마나 벗어났는지 봐요', ('+100 위 · 크게 위로', '−100 아래 · 크게 아래로', '0 근처 · 평균 가까이'),
+             '위아래 한계가 없어 ±200을 넘기도 해요'),
+            ('How far price strays from its average', ('+100: far above', '−100: far below', 'Near 0: at avg'),
+             'It has no limits and can pass ±200.')),
+    'williams': (('종가가 최근 최고가에서 얼마나 내려왔는지 봐요', ('−20 위 · 꼭대기 근처', '−80 아래 · 바닥 근처'),
+                  '범위 안 위치일 뿐이에요'),
+                 ('How far the close sits below the high', ('Above −20: top', 'Below −80: low'),
+                  'It is only a position in a range.')),
+    'roc': (('종가가 얼마 전보다 몇 % 변했는지 봐요', ('0 위 · 그때보다 오름', '0 아래 · 그때보다 내림'),
+             '비교하는 시작 가격 하나에 따라 크게 달라져요'),
+            ('Percent change of the close over a span', ('Above 0: higher', 'Below 0: lower'),
+             'One starting price can swing it a lot.')),
+    'disparity': (('종가가 평균선의 몇 %인지 보여 줘요', ('105 이상 · 과열', '95 이하 · 침체', '100 · 평균과 같음'),
+                   '알맞은 기준은 종목마다 달라요'),
+                  ('The close as a percent of its average', ('105+: overheated', 'Under 95: low', '100: at average'),
+                   'Sensible levels differ from stock to stock.')),
+    'psychology': (('최근 오른 횟수가 몇 %인지 세어요', ('75% 이상 · 과열', '25% 이하 · 침체'),
+                    '오른 크기는 보지 않고 횟수만 세요'),
+                   ('The share of recent periods that rose', ('75%+: overheated', 'Under 25%: cold'),
+                    'It counts rises, not their size.')),
+    'bb': (('평균선 위아래로 가격이 흩어진 만큼 그린 띠예요', ('위 밴드 · 범위 위쪽', '아래 밴드 · 범위 아래쪽', '좁아짐 · 움직임이 잦아듦'),
+            '띠 밖으로 나가도 한동안 머물 수 있어요'),
+           ('A band two deviations around the average', ('Upper: high', 'Lower: low', 'Narrow: calm'),
+            'Price can keep moving outside the band.')),
+    'atr': (('가격이 평균적으로 얼마나 출렁였는지 봐요', ('클수록 · 출렁임이 큼', '종가 대비 % · 비교 쉬움'),
+             '방향은 알려 주지 않아요'),
+            ('How much price typically moves', ('Larger: wilder', 'As %: comparable'),
+             'It has no direction.')),
+    'percent_b': (('종가가 볼린저 밴드의 어디에 있는지 숫자로 봐요', ('1 위 · 위 밴드 밖', '0 아래 · 아래 밴드 밖', '0.5 · 가운데'),
+                   '밖으로 나갔다고 곧 돌아오지는 않아요'),
+                  ('Where the close sits in the band', ('Above 1: outside', 'Below 0: outside', '0.5: middle'),
+                   'Outside does not mean a return soon.')),
+    'bandwidth': (('볼린저 밴드 폭이 평균의 몇 %인지 봐요', ('작아짐 · 움직임 잦아듦', '커짐 · 움직임 커짐'),
+                   '폭은 크기만 알려 주고 방향은 몰라요'),
+                  ('How wide the Bollinger band is', ('Falling: calmer', 'Rising: wilder'),
+                   'Width shows size, never direction.')),
+    'volume_ma': (('거래량의 평균을 선으로 그려요', ('막대가 선 위 · 거래 많음', '막대가 선 아래 · 거래 적음'),
+                   '진행 중인 마지막 막대는 작게 보일 수 있어요'),
+                  ('The average volume, as a line', ('Bar above: busy', 'Bar below: quiet'),
+                   'The last, still-forming bar can look small.')),
+    'obv': (('오를 때 거래량은 더하고 내릴 때는 빼서 쌓아요', ('오름 · 오를 때 거래 많음', '내림 · 내릴 때 거래 많음'),
+             '숫자보다 방향을 봐요. 다른 종목과 비교하지 않아요'),
+            ('Volume added on rises, cut on falls', ('Rising: up vol', 'Falling: dn vol'),
+             'Read its direction; never compare levels.')),
+    'mfi': (('거래대금을 반영한 RSI예요', ('80 이상 · 많이 몰림', '20 이하 · 많이 빠짐'),
+             '실제로 누가 샀는지는 알려 주지 않아요'),
+            ('An RSI that counts traded money', ('80+: heavy in', 'Under 20: out'),
+             'It does not show who actually bought.')),
+    'vwap': (('오늘 거래된 가격을 거래량으로 평균했어요', ('선 위 · 평균 단가보다 위', '선 아래 · 평균 단가 아래'),
+              '장 초반에는 크게 흔들려요'),
+             ("Today's average traded price", ('Above: above avg', 'Below: below avg'),
+              'Early in the session it jumps around.')),
+    'investor_flow': (('외국인·기관·개인의 순매수를 쌓은 선이에요', ('선이 오름 · 더 많이 삼', '선이 내림 · 더 많이 팖'),
+                       '누가 샀다고 가격이 오르는 건 아니에요'),
+                      ('Net buying by investor group, added up', ('Rising: buying', 'Falling: selling'),
+                       'Buying does not mean the price will rise.')),
+    'short_ratio': (('거래량 중 공매도가 차지한 비율이에요', ('최근 평균과 비교해요', '높아짐 · 하락 대비 늘어남'),
+                     '높다고 주가가 떨어진다는 뜻은 아니에요'),
+                    ('Short selling as a share of volume', ('Compare with avg', 'Up: more hedging'),
+                     'A high share does not mean a fall.')),
+}
+# The small painted visual of a guide card (None: no gauge):
+#   ('scale', line, low, high, low zone up to, high zone from)  a 0-100 style value with its conventional zones
+#   ('band', lower line, upper line)                             the close inside or outside a band
+#   ('offset', line, range %)                                    the close above or below a line, ±range %
+#   ('zero', line)                                               a value around 0 (scaled by its recent size)
+#   ('ratio', line)                                              volume against its average, 0 to 3×
+GAUGES = {
+    'rsi': ('scale', 'RSI14', 0, 100, 30, 70), 'stoch': ('scale', 'STOCH_K', 0, 100, 20, 80),
+    'stochrsi': ('scale', 'STOCHRSI_K', 0, 100, 20, 80), 'mfi': ('scale', 'MFI', 0, 100, 20, 80),
+    'williams': ('scale', 'WILLR', -100, 0, -80, -20), 'cci': ('scale', 'CCI', -250, 250, -100, 100),
+    'psychology': ('scale', 'PSY', 0, 100, 25, 75), 'disparity': ('scale', 'DISPARITY', 85, 115, 95, 105),
+    'adx': ('scale', 'ADX', 0, 60, 20, 25),
+    'bb': ('band', 'BB_LOWER', 'BB_UPPER'), 'envelope': ('band', 'ENV_LOWER', 'ENV_UPPER'),
+    'keltner': ('band', 'KC_LOWER', 'KC_UPPER'), 'donchian': ('band', 'DC_LOWER', 'DC_UPPER'),
+    'ichimoku': ('band', 'SPAN_A', 'SPAN_B'), 'percent_b': ('band', None, None),
+    'sma': ('offset', 'SMA20', 5.0), 'ema': ('offset', 'EMA26', 3.0), 'vwap': ('offset', 'VWAP', 2.0),
+    'psar': ('offset', 'SAR', 5.0),
+    'macd': ('zero', 'HISTOGRAM'), 'roc': ('zero', 'ROC'),
+    'volume_ma': ('ratio', 'VOLUME_MA'),
+}
+
+
+@dataclass(frozen=True)
+class ShortGuide:
+    key: str
+    one_liner: str
+    cues: tuple
+    caution: str
+    gauge: tuple | None
+
+
+def short_guide(key, language='ko'):
+    """The short texts of a study's guide card in the window language (Korean in 해요체) and its gauge spec."""
+    spec = study(key)
+    one, cues, caution = SHORT[spec.key][0 if _lang(language) == 'ko' else 1]
+    return ShortGuide(spec.key, one, tuple(cues), caution, GAUGES.get(spec.key))
+
+
+def gauge_value(key, values, bars, index=-1):
+    """(kind, position, marks) for a guide card's gauge at bar `index`, or None.
+
+    position is 0..1 along the gauge (it may pass 0 or 1 for a band the close has left: the view clamps the dot
+    and marks the side); marks are (position, label) of the zone or band edges."""
+    gauge = GAUGES.get(study(key).key)
+    if gauge is None or values is None:
+        return None
+    kind = gauge[0]
+    n = len(bars)
+    i = index + n if index < 0 else index
+    if not 0 <= i < n:
+        return None
+    close = float(bars.close[i])
+    if kind == 'scale':
+        _, line, low, high, zone_low, zone_high = gauge
+        value = _at(values, line, i)
+        if value is None:
+            return None
+        where = lambda v: (v - low) / (high - low)
+        return kind, where(value), ((where(zone_low), _minus(_plain(zone_low))), (where(zone_high), _minus(_plain(zone_high))))
+    if kind == 'band':
+        _, lower_line, upper_line = gauge
+        if lower_line is None:                      # %B: the band itself is the scale
+            value = _at(values, 'PERCENT_B', i)
+            return None if value is None else (kind, 0.25 + 0.5 * value, ())
+        lower, upper = _at(values, lower_line, i), _at(values, upper_line, i)
+        if lower is None or upper is None:
+            return None
+        lower, upper = min(lower, upper), max(lower, upper)
+        if upper == lower:
+            return kind, 0.5, ()
+        return kind, 0.25 + 0.5 * (close - lower) / (upper - lower), ()
+    if kind == 'offset':
+        _, line, span = gauge
+        base = _at(values, line, i)
+        if key == 'ema':
+            fast = _at(values, 'EMA12', i)
+            close = fast if fast is not None else close
+        if base is None or not base:
+            return None
+        return kind, 0.5 + (close / base - 1) * 100 / (2 * span), ()
+    if kind == 'zero':
+        _, line = gauge
+        value = _at(values, line, i)
+        if value is None:
+            return None
+        recent = np.asarray(values[line][max(0, i - 59):i + 1], dtype=float)
+        recent = recent[np.isfinite(recent)]
+        size = float(np.max(np.abs(recent))) if recent.size else abs(value)
+        return kind, 0.5 + (0.5 * value / size if size else 0.0), ()
+    if kind == 'ratio':
+        _, line = gauge
+        average = _at(values, line, i)
+        volume = float(bars.volume[i])
+        if not average or not math.isfinite(volume):
+            return None
+        return kind, (volume / average) / 3, ((1 / 3, '1×'),)
+    return None
+
+
+def short_reading(key, bars, index=-1, *, language='ko', values=None, supply=None):
+    """The reading now in one short sentence for a guide card or a panel header ('RSI 31.1 · 내린 폭이 훨씬
+    컸어요'), in 해요체 for Korean. The long reading (study_reading) stays behind '자세히'."""
+    return _minus(_short_reading(key, bars, index, language=language, values=values, supply=supply))
+
+
+def _short_reading(key, bars, index=-1, *, language='ko', values=None, supply=None):
+    spec = study(key)
+    if not isinstance(bars, Bars) or not len(bars):
+        raise ValueError('short_reading needs non-empty Bars')
+    say = _Say(bars, language)
+    i = index + len(bars) if index < 0 else index
+    code = availability(spec.key, asset='domestic_stock', interval=bars.interval, supply=supply,
+                        has_volume=any(math.isfinite(v) for v in bars.volume))
+    if code:
+        return availability_short(code, say.lang)
+    if values is None:
+        values = compute_study(spec.key, bars, supply=supply)
+    if spec.category != 'supply' and not all(_at(values, line, i) is not None for line in reading_lines(spec.key)):
+        return say('계산에 필요한 자료가 아직 부족해요', 'Not enough data yet')
+    c = float(bars.close[i])
+    at = lambda line: _at(values, line, i)
+    k = spec.key
+    if k in ('sma', 'vwap'):
+        base = at('SMA20' if k == 'sma' else 'VWAP')
+        d = _pct(c, base)
+        name = say('평균선', 'the average') if k == 'sma' else 'VWAP'
+        if not _side(d, 2 if k == 'vwap' else 1):
+            return say(f'종가가 {name}과 거의 같아요' if k == 'sma' else f'종가가 {name}와 거의 같아요',
+                       f'The close is at {name}')
+        digits = 2 if k == 'vwap' else 1
+        return say(f'종가가 {name}보다 {_fmt(abs(d), digits)}% {"위" if d > 0 else "아래"}예요',
+                   f'The close is {_fmt(abs(d), digits)}% {"above" if d > 0 else "below"} {name}')
+    if k == 'ema':
+        d = _pct(at('EMA12'), at('EMA26'))
+        if not _side(d):
+            return say('빠른 선과 느린 선이 거의 같아요', 'The fast and slow lines meet')
+        return say(f'빠른 선이 느린 선보다 {_fmt(abs(d))}% {"위" if d > 0 else "아래"}예요',
+                   f'The fast line is {_fmt(abs(d))}% {"above" if d > 0 else "below"} the slow one')
+    if k == 'macd':
+        m, h = at('MACD'), at('HISTOGRAM')
+        if not h:
+            return say(f'MACD {format_value("value", m)} · 신호선과 같아요', f'MACD {format_value("value", m)} · at its signal')
+        return say(f'MACD {format_value("value", m)} · {"오르는" if h > 0 else "내리는"} 쪽 힘이 커요',
+                   f'MACD {format_value("value", m)} · {"upward" if h > 0 else "downward"} momentum')
+    if k == 'ichimoku':
+        a, b = at('SPAN_A'), at('SPAN_B')
+        where = 'above' if c > max(a, b) else 'below' if c < min(a, b) else 'in'
+        return say({'above': '가격이 구름 위예요 · 상승 흐름', 'below': '가격이 구름 아래예요 · 하락 흐름',
+                    'in': '가격이 구름 안이에요 · 방향이 약해요'}[where],
+                   {'above': 'Price above the cloud: uptrend', 'below': 'Price below the cloud: downtrend',
+                    'in': 'Price inside the cloud: no clear direction'}[where])
+    if k == 'psar':
+        side = parabolic_sar_trend(bars.arrays()[1], bars.arrays()[2], spec.defaults['step'], spec.defaults['maximum'])
+        below = side[i] > 0
+        return say(f'점이 가격 {"아래" if below else "위"} · {"오름" if below else "내림"} 흐름을 따라가요',
+                   f'Dots {"below" if below else "above"} price: trailing a {"rise" if below else "fall"}')
+    if k == 'adx':
+        adx, pdi, mdi = at('ADX'), at('PDI'), at('MDI')
+        shown = _shown(adx)
+        level = say('추세가 뚜렷해요' if shown >= 25 else '추세가 생길지 애매해요' if shown >= 20 else '뚜렷한 추세가 없어요',
+                    'a clear trend' if shown >= 25 else 'a trend may be forming' if shown >= 20 else 'no clear trend')
+        side = say(' · 오르는 힘이 커요' if pdi > mdi else ' · 내리는 힘이 커요' if mdi > pdi else '',
+                   ' · up pressure' if pdi > mdi else ' · down pressure' if mdi > pdi else '')
+        return f'ADX {_fmt(adx)} · {level}{side}'
+    if k in ('bb', 'envelope', 'keltner', 'donchian'):
+        lines = {'bb': ('BB_UPPER', 'BB_LOWER'), 'envelope': ('ENV_UPPER', 'ENV_LOWER'),
+                 'keltner': ('KC_UPPER', 'KC_LOWER'), 'donchian': ('DC_UPPER', 'DC_LOWER')}[k]
+        upper, lower = at(lines[0]), at(lines[1])
+        if k == 'donchian':
+            n = spec.defaults['period']
+            earlier = slice(max(0, i - n + 1), i)
+            arrays = bars.arrays()
+            if i > 0 and arrays[1][i] > float(np.max(arrays[1][earlier])):
+                return say(f'최근 {say.n(n)} 최고가를 새로 썼어요', f'A new {n}-{say.unit[4]} high')
+            if i > 0 and arrays[2][i] < float(np.min(arrays[2][earlier])):
+                return say(f'최근 {say.n(n)} 최저가를 새로 썼어요', f'A new {n}-{say.unit[4]} low')
+        if c > upper:
+            return say('종가가 위 선 밖이에요', 'The close is above the upper line')
+        if c < lower:
+            return say('종가가 아래 선 밖이에요', 'The close is below the lower line')
+        middle = (upper + lower) / 2
+        return say(f'종가가 띠 안, 가운데보다 {"위" if c >= middle else "아래"}예요',
+                   f'Inside the band, {"above" if c >= middle else "below"} the middle')
+    if k == 'rsi' or k == 'mfi':
+        x = at('RSI14' if k == 'rsi' else 'MFI')
+        ratio, text = _ratio(x)
+        degree = 3 if not text else _degree(ratio)
+        head = f'{"RSI" if k == "rsi" else "MFI"} {_fmt(x)} · '
+        if degree == 0:
+            return head + say('오른 폭과 내린 폭이 비슷해요' if k == 'rsi' else '돈이 양쪽에 비슷하게 몰렸어요',
+                              'rises and falls about equal' if k == 'rsi' else 'money about even')
+        up = x >= 50
+        size = say(('조금 더', '더', '훨씬')[degree - 1], ('slightly', 'clearly', 'much')[degree - 1])
+        if k == 'rsi':
+            return head + say(f'{"오른" if up else "내린"} 폭이 {size} 컸어요',
+                              f'{"rises" if up else "falls"} {size} larger')
+        return head + say(f'{"오른" if up else "내린"} {say.noun} 거래대금이 {size} 많았어요',
+                          f'{size} more money on {"rising" if up else "falling"} {say.unit[1]}')
+    if k in ('stoch', 'stochrsi', 'williams'):
+        line, top, bottom = {'stoch': ('STOCH_K', 80, 20), 'stochrsi': ('STOCHRSI_K', 80, 20),
+                             'williams': ('WILLR', -20, -80)}[k]
+        x = at(line)
+        shown = _shown(x)
+        head = ('%R ' if k == 'williams' else '%K ') + _fmt(x) + ' · '
+        if shown >= top:
+            return head + say('범위 꼭대기 근처예요', 'near the top of its range')
+        if shown <= bottom:
+            return head + say('범위 바닥 근처예요', 'near the bottom of its range')
+        return head + say('범위의 중간쯤이에요', 'mid-range')
+    if k == 'cci':
+        x = at('CCI')
+        shown = _shown(x, 0)
+        head = f'CCI {_fmt(x, 0)} · '
+        return head + (say('평균보다 크게 위예요', 'far above its average') if shown >= 100 else
+                       say('평균보다 크게 아래예요', 'far below its average') if shown <= -100 else
+                       say('평균 가까이에 있어요', 'near its average'))
+    if k == 'roc':
+        x = at('ROC')
+        side = _side(x)
+        ago = say.ago(spec.defaults['period'])
+        if not side:
+            return say(f'ROC {_fmt(x)}% · {ago}과 거의 같아요', f'ROC {_fmt(x)}% · flat versus {ago}')
+        return say(f'ROC {_fmt(x, sign=True)}% · {ago}보다 {"올랐어요" if side > 0 else "내렸어요"}',
+                   f'ROC {_fmt(x, sign=True)}% · {"higher" if side > 0 else "lower"} than {ago}')
+    if k == 'disparity':
+        x = at('DISPARITY')
+        gap = _shown(_shown(x) - 100)
+        head = say(f'이격도 {_fmt(x)} · ', f'Disparity {_fmt(x)} · ')
+        if not gap:
+            return head + say('평균과 거의 같아요', 'at its average')
+        return head + say(f'평균보다 {_fmt(abs(gap))}% {"위" if gap > 0 else "아래"}예요',
+                          f'{_fmt(abs(gap))}% {"above" if gap > 0 else "below"} the average')
+    if k == 'psychology':
+        x = at('PSY')
+        n = spec.defaults['period']
+        ups = round(x * n / 100)
+        return say(f'심리도 {_fmt(x, 0)}% · 최근 {say.n(n)} 중 {ups}번 올랐어요',
+                   f'Psychological line {_fmt(x, 0)}% · {ups} of {n} rose')
+    if k == 'percent_b':
+        x = at('PERCENT_B')
+        shown = _shown(x, 2)
+        head = f'%B {_fmt(x, 2)} · '
+        return head + (say('위 밴드 밖이에요', 'above the upper band') if shown > 1 else
+                       say('아래 밴드 밖이에요', 'below the lower band') if shown < 0 else
+                       say(f'띠 안 {"위쪽" if shown >= 0.5 else "아래쪽"}이에요',
+                           f'inside, {"upper" if shown >= 0.5 else "lower"} half'))
+    if k == 'bandwidth':
+        x = at('BANDWIDTH')
+        history = np.asarray(values['BANDWIDTH'][max(0, i - 119):i + 1], dtype=float)
+        history = history[np.isfinite(history)]
+        head = say(f'밴드폭 {x:.1f}% · ', f'Bandwidth {x:.1f}% · ')
+        if history.size < 40:
+            return head + say('비교할 기록이 아직 짧아요', 'too little history to compare')
+        share = float(np.mean(history < x))
+        return head + (say('최근 중 가장 좁은 편이에요', 'among the narrowest lately') if share <= 0.1 else
+                       say('최근 중 가장 넓은 편이에요', 'among the widest lately') if share >= 0.9 else
+                       say('최근 기준 중간쯤이에요', 'mid-range lately'))
+    if k == 'atr':
+        x = at('ATR')
+        return say(f'ATR {_price(x)} · {say.one}에 평균 {x / c * 100:.1f}% 움직여요',
+                   f'ATR {_price(x)} · about {x / c * 100:.1f}% per {say.unit[4]}')
+    if k == 'volume_ma':
+        volume, average = float(bars.volume[i]), at('VOLUME_MA')
+        if not math.isfinite(volume):
+            return say('거래량 자료가 없어요', 'No volume reported')
+        if not average:
+            return say('평균과 비교할 수 없어요', 'No average to compare with')
+        ratio = volume / average
+        return say(f'거래량이 평균의 {_fmt(ratio)}배예요', f'Volume is {_fmt(ratio)}× its average')
+    if k == 'obv':
+        now = at('OBV')
+        back = next((j for j in range(i - 20, -1, -1) if _at(values, 'OBV', j) is not None), None) if i >= 20 else None
+        if back is None:
+            return say('방향을 보려면 자료가 더 필요해요', 'More data needed for a direction')
+        change = now - _at(values, 'OBV', back)
+        return say('OBV가 늘고 있어요 · 오를 때 거래가 많았어요' if change > 0 else
+                   'OBV가 줄고 있어요 · 내릴 때 거래가 많았어요' if change < 0 else 'OBV가 그대로예요',
+                   'OBV rising: more volume on rises' if change > 0 else
+                   'OBV falling: more volume on falls' if change < 0 else 'OBV is flat')
+    if k == 'investor_flow':
+        day = bars.dates[i]
+        rows = [row for row in supply.flows if row[0] <= day][-20:] if isinstance(supply, Supply) else []
+        if len(rows) < 5:
+            return say('투자자별 매매 자료가 부족해요', 'Not enough investor data')
+        totals = {g: sum(r[g + 1] for r in rows if math.isfinite(r[g + 1])) for g in range(3)}
+        buyer = max(totals, key=lambda g: totals[g])
+        if totals[buyer] <= 0:
+            return say(f'최근 {len(rows)}거래일 순매수한 투자자가 없어요', f'No net buyer over {len(rows)} sessions')
+        return say(f'최근 {len(rows)}거래일 {josa(_GROUPS[buyer][0], "이")} 가장 많이 샀어요',
+                   f'{_GROUPS[buyer][1].capitalize()} bought the most over {len(rows)} sessions')
+    if k == 'short_ratio':
+        day = bars.dates[i]
+        rows = [row for row in supply.shorts if row[0] <= day and math.isfinite(row[1])] if isinstance(supply, Supply) else []
+        if not rows or rows[-1][0] != day:
+            return say('이날의 공매도 자료가 없어요', 'No short-sale data for this date')
+        x = rows[-1][1]
+        window = [row[1] for row in rows[-20:]]
+        mean = sum(window) / len(window)
+        trend = say('평균보다 높아요' if x > mean * 1.2 else '평균보다 낮아요' if x < mean * 0.8 else '평균과 비슷해요',
+                    'above average' if x > mean * 1.2 else 'below average' if x < mean * 0.8 else 'about average')
+        return say(f'공매도 비중 {x:.1f}% · {trend}', f'Short share {x:.1f}% · {trend}')
+    return ''
+
+
+def unit_count(interval, count, language='ko'):
+    """`count` periods of `interval` in words: '400일', '20주', '50개월', '10년', '30분', '120개 5분 구간'."""
+    return _Say(interval, language).n(count)
