@@ -121,8 +121,8 @@ def panel(title):
     box = QFrame()
     box.setObjectName("panel")
     layout = QVBoxLayout(box)
-    layout.setContentsMargins(16, 16, 16, 16)
-    layout.setSpacing(12)
+    layout.setContentsMargins(22, 20, 22, 22)  # owner 2026-11-11: roomier panels, lighter lines
+    layout.setSpacing(14)
     if title:
         layout.addWidget(label(title, "heading"))
     return box, layout
@@ -517,8 +517,9 @@ class ResearchWindow(QMainWindow):
         scroll.setFrameShape(QFrame.Shape.NoFrame)
         content = QWidget()
         layout = QVBoxLayout(content)
-        layout.setContentsMargins(24, 22, 24, 22)
-        layout.setSpacing(14)
+        # Owner 2026-11-11: light section lines need roomy blocks ("한칸한칸 공간을 넓게").
+        layout.setContentsMargins(32, 28, 32, 36)
+        layout.setSpacing(24)
         layout.addWidget(label(title, "title"))
         layout.addWidget(label(subtitle, "muted"))
         scroll.setWidget(content)

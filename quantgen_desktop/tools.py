@@ -84,7 +84,7 @@ class ToolPane(QWidget):
         self._details_fold = None
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 12, 0, 0)
-        layout.setSpacing(18)
+        layout.setSpacing(26)  # owner 2026-11-11: roomy blocks with light lines
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.input_box, inner = panel(title)
         bound_input_panel(self.input_box)
@@ -140,7 +140,7 @@ class ToolPane(QWidget):
         self.result = QWidget()
         self.result_layout = QVBoxLayout(self.result)
         self.result_layout.setContentsMargins(0, 0, 0, 0)
-        self.result_layout.setSpacing(16)
+        self.result_layout.setSpacing(22)
         self.result_reading=QWidget()
         self.result_reading_layout=QVBoxLayout(self.result_reading)
         self.result_reading_layout.setContentsMargins(0,0,0,0)

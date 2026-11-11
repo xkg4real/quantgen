@@ -354,9 +354,12 @@ class WindowTypographyTests(unittest.TestCase):
         self.assertIn("QPushButton[nav='true']:checked { font-weight: 600; }", sheet)
         self.assertIn("font-size: 12px; font-weight: 600; }", sheet.split("QHeaderView::section")[1].split("\n")[0])
         self.assertIn("qlineargradient", sheet.split("QFrame#panel {")[1].split("}")[0])
-        self.assertIn("border-bottom: 2px solid #D2D5C9", sheet)
+        # Owner 2026-11-11: light section lines — panels keep their gradient but use one 1px line halfway
+        # from the border colour to the background (no 2px bottom edge), with roomier spacing.
+        self.assertIn("border: 1px solid #ecece6; border-radius: 16px;", sheet.split("QFrame#panel {")[1].split("}")[0])
+        self.assertNotIn("border-bottom: 2px solid #D2D5C9", sheet)
         w.theme.setCurrentIndex(1)
-        self.assertIn("border-bottom: 2px solid #0A110E", w.styleSheet())
+        self.assertIn("border: 1px solid #223028; border-radius: 16px;", w.styleSheet())  # dark: light line too
 
     def test_watchlist_score_header_uses_header_font_and_korean_tones(self):
         from tests.desktop_watchlist_acceptance import sample_rows

@@ -114,12 +114,13 @@ def controls_stylesheet(p, dark: bool) -> str:
     icons, theme = icon_dir(), "dark" if dark else "light"
     down, up = f"{icons}/chevron-down-{theme}.svg", f"{icons}/chevron-up-{theme}.svg"
     left, right = f"{icons}/chevron-left-{theme}.svg", f"{icons}/chevron-right-{theme}.svg"
+    line = mix(p.border, p.bg, 0.5)  # owner 2026-11-11: light section lines ("구획 선을 연하게")
     return f"""
           QComboBox {{ padding: 5px 30px 5px 10px; }}
           QComboBox::drop-down {{ subcontrol-origin: padding; subcontrol-position: center right; width: 28px; border: 0; background: transparent; }}
           QComboBox::down-arrow {{ image: url({down}); width: 12px; height: 12px; }}
           QComboBox::down-arrow:on {{ image: url({up}); }}
-          QComboBox QAbstractItemView {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; border-radius: 10px; padding: 4px; outline: 0; selection-background-color: {p.accent_soft}; selection-color: {p.text}; }}
+          QComboBox QAbstractItemView {{ background: {p.surface}; color: {p.text}; border: 1px solid {line}; border-radius: 10px; padding: 4px; outline: 0; selection-background-color: {p.accent_soft}; selection-color: {p.text}; }}
           QComboBox QAbstractItemView::item {{ min-height: 26px; padding: 3px 8px; border-radius: 6px; }}
           QAbstractSpinBox {{ padding-right: 26px; }}
           QAbstractSpinBox::up-button, QAbstractSpinBox::down-button {{ subcontrol-origin: border; width: 24px; border: 0; background: transparent; }}
@@ -146,8 +147,9 @@ def controls_stylesheet(p, dark: bool) -> str:
 def popup_stylesheet(p, dark: bool) -> str:
     """Applied directly to a completer popup: a parentless top-level list window that the window
     stylesheet never reaches (markets_view.SymbolCompleter.set_theme)."""
+    line = mix(p.border, p.bg, 0.5)  # owner 2026-11-11: light section lines ("구획 선을 연하게")
     return f"""
-          QListView {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; border-radius: 12px;
+          QListView {{ background: {p.surface}; color: {p.text}; border: 1px solid {line}; border-radius: 12px;
                        padding: 0; outline: 0; font-size: 13px; }}
           QListView::item {{ min-height: 28px; padding: 3px 10px; border-radius: 8px; color: {p.text}; }}
           QListView::item:selected, QListView::item:hover {{ background: {p.accent_soft}; color: {p.text}; }}
@@ -216,12 +218,12 @@ def window_stylesheet(p, dark: bool) -> str:
     t, d = TONE_COLORS[dark], PANEL_DEPTH[dark]
     controls = controls_stylesheet(p, dark)
     nav_v, nav_h = NAV_PADDING
+    line = mix(p.border, p.bg, 0.5)  # owner 2026-11-11: light section lines ("구획 선을 연하게")
     return f"""
           QWidget {{ background: {p.bg}; color: {p.text}; font-size: 13px; font-weight: 400; }}
           QFrame#sidebar {{ background: {p.surface}; border-right: 1px solid {p.border}; }}
           QFrame#panel {{ background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 {d['top']}, stop:1 {d['bottom']});
-                          border: 1px solid {p.border}; border-top-color: {d['edge_top']};
-                          border-bottom: 2px solid {d['edge_bottom']}; border-radius: 14px; }}
+                          border: 1px solid {line}; border-radius: 16px; }}
           QFrame#panel QLabel {{ background: transparent; }}
           QLabel {{ background: transparent; font-size: 15px; }}
           QLabel[role='title'] {{ font-size: 30px; font-weight: 600; letter-spacing: -0.6px; }}
@@ -236,8 +238,8 @@ def window_stylesheet(p, dark: bool) -> str:
           QLabel[role='number'] {{ font-size: 32px; font-weight: 600; letter-spacing: -0.6px; font-family: "QG Interface"; }}
           QLabel[role='muted'], QLabel[role='caption'] {{ color: {p.muted}; }}
           QLabel[role='caption'] {{ font-size: 14px; font-weight: 500; }}
-          QToolTip {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; padding: 7px 10px; font-size: 14px; font-weight: 400; }}
-          QPushButton {{ padding: 7px 12px; border: 1px solid {p.border}; border-radius: 8px; background: {p.surface}; font-weight: 500; }}
+          QToolTip {{ background: {p.surface}; color: {p.text}; border: 1px solid {line}; padding: 7px 10px; font-size: 14px; font-weight: 400; }}
+          QPushButton {{ padding: 7px 12px; border: 1px solid {line}; border-radius: 8px; background: {p.surface}; font-weight: 500; }}
           QPushButton:hover {{ background: {p.accent_soft}; }}
           QPushButton:focus, QLineEdit:focus, QComboBox:focus {{ border: 2px solid {p.accent}; }}
           QPushButton[primary='true'], QPushButton:checked {{ background: {p.accent}; color: {p.on_accent}; }}
@@ -248,8 +250,8 @@ def window_stylesheet(p, dark: bool) -> str:
           QPushButton[tool='true']:focus {{ border: 2px solid {p.accent}; }}
           QPushButton[nav='true']:checked {{ font-weight: 600; }}
           QPushButton:disabled {{ color: {p.muted}; background: {p.surface_2}; }}
-          QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox {{ min-height: 24px; padding: 5px; border: 1px solid {p.border}; border-radius: 6px; background: {p.surface}; }}
-          QTableWidget {{ font-size: 14px; background: {p.surface}; alternate-background-color: {p.surface_2}; gridline-color: {p.border}; border: 0; selection-background-color: {p.accent_soft}; selection-color: {p.text}; }}
+          QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox {{ min-height: 24px; padding: 5px; border: 1px solid {line}; border-radius: 6px; background: {p.surface}; }}
+          QTableWidget {{ font-size: 14px; background: {p.surface}; alternate-background-color: {p.surface_2}; gridline-color: {line}; border: 0; selection-background-color: {p.accent_soft}; selection-color: {p.text}; }}
           QTableWidget::item {{ padding: 4px 8px; }}
           QHeaderView::section {{ padding: 6px 8px; border: 0; background: {p.surface_2}; color: {p.muted}; font-size: 12px; font-weight: 600; }}
           QScrollArea {{ border: 0; }}
@@ -259,7 +261,7 @@ def window_stylesheet(p, dark: bool) -> str:
           QTabWidget#marketInnerTabs QTabBar::tab {{ background: transparent; color: {p.muted}; padding: 7px 14px; margin-right: 6px; border: 0; border-bottom: 2px solid transparent; border-radius: 0; }}
           QTabWidget#marketInnerTabs QTabBar::tab:selected {{ background: transparent; color: {p.accent}; border-bottom: 2px solid {p.accent}; font-weight: 600; }}
           QLineEdit#guideSearch {{ min-height: 34px; padding: 6px 12px; border-radius: 20px; font-size: 14px; }}
-          QListWidget#guideSuggestions {{ background: {p.surface}; border: 1px solid {p.border}; border-radius: 14px; padding: 4px; outline: 0; }}
+          QListWidget#guideSuggestions {{ background: {p.surface}; border: 1px solid {line}; border-radius: 14px; padding: 4px; outline: 0; }}
           QListWidget#guideSuggestions::item {{ border-radius: 9px; color: transparent; }}
           QListWidget#guideSuggestions::item:selected, QListWidget#guideSuggestions::item:hover {{ background: {p.accent_soft}; }}
           QPushButton[chip='true'] {{ padding: 6px 12px; border-radius: 15px; font-weight: 500; }}
