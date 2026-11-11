@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings
 next_ids: ⑤-2/g, ⑤-2/e, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-12T00:47:00+09:00
+updated_at: 2026-11-12T02:10:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/macro-fixtures-fx-clock-20261111
@@ -307,6 +307,7 @@ Claude가 받은 뜻(소유자에게 그대로 알림):
 4. 결정 9(현행 유지)의 조건: 기록기 단위는 `run_family` 안에서 PNL_COMPUTED보다 낮은 PROGRESS를 쓰지 않습니다. 결정 14: N-M1-02/b 보류 유지.
 
 ## 7. 주의사항
+- **노션 반영 위치 (소유자 지시, 2026-11-12 02:10 KST, 원문 "1107-그대로. 노션은 앞으로 REMAINING WORK 한 곳에만 반영해 주세요. 1107 페이지는 복원하지 않습니다."):** 노션은 REMAINING WORK(4065c916fe0c80d2af08c0e7f68817fa) 한 곳에만 반영합니다. 보관된 "1107 QUANTGEN : 업무 기록 및 남은 일"(40f5c916fe0c80179ed0c75b3292542a)은 복원하지 않고 더 쓰지도 않습니다.
 
 - **화면(UI) 작업 기준 (소유자 결정 UI-D1~D4, 2026-11-11):** UI 기준 앱은 네이티브 PyQt(`quantgen_desktop/`) 하나입니다. 화면을 건드리기 전에 handoff 브랜치의 `AGENTS.md` 6절과 `UI_SESSION_CURRENT.md` 맨 위(소유자 원문, 금지 사항)를 반드시 읽으십시오. next_ids의 ⑬-2/a3·⑬-2/k와 R3 실험실 화면 연결(C 묶음)은 화면 작업이므로 이 기준을 따릅니다. 지금 UI 세션(session_016uB1jf8m3p5GW1qzQVJe7k, 브랜치 `claude/friendly-bardeen-r6xe8f`, LEDGER ⑬-2/owner-14-native 진행 중)이 `quantgen_desktop/`의 Strategy Lab·도구 화면·글꼴을 고치고 있으니, 그 파일들은 `UI_SESSION_CURRENT.md`의 진행 항목을 확인하기 전에는 시작하지 않습니다.
 - UI 세션의 다음 compliance 갱신은 `docs/compliance/FACTS.md`, 08/13/14/19, `source-review.json`, `.github/workflows/runtime-smoke.yml`을 고칩니다. PR #102와 겹치므로 나중에 병합하는 쪽이 main을 합치고 기준선을 다시 만듭니다.
