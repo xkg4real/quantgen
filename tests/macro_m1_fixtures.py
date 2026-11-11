@@ -1784,13 +1784,17 @@ def test_macro_fixtures_finds_the_date_column_by_name():
     line. Now the date column is the header cell named `date` in any letter case, or FRED's `observation_date` (the
     names core/ficc/data.py reads FRED rows by), wherever it stands, and `date` when both are present. F27 with `code`
     first is written with its columns unchanged and in their order, stamped as the same rows with `date` first. A
-    date that is not ISO (2026/10/02, blank), a header with no date column and a header with two are refused naming
-    the reference file (and the line), and nothing is written. Follow-up of the independent check: a date cell is
-    YYYY-MM-DD, alone or followed by 'T' or a space and a time; the first ten characters were taken, so 2026-09-301
-    became 2026-09-30 and 20260930 or 2026-W40-3 were read without a word, and these are now refused with the file and
+    date that is not ISO (2026/10/02, blank) and a header with two date columns are refused naming the reference file
+    (and the line), and nothing is written. Follow-up of the independent check: the first ten characters were taken,
+    so 2026-09-301 became 2026-09-30 and 2026-W40-3 was read without a word; these are now refused with the file and
     line. A leading byte order mark is dropped when the file is read, so F27 with `code` first saved as Excel's
     "CSV UTF-8" is no longer refused as lacking `code`. A row with fewer or more cells than the header is refused with
-    the file and line (it ended in a bare TypeError or "dict contains fields not in fieldnames")."""
+    the file and line (it ended in a bare TypeError or "dict contains fields not in fieldnames"). Review of PR #107,
+    F1: R3 also refused what the generator read before it, a header with no date name (it read the first column) and
+    a cell written YYYYMMDD (date.fromisoformat takes it on Python 3.11 and later). Now such a header falls back to
+    its first column, so `code,day,close` is refused at its first row naming `code` as the first column, and a cell
+    of exactly eight digits YYYYMMDD is read as that date; every other shape above stays refused
+    (test_macro_fixtures_reads_the_first_column_and_basic_dates_as_before_r3 covers the fallback)."""
     from core.calendars import clocks as K
     from tests.macro_m1_calendars import fixture_set, read_close_layout
     days = K.sessions_between("KR", date(2026, 9, 28), GPOST_DAY, cal=fixture_set())
@@ -1826,8 +1830,9 @@ def test_macro_fixtures_finds_the_date_column_by_name():
                 (code_first + "005930\n", f"{name} line {n + 1}: 1 cell(s), the header has 3"),
                 (code_first.replace(f",{days[2]},", f",{days[2]}1,", 1),           # a typed extra digit
                  f"{name} line 6: date '{days[2]}1' in column 'date' is not an ISO date"),
-                (code_first.replace("code,date,close", "code,day,close", 1),
-                 f"{name}: no date column in the reference header ['code', 'day', 'close']"),
+                (code_first.replace("code,date,close", "code,day,close", 1),            # F1: the first column
+                 f"{name} line 2: date '{codes[0]}' in column 'code' (the first column: no header cell is named date "
+                 "or observation_date) is not an ISO date"),
                 (code_first.replace("code,date,close", "code,date,close,Date", 1),
                  f"{name}: more than one date column ['date', 'Date']")):
             _refused(lambda: generate(text, out), ValueError, needle)
@@ -1852,21 +1857,81 @@ def test_macro_fixtures_finds_the_date_column_by_name():
                            ("observation_date,date,value", "2026-01-02,{d},4.1")):
             assert obs_dates(head + "\n" + "".join(body.format(d=d) + "\n" for d in days[:2])) == [
                 d.isoformat() for d in days[:2]], head
-        # a date cell is YYYY-MM-DD, alone or followed by 'T' or a space and a time (as pandas writes a timestamp):
-        # the date as written. Anything else is refused with the file and line, the shapes Python's own ISO parser
-        # also takes (20260930, 2026-W40-3) included
+        # a date cell is YYYY-MM-DD, alone or followed by 'T' or a space and a time (as pandas writes a timestamp), or
+        # exactly eight digits YYYYMMDD (F1): the date as written. Anything else is refused with the file and line, the
+        # week date Python's own ISO parser also takes (2026-W40-3) included
         for cell in ("2026-10-01 00:00:00", "2026-10-01T00:00:00Z", "2026-10-01 00:00:00+09:00", " 2026-10-01 ",
-                     "2026-10-01T23:59:59.5-04:00"):
+                     "2026-10-01T23:59:59.5-04:00", "20261001", " 20261001 "):
             assert obs_dates(f"DATE,DGS10\n2026-09-30,4.1\n{cell},4.2\n") == ["2026-09-30", "2026-10-01"], cell
-        for cell in ("not-a-date", "2026-10-011", "20261001", "2026-W40-4", "2026-10-01Tjunk", "2026-10-01 25:00",
-                     "2026-13-01", "2026-10-01x"):
+        for cell in ("not-a-date", "2026-10-011", "2026-W40-4", "2026-10-01Tjunk", "2026-10-01 25:00", "2026-13-01",
+                     "2026-10-01x", "2026-10-01xyz", "2026/10/01", "", "202610011", "2026101", "202610", "20261301",
+                     "20261032", "20261001T00:00", "20261001 00:00:00", "2026-1001", "+20261001"):
             _refused(lambda: obs_dates(f"DATE,DGS10\n2026-09-30,4.1\n{cell},4.2\n"), ValueError,
-                     f"plain.csv line 3: date '{cell}' in column 'DATE' is not an ISO date")
+                     f"plain.csv line 3: date '{cell}' in column 'DATE' is not an ISO date written YYYY-MM-DD "
+                     "(a time may follow after 'T' or a space) or YYYYMMDD")
         # a row with fewer or more cells than the header, in a file without the close rules: named with its line
         for text, needle in (("DATE,DGS10\n2026-09-30,4.1\n2026-10-01\n", "plain.csv line 3: 1 cell(s), the header has 2"),
                              ("DATE,DGS10\n2026-09-30,4.1\n2026-10-01,4.2,9\n",
                               "plain.csv line 3: 3 cell(s), the header has 2")):
             _refused(lambda: obs_dates(text), ValueError, needle)
+
+
+def test_macro_fixtures_reads_the_first_column_and_basic_dates_as_before_r3():
+    """Review of PR #107, F1: R3 found the date column only by its name and took only YYYY-MM-DD, so it refused files
+    the generator read before (the first column, through date.fromisoformat): Ken French's raw daily layout (a blank
+    first header cell, dates written YYYYMMDD), a first column with another name, a `date` column written YYYYMMDD.
+    No real reference file has been checked against either rule. Now a header with no cell named date or
+    observation_date falls back to its first column, and a cell of exactly eight digits is read as that calendar
+    date, so these files come out with the observation dates the generator gave them before R3. The date cell is
+    copied as written (the fixture keeps 19261103), and obs_date and session_date are written YYYY-MM-DD; the readers
+    of the fixtures read those, so F13 dated YYYYMMDD goes through the real calendar function and the post-close check
+    and is read by the shared reader and by docs/vol_backtest.fixture_closes exactly as F13 dated YYYY-MM-DD is. A
+    first column that holds no dates is refused naming the file, the line and the column as the first column."""
+    from core.calendars import clocks as K
+    from docs import vol_backtest as VB
+    from tests.macro_m1_calendars import fixture_set, read_close_layout
+    days = K.sessions_between("KR", date(2026, 9, 21), GPOST_DAY, cal=fixture_set())
+    with tempfile.TemporaryDirectory() as tmp:
+        src = Path(tmp) / "plain.csv"
+
+        def stamped(text):
+            src.write_text(text, encoding="utf-8")
+            return MF.fixture_rows(src, series_id="FRENCH_MOM_D", value_status="vendor_derived",
+                                   available_at_source="published", retrieved_at_utc=REFERENCE_RETRIEVED,
+                                   available_at=_available_at)
+        # Ken French's raw daily layout: the first header cell blank, the dates YYYYMMDD; the cell is copied as written
+        fields, rows = stamped(",Mom   \n19261103,   0.56\n19261104,  -0.12\n")
+        assert fields[:2] == ["", "Mom   "] and [(r[""], r["obs_date"], r["session_date"]) for r in rows] == [
+            ("19261103", "1926-11-03", "1926-11-03"), ("19261104", "1926-11-04", "1926-11-04")]
+        assert MF.fixture_text(fields, rows).split("\n")[1].startswith("19261103,   0.56,FRENCH_MOM_D,1926-11-03,")
+        for head, cells in (("day,value", ("2026-09-30,4.1", "2026-10-01,4.2")),         # another first-column name
+                            ("Day,value", ("20260930,4.1", "20261001,4.2")),
+                            ("date,value", ("20260930,4.1", "20261001,4.2")),          # the named column, YYYYMMDD
+                            ("﻿,Mom", ("20260930,0.5", "20261001,0.6")),           # a byte order mark before ""
+                            ("value,DATE", ("4.1,20260930", "4.2,20261001"))):         # named, not first
+            got = [r["obs_date"] for r in stamped(head + "\n" + "".join(c + "\n" for c in cells))[1]]
+            assert got == ["2026-09-30", "2026-10-01"], head
+        _refused(lambda: stamped("value,day\n4.1,2026-09-30\n"), ValueError,
+                 "plain.csv line 2: date '4.1' in column 'value' (the first column: no header cell is named date or "
+                 "observation_date) is not an ISO date")
+        # F13 dated YYYYMMDD and dated YYYY-MM-DD: the same rows for both readers of the declared close layout
+        ref = Path(tmp) / "ref"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+        f13, name = ref / _reference_row("F13")[1], FILE_OF["F13"]
+        iso = _invented_reference("F13", days)
+        basic = iso.replace("-", "")
+        assert iso.count("-") == 2 * len(days) and basic.split("\n")[1].startswith(days[0].strftime("%Y%m%d") + ",")
+        read = {}
+        for label, text in (("iso", iso), ("basic", basic)):
+            f13.write_text(text, encoding="utf-8")
+            out = Path(tmp) / label
+            assert [r["span"] for r in _calendar_generator(("F13",), ref, out)] == [f"{days[0]}..{days[-1]}"], label
+            fixture = (out / name).read_text(encoding="utf-8")
+            assert fixture.split("\n")[1].split(",")[0] == text.split("\n")[1].split(",")[0], label   # as written
+            read[label] = (read_close_layout("F13", fixture), VB.fixture_closes(out / name)[0])
+        assert read["basic"] == read["iso"] and [r["date"] for r in read["basic"][0]] == days
+        assert read["basic"][1] == [d.isoformat() for d in days]
 
 
 def test_macro_fixtures_copies_result_tables_byte_for_byte():

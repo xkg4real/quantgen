@@ -287,7 +287,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "d51cfddbf67dcea7f911e46ec306b60672d196a7a054ab7018348bcccf3c10c7",
+    "docs/compliance/FACTS.md": "6042b93d30c4ce5192d5affb1ebb2c3bb133f04aedd5f2f572058d1731158f18",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -524,7 +524,7 @@
     "tests/macro_m0_schemas.py": "ef2870b7170a9a56b642c55cd509d5e2438efd2698ef52656aec28300fd66aa1",
     "tests/macro_m1_books.py": "e940009e977b4b45f44025b3e91e9bbd0db8b87986b7ff0f0282c08e468f3bd0",
     "tests/macro_m1_calendars.py": "eae070f4744fa5185c3cdc4be3ac7f22cee65bbe2aab2ce1a77fceb55ae8e2e8",
-    "tests/macro_m1_fixtures.py": "849d350e934ed6004a758e3e278e444e90ed734ebf6fcc6f235c9214d6d2f53c",
+    "tests/macro_m1_fixtures.py": "67a2e683dd80406130c2be5d79d50508cf8aea35085f0cf08a0fa1dc20ec2b66",
     "tests/macro_m1_integration.py": "fc6a4190481f1dddafbe40daae4a6b905fd686da36ff5eef070b5aeb3036502f",
     "tests/macro_m1_pit.py": "47c7f40fa275632785e7edb59067bdb8b8c74bd3dac67cf7117d2589b37dd8ed",
     "tests/macro_m2_costed.py": "754a2af2fac98fb245dc6c0c6c53b23e978d4db1c0dff7ec224d712730c143f3",
@@ -683,163 +683,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "94dd73b6bb7fc193d7bf4cdd769ad115f362516d6be3255c0e54b4d5ca2b3719",
+      "source_digest": "3c279833c832b107e5af9bd4d839d2022f2faa08877a4b8e127daf58822e393b",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.788933+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.266323+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "94dd73b6bb7fc193d7bf4cdd769ad115f362516d6be3255c0e54b4d5ca2b3719",
+      "source_digest": "3c279833c832b107e5af9bd4d839d2022f2faa08877a4b8e127daf58822e393b",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.792096+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.268994+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "c18c4b9eeccbd1064d3ea6a31838d3c71e48ff61f5e000f0a8aeb6eaee72630a",
+      "source_digest": "68fc4000f2abe7e6768325093392cfbfda131cc09037d22cb703234c2b1c00ed",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.794883+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.271170+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "2ae3e42bb653895fb39ae533e2b5f6cffcec1234d68eb41c8fc31b91cbb17973",
+      "source_digest": "45b1ea950c972aa597e737975e6555353fb63bc4abeb463c1b36ad7a2801de26",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.796920+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.273136+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "8ba0543791258086330ddc885f3c50c9a3d7e54fd1a940bf5487c3910753a2e6",
+      "source_digest": "fd5420decf3295094a93c28b04979ea55cb487c7e0b38f9bb61f79ce7716abe3",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.799484+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.275690+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "b5ca76428f933330fd7ff4baac267e91637bc4e4c9f2489a354ed4d1ec269fd8",
+      "source_digest": "e37e1ba8141caea4dc4a044b36aa42ec1febe8fd51a550e02499b414b0a1f173",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.801933+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.277543+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
-      "source_digest": "94dd73b6bb7fc193d7bf4cdd769ad115f362516d6be3255c0e54b4d5ca2b3719",
+      "source_digest": "3c279833c832b107e5af9bd4d839d2022f2faa08877a4b8e127daf58822e393b",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.803858+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.280076+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "8": {
       "document_sha256": "50659615e7a2ad431f0ba7c6d124c6da1d1fc63b1ee67b7392362d8e79344f26",
-      "source_digest": "b5ca76428f933330fd7ff4baac267e91637bc4e4c9f2489a354ed4d1ec269fd8",
+      "source_digest": "e37e1ba8141caea4dc4a044b36aa42ec1febe8fd51a550e02499b414b0a1f173",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.806293+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.282016+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "07b584d52b192000056e6381585e26fe5b2a4e3f3a8cb6afde08d90f2a62b787",
+      "source_digest": "e4cd6fc19c197bc0f3bff9e17e3b037fa2d6de0bb64e9474ea0f6c2f35498b52",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.808751+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.283910+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "3a1a0ec15332693ce20fccca9a72158cca99075324c7d37bc31cfa268c4bb904",
+      "source_digest": "40bb10007281719c8487cc6e18cf767464732c343b2585d1ee9d7da4ab8e2d26",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.810662+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.285801+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "8307d4bf33824b027542dddf16885db16fc8794da972ebecc0ffbc6bd6c0d43b",
+      "source_digest": "fd929b910a69ec124daca414531f6f891023ffbe70fae45357b4e0dbdacc1885",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.812424+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.288898+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "27f99ecd4ee0e71aacfef2c41c5b52ec39cd2a9694ab3fa8713562bd1d198461",
+      "source_digest": "0b564bfa561a792dccaeafbcd5725c922f9c6fd848a749db1e414629c8801b91",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.814892+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.290934+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
-      "source_digest": "07b584d52b192000056e6381585e26fe5b2a4e3f3a8cb6afde08d90f2a62b787",
+      "source_digest": "e4cd6fc19c197bc0f3bff9e17e3b037fa2d6de0bb64e9474ea0f6c2f35498b52",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.817406+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.292819+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
-      "source_digest": "07b584d52b192000056e6381585e26fe5b2a4e3f3a8cb6afde08d90f2a62b787",
+      "source_digest": "e4cd6fc19c197bc0f3bff9e17e3b037fa2d6de0bb64e9474ea0f6c2f35498b52",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.819243+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.294903+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
-      "source_digest": "07b584d52b192000056e6381585e26fe5b2a4e3f3a8cb6afde08d90f2a62b787",
+      "source_digest": "e4cd6fc19c197bc0f3bff9e17e3b037fa2d6de0bb64e9474ea0f6c2f35498b52",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.821800+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.296950+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "f6baa9fa5b2b43f2c7820c840388b0bc1efd4686cda4438960a401cf1178214d",
+      "source_digest": "a2ca02347d7c8b343aab9d8c77b19722994519f25c43162c58084f641e5cb5c7",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.824320+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.299122+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "b5ca76428f933330fd7ff4baac267e91637bc4e4c9f2489a354ed4d1ec269fd8",
+      "source_digest": "e37e1ba8141caea4dc4a044b36aa42ec1febe8fd51a550e02499b414b0a1f173",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.826096+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.301219+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "94dd73b6bb7fc193d7bf4cdd769ad115f362516d6be3255c0e54b4d5ca2b3719",
+      "source_digest": "3c279833c832b107e5af9bd4d839d2022f2faa08877a4b8e127daf58822e393b",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.827956+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.302982+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
-      "source_digest": "d02b37d6ba36a4e0a47d833c465b608cc61e3289afac087d6029724b012b087a",
+      "source_digest": "e855087f37283e0bfa764c67f0b6297010f9886180d17a278b73ddbbbe440a9e",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.830391+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.304884+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "94dd73b6bb7fc193d7bf4cdd769ad115f362516d6be3255c0e54b4d5ca2b3719",
+      "source_digest": "3c279833c832b107e5af9bd4d839d2022f2faa08877a4b8e127daf58822e393b",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
-      "reviewed_at": "2026-11-11T15:44:21.832157+00:00",
-      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
+      "review_note": "Review of PR 107, finding F1: docs/compliance/FACTS.md corrects the dated note on the offline fixture generator's date rule. A reference header with no column named date or observation_date falls back to its first column, as the generator read it before review R3; a date cell may also be exactly eight digits YYYYMMDD, read as that calendar date; the date cell is copied as written and obs_date and session_date stay YYYY-MM-DD, the columns the fixture readers read; every other shape stays refused with the file and line. tests/macro_m1_fixtures.py extends the date-column test and adds one for the fallback. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
+      "reviewed_at": "2026-11-11T16:07:33.306968+00:00",
+      "source_commit": "c3101e56d12b271bbedaa243d8e2f9170aa4065f"
     }
   }
 }

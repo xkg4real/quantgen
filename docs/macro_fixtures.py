@@ -304,31 +304,48 @@ def _content_hash(values: list[str]) -> str:
     return hashlib.md5("\x1f".join(values).encode("utf-8")).hexdigest()
 
 
-# The reference date column, found by its name and never by its position (review of PR #101, R3): a header cell named
-# `date` in any letter case (the declared close layout writes `date`, Yahoo `Date`, FRED's older files `DATE`), else
-# FRED's `observation_date` (core/ficc/data.py reads FRED rows by either name). `fixture_rows` reads a reference file
-# as UTF-8 with any leading byte order mark dropped (Excel's "CSV UTF-8" writes one), so the mark hides no column name.
+# The reference date column (review of PR #101, R3; review of PR #107, F1): the header cell named `date` in any letter
+# case (the declared close layout writes `date`, Yahoo `Date`, FRED's older files `DATE`), else FRED's
+# `observation_date` (core/ficc/data.py reads FRED rows by either name), wherever it stands, so a long-form file with
+# `code` before `date` is read by its `date`; two cells of one such name are refused. A header with no such cell falls
+# back to its first column, as the generator read every file before R3 (Ken French's raw daily files leave the first
+# header cell blank; the layouts of the other reference files have never been checked). `fixture_rows` reads a
+# reference file as UTF-8 with any leading byte order mark dropped (Excel's "CSV UTF-8" writes one), so the mark hides
+# no column name and is never part of the first cell.
 DATE_COLUMN_NAMES = ("date", "observation_date")
-# A date cell is the date written YYYY-MM-DD, alone or followed by 'T' or a space and a time of day (HH:MM, :SS and a
-# fraction optional, then Z or a UTC offset optional, as pandas writes a timestamp). The observation date is the date
-# as written; the time is not read. Anything else (a trailing digit, 20260930, 2026-W40-3, 2026/09/30) is refused.
+# A date cell, surrounding blanks ignored, is either the date written YYYY-MM-DD, alone or followed by 'T' or a space
+# and a time of day (HH:MM, :SS and a fraction optional, then Z or a UTC offset optional, as pandas writes a
+# timestamp), or exactly eight digits YYYYMMDD (ISO 8601's basic form, as Ken French's daily files write it; the
+# generator before R3 read it through date.fromisoformat on Python 3.11 and later), read as that calendar date. The
+# observation date is the date as written; the time is not read. Anything else is refused with the reference file and
+# line: a trailing character (2026-09-301, 2026-09-30xyz), a week date (2026-W40-3), another separator (2026/10/02), a
+# blank, six digits (a YYYYMM month), a time after YYYYMMDD, an impossible date (2026-13-01, 20261301). The date cell
+# is copied into the fixture as written, like every reference cell; obs_date and session_date are written YYYY-MM-DD,
+# and the readers of the fixtures read those.
 _DATE_CELL = re.compile(r"([0-9]{4}-[0-9]{2}-[0-9]{2})(?:[T ](?:[01][0-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9](?:\.[0-9]+)?)?"
                         r"(?:Z|[+-](?:[01][0-9]|2[0-3]):?[0-5][0-9])?)?")
+_BASIC_DATE_CELL = re.compile(r"([0-9]{4})([0-9]{2})([0-9]{2})")
 
 
 def _obs_date(cell: str | None) -> date | None:
-    """The observation date of a reference date cell (`_DATE_CELL`, surrounding blanks ignored); None for any other
-    cell, an impossible date (2026-13-01) included."""
-    found = _DATE_CELL.fullmatch((cell or "").strip())
+    """The observation date of a reference date cell (`_DATE_CELL` or `_BASIC_DATE_CELL`, surrounding blanks ignored);
+    None for any other cell, an impossible date (2026-13-01, 20261301) included."""
+    text = (cell or "").strip()
+    extended, basic = _DATE_CELL.fullmatch(text), _BASIC_DATE_CELL.fullmatch(text)
     try:
-        return date.fromisoformat(found.group(1)) if found else None
+        if extended:
+            return date.fromisoformat(extended.group(1))
+        if basic:
+            return date(*(int(part) for part in basic.groups()))
     except ValueError:
         return None
+    return None
 
 
 def _date_column(src: Path, fields: list[str]) -> str:
-    """The one header cell of `fields` that names the date (DATE_COLUMN_NAMES, in that order of preference); a
-    ValueError naming the reference file and header when there is none or more than one."""
+    """The header cell of `fields` that names the date (DATE_COLUMN_NAMES, in that order of preference), or with none,
+    the first cell (the first column); a ValueError naming the reference file and header when one name is held by
+    two cells."""
     def norm(field: str) -> str:
         return field.lstrip("\ufeff").strip().lower()
     for name in DATE_COLUMN_NAMES:
@@ -338,9 +355,7 @@ def _date_column(src: Path, fields: list[str]) -> str:
         if found:
             raise ValueError(f"{src.name}: more than one date column {found} in the reference header {fields}; no "
                              "fixture is written")
-    raise ValueError(f"{src.name}: no date column in the reference header {fields} (a column named date in any letter "
-                     "case, or FRED's observation_date); the generator never takes a column by its position, so no "
-                     "fixture is written")
+    return fields[0]
 
 
 def _atomic_write(path: Path, data: str | bytes) -> None:
@@ -445,9 +460,10 @@ def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_s
     series_id (owner rulings 1 and 2 of 2026-11-11: F27 carries `code`, `series_id` and `close`, and 000660 is a
     reference series of its own). Every other row carries `series_id`. A file with fewer than `min_rows` rows is
     refused. The file is read as UTF-8, a leading byte order mark dropped. A row has as many cells as the header. The
-    observation date is read from the column named by `_date_column` (never by position) and is the date of a cell
-    written YYYY-MM-DD, alone or followed by a time (`_DATE_CELL`). Each refusal is a ValueError naming the reference
-    file and, for a row, its line."""
+    observation date is read from the column `_date_column` picks (the one named date in any letter case or
+    observation_date, else the first column) and is the date of a cell written YYYY-MM-DD, alone or followed by a
+    time (`_DATE_CELL`), or written YYYYMMDD (`_BASIC_DATE_CELL`); the cell itself is copied unchanged and obs_date
+    is written YYYY-MM-DD. Each refusal is a ValueError naming the reference file and, for a row, its line."""
     if value_status not in VALUE_STATUSES or available_at_source not in AVAILABLE_AT_SOURCES:
         raise ValueError(f"{src.name}: value_status {value_status!r} / available_at_source {available_at_source!r}")
     close_rules, long_form = "close" in columns, "code" in columns
@@ -463,6 +479,8 @@ def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_s
             raise ValueError(f"{src.name}: declared columns {absent} absent from the reference header {fields}; the "
                              "generator copies a reference file's columns unchanged and renames none")
         date_col = _date_column(src, fields)
+        first = "" if date_col.strip().lower() in DATE_COLUMN_NAMES else (
+            " (the first column: no header cell is named date or observation_date)")
         rows = []
         seen: set = set()
         last: dict = {}                                  # the last date of each code (long form), or of the file
@@ -476,8 +494,9 @@ def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_s
             cell = raw[date_col]
             obs = _obs_date(cell)
             if obs is None:
-                raise ValueError(f"{where}: date {cell!r} in column {date_col!r} is not an ISO date written YYYY-MM-DD "
-                                 "(a time may follow after 'T' or a space); no fixture is written")
+                raise ValueError(f"{where}: date {cell!r} in column {date_col!r}{first} is not an ISO date written "
+                                 "YYYY-MM-DD (a time may follow after 'T' or a space) or YYYYMMDD; no fixture is "
+                                 "written")
             sid = series_id
             if close_rules:
                 try:
