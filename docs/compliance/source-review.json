@@ -13,14 +13,10 @@
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
     "assets/branding/f1-wordmark.svg": "145715bc8df17cb3c99b734d4c7cb2b8e9bf1878e87c401f518f46b944ba41aa",
     "assets/favicon.png": "c8d4ecdcc08015073632c1d4a89e3b47c9bb312203e46f9937691131102fae46",
-    "assets/fonts/IBMPlexSansKR-Medium.ttf": "4a7130f56ce50bf10f9d383f624e50bad2c80bebc63e51f4269ece2c7d919166",
-    "assets/fonts/IBMPlexSansKR-Regular.ttf": "53750379270312368cf7641901f43a98dd892e3d9d5798cf25cdc245c85c71c0",
-    "assets/fonts/IBMPlexSansKR-SemiBold.ttf": "823c1956adf56c27c06b062725dfce23f266e4fd1366290f2957c8407482a817",
     "assets/fonts/OFL-GothicA1.txt": "ed95c33f80ccca002e3a360b683c43368f9c5eb024e5b992abb51af3c10b59bc",
-    "assets/fonts/OFL-IBMPlexSansKR.txt": "37784b44044a4ffd9256702b7c0982c37e5c8887ba90c6dca0479aea93dc898d",
     "assets/fonts/OFL-Noto-legacy.txt": "e42004c233f81eac2bd0ad6657381079b9207b78fd800e2b515724432e3c0624",
     "assets/fonts/OFL.txt": "d31ddd9f2bed32fd7e302a205cf2380ba0de6529152d239ef99cfb6f261bfc04",
-    "assets/fonts/README.txt": "7f6c380f3b9ca15105f5dd009c1a21c02d861a29a89b5617a49ed9ed17a705cc",
+    "assets/fonts/README.txt": "321aaad928c993338617d2da247792fd554bf4ff450167bc3bc8af9b8310e4ec",
     "assets/fonts/qg-interface-medium.otf": "f52aa3022d241b4cd03eb71f64a9389fc298760e057a317305312e24bb44fbbc",
     "assets/fonts/qg-interface-medium.ttf": "853a07f6eb4b756882c43ce6033305963e8be873a4895532272d48951c39beec",
     "assets/fonts/qg-interface-semibold.otf": "97c53221c1d3fadc48d692fab9bf5a545159be95a5c0228dc3b8cc24db4ec8dd",
@@ -291,7 +287,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "48a682f52c4671d732c56cd51fb47608473c9b9a0bb8dc3929fe320249fd489a",
+    "docs/compliance/FACTS.md": "ae77d2617badf6844a86fe7018d25a68ccc6d398fe8c24b38bfb83d1c34f73e0",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -385,7 +381,7 @@
     "quantgen_desktop/connections.py": "abef3e9ace3b2fa02660507eb171835d5b7290180c38a687395fc7a203e38eef",
     "quantgen_desktop/data_rights.py": "c251c7b622c62ed7b796caa04dec0408b34038ab46ccb2fd89b1d152d9b0d4e3",
     "quantgen_desktop/display_prose_catalog.py": "85cd9be4469c96b83a71aa0ac3c0dad0b04cbbf35649da8beb7cef12c9eb7708",
-    "quantgen_desktop/font_policy.py": "dfa85a88a18c2c0013a794c842a64aee28e9bb87bba66987ae6e962a4c4a163d",
+    "quantgen_desktop/font_policy.py": "7b09850d9fab38520512539aa09d75af3ac595135c1fa17e1a252c0499064df7",
     "quantgen_desktop/form_layout.py": "cb531c0e9f0592e18851b43308e6b084c77de8dad86b8e6ccdc5e3cf4d86ff89",
     "quantgen_desktop/fx.py": "30c519dee7dac02b55b683773ddee46fe86d78a1e31d155736e5634aa7b05d96",
     "quantgen_desktop/fx_narrative.py": "1078cff2724ff7c6bc75f8146e7893622323899ee5bb1c52100007c11649e52e",
@@ -430,8 +426,8 @@
     "quantgen_desktop/table_layout.py": "88fe45b9e8df59328bee520d1147f4189d4e4fffc1e8cf488340bb8eeb744eeb",
     "quantgen_desktop/tools.py": "09dd81fdc75947d32da6e15f96f618c09126c952bfa5b9ae35d5ef86e92885b9",
     "quantgen_desktop/translations.py": "2b94a001ff0d925a570ce1efff3d73f8a08e1de212343f23973e6ba753e6f943",
-    "quantgen_desktop/typography.py": "19b584b70576802ac50ebe949d7265a58e0a7683ccb361377104cf9e9e2ffa6f",
-    "quantgen_desktop/watchlist.py": "c40a4ad9097d24f44c7f3d7abd9febee4c2a4b174731a3d43b35ef7b6ac1d68e",
+    "quantgen_desktop/typography.py": "4b330c744490951b7f9b6993864638c123c70e9dc51ddcc1c41c9ce59eee45e9",
+    "quantgen_desktop/watchlist.py": "b6f23b31481c444fea248f7e5295b274cb654ba22cf183e3dc0ba41ab5fdb9ae",
     "quantgen_desktop/watchlist_live.py": "6d7b9dca2f18adf8a7b01a09ca395a6b776835f82d863669d00f90d426994597",
     "quantgen_desktop/wheel_guard.py": "44bfee9b20b358b794cfebdd71f0760b28b99bcd39a45cc36fa450a8d2ce68f6",
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
@@ -466,7 +462,7 @@
     "tests/desktop_carry_language_acceptance.py": "7f58ba4b867a9b0b4b6e672d564f5663931359880096d08e6ff930d2ff23df53",
     "tests/desktop_chart_rendering_acceptance.py": "1c23ec3b8fe6fc0d327cefb361ebd9866614e58c4a98e87a5c6bf066cb17bac9",
     "tests/desktop_commentary_acceptance.py": "ed1f58c2e133796d77ba3b6cdc5d187321f7491c1091ba3b36853aff773c8250",
-    "tests/desktop_compact_ui_acceptance.py": "f328c4212208825cc72c1fec8b5cdabc644c73b4aa3ccf1b96160a09da5d6d3f",
+    "tests/desktop_compact_ui_acceptance.py": "00157b98311f27444929170d8d27783b3684c2615652023c9c2037d493515df6",
     "tests/desktop_funding_inference_acceptance.py": "ebc0c752e57c8dc0c88024eaa171064eea6701e5b22671e437fdf3c8428295dc",
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
     "tests/desktop_home_live_acceptance.py": "1514c7b2446c314ad3514b21de3fccd7814f8db4e1081a7fc27480fe4163c687",
@@ -481,14 +477,14 @@
     "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
     "tests/desktop_market_chart_acceptance.py": "cb07b4d093bb0d7f28d93a19b22cd7a1636bfcdf855fdf82cbf4ff605ca53382",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
-    "tests/desktop_market_layout_acceptance.py": "44a353accc648d1c05114036176c2fd677a56524a2f9ab8fe4afed1a9fd619bc",
+    "tests/desktop_market_layout_acceptance.py": "087d3c259d887386cbb5c900717097b6c0686d34fdb1437d40dc2d780a790afd",
     "tests/desktop_market_tabs_acceptance.py": "152fb2d3f1a85e5b4417f00d3adc2b3f407ef7e19e43a2eaa7ac1275410236ec",
     "tests/desktop_markets_watchlist_acceptance.py": "6b10fe17e4193e9c742419e742580a74b2f6281642a18ee30206f3bb19a5d2ea",
     "tests/desktop_operation_fixes_acceptance.py": "2a18f23af3cadfa2b7029ba02798230c8c08187e47d9799b729df05c3b31fec0",
     "tests/desktop_owner_ui_charts_acceptance.py": "df55e067eeb0a3192b56c5dcb5f97e37ce84514aee420c0021ad29f74905964c",
     "tests/desktop_owner_ui_ficc_acceptance.py": "29f6186f6fe9d2ae31ecd555d8d18d01f02eb9eee3bde3e818ec1a8bc3f7d4f1",
     "tests/desktop_owner_ui_integration_acceptance.py": "51b20906b9d582dc20a786364cb8147f758fbc48ed6001edcdec38937c8972e9",
-    "tests/desktop_owner_ui_market_acceptance.py": "f59a96b33d13ab0a05973047c369de66f90184ac68cd444d3a61f70571b8e0dd",
+    "tests/desktop_owner_ui_market_acceptance.py": "69317c7b8887101b2e21fca37c0bcc01e95cd2d20957a1c305f451835e4fed8b",
     "tests/desktop_owner_ui_risk_acceptance.py": "24cb51f93c294fcebe11a99dddc0cbac114fa0bb005439b2219efe6615b7819d",
     "tests/desktop_owner_ui_strategy_acceptance.py": "986c312859e9406252fe48e73a21152a9ad90eb1c637797a845ecbadecb04094",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
@@ -502,8 +498,8 @@
     "tests/desktop_strategy_acceptance.py": "6da05d532c1b74b807ba32ecc9e5cfbce7df042ba32f8d2f9e4a0433b49d6f40",
     "tests/desktop_strategy_exposure_acceptance.py": "30c7e9f5c9132d77e546827f15232f769c27f19a60c6b21c3664772207c10ce4",
     "tests/desktop_swaption_conversion_acceptance.py": "113e1af795d0a9d592827330a2fdf115487dc4bb0b496d4ee3f3ba0d3b9185af",
-    "tests/desktop_typography_acceptance.py": "000a136f03feb6a7a7f2bb9d7560d058c4bcf87f8bc463d777c1704a7c286f8b",
-    "tests/desktop_watchlist_acceptance.py": "42dc54bdc550c7f74a81d8d878ac38428195f5395db4526da9d7a09aa46693ea",
+    "tests/desktop_typography_acceptance.py": "67b0a0a5c15c13dcebf92fed50bd5dc21735fba6bf47359423c007b0f202fd63",
+    "tests/desktop_watchlist_acceptance.py": "69dbc5d65982e483b51b835203442fae31ad826c619cefd74df9005cc17a202d",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
     "tests/etf_sleeve_disclosure_acceptance.py": "fa0338f032dfa63d6b003b42b8803cef1d6391be8b36d83e18c021d53cb7fe8a",
     "tests/expansion_acceptance.py": "7c9bff8790d88abdc324057a1e49426c5c0f2b5072acd15e652258a6fb27fc7e",
@@ -693,163 +689,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "d2fe24f307b16a031ca442e133774811a3c0c8d923ad1896bb6c70a215696b80",
+      "source_digest": "d1ebad65e021c68f33a2b6897e279512390772b9790f2d2b5c6a6b3a9a940d9b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.772258+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.508022+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "d2fe24f307b16a031ca442e133774811a3c0c8d923ad1896bb6c70a215696b80",
+      "source_digest": "d1ebad65e021c68f33a2b6897e279512390772b9790f2d2b5c6a6b3a9a940d9b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.774400+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.509852+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "f0c4096774ec16d5583a7f40db2cbf8adf64df925d0bcbd1e49ee21671266c67",
+      "source_digest": "f1e2666427e6b3b585ac793cb60d8c9a1d7904fa7c41e9bceeb70dcb48abc6f5",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.775871+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.512959+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "081b35036a658c99ccbe0db86dc8cf1999082f390b4e098f424132e3da9a38c6",
+      "source_digest": "b764eb652f8679a5a3dc48cec17035646e81486b33c29d4d17481046ce7652ac",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.777680+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.516830+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "2a66e300fa8bee47c27c43122960cf0cbf9bcb74dcc0edc411945ccf5597539c",
+      "source_digest": "c5bdadfdc1a929bf20c59a98559bd75b0175d57082303380c0a97c1a9fbca82b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.779189+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.521113+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "3b1810eecc401c20a02133b2a05d93cb6e30334f38fd8c0bbe44aa491eb3109f",
+      "source_digest": "11a7b27595707d2db355f1683bbb764b2531b31df58a124234310a9f47c3b322",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.781130+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.525064+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "7": {
       "document_sha256": "7a4399a1d194672d9ab3482babd412e894ffbde9070f9db4ba662a43eeb01c17",
-      "source_digest": "d2fe24f307b16a031ca442e133774811a3c0c8d923ad1896bb6c70a215696b80",
+      "source_digest": "d1ebad65e021c68f33a2b6897e279512390772b9790f2d2b5c6a6b3a9a940d9b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.782564+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.529018+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "8": {
       "document_sha256": "94b5b0a31f95e82c4215c5db477ef2716cec3b5da02f57d65c56f227903c1d05",
-      "source_digest": "3b1810eecc401c20a02133b2a05d93cb6e30334f38fd8c0bbe44aa491eb3109f",
+      "source_digest": "11a7b27595707d2db355f1683bbb764b2531b31df58a124234310a9f47c3b322",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.783906+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.530603+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "8fb459b895234eb4f2a0ccbdf83fcbec5e5ef1451c4d35095772ff01bb0837a9",
+      "source_digest": "19e3130dbbb0e75cbc60dd592a308d2edb398fd43e2686d505d471dc5968cb6c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.785278+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.532998+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "cca898041ef16c2c6b7c29dcfada68e36549070e3e20d16da35d0ea7fc375973",
+      "source_digest": "7415aa9a1fea0d00728329bcb3b4ab645dcfac3fbbf65db315d231c9232ed83e",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.786765+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.536908+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "e1f0694d6b4abc6e8f762ec39858dc80cca8465a4e70b66830a365431ed0e98c",
+      "source_digest": "a85f4a7a8c481c2d469b703130c309aced87a70e0b1098ec2e758b9ee5acdc16",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.788201+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.540897+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "12": {
       "document_sha256": "db67cb047f3d16af0b527e27817e51336ffd759d50e8e67f07d34f594f6b1b40",
-      "source_digest": "904fdb973a5350d7d87934e93d2b58f6c3fff9c498046ff918083b818ceb5e47",
+      "source_digest": "35feafe4a2adc2ec8162b652e01fd613f671d2807f5c52dff0a11ed628d1bd9c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.789590+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.545029+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "13": {
       "document_sha256": "15db4fa578c05662fa65624ad6bc02b471744443f4fa5e68cfd7f6e11cc5dcc2",
-      "source_digest": "8fb459b895234eb4f2a0ccbdf83fcbec5e5ef1451c4d35095772ff01bb0837a9",
+      "source_digest": "19e3130dbbb0e75cbc60dd592a308d2edb398fd43e2686d505d471dc5968cb6c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.791077+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.548852+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "14": {
-      "document_sha256": "b9c6e8b903526e1bb3130c58395cb0eda594659ca68b7a8cfc427c8063c5f9e6",
-      "source_digest": "8fb459b895234eb4f2a0ccbdf83fcbec5e5ef1451c4d35095772ff01bb0837a9",
+      "document_sha256": "1f90151548adf32db12908a164741bb3b905108759f365e50c58571facda02d8",
+      "source_digest": "19e3130dbbb0e75cbc60dd592a308d2edb398fd43e2686d505d471dc5968cb6c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.792549+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.552989+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "15": {
       "document_sha256": "9896586c46be4ccf85029ea7d2ad747f941c9eef4c737c822d2f57b417975b78",
-      "source_digest": "8fb459b895234eb4f2a0ccbdf83fcbec5e5ef1451c4d35095772ff01bb0837a9",
+      "source_digest": "19e3130dbbb0e75cbc60dd592a308d2edb398fd43e2686d505d471dc5968cb6c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.793921+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.556928+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "354ec3db36cf53900da606c74544b226c70cee4032a04d86393547620d15a7c3",
+      "source_digest": "2774ba5e874b34d6ef4e906bd4812eb7bfed61cdb0214f5b34c8d4b2a3e7563c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.795225+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.560980+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "3b1810eecc401c20a02133b2a05d93cb6e30334f38fd8c0bbe44aa491eb3109f",
+      "source_digest": "11a7b27595707d2db355f1683bbb764b2531b31df58a124234310a9f47c3b322",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.796889+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.564916+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "d2fe24f307b16a031ca442e133774811a3c0c8d923ad1896bb6c70a215696b80",
+      "source_digest": "d1ebad65e021c68f33a2b6897e279512390772b9790f2d2b5c6a6b3a9a940d9b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.798328+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.569229+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "19": {
-      "document_sha256": "aa3200e4d7e34e97bdcd7a70841eab5f88d6d55c865f87669b7ded3f6e909eaf",
-      "source_digest": "06b2a508892af4b1dd94ad9dd34350732bb9c4d861b047155bf2eed5c0f78255",
+      "document_sha256": "21e751d829ba5fbb1a781a8b1b97aec5cdec8e3aebbd7fa1d02584065368057b",
+      "source_digest": "5fafe9918b8a4d404dd07db85c91b94ace40e8ef67612c74735dfd3017c3363f",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.799968+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.573629+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "d2fe24f307b16a031ca442e133774811a3c0c8d923ad1896bb6c70a215696b80",
+      "source_digest": "d1ebad65e021c68f33a2b6897e279512390772b9790f2d2b5c6a6b3a9a940d9b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
-      "reviewed_at": "2026-11-10T23:06:30.801524+00:00",
-      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
+      "review_note": "Owner font decision UI-D6 (second mockup round, N3): Pretendard QG Interface kept with tighter tracking and one-step-lighter weights; IBM Plex files of plan A removed; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-11T02:36:56.575827+00:00",
+      "source_commit": "d90dda76bb832d6b56fce8569288a7ffc4deca13"
     }
   }
 }

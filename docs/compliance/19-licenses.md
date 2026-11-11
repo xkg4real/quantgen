@@ -154,7 +154,7 @@ OFL 판단은 법률 의견이 아닙니다. 실제 배포 패키지의 고지 �
 
 ### 2026-11-11 글꼴 A안(UI-D5)
 
-소유자가 글꼴 시안 14종 가운데 A안을 고르고 숫자는 기존 글꼴로 두라고 했습니다("일단 A로 바꾸고 숫자는 지금 폰트 유지해줘"). 네이티브 앱의 글자는 IBM Plex Sans KR 400/500/600([OFL-IBMPlexSansKR.txt](../../assets/fonts/OFL-IBMPlexSansKR.txt), SIL OFL 1.1, Copyright 2017 IBM Corp., Reserved Font Name "Plex")으로 그리고, 숫자는 기존 Pretendard 파생 QG Interface로 그립니다([글꼴 정책](../../quantgen_desktop/font_policy.py)). Plex 파일은 google/fonts `ofl/ibmplexsanskr`의 원본을 수정 없이 동봉하므로 예약 이름 규정상 이름을 바꾸지 않으며, 출처·SHA256·크기는 [글꼴 기록](../../assets/fonts/README.txt)에 있습니다. 파일 3개(약 8.5MB)가 설치본에 더해집니다(`pyproject.toml`의 `assets/fonts/*.ttf` 규칙, 설정 변경 없음). 글꼴 파일을 따로 판매하지 않는다는 OFL 조건을 유지합니다. Flet 화면과 Flet 차트 PNG는 계속 QG Interface입니다. OFL 판단은 법률 의견이 아니며 `review-required`와 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#owner-ui-native-2026-11-11)
+소유자가 글꼴 시안 14종 가운데 A안을 고르고 숫자는 기존 글꼴로 두라고 했습니다("일단 A로 바꾸고 숫자는 지금 폰트 유지해줘"). 네이티브 앱의 글자는 IBM Plex Sans KR 400/500/600(`OFL-IBMPlexSansKR.txt`, SIL OFL 1.1 — 같은 날 UI-D6으로 파일 제거, Copyright 2017 IBM Corp., Reserved Font Name "Plex")으로 그리고, 숫자는 기존 Pretendard 파생 QG Interface로 그립니다([글꼴 정책](../../quantgen_desktop/font_policy.py)). Plex 파일은 google/fonts `ofl/ibmplexsanskr`의 원본을 수정 없이 동봉하므로 예약 이름 규정상 이름을 바꾸지 않으며, 출처·SHA256·크기는 [글꼴 기록](../../assets/fonts/README.txt)에 있습니다. 파일 3개(약 8.5MB)가 설치본에 더해집니다(`pyproject.toml`의 `assets/fonts/*.ttf` 규칙, 설정 변경 없음). 글꼴 파일을 따로 판매하지 않는다는 OFL 조건을 유지합니다. Flet 화면과 Flet 차트 PNG는 계속 QG Interface입니다. OFL 판단은 법률 의견이 아니며 `review-required`와 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#owner-ui-native-2026-11-11)
 
 ### 2026-11-11 글꼴 N3(UI-D6)
 
