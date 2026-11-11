@@ -1408,6 +1408,7 @@ class ResearchWindow(QMainWindow):
             return
         self.market_chart.stop()
         self.markets_view.stop()
+        self.home_view.stop()
         self.quote_paint_timer.stop()
         event.accept()
 

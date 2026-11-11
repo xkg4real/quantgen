@@ -130,7 +130,7 @@ jobs:
       - name: Verify the owner's 14 UI issues on the native app (UI-D1..D4)
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m unittest tests.desktop_owner_ui_integration_acceptance tests.desktop_owner_ui_strategy_acceptance tests.desktop_owner_ui_ficc_acceptance tests.desktop_owner_ui_market_acceptance tests.desktop_owner_ui_risk_acceptance tests.desktop_owner_ui_charts_acceptance -v
+        run: python -m unittest tests.desktop_owner_ui_integration_acceptance tests.desktop_owner_ui_strategy_acceptance tests.desktop_owner_ui_ficc_acceptance tests.desktop_owner_ui_market_acceptance tests.desktop_owner_ui_risk_acceptance tests.desktop_owner_ui_charts_acceptance tests.desktop_home_markets_shell_acceptance tests.desktop_home_markets_home_acceptance tests.desktop_home_markets_markets_acceptance tests.market_rankings_acceptance -v
       - name: Verify shared KIS charts and realtime lifecycle with offline fixtures
         env:
           QT_QPA_PLATFORM: offscreen

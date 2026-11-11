@@ -190,8 +190,9 @@ class ResearchHomeTests(unittest.TestCase):
     def test_keyboard_moves_the_selection_and_pages_to_it(self):
         w = self.window()
         hv = w.home_view
-        first = hv.cards["^GSPC"]
-        for _ in range(4):
+        self.assertEqual(hv.selected, "^KS11")  # KOSPI selected by default (owner's reference)
+        first = hv.cards["^KS11"]
+        for _ in range(3):
             QTest.keyClick(hv.cards[hv.selected], Qt.Key.Key_Right)
         self.assertEqual(hv.selected, "VIXCLS")
         self.assertIn(4, hv.strip.shown())
@@ -343,11 +344,11 @@ class ResearchHomeTests(unittest.TestCase):
         view.resize(1200, 1400)
         view.show()
         self.wait(lambda: loader.calls and not view.jobs.busy)
-        self.assertEqual(loader.calls, [("^GSPC", "yfinance", home_view.HISTORY_DAYS)])
+        self.assertEqual(loader.calls, [("^KS11", "yfinance", home_view.HISTORY_DAYS)])  # KOSPI first
         view.select("VIXCLS")
         self.wait(lambda: len(loader.calls) == 2 and not view.jobs.busy)
         self.assertEqual(loader.calls[1][:2], ("VIXCLS", "fred"))
-        view.select("^GSPC")  # loaded recently: no second request
+        view.select("^KS11")  # loaded recently: no second request
         self.drain()
         self.assertEqual(len(loader.calls), 2)
         self.assertTrue(view.chart.values)

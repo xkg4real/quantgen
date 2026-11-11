@@ -729,7 +729,8 @@ class HomeView(QWidget):
         self.infos = {info.symbol: info for info in HOME_MARKETS}
         self.rows, self._row_signature = {}, None
         self.histories, self.failures = {}, {}
-        self.selected = HOME_MARKETS[0].symbol
+        # KOSPI first, as the owner's TradingView reference opens (2026-11-11); falls back to the first card.
+        self.selected = next((i.symbol for i in HOME_MARKETS if i.symbol == "^KS11"), HOME_MARKETS[0].symbol)
         self.range_key = DEFAULT_RANGE
         self._loading, self._wanted, self._epoch = None, None, 0
         self.jobs = Jobs(self)
