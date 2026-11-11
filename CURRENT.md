@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings
 next_ids: ⑤-2/g, ⑤-2/e, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-11T23:41:00+09:00
+updated_at: 2026-11-12T00:47:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: main
-work_commit: 6285430
+work_branch: claude/macro-fixtures-fx-clock-20261111
+work_commit: c3101e5
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/107
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -120,7 +120,16 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - **C:** 0b 채택 방침만 기록. Q12 = 7개 파일(`core/quant/strategies.py`, `validate.py`, `history.py`, `gate_ledger.py`, `core/research/strategy_workflow.py`, `core/quant/optimize.py`, `core/quant/risk.py`). Q13·Q14·Q16·Q17·Q18 기본값. 화면은 네이티브만(UI-D1), Flet 작업(Q19 포함) 안 함, PC 화면은 시안 먼저 + UI 세션 이식과 ⑦-2 병합 뒤. Q22의 잘라내기 여부는 2026-12 말 전에 따로 질문. 다음 단위 ⑨-3a/recorder/1(화면 없음, 결정 9 조건: run_family 안에서 PNL_COMPUTED보다 낮은 PROGRESS를 쓰지 않음).
 - **D:** 주문 한도 수치(1회 100만 원/5%, 하루 10건·300만 원/15%, 손실 중지 40만 원/2%, 종목 비중 20%/400만 원, 가격 이탈 3%·시세 15초·지정가만, 09:00~15:20, 모의 20거래일·30건 등)를 기본값으로 승인. **실거래는 켜지지 않음.** 순서: 안전 설계 문서 보고 → ⑦-2 병합 뒤 구현 → 모의투자 → 결과 보고 → 소유자의 실거래 전환 승인. D-14 법률 자문은 소유자가 의뢰.
 
-### 소유자 판정 "전부승인합노." — 파일럿·마감·병합 결정 27건 (2026-11-11 23:40 KST) — 가장 최신
+### ⑨-1/2/e + ⑨-1/2/d/2: PR #107 올림 (2026-11-12 00:47 KST) — 가장 최신
+
+- 브랜치 `claude/macro-fixtures-fx-clock-20261111`, head `c3101e5` (main `6285430` 병합 포함). [PR #107](https://github.com/xkg4real/quantgen/pull/107).
+- 내용: KRW=X(F16)를 뉴욕 17:00(외환 마감)에 찍음(관측=공개 같은 시각, 경계 0초, 주말 행은 파일·줄을 밝혀 거부, 평일 휴일은 그대로 찍음). 생성기 검토 지적 R1~R5 수정. 확인: macro_m1 네 모듈 통과(fixtures 26/28, calendars 24/28, pit 28/36, integration 8/8; 나머지는 소유자 입력·기준 자료 미실행), 준법 PASS, 독립 검증 3관점 12건 반영, 표적 돌연변이 10/10 제거.
+- 원장 줄(제안): ⑨-1/2/d/2 → e9ee15b, c0f88c0, 8ea325a, 98bdd89, d80db2c (기록 0df00c2, 68ce124); ⑨-1/2/e → 15264e7, 9869f67 (기록 0df00c2, 68ce124). 둘 다 병합 커밋도 적음.
+- 캐시 없는 전체 실행 진행 중(스크래치 이름 `fx1`, 비교 기준 `pp2`). 끝나면 PR 본문 갱신, CI 통과 시 병합.
+- **소유자에게 알릴 것:** (1) 실제 기준 파일의 머리글과 날짜 형식 확인 필요(F02, F04~F06, F09~F11, F19, F28): 이제 날짜 열 이름이 date/Date/DATE/observation_date여야 하고 날짜는 YYYY-MM-DD(시각 허용). (2) Yahoo의 KRW=X 일봉 날짜 기준은 미검증. (3) 서명 요청서의 F16 체크 칸은 소유자가 표시.
+- **자진 보고:** 00:3x KST 리드 세션의 `git ls-files -- 'docs/asset_expansion/*.csv' ...`가 보호 폴더의 파일 이름 10개를 찍음(파일은 안 엶). 결정 기록에 자진 보고로 적음(커밋 `c3101e5`). 앞으로 `docs/asset_expansion` 아래 패턴 검색에는 `':!docs/asset_expansion/cache'`를 붙일 것.
+
+### 소유자 판정 "전부승인합노." — 파일럿·마감·병합 결정 27건 (2026-11-11 23:40 KST)
 
 - 결정표(27행 + 13a)를 23:3x KST에 소유자에게 파일로 보냈고, 소유자가 원문 그대로 "전부승인합노."라고 답했습니다. 결정표 정의대로 모든 행의 `가`(13a 포함, S4 넣음)입니다.
 - 기록: PR #106 병합 완료(main `6285430`, 트리 = head `8e44708`, Compliance 성공). 원장 `⑥-1/rulings`. 결정표 `docs/product/DECISIONS_PILOT_CLOSE_MERGE_2026-11-11.md`(sha256 `7c95de59478f8a4379cbaf237f8ce243a9017b14dbeb0f1818c58cb16547f3ea`), `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` 맨 끝 절, R·K·H 세 문서에 가리키는 줄. CI 통과 시 병합하고 원장 `⑥-1/rulings`.
