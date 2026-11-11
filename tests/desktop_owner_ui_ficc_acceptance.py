@@ -27,6 +27,7 @@ from core.research.tool_export import report_bytes
 from core.ui_page_messages.rates import EN_TO_KO as FLET_RATES_KO
 from quantgen_desktop.localization import CAPTION_ROLE
 from quantgen_desktop.rates import KIND_TEXT, METHOD_TEXT
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 HANGUL = re.compile(r'[가-힣]')
 
@@ -48,7 +49,7 @@ class OwnerUiFiccTests(unittest.TestCase):
 
     def dispose(self):
         self.window.hide()
-        self.window.deleteLater()
+        delete_owned_widget(self.window)
         self.app.sendPostedEvents(None, QEvent.Type.DeferredDelete)
 
     def settle(self):

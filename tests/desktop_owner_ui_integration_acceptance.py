@@ -13,6 +13,7 @@ with patch.object(dotenv, "load_dotenv", return_value=False):
     from core.research.market_analysis import ETFRequest, execute_etf
     from quantgen_desktop.app import ResearchWindow
 from PyQt6.QtWidgets import QApplication
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 # One application for the whole module: a QApplication made inside a test and dropped at its end
 # deletes Qt objects other modules keep (wheel_guard's filter) when several modules share a process.
@@ -60,7 +61,7 @@ class AutomaticSourceTests(unittest.TestCase):
                     self.assertNotIn("source", pane.status.text().lower(), name)
                 self.assertEqual(w.rates.status.text(), prompt)
             finally:
-                w.deleteLater()
+                delete_owned_widget(w)
                 app.processEvents()
 
 
@@ -101,7 +102,7 @@ class AppNotesTests(unittest.TestCase):
         t.setColumnHidden(2, True); t.setColumnHidden(3, True)
         t._compact_layout_controller.measure()
         self.assertLess(t.maximumWidth(), full - 150)
-        t.deleteLater(); app.processEvents()
+        delete_owned_widget(t)
 
 
 if __name__ == "__main__":

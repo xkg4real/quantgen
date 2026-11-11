@@ -30,6 +30,7 @@ from PyQt6.QtWidgets import QApplication, QLabel, QMessageBox
 from core.i18n import LocaleContext
 from quantgen_desktop.watchlist import (BODY_PX, CELL_PADDING, NUMERIC_COLUMNS, SCORE_COLUMN, UNIT_GAP,
                                         WatchlistPanel, _split_number)
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 
 def sections_json(pane):
@@ -56,7 +57,7 @@ class WatchlistAlignmentTests(unittest.TestCase):
         for symbol, price, pct in (("005930", 193500, -3.97), ("000660", 528000, 1.54), ("207940", 1012000, 0.5)):
             self.panel.update_quote(symbol, price, pct, "2026-11-06T06:20:03+00:00", volume=21345678)
         self.panel.show()
-        self.addCleanup(self.panel.close); self.addCleanup(self.panel.deleteLater)
+        self.addCleanup(delete_owned_widget, self.panel)
         for _ in range(4):
             self.app.processEvents()
 
@@ -175,7 +176,7 @@ class MarketToolsKoreanTests(unittest.TestCase):
             pane.clear_result()
         with patch.object(QMessageBox, "question", return_value=QMessageBox.StandardButton.Yes):
             self.window.close()
-        self.window.deleteLater()
+        delete_owned_widget(self.window)
         self.app.sendPostedEvents(None, QEvent.Type.DeferredDelete)
 
     def apply(self, language):

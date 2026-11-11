@@ -26,6 +26,7 @@ from quantgen_desktop.localization import UiLabel
 from quantgen_desktop.narrative_view import NarrativeView
 from PyQt6.QtTest import QTest
 from PyQt6.QtWidgets import QApplication, QMessageBox, QTableWidget
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 RAW_IDS = ("max_sharpe", "min_vol", "risk_parity", "equal_weight", "ma_cross", "rsi_revert", "garch_t")
 
@@ -62,7 +63,7 @@ class OwnerUiRiskTests(unittest.TestCase):
             self.wait_idle(w)
             with patch.object(QMessageBox, "question", return_value=QMessageBox.StandardButton.Yes):
                 w.close()
-            w.deleteLater(); self.app.processEvents()
+            delete_owned_widget(w)
         self.addCleanup(cleanup)
         return w
 

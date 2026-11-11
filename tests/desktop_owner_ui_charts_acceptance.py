@@ -26,6 +26,7 @@ from PyQt6.QtCore import QPointF, QRectF
 from PyQt6.QtGui import QFontMetricsF, QPainter
 from PyQt6.QtTest import QTest
 from PyQt6.QtWidgets import QApplication, QMessageBox, QWidget
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 Z_CHART = '1y z-scores · descriptive only'
 
@@ -65,7 +66,7 @@ class ChartAxesTests(unittest.TestCase):
 
     def chart(self, language, x_label, y_label, x, series):
         host = Host(language)
-        self.addCleanup(host.deleteLater)
+        self.addCleanup(delete_owned_widget, host)
         chart = charts.LineChart(x_label, y_label, parent=host)
         chart.resize(790, 320)
         chart.set_series(x, series)
@@ -116,7 +117,7 @@ class ChartAxesTests(unittest.TestCase):
         for language, expected in (('en', ['Max Sharpe', 'Minimum volatility', 'Risk parity', 'Equal weight']),
                                    ('ko', [translate(k, 'ko') for k in ids])):
             host = Host(language)
-            self.addCleanup(host.deleteLater)
+            self.addCleanup(delete_owned_widget, host)
             chart = charts.FrontierChart(parent=host)
             chart.resize(790, 320)
             chart.set_output(output)
@@ -192,7 +193,7 @@ class MacroSheetTests(unittest.TestCase):
     def close(self):
         with patch.object(QMessageBox, 'question', return_value=QMessageBox.StandardButton.Yes):
             self.window.close()
-        self.window.deleteLater()
+        delete_owned_widget(self.window)
         self.app.processEvents()
 
     def settle(self):
@@ -367,7 +368,7 @@ class ReadingGuideTests(unittest.TestCase):
 
     def test_guide_follows_the_window_language_under_the_chart(self):
         window = ResearchWindow(auto_refresh=False, language='ko')
-        self.addCleanup(window.deleteLater)
+        self.addCleanup(delete_owned_widget, window)
         window.resize(1440, 900)
         window.show()
         pane = window.macro

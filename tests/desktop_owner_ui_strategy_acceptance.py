@@ -32,6 +32,7 @@ with patch.object(dotenv, 'load_dotenv', return_value=False):
     from quantgen_desktop.tools import fmt
 from PyQt6.QtCore import QEvent
 from PyQt6.QtWidgets import QAbstractButton, QApplication, QComboBox, QLabel, QMessageBox, QTableWidget
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 ROOT = Path(__file__).resolve().parents[1]
 CARD_FILES = sorted((ROOT / 'docs' / 'asset_expansion' / 'cards').glob('*.json'))
@@ -127,7 +128,7 @@ class OwnerStrategyTests(unittest.TestCase):
         self.pane.clear_result()
         with patch.object(QMessageBox, 'question', return_value=QMessageBox.StandardButton.Yes):
             self.window.close()
-        self.window.deleteLater()
+        delete_owned_widget(self.window)
         self.app.sendPostedEvents(None, QEvent.Type.DeferredDelete)
 
     def settle(self):
