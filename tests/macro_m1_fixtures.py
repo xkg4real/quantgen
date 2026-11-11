@@ -1893,6 +1893,7 @@ def test_macro_fixtures_copies_result_tables_byte_for_byte():
             assert rows[0]["span"] == "result table" and rows[0]["value_status_rule"].startswith("result table"), label
         manifest = out / "MANIFEST.csv"
         assert MF.freeze(manifest, rows) == 1 and load_manifest(manifest)[name]["md5"] == md5_of(out / name)
+        assert b"\r" not in manifest.read_bytes()                       # the manifest itself is written with LF
         assert require_fixture(name, manifest=manifest) == out / name and unlisted(manifest) == []
 
 
@@ -1902,7 +1903,8 @@ def test_macro_fixtures_compares_the_manifest_before_the_final_write():
     its manifest row. Now the built files are compared with the manifest before anything is written: the refused
     regeneration leaves every frozen byte and the manifest as they were, with a new file selected beside the changed
     one nothing is written either, and `generate(manifest=...)` refuses the same way. An unchanged regeneration
-    rewrites the same bytes and adds no row; once the reference is restored the new file is written and listed. The
+    rewrites the same bytes and adds no row, also when the manifest writes its md5 in upper case, and the manifest is
+    written with LF line ends; once the reference is restored the new file is written and listed. The
     manifest is written in the same final write as the fixtures, last (R4): with MANIFEST.csv locked, a run that
     adds a file fails and leaves that file neither written nor unlisted (`freeze` used to write the manifest after
     the fixtures were in place, so the new file stayed in the folder with no manifest row)."""
@@ -1938,8 +1940,14 @@ def test_macro_fixtures_compares_the_manifest_before_the_final_write():
         frozen = state()
         md5 = hashlib.md5(frozen[n13]).hexdigest()
         assert sorted(frozen) == sorted(["MANIFEST.csv", n13]) and unlisted(manifest) == []
-        assert load_manifest(manifest)[n13]["md5"] == md5
+        assert load_manifest(manifest)[n13]["md5"] == md5 and b"\r" not in frozen["MANIFEST.csv"]
         assert run("F13") == 0 and state() == frozen                     # the same reference: same bytes, no new row
+        # an md5 the manifest writes in upper case is the same md5: the unchanged regeneration is not refused
+        upper = frozen["MANIFEST.csv"].replace(md5.encode(), md5.upper().encode())
+        assert upper != frozen["MANIFEST.csv"]
+        manifest.write_bytes(upper)
+        assert run("F13") == 0 and manifest.read_bytes() == upper
+        manifest.write_bytes(frozen["MANIFEST.csv"])
         lines = good13.rstrip("\n").split("\n")
         f13.write_text("\n".join(lines[:-1] + [lines[-1].rsplit(",", 1)[0] + ",9999.00"]) + "\n", encoding="utf-8")
         _refused(lambda: run("F13"), MF.FixtureChanged, f"{n13}: {md5} -> ", "L5492")
@@ -1977,7 +1985,8 @@ def test_macro_fixtures_final_write_is_all_or_nothing():
     the bytes it replaces are read first, then the renames run, and a failure undoes the renames already made. With
     the second of three files locked: a regeneration leaves every byte as it was, a first generation leaves no output
     directory (nor the parent directories it created), and the error reaching the caller is the PermissionError
-    itself. A destination that cannot be read (here a directory with a fixture's name) stops the run before any
+    itself; a Ctrl+C (KeyboardInterrupt) at the same rename is undone the same way. A destination that cannot be read
+    (here a directory with a fixture's name) stops the run before any
     rename. If the undo itself fails, FinalWriteIncomplete names the file left with its new bytes, and that is the
     only file changed. No temporary file is left in any case. What a stopped process can leave is stated in
     `MF._commit` and is not demonstrated here."""
@@ -2005,8 +2014,9 @@ def test_macro_fixtures_final_write_is_all_or_nothing():
             return {p.name: p.read_bytes() if p.is_file() else "a directory" for p in out.iterdir()}
         real = os.replace
 
-        def with_locked(out, fn, fail_restore_of=None):
-            """Run `fn` with every rename onto out/F14 refused, and the second rename onto `fail_restore_of` too."""
+        def with_locked(out, fn, fail_restore_of=None, error=None):
+            """Run `fn` with every rename onto out/F14 refused (with `error`, by default a PermissionError), and the
+            second rename onto `fail_restore_of` too."""
             seen: dict = {}
 
             def replace(src, dst, *args, **kwargs):
@@ -2014,7 +2024,7 @@ def test_macro_fixtures_final_write_is_all_or_nothing():
                 if dst.parent == out:                                     # renames into `out` only, not the staging
                     seen[dst.name] = seen.get(dst.name, 0) + 1
                     if dst.name == n14 or (dst.name == fail_restore_of and seen[dst.name] > 1):
-                        raise PermissionError(13, "simulated: the file is open in another program", str(dst))
+                        raise error or PermissionError(13, "simulated: the file is open in another program", str(dst))
                 return real(src, dst, *args, **kwargs)
             os.replace = replace
             try:
@@ -2029,6 +2039,10 @@ def test_macro_fixtures_final_write_is_all_or_nothing():
             n: hashlib.md5(b).hexdigest() for n, b in frozen.items()}
         write_reference(500)                                              # every file would change
         _refused(lambda: with_locked(out, lambda: generate(out)), PermissionError, "simulated", n14)
+        assert state(out) == frozen
+        # Ctrl+C at the second rename (KeyboardInterrupt is not an Exception): undone the same way, then re-raised
+        _refused(lambda: with_locked(out, lambda: generate(out), error=KeyboardInterrupt("simulated Ctrl+C")),
+                 KeyboardInterrupt, "simulated Ctrl+C")
         assert state(out) == frozen
         fresh = Path(tmp) / "new" / "deeper" / "out"                      # a first generation, two parents created
         _refused(lambda: with_locked(fresh, lambda: generate(fresh)), PermissionError, "simulated")
