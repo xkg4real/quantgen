@@ -154,7 +154,7 @@ python -B -c "import json,sys; c=json.load(open(sys.argv[1],encoding='utf-8'))['
 **멈춘 뒤의 일.** 아래는 실행 전에 Claude가 적어 둔 해석이며 소유자의 말이 아닙니다. 같은 내용이 [`results/RULINGS.md`](../../results/RULINGS.md)의 SPY 항목에 있습니다.
 
 - 멈춤 지점에서 멈춘 것은 실행이 아닙니다. SPY의 기록 실행은 첫 실행(WITHHELD) 그대로이고, 그동안 파일럿 1은 보류입니다.
-- 실패한 수신(마지막 줄이 `FETCH spy fmp OK exit=0`으로 시작하지 않는 수신)은 아무 폴더도 남기지 않습니다. 5절의 표가 허락하는 경우에는 같은 줄을 그대로 한 번 더 실행합니다. 폴더 이름도 그대로 `fetch2-spy-fmp`입니다. 남은 폴더가 없으니 여전히 새 폴더입니다. 폴더 이름의 숫자는 시도한 횟수가 아니라 `OK`로 끝나 폴더를 남긴 수신의 차례입니다. `fetch3-spy-fmp`는 새 소유자 판정이 수신을 한 번 더 허락할 때 쓸 이름이고, 이 안내에는 그런 줄이 없습니다. 한 번 더 실행해도 실패하면 줄을 보내고 기다립니다. `OK`로 끝난 수신이 없는 동안에는 대조할 파일이 없습니다.
+- 실패한 수신(마지막 줄이 `FETCH spy fmp OK exit=0`으로 시작하지 않는 수신)은 아무 폴더도 남기지 않습니다. 예외가 하나 있습니다. `ERROR:` 줄 위에 `LEFT BEHIND:`로 시작하는 줄이 있으면 도구가 쓰다가 실패한 폴더를 지우지 못한 것이므로(백신이나 동기화 프로그램이 파일을 잡고 있던 경우), 같은 줄을 다시 실행하지 말고 마지막 세 줄을 Claude에게 보냅니다. 그 밖에 5절의 표가 허락하는 경우에는 같은 줄을 그대로 한 번 더 실행합니다. 폴더 이름도 그대로 `fetch2-spy-fmp`입니다. 남은 폴더가 없으니 여전히 새 폴더입니다. 폴더 이름의 숫자는 시도한 횟수가 아니라 `OK`로 끝나 폴더를 남긴 수신의 차례입니다. `fetch3-spy-fmp`는 새 소유자 판정이 수신을 한 번 더 허락할 때 쓸 이름이고, 이 안내에는 그런 줄이 없습니다. 한 번 더 실행해도 실패하면 줄을 보내고 기다립니다. `OK`로 끝난 수신이 없는 동안에는 대조할 파일이 없습니다.
 - 대조는 처음으로 `OK`로 끝난 수신의 파일로 합니다. `OK`로 끝난 수신은 다시 받지 않습니다(도구도 이미 있는 폴더 이름을 거절합니다).
 - 그 수신이 (b)~(d) 가운데 하나라도 만족하지 못하면 그 파일로는 대조하지 않습니다. SPY는 WITHHELD로 남고 파일럿 1은 보류됩니다. 그 뒤의 일(도구를 또 고치는 것, 다른 공급사를 쓰는 것, 그런 파일을 대조하는 것, 한 번 더 받는 것)은 새 소유자 판정이 있어야 인정됩니다(스펙 10.5). Claude가 받은 줄을 보고 선택지를 정리해 드립니다.
 - (a)~(d)를 만족하면 대조합니다. Claude는 대조 결과가 어떻게 나올지를 이유로 대조를 미루지 않습니다.
@@ -248,7 +248,7 @@ python -B -m tools.provider_parity.btc_diagnose --table "$rc\docs\nautilus_bridg
 - 도구 파일과 진단 스크립트의 sha256, 표의 기간, 도구가 쓰는 허용치 세 개.
 - 읽은 coinbase 파일과 bitstamp 파일의 sha256, 그리고 각 파일 옆에 수신 기록이 있었는지(`file`). 이 sha256은 첫 실행 때 올린 요약에 이미 들어 있는 값입니다.
 - 두 시계열에 함께 있는 날 수(`common`)와 연도별로 비교한 날 수(`returns`의 `days`).
-- 대조 도구가 센 불일치 일수와 허용 일수(고정 파일 두 짝의 `returns` `total` 줄에 있는 `tool_over`, `tool_allowed`)와 구간별 날 수(`levels`의 `days`). 셋 다 첫 실행 때 올린 요약에 이미 들어 있는 값입니다.
+- 대조 도구가 센 불일치 일수와 허용 일수(고정 파일 두 짝의 `returns` `total` 줄에 있는 `tool_over`, `tool_allowed`)와 구간별 날 수(`levels`의 `days`). 고정 파일이 들어간 두 짝의 값은 셋 다 첫 실행 때 올린 요약에 이미 들어 있습니다. coinbase와 bitstamp를 서로 견준 줄의 `days`는 요약에 없는 값이지만, 두 거래소 자료만으로 센 날 수입니다.
 - 수준 차이가 1.5%, 5%를 넘은 날 수(`levels`의 `over_p99_max`, `over_max`)와, 그 가운데 그 거래소만 따로 떨어진 날 수(`only_p99_max`, `only_max`: 고정 파일은 다른 거래소와 그 한도 안에서 맞고 두 거래소끼리는 그 한도보다 더 벌어진 날).
 - 불일치한 날의 갈래(`split`). 두 거래소 모두와 불일치한 날(`both`), 한 거래소와만 불일치하고 두 거래소끼리도 서로 다른 날(`..._only`: 그 거래소가 따로 떨어진 날), 한 거래소와만 불일치하지만 두 거래소끼리는 맞는 날(`..._edge`: 어느 쪽이 따로 떨어졌는지 가를 수 없는 날), 짝을 지을 수 없는 날(`..._unpaired`)로 나눕니다.
 - 두 거래소 모두와 불일치한 날에 두 거래소끼리는 서로 맞는지(`venues`).
@@ -287,7 +287,7 @@ python -B -m tools.provider_parity.btc_diagnose --table "$rc\docs\nautilus_bridg
 
 ## 5. 다르게 나왔을 때
 
-고쳐 보려고 애쓰지 말고 줄을 보내 주십시오. 실패한 수신과 REFUSED·ERROR로 끝난 대조는 아무 폴더도 남기지 않습니다. 그래서 표가 "같은 줄을 한 번만 더 실행합니다"라고 한 곳에서는 줄을 고치지 않고 그대로 다시 실행합니다(폴더 이름도 그대로입니다).
+고쳐 보려고 애쓰지 말고 줄을 보내 주십시오. 실패한 수신과 REFUSED·ERROR로 끝난 대조는 아무 폴더도 남기지 않습니다(`LEFT BEHIND:`로 시작하는 줄이 나온 경우만 예외이고, 그때는 다시 실행하지 않고 마지막 세 줄을 보냅니다). 그래서 표가 "같은 줄을 한 번만 더 실행합니다"라고 한 곳에서는 줄을 고치지 않고 그대로 다시 실행합니다(폴더 이름도 그대로입니다).
 
 | 화면 | 원인 | 할 일 |
 | --- | --- | --- |
@@ -303,7 +303,7 @@ python -B -m tools.provider_parity.btc_diagnose --table "$rc\docs\nautilus_bridg
 | 10단계 `UNAVAILABLE: fmp: HTTP <번호>`, `UNAVAILABLE: request failed (<종류>)`, `UNAVAILABLE: fmp answered with a message instead of rows` 또는 `UNAVAILABLE: fmp returned no rows` (줄 끝에 `request <수> of the page-back`가 없음) | 첫 요청이 실패했습니다. `request failed`는 FMP에 닿지 못했다는 뜻입니다(연결이 끊겼거나 시간이 초과됐습니다. `<종류>` 자리에는 `URLError`, `TimeoutError` 같은 이름이 나옵니다). 아무 폴더도 남지 않았습니다. | 첫 실행 안내 6절의 (3)과 같습니다. 같은 줄을 한 번만 더 실행하고, 같은 결과면 마지막 두 줄을 Claude에게 보냅니다. |
 | 10단계 `UNAVAILABLE: fmp: HTTP <번호>; request <수> of the page-back`, `UNAVAILABLE: request failed (<종류>); request <수> of the page-back` 또는 `UNAVAILABLE: fmp answered with a message instead of rows; request <수> of the page-back` | 이어 받는 요청 가운데 하나가 실패했습니다(FMP의 요청 한도이거나 연결 문제일 수 있습니다). 아무 폴더도 남지 않았습니다. | 1분쯤 뒤 같은 줄을 한 번만 더 실행합니다. 같은 결과면 마지막 두 줄을 Claude에게 보냅니다. |
 | 10단계 `UNAVAILABLE: fmp gave one date two different values in two answers` | 이어 받은 두 답이 같은 날짜에 다른 값을 주었습니다. 도구는 두 답이 맞닿는 날을 일부러 두 번 받아 값을 견주며, 어느 쪽도 고르지 않습니다. 아무 폴더도 남지 않았고 실행으로 세지 않습니다. 이 줄은 어느 날짜가 얼마나 다른지 말해 주지 않습니다. | 다시 실행하지 않고 마지막 두 줄을 Claude에게 보냅니다. 그 뒤의 일은 도구 변경과 새 소유자 판정이 있어야 합니다(7절). |
-| 10단계의 확인 줄이 `Traceback`으로 시작해 `FileNotFoundError`가 든 줄로 끝남 | 수신 줄이 `OK`로 끝나지 않아 `fetch2-spy-fmp` 폴더가 없습니다. | 확인 줄은 건너뜁니다. 수신 줄의 마지막 두 줄로 멈춤 지점의 (a)를 봅니다. |
+| 10단계의 확인 줄이 `Traceback`으로 시작해 `FileNotFoundError`가 든 줄로 끝남 | 수신 줄이 `OK`로 끝나지 않아 `fetch2-spy-fmp` 폴더가 없습니다. 또는 수신은 `OK`로 끝났는데 그 뒤에 창을 다시 열어 `$q`가 비었습니다. | 수신이 `OK`로 끝나지 않았으면 확인 줄은 건너뛰고, 수신 줄의 마지막 두 줄로 멈춤 지점의 (a)를 봅니다. 창을 다시 연 경우에는 6절대로 1~3단계를 다시 실행한 뒤 확인 줄만 다시 실행합니다(수신 줄은 다시 실행하지 않습니다). |
 | 11단계 `REFUSED: ...\compare2-spy: the output folder must be new` | 두 번째 대조를 이미 실행했습니다. | 다시 돌리지 않고 12단계로 갑니다. |
 | 11단계 `REFUSED: spy_fmp.csv: cannot be read (FileNotFoundError)` | 10단계가 `OK`로 끝나지 않아 파일이 없습니다. | 멈춤 지점으로 돌아갑니다. |
 | 11단계 `REFUSED: spy_kis.csv: cannot be read (FileNotFoundError)`(또는 `spy_yahoo_now.csv`) | 첫 실행의 수신 폴더가 없거나 이름이 다릅니다. | 줄을 Claude에게 보냅니다. |

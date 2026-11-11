@@ -124,7 +124,9 @@ What follows (how Claude takes "SPY-가-승인"):
      owner: the comparison is made, and the owner sends the fetch line with the results.
   3. *A stop is not a run.* A fetch is not a run (spec 10.5, Runs of record), so a stop at the stop point makes no
      second run. Meanwhile the SPY run of record stays WITHHELD and pilot 1 stays held.
-  4. *A fetch that fails* (its last line is not `FETCH spy fmp OK`) writes no folder and may be repeated. Where
+  4. *A fetch that fails* (its last line is not `FETCH spy fmp OK`) writes no folder and may be repeated. (One
+     exception the tool itself names: a line beginning `LEFT BEHIND:` above the `ERROR:` line means a folder was
+     written and could not be removed; the line is then not run again and the owner sends the last three lines.) Where
      section 5 of the guide says so, the owner runs the same line once more; if that fails too, the owner sends the
      lines and waits, and nothing is compared meanwhile. The same line means the same folder name: after a failed
      fetch `fetch2-spy-fmp` is still a new folder. The number in a folder name counts the fetches that ended `OK`

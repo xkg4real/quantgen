@@ -342,7 +342,7 @@
     "docs/product/PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md": "057e7c88ceb8d238c24cd269b3805a67108aa6d715a070859b965996d28735ab",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md": "0b26452ceb5e1eaed963b60f1a9f5b7bf8276552602fce776ea9b54625885144",
-    "docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md": "b875ed25870839907a526a8394808aa04f6821a09ba042db37ed2261f4e5a39f",
+    "docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md": "9604ff31a94d2e182bebfb71ec65cd83ca2f96cb8942deae39d3a337b288d4dd",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
@@ -682,163 +682,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "be532b91889951ae427ddd31a9f9a769defd4f6de2849e635092ceeb271c0c70",
+      "source_digest": "c949b0b867d9e58cbda0a2e9b93d6bb9997b55cea380dab511da90f2fe50f604",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.775257+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:17.999552+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "be532b91889951ae427ddd31a9f9a769defd4f6de2849e635092ceeb271c0c70",
+      "source_digest": "c949b0b867d9e58cbda0a2e9b93d6bb9997b55cea380dab511da90f2fe50f604",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.777585+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.001979+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "f01f1d00a3fcc5617f330374a80baa6905476d4cff3039932c5edf889386c9b7",
+      "source_digest": "99a148fd4d0cf67b6b229abfc3905bf921ed0d08075d8a17c3c49366702bbbbf",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.779937+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.004078+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "49343fba870d21382e392818b4f83c7eb827462a645c2a056b91195c1af37c0e",
+      "source_digest": "bff39ebc3467ddf9c3fc2bc7589557ecd1aea83cddb47592b20a03d260879466",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.781960+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.006553+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "0153c6661ec365f00533368ba4f61937d9f051294613a50411120a179f111cd0",
+      "source_digest": "30d55a165a8215c91ee643f89481bfef479e51a7e1eb0ddadb0bedf7cd55c85d",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.784608+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.008380+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "49780b7dcd42e66a57dc425382cea749beb1f106457b4c1369346f12867db8eb",
+      "source_digest": "877d156ed205dc658a32155d5531cce5047040a6b932bc3c64124dc7bb3567e7",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.786522+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.010837+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
-      "source_digest": "be532b91889951ae427ddd31a9f9a769defd4f6de2849e635092ceeb271c0c70",
+      "source_digest": "c949b0b867d9e58cbda0a2e9b93d6bb9997b55cea380dab511da90f2fe50f604",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.788410+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.013333+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "8": {
       "document_sha256": "50659615e7a2ad431f0ba7c6d124c6da1d1fc63b1ee67b7392362d8e79344f26",
-      "source_digest": "49780b7dcd42e66a57dc425382cea749beb1f106457b4c1369346f12867db8eb",
+      "source_digest": "877d156ed205dc658a32155d5531cce5047040a6b932bc3c64124dc7bb3567e7",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.790997+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.015413+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "3e39745eb0858777b4522714db9d14bbc27acd201f0ce06417cca31ff50339e5",
+      "source_digest": "674584d2c11fecf51c079c8328722037b8111f051ffd9e572ab5b85fde94b2e8",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.792772+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.017213+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "faaf95662d160e18077c42db36a53fd0df06a705937aaa402abfc598982ac66c",
+      "source_digest": "09895127c20d819e4a4bff184e7e22e2b4464400b0cc855447ee42929eab7bdd",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.794722+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.019335+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "63851f6ee9085171b019b03e45d56dec282fe737ad992a7d6b055fb3300768db",
+      "source_digest": "e00b83564ff8fa02c73ad20a36ac523fd99d7a0ade64de36f598a163c3d19a7d",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.797320+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.022098+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "13c1171784cdc2887b820b1166975e90ae1e0c17dd35f3f448755342b5092965",
+      "source_digest": "b0292d1c4b579d0c2c8d53c57cf883246ed5dc1bf80d99eaa632177d80acce24",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.799126+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.023864+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
-      "source_digest": "3e39745eb0858777b4522714db9d14bbc27acd201f0ce06417cca31ff50339e5",
+      "source_digest": "674584d2c11fecf51c079c8328722037b8111f051ffd9e572ab5b85fde94b2e8",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.801042+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.025612+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
-      "source_digest": "3e39745eb0858777b4522714db9d14bbc27acd201f0ce06417cca31ff50339e5",
+      "source_digest": "674584d2c11fecf51c079c8328722037b8111f051ffd9e572ab5b85fde94b2e8",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.802859+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.027531+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
-      "source_digest": "3e39745eb0858777b4522714db9d14bbc27acd201f0ce06417cca31ff50339e5",
+      "source_digest": "674584d2c11fecf51c079c8328722037b8111f051ffd9e572ab5b85fde94b2e8",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.804734+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.029783+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "796941c21c67b80f59ef06654b97ccbb3ab71680642b5a8186922c1191e03dff",
+      "source_digest": "ca8a62be897e62957a3e23ed787b10f287ffcb95d7fea3f3526baf5cf060ac05",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.807434+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.032456+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "49780b7dcd42e66a57dc425382cea749beb1f106457b4c1369346f12867db8eb",
+      "source_digest": "877d156ed205dc658a32155d5531cce5047040a6b932bc3c64124dc7bb3567e7",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.809362+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.035084+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "be532b91889951ae427ddd31a9f9a769defd4f6de2849e635092ceeb271c0c70",
+      "source_digest": "c949b0b867d9e58cbda0a2e9b93d6bb9997b55cea380dab511da90f2fe50f604",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.811217+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.037519+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
-      "source_digest": "0d65e29413846e6828a351c2195da5849b6253774542e8f902b1f6149626e17f",
+      "source_digest": "e214d3e4664f23ddd5fea06bbd302eda52f278e4d63553ebb1c268c4d288772a",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.812961+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.040192+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "be532b91889951ae427ddd31a9f9a769defd4f6de2849e635092ceeb271c0c70",
+      "source_digest": "c949b0b867d9e58cbda0a2e9b93d6bb9997b55cea380dab511da90f2fe50f604",
       "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Final check before the second SPY run, reviewed at 39d52a7: the rerun guide's stop point (four conditions, a check line that prints two counts of the fetch record, the row total as information), what a stop means in the guide, results/RULINGS.md and the rulings log, the limits of the second fixed version in the tool's README, the two test modules that hold them, and the three FACTS rows. parity_check.py and btc_diagnose.py are byte-identical; no destination, no sent item and no stored file changed. 08 was read again: its provider parity paragraphs hold.",
-      "reviewed_at": "2026-11-11T12:30:05.815530+00:00",
-      "source_commit": "39d52a7f0d16b5ec25e2bde54c8039fa87fe3268"
+      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
+      "reviewed_at": "2026-11-11T12:51:18.042870+00:00",
+      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
     }
   }
 }

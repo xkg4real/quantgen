@@ -347,8 +347,11 @@ python -B -m tools.provider_parity.btc_diagnose --table "$tab\pilot2_C3_btcusd.j
   `_only` days, in `split` and in `levels`: the pinned series agrees with the other venue and that provider is the
   odd one. `differ` days: all three stand apart. `_edge` days decide nothing. The rule Claude applies, with its
   numbers, was written before any output existed and is in `results/RULINGS.md`. In short: the output must first be
-  of the files of record (the hashes of the first lines, the `common` days and the tool's two counts equal the
-  summary of record). If, leaving out the days on which one provider alone is apart, both pinned pairs are inside
+  of the files of record: the first line's `tool_sha256` is the second fixed version's and its `script_sha256` the
+  recorded value (the summary of record names the first fixed version's tool sha256, which differs; that is
+  normal); each `file` line shows `fetch_record=yes` and the `file_sha256` the summary of record holds for that
+  provider; and the `common` days, the tool's two counts and the late segment's days are those of the summary of
+  record. If, leaving out the days on which one provider alone is apart, both pinned pairs are inside
   the tool's allowance and inside the late level limits, the FAIL comes from the venues' own closes: the cause
   counts as identified and the BTC-USD gate is passed by the ruling. If the pinned series stands apart from two
   venues that agree, the lines cannot say why (bad closes, another kind of price, another time of day): the cause
