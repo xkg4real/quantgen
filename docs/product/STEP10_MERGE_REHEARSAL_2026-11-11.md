@@ -6,7 +6,7 @@
 2. 충돌(양쪽이 같은 곳을 고쳐서 git이 스스로 합치지 못한 파일)은 5개였고 모두 풀었습니다. 4개는 정해진 규칙대로 풀리고, Bonds 화면 파일 하나(`ui/bonds_page.py`)는 아홉 군데를 손으로 합쳐야 했습니다. 그 뒤 검토에서 합친 Bonds 화면의 결함 다섯 가지가 더 나와, 연습용 브랜치의 둘째 커밋에서 고쳤습니다.
 3. 문법 검사와 상태 파일 점검은 통과했습니다. Bonds 화면 검사(테스트)는 연구 브랜치 쪽 33개 중 5개, main 쪽 2개가 실패합니다. 모두 한쪽 검사가 다른 쪽이 바꾼 화면 문구를 기대해서 생긴 실패입니다. 수정 3개를 더하면 모두 통과합니다(저장소 밖 사본에서 확인). 3개 가운데 2개는 화면이 아니라 검사가 기대하는 문구를 바꾸는 것이고, 1개는 한글 문구를 더하는 것입니다.
 4. 소유자가 정해 주실 것은 두 가지입니다. (가) 그 수정 3개와 준법 문서 기준선(검토한 파일들의 지문 목록) 갱신을 P3 병합에 함께 넣어도 되는지. (나) Bonds 화면에서 고른 방식 일곱 가지를 그대로 쓸지(본문 2.4): 라벨, 제공처 메시지, 표 머리글, 곡선 문장 위치, 칩 색, 숫자 입력 규칙, 한글 헤지 요약의 반올림과 매수·매도 표시. 일곱째는 PC 앱의 헤지 문구도 함께 바꿉니다. 예: 포지션 DV01 682.5, 전환계수 1이면 전에는 "반올림 10, 잔여 DV01 +32.50"이었고 지금은 위 타일과 같은 "반올림 11, 잔여 DV01 -32.50"입니다. 매도 포지션(-798.19)은 전에는 "선물 매도 -9.82계약 · 반올림 -10"이었고 지금은 "선물 매수 9.82계약 · 반올림 10"입니다.
-5. 캐시 없는 전체 검사는 아직 하지 않았습니다(주 세션이 합니다). 캐시는 보호 대상 자료 폴더(`docs/asset_expansion/cache`)입니다. 연습하는 동안 main이 두 번 바뀌었습니다(`96cca1f`에서 `9fc3817`로, 다시 `83046c1`로). 이 연습은 `9fc3817` 기준입니다. main이 바뀌면 연습은 낡으므로 Step 10 때 다시 해야 합니다.
+5. 캐시 없는 전체 검사를 연습용 브랜치의 둘째 커밋에서 돌렸습니다(2026-11-11 15:00 KST 무렵). 987행 가운데 843행 통과, 137행 미실행, 7행 실패입니다. main 쪽 결과(895행)와 견주면 92행이 늘었고 바뀐 행은 없습니다. 실패 7행 가운데 5행은 3번에 적은 Bonds 검사 5개이고(수정 3개 중 첫째를 넣으면 통과하는 것은 그 검사 묶음만 따로 돌려 확인했고, 전체 검사로는 확인하지 않았습니다), 나머지 2행은 main에서도 이 클라우드 환경에서는 실패하는 2행입니다. Nautilus 검사 57행 가운데 13행은 전용 파이썬이 없어 여기서는 돌지 않았습니다. 캐시는 보호 대상 자료 폴더(`docs/asset_expansion/cache`)입니다. 연습하는 동안 main이 두 번 바뀌었습니다(`96cca1f`에서 `9fc3817`로, 다시 `83046c1`로). 이 연습은 `9fc3817` 기준입니다. main이 바뀌면 연습은 낡으므로 Step 10 때 다시 해야 합니다.
 
 The rest of this document is in English. A statement marked "not verified" was not traced to a source line or a run.
 
@@ -298,9 +298,24 @@ The seven choices of section 2.4 and items 1, 3 and 5 above are one open questio
 
 ## 6. Full test
 
-Full cache-free test of the rehearsal commit: PENDING (the lead fills this in)
+Full cache-free test of the rehearsal commit `a5f904a` (the rehearsal merge with the review fixes), run by the lead on 2026-11-11 from 14:59 to 15:10 KST: **987 rows, 843 PASS, 137 NOT_RUN, 7 FAIL.**
 
-The commit to test is `a5f904a`, the rehearsal merge with the review fixes.
+How it was run: Linux, Python 3.13, in a sparse clone that never checks out the four protected cache files, with the Nautilus interpreter variable and the API key variable unset. The rows went to a scratch file. `qa/acceptance_results.json` was not written (its md5 was the same before and after).
+
+Compared with main's tree at `9fc3817` (the same kind of run on the head of PR #102, whose tree is main's: 895 rows, 769 PASS, 124 NOT_RUN, 2 FAIL), 92 rows are added, none is removed and none changes status:
+
+| Suite | Rows added | PASS | NOT_RUN | FAIL |
+|---|---|---|---|---|
+| nautilus | 57 | 44 | 13 | 0 |
+| bonds | 33 | 28 | 0 | 5 |
+| macro | 2 | 2 | 0 | 0 |
+
+- **The five bonds failures** are the five rows that section 4 names and item 8 of section 5 predicts: `test_hedge_798_x_08_over_65_side_rounding_and_residual`, `test_hedge_override_is_named_and_warned` and `test_rounding_is_half_away_from_zero_as_decided` stop at the label lookup (`KeyError: 'Position DV01 (blank = calculator)'`), and `test_stale_carried_forward_and_bad_unit_curves_are_flagged` and `test_synthetic_and_fred_are_labelled_apart_with_a_mocked_fetch` fail an assertion. Patch S1 is in neither rehearsal commit.
+- **The other two failures** fail on main's tree in this environment too: `macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache` (the cache-free clone has no local cache to read) and `papers/test_debate_run_kills_process_tree` (it calls `taskkill`, a Windows program).
+- **The 13 nautilus rows that did not run** are the layer-2 rows, which need the dedicated Nautilus interpreter. This machine does not have it.
+- **The two macro rows** are the read-only harness's Nautilus rows (`test_t_ro_01_nautilus_allowlist_pinned`, `test_t_ro_01_nautilus_confined_to_the_sandbox`).
+
+Not verified by this run: the merged tree with S1 to S3 applied as a full run (the patches were run per module only, section 4); the 13 layer-2 rows; anything on Windows. The owner's Windows full run is the one that counts for Step 10.
 
 ## 7. This rehearsal goes stale
 

@@ -338,6 +338,8 @@
     "docs/product/NAUTILUS_AND_DATA_SOURCES_2026-10-31.md": "b2b0fdb675bd2e04e79863d872fc6101f40a10744b5bd0516da17957a26e7936",
     "docs/product/OPTION_DISCLOSURE_2026-11-04.md": "ff314ee2043b524cdb8456f4af5c2ffe5f19f19d341ac28be471a6d3c7588373",
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
+    "docs/product/PILOT_OWNER_RUN_2026-11-11.md": "2b51b0f1cd2daef301877e0f685bc2d0a67f2bd77412b76a8a05f840bdc35065",
+    "docs/product/PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md": "057e7c88ceb8d238c24cd269b3805a67108aa6d715a070859b965996d28735ab",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md": "5510ffc40d0cf3f586bf7db7b8fdc9bb197add7b1ec2711b5c8b56e2b7870da3",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
@@ -360,6 +362,7 @@
     "docs/product/SECTION10_PAYLOAD_2026-10-30.md": "aadb8d4d84748ef49de5cfadc0335fcb747694291b192953fca1b7d311e3d426",
     "docs/product/SECTION10_TRIAGE_2026-10-30.md": "4b7a664b2a22cc198740f55ae6e0cfb2a349282d12ce2ef04b7772a491f5834c",
     "docs/product/SIGNALS_TRADE_COUNTS_2026-11-02.md": "262fab241bcc3db4e22817caf5b51c673af998d67d3576135c627f2ab89ae2ac",
+    "docs/product/STEP10_MERGE_REHEARSAL_2026-11-11.md": "3f0d784c78699341715c10142d3d02a44e1314384d23f9af1f4175c0e9c4f296",
     "docs/product/STRATEGY_EXPOSURE_2026-10-30.md": "1c1d5f061e978fdea11aa2fbc3f7d636fb94db00107a8da1daee70e18644b207",
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
     "docs/product/TERMINAL_TARGET_2026-10-30.md": "5c3e2eac999534371560def0e00d3ef45d0b7abcd960a6b1d7d7c3c9c3b05c29",
@@ -676,163 +679,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "4270d3725099b656f1dc287b9e5c915de031270476e7a7ffefd26d012ec47e5c",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.033940+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "2b0ae824b68fa2574a8f9dc9e4f220f8b617bac7467805cc06d643573705e51b",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.828963+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "4270d3725099b656f1dc287b9e5c915de031270476e7a7ffefd26d012ec47e5c",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.036606+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "2b0ae824b68fa2574a8f9dc9e4f220f8b617bac7467805cc06d643573705e51b",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.831300+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "e4c13a9ed9c303fa5d3bb15b2ed18408ad9ce6620026f25814ed2b367d38f54d",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.039008+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "81cedccc21925bdc9dab3e4a9b8596fbdced6048ac1c64847c261a0add92d9d4",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.834115+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "abc490c88d71b094b0b112025d572acc4ccddf6a28ec2989fd631bf7e3d48c52",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.041529+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "3870cf83eb5c9cdf1f26a971d35aac68bf7e2f12b5920d61b22fe591aa496853",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.836026+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "c54360bf79afa75fc15f0a4119499b251f19b70479eda1bfc5f4bc39fc7380e1",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.043740+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "56a865b9d7096031e1afad33f23930a73083eff88f20fefc1d61e690deacb614",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.837804+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "f5f7fe1b8898d5c9266986a3cb9d798bee63de025f1f7b660ae5917367b88865",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.045751+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "b68d453a73652f489143c43be5ff3cf9eacc3c6a4ee4dfe4f21fdc8ea3bb5d25",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.840227+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
-      "source_digest": "4270d3725099b656f1dc287b9e5c915de031270476e7a7ffefd26d012ec47e5c",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.047424+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "2b0ae824b68fa2574a8f9dc9e4f220f8b617bac7467805cc06d643573705e51b",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.842089+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "8": {
       "document_sha256": "50659615e7a2ad431f0ba7c6d124c6da1d1fc63b1ee67b7392362d8e79344f26",
-      "source_digest": "f5f7fe1b8898d5c9266986a3cb9d798bee63de025f1f7b660ae5917367b88865",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.050024+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "b68d453a73652f489143c43be5ff3cf9eacc3c6a4ee4dfe4f21fdc8ea3bb5d25",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.844434+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "c9c7a7fd8412b867996cea6e6b1b246b73eaa2113171a8b60eb9b4175119a35c",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.052051+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "1c3cac6d1bf0291e700630a6897a558092a04479af6e14fd0988b367b500d5ed",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.846269+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "3910c0bffceda2e836414afbd3c0d1ba17c5a0e36924997c505d59fd535ea3af",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.054125+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "8bd292962df22290d083d67b5eff774adf6ec6cc8e6548e54ca8120eccaa0703",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.848571+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "cda8621179de28943b55dad4b4a882f09e00958ea1841091a37b767073ca6ec1",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.056059+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "d2d416e177a5f5f8fab1368846889a81a4699f113eeafa28843b03497a181b5e",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.850436+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "8b3476dd68afb864d8258ce943687380e6122473ad6ef7e427176e51c77fe1f2",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.057892+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "a7be91ff0dff7199e2403aa0fa1a769c48f869b34866ae13721b1976f73cf3bf",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.852856+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
-      "source_digest": "c9c7a7fd8412b867996cea6e6b1b246b73eaa2113171a8b60eb9b4175119a35c",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.059694+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "1c3cac6d1bf0291e700630a6897a558092a04479af6e14fd0988b367b500d5ed",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.854630+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
-      "source_digest": "c9c7a7fd8412b867996cea6e6b1b246b73eaa2113171a8b60eb9b4175119a35c",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.061808+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "1c3cac6d1bf0291e700630a6897a558092a04479af6e14fd0988b367b500d5ed",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.857062+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
-      "source_digest": "c9c7a7fd8412b867996cea6e6b1b246b73eaa2113171a8b60eb9b4175119a35c",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.063503+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "1c3cac6d1bf0291e700630a6897a558092a04479af6e14fd0988b367b500d5ed",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.858823+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "4aa9b140da1058909a67bf6b20208a7aced848d6aa38a3c0fe3071a12dca97f4",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.065162+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "e11428df5cb9e3d9d97959a49488dbeff17abb579f0c0d07e5b1b0b2852fc6b8",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.860582+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "f5f7fe1b8898d5c9266986a3cb9d798bee63de025f1f7b660ae5917367b88865",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.066825+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "b68d453a73652f489143c43be5ff3cf9eacc3c6a4ee4dfe4f21fdc8ea3bb5d25",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.862954+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "4270d3725099b656f1dc287b9e5c915de031270476e7a7ffefd26d012ec47e5c",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.068889+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "2b0ae824b68fa2574a8f9dc9e4f220f8b617bac7467805cc06d643573705e51b",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.864661+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
-      "source_digest": "b35aa5a2965072b67e7180456536eed25ec6c8067b26a1266aa392ac7b7ad1c2",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.070594+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "137098769aa88041c7c7901d425e3c6fbb6f38f402e41d98060e8f660c2d6e0b",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.867915+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "4270d3725099b656f1dc287b9e5c915de031270476e7a7ffefd26d012ec47e5c",
-      "reviewed_by": "Claude series-files follow-up and provider parity test additions",
-      "review_note": "Sources changed since main 9fc3817: core/quant/run_registry_series_files.py and its tests, core/adoption (one source for the reading of record), tests/provider_parity_acceptance.py (tests only; the tool file is unchanged), docs/nautilus_bridge/OWNER_RULINGS_LOG.md and docs/compliance/FACTS.md. No numbered policy document changed.",
-      "reviewed_at": "2026-11-11T04:21:05.072578+00:00",
-      "source_commit": "7161fa296948b623ac7d3894c5e21af5ea30fc6d"
+      "source_digest": "2b0ae824b68fa2574a8f9dc9e4f220f8b617bac7467805cc06d643573705e51b",
+      "reviewed_by": "Claude pilot and closing preparation documents",
+      "review_note": "Three new documents under docs/product (owner run sheet for the pilots and the merge, readout and Step 10 skeleton, merge rehearsal record with its full-test result). No source file and no numbered policy document changed.",
+      "reviewed_at": "2026-11-11T06:11:06.870508+00:00",
+      "source_commit": "e0151784846d3b399e6a0b684b0645d44935a770"
     }
   }
 }
