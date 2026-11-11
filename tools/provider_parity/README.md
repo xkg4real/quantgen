@@ -46,11 +46,11 @@ Tool sha256 fixed by the owner ruling: 78dd1f508c713f9be138466bf69f5dd92d8bfdcc3
 ```
 
 - The second fixed version follows the owner's ruling of 2026-11-11 on the first SPY run ("SPY-가-승인", verbatim in
-  `results/RULINGS.md`). Only the fmp fetch changed (`fetch_fmp`, its helpers `_fmp_rows` and `_fmp_fault` and two constants): it pages
-  back (see Fetch). The module's own description was reworded in two places, and one comment. Every other top-level
-  statement of the file is the same as in the first fixed version. Thresholds, providers, outcome rules and summary fields are those of
-  the first runs. By that ruling a second SPY run made with this version counts for the pilot 1 gate; the first run
-  stays on record.
+  `results/RULINGS.md`). Only the fmp fetch changed (`fetch_fmp`, its helpers `_fmp_rows` and `_fmp_fault` and two
+  constants): it pages back (see Fetch). The module's own description was reworded in two places, and one comment.
+  Every other top-level statement of the file has the same syntax tree as in the first fixed version. Thresholds,
+  providers, outcome rules and summary fields are those of the first runs. By that ruling a second SPY run made with
+  this version counts for the pilot 1 gate; the first run stays on record.
 - The first fixed version is the version of the runs of record of 2026-11-11 (SPY WITHHELD, DGS3MO PASS, BTC-USD
   FAIL). Their summaries carry its sha256 as `tool.sha256`, and it stays their version:
   - first fixed version, commit `5202482e3c24de871b8483608b8a03beb07abe1e`
@@ -127,9 +127,9 @@ names a later day than the request before it. One known limit, unchanged since t
 request of `kis` names the day before the earliest date KIS sent, whatever that date is, so a KIS answer dated after
 the day asked for would move the next request later (the suite shows it with a fake KIS; the second SPY run fetches
 nothing from kis). A response holding an observation dated on or after 2027-01-01 is refused before anything is
-written. When a fetch succeeds but its first date is far after the
-window start, compare still takes the file: its coverage check counts the uncovered days. `short_history` is the
-reason to declare when a provider cannot serve the window at all.
+written. When a fetch succeeds but its first date is far after the window start, compare still takes the file: its
+coverage check counts the uncovered days. `short_history` is the reason to declare when a provider cannot serve the
+window at all.
 
 The line above `FETCH ... OK` reads `rows <n>, first <date>, last <date>, weekend dates <n>` for SPY and DGS3MO, and
 `..., missing days <n>` for BTC-USD. `weekend dates` must be 0: a US session or a Treasury business day never falls on
