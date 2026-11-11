@@ -9,6 +9,16 @@ would have stopped the reference files from being built or read, changes how a v
 more tests, and lists what the owner has to sign. No test changes status today: every real-data test below is still
 NOT_RUN until ⑨-2 lists its fixture, or until the owner extends a signed calendar file.
 
+> **Note added later on 2026-11-11 (⑨-1/2/e):** the owner answered question 1 below with ruling A-1 (the answer
+> "전부승인", recorded in `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`). The generator now stamps KRWX (F16) at the New
+> York 17:00 FX day close: a row dated d is observed and available at 17:00 America/New_York on d (21:00Z while New York
+> keeps daylight time, 22:00Z otherwise), and a row dated on a Saturday or Sunday is refused with the file and line
+> named. No calendar file is signed or changed and KRWX stays unregistered, so ruling 2 is now carried out for all five
+> ids. On the shipped calendars 23 of the 40 data rows, not 24, cannot be stamped by rule (question 4; rerun on
+> 2026-10-01). Whether Yahoo dates its KRW=X daily value at that close is not verified. The statements below that say
+> KRWX is refused, that no FX clock exists or that G-POST-01 waits for question 1 are left as written; the G-POST-01
+> sites still wait for F16 to be listed.
+
 Two things are not finished (a third, the stale `MANIFEST.csv` cell, was closed by the fifth commit; see "Manifest row
 refreshed"):
 
@@ -211,6 +221,8 @@ Questions 1, 2 and 3 block ⑨-2 for the tests they name: the answer is needed b
    daily close? (a) The NYSE calendar: rows dated on NYSE holidays would then be refused as non-sessions, and 16:00 ET
    is before the FX day ends. (b) A new signed FX close rule in the calendar files. (c) Leave F16 out; G-POST-01 then
    stays NOT_RUN. Nothing is implemented until the answer.
+   *Answered later on 2026-11-11 by owner ruling A-1 (New York 17:00, a rule in the generator, not a signed calendar
+   file) and implemented in ⑨-1/2/e; see the note at the top.*
 2. **Where is the R-11 record, and in what layout? Blocks G-REF-01, and blocks listing F20 for any test.** The body
    assumes F20 records, in the keyed layout above, every one of the 64 values except the 16 the product record holds.
    The spec only says F20 holds the DL-A section 7 post-patch values (L5815), which include the G-KR-05 share. It

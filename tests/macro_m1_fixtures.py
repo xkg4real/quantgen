@@ -1161,9 +1161,10 @@ def test_macro_fixtures_stamps_reference_series_from_the_market_calendar():
     and available at the close-print bound of their session (`clocks.close_stamp`, calendar_bound), values unchanged,
     in the layout the shared reader accepts, and they pass the post-close check: retrieved at the bound + 10 min is
     accepted and one second earlier is refused (spec L1493 rule 5). A row of F27, the long form, is stamped with its
-    own code as its series_id, so both 005930 and 000660 are stamped. F16 (KRWX) is refused: its row names FX, and the
-    calendars carry no FX clock (an open owner question). A non-session and a date outside signed coverage raise from
-    the clocks, so nothing is inferred. An id that is neither registered nor declared is refused with the error it
+    own code as its series_id, so both 005930 and 000660 are stamped. F16 (KRWX) names FX, which no signed calendar
+    carries: since owner ruling A-1 (2026-11-11) it is stamped at the New York 17:00 FX day close
+    (test_macro_fixtures_stamps_krwx_at_the_new_york_fx_close; until then it was refused). A non-session and a date
+    outside signed coverage raise from the clocks, so nothing is inferred. An id that is neither registered nor declared is refused with the error it
     always had, a declared series is stamped only as its row's value_status, and the registry knows none of the five
     ids."""
     from core.calendars import clocks as K
@@ -1243,16 +1244,18 @@ def test_macro_fixtures_stamps_reference_series_from_the_market_calendar():
         assert (view.market("KS11"), view.market("KOSPI_OFFICIAL_CLOSE"), view.schedule("DGS10")) == (
             "KR", registry.market("KOSPI_OFFICIAL_CLOSE"), registry.schedule("DGS10"))
         # F16: REFERENCE_FILES names FX. The spec's market clocks are KRX, NYSE and CRYPTO (L1289-1291) and
-        # core.calendars has no FX clock, so KRW=X is not stamped until the owner names its calendar
+        # core.calendars has no FX clock; owner ruling A-1 stamps KRW=X at the New York 17:00 FX day close
         _fid, rel, series, status, source, market, _tests = _reference_row("F16")
         assert (series, market) == ("KRWX", "FX") and market not in K.M1_MARKETS
-        fx = "KRWX: no market calendar for its REFERENCE_FILES market 'FX'"
-        _refused(lambda: available_at("KRWX", GPOST_KRWX_LAST, status), KeyError, fx, "not an M1 market")
+        _refused(lambda: clk.decision_time_utc(market, GPOST_KRWX_LAST), KeyError, "not an M1 market")   # still none
         src = Path(tmp) / f"reference_{Path(rel).name}"
-        src.write_text(_invented_reference("F16", _gpost_weekdays(GPOST_KRWX_LAST, 5)), encoding="utf-8")
-        _refused(lambda: MF.fixture_rows(src, series_id=series, value_status=status, available_at_source=source,
-                                         retrieved_at_utc=REFERENCE_RETRIEVED, available_at=available_at,
-                                         columns=MF.CLOSE_LAYOUT["F16"]), KeyError, fx)
+        fx_days = _gpost_weekdays(GPOST_KRWX_LAST, 5)
+        src.write_text(_invented_reference("F16", fx_days), encoding="utf-8")
+        _fields, fx_rows = MF.fixture_rows(src, series_id=series, value_status=status, available_at_source=source,
+                                           retrieved_at_utc=REFERENCE_RETRIEVED, available_at=available_at,
+                                           columns=MF.CLOSE_LAYOUT["F16"])
+        assert [(r["obs_utc"], r["available_at_utc"]) for r in fx_rows] == [
+            (f"{d}T21:00:00Z", f"{d}T21:00:00Z") for d in fx_days]                    # 17:00 EDT, before November
         # a long-form file is stamped by code, so it is refused without the ids its codes may name
         f27 = Path(tmp) / f"reference_{FILE_OF['F27']}"
         _refused(lambda: MF.fixture_rows(f27, series_id="005930", value_status="official_close",
@@ -1267,6 +1270,89 @@ def test_macro_fixtures_stamps_reference_series_from_the_market_calendar():
     # a Saturday is never rolled to a session, and the synthetic NYSE file starts in 2006
     _refused(lambda: available_at("KS11", date(2026, 10, 3), "vendor_close"), NotASession)
     _refused(lambda: available_at("GSPC", date(2005, 12, 30), "vendor_close"), CalendarCoverageError)
+
+
+def test_macro_fixtures_stamps_krwx_at_the_new_york_fx_close():
+    """Owner ruling A-1 (2026-11-11, docs/nautilus_bridge/OWNER_RULINGS_LOG.md): the generator stamps KRW=X (F16,
+    whose REFERENCE_FILES row names the market FX) at the New York 17:00 FX day close. No signed calendar carries FX
+    and none is added; KRWX stays unregistered. A row dated d is observed at 17:00 America/New_York on d, in UTC by the
+    zone's own rules, and available at that same instant (no ruling names a print delay): 22:00Z in standard time and
+    21:00Z in daylight time, on both sides of both 2026 changes (8 Mar, 1 Nov) and of the 2006 ones (2 Apr, 29 Oct),
+    where today's month rule would give the wrong hour on 13 Mar and 30 Oct 2006. A weekday is stamped without a
+    holiday list (none is signed for FX), 25 Dec included. A Saturday or a Sunday has no FX day close (the week closes
+    on Friday at 17:00 and reopens on Sunday at 17:00): refused by the instant function and by the post-close check,
+    and in a reference file with the file and line named, writing nothing. At the KRX decision of 2 Oct 2026
+    (06:30:30Z) the 1-Oct row is visible and the 2-Oct row is not, as the ruling's note says. T-FIX-01 on an F16
+    fixture: retrieved at its last close + 10 min it is written and accepted, one second earlier it is refused and
+    nothing is written; the shared reader accepts the file. The clocks of every other market are read unchanged."""
+    from core.calendars import clocks as K
+    from core.calendars.adapter import CalendarClocks
+    from core.ficc import contracts, pit
+    from tests.macro_m1_calendars import fixture_set, read_close_layout
+    registry, cal = contracts.default_registry(), fixture_set()
+    clk = CalendarClocks(registry, cal=cal)
+    available_at, check = MF.calendar_available_at(registry, clk), MF.calendar_check_fixture(registry, clk)
+    _fid, rel, series, status, source, market, _tests = _reference_row("F16")
+    assert (series, status, source, market) == ("KRWX", "vendor_close", "calendar_bound", MF.FX_MARKET) and (
+        MF.FX_MARKET == "FX")
+    assert MF.REFERENCE_SERIES["KRWX"] == (MF.FX_MARKET, "vendor_close") and not registry.is_series("KRWX")
+    assert MF.FX_MARKET not in K.M1_MARKETS and (MF.FX_CLOSE_LOCAL.hour, MF.FX_CLOSE_LOCAL.minute, MF.FX_CLOSE_TZ,
+                                                 MF.FX_PRINT_BOUND_S) == (17, 0, "America/New_York", 0)
+
+    def utc(d, hour):
+        return datetime(d.year, d.month, d.day, hour, tzinfo=timezone.utc)
+    stamps = {date(2026, 3, 6): 22, date(2026, 3, 9): 21,        # Fri before and Mon after Sun 8 Mar 2026 (EST -> EDT)
+              date(2026, 10, 30): 21, date(2026, 11, 2): 22,     # Fri before and Mon after Sun 1 Nov 2026 (EDT -> EST)
+              date(2006, 3, 13): 22, date(2006, 4, 3): 21,       # 2006: EDT from 2 Apr, not from the 2nd Sunday of March
+              date(2006, 10, 27): 21, date(2006, 10, 30): 22,    # ... to 29 Oct, not to the 1st Sunday of November
+              date(2026, 10, 1): 21, date(2026, 10, 2): 21,      # a Thursday and a Friday
+              date(2026, 12, 25): 22}                             # a weekday holiday: no FX holiday list is signed
+    for d, hour in stamps.items():
+        assert MF.fx_close_utc(d) == utc(d, hour) and available_at("KRWX", d, status) == (utc(d, hour),) * 2, d
+    reference_clocks = MF._ReferenceClocks(clk)
+    for m, d in (("KR", GPOST_DAY), ("US", date(2026, 10, 1))):
+        assert (reference_clocks.decision_time_utc(m, d), reference_clocks.close_print_bound_utc(m, d)) == (
+            clk.decision_time_utc(m, d), clk.close_print_bound_utc(m, d)), m
+    assert reference_clocks.is_session("KR", GPOST_DAY) and reference_clocks.cal is clk.cal
+    # the ruling's note: at the KRX close of 2 Oct only the value dated the day before is visible
+    assert available_at("KRWX", GPOST_KRWX_LAST, status)[1] <= GPOST_DECISION_UTC < available_at("KRWX", GPOST_DAY,
+                                                                                                    status)[1]
+    for d in (date(2026, 3, 7), date(2026, 3, 8), date(2026, 10, 3), date(2026, 10, 4), date(2026, 10, 31),
+              date(2026, 11, 1)):
+        _refused(lambda: available_at("KRWX", d, status), MF.NoFXDayClose, f"KRWX: FX {d} is a {d:%A}", "no day close")
+        _refused(lambda: reference_clocks.close_print_bound_utc("FX", d), MF.NoFXDayClose, f"FX {d} is a {d:%A}")
+    _refused(lambda: MF.fx_close_utc(datetime(2026, 10, 2, 12)), TypeError, "must be a datetime.date")
+    _refused(lambda: available_at("KRWX", GPOST_DAY, "official_close"), ValueError,
+             "KRWX: a reference series is stamped as its REFERENCE_FILES row declares it (vendor_close)")
+    days, name = _gpost_weekdays(GPOST_KRWX_LAST, 10), FILE_OF["F16"]
+    quarantine = timedelta(minutes=pit.QUARANTINE_MINUTES)
+    with tempfile.TemporaryDirectory() as tmp:
+        ref, out = Path(tmp) / "ref", Path(tmp) / "out"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+        f16 = ref / rel
+
+        def generate(retrieved):
+            return MF.generate(ref, out, retrieved_at_utc=retrieved, licence="test licence", owner="package D",
+                               available_at=available_at, check_fixture=check, only=("F16",))
+        for weekend in (date(2026, 9, 19), date(2026, 9, 20)):                  # a Saturday, a Sunday, on line 3
+            f16.write_text(_invented_reference("F16", days[:1] + [weekend] + days[1:]), encoding="utf-8")
+            _refused(lambda: generate(REFERENCE_RETRIEVED), MF.NoFXDayClose,
+                     f"{name} line 3: KRWX: FX {weekend} is a {weekend:%A}", "no fixture is written")
+            assert not out.exists()
+        f16.write_text(_invented_reference("F16", days), encoding="utf-8")
+        bound = available_at("KRWX", days[-1], status)[1]
+        assert bound == utc(days[-1], 21)
+        _refused(lambda: generate(bound + quarantine - timedelta(seconds=1)), pit.FixtureRefused,
+                 f"{name}:{len(days)}: KRWX {days[-1]}", "close + 10 min")
+        assert not out.exists()
+        rows = generate(bound + quarantine)
+        assert [(r["file"], r["span"]) for r in rows] == [(name, f"{days[0]}..{days[-1]}")]
+        got = read_close_layout("F16", (out / name).read_text(encoding="utf-8"))
+        assert [(r["date"], r["obs_utc"], r["available_at_utc"]) for r in got] == [(d, utc(d, 21), utc(d, 21))
+                                                                                   for d in days]
+        assert check(out / name) == len(days)
+        _refused(lambda: pit.check_fixture(out / name, registry=registry, clocks=clk), KeyError, "KRWX")
 
 
 def test_macro_fixtures_close_layout_is_one_layout_for_three_readers():
@@ -1499,8 +1585,9 @@ def test_macro_fixtures_writes_nothing_when_refused_and_only_the_selected_files(
     `only=("F13", "F14", "F27")` a reference directory holding CATALOG.md and those three files is enough: the three
     fixtures are written in REFERENCE_FILES order, pass the post-close check and are frozen; without `only` the same
     directory is refused, listing the other files. An unknown id and an empty selection are refused; a selected file
-    that is absent is the only one listed; a selection that includes F16 (KRW=X has no calendar) or a file retrieved
-    one second before its bound + 10 min writes none of the selected files. The command line takes `--only` and
+    that is absent is the only one listed; a selection whose F16 holds a Saturday row (no FX day close, owner ruling
+    A-1; before that ruling any F16 was refused) or a file retrieved one second before its bound + 10 min writes none
+    of the selected files. The command line takes `--only` and
     writes the same three files and manifest rows, on the calendars it is given."""
     from core.calendars import clocks as K
     from core.calendars.adapter import CalendarClocks
@@ -1565,10 +1652,13 @@ def test_macro_fixtures_writes_nothing_when_refused_and_only_the_selected_files(
         assert exc.missing == [_reference_row("F15")[1]] and not out3.exists()
         _refused(lambda: some(("F13", "F12")), ValueError, "--only names ['F12']")
         _refused(lambda: some(()), ValueError, "--only names no fixture id")
-        # a selection the generator refuses part-way writes none of it: F16 has no calendar (owner question); a file
-        # retrieved one second before its close-print bound + 10 min fails the post-close check on the staged file
-        (ref3 / _reference_row("F16")[1]).write_text(_invented_reference("F16", us), encoding="utf-8")
-        _refused(lambda: some(("F13", "F16")), KeyError, "KRWX: no market calendar for its REFERENCE_FILES market 'FX'")
+        # a selection the generator refuses part-way writes none of it: an F16 row dated on a Saturday has no FX day
+        # close (owner ruling A-1); a file retrieved one second before its close-print bound + 10 min fails the
+        # post-close check on the staged file
+        saturday = date(2026, 10, 3)
+        (ref3 / _reference_row("F16")[1]).write_text(_invented_reference("F16", us + [saturday]), encoding="utf-8")
+        _refused(lambda: some(("F13", "F16")), MF.NoFXDayClose,
+                 f"{FILE_OF['F16']} line {len(us) + 2}: KRWX: FX {saturday} is a Saturday")
         early = clk.close_print_bound_utc("KR", GPOST_DAY) + timedelta(minutes=pit.QUARANTINE_MINUTES, seconds=-1)
         _refused(lambda: some(three, retrieved=early), pit.FixtureRefused, "close + 10 min")
         assert not out3.exists()

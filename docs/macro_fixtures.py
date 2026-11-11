@@ -23,8 +23,9 @@ import hashlib
 import os
 import sys
 import tempfile
-from datetime import date, datetime, timezone
+from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -100,8 +101,22 @@ def _reference_series(files=CLOSE_LAYOUT) -> dict[str, tuple[str, str]]:
 
 # Ruling 2, the instants: the series of these files (KS11, GSPC, KRWX, 005930, 000660) are reference series. They are
 # not registered (the registry lists the inputs of the operating signals, and stays as it is): `calendar_available_at`
-# stamps each from the market calendar its REFERENCE_FILES row names. Every other unregistered id is refused as before.
+# stamps each from the market calendar its REFERENCE_FILES row names; KRWX, whose row names FX, from the FX day close
+# of owner ruling A-1 below. Every other unregistered id is refused as before.
 REFERENCE_SERIES = _reference_series()
+# Owner ruling A-1 of 2026-11-11 (docs/nautilus_bridge/OWNER_RULINGS_LOG.md, the answer "전부승인"): the generator
+# stamps KRW=X (F16, market FX) at the New York 17:00 foreign-exchange day close. No signed calendar holds an FX clock
+# (the spec's market clocks are KRX, NYSE and CRYPTO, L1289-1291), and none is added: the rule lives here, for the
+# reference series whose REFERENCE_FILES row names FX, and nothing is registered. A row dated d is observed at 17:00
+# America/New_York on d, converted to UTC with the zone's own rules (`zoneinfo`, as core/calendars/clocks.py does;
+# never a month rule), and available at that same instant: the close-print bound adds FX_PRINT_BOUND_S = 0 s because no
+# ruling names a delay (T-FIX-01 still adds its 10 minutes before retrieval). The FX week closes on Friday at 17:00 and
+# reopens on Sunday at 17:00 New York time, so a Saturday or a Sunday has no day close: such a row is refused with the
+# reference file and line named (NoFXDayClose), never rolled to another day. A weekday is not checked against any
+# holiday list, since none is signed for FX. Whether Yahoo dates its KRW=X daily value at this close is not verified.
+FX_MARKET = "FX"
+FX_CLOSE_LOCAL, FX_CLOSE_TZ = time(17, 0), "America/New_York"
+FX_PRINT_BOUND_S = 0
 # The two readers read two more files in this layout that no ruling names: F01 (the official KOSPI close; LA-02 part 1
 # declared its layout, tests/macro_m1_calendars.F01_COLUMNS) and F15 (SPY, which docs/vol_backtest.fixture_closes reads
 # for G-B5-02). Neither is a reference series: F01's series is registered, and F15's SPY is neither registered nor
@@ -128,6 +143,46 @@ class ReferenceMissing(FileNotFoundError):
 
 class FixtureChanged(ValueError):
     """A regenerated fixture's md5 differs from the frozen one (L5492): log the change, never overwrite silently."""
+
+
+class NoFXDayClose(ValueError):
+    """An FX row dated on a Saturday or a Sunday: the FX week closes on Friday at 17:00 New York time and reopens on
+    Sunday at 17:00, so the date has no day close (owner ruling A-1). Nothing is rolled or inferred."""
+
+
+def fx_close_utc(obs_date: date) -> datetime:
+    """The New York 17:00 FX day close of `obs_date` in UTC (owner ruling A-1 of 2026-11-11): 21:00Z while New York
+    keeps daylight time, 22:00Z otherwise, by the America/New_York zone rules of that date. NoFXDayClose for a Saturday
+    or a Sunday."""
+    if not isinstance(obs_date, date) or isinstance(obs_date, datetime):
+        raise TypeError(f"obs_date must be a datetime.date, got {type(obs_date).__name__}")
+    if obs_date.weekday() >= 5:
+        raise NoFXDayClose(f"{FX_MARKET} {obs_date.isoformat()} is a {obs_date:%A}: the FX week closes on Friday at "
+                           "17:00 New York time and reopens on Sunday at 17:00, so the date has no day close (owner "
+                           "ruling A-1); nothing is rolled or inferred")
+    return datetime.combine(obs_date, FX_CLOSE_LOCAL, tzinfo=ZoneInfo(FX_CLOSE_TZ)).astimezone(timezone.utc)
+
+
+class _ReferenceClocks:
+    """`clocks` as the generator reads them for a declared reference series: the clocks' own answer for every market
+    they carry, and for FX_MARKET the day close of owner ruling A-1 (`fx_close_utc`) as both the scheduled close and,
+    plus FX_PRINT_BOUND_S, the close-print bound. Every other attribute is the clocks' own."""
+
+    def __init__(self, clocks) -> None:
+        self._clocks = clocks
+
+    def __getattr__(self, name):
+        return getattr(self._clocks, name)
+
+    def decision_time_utc(self, market: str, session_date: date) -> datetime:
+        if market == FX_MARKET:
+            return fx_close_utc(session_date)
+        return self._clocks.decision_time_utc(market, session_date)
+
+    def close_print_bound_utc(self, market: str, session_date: date) -> datetime:
+        if market == FX_MARKET:
+            return fx_close_utc(session_date) + timedelta(seconds=FX_PRINT_BOUND_S)
+        return self._clocks.close_print_bound_utc(market, session_date)
 
 
 def selected_files(only=None) -> tuple[tuple[str, str, str, str, str, str, str], ...]:
@@ -160,13 +215,16 @@ def calendar_available_at(registry, clocks):
     published series at its publication instant. A series with no scheduled instant (live quote, as posted) is
     refused: backfilled history is never `inferred_from_retrieval`. `clocks` is `core.calendars.adapter.CalendarClocks`.
     A declared reference series (REFERENCE_SERIES; owner ruling 2 of 2026-11-11) is not registered: its close is
-    stamped the same way, on the market calendar its REFERENCE_FILES row names. An id that is neither registered nor
-    declared is refused."""
+    stamped the same way, on the market calendar its REFERENCE_FILES row names, and KRWX (market FX) at the New York
+    17:00 FX day close of owner ruling A-1 (`fx_close_utc`). An id that is neither registered nor declared is
+    refused."""
+    reference_clocks = _ReferenceClocks(clocks)
+
     def available_at(series_id: str, obs_date: date, value_status: str):
         if not registry.is_series(series_id):
             if series_id not in REFERENCE_SERIES:
                 raise KeyError(f"{series_id}: not a registered series id (every fixture series is named)")
-            return _reference_instants(clocks, series_id, obs_date, value_status)
+            return _reference_instants(reference_clocks, series_id, obs_date, value_status)
         if registry.obs_kind(series_id) == "close":
             market = registry.market(series_id)
             return clocks.decision_time_utc(market, obs_date), clocks.close_print_bound_utc(market, obs_date)
@@ -179,17 +237,19 @@ def calendar_available_at(registry, clocks):
 
 def _reference_instants(clocks, series_id: str, obs_date: date, value_status: str):
     """(obs_utc, available_at_utc) of a declared reference series' close: the scheduled close and the close-print
-    bound of the market its REFERENCE_FILES row names, read from `clocks` as for a registered close. Only the row's own
-    value_status is stamped. A market the calendars do not carry is refused: F16 names FX, and neither the spec's
-    market clocks (KRX, NYSE, CRYPTO; L1289-1291) nor core.calendars hold an FX clock, so KRW=X is not stamped until
-    the owner names its calendar. Nothing is inferred. A non-session, an unsigned file or a date outside coverage
-    raises from the clocks."""
+    bound of the market its REFERENCE_FILES row names, read from `clocks` (a `_ReferenceClocks`) as for a registered
+    close. Only the row's own value_status is stamped. F16 names FX, which no signed calendar carries: KRW=X is stamped
+    at the New York 17:00 FX day close of owner ruling A-1 (`fx_close_utc`), observed and available at that instant,
+    and a Saturday or Sunday row is refused (NoFXDayClose). Any other market the calendars do not carry is refused.
+    Nothing is inferred. A non-session, an unsigned file or a date outside coverage raises from the clocks."""
     market, declared = REFERENCE_SERIES[series_id]
     if value_status != declared:
         raise ValueError(f"{series_id}: a reference series is stamped as its REFERENCE_FILES row declares it "
                          f"({declared}), not as {value_status!r}")
     try:
         return clocks.decision_time_utc(market, obs_date), clocks.close_print_bound_utc(market, obs_date)
+    except NoFXDayClose as exc:
+        raise NoFXDayClose(f"{series_id}: {exc}") from None
     except KeyError as exc:
         raise KeyError(f"{series_id}: no market calendar for its REFERENCE_FILES market {market!r} "
                        f"({exc.args[0] if exc.args else exc}); a reference series is stamped from a market calendar, "
@@ -216,10 +276,11 @@ class _ReferenceMarkets:
 def calendar_check_fixture(registry, clocks):
     """`check_fixture(path)` for `generate`: `core.ficc.pit.check_fixture` (T-FIX-01: a close-type row retrieved before
     its session's close-print bound + 10 min is refused) on the same calendars as `calendar_available_at`, a declared
-    reference series' session being its REFERENCE_FILES market's."""
+    reference series' session being its REFERENCE_FILES market's; for KRWX (FX) the bound is the New York 17:00 FX day
+    close of owner ruling A-1, so its rows must be retrieved at 17:10 New York time of their date or later."""
     from core.ficc import pit
-    view = _ReferenceMarkets(registry)
-    return lambda path: pit.check_fixture(path, registry=view, clocks=clocks)
+    view, reference_clocks = _ReferenceMarkets(registry), _ReferenceClocks(clocks)
+    return lambda path: pit.check_fixture(path, registry=view, clocks=reference_clocks)
 
 
 def _iso(dt: datetime) -> str:
@@ -402,7 +463,10 @@ def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_s
                                      "fixture is written")
                 seen.add(key)
                 last[group] = obs
-            obs_utc, avail_utc = available_at(sid, obs, value_status)
+            try:
+                obs_utc, avail_utc = available_at(sid, obs, value_status)
+            except NoFXDayClose as exc:                    # a KRW=X row on a weekend: named with its file and line
+                raise NoFXDayClose(f"{where}: {exc}; no fixture is written") from None
             row = dict(raw)
             row.update({"series_id": sid, "obs_date": obs.isoformat(), "session_date": obs.isoformat(), "obs_utc": _iso(obs_utc),
                         "available_at_utc": _iso(avail_utc), "available_at_source": available_at_source,
