@@ -442,10 +442,14 @@ def _commit(items: list[tuple[Path, bytes]]) -> None:
     """Write `items` ((destination path, bytes)) in their order, all or nothing as far as the file system allows
     (review of PR #101, R4). `generate` passes the fixtures and, last, the manifest with its new rows, so a fixture is
     never left in place without its manifest row. A destination named twice is refused with a ValueError naming it
-    before anything is written (review of PR #107, F5). The missing destination directories are created, then every
-    file is written whole to a temporary file beside its destination, flushed and fsynced (`os.fsync`, F2), and the
-    bytes of each file it replaces are read; a failure in any of these steps removes the temporary files and the
-    directories this run created (F6) and changes nothing else. Then each temporary file is renamed over its
+    before anything is written (review of PR #107, F5): two spellings name one destination when their parent
+    directories resolve to one real directory (os.path.realpath: symlinked directories and `..` resolved) and their
+    names are equal, letter case folded where os.path.normcase folds it (Windows); on a case-insensitive POSIX file
+    system (macOS by default) two names that differ only in letter case are not caught. `generate` never names one
+    file twice (each fixture by its own name, then the manifest). The missing destination directories are created,
+    then every file is written whole to a temporary file beside its destination, flushed and fsynced (`os.fsync`,
+    F2), and the bytes of each file it replaces are read; a failure in any of these steps removes the temporary files
+    and the directories this run created (F6) and changes nothing else. Then each temporary file is renamed over its
     destination (`os.replace`, one rename per file). If a rename fails (on Windows, a destination open in another
     program, the manifest included), the files already renamed get their earlier bytes back, the files this run
     created are removed, the temporary files are deleted, the directories this run created are removed again, and
@@ -464,10 +468,10 @@ def _commit(items: list[tuple[Path, bytes]]) -> None:
     back with their earlier bytes or not at all (the fixture gate, tests/notrun.require_fixture, then refuses those by
     md5). The manifest is renamed last, so whenever the write fails or is undone, the manifest holds no new row."""
     dests = [dest for dest, _data in items]
-    first: dict[str, Path] = {}                             # each destination, however spelled, by its first spelling
+    first: dict[str, Path] = {}                             # each directory entry written, by its first spelling
     repeated: list[str] = []
-    for d in dests:
-        key = os.path.normcase(os.path.abspath(d))
+    for d in dests:                                         # the entry a rename replaces: the real parent directory
+        key = os.path.normcase(os.path.join(os.path.realpath(d.parent), d.name))   # (symlinks, `..`) and the name
         if key not in first:
             first[key] = d
         elif str(first[key]) not in repeated:

@@ -2358,7 +2358,10 @@ def test_macro_fixtures_final_write_refuses_a_destination_named_twice():
     place, the second rename ended in a KeyError, and the undo left the lost `.tmp` file and the directory behind
     (FinalWriteIncomplete). Now a destination named twice (also spelled another way, `sub/../a.csv`) is refused with
     a ValueError naming it before anything is written: no directory is made, an existing file keeps its bytes, and no
-    temporary file is left."""
+    temporary file is left. Verifier round: the paths were compared by their text, so the same file reached through a
+    symlinked folder was written twice, the second bytes kept; now the parent directories are compared as resolved
+    by os.path.realpath, and that spelling is refused too (where the system lets the test make a symlink)."""
+    import os
     with tempfile.TemporaryDirectory() as tmp:
         fresh, kept = Path(tmp) / "fresh", Path(tmp) / "kept"
         kept.mkdir()
@@ -2368,6 +2371,14 @@ def test_macro_fixtures_final_write_refuses_a_destination_named_twice():
             for again in (a, folder / "sub" / ".." / "a.csv"):
                 _refused(lambda: MF._commit([(a, b"one\n"), (folder / "b.csv", b"two\n"), (again, b"three\n")]),
                          ValueError, f"the final write names {a} more than once", "nothing is written")
+        alias = Path(tmp) / "alias"
+        try:
+            os.symlink(kept, alias, target_is_directory=True)
+        except (OSError, NotImplementedError):            # Windows without the symlink privilege
+            alias = None
+        if alias is not None:
+            _refused(lambda: MF._commit([(kept / "a.csv", b"one\n"), (alias / "a.csv", b"two\n")]), ValueError,
+                     f"the final write names {kept / 'a.csv'} more than once", "nothing is written")
         assert not fresh.exists() and [p.name for p in kept.iterdir()] == ["a.csv"]
         assert (kept / "a.csv").read_bytes() == b"earlier\n"
 
