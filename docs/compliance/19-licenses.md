@@ -159,3 +159,7 @@ OFL 판단은 법률 의견이 아닙니다. 실제 배포 패키지의 고지 �
 ### 2026-11-11 글꼴 N3(UI-D6)
 
 소유자가 A안 적용 결과를 보고 거절했고("좃구린데"), Pretendard와 비슷한 글꼴로 다시 만든 2차 시안 16종 중 N3를 골랐습니다("N3 진행해줘"). N3는 새 글꼴 없이 기존 Pretendard 파생 QG Interface를 쓰고 자간과 굵기만 조정합니다. 그래서 A안에서 더했던 IBM Plex Sans KR 파일 3개와 OFL-IBMPlexSansKR.txt를 저장소와 설치본에서 뺐습니다. 위 "글꼴 A안(UI-D5)" 절은 같은 날 대체되었으며 기록으로만 남깁니다. 새 글꼴·패키지 파일은 없습니다. [변경 사실](FACTS.md#owner-ui-native-2026-11-11)
+
+### 2026-11-11 연구 Home·순위 목록·종목 상세 화면(UI-D7·UI-D8)
+
+새 패키지·글꼴·이미지 파일은 없습니다(`pyproject.toml`, `requirements.txt`, `assets/` 변경 없음). 왼쪽 메뉴와 종목 상세 화면 도구 막대의 아이콘(메뉴 접기·멈춤·정보·크게 보기·오른쪽 열 등)은 앱 코드가 직접 그리고([메뉴 부품](../../quantgen_desktop/shell_rail.py), [상세 스타일](../../quantgen_desktop/stock_detail_style.py)), 섹션 접기 꺾쇠는 2026-11-04 절의 저장소 SVG를 다시 씁니다. 순위 목록·Home 카드의 회사 문자 마크는 2026-11-06 절의 로컬 식별자이며 공식 로고가 아닙니다. 지표 27개는 새 의존성 없이 numpy로 계산합니다([지표](../../core/education/indicators.py)). 순위 목록은 KIS·Yahoo 시세, KIS·FMP가 밝힌 시가총액, Yahoo 상장주식수로 계산한 시가총액을 보입니다. 표시 권리는 [권리 목록](../../core/research/display_rights.json)의 `kis_krx`·`fmp` `rights_conditional`, `yahoo` `rights_replace` 그대로이며, 계산 시가총액 같은 파생값의 표시·재배포 허락을 새로 얻지 않았습니다([08번](08-third-parties.md)). `review-required`와 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#ui-d7-d8-uscap-2026-11-11)

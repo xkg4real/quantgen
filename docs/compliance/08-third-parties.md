@@ -55,6 +55,8 @@ PER·EPS·업종·상장주수는 이미 호출하는 KIS `inquire-price` 응답
 
 ### 2026-11-04 시장 개편: 종목 마스터·관심종목 카드·한 종목 화면
 
+> 2026-11-11 대체: 관심종목 카드는 연구 Home(앱 시작 화면)으로 옮겨 Home이 보일 때 조회하고, 시장 화면은 실시간 순위 목록을 보입니다. 한 종목 화면은 종목 상세 화면으로 바뀌어 차트가 기간 칩에 따라 일봉 400 등을 요청합니다(종목 정보의 일봉 260과 국내 세 경로는 그대로). 아래 “2026-11-11 시장 순위 목록·미국 시가총액·연구 Home·종목 상세 화면” 절을 참조합니다.
+
 - **KIS 종목 마스터:** `kospi_code.mst.zip`, `kosdaq_code.mst.zip`을 기존 KIS 마스터 호스트 `https://new.real.download.dws.co.kr/common/master/`에서 받습니다([마스터](../../data/kis_markets.py) `_MASTERS`, `load_master`). 앱 키·토큰·계좌 없이 파일 이름만 요청하며 호스트는 IP 주소 등 통신 정보를 받습니다. 자동 갱신이 켜진 창에서 종목 검색 칸에 처음 포커스가 갈 때 백그라운드로 받습니다. 성공하면 같은 실행 중 다시 받지 않고, 실패하면 10분이 지난 뒤 다음 포커스에서 다시 시도합니다. 내용은 프로세스 메모리에만 두고 파일로 쓰지 않습니다. 화면의 종목 이름은 KIS/KRX 자료이며 표시 권리는 [권리 목록](../../core/research/display_rights.json)의 `kis_krx` `rights_conditional` 그대로입니다. 고정폭 파일 형식은 미검증입니다.
 - **관심종목 카드:** 카드마다 `ChartRequest(종목, "1d", 120, adjusted=True)`를 KIS에 먼저 요청하고, KIS가 응답하지 못하면 주식은 Yahoo Finance(yfinance)에 요청합니다([자동 선택](../../core/market/routing.py) `default_chart_router`). KIS 일별 조회는 현재가도 함께 읽습니다. 카드는 자체 `MarketDataService`를 씁니다. 자동 갱신이 켜진 창에서 시장 화면이 보일 때만 조회합니다(출처가 `KIS` 또는 실제 KIS 일별 응답의 `KIS REST`인 카드 3분, 그 밖 15분, 실패 시 1·2·5·15분). 전송 내용은 종목 코드·주기·기간이며 관심종목 목록 자체는 보내지 않습니다. 같은 종목을 주기적으로 요청하므로 공급자는 요청 기록에서 관심종목을 짐작할 수 있습니다.
 - **한 종목 화면:** 일별 이력 260봉(KIS 먼저, 주식은 Yahoo Finance 대체)을 읽고, 국내주식만 KIS `inquire-price`, `investor-trade-by-stock-daily`(FHPTJ04160001, 20일), `daily-short-sale`(FHPST04830000, 20일)를 부릅니다([종목 정보](../../core/research/stock_profile.py) `load_profile`). 세 경로 모두 이미 [허용목록](../../config.py)에 있던 것이며, 투자자별 매매와 공매도를 앱 화면에 보이는 것은 이번이 처음입니다. 전송 내용은 종목 코드와 날짜뿐입니다. 이 두 자료도 `kis_krx` 정책을 따르며 `registered_series`에는 넣지 않았습니다. 가격 차트는 기존 차트 경로(조회 뒤 지원 체결 연결)를 그대로 씁니다. 해외주식은 이력만 읽습니다.
@@ -81,20 +83,32 @@ Macro·Rates·FX·Bonds·Structuring은 기존 `auto` 경로(키 없이 FRED·Ya
 
 네이티브 앱에서 FMP/KIS 키가 없을 때 Yahoo Finance(yfinance)에 자동으로 요청하는 화면은 Monte Carlo·Portfolio·Signals·Strategy Lab·ETF입니다. 보내는 내용은 위 절과 같이 종목 기호와 기간뿐입니다. Derivatives는 KIS 키가 설정돼 있으면 KIS 호가판, 없으면 표시된 합성 시연판을 고릅니다. 새 외부 서비스·SDK·패키지는 없습니다(`pyproject.toml`, `requirements.txt` 변경 없음). [변경 사실](FACTS.md#owner-ui-native-2026-11-11)
 
+### 2026-11-11 시장 순위 목록·미국 시가총액·연구 Home·종목 상세 화면(UI-D7·UI-D8)
+
+- **KIS 해외 현재가상세(새 허용 경로):** `/uapi/overseas-price/v1/quotations/price-detail`(TR `HHDFS76200200`)을 소유자 승인(2026-11-11, "승인.")으로 `config.KIS_QUOTATION_ALLOWLIST`에 더해 읽기 전용 시세 경로는 32개입니다(이전 31개). 기존 Bearer 토큰으로 GET하며 보내는 값은 거래소 코드(`EXCD`)·종목 기호(`SYMB`)와 빈 `AUTH`입니다. 시장 순위 목록의 미국 묶음에서만, 미국 54종목 중 ADR(TSM)을 뺀 종목마다 5분에 한 번 부르고 응답 중 `tomv`(시가총액)·`shar`(상장주식수)·`last`·`curr`만 씁니다. `tomv`의 단위는 응답에 적혀 있지 않아 `curr`(USD)로 가정하고 `shar`×`last`와 25% 안에서 맞을 때만 쓰며, 맞지 않으면 환산하지 않고 버립니다. 계좌·주문 경로와 KIS 순위 API는 추가하지 않았습니다([설정](../../config.py), [조회 어댑터](../../data/kis_workspace.py) `OVERSEAS_PRICE_DETAIL`, [목록](../../quantgen_desktop/market_rankings.py) `kis_batch`).
+- **KIS 현재가(기존 경로):** 순위 목록은 국내 81종목에 기존 `inquire-price`(FHKST01010100)를, 미국 54종목에 기존 해외 `price`(HHDFS00000300)를 종목마다 기존 시세 서비스로 요청합니다(목록 쪽 초당 최대 20건, KIS 클라이언트의 전역 간격 제한은 그대로). 목록이 보이고 자동 갱신이 켜진 동안 정규장 45초, 그 밖 300초마다 다시 요청하므로 KIS 호출 수가 늘어나며, 미국 묶음에는 현재가상세 최대 53건이 5분마다 더해집니다.
+- **FMP batch-quote:** `FMP_API_KEY`가 설정되면 KIS 값이 없는 미국 종목의 기호를 쉼표로 묶어 `GET {FMP_BASE_URL}/batch-quote?symbols=…&apikey=…`(기본 `https://financialmodelingprep.com/stable`)를 한 번 보냅니다. 키는 기존 인벤토리처럼 쿼리 문자열에 들어가며 오류 글에서는 가립니다. 응답 중 `marketCap`과 시각만 쓰고 5분 동안 다시 묻지 않습니다. 요금제가 일괄 조회를 거절하면(HTTP 402·403) 하루, 그 밖 실패는 30분 동안 묻지 않습니다. 미국 목록이 보이는 동안 최대 5분에 한 번이며, 엔진의 FMP 시세 조회와 같은 요금제 한도를 씁니다([시가총액](../../core/market/market_cap.py) `fmp_batch`).
+- **Yahoo Finance(yfinance):** KIS가 없거나 아무것도 돌려주지 않으면 순위 목록이 보이는 묶음(국내 81 또는 미국 54종목)의 1개월 일봉을 동시 4건씩 요청합니다(국내는 `.KS`, 없으면 `.KQ`). 미국 시가총액이 남은 종목은 키 없이 `Ticker.get_shares_full`(최근 548일)로 상장주식수를 요청합니다. 동시 4건, 이 단계는 최대 20초만 기다리고, 실패한 종목은 30분 동안 다시 묻지 않으며, 받은 주식수는 24시간 재사용합니다([07번](07-data-minimization.md)). 연구 Home의 큰 차트는 S&P 500(`^GSPC`)·KOSPI(`^KS11`)·비트코인(`BTC-USD`)의 일별 종가 400관측을 선택했을 때 요청합니다.
+- **FRED:** 연구 Home의 큰 차트가 원/달러(`DEXKOUS`)·미국 10년 금리(`DGS10`)·VIX(`VIXCLS`)를 선택했을 때 기존 키 없는 경로로 400관측을 요청합니다. 카드 값은 기존 Home 6계열 조회를 그대로 씁니다([Home](../../quantgen_desktop/home_view.py), [시장 목록](../../core/research/markets.py)).
+- **종목 상세 화면:** 새 제공처·경로는 없습니다. 기간 칩에 따라 기존 차트 경로(KIS 먼저, 주식의 일·주·월봉은 KIS가 없거나 실패하면 Yahoo)에 요청하는 주기와 봉 수가 바뀌었고(일봉 400, 1분봉 400, 15분봉 140, 주봉 400, 월봉 500; 분봉은 KIS만), 수급 지표 두 개는 기존 투자자별 매매·공매도 응답을 다시 씁니다([기간](../../core/market/detail_model.py) `PERIODS`).
+- **표시 권리:** 순위 목록·시가총액·차트는 [권리 목록](../../core/research/display_rights.json)의 `kis_krx`·`fmp` `rights_conditional`, `yahoo` `rights_replace` 판정을 그대로 따릅니다. 이 변경이 상업 표시·파생값(계산 시가총액)·재배포 권리를 확정하지 않습니다.
+
+새 패키지·SDK는 없습니다(`pyproject.toml`, `requirements.txt` 변경 없음). 실제 KIS·FMP·Yahoo 응답, `tomv`·`shar`의 단위, FMP 요금제의 일괄 조회 허용 범위, 호출 한도는 확인하지 않았으며 `NOT_VERIFIED`, `review-required`, 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#ui-d7-d8-uscap-2026-11-11)
+
 ## 정책 또는 구현 기준
 
 ### 외부 서비스 인벤토리
 
 | 서비스·연결 | 기능과 요청 시점 | 전송·수신 항목 및 인증 | 로컬 처리·검토 항목 |
 |---|---|---|---|
-| Financial Modeling Prep | 시세·가격 이력 조회 | 종목, 조회기간, `FMP_API_KEY`; 키가 쿼리 문자열에 포함됨 | 가격 이력 캐시. 예외·프록시 로그의 키 노출 방지, 계약의 상업 표시·파생지표·재배포 범위 확인 |
+| Financial Modeling Prep | 시세·가격 이력 조회. 2026-11-11부터 시장 순위 목록의 미국 시가총액용 일괄 시세(`/batch-quote`, 미국 목록이 보이는 동안 최대 5분에 한 번) | 종목(일괄 조회는 기호 목록), 조회기간, `FMP_API_KEY`; 키가 쿼리 문자열에 포함됨 | 가격 이력 캐시. 일괄 시세는 메모리 5분. 예외·프록시 로그의 키 노출 방지, 요금제 한도, 계약의 상업 표시·파생지표·재배포 범위 확인 |
 | 한국투자증권 KIS | 시세 조회와 OAuth 토큰 발급 | 앱 키·시크릿으로 토큰 발급, 이후 토큰·종목·조회 조건 전송 | `~/.nextgen/kis_token.json`에 토큰 저장. 읽기 전용 허용목록과 토큰 파일 접근권한·삭제 절차 확인 |
 | KIS 실시간 시세 구독 | 사용자가 실시간 연결 선택 시 REST 이력 조회 후 승인 발급·WebSocket 구독 | `/oauth2/Approval`에 앱 키·시크릿, `ws://ops.koreainvestment.com:21000`/`:31000`에 승인키·종목/TR. 가격·거래량·시각 수신 | 비TLS 전송 보호 미검증. 승인키 전역 메모리 23시간 재사용은 삭제 기간이 아님. 계좌/주문 통보 구독 없음. 개인 접근·상업 표시·브라우저 전달권을 구분 |
 | KIS 종목 마스터 다운로드 | 종목 식별용 마스터 파일 다운로드. 2026-11-04부터 종목 이름 검색용 KOSPI·KOSDAQ 마스터 포함(자동 갱신이 켜진 창에서 검색 칸 첫 포커스 때) | 요청한 마스터 파일명; 다운로드 호스트 별도, 키 없음 | `new.real.download.dws.co.kr`도 연결 목록에 포함. 내용은 프로세스 메모리에만 둠. 종목 데이터의 배포권 확인 |
 | 금융감독원 OpenDART | 공시·재무·법인코드 조회 | 공시 조회 조건과 `crtfc_key` 쿼리 | 법인코드 JSON 캐시. 공개 공시의 이용 조건 및 키 로그 제거 확인 |
 | 한국거래소 KRX | Open API 시장 데이터; 레거시 CSV 코드 존재 | `AUTH_KEY` 헤더와 조회 조건; 레거시 OTP·다운로드 요청 | 현 코드의 레거시 URL은 HTTP이며 접근 거절 처리 존재. 배포에서 사용할 경로를 확정하고 전송 보호·계약 확인 |
 | FRED / pandas-datareader | 금리·거시 시계열 조회 | 시계열 ID와 기간; 현재 경로는 API 키 불필요 | 시계열별 원권리자가 다를 수 있음. FRED 접근권을 모든 시계열 상업 이용권으로 간주하지 않음 |
-| Yahoo Finance / yfinance | 주가·환율·선물·지수 이력 | 티커와 기간; 앱이 별도 계좌 키를 요구하지 않음 | 라이브러리 내부 세션·쿠키·보관 위치는 설치 버전과 실제 실행으로 확인. 서비스 약관·데이터 이용권 별도 검토 |
+| Yahoo Finance / yfinance | 주가·환율·선물·지수 이력. 2026-11-11부터 미국 종목 상장주식수(`get_shares_full`, 시장 순위 목록의 시가총액 계산값) | 티커와 기간; 앱이 별도 계좌 키를 요구하지 않음 | 라이브러리 내부 세션·쿠키·보관 위치는 설치 버전과 실제 실행으로 확인. 상장주식수는 FICC 캐시 폴더의 `SHARES_YFINANCE_<기호>.json`에 24시간 재사용 기준으로 저장. 서비스 약관·데이터 이용권 별도 검토 |
 | Goldman Sachs Marquee / gs-quant | 로컬 계산 및 선택 세션·가격 조회 | 로컬 분석은 네트워크가 필요하지 않음. 선택 연결은 `GS_CLIENT_ID`·`GS_CLIENT_SECRET`와 `run_analytics` 범위 사용 | 오프라인 함수와 원격 세션 구분. 호출별 상품 파라미터·제공 데이터 이용 조건 확인 |
 | Upbit 공개 API | 가상자산 시세·일봉 | 종목·기간·조회 조건, API 키 불필요 | 공개 데이터 이용약관·호출 제한·상업 표시 및 재배포 범위 확인 |
 | Upbit 계좌 API | 선택 잔액 조회 `GET /v1/accounts` | 접근 키로 만든 JWT 전송; 통화·기준통화·잔액·잠금 수량·평균 매수가 수신, 총수량·원화평가액 계산 | 보유 통화의 종목을 Upbit 공개 시세 API에 추가 전송하여 평가. 계좌정보는 개인정보 처리 목록에 포함. 자산조회 권한만 사용. Flet는 키 설정 후 Refresh에서 조회하고, 네이티브는 기본 OFF 선택 사용 |
@@ -175,7 +189,7 @@ Macro·Rates·FX·Bonds·Structuring은 기존 `auto` 경로(키 없이 FRED·Ya
 
 - 구현: [`pyproject.toml`](../../pyproject.toml), [`requirements.txt`](../../requirements.txt), [`requirements-dev.txt`](../../requirements-dev.txt).
 - 인증·설정: [`config.py`](../../config.py), [`KISClient`](../../data/krx/kis_client.py) 146–184행, [`OpenDARTClient`](../../data/krx/opendart_client.py) 44·74–79행, [`KRXMarketClient`](../../data/krx/krx_market_client.py) 81–129행.
-- API와 SDK: [`crypto_client.py`](../../data/crypto/crypto_client.py) 51–54·308–326행, [`kis_markets.py`](../../data/kis_markets.py) 47·664행, [`gsq.py`](../../core/quant/gsq.py) 70–85행, [`ficc/data.py`](../../core/ficc/data.py) 163–200행, [`quant/history.py`](../../core/quant/history.py) 123–137행.
+- API와 SDK: [`crypto_client.py`](../../data/crypto/crypto_client.py) 51–54·308–326행, [`kis_markets.py`](../../data/kis_markets.py) 47·664행, [`gsq.py`](../../core/quant/gsq.py) 70–85행, [`ficc/data.py`](../../core/ficc/data.py) 163–200행, [`quant/history.py`](../../core/quant/history.py) 123–137행, [`market_cap.py`](../../core/market/market_cap.py) `fmp_batch`·`yahoo_shares`, [`market_rankings.py`](../../quantgen_desktop/market_rankings.py) `kis_batch`·`daily_batch`.
 - AI: [`ai_payload.py`](../../core/research/ai_payload.py) `ai_payload_json`, [`quant/insights.py`](../../core/quant/insights.py) `deep_analysis`, [`ai_connection.py`](../../core/research/ai_connection.py) `reply_result`, [`ui/ai_panel.py`](../../ui/ai_panel.py), [`commentary.py`](../../quantgen_desktop/commentary.py).
 - 공식 확인 창구: [개인정보 보호법](https://www.law.go.kr/법령/개인정보보호법), [FRED 이용 조건](https://fred.stlouisfed.org/legal/), [KIS 개발자센터](https://apiportal.koreainvestment.com/), [OpenDART](https://opendart.fss.or.kr/), [KRX 정보데이터시스템](https://data.krx.co.kr/), [Anthropic 개인정보 안내](https://www.anthropic.com/legal/privacy), [Qt 라이선스 안내](https://www.qt.io/licensing/), [PyQt 라이선스 안내](https://www.riverbankcomputing.com/commercial/license-faq).
 - 법령·외부 계약의 최신 시행·계약 범위 확인 기록은 [출처 대장](SOURCES.md)에 남긴다. 위 링크는 현재 계약 또는 허락을 획득했다는 증거가 아니다.
