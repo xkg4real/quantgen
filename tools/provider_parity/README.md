@@ -41,8 +41,8 @@ verbatim in `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` and in `results/RULINGS.
 The tool has had two fixed versions. The two lines below are the second, the one every run from now on is made with:
 
 ```
-Tool commit fixed by the owner ruling: 4096caa56438825ac66367d1d2eccb5deb68189a
-Tool sha256 fixed by the owner ruling: f56caeb4076c3679db1b8c801ea2f9eb356541684fd94a5947011c826c9b2b21
+Tool commit fixed by the owner ruling: 1be43ec191ce73bc4fbc7357a4b3438aca0e4bb1
+Tool sha256 fixed by the owner ruling: 78dd1f508c713f9be138466bf69f5dd92d8bfdcc3afacfa37b21fc4bf28ca80c
 ```
 
 - The second fixed version follows the owner's ruling of 2026-11-11 on the first SPY run ("SPY-가-승인", verbatim in
@@ -55,6 +55,11 @@ Tool sha256 fixed by the owner ruling: f56caeb4076c3679db1b8c801ea2f9eb356541684
   FAIL). Their summaries carry its sha256 as `tool.sha256`, and it stays their version:
   - first fixed version, commit `5202482e3c24de871b8483608b8a03beb07abe1e`
   - first fixed version, sha256 `f2fe72cdee6344076fd6dfec8943259f44bc52445c66cdaf482a19e269770184`
+- On 2026-11-11 (KST), before this change merged and before any run with the second fixed version, the two lines
+  above replaced the values recorded earlier that day for it (commit `4096caa`, sha256 `f56caeb4...`): a review of
+  that tool found that a page-back request of the fmp fetch could name a later day than the request before it, 2027
+  included, that two answers never shared a day, and that a file could start late without the note. The tool was
+  changed (`results/RULINGS.md`). No run was made with the replaced values.
 - Before any run, on 2026-11-11 (KST) and before PR #102 merged, the first fixed version's values had replaced the
   ones first recorded (commit `49a3a67`, sha256 `d651795e...`): a code review found faults in the tool and it was
   changed (`results/RULINGS.md`).
@@ -66,7 +71,7 @@ an owner ruling (spec 10.5, Tool).
 
 ```powershell
 $rc = "<the research clone>"                         # read only: the tables, the pinned files and its .env
-$fixed = "4096caa56438825ac66367d1d2eccb5deb68189a"
+$fixed = "1be43ec191ce73bc4fbc7357a4b3438aca0e4bb1"
 $origin = git -C $rc remote get-url origin
 git clone --branch claude/provider-parity-runs-20261111 --single-branch $origin "$env:LOCALAPPDATA\quantgen\pp_clone"
 cd "$env:LOCALAPPDATA\quantgen\pp_clone"

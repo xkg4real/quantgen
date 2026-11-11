@@ -85,8 +85,16 @@ What follows (how Claude takes "SPY-가-승인"):
   count, so no request names a later day than the one before it. Nothing else in the tool changes: thresholds,
   providers, outcome rules and summary fields are those of the three runs of record.
 - The changed tool is the second fixed version:
-- Tool commit fixed: `4096caa56438825ac66367d1d2eccb5deb68189a`
-- Tool sha256 fixed (`tools/provider_parity/parity_check.py`): `f56caeb4076c3679db1b8c801ea2f9eb356541684fd94a5947011c826c9b2b21`
+- Tool commit fixed: `1be43ec191ce73bc4fbc7357a4b3438aca0e4bb1`
+- Tool sha256 fixed (`tools/provider_parity/parity_check.py`): `78dd1f508c713f9be138466bf69f5dd92d8bfdcc3afacfa37b21fc4bf28ca80c`
+- 2026-11-11 (KST), before this change merged and before any run with the second fixed version: the two values above
+  replace those recorded earlier that day for it (commit `4096caa`, sha256 `f56caeb4...`), because a review of that
+  tool found faults in the fmp fetch that could have cost the owner the second SPY run (a page-back request could
+  name a later day than the request before it, 2027 included; two answers never shared a day, so a provider whose
+  values for a day depend on the request would have ended the fetch `OK` and failed only in the compare of record; a
+  file could start late without the note) and the tool was changed to fix them. No run was made with the replaced
+  values. The diagnostic's sha256 below was replaced at the same time (the script changed after the same review; it
+  had not been run).
 - "Reaches" means an earliest date at most 7 days after the first requested date, which is 31 days before the
   table's start and need not be a session. A fetch that stops later than that still ends `OK` and says where and why
   on the console line above its `FETCH ... OK` line; the owner does not compare such a file (the guide's stop point).
@@ -126,7 +134,7 @@ What follows (how Claude takes "BTC-나-승인" and the second line):
   ruling, to "only `summary.json` leaves the owner's machine" (spec 10.5, Outputs) and to 10.5.2, which keeps an exact
   extreme out of the summary. No price, no return and no date finer than a calendar year leaves.
 - Claude wrote a read-only diagnostic for the owner's PC: `tools/provider_parity/btc_diagnose.py`, sha256
-  `f9e7146bc86f0062c45dd582e19b686344794274d6d20614399cefb53e01e5fa`. It makes no network call and, run with `-B`
+  `66340bf1330f4cc985328e7756cca4a366423da7c6e47fb8d4b1fc063b64cd3c`. It makes no network call and, run with `-B`
   as the guide's line is, writes no file. The owner runs it once and pastes its console output (same guide).
 - Where the diagnostic goes beyond the words of the option (Claude's reading, not the owner's words):
   - *What it reads.* The option said "PC에 남은 상세 파일에서": from the detail file left on the PC. For this check
