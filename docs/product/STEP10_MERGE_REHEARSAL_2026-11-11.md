@@ -279,6 +279,11 @@ Not run, by rule or by scope: `tests/run_all.py`, `tests.macro_m8_pipeline`, `te
 
 ## 5. Work the real merge will need afterwards
 
+> Decided on 2026-11-11 (KST). The owner answered "전부승인합노." to `docs/product/DECISIONS_PILOT_CLOSE_MERGE_2026-11-11.md`:
+> the seven choices of section 2.4 as rehearsed (rows 20 to 26), the Korean wording of the rehearsal kept and reviewed on
+> the screen after the merge (row 27), and the scope of the P3 merge as items 1 to 5 below with S4 included (rows 13 and
+> 13a). The record is in `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`. The text below is left as it was written.
+
 1. Three small fixes outside the conflicted files (Appendix B). Without them the merged tree cannot pass both sides' tests. They are in neither rehearsal commit, because the rehearsal was limited to the five conflicted files. All three still apply to `a5f904a` (`git apply --check`).
    - S1, `tests/bonds_screen_acceptance.py`: three lookups use the label `Position DV01`; two checks read the failure reason from the folded provider message; the comment at line 561 says that the assertion now reads the curve line, not the narrative.
    - S2, `tests/flet_a1_headers_acceptance.py`: the expected scenario headers, English and Korean.

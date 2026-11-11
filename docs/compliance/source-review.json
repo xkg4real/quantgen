@@ -310,6 +310,7 @@
     "docs/product/COMPANY_MARKS_READABILITY_20261106.md": "cea321847ed32fe5f077180665bcaa485dff75444bdce86526e8357ee2626be3",
     "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md": "9360c8bff2136e6c9c67d18c58caebddf2e09ee0e6abde969503aa78f1970b04",
     "docs/product/DATA_ACQUISITION_2026-10-29.md": "284d5c969d889ec1ca0b381ba5f94ee6f3f16115fac15a247a5b304ba9ae1230",
+    "docs/product/DECISIONS_PILOT_CLOSE_MERGE_2026-11-11.md": "7c95de59478f8a4379cbaf237f8ce243a9017b14dbeb0f1818c58cb16547f3ea",
     "docs/product/DETACHED_INSTRUMENT_IDENTITY_2026-11-06.md": "85c2893a29d219f39e5c98c97da93e4cb3b80ab0d2c703091abd6e7564ecc209",
     "docs/product/DISTRIBUTION_REVIEW_2026-10-29.md": "c03dae78c5964bded90065661a0d3dc631f4b650c3baae8eb6875443b11959e6",
     "docs/product/ETF_SLEEVE_DISCLOSURE_2026-11-04.md": "d39113026df4ad4a4d1903072cd64cbbd8015dc74835b77f4a96d38b1f2c52c3",
@@ -338,8 +339,8 @@
     "docs/product/NAUTILUS_AND_DATA_SOURCES_2026-10-31.md": "b2b0fdb675bd2e04e79863d872fc6101f40a10744b5bd0516da17957a26e7936",
     "docs/product/OPTION_DISCLOSURE_2026-11-04.md": "ff314ee2043b524cdb8456f4af5c2ffe5f19f19d341ac28be471a6d3c7588373",
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
-    "docs/product/PILOT_OWNER_RUN_2026-11-11.md": "2b51b0f1cd2daef301877e0f685bc2d0a67f2bd77412b76a8a05f840bdc35065",
-    "docs/product/PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md": "057e7c88ceb8d238c24cd269b3805a67108aa6d715a070859b965996d28735ab",
+    "docs/product/PILOT_OWNER_RUN_2026-11-11.md": "bdfb3d14fdbfa69ad85dd8a9f1cceda4da8b5cb822e3d761650bae2f89bc13c4",
+    "docs/product/PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md": "d2591d392704368fb8c3d26fe9cc26730e505e7246e79c7518603e07f6da9d68",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md": "0b26452ceb5e1eaed963b60f1a9f5b7bf8276552602fce776ea9b54625885144",
     "docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md": "9604ff31a94d2e182bebfb71ec65cd83ca2f96cb8942deae39d3a337b288d4dd",
@@ -363,7 +364,7 @@
     "docs/product/SECTION10_PAYLOAD_2026-10-30.md": "aadb8d4d84748ef49de5cfadc0335fcb747694291b192953fca1b7d311e3d426",
     "docs/product/SECTION10_TRIAGE_2026-10-30.md": "4b7a664b2a22cc198740f55ae6e0cfb2a349282d12ce2ef04b7772a491f5834c",
     "docs/product/SIGNALS_TRADE_COUNTS_2026-11-02.md": "262fab241bcc3db4e22817caf5b51c673af998d67d3576135c627f2ab89ae2ac",
-    "docs/product/STEP10_MERGE_REHEARSAL_2026-11-11.md": "3f0d784c78699341715c10142d3d02a44e1314384d23f9af1f4175c0e9c4f296",
+    "docs/product/STEP10_MERGE_REHEARSAL_2026-11-11.md": "68cfe84e4b1a52b72857aadb6092b169b1437b15c4c6e0169d5d10a0283bc070",
     "docs/product/STRATEGY_EXPOSURE_2026-10-30.md": "1c1d5f061e978fdea11aa2fbc3f7d636fb94db00107a8da1daee70e18644b207",
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
     "docs/product/TERMINAL_TARGET_2026-10-30.md": "5c3e2eac999534371560def0e00d3ef45d0b7abcd960a6b1d7d7c3c9c3b05c29",
@@ -682,163 +683,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "c949b0b867d9e58cbda0a2e9b93d6bb9997b55cea380dab511da90f2fe50f604",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:17.999552+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "f36793139a395e299fa0067049d1dff7c57ff421b63e8e6aaa009fd13b8f5e8a",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.369163+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "c949b0b867d9e58cbda0a2e9b93d6bb9997b55cea380dab511da90f2fe50f604",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.001979+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "f36793139a395e299fa0067049d1dff7c57ff421b63e8e6aaa009fd13b8f5e8a",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.371686+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "99a148fd4d0cf67b6b229abfc3905bf921ed0d08075d8a17c3c49366702bbbbf",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.004078+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "121aa927f0acb409d406be8a81efe9472459e43ee709692635a4353351c8aadf",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.374468+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "bff39ebc3467ddf9c3fc2bc7589557ecd1aea83cddb47592b20a03d260879466",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.006553+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "f9700aff31c1ba7391d14301df3f56cd8712890415ad1eec3ce8b9f317223879",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.376947+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "30d55a165a8215c91ee643f89481bfef479e51a7e1eb0ddadb0bedf7cd55c85d",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.008380+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "15ffc72440a7d6806b9348da5fa4601b96e8015202aa3d543b4b9a39927076eb",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.378962+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "877d156ed205dc658a32155d5531cce5047040a6b932bc3c64124dc7bb3567e7",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.010837+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "f1162d7804e01910a665fec13207dacfcbecbb88fb6dfdebcd5544c6ea1f056b",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.381114+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
-      "source_digest": "c949b0b867d9e58cbda0a2e9b93d6bb9997b55cea380dab511da90f2fe50f604",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.013333+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "f36793139a395e299fa0067049d1dff7c57ff421b63e8e6aaa009fd13b8f5e8a",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.383641+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "8": {
       "document_sha256": "50659615e7a2ad431f0ba7c6d124c6da1d1fc63b1ee67b7392362d8e79344f26",
-      "source_digest": "877d156ed205dc658a32155d5531cce5047040a6b932bc3c64124dc7bb3567e7",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.015413+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "f1162d7804e01910a665fec13207dacfcbecbb88fb6dfdebcd5544c6ea1f056b",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.385692+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "674584d2c11fecf51c079c8328722037b8111f051ffd9e572ab5b85fde94b2e8",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.017213+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "c1bf28cbfa85656085c9b141429e963c2db6c7ef9cd85dd0b716e231f39846c5",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.387645+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "09895127c20d819e4a4bff184e7e22e2b4464400b0cc855447ee42929eab7bdd",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.019335+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "89740c81ec18f7c10360458bcf31255acce78554086ed7893d6d52e29b0014f3",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.389447+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "e00b83564ff8fa02c73ad20a36ac523fd99d7a0ade64de36f598a163c3d19a7d",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.022098+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "047ced7ceecdb04246d78deef74d21ce0fd16404f91c4fe4ed7c5fa9393d6e65",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.391856+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "b0292d1c4b579d0c2c8d53c57cf883246ed5dc1bf80d99eaa632177d80acce24",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.023864+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "47521425bad792daf4ee028f2885e033a7c7b95ef1e3ecc5bda55983171fb581",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.393657+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
-      "source_digest": "674584d2c11fecf51c079c8328722037b8111f051ffd9e572ab5b85fde94b2e8",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.025612+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "c1bf28cbfa85656085c9b141429e963c2db6c7ef9cd85dd0b716e231f39846c5",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.395470+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
-      "source_digest": "674584d2c11fecf51c079c8328722037b8111f051ffd9e572ab5b85fde94b2e8",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.027531+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "c1bf28cbfa85656085c9b141429e963c2db6c7ef9cd85dd0b716e231f39846c5",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.397952+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
-      "source_digest": "674584d2c11fecf51c079c8328722037b8111f051ffd9e572ab5b85fde94b2e8",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.029783+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "c1bf28cbfa85656085c9b141429e963c2db6c7ef9cd85dd0b716e231f39846c5",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.399845+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "ca8a62be897e62957a3e23ed787b10f287ffcb95d7fea3f3526baf5cf060ac05",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.032456+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "d43fc4223725524317cd394e2137bee7bae398ae67bf318c89ce661bbb0796e4",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.401756+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "877d156ed205dc658a32155d5531cce5047040a6b932bc3c64124dc7bb3567e7",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.035084+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "f1162d7804e01910a665fec13207dacfcbecbb88fb6dfdebcd5544c6ea1f056b",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.403805+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "c949b0b867d9e58cbda0a2e9b93d6bb9997b55cea380dab511da90f2fe50f604",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.037519+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "f36793139a395e299fa0067049d1dff7c57ff421b63e8e6aaa009fd13b8f5e8a",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.405840+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
-      "source_digest": "e214d3e4664f23ddd5fea06bbd302eda52f278e4d63553ebb1c268c4d288772a",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.040192+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "6e9ea1588c7010743c4a89bae8cd78680c7b445d719668f21551125f1a68975d",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.408374+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "c949b0b867d9e58cbda0a2e9b93d6bb9997b55cea380dab511da90f2fe50f604",
-      "reviewed_by": "Claude provider parity SPY rerun and BTC diagnostic",
-      "review_note": "Wording only after the independent check of the documents fix: the README states point 1 of the reading rule in the records' terms; the rerun guide and the records name the LEFT BEHIND exception to 'a failed fetch leaves no folder'; one table row gains a second cause. No tool, script or test change.",
-      "reviewed_at": "2026-11-11T12:51:18.042870+00:00",
-      "source_commit": "324224f681861e3686ca4f28a8553a280e3a6261"
+      "source_digest": "f36793139a395e299fa0067049d1dff7c57ff421b63e8e6aaa009fd13b8f5e8a",
+      "reviewed_by": "Claude owner rulings pilot close merge",
+      "review_note": "Record of the owner's answer to the 27 pilot, closing and merge decisions: a new decision table under docs/product (a byte copy of the file sent to the owner), a rulings log section, and one pointer paragraph each in the pilot readout, the owner run sheet and the merge rehearsal record. No code, test, workflow or numbered policy document changed. 07 and 08 were read again: the provider parity paragraph of 08 still holds (detail.json and the fetch folders stay on the owner's PC until after Step 10, as before), and no decision changes what the app sends, stores or deletes. The Bonds display choices and the PC app hedge label are decided here but changed only later, in the P3 merge on the research branch.",
+      "reviewed_at": "2026-11-11T14:38:51.410824+00:00",
+      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
     }
   }
 }

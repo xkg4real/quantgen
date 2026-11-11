@@ -1617,6 +1617,12 @@ into a repository or a chat. No document lists the choices. Ask after Step 10:
 
 ## 5. Open questions for the owner (not decided here)
 
+> Decided on 2026-11-11 (KST). The owner answered "전부승인합노." to a decision table that holds these 19 questions,
+> K section K and the rehearsal's choices: `docs/product/DECISIONS_PILOT_CLOSE_MERGE_2026-11-11.md`. Each row of the
+> table names its question here as `R<n>`. What each answer decides is recorded in `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`,
+> section "2026-11-11, Claude Code 채팅: 파일럿·마감·병합 결정 27건에 대한 답". Question 2 was decided as "not now: put the
+> choice with the cause when it arises". The questions below are left as they were asked.
+
 1. Pilot 1 ends with `parity.hard_pass` false. What then: find the cause and re-run (a code fix means Windows
    re-validation and a new `owner_confirmed`), or close without pilot 2? No document gives the procedure.
 2. May Step 10 close, and the merge go ahead, when pilot 2 did not run? Step 10's Done-when says "run folders ... are
