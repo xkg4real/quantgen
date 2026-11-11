@@ -523,7 +523,7 @@
     "tests/macro_m0_schemas.py": "ef2870b7170a9a56b642c55cd509d5e2438efd2698ef52656aec28300fd66aa1",
     "tests/macro_m1_books.py": "e940009e977b4b45f44025b3e91e9bbd0db8b87986b7ff0f0282c08e468f3bd0",
     "tests/macro_m1_calendars.py": "eae070f4744fa5185c3cdc4be3ac7f22cee65bbe2aab2ce1a77fceb55ae8e2e8",
-    "tests/macro_m1_fixtures.py": "09b37dd324a41f5297d0ad07ac17d2ed455129c7c4584abccb96c507d7a7a1c1",
+    "tests/macro_m1_fixtures.py": "3514b036cf549e56007664191b196ea4dc53b78a3fb8672bbda61178b83cf477",
     "tests/macro_m1_integration.py": "fc6a4190481f1dddafbe40daae4a6b905fd686da36ff5eef070b5aeb3036502f",
     "tests/macro_m1_pit.py": "47c7f40fa275632785e7edb59067bdb8b8c74bd3dac67cf7117d2589b37dd8ed",
     "tests/macro_m2_costed.py": "754a2af2fac98fb245dc6c0c6c53b23e978d4db1c0dff7ec224d712730c143f3",
@@ -770,11 +770,11 @@
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "b04f4e31304e31d4d88d55e94bb70281991b3e5344986cea968aeef42352a08a",
+      "source_digest": "87b093a0ccabadf6ebf7f5b001d055258fdd4376b8fe0636aca732f64b2e2f30",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Test-only change for document 12: tests/macro_m1_fixtures.py gains one check in the KRW=X test of the reference-data fixture generator (a hand-made fixture with a Saturday KRW=X row is refused by the post-close check, naming the fixture file and the date). 12-claims was read again: no app screen, performance figure, financial claim or user-facing text changes; the generator is a developer tool run on synthetic files in these tests.",
-      "reviewed_at": "2026-11-11T15:24:02.539534+00:00",
-      "source_commit": "0df00c2a02ea81ef2f2c9a0e80026b64d04563c4"
+      "review_note": "Test-only change for document 12: tests/macro_m1_fixtures.py gains one check in the manifest test of the reference-data fixture generator (with the manifest file locked, a command-line run that adds a fixture fails and leaves no fixture that the manifest does not list, because the manifest is now written in the same final write as the fixtures). 12-claims was read again: no app screen, performance figure, financial claim or user-facing text changes; the generator is a developer tool run on synthetic files in these tests.",
+      "reviewed_at": "2026-11-11T15:28:15.806615+00:00",
+      "source_commit": "9869f6735bdf5ce123d43d3674c571d679f948df"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",

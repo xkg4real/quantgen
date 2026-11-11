@@ -1874,7 +1874,10 @@ def test_macro_fixtures_compares_the_manifest_before_the_final_write():
     its manifest row. Now the built files are compared with the manifest before anything is written: the refused
     regeneration leaves every frozen byte and the manifest as they were, with a new file selected beside the changed
     one nothing is written either, and `generate(manifest=...)` refuses the same way. An unchanged regeneration
-    rewrites the same bytes and adds no row; once the reference is restored the new file is written and listed."""
+    rewrites the same bytes and adds no row; once the reference is restored the new file is written and listed. The
+    manifest is written in the same final write as the fixtures, last (R4): with MANIFEST.csv locked, a run that
+    adds a file fails and leaves that file neither written nor unlisted (`freeze` used to write the manifest after
+    the fixtures were in place, so the new file stayed in the folder with no manifest row)."""
     from core.calendars import clocks as K
     from core.calendars.adapter import CalendarClocks
     from core.ficc import contracts
@@ -1918,6 +1921,21 @@ def test_macro_fixtures_compares_the_manifest_before_the_final_write():
         _refused(lambda: _calendar_generator(("F13",), ref, out, manifest=manifest), MF.FixtureChanged, n13)
         assert state() == frozen
         f13.write_text(good13, encoding="utf-8")
+        # R4 on the command line: the manifest is the last file of the same final write. With MANIFEST.csv locked (on
+        # Windows, open in a spreadsheet) a run that adds F14 fails and leaves no F14 that the manifest does not list
+        import os
+        real = os.replace
+
+        def locked(src, dst, *args, **kwargs):
+            if Path(dst) == manifest:
+                raise PermissionError(13, "simulated: MANIFEST.csv is open in another program", str(dst))
+            return real(src, dst, *args, **kwargs)
+        os.replace = locked
+        try:
+            _refused(lambda: run("F13", "F14"), PermissionError, "simulated: MANIFEST.csv")
+        finally:
+            os.replace = real
+        assert state() == frozen and unlisted(manifest) == []
         assert run("F13", "F14") == 0
         after = state()
         assert after[n13] == frozen[n13] and sorted(after) == sorted(["MANIFEST.csv", n13, n14])

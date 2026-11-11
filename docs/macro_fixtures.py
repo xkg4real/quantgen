@@ -9,9 +9,10 @@ contract, writes one fixture per manifest row ("values unchanged; provenance fie
 its md5 and appends the manifest rows. It refuses, listing every missing file, when the reference directory or a file
 it would read is absent (it is absent on this machine: every golden that needs them stays NOT_RUN). A refused run
 writes nothing. A regeneration before the M7 freeze must reproduce the same md5s or is a fixture change logged in the
-manifest with the tests it re-baselines (L5492): the command line compares every built file with the manifest before
-it writes any (`generate(manifest=...)`), and `freeze` refuses a row whose md5 differs instead of overwriting it, so a
-refused regeneration leaves the frozen files and the manifest as they were.
+manifest with the tests it re-baselines (L5492): the command line passes the manifest to `generate`, which compares
+every built file with it before it writes any and refuses a row whose md5 differs instead of overwriting it, so a
+refused regeneration leaves the frozen files and the manifest as they were; the new manifest rows are written in the
+same final write as the fixtures (`_commit`), the manifest last.
 
 No clock is read here: `retrieved_at_utc` is an argument (the retrieval instant recorded in CATALOG.md).
 """
@@ -340,61 +341,64 @@ def _atomic_write(path: Path, data: str | bytes) -> None:
 
 
 class FinalWriteIncomplete(OSError):
-    """The final write into the output directory failed part way and could not be undone in full; `.left` names
-    every file (or temporary file, or directory) left in another state than before the run."""
+    """The final write failed part way and could not be undone in full; `.left` names every file (or temporary file,
+    or directory) left in another state than before the run."""
 
-    def __init__(self, out_dir: Path, failed: str, cause: BaseException, left: list[str]) -> None:
-        self.out_dir, self.left = out_dir, left
-        super().__init__(f"writing {failed} into {out_dir} failed ({type(cause).__name__}: {cause}) and the files "
-                         f"written before it could not all be restored; no manifest row was written. Left: "
+    def __init__(self, failed: Path, cause: BaseException, left: list[str]) -> None:
+        self.failed, self.left = failed, left
+        super().__init__(f"writing {failed.name} into {failed.parent} failed ({type(cause).__name__}: {cause}) and "
+                         "the files written before it could not all be restored; no manifest row was written. Left: "
                          + "; ".join(left))
 
 
-def _commit(out_dir: Path, built: list[tuple[str, bytes]]) -> None:
-    """Write `built` ((file name, bytes)) into `out_dir`, all or nothing as far as the file system allows (review of
-    PR #101, R4). Every file is first written whole to a temporary file in `out_dir`, and the bytes of each file it
-    replaces are read; a failure there changes nothing. Then each temporary file is renamed over its destination
-    (`os.replace`, one rename per file). If a rename fails (on Windows, a destination open in another program), the
-    files already renamed get their earlier bytes back, the files this run created are removed, the temporary files
-    are deleted, a directory this run created is removed again, and the error is raised: `out_dir` is as it was.
-    What remains possible: each file is always whole, either its earlier bytes or its new bytes, never a mix; but if
-    the process is stopped during the renames (killed, power lost) no undo runs, so some files hold their new bytes,
-    other files their earlier bytes, and a temporary file `<name>*.tmp` may remain; a reader of `out_dir` during the
-    renames can see that mix; and if the undo itself fails (a file locked in that instant), FinalWriteIncomplete names
-    each file left changed. In every case no manifest row is written (`freeze` runs only after this returns)."""
-    made: list[Path] = []                                   # directories this run creates, deepest first
-    p = out_dir
-    while not p.exists():
-        made.append(p)
-        p = p.parent
-    out_dir.mkdir(parents=True, exist_ok=True)
-    before: dict[str, bytes | None] = {}
-    temps: dict[str, str] = {}
-    done: list[str] = []
-    name = ""
+def _commit(items: list[tuple[Path, bytes]]) -> None:
+    """Write `items` ((destination path, bytes)) in their order, all or nothing as far as the file system allows
+    (review of PR #101, R4). `generate` passes the fixtures and, last, the manifest with its new rows, so a fixture is
+    never left in place without its manifest row. Every file is first written whole to a temporary file beside its
+    destination, and the bytes of each file it replaces are read; a failure there changes nothing. Then each temporary
+    file is renamed over its destination (`os.replace`, one rename per file). If a rename fails (on Windows, a
+    destination open in another program, the manifest included), the files already renamed get their earlier bytes
+    back, the files this run created are removed, the temporary files are deleted, a directory this run created is
+    removed again, and the error is raised: every destination is as it was. What remains possible: each file is
+    always whole, either its earlier bytes or its new bytes, never a mix; but if the process is stopped during the
+    renames (killed, power lost) no undo runs, so some files hold their new bytes, other files their earlier bytes,
+    the manifest may lack the rows of fixtures already renamed, and a temporary file `<name>*.tmp` may remain; a
+    reader during the renames can see that mix; and if the undo itself fails (a file locked in that instant),
+    FinalWriteIncomplete names each file left changed. The manifest is renamed last, so whenever the write fails or
+    is undone, the manifest holds no new row."""
+    dests = [dest for dest, _data in items]
+    made: list[Path] = []                                   # directories this run creates
+    for parent in dict.fromkeys(dest.parent for dest in dests):
+        p = parent
+        while not p.exists() and p not in made:
+            made.append(p)
+            p = p.parent
+        parent.mkdir(parents=True, exist_ok=True)
+    before: dict[Path, bytes | None] = {}
+    temps: dict[Path, str] = {}
+    done: list[Path] = []
+    dest = dests[0] if dests else Path()
     try:
-        for name, data in built:                            # 1. every new file, whole, beside its destination
-            dest = out_dir / name
-            before[name] = dest.read_bytes() if dest.exists() else None
-            fd, temps[name] = tempfile.mkstemp(dir=out_dir, prefix=name, suffix=".tmp")
+        for dest, data in items:                            # 1. every new file, whole, beside its destination
+            before[dest] = dest.read_bytes() if dest.exists() else None
+            fd, temps[dest] = tempfile.mkstemp(dir=dest.parent, prefix=dest.name, suffix=".tmp")
             with os.fdopen(fd, "wb") as fh:
                 fh.write(data)
-        for name, _data in built:                           # 2. one rename per file
-            os.replace(temps[name], out_dir / name)
-            del temps[name]
-            done.append(name)
+        for dest in dests:                                  # 2. one rename per file, the manifest last
+            os.replace(temps[dest], dest)
+            del temps[dest]
+            done.append(dest)
     except BaseException as exc:
         left = []
         for undo in reversed(done):                         # 3. undo the renames already made
-            dest = out_dir / undo
             try:
                 if before[undo] is None:
-                    dest.unlink()
+                    undo.unlink()
                 else:
-                    _atomic_write(dest, before[undo])
+                    _atomic_write(undo, before[undo])
             except OSError as why:
                 state = "created by this run and not removed" if before[undo] is None else "left with its new bytes"
-                left.append(f"{undo}: {state} ({why})")
+                left.append(f"{undo.name}: {state} ({why})")
         for tmp in temps.values():
             try:
                 os.unlink(tmp)
@@ -402,13 +406,13 @@ def _commit(out_dir: Path, built: list[tuple[str, bytes]]) -> None:
                 pass
             except OSError as why:
                 left.append(f"{Path(tmp).name}: temporary file not removed ({why})")
-        for d in made:
+        for d in sorted(made, key=lambda d: len(d.parts), reverse=True):     # deepest first
             try:
                 d.rmdir()
             except OSError as why:
                 left.append(f"{d}: directory created by this run not removed ({why})")
         if left:
-            raise FinalWriteIncomplete(out_dir, name, exc, left) from exc
+            raise FinalWriteIncomplete(dest, exc, left) from exc
         raise
 
 
@@ -505,9 +509,12 @@ def generate(ref_dir: Path, out_dir: Path, *, retrieved_at_utc: datetime, licenc
     A result table is copied byte for byte (line ends and encoding included) and its md5 is that of those bytes; a
     data fixture is written as `fixture_text` in UTF-8, and its md5 is that of the bytes written. With `manifest` (the
     command line passes it), a file the manifest lists with another md5 is refused with FixtureChanged before
-    `out_dir` is touched, as `freeze` would refuse it after (L5492; review of PR #101, R1). Every file is built and
-    checked in a temporary directory first, and `out_dir` is written only after the last one passed, by `_commit`:
-    a refused run leaves `out_dir` as it was, and `_commit` says what a failure of the final write can leave."""
+    `out_dir` is touched (L5492; review of PR #101, R1), and the rows the manifest lacks are appended to it by
+    `freeze`'s rule in the same final write as the fixtures, as its last file (R4): a fixture is never left in
+    `out_dir` without its manifest row because the manifest could not be written. Every file is built and checked in
+    a temporary directory first, and `out_dir` is written only after the last one passed, by `_commit`: a refused
+    run leaves `out_dir` and the manifest as they were, and `_commit` says what a failure of the final write can
+    leave."""
     ref_dir, out_dir = Path(ref_dir), Path(out_dir)
     files = selected_files(only)
     missing = missing_files(ref_dir, only)
@@ -541,10 +548,10 @@ def generate(ref_dir: Path, out_dir: Path, *, retrieved_at_utc: datetime, licenc
                              "series": series, "span": span, "retrieved_at_utc": _iso(retrieved_at_utc),
                              "value_status_rule": rule, "md5": hashlib.md5(data).hexdigest(), "licence": licence,
                              "owner": owner, "tests": tests})
-            built.append((staged.name, data))
-    if manifest is not None and Path(manifest).is_file():     # R1: compared before `out_dir` is touched
-        _refuse_changed(load_manifest(Path(manifest)), rows_out)
-    _commit(out_dir, built)                                    # every file passed: only now is `out_dir` written
+            built.append((out_dir / staged.name, data))
+    if manifest is not None:                                   # R1: compared before `out_dir` is touched; R4: the
+        built.append((Path(manifest), _manifest_bytes(Path(manifest), rows_out)[0]))   # manifest is written last
+    _commit(built)                                             # every file passed: only now is `out_dir` written
     return rows_out
 
 
@@ -562,11 +569,9 @@ def _refuse_changed(listed: dict, rows: list[dict]) -> None:
                              "manifest with the tests it re-baselines, L5492): " + "; ".join(changed))
 
 
-def freeze(manifest: Path, rows: list[dict]) -> int:
-    """Append the rows the manifest lacks; a listed file whose md5 differs raises FixtureChanged (L5492); an
-    identical row is left alone. Returns the number of rows appended. `generate(manifest=...)` makes the same
-    comparison before it writes, so on the command line a refused regeneration leaves the frozen files as they were."""
-    manifest = Path(manifest)
+def _manifest_bytes(manifest: Path, rows: list[dict]) -> tuple[bytes, int]:
+    """`freeze`'s rule without the write: the manifest's bytes with the rows it lacks appended, and how many; a listed
+    file whose md5 differs raises FixtureChanged (L5492); an identical row is left alone."""
     listed = load_manifest(manifest) if manifest.is_file() else {}
     _refuse_changed(listed, rows)
     new = [r for r in rows if r["file"] not in listed]
@@ -575,8 +580,17 @@ def freeze(manifest: Path, rows: list[dict]) -> int:
         text += "\n"
     buf: list[str] = []
     csv.DictWriter(_Buf(buf), fieldnames=MANIFEST_COLUMNS, lineterminator="\n").writerows(new)
-    _atomic_write(manifest, text + "".join(buf))
-    return len(new)
+    return (text + "".join(buf)).encode("utf-8"), len(new)
+
+
+def freeze(manifest: Path, rows: list[dict]) -> int:
+    """Append the rows the manifest lacks; a listed file whose md5 differs raises FixtureChanged (L5492); an
+    identical row is left alone. Returns the number of rows appended. The command line does not call it:
+    `generate(manifest=...)` applies the same rule and writes the manifest in the same final write as the fixtures."""
+    manifest = Path(manifest)
+    data, added = _manifest_bytes(manifest, rows)
+    _atomic_write(manifest, data)
+    return added
 
 
 def main(argv=None, *, clocks=None) -> int:
@@ -606,11 +620,12 @@ def main(argv=None, *, clocks=None) -> int:
     from core.calendars.adapter import CalendarClocks            # the shipped set: refuses until the owner signs
     from core.ficc import contracts
     registry, clocks = contracts.default_registry(), CalendarClocks() if clocks is None else clocks
+    manifest = Path(args.manifest)
+    listed = set(load_manifest(manifest)) if manifest.is_file() else set()
     rows = generate(ref, Path(args.out), retrieved_at_utc=retrieved, licence=args.licence, owner=args.owner,
                     available_at=calendar_available_at(registry, clocks),
-                    check_fixture=calendar_check_fixture(registry, clocks), only=args.only,
-                    manifest=Path(args.manifest))
-    added = freeze(Path(args.manifest), rows)
+                    check_fixture=calendar_check_fixture(registry, clocks), only=args.only, manifest=manifest)
+    added = sum(r["file"] not in listed for r in rows)       # `generate` appended them with the fixtures
     print(f"{len(rows)} fixtures written under {args.out}; {added} manifest rows appended to {args.manifest}")
     return 0
 
