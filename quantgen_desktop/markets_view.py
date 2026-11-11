@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import json
 import threading
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import date, datetime, timezone
 
 from PyQt6.QtCore import (QAbstractListModel, QByteArray, QModelIndex, QObject, QSize, QTimer, Qt, pyqtSignal,
@@ -809,9 +809,12 @@ class MarketsWorkspace(QWidget):
         self.rankings.listing_requested.connect(self._open_other)
         self.rankings.category_changed.connect(self.category_changed)
         self.rankings.page_changed.connect(self.market_changed)
+        self.rankings.page_changed.connect(self._remember_stock_market)
         self.rankings.others_fn = self._others
+        self._stock_market = "kr"   # the stock market a search for stocks returns to from the coin page
         self.search = self.rankings.search
         self.search.returnPressed.connect(self.submit)
+        self.rankings.search_submitted.connect(self.submit)  # Enter in the pinned bar's search
         self.message = self.rankings.message
         # The directory's code-or-name matching, without its popup: the list narrows in place, and stocks of
         # this market outside the list are offered under it (`RankingBoard._others`). Focusing the search starts
@@ -883,18 +886,30 @@ class MarketsWorkspace(QWidget):
                 if self.stock.focus_search():
                     return True
                 self.show_rankings()
-            self._scroll_to_top()
-            self.search.setFocus(Qt.FocusReason.OtherFocusReason)
-            self.search.selectAll()
-            return True
+            return self.focus_search()
         if key not in _rankings.CATEGORY_KEYS:
             raise ValueError(f"Unknown ranking category {key!r}")
         if _screen.category_note(self.rankings.page, key):
-            self.rankings.set_page("kr")  # coins cannot rank by it; the stock markets can
+            self.rankings.set_page(self._stock_market)  # coins cannot rank by it; the stock market shown last can
         self.rankings.set_category(key)
         self.show_rankings()
         self._scroll_to_top()  # a newly chosen list starts at its first rank
         return True
+
+    def focus_search(self):
+        """The list's search for a stock (Home's "add to watchlist", the window's live-chart action). A coin page
+        cannot find or open a stock (UI-D10 review: Home's add landed on the coin search), so it gives way to the
+        stock market shown last."""
+        if self.rankings.page not in ("kr", "us"):
+            self.rankings.set_page(self._stock_market)
+        self._scroll_to_top()
+        self.search.setFocus(Qt.FocusReason.OtherFocusReason)
+        self.search.selectAll()
+        return True
+
+    def _remember_stock_market(self, page):
+        if page in ("kr", "us"):
+            self._stock_market = page
 
     def _scroll_to_top(self):
         from PyQt6.QtWidgets import QScrollArea
@@ -923,39 +938,53 @@ class MarketsWorkspace(QWidget):
         self.open_instrument(Instrument(listing.asset, listing.code, listing.exchange))
 
     def open_instrument(self, instrument, *, load=True):
-        self._say("")
+        self._say()
         if instrument is None:
             return  # a coin: the stock screen has no instrument for it
-        # The market page under the stock's screen follows the stock, so Back returns to its market's list.
+        was_stock = self.showing_stock()
+        # The stock's screen first, then the market page under it follows the stock (so Back returns to its
+        # market's list): switched while hidden, the list starts no fetch behind the stock screen (UI-D10
+        # review); it loads when Back shows it.
+        self.pages.setCurrentIndex(1)
         market = {"domestic_stock": "kr", "overseas_stock": "us"}.get(instrument.asset)
         if market and market != self.rankings.page:
             self.rankings.set_page(market)
-        was_stock = self.showing_stock()
-        self.pages.setCurrentIndex(1)
         self.stock.show_instrument(instrument, load=load)
         if not was_stock:
             self.category_changed.emit("")
 
     def submit(self):
-        """Enter in the header search: open the one stock the text names (the list's single match, a directory
-        match in this market, a six-digit domestic code, or else a match in the other stock market, as the
-        earlier "종목 검색" did); otherwise the narrowed list and the suggestions under it are the answer. A code of
-        another kind (derivatives, bonds) is offered under the list, never guessed."""
+        """Enter in the search: open the one stock the text names, else leave the answer to the page.
+
+        In order: the list's single row; the single stock of this market's curated list the text names (whether
+        or not its quote is loaded or passes the criteria: `Screen.members`, UI-D10 review); when the list has
+        none by that name, a directory match in this market, a six-digit domestic code, the single stock of
+        another market's curated list, or a directory match in the other stock markets (as the earlier "종목
+        검색" did). Several names, a coin, or a name the criteria leave out: the narrowed list and its empty
+        state say why. A code of another kind (derivatives, bonds) is offered under the list, never guessed."""
         text = self.search.text().strip()
         if not text:
             return
-        page = self.rankings.page
-        openable = [row for row in self.rankings.ranked if row.record.member.instrument is not None]
-        if len(self.rankings.ranked) == 1 and openable:
-            self.open_instrument(openable[0].record.member.instrument)
+        board, page = self.rankings, self.rankings.page
+        shown = [row.record.member for row in board.ranked]
+        if len(shown) == 1 and shown[0].instrument is not None:
+            self.open_instrument(shown[0].instrument)
             return
-        if page == "crypto":
-            if not self.rankings.ranked:
-                self._say(self.rankings._p("no_coin", text=text))
-            return
-        own = ("domestic_stock",) if page == "kr" else ("overseas_stock",)
-        other = ("overseas_stock",) if page == "kr" else ("domestic_stock",)
-        listing = self.directory.resolve(text, assets=own) if self.directory is not None else None
+        named = board.screen.members()
+        if len(named) > 1:  # '카카오' names 카카오 itself among 카카오뱅크 and 카카오페이
+            from core.search_text import normal
+            wanted = normal(text)
+            exact = [m for m in named if wanted in {normal(m.name_ko), normal(m.name_en), normal(m.code)}]
+            named = exact if len(exact) == 1 else named
+        if named:
+            if len(named) == 1 and named[0].instrument is not None:
+                self.open_instrument(named[0].instrument)
+            return  # several, a coin, or one the criteria leave out: the list and its empty state answer
+        if replace(board.screen, sub="", sector="").members():
+            return  # the market has it outside the sub-market or sector chosen: the empty state says so
+        own = {"kr": ("domestic_stock",), "us": ("overseas_stock",)}.get(page, ())
+        other = tuple(asset for asset in STOCK_ASSETS if asset not in own)
+        listing = self.directory.resolve(text, assets=own) if own and self.directory is not None else None
         if listing is not None:
             self.open_listing(listing)
             return
@@ -964,13 +993,21 @@ class MarketsWorkspace(QWidget):
             self.search.clear()
             self.open_instrument(Instrument("domestic_stock", code))
             return
-        if self.rankings.ranked or self.rankings._others():
-            return  # the narrowed list and the suggestions under it are the answer
+        if board._others():
+            return  # the suggestions under the search are the answer
+        elsewhere = [member for each in MARKET_PAGE_KEYS if each != page
+                     for member in _screen.Screen(each, text=text).members()]
+        if len(elsewhere) == 1 and elsewhere[0].instrument is not None:
+            self.search.clear()
+            self.open_instrument(elsewhere[0].instrument)  # its screen, and Back to its market's list
+            return
+        if elsewhere:
+            return  # the '…에서 보기' pointers under the search are the answer
         listing = self.directory.resolve(text, assets=other) if self.directory is not None else None
         if listing is not None:
             self.open_listing(listing)  # the stock is in the other market: its screen, and Back to that list
             return
-        self._say(self.rankings._p("not_found", text=text))
+        self._say("no_coin" if page == "crypto" else "not_found", text=text)
 
     def _open_other(self, payload):
         if isinstance(payload, Instrument):
@@ -1002,13 +1039,13 @@ class MarketsWorkspace(QWidget):
 
     def _directory_loaded(self, _added):
         if self.directory is not None and getattr(self.directory, "error", None):
-            self._say(_text(self.ctx, "국내 종목 이름 목록을 불러오지 못했습니다. 국내 종목은 6자리 코드로 검색하세요.",
-                            "Could not load the domestic stock names. Search domestic stocks by their 6-digit code."))
+            self._say("directory_failed")
         elif self.rankings.query and not self.showing_stock():
             self.rankings.render()  # the suggestions under the search can now name more stocks
 
-    def _say(self, text):
-        self.rankings.say(text)
+    def _say(self, key=None, **fields):
+        """A message under the search, as a PAGE_TEXT key (re-rendered in the new language on a switch)."""
+        self.rankings.say(key, **fields)
 
     # Presentation --------------------------------------------------------------------------
     def set_locale(self, ctx):

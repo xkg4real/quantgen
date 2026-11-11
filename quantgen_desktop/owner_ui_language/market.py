@@ -118,11 +118,11 @@ PAIRS = {
     'Ranked among {count} major stocks, not the whole market. Open a row for its chart.':
         '주요 종목 {count}개 안에서 매긴 순위이며 전체 시장 순위가 아닙니다. 종목을 누르면 차트와 정보를 봅니다.',
     'Delayed · daily: the last daily bar; trading value is close × volume, estimated.':
-        '지연·일별: 마지막 일봉 기준이며 거래대금은 종가×거래량 추정치입니다.',
+        '지연·일별: 마지막 날 종가 기준이며 거래대금은 종가×거래량 추정치입니다.',
     'Could not load {count} of these stocks.': '{count}개 종목은 불러오지 못했습니다.',
     'Left out for old data: {count}.': '오래된 자료라서 뺀 종목 {count}개.',
     '{source} daily bars, last bar {day}; trading value estimated as close × volume.':
-        '{source} 일봉 · 마지막 봉 {day} · 거래대금은 종가×거래량 추정',
+        '{source} 일별 값 · 마지막 {day} · 거래대금은 종가×거래량 추정',
     # Source state (2026-11-11 compliance follow-up): KIS REST quotes are polled, never called 실시간, in the
     # stock detail view's words ("5초 조회", "조회 시점", US "무료 시세"; owner_ui_language/stock.py).
     '{source} current quotes polled every {seconds} s (REST requests, not a trade stream); last received {when} KST.':
@@ -197,18 +197,19 @@ PAIRS = {
     'No source this app uses states coin market cap, so coins are not ranked by it.':
         '이 앱이 쓰는 자료에는 코인 시가총액이 없어 시가총액 순위를 매기지 않습니다.',
     'Find in {market}: name, code, sector': '{market}에서 찾기 · 이름, 코드, 업종',
-    'Find coins: name or symbol': '코인 찾기 · 이름이나 기호',
     'Search within {market}': '{market} 안에서 찾기',
     'Conditions: {count} set': '조건 {count}개 적용 중',
-    'Narrow this list by change, trading value or market cap.': '등락률, 거래대금, 시가총액으로 목록을 좁힙니다.',
     'The lower bound is above the upper bound.': '최소가 최대보다 큽니다. 두 값을 맞추면 적용합니다.',
     'Clear conditions': '조건 지우기',
     'Remove this filter': '이 조건 지우기',
     'Remove filter: {name}': '조건 지우기: {name}',
     'Outside this list:': '목록 밖에서 찾은 종목',
-    'Nothing in this list matches ‘{text}’.': '이 목록에는 ‘{text}’에 맞는 종목이 없습니다.',
     'Coins have no stock screen yet, so this row opens nothing.':
         '코인은 아직 종목 화면이 없어 눌러도 열리지 않습니다.',
+    "Coins have no volume or market-cap ranking: one coin's unit is worth very different amounts from another's, "
+    "and no source this app uses states coin market cap.":
+        '코인은 거래량·시가총액 순위가 없습니다. 코인마다 1개의 값이 크게 달라 개수로 비교할 수 없고, 이 앱이 쓰는 '
+        '자료에는 코인 시가총액이 없습니다.',
     'Ranked among {count} major coins, not the whole market. Prices in US dollars.':
         '주요 코인 {count}개 안에서 매긴 순위이며 전체 시장 순위가 아닙니다. 가격은 미국 달러입니다.',
     "Delayed · daily: Yahoo Finance daily bars by UTC day, today's still moving; trading value is Yahoo's daily "
@@ -241,13 +242,39 @@ PAGE_TEXT = {
     "between": ("{name} {low} to {high}", "{name} {low} ~ {high}"),
     "at_least": ("{name} at least {value}", "{name} {value} 이상"),
     "at_most": ("{name} at most {value}", "{name} {value} 이하"),
-    "results": ("{count} results", "{count}개 종목"),
+    "results": ("{count} stocks", "종목 {count}개"),
     "coin_results": ("{count} coins", "코인 {count}개"),
     "clear_all": ("Clear all", "모두 지우기"),
+    "clear_all_tip": ("Clear the search, market, sector and conditions", "검색어, 시장, 업종, 조건을 모두 지웁니다"),
     "open": ("Open {name}", "{name} 열기"),
-    "no_coin": ("No coin in this list matches '{text}'.", "이 목록에는 '{text}'에 맞는 코인이 없습니다."),
-    "not_found": ("No stock matches '{text}'. Check the name or enter its code.",
-                  "'{text}'에 맞는 종목을 찾지 못했습니다. 이름을 고치거나 종목 코드를 입력하세요."),
+    "find_coins": ("Find coins: name or ticker (BTC)", "코인 찾기 · 이름이나 티커(BTC)"),
+    "conditions_tip": ("Narrow this list by {names}.", "{names}{ro} 목록을 좁힙니다."),
+    "sub_market": ("Listing market", "상장 시장"),
+    "ranked_by": ("By {name}", "{name} 순"),
+    "back_to_criteria": ("Back up to the ranking and filters", "위로 가서 순위 기준과 필터 보기"),
+    "sort_by": ("Rank by {name}", "{name} 순으로 보기"),
+    "rank_by_value": ("Rank by trading value", "거래대금 순으로 보기"),
+    "in_market": ("See in {market}: {name}", "{market}에서 보기: {name}"),
+    "in_market_more": ("See in {market}: {name} and {count} more", "{market}에서 보기: {name} 외 {count}개"),
+    "no_match": ("Nothing in this list matches ‘{text}’.", "이 목록에는 ‘{text}’에 맞는 종목이 없습니다."),
+    "no_coin": ("No coin in this list matches ‘{text}’.", "이 목록에는 ‘{text}’에 맞는 코인이 없습니다."),
+    "outside_place": ("‘{text}’ is outside the market or sector chosen.",
+                      "‘{text}’에 맞는 종목은 지금 고른 시장·업종 밖에 있습니다."),
+    "show_all_place": ("Show every market and sector", "전체 시장·업종으로 보기"),
+    "no_condition": ("No stock here meets these conditions.", "조건에 맞는 종목이 없습니다."),
+    "no_condition_coin": ("No coin here meets these conditions.", "조건에 맞는 코인이 없습니다."),
+    "none_up": ("Top gainers lists only stocks that are up; none of the {count} matching stocks is.",
+                "급상승은 오른 종목만 보여 줍니다. 지금 기준에 맞는 종목 {count}개는 오르지 않았습니다."),
+    "none_up_coin": ("Top gainers lists only coins that are up; none of the {count} matching coins is.",
+                     "급상승은 오른 코인만 보여 줍니다. 지금 기준에 맞는 코인 {count}개는 오르지 않았습니다."),
+    "none_down": ("Top losers lists only stocks that are down; none of the {count} matching stocks is.",
+                  "급하락은 내린 종목만 보여 줍니다. 지금 기준에 맞는 종목 {count}개는 내리지 않았습니다."),
+    "none_down_coin": ("Top losers lists only coins that are down; none of the {count} matching coins is.",
+                       "급하락은 내린 코인만 보여 줍니다. 지금 기준에 맞는 코인 {count}개는 내리지 않았습니다."),
+    "not_found": ("No stock matches ‘{text}’. Check the name or enter its code.",
+                  "‘{text}’에 맞는 종목을 찾지 못했습니다. 이름을 고치거나 종목 코드를 입력하세요."),
+    "directory_failed": ("Could not load the domestic stock names. Search domestic stocks by their 6-digit code.",
+                         "국내 종목 이름 목록을 불러오지 못했습니다. 국내 종목은 6자리 코드로 검색하세요."),
 }
 
 # The market pages' index strip (market_summary.py): Yahoo symbol -> (English, Korean).

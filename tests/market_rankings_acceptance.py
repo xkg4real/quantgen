@@ -477,8 +477,9 @@ class SourceStateWordingTests(unittest.TestCase):
             self.assertFalse(re.search(r"(?i)real[- ]?time|live", en), en)
         self.assertEqual(R.text(R.STATES, "polled", "ko"), "KIS 조회 · 45초마다")
         self.assertEqual(R.text(R.STATES, "polled", "en"), "KIS · polled every 45 s")
-        self.assertEqual(R.text(R.STATES, "polled_us", "ko"), "KIS 무료 시세 · 45초마다 조회")
-        self.assertEqual(R.text(R.STATES, "polled_us", "en"), "KIS free US feed · polled every 45 s")
+        # UI-D10 review: the US state in the domestic one's order, without the trailing "조회" that overflowed.
+        self.assertEqual(R.text(R.STATES, "polled_us", "ko"), "KIS 무료 시세 · 45초마다")
+        self.assertEqual(R.text(R.STATES, "polled_us", "en"), "KIS free feed · polled every 45 s")
         self.assertEqual(R.POLL_SECONDS, 45)
         stock = Path(__file__).resolve().parents[1] / "quantgen_desktop" / "owner_ui_language" / "stock.py"
         words = stock.read_text(encoding="utf-8")

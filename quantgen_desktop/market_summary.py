@@ -11,7 +11,8 @@ daily figures read with a delay, never live: the strip says "지연·일별", an
 provider and that an intraday last bar may still be moving stay in the tooltips (owner, 2026-11-04).
 
 Loading runs off the UI thread, one market's two series per job, only while the strip is visible with automatic
-loading on, or after the user presses the page's Refresh. The strip is given its series loader (the window passes
+loading on, or after the user presses the page's Refresh (a Refresh pressed while another market's strip loads is
+kept and runs next). Closing the window cancels the job between its two requests. The strip is given its series loader (the window passes
 `production_series`); without one it never loads and stays hidden, so a page built on its own (tests) cannot
 reach a provider. With automatic loading off and nothing loaded the strip is hidden (no empty dashes). A language
 or theme switch re-renders without fetching.
@@ -19,7 +20,7 @@ or theme switch re-renders without fetching.
 from __future__ import annotations
 
 from datetime import datetime, timezone
-import math
+import threading
 
 from PyQt6.QtCore import QTimer, Qt, pyqtSignal, pyqtSlot
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel, QSizePolicy, QVBoxLayout, QWidget
@@ -47,11 +48,17 @@ def production_series(symbol, **kwargs):
     return load_series(symbol, **kwargs)
 
 
-def load_summary(page, *, loader=None):
-    """The page's index histories, one after the other; never raises (each failure keeps only a reason code)."""
+def load_summary(page, *, loader=None, cancelled=None):
+    """The page's index histories, one after the other; never raises (each failure keeps only a reason code).
+
+    `cancelled` is asked before each request: a closed window stops after the request already running."""
     from .home_view import MarketInfo, load_market_history
-    return tuple(load_market_history(MarketInfo(symbol, "yfinance", unit), loader=loader)
-                 for symbol, unit in SUMMARY[page])
+    histories = []
+    for symbol, unit in SUMMARY[page]:
+        if cancelled is not None and cancelled():
+            break
+        histories.append(load_market_history(MarketInfo(symbol, "yfinance", unit), loader=loader))
+    return tuple(histories)
 
 
 def _label(rk, *, numbers=False):
@@ -82,6 +89,7 @@ class SummaryTile(QFrame):
         self.value = _label("sumValue", numbers=True)
         self.change = _label("sumChange", numbers=True)
         self.spark = Sparkline(*TILE_SPARK)
+        self.compact, self.ok = False, False  # compact: a narrow page drops the sparkline (`MarketSummary.set_compact`)
         for widget in (self.name, self.value, self.change):
             layout.addWidget(widget, 0, Qt.AlignmentFlag.AlignVCenter)
         layout.addWidget(self.spark, 0, Qt.AlignmentFlag.AlignVCenter)
@@ -91,7 +99,7 @@ class SummaryTile(QFrame):
         from .typography import TONE_COLORS, set_tone
         name = self.names[1] if language == "ko" else self.names[0]
         self.name.setText(name)
-        ok = history is not None and history.ok
+        ok = self.ok = history is not None and history.ok
         if ok:
             values = history.values
             last, before = values[-1], values[-2]
@@ -103,7 +111,7 @@ class SummaryTile(QFrame):
             closes = values[-SPARK_POINTS:]
             tones = TONE_COLORS[bool(dark)]
             self.spark.set_values(closes, tones["up"] if closes[-1] >= closes[0] else tones["down"])
-            self.spark.show()
+            self.spark.setVisible(not self.compact)
         else:
             self.value.setText("—")
             self.change.setText("")
@@ -146,7 +154,8 @@ class MarketSummary(QWidget):
         self.histories = {}          # symbol -> MarketHistory
         self._fetched = {}           # page -> when its last load finished
         self._loading = None         # page while its job runs
-        self._epoch, self._stopped = 0, False
+        self._epoch, self._stopped, self._pending, self._cancel = 0, False, False, None
+        self.compact = False
         self.jobs = Jobs(self)
         self.jobs.succeeded.connect(self._loaded)
         self.jobs.failed.connect(self._failed)
@@ -181,14 +190,31 @@ class MarketSummary(QWidget):
         return (self.clock() - fetched).total_seconds() >= limit
 
     def refresh(self, *, manual=False):
-        if self.loader is None or self._stopped or self.jobs.busy or (not manual and not self.due()):
+        """Load the shown page's series when due (or now, when `manual`); False when nothing started.
+
+        Automatic loads run only while the strip is visible. A manual Refresh refused because another page's
+        series are loading is kept and runs when that job ends (as `RankingBoard.refresh` keeps its own)."""
+        if self.loader is None or self._stopped:
+            return False
+        if self.jobs.busy:
+            self._pending = self._pending or manual
+            return False
+        if not manual and (not self.isVisible() or not self.due()):
             return False
         self._epoch += 1
-        epoch, page, loader = self._epoch, self.page, self.loader
-        self._loading = page
-        started = self.jobs.start(lambda: (epoch, page, load_summary(page, loader=loader)))
+        epoch, page, loader, cancel = self._epoch, self.page, self.loader, threading.Event()
+        self._loading, self._cancel, self._pending = page, cancel, False
+        started = self.jobs.start(lambda: (epoch, page, load_summary(page, loader=loader, cancelled=cancel.is_set)))
         self.render()
         return started
+
+    def _follow_up(self, page):
+        """After a job: a Refresh kept while it ran, or the page shown now when it is not the one just loaded."""
+        manual, self._pending = self._pending, False
+        if self._stopped:
+            return
+        if manual or (page != self.page and self.isVisible() and self.auto_load):
+            QTimer.singleShot(0, lambda: self.refresh(manual=manual))
 
     @pyqtSlot(object)
     def _loaded(self, value):
@@ -203,14 +229,16 @@ class MarketSummary(QWidget):
         self._fetched[page] = self.clock()
         self.render()
         self.loaded.emit(page)
-        if page != self.page and self.isVisible() and self.auto_load:
-            QTimer.singleShot(0, self.refresh)
+        self._follow_up(page)
 
     @pyqtSlot(str)
     def _failed(self, _code):
-        self._loading = None
-        self._fetched[self.page] = self.clock()
+        if self._stopped:
+            return
+        page, self._loading = self._loading or self.page, None
+        self._fetched[page] = self.clock()
         self.render()
+        self._follow_up(page)
 
     def _tick(self):
         if self.isVisible() and self.auto_load:
@@ -227,10 +255,13 @@ class MarketSummary(QWidget):
         super().hideEvent(event)
 
     def stop(self):
+        """Window closing: the running job stops before its next request; its answer is dropped."""
         self.timer.stop()
-        self._stopped = True
+        self._stopped, self._pending = True, False
         self._epoch += 1
         self._loading = None
+        if self._cancel is not None:
+            self._cancel.set()
 
     # Presentation ----------------------------------------------------------------------------
     def set_page(self, page):
@@ -244,6 +275,27 @@ class MarketSummary(QWidget):
     def set_locale(self, ctx):
         self.ctx = ctx
         self.render()
+
+    def set_compact(self, compact):
+        """A narrow page: tiles without their sparkline, so the strip fits beside nothing wider than itself."""
+        compact = bool(compact)
+        if compact == self.compact:
+            return
+        self.compact = compact
+        for tile in self.tiles.values():
+            tile.compact = compact
+        self.render()
+
+    def wide_width(self):
+        """The strip's width with sparklines (what `set_compact(False)` needs)."""
+        shown = [tile for symbol, tile in self.tiles.items() if symbol in {s for s, *_ in SUMMARY[self.page]}]
+        extra = TILE_SPARK[0] + 10  # a hidden sparkline and its spacing
+        width = sum(tile.sizeHint().width() + (extra if tile.ok and not tile.spark.isVisibleTo(tile) else 0)
+                    for tile in shown)
+        width += self.layout().spacing() * len(shown) + 4
+        if self.state.isVisibleTo(self):
+            width += self.state.sizeHint().width()
+        return width
 
     def set_theme(self, dark):
         self.dark = bool(dark)

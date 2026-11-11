@@ -1116,6 +1116,8 @@ class ResearchWindow(QMainWindow):
                     top = self.market_chart.mapTo(scroll.widget(), self.market_chart.rect().topLeft()).y()
                     scroll.verticalScrollBar().setValue(max(0, top - 120))
             QTimer.singleShot(0, reveal)
+        elif hasattr(self.markets_view, 'focus_search'):
+            self.markets_view.focus_search()  # a coin page gives way to a stock market's search (UI-D10 review)
         else:
             self.markets_view.search.setFocus(Qt.FocusReason.OtherFocusReason)
 

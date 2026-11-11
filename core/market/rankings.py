@@ -75,7 +75,9 @@ SECTORS = (("semis", "Semiconductors", "반도체"), ("battery", "Batteries", "2
 # (market_rankings.RankingBoard.due), not after it ended; a round that took longer is 'stale' (`source_state`).
 POLL_SECONDS = 45      # KIS quotes while the market is open (market_rankings.LIVE_REFRESH_SECONDS)
 STATES = (("polled", f"KIS · polled every {POLL_SECONDS} s", f"KIS 조회 · {POLL_SECONDS}초마다"),
-          ("polled_us", f"KIS free US feed · polled every {POLL_SECONDS} s", f"KIS 무료 시세 · {POLL_SECONDS}초마다 조회"),
+          # US: KIS's free feed, in the stock screen's word ("무료 시세"); the same order as the domestic state (UI-D10
+          # review: "KIS 무료 시세 · 45초마다 조회" read differently and overflowed narrow English pages).
+          ("polled_us", f"KIS free feed · polled every {POLL_SECONDS} s", f"KIS 무료 시세 · {POLL_SECONDS}초마다"),
           ("closed", "KIS · market closed", "KIS · 장 마감"),
           ("stale", "KIS · not current", "KIS · 갱신 지연"), ("daily", "Delayed · daily", "지연·일별"),
           ("none", "No data", "자료 없음"))
