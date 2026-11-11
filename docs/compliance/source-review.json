@@ -339,8 +339,8 @@
     "docs/product/NAUTILUS_AND_DATA_SOURCES_2026-10-31.md": "b2b0fdb675bd2e04e79863d872fc6101f40a10744b5bd0516da17957a26e7936",
     "docs/product/OPTION_DISCLOSURE_2026-11-04.md": "ff314ee2043b524cdb8456f4af5c2ffe5f19f19d341ac28be471a6d3c7588373",
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
-    "docs/product/PILOT_OWNER_RUN_2026-11-11.md": "bdfb3d14fdbfa69ad85dd8a9f1cceda4da8b5cb822e3d761650bae2f89bc13c4",
-    "docs/product/PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md": "d2591d392704368fb8c3d26fe9cc26730e505e7246e79c7518603e07f6da9d68",
+    "docs/product/PILOT_OWNER_RUN_2026-11-11.md": "b2cb7421d1029072694d763f492732bc1e4defe005124d50d9f65bbc3ccaa592",
+    "docs/product/PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md": "0788d85318fec47ce6ddb15a153178ad5281f66924bd521c810823ed49a6a666",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md": "0b26452ceb5e1eaed963b60f1a9f5b7bf8276552602fce776ea9b54625885144",
     "docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md": "9604ff31a94d2e182bebfb71ec65cd83ca2f96cb8942deae39d3a337b288d4dd",
@@ -683,163 +683,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "a859c491ba5cd6b9dd8b9b454af225330d198ac91553e6e50f98a2c5c2d04d95",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.407129+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "ecd5d32feefd82869001e4ef912a9453e441abbd2e594361b91d8bc74c1dcdf0",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.383705+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "a859c491ba5cd6b9dd8b9b454af225330d198ac91553e6e50f98a2c5c2d04d95",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.409571+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "ecd5d32feefd82869001e4ef912a9453e441abbd2e594361b91d8bc74c1dcdf0",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.386136+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "9d0775a4e8f9cea98772d9bbc89356ae5ad4c165cd664badfd30b23d0618738c",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.411923+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "5fdd18a965ee29c0e6e1632a55aea4578964c9412a87f21d7c91add702b0abf4",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.388353+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "290b9f6e841bf9f6405998fbb4ef56dc96779c448b541df29b1307fbced01c3b",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.413936+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "4e582f4f9f3b560f748fbc0dc1539fa690c93f3ee559a6dcc7ae6e5a33dafdd5",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.390478+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "6409440ff7cfe1f1f1036b7b189cebe106c256a5c89f60c8970893d9e4d12575",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.415946+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "4e6c4182a4226abdfef20cb553fca16b9738ef3e2eca97ac420bf2fd0d9f2e0f",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.392996+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "19b59bdc558c2b73d970caa6a4886a322e5d2d835e950f8db83abb6145a76887",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.417833+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "333558b1086678bbfbdfb4e0257b467440e593a7beedbb3dfa505b5c14b3a643",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.394872+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
-      "source_digest": "a859c491ba5cd6b9dd8b9b454af225330d198ac91553e6e50f98a2c5c2d04d95",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.419802+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "ecd5d32feefd82869001e4ef912a9453e441abbd2e594361b91d8bc74c1dcdf0",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.397094+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "8": {
       "document_sha256": "50659615e7a2ad431f0ba7c6d124c6da1d1fc63b1ee67b7392362d8e79344f26",
-      "source_digest": "19b59bdc558c2b73d970caa6a4886a322e5d2d835e950f8db83abb6145a76887",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.421815+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "333558b1086678bbfbdfb4e0257b467440e593a7beedbb3dfa505b5c14b3a643",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.400624+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "04ce27fed02f1921b4757ab5607246ff72b220ec7500948c485ca9bad1a86909",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.423949+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "a029b72a77f7f1031cb90cb920fb1dc4daf6a6cdab1f74711eaf3e0c1dc5d99f",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.403445+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "76e4d18f13d585ed2a640a743e3bd1185e14b4768deab736fc46466689aba938",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.425807+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "79f5e58a1a12696ad24a59d8277079d5b7697502fbc6f3c898334f354c251bff",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.406660+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "6de7c01c23f2fee9b223b6cc2a83b09bcbf20528cc87dcb8b23c0213d7131a0d",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.427910+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "2679ce318300b384d116c59f0befbeec7b4e0392af29ff54d89a5c913172f9af",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.408961+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "9f0e29ef156b3ef6feb6de4e807d6dceeb796f214703425f7500c298b644bc92",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Test-only change for document 12: tests/macro_m1_fixtures.py checks that an interrupt during the directory syncs after the offline fixture generator's last rename reaches the caller with every file written, and that the generator no longer syncs the throwaway copies it stages for the post-close check (verifier round of PR 107, finding F2). 12-claims was read again: no app screen, performance figure, financial claim or user-facing text changes; the generator is a developer tool run on synthetic files in these tests.",
-      "reviewed_at": "2026-11-11T17:15:27.956687+00:00",
-      "source_commit": "c63ea6e4ba146caee8abb2916fed378258aec29e"
+      "source_digest": "5741d9b272c5d98c2d975193ffa8855806d610d60efec5f146cedf84dec9b7a1",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.410953+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
-      "source_digest": "04ce27fed02f1921b4757ab5607246ff72b220ec7500948c485ca9bad1a86909",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.431608+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "a029b72a77f7f1031cb90cb920fb1dc4daf6a6cdab1f74711eaf3e0c1dc5d99f",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.413326+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
-      "source_digest": "04ce27fed02f1921b4757ab5607246ff72b220ec7500948c485ca9bad1a86909",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.433560+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "a029b72a77f7f1031cb90cb920fb1dc4daf6a6cdab1f74711eaf3e0c1dc5d99f",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.415201+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
-      "source_digest": "04ce27fed02f1921b4757ab5607246ff72b220ec7500948c485ca9bad1a86909",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.435466+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "a029b72a77f7f1031cb90cb920fb1dc4daf6a6cdab1f74711eaf3e0c1dc5d99f",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.417008+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "202f94a04bd5d56569c942b293e24d58a7dffc7cfe438debacfdcca517d296af",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.437243+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "f6b70aabc3e1bcf18963054b7969e5d42fc67c8f74f3861ca3fc05cf967cdc3b",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.418945+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "19b59bdc558c2b73d970caa6a4886a322e5d2d835e950f8db83abb6145a76887",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.438943+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "333558b1086678bbfbdfb4e0257b467440e593a7beedbb3dfa505b5c14b3a643",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.420972+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "a859c491ba5cd6b9dd8b9b454af225330d198ac91553e6e50f98a2c5c2d04d95",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.440689+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "ecd5d32feefd82869001e4ef912a9453e441abbd2e594361b91d8bc74c1dcdf0",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.423776+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
-      "source_digest": "0fb090d2cfdfb6d83216da36e241660fb0ec762fe693706f91b5c8a731958a08",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.442669+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "31de5462106237b685e47b8ddea87dec7a68921a71ed89e1965fdc88f3d4ddee",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.425776+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "a859c491ba5cd6b9dd8b9b454af225330d198ac91553e6e50f98a2c5c2d04d95",
-      "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Verifier round of PR 107, finding F1: docs/compliance/FACTS.md adds to the dated note on the offline fixture generator's date rule that only ASCII digits are read (full-width digits are refused); that the generator before review R3, reading the first ten characters of a cell, also read ISO week dates and times this rule does not take (2026-W40-2, 2026-09-29T16, an EST suffix, 24:00, 20260929T1600), which stay refused; that a header with two date names, which it read by its first column, is refused and a later column named date is read where it read the first; and that no real reference file has been checked for these shapes. tests/macro_m1_fixtures.py adds header and cell cases for these rules. No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes; the generator is a developer tool run only on the owner's reference files.",
-      "reviewed_at": "2026-11-11T17:04:38.445146+00:00",
-      "source_commit": "6397afd0c5bc52553031b4d530463d0d5688d9cb"
+      "source_digest": "ecd5d32feefd82869001e4ef912a9453e441abbd2e594361b91d8bc74c1dcdf0",
+      "reviewed_by": "Claude pilot sheet rulings",
+      "review_note": "Verifier round of the owner run sheet and the pilot readout under docs/product (6-1/prep/2): cases the owner's 27 decisions of 2026-11-11 do not cover are now marked as asked when they arise (a pilot-2 parity failure, a second C-06-only end once the one pre-approved re-run is used, a record=- line that still leaves a run folder, FAILs beyond the two known ones in the cache-free full test, main moving before the confirmation sentence is recorded); the confirmation-sentence commit, the old and new step numbers of the merge sitting and the tip and row-count checks are made exact; the closing record's provider parity lines name both SPY runs and both fixed tool versions. Documentation only: no code, test, workflow or numbered policy document changed, and nothing here changes what the app sends, stores or deletes.",
+      "reviewed_at": "2026-11-11T18:36:39.428007+00:00",
+      "source_commit": "66d2eb6414fdded34862d823c43513c9e608734d"
     }
   }
 }
