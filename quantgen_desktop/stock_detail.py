@@ -404,7 +404,7 @@ class ChartOverlays(QObject):
                 continue
             colors = study_colors(key, dark)
             if key in layout.unavailable:
-                chips.append(f'<span style="color:{colors[spec.lines[0].id]}">●</span> {_esc(spec.name(lang))} '
+                chips.append(f'<span style="color:{colors[spec.lines[0].id]}">●</span>&ensp;{_esc(spec.name(lang))} '
                              f'<span style="color:{view.palette.muted}">— {_esc(availability_short(layout.unavailable[key], lang))}</span>')
                 continue
             try:
@@ -414,7 +414,7 @@ class ChartOverlays(QObject):
             parts = " · ".join(f'<span style="color:{colors[line.id]}">{_esc(name)}</span> '
                                f'{_esc(view.study_value(key, line, cursor, value))}'
                                for line, (name, value) in zip(spec.lines, readout))
-            chips.append(f'<span style="color:{colors[spec.lines[0].id]}">●</span> {parts}')
+            chips.append(f'<span style="color:{colors[spec.lines[0].id]}">●</span>&ensp;{parts}')
             tips.append(spec.name(lang))
         self.legend_label.setText("&nbsp;&nbsp;&nbsp;".join(chips))
         self.legend.setVisible(bool(chips))
@@ -430,7 +430,7 @@ class ChartOverlays(QObject):
             colors = study_colors(key, dark)
             name = spec.name(lang)
             if key in layout.unavailable:
-                head.title.setText(f'<span style="color:{colors[spec.lines[0].id]}">●</span> '
+                head.title.setText(f'<span style="color:{colors[spec.lines[0].id]}">●</span>&ensp;'
                                    f'<b>{_esc(panel_name(spec, lang))}</b>')
                 reading = availability_short(layout.unavailable[key], lang)
                 head.full = text(lang, "panel_info", name=name) + "\n" + reading
@@ -443,7 +443,7 @@ class ChartOverlays(QObject):
                 values_html = " ".join(f'<span style="color:{colors[line.id]}">'
                                        f'{_esc(view.study_value(key, line, cursor, value))}</span>'
                                        for line, (_, value) in zip(spec.lines, readout))
-                head.title.setText(f'<span style="color:{colors[spec.lines[0].id]}">●</span> '
+                head.title.setText(f'<span style="color:{colors[spec.lines[0].id]}">●</span>&ensp;'
                                    f'<b>{_esc(panel_name(spec, lang))}</b>&nbsp; {values_html}')
                 head.full = reading
             head.reading.setText(head.reading.fontMetrics().elidedText(
@@ -1183,7 +1183,8 @@ class StockDetailView(QWidget):
         its tab remain) give way; the state chip stays down to 640px."""
         scroll = self.lock.scroll
         width = scroll.viewport().width() - self._side_margins() if scroll is not None else self.width()
-        compact, narrow, tiny = width < 1180, width < 900, width < 640
+        compact = width < (1180 if _lang(self.ctx) == "ko" else 1280)  # English labels are longer
+        narrow, tiny = width < 900, width < 640
         if (compact, narrow, tiny) == (self._compact, self._narrow, self._tiny):
             return
         self._compact, self._narrow, self._tiny = compact, narrow, tiny
@@ -1456,19 +1457,19 @@ class StockDetailView(QWidget):
             color = study_colors(key, self.dark)[spec.lines[0].id]
             reading_label = numbers(label("studyReading", wrap=True))
             if bars is None:
-                head.setText(f'<span style="color:{color}">●</span>&nbsp;{_esc(spec.name(lang))}')
+                head.setText(f'<span style="color:{color}">●</span>&ensp;{_esc(spec.name(lang))}')
                 reading_label.setText("")
             else:
                 reason = engine.availability(key, asset=asset, interval=interval, supply=self.chart.supply,
                                              has_volume=has_volume)
                 if reason:
-                    head.setText(f'<span style="color:{color}">●</span>&nbsp;{_esc(spec.name(lang))}')
+                    head.setText(f'<span style="color:{color}">●</span>&ensp;{_esc(spec.name(lang))}')
                     reading_label.setText(availability_text(reason, lang))
                 else:
                     readout = line_readout(key, bars, -1, language=lang, supply=self.chart.supply)
                     values = " · ".join(f"{_esc(n)} {_esc(self.study_value(key, line, len(bars) - 1, v))}"
                                         for line, (n, v) in zip(spec.lines, readout))
-                    head.setText(f'<span style="color:{color}">●</span>&nbsp;{_esc(spec.name(lang))}'
+                    head.setText(f'<span style="color:{color}">●</span>&ensp;{_esc(spec.name(lang))}'
                                  f'&nbsp;&nbsp;<span style="font-weight:400">{values}</span>')
                     reading_label.setText(study_reading(key, bars, -1, language=lang, supply=self.chart.supply))
             head.setWordWrap(True)
@@ -1656,6 +1657,8 @@ class StockDetailView(QWidget):
     def set_locale(self, ctx):
         self.ctx = ctx
         lang = _lang(ctx)
+        self._compact = None
+        self._fit_toolbar()
         self.chart.chart.months = text(lang, "months")
         if self.completer is not None:
             self.completer.set_locale(ctx)
