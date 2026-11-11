@@ -127,6 +127,9 @@ PAIRS = {
     # stock detail view's words ("5초 조회", "조회 시점", US "무료 시세"; owner_ui_language/stock.py).
     '{source} current quotes polled every {seconds} s (REST requests, not a trade stream); last received {when} KST.':
         '{source} 현재가 · {seconds}초마다 조회(REST 요청이며 체결 수신이 아닙니다) · 마지막 수신 {when} (한국 시간)',
+    # A round is timed from its start (market_rankings.RankingBoard.due); one that ran longer says so.
+    'The last round of requests took {took} s, longer than {seconds} s, so each stock was asked less often than that.':
+        '마지막 조회 한 회차가 {took}초 걸려 {seconds}초보다 길었으므로 종목마다 그보다 드물게 조회했습니다.',
     "US quotes are KIS's free feed and can differ from paid consolidated quotes.":
         '미국 시세는 KIS 무료 시세이며 유료 통합 시세와 다를 수 있습니다.',
     # US market cap in the ranked list (owner 2026-11-11, "아니 미국 시총 자료 찾으세요";
@@ -161,6 +164,11 @@ PAIRS = {
     'Could not use domestic market cap.': '국내 시가총액을 쓰지 못했습니다.',
     "KIS's market cap differs by more than 25% from listed shares × price of the same answer, so it is not used.":
         'KIS 시가총액이 같은 응답의 상장주식수 × 현재가와 25% 넘게 달라 쓰지 않습니다.',
+    # A field KIS sent that is not a usable number is refused with its own reason, never read as absent.
+    "KIS's market cap is not a positive number, so it is not used.":
+        'KIS 시가총액이 0보다 큰 수가 아니어서 쓰지 않습니다.',
+    "KIS's listed share count is not a positive whole number, so the market cap could not be checked or computed.":
+        'KIS 상장주식수가 0보다 큰 정수가 아니어서 시가총액을 확인하거나 계산할 수 없습니다.',
     'KIS gave no listed share count, so its market cap could not be checked and is not used.':
         'KIS 응답에 상장주식수가 없어 시가총액을 확인할 수 없으므로 쓰지 않습니다.',
     'KIS gave neither a market cap nor a listed share count.': 'KIS 응답에 시가총액과 상장주식수가 모두 없습니다.',

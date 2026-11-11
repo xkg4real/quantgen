@@ -335,6 +335,32 @@ class MarketsPageTests(Base):
                 self.assertEqual(button.size(), size, key)  # the ring does not resize or move the button
         self.window.theme.setCurrentIndex(0); self.app.processEvents()
 
+    def test_chips_and_market_buttons_are_radio_groups_for_the_keyboard(self):
+        # Reviewer 2026-11-11 (15-keyboard): both rows are exclusive QButtonGroups, so Tab stops only at the
+        # selected chip and the selected market button, and the arrow keys move focus and select; an unselected
+        # chip never gets keyboard focus (the docs say so instead of calling them ordinary Tab stops).
+        self.window.activateWindow(); self.app.processEvents()
+        chips, markets = self.board.category_buttons, self.board.market_buttons
+
+        def tab_from(widget, count=3):
+            widget.setFocus(Qt.FocusReason.TabFocusReason); self.app.processEvents()
+            seen = []
+            for _ in range(count):
+                QTest.keyClick(self.app.focusWidget(), Qt.Key.Key_Tab); self.app.processEvents()
+                seen.append(self.app.focusWidget())
+            return seen
+        self.assertEqual(tab_from(self.board.refresh_button), [chips["value"], markets["kr"], self.board.sector_box])
+        self.assertEqual(tab_from(self.board.refresh_button, 1), [chips["value"]])
+        QTest.keyClick(chips["value"], Qt.Key.Key_Right); self.app.processEvents()
+        self.assertEqual((self.board.category, self.app.focusWidget()), ("volume", chips["volume"]))
+        self.assertTrue(chips["volume"].isChecked())
+        self.assertEqual(tab_from(chips["volume"], 1), [markets["kr"]])
+        QTest.keyClick(markets["kr"], Qt.Key.Key_Right); self.app.processEvents()
+        self.assertEqual((self.board.market, self.app.focusWidget()), ("kospi", markets["kospi"]))
+        self.assertEqual(tab_from(self.board.refresh_button),
+                         [chips["volume"], markets["kospi"], self.board.sector_box])
+        self.assertEqual(self.loader.calls, [])  # moving within the domestic group fetches nothing
+
     def test_domestic_market_cap_is_used_only_when_it_agrees_and_says_its_basis(self):
         # 2026-11-11 compliance follow-up (12-claims 2026-11-02: hts_avls unit unverified): as the US path checks
         # KIS tomv, hts_avls x 1e8 is used only within 25% of listed shares x price of the same answer.
@@ -382,6 +408,32 @@ class MarketsPageTests(Base):
                          "KIS market cap (hts_avls read as 100 million won), stated 2026-11-11 14:20 KST; it agrees "
                          "within 25% with listed shares 6.0B × price 102,300 = ₩610.7T of the same KIS answer.")
         self.assertEqual(self.board.head_value.text(), "Market cap (computed)")
+
+    def test_domestic_cap_fields_present_but_unusable_say_so(self):
+        # Reviewer 2026-11-11: a listed share count of 0 is not "no share count", and a stated cap of 0 is refused,
+        # never replaced by the computed figure (the docs promise that only for an absent hts_avls).
+        records = (kis_domestic("005930", 102300, hts_avls="6050000", lstn_stcn="5969782550"),
+                   kis_domestic("000660", 520000, hts_avls="0", lstn_stcn="728002365"),
+                   kis_domestic("035720", 40000, hts_avls="17", lstn_stcn="0"))
+        self.board.batches["kr"] = R.Batch("kr", records, "kis", NOW.isoformat())
+        self.board.category_buttons["cap"].click(); self.app.processEvents()
+        rows = self.shown_rows()
+        self.assertEqual([(r.rank.text(), r.name.full, r.value.text()) for r in rows],
+                         [("1", "삼성전자", "605.0조"), ("", "SK하이닉스", "—"), ("", "카카오", "—")])
+        self.assertEqual(self.board.head_value.text(), "시가총액")  # nothing computed stands in for the refused cap
+        self.assertEqual(rows[1].value.toolTip(), "KIS 시가총액이 0보다 큰 수가 아니어서 쓰지 않습니다.")
+        self.assertEqual(rows[2].value.toolTip(),
+                         "KIS 상장주식수가 0보다 큰 정수가 아니어서 시가총액을 확인하거나 계산할 수 없습니다.")
+        self.board.batches["kr"] = R.Batch("kr", records[1:], "kis", NOW.isoformat()); self.board.render()
+        self.assertEqual(self.board.empty.text(),
+                         "국내 시가총액을 쓰지 못했습니다. KIS 시가총액이 0보다 큰 수가 아니어서 쓰지 않습니다. "
+                         "KIS 상장주식수가 0보다 큰 정수가 아니어서 시가총액을 확인하거나 계산할 수 없습니다.")
+        self.window.set_language("en"); self.app.processEvents()
+        self.assertEqual(self.board.empty.text(),
+                         "Could not use domestic market cap. KIS's market cap is not a positive number, so it is not "
+                         "used. KIS's listed share count is not a positive whole number, so the market cap could not "
+                         "be checked or computed.")
+        self.assertEqual(self.loader.calls, [])
 
     def test_us_market_cap_says_why_when_none_could_be_read(self):
         base = us_batch()
@@ -544,6 +596,48 @@ class AutomaticRefreshTests(Base):
         self.assertFalse(board.tick.isActive())
         clock.now = NOW + timedelta(hours=2); board._tick(); self.app.processEvents()
         self.assertEqual(loader.calls, ["kr", "kr", "us"])  # hidden: nothing loads
+
+    def test_rounds_are_timed_from_their_start_and_a_slow_round_reads_delayed(self):
+        # Reviewer 2026-11-11: a batch's fetched_at is stamped after the round's last request (81 domestic
+        # requests take at least 9.6 s at the KIS client's 0.12 s spacing). Timed from it, each stock was asked
+        # every 55 s or more while the state said "every 45 s"; rounds are now timed from their start.
+        clock, took = Clock(), [12]
+
+        def timed(group, members, cancelled=None, progress=None):
+            clock.now += timedelta(seconds=took[0])
+            return kr_batch(clock.now)  # stamped at the end of the round, as kis_batch does
+        board = RankingBoard(loader=timed, locale=LocaleContext("ko_KR"), auto_load=False, clock=clock,
+                             open_fn=lambda group, now: True)
+        self.addCleanup(board.deleteLater)
+        board.show()
+        self.assertTrue(board.refresh(manual=True))
+        self.wait(lambda: not board.jobs.busy and "kr" in board.batches)
+        self.app.processEvents()
+        self.assertEqual(board.batches["kr"].fetched_at, (NOW + timedelta(seconds=12)).isoformat())
+        clock.now = NOW + timedelta(seconds=LIVE_REFRESH_SECONDS - 1)
+        self.assertFalse(board.due())
+        clock.now = NOW + timedelta(seconds=LIVE_REFRESH_SECONDS)
+        self.assertTrue(board.due())  # 45 s after the round started, not 45 s after it ended (57 s)
+        board._render_status()
+        self.assertEqual((board.state(), board.badge.text()), ("polled", "KIS 조회 · 45초마다"))
+        self.assertNotIn("회차", board.badge.toolTip())
+        # A round longer than the interval: the next one is due at once and the state stops saying "every 45 s".
+        took[0], first = LIVE_REFRESH_SECONDS + 5, board.batches["kr"]
+        self.assertTrue(board.refresh())
+        self.wait(lambda: not board.jobs.busy and board.batches["kr"] is not first)
+        self.app.processEvents()
+        self.assertTrue(board.due())
+        board._render_status()
+        self.assertEqual((board.state(), board.badge.text()), ("stale", "KIS · 갱신 지연"))
+        self.assertIn("마지막 조회 한 회차가 50초 걸려 45초보다 길었으므로 종목마다 그보다 드물게 조회했습니다.",
+                      board.badge.toolTip())
+        board.set_locale(LocaleContext("en_US")); board._render_status()
+        self.assertIn("The last round of requests took 50 s, longer than 45 s, so each stock was asked less often "
+                      "than that.", board.badge.toolTip())
+        # A batch set from outside, with no round recorded, is timed from its fetched_at as before.
+        board.batches["kr"] = kr_batch(clock.now)
+        self.assertFalse(board.due())
+        self.assertEqual(board.state(), "polled")
 
     def test_progress_is_shown_and_stop_drops_a_late_answer(self):
         gate, started = threading.Event(), threading.Event()

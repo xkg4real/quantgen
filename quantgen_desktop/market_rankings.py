@@ -8,8 +8,11 @@ one sector. A row opens the stock's screen (`markets_view.StockView`).
 Data, off the UI thread and only while the list is visible with automatic refresh on:
 * KIS configured: one allowlisted quote per stock (domestic ``inquire-price``, overseas ``price``) through the
   existing market data service, at most `KIS_MAX_PER_SECOND` requests a second (the KIS client also paces
-  every call process-wide); refreshed every `LIVE_REFRESH_SECONDS` during the session. REST polling, not a
-  trade stream: the state says "KIS 조회 · 45초마다" (US: "KIS 무료 시세 · 45초마다 조회"), never "실시간".
+  every call process-wide); during the session a round of requests starts every `LIVE_REFRESH_SECONDS`,
+  timed from the start of the previous round (`RankingBoard.due`), so each stock is asked every 45 s while a
+  round takes less than that (81 domestic requests take at least 9.6 s at the client's 0.12 s spacing). REST
+  polling, not a trade stream: the state says "KIS 조회 · 45초마다" (US: "KIS 무료 시세 · 45초마다 조회"),
+  never "실시간"; a round that took longer than 45 s makes it "KIS · 갱신 지연" and the tooltip says so.
 * Domestic market cap comes with the same ``inquire-price`` answer (`rankings.parse_kis_domestic_cap`): KIS's
   ``hts_avls`` only when it agrees with listed shares x price of that answer, else listed shares x price
   ("시가총액(계산값)") when KIS states no figure; a refused or missing figure is listed last as '—', with why.
@@ -32,6 +35,7 @@ from __future__ import annotations
 
 from dataclasses import replace
 from datetime import datetime, timezone
+import math
 import threading
 import time
 
@@ -496,9 +500,10 @@ class RankingBoard(QFrame):
         self.batches = {}            # group -> Batch: one fetch serves every category of its group
         self.ranked = []
         self._attempted = {}         # group -> when the last fetch failed outright
+        self._rounds = {}            # group -> (Batch, when the round that fetched it started, seconds it took)
         self._error = ""
         self._loading = None         # (group, done, total) while a fetch runs
-        self._job_group = None
+        self._job_group, self._job_started = None, None
         self._epoch, self._cancel, self._pending, self._stopped = 0, None, False, False
         self.jobs = Jobs(self)
         self.jobs.succeeded.connect(self._loaded)
@@ -665,6 +670,14 @@ class RankingBoard(QFrame):
 
     # Loading ----------------------------------------------------------------------------------
     def due(self, group=None, now=None):
+        """Whether the group's next round of requests should start.
+
+        Timed from the START of the round that fetched the batch shown (its `fetched_at` is stamped after the
+        last request), so during the session a round starts every `LIVE_REFRESH_SECONDS` and each stock is
+        asked every 45 s, as the state says, while a round takes less than that; a longer round makes the
+        next one due at once and the state "KIS · 갱신 지연" (`state`). A batch set from outside, with no
+        round recorded, is timed from its `fetched_at`.
+        """
         group = group or self.group()
         now = now or self.clock()
         batch = self.batches.get(group)
@@ -679,7 +692,14 @@ class RankingBoard(QFrame):
             limit = LIVE_REFRESH_SECONDS
         else:
             limit = IDLE_REFRESH_SECONDS
-        return (now - _parse(batch.fetched_at)).total_seconds() >= limit
+        round_ = self._round(group, batch)
+        since = round_[0] if round_ is not None else _parse(batch.fetched_at)
+        return (now - since).total_seconds() >= limit
+
+    def _round(self, group, batch):
+        """(when the round that fetched `batch` started, seconds it took), or None for a batch set from outside."""
+        kept = self._rounds.get(group)
+        return kept[1:] if kept is not None and kept[0] is batch else None
 
     def refresh(self, *, manual=False):
         """Fetch the current group when due (or now, when `manual`); False when nothing started."""
@@ -694,6 +714,7 @@ class RankingBoard(QFrame):
         self._epoch += 1
         epoch, cancel, loader = self._epoch, threading.Event(), self.loader
         self._cancel, self._job_group, self._error = cancel, group, ""
+        self._job_started = self.clock()   # the next round is timed from here (`due`)
         members = R.members_of(group)
         self._loading = (group, 0, len(members))
         self._pending = False
@@ -720,6 +741,9 @@ class RankingBoard(QFrame):
         if isinstance(batch, R.Batch):
             self.batches[group] = batch
             self._attempted.pop(group, None)
+            if self._job_started is not None:
+                took = max(0.0, (self.clock() - self._job_started).total_seconds())
+                self._rounds[group] = (batch, self._job_started, took)
         self.render()
         self.loaded.emit(group)
 
@@ -958,9 +982,10 @@ class RankingBoard(QFrame):
         if batch is None or not batch.records:
             return "none"
         now = self.clock()
+        round_ = self._round(self.group(), batch)
         return R.source_state(batch, open_now=self.open_fn(self.group(), now),
                               age_seconds=(now - _parse(batch.fetched_at)).total_seconds(),
-                              live_limit=LIVE_STALE_SECONDS)
+                              live_limit=LIVE_STALE_SECONDS, round_seconds=round_[1] if round_ else None)
 
     def _render_status(self):
         lang, group = self._lang(), self.group()
@@ -1007,6 +1032,10 @@ class RankingBoard(QFrame):
         seconds = LIVE_REFRESH_SECONDS if self.open_fn(self.group(), self.clock()) else IDLE_REFRESH_SECONDS
         tip = self._t("{source} current quotes polled every {seconds} s (REST requests, not a trade stream); "
                       "last received {when} KST.", source=", ".join(sources), seconds=seconds, when=when)
+        round_ = self._round(self.group(), batch)
+        if round_ is not None and round_[1] > seconds:
+            tip += " " + self._t("The last round of requests took {took} s, longer than {seconds} s, so each stock "
+                                 "was asked less often than that.", took=math.ceil(round_[1]), seconds=seconds)
         if batch.group == "us":
             tip += " " + self._t("US quotes are KIS's free feed and can differ from paid consolidated quotes.")
         return tip
@@ -1045,6 +1074,9 @@ def _kst(stamp):
 KR_CAP_REASON_TEXT = {
     "mismatch": "KIS's market cap differs by more than 25% from listed shares × price of the same answer, "
                 "so it is not used.",
+    "bad_cap": "KIS's market cap is not a positive number, so it is not used.",
+    "bad_shares": "KIS's listed share count is not a positive whole number, so the market cap could not be "
+                  "checked or computed.",
     "unverified": "KIS gave no listed share count, so its market cap could not be checked and is not used.",
     "absent": "KIS gave neither a market cap nor a listed share count.",
 }

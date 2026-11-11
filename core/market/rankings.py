@@ -8,12 +8,15 @@ them. So this module ranks a curated universe of large caps instead, from per-st
 allowed sources already return:
 
 * KIS ``inquire-price`` (domestic) and the overseas ``price`` quote: price, change, volume and the session's
-  accumulated trading value. These are REST quotes polled every `POLL_SECONDS` during the session, never
-  received trades, so the list's state says "KIS 조회 · 45초마다", not "실시간" (12-claims QG-CLAIM-KIS-20261102).
+  accumulated trading value. These are REST quotes polled during the session, a round of requests starting
+  every `POLL_SECONDS` from the start of the previous one, never received trades, so the list's state says
+  "KIS 조회 · 45초마다", not "실시간" (12-claims QG-CLAIM-KIS-20261102); a round that took longer than
+  `POLL_SECONDS` makes it "KIS · 갱신 지연" (`source_state`).
 * domestic market cap (`parse_kis_domestic_cap`), from the same ``inquire-price`` answer: KIS's stated
   ``hts_avls`` read as 100 million won (`KIS_DOMESTIC_CAP_UNIT`, a unit KIS does not state) only when it agrees
   within `KIS_CAP_TOLERANCE` with listed shares ``lstn_stcn`` x price ``stck_prpr`` (basis 'provider', source
-  KIS); without ``hts_avls``, listed shares x price (basis 'computed'); otherwise none, and why.
+  KIS); without ``hts_avls``, listed shares x price (basis 'computed'); otherwise none, and why (a field that
+  is present but not a usable number is refused, never read as absent).
 * the Yahoo daily path: the last daily bar's close, change against the previous close and volume. Trading
   value is then close x volume, an estimate, and the rows are labelled delayed/daily. Yahoo has no market cap.
 * US market cap (owner 2026-11-11, "아니 미국 시총 자료 찾으세요"; KIS route approved the same day, "승인."):
@@ -60,6 +63,8 @@ SECTORS = (("semis", "Semiconductors", "반도체"), ("battery", "Batteries", "2
 # the session: polling, never "real-time"/"실시간", a word kept for received trades (the stock detail view's
 # WebSocket state; 12-claims QG-CLAIM-KIS-20261102). The wording follows that view's "5초 조회"/"조회 시점",
 # and US KIS quotes are the free feed there ("무료 시세"). Outside the session a KIS quote is the last price.
+# "Every POLL_SECONDS" holds because a round of requests starts POLL_SECONDS after the previous round started
+# (market_rankings.RankingBoard.due), not after it ended; a round that took longer is 'stale' (`source_state`).
 POLL_SECONDS = 45      # KIS quotes while the market is open (market_rankings.LIVE_REFRESH_SECONDS)
 STATES = (("polled", f"KIS · polled every {POLL_SECONDS} s", f"KIS 조회 · {POLL_SECONDS}초마다"),
           ("polled_us", f"KIS free US feed · polled every {POLL_SECONDS} s", f"KIS 무료 시세 · {POLL_SECONDS}초마다 조회"),
@@ -281,8 +286,10 @@ class QuoteRecord:
                                   # date (US) or when the KIS answer holding the share count was received (UTC ISO)
     shares: float | None = None   # the share count used (computed) or stated with the cap (KIS)
     cap_missing: str = ""         # sought but not found: 'adr', 'no_shares', 'error', 'timeout' (US); KIS domestic:
-                                  # 'mismatch' (hts_avls disagrees with shares x price), 'unverified' (hts_avls
-                                  # without a share count to check it), 'absent' (neither in the answer)
+                                  # 'mismatch' (hts_avls disagrees with shares x price), 'bad_cap' (hts_avls
+                                  # present but not a positive number), 'bad_shares' (lstn_stcn present but not
+                                  # a positive whole number), 'unverified' (hts_avls without a share count to
+                                  # check it), 'absent' (neither in the answer)
 
     @property
     def listing(self):
@@ -419,20 +426,35 @@ def parse_kis_domestic_cap(output, price):
     refused, never rescaled ('mismatch'), and a figure with no share count to check it is not used
     ('unverified'). Without ``hts_avls``, listed shares x price is the figure (basis 'computed'). Neither:
     'absent'.
+
+    A field that is present but unusable is refused with its own reason, never treated as absent: an
+    ``hts_avls`` that is not a positive number ('0', '-5', 'nan', text) is 'bad_cap' (the computed figure does
+    not replace it, as the US path refuses a non-positive ``tomv``), and an ``lstn_stcn`` that is not a positive
+    whole number ('0', '-1', '1.5', text) is 'bad_shares'. Absent means missing, None or blank.
     """
     if not isinstance(output, dict) or not _finite(price) or price <= 0:
         return None, "", None, "absent"
-    stated = _number(output.get("hts_avls"))
-    stated = stated * KIS_DOMESTIC_CAP_UNIT if stated is not None and stated > 0 else None
-    shares = _listed_shares(output.get("lstn_stcn"))
+    raw_cap, raw_shares = output.get("hts_avls"), output.get("lstn_stcn")
+    stated = _number(raw_cap)
+    if _present(raw_cap) and (stated is None or stated <= 0):
+        return None, "", None, "bad_cap"
+    shares = _listed_shares(raw_shares)
+    if _present(raw_shares) and shares is None:
+        return None, "", None, "bad_shares"
     if shares is None:
         return None, "", None, "unverified" if stated is not None else "absent"
     computed = shares * float(price)
     if stated is None:
         return computed, "computed", shares, ""
+    stated *= KIS_DOMESTIC_CAP_UNIT
     if abs(stated / computed - 1) > KIS_CAP_TOLERANCE:
         return None, "", None, "mismatch"
     return stated, "provider", shares, ""
+
+
+def _present(value):
+    """Whether an answer field holds anything: not missing, None or blank."""
+    return value is not None and str(value).strip() != ""
 
 
 def parse_kis_domestic(member, output, *, received_at=None):
@@ -637,17 +659,20 @@ def session_open(group, moment=None):
     return bool(is_open("US" if group == "us" else "KRX", moment))
 
 
-def source_state(batch, *, open_now, age_seconds=0.0, live_limit=None):
+def source_state(batch, *, open_now, age_seconds=0.0, live_limit=None, round_seconds=None):
     """'polled' (KIS REST quotes during the session; 'polled_us' for the US group, KIS's free US feed),
-    'stale' (KIS during the session but older than `live_limit` seconds, e.g. refreshes keep failing),
-    'closed' (KIS outside it), 'daily' (delayed daily bars) or 'none'. Never 'live': nothing here is a
-    received trade."""
+    'stale' (KIS during the session but older than `live_limit` seconds, e.g. refreshes keep failing, or
+    fetched by a round of requests that took `round_seconds` > `POLL_SECONDS`, so the next round could not
+    start POLL_SECONDS after it and the "every 45 s" of 'polled' would overstate the polling), 'closed' (KIS
+    outside it), 'daily' (delayed daily bars) or 'none'. Never 'live': nothing here is a received trade."""
     if batch is None or not batch.records:
         return "none"
     if batch.mode == "kis":
         if not open_now:
             return "closed"
         if live_limit is not None and age_seconds > live_limit:
+            return "stale"
+        if round_seconds is not None and round_seconds > POLL_SECONDS:
             return "stale"
         return "polled_us" if batch.group == "us" else "polled"
     return "daily"

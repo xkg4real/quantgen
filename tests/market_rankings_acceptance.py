@@ -484,6 +484,19 @@ class SourceStateWordingTests(unittest.TestCase):
         self.assertIn("'● 5초 조회'", words)  # the detail view's polling word this list follows
         self.assertIn("'● 무료 시세'", words)  # and its US free-feed word
 
+    def test_a_round_longer_than_the_interval_is_not_called_every_45_s(self):
+        # Reviewer 2026-11-11: rounds are timed from their start (market_rankings.RankingBoard.due); a round
+        # that itself took longer than POLL_SECONDS cannot keep the "every 45 s" promise, so it reads delayed.
+        kis = R.Batch("kr", (record(SAMSUNG),), "kis", "2026-11-11T05:00:00+00:00")
+        us = R.Batch("us", (record(APPLE),), "kis", "2026-11-11T15:00:00+00:00")
+        for seconds, state in ((None, "polled"), (9.6, "polled"), (R.POLL_SECONDS, "polled"),
+                               (R.POLL_SECONDS + 0.5, "stale"), (120, "stale")):
+            self.assertEqual(R.source_state(kis, open_now=True, round_seconds=seconds), state, seconds)
+        self.assertEqual(R.source_state(us, open_now=True, round_seconds=R.POLL_SECONDS + 1), "stale")
+        self.assertEqual(R.source_state(kis, open_now=False, round_seconds=120), "closed")  # the last price anyway
+        daily = R.Batch("kr", (record(SAMSUNG, mode="daily"),), "daily", "2026-11-11T05:00:00+00:00")
+        self.assertEqual(R.source_state(daily, open_now=True, round_seconds=120), "daily")
+
 
 class DomesticCapTests(unittest.TestCase):
     """2026-11-11 compliance follow-up (12-claims 2026-11-02 "hts_avls 단위 미검증"): KIS's hts_avls is used only
@@ -509,14 +522,32 @@ class DomesticCapTests(unittest.TestCase):
     def test_refusals_are_never_rescaled(self):
         for fields, missing in (({"hts_avls": "605"}, "mismatch"),             # another unit: refused, not rescaled
                                 ({"hts_avls": "605000000000000"}, "mismatch"),  # already won
-                                ({"lstn_stcn": ""}, "unverified"), ({"lstn_stcn": "5969782550.5"}, "unverified"),
-                                ({"lstn_stcn": "-1"}, "unverified"), ({"lstn_stcn": "x"}, "unverified"),
+                                ({"lstn_stcn": ""}, "unverified"), ({"lstn_stcn": None}, "unverified"),
+                                ({"lstn_stcn": "  "}, "unverified"),
                                 ({"hts_avls": "", "lstn_stcn": ""}, "absent"),
-                                ({"hts_avls": "0", "lstn_stcn": "0"}, "absent")):
+                                ({"hts_avls": None, "lstn_stcn": " "}, "absent")):
             r = self.parse(**fields)
             self.assertEqual((r.market_cap, r.cap_basis, r.cap_missing, r.shares), (None, "", missing, None), fields)
         self.assertEqual(R.parse_kis_domestic_cap(None, 1.0), (None, "", None, "absent"))
         self.assertEqual(R.parse_kis_domestic_cap(self.BASE, 0), (None, "", None, "absent"))
+
+    def test_a_field_present_but_unusable_is_refused_with_its_own_reason(self):
+        # Reviewer 2026-11-11: a share count of 0 was reported as missing, and a stated cap of 0 (or -5, 'nan',
+        # 'inf') silently became the computed figure. Present but unusable is not absent.
+        valid_cap, valid_shares = self.BASE["hts_avls"], self.BASE["lstn_stcn"]
+        for shares in ("0", "-1", "5969782550.5", "x", "nan", "inf", True):
+            for cap in (valid_cap, ""):
+                with self.subTest(shares=shares, cap=cap):
+                    r = self.parse(hts_avls=cap, lstn_stcn=shares)
+                    self.assertEqual((r.market_cap, r.cap_basis, r.cap_missing, r.shares),
+                                     (None, "", "bad_shares", None))
+        for cap in ("0", "-5", "nan", "inf", "-inf", "x", True):
+            for shares in (valid_shares, "", "0"):  # KIS's stated figure is refused, never replaced by shares x price
+                with self.subTest(cap=cap, shares=shares):
+                    r = self.parse(hts_avls=cap, lstn_stcn=shares)
+                    self.assertEqual((r.market_cap, r.cap_basis, r.cap_missing, r.shares),
+                                     (None, "", "bad_cap", None))
+        self.assertEqual(self.parse(hts_avls=" 6,050,000 ").cap_basis, "provider")  # commas and spaces still read
 
     def test_computed_path_without_kis_figure(self):
         r = self.parse(hts_avls="")
