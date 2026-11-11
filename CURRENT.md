@@ -4,13 +4,13 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2
-next_ids: ⑤-2/d, ⑤-2/e, ⑥-1/prep, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-11T15:01:00+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep
+next_ids: ⑤-2/d, ⑤-2/e, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-11T15:12:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: main
-work_commit: 83046c1
+work_commit: fbe493d
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -119,6 +119,13 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - **B:** Q1 REJECT(잠정 표시), Q2 게이트와 같은 분산 값으로 판정·SE_null은 참고 줄, Q3 검정력 부족이면 이겨도 자료 부족, Q4 DM으로 판정·Clark–West 참고 줄, Q5 12항목 필수·Claude 초안·소유자 커밋·R-FAM/L-FAM 병기, Q7 60/40은 21거래일 리밸런싱·실제 거래분 비용. 다음 단위 ⑨-4/2/c(결과 조립).
 - **C:** 0b 채택 방침만 기록. Q12 = 7개 파일(`core/quant/strategies.py`, `validate.py`, `history.py`, `gate_ledger.py`, `core/research/strategy_workflow.py`, `core/quant/optimize.py`, `core/quant/risk.py`). Q13·Q14·Q16·Q17·Q18 기본값. 화면은 네이티브만(UI-D1), Flet 작업(Q19 포함) 안 함, PC 화면은 시안 먼저 + UI 세션 이식과 ⑦-2 병합 뒤. Q22의 잘라내기 여부는 2026-12 말 전에 따로 질문. 다음 단위 ⑨-3a/recorder/1(화면 없음, 결정 9 조건: run_family 안에서 PNL_COMPUTED보다 낮은 PROGRESS를 쓰지 않음).
 - **D:** 주문 한도 수치(1회 100만 원/5%, 하루 10건·300만 원/15%, 손실 중지 40만 원/2%, 종목 비중 20%/400만 원, 가격 이탈 3%·시세 15초·지정가만, 09:00~15:20, 모의 20거래일·30건 등)를 기본값으로 승인. **실거래는 켜지지 않음.** 순서: 안전 설계 문서 보고 → ⑦-2 병합 뒤 구현 → 모의투자 → 결과 보고 → 소유자의 실거래 전환 승인. D-14 법률 자문은 소유자가 의뢰.
+
+### ⑥-1/prep 완료 (2026-11-11 15:12 KST) — 가장 최신
+
+- [PR #104](https://github.com/xkg4real/quantgen/pull/104) 병합, main `fbe493d`(트리 = head `8023833`). Compliance 42970696999 성공(문서만이라 Runtime은 경로 필터 밖). 문서 3개가 main의 `docs/product/`에 있습니다: `PILOT_OWNER_RUN_2026-11-11.md`(소유자 실행표), `PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md`(판독 점검표·Step 10 마감 기록 틀·병합 뒤 정리), `STEP10_MERGE_REHEARSAL_2026-11-11.md`(리허설 기록과 충돌 풀이 방법, 부록에 수정 S1~S3 패치).
+- 리허설 커밋의 캐시 없는 전체 실행(`a5f904a`): 987행 = 843 PASS, 137 NOT_RUN, 7 FAIL. main 트리 대비 92행 추가(nautilus 57 = 44 PASS + 13 NOT_RUN, bonds 33 = 28 PASS + 5 FAIL, macro 2 PASS), 제거 0, 변경 0. bonds 5 FAIL은 기록이 예고한 것(S1을 넣으면 통과, 모듈 단위로만 확인). 리허설 브랜치 `scratch/step10-rehearsal`은 로컬에만 있고 **push 금지**. Step 10 때 그날의 main과 연구 head로 다시 해야 합니다.
+- **소유자에게 보고할 질문 26건**(문서 K절과 리허설 기록 5절, 아직 보고 안 함): 대조 실행이 정리되면 표로 묶어 보고합니다. 급한 것은 파일럿 1 전에 필요한 것(추적되지 않는 폴더 `.agents/`·`quantgen/` 처리)과 Step 10 병합 전에 필요한 것(합친 뒤 Windows 전체 검사 재실행 여부, 서명 문장 적용 한 줄, P3 병합에 S1~S3·기준선을 넣어도 되는지, Bonds 화면 선택 7건, 연구 브랜치 push 승인 방식)입니다.
+- 열려 있는 PR 없음. 소유자 PC 대조 실행은 위 "소유자 PC 대조 실행 중간 결과" 절 그대로이고 답을 기다립니다(실행 브랜치는 아직 `9fc3817`, 요약 push 전).
 
 ### 소유자 PC 대조 실행 중간 결과 (2026-11-11 15:01 KST) — 가장 최신
 
