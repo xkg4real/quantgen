@@ -1,0 +1,160 @@
+{
+ "created_utc": "20261111T051909Z",
+ "integrity": [
+  {
+   "id": "integrity_a",
+   "kind": "hard",
+   "n_dropped_blank": 0,
+   "n_dropped_nonpositive": 0,
+   "n_rows": 5489,
+   "no_split_shaped_jump": true,
+   "outcome": "PASS"
+  }
+ ],
+ "n_a_outside_evidence_spans": 5489,
+ "outcome": "WITHHELD",
+ "pairs": [
+  {
+   "checks": [
+    {
+     "coverage_ok": false,
+     "first_date": "2006-11-15",
+     "id": "coverage",
+     "kind": "hard",
+     "last_date": "2026-09-25",
+     "n_a": 5489,
+     "n_a_outside_b_span": 494,
+     "n_b": 4995,
+     "n_common": 4995,
+     "outcome": "WITHHELD"
+    }
+   ],
+   "convention": "total",
+   "file_sha256": "ff8b779e7f2320027989700fd7215504f8560963ec385ffda22fd641c34d8573",
+   "has_fetch_record": true,
+   "outcome": "WITHHELD",
+   "provider": "fmp",
+   "role": "independent"
+  },
+  {
+   "checks": [
+    {
+     "coverage_ok": false,
+     "first_date": "2007-08-21",
+     "id": "coverage",
+     "kind": "hard",
+     "last_date": "2026-09-25",
+     "n_a": 5489,
+     "n_a_outside_b_span": 684,
+     "n_b": 4805,
+     "n_common": 4805,
+     "outcome": "WITHHELD"
+    }
+   ],
+   "convention": "split",
+   "file_sha256": "497e7f98fa7030d31c5704b6f8c1cc372984dc62f056ceb28bd59292724ea797",
+   "has_fetch_record": true,
+   "outcome": "WITHHELD",
+   "provider": "kis",
+   "role": "cross"
+  },
+  {
+   "checks": [
+    {
+     "coverage_ok": true,
+     "first_date": "2004-12-01",
+     "id": "coverage",
+     "kind": "warn",
+     "last_date": "2026-09-25",
+     "n_a": 5489,
+     "n_a_outside_b_span": 0,
+     "n_b": 5489,
+     "n_common": 5489,
+     "outcome": "PASS"
+    },
+    {
+     "id": "calendar",
+     "kind": "warn",
+     "n_only_a": 0,
+     "n_only_b": 0,
+     "n_weekend_a": 0,
+     "only_a": [],
+     "only_b": [],
+     "outcome": "PASS",
+     "truncated": false
+    },
+    {
+     "drift_ok": true,
+     "drift_range_bucket": "<=1e-04",
+     "id": "returns_same_convention",
+     "kind": "warn",
+     "max_abs_bucket": "<=1e-04",
+     "max_ok": true,
+     "n_allowed": 27,
+     "n_days": 5488,
+     "n_over_tol": 0,
+     "outcome": "PASS"
+    }
+   ],
+   "convention": "total",
+   "file_sha256": "1504b97eaccc540a15e95ae135b177fb3fbc25431ed26cb627787a08c6460633",
+   "has_fetch_record": true,
+   "outcome": "PASS",
+   "provider": "yahoo_now",
+   "role": "vintage"
+  }
+ ],
+ "pinned": {
+  "file": "yf_SPY.csv",
+  "md5": "d2164597d576e1b2fcadde063065811d",
+  "md5_ok": true
+ },
+ "providers": {
+  "fmp": {
+   "convention": "total",
+   "required": true,
+   "role": "independent"
+  },
+  "kis": {
+   "convention": "split",
+   "required": true,
+   "role": "cross"
+  },
+  "yahoo_now": {
+   "convention": "total",
+   "required": true,
+   "role": "vintage"
+  }
+ },
+ "run_id": "PP-20261111T051909Z-spy",
+ "schema": "provider-parity-summary/1",
+ "series": "spy",
+ "thresholds": {
+  "coverage_min": 0.99,
+  "drift_range_max": 0.005,
+  "edge_uncovered_max": 5,
+  "ex_days_per_year": 4,
+  "ex_gap_max": 0.02,
+  "ex_gap_min": 0.0005,
+  "jump_abs_max": 0.25,
+  "ret_diff_floor_days": 5,
+  "ret_diff_max": 0.002,
+  "ret_diff_share_max": 0.005,
+  "ret_diff_tol": 0.0002,
+  "yield_band": [
+   0.005,
+   0.04
+  ]
+ },
+ "tool": {
+  "name": "parity_check.py",
+  "sha256": "f2fe72cdee6344076fd6dfec8943259f44bc52445c66cdaf482a19e269770184"
+ },
+ "window": {
+  "end": "2026-09-25",
+  "start": "2004-12-01"
+ },
+ "withheld_reasons": [
+  "no independent or cross pair was evaluated in full"
+ ]
+}
