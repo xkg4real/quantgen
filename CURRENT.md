@@ -4,9 +4,9 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep
-next_ids: ⑤-2/d, ⑤-2/e, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-11T15:12:00+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d
+next_ids: ⑤-2/e, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-11T17:00:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: main
@@ -119,6 +119,23 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - **B:** Q1 REJECT(잠정 표시), Q2 게이트와 같은 분산 값으로 판정·SE_null은 참고 줄, Q3 검정력 부족이면 이겨도 자료 부족, Q4 DM으로 판정·Clark–West 참고 줄, Q5 12항목 필수·Claude 초안·소유자 커밋·R-FAM/L-FAM 병기, Q7 60/40은 21거래일 리밸런싱·실제 거래분 비용. 다음 단위 ⑨-4/2/c(결과 조립).
 - **C:** 0b 채택 방침만 기록. Q12 = 7개 파일(`core/quant/strategies.py`, `validate.py`, `history.py`, `gate_ledger.py`, `core/research/strategy_workflow.py`, `core/quant/optimize.py`, `core/quant/risk.py`). Q13·Q14·Q16·Q17·Q18 기본값. 화면은 네이티브만(UI-D1), Flet 작업(Q19 포함) 안 함, PC 화면은 시안 먼저 + UI 세션 이식과 ⑦-2 병합 뒤. Q22의 잘라내기 여부는 2026-12 말 전에 따로 질문. 다음 단위 ⑨-3a/recorder/1(화면 없음, 결정 9 조건: run_family 안에서 PNL_COMPUTED보다 낮은 PROGRESS를 쓰지 않음).
 - **D:** 주문 한도 수치(1회 100만 원/5%, 하루 10건·300만 원/15%, 손실 중지 40만 원/2%, 종목 비중 20%/400만 원, 가격 이탈 3%·시세 15초·지정가만, 09:00~15:20, 모의 20거래일·30건 등)를 기본값으로 승인. **실거래는 켜지지 않음.** 순서: 안전 설계 문서 보고 → ⑦-2 병합 뒤 구현 → 모의투자 → 결과 보고 → 소유자의 실거래 전환 승인. D-14 법률 자문은 소유자가 의뢰.
+
+### ⑤-2/d 완료: 소유자 PC 대조 결과와 판독 (2026-11-11 17:00 KST) — 가장 최신
+
+소유자가 16:5x KST에 요약 3개를 실행 브랜치에 올렸습니다(`claude/provider-parity-runs-20261111` `0b397f7`, 9fc3817 위에 `results/PP-*/summary.json` 3개만 추가, 523줄). 세 요약 모두 도구 sha256 `f2fe72cd…0184`, 고정 파일 md5 일치. Claude는 `git show`로 summary.json만 읽었습니다.
+
+| 시계열 | run_id | 기록 실행 | 읽은 내용 |
+|---|---|---|---|
+| DGS3MO(rf) | PP-20261111T075307Z-rf | **PASS** | treasury(독립): 공통 값 5,475개 중 허용치 초과 0, 최대 차이 1e-08 이하. 경고 1건: FRED에는 값이 있고 재무부에는 행이 없는 날 3일(2008-12-10, 12-18, 12-24). fred_now(같은 출처 재수신) 5,478개 초과 0. h15는 `not compared: fetch_failed` |
+| SPY | PP-20261111T051909Z-spy | **WITHHELD** | 고정 파일 자체 검사 PASS(5,489행). fmp: 첫 날짜 2006-11-15, 기간 밖 494거래일(허용 5) → coverage WITHHELD. kis: 첫 날짜 2007-08-21, 기간 밖 684거래일 → WITHHELD. 두 짝 모두 수익률 비교 미실행. yahoo_now(같은 출처): 5,489일 공통, 허용치 초과 0일. 사유 `no independent or cross pair was evaluated in full` |
+| BTC-USD | PP-20261111T075328Z-btc | **FAIL** | 고정 파일 자체 검사 PASS(4,392행, 빠진 날 0). coinbase(독립): coverage·calendar·day_boundary(lag 0) PASS, levels_and_returns FAIL: 2017년 이후 3,555일에서 수준 차이 중앙값 0.1% 이하지만 띠 밖(99번째 백분위 > 1.5% 또는 최댓값 > 5%, 요약은 구간만 적어 어느 쪽인지 모름), 일간 로그수익률 차이 2% 초과 43일(허용 20). bitstamp(독립): 같은 모양, 47일(허용 21). 2017년 전 구간은 띠 안. binance(진단)는 2017-08-17 시작이라 WITHHELD(판정에 영향 없음) |
+
+**관문(스펙 10.5):** Pilot 1은 SPY·DGS3MO → DGS3MO는 통과, SPY는 소유자 판정 필요. Pilot 2는 BTC-USD → 소유자 판정 필요. 판정 문장은 원문 그대로 `results/RULINGS.md`(main과 실행 브랜치)와 `OWNER_RULINGS_LOG.md`에 적습니다. 판정 전에는 어느 파일럿도 시작하지 않습니다.
+
+**소유자에게 물은 것(답 대기, `waiting_on: owner`):**
+- SPY: 가(권장: fmp 수신을 기간을 나눠 받도록 도구 수정 → 새 고정값 → fmp만 재수신 → SPY 대조 한 번 더, 첫 실행은 기록 유지) / 나(증거 없이 진행) / 다(보류).
+- BTC: 가(불일치를 기록하고 Pilot 2 진행) / 나(권장: Pilot 2 전에 원인 확인. 소유자 PC의 `detail.json`에서 가격이 아닌 통계, 곧 연도별 불일치 일수와 수준 차이의 99번째 백분위·최댓값만 읽어 채팅으로 보내는 것을 허용하는 판정이 함께 필요. Pilot 1에는 영향 없음) / 다(자료 교체, 비권장: 고정값·표·owner_confirmed가 무효가 되고 저장된 카드와 비교가 끊김).
+- 읽은 뜻(미검증 추론): 두 거래소가 거의 같은 건수로 어긋나므로 고정 파일(Yahoo 집계가) 쪽이 거래소 종가와 약 1%의 날에 다르다는 쪽을 가리킵니다. 허용치(10.5.1)는 실제 자료로 맞춘 적이 없어 거짓 FAIL 비율은 모릅니다. 허용치를 결과를 본 뒤에 바꾸는 것은 권하지 않습니다.
 
 ### ⑥-1/prep 완료 (2026-11-11 15:12 KST) — 가장 최신
 
