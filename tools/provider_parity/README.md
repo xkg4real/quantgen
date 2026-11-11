@@ -319,7 +319,8 @@ python -B -m tools.provider_parity.btc_diagnose --table "$tab\pilot2_C3_btcusd.j
   `common` (days two series share); `returns` (per year and in total: days compared and disagreement days, for pinned
   against each provider and for coinbase against bitstamp, which involves no pinned data); `levels` (per segment,
   before and from `late_from`: the 99th percentile and the maximum of the level difference in percent with one
-  decimal, and the days above `level_p99_max` and `level_max`); `split` (per year: each disagreement day in one
+  decimal, the days above `level_p99_max` and `level_max` and, for a pinned pair, of those days the ones on which
+  that provider alone is apart, `only_p99_max` and `only_max`); `split` (per year: each disagreement day in one
   group, see below); `venues` (per year, of the days against both providers: on how many the two venues agree with
   each other, differ, or have no return with each other over the same two days); and the result line
   `BTCDIAG <OK|REFUSED|ERROR> exit=<n>` (0, 2, 4). For the pilot 2 window that is 84 lines.
@@ -331,14 +332,15 @@ python -B -m tools.provider_parity.btc_diagnose --table "$tab\pilot2_C3_btcusd.j
   can be said. A provider's four groups add up to its disagreement days.
 - *How to read it.* The lines say which series stands apart, in which years and by how much. They do not say why.
   `both` days that are `agree` days: the pinned series stands apart from two venues that agree with each other.
-  `_only` and `differ` days: the venues stand apart from each other. `_edge` days decide nothing. The rule Claude
-  applies, with its numbers, was written before any output existed and is in `results/RULINGS.md`. In short: the
-  output must first be of the files of record (the hashes of the first lines, the `common` days and the tool's two
-  counts equal the summary of record). If the days on which the venues differ from each other explain the excess of
-  both pinned pairs, and the coinbase-bitstamp pair is outside the same late level limits, the cause counts as
-  identified and the BTC-USD gate is passed by the ruling. If the pinned series stands apart from two venues that
-  agree, the lines cannot say why (bad closes, another kind of price, another time of day): the cause is not
-  verified and Claude asks. Anything else is not identified either.
+  `_only` days, in `split` and in `levels`: the pinned series agrees with the other venue and that provider is the
+  odd one. `differ` days: all three stand apart. `_edge` days decide nothing. The rule Claude applies, with its
+  numbers, was written before any output existed and is in `results/RULINGS.md`. In short: the output must first be
+  of the files of record (the hashes of the first lines, the `common` days and the tool's two counts equal the
+  summary of record). If, leaving out the days on which one provider alone is apart, both pinned pairs are inside
+  the tool's allowance and inside the late level limits, the FAIL comes from the venues' own closes: the cause
+  counts as identified and the BTC-USD gate is passed by the ruling. If the pinned series stands apart from two
+  venues that agree, the lines cannot say why (bad closes, another kind of price, another time of day): the cause
+  is not verified and Claude asks. Anything else is not identified either.
 - *Limits.* A run that ends OK prints no price, no return, no difference of a day whose date is given and no date
   finer than a calendar year (the table's start and end and the threshold `late_from` aside). `max_pct` is the
   level difference of one single day, without its date; because the venues' closes are public, someone who found
@@ -377,12 +379,12 @@ function runs with `urlopen` replaced. The suite reads no cache file, no `.env` 
 the repository it reads the tool, the diagnostic script (for its sha256), this guide, the two Korean guides,
 `results/RULINGS.md` and the CI workflow.
 
-The second module holds the diagnostic in 17 cases, on synthetic series built with the first module's helpers: the
+The second module holds the diagnostic in 18 cases, on synthetic series built with the first module's helpers: the
 yearly counts add up to the tool's own `n_big_return_diff_days` of the same files; the level statistics equal values
 computed from the files parsed by hand and fall in the tool's buckets; a perturbed pinned series reads as `both` and
 `agree`, a perturbed venue as `_only`, a day over the threshold against one venue and under it against the other as
-`_edge`, a day without a return over the same two days as `_unpaired`; a short segment prints `n/a`; the `file` lines
-are the files' own sha256; refusals; the output allow-list, with a bad line at every position, and no price, no
+`_edge`, a day without a return over the same two days as `_unpaired`; the level days of one provider alone; a short
+segment prints `n/a`; the `file` lines are the files' own sha256; refusals; the output allow-list, with a bad line at every position, and no price, no
 return and no day of the data in the output; no file opened for writing, no socket and nothing on the error stream;
 the script run as the owner runs it, and the rerun guide's diagnostic line run as it is written there.
 

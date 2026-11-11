@@ -61,7 +61,10 @@ ALLOWED = [re.compile(x) for x in (
     rf"returns {_PAIRS} year=20\d\d days={_N} over={_N}",
     rf"returns pinned-(?:coinbase|bitstamp) total days={_N} over={_N} tool_over={_N} tool_allowed={_N}",
     rf"returns coinbase-bitstamp total days={_N} over={_N}",
-    rf"levels {_PAIRS} segment=(?:late|early) days={_N} p99_pct={_PCT} max_pct={_PCT} over_p99_max={_N} over_max={_N}",
+    rf"levels pinned-(?:coinbase|bitstamp) segment=(?:late|early) days={_N} p99_pct={_PCT} max_pct={_PCT} "
+    rf"over_p99_max={_N} over_max={_N} only_p99_max={_N} only_max={_N}",
+    rf"levels coinbase-bitstamp segment=(?:late|early) days={_N} p99_pct={_PCT} max_pct={_PCT} over_p99_max={_N} "
+    rf"over_max={_N}",
     rf"split (?:year=20\d\d|total) both={_N} coinbase_only={_N} bitstamp_only={_N} coinbase_edge={_N} "
     rf"bitstamp_edge={_N} coinbase_unpaired={_N} bitstamp_unpaired={_N}",
     rf"venues (?:year=20\d\d|total) both={_N} agree={_N} differ={_N} unpaired={_N}",
@@ -165,16 +168,23 @@ def apart(x: dict, y: dict):
     return days, level, over
 
 
-def levels_by_hand(level: dict) -> dict:
-    """Per segment what a levels line says: one decimal of a percent, and `n/a` under 100 days (typed here)."""
+def levels_by_hand(level: dict, pinned_other: dict | None = None, venues: dict | None = None) -> dict:
+    """Per segment what a levels line says: one decimal of a percent, and `n/a` under 100 days (typed here). For a
+    pinned pair, with the level differences of pinned against the other provider and of the two providers against
+    each other: the days above a threshold on which this provider alone is apart."""
     out = {}
-    for segment, values in (("late", [v for d, v in level.items() if d >= "2017-01-01"]),
-                            ("early", [v for d, v in level.items() if d < "2017-01-01"])):
+    for segment, days in (("late", [d for d in level if d >= "2017-01-01"]),
+                          ("early", [d for d in level if d < "2017-01-01"])):
+        values = [level[d] for d in days]
         enough = len(values) >= 100
         out[segment] = {"days": len(values),
                         "p99_pct": f"{100 * float(np.percentile(values, 99)):.1f}" if enough else "n/a",
                         "max_pct": f"{100 * max(values):.1f}" if enough else "n/a",
                         "over_p99_max": sum(v > 0.015 for v in values), "over_max": sum(v > 0.05 for v in values)}
+        if pinned_other is not None:
+            for key, limit in (("only_p99_max", 0.015), ("only_max", 0.05)):
+                out[segment][key] = sum(1 for d in days if level[d] > limit and d in pinned_other
+                                        and pinned_other[d] <= limit and d in venues and venues[d] > limit)
     return out
 
 
@@ -220,6 +230,8 @@ def test_clean_files_print_the_documented_lines_in_order_with_no_disagreement_da
         seg = table(lines, "levels", pair)
         assert (seg["late"]["days"], seg["early"]["days"]) == (1095, 731) and list(seg) == ["late", "early"], seg
         assert all(row["over_p99_max"] == row["over_max"] == 0 for row in seg.values()), seg
+        assert all(("only_p99_max" in row) == ("only_max" in row) == pair.startswith("pinned-") and
+                   row.get("only_p99_max", 0) == row.get("only_max", 0) == 0 for row in seg.values()), (pair, seg)
     for pair in ("pinned-coinbase", "pinned-bitstamp"):
         assert table(lines, "returns", pair)["total"]["tool_over"] == 0
         assert table(lines, "returns", pair)["total"]["tool_allowed"] == 9 == int(0.005 * 1825)
@@ -278,6 +290,9 @@ def test_level_statistics_are_those_of_the_files_and_fall_in_the_tool_s_buckets(
     seg = table(lines, "levels", "pinned-bitstamp")
     assert (seg["late"]["over_p99_max"], seg["late"]["over_max"]) == (22, 2), seg
     assert (seg["early"]["over_p99_max"], seg["early"]["over_max"]) == (1, 1), seg
+    # on every planted day pinned and coinbase agree and bitstamp is apart from both: bitstamp alone
+    assert (seg["late"]["only_p99_max"], seg["late"]["only_max"]) == (22, 2), seg
+    assert (seg["early"]["only_p99_max"], seg["early"]["only_max"]) == (1, 1), seg
     assert seg["late"]["p99_pct"] in ("2.9", "3.0", "3.1") and seg["late"]["max_pct"] in ("5.9", "6.0", "6.1"), seg
     assert seg["early"]["max_pct"] in ("11.9", "12.0", "12.1") and float(seg["early"]["p99_pct"]) < 0.5, seg
     a, b = read_by_hand(f.pinned), read_by_hand(f.bitstamp)
@@ -285,10 +300,13 @@ def test_level_statistics_are_those_of_the_files_and_fall_in_the_tool_s_buckets(
     assert seg["late"]["max_pct"] == f"{100 * one_day:.1f}", seg
     s = f.summary()
     a = read_by_hand(f.pinned)
-    for provider, path in (("coinbase", f.coinbase), ("bitstamp", f.bitstamp)):
+    files = {"coinbase": read_by_hand(f.coinbase), "bitstamp": read_by_hand(f.bitstamp)}
+    _, between, _ = apart(files["coinbase"], files["bitstamp"])
+    for provider, other in (("coinbase", "bitstamp"), ("bitstamp", "coinbase")):
         printed = table(lines, "levels", f"pinned-{provider}")
-        _, level, _ = apart(a, read_by_hand(path))
-        assert printed == levels_by_hand(level), (provider, printed, levels_by_hand(level))
+        _, level, _ = apart(a, files[provider])
+        by_hand = levels_by_hand(level, apart(a, files[other])[1], between)
+        assert printed == by_hand, (provider, printed, by_hand)
         tool = base.check_of(s, provider, "levels_and_returns")
         for segment in ("late", "early"):
             assert printed[segment]["days"] == tool[segment]["n_days"], (provider, segment)
@@ -319,6 +337,10 @@ def test_a_pinned_series_that_stands_apart_reads_as_both_and_agree():
                for row in split.values()), split
     assert venues == {k: {"both": n, "agree": n, "differ": 0, "unpaired": 0} for k, n in want.items()}, venues
     assert all(n == 0 for n in over_by_year(lines, "coinbase-bitstamp").values()), lines
+    for pair in ("pinned-coinbase", "pinned-bitstamp"):     # five closes 4% off: above 1.5% against both, nobody's alone
+        seg = table(lines, "levels", pair)
+        assert (seg["late"]["over_p99_max"], seg["early"]["over_p99_max"]) == (3, 2), (pair, seg)
+        assert all(row["only_p99_max"] == row["only_max"] == row["over_max"] == 0 for row in seg.values()), (pair, seg)
 
 
 def test_a_venue_that_stands_apart_reads_as_only_and_two_venues_apart_read_as_differ():
@@ -347,6 +369,13 @@ def test_a_venue_that_stands_apart_reads_as_only_and_two_venues_apart_read_as_di
     # the mirror image: bitstamp alone
     code, lines = Files(bs=bumped(BS, {"2017-05-05": 0.04})).run()
     assert table(lines, "split")["total"] == {**none, "bitstamp_only": 2} and code == 0, table(lines, "split")
+    late = table(lines, "levels", "pinned-bitstamp")["late"]
+    assert (late["over_p99_max"], late["only_p99_max"], late["over_max"], late["only_max"]) == (1, 1, 0, 0), late
+    assert table(lines, "levels", "pinned-coinbase")["late"]["over_p99_max"] == 0
+    # the same close, with coinbase lacking that day: nothing says that bitstamp is the odd one
+    code, lines = Files(bs=bumped(BS, {"2017-05-05": 0.04}), cb_days=[d for d in DAYS if d != "2017-05-05"]).run()
+    late = table(lines, "levels", "pinned-bitstamp")["late"]
+    assert code == 0 and (late["over_p99_max"], late["only_p99_max"]) == (1, 0), late
 
 
 def test_a_day_over_the_threshold_against_one_venue_and_under_it_against_the_other_is_an_edge_day():
@@ -448,6 +477,33 @@ def test_a_day_the_other_provider_was_not_compared_is_unpaired_not_only():
     assert over_by_year(lines, "pinned-bitstamp")["total"] == 0 and table(lines, "venues")["total"]["both"] == 0, lines
 
 
+def test_a_level_day_is_a_provider_s_alone_only_when_pinned_agrees_with_the_other_and_the_venues_are_apart():
+    """`only_p99_max` and `only_max` on a pinned pair's `levels` line count the days above the threshold on which
+    that provider alone is apart, by the same reading as `_only` in `split`: pinned is within the threshold of the
+    other provider, and the two providers are more than the threshold apart. One day is moved here, with venues
+    that are otherwise the pinned path itself. Coinbase 6% off alone is coinbase's day at both thresholds. When
+    pinned is 4% off one way and bitstamp 4% the other, all three are apart and the day is nobody's alone. When
+    pinned is 1% off and coinbase 0.8% the other way, pinned is 1.8% from coinbase and within the threshold of
+    bitstamp, but the venues are within it too: nobody's alone. When coinbase is 4% off and bitstamp 2% the other
+    way, coinbase's day is above 1.5% and under 5%, pinned is 2% from bitstamp and the venues are 6% apart: not
+    coinbase's alone at 1.5% (pinned does not agree with bitstamp at that size), and not a day above 5% at all."""
+    exact, day = np.array(PIN), "2018-05-05"
+
+    def late(a=None, cb=None, bs=None) -> dict:
+        code, lines = Files(a=PIN if a is None else bumped(PIN, {day: a}),
+                            cb=exact if cb is None else bumped(exact, {day: cb}),
+                            bs=exact if bs is None else bumped(exact, {day: bs})).run()
+        assert code == 0, lines
+        return {p: tuple(table(lines, "levels", f"pinned-{p}")["late"][k]
+                         for k in ("over_p99_max", "only_p99_max", "over_max", "only_max"))
+                for p in ("coinbase", "bitstamp")}
+    assert late(cb=0.06) == {"coinbase": (1, 1, 1, 1), "bitstamp": (0, 0, 0, 0)}
+    assert late(bs=-0.03) == {"coinbase": (0, 0, 0, 0), "bitstamp": (1, 1, 0, 0)}
+    assert late(a=0.04, bs=-0.04) == {"coinbase": (1, 0, 0, 0), "bitstamp": (1, 0, 1, 0)}
+    assert late(a=0.010, cb=-0.008) == {"coinbase": (1, 0, 0, 0), "bitstamp": (0, 0, 0, 0)}
+    assert late(cb=0.04, bs=-0.02) == {"coinbase": (1, 0, 0, 0), "bitstamp": (1, 0, 0, 0)}
+
+
 def test_level_lines_use_the_late_thresholds_in_both_segments_and_say_n_a_for_a_short_segment():
     """Two things about the `levels` lines that no case held (review of 2026-11-11, BD-2, BD-5, BD-9). The two counts
     above a threshold use `level_p99_max` (1.5%) and `level_max` (5%) in the early segment as in the late one; the
@@ -543,7 +599,9 @@ def test_output_is_held_to_an_allow_list_and_carries_no_price_no_return_and_no_d
     assert all(len(n) <= 4 for n in numbers if "." not in n), numbers            # counts: at most 1,826 days
     # the script's own allow-list refuses a line of any other shape, wherever it stands, before anything is printed
     hexes = "0" * 64
-    levels = "levels pinned-coinbase segment=late days=1095 p99_pct={} max_pct={} over_p99_max=22 over_max=2"
+    levels = ("levels pinned-coinbase segment=late days=1095 p99_pct={} max_pct={} over_p99_max=22 over_max=2 "
+              "only_p99_max=0 only_max=0")
+    bd.assert_lines_safe([levels.format("3.0", "6.1"), levels.format("n/a", "n/a")])
     bad_lines = (
         "price 61234.55", "returns pinned-coinbase day=2018-06-05 over=1", "levels pinned-coinbase max=0.0712",
         "returns pinned-coinbase year=2018 days=365 over=6 worst=2018-06-05",
@@ -556,7 +614,11 @@ def test_output_is_held_to_an_allow_list_and_carries_no_price_no_return_and_no_d
         levels.format("3.02", "6.1"), levels.format("3.0", "6.123"),                 # more than one decimal
         levels.format("61234.5", "6.1"), levels.format("high", "6.1"), levels.format("3.0", "61234"),
         "returns pinned-binance year=2018 days=365 over=6", "common coinbase-pinned days=10",    # another pair
-        "levels pinned-coinbase segment=2018 days=365 p99_pct=3.0 max_pct=6.1 over_p99_max=2 over_max=0",
+        "levels pinned-coinbase segment=2018 days=365 p99_pct=3.0 max_pct=6.1 over_p99_max=2 over_max=0 "
+        "only_p99_max=0 only_max=0",
+        "levels pinned-coinbase segment=late days=1095 p99_pct=3.0 max_pct=6.1 over_p99_max=2 over_max=0",
+        "levels coinbase-bitstamp segment=late days=1095 p99_pct=3.0 max_pct=6.1 over_p99_max=2 over_max=0 "
+        "only_p99_max=0 only_max=0",
         f"file binance sha256={hexes} fetch_record=yes", f"file coinbase sha256={hexes} fetch_record=maybe",
         "file coinbase sha256=61234.55 fetch_record=yes",
         "BTCDIAG OK exit=0 61234.55", " BTCDIAG OK exit=0", "BTCDIAG OK exit=0\nprice 61234.55", "")

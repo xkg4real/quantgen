@@ -46,9 +46,13 @@ a refused or failed run prints no line of data. The last column says whether the
             and the disagreement days (`over`); for a pinned pair the       named (`tool_over` and `tool_allowed` are
             total line also gives the tool's own count and allowance        in the summary of record)
   levels    (c) pinned against each provider, (e) coinbase against          `p99_pct` and `max_pct` of (c) are the
-            bitstamp: per segment, the days, the 99th percentile and the    second named kind; `days`, the two counts
+            bitstamp: per segment, the days, the 99th percentile and the    second named kind; `days`, the counts
             maximum of the level difference in percent with one decimal,    above a threshold and all of (e) are not
-            and the days above `level_p99_max` and above `level_max`        named
+            and the days above `level_p99_max` and above `level_max`; for   named
+            a pinned pair also, of those days, the days on which that
+            provider alone is apart (`only_p99_max`, `only_max`): pinned
+            and the other provider are within the threshold of each
+            other, and the two providers are more than it apart
   split     (d) per year and in total, the disagreement days of (b),        no: a breakdown of the named counts
             each in one group: `both` against both providers;
             `<provider>_only` against that provider alone while the two
@@ -83,10 +87,11 @@ ruling only, rounded to one decimal of a percent. A REFUSED line is the tool's o
 path, an md5 or the window of a fetch record; it carries no price and no date of the data.
 
 How to read it. The lines say which series stands apart, in which years and by how much; they do not say why. `both`
-days that are `agree` days: the pinned series stands apart from two venues that agree with each other. `_only` days
-and `differ` days: the venues stand apart from each other, and (e) shows the same days. `_edge` days decide nothing:
-a day can fall just over the threshold against one venue and just under it against the other. The rule Claude
-applies to the output, written before any output was seen, is in results/RULINGS.md.
+days that are `agree` days: the pinned series stands apart from two venues that agree with each other. `_only` days,
+in (d) and in (c): pinned agrees with the other venue and that provider is the odd one. `differ` days: all three
+stand apart. `_edge` days decide nothing: a day can fall just over the threshold against one venue and just under
+it against the other. The rule Claude applies to the output, written before any output was seen, is in
+results/RULINGS.md.
 
 Exit codes: 0 printed, 2 refused, 4 error; the result is the last line `BTCDIAG <OK|REFUSED|ERROR> exit=<n>`.
 """
@@ -121,7 +126,10 @@ LINE_SHAPES = tuple(re.compile(shape) for shape in (
     rf"returns {_PAIR} year=\d{{4}} days={_N} over={_N}",
     rf"returns {_PINNED_PAIR} total days={_N} over={_N} tool_over={_N} tool_allowed={_N}",
     rf"returns coinbase-bitstamp total days={_N} over={_N}",
-    rf"levels {_PAIR} segment=(?:late|early) days={_N} p99_pct={_PCT} max_pct={_PCT} over_p99_max={_N} over_max={_N}",
+    rf"levels {_PINNED_PAIR} segment=(?:late|early) days={_N} p99_pct={_PCT} max_pct={_PCT} over_p99_max={_N} "
+    rf"over_max={_N} only_p99_max={_N} only_max={_N}",
+    rf"levels coinbase-bitstamp segment=(?:late|early) days={_N} p99_pct={_PCT} max_pct={_PCT} over_p99_max={_N} "
+    rf"over_max={_N}",
     rf"split {_WHEN} both={_N} coinbase_only={_N} bitstamp_only={_N} coinbase_edge={_N} bitstamp_edge={_N} "
     rf"coinbase_unpaired={_N} bitstamp_unpaired={_N}",
     rf"venues {_WHEN} both={_N} agree={_N} differ={_N} unpaired={_N}",
@@ -160,7 +168,11 @@ def _returns_lines(name: str, over: dict[str, bool], years: list[int], tool: dic
     return lines + [total]
 
 
-def _levels_lines(name: str, days: list[str], level: np.ndarray) -> list[str]:
+def _levels_lines(name: str, days: list[str], level: np.ndarray,
+                  others: tuple[dict[str, float], dict[str, float]] | None = None) -> list[str]:
+    """The level lines of one pair. For a pinned pair `others` is, by day, the level difference of pinned against
+    the other provider and of the two providers against each other: a day above a threshold counts as `only` when
+    the first is within that threshold and the second above it, so that this provider alone is apart."""
     t = pc.THRESHOLDS[SERIES]
     late = np.array([d >= t["late_from"] for d in days])
     lines = []
@@ -170,8 +182,16 @@ def _levels_lines(name: str, days: list[str], level: np.ndarray) -> list[str]:
             p99, mx = f"{100.0 * float(np.percentile(x, 99)):.1f}", f"{100.0 * float(np.max(x)):.1f}"
         else:
             p99 = mx = "n/a"
-        lines.append(f"levels {name} segment={segment} days={int(x.size)} p99_pct={p99} max_pct={mx} "
-                     f"over_p99_max={int(np.sum(x > t['level_p99_max']))} over_max={int(np.sum(x > t['level_max']))}")
+        line = (f"levels {name} segment={segment} days={int(x.size)} p99_pct={p99} max_pct={mx} "
+                f"over_p99_max={int(np.sum(x > t['level_p99_max']))} over_max={int(np.sum(x > t['level_max']))}")
+        if others is not None:
+            pinned_other, venues = others
+            for key in ("level_p99_max", "level_max"):
+                alone = sum(1 for d, v, m in zip(days, level, mask)
+                            if m and v > t[key] and d in pinned_other and pinned_other[d] <= t[key]
+                            and d in venues and venues[d] > t[key])
+                line += f" only_{key[len('level_'):]}={alone}"
+        lines.append(line)
     return lines
 
 
@@ -212,8 +232,10 @@ def diagnose(a: pc.Series, b: dict[str, pc.Series], *, start: str, end: str,
     lines.append(f"common coinbase-bitstamp days={len(v_days)}")
     for p in PROVIDERS:                                                             # (b)
         lines += _returns_lines(f"pinned-{p}", pinned[p][2], years, pinned[p][3])
-    for p in PROVIDERS:                                                             # (c)
-        lines += _levels_lines(f"pinned-{p}", pinned[p][0], pinned[p][1])
+    by_day = {p: dict(zip(pinned[p][0], (float(v) for v in pinned[p][1]))) for p in PROVIDERS}
+    venues_by_day = dict(zip(v_days, (float(v) for v in v_level)))
+    for p, other in (PROVIDERS, PROVIDERS[::-1]):                                   # (c)
+        lines += _levels_lines(f"pinned-{p}", pinned[p][0], pinned[p][1], (by_day[other], venues_by_day))
     cb, bs = pinned["coinbase"][2], pinned["bitstamp"][2]
     cb_before, bs_before = pinned["coinbase"][4], pinned["bitstamp"][4]
     # a day is paired when both providers have a return against pinned over the same two days, and the venues have a

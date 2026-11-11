@@ -134,7 +134,7 @@ What follows (how Claude takes "BTC-나-승인" and the second line):
   ruling, to "only `summary.json` leaves the owner's machine" (spec 10.5, Outputs) and to 10.5.2, which keeps an exact
   extreme out of the summary. No price, no return and no date finer than a calendar year leaves.
 - Claude wrote a read-only diagnostic for the owner's PC: `tools/provider_parity/btc_diagnose.py`, sha256
-  `66340bf1330f4cc985328e7756cca4a366423da7c6e47fb8d4b1fc063b64cd3c`. It makes no network call and, run with `-B`
+  `1e44f3a791dd8c13a667bf46cda2933c7bb0810ac6f7bcaae884a16cc71bc6ea`. It makes no network call and, run with `-B`
   as the guide's line is, writes no file. The owner runs it once and pastes its console output (same guide).
 - Where the diagnostic goes beyond the words of the option (Claude's reading, not the owner's words):
   - *What it reads.* The option said "PC에 남은 상세 파일에서": from the detail file left on the PC. For this check
@@ -149,12 +149,12 @@ What follows (how Claude takes "BTC-나-승인" and the second line):
     `max_pct` on their `levels` lines). The script prints those and, as Claude's reading of "가격이 아닌 통계", also:
     the sha256 of the tool, of the script and of the two provider files, and whether each file had its fetch record;
     the table's window and three thresholds; the days two series share; the days compared per year; the days above
-    the two level thresholds; for the disagreement days, which group each is in (`split`: against both providers,
-    against one while the two venues differ, against one while they agree, or not pairable) and whether the venues
-    agree on the days against both (`venues`); and the same `returns` and `levels` lines for coinbase against
-    bitstamp, which involve no pinned data. All of these are counts, identifiers or constants. None is a price, a
-    return or a date finer than a calendar year. The rerun guide lists them before the owner pastes anything and
-    says the owner may hold the output back.
+    the two level thresholds and, of those, the days on which one provider alone is apart; for the disagreement
+    days, which group each is in (`split`: against both providers, against one while the two venues differ, against
+    one while they agree, or not pairable) and whether the venues agree on the days against both (`venues`); and the
+    same `returns` and `levels` lines for coinbase against bitstamp, which involve no pinned data. All of these are
+    counts, identifiers or constants. None is a price, a return or a date finer than a calendar year. The rerun
+    guide lists them before the owner pastes anything and says the owner may hold the output back.
   - *The maximum.* `max_pct` is the level difference of one single day, printed without its date and to one decimal
     of a percent; a segment of fewer than 100 days prints `n/a`. The two venues' closes are public, so someone who
     found that day could work the pinned close of that one day back to about the rounding (0.05%). A reviewer did
@@ -168,27 +168,38 @@ What follows (how Claude takes "BTC-나-승인" and the second line):
      pinned-bitstamp; `tool_over` and `tool_allowed` are 43 and 20 for coinbase, 47 and 21 for bitstamp; the late
      segment has 3555 days in each pair. If one of these differs, nothing is read from the output and Claude asks.
   2. *The groups.* Every disagreement day of a pinned pair is in exactly one group. From the `total` lines, for a
-     provider p (coinbase, bitstamp): `agree` (against both providers while the two venues agree with each other:
-     the pinned series stands apart); `p_only` and `differ` (the two venues differ from each other that day);
-     `p_edge` (against p alone while the venues agree: no series is clearly the odd one); `p_unpaired` and
-     `unpaired` (nothing can be said).
-  3. *Case "the venues differ from each other".* Both of these hold. (a) For each provider p, `agree` + `p_edge` +
-     `p_unpaired` + `unpaired` is at most that pair's `tool_allowed`: without the days on which the venues differ
-     from each other, the pair is inside the tool's own allowance. (b) The coinbase-bitstamp pair is outside every
-     late level limit that a pinned pair is outside: where a pinned pair's late `over_max` is 1 or more, so is the
-     coinbase-bitstamp pair's; where a pinned pair's late `over_p99_max` is 36 or more, the coinbase-bitstamp pair's
-     is 37 or more. (Of 3,555 days, 37 or more above `level_p99_max` put the 99th percentile above it for certain
-     and 35 or fewer put it below; 36 leaves it open. The late band has a third limit, on the median; the summary
-     of record shows both pinned pairs inside it.) Then both parts of the FAIL are shown without the pinned file:
-     two exchanges' closes differ from each other on that many days and by that much. The cause counts as
-     identified.
+     provider p (coinbase, bitstamp): `p_only` (against p alone while the two venues differ from each other: the
+     pinned series agrees with the other venue, and p is the odd one); `agree` (against both providers while the two
+     venues agree with each other: the pinned series stands apart); `differ` (against both while the venues differ
+     too: all three stand apart); `p_edge` (against p alone while the venues agree: no series is clearly the odd
+     one); `p_unpaired` and `unpaired` (nothing can be said). The `levels` lines of a pinned pair count the same
+     way: of the days above a level threshold, `only_p99_max` and `only_max` are the days on which the pinned
+     series is within that threshold of the other venue while the two venues are more than it apart.
+  3. *Case "each venue is the odd one on its own days".* For each provider p, both of these hold. (a) `over` minus
+     `p_only` is at most that pair's `tool_allowed`: leaving out the days on which p alone is apart, the pair is
+     inside the tool's own allowance. (b) On the late `levels` line of pinned-p, `over_p99_max` minus `only_p99_max`
+     is at most 35, and `over_max` minus `only_max` is 0: leaving out the days on which p alone is apart at that
+     size, the pair is inside both late level limits for certain. (Of 3,555 days, 35 or fewer above `level_p99_max`
+     keep the 99th percentile from passing it for certain, 37 or more put it above for certain, and 36 leaves it
+     open. The late band has a third limit, on the median; the summary of record shows both pinned pairs inside
+     it.) Then every day that is
+     left out is a day on which the pinned series agrees with the other venue, and without those days neither part
+     of the FAIL is there: the FAIL against each venue comes from that venue's own closes, not from the pinned
+     file. The cause counts as identified.
   4. *Case "the pinned series stands apart".* For each provider p, `agree` alone is above that pair's
      `tool_allowed`. The lines then say which series stands apart (the pinned one), in which years and how far. They
      do not say why: single bad closes in the pinned file, another kind of price than one venue's close, and a
      close taken at another time of day all give such counts, and the late `levels` line covers 2017 to 2026 as one
      segment. The cause is not verified.
-  5. *Anything else* (one provider in case 3 and the other in case 4, or the `_edge` and unpaired days deciding):
-     the cause is not identified.
+  5. *Anything else* (one provider in case 3 and the other not, a level gap of the pinned series that few return
+     days show, or the `_edge`, `differ` and unpaired days deciding): the cause is not identified.
+  Tried on eleven synthetic patterns with the pilot 2 window's sizes: venues with their own bad closes or a premium
+  of one venue fall in case 3; bad closes of the pinned series, a pinned close taken at another hour and a one-day
+  label shift fall in case 4; a noisier pinned series, a pinned series 3% above both venues for months, and a
+  mixture of venue faults with such a gap fall in case 5. No pattern in which only the pinned series was changed
+  beyond the tool's allowance fell in case 3. A mixture in which the pinned series has a few bad closes, within the
+  tool's allowance, and one venue has many falls in case 3 too: case 3 says that the days on which the pinned series
+  stands apart are within the allowance, not that there are none.
 - The second line ("원인 파악 완료 후 자동으로 해결 및 pilot 2 진행해주세요"): once the cause is identified, Claude
   resolves the matter and lets pilot 2 go ahead without asking again. Claude reads this within the standing rules:
   - If the cause is explained without changing the pinned file, a registration table or the code under the code
