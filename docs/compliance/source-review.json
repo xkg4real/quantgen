@@ -523,7 +523,7 @@
     "tests/macro_m0_schemas.py": "ef2870b7170a9a56b642c55cd509d5e2438efd2698ef52656aec28300fd66aa1",
     "tests/macro_m1_books.py": "e940009e977b4b45f44025b3e91e9bbd0db8b87986b7ff0f0282c08e468f3bd0",
     "tests/macro_m1_calendars.py": "eae070f4744fa5185c3cdc4be3ac7f22cee65bbe2aab2ce1a77fceb55ae8e2e8",
-    "tests/macro_m1_fixtures.py": "8675e0fa1ee3e2f60b0f21d8dfdab45cffe28b74bf69bf4590f5fa63950d3c6d",
+    "tests/macro_m1_fixtures.py": "09b37dd324a41f5297d0ad07ac17d2ed455129c7c4584abccb96c507d7a7a1c1",
     "tests/macro_m1_integration.py": "fc6a4190481f1dddafbe40daae4a6b905fd686da36ff5eef070b5aeb3036502f",
     "tests/macro_m1_pit.py": "47c7f40fa275632785e7edb59067bdb8b8c74bd3dac67cf7117d2589b37dd8ed",
     "tests/macro_m2_costed.py": "754a2af2fac98fb245dc6c0c6c53b23e978d4db1c0dff7ec224d712730c143f3",
@@ -770,11 +770,11 @@
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "338ce5eb20c30827c65e22e71d79df6be7f283ec9581588b88ab2c776650759e",
+      "source_digest": "b04f4e31304e31d4d88d55e94bb70281991b3e5344986cea968aeef42352a08a",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T14:37:35.535942+00:00",
-      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
+      "review_note": "Test-only change for document 12: tests/macro_m1_fixtures.py gains one check in the KRW=X test of the reference-data fixture generator (a hand-made fixture with a Saturday KRW=X row is refused by the post-close check, naming the fixture file and the date). 12-claims was read again: no app screen, performance figure, financial claim or user-facing text changes; the generator is a developer tool run on synthetic files in these tests.",
+      "reviewed_at": "2026-11-11T15:24:02.539534+00:00",
+      "source_commit": "0df00c2a02ea81ef2f2c9a0e80026b64d04563c4"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",

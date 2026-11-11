@@ -277,10 +277,19 @@ def calendar_check_fixture(registry, clocks):
     """`check_fixture(path)` for `generate`: `core.ficc.pit.check_fixture` (T-FIX-01: a close-type row retrieved before
     its session's close-print bound + 10 min is refused) on the same calendars as `calendar_available_at`, a declared
     reference series' session being its REFERENCE_FILES market's; for KRWX (FX) the bound is the New York 17:00 FX day
-    close of owner ruling A-1, so its rows must be retrieved at 17:10 New York time of their date or later."""
+    close of owner ruling A-1, so its rows must be retrieved at 17:10 New York time of their date or later. A KRWX row
+    dated on a Saturday or a Sunday has no bound: NoFXDayClose naming the fixture file and the row's date (`generate`
+    never writes such a row, but an archived or hand-made fixture can hold one)."""
     from core.ficc import pit
     view, reference_clocks = _ReferenceMarkets(registry), _ReferenceClocks(clocks)
-    return lambda path: pit.check_fixture(path, registry=view, clocks=reference_clocks)
+
+    def check_fixture(path):
+        try:
+            return pit.check_fixture(path, registry=view, clocks=reference_clocks)
+        except NoFXDayClose as exc:
+            raise NoFXDayClose(f"{Path(path).name}: {exc}; that row has no close-print bound for T-FIX-01, so the "
+                               "fixture is refused") from None
+    return check_fixture
 
 
 def _iso(dt: datetime) -> str:

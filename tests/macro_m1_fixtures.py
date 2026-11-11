@@ -1284,7 +1284,9 @@ def test_macro_fixtures_stamps_krwx_at_the_new_york_fx_close():
     and in a reference file with the file and line named, writing nothing. At the KRX decision of 2 Oct 2026
     (06:30:30Z) the 1-Oct row is visible and the 2-Oct row is not, as the ruling's note says. T-FIX-01 on an F16
     fixture: retrieved at its last close + 10 min it is written and accepted, one second earlier it is refused and
-    nothing is written; the shared reader accepts the file. The clocks of every other market are read unchanged."""
+    nothing is written; the shared reader accepts the file; a fixture the generator did not write that holds a
+    Saturday row is refused by the check, naming the fixture file and the date (it was a bare NoFXDayClose naming
+    neither). The clocks of every other market are read unchanged."""
     from core.calendars import clocks as K
     from core.calendars.adapter import CalendarClocks
     from core.ficc import contracts, pit
@@ -1353,6 +1355,15 @@ def test_macro_fixtures_stamps_krwx_at_the_new_york_fx_close():
                                                                                    for d in days]
         assert check(out / name) == len(days)
         _refused(lambda: pit.check_fixture(out / name, registry=registry, clocks=clk), KeyError, "KRWX")
+        # a fixture the generator did not write (archived, hand-made) with a Saturday row: T-FIX-01 has no bound for
+        # it, and the refusal names the fixture file and the row's date
+        lines = (out / name).read_text(encoding="utf-8").rstrip("\n").split("\n")
+        saturday = date(2026, 10, 3)
+        hand_made = Path(tmp) / "hand_made_krwx.csv"
+        hand_made.write_text("\n".join(lines + [lines[-1].replace(days[-1].isoformat(), saturday.isoformat())]) + "\n",
+                             encoding="utf-8")
+        _refused(lambda: check(hand_made), MF.NoFXDayClose, f"hand_made_krwx.csv: FX {saturday} is a Saturday",
+                 "no close-print bound for T-FIX-01")
 
 
 def test_macro_fixtures_close_layout_is_one_layout_for_three_readers():
