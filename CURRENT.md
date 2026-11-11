@@ -6,11 +6,11 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d
 next_ids: ⑤-2/e, ⑤-2/f, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-11T20:36:00+09:00
+updated_at: 2026-11-11T21:51:00+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: claude/provider-parity-spy-rerun-20261111
-work_commit: c70426c
+work_commit: f57f528
 uncommitted_changes: no
 pr: 105
 usage_weekly_pct: unknown
@@ -119,6 +119,17 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - **B:** Q1 REJECT(잠정 표시), Q2 게이트와 같은 분산 값으로 판정·SE_null은 참고 줄, Q3 검정력 부족이면 이겨도 자료 부족, Q4 DM으로 판정·Clark–West 참고 줄, Q5 12항목 필수·Claude 초안·소유자 커밋·R-FAM/L-FAM 병기, Q7 60/40은 21거래일 리밸런싱·실제 거래분 비용. 다음 단위 ⑨-4/2/c(결과 조립).
 - **C:** 0b 채택 방침만 기록. Q12 = 7개 파일(`core/quant/strategies.py`, `validate.py`, `history.py`, `gate_ledger.py`, `core/research/strategy_workflow.py`, `core/quant/optimize.py`, `core/quant/risk.py`). Q13·Q14·Q16·Q17·Q18 기본값. 화면은 네이티브만(UI-D1), Flet 작업(Q19 포함) 안 함, PC 화면은 시안 먼저 + UI 세션 이식과 ⑦-2 병합 뒤. Q22의 잘라내기 여부는 2026-12 말 전에 따로 질문. 다음 단위 ⑨-3a/recorder/1(화면 없음, 결정 9 조건: run_family 안에서 PNL_COMPUTED보다 낮은 PROGRESS를 쓰지 않음).
 - **D:** 주문 한도 수치(1회 100만 원/5%, 하루 10건·300만 원/15%, 손실 중지 40만 원/2%, 종목 비중 20%/400만 원, 가격 이탈 3%·시세 15초·지정가만, 09:00~15:20, 모의 20거래일·30건 등)를 기본값으로 승인. **실거래는 켜지지 않음.** 순서: 안전 설계 문서 보고 → ⑦-2 병합 뒤 구현 → 모의투자 → 결과 보고 → 소유자의 실거래 전환 승인. D-14 법률 자문은 소유자가 의뢰.
+
+### PR #105 최종 상태 (2026-11-11 21:51 KST) — 가장 최신
+
+- PR #105 head `f57f528`. 고정값은 그대로입니다: 도구 커밋 `1be43ec191ce73bc4fbc7357a4b3438aca0e4bb1`, 도구 sha256 `78dd1f508c713f9be138466bf69f5dd92d8bfdcc3afacfa37b21fc4bf28ca80c`, 진단 스크립트 sha256 `1e44f3a791dd8c13a667bf46cda2933c7bb0810ac6f7bcaae884a16cc71bc6ea`.
+- `c70426c` 이후 커밋: `cda2106`(시험 준비 코드가 Windows에서 `QUANTGEN`과 `quantgen`을 같은 폴더로 보아 3개 시험이 실패 → 서로 다른 상위 폴더로 분리. Runtime 43013788854 6/6·Compliance 성공으로 확인), `39d52a7`·`324224f`(최종 재점검 지적 반영: 문서와 시험만), `f57f528`(문구 4건과 기준선). 도구와 진단 스크립트는 `c70426c` 이후 바이트 변화 없음.
+- 최종 재점검(독립 2관점, 읽기 전용): blocker 0, 도구 변경 필요 0. 안내서 major 1건(10단계 멈춤 조건이 "행 수 정확히 5515"로 너무 엄격) → **멈춤 조건은 수신이 온전한지만 봄**: (a) 마지막 줄 `FETCH spy fmp OK exit=0`(아니면 5절 표 먼저), (b) `fmp paging stopped at` 없음, (c) `first` ≤ 2004-12-01·`last` = 2026-10-02·`weekend dates 0`, (d) 새 확인 줄(수신 기록 `meta.json`에서 `rows <n> blank <n>`만 출력)에서 `blank 0`. 행 수 5515와 first 2004-11-01은 참고 정보이고 달라도 (a)~(d)가 맞으면 11단계로 갑니다. **대조 결과를 미리 보고 대조를 막는 조건은 넣지 않았습니다**(공급사 달력이 하루 다른 것은 대조가 판정할 결과).
+- 기록(`results/RULINGS.md` SPY-가 항목, 결정 기록 마지막 절, 안내서)에 Claude 해석으로 적은 것: 멈춤은 실행이 아님. 실패한 수신은 폴더를 남기지 않아 5절이 허락하면 같은 줄(같은 폴더 이름 `fetch2-spy-fmp`)로 한 번 더. 대조는 `OK`로 끝난 첫 수신으로만 함. 그 수신이 (b)~(d)를 못 맞추면 대조하지 않고 SPY는 WITHHELD 유지·Pilot 1 보류, 그 뒤의 일(도구 변경, 다른 공급사, 그런 파일의 대조, 또 다른 수신)은 새 소유자 판정 필요. `LEFT BEHIND:` 줄이 나오면 다시 실행하지 않고 세 줄을 보냄.
+- 시험 129 + 18 통과(Linux), selftest PASS, compliance 정합성 PASS. 캐시 없는 전체 실행은 `c70426c`에서 769/895(추가 0·제거 0·변경 0); 그 뒤 바뀐 파일은 전체 실행 밖(시험 모듈 2개, 문서, README).
+- 남은 것: `f57f528`의 CI(약 30분) → 병합(**병합 커밋**, expectedHeadSha, 트리 확인) → main을 실행 브랜치에 병합해 push → `git merge-base --is-ancestor 1be43ec… origin/claude/provider-parity-runs-20261111`과 도구 sha256 확인 → 원장 `⑤-2/f` → Notion → 소유자에게 안내서 `docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md`와 새 고정값 전달.
+- 소유자에게 이미 알린 것: BTC 관문 자동 통과는 진단이 "각 거래소가 자기 날에만 어긋남"을 보일 때뿐이고, "고정 파일이 따로 논다"면 한 줄 여쭙는다는 점; 진단 출력에 승인된 두 통계 외에 파일 지문과 건수가 더 나온다는 점. 소유자 답 없음(대기 아님, 통지).
+- Notion: REMAINING WORK는 19:4x에 갱신. 1107 페이지는 보관(archived) 상태로 조회됨 → 소유자에게 복원 여부를 물었고 답 대기.
 
 ### PR #105 올림 (2026-11-11 20:36 KST) — 가장 최신
 
