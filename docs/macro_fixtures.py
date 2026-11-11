@@ -345,9 +345,9 @@ def _obs_date(cell: str | None) -> date | None:
 def _date_column(src: Path, fields: list[str]) -> str:
     """The header cell of `fields` that names the date (DATE_COLUMN_NAMES, in that order of preference), or with none,
     the first cell (the first column); a ValueError naming the reference file and header when one name is held by
-    two cells."""
+    two cells. `fields` is the header `fixture_rows` read with utf-8-sig, so no byte order mark is left to strip."""
     def norm(field: str) -> str:
-        return field.lstrip("\ufeff").strip().lower()
+        return field.strip().lower()
     for name in DATE_COLUMN_NAMES:
         found = [f for f in fields if norm(f) == name]
         if len(found) == 1:

@@ -524,7 +524,7 @@
     "tests/macro_m0_schemas.py": "ef2870b7170a9a56b642c55cd509d5e2438efd2698ef52656aec28300fd66aa1",
     "tests/macro_m1_books.py": "e940009e977b4b45f44025b3e91e9bbd0db8b87986b7ff0f0282c08e468f3bd0",
     "tests/macro_m1_calendars.py": "eae070f4744fa5185c3cdc4be3ac7f22cee65bbe2aab2ce1a77fceb55ae8e2e8",
-    "tests/macro_m1_fixtures.py": "e291bf66e30ae0384ce15886551c9538f7c1595b797767aad5b4bf114fd06f7b",
+    "tests/macro_m1_fixtures.py": "e5951603fb9152807b96d0c6810924b7ebf07e1061d3e9ec83db92ff099968fa",
     "tests/macro_m1_integration.py": "fc6a4190481f1dddafbe40daae4a6b905fd686da36ff5eef070b5aeb3036502f",
     "tests/macro_m1_pit.py": "47c7f40fa275632785e7edb59067bdb8b8c74bd3dac67cf7117d2589b37dd8ed",
     "tests/macro_m2_costed.py": "754a2af2fac98fb245dc6c0c6c53b23e978d4db1c0dff7ec224d712730c143f3",
@@ -771,11 +771,11 @@
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "8d3e2f5d66998de1711230e33cd1162d98bfe4a0547c14847c2a197f8edc3a97",
+      "source_digest": "8926db635c452deb1d0556b1b9cb9b49e861aa1b8db7473a75992a77a60b6fdd",
       "reviewed_by": "Claude fixture generator FX clock and review fixes",
-      "review_note": "Test-only change for document 12: tests/macro_m1_fixtures.py adds a test that the offline fixture generator's command line reads its manifest once per run and prints the count of appended rows in the same wording (review of PR 107, finding F8). 12-claims was read again: no app screen, performance figure, financial claim or user-facing text changes; the generator is a developer tool run on synthetic files in these tests.",
-      "reviewed_at": "2026-11-11T16:27:47.636209+00:00",
-      "source_commit": "fe9c49bf9ca7adef54d0657b93bf6b0a70481f6a"
+      "review_note": "Test-only change for document 12: tests/macro_m1_fixtures.py checks that a reference header read by the offline fixture generator carries no byte order mark (why its date-column lookup no longer strips one; review of PR 107, finding F9) and writes two byte order marks in test strings as escapes instead of raw characters. 12-claims was read again: no app screen, performance figure, financial claim or user-facing text changes; the generator is a developer tool run on synthetic files in these tests.",
+      "reviewed_at": "2026-11-11T16:31:09.387230+00:00",
+      "source_commit": "36e7e7e434ca226f9ae6128008e0dc3c1809b641"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",

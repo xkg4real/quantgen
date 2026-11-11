@@ -1907,10 +1907,13 @@ def test_macro_fixtures_reads_the_first_column_and_basic_dates_as_before_r3():
         for head, cells in (("day,value", ("2026-09-30,4.1", "2026-10-01,4.2")),         # another first-column name
                             ("Day,value", ("20260930,4.1", "20261001,4.2")),
                             ("date,value", ("20260930,4.1", "20261001,4.2")),          # the named column, YYYYMMDD
-                            ("﻿,Mom", ("20260930,0.5", "20261001,0.6")),           # a byte order mark before ""
+                            ("\ufeff,Mom", ("20260930,0.5", "20261001,0.6")),           # a byte order mark before ""
                             ("value,DATE", ("4.1,20260930", "4.2,20261001"))):         # named, not first
             got = [r["obs_date"] for r in stamped(head + "\n" + "".join(c + "\n" for c in cells))[1]]
             assert got == ["2026-09-30", "2026-10-01"], head
+        # the byte order mark is gone when the header is read (utf-8-sig), so `_date_column` strips none (F9)
+        fields, _rows = stamped("\ufeffDate,value\n20260930,4.1\n")
+        assert fields[:2] == ["Date", "value"] and MF._date_column(src, fields) == "Date"
         _refused(lambda: stamped("value,day\n4.1,2026-09-30\n"), ValueError,
                  "plain.csv line 2: date '4.1' in column 'value' (the first column: no header cell is named date or "
                  "observation_date) is not an ISO date")
