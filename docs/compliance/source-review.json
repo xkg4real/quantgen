@@ -523,7 +523,7 @@
     "tests/macro_m0_schemas.py": "ef2870b7170a9a56b642c55cd509d5e2438efd2698ef52656aec28300fd66aa1",
     "tests/macro_m1_books.py": "e940009e977b4b45f44025b3e91e9bbd0db8b87986b7ff0f0282c08e468f3bd0",
     "tests/macro_m1_calendars.py": "eae070f4744fa5185c3cdc4be3ac7f22cee65bbe2aab2ce1a77fceb55ae8e2e8",
-    "tests/macro_m1_fixtures.py": "69c56c8b88a683c4c39c94b5bad81882b3309927bcf7603482884f2b4dc848a4",
+    "tests/macro_m1_fixtures.py": "dcdca6d8431f1b9814cf3bfe0e1a7ce8a1563d077e28f8dbcbaf4e583a54c4d9",
     "tests/macro_m1_integration.py": "5f965cea2c757631c3cd8a88995854aa702f1cdd95ed00b9fd7a3c7cbf647fb5",
     "tests/macro_m1_pit.py": "47c7f40fa275632785e7edb59067bdb8b8c74bd3dac67cf7117d2589b37dd8ed",
     "tests/macro_m2_costed.py": "754a2af2fac98fb245dc6c0c6c53b23e978d4db1c0dff7ec224d712730c143f3",
@@ -770,11 +770,11 @@
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "564c99e4549c0c8fb3e031e8cc389c51491e23da3d3bdaea5272dfa888232577",
+      "source_digest": "27beacb8532dd970a309880f0e86411120ae429048fdf055099a0e6565b2dae3",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Test-only change for document 12: tests/macro_m1_fixtures.py and tests/macro_m1_calendars.py gain tests for the reference-data fixture generator (date column found by name; the long-form F27 file in date order per code, also in the shared test reader). 12-claims was read again: no app screen, performance figure, financial claim or user-facing text changes; the generator is a developer tool run on synthetic files in these tests.",
-      "reviewed_at": "2026-11-11T14:18:55.927546+00:00",
-      "source_commit": "b97646d3792dae26ae746590cfadd9010037dcac"
+      "review_note": "Test-only change for document 12: tests/macro_m1_fixtures.py gains tests for the fixture generator's final write (result tables copied byte for byte with the md5 of the bytes on disk; the manifest compared before the output folder is written; the final write undone when a rename fails part way). 12-claims was read again: no app screen, performance figure, financial claim or user-facing text changes; the generator is a developer tool run on synthetic files in these tests.",
+      "reviewed_at": "2026-11-11T14:23:53.722561+00:00",
+      "source_commit": "e9ee15bc3ef756f487518c8d20a8fea74676237e"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",

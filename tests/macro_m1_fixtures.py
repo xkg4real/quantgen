@@ -11,6 +11,7 @@ import ast
 import contextlib
 import csv
 import fnmatch
+import hashlib
 import io
 import json
 import math
@@ -1737,6 +1738,172 @@ def test_macro_fixtures_finds_the_date_column_by_name():
                                          available_at_source="calendar_bound", retrieved_at_utc=REFERENCE_RETRIEVED,
                                          available_at=_available_at), ValueError,
                  "plain.csv line 3: date 'not-a-date' in column 'DATE' is not an ISO date")
+
+
+def test_macro_fixtures_copies_result_tables_byte_for_byte():
+    """R5: a result table was read as text and written with LF line ends, so a CRLF table was not copied byte for
+    byte although REFERENCE_FILES says it is, and a byte that is not UTF-8 stopped the run. Now the bytes are copied:
+    CRLF, LF, no final line end, a byte that is not UTF-8 and a byte order mark all come out identical, the md5 listed
+    is the md5 of the bytes on disk, `freeze` lists it and the fixture gate (`require_fixture`) accepts the file."""
+    from tests.notrun import md5_of, unlisted
+    rel, name = _reference_row("F20")[1], FILE_OF["F20"]
+    with tempfile.TemporaryDirectory() as tmp:
+        ref, out = Path(tmp) / "ref", Path(tmp) / "out"
+        (ref / "results").mkdir(parents=True)
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+        for label, data in (("CRLF", b"golden_id,sub_id,value\r\nG-POST-01,gkr05_share,0.42\r\n"),
+                            ("LF", b"golden_id,sub_id,value\nG-POST-01,gkr05_share,0.42\n"),
+                            ("no final line end", b"item,value\nF20,1"),
+                            ("a byte that is not UTF-8", b"item,value\nF20,\xff\n"),
+                            ("a byte order mark and CRLF", b"\xef\xbb\xbfitem,value\r\nF20,1\r\n")):
+            (ref / rel).write_bytes(data)
+            rows = MF.generate(ref, out, retrieved_at_utc=REFERENCE_RETRIEVED, licence="test licence",
+                               owner="package D", available_at=_available_at, only=("F20",))
+            assert (out / name).read_bytes() == data, label
+            assert [r["md5"] for r in rows] == [hashlib.md5(data).hexdigest()] == [md5_of(out / name)], label
+            assert rows[0]["span"] == "result table" and rows[0]["value_status_rule"].startswith("result table"), label
+        manifest = out / "MANIFEST.csv"
+        assert MF.freeze(manifest, rows) == 1 and load_manifest(manifest)[name]["md5"] == md5_of(out / name)
+        assert require_fixture(name, manifest=manifest) == out / name and unlisted(manifest) == []
+
+
+def test_macro_fixtures_compares_the_manifest_before_the_final_write():
+    """R1: on the command line `generate` wrote the output directory and only then did `freeze` compare the md5s, so
+    a regeneration refused with FixtureChanged had already overwritten the frozen file, which then no longer matched
+    its manifest row. Now the built files are compared with the manifest before anything is written: the refused
+    regeneration leaves every frozen byte and the manifest as they were, with a new file selected beside the changed
+    one nothing is written either, and `generate(manifest=...)` refuses the same way. An unchanged regeneration
+    rewrites the same bytes and adds no row; once the reference is restored the new file is written and listed."""
+    from core.calendars import clocks as K
+    from core.calendars.adapter import CalendarClocks
+    from core.ficc import contracts
+    from tests.macro_m1_calendars import fixture_set
+    from tests.notrun import unlisted
+    cal = fixture_set()
+    clk = CalendarClocks(contracts.default_registry(), cal=cal)
+    kr = K.sessions_between("KR", date(2026, 9, 21), GPOST_DAY, cal=cal)
+    us = K.sessions_between("US", date(2026, 9, 21), date(2026, 10, 1), cal=cal)
+    n13, n14 = FILE_OF["F13"], FILE_OF["F14"]
+    with tempfile.TemporaryDirectory() as tmp:
+        ref, out = Path(tmp) / "ref", Path(tmp) / "out"
+        manifest = out / "MANIFEST.csv"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+        f13, f14 = ref / _reference_row("F13")[1], ref / _reference_row("F14")[1]
+        good13 = _invented_reference("F13", kr)
+        f13.write_text(good13, encoding="utf-8")
+        f14.write_text(_invented_reference("F14", us), encoding="utf-8")
+
+        def run(*only):
+            argv = ["--reference", str(ref), "--out", str(out), "--manifest", str(manifest), "--retrieved-at-utc",
+                    "2026-10-02T09:00:00Z", "--licence", "test licence", "--owner", "package D", "--only", *only]
+            with contextlib.redirect_stdout(io.StringIO()):
+                return MF.main(argv, clocks=clk)
+
+        def state():
+            return {p.name: p.read_bytes() for p in out.iterdir()}
+        assert run("F13") == 0
+        frozen = state()
+        md5 = hashlib.md5(frozen[n13]).hexdigest()
+        assert sorted(frozen) == sorted(["MANIFEST.csv", n13]) and unlisted(manifest) == []
+        assert load_manifest(manifest)[n13]["md5"] == md5
+        assert run("F13") == 0 and state() == frozen                     # the same reference: same bytes, no new row
+        lines = good13.rstrip("\n").split("\n")
+        f13.write_text("\n".join(lines[:-1] + [lines[-1].rsplit(",", 1)[0] + ",9999.00"]) + "\n", encoding="utf-8")
+        _refused(lambda: run("F13"), MF.FixtureChanged, f"{n13}: {md5} -> ", "L5492")
+        assert state() == frozen and unlisted(manifest) == []
+        _refused(lambda: run("F13", "F14"), MF.FixtureChanged, f"{n13}: {md5} -> ")
+        assert state() == frozen                                         # F14 is not written either
+        _refused(lambda: _calendar_generator(("F13",), ref, out, manifest=manifest), MF.FixtureChanged, n13)
+        assert state() == frozen
+        f13.write_text(good13, encoding="utf-8")
+        assert run("F13", "F14") == 0
+        after = state()
+        assert after[n13] == frozen[n13] and sorted(after) == sorted(["MANIFEST.csv", n13, n14])
+        assert sorted(load_manifest(manifest)) == sorted([n13, n14]) and unlisted(manifest) == []
+
+
+def test_macro_fixtures_final_write_is_all_or_nothing():
+    """R4: the final write renamed one file after another into the output directory, so a rename that failed part way
+    (on Windows, a destination open in another program) left the earlier files new and the rest old, and on a first
+    generation left files no manifest lists. Now (`MF._commit`) every file is written whole beside its destination and
+    the bytes it replaces are read first, then the renames run, and a failure undoes the renames already made. With
+    the second of three files locked: a regeneration leaves every byte as it was, a first generation leaves no output
+    directory (nor the parent directories it created), and the error reaching the caller is the PermissionError
+    itself. A destination that cannot be read (here a directory with a fixture's name) stops the run before any
+    rename. If the undo itself fails, FinalWriteIncomplete names the file left with its new bytes, and that is the
+    only file changed. No temporary file is left in any case. What a stopped process can leave is stated in
+    `MF._commit` and is not demonstrated here."""
+    import os
+    from tests.notrun import md5_of
+    three = ("F13", "F14", "F27")
+    n13, n14, n27 = (FILE_OF[f] for f in three)
+    with tempfile.TemporaryDirectory() as tmp:
+        ref = Path(tmp) / "ref"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+
+        def write_reference(base):
+            for fid, b in (("F13", base), ("F14", base + 100)):
+                (ref / _reference_row(fid)[1]).write_text(f"date,close\n2026-09-30,{b}\n2026-10-01,{b + 1}\n",
+                                                          encoding="utf-8")
+            (ref / _reference_row("F27")[1]).write_text(f"date,code,close\n2026-10-01,005930,{base}\n"
+                                                        f"2026-10-01,000660,{base + 1}\n", encoding="utf-8")
+
+        def generate(out):
+            return MF.generate(ref, out, retrieved_at_utc=REFERENCE_RETRIEVED, licence="test licence",
+                               owner="package D", available_at=_available_at, only=three)
+
+        def state(out):
+            return {p.name: p.read_bytes() if p.is_file() else "a directory" for p in out.iterdir()}
+        real = os.replace
+
+        def with_locked(out, fn, fail_restore_of=None):
+            """Run `fn` with every rename onto out/F14 refused, and the second rename onto `fail_restore_of` too."""
+            seen: dict = {}
+
+            def replace(src, dst, *args, **kwargs):
+                dst = Path(dst)
+                if dst.parent == out:                                     # renames into `out` only, not the staging
+                    seen[dst.name] = seen.get(dst.name, 0) + 1
+                    if dst.name == n14 or (dst.name == fail_restore_of and seen[dst.name] > 1):
+                        raise PermissionError(13, "simulated: the file is open in another program", str(dst))
+                return real(src, dst, *args, **kwargs)
+            os.replace = replace
+            try:
+                return fn()
+            finally:
+                os.replace = real
+        write_reference(100)
+        out = Path(tmp) / "out"
+        rows = generate(out)
+        frozen = state(out)
+        assert sorted(frozen) == sorted([n13, n14, n27]) and {r["file"]: r["md5"] for r in rows} == {
+            n: hashlib.md5(b).hexdigest() for n, b in frozen.items()}
+        write_reference(500)                                              # every file would change
+        _refused(lambda: with_locked(out, lambda: generate(out)), PermissionError, "simulated", n14)
+        assert state(out) == frozen
+        fresh = Path(tmp) / "new" / "deeper" / "out"                      # a first generation, two parents created
+        _refused(lambda: with_locked(fresh, lambda: generate(fresh)), PermissionError, "simulated")
+        assert not (Path(tmp) / "new").exists()
+        # a destination that cannot be read stops the run before any rename
+        blocked = Path(tmp) / "blocked"
+        generate(blocked)                                                 # the current reference, then one more change
+        (blocked / n27).unlink()
+        (blocked / n27).mkdir()
+        before = state(blocked)
+        write_reference(900)
+        _refused(lambda: generate(blocked), OSError)
+        assert state(blocked) == before and (blocked / n27).is_dir()
+        # the undo fails for F13: named, and F13 is the only file changed
+        write_reference(500)
+        exc = _refused(lambda: with_locked(out, lambda: generate(out), fail_restore_of=n13), MF.FinalWriteIncomplete,
+                       f"writing {n14} into {out} failed (PermissionError", f"{n13}: left with its new bytes")
+        assert len(exc.left) == 1 and isinstance(exc.__cause__, PermissionError)
+        now = state(out)
+        assert sorted(now) == sorted(frozen) and now[n14] == frozen[n14] and now[n27] == frozen[n27]
+        assert now[n13] != frozen[n13] and md5_of(out / n13) == next(
+            r["md5"] for r in generate(Path(tmp) / "check") if r["file"] == n13)   # the new bytes, whole
 
 
 # --------------------------------------------------------------------------- #
