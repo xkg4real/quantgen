@@ -632,6 +632,15 @@ def generate(ref_dir: Path, out_dir: Path, *, retrieved_at_utc: datetime, licenc
     ones; a result table, which no check reads, is not), and `out_dir` is written from those bytes only after the
     last file passed, by `_commit`: a refused run leaves `out_dir` and the manifest as they were, and `_commit`
     says what a failure of the final write can leave."""
+    return _generate(ref_dir, out_dir, retrieved_at_utc=retrieved_at_utc, licence=licence, owner=owner,
+                     available_at=available_at, check_fixture=check_fixture, only=only, manifest=manifest)[0]
+
+
+def _generate(ref_dir: Path, out_dir: Path, *, retrieved_at_utc: datetime, licence: str, owner: str,
+              available_at=_refuse_available_at, check_fixture=None, only=None,
+              manifest=None) -> tuple[list[dict], int | None]:
+    """`generate`, returning also how many rows its final write appended to `manifest`, as `_manifest_bytes`
+    counted them (None without `manifest`): the command line prints that count (review of PR #107, F8)."""
     ref_dir, out_dir = Path(ref_dir), Path(out_dir)
     files = selected_files(only)
     missing = missing_files(ref_dir, only)
@@ -665,10 +674,12 @@ def generate(ref_dir: Path, out_dir: Path, *, retrieved_at_utc: datetime, licenc
                              "value_status_rule": rule, "md5": hashlib.md5(data).hexdigest(), "licence": licence,
                              "owner": owner, "tests": tests})
             built.append((out_dir / staged.name, data))
+    appended = None
     if manifest is not None:                                   # R1: compared before `out_dir` is touched; R4: the
-        built.append((Path(manifest), _manifest_bytes(Path(manifest), rows_out)[0]))   # manifest is written last
+        manifest_bytes, appended = _manifest_bytes(Path(manifest), rows_out)              # manifest is written last
+        built.append((Path(manifest), manifest_bytes))
     _commit(built)                                             # every file passed: only now is `out_dir` written
-    return rows_out
+    return rows_out, appended
 
 
 class _Buf:
@@ -736,12 +747,10 @@ def main(argv=None, *, clocks=None) -> int:
     from core.calendars.adapter import CalendarClocks            # the shipped set: refuses until the owner signs
     from core.ficc import contracts
     registry, clocks = contracts.default_registry(), CalendarClocks() if clocks is None else clocks
-    manifest = Path(args.manifest)
-    listed = set(load_manifest(manifest)) if manifest.is_file() else set()
-    rows = generate(ref, Path(args.out), retrieved_at_utc=retrieved, licence=args.licence, owner=args.owner,
-                    available_at=calendar_available_at(registry, clocks),
-                    check_fixture=calendar_check_fixture(registry, clocks), only=args.only, manifest=manifest)
-    added = sum(r["file"] not in listed for r in rows)       # `generate` appended them with the fixtures
+    rows, added = _generate(ref, Path(args.out), retrieved_at_utc=retrieved, licence=args.licence, owner=args.owner,
+                            available_at=calendar_available_at(registry, clocks),
+                            check_fixture=calendar_check_fixture(registry, clocks), only=args.only,
+                            manifest=Path(args.manifest))      # `added`: the rows the final write appended
     print(f"{len(rows)} fixtures written under {args.out}; {added} manifest rows appended to {args.manifest}")
     return 0
 

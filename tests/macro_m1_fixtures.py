@@ -2037,6 +2037,43 @@ def test_macro_fixtures_copies_result_tables_byte_for_byte():
         assert require_fixture(name, manifest=manifest) == out / name and unlisted(manifest) == []
 
 
+def test_macro_fixtures_command_line_counts_the_appended_rows_once():
+    """Review of PR #107, F8: the command line read the manifest a second time only to count the rows it appended,
+    while `_manifest_bytes` had counted them for the final write and the count was dropped. Now `MF._generate`
+    returns that count with the rows and `main` prints it, so the manifest is read once per run (not at all while it
+    is absent) and the count is the one the final write used. The printed line keeps its wording: a first run
+    appends 1 row, the same run again 0, a run adding a second file 1."""
+    from core.calendars.adapter import CalendarClocks
+    from core.ficc import contracts
+    from tests.macro_m1_calendars import fixture_set
+    clk = CalendarClocks(contracts.default_registry(), cal=fixture_set())
+    with tempfile.TemporaryDirectory() as tmp:
+        ref, out = Path(tmp) / "ref", Path(tmp) / "out"
+        manifest = out / "MANIFEST.csv"
+        (ref / "results").mkdir(parents=True)
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+        for fid in ("F20", "F21"):
+            (ref / _reference_row(fid)[1]).write_bytes(f"item,value\n{fid},1\n".encode("utf-8"))
+        reads, real = [], MF.load_manifest
+
+        def run(*only):
+            argv = ["--reference", str(ref), "--out", str(out), "--manifest", str(manifest), "--retrieved-at-utc",
+                    "2026-10-02T09:00:00Z", "--licence", "test licence", "--owner", "package D", "--only", *only]
+            reads.clear()
+            printed = io.StringIO()
+            MF.load_manifest = lambda path: (reads.append(Path(path)), real(path))[1]
+            try:
+                with contextlib.redirect_stdout(printed):
+                    assert MF.main(argv, clocks=clk) == 0
+            finally:
+                MF.load_manifest = real
+            return printed.getvalue(), len(reads)
+        for only, written, appended, read in ((("F20",), 1, 1, 0), (("F20",), 1, 0, 1), (("F20", "F21"), 2, 1, 1)):
+            assert run(*only) == (f"{written} fixtures written under {out}; {appended} manifest rows appended to "
+                                  f"{manifest}\n", read), (only, appended, read)
+        assert sorted(load_manifest(manifest)) == sorted(FILE_OF[f] for f in ("F20", "F21"))
+
+
 def test_macro_fixtures_compares_the_manifest_before_the_final_write():
     """R1: on the command line `generate` wrote the output directory and only then did `freeze` compare the md5s, so
     a regeneration refused with FixtureChanged had already overwritten the frozen file, which then no longer matched
