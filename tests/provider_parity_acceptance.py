@@ -3458,8 +3458,12 @@ class RerunWorld:
 
     def __init__(self):
         self.root = tmp()
-        self.rc, self.q = self.root / "QUANTGEN", self.root / "quantgen"
+        # The research clone and the local folder sit under two different parents. On Windows a file name is found
+        # in any letter case, so `QUANTGEN` and `quantgen` side by side are one folder there: the fetch folders
+        # would then lie inside the fake clone, and the tool refuses an output folder inside a git work tree.
+        self.rc, self.q = self.root / "desktop" / "QUANTGEN", self.root / "local" / "quantgen"
         (self.rc / ".git").mkdir(parents=True)
+        assert not pc.inside_git_worktree(self.q), "the fake local folder must lie outside the fake research clone"
         (self.rc / "synthetic").mkdir()
         tables = self.rc / "docs" / "nautilus_bridge" / "registration"
         tables.mkdir(parents=True)
