@@ -509,12 +509,15 @@ class MarketChartPane(QWidget):
         }
         for original, translated in translations.items():
             note = note.replace(original, translated)
+        # The yearly chart's monthly request, with or without the KIS paging remark (Yahoo writes none).
         note = re.sub(r"Partial history: (\d+)/(\d+) requested monthly bars \(provider window or paging limit\)\.",
                       r"부분 이력 · 요청한 \2개월 중 \1개월만 조회됐습니다(공급자 조회 범위·페이지 한도).", note)
+        note = re.sub(r"Partial history: (\d+)/(\d+) requested monthly bars\.",
+                      r"부분 이력 · 요청한 \2개월 중 \1개월만 조회됐습니다.", note)
         note = re.sub(r"Partial history: (\d+)/(\d+) requested bars \(provider window or paging limit\)\.",
                       r"부분 이력 · 요청한 \2개 중 \1개만 조회됐습니다(공급자 조회 범위·페이지 한도).", note)
         note = re.sub(r"Yearly candles from monthly history: first month (\d{4})-(\d{2}), last month (\d{4})-(\d{2})\.",
-                      r"년 단위는 월 자료를 해마다 묶었습니다(첫 달 \1-\2, 마지막 달 \3-\4).", note)
+                      r"연 단위는 월 자료를 해마다 묶었습니다(첫 달 \1-\2, 마지막 달 \3-\4).", note)
         return re.sub(r"Partial history: (\d+)/(\d+) requested bars\.",
                       r"부분 이력 · 요청한 \2개 중 \1개만 조회됐습니다.", note)
 
@@ -742,14 +745,23 @@ class MarketChartPane(QWidget):
         return True
 
     def set_interval(self, interval):
-        """An interval chosen in the stock screen's toolbar: no period chip, the latest 120 bars."""
+        """An interval chosen in the stock screen's toolbar: no period chip, the latest 120 bars shown of a request
+        sized for the interval (core.market.detail_model.interval_request: never the 50 years the 전체 chip
+        left behind)."""
+        from core.market.detail_model import interval_request
         index = self.interval.findData(interval)
         if index < 0 or interval == self.interval.currentData():
             return False
+        try:
+            instrument = self.request().instrument
+        except (TypeError, ValueError):
+            instrument = None
         self.period, self.period_view = None, False
-        self.visible_bars.blockSignals(True)
-        self.visible_bars.setValue(120)
-        self.visible_bars.blockSignals(False)
+        for control, value in ((self.visible_bars, 120),
+                               (self.bar_count, interval_request(interval, instrument, self.bar_count.value()))):
+            control.blockSignals(True)
+            control.setValue(value)
+            control.blockSignals(False)
         had = (self.snapshot is not None and bool(self.snapshot.candles)) or self._auto_updates
         self.interval.setCurrentIndex(index)
         if had:

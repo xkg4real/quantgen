@@ -1234,6 +1234,8 @@ SHORT = {
 }
 # The small painted visual of a guide card (None: no gauge):
 #   ('scale', line, low, high, low zone up to, high zone from)  a 0-100 style value with its conventional zones
+#   ('level', line, low, high, weak up to, strong from)          the same for a value with no direction (ADX):
+#                                                                 neutral colours, never the rise/fall ones
 #   ('band', lower line, upper line)                             the close inside or outside a band
 #   ('offset', line, range %)                                    the close above or below a line, ±range %
 #   ('zero', line)                                               a value around 0 (scaled by its recent size)
@@ -1243,7 +1245,7 @@ GAUGES = {
     'stochrsi': ('scale', 'STOCHRSI_K', 0, 100, 20, 80), 'mfi': ('scale', 'MFI', 0, 100, 20, 80),
     'williams': ('scale', 'WILLR', -100, 0, -80, -20), 'cci': ('scale', 'CCI', -250, 250, -100, 100),
     'psychology': ('scale', 'PSY', 0, 100, 25, 75), 'disparity': ('scale', 'DISPARITY', 85, 115, 95, 105),
-    'adx': ('scale', 'ADX', 0, 60, 20, 25),
+    'adx': ('level', 'ADX', 0, 100, 20, 25),
     'bb': ('band', 'BB_LOWER', 'BB_UPPER'), 'envelope': ('band', 'ENV_LOWER', 'ENV_UPPER'),
     'keltner': ('band', 'KC_LOWER', 'KC_UPPER'), 'donchian': ('band', 'DC_LOWER', 'DC_UPPER'),
     'ichimoku': ('band', 'SPAN_A', 'SPAN_B'), 'percent_b': ('band', None, None),
@@ -1263,10 +1265,20 @@ class ShortGuide:
     gauge: tuple | None
 
 
-def short_guide(key, language='ko'):
-    """The short texts of a study's guide card in the window language (Korean in 해요체) and its gauge spec."""
+# The caution of a 0-100 study whose value sits on its low side (SHORT's caution speaks of the high side).
+CAUTION_LOW = {
+    'rsi': ('낮다고 곧 오른다는 뜻은 아니에요', 'Low does not mean a rise is near.'),
+    'mfi': ('실제로 누가 팔았는지는 알려 주지 않아요', 'It does not show who actually sold.'),
+}
+
+
+def short_guide(key, language='ko', *, low=False):
+    """The short texts of a study's guide card in the window language (Korean in 해요체) and its gauge spec.
+    low=True: the value sits on the low side of its scale, so the caution speaks of that side (CAUTION_LOW)."""
     spec = study(key)
     one, cues, caution = SHORT[spec.key][0 if _lang(language) == 'ko' else 1]
+    if low and spec.key in CAUTION_LOW:
+        caution = CAUTION_LOW[spec.key][0 if _lang(language) == 'ko' else 1]
     return ShortGuide(spec.key, one, tuple(cues), caution, GAUGES.get(spec.key))
 
 
@@ -1284,7 +1296,7 @@ def gauge_value(key, values, bars, index=-1):
     if not 0 <= i < n:
         return None
     close = float(bars.close[i])
-    if kind == 'scale':
+    if kind in ('scale', 'level'):
         _, line, low, high, zone_low, zone_high = gauge
         value = _at(values, line, i)
         if value is None:
@@ -1389,13 +1401,18 @@ def _short_reading(key, bars, index=-1, *, language='ko', values=None, supply=No
         return say(f'점이 가격 {"아래" if below else "위"} · {"오름" if below else "내림"} 흐름을 따라가요',
                    f'Dots {"below" if below else "above"} price: trailing a {"rise" if below else "fall"}')
     if k == 'adx':
+        # Two parts (owner R-D9-3: short lines): the value, then how clear the trend is; the direction joins the
+        # words only when the trend is clear (+DI or −DI on top).
         adx, pdi, mdi = at('ADX'), at('PDI'), at('MDI')
         shown = _shown(adx)
-        level = say('추세가 뚜렷해요' if shown >= 25 else '추세가 생길지 애매해요' if shown >= 20 else '뚜렷한 추세가 없어요',
-                    'a clear trend' if shown >= 25 else 'a trend may be forming' if shown >= 20 else 'no clear trend')
-        side = say(' · 오르는 힘이 커요' if pdi > mdi else ' · 내리는 힘이 커요' if mdi > pdi else '',
-                   ' · up pressure' if pdi > mdi else ' · down pressure' if mdi > pdi else '')
-        return f'ADX {_fmt(adx)} · {level}{side}'
+        if shown >= 25:
+            way = 'up' if pdi > mdi else 'down' if mdi > pdi else ''
+            level = say({'up': '상승 추세가 뚜렷해요', 'down': '하락 추세가 뚜렷해요', '': '추세가 뚜렷해요'}[way],
+                        {'up': 'a clear uptrend', 'down': 'a clear downtrend', '': 'a clear trend'}[way])
+        else:
+            level = say('추세가 생길지 애매해요' if shown >= 20 else '뚜렷한 추세가 없어요',
+                        'a trend may be forming' if shown >= 20 else 'no clear trend')
+        return f'ADX {_fmt(adx)} · {level}'
     if k in ('bb', 'envelope', 'keltner', 'donchian'):
         lines = {'bb': ('BB_UPPER', 'BB_LOWER'), 'envelope': ('ENV_UPPER', 'ENV_LOWER'),
                  'keltner': ('KC_UPPER', 'KC_LOWER'), 'donchian': ('DC_UPPER', 'DC_LOWER')}[k]

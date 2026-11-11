@@ -51,6 +51,21 @@ def period_request(key, instrument):
     raise ValueError(f"Unknown period {key!r}")
 
 
+MENU_BARS = 400          # bars an interval chosen in the menu asks for (the daily chips' request)
+YEARLY_BARS = 50         # yearly candles kept (built from YEARLY_MONTHS monthly bars)
+
+
+def interval_request(interval, instrument, current=0):
+    """Bars to request for an interval chosen in the menu, with no period chip: the yearly chart's YEARLY_BARS, a
+    bond's BOND_BARS days, and otherwise at least MENU_BARS, so a study with a long warm-up (a 60-period average,
+    Ichimoku's 78) still has its data after the 전체 chip asked for only 50 years."""
+    if getattr(instrument, "asset", "") == "bond":
+        return BOND_BARS
+    if interval == "1Y":
+        return YEARLY_BARS
+    return max(int(current or 0), MENU_BARS)
+
+
 def visible_for(key, candles):
     """How many of the loaded bars a period shows (at least MIN_VISIBLE, at most what was received)."""
     candles = tuple(candles or ())
@@ -167,20 +182,50 @@ def yearly_snapshot(monthly, request):
     return replace(monthly, request=request, candles=years, note=note)
 
 
-def yearly_span(snapshot):
-    """{year: (first month, last month)} of a yearly snapshot's partial years: the first year when its history
-    starts after January, the last when it has not reached December. Empty for other snapshots."""
+def market_year(snapshot, now=None):
+    """The current year where the snapshot's market is (Korea time for KRX, New York time for US listings, UTC
+    otherwise), at the time it was fetched (or `now`)."""
+    from datetime import timedelta
+    moment = now
+    if moment is None:
+        stamp = str(getattr(snapshot, "fetched_at", "") or "")
+        try:
+            moment = datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+        except ValueError:
+            moment = None
+        if moment is not None and moment.tzinfo is None:
+            moment = None
+    moment = moment or datetime.now(timezone.utc)
+    instrument = getattr(getattr(snapshot, "request", None), "instrument", None)
+    venue = venue_of(instrument)
+    if venue == "KRX":
+        return moment.astimezone(timezone(timedelta(hours=9))).year
+    if venue == "US":
+        try:
+            from zoneinfo import ZoneInfo
+            return moment.astimezone(ZoneInfo("America/New_York")).year
+        except Exception:
+            return moment.astimezone(timezone(timedelta(hours=-5))).year
+    return moment.astimezone(timezone.utc).year
+
+
+def yearly_span(snapshot, now=None):
+    """{year: (first month, last month, running)} of a yearly snapshot's years that are not a whole calendar year
+    of history: the first when its history starts after January; the last when it is the current year in the
+    market's time zone (running, December included) or when its history stopped before December (a stock that
+    stopped trading). Empty for other snapshots."""
     import re
     match = re.search(r"Yearly candles from monthly history: first month (\d{4})-(\d{2}), last month (\d{4})-(\d{2})",
                       str(getattr(snapshot, "note", "") or ""))
     if match is None:
         return {}
     first_year, first_month, last_year, last_month = (int(x) for x in match.groups())
+    running = last_year >= market_year(snapshot, now)
     out = {}
-    if first_month > 1:
-        out[first_year] = (first_month, 12 if first_year != last_year else last_month)
-    if last_month < 12:
-        out[last_year] = (first_month if first_year == last_year else 1, last_month)
+    if first_month > 1 and first_year != last_year:
+        out[first_year] = (first_month, 12, False)
+    if running or last_month < 12 or (first_year == last_year and first_month > 1):
+        out[last_year] = (first_month if first_year == last_year else 1, last_month, running)
     return out
 
 
@@ -417,6 +462,12 @@ STATE_CODES = ("high", "middle", "low", "above", "below", "fast_above", "fast_be
                "band_in", "band_below", "trend_clear", "trend_weak", "volume_more", "volume_usual", "volume_less")
 
 
+def level_marks(key):
+    """(low, high): the edges of the middle zone of a 0-100 style study (RSI 30 and 70), or None."""
+    entry = _LEVELS.get(key)
+    return (entry[2], entry[1]) if entry else None
+
+
 def _value(values, line, index):
     try:
         value = float(values[line][index])
@@ -484,7 +535,8 @@ def study_state(key, values, bars, index=-1):
     return ""
 
 
-__all__ = ["PERIODS", "PERIOD_KEYS", "DEFAULT_PERIOD", "period_request", "visible_for", "window",
-           "routable_intervals", "with_derived", "yearly_candles", "yearly_snapshot", "yearly_span", "load_chart",
+__all__ = ["PERIODS", "PERIOD_KEYS", "DEFAULT_PERIOD", "period_request", "interval_request", "visible_for",
+           "window", "routable_intervals", "with_derived", "yearly_candles", "yearly_snapshot", "yearly_span",
+           "market_year", "load_chart",
            "period_reason", "QuoteState", "quote_state", "venue_of", "VolumeRatio",
-           "volume_vs_average", "SummaryRow", "now_summary", "study_state", "STATE_CODES"]
+           "volume_vs_average", "SummaryRow", "now_summary", "study_state", "level_marks", "STATE_CODES"]

@@ -699,6 +699,108 @@ class StockDetailTests(unittest.TestCase):
         self.view.back_button.click(); self.settle()
         self.assertEqual(bar.value(), 600)
 
+    def test_back_in_a_narrow_window_and_the_owners_own_rail_choice(self):
+        """Review of UI-D9: at 1000x700 the screen folds the rail for the chart, yet Back still returns the list to
+        where it was; a rail the owner opened or closed meanwhile is left as they last set it (and saved)."""
+        from PyQt6.QtWidgets import QWidget
+        from quantgen_desktop import shell_rail
+        w = self.window
+        w.language_store = self.settings          # the shell saves the owner's rail choice here
+        page = w.stack.currentWidget()
+        filler = QWidget(); filler.setFixedHeight(3000)            # a long ranking list
+        w.markets_view.layout().addWidget(filler); self.settle()
+        bar = page.verticalScrollBar()
+        w.resize(1000, 700); self.settle(); self.settle()
+        bar.setValue(600); self.settle()
+        self.assertEqual(bar.value(), 600)
+        self.assertFalse(w.sidebar_collapsed)
+        self.open(load=False, profile=False); self.settle()
+        self.assertTrue(w.sidebar_collapsed)                       # folded to give the chart its room
+        self.assertEqual(bar.value(), self.view.lock.target)
+        self.view.back_button.click(); self.settle(); self.settle()
+        self.assertEqual(bar.value(), 600)
+        self.assertFalse(w.sidebar_collapsed)                      # and given back
+        # The owner opens the rail with its own button while the screen holds it folded: it stays open, also
+        # after a resize; they close it again: Back leaves it closed, as saved.
+        self.open(load=False, profile=False); self.settle()
+        self.assertTrue(w.sidebar_collapsed)
+        w.sidebar_show.click(); self.settle()
+        self.assertFalse(w.sidebar_collapsed)
+        w.resize(1010, 700); self.settle(); self.settle()
+        self.assertFalse(w.sidebar_collapsed)
+        w.sidebar_hide.click(); self.settle()
+        self.view.back_button.click(); self.settle()
+        self.assertTrue(w.sidebar_collapsed)
+        self.assertTrue(shell_rail.stored_flag(self.settings))
+        # A saved choice made any other way counts too.
+        w.set_sidebar_collapsed(False); self.settle()
+        self.open(load=False, profile=False); self.settle()
+        self.assertTrue(w.sidebar_collapsed)
+        w.set_sidebar_collapsed(False); w.set_sidebar_collapsed(True); self.settle()
+        self.view.back_button.click(); self.settle()
+        self.assertTrue(w.sidebar_collapsed)
+        self.assertTrue(shell_rail.stored_flag(self.settings))
+
+    def test_the_data_notes_follow_the_chart_and_menu_intervals_load_enough_bars(self):
+        """Review of UI-D9: the notes box beside the chart never keeps another stock's or interval's notes; ages read
+        in plain units; an interval chosen after the 전체 chip asks for 400 bars again; Yahoo's monthly note and
+        the running year read in Korean."""
+        from core.market.detail_model import yearly_snapshot
+        from quantgen_desktop.stock_detail import plain_age, plain_ages, year_label
+        view, pane = self.view, self.pane
+        self.open(APPLE, profile=False)
+        view._show_notes(); self.settle()
+        self.assertTrue(view.notes.isVisible())
+        apple = view.notes.body.text()
+        self.assertIn("Nasdaq", apple)
+        view.side.watchlist.render()
+        row = view.side.watchlist.watch.rows[("domestic_stock", "005930", "")]
+        QTest.mouseClick(row, Qt.MouseButton.LeftButton); self.settle()
+        pane.refresh(manual=True); self.wait(lambda: not pane.jobs.busy); self.settle()
+        self.assertEqual(view.instrument.code, "005930")
+        self.assertTrue(view.notes.isVisible())
+        self.assertNotIn("Nasdaq", view.notes.body.text())
+        shown = view.notes.body.text()
+        view.notes.refresh()
+        self.assertEqual(view.notes.body.text(), shown)             # already the chart shown now
+        self.assertEqual(view.notes.poll.text(), "5초마다 새로 불러오기")
+        self.assertTrue(view.notes.poll.toolTip() and view.notes.stream.toolTip())
+        # Ages in plain units.
+        self.assertEqual([plain_age(s, "ko") for s in (40, 300, 7200, 108294)], ["40초", "5분", "2시간", "1일"])
+        self.assertEqual(plain_ages("수신 중지 · 마지막 수신 108294초 전", "ko"), "수신 중지 · 마지막 수신 1일 전")
+        self.assertEqual(plain_ages("Updates stopped · last received 3700s ago", "en"),
+                         "Updates stopped · last received 1 h ago")
+        # 전체 asks for the yearly chart (50 years from the monthly history); a menu interval after it, for 400.
+        view.periods.buttons["ALL"].click(); self.wait(lambda: not pane.jobs.busy); self.settle()
+        self.assertEqual((self.service.calls[-1].interval, self.service.calls[-1].limit), ("1M", 500))
+        for interval in ("1d", "1w"):
+            combo = view.interval_combo
+            index = combo.findData(interval)
+            combo.setCurrentIndex(index); view._interval_chosen(index)
+            self.wait(lambda: not pane.jobs.busy); self.settle()
+            self.assertEqual((self.service.calls[-1].interval, self.service.calls[-1].limit), (interval, 400))
+            self.assertEqual(len(pane.snapshot.candles), 400)
+            shown = view.notes.body.text()
+            view.notes.refresh()
+            self.assertEqual(view.notes.body.text(), shown, interval)   # the open notes follow the interval
+            view.periods.buttons["ALL"].click(); self.wait(lambda: not pane.jobs.busy); self.settle()
+        # Yahoo's partial monthly history (no KIS paging remark) reads in Korean in the yearly chart's notes.
+        monthly = MarketSnapshot(ChartRequest(SAMSUNG, "1M", 500), candles("005930", 30), None,
+                                 "2026-11-10T06:20:03+00:00", "Yahoo Finance",
+                                 "Partial history: 234/500 requested bars.")
+        note = pane._data_note(yearly_snapshot(monthly, ChartRequest(SAMSUNG, "1Y", 50)).note, SAMSUNG)
+        self.assertNotIn("Partial history", note)
+        self.assertIn("요청한 500개월 중 234개월", note)
+        self.assertIn("연 단위", note)
+        # The yearly candle's date says which year is still running, by the calendar.
+        self.assertEqual(year_label(2025, None, "ko"), "2025")
+        self.assertEqual(year_label(2026, (1, 12, True), "ko"), "2026년 · 12월까지 (진행 중)")
+        self.assertEqual(year_label(2026, (10, 11, True), "ko"), "2026년 · 10~11월 (진행 중)")
+        self.assertEqual(year_label(2026, (11, 11, True), "ko"), "2026년 · 11월 (진행 중)")
+        self.assertEqual(year_label(2013, (1, 2, False), "ko"), "2013년 · 1~2월 값")
+        self.assertEqual(year_label(2024, (3, 3, False), "ko"), "2024년 · 3월 값")
+        self.assertEqual(year_label(2026, (1, 12, True), "en"), "2026 so far (to Dec)")
+
     def test_the_rail_search_reaches_a_visible_search_while_a_stock_is_open(self):
         self.open(load=False, profile=False)
         markets = self.window.markets_view
@@ -753,6 +855,11 @@ class StockDetailTests(unittest.TestCase):
         self.assertEqual([t for t in texts if "봉" in t], [], where)
         self.assertEqual([t for t in texts if "니다" in t], [], where)
         self.assertEqual([t for t in texts if re.search(r"(수 있음|아님|없었음|높음|낮음)(\s*[.)]|\s·|$)", t)], [], where)
+        # Review of UI-D9: the particle fits the unit word ('120일과', not '120일와'), the trend row names no fixed
+        # span of months, 年 starts a word as 연, and ages read in plain units.
+        self.assertEqual([t for t in texts if re.search(r"(\d일|구간|개월|\d년)와 ", t)], [], where)
+        self.assertEqual([t for t in texts if "1~3개월" in t or re.search(r"(^|[^\d])년 단위", t)], [], where)
+        self.assertEqual([t for t in texts if re.search(r"\d{3,}초", t) or "을(를)" in t], [], where)
 
     def test_nothing_covers_the_chart_at_any_size_or_column_state(self):
         """R-D9-1: for each window size and right-column state, no widget but the chart's own band texts meets the
@@ -825,9 +932,9 @@ class StockDetailTests(unittest.TestCase):
         self.assertEqual(len({c.timestamp[:4] for c in years}), len(years))
         self.assertTrue(all(c.timestamp.endswith("-01-01") for c in years))
         last = int(years[-1].timestamp[:4])
-        if yearly_span(self.pane.snapshot).get(last):
-            self.assertIn("진행 중", self.view.overlays.ohlc.date.text())   # the running year says so
-        self.assertIn("년 단위", self.view.overlays.ohlc.title.text())
+        self.assertTrue(yearly_span(self.pane.snapshot)[last][2])          # 2026 is this year (fetched 2026-11-10)
+        self.assertIn("진행 중", self.view.overlays.ohlc.date.text())       # the running year says so
+        self.assertIn("연 단위", self.view.overlays.ohlc.title.text())      # 年 at a word's start is 연
         self.window.set_language("en"); self.settle()
         self.assertEqual([combo.itemText(i) for i in range(combo.count())],
                          ["1 min", "3 min", "5 min", "15 min", "30 min", "60 min", "Day", "Week", "Month", "Year"])
@@ -950,6 +1057,83 @@ class StockDetailTests(unittest.TestCase):
         self.assertRegex(legend, r"Volume MA 20 [\d.]+M")
         self.window.set_language("ko"); self.settle()
         self.assertRegex(TAGS.sub("", view.overlays.legend_label.text()), r"거래량 평균 20 [\d,]+만")
+
+
+    def test_guide_cards_say_each_thing_once_and_the_keys_stay_with_the_chart(self):
+        """Review of UI-D9 (R-D9-3: "글밥이 너무 많아"): an open guide's row and card say each thing once, the reading
+        first; the pill names the zone by its edges and the caution speaks of the side the value is on; ADX, which
+        has no direction, gets neutral colours on a 0-100 track and a two-part reading; the 기술 지표 rows are a
+        name, a reading with its pill and a gauge. Owner: the PC arrows move the chart, also after a click on a
+        switch, a fold header or a toolbar button."""
+        from core.education import indicators as engine
+        from core.education.study_guide import CAUTION_LOW, short_guide
+        self.open()
+        view, picker, p = self.view, self.view.picker, self.pane
+        view.set_studies(("sma", "bb", "rsi", "adx", "stoch", "vwap")); self.settle()
+        for key in ("rsi", "adx", "stoch", "bb", "macd", "sma"):
+            view.explain(key); self.settle(2)
+            row = picker.rows()[key]
+            texts = [t.strip() for t in self.visible_texts(row) if t.strip()]
+            self.assertEqual(len(texts), len(set(texts)), (key, texts))
+            self.assertFalse(row.desc.isVisible(), key)           # the one-liner is said by the card
+            self.assertFalse(row.value.isVisible(), key)          # the value, by the card's reading
+            self.assertTrue(row.guide.headline.isVisible(), key)
+            self.assertLess(row.guide.pill.y(), row.guide.one_liner.y(), key)   # pill and reading come first
+            self.assertNotIn("보통", texts, key)
+            row.open_guide(False); self.settle(2)
+            self.assertTrue(row.desc.isVisible(), key)
+        rsi = float(engine.compute_study("rsi", view.engine_bars())["RSI14"][-1])
+        view.explain("rsi"); self.settle(2)
+        card = picker.rows()["rsi"].guide
+        if 30 < round(rsi, 1) < 70:
+            self.assertEqual(card.pill.text(), "30~70 사이")
+        self.assertEqual(card.caution.text(), CAUTION_LOW["rsi"][0] if rsi < 50 else short_guide("rsi", "ko").caution)
+        view.explain("adx"); self.settle(2)
+        card = picker.rows()["adx"].guide
+        self.assertEqual(card.gauge.kind, "level")
+        self.assertEqual([round(m[0], 2) for m in card.gauge.marks], [0.2, 0.25])
+        self.assertEqual(card.headline.text().count(" · "), 1, card.headline.text())
+        # 기술 지표: the name alone heads each block; a study that cannot be drawn is one muted line.
+        view.side.set_page(0)
+        tech = view.side.sections["technical"]
+        tech.set_open(True); view.render_sections(); self.settle(2)
+        for key, (block, head, card) in view._technical_blocks.items():
+            name = engine.study(key).name("ko")
+            plain = TAGS.sub("", head.text()).replace("&ensp;", "").replace("●", "").strip()
+            if key == "vwap":
+                self.assertEqual(plain, f"{name} · 분 단위 차트 전용")
+                self.assertTrue(card.isHidden() and card.more.isHidden())       # (some blocks sit behind 더 보기)
+            else:
+                self.assertEqual(plain, name)                       # no readouts in front of the reading
+                self.assertTrue(head.toolTip())                     # they sit in the tooltip
+                self.assertFalse(card.isHidden() or card.headline.isHidden() or card.gauge.isHidden(), key)
+                self.assertIs(card.more.parentWidget(), block)      # 자세히 › ends the name's line
+        # The keys: after a click on a picker switch, a fold header or the toolbar's 지표, ← still pans the chart;
+        # a text input keeps its arrows.
+        n = len(p.snapshot.candles)
+        view.show_indicators(); self.settle()
+        switch_row = picker.rows()["cci"]
+        picker.groups["momentum"].set_open(True); view._reveal(switch_row); self.settle(2)
+        QTest.mouseClick(switch_row.switch, Qt.MouseButton.LeftButton); self.settle(2)
+        self.assertIn("cci", view.studies)
+        focused = APP.focusWidget()
+        self.assertTrue(focused is not None and view.isAncestorOf(focused) and focused is not p.chart, focused)
+        QTest.keyClick(focused, Qt.Key.Key_Left); self.settle(2)
+        self.assertEqual(p._end, n - 2)
+        view.side.set_page(0); self.settle()
+        head = view.side.sections["risk"].head
+        view.side.stock_scroll.ensureWidgetVisible(head); self.settle()
+        QTest.mouseClick(head, Qt.MouseButton.LeftButton); self.settle(2)
+        self.assertIs(APP.focusWidget(), head)
+        QTest.keyClick(head, Qt.Key.Key_Left); self.settle(2)
+        self.assertEqual(p._end, n - 3)
+        view.indicators_button.setFocus(); self.settle()
+        QTest.keyClick(view.indicators_button, Qt.Key.Key_End); self.settle(2)
+        self.assertIsNone(p._end)
+        view.search.setFocus(); view.search.setText("삼성"); self.settle()
+        QTest.keyClick(view.search, Qt.Key.Key_Left); self.settle(2)
+        self.assertIsNone(p._end)                                   # the search box moved its own cursor
+        self.assertEqual(view.search.cursorPosition(), 1)
 
 
 if __name__ == "__main__":

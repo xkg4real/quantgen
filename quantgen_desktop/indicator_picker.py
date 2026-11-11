@@ -42,6 +42,20 @@ def state_tone(code):
     return "up" if code in UP_STATES else "down" if code in DOWN_STATES else "flat" if code else ""
 
 
+def state_word(key, code, lang):
+    """The pill's word for a study_state code. The middle zone of a 0-100 style study is named by its edges
+    ('30~70 사이'), not 'normal': beside a reading such as 'falls were much larger' a '보통' pill contradicts it."""
+    if not code:
+        return ""
+    if code == "middle":
+        from core.market.detail_model import level_marks
+        marks = level_marks(key)
+        if marks:
+            low, high = (f"{mark:g}".replace("-", "−") for mark in marks)
+            return text(lang, "word_between", low=low, high=high)
+    return text(lang, f"word_{code}")
+
+
 def paragraph(value, spacing=150):
     """Rich text of plain `value` with a comfortable line height (QLabel has no line-height property)."""
     body = escape(str(value or "")).replace("\n", "<br>")
@@ -156,8 +170,10 @@ class ColorBar(QWidget):
 
 class Gauge(QWidget):
     """The guide card's small picture (core.education.study_guide.GAUGES): a track with the conventional zones
-    tinted and their numbers under it ('scale'), a band in the middle third with the close as a dot ('band'), a
-    centre line with the close left or right of it ('offset', 'zero'), or volume against its average ('ratio')."""
+    tinted and their numbers under it ('scale'; 'level' for a value with no direction, such as ADX, in neutral
+    tints only: a rise/fall colour there would read as a direction it does not have), a band in the middle third
+    with the close as a dot ('band'), a centre line with the close left or right of it ('offset', 'zero'), or
+    volume against its average ('ratio')."""
 
     def __init__(self):
         super().__init__()
@@ -193,14 +209,16 @@ class Gauge(QWidget):
         p.setBrush(c["track"])
         p.drawRoundedRect(QRectF(left, y, span, h), h / 2, h / 2)
         under = []    # (x, text) labels under the track
-        if self.kind == "scale" and len(self.marks) == 2:
+        level = self.kind == "level"
+        if self.kind in ("scale", "level") and len(self.marks) == 2:
             (low, low_text), (high, high_text) = self.marks
             path = QPainterPath()
             path.addRoundedRect(QRectF(left, y, span, h), h / 2, h / 2)
             p.save()
             p.setClipPath(path)
-            low_zone, high_zone = QColor(c["down"]), QColor(c["up"])
-            low_zone.setAlphaF(0.28)
+            low_zone, high_zone = ((QColor(c["muted"]), QColor(c["accent"])) if level else
+                                   (QColor(c["down"]), QColor(c["up"])))
+            low_zone.setAlphaF(0.16 if level else 0.28)
             high_zone.setAlphaF(0.24)
             p.setBrush(low_zone)
             p.drawRect(QRectF(left, y, x_of(low) - left, h))
@@ -226,6 +244,8 @@ class Gauge(QWidget):
         if self.kind == "scale" and len(self.marks) == 2:
             tone = c["down"] if self.position <= self.marks[0][0] else c["up"] if self.position >= self.marks[1][0] \
                 else c["accent"]
+        elif level and len(self.marks) == 2:
+            tone = c["muted"] if self.position <= self.marks[0][0] else c["accent"]
         elif self.kind == "band":
             tone = c["up"] if self.position > 0.75 else c["down"] if self.position < 0.25 else c["accent"]
         elif self.kind in ("offset", "zero"):
@@ -235,12 +255,16 @@ class Gauge(QWidget):
         p.drawEllipse(QPointF(x, y + h / 2), 6.5, 6.5)
         p.setPen(c["muted"])
         metrics = p.fontMetrics()
-        for lx, value in under:
+        taken = None     # the right edge of the last label: close marks (ADX 20 and 25) never overprint
+        for lx, value in sorted(under):
             if not value:
                 continue
             w = metrics.horizontalAdvance(value)
             tx = min(max(lx - w / 2, 0), self.width() - w)
+            if taken is not None and tx < taken + 4:
+                tx = taken + 4
             p.drawText(QPointF(tx, self.height() - 3), value)
+            taken = tx + w
         p.end()
 
 
@@ -475,8 +499,17 @@ class PickerRow(QFrame):
 
     def _guide_toggled(self, on):
         self.guide.setVisible(on)
-        if on and callable(self.guide_changed):
+        self._sync_open()
+        if callable(self.guide_changed):
             self.guide_changed()
+
+    def _sync_open(self):
+        """While the guide is open, the card says what line 2 and the value said (the one-liner, the reading with
+        its number and the pill): the row keeps only its name and place, so nothing is read twice (owner R-D9-3).
+        A hidden panel's line stays: the card does not say it."""
+        open_ = self.info.isChecked()
+        self.desc.setVisible(not open_ or self.hidden_panel)
+        self.first.fit()
 
     def open_guide(self, on=True):
         self.info.setChecked(on)
@@ -537,9 +570,13 @@ class PickerRow(QFrame):
         set_prop(self.desc, "reason", "true" if (reason or hidden) else "false")
         set_prop(self.name, "dim", "true" if reason else "false")
         shown = f"{value} · {state}" if value and value != "—" and state else value
-        self.value.set_choices([shown, value] if shown != value else [value])
+        if self.info.isChecked():
+            self.value.set_choices([""])         # the open card's reading carries the value and the pill
+        else:
+            self.value.set_choices([shown, value] if shown != value else [value])
         self.first.fit()
         self._show_desc()
+        self._sync_open()
         self.switch.setEnabled(not reason or self.switch.isChecked())
         self.switch.colors = (color, "#C9CCC2" if not dark else "#4A5C52", "#FFFFFF")
         self.switch.update()
@@ -609,6 +646,8 @@ def guide_parts(key, bars, *, language, interval, supply=None, values=None, pric
             gauge = gauge_value(key, values, bars, index)
         except Exception:
             reading, state, gauge, now = "", "", None, ""
+    if gauge is not None and gauge[0] == "scale" and gauge[1] < 0.5:
+        short = short_guide(key, language, low=True)    # the caution speaks of the side the value is on
     params = text(language, "guide_params", params=full.params) if full.params else ""
     long_texts = (now, polite(f"{full.what} {full.how}", language), polite(full.caution, language), params)
     return reading, state, gauge, short, long_texts
@@ -818,7 +857,7 @@ class IndicatorPicker(QWidget):
                         else:
                             value = format_value(line.kind, raw, lang)
                         code = study_state(key, values, bars)
-                        state = text(lang, f"word_{code}") if code else ""
+                        state = state_word(key, code, lang)
                     except Exception:
                         value, values = "", None
                 row.set_checked(key in self.selected)
@@ -846,7 +885,7 @@ class IndicatorPicker(QWidget):
             from core.education.study_guide import availability_short
             reading = polite(availability_short(reason, lang), lang)
         card.show_guide(language=lang, name=study(key).name(lang), reading=reading,
-                        state=text(lang, f"word_{code}") if code else "", tone=state_tone(code), gauge=gauge,
+                        state=state_word(key, code, lang), tone=state_tone(code), gauge=gauge,
                         gauge_labels=self.gauge_labels(key, gauge, lang), short=short, long_texts=long_texts,
                         colors=self.gauge_colors)
 
@@ -856,4 +895,4 @@ _GAUGE_NAMES = ("gauge_name_sma", "gauge_name_ema", "gauge_name_vwap", "gauge_na
 
 
 __all__ = ["IndicatorPicker", "PickerGroup", "PickerRow", "GuideCard", "Gauge", "ChipRow", "Switch", "STARTER",
-           "guide_parts", "state_tone"]
+           "guide_parts", "state_tone", "state_word"]

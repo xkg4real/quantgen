@@ -388,8 +388,8 @@ class YearlyIntervalTests(unittest.TestCase):
         self.assertEqual((candle.open, candle.close), (year[0].open, year[-1].close))
         self.assertEqual((candle.high, candle.low), (max(c.high for c in year), min(c.low for c in year)))
         self.assertEqual(candle.volume, sum(c.volume for c in year))
-        # Honest about partial years: the history starts in March 2023, and 2026 runs to November.
-        self.assertEqual(yearly_span(snapshot), {2023: (3, 12), 2026: (1, 11)})
+        # Honest about partial years: the history starts in March 2023, and 2026 (this year) runs to November.
+        self.assertEqual(yearly_span(snapshot), {2023: (3, 12, False), 2026: (1, 11, True)})
         self.assertIn("requested monthly bars", snapshot.note)
         # A month without volume leaves its year's volume unknown, never a smaller invented sum.
         router2 = Router()
@@ -398,6 +398,39 @@ class YearlyIntervalTests(unittest.TestCase):
         # Other intervals pass straight through.
         daily = ChartRequest(SAMSUNG, "1d", 400)
         self.assertEqual(load_chart(router2, daily).request, daily)
+
+    def test_the_running_year_follows_the_calendar_not_the_last_month(self):
+        """Review of UI-D9: '진행 중' is the current year in the market's time zone (December included); a history
+        that stopped years ago is partial, never running; one month is one month."""
+        from core.market.detail_model import market_year, yearly_snapshot, yearly_span
+
+        def span(first, last, fetched, instrument=SAMSUNG):
+            monthly = MarketSnapshot(ChartRequest(instrument, "1M", 500), self.monthly(first, last), None, fetched,
+                                     "KIS REST")
+            return yearly_span(yearly_snapshot(monthly, ChartRequest(instrument, "1Y", 50)))
+        self.assertEqual(span((2020, 1), (2026, 12), "2026-12-20T06:00:00+00:00"), {2026: (1, 12, True)})
+        self.assertEqual(span((2008, 3), (2013, 2), "2026-11-10T06:00:00+00:00"),
+                         {2008: (3, 12, False), 2013: (1, 2, False)})                 # long past: not running
+        self.assertEqual(span((2015, 1), (2024, 3), "2026-11-10T06:00:00+00:00"), {2024: (1, 3, False)})
+        self.assertEqual(span((2026, 10), (2026, 11), "2026-11-10T06:00:00+00:00"), {2026: (10, 11, True)})
+        self.assertEqual(span((2026, 11), (2026, 11), "2026-11-10T06:00:00+00:00"), {2026: (11, 11, True)})
+        self.assertEqual(span((2015, 1), (2025, 12), "2026-01-05T06:00:00+00:00"), {})   # whole years only
+        # New Year's Eve 16:00 UTC is already 2027 in Seoul but still 2026 in New York.
+        eve = "2026-12-31T16:00:00+00:00"
+        self.assertEqual(span((2020, 1), (2026, 12), eve), {})
+        self.assertEqual(span((2020, 1), (2026, 12), eve, APPLE), {2026: (1, 12, True)})
+        self.assertEqual(market_year(None, datetime(2026, 12, 31, 16, tzinfo=timezone.utc)), 2026)
+
+    def test_an_interval_chosen_in_the_menu_requests_enough_bars(self):
+        """Review of UI-D9: after the 전체 chip (50 yearly candles) a daily, weekly or minute chart from the menu
+        asks for the daily chips' 400 bars again, not 50."""
+        from core.market.detail_model import interval_request, period_request
+        self.assertEqual(period_request("ALL", SAMSUNG), ("1Y", 50))
+        for interval in ("1d", "1w", "1M", "5m", "60m"):
+            self.assertEqual(interval_request(interval, SAMSUNG, 50), 400, interval)
+            self.assertEqual(interval_request(interval, SAMSUNG, 140), 400, interval)
+        self.assertEqual(interval_request("1Y", SAMSUNG, 400), 50)
+        self.assertEqual(interval_request("1d", BOND, 50), 100)
 
     def test_yearly_live_bucket_and_axis_label(self):
         from core.market.detail_svg import cursor_label, render
@@ -449,6 +482,17 @@ class ShortGuideTests(unittest.TestCase):
             lines = {line.id for line in study(key).lines}
             names = [name for name in gauge[1:] if isinstance(name, str)]
             self.assertTrue(set(names) <= lines, (key, names))
+        # Review of UI-D9: the low side has its own caution; ADX, which has no direction, a neutral 0-100 gauge.
+        from core.education.study_guide import CAUTION_LOW
+        for key, pair in CAUTION_LOW.items():
+            for language, caution in zip(("ko", "en"), pair):
+                self.assertEqual(short_guide(key, language, low=True).caution, caution)
+                self.assertTrue(0 < len(caution) <= CAUTION_MAX, caution)
+        self.assertEqual(short_guide("rsi", "ko", low=True).caution, "낮다고 곧 오른다는 뜻은 아니에요")
+        self.assertEqual(short_guide("rsi", "ko").caution, "높다고 곧 내린다는 뜻은 아니에요")
+        self.assertEqual(short_guide("stoch", "ko", low=True).caution, short_guide("stoch", "ko").caution)
+        self.assertEqual(GAUGES["adx"][:4], ("level", "ADX", 0, 100))
+        self.assertIn("0~100", short_guide("adx", "ko").one_liner)
 
     def test_readings_and_guides_never_say_bong_and_read_every_interval(self):
         from core.education.indicators import STUDIES, Supply, compute_study
@@ -470,11 +514,13 @@ class ShortGuideTests(unittest.TestCase):
                         self.assertNotIn("봉", long + brief)
                         self.assertNotIn("니다", brief)
                         self.assertLessEqual(len(brief), 44, brief)
+                        if brief.startswith("ADX"):   # two parts: the value, then the trend (its direction inside)
+                            self.assertEqual(brief.count(" · "), 1, brief)
                         english = short_reading(spec.key, bars, index, language="en", values=values, supply=supply)
                         self.assertIsNone(HANGUL.search(english), english)
                     gauge = gauge_value(spec.key, values, bars)
                     if gauge is not None:
-                        self.assertIn(gauge[0], ("scale", "band", "offset", "zero", "ratio"))
+                        self.assertIn(gauge[0], ("scale", "level", "band", "offset", "zero", "ratio"))
                         self.assertTrue(math.isfinite(gauge[1]))
         # The words follow the interval.
         rsi = lambda interval: study_reading("rsi", self.bars(interval), -1, language="ko")

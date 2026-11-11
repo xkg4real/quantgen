@@ -162,6 +162,24 @@ def korean_times(hint):
     return re.sub(r"(\d) KRW", r"\1원", hint)
 
 
+def plain_age(seconds, lang):
+    """An age in the unit a reader uses: '40초' / '5분' / '3시간' / '2일' ('40 s', '5 min', '3 h', '2 days')."""
+    seconds = max(0, int(seconds))
+    for size, ko, en in ((86400, "일", " days"), (3600, "시간", " h"), (60, "분", " min")):
+        if seconds >= size:
+            count = seconds // size
+            return f"{count}{ko}" if lang == "ko" else f"{count}{en if count != 1 or size != 86400 else ' day'}"
+    return f"{seconds}초" if lang == "ko" else f"{seconds} s"
+
+
+def plain_ages(value, lang):
+    """The chart pane's status with its ages in plain units ('마지막 수신 108294초 전' -> '마지막 수신 1일 전')."""
+    import re
+    if lang == "ko":
+        return re.sub(r"(\d+)초 전", lambda m: f"{plain_age(int(m.group(1)), lang)} 전", str(value or ""))
+    return re.sub(r"(\d+)s ago", lambda m: f"{plain_age(int(m.group(1)), lang)} ago", str(value or ""))
+
+
 # Figures whose tooltip starts with what the term means (spec 6.3; review 2026-11-11: PER, EPS, 시가총액, VaR, CVaR).
 TERM_TIPS = (("시가총액", "term_cap"), ("Market cap", "term_cap"), ("PER", "term_per"), ("EPS", "term_eps"),
              ("CVaR", "term_cvar"), ("VaR", "term_var"))
@@ -346,6 +364,21 @@ INTERVAL_GROUPS = (("group_minutes", ("1m", "3m", "5m", "15m", "30m", "60m")),
 STOCK_INTERVALS = tuple(key for _, keys in INTERVAL_GROUPS for key in keys)
 
 
+def year_label(year, span, lang):
+    """A yearly candle's date: '2025', or for a year that is not a whole calendar year of history (detail_model.
+    yearly_span) '2026년 · 11월까지 (진행 중)', '2026년 · 10~11월 (진행 중)', '2013년 · 1~2월 값', '2024년 · 3월 값'."""
+    if not span:
+        return str(year)
+    first, last, running = span
+    months = text(lang, "months")
+    word = (lambda month: month) if lang == "ko" else (lambda month: months[month - 1])
+    if running:
+        key = "year_running" if first == 1 else "year_running_one" if first == last else "year_running_from"
+    else:
+        key = "year_partial_one" if first == last else "year_partial"
+    return text(lang, key, year=year, first=word(first), last=word(last))
+
+
 def interval_words(interval, lang, long=False):
     """'5분' / '일' / '년' for the menu; '5분 단위' / '일 단위' in sentences (long=True). English: '5 min', 'Day'."""
     from core.education.study_guide import _minutes
@@ -478,6 +511,48 @@ class ChartColumn(QFrame):
             event.accept()
             return
         super().keyPressEvent(event)
+
+
+class ChartKeys(QObject):
+    """Owner 2026-11-11: "pc기준 좌우화살표로 차트 좌우 확인할수있게". While the stock screen is shown, ←/→, Home/End,
+    +/− and 0 move the chart wherever the focus is on it: after a click on a picker switch, a fold header, a tab,
+    the column's background or a toolbar button too (buttons and the scroll areas would otherwise take the arrows).
+    Text inputs keep their keys, and nothing is taken while a menu or a list is open."""
+    KEYS = (Qt.Key.Key_Left, Qt.Key.Key_Right, Qt.Key.Key_Home, Qt.Key.Key_End, Qt.Key.Key_Plus, Qt.Key.Key_Equal,
+            Qt.Key.Key_Minus, Qt.Key.Key_Underscore, Qt.Key.Key_0)
+
+    def __init__(self, view):
+        super().__init__(view)
+        self.view = view
+        self.installed = False
+
+    def install(self, on):
+        from PyQt6.QtWidgets import QApplication
+        app = QApplication.instance()
+        if app is None or on == self.installed:
+            return
+        (app.installEventFilter if on else app.removeEventFilter)(self)
+        self.installed = on
+
+    def eventFilter(self, watched, event):
+        if event.type() != QEvent.Type.KeyPress or event.key() not in self.KEYS:
+            return False
+        from PyQt6.QtWidgets import QAbstractSpinBox, QApplication, QPlainTextEdit, QTextEdit
+        view = self.view
+        if not isinstance(watched, QWidget) or not view.isVisible() or QApplication.activePopupWidget() is not None:
+            return False
+        if not (watched is view or view.isAncestorOf(watched)):
+            return False
+        if isinstance(watched, (QLineEdit, QAbstractSpinBox, QTextEdit, QPlainTextEdit)) or \
+                (isinstance(watched, QComboBox) and watched.isEditable()):
+            return False
+        if event.modifiers() & (Qt.KeyboardModifier.ControlModifier | Qt.KeyboardModifier.AltModifier |
+                                Qt.KeyboardModifier.MetaModifier):
+            return False
+        if view.chart_key(event):
+            event.accept()
+            return True
+        return False
 
 
 class DetailBody(QWidget):
@@ -685,15 +760,7 @@ class ChartOverlays(QObject):
         stamp = str(candle.timestamp)
         if interval == "1Y":
             year = int(stamp[:4])
-            span = yearly_span(snapshot).get(year)
-            date = str(year)
-            if span:
-                first, last = span
-                months = text(lang, "months")
-                date = (text(lang, "year_running", year=year, last=last if lang == "ko" else months[last - 1])
-                        if cursor == n - 1 and first == 1 else
-                        text(lang, "year_partial", year=year, first=first if lang == "ko" else months[first - 1],
-                             last=last if lang == "ko" else months[last - 1]))
+            date = year_label(year, yearly_span(snapshot).get(year), lang)
             strip.date.setText(date)
             strip.date.setToolTip(date)
             strip.date.setVisible(True)
@@ -957,21 +1024,33 @@ class NotesBox(QFrame):
         layout.addWidget(self.stream, 0, Qt.AlignmentFlag.AlignLeft)
 
     def fill(self):
-        view, pane = self.view, self.view.chart
+        """Titles, icons and texts in the window's language and theme, then the notes themselves."""
+        view = self.view
         lang = _lang(view.ctx)
-        facts = pane.feed_facts()
         self.title.setText(text(lang, "notes_section"))
         self.close_button.setIcon(icon("close", view.palette.muted, 15))
         self.close_button.setToolTip(text(lang, "notes_close"))
         self.close_button.setAccessibleName(text(lang, "notes_close"))
-        lines = [facts["status"], facts["notice"], facts["availability"], facts["note"]]
-        self.body.setText(polite("\n\n".join(line for line in dict.fromkeys(lines) if line), lang))
         self.poll.setText(text(lang, "notes_poll"))
+        self.poll.setToolTip(text(lang, "notes_poll_tip"))
+        self.stream.setText(text(lang, "notes_stream"))
+        self.stream.setToolTip(text(lang, "notes_stream_tip"))
+        self.refresh()
+
+    def refresh(self):
+        """The notes of the chart shown now (the view calls this whenever the feed's state or the chart changes,
+        so the box never keeps another stock's or another interval's notes)."""
+        view, pane = self.view, self.view.chart
+        lang = _lang(view.ctx)
+        facts = pane.feed_facts()
+        lines = [plain_ages(facts["status"], lang), facts["notice"], facts["availability"], facts["note"]]
+        body = polite("\n\n".join(line for line in dict.fromkeys(lines) if line), lang)
+        if body != self.body.text():
+            self.body.setText(body)
         self.poll.blockSignals(True)
         self.poll.setChecked(pane.poll_button.isChecked())
         self.poll.setEnabled(pane.poll_button.isEnabled())
         self.poll.blockSignals(False)
-        self.stream.setText(text(lang, "notes_stream"))
         self.stream.setEnabled(pane.stream_button.isEnabled())
 
 
@@ -1003,6 +1082,9 @@ class StockDetailView(QWidget):
         self._bars_cache = (None, None)
         self._side_snapshot = None
         self._rail_owner = None      # the rail as the owner left it, while this screen folded it (focus or narrow)
+        self._rail_yield = False     # the owner moved the rail themselves while this screen was shown
+        self._rail_saved = None      # the shell's saved rail choice when this screen folded the rail
+        self._rail_hooked = None
         self._window_width = None
         self._compact, self._level = False, 0
         self.studies = self._stored_studies()
@@ -1013,6 +1095,7 @@ class StockDetailView(QWidget):
         self.jobs.failed.connect(self._profile_failed)
         self.jobs.busy_changed.connect(self._jobs_busy)
         self.lock = PageLock(self)
+        self.keys = ChartKeys(self)
         root = QVBoxLayout(self)
         root.setContentsMargins(0, 12, 0, 12)
         root.setSpacing(10)
@@ -1624,6 +1707,8 @@ class StockDetailView(QWidget):
         """⤢ / Shift+F: collapse the window's rail and hide the right column; off restores both."""
         on = bool(on)
         self.body.focus = on
+        if on:
+            self._rail_yield = False    # asked for now: focus mode folds the rail again
         self._sync_rail()
         self.body.relayout()
         self.focus_button.setChecked(on)
@@ -1635,6 +1720,8 @@ class StockDetailView(QWidget):
     def _rail_folds(self):
         """True when this screen wants the rail folded: focus mode, or the column shown in a window too narrow for
         the chart to keep CHART_ROOM beside it with the rail open (owner R-D9-1: make room, never cover)."""
+        if self._rail_yield:
+            return False
         if self.body.focus:
             return True
         if not self.body.side_shown() or self.lock.scroll is None:
@@ -1657,13 +1744,32 @@ class StockDetailView(QWidget):
         if want and not collapsed:
             if self._rail_owner is None:
                 self._rail_owner = collapsed
+                self._rail_saved = self._saved_rail(window)
             self._set_rail(window, True)
             self._refit_soon()
         elif not want and self._rail_owner is not None:
-            owner, self._rail_owner = self._rail_owner, None
-            if collapsed != owner:
+            owner = self._owner_rail(window)
+            if owner is not None and collapsed != owner:
                 self._set_rail(window, owner)
                 self._refit_soon()
+
+    @staticmethod
+    def _saved_rail(window):
+        """The rail choice the shell has saved for the owner (it changes only when the owner toggles the rail)."""
+        from .shell_rail import SETTINGS_KEY
+        store = getattr(window, "language_store", None)
+        try:
+            return repr(store.value(SETTINGS_KEY)) if store is not None else None
+        except Exception:
+            return None
+
+    def _owner_rail(self, window):
+        """The rail as the owner left it before this screen folded it, or None when there is nothing to give back:
+        this screen holds no rail, or the owner saved a new choice meanwhile (the rail already shows it)."""
+        owner, self._rail_owner = self._rail_owner, None
+        if owner is None or self._saved_rail(window) != self._rail_saved:
+            return None
+        return owner
 
     def _refit_soon(self):
         """The rail changed the page's width: the page above the view reflows over the next layout passes, so the
@@ -1672,12 +1778,39 @@ class StockDetailView(QWidget):
         QTimer.singleShot(0, self.lock.refit)
         QTimer.singleShot(60, self.lock.refit)
 
-    def _restore_rail(self):
+    def _restore_rail(self, *, leaving=False):
         window = self.window()
         if self._rail_owner is not None and hasattr(window, "sidebar_collapsed"):
-            owner, self._rail_owner = self._rail_owner, None
-            if bool(window.sidebar_collapsed) != owner:
+            owner = self._owner_rail(window)
+            if owner is not None and bool(window.sidebar_collapsed) != owner:
                 self._set_rail(window, owner)
+                if leaving and getattr(window, "_page_position", None):
+                    # The shell keeps the page where it was while the rail moves: it read the page lock's target
+                    # here and would set it again one turn later, over the lock's own return of the list to where
+                    # it was before the stock opened (Back).
+                    window._page_position = None
+
+    def _hook_rail(self):
+        """The owner's own rail toggles (its two buttons and the shortcut) end this screen's hold on the rail."""
+        window = self.window()
+        if window is self or self._rail_hooked is window:
+            return
+        self._rail_hooked = window
+        for name in ("sidebar_hide", "sidebar_show"):
+            button = getattr(window, name, None)
+            if button is not None and hasattr(button, "clicked"):
+                button.clicked.connect(self._owner_moved_rail)
+        shortcut = getattr(window, "sidebar_shortcut", None)
+        if shortcut is not None and hasattr(shortcut, "activated"):
+            shortcut.activated.connect(self._owner_moved_rail)
+
+    def _owner_moved_rail(self, *_):
+        """The owner opened or closed the rail while this screen held it: their choice stands (it is saved by the
+        shell) and this screen leaves the rail alone until it is opened again or focus mode is asked for."""
+        if not self.isVisible():
+            return
+        self._rail_owner = None
+        self._rail_yield = True
 
     @staticmethod
     def _set_rail(window, collapsed):
@@ -1966,7 +2099,7 @@ class StockDetailView(QWidget):
             from datetime import datetime, timezone
             age = _age(facts["last_received"], datetime.now(timezone.utc))
             if age is not None and state.code not in ("closed", "holiday"):
-                line += " · " + text(lang, "received_ago", age=age)
+                line += " · " + text(lang, "received_ago", age=plain_age(age, lang))
         card_state = self.side.card.state
         card_state.setText(line)
         set_prop(card_state, "tone", state.tone)
@@ -1990,6 +2123,8 @@ class StockDetailView(QWidget):
         tip = text(lang, "pause" if streaming else "resume")
         self.pause_button.setToolTip(tip)
         self.pause_button.setAccessibleName(tip)
+        if not self.notes.isHidden():
+            self.notes.refresh()  # the open data notes follow the chart shown now (stock, interval, feed state)
         if changed:
             self._fit_toolbar()   # the chip's words changed width
 
@@ -2066,14 +2201,16 @@ class StockDetailView(QWidget):
             self.side.unavailable.hide()
 
     def _technical_rows(self):
-        """One block per study that is on: its name and values at the latest candle, then the reading as a compact
-        guide card (one short sentence, the pill and the gauge; the full reading behind 자세히, owner R-D9-3).
-        Blocks are kept per study and refilled, so a refresh does not rebuild the column's widgets."""
+        """One block per study that is on, at the guide card's budget (owner R-D9-3: no walls of names and numbers):
+        the coloured name with '자세히 ›' at its end, then the reading in one short sentence with its pill, then the
+        gauge. The lines' values sit in the name's tooltip and the full reading behind 자세히. A study that cannot
+        be drawn here, or has too little data yet, is one muted line after its name. Blocks are kept per study and
+        refilled, so a refresh does not rebuild the column's widgets."""
         from PyQt6 import sip
         from core.education import indicators as engine
-        from core.education.study_guide import availability_text, line_readout
+        from core.education.study_guide import availability_short, availability_text, line_readout, unit_count
         from core.market.presentation import study_colors
-        from .indicator_picker import GuideCard, guide_parts, state_tone
+        from .indicator_picker import GuideCard, guide_parts, state_tone, state_word
         lang = _lang(self.ctx)
         bars = self.engine_bars()
         snapshot = self.chart.snapshot
@@ -2096,13 +2233,19 @@ class StockDetailView(QWidget):
                 block = QWidget()
                 block.setProperty("sdOwned", True)
                 layout = QVBoxLayout(block)
-                layout.setContentsMargins(0, 4, 0, 8)
+                layout.setContentsMargins(0, 4, 0, 10)
                 layout.setSpacing(6)
+                top = QHBoxLayout()
+                top.setContentsMargins(0, 0, 0, 0)
+                top.setSpacing(8)
                 head = rich("studyName")
                 head.setWordWrap(True)
                 card = GuideCard(compact=True)
                 card.more.toggled.connect(lambda on, k=key: self._technical_more(k, on))
-                layout.addWidget(head)
+                top.addWidget(head, 1)
+                card.layout().removeWidget(card.more)
+                top.addWidget(card.more, 0, Qt.AlignmentFlag.AlignTop)   # 자세히 › ends the name's line
+                layout.addLayout(top)
                 layout.addWidget(card)
                 cache[key] = (block, head, card)
             block, head, card = cache[key]
@@ -2110,28 +2253,50 @@ class StockDetailView(QWidget):
             name = f'<span style="color:{color}">●</span>&ensp;{_esc(spec.name(lang))}'
             reason = engine.availability(key, asset=asset, interval=interval, supply=self.chart.supply,
                                          has_volume=has_volume) if bars is not None else ""
-            if bars is None:
-                head.setText(name)
+            values, quiet, tip = None, "", ""
+            if bars is not None and reason:
+                quiet = polite(availability_short(reason, lang), lang)
+                tip = polite(availability_text(reason, lang), lang)
+            elif bars is not None:
+                try:
+                    values = engine.compute_study(key, bars, supply=self.chart.supply)
+                    ready = all(self._finite_at(values, line, len(bars) - 1) for line in engine.reading_lines(key))
+                except Exception:
+                    values, ready = None, False
+                if not ready and spec.category != "supply":
+                    needed = engine.warmup(key) + 1
+                    quiet = text(lang, "technical_wait")
+                    tip = text(lang, "technical_wait_tip", needed=unit_count(interval, needed, lang),
+                               have=unit_count(interval, len(bars), lang))
+            if bars is None or quiet:
+                muted = f' <span style="color:{self.palette.muted}; font-weight:400">· {_esc(quiet)}</span>' \
+                    if quiet else ""
+                head.setText(name + muted)
+                head.setToolTip(tip)
                 card.hide()
-            elif reason:
-                head.setText(name)
-                card.show_guide(language=lang, name=spec.name(lang), reading=polite(availability_text(reason, lang), lang))
-                card.show()
+                card.more.hide()
             else:
                 readout = line_readout(key, bars, -1, language=lang, supply=self.chart.supply)
-                values = " · ".join(f"{_esc(n)} {_esc(self.study_value(key, line, len(bars) - 1, v))}"
-                                    for line, (n, v) in zip(spec.lines, readout))
-                head.setText(f'{name}&nbsp;&nbsp;<span style="font-weight:400">{values}</span>')
+                head.setText(name)
+                head.setToolTip(" · ".join(f"{n} {self.study_value(key, line, len(bars) - 1, v)}"
+                                           for line, (n, v) in zip(spec.lines, readout)))
                 reading, code, gauge, _short, long_texts = guide_parts(
-                    key, bars, language=lang, interval=interval, supply=self.chart.supply)
+                    key, bars, language=lang, interval=interval, supply=self.chart.supply, values=values)
                 card.show_guide(language=lang, name=spec.name(lang), reading=reading,
-                                state=text(lang, f"word_{code}") if code else "", tone=state_tone(code),
+                                state=state_word(key, code, lang), tone=state_tone(code),
                                 gauge=gauge, gauge_labels=self.picker.gauge_labels(key, gauge, lang),
                                 long_texts=long_texts[:1], colors=self.gauge_colors())
                 card.set_open(key in self._technical_open)
                 card.show()
             out.append(block)
         return out
+
+    @staticmethod
+    def _finite_at(values, line, index):
+        try:
+            return math.isfinite(float(values[line][index]))
+        except (KeyError, IndexError, TypeError, ValueError):
+            return False
 
     def _technical_more(self, key, on):
         if on:
@@ -2242,6 +2407,7 @@ class StockDetailView(QWidget):
     def _render_now(self):
         from core.market.detail_model import now_summary
         from core.education.indicators import bars_from_candles, study
+        from core.education.study_guide import josa
         lang = _lang(self.ctx)
         now = self.side.now
         now.title.setText(text(lang, "now_title"))
@@ -2275,6 +2441,8 @@ class StockDetailView(QWidget):
                 for name in ("needed", "have", "bars"):
                     if name in values:
                         values[name] = self._unit(interval, values[name])
+                if "bars" in values and lang == "ko":
+                    values["bars"] = josa(values["bars"], "과")    # '최근 120일과 비교하면' (the text adds none)
             for name, value in values.items():
                 if name in ("pct20", "pct60"):
                     fields["pct"] = f"{value:+.1f}%".replace("-", "−")
@@ -2291,7 +2459,9 @@ class StockDetailView(QWidget):
             row.set_reading(text(lang, f"now_{item.topic}_{item.code}", **fields))
             row.study = item.study if item.study not in self.studies else ""
             row.setCursor(Qt.CursorShape.PointingHandCursor if row.study else Qt.CursorShape.ArrowCursor)
-            row.setToolTip(text(lang, "now_turn_on", name=study(item.study).name(lang)) if row.study else "")
+            name = study(item.study).name(lang) if row.study else ""
+            row.setToolTip(text(lang, "now_turn_on", name=josa(name, "을") if lang == "ko" else name)
+                           if row.study else "")
             row.show()
 
     def _toolbar_texts(self):
@@ -2344,7 +2514,7 @@ class StockDetailView(QWidget):
         self._toolbar_texts()
         self._sync_interval(force=True)
         self._sync_watch()
-        if self.notes.isVisible():
+        if not self.notes.isHidden():
             self.notes.fill()
         self.side.watchlist.set_locale(ctx)
         self.picker.set_locale(ctx)
@@ -2369,6 +2539,8 @@ class StockDetailView(QWidget):
         self.side.watchlist.set_theme(self.dark)
         self.picker.set_theme(self.dark)
         self._toolbar_texts()
+        if not self.notes.isHidden():
+            self.notes.fill()     # its close icon follows the theme
         if self.instrument is not None:
             self._refresh_side(force=True)
             if self.chart.detail and self.chart.snapshot is not None:
@@ -2384,19 +2556,23 @@ class StockDetailView(QWidget):
     # Visibility --------------------------------------------------------------------------------
     def showEvent(self, event):
         super().showEvent(event)
+        self._hook_rail()
+        self.keys.install(True)
         self.lock.engage()
         QTimer.singleShot(0, self.lock.engage)
         QTimer.singleShot(0, self._sync_rail)
 
     def hideEvent(self, event):
-        self.notes.hide()
         if event.spontaneous():
             # The window was minimised: the stock is still open, so focus mode and the page lock stay as they are.
             super().hideEvent(event)
             return
+        self.notes.hide()
+        self.keys.install(False)
         if self.body.focus:
             self.set_focus_mode(False)
-        self._restore_rail()
+        self._restore_rail(leaving=True)
+        self._rail_yield = False
         self.lock.release()
         super().hideEvent(event)
 
@@ -2423,5 +2599,6 @@ class ProfileSectionPanel(QFrame):
         self.section.set_rows(section.rows, note=section.note)
 
 
-__all__ = ["StockDetailView", "PageLock", "DetailBody", "ChartOverlays", "PeriodBar", "ProfileSectionPanel",
-           "NotesBox", "DEFAULT_STUDIES", "STOCK_INTERVALS", "interval_words", "TERM_TIPS"]
+__all__ = ["StockDetailView", "PageLock", "ChartKeys", "DetailBody", "ChartOverlays", "PeriodBar",
+           "ProfileSectionPanel", "NotesBox", "DEFAULT_STUDIES", "STOCK_INTERVALS", "interval_words", "year_label",
+           "plain_age", "TERM_TIPS"]
