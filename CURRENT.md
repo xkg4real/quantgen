@@ -6,9 +6,9 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f
 next_ids: ⑤-2/g, ⑤-2/e, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-11T22:24:00+09:00
+updated_at: 2026-11-11T22:46:00+09:00
 stale_after_hours: 3
-waiting_on: owner
+waiting_on: none
 work_branch: main
 work_commit: b97646d
 uncommitted_changes: no
@@ -120,7 +120,17 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - **C:** 0b 채택 방침만 기록. Q12 = 7개 파일(`core/quant/strategies.py`, `validate.py`, `history.py`, `gate_ledger.py`, `core/research/strategy_workflow.py`, `core/quant/optimize.py`, `core/quant/risk.py`). Q13·Q14·Q16·Q17·Q18 기본값. 화면은 네이티브만(UI-D1), Flet 작업(Q19 포함) 안 함, PC 화면은 시안 먼저 + UI 세션 이식과 ⑦-2 병합 뒤. Q22의 잘라내기 여부는 2026-12 말 전에 따로 질문. 다음 단위 ⑨-3a/recorder/1(화면 없음, 결정 9 조건: run_family 안에서 PNL_COMPUTED보다 낮은 PROGRESS를 쓰지 않음).
 - **D:** 주문 한도 수치(1회 100만 원/5%, 하루 10건·300만 원/15%, 손실 중지 40만 원/2%, 종목 비중 20%/400만 원, 가격 이탈 3%·시세 15초·지정가만, 09:00~15:20, 모의 20거래일·30건 등)를 기본값으로 승인. **실거래는 켜지지 않음.** 순서: 안전 설계 문서 보고 → ⑦-2 병합 뒤 구현 → 모의투자 → 결과 보고 → 소유자의 실거래 전환 승인. D-14 법률 자문은 소유자가 의뢰.
 
-### ⑤-2/f 완료, 소유자 재실행 대기 (2026-11-11 22:24 KST) — 가장 최신
+### 소유자 재실행을 기다리는 동안 시작한 일 (2026-11-11 22:46 KST) — 가장 최신
+
+- **⑤-2/g, ⑤-2/e는 여전히 소유자 차례입니다.** 실행 브랜치 `claude/provider-parity-runs-20261111`는 `648e1d8` 그대로이고 새 SPY 요약은 아직 없습니다. 소유자가 재실행 출력(10·11·14·16·18단계)을 붙이면 바로 그 일을 먼저 합니다. 판독 규칙은 main의 `results/RULINGS.md`에 있습니다(아래 22:24 절).
+- **⑨-1/2/e + ⑨-1/2/d/2를 시작했습니다** (소유자 판정 A-1 "전부승인": 생성기가 KRW=X(F16)를 뉴욕 17:00 외환 마감으로 찍음; PR #101 코드 검토 지적 R1~R5, 모두 `docs/macro_fixtures.py`).
+  - 작업 폴더: 스크래치패드의 `fx` 워크트리(보호 캐시 폴더를 뺀 sparse checkout), 브랜치 `claude/macro-fixtures-fx-clock-20261111` (main `b97646d`에서 시작, 아직 push 전, 커밋 없음).
+  - 진행 방식: 구현 1 → 독립 검증 3관점 → 재수정. 끝나면 Claude가 diff를 읽고 push, PR, 캐시 없는 전체 실행, CI 통과 시 병합, 원장 두 줄.
+  - R1~R5 원문: generate()가 freeze()의 md5 비교 전에 out_dir에 씀(R1); 긴 형식 F27이 전체 날짜 순서를 요구해 코드별로 묶인 파일을 거부(R2); 날짜 열을 fields[0]로 읽고 date.fromisoformat을 감싸지 않음(R3); 마지막 복사가 전부 아니면 전무가 아님(R4); 결과 표가 read_text/LF 쓰기를 거쳐 CRLF 원본이 바이트 그대로가 아님(R5).
+  - 이어받는 쪽: 브랜치가 원격에 없으면 이 일은 처음부터입니다. 있으면 `git log b97646d..origin/claude/macro-fixtures-fx-clock-20261111`로 커밋을 보고 이어 가십시오.
+- **소유자에게 올릴 결정 26건 표를 만드는 중입니다** (근거: main의 `docs/product/PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md` 5절 19건 + `docs/product/STEP10_MERGE_REHEARSAL_2026-11-11.md` 2.4절 7건). 권장안을 스펙·러너 코드·판정 기록과 대조하는 독립 점검이 돌고 있고, 끝나면 표를 소유자에게 보냅니다. 답이 오면 main의 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`에 원문 그대로 기록합니다.
+
+### ⑤-2/f 완료, 소유자 재실행 대기 (2026-11-11 22:24 KST)
 
 - [PR #105](https://github.com/xkg4real/quantgen/pull/105) 병합(병합 커밋), main `b97646d`(부모 `fbe493d`·`f57f528`, 트리 = head 트리). Runtime 43023961117 6/6·Compliance 43023961124 성공.
 - **실행 브랜치 반영:** `claude/provider-parity-runs-20261111` = `648e1d8`(부모: 소유자 커밋 `0b397f7`, main `b97646d`). 요약 3개는 그대로이고 main과의 차이는 그 3개 파일뿐. 확인: `1be43ec`가 실행 브랜치와 main의 조상, 도구 sha256 `78dd1f50…ca80c`, 진단 스크립트 sha256 `1e44f3a7…c6ea`.
