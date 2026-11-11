@@ -1269,13 +1269,15 @@ def test_providers_and_thresholds_are_those_of_spec_10_5_1():
 # fetch over fake transports
 # --------------------------------------------------------------------------- #
 class FakeHttp:
-    """Records every request; `handler(url, params)` answers with a pc.Response."""
+    """Records every request; `handler(url, params)` answers with a pc.Response. `headers` keeps the headers argument
+    of each request as it was passed."""
 
     def __init__(self, handler):
-        self.handler, self.calls = handler, []
+        self.handler, self.calls, self.headers = handler, [], []
 
     def __call__(self, url, params, headers):
         self.calls.append((url, dict(params or {})))
+        self.headers.append(headers)
         return self.handler(url, dict(params or {}))
 
 
@@ -1962,8 +1964,11 @@ def test_every_request_is_bounded_before_2027_and_the_documents_say_how():
     the fetch would run 7 days on, and each provider's request stops short of 2027 in its own way: an explicit last
     date of 2026-12-30 (an exclusive end of 2026-12-31 for yfinance, the last millisecond of 2026-12-30 for Binance)
     or, for the Treasury's yearly file, the calendar year 2026. The tool's docstring and the owner guide say that, and
-    no longer that every request names a last date. (docs/compliance/FACTS.md says it too; that file is held by
-    `python -m tools.compliance.check --check`, not here, because a change to it does not start this suite in CI.)"""
+    no longer that every request names a last date. What holds for a page-back, whose later requests take their
+    last date from the provider's answer, is held elsewhere: an fmp request never names a later day than the one
+    before it (`fmp_requests`, for every fmp case), and the kis page-back has no such bound (a known limit, with its
+    own case). (docs/compliance/FACTS.md says it too; that file is held by `python -m tools.compliance.check
+    --check`, not here, because a change to it does not start this suite in CI.)"""
     root = tmp()
     keys = key_file(root)
     kis_calls, yf_calls, seen = [], [], {}
@@ -2801,18 +2806,21 @@ def capped_fmp(cap: int | None = None, *, first_bar: str = "", ascending: bool =
     """An FMP stand-in over the synthetic SPY path that answers a from/to request with only the most recent `cap`
     rows of the span (None: all of them), as the owner's provider did on 2026-11-11 with 5,000 rows. `first_bar` is
     where its history starts. `loose_days` makes it read `to` loosely: it also sends the rows of that many days after
-    `to`, so two answers overlap. `change(k, rows)` may alter the rows of answer k (0 is the first). Every body it
-    sends is kept in `.sent`, in order."""
-    d0, _, adj0, _ = SPY
+    `to`, so two answers overlap by more than the one day the tool asks for twice. `change(k, rows)` may alter the
+    rows of answer k (0 is the first). Every row also carries `close`, the unadjusted close, which is another number
+    and must never be the value read. Every body it sends is kept in `.sent`, in order."""
+    d0, raw0, adj0, _ = SPY
     http = FakeHttp(None)
     http.sent = []
 
     def handler(url, params):
         assert url == pc.FMP_URL and params["apikey"] == FMP_KEY and params["symbol"] == "SPY", params
+        assert set(params) == {"symbol", "from", "to", "apikey"}, params
         assert params["from"] <= params["to"] <= pc.LAST_REQUEST_DAY, params
         hi = (date.fromisoformat(params["to"]) + timedelta(days=loose_days)).isoformat()
         idx = [i for i in in_span(d0, params["from"], hi) if d0[i] >= first_bar]
-        rows = [{"symbol": "SPY", "date": d0[i], "adjClose": round(float(adj0[i]) * 0.987, 6), "adjOpen": 1.0}
+        rows = [{"symbol": "SPY", "date": d0[i], "adjClose": round(float(adj0[i]) * 0.987, 6), "adjOpen": 1.0,
+                 "close": round(float(raw0[i]) + 7.0, 2)}
                 for i in (idx if cap is None else idx[-cap:])]
         if change is not None:
             rows = change(len(http.sent), rows)
@@ -2835,7 +2843,12 @@ def fmp_fetch(http: FakeHttp, *, start: str = SPY_WIN[0], end: str = SPY_WIN[1])
 
 
 def fmp_requests(http: FakeHttp) -> list[dict]:
+    """The parameters of every request, in order. The key goes in the URL's parameters only: every request was made
+    with empty headers, and no request names a later `to` than the one before it or than LAST_REQUEST_DAY."""
     assert all(url == pc.FMP_URL for url, _ in http.calls), http.calls
+    assert http.headers == [{}] * len(http.calls), http.headers
+    tos = [params["to"] for _, params in http.calls]
+    assert all(b <= a for a, b in zip(tos, tos[1:])) and all(to <= pc.LAST_REQUEST_DAY for to in tos), tos
     return [params for _, params in http.calls]
 
 
@@ -2843,13 +2856,14 @@ def test_fmp_pages_back_when_an_answer_holds_only_the_most_recent_rows():
     """The fault of the owner's SPY run of 2026-11-11: FMP answered a from/to request with exactly 5,000 rows, the
     most recent ones, and the tool took that answer for the whole history. It ended `FETCH spy fmp OK` with a first
     date two years after the requested one and said nothing, and the run of record ended WITHHELD on coverage. Now
-    the fetch reads the earliest date of each answer and asks again for the days before it (the same `from`; `to` =
-    the day before that earliest date) until an answer reaches the first requested date. Whatever the cap, the file
-    is byte for byte the one a provider without a cap gives, every request and every raw answer is in the fetch
-    record, and the line above `FETCH ... OK` carries no note. A provider that answers the whole span is still asked
-    once and leaves the record it always left. The `to` of each request is typed by hand for three caps and, for
-    every cap, checked against the answer the stand-in sent before it; an answer in ascending order gives the same
-    file as one in descending order."""
+    the fetch reads the earliest date of each answer and asks again up to it (the same `from`; `to` = that earliest
+    date, so that day comes twice and its two values are compared) until an answer reaches the first requested
+    date. Whatever the cap, the file is byte for byte the one a provider without a cap gives, every request and
+    every raw answer is in the fetch record, and the line above `FETCH ... OK` carries no note. A provider that
+    answers the whole span is still asked once and leaves the record it always left. The `to` of each request is
+    typed by hand for three caps and, for every cap, checked against the answer the stand-in sent before it; each
+    answer after the first holds the day it was asked up to; an answer in ascending order gives the same file as
+    one in descending order. The value read is `adjClose`, never the `close` the stand-in sends beside it."""
     whole = capped_fmp(None)
     code, out, folder, meta = fmp_fetch(whole)
     reference = (folder / "spy_fmp.csv").read_bytes()
@@ -2858,10 +2872,14 @@ def test_fmp_pages_back_when_an_answer_holds_only_the_most_recent_rows():
     assert meta["requests"] == [{"symbol": "SPY", "from": FMP_FIRST, "to": FMP_LAST}], meta["requests"]
     assert [r["file"] for r in meta["raw"]] == ["raw/fmp_000.json"], meta["raw"]
     assert out.splitlines()[-2] == "rows 1846, first 2009-12-04, last 2016-12-30, weekend dates 0", out
+    assert all("close" in r and r["close"] != r["adjClose"] for r in json.loads(whole.sent[0]))
+    d0, _, adj0, _ = SPY
+    assert read_csv_rows(folder / "spy_fmp.csv") == [(d0[i], repr(round(float(adj0[i]) * 0.987, 6)))
+                                                     for i in in_span(d0, FMP_FIRST, FMP_LAST)]
     by_hand = {1846: [FMP_LAST],                                      # the cap is the whole span: one request
-               1840: [FMP_LAST, "2009-12-13"],
-               1000: [FMP_LAST, "2013-03-03"],
-               700: [FMP_LAST, "2014-04-27", "2011-08-21"],           # the span in three answers
+               1840: [FMP_LAST, "2009-12-14"],                        # the 7th weekday from Friday 2009-12-04
+               1000: [FMP_LAST, "2013-03-04"],                        # 846 weekdays (169 weeks and a day) after it
+               700: [FMP_LAST, "2014-04-28", "2011-08-23"],           # the span in three answers
                400: 5, 200: 10}                                       # the number of requests
     for cap, expected in by_hand.items():
         for ascending in (False, True):
@@ -2877,9 +2895,9 @@ def test_fmp_pages_back_when_an_answer_holds_only_the_most_recent_rows():
             assert (tos == expected) if isinstance(expected, list) else (len(tos) == expected), (case, tos)
             assert all(p == {"symbol": "SPY", "from": FMP_FIRST, "to": p["to"], "apikey": FMP_KEY}
                        for p in asked), asked
-            for k in range(1, len(asked)):                            # each `to` is the day before the answer before it
-                before = min(r["date"] for r in json.loads(http.sent[k - 1]))
-                assert tos[k] == (date.fromisoformat(before) - timedelta(days=1)).isoformat(), (case, k, tos)
+            for k in range(1, len(asked)):          # each `to` is the earliest date of the answer before it, sent twice
+                before, now = ({r["date"]: r["adjClose"] for r in json.loads(http.sent[j])} for j in (k - 1, k))
+                assert tos[k] == min(before) == max(now) and before[tos[k]] == now[tos[k]], (case, k, tos)
             assert all(len(json.loads(body)) <= cap for body in http.sent), case
             assert meta["requests"] == [{"symbol": "SPY", "from": FMP_FIRST, "to": to} for to in tos], (case, meta)
             assert [r["file"] for r in meta["raw"]] == [f"raw/fmp_{k:03d}.json" for k in range(len(tos))], meta["raw"]
@@ -2896,19 +2914,19 @@ def test_fmp_counts_the_first_requested_date_as_reached_within_a_week_of_it():
     date has reached it (a weekend and the holidays beside it), and no further request goes out; an earliest date 8
     days or more after it is asked about once more. Held from both sides with one provider whose first bar is
     2009-12-14: asked from 2009-12-07 it is one request and no note, asked from 2009-12-06 it is a second request
-    for 2009-12-06..2009-12-13, an empty answer and the note. A provider that answers the whole span from a Sunday
-    is asked once, as it always was. The cost of the rule is stated here too: a cap that happens to end inside that
-    week leaves the file up to five sessions short at its very start, more than three weeks before the table's
-    start, where compare never reads a SPY file."""
+    for 2009-12-06..2009-12-14, an answer with that one day again and the note. A provider that answers the whole
+    span from a Sunday is asked once, as it always was. The cost of the rule is stated here too: a cap that ends
+    inside that week leaves the file up to five sessions short at its very start, more than three weeks before the
+    table's start, where compare never reads a SPY file."""
     assert date(2009, 12, 6).weekday() == 6
     note = "; fmp paging stopped at 2009-12-14, after the first requested date 2009-12-06: an answer brought no " \
            "earlier date"
     for start, first_bar, cap, tos, n_rows, first, said in (
             ("2010-01-06", "", None, [FMP_LAST], 1845, "2009-12-07", ""),          # asked from a Sunday
             ("2010-01-07", "2009-12-14", None, [FMP_LAST], 1840, "2009-12-14", ""),            # 7 days after
-            ("2010-01-06", "2009-12-14", None, [FMP_LAST, "2009-12-13"], 1840, "2009-12-14", note),     # 8 days
+            ("2010-01-06", "2009-12-14", None, [FMP_LAST, "2009-12-14"], 1840, "2009-12-14", note),     # 8 days
             (SPY_WIN[0], "", 1841, [FMP_LAST], 1841, "2009-12-11", ""),            # the cap ends 7 days after
-            (SPY_WIN[0], "", 1840, [FMP_LAST, "2009-12-13"], 1846, "2009-12-04", "")):         # and 10 days after
+            (SPY_WIN[0], "", 1840, [FMP_LAST, "2009-12-14"], 1846, "2009-12-04", "")):         # and 10 days after
         http = capped_fmp(cap, first_bar=first_bar)
         code, out, folder, meta = fmp_fetch(http, start=start)
         case = (start, first_bar, cap)
@@ -2919,15 +2937,17 @@ def test_fmp_counts_the_first_requested_date_as_reached_within_a_week_of_it():
             f"rows {n_rows}, first {first}, last 2016-12-30, weekend dates 0{said}",
             f"FETCH spy fmp OK exit=0 csv={folder / 'spy_fmp.csv'}"], (case, out)
         assert len(meta["raw"]) == len(meta["requests"]) == len(tos), (case, meta["requests"])
-        if said:
-            assert http.sent[1] == b"[]" and (folder / "raw" / "fmp_001.json").read_bytes() == b"[]", case
+        if said:                                    # the second answer: the first bar again, and nothing earlier
+            assert [r["date"] for r in json.loads(http.sent[1])] == ["2009-12-14"], case
+            assert (folder / "raw" / "fmp_001.json").read_bytes() == http.sent[1], case
     assert pc.FMP_REACHED_DAYS == 7
 
 
 def test_fmp_history_that_really_starts_late_ends_ok_with_the_note_and_compare_withholds_the_pair():
     """A provider whose history begins years after the first requested date is not a capped answer, and only asking
-    tells the two apart: the request for the days before its first bar brings an empty list. The fetch is then OK
-    with the late first date, both requests and both raw answers are in the record, and the line above
+    tells the two apart: the request for the span up to its first bar brings that one day again and nothing earlier
+    (a provider that reads `to` as exclusive sends an empty list, which ends the page-back the same way). The fetch
+    is then OK with the late first date, both requests and both raw answers are in the record, and the line above
     `FETCH ... OK` says where the page-back stopped and why, where the owner reads it before compare. The outcome
     rules are untouched: compare takes the file, counts the table's sessions before its span against
     `edge_uncovered_max` and ends the pair WITHHELD on coverage, so no return comparison runs. A cap on top of the
@@ -2935,8 +2955,8 @@ def test_fmp_history_that_really_starts_late_ends_ok_with_the_note_and_compare_w
     note = "; fmp paging stopped at 2012-03-01, after the first requested date 2009-12-04: an answer brought no " \
            "earlier date"
     files = {}
-    for cap, tos in ((None, [FMP_LAST, "2012-02-29"]),
-                     (500, [FMP_LAST, "2015-02-01", "2013-03-03", "2012-02-29"])):
+    for cap, tos in ((None, [FMP_LAST, "2012-03-01"]),
+                     (500, [FMP_LAST, "2015-02-02", "2013-03-05", "2012-03-01"])):
         http = capped_fmp(cap, first_bar="2012-03-01")
         code, out, folder, meta = fmp_fetch(http)
         assert code == 0 and out.splitlines()[-2:] == [
@@ -2944,10 +2964,16 @@ def test_fmp_history_that_really_starts_late_ends_ok_with_the_note_and_compare_w
             f"FETCH spy fmp OK exit=0 csv={folder / 'spy_fmp.csv'}"], (cap, out)
         assert [p["to"] for p in fmp_requests(http)] == tos, (cap, fmp_requests(http))
         assert meta["requests"] == [{"symbol": "SPY", "from": FMP_FIRST, "to": to} for to in tos], meta["requests"]
-        assert http.sent[-1] == b"[]" and (folder / meta["raw"][-1]["file"]).read_bytes() == b"[]", cap
+        assert [r["date"] for r in json.loads(http.sent[-1])] == ["2012-03-01"], cap
+        assert (folder / meta["raw"][-1]["file"]).read_bytes() == http.sent[-1], cap
         assert meta["csv"]["first_date"] == "2012-03-01" and len(meta["raw"]) == len(tos), (cap, meta["csv"])
         files[cap] = folder / "spy_fmp.csv"
     assert files[None].read_bytes() == files[500].read_bytes()
+    exclusive = capped_fmp(None, first_bar="2012-03-01",             # the same provider reading `to` as exclusive
+                           change=lambda k, rows: [r for r in rows if k == 0 or r["date"] < "2012-03-01"])
+    code, out, folder, meta = fmp_fetch(exclusive)
+    assert code == 0 and exclusive.sent[1] == b"[]" and out.splitlines()[-2].endswith(note), out
+    assert (folder / "spy_fmp.csv").read_bytes() == files[None].read_bytes()
     w = spy_world()
     code, out, s, _ = w.compare([("fmp", files[None])])
     pair = s["pairs"][0]
@@ -2962,20 +2988,24 @@ def test_fmp_history_that_really_starts_late_ends_ok_with_the_note_and_compare_w
 
 
 def test_fmp_overlapping_answers_are_merged_by_date_and_a_date_with_two_values_is_refused():
-    """Two answers of a page-back can hold the same date (a provider that reads `to` loosely, or one that ignores
-    it). Rows that agree are merged: each date once, the file the same as a provider without a cap gives. A date
-    that two answers give with different values (a number against another number, or a number against no value) is
-    a failed fetch that names no value and writes nothing: the tool never picks one. A provider that ignores `to`
-    sends the same rows again, which is an answer with no earlier date: the page-back stops there and says so. One
-    answer that holds a date twice with two values is refused by the older rule, in its own words."""
+    """Two answers of a page-back hold the same date: the one day the tool asks for twice, and more when a provider
+    reads `to` loosely or ignores it. Rows that agree are merged: each date once, the file the same as a provider
+    without a cap gives. A date that two answers give with different values (a number against another number, or a
+    number against no value) is a failed fetch that names no value and writes nothing: the tool never picks one.
+    That holds for the one day asked for twice as well: a provider whose values for a day depend on the request
+    (here, one that scales every answer so that its last row equals `close`) fails at the fetch, which is no run,
+    and not in a compare that would be the run of record; the same provider without a cap, asked once, gives a
+    file. A provider that ignores `to` sends the same rows again, which is an answer with no earlier date: the
+    page-back stops there and says so. One answer that holds a date twice with two values is refused by the older
+    rule, in its own words, and no further request is made."""
     code, out, folder, meta = fmp_fetch(capped_fmp(None))
     reference = (folder / "spy_fmp.csv").read_bytes()
     http = capped_fmp(700, loose_days=10)
     code, out, folder, meta = fmp_fetch(http)
     answers = [{r["date"] for r in json.loads(body)} for body in http.sent]
-    assert len(answers) == 3 and len(answers[0] & answers[1]) == 8 and len(answers[1] & answers[2]) == 7, \
+    assert len(answers) == 3 and len(answers[0] & answers[1]) == 9 and len(answers[1] & answers[2]) == 7, \
         [len(a) for a in answers]
-    assert [p["to"] for p in fmp_requests(http)] == [FMP_LAST, "2014-04-27", "2011-08-31"], fmp_requests(http)
+    assert [p["to"] for p in fmp_requests(http)] == [FMP_LAST, "2014-04-28", "2011-09-02"], fmp_requests(http)
     assert code == 0 and (folder / "spy_fmp.csv").read_bytes() == reference, out
     dates = [d for d, _ in read_csv_rows(folder / "spy_fmp.csv")]
     assert len(dates) == len(set(dates)) == 1846 and "fmp paging stopped" not in out, out
@@ -3007,22 +3037,44 @@ def test_fmp_overlapping_answers_are_merged_by_date_and_a_date_with_two_values_i
                                     "stopped at 2013-03-04, after the first requested date 2009-12-04: an answer "
                                     "brought no earlier date"), out
 
+    def anchored(k, rows):                                      # every answer scaled so that its last row is `close`
+        last = max(rows, key=lambda r: r["date"])
+        return [{**r, "adjClose": round(r["adjClose"] * last["close"] / last["adjClose"], 6)} for r in rows]
+    http = capped_fmp(1000, change=anchored)
+    code, out, folder, meta = fmp_fetch(http)
+    assert code == 4 and not folder.exists(), out
+    assert [p["to"] for p in fmp_requests(http)] == [FMP_LAST, "2013-03-04"], fmp_requests(http)
+    assert out.splitlines()[-2:] == ["UNAVAILABLE: fmp gave one date two different values in two answers",
+                                     "FETCH spy fmp UNAVAILABLE fetch_failed exit=4 csv=-"], out
+    http = capped_fmp(None, change=anchored)
+    code, out, folder, meta = fmp_fetch(http)
+    assert code == 0 and len(http.calls) == 1 and meta["csv"]["n_rows"] == 1846, out
+
     def twice(k, rows):
         return rows + [{**rows[0], "adjClose": rows[0]["adjClose"] + 0.01}]
-    http = capped_fmp(None, change=twice)
+    for cap in (None, 1000):                                    # with a cap too: the answer is not paged back
+        http = capped_fmp(cap, change=twice)
+        code, out, folder, meta = fmp_fetch(http)
+        assert code == 4 and len(http.calls) == 1 and not folder.exists(), (cap, out)
+        assert out.splitlines()[-2] == "UNAVAILABLE: a date with two different values", (cap, out)
+
+    def same_twice(k, rows):                                    # one date twice with one value is not a fault
+        return rows + [dict(rows[0])]
+    http = capped_fmp(1000, change=same_twice)
     code, out, folder, meta = fmp_fetch(http)
-    assert code == 4 and len(http.calls) == 1 and not folder.exists(), out
-    assert out.splitlines()[-2] == "UNAVAILABLE: a date with two different values", out
+    assert code == 0 and len(http.calls) == 2 and (folder / "spy_fmp.csv").read_bytes() == reference, out
 
 
 def test_fmp_page_back_ends_at_its_request_budget_and_says_so():
     """The page-back is bounded: twelve requests. A cap that needs exactly twelve reaches the first requested date
-    and says nothing. A smaller cap leaves the file short because of the fetch, and the line above `FETCH ... OK`
+    and says nothing (each answer after the first brings one row less than the cap, because the day asked for twice
+    is in it). A smaller cap leaves the file short because of the fetch, and the line above `FETCH ... OK`
     says where it stopped and that the budget ran out; the fetch is still OK, as for `kis`, and the owner settles it
     before compare."""
     for cap, n_rows, first, note in (
             (160, 1846, "2009-12-04", ""),
-            (150, 1800, "2010-02-08", "; fmp paging stopped at 2010-02-08, after the first requested date 2009-12-04: "
+            # 150 rows, then eleven times 149 new ones: the last 1,789 of 1,846, from the 58th weekday of the span
+            (150, 1789, "2010-02-23", "; fmp paging stopped at 2010-02-23, after the first requested date 2009-12-04: "
                                       "the budget of 12 requests ran out")):
         http = capped_fmp(cap)
         code, out, folder, meta = fmp_fetch(http)
@@ -3036,11 +3088,13 @@ def test_fmp_page_back_ends_at_its_request_budget_and_says_so():
 def test_fmp_a_failed_or_empty_answer_on_the_first_and_on_a_later_request():
     """What each kind of answer means, by the request it comes on. On the first request nothing changed: an empty
     list is `fetch_failed`, a message in place of rows is `plan_or_access`, each in the words it always had, after
-    one request. On a later request of the page-back an empty list is an answer (nothing earlier: OK with the note,
-    held by the two cases above), and everything else fails the whole fetch with the request's number on the line:
-    a message, an HTTP error (the body is never quoted for fmp, whose URL holds the key), rows without adjClose, an
-    answer that is not JSON. A transport error on a later request prints its type only, and a later answer that
-    echoes the key is refused. In every failure nothing is written, so no short file is left to be compared."""
+    one request. On a later request of the page-back an empty list is an answer (nothing earlier: OK with the note),
+    and everything else fails the whole fetch with the request's number on the line: a message, an HTTP error (the
+    body is never quoted for fmp, whose URL holds the key), rows without adjClose, an answer that is not JSON, and
+    JSON that is not a list of rows (`null`, an empty string, a number, a list of things that are not rows). A
+    transport error on a later request prints its type only, and an answer that echoes the key is refused with no
+    further request, on the first request and on a later one. In every failure nothing is written, so no short
+    file is left to be compared."""
     for first, words, reason in ((ok_json([]), "fmp returned no rows", "fetch_failed"),
                                  (ok_json({"Error Message": "Limit Reach 4321.12"}),
                                   "fmp answered with a message instead of rows", "plan_or_access"),
@@ -3065,11 +3119,16 @@ def test_fmp_a_failed_or_empty_answer_on_the_first_and_on_a_later_request():
             (lambda p: pc.Response(402, b'{"Error Message":"upgrade the plan"}'), "fmp: HTTP 402", "plan_or_access"),
             (lambda p: ok_json([{"date": "2013-03-01", "close": 4321.12}]),
              "fmp returned no adjClose, so not the dividend-adjusted convention", "fetch_failed"),
+            (lambda p: ok_json(["2013-03-01", 4321.12]),
+             "fmp returned no adjClose, so not the dividend-adjusted convention", "fetch_failed"),
+            (lambda p: ok_json(None), "fmp returned no rows", "fetch_failed"),
+            (lambda p: ok_json(""), "fmp returned no rows", "fetch_failed"),
+            (lambda p: ok_json(0), "fmp returned no rows", "fetch_failed"),
             (lambda p: pc.Response(200, b"<html>4321.12"), "fmp: the response is not JSON", "fetch_failed")):
         http = then(second)
         code, out, folder, meta = fmp_fetch(http)
         assert code == 4 and not folder.exists(), out
-        assert [p["to"] for p in fmp_requests(http)] == [FMP_LAST, "2013-03-03"], fmp_requests(http)
+        assert [p["to"] for p in fmp_requests(http)] == [FMP_LAST, "2013-03-04"], fmp_requests(http)
         assert out.splitlines()[-2:] == [f"UNAVAILABLE: {words}; request 2 of the page-back",
                                          f"FETCH spy fmp UNAVAILABLE {reason} exit=4 csv=-"], out
         assert "4321" not in out and "Limit" not in out and "upgrade" not in out, out
@@ -3086,14 +3145,20 @@ def test_fmp_a_failed_or_empty_answer_on_the_first_and_on_a_later_request():
     assert code == 2 and len(http.calls) == 2 and not folder.exists(), out
     assert out.splitlines()[-2:] == ["REFUSED: fmp_001.json: the response holds a key value; nothing is written",
                                      "FETCH spy fmp REFUSED exit=2 csv=-"], out
+    http = capped_fmp(1000, change=lambda k, rows: [{**r, "note": f"key {FMP_KEY}"} for r in rows])
+    code, out, folder, meta = fmp_fetch(http)                   # the first answer of a capped provider echoes the key
+    assert code == 2 and len(http.calls) == 1 and not folder.exists(), out
+    assert out.splitlines()[-2:] == ["REFUSED: fmp_000.json: the response holds a key value; nothing is written",
+                                     "FETCH spy fmp REFUSED exit=2 csv=-"], out
 
 
 def test_fmp_rows_without_an_iso_date_fail_the_fetch_in_the_older_words():
     """An older rule, held through the page-back: a row whose date is not an ISO calendar date fails the fetch as
     `a row without an ISO date`, and nothing is written. The page-back reads the earliest date of each answer, so
-    an answer with no date it can read must end the page-back quietly and leave the refusal to that rule, on the
-    first request (one request, as before the page-back existed) and on a later one. An answer that mixes such a
-    row with dated rows is paged back like any other and then refused by the same rule. No value is printed."""
+    an answer with a date it cannot read must end the page-back at once and leave the refusal to that rule, on the
+    first request (one request, as before the page-back existed) and on a later one, whether every row of the
+    answer is such a row or one among dated rows. The same holds for an answer with a row dated 2027: no further
+    request, and the older refusal. No value is printed."""
     def no_dates(k, rows):
         return [{**r, "date": f"day {n}"} for n, r in enumerate(rows)]
 
@@ -3103,8 +3168,8 @@ def test_fmp_rows_without_an_iso_date_fail_the_fetch_in_the_older_words():
     def one_bad(bad):
         return lambda k, rows: rows[:5] + [{**rows[5], "date": bad}] + rows[6:] if k == 0 else rows
     for cap, change, n_requests in ((None, no_dates, 1), (1000, no_dates, 1), (1000, none_on_the_second, 2),
-                                    (1000, one_bad("03/01/2016"), 2), (1000, one_bad("2016-02-30"), 2),
-                                    (1000, one_bad(""), 2), (None, one_bad("2016-02-30"), 1)):
+                                    (1000, one_bad("03/01/2016"), 1), (1000, one_bad("2016-02-30"), 1),
+                                    (1000, one_bad(""), 1), (None, one_bad("2016-02-30"), 1)):
         http = capped_fmp(cap, change=change)
         code, out, folder, meta = fmp_fetch(http)
         case = (cap, change.__name__, n_requests)
@@ -3112,6 +3177,149 @@ def test_fmp_rows_without_an_iso_date_fail_the_fetch_in_the_older_words():
         assert out.splitlines()[-2:] == ["UNAVAILABLE: a row without an ISO date",
                                          "FETCH spy fmp UNAVAILABLE fetch_failed exit=4 csv=-"], (case, out)
         assert "Traceback" not in out and "ERROR" not in out and "day " not in out and "2016-02-30" not in out, out
+    for cap, k_bad, n_requests in ((None, 0, 1), (1000, 0, 1), (1000, 1, 2)):         # a row dated 2027
+        http = capped_fmp(cap, change=lambda k, rows, k_bad=k_bad: rows + (
+            [{**rows[0], "date": "2027-01-04"}] if k == k_bad else []))
+        code, out, folder, meta = fmp_fetch(http)
+        assert code == 2 and len(http.calls) == n_requests and not folder.exists(), (cap, k_bad, len(http.calls), out)
+        assert out.splitlines()[-2:] == ["REFUSED: a response holds an observation dated on or after 2027-01-01; "
+                                         "nothing is written", "FETCH spy fmp REFUSED exit=2 csv=-"], (cap, k_bad, out)
+
+
+def test_fmp_page_back_never_asks_past_the_span_and_counts_only_dates_inside_it():
+    """Review of 2026-11-11 (FMP-1, FMP-3). The `to` of a page-back request comes from the provider's own dates, so
+    those dates are held to the span that was asked for: only a date from the first requested date to the `to` of
+    the request counts as "the earliest date of the answer". Then no request names a later day than the one before
+    it, and none a day after LAST_REQUEST_DAY (`fmp_requests` holds that for every fmp case of this suite). An
+    answer dated wholly after the `to` it was asked for brings no second request: one request and the older
+    outcome, whether its rows are dated 2027 (refused) or only later than `to` (no published value in the span). A
+    provider that ignores `to` is asked a second time up to the earliest date of the span it sent, never further.
+    A later answer that holds only a date before `from`, or only a date after its `to`, has brought no earlier
+    date of the span: the page-back stops with the note, so a file that starts late never lacks it."""
+    d0, _, adj0, _ = SPY
+
+    def row(d: str, v: float = 1.0) -> dict:
+        return {"symbol": "SPY", "date": d, "adjClose": v}
+    for first, words, code_expected in (
+            ([row("2027-03-01")], "REFUSED: a response holds an observation dated on or after 2027-01-01; nothing is "
+                                  "written", 2),
+            ([row(f"2027-01-0{n}") for n in (4, 5, 6, 7, 8)],
+             "REFUSED: a response holds an observation dated on or after 2027-01-01; nothing is written", 2),
+            ([row(f"2017-01-{n:02d}") for n in (9, 10, 11, 12, 13)],            # after `to`, before the cut-off
+             "UNAVAILABLE: no published value in the requested span", 4)):
+        http = FakeHttp(lambda url, params, first=first: ok_json(first))
+        code, out, folder, meta = fmp_fetch(http)
+        assert code == code_expected and not folder.exists() and out.splitlines()[-2] == words, out
+        assert [p["to"] for p in fmp_requests(http)] == [FMP_LAST], fmp_requests(http)
+    # a provider that ignores `to`: the most recent 1,000 rows it has, whatever is asked
+    ignores = FakeHttp(lambda url, params: ok_json(
+        [row(d0[i], round(float(adj0[i]) * 0.987, 6)) for i in in_span(d0, params["from"], "9999-12-31")[-1000:]]))
+    code, out, folder, meta = fmp_fetch(ignores, end="2015-06-30")              # asked up to 2015-07-07
+    assert [p["to"] for p in fmp_requests(ignores)] == ["2015-07-07", "2013-03-04"], fmp_requests(ignores)
+    assert code == 0 and out.splitlines()[-2] == (
+        "rows 612, first 2013-03-04, last 2015-07-07, weekend dates 0; fmp paging stopped at 2013-03-04, after the "
+        "first requested date 2009-12-04: an answer brought no earlier date"), out
+    assert [d for d, _ in read_csv_rows(folder / "spy_fmp.csv")] == [d for d in d0 if "2013-03-04" <= d <= "2015-07-07"]
+    # a later answer with nothing inside the span it was asked for
+    for stray, n_rows, last in (("2001-01-02", 1000, "2016-12-30"),             # before `from`
+                                ("2017-01-05", 1001, "2017-01-05")):            # after its `to`, inside the fetch span
+        capped = capped_fmp(1000)
+        http = FakeHttp(None)
+        http.handler = lambda url, params, stray=stray: capped.handler(url, params) if len(http.calls) == 1 \
+            else ok_json([row(stray)])
+        code, out, folder, meta = fmp_fetch(http)
+        assert [p["to"] for p in fmp_requests(http)] == [FMP_LAST, "2013-03-04"], fmp_requests(http)
+        assert code == 0 and out.splitlines()[-2] == (
+            f"rows {n_rows}, first 2013-03-04, last {last}, weekend dates 0; fmp paging stopped at 2013-03-04, after "
+            "the first requested date 2009-12-04: an answer brought no earlier date"), (stray, out)
+        assert meta["csv"]["first_date"] == "2013-03-04", meta["csv"]
+
+
+def test_fmp_a_provider_that_reads_to_as_exclusive_loses_no_session_between_two_answers():
+    """Review of 2026-11-11 (FMP-2). The next request names the earliest date already received as its `to`, not
+    the day before it. A provider that reads `to` as inclusive sends that day twice and the two values are compared
+    (the overlap case holds that). A provider that reads `to` as exclusive sends the days before it, so no session
+    is lost between two answers either way; with `to` = the day before, such a provider lost one session at every
+    seam, the fetch ended OK without a word and the compare failed its calendar check. What the fetch still cannot
+    see is a session missing from the provider's answer itself."""
+    d0, _, adj0, _ = SPY
+    code, out, folder, meta = fmp_fetch(capped_fmp(None))
+    reference = (folder / "spy_fmp.csv").read_bytes()
+
+    def exclusive(cap: int) -> FakeHttp:
+        """The most recent `cap` rows from `from` up to, and not including, `to`."""
+        http = FakeHttp(None)
+        http.sent = []
+
+        def handler(url, params):
+            idx = [i for i in in_span(d0, params["from"], params["to"]) if d0[i] < params["to"]][-cap:]
+            answer = ok_json([{"symbol": "SPY", "date": d0[i], "adjClose": round(float(adj0[i]) * 0.987, 6)}
+                              for i in reversed(idx)])
+            http.sent.append(answer.body)
+            return answer
+        http.handler = handler
+        return http
+    # by hand: 700 rows end at Monday 2014-04-28; the 700 before that day end at Monday 2011-08-22
+    for cap, tos in ((1000, [FMP_LAST, "2013-03-04"]), (700, [FMP_LAST, "2014-04-28", "2011-08-22"])):
+        http = exclusive(cap)
+        code, out, folder, meta = fmp_fetch(http)
+        assert [p["to"] for p in fmp_requests(http)] == tos, (cap, fmp_requests(http))
+        assert code == 0 and "fmp paging stopped" not in out, (cap, out)
+        assert (folder / "spy_fmp.csv").read_bytes() == reference, cap
+        sent = [{r["date"] for r in json.loads(body)} for body in http.sent]
+        assert all(not (a & b) for a, b in zip(sent, sent[1:])), cap                # no day came twice
+        assert sum(len(a) for a in sent) == 1846, cap                               # and none was lost
+
+
+def test_fmp_whole_answers_in_other_shapes_give_the_same_file():
+    """Lines of `_fmp_rows` that no case held (review of 2026-11-11, FMP-4): a date with a time part is cut to its
+    first ten characters, the older answer shape `{"symbol": ..., "historical": [...]}` is read like a bare list,
+    and an element of the list that is not a row is skipped. Each gives byte for byte the file of the plain answer,
+    asked once and under a cap."""
+    code, out, folder, meta = fmp_fetch(capped_fmp(None))
+    reference = (folder / "spy_fmp.csv").read_bytes()
+
+    def with_time(k, rows):
+        return [{**r, "date": r["date"] + " 00:00:00"} for r in rows]
+
+    def with_strays(k, rows):
+        return ["2016-01-04", 17, None] + rows + [["2016-01-05", 1.0]]
+    for cap, n_requests in ((None, 1), (1000, 2)):
+        for change in (with_time, with_strays):
+            http = capped_fmp(cap, change=change)
+            code, out, folder, meta = fmp_fetch(http)
+            assert code == 0 and len(fmp_requests(http)) == n_requests, (cap, change.__name__, out)
+            assert (folder / "spy_fmp.csv").read_bytes() == reference, (cap, change.__name__)
+        inner = capped_fmp(cap)
+        legacy = FakeHttp(lambda url, params, inner=inner: ok_json(
+            {"symbol": "SPY", "historical": json.loads(inner.handler(url, params).body)}))
+        code, out, folder, meta = fmp_fetch(legacy)
+        assert code == 0 and len(fmp_requests(legacy)) == n_requests, (cap, out)
+        assert (folder / "spy_fmp.csv").read_bytes() == reference, cap
+        assert json.loads((folder / "raw" / "fmp_000.json").read_bytes())["symbol"] == "SPY"
+
+
+def test_kis_page_back_takes_its_next_date_from_what_kis_sent_a_known_limit():
+    """A known limit, written down and not changed (review of 2026-11-11, FMP-1): the `kis` page-back names as its
+    next BYMD the day before the earliest date KIS sent, with no upper bound, as it has since the first fixed
+    version. If KIS answered a request with a row dated after the day asked for, the next request would name a
+    later day, 2027 included. The fetch is still refused before anything is written, because a response with a
+    2027 date always is. The owner ruling of 2026-11-11 (SPY-가) changed the fmp fetch only, and the second SPY run
+    reads the kis file of the first sitting, so this path is not run again; the tool's docstring says so."""
+    calls = []
+
+    def kis(path, tr_id, params):
+        calls.append(params["BYMD"])
+        return {"rt_cd": "0", "output2": [{"xymd": "20270301", "clos": "1.0000"}] if len(calls) == 1 else []}
+    root = tmp()
+    with env_without(*pc.KEY_NAMES):
+        code, out, folder = fetch("spy", "kis", start=SPY_WIN[0], end=SPY_WIN[1], kis=kis, env_file=key_file(root),
+                                  root=root)
+    assert calls == ["20170106", "20270228"], calls
+    assert code == 2 and not folder.exists(), out
+    assert out.splitlines()[-2:] == ["REFUSED: a response holds an observation dated on or after 2027-01-01; nothing "
+                                     "is written", "FETCH spy kis REFUSED exit=2 csv=-"], out
+    assert "a page-back request of `kis` names the day before the earliest date KIS sent" in " ".join(pc.__doc__.split())
 
 
 def test_fmp_capped_provider_passes_end_to_end_where_one_answer_alone_was_withheld():
@@ -3356,7 +3564,8 @@ def test_the_rerun_guide_s_tool_lines_run_as_written_after_a_synthetic_first_sit
     with env_without(*pc.KEY_NAMES):
         code, out = capture(lambda: pc.run(w.tool_line(tool[1]), now=NOW, http=w.fmp))
     asked = [(p["from"], p["to"]) for _, p in w.fmp.calls]
-    assert asked == [("2004-10-31", "2026-10-02"), ("2004-10-31", "2007-08-05")], asked
+    assert asked == [("2004-10-31", "2026-10-02"), ("2004-10-31", "2007-08-06")], asked
+    assert w.fmp.headers == [{}, {}], w.fmp.headers
     assert code == 0 and out.splitlines()[-2:] == [
         "rows 5720, first 2004-11-01, last 2026-10-02, weekend dates 0",
         f"FETCH spy fmp OK exit=0 csv={pp / 'fetch2-spy-fmp' / 'spy_fmp.csv'}"], out
@@ -3444,8 +3653,9 @@ def test_the_rerun_guide_s_failure_lines_are_the_tool_s_own_lines():
     assert f"`{note}`" in stop and "`fmp paging stopped at`이 없습니다" in text, stop
     for kw, n_requests, first, why in (
             (dict(first_bar="2006-11-15"), 3, "2006-11-15", "an answer brought no earlier date"),
-            # 12 answers of 450 rows are the last 5,400 of 5,720 sessions: 320 weekdays (64 weeks) after 2004-11-01
-            (dict(cap=450), 12, "2006-01-23", f"the budget of {pc.FMP_MAX_REQUESTS} requests ran out")):
+            # 450 rows and eleven times 449 new ones are the last 5,389 of 5,720 sessions: 331 weekdays (66 weeks
+            # and a day) after Monday 2004-11-01
+            (dict(cap=450), 12, "2006-02-07", f"the budget of {pc.FMP_MAX_REQUESTS} requests ran out")):
         late = pp / f"probe-{first}"
         http = w.fmp_then(**kw)
         code, lines = fetch_line(http, **{str(pp / "fetch2-spy-fmp"): str(late)})
