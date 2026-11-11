@@ -19,7 +19,7 @@
 | 필요한 것 | 내용 |
 | --- | --- |
 | 선행 단계 | Step 7A가 7A.5까지 끝나 있어야 합니다(2026-11-04 완료). |
-| 고정값 세 줄 | 5~7단계에 채워져 있습니다. 실행 브랜치 `claude/provider-parity-runs-20261111`(main에서 갈라낸 브랜치로, 결과 요약을 올리는 곳), 도구 커밋 `4096caa56438825ac66367d1d2eccb5deb68189a`, 도구 파일 sha256 `f56caeb4076c3679db1b8c801ea2f9eb356541684fd94a5947011c826c9b2b21`. 2026-11-11 소유자 판정(P1)으로 고정됐습니다. 12단계에서 `sha256 DIFFERENT`가 나오면 멈추고 Claude에게 알려 주십시오. |
+| 고정값 세 줄 | 5~7단계에 채워져 있습니다. 실행 브랜치 `claude/provider-parity-runs-20261111`(main에서 갈라낸 브랜치로, 결과 요약을 올리는 곳), 도구 커밋 `4096caa56438825ac66367d1d2eccb5deb68189a`, 도구 파일 sha256 `f56caeb4076c3679db1b8c801ea2f9eb356541684fd94a5947011c826c9b2b21`. 2026-11-11 소유자 판정(P1, 이어서 SPY-가)에 따른 두 번째 고정 버전입니다. 12단계에서 `sha256 DIFFERENT`가 나오면 멈추고 Claude에게 알려 주십시오. |
 | 연구 클론 | Step 7A를 실행한 QUANTGEN 폴더입니다. 브랜치는 `claude/amazing-gauss-tdiguu` 그대로 둡니다. 도구는 이 폴더를 읽기만 합니다. 이 폴더에 대해서는 상태를 읽는 git 줄(2, 3, 8, 34단계)만 실행하고, 그 밖에는 아무것도 실행하지 않습니다. |
 | 도구 클론 | 9단계가 `%LOCALAPPDATA%\quantgen\pp_clone`에 새로 만듭니다. 7A의 `py313`, `ntvenv`가 있는 그 폴더 옆입니다. 내려받는 양은 100MB 안팎으로 예상합니다. |
 | 출력 폴더 | 도구가 `%LOCALAPPDATA%\quantgen\provider_parity` 아래에 만듭니다. 미리 만들지 않습니다. OneDrive 안이나 git 폴더 안은 도구가 거부합니다. |

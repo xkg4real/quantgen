@@ -1964,9 +1964,9 @@ def test_every_request_is_bounded_before_2027_and_the_documents_say_how():
     the fetch would run 7 days on, and each provider's request stops short of 2027 in its own way: an explicit last
     date of 2026-12-30 (an exclusive end of 2026-12-31 for yfinance, the last millisecond of 2026-12-30 for Binance)
     or, for the Treasury's yearly file, the calendar year 2026. The tool's docstring and the owner guide say that, and
-    no longer that every request names a last date. What holds for a page-back, whose later requests take their
-    last date from the provider's answer, is held elsewhere: an fmp request never names a later day than the one
-    before it (`fmp_requests`, for every fmp case), and the kis page-back has no such bound (a known limit, with its
+    no longer that every request names a last date. They also say what holds for a page-back, whose later requests
+    take their last date from the provider's answer: an fmp request never names a later day than the one before it
+    (held for every fmp case by `fmp_requests`), and the kis page-back has no such bound (a known limit, with its
     own case). (docs/compliance/FACTS.md says it too; that file is held by `python -m tools.compliance.check
     --check`, not here, because a change to it does not start this suite in CI.)"""
     root = tmp()
@@ -2008,6 +2008,7 @@ def test_every_request_is_bounded_before_2027_and_the_documents_say_how():
              "calendar year of at most 2026")):
         flat = " ".join(text.split())
         assert old not in flat and new in flat, name
+        assert "A page-back request of `fmp` never names a later day than the request before it" in flat, name
 
 
 # --------------------------------------------------------------------------- #
@@ -2722,35 +2723,46 @@ def test_a_kis_page_back_that_stops_short_says_where_and_why_above_the_result_li
 def test_every_statement_of_the_fixed_commit_and_sha256_agrees_with_the_tool_file():
     """Owner ruling P1 fixes the tool by commit and sha256, and the owner pastes both from the documents. The tool
     has had two fixed versions: the first made the three runs of record of 2026-11-11, and the ruling SPY-가 of that
-    day made the second (the fmp page-back). This case reads as current the statements of these fixed shapes, each
-    found exactly once: the guide's two lines and its `$fixed`; in each Korean guide (the first run and the rerun)
-    `$fixed`, `$sha` and the table row; results/RULINGS.md's two `Tool ... fixed` lines. Every current sha256 is this
-    tool file's and every current commit is one and the same 40-hex id, so a change to the tool, or to one statement
-    alone, fails here until all of them are right again.
+    day made the second (the fmp page-back). This case reads as current the statements of these fixed shapes: the
+    guide's two lines and its `$fixed`; in each Korean guide (the first run and the rerun) `$fixed`, `$sha` and the
+    table row; and the LAST `Tool ... fixed` pair of results/RULINGS.md. Every current sha256 is this tool file's
+    and every current commit is one and the same 40-hex id, so a change to the tool, or to one statement alone,
+    fails here until all of them are right again.
 
-    The first version's values are history. They stand in the guide, in the first Korean guide and in RULINGS.md
-    (the runs of record were made with that version), only on a line that says `first fixed version` or `첫 고정
-    버전`, and never in a current statement. The diagnostic script's sha256 is stated in RULINGS.md and in the rerun
-    guide, once each, and is that file's. No other 40-hex or 64-hex value stands in the four documents, so a stray
-    or mistyped copy of any of these values fails too.
+    results/RULINGS.md is a record: an entry is never rewritten. It therefore holds exactly two `Tool commit fixed`
+    and two `Tool sha256 fixed` lines. The first pair stands in the P1 entry as that entry was written and merged,
+    and is the first fixed version's; the second pair stands in the SPY entry and is the current one. Everywhere
+    else the first version's values are history: they stand in the guide and in the first Korean guide only on a
+    line that says `first fixed version` or `첫 고정 버전`, and never in a current statement. The diagnostic
+    script's sha256 is stated in RULINGS.md and in the rerun guide, once each, and is that file's. No other 40-hex
+    or 64-hex value stands in the four documents, so a stray or mistyped copy of any of these values fails too.
 
     Not held here: that the id is the commit that last changed the tool (CI checks out a single commit), and the two
     prose records (docs/nautilus_bridge/OWNER_RULINGS_LOG.md, the tool's rows of docs/compliance/FACTS.md), which are
     checked by hand whenever the values change."""
     docs = {"guide": GUIDE, "Korean guide": KO_GUIDE, "rerun guide": RERUN_GUIDE, "RULINGS.md": RULINGS}
     text = {name: path.read_text(encoding="utf-8") for name, path in docs.items()}
+    ruled_commit, ruled_sha = r"^- Tool commit fixed: `([^`]*)`$", \
+        r"^- Tool sha256 fixed \(`tools/provider_parity/parity_check\.py`\): `([^`]*)`$"
+    record = {"commit": re.findall(ruled_commit, text["RULINGS.md"], flags=re.M),
+              "sha256": re.findall(ruled_sha, text["RULINGS.md"], flags=re.M)}
+    for kind, found in record.items():
+        assert len(found) == 2, f"RULINGS.md: the fixed {kind} is stated {len(found)} times, not by two rulings"
+    assert (record["commit"][0], record["sha256"][0]) == (FIRST_TOOL_COMMIT, FIRST_TOOL_SHA256), record
+    p1 = text["RULINGS.md"].split("\n## ")[1]                    # the P1 entry holds the first pair, and only it
+    assert p1.startswith("2026-11-11 (KST), all series, before any run: where the tool is fixed (P1)"), p1[:80]
+    assert len(re.findall(ruled_commit, p1, flags=re.M)) == len(re.findall(ruled_sha, p1, flags=re.M)) == 1, p1
     commits = {"guide line": re.findall(r"^Tool commit fixed by the owner ruling: (.+)$", text["guide"], flags=re.M),
                "guide $fixed": re.findall(r'^\$fixed = "([^"]*)"', text["guide"], flags=re.M),
-               "RULINGS.md": re.findall(r"^- Tool commit fixed: `([^`]*)`", text["RULINGS.md"], flags=re.M)}
+               "RULINGS.md": record["commit"][1:]}
     shas = {"guide line": re.findall(r"^Tool sha256 fixed by the owner ruling: (.+)$", text["guide"], flags=re.M),
-            "RULINGS.md": re.findall(r"^- Tool sha256 fixed \(`tools/provider_parity/parity_check\.py`\): `([^`]*)`",
-                                     text["RULINGS.md"], flags=re.M)}
+            "RULINGS.md": record["sha256"][1:]}
     for name in ("Korean guide", "rerun guide"):
         commits[f"{name} $fixed"] = re.findall(r'^\$fixed = "([^"]*)"', text[name], flags=re.M)
         commits[f"{name} table"] = re.findall(r"도구 커밋 `([^`]*)`", text[name])
         shas[f"{name} $sha"] = re.findall(r'^\$sha = "([^"]*)"', text[name], flags=re.M)
         shas[f"{name} table"] = re.findall(r"도구 파일 sha256 `([^`]*)`", text[name])
-    diagnostic = {"RULINGS.md": re.findall(r"`tools/provider_parity/btc_diagnose\.py`, sha256 `([^`]*)`",
+    diagnostic = {"RULINGS.md": re.findall(r"`tools/provider_parity/btc_diagnose\.py`, sha256\s+`([^`]*)`",
                                            text["RULINGS.md"]),
                   "rerun guide": re.findall(r"진단 스크립트 sha256 `([^`]*)`", text["rerun guide"])}
     for kind, stated in (("commit", commits), ("sha256", shas), ("diagnostic sha256", diagnostic)):
@@ -2767,9 +2779,12 @@ def test_every_statement_of_the_fixed_commit_and_sha256_agrees_with_the_tool_fil
     assert not wrong, f"a sha256 that is not the diagnostic script's ({diagnostic_sha}): {wrong}"
     # the first version is history: said to be so on its own line, kept on record, never current
     assert commit != FIRST_TOOL_COMMIT and tool_sha != FIRST_TOOL_SHA256
+    ruling_lines = {f"- Tool commit fixed: `{FIRST_TOOL_COMMIT}`",
+                    f"- Tool sha256 fixed (`tools/provider_parity/parity_check.py`): `{FIRST_TOOL_SHA256}`"}
     for name, body in text.items():
         for line in body.splitlines():
-            if FIRST_TOOL_COMMIT in line or FIRST_TOOL_SHA256 in line:
+            if (FIRST_TOOL_COMMIT in line or FIRST_TOOL_SHA256 in line) and not \
+                    (name == "RULINGS.md" and line in ruling_lines):
                 assert re.search(r"first fixed version|첫 고정 버전", line, flags=re.I), (name, line[:80])
         if name != "rerun guide":
             assert FIRST_TOOL_COMMIT in body and FIRST_TOOL_SHA256 in body, f"{name}: the first version is not kept"
@@ -2777,6 +2792,8 @@ def test_every_statement_of_the_fixed_commit_and_sha256_agrees_with_the_tool_fil
         other = [x for x in re.findall(r"(?<![0-9a-f])(?:[0-9a-f]{40}|[0-9a-f]{64})(?![0-9a-f])", body)
                  if x not in known]
         assert not other, f"{name}: a 40-hex or 64-hex value that is none of the recorded ones: {other}"
+    rulings = text["RULINGS.md"]
+    assert rulings.count(FIRST_TOOL_COMMIT) == rulings.count(FIRST_TOOL_SHA256) == 1, "the first pair, once"
 
 
 def test_every_repository_file_this_suite_reads_starts_the_ci_workflow():
@@ -3305,7 +3322,8 @@ def test_kis_page_back_takes_its_next_date_from_what_kis_sent_a_known_limit():
     version. If KIS answered a request with a row dated after the day asked for, the next request would name a
     later day, 2027 included. The fetch is still refused before anything is written, because a response with a
     2027 date always is. The owner ruling of 2026-11-11 (SPY-가) changed the fmp fetch only, and the second SPY run
-    reads the kis file of the first sitting, so this path is not run again; the tool's docstring says so."""
+    reads the kis file of the first sitting, so this path is not run again; the tool's docstring and its guide say
+    so in these words."""
     calls = []
 
     def kis(path, tr_id, params):
@@ -3319,7 +3337,9 @@ def test_kis_page_back_takes_its_next_date_from_what_kis_sent_a_known_limit():
     assert code == 2 and not folder.exists(), out
     assert out.splitlines()[-2:] == ["REFUSED: a response holds an observation dated on or after 2027-01-01; nothing "
                                      "is written", "FETCH spy kis REFUSED exit=2 csv=-"], out
-    assert "a page-back request of `kis` names the day before the earliest date KIS sent" in " ".join(pc.__doc__.split())
+    limit = "a page-back request of `kis` names the day before the earliest date KIS sent"
+    for name, text in (("docstring", pc.__doc__), ("guide", GUIDE.read_text(encoding="utf-8"))):
+        assert limit in " ".join(text.split()), name
 
 
 def test_fmp_capped_provider_passes_end_to_end_where_one_answer_alone_was_withheld():
@@ -3405,13 +3425,15 @@ def guide_steps(path: Path) -> dict[int, str]:
 def guide_failure_shapes(path: Path, section: str, step: int) -> list[re.Pattern]:
     """The tool lines a guide quotes for one step in its table of failures (`section`, a heading number): every
     `REFUSED: ...` or `UNAVAILABLE: ...` in backticks in the first cell of a row that begins with that step. In a
-    quoted line `...` and each `<...>` stand for any text, and the Windows path separator is turned."""
+    quoted line `<번호>` and `<수>` stand for a number, `...` and any other `<...>` for any text, and the Windows
+    path separator is turned."""
     text = path.read_text(encoding="utf-8")
     body = re.search(rf"^## {section}\. .*?(?=^## |\Z)", text, flags=re.S | re.M).group(0)
     shapes = []
     for row in re.findall(rf"^\| {step}단계 ([^|]*)\|", body, flags=re.M):
         for quoted in re.findall(r"`((?:REFUSED|UNAVAILABLE): [^`]*)`", row):
             shape = re.escape(quoted.replace("\\", "/"))
+            shape = re.sub(r"<(?:번호|수)>", r"\\d+", shape)
             shape = re.sub(r"<[^>]*>", ".+", shape.replace(re.escape("..."), ".+"))
             shapes.append(re.compile(shape))
     return shapes
@@ -3603,14 +3625,25 @@ def test_the_rerun_guide_s_failure_lines_are_the_tool_s_own_lines():
     to the guide both ways: every line raised has exactly one of the shapes the guide's table quotes for that step,
     and every shape the table quotes is raised. None of these failures leaves a folder behind.
 
+    A failure of the first fmp request has its own row (review of 2026-11-11, R6): its lines carry no request
+    number, and the row for a later request does not match them. The table also says what to do when the selftest
+    of step 9 does not end PASS, and names the line the tool prints then.
+
     The stop point of step 10 is held the same way. A provider whose history starts on 2006-11-15, the first date of
     the owner's first file, ends `OK` with the note in the guide's words and a first date the stop point refuses;
     so does a provider that sends too few rows for twelve requests. Compared all the same (into another folder,
-    which the guide does not do), the late file ends WITHHELD again, as the guide warns."""
+    which the guide does not do), the late file ends WITHHELD again, as the guide warns. The stop point has five
+    conditions, the fifth being the number of rows, and says that stopping there makes no second run."""
     steps = guide_steps(RERUN_GUIDE)
     text = RERUN_GUIDE.read_text(encoding="utf-8")
     shapes = {10: guide_failure_shapes(RERUN_GUIDE, "5", 10), 11: guide_failure_shapes(RERUN_GUIDE, "5", 11)}
-    assert (len(shapes[10]), len(shapes[11])) == (5, 3), shapes
+    assert (len(shapes[10]), len(shapes[11])) == (8, 3), shapes
+    assert "| 9단계의 마지막 줄이 `SELFTEST PASS checks=11 failures=0`이 아님(`SELFTEST FAIL ...`이거나" in text
+    assert "SELFTEST {'FAIL' if failures else 'PASS'} checks=" in Path(pc.__file__).read_text(encoding="utf-8")
+    assert "아래 다섯 가지를 모두 만족하면 11단계로 갑니다" in text and "- 첫 줄의 `rows`가 5515입니다." in text
+    assert 4995 + 494 + 21 + 5 == 5515 and "4,995일" in text and "494일" in text and "21일" in text
+    assert "여기서 멈추면 두 번째 실행은 하지 않은 것입니다." in text
+    assert "no second\n  run is made" in RULINGS.read_text(encoding="utf-8")
     w = RerunWorld()
     pp = w.q / "provider_parity"
     raised = {10: [], 11: []}
@@ -3638,6 +3671,16 @@ def test_the_rerun_guide_s_failure_lines_are_the_tool_s_own_lines():
     code, lines = fetch_line(w.fmp_then(), **{str(w.keys): str(no_key)})
     assert code == 4 and lines[-1] == "FETCH spy fmp UNAVAILABLE no_key exit=4 csv=-", lines
     raised[10].append(lines[-2])
+    # the first request fails: no request number on the line
+    for first, reason in ((pc.Response(401, b'{"Error Message":"Invalid API KEY"}'), "plan_or_access"),
+                          (pc.Response(429, b'{"Error Message":"Limit Reach"}'), "fetch_failed"),
+                          (ok_json({"Error Message": "Limit Reach"}), "plan_or_access"),
+                          (ok_json([]), "fetch_failed")):
+        http = FakeHttp(lambda url, params, first=first: first)
+        code, lines = fetch_line(http)
+        assert code == 4 and len(http.calls) == 1 and "page-back" not in lines[-2], lines
+        assert lines[-1] == f"FETCH spy fmp UNAVAILABLE {reason} exit=4 csv=-", lines
+        raised[10].append(lines[-2])
     for second, reason in ((lambda p: pc.Response(429, b'{"Error Message":"Limit Reach"}'), "fetch_failed"),
                            (lambda p: ok_json({"Error Message": "Limit Reach"}), "plan_or_access"),
                            (lambda p: ok_json([{"date": "2010-06-01", "adjClose": 1.0}]), "fetch_failed")):

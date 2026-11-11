@@ -26,10 +26,8 @@ Owner's words, verbatim:
 > 1번으로 승인하겠노
 
 What follows:
-- First fixed version, commit: `5202482e3c24de871b8483608b8a03beb07abe1e`
-- First fixed version, sha256 of `tools/provider_parity/parity_check.py`: `f2fe72cdee6344076fd6dfec8943259f44bc52445c66cdaf482a19e269770184`
-- The first fixed version is the tool of the three runs of record of 2026-11-11 (next entry) and stays their
-  version. For every later run the fixed version is the second one, under the SPY entry of 2026-11-11 below.
+- Tool commit fixed: `5202482e3c24de871b8483608b8a03beb07abe1e`
+- Tool sha256 fixed (`tools/provider_parity/parity_check.py`): `f2fe72cdee6344076fd6dfec8943259f44bc52445c66cdaf482a19e269770184`
 - 2026-11-11 (KST), before PR #102 merged: the two values above replace those first recorded here (commit `49a3a67`,
   sha256 `d651795e...`), because a code review of PR #102 found faults in the tool that could have cost the owner a
   run of record (F1: the H.15 fetch could read another maturity's column and end the DGS3MO run FAIL; F2: a file
@@ -38,7 +36,11 @@ What follows:
 - Run branch the owner clones and pushes summaries to: `claude/provider-parity-runs-20261111` (cut from `main`; it contains the fixed commit).
 - The research branch gets no commit for this. The spec's branch name (`claude/provider-parity-5-2`) differs from the
   above; Step 10 records the difference in the execution record.
-- No run of record existed when this ruling was given. The first runs are the next entry.
+- No run of record exists yet.
+- 2026-11-11 (KST), added after the first runs and the owner's ruling on them: the commit and the sha256 above are
+  the tool's first fixed version. It made the three runs of record of 2026-11-11 (next entry) and stays their
+  version. "No run of record exists yet" was the state when this entry was written. For every later run the fixed
+  version is the second one, stated under the SPY entry of 2026-11-11 below.
 
 ## 2026-11-11 (KST), all series: the first runs, each its series' run of record
 
@@ -77,23 +79,28 @@ Owner's words, verbatim (one reply to this question and to the BTC-USD question 
 
 What follows (how Claude takes "SPY-가-승인"):
 - Claude changes the tool's fmp fetch so that it asks again when one answer does not reach the first requested date:
-  the same `from`, and `to` = the day before the earliest date received, until an answer reaches the first requested
-  date, brings no earlier date, or twelve requests are spent. Nothing else in the tool changes: thresholds, providers,
-  outcome rules and summary fields are those of the three runs of record.
+  the same `from`, and `to` = the earliest date received, until an answer reaches the first requested date, brings no
+  earlier date, or twelve requests are spent. That earliest date is asked for twice on purpose: the two values the
+  provider gives for it are compared at the fetch, and a fetch is not a run. Only dates inside the span asked for
+  count, so no request names a later day than the one before it. Nothing else in the tool changes: thresholds,
+  providers, outcome rules and summary fields are those of the three runs of record.
 - The changed tool is the second fixed version:
 - Tool commit fixed: `4096caa56438825ac66367d1d2eccb5deb68189a`
 - Tool sha256 fixed (`tools/provider_parity/parity_check.py`): `f56caeb4076c3679db1b8c801ea2f9eb356541684fd94a5947011c826c9b2b21`
 - "Reaches" means an earliest date at most 7 days after the first requested date, which is 31 days before the
   table's start and need not be a session. A fetch that stops later than that still ends `OK` and says where and why
-  on the line above; the owner does not compare such a file (the guide's stop point).
+  on the console line above its `FETCH ... OK` line; the owner does not compare such a file (the guide's stop point).
 - The owner fetches fmp again with it into a new folder and runs the SPY comparison one more time, with the new fmp
   file and the kis and yahoo_now files of the first sitting (a fetch record binds a file's bytes, provider, series and
   window, not the tool version). Steps: `docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md`.
 - This is the owner ruling that spec 10.5 requires for a later run to count: the second SPY run counts for the pilot 1
   gate. The first run (WITHHELD) stays on record, and both summaries are kept.
 - DGS3MO is PASS and is not run again.
-- Not verified: whether FMP serves 2004 to 2006 at all. If it does not, the second run ends WITHHELD again; that
-  outcome would need its own ruling.
+- Not verified: whether FMP serves 2004 to 2006 at all, and whether it gives one value for a day in two requests.
+  If the new fmp file still starts late, or the fetch fails, the owner stops at the guide's stop point and no second
+  run is made: the SPY run of record stays WITHHELD and pilot 1 stays held. If a second run is made and ends
+  WITHHELD or FAIL, its summary stays on record beside the first. Either way, another change to the tool or another
+  compare counts only after a new owner ruling (spec 10.5, Tool; Runs of record).
 
 ## 2026-11-11 (KST), BTC-USD, `PP-20261111T075328Z-btc` (FAIL): the cause is looked at before pilot 2 (BTC-나)
 
@@ -118,17 +125,70 @@ What follows (how Claude takes "BTC-나-승인" and the second line):
   disagreement days, and the 99th percentile and the maximum of the level difference. This is an exception, by this
   ruling, to "only `summary.json` leaves the owner's machine" (spec 10.5, Outputs) and to 10.5.2, which keeps an exact
   extreme out of the summary. No price, no return and no date finer than a calendar year leaves.
-- Claude wrote a read-only diagnostic for the owner's PC that prints only such statistics:
-  `tools/provider_parity/btc_diagnose.py`, sha256 `f9e7146bc86f0062c45dd582e19b686344794274d6d20614399cefb53e01e5fa`. It reads the pinned file and the
-  coinbase and bitstamp files of the first sitting through the fixed tool's own readers, writes no file and makes no
-  network call. What it computes are kinds the exception to 3.9 names (differences between two providers' series:
-  counts, percentiles, extreme); coinbase against bitstamp involves no pinned data. The owner runs it once and pastes
-  its console output (same guide).
+- Claude wrote a read-only diagnostic for the owner's PC: `tools/provider_parity/btc_diagnose.py`, sha256
+  `f9e7146bc86f0062c45dd582e19b686344794274d6d20614399cefb53e01e5fa`. It makes no network call and, run with `-B`
+  as the guide's line is, writes no file. The owner runs it once and pastes its console output (same guide).
+- Where the diagnostic goes beyond the words of the option (Claude's reading, not the owner's words):
+  - *What it reads.* The option said "PC에 남은 상세 파일에서": from the detail file left on the PC. For this check
+    `detail.json` holds the 100 largest level differences of a pair and no return difference (read from the tool's
+    code), so the yearly counts cannot come from it. The script reads the pinned file and the coinbase and bitstamp
+    files of the first sitting again, through the fixed tool's own readers (the md5, the fetch records and the pinned
+    cache guard apply as in compare), and computes kinds the exception to 3.9 names: differences between two
+    providers' series, as counts, percentiles and an extreme. That exception names the tool; the script is a second
+    file beside it and prints by this ruling. It opens no `detail.json`.
+  - *What it prints.* The option named two kinds: the disagreement days per calendar year (`over` on the `returns`
+    lines of the two pinned pairs) and the 99th percentile and the maximum of the level difference (`p99_pct` and
+    `max_pct` on their `levels` lines). The script prints those and, as Claude's reading of "가격이 아닌 통계", also:
+    the sha256 of the tool, of the script and of the two provider files, and whether each file had its fetch record;
+    the table's window and three thresholds; the days two series share; the days compared per year; the days above
+    the two level thresholds; for the disagreement days, which group each is in (`split`: against both providers,
+    against one while the two venues differ, against one while they agree, or not pairable) and whether the venues
+    agree on the days against both (`venues`); and the same `returns` and `levels` lines for coinbase against
+    bitstamp, which involve no pinned data. All of these are counts, identifiers or constants. None is a price, a
+    return or a date finer than a calendar year. The rerun guide lists them before the owner pastes anything and
+    says the owner may hold the output back.
+  - *The maximum.* `max_pct` is the level difference of one single day, printed without its date and to one decimal
+    of a percent; a segment of fewer than 100 days prints `n/a`. The two venues' closes are public, so someone who
+    found that day could work the pinned close of that one day back to about the rounding (0.05%). A reviewer did
+    this on synthetic series; on the real files it is not verified.
+- How Claude reads the output. This is Claude's rule, not the owner's words. It was written on 2026-11-11, before any
+  output existed, so that the reading cannot follow the result. It was tried on synthetic series only; into which
+  case real data falls is not verified.
+  1. *The files.* The output counts only when it is of the files of record: `tool_sha256` is the second fixed
+     version's and `script_sha256` the value above; each `file` line shows the `file_sha256` that the summary of
+     record holds for that provider, with `fetch_record=yes`; `common` is 4086 for pinned-coinbase and 4392 for
+     pinned-bitstamp; `tool_over` and `tool_allowed` are 43 and 20 for coinbase, 47 and 21 for bitstamp; the late
+     segment has 3555 days in each pair. If one of these differs, nothing is read from the output and Claude asks.
+  2. *The groups.* Every disagreement day of a pinned pair is in exactly one group. From the `total` lines, for a
+     provider p (coinbase, bitstamp): `agree` (against both providers while the two venues agree with each other:
+     the pinned series stands apart); `p_only` and `differ` (the two venues differ from each other that day);
+     `p_edge` (against p alone while the venues agree: no series is clearly the odd one); `p_unpaired` and
+     `unpaired` (nothing can be said).
+  3. *Case "the venues differ from each other".* Both of these hold. (a) For each provider p, `agree` + `p_edge` +
+     `p_unpaired` + `unpaired` is at most that pair's `tool_allowed`: without the days on which the venues differ
+     from each other, the pair is inside the tool's own allowance. (b) The coinbase-bitstamp pair is outside every
+     late level limit that a pinned pair is outside: where a pinned pair's late `over_max` is 1 or more, so is the
+     coinbase-bitstamp pair's; where a pinned pair's late `over_p99_max` is 36 or more, the coinbase-bitstamp pair's
+     is 37 or more. (Of 3,555 days, 37 or more above `level_p99_max` put the 99th percentile above it for certain
+     and 35 or fewer put it below; 36 leaves it open. The late band has a third limit, on the median; the summary
+     of record shows both pinned pairs inside it.) Then both parts of the FAIL are shown without the pinned file:
+     two exchanges' closes differ from each other on that many days and by that much. The cause counts as
+     identified.
+  4. *Case "the pinned series stands apart".* For each provider p, `agree` alone is above that pair's
+     `tool_allowed`. The lines then say which series stands apart (the pinned one), in which years and how far. They
+     do not say why: single bad closes in the pinned file, another kind of price than one venue's close, and a
+     close taken at another time of day all give such counts, and the late `levels` line covers 2017 to 2026 as one
+     segment. The cause is not verified.
+  5. *Anything else* (one provider in case 3 and the other in case 4, or the `_edge` and unpaired days deciding):
+     the cause is not identified.
 - The second line ("원인 파악 완료 후 자동으로 해결 및 pilot 2 진행해주세요"): once the cause is identified, Claude
   resolves the matter and lets pilot 2 go ahead without asking again. Claude reads this within the standing rules:
   - If the cause is explained without changing the pinned file, a registration table or the code under the code
     fingerprint, Claude records the mismatch and its cause here, and treats the BTC-USD gate as passed by this ruling:
-    pilot 2 goes ahead with the disagreement noted in the execution record and in 10.4 (spec 10.5, Gate).
+    pilot 2 goes ahead with the disagreement noted in the execution record and in 10.4 (spec 10.5, Gate). Of the
+    cases above this is case 3, and only case 3.
+  - In case 4 or 5 the cause is not identified, so the gate does not pass by itself. Claude reports the numbers and
+    asks the owner.
   - If resolving it would need the pinned file, a table or fingerprinted code to change, that cannot be automatic: it
     voids the owner's run approval (`owner_confirmed`) and needs the owner's own acts. Claude then reports and asks.
 - Pilot 2 itself is run by the owner on the owner's PC, after pilot 1 passed all hard parity checks (the runner

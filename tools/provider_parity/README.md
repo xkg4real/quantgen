@@ -46,9 +46,11 @@ Tool sha256 fixed by the owner ruling: f56caeb4076c3679db1b8c801ea2f9eb356541684
 ```
 
 - The second fixed version follows the owner's ruling of 2026-11-11 on the first SPY run ("SPY-가-승인", verbatim in
-  `results/RULINGS.md`). Only `fetch_fmp` changed: it pages back (see Fetch). Thresholds, providers, outcome rules and
-  summary fields are those of the first runs. By that ruling a second SPY run made with this version counts for the
-  pilot 1 gate; the first run stays on record.
+  `results/RULINGS.md`). Only the fmp fetch changed (`fetch_fmp`, its helpers `_fmp_rows` and `_fmp_fault` and two constants): it pages
+  back (see Fetch). The module's own description was reworded in two places, and one comment. Every other top-level
+  statement of the file is the same as in the first fixed version. Thresholds, providers, outcome rules and summary fields are those of
+  the first runs. By that ruling a second SPY run made with this version counts for the pilot 1 gate; the first run
+  stays on record.
 - The first fixed version is the version of the runs of record of 2026-11-11 (SPY WITHHELD, DGS3MO PASS, BTC-USD
   FAIL). Their summaries carry its sha256 as `tool.sha256`, and it stays their version:
   - first fixed version, commit `5202482e3c24de871b8483608b8a03beb07abe1e`
@@ -114,9 +116,13 @@ Each call ends with `FETCH <series> <provider> OK exit=0 csv=<file>`, or `... UN
 the reason to give compare (`no_key`, `plan_or_access`, `fetch_failed`) and a line above it that says what is missing
 (for example `UNAVAILABLE: FMP_API_KEY is not set (--env-file or the environment)`), or `REFUSED exit=2`/`ERROR exit=4`.
 Only an `OK` fetch writes a folder: the raw responses, the `date,value` CSV (window start - 31 days to window end + 7
-days) and `meta.json`. Every request is bounded before 2027-01-01: by an explicit last date of at most 2026-12-30 or,
-for the Treasury's yearly file, by a calendar year of at most 2026. A response holding an observation dated on or
-after 2027-01-01 is refused before anything is written. When a fetch succeeds but its first date is far after the
+days) and `meta.json`. Every provider's requests are bounded before 2027-01-01: by an explicit last date of at most
+2026-12-30 or, for the Treasury's yearly file, by a calendar year of at most 2026. A page-back request of `fmp` never
+names a later day than the request before it. One known limit, unchanged since the first fixed version: a page-back
+request of `kis` names the day before the earliest date KIS sent, whatever that date is, so a KIS answer dated after
+the day asked for would move the next request later (the suite shows it with a fake KIS; the second SPY run fetches
+nothing from kis). A response holding an observation dated on or after 2027-01-01 is refused before anything is
+written. When a fetch succeeds but its first date is far after the
 window start, compare still takes the file: its coverage check counts the uncovered days. `short_history` is the
 reason to declare when a provider cannot serve the window at all.
 
@@ -138,21 +144,34 @@ For `fmp` the same line can end with `; fmp paging stopped at <date>, after the 
 FMP can answer a from/to request with only the most recent rows of the span: in the owner's first run it sent exactly
 5,000 rows, the first dated 2006-11-15, for a span that starts on 2004-10-31. The first fixed version took that
 answer for the whole history and said nothing. The `fmp` fetch now reads the earliest date of each answer and, while
-that date lies more than 7 days after the first requested date, asks again for the days before it: the same `from`,
-and `to` = the day before that earliest date. It stops when an answer reaches the first requested date, and then the
-line carries no note. "Reaches" means an earliest date at most 7 days after the first requested date, which is 31
-days before `--start` and need not be a session (2004-10-31 is a Sunday): a week covers a weekend and the holidays
-beside it. It also stops, with the note, on `an answer brought no earlier date` (FMP sent an empty list for the
-days asked for, or only dates the tool already holds) or `the budget of 12 requests ran out`. The fetch is then still
-`OK` and the file starts at that date because of the provider or the fetch: settle it before compare and send Claude
-the line. Answers are merged by date. A date that two answers give with different values ends the fetch
-`UNAVAILABLE fetch_failed` (`fmp gave one date two different values in two answers`): the tool never picks one. A
-later request that fails (an HTTP error, a message in place of rows, rows without `adjClose`) fails the whole fetch
-with `; request <n> of the page-back` on the line, and nothing is written. Every request's parameters, never the key,
-and every raw answer (`raw/fmp_000.json`, `raw/fmp_001.json`, ...) are in the fetch folder. A provider that answers
-the whole span is asked once, as before. One known cost of the 7-day rule: a cap that happens to end inside that week
-leaves up to five sessions unfetched at the very start of the file, more than three weeks before `--start`, which
-compare never reads for SPY.
+that date lies more than 7 days after the first requested date, asks again up to it: the same `from`, and `to` = that
+earliest date.
+
+- *What counts.* Only a date inside the span asked for (from the first requested date to the `to` of the request)
+  counts as the earliest date of an answer. So no request names a later day than the one before it, and the date in
+  the note is the first date of the file.
+- *When it stops.* When an answer reaches the first requested date; then the line carries no note. "Reaches" means an
+  earliest date at most 7 days after the first requested date, which is 31 days before `--start` and need not be a
+  session (2004-10-31 is a Sunday): a week covers a weekend and the holidays beside it. It also stops, with the
+  note, on `an answer brought no earlier date` (FMP sent an empty list, or no date of the span earlier than those the
+  tool already holds) or `the budget of 12 requests ran out`. The fetch is then still `OK` and the file starts at
+  that date because of the provider or the fetch: settle it before compare and send Claude the line.
+- *The day two answers share.* The earliest date is asked for twice on purpose. A provider that reads `to` as
+  inclusive sends that day in both answers, and the two values must be the same: a date that two answers give with
+  different values ends the fetch `UNAVAILABLE fetch_failed` (`fmp gave one date two different values in two
+  answers`), and the tool never picks one. So a provider whose values for a day depend on the request fails at the
+  fetch, which is not a run, and not in compare. A provider that reads `to` as exclusive sends the days before it
+  and loses no session. Answers are merged by date.
+- *Failures.* A later request that fails (an HTTP error, a message in place of rows, rows without `adjClose`, JSON
+  that is not a list of rows) fails the whole fetch with `; request <n> of the page-back` on the line, and nothing is
+  written. An answer that the tool refuses anyway (a key value in it, a row without an ISO date, a 2027 date, one
+  date twice with two values) ends the page-back at once, with the refusal it always had.
+- *The record.* Every request's parameters, never the key, and every raw answer (`raw/fmp_000.json`,
+  `raw/fmp_001.json`, ...) are in the fetch folder. A provider that answers the whole span is asked once, as before.
+- *Limits.* A cap that happens to end inside the 7-day week leaves up to five sessions unfetched at the very start of
+  the file, more than three weeks before `--start`, which compare never reads for SPY. The fetch cannot see a
+  session that is missing inside the provider's own answer; the rerun guide's stop point therefore also checks the
+  number of rows before the one compare that counts.
 
 Settle every fetch of a series before its compare. A fetch is not a run and may be repeated into a new folder;
 compare is what makes the run of record. No provider endpoint has been called while the tool was built (see the last
@@ -268,41 +287,66 @@ The earlier result is never removed.
 
 The BTC-USD run of record of 2026-11-11 ended FAIL against coinbase and bitstamp. The owner ruled ("BTC-나-승인",
 verbatim in `results/RULINGS.md`) that the cause is looked at before pilot 2, and that statistics which are not prices
-may leave the PC through the chat: per calendar year the number of disagreement days, and the 99th percentile and the
-maximum of the level difference. `btc_diagnose.py` prints those and nothing else. It is not a run: it writes no file,
-makes no network call, writes no summary and changes no outcome. The owner runs it once, from the tool clone's root,
-and pastes the whole console output:
+may leave the PC through the chat. The option put to the owner named two kinds: per calendar year the number of
+disagreement days, and the 99th percentile and the maximum of the level difference. `btc_diagnose.py` prints those
+two and, beside them, the counts and identifiers listed below; `results/RULINGS.md` says which lines go beyond the two
+named kinds, as Claude's reading of the ruling. It is not a run: it makes no network call, writes no summary and
+changes no outcome, and run with `-B`, as below, it writes no file. The owner runs it once, from the tool clone's
+root, and pastes the whole console output:
 
 ```powershell
 python -B -m tools.provider_parity.btc_diagnose --table "$tab\pilot2_C3_btcusd.json" --repo $rc `
   --pair coinbase "<fetch folder>\btc_coinbase.csv" --pair bitstamp "<fetch folder>\btc_bitstamp.csv" --owner-run
 ```
 
-- It reads the pinned file and the two provider files only through this tool's own readers (`read_table`,
-  `read_pinned`, `read_provider`), aligns them with `_common` and takes every threshold from `THRESHOLDS`, so the
-  dates and definitions are those of the run of record. The md5, the fetch records and the `--owner-run` guard apply
-  as in compare. It takes the BTC-USD table and `coinbase` and `bitstamp`, each once, and refuses anything else.
-- A disagreement day is a day whose log-return difference between two series is above `ret_diff_big` (0.02), the
-  definition of the tool's `levels_and_returns` check. The level difference of a day is `abs(log(P_x / P_y))`.
-- Lines, in order: `BTCDIAG 1` with the sha256 of the tool file and of the script; `window` (the table's start and
-  end, the thresholds used); `common` (days two series share); `returns` (per year and in total: days compared and
-  disagreement days, for pinned against each provider and for coinbase against bitstamp, which involves no pinned
-  data); `levels` (per segment, before and from `late_from`: the 99th percentile and the maximum of the level
-  difference in percent with two decimals, and the days above `level_p99_max` and `level_max`); `split` (per year:
-  the disagreement days against both providers, against one only, and against one on a day the other was not
-  compared); `venues` (per year, of the days against both: on how many the two venues agree with each other, differ,
-  or were not compared with each other); and the result line `BTCDIAG <OK|REFUSED|ERROR> exit=<n>` (0, 2, 4).
-- How to read it: if most `both` days are `agree` days, the pinned series stands apart from two venues that agree
-  with each other; if the disagreement days are `_only` days or `differ` days, the venues stand apart from each
-  other.
-- Limits. It never prints a price, a return, a difference of one named day or a date finer than a calendar year (the
-  table's start and end and the threshold `late_from` aside). Every line is held to an allow-list of shapes before
-  the first one is printed. Before that the script holds its own numbers to the tool's `levels_and_returns` check of
-  the same pair (count of disagreement days, days per segment, decade buckets) and prints no data when they differ.
-  The 99th percentile and the maximum are exact statistics that 10.5.2 keeps out of `summary.json`; they leave the
-  machine by this ruling only, rounded to two decimals of a percent. The kinds it computes are those the exception
-  to 3.9 names: differences between two providers' series, as counts, percentiles and an extreme. It computes no lag
-  count, no median, no correlation and nothing of one series alone.
+- *What it reads.* The option's words were "from the detail file left on the PC". `detail.json` holds, for this
+  check, the 100 largest level differences of a pair and no return difference, so the yearly counts cannot come from
+  it. The script reads the pinned file and the two provider files again, only through this tool's own readers
+  (`read_table`, `read_pinned`, `read_provider`), aligns them with `_common` and takes every threshold from
+  `THRESHOLDS`, so the dates and definitions are those of the run of record. The md5, the fetch records and the
+  `--owner-run` guard apply as in compare. It takes the BTC-USD table and `coinbase` and `bitstamp`, each once, and
+  refuses anything else. It opens no `detail.json`.
+- *Words.* A disagreement day is a day whose log-return difference between two series is above `ret_diff_big`
+  (0.02), the definition of the tool's `levels_and_returns` check. The level difference of a day is
+  `abs(log(P_x / P_y))`. A pair is two series on the days both have.
+- *Lines, in order.* `BTCDIAG 1` with the sha256 of the tool file and of the script; `window` (the table's start and
+  end, the thresholds used); `file` (per provider file: its sha256 and whether its fetch record lay beside it);
+  `common` (days two series share); `returns` (per year and in total: days compared and disagreement days, for pinned
+  against each provider and for coinbase against bitstamp, which involves no pinned data); `levels` (per segment,
+  before and from `late_from`: the 99th percentile and the maximum of the level difference in percent with one
+  decimal, and the days above `level_p99_max` and `level_max`); `split` (per year: each disagreement day in one
+  group, see below); `venues` (per year, of the days against both providers: on how many the two venues agree with
+  each other, differ, or have no return with each other over the same two days); and the result line
+  `BTCDIAG <OK|REFUSED|ERROR> exit=<n>` (0, 2, 4). For the pilot 2 window that is 84 lines.
+- *The groups of `split`.* `both`: against both providers. `<provider>_only`: against that provider alone while the
+  two venues differ from each other, so that provider is the odd one. `<provider>_edge`: against that provider alone
+  while the two venues agree with each other; no series is clearly the odd one, because the pinned series is over
+  the threshold from one venue and under it from the other. `<provider>_unpaired`: the other provider, or the two
+  venues with each other, have no return over the same two days (a provider that starts late, or a gap), so nothing
+  can be said. A provider's four groups add up to its disagreement days.
+- *How to read it.* The lines say which series stands apart, in which years and by how much. They do not say why.
+  `both` days that are `agree` days: the pinned series stands apart from two venues that agree with each other.
+  `_only` and `differ` days: the venues stand apart from each other. `_edge` days decide nothing. The rule Claude
+  applies, with its numbers, was written before any output existed and is in `results/RULINGS.md`. In short: the
+  output must first be of the files of record (the hashes of the first lines, the `common` days and the tool's two
+  counts equal the summary of record). If the days on which the venues differ from each other explain the excess of
+  both pinned pairs, and the coinbase-bitstamp pair is outside the same late level limits, the cause counts as
+  identified and the BTC-USD gate is passed by the ruling. If the pinned series stands apart from two venues that
+  agree, the lines cannot say why (bad closes, another kind of price, another time of day): the cause is not
+  verified and Claude asks. Anything else is not identified either.
+- *Limits.* A run that ends OK prints no price, no return, no difference of a day whose date is given and no date
+  finer than a calendar year (the table's start and end and the threshold `late_from` aside). `max_pct` is the
+  level difference of one single day, without its date; because the venues' closes are public, someone who found
+  that day could work the pinned close of that one day back to about the rounding. A segment of fewer than 100 days
+  prints `n/a` for both level figures. The two counts above a threshold use `level_p99_max` and `level_max` in both
+  segments; the tool's own early band is wider, so the early counts are not the tool's early check. A `REFUSED` line
+  is the tool's own message and can name a folder path. Every line is held to an allow-list of shapes before the
+  first one is printed. Before that the script holds its own numbers to the tool's `levels_and_returns` check of the
+  same pair (count of disagreement days, days per segment, decade buckets) and prints no data when they differ. The
+  99th percentile and the maximum are statistics that 10.5.2 keeps out of `summary.json`; they leave the machine by
+  this ruling only. The kinds it computes are those the exception to 3.9 names: differences between two providers'
+  series, as counts, percentiles and an extreme. It computes no lag count, no median, no correlation and nothing of
+  one series alone.
 - Its sha256 is written in `results/RULINGS.md` and in the rerun guide, and the suite holds both statements to the
   file's bytes. It is not part of the fixed tool version: a change to it changes no run.
 
@@ -312,26 +356,30 @@ python -B -m tools.provider_parity.btc_diagnose --table "$tab\pilot2_C3_btcusd.j
 python -B -m unittest tests.provider_parity_acceptance tests.provider_parity_btc_diagnose_acceptance -v
 ```
 
-124 cases on synthetic series, with every provider faked in the process and socket connects patched to raise: each
+128 cases on synthetic series, with every provider faked in the process and socket connects patched to raise: each
 threshold of 10.5.1 from both sides, every outcome and exit code, the provider map, the 2027-01-01 cut-off, the summary
 allow-list, where the tool may write, key handling, a cp949 console, the tool started as a module, the `fmp`
-page-back (a capped provider at several cap sizes, a history that really starts late, overlapping answers that agree
-and that disagree, the request budget, failed and empty answers on the first and on a later request, rows without an
-ISO date, and a fetch and compare that ends PASS where one answer alone ended WITHHELD), the rerun guide (its tool
-lines and its two Python lines run as they are written in the guide file, and every failure line its table quotes
-for the fetch and the compare raised and compared with the table), and every statement of the fixed tool commit and
-sha256 (current statements against the tool file, the first version's values as marked history only). The fetchers
+page-back (a capped provider at several cap sizes, a history that really starts late, the day two answers share and
+a provider whose values for it differ, a provider that reads `to` as exclusive, answers dated outside the span asked
+for, the request budget, failed and empty answers on the first and on a later request, rows without an ISO date,
+whole answers in other shapes, and a fetch and compare that ends PASS where one answer alone ended WITHHELD), the
+known limit of the `kis` page-back, the rerun guide (its tool lines and its two Python lines run as they are written
+in the guide file, and every failure line its table quotes for the selftest, the fetch and the compare raised and
+compared with the table), and every statement of the fixed tool commit and sha256 (current statements against the
+tool file; the first version's values in the ruling that fixed them and as marked history). The fetchers
 are checked against values typed by hand (epoch seconds, request parameters, expected rows), and the tool's own HTTP
 function runs with `urlopen` replaced. The suite reads no cache file, no `.env` and nothing under `~/.nextgen`; in
 the repository it reads the tool, the diagnostic script (for its sha256), this guide, the two Korean guides,
 `results/RULINGS.md` and the CI workflow.
 
-The second module holds the diagnostic in 15 cases, on synthetic series built with the first module's helpers: the
+The second module holds the diagnostic in 17 cases, on synthetic series built with the first module's helpers: the
 yearly counts add up to the tool's own `n_big_return_diff_days` of the same files; the level statistics equal values
 computed from the files parsed by hand and fall in the tool's buckets; a perturbed pinned series reads as `both` and
-`agree`, a perturbed venue as `_only`; refusals; the output allow-list, with no price, no return and no day of the
-data in the output; no file opened for writing and no socket; the script run as the owner runs it, and the rerun
-guide's diagnostic line run as it is written there.
+`agree`, a perturbed venue as `_only`, a day over the threshold against one venue and under it against the other as
+`_edge`, a day without a return over the same two days as `_unpaired`; a short segment prints `n/a`; the `file` lines
+are the files' own sha256; refusals; the output allow-list, with a bad line at every position, and no price, no
+return and no day of the data in the output; no file opened for writing, no socket and nothing on the error stream;
+the script run as the owner runs it, and the rerun guide's diagnostic line run as it is written there.
 
 The suite is not registered in `tests/run_all.py` and has no row in the root `README.md`: both files are left as they
 are on main until the owner says otherwise, so the Step 10 merge of the research branch meets no conflict there. CI
@@ -364,10 +412,14 @@ with `git grep` when the tool was fixed), and FACTS is held by `python -B -m too
 - What the owner's runs of 2026-11-11 showed, read from the three pushed summaries and the lines the owner sent:
   eight of the nine providers were fetched and compared; `h15` was declared `fetch_failed`; FMP answered one request
   with exactly 5,000 rows from 2006-11-15; the kis file starts on 2007-08-21; the coinbase file starts on 2015-07-20.
-  Still not verified, because Claude has called no provider: that FMP cuts an answer by rows and honours `to`, so
-  that a second request brings the days before; whether FMP has SPY before 2006-11-15 at all; and what FMP answers
-  for a span in which it has no row (the tool takes an empty list as "nothing earlier" and treats anything else as a
-  failed fetch). The second fixed version and the diagnostic have not run on Windows or on a real file.
+  A session calendar built by rule reproduces every count of the SPY summary and has exactly 5,000 sessions from
+  2006-11-15 to 2026-10-02, so that answer included the `to` it was asked for. Still not verified, because Claude has
+  called no provider: that FMP cuts an answer by rows and honours `to` on a second request, so that it brings the
+  days before; whether FMP has SPY before 2006-11-15 at all; whether FMP gives the same `adjClose` for a day in two
+  requests with different `to` (if not, the second fetch ends `UNAVAILABLE` and no run is made); and what FMP
+  answers for a span in which it has no row (the tool takes an empty list as "nothing earlier" and treats anything
+  else that is not a list of rows as a failed fetch). The second fixed version and the diagnostic have not run on
+  Windows or on a real file. The rule for reading the diagnostic's output was tried on synthetic series only.
 - Claude has not run the tool on Windows and has not read a real pilot file. The first fixed version ran on the
   owner's Windows PC on 2026-11-11 and read the real pinned files there; of those runs Claude has seen the three
   pushed summaries and the lines the owner sent, nothing else. The suite was run on Linux only (Python 3.13,
