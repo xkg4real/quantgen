@@ -36,12 +36,15 @@ APPROVED = {  # the owner-approved list (2026-11-11) plus the five original stud
 
 
 def setUpModule():
-    global _deny
+    global _deny, _deny_requests
     _deny = patch('socket.socket.connect', side_effect=AssertionError('Network forbidden in this test'))
     _deny.start()
+    _deny_requests = patch('requests.sessions.Session.request', side_effect=AssertionError('Network forbidden in this test'))
+    _deny_requests.start()
 
 
 def tearDownModule():
+    _deny_requests.stop()
     _deny.stop()
 
 
@@ -873,6 +876,305 @@ class RenderingTests(unittest.TestCase):
         self.assertEqual(chart_svg(self.snap, indicators=('sma', 'not-a-study')).replace(' · not-a-study', ''),
                          chart_svg(self.snap, indicators=('sma',)))
         self.assertEqual(chart_svg(self.snap, indicators=('bb',)), chart_svg(self.snap, indicators=('bollinger',)))
+
+
+def flat_bars(price, n=40, interval='1d', volume=100.0):
+    """n bars that never move (open = high = low = close), with a constant volume."""
+    if interval in ('1d', '1w', '1M'):
+        stamps = tuple((datetime(2026, 2, 2) + timedelta(days=i)).date().isoformat() for i in range(n))
+    else:
+        stamps = tuple((datetime(2026, 2, 2, 9) + timedelta(minutes=i)).isoformat() for i in range(n))
+    prices = (float(price),) * n
+    return E.Bars(stamps, prices, prices, prices, prices, (volume,) * n, interval)
+
+
+def faked(key, bars, line, value, index=-1):
+    """compute_study values with one line's value at `index` replaced (a reading of any value)."""
+    values = {k: np.array(v, dtype=float) for k, v in E.compute_study(key, bars).items()}
+    values[line][index] = value
+    return values
+
+
+def both(key, bars, index=-1, **kwargs):
+    return G.study_reading(key, bars, index, language='ko', **kwargs), \
+        G.study_reading(key, bars, index, language='en', **kwargs)
+
+
+class VerifierDefectTests(unittest.TestCase):
+    """Regressions for the independent verifier's defects 1-11 in the beginner readings
+    (engine_verify_defects.md, 2026-11-11). Each test failed on the commit before the fix."""
+
+    def test_defect_1_flat_windows_of_decimal_prices_read_exactly_flat(self):
+        for price in (88.79, 0.3, 7.1, 51300.0):
+            with self.subTest(price=price):
+                b = E.bars_from_closes([price] * 40)
+                self.assertEqual(E.compute_study('percent_b', b)['PERCENT_B'][-1], 0.5)
+                self.assertEqual(E.compute_study('cci', b)['CCI'][-1], 0.0)
+                self.assertEqual(E.compute_study('disparity', b)['DISPARITY'][-1], 100.0)
+                self.assertEqual(E.compute_study('bandwidth', b)['BANDWIDTH'][-1], 0.0)
+                self.assertEqual(E.compute_study('sma', b)['SMA20'][-1], price)
+                self.assertEqual(E.compute_study('ema', b)['EMA26'][-1], price)
+                self.assertEqual(E.compute_study('macd', b)['MACD'][-1], 0.0)
+                self.assertEqual(E.compute_study('keltner', b)['KC_UPPER'][-1], price)
+                minute = flat_bars(price, 30, '1m')
+                self.assertEqual(E.compute_study('vwap', minute)['VWAP'][-1], price)
+                ko, en = both('bb', b)
+                self.assertIn('아래 밴드에서 50% 높이', ko)
+                self.assertIn('50% of the way', en)
+                self.assertIn('한가운데', both('percent_b', b)[0])
+                self.assertTrue(both('cci', b)[1].startswith('CCI 0:'))
+                for key in ('sma', 'disparity', 'envelope', 'keltner'):
+                    ko, en = both(key, b)
+                    self.assertNotRegex(ko, r'0\.0% (위|아래)')
+                    self.assertNotRegex(en, r'0\.0% (above|below)')
+                self.assertNotIn('위 선 밖', both('keltner', b)[0])
+
+    def test_defect_2_stochastic_reading_separates_the_average_from_this_bar(self):
+        n = 20
+        highs = [50.0] * n
+        lows = [10.0] * n
+        closes = [30.0] * n
+        highs[n - 14], lows[1] = 100.0, 1.0
+        for j in (n - 3, n - 2):
+            closes[j] = lows[j] = 1.0
+        closes[-1] = highs[-1] = 1 + .9 * 99  # raw positions 0%, 0%, 90% of the 1..100 range
+        b = E.Bars(tuple(f'2026-01-{i + 1:02d}' for i in range(n)), tuple(closes), tuple(highs), tuple(lows),
+                   tuple(closes), (1000.0,) * n)
+        self.assertAlmostEqual(E.compute_study('stoch', b)['STOCH_K'][-1], 30.0)
+        ko, en = both('stoch', b)
+        self.assertIn('이번 봉 종가만 보면 범위의 90% 높이', ko)
+        self.assertIn('This bar’s close alone is 90% of the way up', en)
+        self.assertNotIn('30% 높이에서 마감', ko)
+        self.assertNotIn('finished 30%', en)
+        self.assertIn('3일 동안 평균하면', ko)
+        # The mirror case: raw 100, 100, 40 averages to %K 80 (near the top) though this bar closed at 40%.
+        closes = [30.0] * n
+        closes[-3] = closes[-2] = highs[-3] = highs[-2] = 100.0
+        closes[-1] = 1 + .4 * 99
+        b = E.Bars(b.timestamps, tuple(closes), tuple(highs), tuple(lows), tuple(closes), (1000.0,) * n)
+        self.assertAlmostEqual(E.compute_study('stoch', b)['STOCH_K'][-1], 80.0)
+        ko, en = both('stoch', b)
+        self.assertIn('꼭대기 근처', ko)
+        self.assertIn('이번 봉 종가만 보면 범위의 40% 높이', ko)
+        # StochRSI: this bar's own position is the unsmoothed one (k_smooth = 1).
+        bars = bars_of(walk(160, seed=5))
+        raw = E.compute_study('stochrsi', bars, k_smooth=1)['STOCHRSI_K']
+        slow = E.compute_study('stochrsi', bars)['STOCHRSI_K']
+        index = max(range(40, 160), key=lambda j: abs(raw[j] - slow[j]))
+        self.assertGreater(abs(raw[index] - slow[index]), 10)
+        ko, en = both('stochrsi', bars, index)
+        self.assertIn(f'이번 봉 RSI만 보면 범위의 {raw[index]:.0f}% 높이', ko)
+        self.assertIn(f'This bar’s RSI alone is {raw[index]:.0f}% of the way up', en)
+
+    def test_defect_3_zero_volume_never_prints_nan(self):
+        halted = flat_bars(51300, 25, volume=0.0)
+        ko, en = both('volume_ma', halted)
+        for text in (ko, en):
+            self.assertNotRegex(text.lower(), r'\bnan\b')
+        self.assertIn('거래량이 0', ko)
+        self.assertIn('Volume was 0', en)
+
+    def test_defect_4_investor_flow_never_calls_a_net_seller_a_buyer(self):
+        bars = flat_bars(100, 25)
+        dates = bars.dates
+        selling = E.supply_from_rows([{'date': d, 'foreign_net_qty': -1000, 'institution_net_qty': -500,
+                                       'individual_net_qty': -200} for d in dates])
+        ko, en = both('investor_flow', bars, supply=selling)
+        self.assertNotIn('샀고', ko)
+        self.assertNotIn('순매수했고', ko)
+        self.assertIn('순매수한 투자자는 없고 외국인이 가장 많이 순매도했습니다(−2만주)', ko)
+        self.assertNotIn('bought', en)
+        self.assertIn('no group was a net buyer', en)
+        mixed = E.supply_from_rows([{'date': d, 'foreign_net_qty': 300, 'institution_net_qty': -100,
+                                     'individual_net_qty': -200} for d in dates])
+        ko, en = both('investor_flow', bars, supply=mixed)
+        self.assertIn('외국인이 가장 많이 순매수했고(+6,000주), 개인이 가장 많이 순매도했습니다(−4,000주)', ko)
+        blank = E.supply_from_rows([{'date': d, 'foreign_net_qty': 1, 'institution_net_qty': 1, 'individual_net_qty': -2}
+                                    for d in dates[:-1]] +
+                                   [{'date': dates[-1], 'foreign_net_qty': None, 'institution_net_qty': None,
+                                     'individual_net_qty': None}])
+        ko, en = both('investor_flow', bars, supply=blank)
+        self.assertNotIn('순매수: .', ko)
+        self.assertNotIn('date: .', en)
+        self.assertIn('비어 있습니다', ko)
+
+    def test_defect_5_psar_side_and_flip_come_from_the_engine(self):
+        b = E.Bars(('2026-01-01', '2026-01-02', '2026-01-03'), (9.5, 9.4, 10.0), (10.0, 9.5, 10.5), (9.0, 8.0, 7.0),
+                   (9.5, 8.2, 7.0), (1.0,) * 3)
+        assert_close(self, E.compute_study('psar', b)['SAR'], [NAN, 10.0, 7.0])  # turns long on bar 2, SAR = close
+        assert_close(self, E.parabolic_sar_trend(b.high, b.low), [NAN, -1.0, 1.0])
+        ko, en = both('psar', b)
+        self.assertIn('below price', en)
+        self.assertIn('an upward move', en)
+        self.assertIn('flipped', en)
+        self.assertIn('아래쪽', ko)
+        self.assertIn('상승 흐름', ko)
+        self.assertIn('반대편으로 넘어왔습니다', ko)
+        bars = bars_of(walk(160, seed=8))
+        side = E.parabolic_sar_trend(bars.high, bars.low)
+        for i in range(2, 160):
+            text = G.study_reading('psar', bars, i, language='en')
+            self.assertEqual('below price' in text, side[i] > 0, i)
+            self.assertEqual('flipped' in text, side[i] != side[i - 1], i)
+
+    def test_defect_6_vwap_reading_names_the_session_of_the_bar(self):
+        stamps = tuple(f'2026-11-10T09:{m:02d}:00+09:00' for m in range(30)) + \
+            tuple(f'2026-11-11T09:{m:02d}:00+09:00' for m in range(30))
+        closes = tuple(100 + math.sin(i / 3) for i in range(60))
+        b = E.Bars(stamps, closes, tuple(c + .2 for c in closes), tuple(c - .2 for c in closes), closes,
+                   tuple(1000.0 + i for i in range(60)), '1m')
+        for index, day in ((20, '2026-11-10'), (50, '2026-11-11')):
+            ko, en = both('vwap', b, index)
+            self.assertIn(f'{day} 장 VWAP', ko)
+            self.assertIn(f'{day} session', en)
+            self.assertNotIn('오늘', ko)
+            self.assertNotIn('today', en.lower())
+
+    def test_defect_7_donchian_tie_is_not_a_new_high(self):
+        highs = [100.0] * 25
+        highs[10] = highs[-1] = 105.0
+        b = E.Bars(tuple(f'2026-01-{i + 1:02d}' for i in range(25)), (95.0,) * 25, tuple(highs), (90.0,) * 25,
+                   (95.0,) * 25, (1.0,) * 25)
+        ko, en = both('donchian', b)
+        self.assertNotIn('새로 썼습니다', ko)
+        self.assertNotIn('new high', en.replace('not a new high', ''))
+        self.assertIn('최고가와 같습니다', ko)
+        self.assertIn('a tie', en)
+        flat_ko, flat_en = both('donchian', flat_bars(51300, 25))
+        self.assertNotIn('새로 썼습니다', flat_ko)
+        self.assertNotIn('new high', flat_en)
+        highs[-1] = 106.0  # beating the earlier 105 is a new high
+        ko, en = both('donchian', replace(b, high=tuple(highs)))
+        self.assertIn('최고가를 새로 썼습니다', ko)
+        self.assertIn('set a new high', en)
+
+    def test_defect_8_words_follow_the_value_and_the_printed_number(self):
+        bars = bars_of(walk(120, seed=2))
+        rsi = lambda r, language='ko': G.study_reading('rsi', bars, -1, language=language,
+                                                       values=faked('rsi', bars, 'RSI14', r))
+        # 69 (rises 2.23x the falls) and 70 (2.33x) are described alike, with the ratio itself.
+        self.assertIn('훨씬 컸습니다(평균 상승폭이 평균 하락폭의 2.2배)', rsi(69.0))
+        self.assertIn('훨씬 컸습니다(평균 상승폭이 평균 하락폭의 2.3배)', rsi(70.0))
+        self.assertIn('much larger', rsi(69.0, 'en'))
+        words = [re.search(r'폭보다 (조금 더|더|훨씬) 컸습니다', rsi(r)).group(1) for r in np.arange(53, 100, .25)]
+        order = {'조금 더': 1, '더': 2, '훨씬': 3}
+        self.assertEqual([order[w] for w in words], sorted(order[w] for w in words))
+        mfi = G.study_reading('mfi', bars, -1, values=faked('mfi', bars, 'MFI', 79.0))
+        self.assertIn('훨씬 많았습니다(내린 봉의 3.8배)', mfi)
+        self.assertIn('far more', G.study_reading('mfi', bars, -1, language='en', values=faked('mfi', bars, 'MFI', 79.0)))
+        # The conventional band always matches the number printed at the start of the reading.
+        sweep = lambda *centres, step=.001, width=.1: np.concatenate(
+            [np.arange(c - width, c + width, step) for c in centres])
+        cases = (
+            ('rsi', 'RSI14', r'RSI ([\d.]+):', sweep(30, 70),
+             ((lambda x: x >= 70, '과매수'), (lambda x: x <= 30, '과매도'), (lambda x: 30 < x < 70, '30~70'))),
+            ('stoch', 'STOCH_K', r'%K ([\d.]+):', sweep(20, 80),
+             ((lambda x: x >= 80, '과매수'), (lambda x: x <= 20, '과매도'))),
+            ('stochrsi', 'STOCHRSI_K', r'%K ([\d.]+):', sweep(20, 80),
+             ((lambda x: x >= 80, '과매수'), (lambda x: x <= 20, '과매도'))),
+            ('williams', 'WILLR', r'%R (−[\d.]+):', sweep(-20, -80),
+             ((lambda x: x >= -20, '과매수'), (lambda x: x <= -80, '과매도'))),
+            ('cci', 'CCI', r'CCI (−?\d+):', sweep(100, -100, step=.01, width=1),
+             ((lambda x: x >= 100, '과열'), (lambda x: x <= -100, '침체'), (lambda x: -100 < x < 100, '±100 안'))),
+            ('mfi', 'MFI', r'MFI ([\d.]+):', sweep(20, 80),
+             ((lambda x: x >= 80, '과매수'), (lambda x: x <= 20, '과매도'))),
+            ('percent_b', 'PERCENT_B', r'%B (−?[\d.]+):', sweep(0, 1, step=.0001, width=.01),
+             ((lambda x: x > 1, '위 밴드 밖'), (lambda x: x < 0, '아래 밴드 밖'))),
+            ('disparity', 'DISPARITY', r'이격도 ([\d.]+):', sweep(95, 105),
+             ((lambda x: x >= 105, '과열'), (lambda x: x <= 95, '침체'))),
+            ('adx', 'ADX', r'ADX ([\d.]+):', sweep(20, 25, 40),
+             ((lambda x: x >= 40, '매우 뚜렷'), (lambda x: 25 <= x < 40, '추세가 뚜렷한 구간'),
+              (lambda x: 20 <= x < 25, '애매'), (lambda x: x < 20, '20 미만'))),
+        )
+        for key, line, pattern, values, rules in cases:
+            for value in values:
+                text = G.study_reading(key, bars, -1, values=faked(key, bars, line, float(value)))
+                shown = float(re.match(pattern, text).group(1).replace('−', '-'))
+                for rule, phrase in rules:
+                    self.assertEqual(rule(shown), phrase in text, f'{key} {value!r}: {text}')
+        # The verifier's examples.
+        self.assertTrue(rsi(69.96).startswith('RSI 70.0:'))
+        self.assertIn('과매수', rsi(69.96))
+        cci = G.study_reading('cci', bars, -1, values=faked('cci', bars, 'CCI', 99.6))
+        self.assertTrue(cci.startswith('CCI 100:') and '±100 안' not in cci)
+        stoch = G.study_reading('stoch', bars, -1, values=faked('stoch', bars, 'STOCH_K', 79.97))
+        self.assertTrue(stoch.startswith('%K 80.0:') and '과매수' in stoch)
+
+    def test_defect_9_equal_and_flat_branches_read_as_natural_korean(self):
+        broken = re.compile(r'보다 (같|평평|정확히|0\.0+% (같|변하지))|같은 곳|보다 같음|equal than|unchanged than|'
+                            r'0\.0+% (above|below|at|unchanged)')
+        for price in (51300, 88.79):
+            daily, minute = flat_bars(price, 90), flat_bars(price, 40, '1m')
+            texts = {key: both(key, minute if key == 'vwap' else daily) for key in E.study_keys()
+                     if not E.study(key).needs.startswith('kis_')}
+            for key, pair in texts.items():
+                for text in pair:
+                    self.assertIsNone(broken.search(text), f'{key}: {text}')
+                    self.assertNotRegex(text.lower(), r'\bnan\b|\bnone\b|\binf\b|−0\.0\b')
+            ko = {key: pair[0] for key, pair in texts.items()}
+            self.assertIn('평균선은 5일 전과 같은 높이로 평평합니다', ko['sma'])
+            self.assertIn('12일 지수평균과 26일 지수평균이 같습니다', ko['macd'])
+            self.assertIn('전환선과 기준선이 같은 높이에 있습니다', ko['ichimoku'])
+            self.assertIn('+DI와 −DI가 모두 0', ko['adx'])
+            self.assertIn('중심선과 같은 높이', ko['envelope'])
+            self.assertIn('중심선과 같은 높이', ko['keltner'])
+            self.assertIn('%K와 %D(50.0)가 같아', ko['stoch'])
+            self.assertIn('12일 전과 같습니다', ko['roc'])
+            self.assertIn('20일 평균과 같습니다', ko['disparity'])
+            self.assertIn('한가운데', ko['percent_b'])
+            self.assertIn('VWAP', ko['vwap'])
+            self.assertIn('같습니다', ko['vwap'])
+
+    def test_defect_10_ichimoku_pans_exactly_like_a_truncated_history(self):
+        snap = snapshot(walk(200, seed=5))
+        for end, visible in ((120, 60), (150, 120), (90, 30), (199, 60)):
+            with self.subTest(end=end, visible=visible):
+                truncated = replace(snap, candles=snap.candles[:end + 1])
+                for keys in (('ichimoku',), ('ichimoku', 'stoch', 'psar', 'vwap', 'donchian')):
+                    self.assertEqual(chart_svg(snap, indicators=keys, end=end, visible=visible, language='ko'),
+                                     chart_svg(truncated, indicators=keys, visible=visible, language='ko'))
+
+    def test_defect_11a_ichimoku_ahead_is_aligned_on_short_series(self):
+        # ichimoku_ahead always returns displacement - 1 values, value k drawn k + 1 bars after the last bar.
+        rows = walk(90, seed=4)
+        h, l, c = column(rows, 1), column(rows, 2), column(rows, 3)
+        for size in (1, 10, 24, 25, 26, 60):
+            ahead = E.ichimoku_ahead(h[:size], l[:size], base=9, span_b=9)
+            # Leading spans are causal: drawn on a longer series, bars size..size+24 show exactly these values.
+            drawn = E.ichimoku_lines(h[:size] + h[60:85], l[:size] + l[60:85], c[:size] + c[60:85], base=9, span_b=9)
+            for line in ('SPAN_A', 'SPAN_B'):
+                with self.subTest(size=size, line=line):
+                    self.assertEqual(len(ahead[line]), 25)
+                    assert_close(self, ahead[line], list(drawn[line][size:size + 25]))
+
+    def test_defect_11b_disparity_convention_names_the_chart_it_reads(self):
+        # The 105/95 convention is the 20-day disparity's: other charts are not called '20일 이격도'.
+        rising = [100 * 1.01 ** i for i in range(40)]
+        weekly = G.study_reading('disparity', E.bars_from_closes(rising, interval='1w'), -1)
+        self.assertNotIn('20일 이격도는 흔히', weekly)
+        self.assertIn('20주 이격도', weekly)
+        self.assertIn('20-week', G.study_reading('disparity', E.bars_from_closes(rising, interval='1w'), -1, language='en'))
+        self.assertIn('20일 이격도는 흔히 105 이상을 과열', G.study_reading('disparity', E.bars_from_closes(rising), -1))
+        minute = G.study_reading('disparity', E.bars_from_closes(rising, interval='5m'), -1)
+        self.assertIn('20개 봉 이격도', minute)
+        self.assertNotIn('20일 이격도는 흔히', minute)
+
+    def test_defect_11c_vwap_session_survives_midnight_in_a_night_session(self):
+        # A KRX night futures session crossing midnight stays one VWAP session; the day session restarts it.
+        stamps = ('2026-11-10T23:58:00+09:00', '2026-11-10T23:59:00+09:00', '2026-11-11T00:00:00+09:00',
+                  '2026-11-11T00:01:00+09:00', '2026-11-11T08:45:00+09:00', '2026-11-11T08:46:00+09:00')
+        prices = (10.0, 12.0, 14.0, 16.0, 20.0, 22.0)
+        night = E.Bars(stamps, prices, prices, prices, prices, (1.0, 1.0, 2.0, 1.0, 1.0, 3.0), '1m')
+        # (10 + 12 + 28) / 4 = 12.5 after midnight, (50 + 16) / 5 = 13.2; the day session starts again at 20.
+        assert_close(self, E.compute_study('vwap', night)['VWAP'], [10.0, 11.0, 12.5, 13.2, 20.0, 21.5])
+        self.assertIn('2026-11-10 장 VWAP', G.study_reading('vwap', night, 3))
+        # Lunch breaks of 60-90 minutes keep one session; overnight gaps split it.
+        lunch = ('2026-11-10T11:29:00+09:00', '2026-11-10T13:00:00+09:00', '2026-11-11T09:30:00+09:00')
+        self.assertEqual(list(E.session_start_index(lunch)), [0, 0, 2])
+        # A nearly 24-hour futures session (30-minute bars across midnight) restarts after its daily break.
+        globex = [(datetime(2026, 11, 8, 17) + timedelta(minutes=30 * k)).isoformat() for k in range(46)] + \
+            [(datetime(2026, 11, 9, 17) + timedelta(minutes=30 * k)).isoformat() for k in range(3)]
+        self.assertEqual(list(E.session_start_index(globex)), [0] * 46 + [46] * 3)
 
 
 if __name__ == '__main__':

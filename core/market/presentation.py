@@ -178,7 +178,9 @@ def chart_svg(snapshot: MarketSnapshot, *, indicators=("sma", "rsi", "macd"),
     'rsi', 'macd') and any key of core.education.indicators.STUDIES: price
     overlays share the candle panel, 'volume_ma' the volume panel, and every other
     study gets its own panel below with its conventional reference lines.
-    `end` is the index of the last bar shown (pan; default the latest bar).
+    `end` is the index of the last bar shown (pan; default the latest bar). A panned
+    chart is the chart of the history ending at `end`: nothing after it is drawn (the
+    Ichimoku lagging span stops displacement - 1 bars before `end`).
     `supply` (indicators.Supply or {'flows': rows, 'shorts': rows} from
     KISMarkets.investor_daily / short_sale_daily) feeds the supply/demand studies.
     `price_height` makes the candle panel taller than its 204px default (a detail
@@ -281,8 +283,16 @@ def chart_svg(snapshot: MarketSnapshot, *, indicators=("sma", "rsi", "macd"),
         values = {spec.key: engine.compute_study(spec.key, candles, supply=supply)
                   for spec in extra if not reason[spec.key]}
 
+    # The Ichimoku lagging span at bar j is the close `displacement - 1` bars later: past
+    # the last bar shown (`end`) it would show prices from after it, so panning would
+    # differ from a chart that ends there. It is left blank instead.
+    lag = engine.study("ichimoku").defaults["displacement"] - 1
+
     def window(key, line_id):
-        return [None if not math.isfinite(v) else float(v) for v in values[key][line_id][start:stop]]
+        seq = [None if not math.isfinite(v) else float(v) for v in values[key][line_id][start:stop]]
+        if key == "ichimoku" and line_id == "CHIKOU":
+            seq = [None if start + j + lag >= stop else value for j, value in enumerate(seq)]
+        return seq
 
     lo, hi = min(c.low for c in bars), max(c.high for c in bars)
     if "bollinger" in indicators:

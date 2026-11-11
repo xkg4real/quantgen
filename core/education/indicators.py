@@ -4,6 +4,7 @@ Also the catalogue of market-chart studies (STUDIES, compute_study) that
 core.market.presentation.chart_svg draws and core.education.study_guide explains.
 """
 from dataclasses import dataclass
+from datetime import datetime, timedelta
 from functools import lru_cache
 from types import MappingProxyType
 from pathlib import Path
@@ -479,14 +480,31 @@ def rolling(x, n, reduce):
     return out
 
 
+def _flat_windows(x, n):
+    """True where the n-long window ending at i holds one repeated value (no NaN).
+
+    The mean of 20 equal decimal prices such as 88.79 is not always exactly 88.79 in
+    floating point; the studies use this to make a window with no range read exactly
+    flat (standard deviation and mean deviation 0, average equal to the price)."""
+    x = _array(x)
+    return rolling(x, n, np.max) == rolling(x, n, np.min)
+
+
 def sma_line(x, n):
-    """Simple moving average over the last n values (NaN until n values exist)."""
-    return rolling(x, n, np.mean)
+    """Simple moving average over the last n values (NaN until n values exist).
+    A window of one repeated value averages to exactly that value."""
+    x = _array(x)
+    out = rolling(x, n, np.mean)
+    flat = _flat_windows(x, n)
+    out[flat] = x[flat]
+    return out
 
 
 def _recursive(x, n, alpha):
     """Seeded with the mean of the first n values after any leading NaN, then
-    out[i] = alpha * x[i] + (1 - alpha) * out[i-1]; a later NaN stays NaN."""
+    out[i] = out[i-1] + alpha * (x[i] - out[i-1]); a later NaN stays NaN.
+    (Written this way, and seeded with the value itself when the first n are equal,
+    a run of one repeated value stays exactly that value.)"""
     x = _array(x)
     out = np.full(x.size, np.nan)
     finite = np.flatnonzero(np.isfinite(x))
@@ -495,9 +513,10 @@ def _recursive(x, n, alpha):
     first = int(finite[0])
     if x.size - first < n or not np.isfinite(x[first:first + n]).all():
         return out
-    out[first + n - 1] = x[first:first + n].mean()
+    seed = x[first:first + n]
+    out[first + n - 1] = seed[0] if (seed == seed[0]).all() else seed.mean()
     for i in range(first + n, x.size):
-        out[i] = alpha * x[i] + (1 - alpha) * out[i - 1]
+        out[i] = out[i - 1] + alpha * (x[i] - out[i - 1])
     return out
 
 
@@ -509,6 +528,13 @@ def ema_line(x, n):
 def wilder_line(x, n):
     """Wilder smoothing (RMA): mean of the first n values, then (prev*(n-1) + x)/n."""
     return _recursive(x, int(n), 1.0 / int(n))
+
+
+def typical_price(high, low, close):
+    """(high + low + close) / 3; exactly the price on a bar that did not move
+    ((3 × 7.1) / 3 is 7.0999… in floating point)."""
+    h, l, c = _array(high), _array(low), _array(close)
+    return np.where((h == l) & (l == c), c, (h + l + c) / 3)
 
 
 def true_range(high, low, close):
@@ -552,9 +578,11 @@ def macd_lines(close, fast=12, slow=26, signal=9):
 
 
 def bollinger_lines(close, n=20, k=2.0):
-    """Middle SMA n and bands at k population standard deviations."""
+    """Middle SMA n and bands at k population standard deviations; a window with no
+    range has no deviation (both bands on the middle)."""
     middle = sma_line(close, n)
     sd = rolling(close, n, np.std)
+    sd[_flat_windows(close, n)] = 0.0
     return {'BB_MIDDLE': middle, 'BB_UPPER': middle + k * sd, 'BB_LOWER': middle - k * sd}
 
 
@@ -588,9 +616,10 @@ def stoch_rsi_lines(close, rsi_period=14, n=14, k_smooth=3, d_smooth=3):
 def cci_line(high, low, close, n=20, constant=0.015):
     """(TP - SMA n of TP) / (constant * mean absolute deviation of TP); TP = (H+L+C)/3.
     No deviation in the window reads 0."""
-    tp = (_array(high) + _array(low) + _array(close)) / 3
+    tp = typical_price(high, low, close)
     mean = sma_line(tp, n)
     dev = rolling(tp, n, lambda w, axis: np.mean(np.abs(w - w.mean(axis=axis, keepdims=True)), axis=axis))
+    dev[_flat_windows(tp, n)] = 0.0
     out = np.full(tp.size, np.nan)
     ok = np.isfinite(dev)
     with np.errstate(invalid='ignore', divide='ignore'):
@@ -614,8 +643,8 @@ def roc_line(close, n=12):
 
 
 def disparity_line(close, n=20):
-    """이격도: close / SMA n * 100."""
-    return 100 * _array(close) / sma_line(close, n)
+    """이격도: close / SMA n * 100 (exactly 100 when the close equals its average)."""
+    return 100 * (_array(close) / sma_line(close, n))
 
 
 def psychology_line(close, n=10):
@@ -650,12 +679,20 @@ def ichimoku_lines(high, low, close, conversion=9, base=26, span_b=52, displacem
 
 
 def ichimoku_ahead(high, low, conversion=9, base=26, span_b=52, displacement=26):
-    """Leading spans for the displacement - 1 periods after the latest bar."""
+    """Leading spans for the displacement - 1 periods after the latest bar: always
+    displacement - 1 values, value k drawn k + 1 bars after the latest bar. A series
+    shorter than that leaves the first periods blank (NaN) instead of shifting them."""
     h, l = _array(high), _array(low)
     mid = lambda n: (rolling(h, n, np.max) + rolling(l, n, np.min)) / 2
     a, b = (mid(conversion) + mid(base)) / 2, mid(span_b)
     shift = int(displacement) - 1
-    return {'SPAN_A': a[a.size - shift:] if shift else a[:0], 'SPAN_B': b[b.size - shift:] if shift else b[:0]}
+
+    def ahead(values):
+        if shift <= 0:
+            return values[:0]
+        blank = np.full(max(0, shift - values.size), np.nan)
+        return np.concatenate([blank, values[max(0, values.size - shift):]])
+    return {'SPAN_A': ahead(a), 'SPAN_B': ahead(b)}
 
 
 def parabolic_sar(high, low, step=0.02, maximum=0.2):
@@ -667,11 +704,23 @@ def parabolic_sar(high, low, step=0.02, maximum=0.2):
     `step`, grows by `step` at each new extreme up to `maximum`, and SAR never
     enters the latest two bars' range; touching SAR flips the trend to the extreme.
     """
+    return _sar_path(high, low, step, maximum)[0]
+
+
+def parabolic_sar_trend(high, low, step=0.02, maximum=0.2):
+    """The side parabolic_sar is following at each bar: 1.0 for an upward move (dots
+    below price), -1.0 for a downward move (dots above), NaN where there is no SAR.
+    Taken from the algorithm itself, so a dot that lands exactly on the close is
+    still on the side of the move it belongs to."""
+    return _sar_path(high, low, step, maximum)[1]
+
+
+def _sar_path(high, low, step, maximum):
     h, l = _array(high), _array(low)
     n = h.size
-    out = np.full(n, np.nan)
+    out, side = np.full(n, np.nan), np.full(n, np.nan)
     if n < 2:
-        return out
+        return out, side
     up, down = h[1] - h[0], l[0] - l[1]
     long = not (down > 0 and down > up)
     af = step
@@ -705,7 +754,8 @@ def parabolic_sar(high, low, step=0.02, maximum=0.2):
                 if new_low < ep:
                     ep, af = new_low, min(af + step, maximum)
                 sar = max(sar + af * (ep - sar), prev_high, new_high)
-    return out
+        side[i] = 1.0 if long else -1.0
+    return out, side
 
 
 def adx_lines(high, low, close, n=14):
@@ -768,7 +818,7 @@ def mfi_line(high, low, close, volume, n=14):
     """Money flow index: 100 − 100/(1 + positive/negative flow over n bars), flow =
     typical price × volume signed by the change in typical price; first at bar n.
     A window with unknown volume is NaN; no flow either way reads 50."""
-    tp = (_array(high) + _array(low) + _array(close)) / 3
+    tp = typical_price(high, low, close)
     flow = tp * _array(volume)
     pos, neg = np.full(tp.size, np.nan), np.full(tp.size, np.nan)
     if tp.size > 1:
@@ -790,25 +840,64 @@ def volume_ma_line(volume, n=20):
     return sma_line(volume, n)
 
 
+_SESSION_GAP = timedelta(hours=2)
+_LONG_SESSION = timedelta(hours=20)
+_DAILY_BREAK = timedelta(minutes=45)
+
+
+def session_start_index(timestamps):
+    """For each bar, the index of the first bar of its trading session (the VWAP anchor).
+
+    A session starts after a gap of 2 hours or more between bar times: overnight, or the
+    switch between the KRX day and night futures sessions. A night session that crosses
+    midnight therefore stays one session, and a lunch break (90 minutes at most on the
+    supported exchanges) does not split the day. A session already 20 hours long also
+    restarts at a gap of 45 minutes or more (the daily break of nearly 24-hour futures)
+    or at a new calendar date (a market with no break). Timestamps that are not ISO
+    times fall back to one session per calendar date."""
+    stamps = [str(t) for t in timestamps]
+    out = np.zeros(len(stamps), dtype=int)
+    try:
+        times = [datetime.fromisoformat(s) for s in stamps]
+        gaps = [b - a for a, b in zip(times, times[1:])]  # mixed naive/aware times raise TypeError
+    except (TypeError, ValueError):
+        times = None
+    start = 0
+    for i in range(1, len(stamps)):
+        new_date = stamps[i][:10] != stamps[i - 1][:10]
+        if times is None:
+            new = new_date
+        else:
+            gap, length = gaps[i - 1], times[i] - times[start]
+            new = gap >= _SESSION_GAP or (length >= _LONG_SESSION and (gap >= _DAILY_BREAK or new_date))
+        if new:
+            start = i
+        out[i] = start
+    return out
+
+
 def vwap_line(high, low, close, volume, timestamps, intraday=True):
-    """Session-anchored VWAP of the typical price (H+L+C)/3, restarting at each
-    calendar date of the bar timestamps (exchange-local dates as KIS reports them).
-    Daily and longer bars have no session VWAP (all NaN); unknown-volume bars are blank."""
-    tp = (_array(high) + _array(low) + _array(close)) / 3
+    """Session-anchored VWAP of the typical price (H+L+C)/3, restarting at each trading
+    session of the bar timestamps (session_start_index; exchange-local times as KIS reports
+    them). Daily and longer bars have no session VWAP (all NaN); unknown-volume bars are blank."""
+    tp = typical_price(high, low, close)
     v = _array(volume)
     out = np.full(tp.size, np.nan)
     if not intraday:
         return out
-    session, pv, vol = None, 0.0, 0.0
-    for i, stamp in enumerate(timestamps):
-        day = str(stamp)[:10]
-        if day != session:
-            session, pv, vol = day, 0.0, 0.0
+    starts = session_start_index(timestamps)
+    session, pv, vol, lo, hi = None, 0.0, 0.0, math.inf, -math.inf
+    for i in range(tp.size):
+        if starts[i] != session:
+            session, pv, vol, lo, hi = starts[i], 0.0, 0.0, math.inf, -math.inf
         if not math.isfinite(v[i]):
             continue
         pv, vol = pv + tp[i] * v[i], vol + v[i]
+        if v[i] > 0:
+            lo, hi = min(lo, tp[i]), max(hi, tp[i])
         if vol > 0:
-            out[i] = pv / vol
+            # One repeated price traded all session: the VWAP is exactly that price.
+            out[i] = lo if lo == hi else pv / vol
     return out
 
 
