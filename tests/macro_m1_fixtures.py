@@ -2004,7 +2004,10 @@ def test_macro_fixtures_copies_result_tables_byte_for_byte():
     """R5: a result table was read as text and written with LF line ends, so a CRLF table was not copied byte for
     byte although REFERENCE_FILES says it is, and a byte that is not UTF-8 stopped the run. Now the bytes are copied:
     CRLF, LF, no final line end, a byte that is not UTF-8 and a byte order mark all come out identical, the md5 listed
-    is the md5 of the bytes on disk, `freeze` lists it and the fixture gate (`require_fixture`) accepts the file."""
+    is the md5 of the bytes on disk, `freeze` lists it and the fixture gate (`require_fixture`) accepts the file.
+    Review of PR #107, F7: the table was also written to the staging directory, where nothing reads it (no check
+    runs on a result table; the md5 and the final write use the bytes in memory); it is no longer staged, so the
+    one write of it is the final one into the output directory."""
     from tests.notrun import md5_of, unlisted
     rel, name = _reference_row("F20")[1], FILE_OF["F20"]
     with tempfile.TemporaryDirectory() as tmp:
@@ -2017,8 +2020,14 @@ def test_macro_fixtures_copies_result_tables_byte_for_byte():
                             ("a byte that is not UTF-8", b"item,value\nF20,\xff\n"),
                             ("a byte order mark and CRLF", b"\xef\xbb\xbfitem,value\r\nF20,1\r\n")):
             (ref / rel).write_bytes(data)
-            rows = MF.generate(ref, out, retrieved_at_utc=REFERENCE_RETRIEVED, licence="test licence",
-                               owner="package D", available_at=_available_at, only=("F20",))
+            staged, real = [], MF._atomic_write
+            MF._atomic_write = lambda path, data: (staged.append(Path(path)), real(path, data))[1]
+            try:
+                rows = MF.generate(ref, out, retrieved_at_utc=REFERENCE_RETRIEVED, licence="test licence",
+                                   owner="package D", available_at=_available_at, only=("F20",))
+            finally:
+                MF._atomic_write = real
+            assert staged == [], (label, staged)                       # F7: not staged; written once, by `_commit`
             assert (out / name).read_bytes() == data, label
             assert [r["md5"] for r in rows] == [hashlib.md5(data).hexdigest()] == [md5_of(out / name)], label
             assert rows[0]["span"] == "result table" and rows[0]["value_status_rule"].startswith("result table"), label

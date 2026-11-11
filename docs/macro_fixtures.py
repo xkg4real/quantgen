@@ -627,10 +627,11 @@ def generate(ref_dir: Path, out_dir: Path, *, retrieved_at_utc: datetime, licenc
     command line passes it), a file the manifest lists with another md5 is refused with FixtureChanged before
     `out_dir` is touched (L5492; review of PR #101, R1), and the rows the manifest lacks are appended to it by
     `freeze`'s rule in the same final write as the fixtures, as its last file (R4): a fixture is never left in
-    `out_dir` without its manifest row because the manifest could not be written. Every file is built and checked in
-    a temporary directory first, and `out_dir` is written only after the last one passed, by `_commit`: a refused
-    run leaves `out_dir` and the manifest as they were, and `_commit` says what a failure of the final write can
-    leave."""
+    `out_dir` without its manifest row because the manifest could not be written. Every file is built in memory
+    first (a data fixture is also written to a temporary directory, where `check_fixture` reads the close-type
+    ones; a result table, which no check reads, is not), and `out_dir` is written from those bytes only after the
+    last file passed, by `_commit`: a refused run leaves `out_dir` and the manifest as they were, and `_commit`
+    says what a failure of the final write can leave."""
     ref_dir, out_dir = Path(ref_dir), Path(out_dir)
     files = selected_files(only)
     missing = missing_files(ref_dir, only)
@@ -655,11 +656,10 @@ def generate(ref_dir: Path, out_dir: Path, *, retrieved_at_utc: datetime, licenc
                 rule = f"{value_status}; available_at_source = {source}"
                 if check_fixture is not None and value_status in ("official_close", "vendor_close", "live_snapshot"):
                     check_fixture(staged)
-            else:                                              # result table: copied byte for byte (R5)
-                data = src.read_bytes()
-                _atomic_write(staged, data)
+            else:                                              # result table: copied byte for byte (R5), from
+                data = src.read_bytes()                        # memory; no check reads a staged copy (F7)
                 span, rule = "result table", "result table; not an acting input"
-            # the md5 is that of `data`, the bytes staged here and written by `_commit`
+            # the md5 is that of `data`, the bytes `_commit` writes
             rows_out.append({"file": staged.name, "source": f"/home/claude/quantgen_macro_data/{rel} ({fid}, per CATALOG.md)",
                              "series": series, "span": span, "retrieved_at_utc": _iso(retrieved_at_utc),
                              "value_status_rule": rule, "md5": hashlib.md5(data).hexdigest(), "licence": licence,
