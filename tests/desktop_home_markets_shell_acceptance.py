@@ -217,7 +217,7 @@ class ShellRailTests(unittest.TestCase):
         view.showing_stock = lambda: True  # one stock's screen belongs to stock search
         w.navigate("markets")
         self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], ["search"])
-        del view.current_category
+        view.current_category = lambda: None  # the page reports nothing: the last choice is kept
         view.showing_stock = lambda: False
         w.market_sections["volume"].click()
         w.navigate("guide")
