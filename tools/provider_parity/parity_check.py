@@ -525,21 +525,76 @@ def _chunks(first: str, last: str, days: int) -> list[tuple[str, str]]:
     return out
 
 
-def fetch_fmp(ctx: FetchContext) -> Fetched:
-    """FMP dividend-adjusted closes (total return), one request with explicit `from` and `to`."""
-    key = ctx.key("FMP_API_KEY")
-    params = {"symbol": "SPY", "from": ctx.first, "to": ctx.last}
-    body = _ok(ctx.http(FMP_URL, {**params, "apikey": key}, {}), "fmp")
+FMP_MAX_REQUESTS = 12     # the page-back's request budget: the first request and at most eleven more
+# An answer whose earliest date lies at most this many days after the first requested date has reached it. The first
+# requested date is 31 days before the table's start (fetch_window) and need not be a session: a weekend and the
+# holidays beside it can stand between it and the provider's first session. One week covers that, and it is well
+# inside the 31 days, which compare never reads for SPY.
+FMP_REACHED_DAYS = 7
+
+
+def _fmp_rows(body: bytes, later: bool) -> list[tuple[str, float | None]]:
+    """One FMP answer as (date, adjClose) rows. A message in place of rows, an answer with no row and rows without
+    adjClose are failed fetches. Only on a `later` request of the page-back is an empty list an answer: the provider
+    has nothing in the span asked for."""
     payload = _json(body, "fmp")
     records = payload.get("historical") if isinstance(payload, dict) else payload
     if isinstance(payload, dict) and not records:
         raise FetchFailed("plan_or_access", "fmp answered with a message instead of rows")
+    if later and isinstance(records, list) and not records:
+        return []
     if not isinstance(records, list) or not records:
         raise FetchFailed("fetch_failed", "fmp returned no rows")
     if not any(isinstance(r, dict) and r.get("adjClose") is not None for r in records):
         raise FetchFailed("fetch_failed", "fmp returned no adjClose, so not the dividend-adjusted convention")
-    rows = [(str(r.get("date") or "")[:10], _num(r.get("adjClose"))) for r in records if isinstance(r, dict)]
-    return Fetched([params], [("fmp_000.json", body)], rows)
+    return [(str(r.get("date") or "")[:10], _num(r.get("adjClose"))) for r in records if isinstance(r, dict)]
+
+
+def fetch_fmp(ctx: FetchContext) -> Fetched:
+    """FMP dividend-adjusted closes (total return), requested with explicit `from` and `to`. A provider that answers
+    the whole span is asked once. FMP can answer with only the most recent rows of the span (5,000 rows in the owner's
+    run of 2026-11-11), so the earliest date of each answer is read: while it lies more than FMP_REACHED_DAYS after
+    the first requested date, the days before it are requested again (the same `from`; `to` = the day before that
+    earliest date), the way `fetch_kis` pages back. The page-back ends when an answer reaches the first requested
+    date, when an answer brings no earlier date (an empty list, or only dates already held) or when FMP_MAX_REQUESTS
+    requests are spent. In the last two cases `note` says where and why: the file starts late, and the owner reads
+    that before compare. Answers are merged by date; a date that two answers give with different values is a failed
+    fetch, never a pick. Any failed request fails the whole fetch, and nothing is written."""
+    key = ctx.key("FMP_API_KEY")
+    reach = (date.fromisoformat(ctx.first) + timedelta(days=FMP_REACHED_DAYS)).isoformat()
+    requests, pages, rows = [], [], []
+    held: dict[str, float | None] = {}          # date -> value, from the answers before the one being read
+    earliest, to = None, ctx.last
+    why = f"the budget of {FMP_MAX_REQUESTS} requests ran out"
+    for k in range(FMP_MAX_REQUESTS):
+        params = {"symbol": "SPY", "from": ctx.first, "to": to}
+        try:
+            body = _ok(ctx.http(FMP_URL, {**params, "apikey": key}, {}), "fmp")
+            answer = _fmp_rows(body, later=k > 0)
+        except FetchFailed as exc:
+            if k == 0:
+                raise
+            raise FetchFailed(exc.reason, f"{exc}; request {k + 1} of the page-back") from None
+        requests.append(params)
+        pages.append((f"fmp_{k:03d}.json", body))
+        for d, v in answer:
+            if d not in held:
+                rows.append((d, v))
+            elif held[d] != v:
+                raise FetchFailed("fetch_failed", "fmp gave one date two different values in two answers")
+        for d, v in answer:
+            held.setdefault(d, v)
+        dated = [d for d, _ in answer if _DATE.fullmatch(d) and _valid_iso(d)]
+        if not dated or (earliest is not None and min(dated) >= earliest):
+            why = "an answer brought no earlier date"
+            break
+        earliest = min(dated)
+        if earliest <= reach:
+            break
+        to = (date.fromisoformat(earliest) - timedelta(days=1)).isoformat()
+    note = "" if earliest is None or earliest <= reach else \
+        f"fmp paging stopped at {earliest}, after the first requested date {ctx.first}: {why}"
+    return Fetched(requests, pages, rows, note)
 
 
 def _kis_default_get(keys: dict) -> Callable:
