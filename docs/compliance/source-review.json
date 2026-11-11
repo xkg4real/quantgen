@@ -310,6 +310,7 @@
     "docs/product/COMPANY_MARKS_READABILITY_20261106.md": "cea321847ed32fe5f077180665bcaa485dff75444bdce86526e8357ee2626be3",
     "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md": "9360c8bff2136e6c9c67d18c58caebddf2e09ee0e6abde969503aa78f1970b04",
     "docs/product/DATA_ACQUISITION_2026-10-29.md": "284d5c969d889ec1ca0b381ba5f94ee6f3f16115fac15a247a5b304ba9ae1230",
+    "docs/product/DECISIONS_PILOT_CLOSE_MERGE_2026-11-11.md": "7c95de59478f8a4379cbaf237f8ce243a9017b14dbeb0f1818c58cb16547f3ea",
     "docs/product/DETACHED_INSTRUMENT_IDENTITY_2026-11-06.md": "85c2893a29d219f39e5c98c97da93e4cb3b80ab0d2c703091abd6e7564ecc209",
     "docs/product/DISTRIBUTION_REVIEW_2026-10-29.md": "c03dae78c5964bded90065661a0d3dc631f4b650c3baae8eb6875443b11959e6",
     "docs/product/ETF_SLEEVE_DISCLOSURE_2026-11-04.md": "d39113026df4ad4a4d1903072cd64cbbd8015dc74835b77f4a96d38b1f2c52c3",
@@ -338,8 +339,8 @@
     "docs/product/NAUTILUS_AND_DATA_SOURCES_2026-10-31.md": "b2b0fdb675bd2e04e79863d872fc6101f40a10744b5bd0516da17957a26e7936",
     "docs/product/OPTION_DISCLOSURE_2026-11-04.md": "ff314ee2043b524cdb8456f4af5c2ffe5f19f19d341ac28be471a6d3c7588373",
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
-    "docs/product/PILOT_OWNER_RUN_2026-11-11.md": "2b51b0f1cd2daef301877e0f685bc2d0a67f2bd77412b76a8a05f840bdc35065",
-    "docs/product/PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md": "057e7c88ceb8d238c24cd269b3805a67108aa6d715a070859b965996d28735ab",
+    "docs/product/PILOT_OWNER_RUN_2026-11-11.md": "bdfb3d14fdbfa69ad85dd8a9f1cceda4da8b5cb822e3d761650bae2f89bc13c4",
+    "docs/product/PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md": "d2591d392704368fb8c3d26fe9cc26730e505e7246e79c7518603e07f6da9d68",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md": "0b26452ceb5e1eaed963b60f1a9f5b7bf8276552602fce776ea9b54625885144",
     "docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md": "9604ff31a94d2e182bebfb71ec65cd83ca2f96cb8942deae39d3a337b288d4dd",
@@ -363,7 +364,7 @@
     "docs/product/SECTION10_PAYLOAD_2026-10-30.md": "aadb8d4d84748ef49de5cfadc0335fcb747694291b192953fca1b7d311e3d426",
     "docs/product/SECTION10_TRIAGE_2026-10-30.md": "4b7a664b2a22cc198740f55ae6e0cfb2a349282d12ce2ef04b7772a491f5834c",
     "docs/product/SIGNALS_TRADE_COUNTS_2026-11-02.md": "262fab241bcc3db4e22817caf5b51c673af998d67d3576135c627f2ab89ae2ac",
-    "docs/product/STEP10_MERGE_REHEARSAL_2026-11-11.md": "3f0d784c78699341715c10142d3d02a44e1314384d23f9af1f4175c0e9c4f296",
+    "docs/product/STEP10_MERGE_REHEARSAL_2026-11-11.md": "68cfe84e4b1a52b72857aadb6092b169b1437b15c4c6e0169d5d10a0283bc070",
     "docs/product/STRATEGY_EXPOSURE_2026-10-30.md": "1c1d5f061e978fdea11aa2fbc3f7d636fb94db00107a8da1daee70e18644b207",
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
     "docs/product/TERMINAL_TARGET_2026-10-30.md": "5c3e2eac999534371560def0e00d3ef45d0b7abcd960a6b1d7d7c3c9c3b05c29",
@@ -682,163 +683,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "47ad89b3175681d1128df137fb3617c8bc93e558504955b62d47d47202a89345",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:32.972220+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "94dd73b6bb7fc193d7bf4cdd769ad115f362516d6be3255c0e54b4d5ca2b3719",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.788933+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "47ad89b3175681d1128df137fb3617c8bc93e558504955b62d47d47202a89345",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:32.975373+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "94dd73b6bb7fc193d7bf4cdd769ad115f362516d6be3255c0e54b4d5ca2b3719",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.792096+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "850b9fe3407c5799abc38f834ee9bd5b103ceb180e2eae360316a517b9b5ba5e",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:32.977963+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "c18c4b9eeccbd1064d3ea6a31838d3c71e48ff61f5e000f0a8aeb6eaee72630a",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.794883+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "8b5fb945271d3113425fff4b472aa1d71e8c503827cf7664b3b0186de8b04739",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:32.980682+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "2ae3e42bb653895fb39ae533e2b5f6cffcec1234d68eb41c8fc31b91cbb17973",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.796920+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "6430dde45f6164c5ba80e4e5a09f378f6fe9550986372c517aedca9cfa0dc5b1",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:32.982529+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "8ba0543791258086330ddc885f3c50c9a3d7e54fd1a940bf5487c3910753a2e6",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.799484+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "4108c825613197a8fcece2243150a3d6bb173f3f61280d8a9e01504101b584e2",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:32.984332+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "b5ca76428f933330fd7ff4baac267e91637bc4e4c9f2489a354ed4d1ec269fd8",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.801933+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
-      "source_digest": "47ad89b3175681d1128df137fb3617c8bc93e558504955b62d47d47202a89345",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:32.986782+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "94dd73b6bb7fc193d7bf4cdd769ad115f362516d6be3255c0e54b4d5ca2b3719",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.803858+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "8": {
       "document_sha256": "50659615e7a2ad431f0ba7c6d124c6da1d1fc63b1ee67b7392362d8e79344f26",
-      "source_digest": "4108c825613197a8fcece2243150a3d6bb173f3f61280d8a9e01504101b584e2",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:32.989247+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "b5ca76428f933330fd7ff4baac267e91637bc4e4c9f2489a354ed4d1ec269fd8",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.806293+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "59d0f5e7178873cc1405b30d05753007fb2c7206e5b97558538870be0ff1db85",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:32.991213+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "07b584d52b192000056e6381585e26fe5b2a4e3f3a8cb6afde08d90f2a62b787",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.808751+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "2c14216b6a771c35927d8c382ced1afbe24acc34f75c3aa55d4932fb9b7d6bc7",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:32.993812+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "3a1a0ec15332693ce20fccca9a72158cca99075324c7d37bc31cfa268c4bb904",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.810662+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "1dacefc8c404b408cc45ffc15f2eb9576d0977c85972f7db89d829f7ff8b9c62",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:32.996316+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "8307d4bf33824b027542dddf16885db16fc8794da972ebecc0ffbc6bd6c0d43b",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.812424+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "72fe7a13d59c6be7838eeef67b6eca39a774ca045cbed890af50be605a207258",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:32.998186+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "27f99ecd4ee0e71aacfef2c41c5b52ec39cd2a9694ab3fa8713562bd1d198461",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.814892+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
-      "source_digest": "59d0f5e7178873cc1405b30d05753007fb2c7206e5b97558538870be0ff1db85",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:32.999983+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "07b584d52b192000056e6381585e26fe5b2a4e3f3a8cb6afde08d90f2a62b787",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.817406+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
-      "source_digest": "59d0f5e7178873cc1405b30d05753007fb2c7206e5b97558538870be0ff1db85",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:33.002448+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "07b584d52b192000056e6381585e26fe5b2a4e3f3a8cb6afde08d90f2a62b787",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.819243+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
-      "source_digest": "59d0f5e7178873cc1405b30d05753007fb2c7206e5b97558538870be0ff1db85",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:33.004293+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "07b584d52b192000056e6381585e26fe5b2a4e3f3a8cb6afde08d90f2a62b787",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.821800+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "129a99a83ca339fa5052cb1fff9599b5dd06f1a4ccfebb3b40f45649772a9010",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:33.006700+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "f6baa9fa5b2b43f2c7820c840388b0bc1efd4686cda4438960a401cf1178214d",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.824320+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "4108c825613197a8fcece2243150a3d6bb173f3f61280d8a9e01504101b584e2",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:33.009143+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "b5ca76428f933330fd7ff4baac267e91637bc4e4c9f2489a354ed4d1ec269fd8",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.826096+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "47ad89b3175681d1128df137fb3617c8bc93e558504955b62d47d47202a89345",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:33.011223+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "94dd73b6bb7fc193d7bf4cdd769ad115f362516d6be3255c0e54b4d5ca2b3719",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.827956+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
-      "source_digest": "550446c0823353d6ccb3bcfca3c46628e028d33e99e22a2103a52fd03f766342",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:33.012970+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "d02b37d6ba36a4e0a47d833c465b608cc61e3289afac087d6029724b012b087a",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.830391+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "47ad89b3175681d1128df137fb3617c8bc93e558504955b62d47d47202a89345",
-      "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Records only: docs/compliance/FACTS.md corrects two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator. The final write, now with the manifest written last in the same step, is undone when a rename fails part way, with stated limits: a failed undo is reported naming the files left changed (FinalWriteIncomplete), a process killed during the renames is not undone, and a reader during the renames can see old and new files mixed. A date cell is accepted only as YYYY-MM-DD, optionally followed by a time; a leading byte order mark is dropped; a row whose cell count differs from the header is refused with its file and line. docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md rewords its dated F16 note (the count of 24 becomes 23 because KRW=X is now stamped) and says its checklist box is the owner's to tick. The rulings log gains one sentence in the A-1 entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
-      "reviewed_at": "2026-11-11T15:38:33.015334+00:00",
-      "source_commit": "d80db2cb0bdf92fbf32cfecece83905eeabee539"
+      "source_digest": "94dd73b6bb7fc193d7bf4cdd769ad115f362516d6be3255c0e54b4d5ca2b3719",
+      "reviewed_by": "Claude fixture generator FX clock and review fixes",
+      "review_note": "Merge of main 6285430 (PR 106, the record of the owner's answer to the 27 pilot, closing and merge decisions: a decision table under docs/product, a rulings log section, pointer paragraphs in three docs/product files) into the branch for owner ruling A-1 and review findings R1 to R5. No numbered policy document changed on either side. 07 and 08 were read again: neither side changes what the app sends, stores or deletes; the fixture generator runs only on the owner's reference files, and the decisions only fix procedure.",
+      "reviewed_at": "2026-11-11T15:44:21.832157+00:00",
+      "source_commit": "68ce1249a0a2791ebf071c0b3a5c14ecba680863"
     }
   }
 }
