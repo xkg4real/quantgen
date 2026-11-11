@@ -9,7 +9,10 @@ contract, writes one fixture per manifest row ("values unchanged; provenance fie
 its md5 and appends the manifest rows. It refuses, listing every missing file, when the reference directory or a file
 it would read is absent (it is absent on this machine: every golden that needs them stays NOT_RUN). A refused run
 writes nothing. A regeneration before the M7 freeze must reproduce the same md5s or is a fixture change logged in the
-manifest with the tests it re-baselines (L5492): `freeze` refuses a row whose md5 differs instead of overwriting it.
+manifest with the tests it re-baselines (L5492): the command line passes the manifest to `generate`, which compares
+every built file with it before it writes any and refuses a row whose md5 differs instead of overwriting it, so a
+refused regeneration leaves the frozen files and the manifest as they were; the new manifest rows are written in the
+same final write as the fixtures (`_commit`), the manifest last.
 
 No clock is read here: `retrieved_at_utc` is an argument (the retrieval instant recorded in CATALOG.md).
 """
@@ -19,16 +22,18 @@ import argparse
 import csv
 import hashlib
 import os
+import re
 import sys
 import tempfile
-from datetime import date, datetime, timezone
+from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tests.notrun import MANIFEST, MANIFEST_COLUMNS, load_manifest, md5_of  # noqa: E402
+from tests.notrun import MANIFEST, MANIFEST_COLUMNS, load_manifest  # noqa: E402
 
 PROVENANCE_FIELDS = ("series_id", "obs_date", "session_date", "obs_utc", "available_at_utc", "available_at_source",
                      "retrieved_at_utc", "value_status", "vintage", "content_hash")       # section 4.1 L1274-1281
@@ -98,15 +103,30 @@ def _reference_series(files=CLOSE_LAYOUT) -> dict[str, tuple[str, str]]:
 
 # Ruling 2, the instants: the series of these files (KS11, GSPC, KRWX, 005930, 000660) are reference series. They are
 # not registered (the registry lists the inputs of the operating signals, and stays as it is): `calendar_available_at`
-# stamps each from the market calendar its REFERENCE_FILES row names. Every other unregistered id is refused as before.
+# stamps each from the market calendar its REFERENCE_FILES row names; KRWX, whose row names FX, from the FX day close
+# of owner ruling A-1 below. Every other unregistered id is refused as before.
 REFERENCE_SERIES = _reference_series()
+# Owner ruling A-1 of 2026-11-11 (docs/nautilus_bridge/OWNER_RULINGS_LOG.md, the answer "전부승인"): the generator
+# stamps KRW=X (F16, market FX) at the New York 17:00 foreign-exchange day close. No signed calendar holds an FX clock
+# (the spec's market clocks are KRX, NYSE and CRYPTO, L1289-1291), and none is added: the rule lives here, for the
+# reference series whose REFERENCE_FILES row names FX, and nothing is registered. A row dated d is observed at 17:00
+# America/New_York on d, converted to UTC with the zone's own rules (`zoneinfo`, as core/calendars/clocks.py does;
+# never a month rule), and available at that same instant: the close-print bound adds FX_PRINT_BOUND_S = 0 s because no
+# ruling names a delay (T-FIX-01 still adds its 10 minutes before retrieval). The FX week closes on Friday at 17:00 and
+# reopens on Sunday at 17:00 New York time, so a Saturday or a Sunday has no day close: such a row is refused with the
+# reference file and line named (NoFXDayClose), never rolled to another day. A weekday is not checked against any
+# holiday list, since none is signed for FX. Whether Yahoo dates its KRW=X daily value at this close is not verified.
+FX_MARKET = "FX"
+FX_CLOSE_LOCAL, FX_CLOSE_TZ = time(17, 0), "America/New_York"
+FX_PRINT_BOUND_S = 0
 # The two readers read two more files in this layout that no ruling names: F01 (the official KOSPI close; LA-02 part 1
 # declared its layout, tests/macro_m1_calendars.F01_COLUMNS) and F15 (SPY, which docs/vol_backtest.fixture_closes reads
 # for G-B5-02). Neither is a reference series: F01's series is registered, and F15's SPY is neither registered nor
 # declared, so stamping it is still refused. CLOSE_FILES is every file read in the close layout. For each of them
 # `fixture_rows` applies the rules the readers apply after the freeze, before anything is written, so a file a reader
 # would refuse is refused here with the reference file and line named: a close is a finite number > 0; rows are in
-# date order and no date repeats (F27: no date and code pair repeats, and every code is one of the file's series).
+# date order and no date repeats (F27, long form: the dates of each code are in order, so a file in date order and a
+# file grouped by code are both accepted; no date and code pair repeats, and every code is one of the file's series).
 CLOSE_FILES: dict[str, tuple[str, ...]] = {"F01": ("close",), "F15": ("close",), **CLOSE_LAYOUT}
 # docs/vol_backtest.fixture_closes reads these two (docs/vol_backtest.FIXTURES) and needs two closes for one return;
 # every other close file holds at least one row.
@@ -125,6 +145,46 @@ class ReferenceMissing(FileNotFoundError):
 
 class FixtureChanged(ValueError):
     """A regenerated fixture's md5 differs from the frozen one (L5492): log the change, never overwrite silently."""
+
+
+class NoFXDayClose(ValueError):
+    """An FX row dated on a Saturday or a Sunday: the FX week closes on Friday at 17:00 New York time and reopens on
+    Sunday at 17:00, so the date has no day close (owner ruling A-1). Nothing is rolled or inferred."""
+
+
+def fx_close_utc(obs_date: date) -> datetime:
+    """The New York 17:00 FX day close of `obs_date` in UTC (owner ruling A-1 of 2026-11-11): 21:00Z while New York
+    keeps daylight time, 22:00Z otherwise, by the America/New_York zone rules of that date. NoFXDayClose for a Saturday
+    or a Sunday."""
+    if not isinstance(obs_date, date) or isinstance(obs_date, datetime):
+        raise TypeError(f"obs_date must be a datetime.date, got {type(obs_date).__name__}")
+    if obs_date.weekday() >= 5:
+        raise NoFXDayClose(f"{FX_MARKET} {obs_date.isoformat()} is a {obs_date:%A}: the FX week closes on Friday at "
+                           "17:00 New York time and reopens on Sunday at 17:00, so the date has no day close (owner "
+                           "ruling A-1); nothing is rolled or inferred")
+    return datetime.combine(obs_date, FX_CLOSE_LOCAL, tzinfo=ZoneInfo(FX_CLOSE_TZ)).astimezone(timezone.utc)
+
+
+class _ReferenceClocks:
+    """`clocks` as the generator reads them for a declared reference series: the clocks' own answer for every market
+    they carry, and for FX_MARKET the day close of owner ruling A-1 (`fx_close_utc`) as both the scheduled close and,
+    plus FX_PRINT_BOUND_S, the close-print bound. Every other attribute is the clocks' own."""
+
+    def __init__(self, clocks) -> None:
+        self._clocks = clocks
+
+    def __getattr__(self, name):
+        return getattr(self._clocks, name)
+
+    def decision_time_utc(self, market: str, session_date: date) -> datetime:
+        if market == FX_MARKET:
+            return fx_close_utc(session_date)
+        return self._clocks.decision_time_utc(market, session_date)
+
+    def close_print_bound_utc(self, market: str, session_date: date) -> datetime:
+        if market == FX_MARKET:
+            return fx_close_utc(session_date) + timedelta(seconds=FX_PRINT_BOUND_S)
+        return self._clocks.close_print_bound_utc(market, session_date)
 
 
 def selected_files(only=None) -> tuple[tuple[str, str, str, str, str, str, str], ...]:
@@ -157,13 +217,16 @@ def calendar_available_at(registry, clocks):
     published series at its publication instant. A series with no scheduled instant (live quote, as posted) is
     refused: backfilled history is never `inferred_from_retrieval`. `clocks` is `core.calendars.adapter.CalendarClocks`.
     A declared reference series (REFERENCE_SERIES; owner ruling 2 of 2026-11-11) is not registered: its close is
-    stamped the same way, on the market calendar its REFERENCE_FILES row names. An id that is neither registered nor
-    declared is refused."""
+    stamped the same way, on the market calendar its REFERENCE_FILES row names, and KRWX (market FX) at the New York
+    17:00 FX day close of owner ruling A-1 (`fx_close_utc`). An id that is neither registered nor declared is
+    refused."""
+    reference_clocks = _ReferenceClocks(clocks)
+
     def available_at(series_id: str, obs_date: date, value_status: str):
         if not registry.is_series(series_id):
             if series_id not in REFERENCE_SERIES:
                 raise KeyError(f"{series_id}: not a registered series id (every fixture series is named)")
-            return _reference_instants(clocks, series_id, obs_date, value_status)
+            return _reference_instants(reference_clocks, series_id, obs_date, value_status)
         if registry.obs_kind(series_id) == "close":
             market = registry.market(series_id)
             return clocks.decision_time_utc(market, obs_date), clocks.close_print_bound_utc(market, obs_date)
@@ -176,17 +239,19 @@ def calendar_available_at(registry, clocks):
 
 def _reference_instants(clocks, series_id: str, obs_date: date, value_status: str):
     """(obs_utc, available_at_utc) of a declared reference series' close: the scheduled close and the close-print
-    bound of the market its REFERENCE_FILES row names, read from `clocks` as for a registered close. Only the row's own
-    value_status is stamped. A market the calendars do not carry is refused: F16 names FX, and neither the spec's
-    market clocks (KRX, NYSE, CRYPTO; L1289-1291) nor core.calendars hold an FX clock, so KRW=X is not stamped until
-    the owner names its calendar. Nothing is inferred. A non-session, an unsigned file or a date outside coverage
-    raises from the clocks."""
+    bound of the market its REFERENCE_FILES row names, read from `clocks` (a `_ReferenceClocks`) as for a registered
+    close. Only the row's own value_status is stamped. F16 names FX, which no signed calendar carries: KRW=X is stamped
+    at the New York 17:00 FX day close of owner ruling A-1 (`fx_close_utc`), observed and available at that instant,
+    and a Saturday or Sunday row is refused (NoFXDayClose). Any other market the calendars do not carry is refused.
+    Nothing is inferred. A non-session, an unsigned file or a date outside coverage raises from the clocks."""
     market, declared = REFERENCE_SERIES[series_id]
     if value_status != declared:
         raise ValueError(f"{series_id}: a reference series is stamped as its REFERENCE_FILES row declares it "
                          f"({declared}), not as {value_status!r}")
     try:
         return clocks.decision_time_utc(market, obs_date), clocks.close_print_bound_utc(market, obs_date)
+    except NoFXDayClose as exc:
+        raise NoFXDayClose(f"{series_id}: {exc}") from None
     except KeyError as exc:
         raise KeyError(f"{series_id}: no market calendar for its REFERENCE_FILES market {market!r} "
                        f"({exc.args[0] if exc.args else exc}); a reference series is stamped from a market calendar, "
@@ -213,10 +278,20 @@ class _ReferenceMarkets:
 def calendar_check_fixture(registry, clocks):
     """`check_fixture(path)` for `generate`: `core.ficc.pit.check_fixture` (T-FIX-01: a close-type row retrieved before
     its session's close-print bound + 10 min is refused) on the same calendars as `calendar_available_at`, a declared
-    reference series' session being its REFERENCE_FILES market's."""
+    reference series' session being its REFERENCE_FILES market's; for KRWX (FX) the bound is the New York 17:00 FX day
+    close of owner ruling A-1, so its rows must be retrieved at 17:10 New York time of their date or later. A KRWX row
+    dated on a Saturday or a Sunday has no bound: NoFXDayClose naming the fixture file and the row's date (`generate`
+    never writes such a row, but an archived or hand-made fixture can hold one)."""
     from core.ficc import pit
-    view = _ReferenceMarkets(registry)
-    return lambda path: pit.check_fixture(path, registry=view, clocks=clocks)
+    view, reference_clocks = _ReferenceMarkets(registry), _ReferenceClocks(clocks)
+
+    def check_fixture(path):
+        try:
+            return pit.check_fixture(path, registry=view, clocks=reference_clocks)
+        except NoFXDayClose as exc:
+            raise NoFXDayClose(f"{Path(path).name}: {exc}; that row has no close-print bound for T-FIX-01, so the "
+                               "fixture is refused") from None
+    return check_fixture
 
 
 def _iso(dt: datetime) -> str:
@@ -229,16 +304,238 @@ def _content_hash(values: list[str]) -> str:
     return hashlib.md5("\x1f".join(values).encode("utf-8")).hexdigest()
 
 
-def _atomic_write(path: Path, text: str) -> None:
+# The reference date column (review of PR #101, R3; review of PR #107, F1): the header cell named `date` in any letter
+# case (the declared close layout writes `date`, Yahoo `Date`, FRED's older files `DATE`), else FRED's
+# `observation_date` (core/ficc/data.py reads FRED rows by either name), blanks around the name ignored, wherever it
+# stands, so a long-form file with `code` before `date` is read by its `date`; two cells of one such name are refused.
+# A header with no such cell falls back to its first column, as the generator read every file before R3 (Ken French's
+# raw daily files leave the first header cell blank; the layouts of the other reference files have never been
+# checked); a header with two such cells (Date,DATE), which that generator read by its first column, stays refused,
+# and a header whose first column holds dates while a later one is named date is read by the later one.
+# `fixture_rows` reads a reference file as UTF-8 with any leading byte order mark dropped (Excel's "CSV UTF-8" writes
+# one), so the mark hides no column name and is never part of the first cell (that generator copied it into the
+# fixture's first header cell).
+DATE_COLUMN_NAMES = ("date", "observation_date")
+# A date cell, surrounding blanks ignored, is either the date written YYYY-MM-DD, alone or followed by 'T' or a space
+# and a time of day (HH:MM, :SS and a fraction optional, then Z or a UTC offset optional, as pandas writes a
+# timestamp), or exactly eight digits YYYYMMDD (ISO 8601's basic form, as Ken French's daily files write it; the
+# generator before R3 read it through date.fromisoformat on Python 3.11 and later), read as that calendar date. Every
+# digit of either form is an ASCII digit 0-9. The observation date is the date as written; the time is not read.
+# Anything else is refused with the reference file and line: a trailing character (2026-09-301, 2026-09-30xyz), a week
+# date (2026-W40-3), another separator (2026/10/02), a blank, six digits (a YYYYMM month), a time after YYYYMMDD, an
+# impossible date (2026-13-01, 20261301), digits of another script (full-width, Arabic-Indic). The generator before
+# R3 read the first ten characters of the cell through date.fromisoformat, so it also read, with the right date, a
+# week date (2026-W40-2, 2026W402) and times this rule does not take (2026-09-29T16, 2026-09-29 16:00:00 EST,
+# 2026-09-29T24:00, 20260929T1600); like 2026-09-301, which the same cut read as 2026-09-30, they stay refused. No real
+# reference file has been checked for any of these shapes. The date cell is copied into the fixture as written, like
+# every reference cell; obs_date and session_date are written YYYY-MM-DD, and the readers of the fixtures read those.
+_DATE_CELL = re.compile(r"([0-9]{4}-[0-9]{2}-[0-9]{2})(?:[T ](?:[01][0-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9](?:\.[0-9]+)?)?"
+                        r"(?:Z|[+-](?:[01][0-9]|2[0-3]):?[0-5][0-9])?)?")
+_BASIC_DATE_CELL = re.compile(r"([0-9]{4})([0-9]{2})([0-9]{2})")
+
+
+def _obs_date(cell: str | None) -> date | None:
+    """The observation date of a reference date cell (`_DATE_CELL` or `_BASIC_DATE_CELL`, surrounding blanks ignored);
+    None for any other cell, an impossible date (2026-13-01, 20261301) included."""
+    text = (cell or "").strip()
+    extended, basic = _DATE_CELL.fullmatch(text), _BASIC_DATE_CELL.fullmatch(text)
+    try:
+        if extended:
+            return date.fromisoformat(extended.group(1))
+        if basic:
+            return date(*(int(part) for part in basic.groups()))
+    except ValueError:
+        return None
+    return None
+
+
+def _date_column(src: Path, fields: list[str]) -> str:
+    """The header cell of `fields` that names the date (DATE_COLUMN_NAMES, in that order of preference), or with none,
+    the first cell (the first column); a ValueError naming the reference file and header when one name is held by
+    two cells. `fields` is the header `fixture_rows` read with utf-8-sig, so no byte order mark is left to strip."""
+    def norm(field: str) -> str:
+        return field.strip().lower()
+    for name in DATE_COLUMN_NAMES:
+        found = [f for f in fields if norm(f) == name]
+        if len(found) == 1:
+            return found[0]
+        if found:
+            raise ValueError(f"{src.name}: more than one date column {found} in the reference header {fields}; no "
+                             "fixture is written")
+    return fields[0]
+
+
+def _add_note(exc: BaseException, note: str) -> None:
+    """Add `note` to `exc` without changing its type, args or str(): `exc.add_note` (Python 3.11 and later), which the
+    traceback prints under the message. pyproject.toml allows Python 3.10, which has no add_note: there the note is
+    kept in `exc.__notes__` as 3.11 keeps it, but the 3.10 traceback does not print it."""
+    if hasattr(exc, "add_note"):
+        exc.add_note(note)
+    else:
+        exc.__notes__ = [*getattr(exc, "__notes__", ()), note]
+
+
+def _atomic_write(path: Path, data: str | bytes, *, durable: bool = True) -> None:
+    """`data` (text is written as UTF-8 with its own line ends) to a temporary file beside `path`, then renamed over
+    it. With `durable` (the default: `freeze`'s manifest, the undo of `_commit`), the temporary file is flushed and
+    fsynced (`os.fsync`) before the rename and, on POSIX, the directory after it (`_fsync_dir`). `generate` stages
+    its data fixtures with durable=False: a staged copy is at most read back by the same process (`check_fixture`,
+    close-type fixtures only) and is deleted with the staging directory, so a sync protects nothing there."""
     path.parent.mkdir(parents=True, exist_ok=True)
     fd, tmp = tempfile.mkstemp(dir=path.parent, prefix=path.name, suffix=".tmp")
     try:
-        with os.fdopen(fd, "w", encoding="utf-8", newline="") as fh:
-            fh.write(text)
+        with os.fdopen(fd, "wb") as fh:
+            fh.write(data.encode("utf-8") if isinstance(data, str) else data)
+            if durable:
+                fh.flush()
+                os.fsync(fh.fileno())
         os.replace(tmp, path)
     finally:
         if os.path.exists(tmp):
             os.unlink(tmp)
+    if durable:
+        _fsync_dir(path.parent)
+
+
+def _fsync_dir(path: Path) -> None:
+    """fsync the directory `path`, so that the renames into it reach the disk, on POSIX only: Windows cannot open a
+    directory with os.open, so nothing is done there. Best effort: a directory that cannot be opened or synced is
+    left as it is and never fails the run, whose files are already in place."""
+    if os.name == "nt":
+        return
+    try:
+        fd = os.open(path, os.O_RDONLY)
+    except OSError:
+        return
+    try:
+        os.fsync(fd)
+    except OSError:
+        pass
+    finally:
+        os.close(fd)
+
+
+def _make_dirs(path: Path, made: list[Path]) -> None:
+    """Create the directory `path` and its missing parents, the outermost first, appending each directory this call
+    creates to `made` as soon as it exists (a directory another process creates meanwhile is not appended)."""
+    missing = []
+    while not path.exists():
+        missing.append(path)
+        path = path.parent
+    for d in reversed(missing):
+        try:
+            d.mkdir()
+        except FileExistsError:
+            if not d.is_dir():
+                raise
+            continue
+        made.append(d)
+
+
+class FinalWriteIncomplete(OSError):
+    """The final write failed part way and could not be undone in full; `.left` names every file (or temporary file,
+    or directory) left in another state than before the run."""
+
+    def __init__(self, failed: Path, cause: BaseException, left: list[str]) -> None:
+        self.failed, self.left = failed, left
+        super().__init__(f"writing {failed.name} into {failed.parent} failed ({type(cause).__name__}: {cause}) and "
+                         "the files written before it could not all be restored; no manifest row was written. Left: "
+                         + "; ".join(left))
+
+
+def _commit(items: list[tuple[Path, bytes]]) -> None:
+    """Write `items` ((destination path, bytes)) in their order, all or nothing as far as the file system allows
+    (review of PR #101, R4). `generate` passes the fixtures and, last, the manifest with its new rows, so a fixture is
+    never left in place without its manifest row. A destination named twice is refused with a ValueError naming it
+    before anything is written (review of PR #107, F5): two spellings name one destination when their parent
+    directories resolve to one real directory (os.path.realpath: symlinked directories and `..` resolved) and their
+    names are equal, letter case folded where os.path.normcase folds it (Windows); on a case-insensitive POSIX file
+    system (macOS by default) two names that differ only in letter case are not caught. `generate` never names one
+    file twice (each fixture by its own name, then the manifest). The missing destination directories are created,
+    then every file is written whole to a temporary file beside its destination, flushed and fsynced (`os.fsync`,
+    F2), and the bytes of each file it replaces are read; a failure in any of these steps removes the temporary files
+    and the directories this run created (F6) and changes nothing else. Then each temporary file is renamed over its
+    destination (`os.replace`, one rename per file). If a rename fails (on Windows, a destination open in another
+    program, the manifest included), or any other exception (a Ctrl+C included) stops `_commit` before its last
+    rename is done, the files already renamed get their earlier bytes back, the files this run created are removed,
+    the temporary files are deleted, the directories this run created are removed again, and the error is raised:
+    every destination is as it was. After the last rename the write is complete. Then, on POSIX only, each
+    destination directory and the parent of each directory this run created is fsynced, best effort (`_fsync_dir`:
+    an OSError opening or syncing a directory is ignored; Windows has no directory fsync); any other exception
+    there, a Ctrl+C included, reaches the caller and undoes nothing: every file already holds its new bytes.
+    What remains possible. A reader during the renames can see new and earlier files mixed. If the undo itself fails
+    (a file locked in that instant), FinalWriteIncomplete names each file left changed. If the process is stopped
+    with no exception raised in it (killed, power lost), no undo runs: stopped before the renames, it has changed no
+    destination but can leave temporary files `<name>*.tmp` and directories it created; stopped during the renames,
+    some files hold their new bytes, others their earlier bytes, the manifest may lack the rows of fixtures already
+    renamed, and temporary files and directories it created may remain. After a power loss, each file holds its
+    earlier bytes or its new bytes, whole, as far as the disk honours fsync and the file system keeps a rename atomic
+    across a crash (the common journaling file systems, such as ext4 and XFS, do; POSIX promises the atomicity only
+    to other processes, and Windows does not promise it): the new bytes are on disk before the rename, but a rename
+    not yet on disk when the power goes (any rename before the directory fsync; on Windows any rename) can be lost,
+    and the renames that survive need not be the earlier ones, so the manifest can survive with rows for fixtures
+    that came back with their earlier bytes or not at all (the fixture gate, tests/notrun.require_fixture, then
+    refuses those: a file that is not there as absent, one with its earlier bytes by md5). The manifest is renamed
+    last, so whenever the write fails or is undone, the manifest holds no new row."""
+    dests = [dest for dest, _data in items]
+    first: dict[str, Path] = {}                             # each directory entry written, by its first spelling
+    repeated: list[str] = []
+    for d in dests:                                         # the entry a rename replaces: the real parent directory
+        key = os.path.normcase(os.path.join(os.path.realpath(d.parent), d.name))   # (symlinks, `..`) and the name
+        if key not in first:
+            first[key] = d
+        elif str(first[key]) not in repeated:
+            repeated.append(str(first[key]))
+    if repeated:
+        raise ValueError(f"the final write names {', '.join(repeated)} more than once (one temporary file and one "
+                         "rename per destination); nothing is written")
+    made: list[Path] = []                                   # directories this run created
+    before: dict[Path, bytes | None] = {}
+    temps: dict[Path, str] = {}
+    done: list[Path] = []
+    dest = dests[0] if dests else Path()
+    try:
+        for dest in dests:                                  # 0. the missing directories, each recorded once made
+            _make_dirs(dest.parent, made)
+        for dest, data in items:                            # 1. every new file, whole and synced, beside its dest.
+            before[dest] = dest.read_bytes() if dest.exists() else None
+            fd, temps[dest] = tempfile.mkstemp(dir=dest.parent, prefix=dest.name, suffix=".tmp")
+            with os.fdopen(fd, "wb") as fh:
+                fh.write(data)
+                fh.flush()
+                os.fsync(fh.fileno())
+        for dest in dests:                                  # 2. one rename per file, the manifest last
+            os.replace(temps[dest], dest)
+            del temps[dest]
+            done.append(dest)
+    except BaseException as exc:
+        left = []
+        for undo in reversed(done):                         # 3. undo the renames already made
+            try:
+                if before[undo] is None:
+                    undo.unlink()
+                else:
+                    _atomic_write(undo, before[undo])
+            except OSError as why:
+                state = "created by this run and not removed" if before[undo] is None else "left with its new bytes"
+                left.append(f"{undo.name}: {state} ({why})")
+        for tmp in temps.values():
+            try:
+                os.unlink(tmp)
+            except FileNotFoundError:
+                pass
+            except OSError as why:
+                left.append(f"{Path(tmp).name}: temporary file not removed ({why})")
+        for d in sorted(made, key=lambda d: len(d.parts), reverse=True):     # deepest first
+            try:
+                d.rmdir()
+            except OSError as why:
+                left.append(f"{d}: directory created by this run not removed ({why})")
+        if left:
+            raise FinalWriteIncomplete(dest, exc, left) from exc
+        raise
+    for d in dict.fromkeys([*(dest.parent for dest in dests), *(m.parent for m in made)]):
+        _fsync_dir(d)                                       # 4. the renames on disk (POSIX), best effort
 
 
 def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_source: str, retrieved_at_utc: datetime,
@@ -249,16 +546,25 @@ def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_s
     layout names `close` is held to the rules its readers apply (tests/macro_m1_calendars.read_close_layout,
     docs/vol_backtest.fixture_closes), so that no row they refuse is written: a close is a finite number > 0, and rows
     are in date order with no date twice. A long-form file (its layout names `code`) may repeat a date, never a date
-    and code pair; every code is one of `series`, the file's ids; and each row is stamped with its own code as its
+    and code pair, and its date order is that of each code: rows in date order and rows grouped by code are both in
+    order; every code is one of `series`, the file's ids; and each row is stamped with its own code as its
     series_id (owner rulings 1 and 2 of 2026-11-11: F27 carries `code`, `series_id` and `close`, and 000660 is a
     reference series of its own). Every other row carries `series_id`. A file with fewer than `min_rows` rows is
-    refused. Each refusal is a ValueError naming the reference file and, for a row, its line."""
+    refused. The file is read as UTF-8, a leading byte order mark dropped. A row has as many cells as the header. The
+    observation date is read from the column `_date_column` picks (the one named date in any letter case or
+    observation_date, else the first column) and is the date of a cell written YYYY-MM-DD, alone or followed by a
+    time (`_DATE_CELL`), or written YYYYMMDD (`_BASIC_DATE_CELL`); the cell itself is copied unchanged and obs_date
+    is written YYYY-MM-DD. Each refusal of the file or of a row's cells is a ValueError naming the reference file and,
+    for a row, its line. A refusal of `available_at` for a row (NotASession, CalendarCoverageError, CalendarUnsigned, a
+    KeyError, a ValueError, ...) keeps its own type, message and cause, and carries the reference file, the line, the
+    date cell and the series as a note (`_add_note`; review of PR #107, F4); NoFXDayClose is raised again with the
+    file and line in its message."""
     if value_status not in VALUE_STATUSES or available_at_source not in AVAILABLE_AT_SOURCES:
         raise ValueError(f"{src.name}: value_status {value_status!r} / available_at_source {available_at_source!r}")
     close_rules, long_form = "close" in columns, "code" in columns
     if long_form and not series:
         raise ValueError(f"{src.name}: a long-form file (declared column `code`) is stamped by code and needs its series ids")
-    with src.open(encoding="utf-8", newline="") as fh:
+    with src.open(encoding="utf-8-sig", newline="") as fh:
         reader = csv.DictReader(fh)
         fields = list(reader.fieldnames or ())
         if not fields:
@@ -267,16 +573,27 @@ def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_s
         if absent:
             raise ValueError(f"{src.name}: declared columns {absent} absent from the reference header {fields}; the "
                              "generator copies a reference file's columns unchanged and renames none")
-        date_col = fields[0]
+        date_col = _date_column(src, fields)
+        first = "" if date_col.strip().lower() in DATE_COLUMN_NAMES else (
+            " (the first column: no header cell is named date or observation_date)")
         rows = []
         seen: set = set()
-        last = date.min
+        last: dict = {}                                  # the last date of each code (long form), or of the file
         retrieved = _iso(retrieved_at_utc)
         for line, raw in enumerate(reader, start=2):
-            obs = date.fromisoformat(raw[date_col].strip()[:10])
+            where = f"{src.name} line {line}"
+            extra = raw.get(None) or []                  # cells past the header (DictReader's restkey)
+            if extra or None in raw.values():            # or a short row (restval None)
+                cells = sum(v is not None for k, v in raw.items() if k is not None) + len(extra)
+                raise ValueError(f"{where}: {cells} cell(s), the header has {len(fields)}; no fixture is written")
+            cell = raw[date_col]
+            obs = _obs_date(cell)
+            if obs is None:
+                raise ValueError(f"{where}: date {cell!r} in column {date_col!r}{first} is not an ISO date written "
+                                 "YYYY-MM-DD (a time may follow after 'T' or a space) or YYYYMMDD; no fixture is "
+                                 "written")
             sid = series_id
             if close_rules:
-                where = f"{src.name} line {line}"
                 try:
                     close = float((raw["close"] or "").strip())
                 except ValueError:
@@ -288,13 +605,22 @@ def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_s
                     sid = raw["code"]
                     if sid not in series:
                         raise ValueError(f"{where}: code {sid!r} is not one of the file's series {series}")
-                key = (obs, sid) if long_form else obs
-                if obs < last or key in seen:
+                key, group = ((obs, sid), sid) if long_form else (obs, None)
+                if obs < last.get(group, date.min) or key in seen:
                     raise ValueError(f"{where}: rows out of date order or repeated; no reader accepts the file, so no "
                                      "fixture is written")
                 seen.add(key)
-                last = obs
-            obs_utc, avail_utc = available_at(sid, obs, value_status)
+                last[group] = obs
+            try:
+                obs_utc, avail_utc = available_at(sid, obs, value_status)
+            except NoFXDayClose as exc:                    # a KRW=X row on a weekend: named with its file and line
+                raise NoFXDayClose(f"{where}: {exc}; no fixture is written") from None
+            except Exception as exc:
+                # every other refusal of the same call (NotASession, CalendarUnsigned, CalendarCoverageError, a
+                # KeyError, ...; review of PR #107, F4) keeps its type and str() and gains the file and line as a note
+                _add_note(exc, f"reference row: {where}, date {cell!r} in column {date_col!r}, series {sid}; no "
+                               "fixture is written")
+                raise
             row = dict(raw)
             row.update({"series_id": sid, "obs_date": obs.isoformat(), "session_date": obs.isoformat(), "obs_utc": _iso(obs_utc),
                         "available_at_utc": _iso(avail_utc), "available_at_source": available_at_source,
@@ -316,13 +642,30 @@ def fixture_text(fields: list[str], rows: list[dict]) -> str:
 
 
 def generate(ref_dir: Path, out_dir: Path, *, retrieved_at_utc: datetime, licence: str, owner: str,
-             available_at=_refuse_available_at, check_fixture=None, only=None) -> list[dict]:
+             available_at=_refuse_available_at, check_fixture=None, only=None, manifest=None) -> list[dict]:
     """Write the fixtures under `out_dir`; return their manifest rows (S1's ten columns). `only` names the fixture ids
     to write (`selected_files`); the default is every file. Refuses when a reference file it would read is absent, or
     when a close file lacks a column of its declared layout or holds a row its readers refuse (CLOSE_FILES,
     `fixture_rows`). `check_fixture(path)` (core/ficc/pit.check_fixture, T-FIX-01) runs on every close-type fixture.
-    Every file is built and checked in a temporary directory first, and `out_dir` is written only after the last one
-    passed: a refused run leaves `out_dir` as it was."""
+    A result table is copied byte for byte (line ends and encoding included) and its md5 is that of those bytes; a
+    data fixture is written as `fixture_text` in UTF-8, and its md5 is that of the bytes written. With `manifest` (the
+    command line passes it), a file the manifest lists with another md5 is refused with FixtureChanged before
+    `out_dir` is touched (L5492; review of PR #101, R1), and the rows the manifest lacks are appended to it by
+    `freeze`'s rule in the same final write as the fixtures, as its last file (R4): a fixture is never left in
+    `out_dir` without its manifest row because the manifest could not be written. Every file is built in memory
+    first (a data fixture is also written, unsynced, to a temporary directory, where `check_fixture` reads the
+    close-type ones; a result table, which no check reads, is not), and `out_dir` is written from those bytes only
+    after the last file passed, by `_commit`: a refused run leaves `out_dir` and the manifest as they were, and
+    `_commit` says what a failure of the final write can leave."""
+    return _generate(ref_dir, out_dir, retrieved_at_utc=retrieved_at_utc, licence=licence, owner=owner,
+                     available_at=available_at, check_fixture=check_fixture, only=only, manifest=manifest)[0]
+
+
+def _generate(ref_dir: Path, out_dir: Path, *, retrieved_at_utc: datetime, licence: str, owner: str,
+              available_at=_refuse_available_at, check_fixture=None, only=None,
+              manifest=None) -> tuple[list[dict], int | None]:
+    """`generate`, returning also how many rows its final write appended to `manifest`, as `_manifest_bytes`
+    counted them (None without `manifest`): the command line prints that count (review of PR #107, F8)."""
     ref_dir, out_dir = Path(ref_dir), Path(out_dir)
     files = selected_files(only)
     missing = missing_files(ref_dir, only)
@@ -340,24 +683,28 @@ def generate(ref_dir: Path, out_dir: Path, *, retrieved_at_utc: datetime, licenc
                                             available_at_source=source, retrieved_at_utc=retrieved_at_utc,
                                             available_at=available_at, columns=CLOSE_FILES.get(fid, ()), series=ids,
                                             min_rows=CLOSE_MIN_ROWS.get(fid, 1) if fid in CLOSE_FILES else 0)
-                text = fixture_text(fields, rows)
-                _atomic_write(staged, text)
-                span = f"{rows[0]['obs_date']}..{rows[-1]['obs_date']}" if rows else ""
+                data = fixture_text(fields, rows).encode("utf-8")
+                _atomic_write(staged, data, durable=False)     # at most read below, then deleted: not synced
+                dates = [r["obs_date"] for r in rows]        # ISO dates: the first and last observation of the file,
+                span = f"{min(dates)}..{max(dates)}" if rows else ""   # also of a long-form file grouped by code
                 rule = f"{value_status}; available_at_source = {source}"
                 if check_fixture is not None and value_status in ("official_close", "vendor_close", "live_snapshot"):
                     check_fixture(staged)
-            else:                                              # result table: copied byte-for-byte
-                text = src.read_text(encoding="utf-8")
-                _atomic_write(staged, text)
+            else:                                              # result table: copied byte for byte (R5), from
+                data = src.read_bytes()                        # memory; no check reads a staged copy (F7)
                 span, rule = "result table", "result table; not an acting input"
+            # the md5 is that of `data`, the bytes `_commit` writes
             rows_out.append({"file": staged.name, "source": f"/home/claude/quantgen_macro_data/{rel} ({fid}, per CATALOG.md)",
                              "series": series, "span": span, "retrieved_at_utc": _iso(retrieved_at_utc),
-                             "value_status_rule": rule, "md5": md5_of(staged), "licence": licence, "owner": owner,
-                             "tests": tests})
-            built.append((staged.name, text))
-        for name, text in built:                               # every file passed: only now is `out_dir` written
-            _atomic_write(out_dir / name, text)
-    return rows_out
+                             "value_status_rule": rule, "md5": hashlib.md5(data).hexdigest(), "licence": licence,
+                             "owner": owner, "tests": tests})
+            built.append((out_dir / staged.name, data))
+    appended = None
+    if manifest is not None:                                   # R1: compared before `out_dir` is touched; R4: the
+        manifest_bytes, appended = _manifest_bytes(Path(manifest), rows_out)              # manifest is written last
+        built.append((Path(manifest), manifest_bytes))
+    _commit(built)                                             # every file passed: only now is `out_dir` written
+    return rows_out, appended
 
 
 class _Buf:
@@ -365,24 +712,37 @@ class _Buf:
     def write(self, s): self.parts.append(s)
 
 
-def freeze(manifest: Path, rows: list[dict]) -> int:
-    """Append the rows the manifest lacks; a listed file whose md5 differs raises FixtureChanged (L5492); an
-    identical row is left alone. Returns the number of rows appended."""
-    manifest = Path(manifest)
-    listed = load_manifest(manifest) if manifest.is_file() else {}
+def _refuse_changed(listed: dict, rows: list[dict]) -> None:
+    """FixtureChanged naming every row whose file `listed` (a loaded manifest) holds with another md5 (L5492)."""
     changed = [f"{r['file']}: {listed[r['file']]['md5']} -> {r['md5']}" for r in rows
                if r["file"] in listed and listed[r["file"]]["md5"].lower() != r["md5"].lower()]
     if changed:
         raise FixtureChanged("regeneration does not reproduce the frozen md5 (a fixture change must be logged in the "
                              "manifest with the tests it re-baselines, L5492): " + "; ".join(changed))
+
+
+def _manifest_bytes(manifest: Path, rows: list[dict]) -> tuple[bytes, int]:
+    """`freeze`'s rule without the write: the manifest's bytes with the rows it lacks appended, and how many; a listed
+    file whose md5 differs raises FixtureChanged (L5492); an identical row is left alone."""
+    listed = load_manifest(manifest) if manifest.is_file() else {}
+    _refuse_changed(listed, rows)
     new = [r for r in rows if r["file"] not in listed]
     text = manifest.read_text(encoding="utf-8") if manifest.is_file() else ",".join(MANIFEST_COLUMNS) + "\n"
     if not text.endswith("\n"):
         text += "\n"
     buf: list[str] = []
     csv.DictWriter(_Buf(buf), fieldnames=MANIFEST_COLUMNS, lineterminator="\n").writerows(new)
-    _atomic_write(manifest, text + "".join(buf))
-    return len(new)
+    return (text + "".join(buf)).encode("utf-8"), len(new)
+
+
+def freeze(manifest: Path, rows: list[dict]) -> int:
+    """Append the rows the manifest lacks; a listed file whose md5 differs raises FixtureChanged (L5492); an
+    identical row is left alone. Returns the number of rows appended. The command line does not call it:
+    `generate(manifest=...)` applies the same rule and writes the manifest in the same final write as the fixtures."""
+    manifest = Path(manifest)
+    data, added = _manifest_bytes(manifest, rows)
+    _atomic_write(manifest, data)
+    return added
 
 
 def main(argv=None, *, clocks=None) -> int:
@@ -412,10 +772,10 @@ def main(argv=None, *, clocks=None) -> int:
     from core.calendars.adapter import CalendarClocks            # the shipped set: refuses until the owner signs
     from core.ficc import contracts
     registry, clocks = contracts.default_registry(), CalendarClocks() if clocks is None else clocks
-    rows = generate(ref, Path(args.out), retrieved_at_utc=retrieved, licence=args.licence, owner=args.owner,
-                    available_at=calendar_available_at(registry, clocks),
-                    check_fixture=calendar_check_fixture(registry, clocks), only=args.only)
-    added = freeze(Path(args.manifest), rows)
+    rows, added = _generate(ref, Path(args.out), retrieved_at_utc=retrieved, licence=args.licence, owner=args.owner,
+                            available_at=calendar_available_at(registry, clocks),
+                            check_fixture=calendar_check_fixture(registry, clocks), only=args.only,
+                            manifest=Path(args.manifest))      # `added`: the rows the final write appended
     print(f"{len(rows)} fixtures written under {args.out}; {added} manifest rows appended to {args.manifest}")
     return 0
 

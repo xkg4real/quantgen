@@ -7,6 +7,10 @@
 > compared at two decimals; and T-REGIME-01 full range and G-REF-01 are converted. The statements below that say
 > otherwise are left as they were written on 2026-11-10: questions 1 to 4, the last "unverified" bullet, "Next parts"
 > and the counts.
+>
+> **Added later on 2026-11-11 (⑨-1/2/e):** "KRWX is still refused" above no longer holds. Owner ruling A-1 has the
+> generator stamp KRW=X (F16) at the New York 17:00 FX day close (`docs/macro_fixtures.fx_close_utc`), observed and
+> available at that instant; a Saturday or Sunday row is refused. No calendar file was changed.
 
 This is the second part of the LA-02 fix from the 2026-11-04 look-ahead audit
 (`git show 7749450:docs/nautilus_bridge/LOOKAHEAD_AUDIT_2026-11-04.md`, LA-02 at lines 279-284). It follows the pattern

@@ -35,3 +35,5 @@ A row without `licence`, `owner` and `md5` is not a fixture: `load_manifest` ref
   holds the published Bailey-Lopez de Prado inputs of G-DSR-01 (synthetic, exempt from the post-close rule).
 - Generated fixtures (`python docs/macro_fixtures.py --reference /home/claude/quantgen_macro_data ...`) carry the
   section 4.1 provenance columns (`series_id` first) and are checked by `core.ficc.pit.check_fixture` (T-FIX-01).
+  KRW=X (F16) has no signed market calendar: owner ruling A-1 (2026-11-11) stamps it at the New York 17:00 FX day
+  close, which is also its close-print bound, and a row dated on a Saturday or Sunday is refused.
