@@ -22,6 +22,7 @@ import argparse
 import csv
 import hashlib
 import os
+import re
 import sys
 import tempfile
 from datetime import date, datetime, time, timedelta, timezone
@@ -305,9 +306,24 @@ def _content_hash(values: list[str]) -> str:
 
 # The reference date column, found by its name and never by its position (review of PR #101, R3): a header cell named
 # `date` in any letter case (the declared close layout writes `date`, Yahoo `Date`, FRED's older files `DATE`), else
-# FRED's `observation_date` (core/ficc/data.py reads FRED rows by either name). A leading UTF-8 byte order mark on the
-# first cell does not hide it.
+# FRED's `observation_date` (core/ficc/data.py reads FRED rows by either name). `fixture_rows` reads a reference file
+# as UTF-8 with any leading byte order mark dropped (Excel's "CSV UTF-8" writes one), so the mark hides no column name.
 DATE_COLUMN_NAMES = ("date", "observation_date")
+# A date cell is the date written YYYY-MM-DD, alone or followed by 'T' or a space and a time of day (HH:MM, :SS and a
+# fraction optional, then Z or a UTC offset optional, as pandas writes a timestamp). The observation date is the date
+# as written; the time is not read. Anything else (a trailing digit, 20260930, 2026-W40-3, 2026/09/30) is refused.
+_DATE_CELL = re.compile(r"([0-9]{4}-[0-9]{2}-[0-9]{2})(?:[T ](?:[01][0-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9](?:\.[0-9]+)?)?"
+                        r"(?:Z|[+-](?:[01][0-9]|2[0-3]):?[0-5][0-9])?)?")
+
+
+def _obs_date(cell: str | None) -> date | None:
+    """The observation date of a reference date cell (`_DATE_CELL`, surrounding blanks ignored); None for any other
+    cell, an impossible date (2026-13-01) included."""
+    found = _DATE_CELL.fullmatch((cell or "").strip())
+    try:
+        return date.fromisoformat(found.group(1)) if found else None
+    except ValueError:
+        return None
 
 
 def _date_column(src: Path, fields: list[str]) -> str:
@@ -428,14 +444,16 @@ def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_s
     order; every code is one of `series`, the file's ids; and each row is stamped with its own code as its
     series_id (owner rulings 1 and 2 of 2026-11-11: F27 carries `code`, `series_id` and `close`, and 000660 is a
     reference series of its own). Every other row carries `series_id`. A file with fewer than `min_rows` rows is
-    refused. The observation date is read from the column named by `_date_column` (never by position) and must be an
-    ISO date. Each refusal is a ValueError naming the reference file and, for a row, its line."""
+    refused. The file is read as UTF-8, a leading byte order mark dropped. A row has as many cells as the header. The
+    observation date is read from the column named by `_date_column` (never by position) and is the date of a cell
+    written YYYY-MM-DD, alone or followed by a time (`_DATE_CELL`). Each refusal is a ValueError naming the reference
+    file and, for a row, its line."""
     if value_status not in VALUE_STATUSES or available_at_source not in AVAILABLE_AT_SOURCES:
         raise ValueError(f"{src.name}: value_status {value_status!r} / available_at_source {available_at_source!r}")
     close_rules, long_form = "close" in columns, "code" in columns
     if long_form and not series:
         raise ValueError(f"{src.name}: a long-form file (declared column `code`) is stamped by code and needs its series ids")
-    with src.open(encoding="utf-8", newline="") as fh:
+    with src.open(encoding="utf-8-sig", newline="") as fh:
         reader = csv.DictReader(fh)
         fields = list(reader.fieldnames or ())
         if not fields:
@@ -451,12 +469,15 @@ def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_s
         retrieved = _iso(retrieved_at_utc)
         for line, raw in enumerate(reader, start=2):
             where = f"{src.name} line {line}"
-            cell = raw.get(date_col)
-            try:
-                obs = date.fromisoformat((cell or "").strip()[:10])
-            except ValueError:
-                raise ValueError(f"{where}: date {cell!r} in column {date_col!r} is not an ISO date (YYYY-MM-DD); "
-                                 "no fixture is written") from None
+            extra = raw.get(None) or []                  # cells past the header (DictReader's restkey)
+            if extra or None in raw.values():            # or a short row (restval None)
+                cells = sum(v is not None for k, v in raw.items() if k is not None) + len(extra)
+                raise ValueError(f"{where}: {cells} cell(s), the header has {len(fields)}; no fixture is written")
+            cell = raw[date_col]
+            obs = _obs_date(cell)
+            if obs is None:
+                raise ValueError(f"{where}: date {cell!r} in column {date_col!r} is not an ISO date written YYYY-MM-DD "
+                                 "(a time may follow after 'T' or a space); no fixture is written")
             sid = series_id
             if close_rules:
                 try:
