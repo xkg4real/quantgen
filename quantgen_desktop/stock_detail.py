@@ -1,0 +1,1736 @@
+"""Native stock detail view: one stock on one screen with a chart that fills it (owner request 2026-11-11, UI-D8).
+
+Owner, verbatim: "검색해서 한 차트를 구체적으로 볼때에는, 해당 차트로 화면을 거의 가득채워도 가능해. 정보전달과 가독성에
+신경쓰고 공간 넉넉하게써줘" · "스크롤로 차트좌우이동이 가능한데, 이거 그냥 막아버리고 pc기준 좌우화살표로 차트 좌우
+확인할수있게 변경해줘" · "트레이딩뷰 상세차트 목록 ui인데, 이런식으로 큼직큼직하게 하고 지표같은건 화살표로 접고펴고
+할수잇게 해야하고, 우리는 이 ui를 기본으로 주린이들이 읽기 쉽게 하는 가이드를 화면에 잘 녹여야해" · "그냥 좌측에 존나큰차트
+존나크게, 이런 공간 부족해서 스크롤이 필요한 메뉴들은 오른쪽으로 빼서 간소화" · "오른쪽의 스크롤 필요한 메뉴들은
+움직이는거고, 차트쪽은 스크롤로 위아래 이동이 안되는거야. 오른쪽만 움직이는거지 스크롤이".
+
+Layout: a one-row toolbar; under it the chart column (the shared MarketChartPane in detail mode, drawn by
+core.market.detail_svg at its exact size, and the period bar) on the left, and one fixed-width right column
+(stock_detail_side.RightColumn) that is the only thing that scrolls. While a stock is open the page never scrolls
+(`PageLock`); the wheel over the chart does nothing; ←/→ (Shift: 10 bars), Home/End, +/− and 0 move the chart.
+Focus mode (⤢, Shift+F) collapses the window's rail and hides the right column. Under 900px of chart room the
+right column opens over the chart instead of beside it.
+
+Kept for the rest of the app and its tests: the StockView surface (`chart`, `store`, `instrument`, `profile`,
+`jobs`, `back_button`, `watch_button`, `mark`, `code`, `name`, `price`, `change`, `profile_status`,
+`section_panels`, `adopt_chart()`, `show_instrument()`, `load_profile()`, `render_header()`,
+`render_sections()`, `set_locale()`, `set_theme()`, `stop()`) and the profile loading epochs.
+"""
+from __future__ import annotations
+
+import json
+import math
+
+from PyQt6.QtCore import QEvent, QObject, QPoint, QSize, QTimer, Qt, pyqtSignal, pyqtSlot
+from PyQt6.QtGui import QPainter, QPalette
+from PyQt6.QtWidgets import (QCheckBox, QComboBox, QFrame, QHBoxLayout, QLabel, QLineEdit, QPushButton, QScrollArea,
+                             QSizePolicy, QVBoxLayout, QWidget)
+
+from core.i18n import LocaleContext
+from core.market.models import Instrument
+from core.theme import DARK, LIGHT
+from .company_identity import CompanyMark
+from .jobs import Jobs
+from .stock_detail_side import FoldSection, RightColumn
+from .stock_detail_style import icon, icon_size, label, numbers, rich, set_prop, sheet, text
+
+SETTINGS_PREFIX = "markets/detail/"
+DEFAULT_STUDIES = ("sma", "volume_ma", "rsi")
+SIDE_GAP = 16
+MIN_CHART = 560          # narrower than this beside the column: the column opens over the chart instead
+OVERLAY_ROW = 24
+
+
+def _lang(ctx):
+    return "ko" if getattr(ctx, "language", "ko") == "ko" else "en"
+
+
+def _esc(value):
+    from html import escape
+    return escape(str(value))
+
+
+def panel_name(spec, lang):
+    """A sub-panel's title: the Korean name with its settings ('스토캐스틱 14·3·3'), or in English the compact
+    label when it has no Hangul ('Stoch 14·3·3'), else the English name."""
+    import re
+    numbers = "·".join(f"{value:g}" if isinstance(value, float) else str(value) for _, value in spec.params)
+    if lang == "ko":
+        return f"{spec.ko} {numbers}".strip()
+    if re.search("[가-힣]", spec.short):
+        return f"{spec.en} {numbers}".strip()
+    return spec.short
+
+
+class PageLock(QObject):
+    """Owner 2026-11-11: while a stock is open the app page never scrolls. The view is sized to the page
+    viewport and the page is held at the view's top; wheel events that reach the page are dropped and any other
+    scroll (wheel guards, the shell's position restore, a deferred setValue(0)) is pinned back."""
+
+    def __init__(self, view):
+        super().__init__(view)
+        self.view = view
+        self.scroll = self.bar = None
+        self.target = 0
+        self._policy = None
+        self._pinning = False
+
+    def _find(self):
+        parent = self.view.parentWidget()
+        while parent is not None and not isinstance(parent, QScrollArea):
+            parent = parent.parentWidget()
+        return parent
+
+    @property
+    def engaged(self):
+        return self.scroll is not None
+
+    def engage(self):
+        scroll = self._find()
+        if scroll is None or not self.view.isVisible():
+            return False
+        if scroll is not self.scroll:
+            self.release()
+            self.scroll, self.bar = scroll, scroll.verticalScrollBar()
+            self._policy = (scroll.verticalScrollBarPolicy(), scroll.horizontalScrollBarPolicy())
+            scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            self.bar.valueChanged.connect(self._repin)
+            self.bar.rangeChanged.connect(self._range)
+            scroll.viewport().installEventFilter(self)
+        self.refit()
+        return True
+
+    def refit(self):
+        if self.scroll is None:
+            return
+        height = max(420, self.scroll.viewport().height())
+        if self.view.minimumHeight() != height or self.view.maximumHeight() != height:
+            self.view.setFixedHeight(height)
+        content = self.scroll.widget()
+        if content is not None and content.layout() is not None:
+            content.layout().activate()
+        self.target = self.view.mapTo(content, QPoint(0, 0)).y() if content is not None else 0
+        self._pin()
+        self.view._fit_toolbar()
+
+    def _pin(self):
+        if self.bar is None or self._pinning:
+            return
+        self._pinning = True
+        try:
+            if self.bar.value() != self.target:
+                self.bar.setValue(self.target)
+        finally:
+            self._pinning = False
+
+    def _repin(self, value):
+        if not self._pinning and value != self.target:
+            self._pin()
+
+    def _range(self, *_):
+        self._pin()
+
+    def eventFilter(self, watched, event):
+        if self.scroll is not None and watched is self.scroll.viewport():
+            if event.type() == QEvent.Type.Wheel:
+                event.accept()
+                return True
+            if event.type() == QEvent.Type.Resize:
+                QTimer.singleShot(0, self.refit)
+        return False
+
+    def release(self):
+        if self.scroll is None:
+            return
+        try:
+            self.bar.valueChanged.disconnect(self._repin)
+            self.bar.rangeChanged.disconnect(self._range)
+        except (TypeError, RuntimeError):
+            pass
+        try:
+            self.scroll.viewport().removeEventFilter(self)
+            if self._policy is not None:
+                self.scroll.setVerticalScrollBarPolicy(self._policy[0])
+                self.scroll.setHorizontalScrollBarPolicy(self._policy[1])
+        except RuntimeError:
+            pass
+        self.scroll = self.bar = None
+        self.view.setMinimumHeight(0)
+        self.view.setMaximumHeight(16777215)
+
+
+class DetailBody(QWidget):
+    """Chart column and right column, placed by hand: docked side by side, or the column over the chart."""
+    mode_changed = pyqtSignal()
+
+    def __init__(self, chart_column, side):
+        super().__init__()
+        self.setObjectName("sdBody")
+        self.chart_column, self.side = chart_column, side
+        chart_column.setParent(self)
+        side.setParent(self)
+        self.side_pref = True      # docked: the user's show/hide choice
+        self.overlay_open = False  # narrow: the column is opened over the chart
+        self.focus = False         # focus mode hides the column in both
+        self.setMinimumSize(360, 300)
+        self._docked = None
+
+    def side_width(self):
+        width = self.width()
+        return 380 if width >= 1320 else 360 if width >= 1120 else 340
+
+    def docked(self):
+        return self.width() - self.side_width() - SIDE_GAP >= MIN_CHART
+
+    def side_shown(self):
+        if self.focus:
+            return False
+        return self.side_pref if self.docked() else self.overlay_open
+
+    def relayout(self):
+        width, height = self.width(), self.height()
+        side = self.side_width()
+        docked = self.docked()
+        shown = self.side_shown()
+        if docked and shown:
+            self.chart_column.setGeometry(0, 0, width - side - SIDE_GAP, height)
+        else:
+            self.chart_column.setGeometry(0, 0, width, height)
+        if shown:
+            self.side.setGeometry(width - side, 0, side, height)
+            self.side.show()
+            self.side.raise_()
+        else:
+            self.side.hide()
+        if docked != self._docked:
+            self._docked = docked
+            self.mode_changed.emit()
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.relayout()
+
+
+class FitLabel(QLabel):
+    """One line that keeps its whole text (text() is the full name) but paints it elided when squeezed."""
+
+    def __init__(self):
+        super().__init__()
+        self.setTextFormat(Qt.TextFormat.PlainText)
+        self.setProperty("qg_literal", True)
+        self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+
+    def minimumSizeHint(self):
+        hint = super().minimumSizeHint()
+        return QSize(min(hint.width(), 64), hint.height())
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setFont(self.font())
+        painter.setPen(self.palette().color(QPalette.ColorRole.WindowText))
+        shown = self.fontMetrics().elidedText(self.text(), Qt.TextElideMode.ElideRight, self.contentsRect().width())
+        painter.drawText(self.contentsRect(), int(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter), shown)
+        painter.end()
+        self.setToolTip(self.text() if shown != self.text() else "")
+
+
+class OhlcStrip(QFrame):
+    """Line 1 of the chart header: the selected candle's open, high, low, close, change and volume."""
+
+    def __init__(self):
+        super().__init__()
+        self.setProperty("sd", "overlay")
+        row = QHBoxLayout(self)
+        row.setContentsMargins(6, 0, 8, 0)
+        row.setSpacing(5)
+        self.title = label("ohlcTitle")
+        row.addWidget(self.title)
+        self.date = numbers(label("ohlcDate"))
+        row.addWidget(self.date)
+        row.addSpacing(6)
+        self.keys, self.values = {}, {}
+        for name in ("o", "h", "l", "c"):
+            key, value = label("ohlcKey"), numbers(label("ohlcValue"))
+            row.addWidget(key)
+            row.addWidget(value)
+            row.addSpacing(4)
+            self.keys[name], self.values[name] = key, value
+        self.change = numbers(label("ohlcValue"))
+        row.addWidget(self.change)
+        row.addSpacing(8)
+        self.keys["v"], self.values["v"] = label("ohlcKey"), numbers(label("ohlcValue"))
+        row.addWidget(self.keys["v"])
+        row.addWidget(self.values["v"])
+        row.addStretch(1)
+
+
+class ChartOverlays(QObject):
+    """Qt text over the SVG chart, placed from detail_svg.ChartLayout: the OHLC strip, the overlay legend, one
+    header per sub-panel (values and the beginner reading at the selected candle, ⓘ, ×) and notice chips."""
+    info_requested = pyqtSignal(str)
+    off_requested = pyqtSignal(str)
+
+    def __init__(self, view):
+        super().__init__(view)
+        self.view = view
+        self.chart = view.chart.chart
+        self.ohlc = OhlcStrip()
+        self.ohlc.setParent(self.chart)
+        self.legend = QFrame(self.chart)
+        self.legend.setProperty("sd", "overlay")
+        legend = QHBoxLayout(self.legend)
+        legend.setContentsMargins(6, 0, 8, 0)
+        legend.setSpacing(14)
+        self.legend_label = rich("legend")
+        legend.addWidget(self.legend_label)
+        legend.addStretch(1)
+        self.heads = {}
+        self.notice = QFrame(self.chart)
+        self.notice.setProperty("sd", "overlayClear")
+        notice = QHBoxLayout(self.notice)
+        notice.setContentsMargins(0, 0, 0, 0)
+        notice.setSpacing(6)
+        self.hidden_label = label("notice")
+        notice.addWidget(self.hidden_label)
+        self.latest_button = QPushButton()
+        self.latest_button.setProperty("sd", "notice")
+        self.latest_button.setProperty("qg_literal", True)
+        self.latest_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.latest_button.clicked.connect(lambda: (view.chart.follow_latest(), view.focus_chart()))
+        notice.addWidget(self.latest_button)
+        for widget in (self.ohlc, self.legend, self.notice):
+            widget.hide()
+
+    def _head(self, key):
+        head = self.heads.get(key)
+        if head is None:
+            head = QFrame(self.chart)
+            head.setProperty("sd", "overlayClear")
+            row = QHBoxLayout(head)
+            row.setContentsMargins(4, 0, 2, 0)
+            row.setSpacing(8)
+            head.title = rich("panelTitle")
+            row.addWidget(head.title)
+            head.reading = label("reading")
+            head.reading.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
+            row.addWidget(head.reading, 1)
+            head.info = QPushButton()
+            head.info.setProperty("sd", "mini")
+            head.info.setFocusPolicy(Qt.FocusPolicy.TabFocus)
+            head.info.clicked.connect(lambda checked=False, k=key: self.info_requested.emit(k))
+            row.addWidget(head.info)
+            head.off = QPushButton()
+            head.off.setProperty("sd", "mini")
+            head.off.setFocusPolicy(Qt.FocusPolicy.TabFocus)
+            head.off.clicked.connect(lambda checked=False, k=key: self.off_requested.emit(k))
+            row.addWidget(head.off)
+            head.full = ""
+            self.heads[key] = head
+        return head
+
+    def hide_all(self):
+        for widget in (self.ohlc, self.legend, self.notice, *self.heads.values()):
+            widget.hide()
+
+    def refresh(self):
+        """Texts at the selected candle and positions from the chart's last layout."""
+        from core.education import indicators as engine
+        from core.education.study_guide import availability_short, line_readout, study_reading
+        from core.market.detail_svg import compact
+        from core.market.presentation import study_colors
+        view, pane = self.view, self.view.chart
+        layout = self.chart.layout_info
+        snapshot = pane.snapshot
+        if layout is None or snapshot is None or not snapshot.candles or not self.chart.isVisible():
+            self.hide_all()
+            return
+        lang, dark = _lang(view.ctx), view.dark
+        candles = snapshot.candles
+        n = len(candles)
+        cursor = max(0, min(n - 1, layout.cursor))
+        candle = candles[cursor]
+        width = layout.plot_right - layout.plot_left
+        compact_labels = width < 600
+        # OHLC strip.
+        strip = self.ohlc
+        interval = snapshot.request.interval
+        strip.title.setText(f"{view.name.text()} · {view.interval_name(interval)}")
+        strip.title.setVisible(width >= 700)
+        intraday = interval not in ("1d", "1w", "1M")
+        stamp = str(candle.timestamp)
+        strip.date.setText((stamp[5:16].replace("T", " ") if intraday else stamp[:10]) if cursor != n - 1 else "")
+        strip.date.setVisible(cursor != n - 1)
+        terms = {"o": "term_open", "h": "term_high", "l": "term_low", "c": "term_close"}
+        values = {"o": candle.open, "h": candle.high, "l": candle.low, "c": candle.close}
+        for name in ("o", "h", "l", "c"):
+            strip.keys[name].setText(text(lang, f"{name}_short" if compact_labels else name))
+            strip.values[name].setText(view.price_text(values[name]))
+            strip.keys[name].setToolTip(text(lang, terms[name]))
+            strip.values[name].setToolTip(text(lang, terms[name]))
+        previous = candles[cursor - 1].close if cursor > 0 else None
+        tone = ""
+        if previous:
+            change = candle.close - previous
+            pct = change / previous * 100
+            arrow = "▲" if change > 0 else "▼" if change < 0 else "–"
+            tone = "up" if change > 0 else "down" if change < 0 else ""
+            sign = "+" if change > 0 else "−" if change < 0 else ""
+            strip.change.setText(f"{arrow} {sign}{view.price_text(abs(change))} ({sign}{abs(pct):.2f}%)")
+        else:
+            strip.change.setText("")
+        set_prop(strip.change, "tone", tone)
+        set_prop(strip.values["c"], "tone", tone)
+        strip.change.setToolTip(text(lang, "term_change"))
+        volume = candle.volume
+        strip.values["v"].setText(compact(volume) if volume is not None else "—")
+        full = f"{volume:,.0f}" if volume is not None else "—"
+        strip.keys["v"].setText(text(lang, "v"))
+        for widget in (strip.keys["v"], strip.values["v"]):
+            widget.setToolTip(text(lang, "term_volume", full=full))
+        strip.setGeometry(int(layout.plot_left), 6, int(width), OVERLAY_ROW)
+        strip.show()
+        strip.raise_()
+        # Overlay legend.
+        bars = view.engine_bars()
+        chips = []
+        tips = []
+        for key in pane.selected_indicators():
+            spec = engine.study(key)
+            if not spec.overlay:
+                continue
+            colors = study_colors(key, dark)
+            if key in layout.unavailable:
+                chips.append(f'<span style="color:{colors[spec.lines[0].id]}">●</span> {_esc(spec.name(lang))} '
+                             f'<span style="color:{view.palette.muted}">— {_esc(availability_short(layout.unavailable[key], lang))}</span>')
+                continue
+            try:
+                readout = line_readout(key, bars, cursor, language=lang, supply=pane.supply)
+            except Exception:
+                readout = ()
+            parts = " · ".join(f'<span style="color:{colors[line.id]}">{_esc(name)}</span> '
+                               f'{_esc(view.study_value(key, line, cursor, value))}'
+                               for line, (name, value) in zip(spec.lines, readout))
+            chips.append(f'<span style="color:{colors[spec.lines[0].id]}">●</span> {parts}')
+            tips.append(spec.name(lang))
+        self.legend_label.setText("&nbsp;&nbsp;&nbsp;".join(chips))
+        self.legend.setVisible(bool(chips))
+        if chips:
+            self.legend.setGeometry(int(layout.plot_left), 32, int(width), 22)
+            self.legend.raise_()
+        # Panel headers.
+        shown = set()
+        for key, top, bottom in layout.panels:
+            spec = engine.study(key)
+            head = self._head(key)
+            shown.add(key)
+            colors = study_colors(key, dark)
+            name = spec.name(lang)
+            if key in layout.unavailable:
+                head.title.setText(f'<span style="color:{colors[spec.lines[0].id]}">●</span> '
+                                   f'<b>{_esc(panel_name(spec, lang))}</b>')
+                reading = availability_short(layout.unavailable[key], lang)
+                head.full = text(lang, "panel_info", name=name) + "\n" + reading
+            else:
+                try:
+                    readout = line_readout(key, bars, cursor, language=lang, supply=pane.supply)
+                    reading = study_reading(key, bars, cursor, language=lang, supply=pane.supply)
+                except Exception:
+                    readout, reading = (), ""
+                values_html = " ".join(f'<span style="color:{colors[line.id]}">'
+                                       f'{_esc(view.study_value(key, line, cursor, value))}</span>'
+                                       for line, (_, value) in zip(spec.lines, readout))
+                head.title.setText(f'<span style="color:{colors[spec.lines[0].id]}">●</span> '
+                                   f'<b>{_esc(panel_name(spec, lang))}</b>&nbsp; {values_html}')
+                head.full = reading
+            head.reading.setText(head.reading.fontMetrics().elidedText(
+                head.full.replace("\n", " "), Qt.TextElideMode.ElideRight, max(40, int(width) - head.title.sizeHint().width() - 90)))
+            head.reading.setToolTip(head.full)
+            head.title.setToolTip(head.full)
+            head.info.setIcon(icon("info", view.palette.muted, 15))
+            head.off.setIcon(icon("close", view.palette.muted, 15))
+            head.info.setToolTip(text(lang, "panel_info", name=name))
+            head.info.setAccessibleName(text(lang, "panel_info", name=name))
+            head.off.setToolTip(text(lang, "panel_off", name=name))
+            head.off.setAccessibleName(text(lang, "panel_off", name=name))
+            head.setGeometry(int(layout.plot_left), int(top + 1), int(width), OVERLAY_ROW)
+            head.show()
+            head.raise_()
+        for key, head in self.heads.items():
+            if key not in shown:
+                head.hide()
+        # Notices at the top right of the price pane.
+        hidden = len(layout.hidden_panels)
+        self.hidden_label.setText(text(lang, "hidden_panels", count=hidden))
+        self.hidden_label.setVisible(bool(hidden))
+        panned = pane._end is not None
+        self.latest_button.setText(text(lang, "to_latest"))
+        self.latest_button.setToolTip(text(lang, "to_latest_tip"))
+        self.latest_button.setVisible(panned)
+        if hidden or panned:
+            self.notice.adjustSize()
+            size = self.notice.sizeHint()
+            self.notice.setGeometry(int(layout.plot_right - size.width() - 8), int(layout.price[0] + 4),
+                                    size.width(), size.height())
+            self.notice.show()
+            self.notice.raise_()
+        else:
+            self.notice.hide()
+
+
+class PeriodBar(QWidget):
+    """Period chips on the left; pan, zoom and the default view on the right."""
+
+    def __init__(self, view):
+        super().__init__()
+        from core.market.detail_model import PERIOD_KEYS
+        self.view = view
+        self.setObjectName("sdPeriods")
+        self.setFixedHeight(40)
+        row = QHBoxLayout(self)
+        row.setContentsMargins(4, 2, 4, 2)
+        row.setSpacing(2)
+        self.buttons = {}
+        for key in PERIOD_KEYS:
+            button = QPushButton()
+            button.setProperty("sd", "period")
+            button.setProperty("qg_literal", True)
+            button.setCheckable(True)
+            button.setFocusPolicy(Qt.FocusPolicy.TabFocus)
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
+            button.clicked.connect(lambda checked=False, k=key: view.choose_period(k))
+            row.addWidget(button)
+            self.buttons[key] = button
+        row.addStretch(1)
+        self.hint = label("hint")
+        row.addWidget(self.hint)
+        row.addSpacing(8)
+        self.left, self.right, self.zoom_out, self.zoom_in = (QPushButton() for _ in range(4))
+        actions = ((self.left, lambda: view.chart.pan(-10)), (self.right, lambda: view.chart.pan(10)),
+                   (self.zoom_out, lambda: view.chart.zoom(-1)), (self.zoom_in, lambda: view.chart.zoom(1)))
+        for button, action in actions:
+            button.setProperty("sd", "tool")
+            button.setFocusPolicy(Qt.FocusPolicy.TabFocus)
+            button.setAutoRepeat(True)
+            button.clicked.connect(lambda checked=False, a=action: (a(), view.focus_chart()))
+            row.addWidget(button)
+        self.reset = QPushButton()
+        self.reset.setProperty("sd", "text")
+        self.reset.setProperty("qg_literal", True)
+        self.reset.setFocusPolicy(Qt.FocusPolicy.TabFocus)
+        self.reset.clicked.connect(lambda: (view.chart.reset_view(), view.focus_chart()))
+        row.addSpacing(4)
+        row.addWidget(self.reset)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        width = self.width()
+        self.hint.setVisible(width >= 980)
+        for button in (self.left, self.right):
+            button.setVisible(width >= 700)
+        self.reset.setVisible(width >= 620)
+
+
+class NotesPopover(QFrame):
+    """ⓘ: the pane's availability note, data notes, notices and the update settings it used to show inline."""
+
+    def __init__(self, view):
+        super().__init__(view, Qt.WindowType.Popup)
+        self.view = view
+        self.setObjectName("sdNotes")
+        self.setFixedWidth(420)
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(16, 14, 16, 14)
+        layout.setSpacing(8)
+        self.title = label("cardTitle")
+        layout.addWidget(self.title)
+        self.body = label("body", wrap=True, selectable=True)
+        layout.addWidget(self.body)
+        self.poll = QCheckBox()
+        self.poll.setProperty("qg_literal", True)
+        self.poll.toggled.connect(lambda on: view.chart.poll_button.setChecked(on))
+        layout.addWidget(self.poll)
+        self.stream = QPushButton()
+        self.stream.setProperty("sd", "text")
+        self.stream.setProperty("qg_literal", True)
+        self.stream.clicked.connect(lambda: (view.chart.start_stream(), self.hide()))
+        layout.addWidget(self.stream, 0, Qt.AlignmentFlag.AlignLeft)
+
+    def fill(self):
+        view, pane = self.view, self.view.chart
+        lang = _lang(view.ctx)
+        facts = pane.feed_facts()
+        self.title.setText(text(lang, "notes_title"))
+        lines = [facts["status"], facts["notice"], facts["availability"], facts["note"]]
+        self.body.setText("\n\n".join(line for line in dict.fromkeys(lines) if line))
+        self.poll.setText(text(lang, "notes_poll"))
+        self.poll.blockSignals(True)
+        self.poll.setChecked(pane.poll_button.isChecked())
+        self.poll.setEnabled(pane.poll_button.isEnabled())
+        self.poll.blockSignals(False)
+        self.stream.setText(text(lang, "notes_stream"))
+        self.stream.setEnabled(pane.stream_button.isEnabled())
+        self.adjustSize()
+
+
+class StockDetailView(QWidget):
+    """Toolbar, the large chart with its period bar, and the right column for one instrument."""
+    back_requested = pyqtSignal()
+    watch_toggled = pyqtSignal(object, bool)
+    open_requested = pyqtSignal(object)
+    guide_requested = pyqtSignal(str)
+
+    def __init__(self, chart, *, store, profile_loader=None, name_fn=None, locale=None, auto_load=True,
+                 directory=None, directory_loader=None, quote_router_factory=None):
+        super().__init__()
+        self.setObjectName("stockDetail")
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        # The page gives this view its width; the toolbar adapts (_fit_toolbar) instead of widening the page.
+        self.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
+        self.chart, self.store = chart, store
+        self.profile_loader = profile_loader
+        self.name_fn = name_fn or (lambda instrument, lang: instrument.code)
+        self.ctx, self.dark, self.auto_load = locale or LocaleContext("ko_KR"), False, auto_load
+        self.palette = LIGHT
+        self.instrument, self.profile = None, None
+        self.directory, self.directory_loader = directory, directory_loader
+        self._epoch = 0
+        self._live_price = None
+        self._reload, self._job_epoch = False, -1
+        self._routable = None
+        self._bars_cache = (None, None)
+        self._side_snapshot = None
+        self._rail_before = None
+        self._compact = self._narrow = self._tiny = None
+        self.studies = self._stored_studies()
+        self.period = self._setting("period", "6M")
+        self.jobs = Jobs(self)
+        self.jobs.succeeded.connect(self._profile_loaded)
+        self.jobs.failed.connect(self._profile_failed)
+        self.jobs.busy_changed.connect(self._jobs_busy)
+        self.lock = PageLock(self)
+        root = QVBoxLayout(self)
+        root.setContentsMargins(0, 12, 0, 12)
+        root.setSpacing(10)
+        root.addWidget(self._build_toolbar())
+        self.chart_column = QFrame()
+        self.chart_column.setObjectName("sdChartColumn")
+        column = QVBoxLayout(self.chart_column)
+        column.setContentsMargins(0, 0, 0, 0)
+        column.setSpacing(4)
+        self.chart_slot = QVBoxLayout()
+        self.chart_slot.setContentsMargins(0, 0, 0, 0)
+        column.addLayout(self.chart_slot, 1)
+        self.periods = PeriodBar(self)
+        column.addWidget(self.periods)
+        factory = quote_router_factory or self._window_card_router
+        self.side = RightColumn(store=store, name_fn=self.name_fn, router_factory=factory, auto_load=auto_load,
+                                locale=self.ctx)
+        self.side.watchlist.open_requested.connect(self._open)
+        self.side.now.study_requested.connect(self.turn_on)
+        self.side.page_changed.connect(lambda index: self._refresh_side(force=True) if index == 1 else None)
+        self.side.retry_button.clicked.connect(self.load_profile)
+        for key, section in self.side.sections.items():
+            section.set_open(self._section_open(key, section.is_open))
+            section.toggled.connect(self._section_toggled)
+        from .indicator_picker import IndicatorPicker
+        self.picker = IndicatorPicker(locale=self.ctx)
+        self.picker.price_format = self.price_text
+        self.picker.set_selected(self.studies)
+        self.picker.changed.connect(self.set_studies)
+        self.side.indicator_layout.addWidget(self.picker)
+        self.body = DetailBody(self.chart_column, self.side)
+        self.body.side_pref = self._setting("side", "shown") != "hidden"
+        self.body.mode_changed.connect(self._sync_side_button)
+        root.addWidget(self.body, 1)
+        self.profile_status = self.side.profile_status
+        self.price, self.change = self.side.card.price, self.side.card.change
+        self.section_panels = []
+        self.notes = NotesPopover(self)
+        self.overlays = ChartOverlays(self)
+        self.overlays.info_requested.connect(self.explain)
+        self.overlays.off_requested.connect(self.turn_off)
+        self.side_timer = QTimer(self)
+        self.side_timer.setSingleShot(True)
+        self.side_timer.setInterval(1200)
+        self.side_timer.timeout.connect(self._refresh_side)
+        chart.snapshot_loaded.connect(self._chart_loaded)
+        chart.trade_received.connect(self._chart_tick)
+        chart.rendered.connect(self._chart_rendered)
+        chart.q_score_changed.connect(self._render_qscore)
+        chart.age_timer.timeout.connect(self._render_state)
+        # One overlay pass per event-loop turn: a render emits both layout_changed and rendered.
+        self.overlay_timer = QTimer(self)
+        self.overlay_timer.setSingleShot(True)
+        self.overlay_timer.setInterval(0)
+        self.overlay_timer.timeout.connect(self.overlays.refresh)
+        chart.chart.layout_changed.connect(lambda _layout: self.overlay_timer.start())
+        store.changed.connect(self._sync_watch)
+        self.set_theme(False)
+        self.set_locale(self.ctx)
+
+    # Construction ----------------------------------------------------------------------------
+    def _build_toolbar(self):
+        bar = QFrame()
+        bar.setObjectName("sdToolbar")
+        self.toolbar = bar
+        row = QHBoxLayout(bar)
+        row.setContentsMargins(0, 0, 0, 0)
+        row.setSpacing(8)
+        self.back_button = QPushButton()
+        self.back_button.setProperty("sd", "back")
+        self.back_button.setProperty("qg_literal", True)
+        self.back_button.clicked.connect(self.back_requested)
+        row.addWidget(self.back_button)
+        row.addSpacing(4)
+        self.mark = CompanyMark("", size=34)
+        self.mark.hide()
+        row.addWidget(self.mark, 0, Qt.AlignmentFlag.AlignVCenter)
+        names = QVBoxLayout()
+        names.setSpacing(0)
+        names.setContentsMargins(0, 0, 0, 0)
+        self.name = FitLabel()
+        self.name.setProperty("sd", "name")
+        self.code = label("code")
+        names.addWidget(self.name)
+        names.addWidget(self.code)
+        row.addLayout(names)
+        row.addSpacing(6)
+        self.state_chip = label("chip")
+        row.addWidget(self.state_chip, 0, Qt.AlignmentFlag.AlignVCenter)
+        row.addStretch(1)
+        self.search = QLineEdit()
+        self.search.setObjectName("sdSearch")
+        self.search.setClearButtonEnabled(True)
+        self.search.setMinimumWidth(120)
+        self.search.setMaximumWidth(240)
+        self.search.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        self.search.returnPressed.connect(self._search_submit)
+        row.addWidget(self.search)
+        self.completer = None
+        if self.directory is not None:
+            from .markets_view import STOCK_ASSETS, attach_symbol_search
+            self.completer = attach_symbol_search(self.search, self.directory, assets=STOCK_ASSETS, locale=self.ctx,
+                                                  loader=self.directory_loader)
+            self.completer.chosen.connect(self._search_chosen)
+        else:
+            self.search.hide()
+        self.interval_combo = QComboBox()
+        self.interval_combo.setObjectName("sdInterval")
+        self.interval_combo.setProperty("qg_literal", True)
+        self.interval_combo.setModel(self.chart.interval.model())
+        self.interval_combo.setCurrentIndex(self.chart.interval.currentIndex())
+        self.interval_combo.setMinimumWidth(84)
+        self.interval_combo.activated.connect(self._interval_chosen)
+        self.chart.interval.currentIndexChanged.connect(self._sync_interval)
+        row.addWidget(self.interval_combo)
+        self.indicators_button = QPushButton()
+        self.indicators_button.setProperty("sd", "text")
+        self.indicators_button.setProperty("qg_literal", True)
+        self.indicators_button.clicked.connect(self.show_indicators)
+        row.addWidget(self.indicators_button)
+        self.watch_button = QPushButton()
+        self.watch_button.setCheckable(True)
+        self.watch_button.setProperty("sd", "text")
+        self.watch_button.setProperty("qg_literal", True)
+        self.watch_button.clicked.connect(self._toggle_watch)
+        row.addWidget(self.watch_button)
+        self.refresh_button, self.pause_button, self.notes_button, self.focus_button, self.side_button = (
+            QPushButton() for _ in range(5))
+        for button in (self.refresh_button, self.pause_button, self.notes_button, self.focus_button, self.side_button):
+            button.setProperty("sd", "tool")
+            button.setProperty("qg_literal", True)
+            button.setIconSize(icon_size(18))
+            row.addWidget(button)
+        self.focus_button.setCheckable(True)
+        self.side_button.setCheckable(True)
+        self.refresh_button.clicked.connect(self.refresh)
+        self.pause_button.clicked.connect(self._pause_clicked)
+        self.notes_button.clicked.connect(self._show_notes)
+        self.focus_button.clicked.connect(lambda checked: self.set_focus_mode(checked))
+        self.side_button.clicked.connect(lambda checked: self.set_side_shown(checked))
+        return bar
+
+    # Settings --------------------------------------------------------------------------------
+    def _settings(self):
+        return getattr(self.store, "settings", None)
+
+    def _setting(self, key, default):
+        settings = self._settings()
+        if settings is None:
+            return getattr(self, "_memory", {}).get(key, default)
+        value = settings.value(SETTINGS_PREFIX + key)
+        return default if value is None else value
+
+    def _remember(self, key, value):
+        settings = self._settings()
+        if settings is None:
+            self.__dict__.setdefault("_memory", {})[key] = value
+        else:
+            settings.setValue(SETTINGS_PREFIX + key, value)
+
+    def _stored_studies(self):
+        raw = self._setting("indicators", None)
+        try:
+            keys = tuple(json.loads(raw)) if isinstance(raw, str) else None
+        except ValueError:
+            keys = None
+        return keys if keys is not None else DEFAULT_STUDIES
+
+    def _section_open(self, key, default):
+        raw = self._setting("sections", None)
+        try:
+            states = json.loads(raw) if isinstance(raw, str) else {}
+        except ValueError:
+            states = {}
+        return bool(states.get(key, default))
+
+    def _section_toggled(self, key, is_open):
+        raw = self._setting("sections", None)
+        try:
+            states = json.loads(raw) if isinstance(raw, str) else {}
+        except ValueError:
+            states = {}
+        states[key] = bool(is_open)
+        self._remember("sections", json.dumps(states))
+
+    def _window_card_router(self):
+        factory = getattr(self.window(), "card_router_factory", None)
+        if factory is None:
+            from .app import _production_card_router as factory
+        return factory()
+
+    # Chart adoption and the open stock ----------------------------------------------------------
+    def adopt_chart(self):
+        """Move the shared chart pane into this view (it lives in one place at a time) in detail mode."""
+        if self.chart.parent() is not self.chart_column:
+            self.chart_slot.addWidget(self.chart, 1)
+        self.chart.empty_hint = self._empty_hint
+        self.chart.chart.key_handler = self.chart_key
+        self.chart.set_detail_mode(True)
+        if self.chart._studies is None:
+            self.chart.set_indicators(self.studies)
+        if self.chart.period is None and self.chart.snapshot is None:
+            self.chart.apply_period(self.period if self.period in self.periods.buttons else "6M")
+        self._sync_interval()
+        self.chart.show()
+
+    def _empty_hint(self, mode, waiting):
+        lang = _lang(self.ctx)
+        if waiting:
+            return text(lang, "empty_waiting")
+        if mode == "loading":
+            return text(lang, "empty_loading")
+        if mode in ("error", "stale"):
+            return text(lang, "empty_error")
+        return text(lang, "empty_idle")
+
+    def show_instrument(self, instrument, *, load=True):
+        self.instrument = instrument
+        self.profile = None
+        self._live_price = None
+        self._epoch += 1
+        self._side_snapshot = None
+        self.adopt_chart()
+        if self.chart.asset.currentData() != instrument.asset:
+            self.chart.set_asset_class(instrument.asset)
+        index = self.chart.exchange.findData(instrument.exchange)
+        if index >= 0:
+            self.chart.exchange.setCurrentIndex(index)
+        self.chart.symbol.setText(instrument.code)
+        self.chart.supply = None
+        self._routable = None
+        self.chart.apply_period(self.period if self.period_reason(self.period) == "" else "6M")
+        self._clear_sections()
+        self.render_header()
+        self._sync_watch()
+        self.side.watchlist.set_current(instrument)
+        lang = _lang(self.ctx)
+        self.profile_status.setText("" if instrument.asset in ("domestic_stock", "overseas_stock") else
+                                    text(lang, "profile_stocks_only"))
+        self.profile_status.setVisible(bool(self.profile_status.text()))
+        self.side.retry_button.hide()
+        self.render_sections()
+        self._refresh_side(force=True)
+        if load and self.auto_load:
+            # Opening a stock loads its chart and details; with automatic refresh off (tests) both stay explicit.
+            self.chart.refresh(manual=True)
+            self.load_profile()
+        QTimer.singleShot(0, self.focus_chart)
+
+    def _open(self, instrument):
+        if self.receivers(self.open_requested) > 0:
+            self.open_requested.emit(instrument)
+        else:
+            self.show_instrument(instrument)
+
+    def _search_chosen(self, listing):
+        self.search.clear()
+        self._open(Instrument(listing.asset, listing.code, listing.exchange))
+
+    def _search_submit(self):
+        query = self.search.text().strip()
+        if not query or self.directory is None:
+            return
+        from .markets_view import STOCK_ASSETS
+        listing = self.directory.resolve(query, assets=STOCK_ASSETS)
+        if listing is None and self.completer is not None:
+            rows = self.completer.results(query)
+            listing = rows[0] if rows else None
+        if listing is not None:
+            self._search_chosen(listing)
+
+    def focus_chart(self):
+        if self.chart.chart.isVisible():
+            self.chart.chart.setFocus(Qt.FocusReason.OtherFocusReason)
+
+    # Profile -----------------------------------------------------------------------------------
+    def load_profile(self):
+        lang = _lang(self.ctx)
+        if self.instrument is None or self.profile_loader is None or \
+                self.instrument.asset not in ("domestic_stock", "overseas_stock"):
+            self.profile_status.setText("" if self.instrument is None or
+                                        self.instrument.asset in ("domestic_stock", "overseas_stock")
+                                        else text(lang, "profile_stocks_only"))
+            self.profile_status.setVisible(bool(self.profile_status.text()))
+            return False
+        self.profile_status.setText(text(lang, "profile_loading"))
+        self.profile_status.show()
+        self.side.retry_button.hide()
+        if self.jobs.busy:
+            # Another stock's details are still loading; load this one when that job ends.
+            self._reload = True
+            return False
+        self._reload = False
+        epoch, instrument, loader = self._epoch, self.instrument, self.profile_loader
+        self._job_epoch = epoch
+        return self.jobs.start(lambda: (epoch, loader(instrument)))
+
+    @pyqtSlot(bool)
+    def _jobs_busy(self, busy):
+        # Jobs emits succeeded/failed before it clears its job, so a refused load is retried here.
+        if not busy and self._reload and self._job_epoch != self._epoch:
+            QTimer.singleShot(0, self.load_profile)
+
+    @pyqtSlot(object)
+    def _profile_loaded(self, value):
+        epoch, profile = value
+        if epoch != self._epoch:
+            return  # a newer stock was opened meanwhile; _jobs_busy loads it
+        self.profile = profile
+        self.profile_status.setText("")
+        self.profile_status.hide()
+        self.chart.supply = self._supply()
+        self.render_header()
+        self.render_sections()
+        self.chart.render()
+        self._refresh_side(force=True)
+
+    @pyqtSlot(str)
+    def _profile_failed(self, code):
+        if self._job_epoch != self._epoch:
+            return  # the failure belongs to a stock that is no longer open
+        self.profile_status.setText(text(_lang(self.ctx), "profile_failed", code=code))
+        self.profile_status.show()
+        self.side.retry_button.setText(text(_lang(self.ctx), "retry"))
+        self.side.retry_button.show()
+
+    def _supply(self):
+        """KIS supply/demand rows the profile already read (investor flows, short sales) for the chart studies."""
+        from core.education.indicators import Supply
+        if self.profile is None:
+            return None
+        nan = lambda v: math.nan if v is None else float(v)
+        flows = (self.profile.values.get("flows") or {}).get("daily") or ()
+        shorts = (self.profile.values.get("short_selling") or {}).get("daily") or ()
+        if not flows and not shorts:
+            return None
+        return Supply(tuple((d, nan(f), nan(i), nan(p)) for d, f, i, p in flows),
+                      tuple((d, nan(r), nan(q)) for d, r, q in shorts))
+
+    # Chart events ------------------------------------------------------------------------------
+    def _chart_loaded(self, snapshot):
+        instrument = snapshot.request.instrument
+        if self.instrument is None or not _same(instrument, self.instrument):
+            return
+        quote = getattr(snapshot, "quote", None)
+        if quote is not None and quote.price is not None:
+            self._live_price = (quote.price, quote.change_pct, quote.change)
+            self.render_header()
+
+    def _chart_tick(self, tick):
+        if self.instrument is None or not _same(tick.instrument, self.instrument):
+            return
+        self._live_price = (tick.price, tick.change_pct, tick.change)
+        self.render_header()
+
+    def _chart_rendered(self):
+        if self.instrument is None:
+            return
+        self.overlay_timer.start()
+        self._sync_periods()
+        self._render_state()
+        self._render_qscore()
+        snapshot = self.chart.snapshot
+        if snapshot is not self._side_snapshot:
+            if self._side_snapshot is None or snapshot is None:
+                self._refresh_side(force=True)
+            elif not self.side_timer.isActive():
+                self.side_timer.start()
+
+    def engine_bars(self):
+        """core.education.indicators Bars of the chart's snapshot (cached per snapshot)."""
+        from core.education.indicators import bars_from_candles
+        snapshot = self.chart.snapshot
+        if snapshot is None or not snapshot.candles:
+            return None
+        cached, bars = self._bars_cache
+        if cached is snapshot:
+            return bars
+        bars = bars_from_candles(snapshot.candles, snapshot.request.interval)
+        self._bars_cache = (snapshot, bars)
+        return bars
+
+    # Indicators --------------------------------------------------------------------------------
+    def set_studies(self, keys):
+        """The picker, a reading row or a panel's × changed the selection: draw it and remember it."""
+        from core.education.indicators import study
+        out = []
+        for key in keys:
+            try:
+                name = study(key).key
+            except ValueError:
+                continue
+            if name not in out:
+                out.append(name)
+        self.studies = tuple(out)
+        self._remember("indicators", json.dumps(list(self.studies)))
+        if tuple(self.picker.selected) != self.studies:
+            self.picker.set_selected(self.studies)
+        self.chart.set_indicators(self.studies)
+        self._refresh_side(force=True)
+
+    def turn_on(self, key):
+        if key and key not in self.studies:
+            self.set_studies((*self.studies, key))
+        self.focus_chart()
+
+    def turn_off(self, key):
+        self.set_studies(tuple(k for k in self.studies if k != key))
+        self.focus_chart()
+
+    def explain(self, key):
+        """ⓘ on a panel: the right column's indicator page with that study's guide unfolded."""
+        self.show_indicators()
+        from core.education.indicators import study
+        category = study(key).category
+        group = self.picker.groups[category]
+        group.set_open(True)
+        row = group.rows[key]
+        row.open_guide(True)
+        self.picker.render()
+        QTimer.singleShot(0, lambda: self.side.indicator_scroll.ensureWidgetVisible(row, 0, 40))
+        self.guide_requested.emit(key)
+
+    def show_indicators(self):
+        if self.body.focus:
+            self.set_focus_mode(False)
+        if self.body.docked():
+            self.body.side_pref = True
+        else:
+            self.body.overlay_open = True
+        self.body.relayout()
+        self._sync_side_button()
+        self.side.set_page(1)
+
+    # Period and interval -----------------------------------------------------------------------
+    def routable(self):
+        if self._routable is None and self.instrument is not None:
+            from core.market.detail_model import routable_intervals
+            try:
+                self._routable = routable_intervals(self.chart.router, self.instrument, paper=self.chart._paper())
+            except Exception:
+                self._routable = ()
+        return self._routable or ()
+
+    def period_reason(self, key):
+        from core.market.detail_model import period_reason
+        if self.instrument is None:
+            return ""
+        return period_reason(key, self.instrument, self.routable())
+
+    def choose_period(self, key):
+        if self.period_reason(key):
+            return False
+        self.period = key
+        self._remember("period", key)
+        self.chart.apply_period(key)
+        self._sync_periods()
+        self.focus_chart()
+        return True
+
+    def _sync_periods(self):
+        lang = _lang(self.ctx)
+        for key, button in self.periods.buttons.items():
+            reason = self.period_reason(key)
+            button.setEnabled(not reason)
+            tip = text(lang, f"period_tip_{key}")
+            if reason:
+                tip += "\n" + text(lang, f"period_{reason}")
+            button.setToolTip(tip)
+            button.setChecked(self.chart.period == key and self.chart.period_view)
+
+    def _interval_chosen(self, index):
+        interval = self.interval_combo.itemData(index)
+        if interval:
+            self.chart.set_interval(interval)
+            self.period = None
+            self._sync_periods()
+        self.focus_chart()
+
+    def _sync_interval(self, *_):
+        if self.interval_combo.currentIndex() != self.chart.interval.currentIndex():
+            self.interval_combo.blockSignals(True)
+            self.interval_combo.setCurrentIndex(self.chart.interval.currentIndex())
+            self.interval_combo.blockSignals(False)
+
+    def interval_name(self, interval):
+        lang = _lang(self.ctx)
+        if interval in ("1d", "1w", "1M"):
+            return text(lang, f"interval_{interval}")
+        return self.chart.interval.itemText(max(0, self.chart.interval.findData(interval)))
+
+    # Toolbar actions ---------------------------------------------------------------------------
+    def refresh(self):
+        self.chart.refresh(manual=True)
+        if self.profile_loader is not None:
+            self.load_profile()
+        self.side.watchlist.refresh(manual=True)
+        self.focus_chart()
+
+    def _pause_clicked(self):
+        facts = self.chart.feed_facts()
+        if facts["streaming"] or facts["polling"] or facts["busy"] or facts["auto"]:
+            self.chart.stop()
+        else:
+            self.chart.refresh(manual=True)
+        self._render_state()
+
+    def _show_notes(self):
+        self.notes.fill()
+        anchor = self.notes_button.mapToGlobal(QPoint(self.notes_button.width() - self.notes.width(),
+                                                      self.notes_button.height() + 6))
+        self.notes.move(anchor)
+        self.notes.show()
+
+    def set_focus_mode(self, on):
+        """⤢ / Shift+F: collapse the window's rail and hide the right column; off restores both."""
+        on = bool(on)
+        window = self.window()
+        if on and not self.body.focus:
+            self._rail_before = getattr(window, "sidebar_collapsed", None)
+            self._set_rail(window, True)
+        elif not on and self.body.focus and self._rail_before is not None:
+            self._set_rail(window, self._rail_before)
+            self._rail_before = None
+        self.body.focus = on
+        self.body.relayout()
+        self.focus_button.setChecked(on)
+        self._toolbar_texts()
+        self._sync_side_button()
+        self.focus_chart()
+
+    @staticmethod
+    def _set_rail(window, collapsed):
+        rail = getattr(window, "set_rail_collapsed", None)
+        if callable(rail):
+            rail(collapsed)
+            return
+        sidebar = getattr(window, "set_sidebar_collapsed", None)
+        if callable(sidebar):
+            sidebar(collapsed, remember=False)
+
+    def set_side_shown(self, shown):
+        shown = bool(shown)
+        if self.body.focus and shown:
+            self.set_focus_mode(False)
+        if self.body.docked():
+            self.body.side_pref = shown
+            self._remember("side", "shown" if shown else "hidden")
+        else:
+            self.body.overlay_open = shown
+        self.body.relayout()
+        self._sync_side_button()
+
+    def _sync_side_button(self):
+        shown = self.body.side_shown()
+        self.side_button.setChecked(shown)
+        lang = _lang(self.ctx)
+        tip = text(lang, "side_hide" if shown else "side_show")
+        self.side_button.setToolTip(tip)
+        self.side_button.setAccessibleName(tip)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._fit_toolbar()
+
+    def _fit_toolbar(self):
+        """Narrower windows keep the controls that matter: the star drops its words under 1180px; under 900px
+        the toolbar search (the list's search is one click back) and the Indicators button (the column toggle and
+        its tab remain) give way; the state chip stays down to 640px."""
+        scroll = self.lock.scroll
+        width = scroll.viewport().width() - self._side_margins() if scroll is not None else self.width()
+        compact, narrow, tiny = width < 1180, width < 900, width < 640
+        if (compact, narrow, tiny) == (self._compact, self._narrow, self._tiny):
+            return
+        self._compact, self._narrow, self._tiny = compact, narrow, tiny
+        self.search.setVisible(self.completer is not None and not narrow)
+        self.indicators_button.setVisible(not narrow)
+        self.state_chip.setVisible(not tiny)
+        self._sync_watch()
+
+    def _side_margins(self):
+        """The page margins around this view (the view is laid out inside the page's content)."""
+        content = self.lock.scroll.widget() if self.lock.scroll is not None else None
+        if content is None or content.layout() is None:
+            return 0
+        margins = content.layout().contentsMargins()
+        return margins.left() + margins.right()
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key.Key_Escape:
+            if not self.body.docked() and self.body.overlay_open:
+                self.set_side_shown(False)
+                return
+            if self.body.focus:
+                self.set_focus_mode(False)
+                return
+        super().keyPressEvent(event)
+
+    def chart_key(self, event):
+        """The chart's keys: Shift+F and Esc here, everything else the pane's (arrows, Home/End, +/-, 0)."""
+        if event.key() == Qt.Key.Key_F and event.modifiers() & Qt.KeyboardModifier.ShiftModifier:
+            self.set_focus_mode(not self.body.focus)
+            return True
+        if event.key() == Qt.Key.Key_Escape and (self.body.focus or (not self.body.docked() and self.body.overlay_open)):
+            self.keyPressEvent(event)
+            return True
+        return self.chart.chart_key(event)
+
+    # Watchlist ---------------------------------------------------------------------------------
+    def _toggle_watch(self):
+        if self.instrument is None:
+            return
+        if self.store.contains(self.instrument):
+            self.store.remove(self.instrument)
+            self.watch_toggled.emit(self.instrument, False)
+        elif self.store.add(self.instrument):
+            self.watch_toggled.emit(self.instrument, True)
+        self._sync_watch()
+
+    def _sync_watch(self):
+        lang = _lang(self.ctx)
+        watched = self.instrument is not None and self.store.contains(self.instrument)
+        self.watch_button.setChecked(watched)
+        full = not watched and self.store.full()
+        self.watch_button.setEnabled(self.instrument is not None and not full)
+        words = text(lang, "watch_on" if watched else "watch_add")
+        self.watch_button.setText(words[:1] if self._compact else words)
+        self.watch_button.setAccessibleName(words[2:])
+        self.watch_button.setToolTip(text(lang, "watch_full", limit=self.store.limit) if full else "")
+
+    # Presentation ------------------------------------------------------------------------------
+    def price_text(self, value):
+        from .markets_view import _price_text
+        if self.instrument is None or value is None:
+            return "—"
+        if self.instrument.asset == "domestic_stock":
+            return f"{value:,.0f}"
+        if abs(value) < 1:
+            return f"{value:,.4f}".rstrip("0").rstrip(".")
+        return _price_text(value, self.instrument)
+
+    def study_value(self, key, line, index, fallback):
+        """A study value for the chart overlays: prices in the instrument's own precision, the rest as the guide
+        formats them."""
+        if line.kind != "price":
+            return fallback
+        from core.education.indicators import compute_study
+        bars = self.engine_bars()
+        try:
+            value = float(compute_study(key, bars, supply=self.chart.supply)[line.id][index])
+        except Exception:
+            return fallback
+        return self.price_text(value) if math.isfinite(value) else "—"
+
+    def _current_price(self):
+        """(price, change %, change) from a live trade, the chart's quote, the profile or the last candle."""
+        if self._live_price is not None:
+            return self._live_price
+        snapshot = self.chart.snapshot
+        if snapshot is not None and snapshot.request.instrument == self.instrument and snapshot.candles:
+            quote = snapshot.quote
+            if quote is not None and quote.price is not None:
+                return quote.price, quote.change_pct, quote.change
+        if self.profile is not None and self.profile.last_price is not None:
+            return self.profile.last_price, self.profile.change_pct, self.profile.change
+        return None, None, None
+
+    def render_header(self):
+        lang = _lang(self.ctx)
+        instrument = self.instrument
+        card = self.side.card
+        if instrument is None:
+            self.mark.hide()
+            for field in (self.code, self.name, self.price, self.change, card.name, card.sector):
+                field.setText("")
+            return
+        # The directory name first, so the header does not change name when the details arrive; the profile's
+        # name only when the directory does not know the stock.
+        name = self.name_fn(instrument, lang)
+        if self.profile is not None and name == instrument.code:
+            from core.research.stock_profile import display_name
+            name = display_name(self.profile, lang) or name
+        self.mark.set_identity(instrument.code, name)
+        self.mark.setVisible(instrument.asset in ("domestic_stock", "overseas_stock"))
+        self.mark.setAccessibleName(name)
+        place = instrument.exchange or ("KRX" if instrument.asset == "domestic_stock" else "")
+        self.code.setText(f"{instrument.code} · {place}" if place else instrument.code)
+        self.name.setText(name)
+        card.name.setText(name)
+        sector = ""
+        if self.profile is not None:
+            figures = self.profile.values.get("key_figures") or {}
+            sector = str(figures.get("sector") or "")
+            if lang != "ko":
+                from core.research.stock_profile import _HANGUL
+                sector = "" if _HANGUL.search(sector) else sector
+        card.sector.setText(sector)
+        price, pct, change = self._current_price()
+        self.price.setText(self.price_text(price))
+        if pct is not None:
+            arrow = "▲" if pct > 0 else "▼" if pct < 0 else "–"
+            tone = "up" if pct > 0 else "down" if pct < 0 else "flat"
+            amount = ""
+            if change is not None:
+                sign = "+" if change > 0 else "−" if change < 0 else ""
+                amount = f"{sign}{self.price_text(abs(change))} "
+            self.change.setText(f"{arrow} {amount}({pct:+.2f}%)".replace("-", "−").replace("(+", "(+"))
+            set_prop(self.change, "tone", tone)
+        else:
+            self.change.setText("")
+        self.change.setVisible(bool(self.change.text()))
+        self.price.setAccessibleName(f"{name} {self.price.text()} {self.change.text()}")
+        self._render_state()
+
+    def _render_state(self):
+        from core.market.detail_model import quote_state
+        from .markets_view import _clock
+        if self.instrument is None:
+            return
+        lang = _lang(self.ctx)
+        facts = self.chart.feed_facts()
+        state = quote_state(self.instrument, source=facts["source"], mode=facts["mode"], has_data=facts["has_data"],
+                            last_trade_at=facts["last_trade_at"], market_time=facts["market_time"])
+        self.state_chip.setText(text(lang, f"state_{state.code}"))
+        set_prop(self.state_chip, "tone", state.tone)
+        line = text(lang, f"state_{state.code}_long", age=state.age if state.age is not None else "—")
+        if facts["last_received"] and facts["has_data"]:
+            from core.market.detail_model import _age
+            from datetime import datetime, timezone
+            age = _age(facts["last_received"], datetime.now(timezone.utc))
+            if age is not None and state.code not in ("closed", "holiday"):
+                line += " · " + text(lang, "received_ago", age=age)
+        card_state = self.side.card.state
+        card_state.setText(line)
+        set_prop(card_state, "tone", state.tone)
+        tip = ""
+        if facts["has_data"]:
+            tip = text(lang, "state_tip", source=facts["source"], fetched=_clock(facts["fetched_at"]) or "—",
+                       market=_clock(facts["market_time"]) or "—")
+            # A closed market's label wins, but a delay or fallback qualifier stays readable (12-claims, 09).
+            if not facts["source"].upper().startswith("KIS"):
+                key = "state_fallback_long"
+            elif self.instrument.asset == "overseas_stock":
+                key = "state_us_free_long" if state.venue == "US" else "state_delayed15_long"
+            else:
+                key = ""
+            if key and key != f"state_{state.code}_long":
+                tip += "\n" + text(lang, key).lstrip("● ")
+        for widget in (self.state_chip, card_state, self.price, self.change):
+            widget.setToolTip(tip)
+        streaming = facts["streaming"] or facts["polling"] or facts["busy"] or facts["auto"]
+        self.pause_button.setIcon(icon("pause" if streaming else "play", self.palette.muted))
+        tip = text(lang, "pause" if streaming else "resume")
+        self.pause_button.setToolTip(tip)
+        self.pause_button.setAccessibleName(tip)
+
+    def _render_qscore(self):
+        chip = self.side.card.qscore
+        shown = self.chart.q_score_text()
+        chip.setVisible(shown is not None)
+        if shown is not None:
+            chip.setText(shown[0])
+            chip.setToolTip(shown[1])
+
+    def _clear_sections(self):
+        for section in self.side.sections.values():
+            section.set_rows([], ctx=self.ctx, dark=self.dark)
+            section.hide()
+        self.section_panels = []
+        self.side.unavailable.setText("")
+        self.side.unavailable.hide()
+
+    def render_sections(self):
+        """Profile sections folded in the right column (owner: 3-4 figures each, the rest folded)."""
+        from core.research.stock_profile import sections
+        lang = _lang(self.ctx)
+        by_key = {}
+        if self.profile is not None:
+            for section in sections(self.profile, lang):
+                by_key[section.key] = section
+        groups = {
+            "key_figures": (("key_figures",), "section_key_figures"),
+            "range": (("returns", "range"), "section_range"),
+            "risk": (("risk",), "section_risk"),
+            "supply": (("short_selling", "flows"), "section_supply"),
+        }
+        self.section_panels = []
+        for key, (sources, title) in groups.items():
+            panel = self.side.sections[key]
+            rows = [row for source in sources if source in by_key for row in by_key[source].rows]
+            notes = " · ".join(dict.fromkeys(by_key[s].note for s in sources if s in by_key and by_key[s].note))
+            panel.set_title(text(lang, title))
+            panel.set_rows(rows, note=notes, ctx=self.ctx, dark=self.dark)
+            panel.setVisible(bool(rows))
+            if rows:
+                self.section_panels.append(panel)
+        technical = self.side.sections["technical"]
+        technical.set_title(text(lang, "section_technical"))
+        entries = self._technical_rows()
+        extra = [row for source in ("indicators", "signals") if source in by_key for row in by_key[source].rows]
+        notes = " · ".join(dict.fromkeys(by_key[s].note for s in ("signals",) if s in by_key and by_key[s].note))
+        technical.set_rows([*entries, *extra], note=notes, ctx=self.ctx, dark=self.dark)
+        technical.setVisible(True)
+        order = ["key_figures", "range", "risk", "technical", "supply"]
+        self.section_panels = [self.side.sections[k] for k in order if self.side.sections[k].isVisibleTo(self.side)
+                               and (k == "technical" or self.side.sections[k] in self.section_panels)]
+        unavailable = by_key.get("unavailable")
+        if unavailable is not None and unavailable.rows:
+            items = " · ".join(row.label for row in unavailable.rows)
+            self.side.unavailable.setText(text(lang, "unavailable", items=items))
+            self.side.unavailable.setToolTip("\n".join(f"{row.label}: {row.value}" + (f" — {row.hint}" if row.hint else "")
+                                                       for row in unavailable.rows))
+            self.side.unavailable.show()
+        else:
+            self.side.unavailable.hide()
+
+    def _technical_rows(self):
+        """One block per study that is on: name and values at the latest candle, then the beginner reading."""
+        from core.education import indicators as engine
+        from core.education.study_guide import availability_text, line_readout, study_reading
+        from core.market.presentation import study_colors
+        lang = _lang(self.ctx)
+        bars = self.engine_bars()
+        snapshot = self.chart.snapshot
+        out = []
+        if not self.studies:
+            note = label("rowNote", wrap=True)
+            note.setText(text(lang, "technical_none"))
+            note.setProperty("sdOwned", True)
+            return [note]
+        asset = self.instrument.asset if self.instrument is not None else "domestic_stock"
+        interval = snapshot.request.interval if snapshot is not None else "1d"
+        has_volume = bool(bars is not None and any(math.isfinite(v) for v in bars.volume))
+        for key in self.studies:
+            spec = engine.study(key)
+            block = QWidget()
+            block.setProperty("sdOwned", True)
+            layout = QVBoxLayout(block)
+            layout.setContentsMargins(0, 2, 0, 4)
+            layout.setSpacing(2)
+            head = rich("studyName")
+            color = study_colors(key, self.dark)[spec.lines[0].id]
+            reading_label = numbers(label("studyReading", wrap=True))
+            if bars is None:
+                head.setText(f'<span style="color:{color}">●</span>&nbsp;{_esc(spec.name(lang))}')
+                reading_label.setText("")
+            else:
+                reason = engine.availability(key, asset=asset, interval=interval, supply=self.chart.supply,
+                                             has_volume=has_volume)
+                if reason:
+                    head.setText(f'<span style="color:{color}">●</span>&nbsp;{_esc(spec.name(lang))}')
+                    reading_label.setText(availability_text(reason, lang))
+                else:
+                    readout = line_readout(key, bars, -1, language=lang, supply=self.chart.supply)
+                    values = " · ".join(f"{_esc(n)} {_esc(self.study_value(key, line, len(bars) - 1, v))}"
+                                        for line, (n, v) in zip(spec.lines, readout))
+                    head.setText(f'<span style="color:{color}">●</span>&nbsp;{_esc(spec.name(lang))}'
+                                 f'&nbsp;&nbsp;<span style="font-weight:400">{values}</span>')
+                    reading_label.setText(study_reading(key, bars, -1, language=lang, supply=self.chart.supply))
+            head.setWordWrap(True)
+            layout.addWidget(head)
+            layout.addWidget(reading_label)
+            reading_label.setVisible(bool(reading_label.text()))
+            out.append(block)
+        return out
+
+    def _refresh_side(self, force=False):
+        """The parts of the right column that follow the data (not the cursor): card, readings, picker."""
+        if self.instrument is None:
+            return
+        self._side_snapshot = self.chart.snapshot
+        self._render_card()
+        self._render_now()
+        technical = self.side.sections["technical"]
+        if technical.isVisibleTo(self.side) or force:
+            self.render_sections()
+        bars = self.engine_bars()
+        snapshot = self.chart.snapshot
+        from core.market.detail_svg import max_panels
+        limit = max_panels(self.chart.chart.height()) if self.chart.chart.isVisible() else None
+        self.picker.set_context(bars, asset=self.instrument.asset,
+                                interval=snapshot.request.interval if snapshot is not None else
+                                self.chart.interval.currentData() or "1d",
+                                supply=self.chart.supply, panel_limit=limit)
+
+    def _daily_candles(self):
+        if self.profile is not None and self.profile.candles:
+            return self.profile.candles
+        snapshot = self.chart.snapshot
+        if snapshot is not None and snapshot.request.interval == "1d":
+            return snapshot.candles
+        return ()
+
+    def volume_ratio(self):
+        from core.market.detail_model import volume_vs_average
+        candles = self._daily_candles()
+        today = None
+        snapshot = self.chart.snapshot
+        if snapshot is not None and snapshot.last_cumulative_volume is not None and \
+                self.instrument is not None and self.instrument.asset == "domestic_stock":
+            today = float(snapshot.last_cumulative_volume)
+        elif self.profile is not None:
+            figures = self.profile.values.get("key_figures") or {}
+            if figures.get("basis") == "quote" and figures.get("volume") is not None:
+                today = float(figures["volume"])
+        return volume_vs_average(candles, today)
+
+    def _render_card(self):
+        from .typography import mix
+        card = self.side.card
+        lang = _lang(self.ctx)
+        p = self.palette
+        colors = (mix(p.border, p.bg, 0.2), p.accent, p.muted)
+        ratio = self.volume_ratio()
+        if ratio.volume is not None:
+            unit = "주" if lang == "ko" and self.instrument.asset == "domestic_stock" else ""
+            card.volume.setText(text(lang, "volume_line", volume=f"{ratio.volume:,.0f}{unit}"))
+            if ratio.ratio is not None:
+                card.volume_ratio.setText(text(lang, "volume_ratio_cap") if ratio.ratio >= 2 else
+                                          text(lang, "volume_ratio", ratio=f"{ratio.ratio:.1f}"))
+                card.volume_ratio.setToolTip(text(lang, "volume_tip", sessions=ratio.sessions))
+            else:
+                card.volume_ratio.setText(text(lang, "volume_short"))
+            card.volume_bar.set_value(ratio.ratio, colors)
+            for widget in (card.volume, card.volume_ratio, card.volume_bar):
+                widget.show()
+        else:
+            for widget in (card.volume, card.volume_ratio, card.volume_bar):
+                widget.hide()
+        span = (self.profile.values.get("range") or {}) if self.profile is not None else {}
+        card.range_title.setText(text(lang, "range_title"))
+        card.range_title.setToolTip(text(lang, "range_tip"))
+        if span.get("position") is not None or ("high" in span and "low" in span):
+            card.range_bar.set_value(span.get("position"), colors)
+            card.range_low.setText(f"{self.price_text(span['low'])} ({span['low_date'][5:]})")
+            card.range_high.setText(f"{self.price_text(span['high'])} ({span['high_date'][5:]})")
+            high = f"{span['from_high'] * 100:+.1f}%".replace("-", "−")
+            low = f"{span['from_low'] * 100:+.1f}%".replace("-", "−")
+            card.range_from.setText(text(lang, "range_from", high=high, low=low))
+            for widget in (card.range_title, card.range_bar, card.range_low, card.range_high, card.range_from):
+                widget.show()
+        elif span.get("sessions"):
+            card.range_from.setText(text(lang, "range_short", sessions=span["sessions"]))
+            for widget in (card.range_bar, card.range_low, card.range_high):
+                widget.hide()
+            card.range_title.show()
+            card.range_from.show()
+        else:
+            for widget in (card.range_title, card.range_bar, card.range_low, card.range_high, card.range_from):
+                widget.hide()
+
+    def _unit(self, interval, n):
+        lang = _lang(self.ctx)
+        key = {"1d": "unit_day", "1w": "unit_week", "1M": "unit_month"}.get(interval, "unit_bar")
+        return text(lang, key, n=n)
+
+    def _render_now(self):
+        from core.market.detail_model import now_summary
+        from core.education.indicators import bars_from_candles, study
+        lang = _lang(self.ctx)
+        now = self.side.now
+        now.title.setText(text(lang, "now_title"))
+        now.disclaimer.setText(text(lang, "disclaimer"))
+        bars = self.engine_bars()
+        interval = self.chart.snapshot.request.interval if bars is not None else "1d"
+        if bars is None:
+            daily = self._daily_candles()
+            bars = bars_from_candles(daily, "1d") if daily else None
+        if bars is None or not len(bars):
+            now.caption.setText("")
+            for row in now.rows:
+                row.hide()
+            now.setVisible(False)
+            self.side.now_rule.setVisible(False)
+            return
+        now.setVisible(True)
+        self.side.now_rule.setVisible(True)
+        now.caption.setText(text(lang, "now_caption", interval=self.interval_name(interval),
+                                 date=str(bars.timestamps[-1])[:10]))
+        ratio = self.volume_ratio()
+        intraday = ""
+        if self.side.card.state.property("tone") == "success" or self.chart.feed_facts()["polling"]:
+            intraday = text(lang, "volume_intraday")
+        rows = now_summary(bars, volume=ratio)
+        for row, item in zip(now.rows, rows):
+            values = dict(item.values)
+            fields = {"n20": self._unit(interval, 20), "n60": self._unit(interval, 60), "intraday": intraday}
+            for name, value in values.items():
+                if name in ("pct20", "pct60"):
+                    fields["pct"] = f"{value:+.1f}%".replace("-", "−")
+                elif name == "pct":
+                    fields["pct"] = f"{value:.1f}%"
+                elif name == "rsi":
+                    fields["rsi"] = f"{value:.0f}"
+                elif name == "ratio":
+                    fields["ratio"] = f"{value:.1f}"
+                else:
+                    fields[name] = value
+            row.topic.setText(text(lang, f"topic_{item.topic}"))
+            row.topic.setFixedWidth(60 if lang == "ko" else 84)
+            row.sentence.setText(text(lang, f"now_{item.topic}_{item.code}", **fields))
+            row.study = item.study if item.study not in self.studies else ""
+            row.setCursor(Qt.CursorShape.PointingHandCursor if row.study else Qt.CursorShape.ArrowCursor)
+            row.setToolTip(text(lang, "now_turn_on", name=study(item.study).name(lang)) if row.study else "")
+            row.show()
+
+    def _toolbar_texts(self):
+        lang = _lang(self.ctx)
+        p = self.palette
+        self.back_button.setText(text(lang, "back"))
+        self.back_button.setAccessibleName(text(lang, "back_name"))
+        self.back_button.setToolTip(text(lang, "back_name"))
+        self.search.setPlaceholderText(text(lang, "search"))
+        self.search.setAccessibleName(text(lang, "search_name"))
+        self.interval_combo.setAccessibleName(text(lang, "interval_name"))
+        self.indicators_button.setText(text(lang, "indicators_button"))
+        for button, kind, tip in ((self.refresh_button, "refresh", "refresh"), (self.notes_button, "info", "notes")):
+            button.setIcon(icon(kind, p.muted))
+            button.setToolTip(text(lang, tip))
+            button.setAccessibleName(text(lang, tip))
+        focus = self.body.focus
+        self.focus_button.setIcon(icon("unfocus" if focus else "focus", p.muted))
+        self.focus_button.setToolTip(text(lang, "focus_off" if focus else "focus"))
+        self.focus_button.setAccessibleName(text(lang, "focus_off" if focus else "focus"))
+        self.side_button.setIcon(icon("panel", p.muted))
+        self._sync_side_button()
+        periods = self.periods
+        for key, button in periods.buttons.items():
+            button.setText(text(lang, f"period_{key}"))
+        periods.hint.setText(text(lang, "keys_hint"))
+        for button, kind, tip in ((periods.left, "left", "pan_left"), (periods.right, "right", "pan_right"),
+                                  (periods.zoom_out, "minus", "zoom_out"), (periods.zoom_in, "plus", "zoom_in")):
+            button.setIcon(icon(kind, p.muted))
+            button.setToolTip(text(lang, tip))
+            button.setAccessibleName(text(lang, tip))
+        periods.reset.setText(text(lang, "reset"))
+        periods.reset.setToolTip(text(lang, "reset_tip"))
+        self.chart.chart.setAccessibleName(text(lang, "chart_name"))
+        self.side.stock_tab.setText(text(lang, "tab_stock"))
+        self.side.indicators_tab.setText(text(lang, "tab_indicators"))
+
+    def set_locale(self, ctx):
+        self.ctx = ctx
+        lang = _lang(ctx)
+        self.chart.chart.months = text(lang, "months")
+        if self.completer is not None:
+            self.completer.set_locale(ctx)
+        self._toolbar_texts()
+        self._sync_watch()
+        self.side.watchlist.set_locale(ctx)
+        self.picker.set_locale(ctx)
+        self.render_header()
+        self.render_sections()
+        self._sync_periods()
+        if self.instrument is not None:
+            self._refresh_side(force=True)
+            if self.chart.detail:
+                self.chart.render()  # the chart's month labels and every overlay follow; nothing is fetched
+
+    def set_theme(self, dark):
+        self.dark = bool(dark)
+        self.palette = p = DARK if self.dark else LIGHT
+        self.setStyleSheet(sheet(p, self.dark))
+        self.mark.set_theme(p)
+        self.chart.chart.theme = {"bg": p.bg, "text": p.text, "muted": p.muted, "border": p.border}
+        if self.completer is not None:
+            self.completer.set_theme(p, self.dark)
+        for section in self.side.sections.values():
+            section.set_theme(self.dark)
+        self.side.watchlist.set_theme(self.dark)
+        self.picker.set_theme(self.dark)
+        self._toolbar_texts()
+        if self.instrument is not None:
+            self._refresh_side(force=True)
+            if self.chart.detail and self.chart.snapshot is not None:
+                self.chart.render()
+
+    def stop(self):
+        self._epoch += 1
+        self.side.watchlist.stop()
+        self.side_timer.stop()
+        if self.body.focus:
+            self.set_focus_mode(False)
+
+    # Visibility --------------------------------------------------------------------------------
+    def showEvent(self, event):
+        super().showEvent(event)
+        self.lock.engage()
+        QTimer.singleShot(0, self.lock.engage)
+
+    def hideEvent(self, event):
+        if self.body.focus:
+            self.set_focus_mode(False)
+        self.lock.release()
+        self.notes.hide()
+        super().hideEvent(event)
+
+
+def _same(a, b):
+    return (a.asset, a.code, a.exchange) == (b.asset, b.code, b.exchange)
+
+
+class ProfileSectionPanel(QFrame):
+    """Kept for compatibility with code that imports it from markets_view; the stock screen folds its sections
+    in the right column (stock_detail_side.FoldSection) since 2026-11-11."""
+
+    def __init__(self):
+        super().__init__()
+        self.setObjectName("panel")
+        layout = QVBoxLayout(self)
+        self.title = label("foldTitle")
+        layout.addWidget(self.title)
+        self.section = FoldSection("compat")
+        layout.addWidget(self.section)
+
+    def show_section(self, section):
+        self.title.setText(section.title)
+        self.section.set_rows(section.rows, note=section.note)
+
+
+__all__ = ["StockDetailView", "PageLock", "DetailBody", "ChartOverlays", "PeriodBar", "ProfileSectionPanel",
+           "DEFAULT_STUDIES"]

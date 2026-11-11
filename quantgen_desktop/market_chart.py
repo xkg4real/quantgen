@@ -34,17 +34,29 @@ class _StreamBridge(QObject):
 
 
 class MarketChartSvg(QSvgWidget):
-    """The same SVG as the web view with native keyboard and pointer selection."""
+    """The same SVG as the web view with native keyboard and pointer selection.
+
+    Detail mode (the stock screen, owner 2026-11-11): the chart is drawn by core.market.detail_svg at exactly the
+    widget's size, the wheel does nothing over it ("스크롤로 차트좌우이동 ... 그냥 막아버리고"), and the arrow keys pan
+    (`key_handler`, the pane). Outside detail mode it keeps the document-height chart_svg drawing.
+    """
     cursor_changed = pyqtSignal(int)
+    layout_changed = pyqtSignal(object)   # detail_svg.ChartLayout after each detail redraw (None when empty)
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self.snapshot = None
         self.cursor = 0
         self.visible_bars = 120
+        self.end = None          # last bar index shown; None follows the latest bar
         self.indicators = ("sma",)
         self.dark = False
         self.language = "en"
+        self.detail = False
+        self.supply = None
+        self.theme = None        # detail: palette colours (bg, text, muted, border)
+        self.months = None       # detail: month names in the window language
+        self.layout_info = None
         self.setMinimumWidth(260)
         self.setMinimumHeight(300)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
@@ -53,21 +65,51 @@ class MarketChartSvg(QSvgWidget):
         self._geometry_timer.setSingleShot(True)
         self._geometry_timer.timeout.connect(self._propagate_chart_height)
 
-    def set_snapshot(self, snapshot, cursor=0, *, visible_bars=120, indicators=None, dark=False, language="en"):
+    def set_detail(self, on):
+        """Fill the space the layout gives (no fixed height); the wheel never moves the chart."""
+        self.detail = bool(on)
+        if self.detail:
+            self.setMinimumHeight(220)
+            self.setMaximumHeight(16777215)
+            self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.redraw()
+
+    def set_snapshot(self, snapshot, cursor=0, *, visible_bars=120, indicators=None, dark=False, language="en",
+                     end=None, supply=None):
         self.snapshot, self.cursor = snapshot, cursor
         self.visible_bars, self.dark = visible_bars, dark
         self.language = language
+        self.end, self.supply = end, supply
         if indicators is not None:
             self.indicators = tuple(indicators)
         self.redraw()
 
+    def window(self):
+        """(start, stop) of the bars drawn."""
+        from core.market.detail_model import window
+        n = len(self.snapshot.candles) if self.snapshot else 0
+        return window(n, min(n, self.visible_bars) if n else 1, self.end)
+
     def redraw(self):
         if self.snapshot is None:
             self.load(QByteArray())
+            if self.detail:
+                self.layout_info = None
+                self.layout_changed.emit(None)
+            return
+        if self.detail:
+            from core.market.detail_svg import EN_MONTHS, render
+            svg, layout = render(self.snapshot, studies=self.indicators, cursor=self.cursor, end=self.end,
+                                 visible=self.visible_bars, width=max(240, self.width()), height=max(200, self.height()),
+                                 dark=self.dark, theme=self.theme, months=self.months or EN_MONTHS, supply=self.supply)
+            self.load(QByteArray(svg.encode("utf-8")))
+            self.layout_info = layout
+            self.layout_changed.emit(layout)
             return
         from core.market.presentation import chart_svg
         svg = chart_svg(self.snapshot, indicators=self.indicators, cursor=self.cursor,
-                        width=max(320, self.width()), dark=self.dark, visible=self.visible_bars, language=self.language)
+                        width=max(320, self.width()), dark=self.dark, visible=self.visible_bars, language=self.language,
+                        end=self.end)
         self.load(QByteArray(svg.encode("utf-8")))
         height = self.renderer().viewBoxF().height()
         if height > 0 and self.minimumHeight() != round(height):
@@ -93,36 +135,33 @@ class MarketChartSvg(QSvgWidget):
 
     def mouseMoveEvent(self, event):
         if self.snapshot and self.snapshot.candles:
-            n = len(self.snapshot.candles)
-            visible = min(n, self.visible_bars)
-            # Pointer selection is complemented by an exact, keyboard accessible slider.
-            from core.market.presentation import plot_bounds
-            left, right = plot_bounds(max(320, self.width()))
-            fraction = max(0, min(1, (event.position().x() - left) / max(1, right - left)))
-            self.cursor_changed.emit(n - visible + round(fraction * max(0, visible - 1)))
+            if self.detail and self.layout_info is not None:
+                self.cursor_changed.emit(self.layout_info.index_at(event.position().x()))
+            else:
+                start, stop = self.window()
+                visible = stop - start
+                # Pointer selection is complemented by an exact, keyboard accessible slider.
+                from core.market.presentation import plot_bounds
+                left, right = plot_bounds(max(320, self.width()))
+                fraction = max(0, min(1, (event.position().x() - left) / max(1, right - left)))
+                self.cursor_changed.emit(start + round(fraction * max(0, visible - 1)))
         super().mouseMoveEvent(event)
 
+    def mousePressEvent(self, event):
+        self.setFocus(Qt.FocusReason.MouseFocusReason)
+        super().mousePressEvent(event)
+
     def wheelEvent(self, event):
-        """Owner UI-16: the wheel zooms the price chart; at a zoom limit the page scrolls instead."""
-        steps = event.angleDelta().y() / 120
-        handler = getattr(self, "zoom_handler", None)
-        if steps and handler is not None and handler(steps):
+        """Owner 2026-11-11: the wheel never moves or zooms the chart. Over the stock screen's chart it does
+        nothing at all (accepted, so the page does not scroll either); elsewhere the page scrolls."""
+        if self.detail:
             event.accept()
             return
         event.ignore()
 
     def keyPressEvent(self, event):
-        handler = getattr(self, "zoom_handler", None)
-        if handler is not None and event.key() in (Qt.Key.Key_Plus, Qt.Key.Key_Equal, Qt.Key.Key_Minus):
-            handler(-1 if event.key() == Qt.Key.Key_Minus else 1)
-            event.accept()
-            return
-        if self.snapshot and self.snapshot.candles and event.key() in (
-                Qt.Key.Key_Left, Qt.Key.Key_Right, Qt.Key.Key_Home, Qt.Key.Key_End):
-            n = len(self.snapshot.candles)
-            target = (0 if event.key() == Qt.Key.Key_Home else n - 1 if event.key() == Qt.Key.Key_End
-                      else self.cursor + (1 if event.key() == Qt.Key.Key_Right else -1))
-            self.cursor_changed.emit(max(0, min(n - 1, target)))
+        handler = getattr(self, "key_handler", None)
+        if handler is not None and handler(event):
             event.accept()
             return
         super().keyPressEvent(event)
@@ -133,6 +172,8 @@ class MarketChartPane(QWidget):
     snapshot_loaded = pyqtSignal(object)
     trade_received = pyqtSignal(object)
     feed_state_changed = pyqtSignal(str)
+    rendered = pyqtSignal()    # after every render(): the stock screen refreshes its header, overlays and readings
+    q_score_changed = pyqtSignal()
 
     def __init__(self, *, service=None, stream_factory=None, locale=None, router=None):
         super().__init__()
@@ -167,6 +208,13 @@ class MarketChartPane(QWidget):
         self._auto_updates = False
         self._restart_pending = False
         self._resync_attempted = False
+        # Stock screen (detail mode, owner 2026-11-11): pan window, registry studies and the period chip.
+        self.detail = False
+        self._end = None          # last bar index shown; None follows the latest bar
+        self._studies = None      # registry study keys; None means the five legacy buttons choose
+        self.period = None        # detail_model.PERIODS key that chose the request, or None
+        self.period_view = False  # True while the window is the period's own (no manual pan or zoom since)
+        self.supply = None        # core.education.indicators.Supply for the KIS supply/demand studies
         self.input_timer = QTimer(self)
         self.input_timer.setSingleShot(True)
         self.input_timer.setInterval(450)
@@ -342,6 +390,7 @@ class MarketChartPane(QWidget):
         layout.addWidget(self.empty_state)
         self.chart = MarketChartSvg()
         self.chart.zoom_handler = self.zoom
+        self.chart.key_handler = self.chart_key
         self.chart.cursor_changed.connect(self.move_cursor)
         layout.addWidget(self.chart)
         self.cursor_slider = QSlider(Qt.Orientation.Horizontal)
@@ -489,7 +538,7 @@ class MarketChartPane(QWidget):
                 ("Asset", "Instrument code", "Market", "Interval", "History bars")):
             label.setText(self._text(ko, en))
         self._search_mode()
-        if not self.symbol_suggestions.isHidden():
+        if self.symbol_suggestions.count():
             self._symbol_typed(self.symbol.text())  # rebuild labels in the new language
         self.asset.blockSignals(True)
         for index, (_, ko, en, _) in enumerate(_ASSETS):
@@ -511,22 +560,228 @@ class MarketChartPane(QWidget):
             "Trade delivery depends on market hours and access; overseas data may be delayed. Indicators show — until enough bars arrive. Updates stop when you leave this screen."))
         self.render()
 
+    # Stock screen (detail mode) -------------------------------------------------------------------
+    def _detail_hidden(self):
+        """Pane widgets the stock screen replaces with its own toolbar, period bar, overlays and side column."""
+        return (self.intro, self.symbol, self.symbol_suggestions, self.load_button, self.stop_button,
+                self.advanced_button, self.advanced, self.status, self.quote, self.quote_detail, self.q_score_label,
+                self.provenance, self.times, self.indicator_title, self.guide_button, *self.indicator_boxes.values(),
+                self.chart_help, self.indicator_help, self.guide, self.cursor_slider, self.reading,
+                self.indicator_reading, self.limitations, self.interval, self.form_labels[1], self.form_labels[3])
+
+    def _show(self, widget, visible):
+        widget.setVisible(bool(visible) and not (self.detail and widget in self._detail_hidden()))
+
+    def set_detail_mode(self, on):
+        """Owner 2026-11-11: the stock screen shows the chart large; its toolbar, period bar and right column
+        replace the pane's own controls. The pane keeps the feed notice, the empty state and the chart (which
+        then fills the height it is given), and the domestic-derivative market selector."""
+        on = bool(on)
+        if on == self.detail:
+            return
+        self.detail = on
+        layout = self.layout()
+        if on:
+            for widget in self._detail_hidden():
+                widget.hide()
+            layout.setContentsMargins(0, 0, 0, 0)
+            layout.setSpacing(8)
+            layout.setAlignment(Qt.AlignmentFlag(0))
+            layout.setStretchFactor(self.chart, 1)
+            self.empty_state.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.empty_state.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+            self.chart.set_detail(True)
+            self._configure_intervals()
+        self.render()
+
+    def selected_indicators(self):
+        """The registry keys drawn (core.education.indicators.STUDIES; the legacy 'bollinger' is 'bb')."""
+        if self._studies is not None:
+            return self._studies
+        return tuple("bb" if key == "bollinger" else key for key, button in self.indicator_boxes.items()
+                     if button.isChecked())
+
+    def set_indicators(self, keys):
+        """Choose the studies by registry key; the five legacy buttons mirror the choice."""
+        from core.education.indicators import study
+        chosen = []
+        for key in keys:
+            try:
+                name = study(key).key
+            except ValueError:
+                continue
+            if name not in chosen:
+                chosen.append(name)
+        self._studies = tuple(chosen)
+        for key, button in self.indicator_boxes.items():
+            button.blockSignals(True)
+            button.setChecked(("bb" if key == "bollinger" else key) in self._studies)
+            button.blockSignals(False)
+        self.render()
+
+    def window(self):
+        """(start, stop) of the bars shown."""
+        from core.market.detail_model import window
+        n = len(self.snapshot.candles) if self.snapshot else 0
+        return window(n, self.visible_bars.value(), self._end)
+
+    def pan(self, bars):
+        """Move the window `bars` bars (negative: older); the selected candle moves with it."""
+        n = len(self.snapshot.candles) if self.snapshot else 0
+        if n < 2 or not bars:
+            return False
+        start, stop = self.window()
+        visible = stop - start
+        current = stop - 1
+        target = max(visible - 1, min(n - 1, current + int(bars)))
+        if target == current:
+            return False
+        self._end = None if target >= n - 1 else target
+        shift = target - current
+        self._cursor = max(target - visible + 1, min(target, self._cursor + shift))
+        self.period_view = False
+        self.render()
+        return True
+
+    def follow_latest(self):
+        """End: back to the latest bar, following live data."""
+        if not self.snapshot or not self.snapshot.candles:
+            return False
+        self._end = None
+        self._cursor = len(self.snapshot.candles) - 1
+        self.render()
+        return True
+
+    def reset_view(self):
+        """'0' / 기본 보기: the period's own window (or 120 bars), following the latest bar."""
+        from core.market.detail_model import visible_for
+        self._end = None
+        if self.snapshot and self.snapshot.candles:
+            self._cursor = len(self.snapshot.candles) - 1
+        visible = visible_for(self.period, self.snapshot.candles if self.snapshot else ()) if self.period else 120
+        self.period_view = self.period is not None
+        self.visible_bars.blockSignals(True)
+        self.visible_bars.setValue(max(self.visible_bars.minimum(), visible))
+        self.visible_bars.blockSignals(False)
+        self.render()
+        return True
+
+    def apply_period(self, key):
+        """A period chip: interval, bars requested and bars shown (core.market.detail_model.PERIODS).
+
+        Daily periods share one 1d x 400 request, so moving among them only changes the window. A new request
+        reloads at once only when the chart had data or was updating; with automatic loading off and nothing
+        loaded it stays explicit."""
+        from core.market.detail_model import period_request
+        try:
+            instrument = self.request().instrument
+        except (TypeError, ValueError):
+            instrument = None
+        interval, limit = period_request(key, instrument)
+        index = self.interval.findData(interval)
+        if index < 0:
+            return False
+        self.period, self.period_view = key, True
+        if interval == self.interval.currentData() and limit == self.bar_count.value():
+            if self.snapshot is not None:
+                self.reset_view()
+            else:
+                self.render()
+            return True
+        had = (self.snapshot is not None and bool(self.snapshot.candles)) or self._auto_updates
+        for control in (self.interval, self.bar_count):
+            control.blockSignals(True)
+        self.interval.setCurrentIndex(index)
+        self.bar_count.setValue(limit)
+        for control in (self.interval, self.bar_count):
+            control.blockSignals(False)
+        self._inputs_changed()
+        if had:
+            self.refresh(manual=True)
+        return True
+
+    def set_interval(self, interval):
+        """An interval chosen in the stock screen's toolbar: no period chip, the latest 120 bars."""
+        index = self.interval.findData(interval)
+        if index < 0 or interval == self.interval.currentData():
+            return False
+        self.period, self.period_view = None, False
+        self.visible_bars.blockSignals(True)
+        self.visible_bars.setValue(120)
+        self.visible_bars.blockSignals(False)
+        had = (self.snapshot is not None and bool(self.snapshot.candles)) or self._auto_updates
+        self.interval.setCurrentIndex(index)
+        if had:
+            self.refresh(manual=True)
+        return True
+
+    def chart_key(self, event):
+        """Owner 2026-11-11: left/right arrows move the selected candle (the window pans at its edges), with
+        Shift they pan 10 bars; Home/End go to the first loaded / latest bar, +/- zoom and 0 restores the view."""
+        key, shift = event.key(), bool(event.modifiers() & Qt.KeyboardModifier.ShiftModifier)
+        if self.snapshot is None or not self.snapshot.candles:
+            return False
+        if key in (Qt.Key.Key_Left, Qt.Key.Key_Right):
+            direction = 1 if key == Qt.Key.Key_Right else -1
+            if shift:
+                self.pan(10 * direction)
+            else:
+                self.move_cursor(self._cursor + direction)
+            return True
+        if key == Qt.Key.Key_Home:
+            self.move_cursor(0)
+            return True
+        if key == Qt.Key.Key_End:
+            self.follow_latest()
+            return True
+        if key in (Qt.Key.Key_Plus, Qt.Key.Key_Equal):
+            self.zoom(1)
+            return True
+        if key in (Qt.Key.Key_Minus, Qt.Key.Key_Underscore):
+            self.zoom(-1)
+            return True
+        if key == Qt.Key.Key_0 and not shift:
+            self.reset_view()
+            return True
+        return False
+
+    def feed_facts(self):
+        """What the stock screen states about the feed, without reading private fields."""
+        snapshot = self.snapshot
+        quote = snapshot.quote if snapshot is not None else None
+        return {"mode": self._mode, "has_data": bool(snapshot and snapshot.candles),
+                "source": str(getattr(snapshot, "source", "") or ""),
+                "last_trade_at": str(getattr(snapshot, "last_tick_at", "") or ""),
+                "last_received": self._last_received, "fetched_at": str(getattr(snapshot, "fetched_at", "") or ""),
+                "market_time": str(getattr(quote, "market_time", "") or ""), "status": self.status.text(),
+                "notice": self.feed_notice.text(), "note": self.note.text(), "availability": self.availability.text(),
+                "streaming": self._stream is not None, "polling": self.poll_timer.isActive(),
+                "busy": self.jobs.busy, "auto": self._auto_updates}
+
     def set_q_score(self, symbol, score):
         if symbol != self.symbol.text().strip() or self.asset.currentData() != 'domestic_stock':
             return
         self._q_score = (symbol, score)
         self._render_q_score()
+        self.q_score_changed.emit()
 
     def _render_q_score(self):
         visible = bool(self.snapshot and self._q_score and
                        self.snapshot.request.instrument.asset == 'domestic_stock' and
                        self.snapshot.request.instrument.code == self._q_score[0])
-        self.q_score_label.setVisible(visible)
+        self._show(self.q_score_label, visible)
         if visible:
             from .watchlist import _score_text, _score_tooltip
             score = self._q_score[1]
             self.q_score_label.setText('Q-SCORE · ' + _score_text(score, self.ctx))
             self.q_score_label.setToolTip(_score_tooltip(score, self.ctx))
+        self._q_score_shown = visible
+
+    def q_score_text(self):
+        """(text, tooltip) of the open stock's Q-SCORE, or None; the stock screen shows it on its card."""
+        if not getattr(self, "_q_score_shown", False):
+            return None
+        return self.q_score_label.text(), self.q_score_label.toolTip()
 
     def request(self):
         asset = self.asset.currentData()
@@ -567,7 +822,7 @@ class MarketChartPane(QWidget):
             self.symbol_suggestions.setCurrentRow(0)
             rows = sum(self.symbol_suggestions.sizeHintForRow(i) for i in range(len(found)))
             self.symbol_suggestions.setFixedHeight(rows + 2 * self.symbol_suggestions.frameWidth() + 6)
-        self.symbol_suggestions.setVisible(bool(found))
+        self._show(self.symbol_suggestions, bool(found))  # filled but never shown on the stock screen
 
     def suggestion_codes(self):
         return tuple((self.symbol_suggestions.item(i).data(Qt.ItemDataRole.UserRole).code,
@@ -612,7 +867,8 @@ class MarketChartPane(QWidget):
         return False
 
     def zoom(self, steps):
-        """Wheel or +/- zoom: fewer bars per notch in, more out; returns False at a limit."""
+        """+/- zoom: fewer bars per step in, more out; returns False at a limit. A panned window keeps its
+        last bar; the wheel never zooms (owner 2026-11-11)."""
         n = len(self.snapshot.candles) if self.snapshot else 0
         if n < 2:
             return False
@@ -621,6 +877,10 @@ class MarketChartPane(QWidget):
         target = max(min(20, n), min(n, target))
         if target == current:
             return False
+        if self._end is not None and target > self._end + 1:
+            end = min(n - 1, target - 1)
+            self._end = None if end >= n - 1 else end
+        self.period_view = False
         self.visible_bars.setValue(target)
         return True
 
@@ -692,6 +952,11 @@ class MarketChartPane(QWidget):
             instrument = Instrument(self.asset.currentData(), self.symbol.text(),
                                     self.exchange.currentData() or "")
             supported = supported_intervals(instrument, paper=self._paper())
+            if self.detail:
+                # The stock screen offers only what a ready provider can deliver (KIS, else Yahoo daily).
+                from core.market.detail_model import routable_intervals
+                routable = routable_intervals(self.router, instrument, paper=self._paper(), supported=supported)
+                supported = routable or supported
         except ValueError:
             supported = INTERVALS
         self.interval.blockSignals(True)
@@ -713,6 +978,7 @@ class MarketChartPane(QWidget):
         self._last_received = ""
         self._last_tick_received = ""
         self._cursor = 0
+        self._end = None
         self.chart.set_snapshot(None)
         self.quote.clear()
         self.quote_detail.clear()
@@ -786,6 +1052,11 @@ class MarketChartPane(QWidget):
         self._stream_gap = False
         self._last_received = snapshot.fetched_at
         self._restore_cursor(selected)
+        if selected is None and self.period and self.period_view:
+            from core.market.detail_model import visible_for
+            self.visible_bars.blockSignals(True)
+            self.visible_bars.setValue(max(self.visible_bars.minimum(), visible_for(self.period, snapshot.candles)))
+            self.visible_bars.blockSignals(False)
         self._mode = "polling" if self.poll_timer.isActive() else "snapshot"
         self._status_detail = ""
         self.render()
@@ -995,10 +1266,15 @@ class MarketChartPane(QWidget):
         n = len(self.snapshot.candles)
         self._cursor = (next((i for i, c in enumerate(self.snapshot.candles) if (c.timestamp, getattr(c, "sequence", None)) == timestamp), 0)
                         if timestamp is not None else max(0, n - 1))
-        if n - self._cursor > self.visible_bars.value():
-            self.visible_bars.blockSignals(True)
-            self.visible_bars.setValue(n - self._cursor)
-            self.visible_bars.blockSignals(False)
+        if timestamp is not None:
+            # A pinned candle stays in view: the window stops following new bars instead of growing.
+            start, stop = self.window()
+            if not start <= self._cursor < stop:
+                visible = stop - start
+                end = min(n - 1, self._cursor + visible - 1)
+                self._end = None if end >= n - 1 else end
+        elif self._end is not None and self._end >= n:
+            self._end = None
 
     def _render_status(self):
         modes = {
@@ -1042,16 +1318,27 @@ class MarketChartPane(QWidget):
     def move_cursor(self, value):
         if self.snapshot is None or not self.snapshot.candles:
             return
-        self._cursor = max(0, min(len(self.snapshot.candles) - 1, value))
-        # Keep the selected candle visible when keyboard/slider selects older history.
-        needed = len(self.snapshot.candles) - self._cursor
-        if needed > self.visible_bars.value():
-            self.visible_bars.blockSignals(True)
-            self.visible_bars.setValue(needed)
-            self.visible_bars.blockSignals(False)
+        n = len(self.snapshot.candles)
+        self._cursor = max(0, min(n - 1, value))
+        # Owner 2026-11-11: past the window's edge the window pans with the selected candle; the zoom is kept.
+        start, stop = self.window()
+        visible = stop - start
+        if self._cursor < start:
+            end = self._cursor + visible - 1
+            self._end = None if end >= n - 1 else end
+            self.period_view = False
+        elif self._cursor >= stop:
+            self._end = None if self._cursor >= n - 1 else self._cursor
+            self.period_view = False
         self.render()
 
     def render(self, *_):
+        try:
+            self._render()
+        finally:
+            self.rendered.emit()
+
+    def _render(self):
         self._render_status()
         self._render_q_score()
         from core.market.models import LIVE_INTERVALS
@@ -1059,6 +1346,7 @@ class MarketChartPane(QWidget):
         from core.theme import DARK
         dark = getattr(self.window(), "colors", None) == DARK
         selected = tuple(key for key, button in self.indicator_boxes.items() if button.isChecked())
+        drawn = self.selected_indicators() if self.detail else selected
         colors = indicator_colors(dark)
         for key, button in self.indicator_boxes.items():
             swatch = QPixmap(8, 8)
@@ -1066,8 +1354,8 @@ class MarketChartPane(QWidget):
             button.setIcon(QIcon(swatch))
             button.setIconSize(QSize(8, 8))
         self.indicator_help.setText("\n".join(self._indicator_explanation(key) for key in selected))
-        self.indicator_help.setVisible(bool(selected))
-        self.indicator_reading.setVisible(bool(selected))
+        self._show(self.indicator_help, bool(selected))
+        self._show(self.indicator_reading, bool(selected))
         live_only = self.interval.currentData() in LIVE_INTERVALS
         notices = []
         if self.snapshot is not None and not self._from_kis(self.snapshot):
@@ -1093,15 +1381,18 @@ class MarketChartPane(QWidget):
         if self.snapshot and "Partial history:" in self.snapshot.note:
             notices.append(self._text(f"요청한 {self.snapshot.request.limit}개 중 {len(self.snapshot.candles)}개 봉을 받았어요.",
                                       f"Received {len(self.snapshot.candles)} of {self.snapshot.request.limit} requested bars."))
-        self.feed_notice.setText("\n".join(notices))
+        self.feed_notice.setText(("  ·  " if self.detail else "\n").join(notices))
         self.feed_notice.setVisible(bool(notices))
         self.poll_button.setEnabled(not live_only)
         self.bar_count.setToolTip(self._text("틱·초봉은 수신한 봉의 보관 개수입니다.", "For tick/second charts, this limits retained received bars."))
         has_candles = bool(self.snapshot and self.snapshot.candles)
         self.empty_state.setVisible(not has_candles)
         self.chart.setVisible(has_candles)
-        self.cursor_slider.setVisible(has_candles)
-        if not has_candles:
+        self._show(self.cursor_slider, has_candles)
+        hint = getattr(self, "empty_hint", None)
+        if not has_candles and self.detail and hint is not None:
+            self.empty_state.setText(hint(self._mode, self.snapshot is not None and live_only))
+        elif not has_candles:
             waiting = self.snapshot is not None and live_only
             self.empty_state.setText(self._text(
                 "연결 이후의 첫 체결을 기다리고 있어요. 체결이 도착하면 틱·초봉이 차례로 그려집니다. 장이 닫혀 있거나 거래가 없으면 기다릴 수 있어요." if waiting else
@@ -1119,7 +1410,7 @@ class MarketChartPane(QWidget):
         delay = self._delay_text(snapshot)
         realtime = self._from_kis(snapshot) and snapshot.request.instrument.asset in ("domestic_stock", "domestic_future")
         self.provenance.setText("" if realtime else delay)
-        self.provenance.setVisible(not realtime)
+        self._show(self.provenance, not realtime)
         self.times.setText(self._text("조회", "Fetched") + f" {self._clock(snapshot.fetched_at)}"
             + (" · " + self._text("체결", "Market") + f" {self._clock(q.market_time)}" if q and q.market_time else "")
             + self._text(" (한국시간)", " (Korea time)"))
@@ -1135,14 +1426,16 @@ class MarketChartPane(QWidget):
             self.reading.clear()
             self.indicator_reading.setText(self._text("지표는 실제 수신한 봉이 충분히 쌓인 뒤 표시돼요.", "Indicators appear once enough actual bars have arrived."))
             return
-        self._cursor = max(0, n - self.visible_bars.value(), min(n - 1, self._cursor))
+        start, stop = self.window()
+        self._cursor = max(start, min(stop - 1, self._cursor))
         self.cursor_slider.blockSignals(True)
         self.cursor_slider.setRange(0, n - 1)
         self.cursor_slider.setValue(self._cursor)
         self.cursor_slider.setEnabled(True)
         self.cursor_slider.blockSignals(False)
         self.chart.set_snapshot(snapshot, self._cursor, visible_bars=self.visible_bars.value(),
-                                indicators=selected, dark=dark, language=self.ctx.language)
+                                indicators=drawn, dark=dark, language=self.ctx.language, end=self._end,
+                                supply=self.supply if self.detail else None)
         self.reading.setText(readout(snapshot, self._cursor, language=self.ctx.language))
         self.chart.setAccessibleDescription(self.reading.text())
         self.chart.setAccessibleName(self._text("캔들 차트", "Candlestick chart") + f" · {snapshot.source}")

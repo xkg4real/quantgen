@@ -16,6 +16,7 @@ import dotenv
 with patch.object(dotenv, 'load_dotenv', return_value=False):
     from quantgen_desktop.app import ResearchWindow, TOOL_PANES
 from PyQt6.QtWidgets import QApplication, QComboBox, QLabel, QTabBar, QToolButton, QWidget
+from core.market.models import Instrument
 from core.market.routing import ChartRouter, KISChartProvider
 from tests.desktop_market_chart_acceptance import FakeService, FakeStream, fixture
 
@@ -122,8 +123,9 @@ class MarketTabsTests(unittest.TestCase):
 
 
 class SearchZoomTests(unittest.TestCase):
-    """Owner UI-16 inside the pane: name search, no exchange/bar-count inputs, wheel zoom; since 2026-11-04 no
-    provider or time lines (a delay notice only when the data is not domestic real-time)."""
+    """Owner UI-16 inside the pane: name search, no exchange/bar-count inputs; since 2026-11-04 no provider or time
+    lines (a delay notice only when the data is not domestic real-time). Since 2026-11-11 (UI-D8) the stock screen
+    searches from its toolbar and the wheel never moves the chart: arrows pan, +/- zoom."""
     @classmethod
     def setUpClass(cls):
         cls.app = QApplication.instance() or QApplication([])
@@ -148,53 +150,69 @@ class SearchZoomTests(unittest.TestCase):
         self.assertTrue(predicate())
 
     def test_choosing_a_name_loads_and_connects_without_a_button(self):
+        """UI-D8: the stock screen's toolbar search takes a name; the refresh button loads the 6-month period
+        (1d x 400) and connects. The pane still fills its own (hidden) suggestions for typed names."""
         from PyQt6.QtCore import Qt
         from PyQt6.QtTest import QTest
         p = self.window.market_chart
-        for hidden in (p.exchange, p.bar_count, p.visible_bars, p.asset):
+        stock = self.window.markets_view.stock
+        for hidden in (p.exchange, p.bar_count, p.visible_bars, p.asset, p.symbol, p.load_button):
             self.assertTrue(hidden.isHidden())
-        self.assertEqual(p.form_labels[1].text(), '종목 검색')
-        p.symbol.setFocus(); p.symbol.setText('애플'); self.app.processEvents()
-        self.assertTrue(p.symbol_suggestions.isVisible())
+        self.assertTrue(stock.search.isVisible())
+        p.symbol.setText('애플'); self.app.processEvents()
         self.assertEqual(p.suggestion_codes()[0], ('AAPL', 'NAS'))
-        self.assertEqual(self.service.calls, [])  # typing alone never loads
-        QTest.keyClick(p.symbol, Qt.Key.Key_Return)
+        self.assertFalse(p.symbol_suggestions.isVisible())  # filled, never shown on the stock screen
+        self.assertEqual(stock.completer.results('애플')[0].code, 'AAPL')
+        stock.search.setFocus(); stock.search.setText('애플')
+        QTest.keyClick(stock.search, Qt.Key.Key_Return); self.app.processEvents()
+        self.assertEqual(stock.instrument, Instrument('overseas_stock', 'AAPL', 'NAS'))
+        self.assertEqual(stock.search.text(), '')
+        self.assertEqual(self.service.calls, [])  # choosing alone never loads with automatic refresh off
+        stock.refresh_button.click()
         self.wait(lambda: p.snapshot is not None and not p.jobs.busy)
         self.assertEqual(self.service.calls[0].instrument.symbol, 'NAS:AAPL')
-        self.assertEqual(self.service.calls[0].limit, 240)
+        self.assertEqual((self.service.calls[0].interval, self.service.calls[0].limit), ('1d', 400))
         self.assertTrue(self.streams and self.streams[0].started)
-        self.assertFalse(p.symbol_suggestions.isVisible())
-        # Owner, 2026-11-04: no provider or time line; the US delay notice stays (12-claims), and the
-        # source and times remain in the price tooltip.
-        self.assertTrue(p.provenance.isVisible()); self.assertFalse(p.times.isVisible())
-        self.assertIn('지연 0분', p.provenance.text())
-        self.assertNotIn('출처', p.provenance.text()); self.assertNotIn('KIS', p.provenance.text())
-        self.assertIn('출처', p.quote.toolTip()); self.assertIn('한국시간', p.quote.toolTip())
+        # Owner, 2026-11-04: no provider or time line; the US delay notice stays (12-claims) in the state chip
+        # (or its tooltip when the market is closed), and the source and times remain in the price tooltip.
+        self.assertFalse(p.provenance.isVisible()); self.assertFalse(p.times.isVisible())
+        state = stock.state_chip.text() + stock.state_chip.toolTip() + stock.side.card.state.text()
+        self.assertIn('지연 0분', state + stock.side.card.state.toolTip())
+        self.assertIn('출처', stock.price.toolTip()); self.assertIn('한국시간', stock.price.toolTip())
+        self.assertNotIn('출처', stock.state_chip.text()); self.assertNotIn('KIS', stock.state_chip.text())
 
-    def test_wheel_zooms_without_reloading_and_passes_through_at_limits(self):
+    def test_wheel_never_moves_the_chart_and_keys_zoom(self):
+        """Owner 2026-11-11 ("스크롤로 차트좌우이동 ... 그냥 막아버리고"): over the stock screen's chart the wheel,
+        vertical or sideways, changes nothing (not the zoom, the pan, the candle or the page); + and - zoom."""
         from PyQt6.QtCore import QPoint, QPointF, Qt
         from PyQt6.QtGui import QWheelEvent
+        from PyQt6.QtTest import QTest
         p = self.window.market_chart
         p.refresh(manual=True)
         self.wait(lambda: p.snapshot is not None and not p.jobs.busy)
         n = len(p.snapshot.candles)
+        page = self.window.stack.currentWidget().verticalScrollBar()
 
-        def wheel(delta):
-            event = QWheelEvent(QPointF(100, 100), QPointF(100, 100), QPoint(0, 0), QPoint(0, delta),
+        def wheel(dx, dy):
+            event = QWheelEvent(QPointF(100, 100), QPointF(100, 100), QPoint(0, 0), QPoint(dx, dy),
                                 Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False)
             self.app.sendEvent(p.chart, event)
             return event.isAccepted()
 
-        start = p.visible_bars.value()
-        self.assertTrue(wheel(120)); self.assertLess(p.visible_bars.value(), start)
+        for _ in range(5):
+            self.app.processEvents()  # the page lock settles first
+        before = (p.visible_bars.value(), p._end, p._cursor, page.value())
+        for dx, dy in ((0, 120), (0, -120), (120, 0), (-120, 0)):
+            self.assertTrue(wheel(dx, dy))
+            self.app.processEvents()
+            self.assertEqual((p.visible_bars.value(), p._end, p._cursor, page.value()), before)
+        p.chart.setFocus()
         for _ in range(30):
-            wheel(120)
+            QTest.keyClick(p.chart, Qt.Key.Key_Plus)
         self.assertEqual(p.visible_bars.value(), 20)
-        self.assertFalse(wheel(120))  # at the limit the page may scroll instead
         for _ in range(30):
-            wheel(-120)
+            QTest.keyClick(p.chart, Qt.Key.Key_Minus)
         self.assertEqual(p.visible_bars.value(), n)
-        self.assertFalse(wheel(-120))
         self.assertEqual(len(self.service.calls), 1)
         self.assertGreaterEqual(p._cursor, n - p.visible_bars.value())
 

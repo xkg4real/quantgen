@@ -391,6 +391,8 @@ def _flows(rows):
         out["windows"][length] = entry
     if not any(entry[k] is not None for entry in out["windows"].values() for k in _INVESTOR_KEYS):
         return None
+    # The rows themselves, for the chart's supply/demand studies (UI-D8): (date, foreign, institution, individual).
+    out["daily"] = tuple((r["date"], r["foreign"], r["institution"], r["individual"]) for r in rows)
     return out
 
 
@@ -405,7 +407,9 @@ def _shorts(rows):
             "average": {"sessions": len(window), "first_date": window[0]["date"], "last_date": window[-1]["date"],
                         "short_ratio_pct": sum(ratios) / len(ratios) if ratios else None,
                         "short_qty": sum(quantities) / len(quantities) if quantities else None,
-                        "reported_ratio": len(ratios), "reported_qty": len(quantities)}}
+                        "reported_ratio": len(ratios), "reported_qty": len(quantities)},
+            # The rows themselves, for the chart's short-sale study (UI-D8): (date, short share %, short quantity).
+            "daily": tuple((r["date"], r["short_ratio_pct"], r["short_qty"]) for r in rows)}
 
 
 def build_profile(instrument, *, candles, quote=None, flows=None, shorts=None, name="", today=None,

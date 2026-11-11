@@ -174,8 +174,17 @@ class NativeChartLifecycleTests(unittest.TestCase):
         self.assertEqual(p.cursor_slider.maximum(), 119)
         p.visible_bars.setValue(30)
         p.move_cursor(0)
-        self.assertEqual(p.visible_bars.value(), 120)
+        # Owner 2026-11-11 (UI-D8): an older candle pans the window to it; the zoom (30 bars) is kept.
+        self.assertEqual(p.visible_bars.value(), 30)
+        self.assertEqual(p.chart.end, 29)
+        self.assertEqual(p.window(), (0, 30))
+        self.assertEqual(p.chart.cursor, 0)
         self.assertIn(p.snapshot.candles[0].timestamp, p.reading.text())
+        p.pan(10)
+        self.assertEqual((p.window(), p._cursor), ((10, 40), 10))
+        p.follow_latest()
+        self.assertEqual((p.window(), p._cursor, p.chart.end), ((90, 120), 119, None))
+        self.assertEqual(p.selected_indicators(), ("sma",))
         before = p.snapshot
         p.set_locale(LocaleContext("en_US"))
         self.assertEqual(p.load_button.text(), "Load / refresh")
@@ -447,6 +456,7 @@ class NativeChartLifecycleTests(unittest.TestCase):
         macd = p.indicator_boxes["macd"]
         QTest.mouseClick(macd, Qt.MouseButton.LeftButton, pos=macd.rect().center())
         self.assertEqual(p.chart.indicators, ("sma", "ema", "rsi", "macd"))
+        self.assertEqual(p.selected_indicators(), ("sma", "ema", "rsi", "macd"))  # registry keys mirror the buttons
         self.assertEqual(len(self.streams), 1)
         self.assertEqual(len(self.service.calls), 1)
         self.assertGreater(p.chart.renderer().viewBoxF().height(), 410)

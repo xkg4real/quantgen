@@ -183,8 +183,12 @@ class HomeLiveIntegrationTests(unittest.TestCase):
         self.assertEqual(p.snapshot.candles[-1].close, 121)
         self.assertTrue(p.chart.renderer().isValid())
         self.assertIn("121", p.quote.text())
-        self.assertTrue(p.q_score_label.isVisible())
-        self.assertIn("★", p.q_score_label.text())
+        # UI-D8: the stock screen hides the pane's own labels; its symbol card shows the price and the Q-SCORE.
+        card = w.markets_view.stock.side.card
+        self.assertIn("121", card.price.text())
+        self.assertTrue(card.qscore.isVisible())
+        self.assertIn("★", card.qscore.text())
+        self.assertEqual(card.qscore.text(), p.q_score_label.text())
         self.assertEqual(w.chart_scores.scores()["005930"]["last_price"], 121)
         self.assertEqual(w.watchlist.rows[6]["q_score"]["last_price"], 121)
         self.assertEqual(len(self.home_service.calls), 6)
