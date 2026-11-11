@@ -22,10 +22,12 @@ README.md here and in results/RULINGS.md, not in this file:
 
 fetch
 - One provider of one series per call. Each provider is a small function over an injected HTTP layer (`http_get`; the
-  `kis` fetch goes through the app's KIS client for its token, `yahoo_now` through yfinance). Every request is
-  bounded before 2027-01-01: by an explicit last date of at most LAST_REQUEST_DAY or, for the Treasury's yearly
-  file, by a calendar year of at most 2026. A response that still holds an observation dated on or after 2027-01-01
-  is refused before anything is written.
+  `kis` fetch goes through the app's KIS client for its token, `yahoo_now` through yfinance). Every provider's
+  requests are bounded before 2027-01-01: by an explicit last date of at most LAST_REQUEST_DAY or, for the
+  Treasury's yearly file, by a calendar year of at most 2026. A page-back request of `fmp` never names a later day
+  than the request before it. One known limit, unchanged since the first fixed version: a page-back request of
+  `kis` names the day before the earliest date KIS sent, whatever that date is. A response that still holds an
+  observation dated on or after 2027-01-01 is refused before anything is written.
 - Keys are read by NAME only (KEY_NAMES), from --env-file or the process environment, and never printed or written.
 - It writes into a new folder outside every git work tree, and never under docs/asset_expansion, ~/.nextgen, a
   ledger folder or a OneDrive folder: the raw response bytes, the normalised `date,value` CSV (window start - 31
@@ -33,7 +35,7 @@ fetch
   with a reason for compare's --unavailable; nothing is written then.
 - The line before `FETCH ... OK` gives one calendar fact of the provider's own dates (weekend dates for spy and rf,
   missing UTC days for btc; calendar membership, the 3.9 exception), so a date label one day off shows before compare.
-  For `kis` the same line says when the page-back stopped after the first requested date, and why.
+  For `kis` and `fmp` the same line says when the page-back stopped after the first requested date, and why.
 
 compare
 - Reads the pilot table (--table, inside --repo) read-only, then its `prices_file` (spy, btc) or `rf_file` (rf), checks
@@ -466,7 +468,7 @@ class Fetched:
     requests: list[dict]               # each request's parameters, without any key
     pages: list[tuple[str, bytes]]     # (file name, raw response bytes)
     rows: list[tuple[str, float | None]]
-    note: str = ""                     # said on the console line above `FETCH ... OK` (kis: a page-back cut short)
+    note: str = ""                     # said on the console line above `FETCH ... OK` (kis, fmp: a short page-back)
 
 
 # Providers whose requests carry no key: the first bytes of their error answers may be printed. Never fmp, whose URL
@@ -525,21 +527,95 @@ def _chunks(first: str, last: str, days: int) -> list[tuple[str, str]]:
     return out
 
 
-def fetch_fmp(ctx: FetchContext) -> Fetched:
-    """FMP dividend-adjusted closes (total return), one request with explicit `from` and `to`."""
-    key = ctx.key("FMP_API_KEY")
-    params = {"symbol": "SPY", "from": ctx.first, "to": ctx.last}
-    body = _ok(ctx.http(FMP_URL, {**params, "apikey": key}, {}), "fmp")
+FMP_MAX_REQUESTS = 12     # the page-back's request budget: the first request and at most eleven more
+# An answer whose earliest date lies at most this many days after the first requested date has reached it. The first
+# requested date is 31 days before the table's start (fetch_window) and need not be a session: a weekend and the
+# holidays beside it can stand between it and the provider's first session. One week covers that, and it is well
+# inside the 31 days, which compare never reads for SPY.
+FMP_REACHED_DAYS = 7
+
+
+def _fmp_rows(body: bytes, later: bool) -> list[tuple[str, float | None]]:
+    """One FMP answer as (date, adjClose) rows. A message in place of rows, an answer with no row and rows without
+    adjClose are failed fetches. Only on a `later` request of the page-back is an empty list an answer: the provider
+    has nothing in the span asked for."""
     payload = _json(body, "fmp")
     records = payload.get("historical") if isinstance(payload, dict) else payload
     if isinstance(payload, dict) and not records:
         raise FetchFailed("plan_or_access", "fmp answered with a message instead of rows")
+    if later and isinstance(records, list) and not records:
+        return []
     if not isinstance(records, list) or not records:
         raise FetchFailed("fetch_failed", "fmp returned no rows")
     if not any(isinstance(r, dict) and r.get("adjClose") is not None for r in records):
         raise FetchFailed("fetch_failed", "fmp returned no adjClose, so not the dividend-adjusted convention")
-    rows = [(str(r.get("date") or "")[:10], _num(r.get("adjClose"))) for r in records if isinstance(r, dict)]
-    return Fetched([params], [("fmp_000.json", body)], rows)
+    return [(str(r.get("date") or "")[:10], _num(r.get("adjClose"))) for r in records if isinstance(r, dict)]
+
+
+def _fmp_fault(answer: list[tuple[str, float | None]]) -> bool:
+    """Whether one answer already fails the fetch by `normalise`'s rules: a row without an ISO date, a date on or
+    after the cut-off, or one date twice with two values."""
+    seen: dict[str, float | None] = {}
+    for d, v in answer:
+        if not (_DATE.fullmatch(d) and _valid_iso(d)) or d >= CUTOFF or seen.setdefault(d, v) != v:
+            return True
+    return False
+
+
+def fetch_fmp(ctx: FetchContext) -> Fetched:
+    """FMP dividend-adjusted closes (total return), requested with explicit `from` and `to`. A provider that answers
+    the whole span is asked once. FMP can answer with only the most recent rows of the span (5,000 rows in the owner's
+    run of 2026-11-11), so the earliest date of each answer is read: while it lies more than FMP_REACHED_DAYS after
+    the first requested date, the span is requested again up to that date (the same `from`; `to` = that earliest
+    date). Only dates inside the span asked for count, so no request names a later `to` than the one before it and
+    none names a day after LAST_REQUEST_DAY. The earliest date is asked for twice on purpose: a provider that reads
+    `to` as inclusive sends that day in both answers, and the two values must be the same. The page-back ends when
+    an answer reaches the first requested date, when an answer brings no earlier date (an empty list, or no date of
+    the span that is earlier than those already held) or when FMP_MAX_REQUESTS requests are spent. In the last two
+    cases `note` says where and why: the file starts late, and the owner reads that before compare. Answers are
+    merged by date; a date that two answers give with different values is a failed fetch, never a pick. An answer
+    that `run_fetch` or `normalise` will refuse anyway (a key value in it, a row without an ISO date, a 2027 date,
+    one date twice with two values) ends the page-back at once, and the refusal is theirs. Any failed request fails
+    the whole fetch, and nothing is written."""
+    key = ctx.key("FMP_API_KEY")
+    secrets = _secrets(ctx.keys)
+    reach = (date.fromisoformat(ctx.first) + timedelta(days=FMP_REACHED_DAYS)).isoformat()
+    requests, pages, rows = [], [], []
+    held: dict[str, float | None] = {}          # date -> value, from the answers before the one being read
+    earliest, to = None, ctx.last
+    why = f"the budget of {FMP_MAX_REQUESTS} requests ran out"
+    for k in range(FMP_MAX_REQUESTS):
+        params = {"symbol": "SPY", "from": ctx.first, "to": to}
+        try:
+            body = _ok(ctx.http(FMP_URL, {**params, "apikey": key}, {}), "fmp")
+            answer = _fmp_rows(body, later=k > 0)
+        except FetchFailed as exc:
+            if k == 0:
+                raise
+            raise FetchFailed(exc.reason, f"{exc}; request {k + 1} of the page-back") from None
+        requests.append(params)
+        pages.append((f"fmp_{k:03d}.json", body))
+        for d, v in answer:
+            if d not in held:
+                rows.append((d, v))
+            elif held[d] != v:
+                raise FetchFailed("fetch_failed", "fmp gave one date two different values in two answers")
+        for d, v in answer:
+            held.setdefault(d, v)
+        if _fmp_fault(answer) or any(s.encode("utf-8") in body for s in secrets):
+            why = "an answer cannot be used"    # never printed: run_fetch or normalise refuses this fetch
+            break
+        inside = [d for d, _ in answer if ctx.first <= d <= to]
+        if not inside or (earliest is not None and min(inside) >= earliest):
+            why = "an answer brought no earlier date"
+            break
+        earliest = min(inside)
+        if earliest <= reach:
+            break
+        to = earliest
+    note = "" if earliest is None or earliest <= reach else \
+        f"fmp paging stopped at {earliest}, after the first requested date {ctx.first}: {why}"
+    return Fetched(requests, pages, rows, note)
 
 
 def _kis_default_get(keys: dict) -> Callable:
