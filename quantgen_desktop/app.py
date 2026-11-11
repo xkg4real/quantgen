@@ -709,7 +709,7 @@ class ResearchWindow(QMainWindow):
     def current_market_pane(self):
         if self.stack.currentIndex() == self.route_indices['tools']:
             return self.tool_host.currentWidget()
-        return self.market_chart if self.markets_view.showing_stock() else self.markets_view.grid
+        return self.market_chart if self.markets_view.showing_stock() else self.markets_view.rankings
 
     def make_quant(self):
         outer = self.page("Build & Test", "Quant Lab · 기존 계산 엔진으로 가격 분포 분석")

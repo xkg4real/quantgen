@@ -208,7 +208,8 @@ class ShellRailTests(unittest.TestCase):
         view = w.markets_view
         view.show_category = Mock()
         w.navigate("markets")
-        self.assertEqual([b for b in w.market_sections.values() if b.isChecked()], [])
+        # The Markets page reports its default category (trading value) on the first visit.
+        self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], ["value"])
         view.current_category = lambda: "losers"  # the page may report its own category
         w.navigate("home")
         w.navigate("markets")
