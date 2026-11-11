@@ -1052,7 +1052,9 @@ class StockView(QWidget):
 
 class MarketsWorkspace(QWidget):
     """Search bar, then either the real-time ranked lists or one stock's screen."""
-    category_changed = pyqtSignal(str)  # the shown list's RANKING_CATEGORIES key (chips inside the page too)
+    # The shown list's RANKING_CATEGORIES key when it changes (chips inside the page too), and "" when a
+    # stock's screen replaces the list; the rail's sub-menu highlight follows it.
+    category_changed = pyqtSignal(str)
 
     def __init__(self, chart, *, store, directory=None, directory_loader=None, ranking_loader=None,
                  profile_loader=None, locale=None, auto_load=True):
@@ -1126,7 +1128,10 @@ class MarketsWorkspace(QWidget):
 
     # Navigation ----------------------------------------------------------------------------
     def show_rankings(self):
+        was_stock = self.showing_stock()
         self.pages.setCurrentIndex(0)
+        if was_stock:
+            self.category_changed.emit(self.rankings.category)
 
     def show_category(self, key):
         """Show the real-time list for a RANKING_CATEGORIES key; "search" focuses the stock search.
@@ -1168,8 +1173,11 @@ class MarketsWorkspace(QWidget):
         # The header names the open stock; a leftover query would name another one.
         self.completer.completer.popup().hide()
         self.search.clear()
+        was_stock = self.showing_stock()
         self.pages.setCurrentIndex(1)
         self.stock.show_instrument(instrument, load=load)
+        if not was_stock:
+            self.category_changed.emit("")
 
     def submit(self):
         text = self.search.text().strip()

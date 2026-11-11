@@ -258,6 +258,10 @@ class MarketsPageTests(Base):
         QTest.mouseClick(row, Qt.MouseButton.LeftButton); self.app.processEvents()
         self.assertTrue(self.view.showing_stock())
         self.assertIsNone(self.view.current_category())
+        self.assertEqual(heard[-1], "")  # a stock's screen replaced the list
+        self.view.show_rankings()
+        self.assertEqual((heard[-1], self.view.current_category()), ("value", "value"))
+        QTest.mouseClick(row, Qt.MouseButton.LeftButton); self.app.processEvents()
         self.assertEqual(self.view.stock.instrument, member("000660").instrument)
         self.assertEqual(self.view.stock.name.text(), "SK하이닉스")
         self.assertIs(self.window.current_market_pane(), self.window.market_chart)
