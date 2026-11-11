@@ -232,10 +232,32 @@ class MarketsPageTests(Base):
         self.assertEqual(self.board.badge.text(), "KIS · 갱신 지연")  # an old KIS list is not called real-time
 
     def test_rail_sub_menu_and_a_row_open_the_stock_screen(self):
+        self.assertEqual(self.view.current_category(), "value")  # first visit: trading value
+        heard = []
+        self.view.category_changed.connect(heard.append)
+        self.board.category_buttons["losers"].click()  # a chip inside the page; the rail follows the signal
+        self.assertEqual((heard, self.view.current_category()), (["losers"], "losers"))
+        self.view.show_category("losers")
+        self.assertEqual(heard, ["losers"])  # no change, no signal
+        self.view.show_category("value")
+        self.assertEqual(heard, ["losers", "value"])
+        scroll = self.window.stack.currentWidget().verticalScrollBar()
         self.load()
+        self.window.resize(1000, 700)  # the minimum window: the list runs past the fold
+        for _ in range(5):
+            self.app.processEvents()
+        self.assertGreater(scroll.maximum(), 0)
+        scroll.setValue(scroll.maximum())
+        self.view.show_category("volume")
+        self.assertEqual(scroll.value(), 0)  # the chosen list is brought into view from its first rank
+        scroll.setValue(scroll.maximum())
+        self.view.show_category("search")
+        self.assertEqual(scroll.value(), 0)
+        self.view.show_category("value")
         row = self.shown_rows()[0]
         QTest.mouseClick(row, Qt.MouseButton.LeftButton); self.app.processEvents()
         self.assertTrue(self.view.showing_stock())
+        self.assertIsNone(self.view.current_category())
         self.assertEqual(self.view.stock.instrument, member("000660").instrument)
         self.assertEqual(self.view.stock.name.text(), "SK하이닉스")
         self.assertIs(self.window.current_market_pane(), self.window.market_chart)

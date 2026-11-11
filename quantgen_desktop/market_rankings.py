@@ -403,6 +403,7 @@ class RankingBoard(QFrame):
     """Category chips, market and sector filters, and the ranked list with its source state."""
     open_requested = pyqtSignal(object)
     loaded = pyqtSignal(str)
+    category_changed = pyqtSignal(str)      # a chip click or set_category() changed the list shown
     _progress = pyqtSignal(int, int, int)   # epoch, done, total; emitted on the worker thread, queued here
 
     def __init__(self, *, loader=None, locale=None, auto_load=True, clock=None, open_fn=None, limit=LIST_LIMIT):
@@ -544,8 +545,10 @@ class RankingBoard(QFrame):
     def set_category(self, key):
         if key not in R.CATEGORY_KEYS:
             raise ValueError(f"Unknown ranking category {key!r}")
-        self.category = key
+        changed, self.category = key != self.category, key
         self.render()
+        if changed:
+            self.category_changed.emit(key)
         return True
 
     def set_market(self, key):

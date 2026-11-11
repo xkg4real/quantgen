@@ -1052,6 +1052,7 @@ class StockView(QWidget):
 
 class MarketsWorkspace(QWidget):
     """Search bar, then either the real-time ranked lists or one stock's screen."""
+    category_changed = pyqtSignal(str)  # the shown list's RANKING_CATEGORIES key (chips inside the page too)
 
     def __init__(self, chart, *, store, directory=None, directory_loader=None, ranking_loader=None,
                  profile_loader=None, locale=None, auto_load=True):
@@ -1098,6 +1099,7 @@ class MarketsWorkspace(QWidget):
         name_fn = self.display_name
         self.rankings = RankingBoard(loader=ranking_loader, locale=self.ctx, auto_load=auto_load)
         self.rankings.open_requested.connect(self.open_instrument)
+        self.rankings.category_changed.connect(self.category_changed)
         self.stock = StockView(chart, store=store, profile_loader=profile_loader, name_fn=name_fn, locale=self.ctx,
                                auto_load=auto_load)
         self.stock.back_requested.connect(self.show_rankings)
@@ -1149,6 +1151,11 @@ class MarketsWorkspace(QWidget):
             parent = parent.parentWidget()
         if parent is not None:
             parent.verticalScrollBar().setValue(0)
+
+    def current_category(self):
+        """The RANKING_CATEGORIES key of the list shown, or None while a stock's screen is shown.
+        The first visit shows "value" (trading value)."""
+        return None if self.showing_stock() else self.rankings.category
 
     def showing_stock(self):
         return self.pages.currentIndex() == 1
