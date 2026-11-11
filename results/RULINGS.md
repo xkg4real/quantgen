@@ -49,7 +49,7 @@ Each run is its series' run of record and stays. Read from the pushed `summary.j
 | Series | `run_id` | Outcome | What the summary says |
 | --- | --- | --- | --- |
 | SPY | `PP-20261111T051909Z-spy` | WITHHELD | `fmp` (independent): first date 2006-11-15, 494 of the table's 5,489 sessions lie before its span (allowed 5), so the pair is WITHHELD on coverage. `kis` (cross): first date 2007-08-21, 684 sessions before its span, WITHHELD on coverage. Neither pair's return comparison ran. `yahoo_now` (vintage): PASS on 5,489 common days. Reason: `no independent or cross pair was evaluated in full`. |
-| DGS3MO | `PP-20261111T075307Z-rf` | PASS | `treasury` (independent): 5,475 common values, 0 beyond tolerance. `fred_now` (vintage): PASS. `h15` (optional) not compared: `fetch_failed`. |
+| DGS3MO | `PP-20261111T075307Z-rf` | PASS | `treasury` (independent): 5,475 common values, 0 beyond tolerance; the pair is WARN, not PASS, because on 3 dates the pinned file has a value and treasury has none (a warning check; the dates are in the summary). `fred_now` (vintage): PASS. `h15` (optional) not compared: `fetch_failed`. |
 | BTC-USD | `PP-20261111T075328Z-btc` | FAIL | `coinbase` (independent): 43 days with a log-return difference above 0.02 (allowed 20), and the late segment outside the level band; calendar and day boundary PASS. `bitstamp` (independent, optional): 47 such days (allowed 21), late segment outside the band; calendar and day boundary PASS. `binance` (diagnostic): WITHHELD on coverage. |
 
 Why the fmp file started in 2006: fmp answered the tool's one request with exactly 5,000 rows, the most recent ones
@@ -83,6 +83,9 @@ What follows (how Claude takes "SPY-가-승인"):
 - The changed tool is the second fixed version:
 - Tool commit fixed: `(recorded by the next commit)`
 - Tool sha256 fixed (`tools/provider_parity/parity_check.py`): `(recorded by the next commit)`
+- "Reaches" means an earliest date at most 7 days after the first requested date, which is 31 days before the
+  table's start and need not be a session. A fetch that stops later than that still ends `OK` and says where and why
+  on the line above; the owner does not compare such a file (the guide's stop point).
 - The owner fetches fmp again with it into a new folder and runs the SPY comparison one more time, with the new fmp
   file and the kis and yahoo_now files of the first sitting (a fetch record binds a file's bytes, provider, series and
   window, not the tool version). Steps: `docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md`.

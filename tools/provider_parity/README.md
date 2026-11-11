@@ -312,17 +312,19 @@ python -B -m tools.provider_parity.btc_diagnose --table "$tab\pilot2_C3_btcusd.j
 python -B -m unittest tests.provider_parity_acceptance tests.provider_parity_btc_diagnose_acceptance -v
 ```
 
-122 cases on synthetic series, with every provider faked in the process and socket connects patched to raise: each
+124 cases on synthetic series, with every provider faked in the process and socket connects patched to raise: each
 threshold of 10.5.1 from both sides, every outcome and exit code, the provider map, the 2027-01-01 cut-off, the summary
 allow-list, where the tool may write, key handling, a cp949 console, the tool started as a module, the `fmp`
 page-back (a capped provider at several cap sizes, a history that really starts late, overlapping answers that agree
-and that disagree, the request budget, failed and empty answers on the first and on a later request, and a fetch and
-compare that ends PASS where one answer alone ended WITHHELD), the rerun guide's tool lines run as they are written
-in the guide file, and every statement of the fixed tool commit and sha256 (current statements against the tool
-file, the first version's values as marked history only). The fetchers are checked against values typed by hand (epoch seconds, request parameters, expected rows), and
-the tool's own HTTP function runs with `urlopen` replaced. The suite reads no cache file, no `.env` and nothing under
-`~/.nextgen`; in the repository it reads the tool, the diagnostic script (for its sha256), this guide, the two Korean
-guides, `results/RULINGS.md` and the CI workflow.
+and that disagree, the request budget, failed and empty answers on the first and on a later request, rows without an
+ISO date, and a fetch and compare that ends PASS where one answer alone ended WITHHELD), the rerun guide (its tool
+lines and its two Python lines run as they are written in the guide file, and every failure line its table quotes
+for the fetch and the compare raised and compared with the table), and every statement of the fixed tool commit and
+sha256 (current statements against the tool file, the first version's values as marked history only). The fetchers
+are checked against values typed by hand (epoch seconds, request parameters, expected rows), and the tool's own HTTP
+function runs with `urlopen` replaced. The suite reads no cache file, no `.env` and nothing under `~/.nextgen`; in
+the repository it reads the tool, the diagnostic script (for its sha256), this guide, the two Korean guides,
+`results/RULINGS.md` and the CI workflow.
 
 The second module holds the diagnostic in 15 cases, on synthetic series built with the first module's helpers: the
 yearly counts add up to the tool's own `n_big_return_diff_days` of the same files; the level statistics equal values
@@ -366,14 +368,18 @@ with `git grep` when the tool was fixed), and FACTS is held by `python -B -m too
   that a second request brings the days before; whether FMP has SPY before 2006-11-15 at all; and what FMP answers
   for a span in which it has no row (the tool takes an empty list as "nothing earlier" and treats anything else as a
   failed fetch). The second fixed version and the diagnostic have not run on Windows or on a real file.
-- The tool has not run on Windows and has not read a real pilot file. The suite was run on Linux only (Python 3.13,
+- Claude has not run the tool on Windows and has not read a real pilot file. The first fixed version ran on the
+  owner's Windows PC on 2026-11-11 and read the real pinned files there; of those runs Claude has seen the three
+  pushed summaries and the lines the owner sent, nothing else. The suite was run on Linux only (Python 3.13,
   numpy 2.3.5, pandas 2.3.3). Checked on Linux only, with stand-ins: a link to a folder named `asset_expansion/cache`
   (not a Windows junction or an 8.3 short name), a folder named `OneDrive` and the three OneDrive variable names
   (not a real OneDrive), LF under simulated Windows text mode, and a folder that cannot be removed (simulated).
-- The PowerShell lines of this guide have not been run. The steps of the Korean guide were followed on Linux only:
-  the same git and python commands rewritten for bash, a synthetic research clone and stand-in transports (`urlopen`,
-  a stand-in `yfinance` module and a stand-in for the app's KIS client module), with the clone and the push against a
-  scratch repository. Its last section lists what that could not show.
+- The PowerShell lines of this guide have not been run. The owner followed the Korean guide's lines on Windows on
+  2026-11-11, through its push (run branch commit `0b397f7` holds the three summaries). Claude followed the steps of
+  both Korean guides on Linux only: the same git and python commands rewritten for bash, a synthetic research clone
+  and stand-in transports, with a scratch repository on disk in place of GitHub. For the rerun guide the stand-ins
+  were an in-process fake FMP and a synthetic key file under another name than `.env`, and its `git push` was not
+  run. The last section of each guide lists what that could not show.
 - The thresholds of 10.5.1 were set without real data, so the rate of false FAIL on real series is unknown.
 - yfinance 1.7.0 routes its tz, cookie and ISIN caches through `set_tz_cache_location` (read from its source, not
   from a download); another version may keep a cache elsewhere.

@@ -23,7 +23,8 @@ tool's own HTTP function with `urlopen` replaced; COMPUTES against the checks (s
 and non-positive cells of a provider file (kept for the cash rate, dropped for SPY and BTC-USD); what a failed run
 prints and leaves; a cp949 console; UTF-8 and LF in every file the tool writes; the tool run as the owner runs it
 (`python -B -m ...`); every statement of the fixed tool commit and sha256, for the two fixed versions the tool has
-had; the fmp page-back of the second version; the rerun guide's tool lines, run as written.
+had; the fmp page-back of the second version; the rerun guide's tool lines and Python lines, run as written, and the
+failure lines its table quotes, raised and compared with the table.
 """
 from __future__ import annotations
 
@@ -2542,9 +2543,11 @@ def test_an_output_folder_inside_onedrive_is_refused():
 def test_the_guide_matches_the_tool_and_says_what_is_not_settled():
     """The owner follows the guide, so it is held to the tool: the number of cases, and the notes a reader needs on
     what the tool leaves out and what a WITHHELD, a refused or a failed run means. The Korean guide's stop point
-    names the tool's page-back note in the tool's own words, and so does the rerun guide for the fmp note and for
-    each failure line it quotes: every such phrase is also in the tool's source. The fixed commit and sha256 have
-    their own case below."""
+    names the tool's page-back note in the tool's own words, and so does the rerun guide for the fmp note: each
+    phrase listed here stands in the tool's source as it is written in the guide. A line the tool composes when it
+    runs (a file name, an exception type, a request number) cannot be found that way; the rerun guide's failure
+    lines are raised and compared in `test_the_rerun_guide_s_failure_lines_are_the_tool_s_own_lines`. The fixed
+    commit and sha256 have their own case below."""
     flat = " ".join(GUIDE.read_text(encoding="utf-8").split())
     assert f"{len(tests())} cases on synthetic series" in flat, len(tests())
     for phrase in ("signed NYSE calendar. That check is not built",             # the draft's 4.1 clause, left out
@@ -2561,9 +2564,8 @@ def test_the_guide_matches_the_tool_and_says_what_is_not_settled():
     rerun, source = RERUN_GUIDE.read_text(encoding="utf-8"), Path(pc.__file__).read_text(encoding="utf-8")
     for phrase in ("fmp paging stopped at", "an answer brought no earlier date", "of the page-back",
                    "fmp gave one date two different values in two answers",
-                   "fmp answered with a message instead of rows", "the output folder must be new",
-                   "FMP_API_KEY is not set (--env-file or the environment)", "cannot be read (FileNotFoundError)"):
-        assert phrase in rerun and (phrase in source or phrase.replace("FMP_API_KEY", "{name}") in source), phrase
+                   "fmp answered with a message instead of rows", "the output folder must be new"):
+        assert phrase in rerun and phrase in source, phrase
     assert f"the budget of {pc.FMP_MAX_REQUESTS} requests ran out" in rerun and "requests ran out" in source
     assert f"요청 횟수 {pc.FMP_MAX_REQUESTS}번" in rerun and "SELFTEST PASS checks=11 failures=0" in rerun
 
@@ -3183,6 +3185,30 @@ def guide_blocks(path: Path) -> list[str]:
     return re.findall(r"```powershell\n(.*?)\n```", path.read_text(encoding="utf-8"), flags=re.S)
 
 
+def guide_steps(path: Path) -> dict[int, str]:
+    """The numbered steps of a guide: step number -> the one PowerShell line under it."""
+    found = re.findall(r"^\*\*(\d+)\.\*\* [^\n]*\n\n```powershell\n(.*?)\n```", path.read_text(encoding="utf-8"),
+                       flags=re.S | re.M)
+    steps = {int(n): line for n, line in found}
+    assert len(steps) == len(found), "a step number is used twice"
+    return steps
+
+
+def guide_failure_shapes(path: Path, section: str, step: int) -> list[re.Pattern]:
+    """The tool lines a guide quotes for one step in its table of failures (`section`, a heading number): every
+    `REFUSED: ...` or `UNAVAILABLE: ...` in backticks in the first cell of a row that begins with that step. In a
+    quoted line `...` and each `<...>` stand for any text, and the Windows path separator is turned."""
+    text = path.read_text(encoding="utf-8")
+    body = re.search(rf"^## {section}\. .*?(?=^## |\Z)", text, flags=re.S | re.M).group(0)
+    shapes = []
+    for row in re.findall(rf"^\| {step}단계 ([^|]*)\|", body, flags=re.M):
+        for quoted in re.findall(r"`((?:REFUSED|UNAVAILABLE): [^`]*)`", row):
+            shape = re.escape(quoted.replace("\\", "/"))
+            shape = re.sub(r"<[^>]*>", ".+", shape.replace(re.escape("..."), ".+"))
+            shapes.append(re.compile(shape))
+    return shapes
+
+
 def guide_argv(line: str, variables: dict[str, str]) -> list[str]:
     """A guide line as an argument list: each `$name` and each quoted literal in `variables` replaced, the Windows
     path separator turned, and the quotes read as a shell reads them."""
@@ -3237,11 +3263,19 @@ class RerunWorld:
                 meta["tool"]["sha256"] = FIRST_TOOL_SHA256
                 (folder / "meta.json").write_text(json.dumps(meta, indent=1, sort_keys=True) + "\n", encoding="utf-8")
 
-    def _fmp(self, url, params):
+    def _fmp(self, url, params, *, cap: int = 5000, first_bar: str = ""):
         days, _, adj, _ = self.spy
         assert url == pc.FMP_URL and params["apikey"] == FMP_KEY, params
+        idx = [i for i in in_span(days, params["from"], params["to"]) if days[i] >= first_bar]
         return ok_json([{"symbol": "SPY", "date": days[i], "adjClose": round(float(adj[i]) * 0.987, 6)}
-                        for i in reversed(in_span(days, params["from"], params["to"])[-5000:])])
+                        for i in reversed(idx[-cap:])])
+
+    def fmp_then(self, second=None, **kw) -> FakeHttp:
+        """The provider of `_fmp` (with another cap or first bar), whose second answer is `second(params)` if given."""
+        http = FakeHttp(None)
+        http.handler = lambda url, params: second(params) if second is not None and len(http.calls) == 2 \
+            else self._fmp(url, params, **kw)
+        return http
 
     def _kis(self, path, tr_id, params):
         days, raw, _, _ = self.spy
@@ -3273,25 +3307,49 @@ class RerunWorld:
         assert argv[:4] == ["python", "-B", "-m", f"tools.provider_parity.{module}"], argv[:4]
         return argv[4:]
 
+    def python_line(self, line: str, cwd: Path, **more: str) -> tuple[int, list[str], str]:
+        """A guide line of the form `python -B -c "<code>" <argument>`, run as written with this interpreter from
+        `cwd`: (exit code, the lines it prints, what it writes to stderr). `more` gives the value of a variable the
+        line names bare (`$sha`); PowerShell hands such a value over as one argument, whatever it holds."""
+        argv = guide_argv(line, {**{f"${name}": f"@@{name}@@" for name in more}, **self.variables})
+        argv = [more.get(a[2:-2], a) if a.startswith("@@") and a.endswith("@@") else a for a in argv]
+        assert argv[:3] == ["python", "-B", "-c"] and len(argv) == 5, argv[:3]
+        done = subprocess.run([sys.executable, *argv[1:]], cwd=str(cwd), capture_output=True, timeout=600,
+                              env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
+        return done.returncode, done.stdout.decode("utf-8").splitlines(), done.stderr.decode("utf-8", errors="replace")
+
 
 def test_the_rerun_guide_s_tool_lines_run_as_written_after_a_synthetic_first_sitting():
-    """The owner pastes the rerun guide's lines as they stand, so the lines that start the tool are taken from the
-    guide file and run here, on a synthetic copy of the first sitting with the two tables' own windows. Every
-    PowerShell block of the guide is one line with no `&&`, no line continuation and no `<...>` left to fill but
-    the one of step 1. Step 9 (selftest) ends as the guide says. Step 10 fetches fmp into `fetch2-spy-fmp`: two
-    requests, a first date of 2004-11-01 for the first requested 2004-10-31 (a Sunday), no note, which is what the
-    guide's stop point asks for. Step 11 compares the new fmp file with the kis and yahoo_now files of the first
-    sitting, whose fetch records name the first fixed version's sha256, into `compare2-spy`: PASS, with kis WITHHELD
-    on coverage inside the summary, as the guide says is normal. The lines that only call git or copy a file are not
+    """The owner pastes the rerun guide's lines as they stand, so the lines that start the tool or Python are taken
+    from the guide file and run here, on a synthetic copy of the first sitting with the two tables' own windows.
+    Every PowerShell block of the guide is one line with no `&&`, no line continuation and no `<...>` left to fill
+    but the one of step 1, and the steps are numbered 1 to 18 without a gap. Step 8 (the sha256 line) prints the
+    tool file's sha256 and says `sha256 ok` for that value and `sha256 DIFFERENT` for any other; that the guide's
+    own `$sha` is that value is held by the fixed-values case. Step 9 (selftest) ends as the guide says. Step 10
+    fetches fmp into `fetch2-spy-fmp`: two requests, a first date of 2004-11-01 for the first requested 2004-10-31
+    (a Sunday), no note, which is what the guide's stop point asks for. Step 11 compares the new fmp file with the
+    kis and yahoo_now files of the first sitting, whose fetch records name the first fixed version's sha256, into
+    `compare2-spy`: PASS, with kis WITHHELD on coverage inside the summary, as the guide says is normal. Step 12
+    (the copy line) puts that summary, and nothing else, under `results/<run_id>/` of the folder it runs in, and a
+    second run of it stops with FileExistsError, as the guide's table says. The lines that only call git are not
     run here."""
-    blocks = guide_blocks(RERUN_GUIDE)
+    blocks, steps = guide_blocks(RERUN_GUIDE), guide_steps(RERUN_GUIDE)
     assert len(blocks) == 20 and all("\n" not in b and "&&" not in b and not b.rstrip().endswith(("`", "\\"))
                                      for b in blocks), [b[:40] for b in blocks if "\n" in b]
+    assert sorted(steps) == list(range(1, 19)) and blocks[:18] == [steps[n] for n in range(1, 19)], sorted(steps)
+    assert blocks[18:] == ["git pull --rebase", "git push"] and steps[16] == "git push", blocks[18:]
     assert [b for b in blocks if "<" in b] == ['$rc = "<연구 클론 폴더의 전체 경로>"'], blocks[:1]
-    assert blocks[1] == '$q = Join-Path $env:LOCALAPPDATA "quantgen"' and blocks[2] == 'cd "$q\\pp_clone"', blocks[:3]
+    assert steps[2] == '$q = Join-Path $env:LOCALAPPDATA "quantgen"' and steps[3] == 'cd "$q\\pp_clone"', blocks[:3]
     tool = [b for b in blocks if b.startswith("python -B -m tools.provider_parity.parity_check ")]
+    assert tool == [steps[9], steps[10], steps[11]], tool
     w = RerunWorld()
     assert [w.tool_line(b)[0] for b in tool] == ["selftest", "fetch", "compare"], tool
+    tool_sha = pc.tool_sha256()
+    said = re.fullmatch(r'\$sha = "([^"]*)"', steps[6]).group(1)
+    for value, verdict in ((said, "sha256 ok" if said == tool_sha else "sha256 DIFFERENT"), (tool_sha, "sha256 ok"),
+                           (tool_sha[:-1] + ("0" if tool_sha[-1] != "0" else "1"), "sha256 DIFFERENT")):
+        code, lines, err = w.python_line(steps[8], ROOT, sha=value)
+        assert (code, lines) == (0, [tool_sha, verdict]) and "Traceback" not in err, (value, lines, err)
     code, out = capture(lambda: pc.run(w.tool_line(tool[0]), now=NOW))
     assert code == 0 and last_line(out) == "SELFTEST PASS checks=11 failures=0", out
     pp = w.q / "provider_parity"
@@ -3314,9 +3372,120 @@ def test_the_rerun_guide_s_tool_lines_run_as_written_after_a_synthetic_first_sit
     for folder in ("fetch1-spy-kis", "fetch1-spy-yahoo_now"):
         meta = json.loads((pp / folder / "meta.json").read_text(encoding="utf-8"))
         assert meta["tool"]["sha256"] == FIRST_TOOL_SHA256 != pc.tool_sha256(), folder
-    # the folder names the copy step and the result table of the guide use
+    # step 12, as written, from a folder that stands for the tool clone
+    clone = w.root / "pp_clone"
+    clone.mkdir()
+    code, lines, err = w.python_line(steps[12], clone)
+    copied = clone / "results" / s["run_id"] / "summary.json"
+    assert (code, lines) == (0, [f"results/{s['run_id']}/summary.json"]) and "Traceback" not in err, (lines, err)
+    assert copied.read_bytes() == (pp / "compare2-spy" / "summary.json").read_bytes()
+    assert sorted(p.relative_to(clone).as_posix() for p in clone.rglob("*") if p.is_file()) == \
+        [f"results/{s['run_id']}/summary.json"]                           # the summary alone: never detail.json
+    code, lines, err = w.python_line(steps[12], clone)
+    assert code != 0 and lines == [] and "FileExistsError" in err, (code, lines, err)
     text = RERUN_GUIDE.read_text(encoding="utf-8")
-    assert '"$q\\provider_parity\\compare2-spy\\summary.json"' in text and "fetch2-spy-fmp\\spy_fmp.csv" in text
+    assert "| 12단계 `FileExistsError` |" in text and "PP-20261111T051909Z-spy" in text
+
+
+def test_the_rerun_guide_s_failure_lines_are_the_tool_s_own_lines():
+    """The rerun guide tells the owner what to do when a step ends another way, and quotes the line he will see.
+    Those lines are composed by the tool when it runs (a folder, a file name, an exception type, a request number),
+    so each is raised here on the synthetic first sitting, with the guide's own step 10 and step 11 lines, and held
+    to the guide both ways: every line raised has exactly one of the shapes the guide's table quotes for that step,
+    and every shape the table quotes is raised. None of these failures leaves a folder behind.
+
+    The stop point of step 10 is held the same way. A provider whose history starts on 2006-11-15, the first date of
+    the owner's first file, ends `OK` with the note in the guide's words and a first date the stop point refuses;
+    so does a provider that sends too few rows for twelve requests. Compared all the same (into another folder,
+    which the guide does not do), the late file ends WITHHELD again, as the guide warns."""
+    steps = guide_steps(RERUN_GUIDE)
+    text = RERUN_GUIDE.read_text(encoding="utf-8")
+    shapes = {10: guide_failure_shapes(RERUN_GUIDE, "5", 10), 11: guide_failure_shapes(RERUN_GUIDE, "5", 11)}
+    assert (len(shapes[10]), len(shapes[11])) == (5, 3), shapes
+    w = RerunWorld()
+    pp = w.q / "provider_parity"
+    raised = {10: [], 11: []}
+
+    def fetch_line(http, **swap) -> tuple[int, list[str]]:
+        argv = w.tool_line(steps[10])
+        for old, new in swap.items():                    # one argument for another, whatever the path separator
+            assert sum(Path(a) == Path(old) for a in argv) == 1, (old, argv)
+            argv = [new if Path(a) == Path(old) else a for a in argv]
+        with env_without(*pc.KEY_NAMES):
+            code, out = capture(lambda: pc.run(argv, now=NOW, http=http))
+        assert FMP_KEY not in out, out
+        return code, out.splitlines()
+
+    def compare_line() -> tuple[int, list[str]]:
+        code, out = capture(lambda: pc.run(w.tool_line(steps[11]), now=NOW))
+        return code, out.splitlines()
+    # step 11 before step 10 has left a file
+    code, lines = compare_line()
+    assert code == 2 and lines[-1] == "PARITY spy REFUSED exit=2 summary=-", lines
+    raised[11].append(lines[-2])
+    # step 10: the key's name is not in the file; a later request fails; two answers disagree on a date
+    no_key = w.root / "no_key.txt"
+    no_key.write_text("# synthetic\nOPENAI_API_KEY=never-read\n", encoding="utf-8")
+    code, lines = fetch_line(w.fmp_then(), **{str(w.keys): str(no_key)})
+    assert code == 4 and lines[-1] == "FETCH spy fmp UNAVAILABLE no_key exit=4 csv=-", lines
+    raised[10].append(lines[-2])
+    for second, reason in ((lambda p: pc.Response(429, b'{"Error Message":"Limit Reach"}'), "fetch_failed"),
+                           (lambda p: ok_json({"Error Message": "Limit Reach"}), "plan_or_access"),
+                           (lambda p: ok_json([{"date": "2010-06-01", "adjClose": 1.0}]), "fetch_failed")):
+        http = w.fmp_then(second)
+        code, lines = fetch_line(http)
+        assert code == 4 and len(http.calls) == 2, lines
+        assert lines[-1] == f"FETCH spy fmp UNAVAILABLE {reason} exit=4 csv=-", lines
+        raised[10].append(lines[-2])
+    assert not (pp / "fetch2-spy-fmp").exists() and not (pp / "compare2-spy").exists()
+    # the stop point: a file that starts late is OK with the note, and compare would withhold again
+    stop = re.search(r"^`first`가 여전히.*$", text, flags=re.M).group(0)
+    note = "; fmp paging stopped at <날짜>, after the first requested date 2004-10-31: <이유>"
+    assert f"`{note}`" in stop and "`fmp paging stopped at`이 없습니다" in text, stop
+    for kw, n_requests, first, why in (
+            (dict(first_bar="2006-11-15"), 3, "2006-11-15", "an answer brought no earlier date"),
+            # 12 answers of 450 rows are the last 5,400 of 5,720 sessions: 320 weekdays (64 weeks) after 2004-11-01
+            (dict(cap=450), 12, "2006-01-23", f"the budget of {pc.FMP_MAX_REQUESTS} requests ran out")):
+        late = pp / f"probe-{first}"
+        http = w.fmp_then(**kw)
+        code, lines = fetch_line(http, **{str(pp / "fetch2-spy-fmp"): str(late)})
+        assert code == 0 and len(http.calls) == n_requests, (kw, len(http.calls), lines)
+        assert lines[-2].endswith(note.replace("<날짜>", first).replace("<이유>", why)) and \
+            f", first {first}, " in lines[-2] and f"`{why}`" in stop, (lines[-2], stop)
+        assert first > "2004-12-01" and lines[-1].startswith("FETCH spy fmp OK exit=0 csv="), lines
+    argv = [str(pp / "probe-2006-11-15" / "spy_fmp.csv") if a.endswith("spy_fmp.csv") else
+            str(pp / "probe-compare") if a.endswith("compare2-spy") else a for a in w.tool_line(steps[11])]
+    code, out = capture(lambda: pc.run(argv, now=NOW))
+    assert code == 3 and last_line(out).startswith("PARITY spy WITHHELD exit=3 summary="), out
+    assert "이대로 대조하면 다시 WITHHELD가 됩니다" in stop
+    # step 10 as it should end, then once more; step 11 without the kis file of the first sitting, as it should
+    # end, then once more
+    code, lines = fetch_line(w.fmp_then())
+    assert code == 0 and "fmp paging stopped" not in lines[-2] and ", first 2004-11-01, " in lines[-2], lines
+    code, lines = fetch_line(w.fmp_then())
+    assert code == 2 and lines[-1] == "FETCH spy fmp REFUSED exit=2 csv=-", lines
+    raised[10].append(lines[-2])
+    for folder, name in (("fetch1-spy-kis", "spy_kis.csv"), ("fetch1-spy-yahoo_now", "spy_yahoo_now.csv")):
+        (pp / folder).rename(pp / f"{folder}-moved")
+        code, lines = compare_line()
+        (pp / f"{folder}-moved").rename(pp / folder)
+        assert code == 2 and not (pp / "compare2-spy").exists(), lines
+        assert lines[-2] == f"REFUSED: {name}: cannot be read (FileNotFoundError)", lines
+        if name == "spy_kis.csv":
+            raised[11].append(lines[-2])
+    assert "`REFUSED: spy_kis.csv: cannot be read (FileNotFoundError)`(또는 `spy_yahoo_now.csv`)" in text
+    code, lines = compare_line()
+    assert code == 0 and lines[-1].startswith("PARITY spy PASS exit=0 summary="), lines
+    code, lines = compare_line()
+    assert code == 2 and lines[-1] == "PARITY spy REFUSED exit=2 summary=-", lines
+    raised[11].append(lines[-2])
+    for step, lines in raised.items():
+        hit = set()
+        for line in lines:
+            matching = [k for k, shape in enumerate(shapes[step]) if shape.fullmatch(line.replace("\\", "/"))]
+            assert len(matching) == 1, (step, line, [s.pattern for s in shapes[step]])
+            hit.add(matching[0])
+        assert hit == set(range(len(shapes[step]))), (step, hit, lines)
 
 
 # --------------------------------------------------------------------------- #
