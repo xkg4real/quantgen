@@ -71,7 +71,9 @@ N_RAW_READINGS = MappingProxyType({
     "R-FAM": "R3 registry literal family-wide count (R3 design 3.13: |K| + |L minus cfg(K)|)",
 })
 # Owner ruling 7 of 2026-11-11 (M-3, roadmap ⑨-4/2/b): the R3 run-registry count is the N_raw reading of record.
-# Until the R3 recorder exists both readings are still shown and the second DSR stays provisional.
+# Until the R3 recorder exists both readings are still shown and the second DSR stays provisional. This constant
+# is the only place the reading of record is stored: `RawReading.of_record`, `RawReading.role()` and
+# `DsrTwoN.reading_of_record` are derived from it, so a result cannot name one reading and print another.
 N_RAW_READING_OF_RECORD = "R-FAM"
 
 DSR_STATUSES = ("pass", "borderline", "below", "nan", "not_supplied")
@@ -268,7 +270,11 @@ class RawReading:
     dsr: float
     status: str               # pass / borderline / below / nan / not_supplied
     below_grid: bool          # N_raw < G, printed only
-    of_record: bool           # True for N_RAW_READING_OF_RECORD (ruling 7); the other reading is for comparison
+
+    @property
+    def of_record(self) -> bool:
+        """True for `N_RAW_READING_OF_RECORD` (ruling 7); the other reading is for comparison. Derived, not stored."""
+        return self.reading == N_RAW_READING_OF_RECORD
 
     def role(self) -> str:
         return _OF_RECORD_ROLE if self.of_record else _COMPARISON_ROLE
@@ -289,7 +295,11 @@ class DsrTwoN:
     notes: tuple
     rule: str = "S-2"
     provisional: bool = True  # stays True until the R3 recorder exists, with or without the reading of record
-    reading_of_record: str = N_RAW_READING_OF_RECORD
+
+    @property
+    def reading_of_record(self) -> str:
+        """`N_RAW_READING_OF_RECORD` itself: not a field, so `dataclasses.replace` cannot make it differ."""
+        return N_RAW_READING_OF_RECORD
 
     def lines(self) -> tuple:
         out = [f"S-2 [provisional] DSR at N = G = {self.n_grid}: {_fmt(self.dsr_grid)} ({self.status_grid}); "
@@ -345,13 +355,12 @@ def dsr_two_n(oos_daily, *, n_grid, sr_sd_grid, n_raw: Mapping, sr_sd_daily, sr_
     status_grid = classify_dsr(dsr_grid)
     readings, notes = [], [_PROVISIONAL_NOTE, _PAIRING_NOTE]
     for key, meaning in N_RAW_READINGS.items():
-        of_record = key == N_RAW_READING_OF_RECORD
         if key not in counts:
-            readings.append(RawReading(key, meaning, None, float("nan"), "not_supplied", False, of_record))
+            readings.append(RawReading(key, meaning, None, float("nan"), "not_supplied", False))
             continue
         value = float(V.deflated_sharpe(daily, n_trials=counts[key], sr_sd_daily=sd))
         readings.append(RawReading(key, meaning, counts[key], value, classify_dsr(value, grid_status=status_grid),
-                                   counts[key] < g, of_record))
+                                   counts[key] < g))
     if any(r.below_grid for r in readings):
         notes.append(_BELOW_GRID_NOTE)
     if status_grid == "nan" or any(r.status == "nan" for r in readings):
