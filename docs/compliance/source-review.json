@@ -287,7 +287,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "abea83472495039844189576f11177bf27a986842e5cc09052251db96d191246",
+    "docs/compliance/FACTS.md": "4217d76621711684ba2178cfbd9a6996559903f12e86a354104b0f70af4a7485",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -682,163 +682,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "f393afd6b8fa1b10be4691fabba339bba16c0964b635afd86a0bcf4584a86736",
+      "source_digest": "a92e36004fa964e52cd46c927855dbc824b628a46da3cb2a4a0fa1f8b1cfdfb7",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.533096+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.507472+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "f393afd6b8fa1b10be4691fabba339bba16c0964b635afd86a0bcf4584a86736",
+      "source_digest": "a92e36004fa964e52cd46c927855dbc824b628a46da3cb2a4a0fa1f8b1cfdfb7",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.536127+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.510828+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "48a66bbaa1217fa65ee2dbc7768be44a24b7763cfa8fb98ad9e2a9e2da4c7059",
+      "source_digest": "b75299bf88b3155198db74e0236196e8d14a44f8038585d082a98447f134139a",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.538874+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.513924+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "6cc9c46259fd78ee84911325d6914b7c7f33dd2b1e374cbd9ddfcdbb1fa7c7a1",
+      "source_digest": "679be1b2db07b049623e2a0b153d70f662c7758fce80ccfd278736d529f9873d",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.540887+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.517038+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "7233310c2f2d5d076230fc8258d140144beadcc7bd8a268d92a31bfa64f1e553",
+      "source_digest": "595ece8c03a9f41a82194319d63d47a713d71b7100325ac62a715f4afafad572",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.542714+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.518820+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "ac4bc2f6aac7dfe08c7de7c753408a60d876516943254522d159ef71a6543ece",
+      "source_digest": "f5ba1192d7e8dfea87b4a4e0962819c827d3905dd88ffb89657a4528432c050a",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.544593+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.522235+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
-      "source_digest": "f393afd6b8fa1b10be4691fabba339bba16c0964b635afd86a0bcf4584a86736",
+      "source_digest": "a92e36004fa964e52cd46c927855dbc824b628a46da3cb2a4a0fa1f8b1cfdfb7",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.546553+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.524478+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "8": {
       "document_sha256": "50659615e7a2ad431f0ba7c6d124c6da1d1fc63b1ee67b7392362d8e79344f26",
-      "source_digest": "ac4bc2f6aac7dfe08c7de7c753408a60d876516943254522d159ef71a6543ece",
+      "source_digest": "f5ba1192d7e8dfea87b4a4e0962819c827d3905dd88ffb89657a4528432c050a",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.548428+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.526257+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "07c10f3dd214aafec1632c59edc4c2bdb3cef1ed0c3384269a2ef1a144a54307",
+      "source_digest": "e311a6059eeb61e354cf5494948a2feeac4d0c0f2b6c44d4dcb2ddbc6bd85997",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.550135+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.528524+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "4e4914a3f8c971380b35de14d3b9d6d4614ed6d7c10aded86c61dd3547511388",
+      "source_digest": "2fd218880e34064fd43be8f84f5c33f6f0b6a83ab320cf155a01d13fc1122aea",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.551846+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.531022+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "b1fb38484761a3a1756fb060383be29be01183c1d58d69557274e6554f701226",
+      "source_digest": "43bedc77e9fe50b0044e5787741311909b18bb634f47651d21f2b436efa82c71",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.553730+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.533447+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "45d39d5dbea7b6c559fdc395e39ffab6b30e360cdb74f0f4c3e4abc7b71bb5f6",
+      "source_digest": "338ce5eb20c30827c65e22e71d79df6be7f283ec9581588b88ab2c776650759e",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.556189+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.535942+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
-      "source_digest": "07c10f3dd214aafec1632c59edc4c2bdb3cef1ed0c3384269a2ef1a144a54307",
+      "source_digest": "e311a6059eeb61e354cf5494948a2feeac4d0c0f2b6c44d4dcb2ddbc6bd85997",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.558521+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.537935+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
-      "source_digest": "07c10f3dd214aafec1632c59edc4c2bdb3cef1ed0c3384269a2ef1a144a54307",
+      "source_digest": "e311a6059eeb61e354cf5494948a2feeac4d0c0f2b6c44d4dcb2ddbc6bd85997",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.560396+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.540234+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
-      "source_digest": "07c10f3dd214aafec1632c59edc4c2bdb3cef1ed0c3384269a2ef1a144a54307",
+      "source_digest": "e311a6059eeb61e354cf5494948a2feeac4d0c0f2b6c44d4dcb2ddbc6bd85997",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.562840+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.542009+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "3310bc32cd6422771f99cabf0a9e6c5e20dc6bb53e68d70822602cd3a897ec4c",
+      "source_digest": "0836ad8eb6efb642c7123cfcbd3d02d5ecc481cc8a23e694d4f8ab2d9b8fd6eb",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.564650+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.543917+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "ac4bc2f6aac7dfe08c7de7c753408a60d876516943254522d159ef71a6543ece",
+      "source_digest": "f5ba1192d7e8dfea87b4a4e0962819c827d3905dd88ffb89657a4528432c050a",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.566475+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.545725+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "f393afd6b8fa1b10be4691fabba339bba16c0964b635afd86a0bcf4584a86736",
+      "source_digest": "a92e36004fa964e52cd46c927855dbc824b628a46da3cb2a4a0fa1f8b1cfdfb7",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.568430+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.547559+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
-      "source_digest": "fee315fa228cd2d71b37e8bcc37509bb07c703ab2067d567af65c36053061c23",
+      "source_digest": "1af5a9248ae63e4f5d20ce6710503d3070c6f51887259014089e50567992a870",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.570848+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.549332+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "f393afd6b8fa1b10be4691fabba339bba16c0964b635afd86a0bcf4584a86736",
+      "source_digest": "a92e36004fa964e52cd46c927855dbc824b628a46da3cb2a4a0fa1f8b1cfdfb7",
       "reviewed_by": "Claude macro fixtures FX clock and PR #101 review fixes",
-      "review_note": "Owner ruling A-1 carried out in the offline reference-data fixture generator (docs/macro_fixtures.py): KRW=X (F16) is stamped at the New York 17:00 FX day close, a weekend row is refused; no calendar file, registry or app code changed. Changed sources: docs/compliance/FACTS.md (dated notes in the LA-02 part 2 and part 3 rows: KRWX is no longer refused, 23 of 40 data rows instead of 24 cannot be stamped by rule), three docs/product records of the look-ahead audit and the calendar signing request (dated notes saying the same), and the tests that check it. The 20 numbered documents need no change: the generator runs offline on local files and adds no screen, collection, transfer, network destination, stored personal data, price, claim or third party; 08's Yahoo KRW=X lines concern the app's market screen, which is unchanged; 12-claims has no performance figure or user-facing claim that changes.",
-      "reviewed_at": "2026-11-11T14:34:17.573281+00:00",
-      "source_commit": "c0f88c0e2778bff5c762f10f7955608ee0b36542"
+      "review_note": "Records only: docs/compliance/FACTS.md gains two dated notes in the LA-02 part 3 rows on the review fixes of PR #101 in the offline fixture generator (the long-form F27 date order is per code; the date column is found by name; the manifest is compared before the output folder is written; a failed final write is undone; result tables are copied byte for byte), and the rulings log gains the dated A-1 implementation entry (not a monitored source). No numbered policy document changes: no screen, collection, transfer, network destination, stored personal data, price, claim or third party changes.",
+      "reviewed_at": "2026-11-11T14:37:35.551009+00:00",
+      "source_commit": "15264e7434820e3760696833dac9e14b672f1420"
     }
   }
 }
