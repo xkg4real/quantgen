@@ -23,8 +23,8 @@ tool's own HTTP function with `urlopen` replaced; COMPUTES against the checks (s
 and non-positive cells of a provider file (kept for the cash rate, dropped for SPY and BTC-USD); what a failed run
 prints and leaves; a cp949 console; UTF-8 and LF in every file the tool writes; the tool run as the owner runs it
 (`python -B -m ...`); every statement of the fixed tool commit and sha256, for the two fixed versions the tool has
-had; the fmp page-back of the second version; the rerun guide's tool lines and Python lines, run as written, and the
-failure lines its table quotes, raised and compared with the table.
+had; the fmp page-back of the second version; the rerun guide's tool lines and Python lines, run as written (the
+check line of its step 10 among them), and the failure lines its table quotes, raised and compared with the table.
 """
 from __future__ import annotations
 
@@ -46,6 +46,7 @@ import time
 import types
 import unittest
 import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
@@ -126,6 +127,37 @@ def weekdays(lo: str, hi: str) -> list[str]:
 def alldays(lo: str, hi: str) -> list[str]:
     d0, d1 = date.fromisoformat(lo), date.fromisoformat(hi)
     return [(d0 + timedelta(k)).isoformat() for k in range((d1 - d0).days + 1)]
+
+
+def us_sessions(lo: str, hi: str) -> list[str]:
+    """US stock sessions from `lo` to `hi`, made by rule: the weekdays less the exchange's regular full-day holidays
+    (one that falls on a Saturday is kept on the Friday before and one on a Sunday on the Monday after; a New Year's
+    Day on a Saturday is not kept at all; Juneteenth from 2022) and less the special closures of 2007-01-02,
+    2012-10-29, 2012-10-30, 2018-12-05 and 2025-01-09. Calendar facts only, no price. It is meant for 2004-11-01 to
+    2026-10-02, the span the second SPY fetch asks for, and holds no special closure outside it."""
+    def nth(y: int, m: int, weekday: int, n: int) -> date:
+        return date(y, m, 1 + (weekday - date(y, m, 1).weekday()) % 7 + 7 * (n - 1))
+
+    def kept(d: date) -> date:
+        return d - timedelta(1) if d.weekday() == 5 else d + timedelta(1) if d.weekday() == 6 else d
+
+    def easter(y: int) -> date:
+        a, b, c = y % 19, y // 100, y % 100
+        h = (19 * a + b - b // 4 - (b - (b + 8) // 25 + 1) // 3 + 15) % 30
+        k = (32 + 2 * (b % 4) + 2 * (c // 4) - h - c % 4) % 7
+        month, day = divmod(h + k - 7 * ((a + 11 * h + 22 * k) // 451) + 114, 31)
+        return date(y, month, day + 1)
+    d0, d1 = date.fromisoformat(lo), date.fromisoformat(hi)
+    closed = {date(2007, 1, 2), date(2012, 10, 29), date(2012, 10, 30), date(2018, 12, 5), date(2025, 1, 9)}
+    for y in range(d0.year, d1.year + 1):
+        last_monday_of_may = date(y, 5, 31) - timedelta(date(y, 5, 31).weekday())
+        closed |= {nth(y, 1, 0, 3), nth(y, 2, 0, 3), easter(y) - timedelta(2), last_monday_of_may, nth(y, 9, 0, 1),
+                   nth(y, 11, 3, 4), kept(date(y, 7, 4)), kept(date(y, 12, 25))}
+        if date(y, 1, 1).weekday() != 5:
+            closed.add(kept(date(y, 1, 1)))
+        if y >= 2022:
+            closed.add(kept(date(y, 6, 19)))
+    return [d for d in weekdays(lo, hi) if date.fromisoformat(d) not in closed]
 
 
 def spy_like(seed: int = 7, lo: str = "2009-06-01", hi: str = "2016-12-30", *, rate: float = 0.0045,
@@ -2553,7 +2585,12 @@ def test_the_guide_matches_the_tool_and_says_what_is_not_settled():
     phrase listed here stands in the tool's source as it is written in the guide. A line the tool composes when it
     runs (a file name, an exception type, a request number) cannot be found that way; the rerun guide's failure
     lines are raised and compared in `test_the_rerun_guide_s_failure_lines_are_the_tool_s_own_lines`. The fixed
-    commit and sha256 have their own case below."""
+    commit and sha256 have their own case below.
+
+    After the final check of 2026-11-11 the guide also says what the second fixed version leaves open, under a
+    heading of its own, since the tool file itself stays as the ruling fixed it: two answers of a provider that
+    reads `to` as exclusive share no day and would be joined unchecked, and a dated row without a value shows only
+    in the fetch record."""
     flat = " ".join(GUIDE.read_text(encoding="utf-8").split())
     assert f"{len(tests())} cases on synthetic series" in flat, len(tests())
     for phrase in ("signed NYSE calendar. That check is not built",             # the draft's 4.1 clause, left out
@@ -2564,14 +2601,20 @@ def test_the_guide_matches_the_tool_and_says_what_is_not_settled():
                    f"the budget of {pc.FMP_MAX_REQUESTS} requests ran out", "an answer brought no earlier date",
                    "fmp gave one date two different values in two answers",
                    f"more than {pc.FMP_REACHED_DAYS} days after the first requested date",
+                   "## Known wording and limits of the second fixed version",
+                   "would be joined unchecked", "`csv.n_blank` of `meta.json`",
+                   "the row total is information there, not a condition",
                    "is not registered in `tests/run_all.py`"):
         assert phrase in flat, phrase
     assert "kis paging stopped at" in KO_GUIDE.read_text(encoding="utf-8")
     rerun, source = RERUN_GUIDE.read_text(encoding="utf-8"), Path(pc.__file__).read_text(encoding="utf-8")
     for phrase in ("fmp paging stopped at", "an answer brought no earlier date", "of the page-back",
                    "fmp gave one date two different values in two answers",
-                   "fmp answered with a message instead of rows", "the output folder must be new"):
+                   "fmp answered with a message instead of rows", "the output folder must be new",
+                   "request failed ("):
         assert phrase in rerun and phrase in source, phrase
+    for key in ("n_rows", "n_blank"):               # the check line of step 10 reads two keys of the fetch record
+        assert f"c['{key}']" in rerun and f'"{key}": ' in source, key
     assert f"the budget of {pc.FMP_MAX_REQUESTS} requests ran out" in rerun and "requests ran out" in source
     assert f"요청 횟수 {pc.FMP_MAX_REQUESTS}번" in rerun and "SELFTEST PASS checks=11 failures=0" in rerun
 
@@ -3557,21 +3600,26 @@ def test_the_rerun_guide_s_tool_lines_run_as_written_after_a_synthetic_first_sit
     """The owner pastes the rerun guide's lines as they stand, so the lines that start the tool or Python are taken
     from the guide file and run here, on a synthetic copy of the first sitting with the two tables' own windows.
     Every PowerShell block of the guide is one line with no `&&`, no line continuation and no `<...>` left to fill
-    but the one of step 1, and the steps are numbered 1 to 18 without a gap. Step 8 (the sha256 line) prints the
-    tool file's sha256 and says `sha256 ok` for that value and `sha256 DIFFERENT` for any other; that the guide's
-    own `$sha` is that value is held by the fixed-values case. Step 9 (selftest) ends as the guide says. Step 10
-    fetches fmp into `fetch2-spy-fmp`: two requests, a first date of 2004-11-01 for the first requested 2004-10-31
-    (a Sunday), no note, which is what the guide's stop point asks for. Step 11 compares the new fmp file with the
-    kis and yahoo_now files of the first sitting, whose fetch records name the first fixed version's sha256, into
-    `compare2-spy`: PASS, with kis WITHHELD on coverage inside the summary, as the guide says is normal. Step 12
-    (the copy line) puts that summary, and nothing else, under `results/<run_id>/` of the folder it runs in, and a
-    second run of it stops with FileExistsError, as the guide's table says. The lines that only call git are not
-    run here."""
+    but the one of step 1, and the steps are numbered 1 to 18 without a gap. Step 10 has a second block, the check
+    line, which is no step of its own; the two lines after a rejected push are the last two blocks. Step 8 (the
+    sha256 line) prints the tool file's sha256 and says `sha256 ok` for that value and `sha256 DIFFERENT` for any
+    other; that the guide's own `$sha` is that value is held by the fixed-values case. Step 9 (selftest) ends as the
+    guide says. Step 10 fetches fmp into `fetch2-spy-fmp`: two requests, a first date of 2004-11-01 for the first
+    requested 2004-10-31 (a Sunday), the last requested day as the last date and no note, and its check line prints
+    the row count of the fetch line and `blank 0`: the four conditions of the guide's stop point. (The sitting's
+    sessions are plain weekdays, so the total is 5,720; the case below runs the check line over a session
+    calendar.) Step 11 compares the new fmp file with the kis and yahoo_now files of the first sitting, whose fetch
+    records name the first fixed version's sha256, into `compare2-spy`: PASS, with kis WITHHELD on coverage inside
+    the summary, as the guide says is normal. Step 12 (the copy line) puts that summary, and nothing else, under
+    `results/<run_id>/` of the folder it runs in, and a second run of it stops with FileExistsError, as the guide's
+    table says. The lines that only call git are not run here."""
     blocks, steps = guide_blocks(RERUN_GUIDE), guide_steps(RERUN_GUIDE)
-    assert len(blocks) == 20 and all("\n" not in b and "&&" not in b and not b.rstrip().endswith(("`", "\\"))
+    assert len(blocks) == 21 and all("\n" not in b and "&&" not in b and not b.rstrip().endswith(("`", "\\"))
                                      for b in blocks), [b[:40] for b in blocks if "\n" in b]
-    assert sorted(steps) == list(range(1, 19)) and blocks[:18] == [steps[n] for n in range(1, 19)], sorted(steps)
-    assert blocks[18:] == ["git pull --rebase", "git push"] and steps[16] == "git push", blocks[18:]
+    check = blocks[10]                                          # the second block of step 10, no step of its own
+    assert sorted(steps) == list(range(1, 19)) and blocks[:10] + blocks[11:19] == [steps[n] for n in range(1, 19)], \
+        sorted(steps)
+    assert blocks[19:] == ["git pull --rebase", "git push"] and steps[16] == "git push", blocks[19:]
     assert [b for b in blocks if "<" in b] == ['$rc = "<연구 클론 폴더의 전체 경로>"'], blocks[:1]
     assert steps[2] == '$q = Join-Path $env:LOCALAPPDATA "quantgen"' and steps[3] == 'cd "$q\\pp_clone"', blocks[:3]
     tool = [b for b in blocks if b.startswith("python -B -m tools.provider_parity.parity_check ")]
@@ -3596,6 +3644,8 @@ def test_the_rerun_guide_s_tool_lines_run_as_written_after_a_synthetic_first_sit
         "rows 5720, first 2004-11-01, last 2026-10-02, weekend dates 0",
         f"FETCH spy fmp OK exit=0 csv={pp / 'fetch2-spy-fmp' / 'spy_fmp.csv'}"], out
     assert FMP_KEY not in out and FMP_KEY not in all_text(pp / "fetch2-spy-fmp")
+    code, lines, err = w.python_line(check, w.root)             # the check line of step 10, as written
+    assert (code, lines) == (0, ["rows 5720 blank 0"]) and "Traceback" not in err, (lines, err)
     code, out = capture(lambda: pc.run(w.tool_line(tool[2]), now=NOW))
     assert code == 0 and last_line(out) == f"PARITY spy PASS exit=0 summary={pp / 'compare2-spy' / 'summary.json'}", out
     s = json.loads((pp / "compare2-spy" / "summary.json").read_text(encoding="utf-8"))
@@ -3622,6 +3672,89 @@ def test_the_rerun_guide_s_tool_lines_run_as_written_after_a_synthetic_first_sit
     assert "| 12단계 `FileExistsError` |" in text and "PP-20261111T051909Z-spy" in text
 
 
+def test_the_rerun_guide_s_check_line_prints_the_two_counts_of_the_fetch_record():
+    """Step 10 of the rerun guide has a second line, the check line (final check of 2026-11-11, FMP-1 and G1): it
+    reads `meta.json` of `fetch2-spy-fmp` and prints `rows <n> blank <n>`. The console line of the fetch cannot show
+    a dated row without a value: such a row counts as a row and as the file's first date. The line is taken from the
+    guide file and run as written. Its code holds no double quote, no `$` and no backtick, and its one argument is
+    a quoted path that does not end in a backslash, the shape of the guide's other two Python lines.
+
+    The provider is the owner's of 2026-11-11 in synthetic form: it answers with the most recent 5,000 rows of a
+    span, over a session calendar made by rule. That calendar gives the numbers the guide adds up (4,995 and 494 of
+    the first summary, 21 sessions of November 2004, 5 after the table's end), so the fetch asks twice (`to`
+    2026-10-02, then 2006-11-15) and ends with the 5,515 rows from 2004-11-01 that the guide names as what a
+    complete answer is expected to show, and the check line prints `rows 5515 blank 0`. The same provider with no
+    value on its rows before 2005-03-01 gives the very same console line, and the check line shows 82 blanks:
+    condition (d) of the stop point is what stops that file. A provider that reads `to` as exclusive shares no day
+    between its two answers and leaves out the last day asked for, `last 2026-10-01`, which condition (c) stops.
+    On a folder that was never written the check line ends with FileNotFoundError, as the guide's table says."""
+    blocks, steps = guide_blocks(RERUN_GUIDE), guide_steps(RERUN_GUIDE)
+    text = RERUN_GUIDE.read_text(encoding="utf-8")
+    check = blocks[blocks.index(steps[10]) + 1]
+    code = re.fullmatch(r'python -B -c "([^"]*)" "\$q\\provider_parity\\fetch2-spy-fmp\\meta\.json"', check)
+    assert check not in steps.values() and code and not set("$`") & set(code.group(1)), check
+    assert "화면: `rows <행 수> blank 0` 한 줄입니다." in text
+    w = RerunWorld()
+    pp = w.q / "provider_parity"
+    days, _, adj, _ = w.spy
+    open_days = set(us_sessions(days[0], days[-1]))
+    asked = [d for d in days if d in open_days and "2004-10-31" <= d <= "2026-10-02"]
+    counts = (sum(d < "2004-12-01" for d in asked), sum("2004-12-01" <= d < "2006-11-15" for d in asked),
+              sum("2006-11-15" <= d <= "2026-09-25" for d in asked), sum(d > "2026-09-25" for d in asked))
+    assert counts == (21, 494, 4995, 5) and asked[-5000] == "2006-11-15", (counts, asked[-5000])
+    assert all(f"{n:,}일" in text for n in counts) and "`rows`는 5515, `first`는 2004-11-01로 예상합니다" in text
+
+    def provider(blank_before: str = "", exclusive: bool = False) -> FakeHttp:
+        """The most recent 5,000 sessions of the span asked for; `sent` keeps the dates of each answer."""
+        def answer(url, params):
+            assert url == pc.FMP_URL and params["apikey"] == FMP_KEY, params
+            idx = [i for i in in_span(days, params["from"], params["to"]) if days[i] in open_days
+                   and not (exclusive and days[i] == params["to"])][-5000:]
+            http.sent.append({days[i] for i in idx})
+            return ok_json([{"symbol": "SPY", "date": days[i],
+                             "adjClose": None if days[i] < blank_before else round(float(adj[i]) * 0.987, 6)}
+                            for i in reversed(idx)])
+        http = FakeHttp(answer)
+        http.sent = []
+        return http
+
+    def fetch_into(folder: str, http: FakeHttp) -> list[str]:
+        """Step 10's fetch line as written, into `folder`: its last two console lines."""
+        argv = [a.replace("fetch2-spy-fmp", folder) for a in w.tool_line(steps[10])]
+        with env_without(*pc.KEY_NAMES):
+            done, out = capture(lambda: pc.run(argv, now=NOW, http=http))
+        assert done == 0 and FMP_KEY not in out, out
+        return out.splitlines()[-2:]
+
+    def check_line(folder: str) -> tuple[int, list[str], str]:
+        return w.python_line(check.replace("fetch2-spy-fmp", folder), w.root)
+    # a complete answer: two requests, 5,515 rows, no blank
+    http = provider()
+    whole = fetch_into("fetch2-spy-fmp", http)
+    assert [(p["from"], p["to"]) for _, p in http.calls] == [("2004-10-31", "2026-10-02"),
+                                                             ("2004-10-31", "2006-11-15")], http.calls
+    assert whole == ["rows 5515, first 2004-11-01, last 2026-10-02, weekend dates 0",
+                     f"FETCH spy fmp OK exit=0 csv={pp / 'fetch2-spy-fmp' / 'spy_fmp.csv'}"], whole
+    done, said, err = check_line("fetch2-spy-fmp")
+    assert (done, said) == (0, ["rows 5515 blank 0"]) and "Traceback" not in err, (said, err)
+    # dated rows without a value: the console line is the same, the check line is not
+    blank = fetch_into("probe-blank", provider(blank_before="2005-03-01"))
+    done, said, err = check_line("probe-blank")
+    assert blank[0] == whole[0] and (done, said) == (0, ["rows 5515 blank 82"]), (blank, said, err)
+    assert "Traceback" not in err and "- (d) 확인 줄의 출력에서 `blank`가 0입니다." in text, err
+    # an exclusive `to`: no day comes twice, and the last day asked for is missing
+    http = provider(exclusive=True)
+    cut = fetch_into("probe-exclusive", http)
+    assert [p["to"] for _, p in http.calls] == ["2026-10-02", "2006-11-14"] and not http.sent[0] & http.sent[1]
+    assert cut[0] == "rows 5514, first 2004-11-01, last 2026-10-01, weekend dates 0", cut
+    assert check_line("probe-exclusive")[:2] == (0, ["rows 5514 blank 0"])
+    assert "`last`가 정확히 2026-10-02이고" in text and "2026-10-02는 도구가 요청한 마지막 날이라" in text
+    # a fetch that did not end OK left no folder
+    done, said, err = check_line("probe-never")
+    assert done != 0 and said == [] and "FileNotFoundError" in err, (done, said, err)
+    assert "| 10단계의 확인 줄이 `Traceback`으로 시작해 `FileNotFoundError`가 든 줄로 끝남 |" in text
+
+
 def test_the_rerun_guide_s_failure_lines_are_the_tool_s_own_lines():
     """The rerun guide tells the owner what to do when a step ends another way, and quotes the line he will see.
     Those lines are composed by the tool when it runs (a folder, a file name, an exception type, a request number),
@@ -3630,24 +3763,43 @@ def test_the_rerun_guide_s_failure_lines_are_the_tool_s_own_lines():
     and every shape the table quotes is raised. None of these failures leaves a folder behind.
 
     A failure of the first fmp request has its own row (review of 2026-11-11, R6): its lines carry no request
-    number, and the row for a later request does not match them. The table also says what to do when the selftest
-    of step 9 does not end PASS, and names the line the tool prints then.
+    number, and the row for a later request does not match them. A transport failure stands in both rows (final
+    check of 2026-11-11, G5 and FMP-6); it is raised through the tool's own HTTP function with `urlopen` replaced,
+    on the first request and on the second. The table also says what to do when the selftest of step 9 does not end
+    PASS, and names the line the tool prints then; that line is not raised, the row is held to the tool's source.
 
     The stop point of step 10 is held the same way. A provider whose history starts on 2006-11-15, the first date of
-    the owner's first file, ends `OK` with the note in the guide's words and a first date the stop point refuses;
-    so does a provider that sends too few rows for twelve requests. Compared all the same (into another folder,
-    which the guide does not do), the late file ends WITHHELD again, as the guide warns. The stop point has five
-    conditions, the fifth being the number of rows, and says that stopping there makes no second run."""
+    the owner's first file, ends `OK` with the note in the guide's words, which condition (b) stops; so does a
+    provider that sends too few rows for twelve requests. Compared all the same (into another folder, which the
+    guide does not do), a file that starts on 2004-12-08 still passes and one that starts on 2004-12-09 or on
+    2006-11-15 ends WITHHELD, the date the guide names. The stop point has four conditions, (a) to (d), and the
+    number of rows is none of them (final check of 2026-11-11, G1): it decides whether the fetch is complete, not
+    what the comparison will show. The guide and results/RULINGS.md say the same of what a stop means: no run was
+    made, a failed fetch is repeated by the same line into the same folder name, the comparison reads the first
+    fetch that ended OK, and no comparison is held back because of what it might show."""
     steps = guide_steps(RERUN_GUIDE)
     text = RERUN_GUIDE.read_text(encoding="utf-8")
     shapes = {10: guide_failure_shapes(RERUN_GUIDE, "5", 10), 11: guide_failure_shapes(RERUN_GUIDE, "5", 11)}
-    assert (len(shapes[10]), len(shapes[11])) == (8, 3), shapes
+    assert (len(shapes[10]), len(shapes[11])) == (10, 3), shapes
     assert "| 9단계의 마지막 줄이 `SELFTEST PASS checks=11 failures=0`이 아님(`SELFTEST FAIL ...`이거나" in text
     assert "SELFTEST {'FAIL' if failures else 'PASS'} checks=" in Path(pc.__file__).read_text(encoding="utf-8")
-    assert "아래 다섯 가지를 모두 만족하면 11단계로 갑니다" in text and "- 첫 줄의 `rows`가 5515입니다." in text
+    point = text.split("**멈춤 지점.**")[1].split("**11.**")[0]
+    assert "아래 (a)~(d)를 모두 만족하면 11단계로 갑니다" in point and "다섯 가지" not in text, point[:200]
+    assert re.findall(r"^- \((\w)\) ", point, flags=re.M) == ["a", "b", "c", "d"], point[:400]
+    assert "**행 수는 조건이 아니라 참고입니다.**" in point and "- 첫 줄의 `rows`가 5515입니다." not in text
     assert 4995 + 494 + 21 + 5 == 5515 and "4,995일" in text and "494일" in text and "21일" in text
-    assert "여기서 멈추면 두 번째 실행은 하지 않은 것입니다." in text
-    assert "no second\n  run is made" in RULINGS.read_text(encoding="utf-8")
+    rulings = " ".join(RULINGS.read_text(encoding="utf-8").split())
+    for said, recorded in (
+            ("멈춤 지점에서 멈춘 것은 실행이 아닙니다.", "a stop at the stop point makes no second run"),
+            ("폴더 이름도 그대로 `fetch2-spy-fmp`입니다.", "after a failed fetch `fetch2-spy-fmp` is still a new folder"),
+            ("대조는 처음으로 `OK`로 끝난 수신의 파일로 합니다.", "is that of the first fetch that ended `OK`"),
+            ("하나라도 만족하지 못하면 그 파일로는 대조하지 않습니다.", "no comparison is made with it"),
+            ("Claude는 대조 결과가 어떻게 나올지를 이유로 대조를 미루지 않습니다.",
+             "Claude does not hold a comparison back because of what it might show"),
+            ("**행 수는 조건이 아니라 참고입니다.**", "The row total is information, not a condition."),
+            ("`last`가 정확히 2026-10-02이고", "`last` is exactly 2026-10-02, the last day asked for")):
+        assert said in point and recorded in rulings, (said, recorded)
+    assert "여기서 멈추면 두 번째 실행은 하지 않은 것입니다." not in text and "no second run is made" not in rulings
     w = RerunWorld()
     pp = w.q / "provider_parity"
     raised = {10: [], 11: []}
@@ -3693,16 +3845,42 @@ def test_the_rerun_guide_s_failure_lines_are_the_tool_s_own_lines():
         assert code == 4 and len(http.calls) == 2, lines
         assert lines[-1] == f"FETCH spy fmp UNAVAILABLE {reason} exit=4 csv=-", lines
         raised[10].append(lines[-2])
+    # a transport failure, raised where the tool raises it: its own HTTP function, with `urlopen` replaced. Once on
+    # the first request and once on the second, after a first answer of 5,000 rows
+    saved_open, saved_gap = urllib.request.urlopen, pc._MIN_GAP_S
+    pc._MIN_GAP_S = 0.0
+    try:
+        for fail_at, kind, said in (
+                (1, TimeoutError, "request failed (TimeoutError)"),
+                (2, urllib.error.URLError, "request failed (URLError); request 2 of the page-back")):
+            opened = []
+
+            def no_answer(request, timeout=None):
+                opened.append(request.full_url)
+                if len(opened) == fail_at:
+                    raise kind(f"no answer from {request.full_url}")
+                query = dict(urllib.parse.parse_qsl(urllib.parse.urlsplit(request.full_url).query))
+                return _Answer(200, w._fmp(pc.FMP_URL, query).body)
+            urllib.request.urlopen = no_answer
+            code, lines = fetch_line(REAL_URLLIB_GET)
+            assert code == 4 and len(opened) == fail_at and lines[-2] == f"UNAVAILABLE: {said}", (opened, lines)
+            assert lines[-1] == "FETCH spy fmp UNAVAILABLE fetch_failed exit=4 csv=-", lines
+            raised[10].append(lines[-2])
+    finally:
+        urllib.request.urlopen, pc._MIN_GAP_S = saved_open, saved_gap
     assert not (pp / "fetch2-spy-fmp").exists() and not (pp / "compare2-spy").exists()
-    # the stop point: a file that starts late is OK with the note, and compare would withhold again
+    # the stop point, condition (b): a file that starts late is OK with the note. Compared all the same, it ends
+    # WITHHELD again once more than five sessions of the table lie before it, a first date after 2004-12-08
     stop = re.search(r"^`first`가 여전히.*$", text, flags=re.M).group(0)
     note = "; fmp paging stopped at <날짜>, after the first requested date 2004-10-31: <이유>"
-    assert f"`{note}`" in stop and "`fmp paging stopped at`이 없습니다" in text, stop
-    for kw, n_requests, first, why in (
-            (dict(first_bar="2006-11-15"), 3, "2006-11-15", "an answer brought no earlier date"),
+    assert f"`{note}`" in stop and "- (b) 첫 줄에 `fmp paging stopped at`이 없습니다." in text, stop
+    for kw, n_requests, first, why, compared in (
+            (dict(first_bar="2004-12-08"), 3, "2004-12-08", "an answer brought no earlier date", "PASS exit=0"),
+            (dict(first_bar="2004-12-09"), 3, "2004-12-09", "an answer brought no earlier date", "WITHHELD exit=3"),
+            (dict(first_bar="2006-11-15"), 3, "2006-11-15", "an answer brought no earlier date", "WITHHELD exit=3"),
             # 450 rows and eleven times 449 new ones are the last 5,389 of 5,720 sessions: 331 weekdays (66 weeks
             # and a day) after Monday 2004-11-01
-            (dict(cap=450), 12, "2006-02-07", f"the budget of {pc.FMP_MAX_REQUESTS} requests ran out")):
+            (dict(cap=450), 12, "2006-02-07", f"the budget of {pc.FMP_MAX_REQUESTS} requests ran out", "")):
         late = pp / f"probe-{first}"
         http = w.fmp_then(**kw)
         code, lines = fetch_line(http, **{str(pp / "fetch2-spy-fmp"): str(late)})
@@ -3710,11 +3888,14 @@ def test_the_rerun_guide_s_failure_lines_are_the_tool_s_own_lines():
         assert lines[-2].endswith(note.replace("<날짜>", first).replace("<이유>", why)) and \
             f", first {first}, " in lines[-2] and f"`{why}`" in stop, (lines[-2], stop)
         assert first > "2004-12-01" and lines[-1].startswith("FETCH spy fmp OK exit=0 csv="), lines
-    argv = [str(pp / "probe-2006-11-15" / "spy_fmp.csv") if a.endswith("spy_fmp.csv") else
-            str(pp / "probe-compare") if a.endswith("compare2-spy") else a for a in w.tool_line(steps[11])]
-    code, out = capture(lambda: pc.run(argv, now=NOW))
-    assert code == 3 and last_line(out).startswith("PARITY spy WITHHELD exit=3 summary="), out
-    assert "이대로 대조하면 다시 WITHHELD가 됩니다" in stop
+        if compared:
+            argv = [str(late / "spy_fmp.csv") if a.endswith("spy_fmp.csv") else
+                    str(pp / f"probe-compare-{first}") if a.endswith("compare2-spy") else a
+                    for a in w.tool_line(steps[11])]
+            code, out = capture(lambda: pc.run(argv, now=NOW))
+            assert last_line(out).startswith(f"PARITY spy {compared} summary=") and \
+                "그 날짜가 2004-12-08보다 늦으면" in stop, (first, out, stop)
+    assert "이대로 대조해도 다시 WITHHELD가 됩니다" in stop and "(b)에서 멈춥니다" in stop, stop
     # step 10 as it should end, then once more; step 11 without the kis file of the first sitting, as it should
     # end, then once more
     code, lines = fetch_line(w.fmp_then())

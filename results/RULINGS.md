@@ -80,10 +80,13 @@ Owner's words, verbatim (one reply to this question and to the BTC-USD question 
 What follows (how Claude takes "SPY-가-승인"):
 - Claude changes the tool's fmp fetch so that it asks again when one answer does not reach the first requested date:
   the same `from`, and `to` = the earliest date received, until an answer reaches the first requested date, brings no
-  earlier date, or twelve requests are spent. That earliest date is asked for twice on purpose: the two values the
-  provider gives for it are compared at the fetch, and a fetch is not a run. Only dates inside the span asked for
-  count, so no request names a later day than the one before it. Nothing else in the tool changes: thresholds,
-  providers, outcome rules and summary fields are those of the three runs of record.
+  earlier date, or twelve requests are spent. That earliest date is asked for twice on purpose: when the provider
+  sends that day in both answers (it reads `to` as inclusive), the two values it gives for it are compared at the
+  fetch, and a fetch is not a run. A provider that reads `to` as exclusive shares no day between two answers, so
+  nothing is compared and the answers would be joined unchecked; such a provider also leaves out the last day asked
+  for, and condition (c) of the guide's stop point (below) is what stops that case before the compare. Only dates
+  inside the span asked for count, so no request names a later day than the one before it. Nothing else in the tool
+  changes: thresholds, providers, outcome rules and summary fields are those of the three runs of record.
 - The changed tool is the second fixed version:
 - Tool commit fixed: `1be43ec191ce73bc4fbc7357a4b3438aca0e4bb1`
 - Tool sha256 fixed (`tools/provider_parity/parity_check.py`): `78dd1f508c713f9be138466bf69f5dd92d8bfdcc3afacfa37b21fc4bf28ca80c`
@@ -92,23 +95,53 @@ What follows (how Claude takes "SPY-가-승인"):
   tool found faults in the fmp fetch that could have cost the owner the second SPY run (a page-back request could
   name a later day than the request before it, 2027 included; two answers never shared a day, so a provider whose
   values for a day depend on the request would have ended the fetch `OK` and failed only in the compare of record; a
-  file could start late without the note) and the tool was changed to fix them. No run was made with the replaced
-  values. The diagnostic's sha256 below was replaced at the same time (the script changed after the same review; it
-  had not been run).
+  file could start late without the note) and the tool was changed to fix them. The second of these is fixed for a
+  provider that reads `to` as inclusive, which is the only case in which two answers share a day (the point above).
+  No run was made with the replaced values. The diagnostic's sha256 below was replaced at the same time (the script
+  changed after the same review; it had not been run).
 - "Reaches" means an earliest date at most 7 days after the first requested date, which is 31 days before the
   table's start and need not be a session. A fetch that stops later than that still ends `OK` and says where and why
   on the console line above its `FETCH ... OK` line; the owner does not compare such a file (the guide's stop point).
-- The owner fetches fmp again with it into a new folder and runs the SPY comparison one more time, with the new fmp
-  file and the kis and yahoo_now files of the first sitting (a fetch record binds a file's bytes, provider, series and
-  window, not the tool version). Steps: `docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md`.
+- The owner fetches fmp again with it into a new folder (`fetch2-spy-fmp`) and runs the SPY comparison one more time,
+  with the new fmp file and the kis and yahoo_now files of the first sitting (a fetch record binds a file's bytes,
+  provider, series and window, not the tool version). Steps: `docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md`.
 - This is the owner ruling that spec 10.5 requires for a later run to count: the second SPY run counts for the pilot 1
   gate. The first run (WITHHELD) stays on record, and both summaries are kept.
 - DGS3MO is PASS and is not run again.
-- Not verified: whether FMP serves 2004 to 2006 at all, and whether it gives one value for a day in two requests.
-  If the new fmp file still starts late, or the fetch fails, the owner stops at the guide's stop point and no second
-  run is made: the SPY run of record stays WITHHELD and pilot 1 stays held. If a second run is made and ends
-  WITHHELD or FAIL, its summary stays on record beside the first. Either way, another change to the tool or another
-  compare counts only after a new owner ruling (spec 10.5, Tool; Runs of record).
+- Not verified: whether FMP serves 2004 to 2006 at all, whether it gives one value for a day in two requests,
+  whether it reads `to` as inclusive on every request, and whether it ever sends a dated row without a value.
+- The stop point of the guide's step 10, and what a stop means. This is Claude's reading, not the owner's words. It
+  was written on 2026-11-11, before the second fetch and before any second run, so that it cannot follow the result.
+  1. *What the stop point decides.* One thing only: whether the fetched file is a complete fetch that may go to the
+     comparison. It does not predict the comparison's result. Its conditions, in the guide's order: (a) the last line
+     of the fetch is `FETCH spy fmp OK exit=0 ...`; (b) the line above it carries no `fmp paging stopped at`; (c) on
+     that line `first` is 2004-12-01 or earlier, `last` is exactly 2026-10-02, the last day asked for, and
+     `weekend dates` is 0; (d) the guide's check line, which prints two counts of the fetch record (`csv.n_rows` and
+     `csv.n_blank` of `meta.json`), shows `blank 0`: no dated row without a value.
+  2. *The row total is information, not a condition.* A complete answer is expected to show 5,515 rows from
+     2004-11-01: the 4,995 and the 494 of the first summary, and 21 sessions of November 2004 and 5 after the
+     table's end, counted on a session calendar made by rule. Another total with (a) to (d) holding does not stop the
+     owner: the comparison is made, and the owner sends the fetch line with the results.
+  3. *A stop is not a run.* A fetch is not a run (spec 10.5, Runs of record), so a stop at the stop point makes no
+     second run. Meanwhile the SPY run of record stays WITHHELD and pilot 1 stays held.
+  4. *A fetch that fails* (its last line is not `FETCH spy fmp OK`) writes no folder and may be repeated. Where
+     section 5 of the guide says so, the owner runs the same line once more; if that fails too, the owner sends the
+     lines and waits, and nothing is compared meanwhile. The same line means the same folder name: after a failed
+     fetch `fetch2-spy-fmp` is still a new folder. The number in a folder name counts the fetches that ended `OK`
+     and left a folder, not the attempts; `fetch3-spy-fmp` would be the folder of a further fetch, which only a new
+     ruling could allow (point 6). One failure is not repeated, as the guide's table says: `fmp gave one date two
+     different values in two answers`. Its line names neither the date nor the size of the difference, so what
+     follows it would be a change to the tool, which counts only after a new ruling.
+  5. *The file that is compared* is that of the first fetch that ended `OK`. A fetch that ended `OK` is not repeated
+     (the tool refuses a folder that exists).
+  6. *If that fetch does not meet (b) to (d)*, no comparison is made with it: the SPY run of record stays WITHHELD
+     and pilot 1 stays held. Anything further (a change to the tool, another provider, a comparison of such a file,
+     another fetch) counts only after a new owner ruling (spec 10.5, Tool; Runs of record).
+  7. *If it meets them*, the owner compares. Claude does not hold a comparison back because of what it might show:
+     a provider whose calendar differs from the pinned file by a session is a finding of the comparison, not a
+     reason to hold the comparison back.
+- If a second run is made and ends WITHHELD or FAIL, its summary stays on record beside the first, and another change
+  to the tool or another compare counts only after a new owner ruling (spec 10.5, Tool; Runs of record).
 
 ## 2026-11-11 (KST), BTC-USD, `PP-20261111T075328Z-btc` (FAIL): the cause is looked at before pilot 2 (BTC-나)
 

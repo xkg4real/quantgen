@@ -926,7 +926,14 @@ def test_the_rerun_guide_s_diagnostic_line_runs_as_written_and_prints_what_the_g
     version's sha256. It prints 84 lines, the number the guide tells the owner to expect and to paste (13 calendar
     years, 2014 to 2026), begins and ends as the guide says, and every line starts with one of the words the guide
     lists. The two `file` lines name the files of the first sitting by the sha256 their fetch records hold. The
-    guide's two failure lines are the script's own."""
+    guide's two failure lines are the script's own.
+
+    The guide tells the owner everything the script prints before he pastes it, so its list also names the three
+    fields a final check found missing there (2026-11-11, G6): the tool's own count and allowance on the two pinned
+    `total` lines and the days of each `levels` line. And the first point of its reading rule names the fields
+    Claude holds to the run of record in the words of results/RULINGS.md (G3): the sha256 of the first line are
+    those of the second fixed version and of the script, not values of the first summary, and the late segment has
+    3,555 days in each pinned pair, which this sitting prints too."""
     line = [b for b in base.guide_blocks(base.RERUN_GUIDE) if "btc_diagnose" in b]
     assert len(line) == 1 and line[0].endswith(" --owner-run"), line
     w = base.RerunWorld()
@@ -950,6 +957,18 @@ def test_the_rerun_guide_s_diagnostic_line_runs_as_written_and_prints_what_the_g
     kinds = sorted({x.split()[0] for x in lines[1:-1]})
     assert kinds == ["common", "file", "levels", "returns", "split", "venues", "window"], kinds
     assert all(f"`{kind}`" in guide for kind in kinds), kinds
+    printed = guide.split("**찍는 것.**")[1].split("**찍지 않는 것.**")[0]
+    totals = [x for x in lines if re.fullmatch(r"returns pinned-\w+ total days=\d+ over=\d+ tool_over=\d+ "
+                                               r"tool_allowed=\d+", x)]
+    late = [x for x in lines if re.match(r"levels pinned-\w+ segment=late days=3555 ", x)]
+    assert (len(totals), len(late)) == (2, 2) and all(
+        said in printed for said in ("`tool_over`", "`tool_allowed`", "`levels`의 `days`")), (totals, late, printed)
+    rule = re.search(r"^1\. 먼저 기록 실행의 파일을 읽은 출력인지 봅니다\..*$", guide, flags=re.M).group(0)
+    assert "sha256 넷" not in guide and all(said in rule for said in (
+        "`tool_sha256`은 두 번째 고정 버전의 값", "`script_sha256`은 진단 스크립트의 값", "`fetch_record=yes`",
+        "`file_sha256`", "`common`은 coinbase 짝이 4086, bitstamp 짝이 4392",
+        "`tool_over`와 `tool_allowed`는 coinbase 짝이 43과 20, bitstamp 짝이 47과 21",
+        "`days`는 두 짝 모두 3555")), rule
     code, out = base.capture(lambda: bd.run(w.tool_line(line[0].replace("--pair bitstamp", "--pair binance"),
                                                         "btc_diagnose")))
     assert code == 2 and base.last_line(out) == "BTCDIAG REFUSED exit=2", out

@@ -166,7 +166,7 @@ earliest date.
   different values ends the fetch `UNAVAILABLE fetch_failed` (`fmp gave one date two different values in two
   answers`), and the tool never picks one. So a provider whose values for a day depend on the request fails at the
   fetch, which is not a run, and not in compare. A provider that reads `to` as exclusive sends the days before it
-  and loses no session. Answers are merged by date.
+  and loses no session, but then no day is shared and nothing is compared (see Limits). Answers are merged by date.
 - *Failures.* A later request that fails (an HTTP error, a message in place of rows, rows without `adjClose`, JSON
   that is not a list of rows) fails the whole fetch with `; request <n> of the page-back` on the line, and nothing is
   written. An answer that the tool refuses anyway (a key value in it, a row without an ISO date, a 2027 date, one
@@ -174,16 +174,28 @@ earliest date.
 - *The record.* Every request's parameters, never the key, and every raw answer (`raw/fmp_000.json`,
   `raw/fmp_001.json`, ...) are in the fetch folder. A provider that answers the whole span is asked once, as before.
 - *Limits.* A cap that happens to end inside the 7-day week leaves up to five sessions unfetched at the very start of
-  the file, more than three weeks before `--start`, which compare never reads for SPY. The fetch cannot see a
-  session that is missing inside the provider's own answer; the rerun guide's stop point therefore also checks the
-  number of rows before the one compare that counts.
+  the file, more than three weeks before `--start`, which compare never reads for SPY. The two values of a shared
+  day are compared only when the provider sends that day in both answers, that is when it reads `to` as inclusive.
+  For a provider that reads `to` as exclusive no day is shared, and two answers whose values depend on the request
+  would be joined unchecked: the fetch ends `OK` with no note, and the fault shows only in compare. Such a provider
+  also leaves out the last day asked for, so the rerun guide's stop point requires `last` to be exactly that day
+  (2026-10-02 for the SPY window) before the one compare that counts: that condition is what stops this case. The
+  fetch counts a dated row without a value as a row and as a date reached, and its console line does not show such
+  rows; `csv.n_blank` of `meta.json` counts them, and the stop point prints that count and requires 0. The fetch
+  cannot see a session that is missing inside the provider's own answer. The stop point does not try to: the row
+  total is information there, not a condition, because a session the provider lacks is for compare's calendar check
+  to find.
 
 Settle every fetch of a series before its compare. A fetch is not a run and may be repeated into a new folder;
-compare is what makes the run of record. No provider endpoint has been called while the tool was built (see the last
-section), so if a fetch ends `UNAVAILABLE fetch_failed` or `ERROR`, or `UNAVAILABLE plan_or_access` for a provider
-that needs no key, send Claude that line and the line above it before declaring the provider unavailable. The two
-lines carry no key, and the only part of a provider's answer they quote is the start of an error answer. The line
-above says:
+compare is what makes the run of record. For the second SPY run the rule is narrower and was written down before the
+run (`results/RULINGS.md`, the SPY entry; the rerun guide's stop point): a fetch that failed left no folder and is
+repeated by the same line, so again into `fetch2-spy-fmp`; the compare reads the first fetch that ended `OK`; and a
+fetch that ended `OK` is not repeated without a new ruling.
+
+No provider endpoint has been called while the tool was built (see the last section), so if a fetch ends
+`UNAVAILABLE fetch_failed` or `ERROR`, or `UNAVAILABLE plan_or_access` for a provider that needs no key, send Claude
+that line and the line above it before declaring the provider unavailable. The two lines carry no key, and the only
+part of a provider's answer they quote is the start of an error answer. The line above says:
 
 - for a provider without a key (coinbase, bitstamp, binance, treasury, h15, fred_now): the HTTP status and, for a
   status of 400 or above, the first 200 bytes of the provider's error answer, with every byte outside printable ASCII
@@ -357,23 +369,55 @@ python -B -m tools.provider_parity.btc_diagnose --table "$tab\pilot2_C3_btcusd.j
 - Its sha256 is written in `results/RULINGS.md` and in the rerun guide, and the suite holds both statements to the
   file's bytes. It is not part of the fixed tool version: a change to it changes no run.
 
+## Known wording and limits of the second fixed version
+
+The final check before the second SPY run (2026-11-11) found the points below in `parity_check.py`. None of them
+is needed for that run, and the tool is fixed by owner ruling, so the file is left byte for byte as it is: a change
+to it would be a third version and would count only after a new ruling. They are written here so that the next
+change of the tool can pick them up. Each was shown with a fake provider only; whether real FMP can meet any of
+them is not verified.
+
+- *The two-values rule covers every date of an answer.* `fetch_fmp` holds two answers to each other on every date
+  they both carry, also on dates outside the span asked for, which `normalise` cuts before anything is written. Its
+  docstring says "Only dates inside the span asked for count", which is true of the earliest date of an answer and
+  not of this rule. A provider that ignores `to` and whose newest row changes between two requests would fail the
+  fetch over a day that would never be written. Next version: compare only the dates from the first to the last
+  requested date, or say in the docstring that the rule covers all dates received.
+- *The note is narrower than the module's description says.* The module docstring says the line above `FETCH ... OK`
+  tells "when the page-back stopped after the first requested date". For `fmp` the note appears only when the
+  page-back stopped more than 7 days (`FMP_REACHED_DAYS`) after that date. Next version: say so there.
+- *A shared day that is not shared goes unnoticed.* When an answer of the page-back does not contain the `to` day it
+  was asked for (a provider that reads `to` as exclusive), nothing is compared and nothing is said (Fetch, Limits).
+  Next version: add it to the note, or fail the fetch.
+- *The two-values failure cannot be sized.* The comparison of the shared day is exact equality of two floats, and
+  the line `fmp gave one date two different values in two answers` names neither the date nor the size of the
+  difference, and nothing is kept. A difference in the last decimal ends the fetch like a different dividend
+  adjustment does, and the two console lines cannot tell them apart. Failing is right by the rule (never a pick).
+  Next version: name the date, which is a calendar fact, and the decade bucket of the relative difference.
+- *A dated row without a value is not shown on the console.* It counts as a row, as the file's first date and as a
+  date reached; only `csv.n_blank` of `meta.json` shows it. The rerun guide's check line prints that count. Next
+  version: print the count on the console line.
+
 ## Tests
 
 ```
 python -B -m unittest tests.provider_parity_acceptance tests.provider_parity_btc_diagnose_acceptance -v
 ```
 
-128 cases on synthetic series, with every provider faked in the process and socket connects patched to raise: each
+129 cases on synthetic series, with every provider faked in the process and socket connects patched to raise: each
 threshold of 10.5.1 from both sides, every outcome and exit code, the provider map, the 2027-01-01 cut-off, the summary
 allow-list, where the tool may write, key handling, a cp949 console, the tool started as a module, the `fmp`
 page-back (a capped provider at several cap sizes, a history that really starts late, the day two answers share and
 a provider whose values for it differ, a provider that reads `to` as exclusive, answers dated outside the span asked
 for, the request budget, failed and empty answers on the first and on a later request, rows without an ISO date,
 whole answers in other shapes, and a fetch and compare that ends PASS where one answer alone ended WITHHELD), the
-known limit of the `kis` page-back, the rerun guide (its tool lines and its two Python lines run as they are written
-in the guide file, and every failure line its table quotes for the selftest, the fetch and the compare raised and
-compared with the table), and every statement of the fixed tool commit and sha256 (current statements against the
-tool file; the first version's values in the ruling that fixed them and as marked history). The fetchers
+known limit of the `kis` page-back, the rerun guide (its tool lines and its three Python lines run as they are
+written in the guide file; the check line of its step 10 on a provider capped at 5,000 rows over a session calendar
+made by rule, where it prints `rows 5515 blank 0`, and on one that sends dated rows without a value, where the blank
+count is above 0; every failure line its table quotes for the fetch and the compare raised and compared with the
+table, the two transport failures through the tool's own HTTP function; the table's row for the selftest held to the
+tool's source), and every statement of the fixed tool commit and sha256 (current statements against the tool file;
+the first version's values in the ruling that fixed them and as marked history). The fetchers
 are checked against values typed by hand (epoch seconds, request parameters, expected rows), and the tool's own HTTP
 function runs with `urlopen` replaced. The suite reads no cache file, no `.env` and nothing under `~/.nextgen`; in
 the repository it reads the tool, the diagnostic script (for its sha256), this guide, the two Korean guides,
@@ -423,10 +467,13 @@ with `git grep` when the tool was fixed), and FACTS is held by `python -B -m too
   2006-11-15 to 2026-10-02, so that answer included the `to` it was asked for. Still not verified, because Claude has
   called no provider: that FMP cuts an answer by rows and honours `to` on a second request, so that it brings the
   days before; whether FMP has SPY before 2006-11-15 at all; whether FMP gives the same `adjClose` for a day in two
-  requests with different `to` (if not, the second fetch ends `UNAVAILABLE` and no run is made); and what FMP
-  answers for a span in which it has no row (the tool takes an empty list as "nothing earlier" and treats anything
-  else that is not a list of rows as a failed fetch). The second fixed version and the diagnostic have not run on
-  Windows or on a real file. The rule for reading the diagnostic's output was tried on synthetic series only.
+  requests with different `to` (if not, the second fetch ends `UNAVAILABLE` and no run is made); whether it reads
+  `to` as inclusive on the second request too (only then is the shared day compared); whether it ever sends a dated
+  row with no value or with a value of zero (the rerun guide's check line counts the first kind only; compare drops
+  both); and what FMP answers for a span in which it has no row (the tool takes an empty list as "nothing earlier"
+  and treats anything else that is not a list of rows as a failed fetch). The second fixed version and the
+  diagnostic have not run on Windows or on a real file. The rule for reading the diagnostic's output was tried on
+  synthetic series only.
 - Claude has not run the tool on Windows and has not read a real pilot file. The first fixed version ran on the
   owner's Windows PC on 2026-11-11 and read the real pinned files there; of those runs Claude has seen the three
   pushed summaries and the lines the owner sent, nothing else. The suite was run on Linux only (Python 3.13,
@@ -438,7 +485,11 @@ with `git grep` when the tool was fixed), and FACTS is held by `python -B -m too
   both Korean guides on Linux only: the same git and python commands rewritten for bash, a synthetic research clone
   and stand-in transports, with a scratch repository on disk in place of GitHub. For the rerun guide the stand-ins
   were an in-process fake FMP and a synthetic key file under another name than `.env`, and its `git push` was not
-  run. The last section of each guide lists what that could not show.
+  run. The final check of 2026-11-11 followed the rerun guide's 18 steps once more as the guide then was, with a
+  scratch repository on disk for its push. The guide was changed after that check (the stop point of step 10 and
+  its check line, the table of failures); the changed guide was not followed from start to end again. Its check
+  line was run in bash on a synthetic fetch folder and is run by the suite, never in PowerShell. The last section of
+  each guide lists what that could not show.
 - The thresholds of 10.5.1 were set without real data, so the rate of false FAIL on real series is unknown.
 - yfinance 1.7.0 routes its tz, cookie and ISIN caches through `set_tz_cache_location` (read from its source, not
   from a download); another version may keep a cache elsewhere.
