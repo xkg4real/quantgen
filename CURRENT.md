@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2
 next_ids: ⑤-2/d, ⑤-2/e, ⑥-1/prep, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-11T13:53:00+09:00
+updated_at: 2026-11-11T15:01:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: main
@@ -119,6 +119,18 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - **B:** Q1 REJECT(잠정 표시), Q2 게이트와 같은 분산 값으로 판정·SE_null은 참고 줄, Q3 검정력 부족이면 이겨도 자료 부족, Q4 DM으로 판정·Clark–West 참고 줄, Q5 12항목 필수·Claude 초안·소유자 커밋·R-FAM/L-FAM 병기, Q7 60/40은 21거래일 리밸런싱·실제 거래분 비용. 다음 단위 ⑨-4/2/c(결과 조립).
 - **C:** 0b 채택 방침만 기록. Q12 = 7개 파일(`core/quant/strategies.py`, `validate.py`, `history.py`, `gate_ledger.py`, `core/research/strategy_workflow.py`, `core/quant/optimize.py`, `core/quant/risk.py`). Q13·Q14·Q16·Q17·Q18 기본값. 화면은 네이티브만(UI-D1), Flet 작업(Q19 포함) 안 함, PC 화면은 시안 먼저 + UI 세션 이식과 ⑦-2 병합 뒤. Q22의 잘라내기 여부는 2026-12 말 전에 따로 질문. 다음 단위 ⑨-3a/recorder/1(화면 없음, 결정 9 조건: run_family 안에서 PNL_COMPUTED보다 낮은 PROGRESS를 쓰지 않음).
 - **D:** 주문 한도 수치(1회 100만 원/5%, 하루 10건·300만 원/15%, 손실 중지 40만 원/2%, 종목 비중 20%/400만 원, 가격 이탈 3%·시세 15초·지정가만, 09:00~15:20, 모의 20거래일·30건 등)를 기본값으로 승인. **실거래는 켜지지 않음.** 순서: 안전 설계 문서 보고 → ⑦-2 병합 뒤 구현 → 모의투자 → 결과 보고 → 소유자의 실거래 전환 승인. D-14 법률 자문은 소유자가 의뢰.
+
+### 소유자 PC 대조 실행 중간 결과 (2026-11-11 15:01 KST) — 가장 최신
+
+소유자가 14:1x KST에 안내서 1~26단계의 화면을 채팅에 붙였습니다(요약 파일은 아직 push 전). 화면 줄에서 읽은 것:
+
+- **수신 9번:** fmp OK(5,000행, 첫 날짜 2006-11-15), kis OK(4,810행, 첫 날짜 2007-08-21, `kis paging stopped at 2007-08-21 ... a page brought no new date`), yahoo_now OK(2004-11-01부터), treasury OK(2004-11-01부터), **h15 UNAVAILABLE fetch_failed**(`the response does not name the 3-month series`), fred_now OK, coinbase OK(2015-07-20부터), bitstamp OK(2014-08-17부터), binance OK(2017-08-17부터). 모두 마지막 날짜 2026-10-02, 주말 날짜 0.
+- **SPY 기록 실행 = WITHHELD** (`PARITY spy WITHHELD exit=3`, run_id `PP-20261111T051909Z-spy`, 요약은 도구 클론의 `results/PP-20261111T051909Z-spy/summary.json`에 복사됨). 원인(도구 규칙으로 읽음, 요약으로 확인 전): SPY의 `edge_uncovered_max`는 5인데 fmp와 kis가 표 시작일 2004-12-01보다 2년 이상 늦게 시작 → 두 짝 모두 coverage WITHHELD, 수익률 비교 미실행 → 독립·교차 증거 0. yahoo_now는 vintage라 증거로 세지 않음. fmp는 한 요청이 5,000행에서 끊긴 것으로 보임(도구가 요청을 나누지 않음, FMP 문서로는 미확인). 안내서의 멈춤 지점 조건(첫 날짜, kis 문구)에 걸렸지만 소유자가 계속 진행했습니다.
+- **rf:** 첫 대조는 h15 파일이 없어 `REFUSED`(실행 아님). 소유자에게 준 다시 실행 줄: 26단계에서 `--pair h15 ...` 대신 `--unavailable h15 fetch_failed`. 이어서 27(복사), 28(btc 대조), 29(복사), 30~34(add, status, commit, push, 연구 클론 status).
+- **소유자에게 물은 것(답 대기):** SPY 선택지 가(권장: Claude가 fmp 수신을 기간을 나눠 받도록 고치고 새 고정값 기록 → 소유자가 fmp만 다시 받아 SPY 대조를 한 번 더, 첫 실행은 기록에 유지) / 나(독립 증거 없이 "기록하고 진행") / 다(보류). 승인양식 `SPY-가-승인` 등. 답은 원문 그대로 `results/RULINGS.md`와 `OWNER_RULINGS_LOG.md`에 적습니다. "가"면: main에서 새 브랜치, `tools/provider_parity/parity_check.py`의 `fetch_fmp`(528행 부근)를 날짜 구간으로 나눠 요청·병합·중복 제거하고 한 구간이 상한에 닿으면 알리도록 수정, h15 요청 형식(`H15_URL`, 식별자 `RIFLGFCM03_N.B`)도 조사, 시험·검토·CI → 새 커밋과 sha256을 README·안내서·`results/RULINGS.md`·결정 기록·FACTS에 기록 → 실행 브랜치에 반영(소유자 요약 push와 충돌하지 않게 main을 실행 브랜치에 병합) → 소유자 재수신·재대조. FMP가 2004~2006년 자료를 주는지는 미검증.
+- **판독 방법:** 소유자 push 뒤 `git fetch origin claude/provider-parity-runs-20261111` → `git show origin/claude/provider-parity-runs-20261111:results/<run_id>/summary.json`만 읽습니다.
+- **소유자 PC 상태(파일럿 전에 정리 필요):** 연구 클론은 `C:\Users\<사용자>\OneDrive\Desktop\QUANTGEN`. UI 브랜치 `claude/friendly-bardeen-r6xe8f`에 있던 것을 소유자가 연구 브랜치로 전환(로컬 `83ee469`, 원격 `8a8c247`보다 스펙 커밋 1개 뒤, 대조가 읽는 표·고정 파일은 동일). 추적되지 않는 폴더 `.agents/`와 `quantgen/`이 있어 러너가 R-01로 거부할 것 → 내용 확인 뒤 클론 밖으로 옮기는 줄을 안내해야 합니다(지우지 않음). 실행표 맨 위에 적어 둠.
+- **⑥-1/prep:** 워크플로 완료. 브랜치 `claude/pilot-prep-20261111`(로컬, push 전): `b246b98`(문서 3개, 검증 지적 59건 반영), PC 상태 메모 커밋, main `83046c1` 병합 `e015178`, 기준선 갱신(미커밋). 리허설은 로컬 `scratch/step10-rehearsal`의 `c582f15`(main `9fc3817` 병합) + `a5f904a`(Bonds 화면 검토 수정 F1~F5), **push 금지**. `a5f904a`의 캐시 없는 전체 실행이 도는 중(`scratchpad/reh.json`, 비교 `reh_full.out`) → 기록 301행의 PENDING 줄을 채움 → 기준선 다시 → push → PR → Compliance CI → 병합 → 원장 `⑥-1/prep`. 문서가 모은 소유자 질문 26건(파일럿이 보류로 끝났을 때, 합친 뒤 Windows 전체 검사 재실행, 서명 문장 적용, push 승인, Bonds 화면 선택 7건 등)은 표로 정리해 소유자에게 보고해야 합니다(아직 안 함).
 
 ### PR #103 병합 (2026-11-11 13:53 KST) — 가장 최신
 
