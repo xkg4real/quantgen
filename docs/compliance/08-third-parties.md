@@ -1,8 +1,8 @@
 # 08. 외부 SDK·데이터 제공자 점검대장
 
 - 문서 ID: QG-C08
-- 버전: 1.6
-- 기준일: 2026-11-06
+- 버전: 1.7
+- 기준일: 2026-11-11
 - 상태: review-required
 - 관리 주체: (주)넥스트제너레이션
 - 문의: {{operator.support_email}}
@@ -76,6 +76,12 @@ Macro·Rates·FX·Bonds·Structuring은 기존 `auto` 경로(키 없이 FRED·Ya
 
 새 외부 서비스·SDK·패키지는 없습니다(`pyproject.toml`, `requirements.txt` 변경 없음). 곡선 방법은 기존 scipy(`CubicSpline`, `PchipInterpolator`, `least_squares`)만 씁니다. Anthropic 요청 대상, 전송 안내, 응답한 해설 엔진 표시는 그대로입니다. 분석 패널의 한국어 해설은 네이티브 앱의 기존 한국어 해설 함수로 로컬에서 만든 표시이며 외부로 보내지 않습니다. 실제 Yahoo·FRED·FMP·KIS 응답, 호출 한도, 상업 이용 조건은 이번 검토에서 확인하지 않았으며 `NOT_VERIFIED`, `review-required`, 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#owner-ui-review-2026-11-10)
 
+### 2026-11-11 파일럿 시계열 공급사 대조 도구(⑤-2)
+
+소유자 PC의 별도 클론에서만 실행하는 연구 도구 [`parity_check.py`](../../tools/provider_parity/parity_check.py)가 저장소 코드에 새 외부 목적지 넷을 더합니다: Coinbase Exchange 공개 일봉, Bitstamp 공개 일봉, 미국 재무부 일별 수익률 곡선 XML, 연준 H.15 Data Download Program. FMP·KIS 해외 일봉·Yahoo Finance(yfinance)·Binance 공개 일봉·FRED `fredgraph.csv`는 기존 목적지에 대한 이 도구 자체의 요청입니다. 앱 화면·자동 갱신·설치 wheel에는 들어가지 않고, 소유자가 명령을 줄 때만 공급사 하나씩 요청합니다. 전송 항목은 종목·시계열 식별자와 날짜 구간, FMP의 `FMP_API_KEY`(쿼리 문자열), KIS의 기존 토큰·앱 키 헤더이며 계좌·주문·사용자 입력은 보내지 않습니다. 받은 원자료·정규화 CSV·`detail.json`은 소유자 PC의 git 작업 트리 밖 새 폴더에만 두고, 커밋 대상인 `summary.json`은 개수·판정·10단위 구간·달력 날짜만 담습니다.
+
+공급사별 이용 조건, 개인 키의 연구 목적 사용 범위, 값 없는 요약의 권리 승계는 확인하지 못했으므로 `NOT_VERIFIED`를 유지합니다. 실제 공급사 응답·엔드포인트 형식·Windows 실행도 미검증입니다. [변경 사실](FACTS.md#provider-parity-2026-11-11)을 따릅니다.
+
 ## 정책 또는 구현 기준
 
 ### 외부 서비스 인벤토리
@@ -95,6 +101,7 @@ Macro·Rates·FX·Bonds·Structuring은 기존 `auto` 경로(키 없이 FRED·Ya
 | Upbit 계좌 API | 선택 잔액 조회 `GET /v1/accounts` | 접근 키로 만든 JWT 전송; 통화·기준통화·잔액·잠금 수량·평균 매수가 수신, 총수량·원화평가액 계산 | 보유 통화의 종목을 Upbit 공개 시세 API에 추가 전송하여 평가. 계좌정보는 개인정보 처리 목록에 포함. 자산조회 권한만 사용. Flet는 키 설정 후 Refresh에서 조회하고, 네이티브는 기본 OFF 선택 사용 |
 | Binance 공개 API | 가격·펀딩·미결제약정 조회 | 종목·기간; 현재 코드에 계좌 인증 없음 | `data-api.binance.vision`, `api.binance.com`, `fapi.binance.com` 각각 확인. 접속 가능성과 국내 제공·상업 데이터 이용권을 구분 |
 | CoinGecko 공개 API | 가상자산 목록·시가총액 조회 함수 | 통화·정렬·페이지 조건; 코드 경로에서 키 불필요 | 연결 코드 존재와 실제 화면 호출 여부 구분. 무료 플랜의 표시·귀속 조건 확인 |
+| 공급사 대조 도구(⑤-2), 소유자 PC 전용 | 소유자가 실행할 때만 파일럿 시계열(SPY, BTC-USD, DGS3MO)의 다른 공급사 사본을 수신. 앱·설치 wheel 밖 | 신규 목적지(키 없음): Coinbase Exchange, Bitstamp, 미국 재무부, 연준 H.15. 기존 목적지: FMP(`FMP_API_KEY` 쿼리), KIS 해외 일봉(기존 토큰·앱 키), Yahoo Finance, Binance, FRED. 종목·시계열 식별자와 날짜 구간만 전송 | 원자료는 git 작업 트리 밖 새 폴더에만 저장하고 요약은 값 없이 개수·판정만 담음. 공급사별 이용 조건, 캐시·보관 범위, 요약 커밋의 권리 승계 확인 |
 | Anthropic Claude API | 이용자가 선택한 AI 해설 | 계산 결과·질문·분석 종류·고정 작성 지시문·해당 시 값 표기 설명, 모델명·출력 예산·인증 헤더. 알려진 계좌·잔액·키 필드명은 제외 | 자유 입력 질문의 개인정보 자동 제거는 보장하지 않음. 수신 법인·국가·보존·모델 학습 사용·하위처리자·삭제 방법은 계약으로 확인 |
 | Cloudflare — 운영자가 지정한 호스팅 업체 | 대한민국에서 서비스를 운영할 예정이라는 사용자 제공 정보. 실제 연결 구조는 별도 확인 | Workers·Pages·R2 등 제품, 계약 법인, 원본 서버, 처리 항목·보유기간·국가 미확정 | CDN·엣지·로그·백업·하위처리자와 국외 접근을 조사. 대한민국 운영을 모든 자료의 국내 보관으로 해석하지 않음 |
 | 기타 CDN·메일·결제·오류 수집 | 실제 운영 구성을 아직 확정하지 못함 | 서비스가 추가될 경우 별도 입력 | 저장소에서 회원·결제·광고메일·추적 SDK 흐름을 확인하지 못했어도 배포 인프라가 없다고 단정하지 않음 |
@@ -171,6 +178,7 @@ Macro·Rates·FX·Bonds·Structuring은 기존 `auto` 경로(키 없이 FRED·Ya
 - 구현: [`pyproject.toml`](../../pyproject.toml), [`requirements.txt`](../../requirements.txt), [`requirements-dev.txt`](../../requirements-dev.txt).
 - 인증·설정: [`config.py`](../../config.py), [`KISClient`](../../data/krx/kis_client.py) 146–184행, [`OpenDARTClient`](../../data/krx/opendart_client.py) 44·74–79행, [`KRXMarketClient`](../../data/krx/krx_market_client.py) 81–129행.
 - API와 SDK: [`crypto_client.py`](../../data/crypto/crypto_client.py) 51–54·308–326행, [`kis_markets.py`](../../data/kis_markets.py) 47·664행, [`gsq.py`](../../core/quant/gsq.py) 70–85행, [`ficc/data.py`](../../core/ficc/data.py) 163–200행, [`quant/history.py`](../../core/quant/history.py) 123–137행.
+- 공급사 대조 도구: [`parity_check.py`](../../tools/provider_parity/parity_check.py) `SOURCES`, `FETCHERS`, `KEY_NAMES`, `check_new_out`; [실행 안내](../../tools/provider_parity/README.md).
 - AI: [`ai_payload.py`](../../core/research/ai_payload.py) `ai_payload_json`, [`quant/insights.py`](../../core/quant/insights.py) `deep_analysis`, [`ai_connection.py`](../../core/research/ai_connection.py) `reply_result`, [`ui/ai_panel.py`](../../ui/ai_panel.py), [`commentary.py`](../../quantgen_desktop/commentary.py).
 - 공식 확인 창구: [개인정보 보호법](https://www.law.go.kr/법령/개인정보보호법), [FRED 이용 조건](https://fred.stlouisfed.org/legal/), [KIS 개발자센터](https://apiportal.koreainvestment.com/), [OpenDART](https://opendart.fss.or.kr/), [KRX 정보데이터시스템](https://data.krx.co.kr/), [Anthropic 개인정보 안내](https://www.anthropic.com/legal/privacy), [Qt 라이선스 안내](https://www.qt.io/licensing/), [PyQt 라이선스 안내](https://www.riverbankcomputing.com/commercial/license-faq).
 - 법령·외부 계약의 최신 시행·계약 범위 확인 기록은 [출처 대장](SOURCES.md)에 남긴다. 위 링크는 현재 계약 또는 허락을 획득했다는 증거가 아니다.

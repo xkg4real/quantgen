@@ -11,17 +11,34 @@ Publishing never overwrites (owner ruling 10 of 2026-11-11). The verified temp
 file is given the target name by a call that fails when that name exists:
 ``os.link`` on POSIX, after which the temp name is unlinked, and ``os.rename``
 on Windows. ``os.replace`` and POSIX ``os.rename`` are never called. A target
-name that exists at publish time is verified against the digest and reported
-as already present, or refused and left untouched; one that cannot be opened
-or read is ``PublicationUncertain``. When ``os.link`` cannot make the hard
-link at all (a filesystem without hard links, or a kernel refusal) the write
-raises ``NoClobberUnsupported``; there is no overwriting fallback.
+name that exists at publish time is never overwritten, repaired or removed.
+This call's verified temp is kept while the target is looked at, at most
+``PUBLISH_ATTEMPTS`` times within ``PUBLISH_BUDGET`` seconds: a target that
+verifies against the digest is reported as already present; a regular file
+that does not verify or cannot be opened yet is looked at again; when the
+name is gone again the publish call is made again. A name that is not a
+regular file (a link, a directory) is refused at once (``IntegrityError``).
+At the end of the budget a target that does not verify is refused
+(``IntegrityError``) and one that cannot be opened or read is
+``PublicationUncertain``. A look made before a wait that ended late is not
+used for that: the name is looked at once more. A target that is already
+there when the call begins is looked at once, as in ``read``, before any temp
+exists.
+
+When POSIX ``os.link`` refuses the hard link (a filesystem without hard links,
+a kernel refusal, or a ``PermissionError``) and no target name exists, the
+write raises ``NoClobberUnsupported`` at once; there is no overwriting
+fallback. Only the Windows publish call is retried on ``PermissionError``. A
+refused ``os.link`` is not repeated because of its error: it is made again
+only when a foreign name found at the check after the refusal is gone again,
+within the same rounds and budget.
 
 This is not a path-security sandbox. Hostile path changes, hard-link aliases
 made by others, sync folders, network mounts, fork during active I/O and
 inherited descriptors are outside the trust model. No power-loss durability is
-promised: POSIX fsyncs the directory after the link and the temp unlink;
-Windows fsyncs only the file before the rename.
+promised. POSIX fsyncs the directory after the link and the temp unlink, and
+fsyncs an existing target and the directory before it reports that target as
+stored; Windows fsyncs only this call's temp file before the rename.
 """
 from __future__ import annotations
 
@@ -48,12 +65,12 @@ else:
 
 
 MAX_LOCK_TIMEOUT = 10.0
-REPLACE_ATTEMPTS = 10
-REPLACE_BUDGET = 5.0
-# Nine waits between ten attempts; their sum (4.75 s) fits the 5 s budget.
-# The REPLACE_* names date from the first version, which published with
-# os.replace; they now bound the no-clobber publish call.
-_REPLACE_DELAYS = (0.05, 0.1, 0.2, 0.4, 0.8, 0.8, 0.8, 0.8, 0.8)
+# A publish takes at most PUBLISH_ATTEMPTS rounds within PUBLISH_BUDGET seconds.
+# One round is one publish call, one look at a target name that blocks it, or
+# both. Nine waits between ten rounds; their sum (4.75 s) fits the 5 s budget.
+PUBLISH_ATTEMPTS = 10
+PUBLISH_BUDGET = 5.0
+_PUBLISH_DELAYS = (0.05, 0.1, 0.2, 0.4, 0.8, 0.8, 0.8, 0.8, 0.8)
 # os.link errors that say the hard link cannot be made at all. Most name a
 # filesystem without hard links (link(2): EPERM "does not support the creation
 # of hard links"). EPERM is also what the kernel returns when its
@@ -88,15 +105,18 @@ class ReleaseError(StoreError):
     """
 
 
-class ReplaceRetryExhausted(StoreError):
-    """Every bounded publish attempt raised PermissionError; nothing was published.
+class PublishRetryExhausted(StoreError):
+    """The Windows publish call still raised PermissionError when the budget ended.
 
-    The original temp identity and target absence were confirmed after the last
-    attempt. ``temp_removed`` says whether the owned temp file was deleted.
-    The keyword defaults exist only so that unpickling, which rebuilds the
-    exception from its message and then restores its attributes, works in a
-    worker process's parent. The class name dates from the first version, which
-    published with os.replace; the publish call no longer replaces anything.
+    Windows only: os.rename is retried on PermissionError (an access or
+    sharing violation while another program holds the new file open); a POSIX
+    os.link is not repeated because of its error. Nothing was published. The
+    original temp identity and target absence were confirmed after the last
+    attempt.
+    ``attempts`` counts the publish calls made; ``temp_removed`` says whether
+    the owned temp file was deleted. The keyword defaults exist only so that
+    unpickling, which rebuilds the exception from its message and then
+    restores its attributes, works in a worker process's parent.
     """
 
     def __init__(self, message, *, attempts=None, temp_removed=None):
@@ -109,22 +129,32 @@ class PublicationUncertain(StoreError):
     """Publication state is not established; do not blindly retry.
 
     The target may be absent, foreign or published without the post-publish
-    checks completing. A later read() verifies the bytes present now but does
-    not prove durability at the time of failure.
+    checks completing; or an existing target verified but its fsync or the
+    directory fsync failed. A later read() verifies the bytes present now but
+    does not prove durability at the time of failure.
     """
 
 
 class NoClobberUnsupported(StoreError):
-    """os.link could not make the hard link, so nothing was published.
+    """os.link refused the hard link, so nothing was published.
 
-    POSIX only. The usual cause is a filesystem without hard links (for example
-    FAT or exFAT): use a directory on a filesystem that has them. link(2) also
+    POSIX only. Raised by the os.link call that was refused while no target
+    name exists, with no wait after that call: os.link is not repeated because
+    of its error. (It is made again only when a foreign name found at the
+    check after a refusal is gone again. That is the rule for a name that
+    vanished, within the same rounds and budget; a second refusal with no
+    name in the way raises this error.)
+
+    The usual cause is a filesystem without hard links (for example FAT or
+    exFAT): use a directory on a filesystem that has them. link(2) also
     returns EPERM when the kernel's protected-hardlinks policy refuses (the
-    temp file's owner is not the caller, as on some uid-mapped mounts) and when
-    the file is immutable or append-only, so the message names the errno and
-    not a cause; the OS error is ``__cause__``. In every case nothing was
-    overwritten, the original temp and an absent target were confirmed, and the
-    store does not fall back to a call that replaces.
+    temp file's owner is not the caller, as on some uid-mapped mounts) and
+    when the file is immutable or append-only, and EACCES when the directory
+    may not be written or a directory of either path may not be searched. The
+    store cannot tell these apart, so the message names the errno and not a
+    cause; the OS error is ``__cause__``. In every case nothing was
+    overwritten, the original temp and an absent target were confirmed, and
+    the store does not fall back to a call that replaces.
     """
 
 
@@ -188,6 +218,14 @@ def _lexists(path):
     except FileNotFoundError:
         return False
     return True
+
+
+def _not_regular(path):
+    """True when the name exists and lstat says it is not a regular file."""
+    try:
+        return not stat.S_ISREG(os.lstat(path).st_mode)
+    except OSError:
+        return False
 
 
 def _open_regular(path, flags, error):
@@ -369,6 +407,18 @@ def _no_clobber(temp, target):
         os.link(temp, target)
 
 
+def _link_refused(exc):
+    """POSIX: os.link said it will not make this hard link; no retry can help.
+
+    The no-hard-link errors, and every PermissionError: link(2) returns EACCES
+    for a directory that may not be written or searched, which does not pass
+    by waiting. The PermissionError retry exists for Windows sharing
+    violations only.
+    """
+    return isinstance(exc, PermissionError) or (
+        isinstance(exc, OSError) and exc.errno in _NO_HARD_LINK)
+
+
 def _fsync_directory(path):
     fd = os.open(path, os.O_RDONLY | getattr(os, "O_DIRECTORY", 0))
     try:
@@ -464,20 +514,58 @@ class SeriesFiles:
             raise _attach(primary, _close_once(fd))
         return data, _close_once(fd)
 
-    def _load_verified(self, target, digest):
-        """Bounded read, extra-byte probe and exact content rehash of a target."""
-        data, close_errors = self._read_target(target)
+    def _load_verified(self, target, digest, *, sync=False):
+        """Bounded read, extra-byte probe and exact content rehash of a target.
+
+        With ``sync`` the file is fsynced after it verified, through the same
+        read-only descriptor that read it; a failed fsync is
+        PublicationUncertain. The target is never opened for writing.
+        """
+        fd = _open_regular(target, os.O_RDONLY, IntegrityError)
         try:
-            array = decode_series(data, digest, max_bytes=self.max_bytes)
-        except SeriesFormatError as exc:
-            raise _attach(IntegrityError(
-                "Stored series failed format or content verification; it was not repaired"),
-                close_errors) from exc
+            data = _read_bounded(fd, self.max_bytes)
+            try:
+                array = decode_series(data, digest, max_bytes=self.max_bytes)
+            except SeriesFormatError as exc:
+                raise IntegrityError(
+                    "Stored series failed format or content verification; it was not "
+                    "repaired") from exc
+            if sync:
+                try:
+                    os.fsync(fd)
+                except OSError as exc:
+                    raise PublicationUncertain(
+                        "An existing series was verified, but its fsync failed; it was not "
+                        "changed") from exc
+        except BaseException as primary:
+            raise _attach(primary, _close_once(fd))
+        close_errors = _close_once(fd)
         if close_errors:
             raise _attach(ReleaseError(
                 "Stored series was verified but its file did not close cleanly"),
                 close_errors[1:]) from close_errors[0]
         return array
+
+    def _confirm_existing(self, target, digest):
+        """Verify an existing target, then sync it, before it is reported as stored.
+
+        Every ``created`` False passes through here, whether the target was
+        there when the call began or appeared while it was publishing. POSIX:
+        the verified file is fsynced through its read-only descriptor and the
+        directory is fsynced, so a file that a writer outside the lock made
+        without syncing does not rest on that writer. Windows: neither is
+        done. FlushFileBuffers needs a handle opened for writing, which the
+        store never opens on a target, and there is no directory fsync. A
+        failed fsync is PublicationUncertain; the target is never changed.
+        """
+        self._load_verified(target, digest, sync=not _WINDOWS)
+        if not _WINDOWS:
+            try:
+                _fsync_directory(self.directory)
+            except Exception as exc:
+                raise PublicationUncertain(
+                    "An existing series was verified, but the directory fsync failed; it was "
+                    "not changed") from exc
 
     def read(self, sha256):
         """Return the verified read-only array stored under ``sha256``.
@@ -507,7 +595,8 @@ class SeriesFiles:
         The result is returned only after verification and a clean release.
         An existing valid target is kept byte for byte (``created`` False),
         also when it appears while this call is publishing: no existing
-        target name is ever overwritten.
+        target name is ever overwritten. On POSIX ``created`` False is
+        returned only after that target and the directory were fsynced.
         """
         decode_series(payload, expected_sha256, max_bytes=self.max_bytes)
         held = self._acquire(expected_sha256, create=True)
@@ -529,7 +618,7 @@ class SeriesFiles:
     def _write_locked(self, payload, digest):
         target = self._paths(digest)[1]
         if _lexists(target):
-            self._load_verified(target, digest)
+            self._confirm_existing(target, digest)
             return False
         fd, name = tempfile.mkstemp(prefix="." + digest + ".", suffix=".tmp",
                                     dir=str(self.directory))
@@ -576,90 +665,141 @@ class SeriesFiles:
                 "failed") from exc
         return True
 
-    def _keep_existing(self, temp, target, identity, digest):
-        """A target name exists at publish time: verify it, never overwrite it.
+    def _look(self, temp, target, identity, digest):
+        """Look at a target name that blocks the publish; never change it.
 
-        The owned temp is removed first. A target that verifies against the
-        digest is reported as already present (False). One that does not is
-        refused with IntegrityError and left untouched. One that vanished
-        again, or that could not be opened or read (for example while its
-        writer still holds it open on Windows), is PublicationUncertain with
-        the OS error as its cause; it is left untouched as well.
+        This call's temp is kept until the outcome is known. None: the target
+        verified against the digest and was synced (_confirm_existing); only
+        then is the temp removed, and the caller reports the target as already
+        present. Otherwise the reason is returned, with the temp still in
+        hand, for the three states that can pass: IntegrityError (a regular
+        file that does not verify now; a writer outside the lock may still be
+        writing it), PermissionError (it cannot be opened or read now; on
+        Windows its writer may still hold it open) and FileNotFoundError (the
+        name is gone again). Any other failure ends the call: the temp is
+        removed and the target is left as it is. That includes a name that is
+        not a regular file (a link, a directory, a device): nobody is still
+        writing one into a series, so it is refused at once (IntegrityError)
+        and the locks are not held for the rest of the budget.
         """
-        errors = _remove_owned_temp(temp, identity)[1]
         try:
-            self._load_verified(target, digest)
+            self._confirm_existing(target, digest)
+        except (PermissionError, FileNotFoundError) as exc:
+            return exc
+        except IntegrityError as exc:
+            if not _not_regular(target):
+                return exc
+            raise _attach(exc, _remove_owned_temp(temp, identity)[1])
         except OSError as exc:
-            reason = ("vanished before it could be verified" if isinstance(exc, FileNotFoundError)
-                      else "could not be opened or read for verification")
+            errors = _remove_owned_temp(temp, identity)[1]
             raise _attach(PublicationUncertain(
-                "A target name blocked the publish and " + reason + "; nothing was overwritten"),
-                errors) from exc
-        except BaseException as primary:
-            raise _attach(primary, errors)
+                "A target name blocked the publish and could not be opened or read for "
+                "verification; nothing was overwritten"), errors) from exc
+        except Exception as primary:
+            raise _attach(primary, _remove_owned_temp(temp, identity)[1])
+        errors = _remove_owned_temp(temp, identity)[1]
         if errors:
             raise _attach(ReleaseError(
                 "Existing series was verified, but this call's temp file was not removed"),
                 errors[1:]) from errors[0]
-        return False
+        return None
 
     def _publish(self, temp, target, identity, size, digest):
         """Publish without overwriting; return whether this call created the target.
 
-        The only retry: the publish call on PermissionError, at most 10
-        attempts in 5 s. No attempt starts once 5 s have elapsed: a wait that
-        would reach the budget is not taken, and the clock is read again after
-        each wait. A target name found before an attempt, by the call itself
-        (FileExistsError), after a no-hard-link error or at exhaustion is
-        verified instead (False).
+        At most PUBLISH_ATTEMPTS rounds within PUBLISH_BUDGET seconds. No round
+        starts once the budget has elapsed: a wait that would reach it is not
+        taken, and the clock is read again after each wait. A round makes the
+        publish call when the target name is absent, and looks at the target
+        (_look) when the name exists: before the call, when the call itself
+        says so (FileExistsError), or after POSIX os.link refused. A target
+        that verifies ends the call (False), and a name that is not a regular
+        file ends it at once (IntegrityError). The call waits and goes round
+        again, with the temp in hand, when the target is a regular file that
+        does not verify yet, cannot be opened yet or is gone again, and, on
+        Windows only, when the publish call raised PermissionError. A POSIX
+        os.link is not repeated because of its error: it is made again only
+        when a foreign name found at the check after the refusal is gone
+        again. When the rounds are used up the last look decides:
+        IntegrityError for a target that does not verify, PublicationUncertain
+        for one that cannot be opened or that vanished; with no target,
+        PublishRetryExhausted. A look made before a wait that ended late, past
+        the budget, is not the last look: the name is looked at once more, and
+        no publish call is made after the budget.
         """
-        start, attempts, last = time.monotonic(), 0, None
+        start, rounds, calls, refused = time.monotonic(), 0, 0, None
         try:
             while True:
-                if _target_present(temp, target, identity, size, last):
-                    return self._keep_existing(temp, target, identity, digest)
-                attempts += 1
-                try:
-                    _no_clobber(temp, target)
-                except FileExistsError:
-                    return self._keep_existing(temp, target, identity, digest)
-                except Exception as exc:
-                    if not _WINDOWS and isinstance(exc, OSError) and exc.errno in _NO_HARD_LINK:
-                        if _target_present(temp, target, identity, size, exc):
-                            return self._keep_existing(temp, target, identity, digest)
-                        errors = _remove_owned_temp(temp, identity)[1]
-                        raise _attach(NoClobberUnsupported(
-                            "os.link refused the hard link (%s), so nothing was published; "
-                            "the store does not fall back to an overwriting call"
-                            % errno.errorcode.get(exc.errno, exc.errno)), errors) from exc
-                    if not isinstance(exc, PermissionError):
-                        errors = _remove_owned_temp(temp, identity)[1]
-                        raise _attach(PublicationUncertain(
-                            "The publish call failed without PermissionError; publication is "
-                            "uncertain"), errors) from exc
-                    last = exc
-                else:
-                    if not _WINDOWS:
-                        # The target is published; the temp name is now its hard link.
-                        errors = _remove_owned_temp(temp, identity)[1]
-                        if errors:
-                            raise PublicationUncertain(
-                                "Published without overwrite, but the temp name, a hard link "
-                                "to the published file, was not removed") from errors[0]
-                    return True
-                if attempts < REPLACE_ATTEMPTS:
-                    wait = _REPLACE_DELAYS[attempts - 1]
-                    if time.monotonic() - start + wait < REPLACE_BUDGET:
+                rounds += 1
+                blocked = stale = None
+                present = _target_present(temp, target, identity, size, refused)
+                if not present:
+                    calls += 1
+                    try:
+                        _no_clobber(temp, target)
+                    except FileExistsError:
+                        present = True
+                    except Exception as exc:
+                        if _WINDOWS and isinstance(exc, PermissionError):
+                            refused = exc
+                        elif not _WINDOWS and _link_refused(exc):
+                            if not _target_present(temp, target, identity, size, exc):
+                                errors = _remove_owned_temp(temp, identity)[1]
+                                raise _attach(NoClobberUnsupported(
+                                    "os.link refused the hard link (%s), so nothing was "
+                                    "published; the store does not fall back to an overwriting "
+                                    "call" % errno.errorcode.get(exc.errno, exc.errno)),
+                                    errors) from exc
+                            present = True
+                        else:
+                            errors = _remove_owned_temp(temp, identity)[1]
+                            raise _attach(PublicationUncertain(
+                                "The publish call failed without PermissionError; publication "
+                                "is uncertain"), errors) from exc
+                    else:
+                        if not _WINDOWS:
+                            # The target is published; the temp name is now its hard link.
+                            errors = _remove_owned_temp(temp, identity)[1]
+                            if errors:
+                                raise PublicationUncertain(
+                                    "Published without overwrite, but the temp name, a hard "
+                                    "link to the published file, was not removed") from errors[0]
+                        return True
+                if present:
+                    blocked = self._look(temp, target, identity, digest)
+                    if blocked is None:
+                        return False
+                if rounds < PUBLISH_ATTEMPTS:
+                    wait = _PUBLISH_DELAYS[rounds - 1]
+                    if time.monotonic() - start + wait < PUBLISH_BUDGET:
                         time.sleep(wait)
-                        if time.monotonic() - start < REPLACE_BUDGET:
+                        if time.monotonic() - start < PUBLISH_BUDGET:
                             continue
-                if _target_present(temp, target, identity, size, last):
-                    return self._keep_existing(temp, target, identity, digest)
+                        # The wake-up came late and the budget is used up. What the look
+                        # before this wait found may no longer be so: it is set aside and
+                        # the name is looked at once more. No publish call follows.
+                        stale, blocked = blocked, None
+                if blocked is None:
+                    if _target_present(temp, target, identity, size, refused):
+                        blocked = self._look(temp, target, identity, digest)
+                        if blocked is None:
+                            return False
+                    elif stale is not None:
+                        blocked = FileNotFoundError(errno.ENOENT, "the blocking name is gone again")
                 removed, errors = _remove_owned_temp(temp, identity)
-                raise _attach(ReplaceRetryExhausted(
-                    "The publish call raised PermissionError on every bounded attempt; "
-                    "nothing was published", attempts=attempts, temp_removed=removed),
-                    errors) from last
+                if blocked is None:
+                    raise _attach(PublishRetryExhausted(
+                        "The publish call still raised PermissionError when the attempts or "
+                        "the time budget were used up; nothing was published",
+                        attempts=calls, temp_removed=removed), errors) from refused
+                if isinstance(blocked, IntegrityError):
+                    raise _attach(blocked, errors)
+                reason = ("vanished before it could be verified"
+                          if isinstance(blocked, FileNotFoundError)
+                          else "could not be opened or read for verification")
+                raise _attach(PublicationUncertain(
+                    "A target name blocked the publish and " + reason + "; nothing was "
+                    "overwritten"), errors) from blocked
         except BaseException as primary:
             if isinstance(primary, Exception):
                 raise
