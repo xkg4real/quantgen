@@ -23,7 +23,8 @@ with patch.object(dotenv, "load_dotenv", return_value=False):
     import config
     from quantgen_desktop.app import ResearchWindow
     from quantgen_desktop.market_rankings import (IDLE_REFRESH_SECONDS, LIVE_REFRESH_SECONDS,
-                                                  ProductionRankingLoader, RankingBoard, daily_batch, kis_batch)
+                                                  ProductionRankingLoader, RankingBoard, board_stylesheet,
+                                                  daily_batch, kis_batch)
     from quantgen_desktop.markets_view import RANKING_CATEGORIES, MarketsWorkspace, WatchlistGrid
 from PyQt6.QtCore import Qt
 from PyQt6.QtTest import QTest
@@ -40,12 +41,31 @@ def member(code):
 
 
 def kr_batch(fetched_at=NOW):
+    """Domestic KIS quotes as `parse_kis_domestic` leaves them: KIS's market cap, checked against listed shares x
+    price of the same answer (basis 'provider')."""
     rows = (("005930", 102300, 1.5, 1.49e7, 1.52e12, 6.05e14), ("000660", 520000, -2.0, 3.1e6, 1.61e12, 3.8e14),
             ("035720", 40000, 4.2, 2.0e7, 8.0e11, 1.8e13), ("247540", 150000, -6.5, 1.0e6, 1.5e11, 1.5e13),
             ("196170", 400000, 0.0, 2.0e5, 8.0e10, 2.1e13), ("005380", 241500, 0.7, 9.8e5, 2.4e11, 5.0e13))
-    records = tuple(R.QuoteRecord(member(c), p, p * x / 100, x, v, tv, cap, "KIS", "kis", fetched_at.isoformat())
+    at = fetched_at.isoformat()
+    records = tuple(R.with_cap(R.QuoteRecord(member(c), p, p * x / 100, x, v, tv, None, "KIS", "kis", at), cap,
+                               basis="provider", source="KIS", as_of=at, shares=float(round(cap / p)))
                     for c, p, x, v, tv, cap in rows)
-    return R.Batch("kr", records, "kis", fetched_at.isoformat(), failures=(("028300", "KISError"),))
+    return R.Batch("kr", records, "kis", at, failures=(("028300", "KISError"),))
+
+
+def accent_pixels(widget, colour):
+    """How many pixels of `widget` as rendered are (nearly) `colour`."""
+    from PyQt6.QtGui import QColor
+    image, target = widget.grab().toImage(), QColor(colour)
+    near = lambda c: max(abs(c.red() - target.red()), abs(c.green() - target.green()), abs(c.blue() - target.blue())) < 8
+    return sum(1 for x in range(image.width()) for y in range(image.height()) if near(image.pixelColor(x, y)))
+
+
+def kis_domestic(code, price, **fields):
+    """A domestic record parsed from a KIS inquire-price answer (`hts_avls`, `lstn_stcn` as given)."""
+    out = {"stck_prpr": str(price), "prdy_vrss": "0", "prdy_vrss_sign": "3", "prdy_ctrt": "0.00", "acml_vol": "1000",
+           "acml_tr_pbmn": "1000000", **fields}
+    return R.parse_kis_domestic(member(code), out, received_at=NOW.isoformat())
 
 
 def us_batch(fetched_at=NOW):
@@ -189,7 +209,9 @@ class MarketsPageTests(Base):
 
     def test_source_state_and_refresh_age_are_always_shown(self):
         self.load()
-        self.assertEqual(self.board.badge.text(), "KIS 실시간")
+        self.assertEqual(self.board.badge.text(), "KIS 조회 · 45초마다")  # REST polling, never "실시간"
+        self.assertEqual(self.board.heading.text(), "실시간 차트")  # the owner's page name stays
+        self.assertIn("45초마다 조회(REST 요청이며 체결 수신이 아닙니다)", self.board.badge.toolTip())
         self.assertEqual(self.board.caption.text(), "방금 갱신")
         self.clock.now = NOW + timedelta(seconds=12); self.board._render_status()
         self.assertEqual(self.board.caption.text(), "12초 전 갱신")
@@ -250,16 +272,116 @@ class MarketsPageTests(Base):
         self.assertEqual(len(self.shown_rows()), 3)
         self.assertNotIn("market cap", self.board.footnote.text().lower())
         self.window.set_language("ko"); self.app.processEvents()
-        # The domestic path is unchanged: KIS's own figure, the plain heading, rows without a cap left out.
+        # Domestic: KIS's figure, checked against listed shares x price of the same answer (the tooltip says so).
         self.board.market_buttons["kr"].click(); self.board.category_buttons["cap"].click(); self.load()
         self.assertEqual(self.board.head_value.text(), "시가총액")
-        self.assertEqual(self.shown_rows()[0].value.toolTip(), "")
+        self.assertEqual(self.shown_rows()[0].value.toolTip(),
+                         "KIS 제공 시가총액(hts_avls를 1억 원 단위로 읽음) · 2026-11-11 14:20 (한국 시간) 기준 · "
+                         "같은 KIS 응답의 상장주식수 59.1억주 × 현재가 102,300 = 605.0조와 25% 안에서 맞음")
         no_cap = kr_batch()
         self.board.batches["kr"] = replace(no_cap, records=tuple(replace(r, market_cap=None) for r in no_cap.records))
         self.board.render()
         self.assertEqual(self.shown_rows(), [])
         self.assertIn("시가총액은 KIS", self.board.empty.text())  # the domestic explanation stays
         self.assertEqual(self.board.loader.calls, ["us", "kr"])
+
+    def test_us_kis_quotes_are_the_free_feed_polled_never_live(self):
+        # 2026-11-11 compliance follow-up: the stock detail view calls KIS US quotes "무료 시세"; so does the list.
+        base = us_batch()
+        polled = replace(base, mode="kis", records=tuple(replace(r, mode="kis", source="KIS", as_of=NOW.isoformat())
+                                                         for r in base.records))
+        self.board.batches["us"] = polled
+        self.board.market_buttons["us"].click(); self.app.processEvents()
+        self.assertEqual(self.board.badge.text(), "KIS 무료 시세 · 45초마다 조회")
+        self.assertEqual(self.board.badge.property("state"), "polled_us")
+        tip = self.board.badge.toolTip()
+        self.assertIn("KIS 현재가 · 45초마다 조회(REST 요청이며 체결 수신이 아닙니다)", tip)
+        self.assertIn("미국 시세는 KIS 무료 시세이며 유료 통합 시세와 다를 수 있습니다.", tip)
+        self.board.open_fn = lambda group, now: False
+        self.board.render()
+        self.assertEqual(self.board.badge.text(), "KIS · 장 마감")
+        self.assertIn("300초마다 조회", self.board.badge.toolTip())  # outside the session: the slow cadence
+        self.window.set_language("en"); self.app.processEvents()
+        self.board.open_fn = lambda group, now: True
+        self.board.render()
+        self.assertEqual(self.board.badge.text(), "KIS free US feed · polled every 45 s")
+        self.assertIn("polled every 45 s (REST requests, not a trade stream)", self.board.badge.toolTip())
+        self.assertIn("can differ from paid consolidated quotes", self.board.badge.toolTip())
+        for state in ("polled", "polled_us", "closed", "stale", "daily", "none"):
+            self.assertNotIn("실시간", R.text(R.STATES, state, "ko"))
+            self.assertNotIn("real-time", R.text(R.STATES, state, "en").lower())
+
+    def test_market_buttons_show_the_windows_focus_ring_without_changing_their_look(self):
+        # 2026-11-11 compliance follow-up (14-contrast, 15-keyboard): the list's own [tool='true'] rule set
+        # `border` with no :focus rule, and the closer sheet hid the window's 2px focus ring.
+        from core.theme import DARK, LIGHT
+        for colors, dark in ((LIGHT, False), (DARK, True)):
+            rule = re.search(r"QPushButton\[tool='true'\]:focus \{([^}]*)\}", board_stylesheet(colors, dark))
+            self.assertIsNotNone(rule)
+            self.assertIn(f"border: 2px solid {colors.accent}", rule.group(1))
+        self.window.activateWindow(); self.app.processEvents()
+        for theme in (0, 1):
+            self.window.theme.setCurrentIndex(theme); self.app.processEvents()
+            accent = (DARK if theme else LIGHT).accent
+            for key in ("kr", "kospi", "kosdaq", "us"):
+                button = self.board.market_buttons[key]
+                self.board.category_buttons["value"].setFocus(Qt.FocusReason.TabFocusReason); self.app.processEvents()
+                plain, size = accent_pixels(button, accent), button.size()
+                if not button.isChecked():
+                    self.assertEqual(plain, 0, key)  # unfocused: no ring (the checked one keeps its underline)
+                button.setFocus(Qt.FocusReason.TabFocusReason); self.app.processEvents()
+                self.assertTrue(button.hasFocus(), key)
+                self.assertGreater(accent_pixels(button, accent), plain + 2 * (size.width() + size.height()), key)
+                self.assertEqual(button.size(), size, key)  # the ring does not resize or move the button
+        self.window.theme.setCurrentIndex(0); self.app.processEvents()
+
+    def test_domestic_market_cap_is_used_only_when_it_agrees_and_says_its_basis(self):
+        # 2026-11-11 compliance follow-up (12-claims 2026-11-02: hts_avls unit unverified): as the US path checks
+        # KIS tomv, hts_avls x 1e8 is used only within 25% of listed shares x price of the same answer.
+        records = (kis_domestic("005930", 102300, hts_avls="6050000", lstn_stcn="5969782550"),  # agrees
+                   kis_domestic("000660", 520000, hts_avls="", lstn_stcn="728002365"),        # computed
+                   kis_domestic("035720", 40000, hts_avls="17", lstn_stcn="442000000"),       # refused
+                   kis_domestic("005380", 241500, hts_avls="505000"))                         # no share count
+        self.board.loader = FakeLoader({"kr": R.Batch("kr", records, "kis", NOW.isoformat())})
+        self.board.category_buttons["cap"].click(); self.load()
+        rows = self.shown_rows()
+        self.assertEqual([(r.rank.text(), r.name.full, r.value.text()) for r in rows],
+                         [("1", "삼성전자", "605.0조"), ("2", "SK하이닉스", "378.6조"), ("", "카카오", "—"),
+                          ("", "현대차", "—")])
+        self.assertEqual(self.board.head_value.text(), "시가총액(계산값)")
+        self.assertIn("같은 KIS 응답의 상장주식수 59.7억주 × 현재가 102,300 = 610.7조와 25% 안에서 맞음",
+                      rows[0].value.toolTip())
+        self.assertEqual(rows[1].value.toolTip(), "상장주식수 7.3억주 (KIS, 2026-11-11) × 가격 520,000 = 378.6조")
+        self.assertEqual(rows[2].value.toolTip(), "KIS 시가총액이 같은 응답의 상장주식수 × 현재가와 25% 넘게 달라 쓰지 않습니다.")
+        self.assertEqual(rows[3].value.toolTip(), "KIS 응답에 상장주식수가 없어 시가총액을 확인할 수 없으므로 쓰지 않습니다.")
+        self.assertIn("1억 원 단위", self.board.head_value.toolTip())
+        self.assertIn("계산값: 같은 KIS 응답의 상장주식수 × 현재가", self.board.head_value.toolTip())
+        note = self.board.footnote.text()
+        self.assertIn("시가총액은 KIS 제공 값이며, 같은 응답의 상장주식수 × 현재가와 맞는 종목에만 씁니다.", note)
+        self.assertIn("시가총액(계산값) = KIS 응답의 상장주식수 × 현재가입니다.", note)
+        self.assertIn("2개 종목은 쓸 수 있는 시가총액이 없어 순위 없이 맨 아래에 둡니다", note)
+        self.board.category_buttons["value"].click(); self.app.processEvents()
+        self.assertEqual(len(self.shown_rows()), 4)  # the refused figures never cost the quotes
+        self.assertNotIn("시가총액", self.board.footnote.text())
+        # None usable: the list says why instead of ranking nothing.
+        refused = (kis_domestic("005930", 102300, hts_avls="605", lstn_stcn="5969782550"),
+                   kis_domestic("000660", 520000, hts_avls="3786"))
+        self.board.batches["kr"] = R.Batch("kr", refused, "kis", NOW.isoformat())
+        self.board.category_buttons["cap"].click(); self.app.processEvents()
+        self.assertEqual(self.shown_rows(), [])
+        self.assertEqual(self.board.empty.text(),
+                         "국내 시가총액을 쓰지 못했습니다. KIS 시가총액이 같은 응답의 상장주식수 × 현재가와 25% 넘게 달라 "
+                         "쓰지 않습니다. KIS 응답에 상장주식수가 없어 시가총액을 확인할 수 없으므로 쓰지 않습니다.")
+        self.window.set_language("en"); self.app.processEvents()
+        self.assertEqual(self.board.empty.text(),
+                         "Could not use domestic market cap. KIS's market cap differs by more than 25% from listed "
+                         "shares × price of the same answer, so it is not used. KIS gave no listed share count, so "
+                         "its market cap could not be checked and is not used.")
+        self.board.batches["kr"] = R.Batch("kr", records, "kis", NOW.isoformat()); self.board.render()
+        self.assertEqual(self.shown_rows()[0].value.toolTip(),
+                         "KIS market cap (hts_avls read as 100 million won), stated 2026-11-11 14:20 KST; it agrees "
+                         "within 25% with listed shares 6.0B × price 102,300 = ₩610.7T of the same KIS answer.")
+        self.assertEqual(self.board.head_value.text(), "Market cap (computed)")
 
     def test_us_market_cap_says_why_when_none_could_be_read(self):
         base = us_batch()
@@ -306,9 +428,9 @@ class MarketsPageTests(Base):
         self.app.processEvents()
         self.assertTrue(self.shown_rows())  # a failed refresh keeps the last list and says how old it is
         self.assertEqual(self.board.caption.text(), "조회 실패 (RuntimeError) · 2분 전 갱신")
-        self.assertEqual(self.board.badge.text(), "KIS 실시간")
+        self.assertEqual(self.board.badge.text(), "KIS 조회 · 45초마다")
         self.clock.now = NOW + timedelta(minutes=5); self.board._render_status()
-        self.assertEqual(self.board.badge.text(), "KIS · 갱신 지연")  # an old KIS list is not called real-time
+        self.assertEqual(self.board.badge.text(), "KIS · 갱신 지연")  # an old KIS list is not called polled
 
     def test_rail_sub_menu_and_a_row_open_the_stock_screen(self):
         self.assertEqual(self.view.current_category(), "value")  # first visit: trading value
@@ -382,7 +504,7 @@ class MarketsPageTests(Base):
         self.assertEqual(self.names()[:2], ["SK hynix", "Samsung Electronics"])
         self.assertEqual(self.shown_rows()[0].value.text(), "₩1.6T")
         self.assertEqual(self.shown_rows()[0].code.full, "000660 · KOSPI")
-        self.assertEqual(self.board.badge.text(), "KIS real-time")
+        self.assertEqual(self.board.badge.text(), "KIS · polled every 45 s")
         self.assertEqual(self.board.caption.text(), "Updated just now")
         hangul = [t for t in self.page_text() if re.search("[가-힣]", t)]
         self.assertEqual(hangul, [])
@@ -460,9 +582,10 @@ class FakeService:
                 raise RuntimeError("no detail")
             return {"output": {"last": "100.5", "tomv": "1507500000000", "shar": "15000000000", "curr": "USD",
                                "perx": "30.10", "pbrx": "40.20"}}
-        if tr_id == "FHKST01010100":
+        if tr_id == "FHKST01010100":  # hts_avls (100 million won) agrees with lstn_stcn x stck_prpr
             return {"output": {"stck_prpr": "70000", "prdy_vrss": "700", "prdy_vrss_sign": "2", "prdy_ctrt": "1.01",
-                               "acml_vol": "1000", "acml_tr_pbmn": "70000000", "hts_avls": "4200"}}
+                               "acml_vol": "1000", "acml_tr_pbmn": "70000000", "hts_avls": "4200",
+                               "lstn_stcn": "6000000"}}
         return {"output": {"last": "100.5", "diff": "0.5", "sign": "2", "rate": "0.50", "tvol": "10", "tamt": "1005"}}
 
 
@@ -561,7 +684,9 @@ class LoaderTests(Base):
                          (1.5e10 * 100.5, "computed", ("kis_none", "fmp_no_key")))  # Yahoo shares x KIS last
         self.assertEqual(asked, ["AAPL"])
         kr = loader("kr", R.DOMESTIC[:2])
-        self.assertEqual((kr.caps, [r.cap_basis for r in kr.records], asked), ("", ["", ""], ["AAPL"]))
+        # Domestic caps come checked from the same KIS answer (hts_avls against lstn_stcn x stck_prpr); the US
+        # market-cap step (FMP, Yahoo) is never asked for them.
+        self.assertEqual((kr.caps, [r.cap_basis for r in kr.records], asked), ("", ["provider", "provider"], ["AAPL"]))
         self.assertEqual([c[1] for c in loader.service().calls[3:]], ["FHKST01010100"] * 2)  # domestic: no detail
         self.assertEqual(loader("us", (member("AAPL"),), cancelled=lambda: True).caps, "")  # stopped: not sought
         broken = ProductionRankingLoader(service_factory=lambda: FakeService(ready=True),

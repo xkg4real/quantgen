@@ -1131,8 +1131,22 @@ class HomeView(QWidget):
         self.chart_status.setVisible(bool(status))
 
 
+def fold_stylesheet(p):
+    """The "전체 시세 표" fold toggle: a borderless title, and Home's 1px `accent` focus line while it has the
+    keyboard focus (Tab; a QToolButton takes no focus on click). The focused padding is 1px smaller so the
+    button keeps its size; the unfocused look is unchanged. Set on the toggle itself, so the window sheet's
+    rules never hide it."""
+    return ("QToolButton#homeFoldToggle { font-size: 17px; font-weight: 500; letter-spacing: -0.3px; border: 0px; "
+            "padding: 4px 2px; background: transparent; }"
+            f" QToolButton#homeFoldToggle:focus {{ border: 1px solid {p.accent}; border-radius: 6px; "
+            "padding: 3px 1px; }")
+
+
 class QuotesFold(QWidget):
-    """A closed-by-default section holding the full quotes table (owner: no big table on Research Home)."""
+    """A closed-by-default section holding the full quotes table (owner: no big table on Research Home).
+
+    It sits in the Home page beside `HomeView`, not inside it, so it follows the window's theme itself
+    (`colors`, on every style change) for its toggle's focus line."""
 
     def __init__(self, title, body, note="", parent=None):
         super().__init__(parent)
@@ -1150,8 +1164,8 @@ class QuotesFold(QWidget):
         self.toggle.setCheckable(True)
         self.toggle.setCursor(Qt.CursorShape.PointingHandCursor)
         self.toggle.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
-        self.toggle.setStyleSheet("QToolButton#homeFoldToggle { font-size: 17px; font-weight: 500; "
-                                  "letter-spacing: -0.3px; border: 0px; padding: 4px 2px; background: transparent; }")
+        self.colors = None
+        self.set_theme(LIGHT)
         self.toggle.toggled.connect(self._toggled)
         head.addWidget(self.toggle, 0, Qt.AlignmentFlag.AlignVCenter)
         self.note = UiLabel(note)
@@ -1167,10 +1181,28 @@ class QuotesFold(QWidget):
         self.toggle.setArrowType(Qt.ArrowType.DownArrow if expanded else Qt.ArrowType.RightArrow)
         self.body.setVisible(expanded)
 
+    def set_theme(self, colors):
+        if colors is not None and colors != self.colors:
+            self.colors = colors
+            self.toggle.setStyleSheet(fold_stylesheet(colors))
+
+    def follow_window(self):
+        self.set_theme(getattr(self.window(), "colors", None))
+
+    def changeEvent(self, event):
+        super().changeEvent(event)
+        if event.type() == QEvent.Type.StyleChange:
+            self.follow_window()
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        self.follow_window()
+
     def expanded(self):
         return self.toggle.isChecked()
 
 
-__all__ = ["HomeView", "MarketCard", "MarketStrip", "HistoryChart", "QuotesFold", "MarketHistory", "MarketInfo",
+__all__ = ["HomeView", "MarketCard", "MarketStrip", "HistoryChart", "QuotesFold", "fold_stylesheet", "MarketHistory",
+           "MarketInfo",
            "HOME_MARKETS", "SECTION_GAP", "card_columns", "crop", "load_market_history", "directory_name",
            "change_text", "value_text", "text"]

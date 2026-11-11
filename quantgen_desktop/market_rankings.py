@@ -8,7 +8,11 @@ one sector. A row opens the stock's screen (`markets_view.StockView`).
 Data, off the UI thread and only while the list is visible with automatic refresh on:
 * KIS configured: one allowlisted quote per stock (domestic ``inquire-price``, overseas ``price``) through the
   existing market data service, at most `KIS_MAX_PER_SECOND` requests a second (the KIS client also paces
-  every call process-wide); refreshed every `LIVE_REFRESH_SECONDS` during the session.
+  every call process-wide); refreshed every `LIVE_REFRESH_SECONDS` during the session. REST polling, not a
+  trade stream: the state says "KIS 조회 · 45초마다" (US: "KIS 무료 시세 · 45초마다 조회"), never "실시간".
+* Domestic market cap comes with the same ``inquire-price`` answer (`rankings.parse_kis_domestic_cap`): KIS's
+  ``hts_avls`` only when it agrees with listed shares x price of that answer, else listed shares x price
+  ("시가총액(계산값)") when KIS states no figure; a refused or missing figure is listed last as '—', with why.
 * otherwise (or when KIS answers nothing): the Yahoo daily path, labelled "delayed · daily"; trading value is
   close x volume (an estimate, said so in the note). Refreshed every `IDLE_REFRESH_SECONDS`.
 * US market cap (owner 2026-11-11, "아니 미국 시총 자료 찾으세요"), inside the same US fetch, in this order:
@@ -19,9 +23,10 @@ Data, off the UI thread and only while the list is visible with automatic refres
   read is listed last without a rank and shows '—'; when none could be read the list says why instead.
 One fetch serves every category of its group ('kr' or 'us'): switching category re-ranks the cached quotes.
 
-The source state is always shown ("KIS 실시간" only for KIS quotes during the regular session; "지연·일별";
-"자료 없음") with the time since the last update; nothing stale or synthetic is presented as live. Provider
-names and dates beyond that stay in tooltips (owner, 2026-11-04).
+The source state is always shown ("KIS 조회 · 45초마다" for KIS quotes during the regular session, "KIS · 장
+마감", "KIS · 갱신 지연", "지연·일별", "자료 없음") with the time since the last update; nothing polled, stale or
+synthetic is presented as live. The heading "실시간 차트" is the owner's name for the page (Toss style), not a
+data state. Provider names and dates beyond that stay in tooltips (owner, 2026-11-04).
 """
 from __future__ import annotations
 
@@ -42,10 +47,10 @@ from .company_identity import CompanyMark
 from .jobs import Jobs
 
 LIST_LIMIT = 30
-LIVE_REFRESH_SECONDS = 45      # KIS quotes while the market is open
+LIVE_REFRESH_SECONDS = R.POLL_SECONDS  # KIS quotes while the market is open (REST polling, not a stream)
 IDLE_REFRESH_SECONDS = 300     # KIS outside the session, and delayed daily bars
 RETRY_SECONDS = 60             # after a failed fetch
-LIVE_STALE_SECONDS = 3 * LIVE_REFRESH_SECONDS  # a KIS list older than this is not called real-time
+LIVE_STALE_SECONDS = 3 * LIVE_REFRESH_SECONDS  # a KIS list older than this is "KIS · 갱신 지연", not polled
 KIS_MAX_PER_SECOND = 20
 DETAIL_SECONDS = IDLE_REFRESH_SECONDS  # a US stock's KIS price-detail (market cap) is asked at most this often
 DAILY_WORKERS = 4
@@ -57,6 +62,7 @@ RANK_WIDTH, MARK_SIZE, SPARK_WIDTH, PRICE_WIDTH, CHANGE_WIDTH, VALUE_WIDTH = 30,
 ROW_MARGINS = (12, 12, 14, 12)   # roomy rows: whitespace, not lines, separates them (owner 2026-11-11)
 ROW_SPACING = 14
 SPARK_MIN_WIDTH = 820          # below this list width the sparkline column is dropped
+TOOL_PADDING = (7, 12)         # market buttons: the window's `QPushButton[tool='true']` padding (typography.py)
 
 
 def _utc_now():
@@ -421,6 +427,11 @@ def board_stylesheet(palette, dark):
     Owner, 2026-11-11 ("구획 선을 연하게 ... 한칸한칸 공간을 넓게"): no outlined boxes here. Chips, the
     refresh button and the sector selector are soft surface fills without borders; rows are separated by
     whitespace; the one rule under the filters is the border colour blended half way into the background.
+
+    A rule here that sets `border` hides the window's `:focus` ring (the closer sheet wins whatever the
+    selector), so every focusable control styled here has its own `:focus` rule: the market buttons
+    (국내 전체·코스피·코스닥·미국) take the window's 2px `accent` ring, their padding 2px smaller while focused
+    so the button keeps its size and the unfocused look is unchanged.
     """
     from .typography import TONE_COLORS
     p, t = palette, TONE_COLORS[bool(dark)]
@@ -431,10 +442,14 @@ def board_stylesheet(palette, dark):
           QPushButton[chip='true']:hover {{ background: {p.accent_soft}; }}
           QPushButton[chip='true']:checked {{ background: {p.accent}; color: {p.on_accent}; }}
           QPushButton[chip='true']:focus {{ border: 2px solid {p.accent}; }}
-          QPushButton[tool='true'] {{ background: transparent; border: 0; border-bottom: 2px solid transparent; }}
+          QPushButton[tool='true'] {{ background: transparent; border: 0; border-bottom: 2px solid transparent;
+                                     padding: {TOOL_PADDING[0]}px {TOOL_PADDING[1]}px; }}
           QPushButton[tool='true']:hover {{ background: {p.accent_soft}; }}
           QPushButton[tool='true']:checked {{ background: transparent; color: {p.accent};
                                              border-bottom: 2px solid {p.accent}; }}
+          QPushButton[tool='true']:focus {{ border: 2px solid {p.accent}; border-radius: 5px;
+                                           padding: {TOOL_PADDING[0] - 2}px {TOOL_PADDING[1] - 2}px
+                                                    {TOOL_PADDING[0]}px; }}
           QPushButton#rankRefresh {{ border: 0; border-radius: 8px; padding: 6px 12px; background: {p.surface_2}; }}
           QPushButton#rankRefresh:hover {{ background: {p.accent_soft}; }}
           QPushButton#rankRefresh:focus {{ border: 2px solid {p.accent}; }}
@@ -454,7 +469,8 @@ def board_stylesheet(palette, dark):
           QLabel[rk='head'] {{ font-size: 12px; font-weight: 500; color: {p.muted}; letter-spacing: -0.1px; }}
           QLabel[rk='badge'] {{ font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 9px;
                                color: {p.muted}; background: {p.surface_2}; letter-spacing: -0.1px; }}
-          QLabel[rk='badge'][state='live'] {{ color: {p.success}; background: {p.accent_soft}; }}
+          QLabel[rk='badge'][state='polled'], QLabel[rk='badge'][state='polled_us'] {{ color: {p.success};
+                                                                               background: {p.accent_soft}; }}
           QLabel[rk='badge'][state='daily'], QLabel[rk='badge'][state='stale'] {{ color: {p.warning};
                                                                            background: {t['flat_tint']}; }}
           QLabel[rk='empty'] {{ font-size: 14px; color: {p.muted}; padding: 28px 8px; }}
@@ -781,8 +797,9 @@ class RankingBoard(QFrame):
         for key, button in self.market_buttons.items():
             button.setChecked(key == self.market)
         batch = self.batches.get(group)
-        # US market cap: a stock whose figure could not be read is listed last, unranked, as '—'.
-        missing = "last" if self.category == "cap" and group == "us" else "omit"
+        # Market cap: a stock whose figure could not be read (US) or was refused (domestic: KIS's hts_avls
+        # disagreed with listed shares x price, or could not be checked) is listed last, unranked, as '—'.
+        missing = "last" if self.category == "cap" else "omit"
         rows = R.rank(batch.records, self.category, market=self.market, sector=self.sector,
                       limit=self.limit, missing=missing) if batch is not None else []
         self.ranked = rows
@@ -823,7 +840,7 @@ class RankingBoard(QFrame):
         if self.category == "cap" and self.group() == "us":
             return self._us_cap_empty(batch)
         if self.category == "cap":
-            return self._t("Market cap comes with KIS quotes of domestic stocks only; the data shown has none.")
+            return self._kr_cap_empty(batch)
         if self.category == "gainers":
             return self._t("No stock in this list is up.")
         if self.category == "losers":
@@ -841,17 +858,40 @@ class RankingBoard(QFrame):
             return self._t("No stock in this list has a market cap.")
         return self._t("These quotes came without market cap.")
 
+    # Domestic market cap ------------------------------------------------------------------------
+    def _kr_cap_empty(self, batch):
+        """Why the domestic market-cap list is empty: the daily path has none; KIS figures were refused."""
+        listed = {member.code for member in R.universe(self.market, self.sector)}
+        records = [r for r in batch.records if r.member.code in listed]
+        reasons = [r.cap_missing for r in records if r.cap_missing]
+        if not records:
+            return self._t("No stocks match these filters.")
+        if batch.mode != "kis" or not reasons:
+            return self._t("Market cap comes with KIS quotes of domestic stocks only; the data shown has none.")
+        parts = [self._t("Could not use domestic market cap.")]
+        parts += [self._t(KR_CAP_REASON_TEXT[key]) for key in KR_CAP_REASON_TEXT if key in reasons]
+        return " ".join(parts)
+
     def _cap_tip(self, record):
-        """Where one row's market cap came from (tooltip; provider names and dates stay out of the list)."""
+        """Where one row's market cap came from, and its basis (tooltip; provider names and dates stay out
+        of the list)."""
         lang = self._lang()
+        money = "usd" if record.member.currency == "USD" else "krw"
+        price = R.price_text(record.price, record.member.currency)
         if record.cap_basis == "computed":
             return self._t("Shares outstanding {shares} ({source}, {day}) × price {price} = {cap}.",
                            shares=R.compact(record.shares, "shares", lang), source=record.cap_source,
-                           day=record.cap_as_of or "—", price=R.price_text(record.price, record.member.currency),
-                           cap=R.compact(record.market_cap, "usd", lang))
+                           day=_day(record.cap_as_of), price=price, cap=R.compact(record.market_cap, money, lang))
+        if record.cap_basis == "provider" and record.shares and record.member.group == "kr":
+            return self._t("KIS market cap (hts_avls read as 100 million won), stated {when} KST; it agrees within "
+                           "25% with listed shares {shares} × price {price} = {computed} of the same KIS answer.",
+                           when=_kst(record.cap_as_of), shares=R.compact(record.shares, "shares", lang),
+                           price=price, computed=R.compact(record.shares * record.price, money, lang))
         if record.cap_basis == "provider":
             return self._t("{source} market cap, stated {when} KST.", source=record.cap_source,
                            when=_kst(record.cap_as_of))
+        if record.cap_missing in KR_CAP_REASON_TEXT:
+            return self._t(KR_CAP_REASON_TEXT[record.cap_missing])
         if record.cap_missing == "adr":
             return self._t("ADR: the share count is not per ADR, so no market cap is computed.")
         if record.cap_missing:
@@ -859,6 +899,8 @@ class RankingBoard(QFrame):
         return ""
 
     def _cap_heading_tip(self, rows):
+        if self.group() == "kr":
+            return self._kr_cap_heading_tip(rows)
         computed = sorted({row.record.cap_source for row in rows if row.record.cap_basis == "computed"})
         stated = sorted({row.record.cap_source for row in rows if row.record.cap_basis == "provider"})
         parts = []
@@ -869,18 +911,37 @@ class RankingBoard(QFrame):
             parts.append(self._t("Stated by {source}.", source=", ".join(stated)))
         return " ".join(parts)
 
+    def _kr_cap_heading_tip(self, rows):
+        bases = {row.record.cap_basis for row in rows}
+        parts = []
+        if "provider" in bases:
+            parts.append(self._t("Stated by KIS (hts_avls, read as 100 million won) and used only when it agrees "
+                                 "within 25% with listed shares × price of the same KIS answer."))
+        if "computed" in bases:
+            parts.append(self._t("Computed: listed shares × price, both from the same KIS answer."))
+        return " ".join(parts)
+
     def _footnote(self, batch):
         listed = {member.code for member in R.universe(self.market, self.sector)}
         parts = [self._t("Ranked among {count} major stocks, not the whole market. Open a row for its chart.",
                          count=len(listed))]
         if batch is not None and batch.mode == "daily":
             parts.append(self._t("Delayed · daily: the last daily bar; trading value is close × volume, estimated."))
-        if self.category == "cap" and self.group() == "us":
+        if self.category == "cap" and self.group() == "kr" and self.ranked:
+            if any(row.record.cap_basis == "provider" for row in self.ranked):
+                parts.append(self._t("Market cap is KIS's figure, used only where it agrees with listed shares × "
+                                     "price of the same answer."))
             if any(row.record.cap_basis == "computed" for row in self.ranked):
+                parts.append(self._t("Market cap (computed) = listed shares × price, both from the KIS answer."))
+        if self.category == "cap":
+            if self.group() == "us" and any(row.record.cap_basis == "computed" for row in self.ranked):
                 parts.append(self._t("Market cap (computed) = shares outstanding × the price shown; "
                                      "share counts are refreshed daily."))
             unranked = sum(1 for row in self.ranked if not row.rank)
-            if unranked:
+            if unranked and self.group() == "kr":
+                parts.append(self._t("No usable market cap for {count} of these stocks; listed last without a rank "
+                                     "(each row's tooltip says why).", count=unranked))
+            elif unranked:
                 parts.append(self._t("No market cap for {count} of these stocks; listed last without a rank.",
                                      count=unranked))
         failed = [code for code, _error in (batch.failures if batch is not None else ()) if code in listed]
@@ -892,7 +953,7 @@ class RankingBoard(QFrame):
         return " ".join(parts)
 
     def state(self):
-        """'live', 'closed', 'daily' or 'none' for the current group."""
+        """'polled' ('polled_us'), 'stale', 'closed', 'daily' or 'none' for the current group; never live."""
         batch = self.batches.get(self.group())
         if batch is None or not batch.records:
             return "none"
@@ -943,7 +1004,12 @@ class RankingBoard(QFrame):
                            source=", ".join(sources), day=days[-1] if days else "—")
         from zoneinfo import ZoneInfo
         when = _parse(batch.fetched_at).astimezone(ZoneInfo("Asia/Seoul")).strftime("%Y-%m-%d %H:%M:%S")
-        return self._t("{source} current quotes, received {when} KST.", source=", ".join(sources), when=when)
+        seconds = LIVE_REFRESH_SECONDS if self.open_fn(self.group(), self.clock()) else IDLE_REFRESH_SECONDS
+        tip = self._t("{source} current quotes polled every {seconds} s (REST requests, not a trade stream); "
+                      "last received {when} KST.", source=", ".join(sources), seconds=seconds, when=when)
+        if batch.group == "us":
+            tip += " " + self._t("US quotes are KIS's free feed and can differ from paid consolidated quotes.")
+        return tip
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
@@ -957,6 +1023,14 @@ def _parse(stamp):
     return value if value.tzinfo is not None else value.replace(tzinfo=timezone.utc)
 
 
+def _day(stamp):
+    """A share count's date: '2026-10-17' as given, or the Korea-time date of a UTC ISO receipt stamp."""
+    stamp = str(stamp or "")
+    if "T" in stamp:
+        stamp = _kst(stamp)
+    return stamp[:10] if stamp and stamp != "—" else "—"
+
+
 def _kst(stamp):
     """'2026-11-11 14:20' (Korea time) from a UTC ISO stamp; '—' when there is none."""
     from zoneinfo import ZoneInfo
@@ -965,6 +1039,15 @@ def _kst(stamp):
     except (TypeError, ValueError):
         return "—"
 
+
+# Why a domestic KIS row has no market cap (`rankings.parse_kis_domestic_cap`): its tooltip, and under the
+# empty list when no row has one.
+KR_CAP_REASON_TEXT = {
+    "mismatch": "KIS's market cap differs by more than 25% from listed shares × price of the same answer, "
+                "so it is not used.",
+    "unverified": "KIS gave no listed share count, so its market cap could not be checked and is not used.",
+    "absent": "KIS gave neither a market cap nor a listed share count.",
+}
 
 # Why a US batch has no market cap (`rankings.CAP_REASONS`), as said under the empty list.
 CAP_REASON_TEXT = {

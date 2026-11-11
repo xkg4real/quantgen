@@ -399,6 +399,48 @@ class ResearchHomeTests(unittest.TestCase):
         self.assertFalse(hv.chart.dark)
         self.assertIn(w.colors.surface, hv.styleSheet())
 
+    def test_quotes_fold_toggle_shows_a_focus_line_without_changing_its_look(self):
+        # 2026-11-11 compliance follow-up (14-contrast, 15-keyboard): the "전체 시세 표" toggle took Tab focus but
+        # its own sheet set `border: 0px` with no :focus rule, so focus was invisible. Now Home's 1px accent line.
+        from PyQt6.QtGui import QColor
+        from core.theme import DARK, LIGHT
+        for colors in (LIGHT, DARK):
+            sheet = home_view.fold_stylesheet(colors)
+            rule = re.search(r"QToolButton#homeFoldToggle:focus \{([^}]*)\}", sheet)
+            self.assertIsNotNone(rule)
+            self.assertIn(f"border: 1px solid {colors.accent}", rule.group(1))
+            self.assertIn("border: 0px", sheet.split(":focus")[0])  # unfocused: borderless, as before
+
+        def accent_pixels(widget, colour):
+            image, target = widget.grab().toImage(), QColor(colour)
+            return sum(1 for x in range(image.width()) for y in range(image.height())
+                       if max(abs(image.pixelColor(x, y).red() - target.red()),
+                              abs(image.pixelColor(x, y).green() - target.green()),
+                              abs(image.pixelColor(x, y).blue() - target.blue())) < 8)
+        w = self.window()
+        w.activateWindow()
+        toggle = w.quotes_fold.toggle
+        self.assertEqual(toggle.focusPolicy(), Qt.FocusPolicy.TabFocus)  # keyboard focus only, never on click
+        for theme in (0, 1):
+            w.change_theme(theme)
+            self.drain()
+            self.assertEqual(w.quotes_fold.colors, w.colors)  # it follows the window, though outside HomeView
+            self.assertIn(w.colors.accent, toggle.styleSheet())
+            w.home_view.add_button.setFocus(Qt.FocusReason.TabFocusReason)
+            self.drain(2)
+            plain, size = accent_pixels(toggle, w.colors.accent), toggle.size()
+            self.assertEqual(plain, 0)
+            toggle.setFocus(Qt.FocusReason.TabFocusReason)
+            self.drain(2)
+            self.assertTrue(toggle.hasFocus())
+            self.assertGreater(accent_pixels(toggle, w.colors.accent), size.width() + size.height())
+            self.assertEqual(toggle.size(), size)  # the line does not resize the toggle
+            QTest.keyClick(toggle, Qt.Key.Key_Space)
+            self.drain(2)
+            self.assertTrue(w.quotes_fold.expanded())
+            toggle.click()
+            self.drain(2)
+
 
 if __name__ == "__main__":
     unittest.main()

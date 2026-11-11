@@ -123,7 +123,12 @@ PAIRS = {
     'Left out for old data: {count}.': '오래된 자료라서 뺀 종목 {count}개.',
     '{source} daily bars, last bar {day}; trading value estimated as close × volume.':
         '{source} 일봉 · 마지막 봉 {day} · 거래대금은 종가×거래량 추정',
-    '{source} current quotes, received {when} KST.': '{source} 현재가 · {when} (한국 시간) 수신',
+    # Source state (2026-11-11 compliance follow-up): KIS REST quotes are polled, never called 실시간, in the
+    # stock detail view's words ("5초 조회", "조회 시점", US "무료 시세"; owner_ui_language/stock.py).
+    '{source} current quotes polled every {seconds} s (REST requests, not a trade stream); last received {when} KST.':
+        '{source} 현재가 · {seconds}초마다 조회(REST 요청이며 체결 수신이 아닙니다) · 마지막 수신 {when} (한국 시간)',
+    "US quotes are KIS's free feed and can differ from paid consolidated quotes.":
+        '미국 시세는 KIS 무료 시세이며 유료 통합 시세와 다를 수 있습니다.',
     # US market cap in the ranked list (owner 2026-11-11, "아니 미국 시총 자료 찾으세요";
     # core/market/market_cap.py). The column heading is core/market/rankings.py CAP_LABELS.
     'Could not read US market cap.': '미국 시가총액을 읽지 못했습니다.',
@@ -151,4 +156,28 @@ PAIRS = {
     'Computed: shares outstanding × the price in the row; share counts from {source}, kept for a day.':
         '계산값: 상장주식수 × 행의 가격 · 상장주식수 출처 {source}, 하루 보관',
     'Stated by {source}.': '{source} 제공 수치',
+    # Domestic market cap (2026-11-11 compliance follow-up; core/market/rankings.py parse_kis_domestic_cap):
+    # KIS's hts_avls only when it agrees with listed shares x price of the same answer, else computed or none.
+    'Could not use domestic market cap.': '국내 시가총액을 쓰지 못했습니다.',
+    "KIS's market cap differs by more than 25% from listed shares × price of the same answer, so it is not used.":
+        'KIS 시가총액이 같은 응답의 상장주식수 × 현재가와 25% 넘게 달라 쓰지 않습니다.',
+    'KIS gave no listed share count, so its market cap could not be checked and is not used.':
+        'KIS 응답에 상장주식수가 없어 시가총액을 확인할 수 없으므로 쓰지 않습니다.',
+    'KIS gave neither a market cap nor a listed share count.': 'KIS 응답에 시가총액과 상장주식수가 모두 없습니다.',
+    'KIS market cap (hts_avls read as 100 million won), stated {when} KST; it agrees within 25% with listed '
+    'shares {shares} × price {price} = {computed} of the same KIS answer.':
+        'KIS 제공 시가총액(hts_avls를 1억 원 단위로 읽음) · {when} (한국 시간) 기준 · 같은 KIS 응답의 '
+        '상장주식수 {shares} × 현재가 {price} = {computed}와 25% 안에서 맞음',
+    'Stated by KIS (hts_avls, read as 100 million won) and used only when it agrees within 25% with listed '
+    'shares × price of the same KIS answer.':
+        'KIS 제공 수치(hts_avls를 1억 원 단위로 읽음)이며, 같은 KIS 응답의 상장주식수 × 현재가와 25% 안에서 맞을 '
+        '때만 씁니다.',
+    'Computed: listed shares × price, both from the same KIS answer.':
+        '계산값: 같은 KIS 응답의 상장주식수 × 현재가',
+    "Market cap is KIS's figure, used only where it agrees with listed shares × price of the same answer.":
+        '시가총액은 KIS 제공 값이며, 같은 응답의 상장주식수 × 현재가와 맞는 종목에만 씁니다.',
+    'Market cap (computed) = listed shares × price, both from the KIS answer.':
+        '시가총액(계산값) = KIS 응답의 상장주식수 × 현재가입니다.',
+    "No usable market cap for {count} of these stocks; listed last without a rank (each row's tooltip says why).":
+        '{count}개 종목은 쓸 수 있는 시가총액이 없어 순위 없이 맨 아래에 둡니다(이유는 각 값의 설명에 있습니다).',
 }

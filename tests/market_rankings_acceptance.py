@@ -2,7 +2,9 @@
 
 The curated universe, the ranking per category/market/sector, the provider-answer parsers and the compact
 figures; and US market cap (owner 2026-11-11, "아니 미국 시총 자료 찾으세요": FMP's stated figure, else
-Yahoo share counts x the row price, cached a day). Fixture records and injected fake providers only;
+Yahoo share counts x the row price, cached a day); domestic market cap (KIS's hts_avls only when it agrees
+with listed shares x price of the same answer) and the polled-state wording (2026-11-11 compliance follow-up).
+Fixture records and injected fake providers only;
 nothing here touches the network or Qt, and the share-count cache writes to a temporary folder.
 """
 import json
@@ -43,7 +45,7 @@ class UniverseTests(unittest.TestCase):
                                         ("gainers", "Top gainers", "급상승"), ("losers", "Top losers", "급하락"),
                                         ("cap", "Market cap", "시가총액")))
         self.assertEqual(R.MARKET_KEYS, ("kr", "kospi", "kosdaq", "us"))
-        self.assertEqual({k for k, _e, _k in R.STATES}, {"live", "closed", "stale", "daily", "none"})
+        self.assertEqual({k for k, _e, _k in R.STATES}, {"polled", "polled_us", "closed", "stale", "daily", "none"})
         self.assertEqual(R.CAP_LABELS, (("provider", "Market cap", "시가총액"),
                                         ("computed", "Market cap (computed)", "시가총액(계산값)")))
         for table in (R.CATEGORIES, R.MARKETS, R.SECTORS, R.STATES, R.COLUMNS, R.CAP_LABELS):
@@ -138,15 +140,20 @@ class ParsingTests(unittest.TestCase):
     def test_kis_domestic_quote(self):
         out = {"stck_prpr": "102,300", "prdy_vrss": "1500", "prdy_vrss_sign": "5", "prdy_ctrt": "1.45",
                "acml_vol": "14900000", "acml_tr_pbmn": "1520000000000", "hts_avls": "6050000",
-               "rprs_mrkt_kor_name": "KOSPI200"}
+               "lstn_stcn": "5969782550", "rprs_mrkt_kor_name": "KOSPI200"}
         r = R.parse_kis_domestic(member(SAMSUNG), out, received_at="2026-11-11T05:20:00+00:00")
         self.assertEqual((r.price, r.change, r.change_pct), (102300.0, -1500.0, -1.45))  # sign 5: down
-        self.assertEqual((r.volume, r.trading_value, r.market_cap), (1.49e7, 1.52e12, 6.05e14))  # 억원 -> won
+        # hts_avls read as 100 million won, used because it agrees with listed shares x price (610.7조).
+        self.assertEqual((r.volume, r.trading_value, r.market_cap), (1.49e7, 1.52e12, 6.05e14))
+        self.assertEqual((r.cap_basis, r.cap_source, r.cap_as_of, r.shares),
+                         ("provider", "KIS", "2026-11-11T05:20:00+00:00", 5969782550.0))
         self.assertEqual((r.mode, r.source, r.market, r.estimated_value), ("kis", "KIS", "KOSPI", False))
         self.assertEqual(R.parse_kis_domestic(member(ALTEO), {**out, "rprs_mrkt_kor_name": "KOSDAQ150"}).market,
                          "KOSDAQ")
         up = R.parse_kis_domestic(member(SAMSUNG), {**out, "prdy_vrss_sign": "2", "hts_avls": "", "acml_tr_pbmn": "x"})
-        self.assertEqual((up.change, up.market_cap, up.trading_value), (1500.0, None, None))
+        # Without KIS's figure: listed shares x price, labelled computed.
+        self.assertEqual((up.change, up.market_cap, up.trading_value, up.cap_basis), (1500.0, 102300 * 5969782550,
+                                                                                      None, "computed"))
         for bad in ({}, {"stck_prpr": "0"}, None, {"stck_prpr": "nan"}):
             with self.assertRaises(ValueError):
                 R.parse_kis_domestic(member(SAMSUNG), bad)
@@ -198,11 +205,14 @@ class DisplayTests(unittest.TestCase):
         self.assertEqual(R.change_text(0.0), ("0.00%", "flat"))
         self.assertEqual(R.change_text(None), ("", "flat"))
         kis = R.Batch("kr", (record(SAMSUNG),), "kis", "2026-11-11T05:00:00+00:00")
+        us = R.Batch("us", (record(APPLE),), "kis", "2026-11-11T15:00:00+00:00")
         daily = R.Batch("kr", (record(SAMSUNG, mode="daily"),), "daily", "2026-11-11T05:00:00+00:00")
-        self.assertEqual(R.source_state(kis, open_now=True), "live")
-        self.assertEqual(R.source_state(kis, open_now=False), "closed")  # KIS after the close is not live
+        # KIS REST quotes polled during the session: "polled", never live (12-claims QG-CLAIM-KIS-20261102).
+        self.assertEqual(R.source_state(kis, open_now=True), "polled")
+        self.assertEqual(R.source_state(us, open_now=True), "polled_us")  # KIS's free US feed
+        self.assertEqual(R.source_state(kis, open_now=False), "closed")  # KIS after the close is the last price
         self.assertEqual(R.source_state(kis, open_now=True, age_seconds=200, live_limit=135), "stale")
-        self.assertEqual(R.source_state(kis, open_now=True, age_seconds=100, live_limit=135), "live")
+        self.assertEqual(R.source_state(kis, open_now=True, age_seconds=100, live_limit=135), "polled")
         self.assertEqual(R.source_state(daily, open_now=True), "daily")  # delayed bars are never live
         self.assertEqual(R.source_state(R.Batch("kr", (), "none", ""), open_now=True), "none")
         self.assertEqual(R.source_state(None, open_now=True), "none")
@@ -450,8 +460,80 @@ class MarketCapTests(unittest.TestCase):
             R.with_cap(apple, 1.0, basis="guess", source="")
         with self.assertRaises(ValueError):
             R.rank((computed,), "cap", missing="maybe")
-        # Domestic records are as KIS gave them: no basis, ranked and left out as before.
-        self.assertEqual(R.parse_kis_domestic(member(SAMSUNG), {"stck_prpr": "1", "hts_avls": "5"}).cap_basis, "")
+        # A domestic figure that cannot be checked against a share count is not used.
+        unchecked = R.parse_kis_domestic(member(SAMSUNG), {"stck_prpr": "1", "hts_avls": "5"})
+        self.assertEqual((unchecked.cap_basis, unchecked.market_cap, unchecked.cap_missing), ("", None, "unverified"))
+
+
+class SourceStateWordingTests(unittest.TestCase):
+    """2026-11-11 compliance follow-up (12-claims QG-CLAIM-RANK-20261111, 09): the list polls KIS REST quotes
+    every 45 s, so its state is worded as the stock detail view words polling ("5초 조회", "조회 시점", US
+    "무료 시세"), never "실시간"/"real-time", a word kept for received trades."""
+
+    def test_no_state_claims_live_ticks_and_the_polled_state_names_its_interval(self):
+        for key, en, ko in R.STATES:
+            self.assertNotIn("실시간", ko, key)
+            self.assertFalse(re.search(r"(?i)real[- ]?time|live", en), en)
+        self.assertEqual(R.text(R.STATES, "polled", "ko"), "KIS 조회 · 45초마다")
+        self.assertEqual(R.text(R.STATES, "polled", "en"), "KIS · polled every 45 s")
+        self.assertEqual(R.text(R.STATES, "polled_us", "ko"), "KIS 무료 시세 · 45초마다 조회")
+        self.assertEqual(R.text(R.STATES, "polled_us", "en"), "KIS free US feed · polled every 45 s")
+        self.assertEqual(R.POLL_SECONDS, 45)
+        stock = Path(__file__).resolve().parents[1] / "quantgen_desktop" / "owner_ui_language" / "stock.py"
+        words = stock.read_text(encoding="utf-8")
+        self.assertIn("'● 5초 조회'", words)  # the detail view's polling word this list follows
+        self.assertIn("'● 무료 시세'", words)  # and its US free-feed word
+
+
+class DomesticCapTests(unittest.TestCase):
+    """2026-11-11 compliance follow-up (12-claims 2026-11-02 "hts_avls 단위 미검증"): KIS's hts_avls is used only
+    when it agrees within 25% with listed shares x price of the same inquire-price answer, as the US path
+    checks tomv; else refused ('—', unranked, with why); without hts_avls, shares x price is computed."""
+
+    BASE = {"stck_prpr": "102300", "prdy_vrss": "0", "prdy_vrss_sign": "3", "prdy_ctrt": "0.00",
+            "acml_vol": "1", "acml_tr_pbmn": "1", "hts_avls": "6050000", "lstn_stcn": "5969782550"}
+
+    def parse(self, **fields):
+        return R.parse_kis_domestic(member(SAMSUNG), {**self.BASE, **fields}, received_at="2026-11-11T05:20:00+00:00")
+
+    def test_agreement_uses_kis_figure_within_tolerance_only(self):
+        self.assertEqual(R.KIS_DOMESTIC_CAP_UNIT, 1e8)
+        self.assertEqual(R.parse_kis_domestic_cap(self.BASE, 102300.0), (6.05e14, "provider", 5969782550.0, ""))
+        computed = 5969782550 * 102300.0
+        for ratio, used in ((1.0, True), (1.24, True), (0.76, True), (1.26, False), (0.74, False)):
+            stated = str(round(computed * ratio / 1e8))
+            cap, basis, _shares, missing = R.parse_kis_domestic_cap({**self.BASE, "hts_avls": stated}, 102300.0)
+            self.assertEqual((cap is not None, basis, missing), (True, "provider", "") if used else
+                             (False, "", "mismatch"), ratio)
+
+    def test_refusals_are_never_rescaled(self):
+        for fields, missing in (({"hts_avls": "605"}, "mismatch"),             # another unit: refused, not rescaled
+                                ({"hts_avls": "605000000000000"}, "mismatch"),  # already won
+                                ({"lstn_stcn": ""}, "unverified"), ({"lstn_stcn": "5969782550.5"}, "unverified"),
+                                ({"lstn_stcn": "-1"}, "unverified"), ({"lstn_stcn": "x"}, "unverified"),
+                                ({"hts_avls": "", "lstn_stcn": ""}, "absent"),
+                                ({"hts_avls": "0", "lstn_stcn": "0"}, "absent")):
+            r = self.parse(**fields)
+            self.assertEqual((r.market_cap, r.cap_basis, r.cap_missing, r.shares), (None, "", missing, None), fields)
+        self.assertEqual(R.parse_kis_domestic_cap(None, 1.0), (None, "", None, "absent"))
+        self.assertEqual(R.parse_kis_domestic_cap(self.BASE, 0), (None, "", None, "absent"))
+
+    def test_computed_path_without_kis_figure(self):
+        r = self.parse(hts_avls="")
+        self.assertEqual((r.market_cap, r.cap_basis, r.cap_source, r.shares, r.cap_missing),
+                         (5969782550 * 102300.0, "computed", "KIS", 5969782550.0, ""))
+        self.assertEqual(R.cap_label(R.rank((r,), "cap"), "ko"), "시가총액(계산값)")
+
+    def test_refused_rows_follow_the_ranked_ones_unranked(self):
+        good = self.parse()
+        computed = R.parse_kis_domestic(member(HYNIX), {**self.BASE, "stck_prpr": "520000", "hts_avls": "",
+                                                        "lstn_stcn": "728002365"})
+        refused = R.parse_kis_domestic(member(KAKAO), {**self.BASE, "stck_prpr": "40000", "hts_avls": "1",
+                                                       "lstn_stcn": "442000000"})
+        rows = R.rank((refused, computed, good), "cap", missing="last")
+        self.assertEqual([(row.rank, row.record.member.code) for row in rows], [(1, SAMSUNG), (2, HYNIX), (0, KAKAO)])
+        self.assertEqual(R.cap_label(rows, "ko"), "시가총액(계산값)")
+        self.assertEqual(R.rank((refused,), "cap", missing="last"), [])  # nothing ranked: the list says why
 
 
 class KISDetailTests(unittest.TestCase):
