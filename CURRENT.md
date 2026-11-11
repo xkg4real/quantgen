@@ -1,19 +1,19 @@
 ---
-status: checkpoint
-reason: manual
+status: handoff
+reason: usage_limit_weekly
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d
 next_ids: ⑤-2/e, ⑤-2/f, ⑨-1/2/d/2, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-1/2/e, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-11T17:06:00+09:00
+updated_at: 2026-11-11T18:00:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/provider-parity-spy-rerun-20261111
-work_commit: fbe493d
+work_commit: 8e36aa0
 uncommitted_changes: no
 pr: none
-usage_weekly_pct: unknown
+usage_weekly_pct: 98
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
 session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
@@ -120,6 +120,33 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - **C:** 0b 채택 방침만 기록. Q12 = 7개 파일(`core/quant/strategies.py`, `validate.py`, `history.py`, `gate_ledger.py`, `core/research/strategy_workflow.py`, `core/quant/optimize.py`, `core/quant/risk.py`). Q13·Q14·Q16·Q17·Q18 기본값. 화면은 네이티브만(UI-D1), Flet 작업(Q19 포함) 안 함, PC 화면은 시안 먼저 + UI 세션 이식과 ⑦-2 병합 뒤. Q22의 잘라내기 여부는 2026-12 말 전에 따로 질문. 다음 단위 ⑨-3a/recorder/1(화면 없음, 결정 9 조건: run_family 안에서 PNL_COMPUTED보다 낮은 PROGRESS를 쓰지 않음).
 - **D:** 주문 한도 수치(1회 100만 원/5%, 하루 10건·300만 원/15%, 손실 중지 40만 원/2%, 종목 비중 20%/400만 원, 가격 이탈 3%·시세 15초·지정가만, 09:00~15:20, 모의 20거래일·30건 등)를 기본값으로 승인. **실거래는 켜지지 않음.** 순서: 안전 설계 문서 보고 → ⑦-2 병합 뒤 구현 → 모의투자 → 결과 보고 → 소유자의 실거래 전환 승인. D-14 법률 자문은 소유자가 의뢰.
 
+### 주간 사용량 98%로 중단 (2026-11-11 18:00 KST) — 가장 최신, 여기서 이어받으십시오
+
+사용량 감시 플러그인이 98%를 알려 진행 중이던 워크플로를 멈췄고 새 일은 시작하지 않았습니다. 플러그인은 "handoff 브랜치를 다른 작업이 잡고 있어 이 세션은 인계할 수 없다"고 알렸습니다. 이 문서가 게시됐다면 그 거부는 없었던 것입니다.
+
+**작업 브랜치:** `claude/provider-parity-spy-rerun-20261111` (main `fbe493d`에서), 원격 head `8e36aa0`, PR 없음. 워크트리 없이 `git fetch origin claude/provider-parity-spy-rerun-20261111`로 받으면 됩니다.
+
+| 커밋 | 내용 | 상태 |
+|---|---|---|
+| `4096caa` | `tools/provider_parity/parity_check.py`의 `fetch_fmp`: 응답이 요청한 첫 날짜에 못 미치면 `to`를 앞당겨 다시 요청해 이어 받음(kis와 같은 방식), 시험 추가 | 구현자 한 명의 작업. **독립 검증 전** |
+| `41bd108` | `tools/provider_parity/btc_diagnose.py`(소유자 PC용 읽기 전용 BTC 진단)와 `tests/provider_parity_btc_diagnose_acceptance.py` | 구현자 한 명의 작업. **독립 검증 전** |
+| `8e36aa0` | **WIP(미완성·미검토, 병합 금지):** 판정 기록(`OWNER_RULINGS_LOG.md` 새 절, `results/RULINGS.md`), 도구 README, 새 안내서 초안 `docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md`, 고정값 시험 변경, CI 경로 필터 | 3부 도중에 멈춤 |
+
+이 head에서 확인한 것: `tests.provider_parity_acceptance` 122개 중 **2개 실패**(새 고정값이 아직 모든 곳에 적히지 않아서로 보임, 원인 미확인), `tests.provider_parity_btc_diagnose_acceptance` 15개 통과. compliance 기준선은 갱신하지 않았습니다(`--check`는 FAIL일 것).
+
+**남은 일(순서대로, 완료 기준 포함):**
+1. `8e36aa0`의 기록·안내서를 끝까지 읽고 마무리. 판정 원문은 위 "소유자 판정: SPY-가, BTC-나" 절의 두 줄이며 한 글자도 바꾸지 않습니다. 선택지 표 원문은 그 절과 `OWNER_RULINGS_LOG.md` 새 절에 있습니다.
+2. 새 고정값 기록: 도구 커밋 `4096caa56438825ac66367d1d2eccb5deb68189a`, 도구 파일 sha256 `f56caeb4076c3679db1b8c801ea2f9eb356541684fd94a5947011c826c9b2b21`(도구 파일을 더 고치면 둘 다 바뀜). 적을 곳: 도구 README(두 줄과 `$fixed`), 기존 안내서 6·7단계와 표, 새 안내서, `results/RULINGS.md`, `OWNER_RULINGS_LOG.md`, FACTS 행. 첫 버전(`5202482`, `f2fe72cd…0184`)은 "2026-11-11 기록 실행 3건의 버전"으로만 남김. 진단 스크립트 sha256(지금 `f9e7146b…e5fa`)은 `results/RULINGS.md`와 새 안내서에. 완료 기준: `python -B -m unittest tests.provider_parity_acceptance` 전부 통과, `python -B -m tools.provider_parity.parity_check selftest` PASS.
+3. 독립 검증(이 세션이 하려던 3관점): (가) fmp 이어 받기를 가짜 전송으로 공격(상한 1·2·5,000행, `to`를 무시하는 공급사, 같은 페이지 반복, 서로 다른 값의 중복 날짜, 한 번에 다 주는 공급사에서는 이전 도구와 바이트가 같은지), 도구의 다른 정의가 바뀌지 않았는지 AST 비교; (나) 진단 스크립트가 가격·일별 차이·연도보다 자세한 날짜를 어떤 경로(오류 메시지 포함)로도 출력하지 않는지, 고정 도구의 판독 함수만 쓰는지, 파일을 쓰지 않고 네트워크를 열지 않는지, 출력이 소유자가 허용한 통계(연도별 불일치 일수, 수준 차이의 99번째 백분위·최댓값)와 고정 자료가 들어가지 않는 통계(coinbase 대 bitstamp)뿐인지; (다) 새 안내서의 PowerShell 5.1 줄을 bash로 옮겨 처음부터 끝까지 실행(실행 브랜치를 흉내 낸 임시 원격에서 `git pull --ff-only`, `$fixed`·`$sha` 확인, fmp 재수신, 기존 `fetch1`의 kis·yahoo_now 파일로 대조).
+4. `python3 -B -m tools.compliance.check --refresh-baseline --documents $(seq 1 20) --reviewed-by "..." --review-note "..."` → `--check` 정합성 PASS → push → PR → CI(Runtime 약 30분 + Compliance) + 캐시 없는 전체 실행(기준 `sf4.json`/`par2.json` 769/895는 이 세션 scratchpad에만 있음. 새 환경이면 main `fbe493d`를 같은 방식으로 한 번 돌려 기준을 만듦) → 병합(expectedHeadSha, 트리 확인).
+5. **main을 실행 브랜치에 병합**해 push: `claude/provider-parity-runs-20261111`은 소유자 커밋 `0b397f7`(요약 3개)이 위에 있으므로 병합 커밋으로 올립니다(되돌리기·강제 push 금지). 확인: `git branch -r --contains <새 도구 커밋>`에 실행 브랜치가 나옴.
+6. 소유자에게 새 안내서와 새 고정값 전달 → 소유자: `pp_clone`에서 `git pull --ff-only`, fmp를 새 폴더(`fetch2-spy-fmp`)에 다시 받기, SPY 대조(`compare2-spy`), 요약 push, BTC 진단 출력 붙여넣기.
+7. 판독: SPY 둘째 요약이 PASS면 Pilot 1 관문 통과(DGS3MO는 이미 PASS). fmp가 여전히 늦게 시작하면 다시 WITHHELD이고 소유자에게 다시 여쭙니다(셋째 실행은 또 판정 필요). BTC 진단으로 원인이 고정 파일·표·코드를 바꾸지 않고 설명되면 불일치와 원인을 `results/RULINGS.md`에 적고 BTC 관문을 통과로 처리(소유자 둘째 줄), 아니면 보고 후 판정. 원장 `--done "⑤-2/e | ..."`, `--done "⑤-2/f | ..."`.
+8. Pilot 1 안내: main의 `docs/product/PILOT_OWNER_RUN_2026-11-11.md`. 그 전에 연구 클론의 추적되지 않는 폴더 `.agents/`·`quantgen/`을 클론 밖으로 옮기는 줄을 소유자에게 줘야 합니다(폴더 안 이름 목록을 요청했고 답 대기. 지우지 않음).
+9. 소유자에게 보고할 질문 26건(문서 K절, 리허설 기록 5절)을 표로 정리.
+
+**소유자가 기다리는 것:** 도구 수정 병합과 새 안내서. 소유자는 지금 PC에서 할 일이 없습니다(폴더 이름 목록 두 줄만 요청해 둠).
+
 ### 소유자 판정: SPY-가, BTC-나 (2026-11-11 17:06 KST) — 가장 최신
 
 소유자 답(2026-11-11 17:1x KST, 원문 두 줄):
@@ -224,7 +251,7 @@ Claude가 받은 뜻(소유자에게 그대로 알림):
 
 ## 9. 이어받는 에이전트에게
 
-`status: checkpoint`인 동안 이어받지 않습니다.
+맨 위쪽 "주간 사용량 98%로 중단" 절부터 읽으십시오. 작업 브랜치 `claude/provider-parity-spy-rerun-20261111`의 `8e36aa0`에서 이어받고, WIP 커밋은 그대로 병합하지 않습니다. 금지 사항은 7절과 CLAUDE.md(보호 캐시, `.env`, `~/.nextgen`, 연구 브랜치와 `tools/nautilus/**`, `tests/run_all.py` 직접 실행)를 따릅니다.
 
 ## 10. 확인
 
