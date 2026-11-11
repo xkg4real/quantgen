@@ -2198,6 +2198,26 @@ def test_macro_fixtures_final_write_is_all_or_nothing():
             r["md5"] for r in generate(Path(tmp) / "check") if r["file"] == n13)   # the new bytes, whole
 
 
+def test_macro_fixtures_final_write_refuses_a_destination_named_twice():
+    """Review of PR #107, F5: `MF._commit` kept its temporary files in a table keyed by destination, so two items with
+    one destination lost the first temporary file from the table: the first rename put the second item's bytes in
+    place, the second rename ended in a KeyError, and the undo left the lost `.tmp` file and the directory behind
+    (FinalWriteIncomplete). Now a destination named twice (also spelled another way, `sub/../a.csv`) is refused with
+    a ValueError naming it before anything is written: no directory is made, an existing file keeps its bytes, and no
+    temporary file is left."""
+    with tempfile.TemporaryDirectory() as tmp:
+        fresh, kept = Path(tmp) / "fresh", Path(tmp) / "kept"
+        kept.mkdir()
+        (kept / "a.csv").write_bytes(b"earlier\n")
+        for folder in (fresh, kept):
+            a = folder / "a.csv"
+            for again in (a, folder / "sub" / ".." / "a.csv"):
+                _refused(lambda: MF._commit([(a, b"one\n"), (folder / "b.csv", b"two\n"), (again, b"three\n")]),
+                         ValueError, f"the final write names {a} more than once", "nothing is written")
+        assert not fresh.exists() and [p.name for p in kept.iterdir()] == ["a.csv"]
+        assert (kept / "a.csv").read_bytes() == b"earlier\n"
+
+
 # --------------------------------------------------------------------------- #
 # docs/kis_quote_check.py (TASK-M1-01; T-RO-02 record clause)
 # --------------------------------------------------------------------------- #

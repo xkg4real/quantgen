@@ -395,9 +395,10 @@ class FinalWriteIncomplete(OSError):
 def _commit(items: list[tuple[Path, bytes]]) -> None:
     """Write `items` ((destination path, bytes)) in their order, all or nothing as far as the file system allows
     (review of PR #101, R4). `generate` passes the fixtures and, last, the manifest with its new rows, so a fixture is
-    never left in place without its manifest row. Every file is first written whole to a temporary file beside its
-    destination, and the bytes of each file it replaces are read; a failure there changes nothing. Then each temporary
-    file is renamed over its destination (`os.replace`, one rename per file). If a rename fails (on Windows, a
+    never left in place without its manifest row. A destination named twice is refused with a ValueError naming it
+    before anything is written (review of PR #107, F5). Every file is first written whole to a temporary file beside
+    its destination, and the bytes of each file it replaces are read; a failure there changes nothing. Then each
+    temporary file is renamed over its destination (`os.replace`, one rename per file). If a rename fails (on Windows, a
     destination open in another program, the manifest included), the files already renamed get their earlier bytes
     back, the files this run created are removed, the temporary files are deleted, a directory this run created is
     removed again, and the error is raised: every destination is as it was. What remains possible: each file is
@@ -408,6 +409,17 @@ def _commit(items: list[tuple[Path, bytes]]) -> None:
     FinalWriteIncomplete names each file left changed. The manifest is renamed last, so whenever the write fails or
     is undone, the manifest holds no new row."""
     dests = [dest for dest, _data in items]
+    first: dict[str, Path] = {}                             # each destination, however spelled, by its first spelling
+    repeated: list[str] = []
+    for d in dests:
+        key = os.path.normcase(os.path.abspath(d))
+        if key not in first:
+            first[key] = d
+        elif str(first[key]) not in repeated:
+            repeated.append(str(first[key]))
+    if repeated:
+        raise ValueError(f"the final write names {', '.join(repeated)} more than once (one temporary file and one "
+                         "rename per destination); nothing is written")
     made: list[Path] = []                                   # directories this run creates
     for parent in dict.fromkeys(dest.parent for dest in dests):
         p = parent
