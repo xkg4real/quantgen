@@ -7,7 +7,7 @@ edge needs an exact p or DSR value, the gate function is replaced by a stub for 
 """
 import ast
 import copy
-from dataclasses import FrozenInstanceError, fields
+from dataclasses import FrozenInstanceError, fields, replace
 from datetime import date, datetime, timedelta
 import json
 import math
@@ -377,6 +377,72 @@ class DsrLines(unittest.TestCase):
                     V, "deflated_sharpe", side_effect=lambda d, *, n_trials, sr_sd_daily: values[n_trials]):
                 edge = S.dsr_two_n(a, n_raw={"L-FAM": 17, "R-FAM": 11}, **kw)
                 self.assertEqual([r.status for r in edge.readings], [want, want])
+
+    def test_reading_of_record_has_one_source_and_a_result_cannot_contradict_it(self):
+        # /code-review F7. The reading of record was stored three times (the constant, a flag on each reading
+        # and a field on the result) and lines() read only the flag, so dataclasses.replace(result,
+        # reading_of_record="L-FAM") gave a result whose field named L-FAM while its lines named R-FAM.
+        a, _ = pair()
+        kw = dict(n_grid=12, sr_sd_grid=0.01, sr_sd_daily=0.012, sr_sd_label="caller term")
+        res = S.dsr_two_n(a, n_raw={"L-FAM": 17, "R-FAM": 11}, **kw)
+        # The constructors are those of main before PR #100 (7ddb568): no stored copy of the reading of record.
+        self.assertEqual([f.name for f in fields(S.RawReading)],
+                         ["reading", "meaning", "n_raw", "dsr", "status", "below_grid"])
+        self.assertNotIn("reading_of_record", {f.name for f in fields(S.DsrTwoN)})
+        self.assertEqual(S.DsrTwoN.__dataclass_fields__["provisional"].default, True)
+        built = S.RawReading("L-FAM", "meaning", 17, 0.5, "below", False)        # six arguments, as at 7ddb568
+        self.assertEqual((built.of_record, built.role()), (False, "shown for comparison"))
+        with self.assertRaises(TypeError):
+            S.RawReading("L-FAM", "meaning", 17, 0.5, "below", False, True)        # no seventh, stored flag
+        # Nothing on a result can be set to disagree with the constant.
+        with self.assertRaises(TypeError):
+            replace(res, reading_of_record="L-FAM")
+        for r in res.readings:
+            with self.assertRaises(TypeError):
+                replace(r, of_record=not r.of_record)
+            with self.assertRaises(AttributeError):
+                r.of_record = not r.of_record
+        with self.assertRaises(AttributeError):
+            res.reading_of_record = "L-FAM"
+        # A reading rebuilt by hand under either key still gets its role from the constant.
+        moved = replace(res, readings=tuple(replace(r, reading=other) for r, other in
+                                            zip(res.readings, ("R-FAM", "L-FAM"))))
+        self.assertEqual([(r.reading, r.of_record) for r in moved.readings], [("R-FAM", True), ("L-FAM", False)])
+        self.assertEqual(["[reading of record" in line for line in moved.lines()[1:3]], [True, False])
+        # The field-like names, the roles and the printed lines all follow the one constant.
+        self.assertEqual((res.reading_of_record, [r.of_record for r in res.readings]), ("R-FAM", [False, True]))
+        with patch.object(S, "N_RAW_READING_OF_RECORD", "L-FAM"):
+            self.assertEqual((res.reading_of_record, [r.of_record for r in res.readings]), ("L-FAM", [True, False]))
+            self.assertEqual([r.role() for r in res.readings],
+                             ["reading of record (owner ruling 7, 2026-11-11)", "shown for comparison"])
+            self.assertEqual(["[reading of record" in line for line in res.lines()[1:3]], [True, False])
+        self.assertEqual(["[reading of record" in line for line in res.lines()[1:3]], [False, True])
+
+    def test_s2_lines_text_is_exact(self):
+        # The text of the S-2 lines is pinned in full, so a change of structure cannot change a printed word.
+        a, _ = pair()
+        kw = dict(n_grid=12, sr_sd_grid=0.01, sr_sd_daily=0.012, sr_sd_label="caller term")
+        grid = V.deflated_sharpe(a, n_trials=12, sr_sd_daily=0.01)
+        d17 = V.deflated_sharpe(a, n_trials=17, sr_sd_daily=0.012)
+        d11 = V.deflated_sharpe(a, n_trials=11, sr_sd_daily=0.012)
+        g_line = (f"S-2 [provisional] DSR at N = G = 12: {grid:.4f} ({S.classify_dsr(grid)}); "
+                  "dispersion term 0.01 per period [the gate's own term]")
+        status = lambda value: S.classify_dsr(value, grid_status=S.classify_dsr(grid))
+        l_line = (f"S-2 [provisional] DSR at N_raw L-FAM = 17 [shown for comparison]: {d17:.4f} ({status(d17)}); "
+                  "dispersion term 0.012 per period [caller term]")
+        r_line = ("S-2 [provisional] DSR at N_raw R-FAM = 11 [reading of record (owner ruling 7, 2026-11-11)]: "
+                  f"{d11:.4f} ({status(d11)}); dispersion term 0.012 per period [caller term]; "
+                  "N_raw 11 < G 12: printed only")
+        l_missing = ("S-2 [provisional] N_raw L-FAM (family ledger row count (gate_ledger.FamilyLedger.n_raw, the "
+                     "number of ledger rows), read on the owner PC) [shown for comparison]: not supplied")
+        r_missing = ("S-2 [provisional] N_raw R-FAM (R3 registry literal family-wide count (R3 design 3.13: |K| + "
+                     "|L minus cfg(K)|)) [reading of record (owner ruling 7, 2026-11-11)]: not supplied; the reading "
+                     "of record was not supplied, so this result has no second DSR of record and stays provisional")
+        for n_raw, want in (({"L-FAM": 17, "R-FAM": 11}, (g_line, l_line, r_line)),
+                            ({"L-FAM": 17}, (g_line, l_line, r_missing)),
+                            ({"R-FAM": 11}, (g_line, l_missing, r_line))):
+            with self.subTest(n_raw=sorted(n_raw)):
+                self.assertEqual(S.dsr_two_n(a, n_raw=n_raw, **kw).lines()[:3], want)
 
     def test_counts_and_dispersion_inputs_refused(self):
         a, _ = pair()
