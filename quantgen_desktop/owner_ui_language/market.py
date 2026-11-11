@@ -95,4 +95,33 @@ PAIRS = {
     'Account': '계정과목',
     'This term': '당기',
     'Prev term': '전기',
+    # Markets real-time ranked lists (owner 2026-11-11, point 5; quantgen_desktop/market_rankings.py).
+    # Short labels (categories, markets, sectors, source states, columns) are the (key, English, Korean)
+    # tables of core/market/rankings.py, so that 'KOSPI' or 'Volume' elsewhere in the window is untouched.
+    'Real-time charts': '실시간 차트',
+    'All sectors': '전체 업종',
+    'Refresh the ranked list': '순위 목록 새로고침',
+    'Loading quotes…': '시세를 불러오는 중…',
+    'Loading… {done}/{total}': '불러오는 중… {done}/{total}',
+    'Request failed ({code})': '조회 실패 ({code})',
+    'Updated just now': '방금 갱신',
+    'Updated {seconds}s ago': '{seconds}초 전 갱신',
+    'Updated {minutes} min ago': '{minutes}분 전 갱신',
+    'Updated {hours} h ago': '{hours}시간 전 갱신',
+    'Not loaded yet. Press Refresh to load the list.': '아직 불러오지 않았습니다. 새로고침을 누르면 목록을 불러옵니다.',
+    'Could not load quotes. Trying again shortly.': '시세를 불러오지 못했습니다. 잠시 뒤 다시 시도합니다.',
+    'Market cap comes with KIS quotes of domestic stocks only; the data shown has none.':
+        '시가총액은 KIS 국내 주식 현재가에만 있습니다. 지금 자료에는 시가총액이 없습니다.',
+    'No stock in this list is up.': '이 목록에서 오른 종목이 없습니다.',
+    'No stock in this list is down.': '이 목록에서 내린 종목이 없습니다.',
+    'No stocks match these filters.': '조건에 맞는 종목이 없습니다.',
+    'Ranked among {count} major stocks, not the whole market. Open a row for its chart.':
+        '주요 종목 {count}개 안에서 매긴 순위이며 전체 시장 순위가 아닙니다. 종목을 누르면 차트와 정보를 봅니다.',
+    'Delayed · daily: the last daily bar; trading value is close × volume, estimated.':
+        '지연·일별: 마지막 일봉 기준이며 거래대금은 종가×거래량 추정치입니다.',
+    'Could not load {count} of these stocks.': '{count}개 종목은 불러오지 못했습니다.',
+    'Left out for old data: {count}.': '오래된 자료라서 뺀 종목 {count}개.',
+    '{source} daily bars, last bar {day}; trading value estimated as close × volume.':
+        '{source} 일봉 · 마지막 봉 {day} · 거래대금은 종가×거래량 추정',
+    '{source} current quotes, received {when} KST.': '{source} 현재가 · {when} (한국 시간) 수신',
 }

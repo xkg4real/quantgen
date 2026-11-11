@@ -82,7 +82,14 @@ class OperationFixTests(unittest.TestCase):
 
     def test_unfocused_selectors_ignore_the_wheel_and_the_page_scrolls(self):
         w = self.window
-        # Markets (owner, 2026-11-04): the watchlist cards make the page taller than the window.
+        # Markets: a ranked list (owner 2026-11-11; the watchlist cards of 2026-11-04 moved to Home) makes the
+        # page taller than the window. Fixture quotes, set directly: nothing loads with automatic refresh off.
+        from core.market import rankings as R
+        stamp = '2026-11-11T05:00:00+00:00'
+        w.markets_view.rankings.batches['kr'] = R.Batch('kr', tuple(
+            R.QuoteRecord(m, 1000.0 + i, 1.0, 0.1, 1e5, 1e9 - i, None, 'KIS', 'kis', stamp)
+            for i, m in enumerate(R.DOMESTIC)), 'kis', stamp)
+        w.markets_view.rankings.render()
         w.navigate('markets'); settle(self.app)
         scroll = w.stack.currentWidget().verticalScrollBar()
         self.assertGreater(scroll.maximum(), 0)

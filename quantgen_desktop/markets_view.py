@@ -1,16 +1,16 @@
-"""Markets workspace (owner request, 2026-11-04): watchlist charts and one screen per stock.
+"""Markets workspace: real-time ranked lists, stock search and one screen per stock.
 
-Replaces the UI-7 indicator board and the UI-8 asset-class tab strip on Markets:
+Owner request 2026-11-04: one search bar takes a stock code or a stock name (Korean, English, 초성) through
+core.market.directory (futures and bonds keep code entry through the kind selector), and choosing a stock
+opens one screen with its price chart and every profile section core.research.stock_profile provides.
 
-- one search bar takes a stock code or a stock name (Korean, English, 초성) through
-  core.market.directory; futures and bonds keep code entry through the kind selector;
-- the watchlist the user builds is shown as chart cards (QSettings ``markets/watchlist``);
-- choosing a stock opens one screen with its price chart and every profile section
-  core.research.stock_profile provides.
+Owner request 2026-11-11 (point 5, "토스증권처럼 실시간 차트를 다양한 분류기준으로"): below the search, Markets
+shows Toss-style ranked lists (`market_rankings.RankingBoard`: trading value, volume, top gainers, top losers,
+market cap; all of Korea, KOSPI, KOSDAQ or the US). The watchlist chart cards (`WatchlistGrid`, kept here
+with its constructor) moved to Research Home (point 4); the user's watchlist store stays shared.
 
-Provider and observation-date fields are not shown as columns or lines (owner request).
-They stay in tooltips, and delayed, fallback, stale and failed states stay labelled
-(docs/compliance/09-dark-patterns.md).
+Provider and observation-date fields are not shown as columns or lines (owner request). They stay in
+tooltips, and delayed, fallback, stale and failed states stay labelled (docs/compliance/09-dark-patterns.md).
 """
 from __future__ import annotations
 
@@ -26,12 +26,16 @@ from PyQt6.QtWidgets import (QComboBox, QCompleter, QFrame, QGridLayout, QHBoxLa
                              QSizePolicy, QVBoxLayout, QWidget)
 
 from core.i18n import LocaleContext
+from core.market import rankings as _rankings
 from core.market.models import ChartRequest, Instrument
 from core.theme import DARK, LIGHT
 from .company_identity import CompanyMark, company_icon
 from .jobs import Jobs
 from .tools import CurrentPageStack
 
+# Interface contract between the native UI areas (2026-11-11): the rail's Markets sub-menu calls
+# `MarketsWorkspace.show_category(key)` with one of these keys, or "search".
+RANKING_CATEGORIES = _rankings.CATEGORIES
 WATCHLIST_KEY = "markets/watchlist"
 WATCHLIST_LIMIT = 20
 DEFAULT_CODES = ("005930", "000660", "005380", "105560", "373220", "207940")
@@ -477,7 +481,7 @@ class WatchCard(QFrame):
             set_tone(self.change, "")
             self.change.hide()  # an empty delta pill showed as a blank grey box
             if self.result is None:
-                self._state(_text(ctx, "시장 화면을 열면 불러옵니다.", "Loads when Markets is shown."))
+                self._state(_text(ctx, "화면을 열면 불러옵니다.", "Loads when shown."))
             else:
                 self._state(_text(ctx, "불러오지 못했습니다", "Could not load") + f" ({self.result.error})")
             self.render_chart()
@@ -726,8 +730,9 @@ class WatchlistGrid(QWidget):
         self.heading.setText(_text(ctx, "관심종목", "Watchlist") + (f"  {count}/{self.store.limit}" if count else ""))
         self.refresh_button.setText(_text(ctx, "새로고침", "Refresh"))
         self.refresh_button.setAccessibleName(_text(ctx, "관심종목 새로고침", "Refresh watchlist"))
-        self.empty.setText(_text(ctx, "관심종목이 없습니다. 위에서 종목을 검색한 뒤 ☆를 눌러 추가하세요.",
-                                 "No stocks yet. Search above and press ☆ to add one."))
+        # The grid lives on Research Home since 2026-11-11; stocks are added from their screen on Markets.
+        self.empty.setText(_text(ctx, "관심종목이 없습니다. 시장에서 종목을 연 뒤 ☆를 눌러 추가하세요.",
+                                 "No stocks yet. Open a stock on Markets and press ☆ to add it."))
         self.empty.setVisible(count == 0)
         for card in self.cards.values():
             card.render(ctx, self.dark)
@@ -1030,8 +1035,8 @@ class StockView(QWidget):
 
     def set_locale(self, ctx):
         self.ctx = ctx
-        self.back_button.setText("← " + _text(ctx, "관심종목", "Watchlist"))
-        self.back_button.setAccessibleName(_text(ctx, "관심종목으로 돌아가기", "Back to watchlist"))
+        self.back_button.setText("← " + _text(ctx, "실시간 차트", "Real-time charts"))
+        self.back_button.setAccessibleName(_text(ctx, "실시간 차트로 돌아가기", "Back to the real-time charts"))
         self._sync_watch()
         self.render_header()
         if self.profile is not None:
@@ -1046,18 +1051,19 @@ class StockView(QWidget):
 
 
 class MarketsWorkspace(QWidget):
-    """Search bar, then either the watchlist cards or one stock's screen."""
+    """Search bar, then either the real-time ranked lists or one stock's screen."""
 
-    def __init__(self, chart, *, store, directory=None, directory_loader=None, card_router_factory=None,
+    def __init__(self, chart, *, store, directory=None, directory_loader=None, ranking_loader=None,
                  profile_loader=None, locale=None, auto_load=True):
         super().__init__()
         from .app import label
+        from .market_rankings import RankingBoard
         self.ctx = locale or LocaleContext("ko_KR")
         self.store, self.directory, self.chart = store, directory, chart
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(16)
+        layout.setSpacing(24)  # owner 2026-11-11: room between blocks instead of strong dividers
         bar = QFrame()
         bar.setObjectName("panel")
         bar.setProperty("card", "search")
@@ -1090,16 +1096,20 @@ class MarketsWorkspace(QWidget):
             directory_loader.loaded.connect(self._directory_loaded)
         self.pages = CurrentPageStack()
         name_fn = self.display_name
-        self.grid = WatchlistGrid(store, router_factory=card_router_factory, name_fn=name_fn, locale=self.ctx,
-                                  auto_load=auto_load)
-        self.grid.open_requested.connect(self.open_instrument)
+        self.rankings = RankingBoard(loader=ranking_loader, locale=self.ctx, auto_load=auto_load)
+        self.rankings.open_requested.connect(self.open_instrument)
         self.stock = StockView(chart, store=store, profile_loader=profile_loader, name_fn=name_fn, locale=self.ctx,
                                auto_load=auto_load)
-        self.stock.back_requested.connect(self.show_watchlist)
-        self.pages.addWidget(self.grid)
+        self.stock.back_requested.connect(self.show_rankings)
+        self.pages.addWidget(self.rankings)
         self.pages.addWidget(self.stock)
         layout.addWidget(self.pages)
         self.set_locale(self.ctx)
+
+    @property
+    def grid(self):
+        """The list page. Kept for `ResearchWindow.current_market_pane()`; the watchlist grid is on Home."""
+        return self.rankings
 
     # Names ---------------------------------------------------------------------------------
     def display_name(self, instrument, lang):
@@ -1107,11 +1117,38 @@ class MarketsWorkspace(QWidget):
             listing = self.directory.lookup(instrument.asset, instrument.code, instrument.exchange)
             if listing is not None:
                 return listing.label(lang)
+        member = _rankings.member_for(instrument)
+        if member is not None:
+            return member.label("ko" if lang == "ko" else "en")
         return instrument.code
 
     # Navigation ----------------------------------------------------------------------------
-    def show_watchlist(self):
+    def show_rankings(self):
         self.pages.setCurrentIndex(0)
+
+    def show_category(self, key):
+        """Show the real-time list for a RANKING_CATEGORIES key; "search" focuses the stock search.
+
+        Called by the rail's Markets sub-menu after navigate('markets'). An open stock's screen gives way
+        to the list; the search keeps whatever page is shown.
+        """
+        if key == "search":
+            self._scroll_to_top()
+            self.search.setFocus(Qt.FocusReason.OtherFocusReason)
+            self.search.selectAll()
+            return True
+        self.rankings.set_category(key)
+        self.show_rankings()
+        self._scroll_to_top()  # a newly chosen list starts at its first rank
+        return True
+
+    def _scroll_to_top(self):
+        from PyQt6.QtWidgets import QScrollArea
+        parent = self.parentWidget()
+        while parent is not None and not isinstance(parent, QScrollArea):
+            parent = parent.parentWidget()
+        if parent is not None:
+            parent.verticalScrollBar().setValue(0)
 
     def showing_stock(self):
         return self.pages.currentIndex() == 1
@@ -1188,17 +1225,18 @@ class MarketsWorkspace(QWidget):
         self.search.setAccessibleName(_text(ctx, "종목 검색", "Search stocks"))
         self._placeholder()
         self.completer.set_locale(ctx)
-        self.grid.set_locale(ctx)
+        self.rankings.set_locale(ctx)
         self.stock.set_locale(ctx)
 
     def set_theme(self, dark):
-        self.grid.set_theme(dark)
+        self.rankings.set_theme(dark)
         self.stock.set_theme(dark)
 
     def stop(self):
-        self.grid.stop()
+        self.rankings.stop()
         self.stock.stop()
 
 
 __all__ = ["WatchlistStore", "WatchlistGrid", "WatchCard", "StockView", "MarketsWorkspace", "SymbolCompleter",
-           "DirectoryLoader", "attach_symbol_search", "load_cards", "set_tone", "WATCHLIST_KEY", "WATCHLIST_LIMIT"]
+           "DirectoryLoader", "attach_symbol_search", "load_cards", "set_tone", "WATCHLIST_KEY", "WATCHLIST_LIMIT",
+           "RANKING_CATEGORIES"]

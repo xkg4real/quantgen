@@ -48,7 +48,10 @@ class MarketTabsTests(unittest.TestCase):
         page = w.stack.currentWidget().widget()
         self.assertFalse([b for b in page.findChildren(QToolButton) if b.isVisible() and b.arrowType()])
         self.assertTrue(w.markets_view.isVisible()); self.assertFalse(w.markets_view.showing_stock())
-        self.assertEqual(len(w.markets_view.grid.cards), 6)  # the default watchlist: the six Home stocks
+        # Owner 2026-11-11: Markets shows the ranked lists (the watchlist cards moved to Research Home);
+        # nothing loads with automatic refresh off.
+        self.assertIs(w.markets_view.pages.currentWidget(), w.markets_view.rankings)
+        self.assertEqual(w.markets_view.rankings.batches, {})
         shown = [l.text() for l in page.findChildren(QLabel) if l.isVisible()]
         self.assertFalse([t for t in shown if '공급자' in t or '관측' in t], shown)
         self.provider.assert_not_called()

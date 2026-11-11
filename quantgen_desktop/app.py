@@ -574,14 +574,19 @@ class ResearchWindow(QMainWindow):
         layout.addStretch()
 
     def make_markets(self):
+        """Markets (owner, 2026-11-11 point 5): Toss-style real-time ranked lists, stock search and one
+        screen per stock. The watchlist chart cards moved to Research Home (make_home)."""
         from .market_chart import MarketChartPane
+        from .market_rankings import ProductionRankingLoader
         from .markets_view import DirectoryLoader, MarketsWorkspace, WatchlistStore
         from core.market.directory import default_directory
-        layout = self.page("Markets", "관심종목 차트와 종목 한 화면 보기")
+        layout = self.page("Markets", "실시간 차트와 종목 한 화면 보기")
         self.market_subtitle = layout.itemAt(1).widget()
         self.market_subtitle.localized_text = {
-            "ko": "관심종목 차트를 한눈에 보고, 종목 코드나 이름으로 검색해 그 종목의 모든 것을 한 화면에서 확인합니다.",
-            "en": "Your watchlist charts at a glance; search a stock by code or name to see everything about it on one screen."}
+            "ko": "거래대금·거래량·급상승·급하락·시가총액 순위로 주요 종목을 보고, 종목 코드나 이름으로 검색하거나 "
+                  "순위의 종목을 눌러 그 종목의 모든 것을 한 화면에서 확인합니다.",
+            "en": "Major stocks ranked by trading value, volume, gains, losses and market cap; search a stock by "
+                  "code or name, or open one from the list, to see everything about it on one screen."}
         self.market_subtitle.retranslate()
         # Owner, 2026-11-04: no indicator board (UI-7) and no asset-class tab strip (UI-8) here.
         self.market_chart = MarketChartPane(locale=self.ctx)
@@ -592,10 +597,12 @@ class ResearchWindow(QMainWindow):
         self.directory_loader = DirectoryLoader(self.symbol_directory, enabled=self.auto_refresh)
         if self.watchlist_store is None:
             self.watchlist_store = WatchlistStore(self.language_store)
+        # Ranked quotes: an injected loader (tests: window.ranking_loader before make_markets, or
+        # markets_view.rankings.loader after) or KIS/Yahoo constructed on first use.
         self.markets_view = MarketsWorkspace(
             self.market_chart, store=self.watchlist_store, directory=self.symbol_directory,
             directory_loader=self.directory_loader,
-            card_router_factory=self.card_router_factory or _production_card_router,
+            ranking_loader=getattr(self, "ranking_loader", None) or ProductionRankingLoader(),
             profile_loader=self.profile_loader or _ProductionProfileLoader(),
             locale=self.ctx, auto_load=self.auto_refresh)
         self.markets_view.setProperty("reading_help_keep_visible", True)
