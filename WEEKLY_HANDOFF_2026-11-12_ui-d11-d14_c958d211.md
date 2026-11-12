@@ -32,7 +32,7 @@ Claude가 물은 4개(6절)에 대한 답, 원문 그대로:
 |---|---|---|
 | `c508a0d`, `793a321`, `5916c36` | R-D12-1/2: 상세 차트 Ctrl+휠 확대(커서 기준), +/− 키·버튼 제거, 좌클릭 끌기로 좌우 이동(←/→ 유지), 키 안내 "← → · 끌기 이동 · Ctrl+휠 확대·축소". 규정 문서 15-keyboard 날짜 메모, FACTS 앵커 `chart-zoom-drag-2026-11-12`, 기준선 갱신 | 상세 차트 시험 통과, compliance --check PASS |
 | `36d23b8` | 소유자 PC 캡처 버그: 상세 화면 오른쪽 "종목" 칸이 7자리 가격(SK하이닉스 1,255,000)에서 좌우로 잘림 → 가격·등락이 한 줄에 안 들어가면 위아래로 쌓음, 카드 최소폭 축소, 칸의 가로 스크롤을 0에 고정. 회귀 시험 `test_the_right_column_never_moves_sideways_with_seven_digit_prices`(1440x900·1280x800·1000x700) | `tests.desktop_stock_detail_acceptance` + `tests.desktop_home_markets_markets_acceptance` 78개 OK(608초). 고치기 전엔 시험 실패(334 > 324) |
-| `840ae95` (원래 `f4ac417`을 체리픽) | UI-D11 본체: 레일 "시장" = 지수·주식·크립토·선물·외환·국채·회사채·ETF·월드 이코노미 큰 범주 + 마우스 올리면 3단 하위 메뉴(`quantgen_desktop/rail_menu.py` 신규), 국내·미국 ETF 목록(각 약 20종, 주식과 같은 시세 경로, 시가총액 기준 없음), "코인"→"크립토" | 워크트리에서 레일·시장·순위 시험 통과 후 커밋. 합친 브랜치에서 `market_rankings`·`desktop_home_markets_shell`·`desktop_home_markets_markets`·`kis_workspace` 시험을 돌리는 중에 인계(결과 미확인 → 4절 1번에서 다시 돌릴 것) |
+| `840ae95` (원래 `f4ac417`을 체리픽) | UI-D11 본체: 레일 "시장" = 지수·주식·크립토·선물·외환·국채·회사채·ETF·월드 이코노미 큰 범주 + 마우스 올리면 3단 하위 메뉴(`quantgen_desktop/rail_menu.py` 신규), 국내·미국 ETF 목록(각 약 20종, 주식과 같은 시세 경로, 시가총액 기준 없음), "코인"→"크립토" | 워크트리에서 레일·시장·순위 시험 통과 후 커밋. 합친 브랜치(`7402a43`)에서 `market_rankings`·`desktop_home_markets_shell`·`desktop_home_markets_markets`·`kis_workspace` 128개 OK(413초, 인계 직후 완료 — KIS 허용 경로 시험 포함) |
 | `7402a43` | 규정 기준선 갱신(UI-D11) | compliance --check consistency PASS, publication BLOCKED(이전과 같음) |
 
 ## 2. 소유자 원문 — 이번 주 마지막 지시까지 (순서대로, 그대로)
@@ -78,7 +78,7 @@ Claude가 물은 4개(6절)에 대한 답, 원문 그대로:
 
 시작 전: `git fetch origin && git checkout -B ui-followup origin/claude/friendly-bardeen-r6xe8f` (또는 같은 브랜치에서 계속). 모든 시험은 `QT_QPA_PLATFORM=offscreen`.
 
-1. **합친 브랜치 확인(인계 시점 결과 미확인)**
+1. **합친 브랜치 확인** (D11 관련 128개는 이미 OK — 1절. 상세 차트까지 함께 한 번 더 돌려 기준을 잡을 것)
    `QT_QPA_PLATFORM=offscreen python -m unittest tests.market_rankings_acceptance tests.desktop_home_markets_shell_acceptance tests.desktop_home_markets_markets_acceptance tests.kis_workspace_acceptance tests.desktop_stock_detail_acceptance`
    완료 기준: 모두 OK. 실패하면 D11(840ae95)과 36d23b8/R-D12의 충돌부터 볼 것.
 
@@ -111,4 +111,4 @@ Claude가 물은 4개(6절)에 대한 답, 원문 그대로:
 
 ## 7. 증거 경계
 
-컨테이너 로컬 워크트리(`.claude/worktrees/rail-d11`, `qscore-d13`, `report-d14`)와 Claude 스크래치(캡처 `d11_shots/` 등)는 세션과 함께 사라짐 — 남는 것은 work_branch 커밋과 이 브랜치의 `UI_WIP/*.patch`뿐. patch 셋은 시험되지 않은 중간 상태이며 완료 증거가 아님. 1절 840ae95의 합친 상태 시험은 인계 시점에 실행 중이었음.
+컨테이너 로컬 워크트리(`.claude/worktrees/rail-d11`, `qscore-d13`, `report-d14`)와 Claude 스크래치(캡처 `d11_shots/` 등)는 세션과 함께 사라짐 — 남는 것은 work_branch 커밋과 이 브랜치의 `UI_WIP/*.patch`뿐. patch 셋은 시험되지 않은 중간 상태이며 완료 증거가 아님. 1절 840ae95의 합친 상태 시험은 인계 직후 128개 OK로 끝남(LEDGER ⑬-2/ui-d11-rail/a 행의 "미확인"은 이 결과로 해소).
