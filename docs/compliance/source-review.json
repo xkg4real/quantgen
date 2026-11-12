@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "454a03f61807dad15e351eba8dda928d253f0c8fe030882a0b2282a90e97506a",
+    ".github/workflows/runtime-smoke.yml": "b66349a2f98e129651b961afad54d8a50de71fdf3686a9e101770a7ecc95a9f6",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -345,8 +345,8 @@
     "docs/product/NAUTILUS_AND_DATA_SOURCES_2026-10-31.md": "b2b0fdb675bd2e04e79863d872fc6101f40a10744b5bd0516da17957a26e7936",
     "docs/product/OPTION_DISCLOSURE_2026-11-04.md": "ff314ee2043b524cdb8456f4af5c2ffe5f19f19d341ac28be471a6d3c7588373",
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
-    "docs/product/PILOT_OWNER_RUN_2026-11-11.md": "b2cb7421d1029072694d763f492732bc1e4defe005124d50d9f65bbc3ccaa592",
-    "docs/product/PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md": "0788d85318fec47ce6ddb15a153178ad5281f66924bd521c810823ed49a6a666",
+    "docs/product/PILOT_OWNER_RUN_2026-11-11.md": "269ba6831332ea63c49067d0af8f1a588d934e75bc9b919af520e45347ac4484",
+    "docs/product/PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md": "67784df20a1ad8471f8d0afeadd99e9c6c3b6320c7fa712a60c377d3175c2e04",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md": "0b26452ceb5e1eaed963b60f1a9f5b7bf8276552602fce776ea9b54625885144",
     "docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md": "9604ff31a94d2e182bebfb71ec65cd83ca2f96cb8942deae39d3a337b288d4dd",
@@ -724,163 +724,163 @@
   "reviews": {
     "1": {
       "document_sha256": "bacab46dd51ed03b4d3be4b9bc46a7733cbed73ba42653ce9695e5ca0e10b4b4",
-      "source_digest": "fbeed049ff75330b8c27d75ebd905102a845179ac104139c367fa66a75c8d9e5",
+      "source_digest": "36d85372446c10d6dcf99cdc51da2d21966e558cc86bd07b460908bf92f7d9c3",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.617125+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.659261+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "fbeed049ff75330b8c27d75ebd905102a845179ac104139c367fa66a75c8d9e5",
+      "source_digest": "36d85372446c10d6dcf99cdc51da2d21966e558cc86bd07b460908bf92f7d9c3",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.619259+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.661355+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "1bab6c2c21475cd60f92fd95d1b42b10e0c607f382541a3c24018c4c031c226e",
+      "source_digest": "4bb837eefd795386163314a8a25e3ef61861f4e84a97aa157c48c1a4ec229264",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.621125+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.663117+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "4": {
       "document_sha256": "f63c98563dc663611297f52c74457ea7ad2f052d918c45e505dd667652074c9b",
-      "source_digest": "0b0516d98f10d788fb36096a2753029363f74ff09721c664b3f251c45ff737d2",
+      "source_digest": "4b9ca41a20991e347353d6f6defea91bf917c3c1cf621ae5eab1898d403420da",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.622801+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.664769+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "a9e54c4daf67d1e3e69afdf754a4985c918dbd0b9bc24b2db9cf33d67b1fe6d5",
+      "source_digest": "99ea97a16e43cc4abb761d35aa416df3f32639ad9d7ec3bc6741712041d2005c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.624406+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.666311+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "6": {
       "document_sha256": "60bb586d0bce26480feecc06f182c6ceaaea1700f1be0e95bac820f18ad484a8",
-      "source_digest": "1c48abe5aa7795d03cd4f904de2a2cb030e88cd2033239ca2b5576ea62f395e6",
+      "source_digest": "1aaadd692c8e248e31f46a7e04108d8c32a187adb90e21c1367417980a252f63",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.626035+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.667987+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "7": {
       "document_sha256": "1eb6da7d87830c9abde24303464cd80f65f6a1bf5b66bc5b53ec81b2c2e4b1ed",
-      "source_digest": "fbeed049ff75330b8c27d75ebd905102a845179ac104139c367fa66a75c8d9e5",
+      "source_digest": "36d85372446c10d6dcf99cdc51da2d21966e558cc86bd07b460908bf92f7d9c3",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.627661+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.669618+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "8": {
       "document_sha256": "e50e210234645ca8e2561662dae3a0afc5ab445e68fe523d320c3889c7e0d8a7",
-      "source_digest": "1c48abe5aa7795d03cd4f904de2a2cb030e88cd2033239ca2b5576ea62f395e6",
+      "source_digest": "1aaadd692c8e248e31f46a7e04108d8c32a187adb90e21c1367417980a252f63",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.629361+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.671207+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "9": {
       "document_sha256": "ebdb3469ea72e45341719aae0805b46a526374d394dbdb0e1875fe1df2c01757",
-      "source_digest": "4eee4c1185097f1364d049b36fbd6697d23f649977242ecc2b4f168afda90469",
+      "source_digest": "3b06f0446fadf646e58460f021837515386fd78c7cb757ddef5f7231d17d3468",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.631024+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.672887+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "10": {
       "document_sha256": "13ab9559eb6b5a0bf84c1575acd19d94cdb0b69273474fd5e686e05df5930fc3",
-      "source_digest": "4a0c2801c0b3db731a8f8b8739345093e6fd526ff28b8f3ad36c914d29a2e96a",
+      "source_digest": "1448288236ddcbca6594a2a43aacf0e07d1368bd7d73bc5081b50e72355bcf49",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.632618+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.674439+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "1ecd1384c0760b7ea8d9606dfc561a91ffaf613172bd1079a16ed097ca9eb2f3",
+      "source_digest": "d381f911d652c1d5c2d35713347791d4f9b095c51bff4ad294536d36336f60a8",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.634101+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.676081+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "12": {
       "document_sha256": "55b14bd417df61e59c2e06eb37f397dcbe8457ec571342c27e6b0d3559d507dc",
-      "source_digest": "5e673f291ed219a6f736e14cf370b1d14a1b7b63d0c6052409aab08b506fb7f9",
+      "source_digest": "10486f5adfb7b903490fa8b26ac816a7c5d42c5a88d8a4e544793ed0aa6301e1",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.635677+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.677758+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "13": {
       "document_sha256": "cbb62a2360f579617977c7d4bb0105eecfec4b091ef98d554d14f8f675508ac0",
-      "source_digest": "4eee4c1185097f1364d049b36fbd6697d23f649977242ecc2b4f168afda90469",
+      "source_digest": "3b06f0446fadf646e58460f021837515386fd78c7cb757ddef5f7231d17d3468",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.637316+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.679462+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "14": {
       "document_sha256": "afe03ddc02088367ca6e918721184f91ee895405c555f7b65a7633aec2cbb686",
-      "source_digest": "4eee4c1185097f1364d049b36fbd6697d23f649977242ecc2b4f168afda90469",
+      "source_digest": "3b06f0446fadf646e58460f021837515386fd78c7cb757ddef5f7231d17d3468",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.639108+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.681039+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "15": {
       "document_sha256": "6b12ffaeaed6ebd8b925ea4ff65ae5e6b0031dd9566739474f672cda1b7d0055",
-      "source_digest": "4eee4c1185097f1364d049b36fbd6697d23f649977242ecc2b4f168afda90469",
+      "source_digest": "3b06f0446fadf646e58460f021837515386fd78c7cb757ddef5f7231d17d3468",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.640674+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.682641+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "a65bfa90a8e66ab854de2fddf37d74cb30a40a144c6172be913ee54c2496a12c",
+      "source_digest": "373aeb145e8855e3df6b7ac4574995f5d0adb7367f201a6b9e77719f46f99188",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.642275+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.684221+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "1c48abe5aa7795d03cd4f904de2a2cb030e88cd2033239ca2b5576ea62f395e6",
+      "source_digest": "1aaadd692c8e248e31f46a7e04108d8c32a187adb90e21c1367417980a252f63",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.644011+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.685789+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "fbeed049ff75330b8c27d75ebd905102a845179ac104139c367fa66a75c8d9e5",
+      "source_digest": "36d85372446c10d6dcf99cdc51da2d21966e558cc86bd07b460908bf92f7d9c3",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.645658+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.687489+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "19": {
       "document_sha256": "983c0b85fb10b1018222236a37b839667a1103472796b514a9419651b8af2a37",
-      "source_digest": "696053fd3a00bdc645b1e0e26b8e139f35f256eeca7bbe23df43f2caa80eea5d",
+      "source_digest": "8eebc8bd3fcc8ea6fedebdde21ceae5b51b355f8638a6c08eac6d29b2070b282",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.647315+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.689088+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     },
     "20": {
       "document_sha256": "b6019dd07ee24fdf3a53791a3e0adad1472bb14cbe843a38553f209b669d1551",
-      "source_digest": "fbeed049ff75330b8c27d75ebd905102a845179ac104139c367fa66a75c8d9e5",
+      "source_digest": "36d85372446c10d6dcf99cdc51da2d21966e558cc86bd07b460908bf92f7d9c3",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main f4837ef (PR #108) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks; FACTS and 08 keep main's sections",
-      "reviewed_at": "2026-11-12T00:27:21.648897+00:00",
-      "source_commit": "a6d780b802b3a610c8e25c8d4ca73a19b9121523"
+      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
+      "reviewed_at": "2026-11-12T01:31:43.690676+00:00",
+      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
     }
   }
 }
