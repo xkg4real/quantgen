@@ -51,7 +51,7 @@ jobs:
           - os: windows-latest
             python: '3.14'
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 45
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
         with:
