@@ -18,6 +18,7 @@ from quantgen_desktop.bonds_portfolio_narrative import (
     bond_korean,portfolio_korean,portfolio_scope_korean,model_note_korean,
     bond_notes,portfolio_notes,hedge_text,convention_korean)
 from quantgen_desktop.app import ResearchWindow
+from ui.narrative_sections import ko_terms
 from PyQt6.QtWidgets import QApplication
 
 
@@ -138,8 +139,13 @@ class BondsPortfolioLanguageTests(unittest.TestCase):
                 d=portfolio_disclosure(out.portfolios,objective)
                 for lang in ('en','ko','en','ko'):
                     w.set_language(lang)
-                    self.assertEqual(w.portfolio.notes.text(),portfolio_notes(out,lang,d))
-                    if lang=='ko':self.assertIn(portfolio_scope_korean(out.portfolios,objective),w.portfolio.scope.text())
+                    # Owner issue 14 (2026-11-10): in Korean, raw ids (equal_weight, risk_parity) read as
+                    # their Korean names (ko_terms); the English notes and the export stay as they were.
+                    shown=(lambda t:ko_terms(t)) if lang=='ko' else (lambda t:t)
+                    self.assertEqual(w.portfolio.notes.text(),shown(portfolio_notes(out,lang,d)))
+                    if lang=='ko':
+                        self.assertIn(ko_terms(portfolio_scope_korean(out.portfolios,objective)),w.portfolio.scope.text())
+                        self.assertNotIn('equal_weight',w.portfolio.scope.text()+w.portfolio.notes.text())
                     else:self.assertEqual(w.portfolio.scope.text(),w.portfolio.scope.source_text)
                     self.assertEqual(w.portfolio.notes.source_text,raw)
                     self.assertEqual(w.portfolio.exports.report,before)

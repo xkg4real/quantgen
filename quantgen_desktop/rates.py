@@ -1,28 +1,123 @@
 """Native yield curve, swaps, rate options and short-rate simulation."""
 import math
-from core.ficc.curves import CURVE_METHODS, METHOD_NAMES
+from core.ficc.curves import CURVE_METHODS, EXACT_METHODS, METHOD_NAMES
+from .source_notes import method_korean, note_korean
 from core.research.rates_analysis import RatesRequest
+from .bonds import group_digits
+from .model_narrative_language import localize_columns, show_as
 from .tools import ToolPane, number, fmt
+
+# What each curve construction method assumes and when to use it (owner issue 08). The English text is
+# the Flet Rates page's (ui/rates_page.py `_METHOD_TEXT`); its reviewed Korean lives in
+# core/ui_page_messages/rates.py and reaches these captions through the shared catalogue.
+METHOD_TEXT = {
+    "bootstrap": "Solves the zero rate at each quoted maturity in turn so every quoted yield is "
+                 "repriced exactly; between maturities the forward rate is held flat. The standard "
+                 "choice for pricing: the swap, option and simulation tools always use it.",
+    "cubic_spline": "Draws a natural cubic spline through the quoted par yields, reads a yield at "
+                    "every half-year and bootstraps them. Smooth and exact at every quote, but it "
+                    "can swing between widely spaced long maturities.",
+    "pchip": "Like the cubic spline, but with a shape-preserving monotone cubic (PCHIP) that never "
+             "overshoots the quotes, so it adds no bumps the market does not show. A safe smooth "
+             "choice for sparse or kinked curves.",
+    "monotone_convex": "Hagan and West's method: forward rates are continuous and stay positive, and "
+                       "a change in one quote moves the curve only nearby, while every quote is "
+                       "repriced exactly. The U.S. Treasury has used it for its official par yield "
+                       "curve since December 2021.",
+    "smith_wilson": "The method EIOPA has used for the Solvency II risk-free interest rate curves (its "
+                    "extrapolation method is due to change from 30 January 2027). It passes exactly "
+                    "through every quote and, beyond the last one, bends the forward rate toward an "
+                    "assumed ultimate forward rate of 3.30% (convergence speed alpha 0.10). Both "
+                    "values are assumptions, not estimates. The curve is computed out to 60 years "
+                    "and held flat beyond, so values past 60 years are not Smith-Wilson.",
+    "nelson_siegel": "Fits three factors (level, slope and curvature) plus one decay parameter by "
+                     "least squares. Smooth and easy to read, but it misses individual quotes; the "
+                     "fit error is shown with the result.",
+    "diebold_li": "Nelson-Siegel with the decay fixed at 0.0609 per month (Diebold and Li, 2006), so "
+                  "the three factors come from a plain regression and can be compared from day to "
+                  "day. Built for tracking and forecasting the curve; it fits single quotes more "
+                  "loosely.",
+    "svensson": "Nelson-Siegel with a second hump term (six parameters). It follows long-end shapes "
+                "better; many central banks publish curves fitted this way.",
+    "bjork_christensen": "Nelson-Siegel plus a second slope term that decays twice as fast (five "
+                         "parameters, Björk and Christensen, 1999). It starts from the Nelson-Siegel "
+                         "fit, so it never fits worse than Nelson-Siegel.",
+}
+KIND_TEXT = {True: "Exact fit: reprices every quoted yield", False: "Smooth fit: the fit error is shown"}
+
+# Display captions for metric rows whose own words are raw keys or ambiguous single words (owner issues
+# 07/14). Only the shown text changes; the exported rows keep the original words.
+_METRIC_CAPTIONS = {
+    'Shape': 'Curve shape', 'Lookback': 'Change window · sessions', '2s5s10s_fly': '2s5s10s fly',
+    'level': 'Level (2/5/10y)', '1y_fwd_1y_ahead': '1y fwd vs 1y', 'Fixed': 'Fixed rate',
+    'Forward': 'Forward swap rate', 'Kappa · /year': 'Mean reversion (kappa) · per year',
+    'Theta': 'Long-run mean (theta)', 'Sigma': 'Volatility (sigma)', 'Initial rate': 'Current rate (r0)',
+    'Threshold': 'Threshold rate',
+}
+_SHAPE_CAPTIONS = {'normal': 'Upward (normal) curve', 'inverted': 'Inverted curve', 'humped': 'Humped curve',
+                   'flat': 'Flat curve'}
+_KIND_NAMES = {'swaption': 'Swaption', 'cap': 'Cap', 'floor': 'Floor'}
+_MODEL_NAMES = {'vasicek': 'Vasicek', 'cir': 'CIR', 'hull_white': 'Hull-White'}
+_AMOUNT_FIELDS = (('swap', 'notional'), ('option', 'notional'), ('sim', 'n_paths'))
 
 
 class RatesPane(ToolPane):
     def __init__(self):
-        super().__init__('Rates · 수익률 곡선과 금리 위험',
+        super().__init__('Rates · yield curve and rate risk',
             [('curve','Yield curve'),('swap','Swap pricer'),('option','Swaption / cap-floor'),('sim','Rate simulation')],
             [('auto','Auto · FRED / synthetic fallback'),('fred','FRED'),('synthetic','Synthetic demo')], {
-            'curve': [('method','Method',[(v,METHOD_NAMES[v]) for v in CURVE_METHODS]),('lookback','Lookback · sessions','20')],
+            'curve': [('method','Curve method',[(v,METHOD_NAMES[v]) for v in CURVE_METHODS]),('lookback','Lookback (sessions)','20')],
             'swap': [('tenor','Tenor · 10y or 5y5y','10y'),('fixed_rate','Fixed % · blank = par',''),
                 ('notional','Notional','1000000'),('pay_fixed','Side',[(True,'Pay fixed'),(False,'Receive fixed')])],
-            'option': [('kind','Instrument',[(v,v) for v in ('swaption','cap','floor')]),('expiry','Expiry · swaption only','1y'),
+            'option': [('kind','Instrument',list(_KIND_NAMES.items())),('expiry','Expiry · swaption only','1y'),
                 ('tenor','Underlying tenor','5y'),('strike','Strike % · blank = ATM',''),
                 ('pay_fixed','Swaption side',[(True,'Payer'),(False,'Receiver')]),
                 ('option_model','Model',[('bachelier','Bachelier · normal'),('black','Black-76')]),
                 ('vol','Normal volatility · bp','80'),('notional','Notional','1000000')],
-            'sim': [('model','Model',[(v,v) for v in ('vasicek','cir','hull_white')]),('horizon','Horizon · years','1'),
+            'sim': [('model','Model',list(_MODEL_NAMES.items())),('horizon','Horizon · years','1'),
                 ('n_paths','Paths · 100–100000','5000'),('threshold','Threshold % · optional',''),
-                ('instrument','Revalue',[(v,v) for v in ('none','bond','swap')]),('tenor','Instrument tenor','10y'),('coupon','Bond coupon %','4')]})
+                ('instrument','Revalue',[('none','Nothing'),('bond','Bond'),('swap','Payer swap')]),
+                ('tenor','Instrument tenor','10y'),('coupon','Bond coupon %','4')]})
         self.fields['option']['option_model'].currentIndexChanged.connect(self.vol_unit)
         self.fields['option']['kind'].currentIndexChanged.connect(self.option_fields)
+        # Owner issue 03: amounts read with thousands separators (1,000,000); number() strips them.
+        for tool, key in _AMOUNT_FIELDS:
+            field = self.fields[tool][key]
+            field.setText(group_digits(field.text()))
+            field.editingFinished.connect(lambda field=field: field.setText(group_digits(field.text())))
+        self._method_info()
+
+    def _method_info(self):
+        """Owner issue 08: what the chosen curve method assumes, under the form, for the curve tool."""
+        from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
+        from .app import label
+        self.method_info = QWidget()
+        self.method_info.setObjectName('curveMethodInfo')
+        # An inset note on the page colour, as the Flet page's method box (theme rules give the colour).
+        self.method_info.setStyleSheet('QWidget#curveMethodInfo { border-radius: 8px; }')
+        column = QVBoxLayout(self.method_info)
+        column.setContentsMargins(12, 10, 12, 10)
+        column.setSpacing(4)
+        head = QHBoxLayout()
+        head.setSpacing(10)
+        self.method_name, self.method_kind = label('', 'cardTitle'), label('', 'eyebrow')
+        head.addWidget(self.method_name)
+        head.addWidget(self.method_kind, 1)
+        column.addLayout(head)
+        self.method_text = label('', 'caption')
+        column.addWidget(self.method_text)
+        inner = self.input_box.layout()
+        inner.insertWidget(inner.indexOf(self.forms) + 1, self.method_info)
+        self.fields['curve']['method'].currentIndexChanged.connect(self.describe_method)
+        self.tool.currentIndexChanged.connect(self.describe_method)
+        self.describe_method()
+
+    def describe_method(self):
+        method = self.fields['curve']['method'].currentData() or 'bootstrap'
+        self.method_name.setText(METHOD_NAMES.get(method, method))
+        self.method_kind.setText(KIND_TEXT[method in EXACT_METHODS])
+        self.method_text.setText(METHOD_TEXT.get(method, ''))
+        self.method_info.setVisible(self.tool.currentData() == 'curve')
 
     def vol_unit(self):
         # Deliberately reset when changing units so 80bp cannot silently become 80%.
@@ -32,11 +127,32 @@ class RatesPane(ToolPane):
         field.setAccessibleName('Normal volatility · bp' if model == 'bachelier' else 'Black volatility · %')
         from PyQt6.QtWidgets import QLabel
         for label in self.forms.widget(2).findChildren(QLabel):
-            if 'volatility ·' in label.text(): label.setText(field.accessibleName())
+            # Match the caption's English source: its shown text may be Korean.
+            if 'volatility ·' in getattr(label, 'source_text', label.text()): label.setText(field.accessibleName())
 
     def option_fields(self):
         is_swaption = self.fields['option']['kind'].currentData() == 'swaption'
         for key in ('expiry','pay_fixed'): self.fields['option'][key].setEnabled(is_swaption)
+
+    def _metric_captions(self, metrics, report):
+        """Readable captions for raw keys and codes in the Metrics table (display only, owner issues 07/14)."""
+        cells = []
+        for row, (name, value) in enumerate(metrics):
+            caption = (f'Curve move · last {report.lookback} sessions' if name == 'Regime'
+                       else _METRIC_CAPTIONS.get(name))
+            if caption:
+                cells.append((row, 0, caption))
+            if name == 'Shape' and value in _SHAPE_CAPTIONS:
+                cells.append((row, 1, _SHAPE_CAPTIONS[value]))
+            elif name == 'Instrument' and value in _KIND_NAMES:
+                cells.append((row, 1, _KIND_NAMES[value]))
+            elif name == 'Model' and value in _MODEL_NAMES:
+                cells.append((row, 1, _MODEL_NAMES[value]))
+            elif name == 'Swap':
+                cells.append((row, 1, f'{value} swap'))
+            elif name in ('Regime', 'Sigma'):
+                cells.append((row, 1, value))
+        show_as(self.tables['Metrics'], cells=cells)
 
     def make_request(self):
         v = self.values(); tool = self.tool.currentData()
@@ -61,11 +177,13 @@ class RatesPane(ToolPane):
                          f'{p.source} · {c.date} · {len(p)} observations · {c.method}\n{p.note}\n{c.note}'
         # Author only the UI metadata. Embedded provider/model notes are literal
         # in both languages; the original mixed-language export stays unchanged.
+        # A curve built from the panel repeats the panel's note: show it once.
+        notes = p.note if p.note == c.note else f'{p.note}\n{c.note}'
         self.text(source_summary, localized={
             'en': ('Synthetic curve · not current market data\n' if p.source=='SYNTHETIC' else '')+
-                  f'{p.source} · {c.date} · {len(p)} observations · {c.method}\n{p.note}\n{c.note}',
+                  f'{p.source} · {c.date} · {len(p)} observations · {c.method}\n{notes}',
             'ko': ('합성 곡선 · 현재 시장 데이터 아님\n' if p.source=='SYNTHETIC' else '')+
-                  f'{p.source} · {c.date} · 관측 {len(p)}개 · {c.method}\n{p.note}\n{c.note}',
+                  f'{p.source} · {c.date} · 관측 {len(p)}개 · {method_korean(c.method)}\n{note_korean(notes)}',
         })
         metrics = []
         if q.tool == 'curve':
@@ -93,6 +211,9 @@ class RatesPane(ToolPane):
                 self.line('PCA loadings', pc.tenors, [(name,pc.loadings[:,i]) for i,name in enumerate(pc.labels)], 'Tenor · years','Loading')
                 self.result_table('PCA variance', ['Component','Explained','Latest score'],
                                   [[name,fmt(pc.explained[i],'pct'),fmt(pc.latest_scores[i])] for i,name in enumerate(pc.labels)])
+                # Factor names (level/slope/curvature) read in the window language, as on the chart.
+                localize_columns(self.tables['PCA variance'], (0,))
+                show_as(self.tables['PCA variance'], headers=[(0, 'PCA factor')])
             else: self.text('PCA 미실행 · 60개 이상의 관측이 필요합니다.')
         elif q.tool == 'swap':
             metrics = [('Swap',r.swap.label),('Par rate',fmt(r.par_rate,'pct')),('Fixed',fmt(r.par_rate if q.fixed_rate is None else q.fixed_rate,'pct')),
@@ -103,7 +224,7 @@ class RatesPane(ToolPane):
             swap_terms = f'{q.notional:,.0f} notional · {r.swap.freq} payments/year · single curve · ACT/365F\n{r.note}'
             self.text(swap_terms, localized={
                 'en': swap_terms,
-                'ko': f'명목금액 {q.notional:,.0f} · 연 {r.swap.freq}회 지급 · 단일 곡선 · ACT/365F\n{r.note}',
+                'ko': f'명목금액 {q.notional:,.0f} · 연 {r.swap.freq}회 지급 · 단일 곡선 · ACT/365F\n{note_korean(r.note)}',
             })
         elif q.tool == 'option':
             metrics = [('Instrument',q.kind),('Strike',fmt(r.strike,'pct')),('Premium',fmt(r.premium)),('Premium / notional',f'{r.premium_bp:.2f} bp')]
@@ -112,7 +233,7 @@ class RatesPane(ToolPane):
             self.text(option_terms, localized={
                 'en': option_terms,
                 'ko': f'{q.option_model} · '+(fmt(q.vol,'bp')+' 정규' if q.option_model=='bachelier' else fmt(q.vol,'pct')+' Black')+
-                      f' · 명목금액 {q.notional:,.0f}\n{r.note}',
+                      f' · 명목금액 {q.notional:,.0f}\n{note_korean(r.note)}',
             })
             if q.kind == 'swaption':
                 self.sections.append({'type':'comparison_volatility',
@@ -130,6 +251,8 @@ class RatesPane(ToolPane):
                 metrics += [('ATM par swap',fmt(r.atm_strike,'pct')),('Caplets',str(len(r.caplets)))]
                 self.result_table('Caplets', ['Start · y','End · y','Forward','Premium'],
                     [[fmt(a),fmt(b),fmt(f,'pct'),fmt(v)] for a,b,f,v in r.caplets])
+                # The caplet's forward rate, not an FX forward (the catalogue's 'Forward' is 선물환).
+                show_as(self.tables['Caplets'], headers=[(2, 'Forward rate')])
                 self.line('Caplet premium', [b for a,b,f,v in r.caplets], [('Premium',[v for a,b,f,v in r.caplets])], 'End · years','Premium')
         else:
             params = r.params
@@ -145,7 +268,7 @@ class RatesPane(ToolPane):
                 'en': ('Synthetic short rate · ' if s.source=='SYNTHETIC' else '')+
                       f'{s.id} · {s.source} · {s.first_date} → {s.last_date}\n{s.note}\n{params.note}\n{r.note}\nSeed 7 · {r.n_paths} paths',
                 'ko': ('합성 단기금리 · ' if s.source=='SYNTHETIC' else '')+
-                      f'{s.id} · {s.source} · {s.first_date} → {s.last_date}\n{s.note}\n{params.note}\n{r.note}\n시드 7 · 경로 {r.n_paths}개',
+                      f'{s.id} · {s.source} · {s.first_date} → {s.last_date}\n{note_korean(s.note)}\n{params.note}\n{note_korean(r.note)}\n시드 7 · 경로 {r.n_paths}개',
             })
             if out.horizon_pv is not None:
                 hp = out.horizon_pv
@@ -155,6 +278,7 @@ class RatesPane(ToolPane):
                 self.line('Horizon PV distribution', (edges[:-1]+edges[1:])/2, [('Count',counts)], 'PV','Paths per bin')
                 self.text(hp.note)
         self.result_table('Metrics', ['Metric','Value'], metrics)
+        self._metric_captions(metrics, r)
         from .rates_narrative import rates_korean
         korean = rates_korean(out)
         self.finished(out.narrative, localized={'ko': korean} if korean is not None else None)

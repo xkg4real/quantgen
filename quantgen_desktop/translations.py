@@ -590,17 +590,24 @@ _PAIRS += _DISPLAY_PROSE
 
 EN, KO = {}, {}
 TEMPLATES = []
+
+
+def _add_templates(en, ko):
+    """'{name}' fields make a pair a pattern in both directions."""
+    for source, target, language in ((en, ko, 'ko'), (ko, en, 'en')):
+        parts = []
+        for literal, key, spec, conversion in Formatter().parse(source):
+            parts.append(re.escape(literal))
+            if key is not None: parts.append(f'(?P<{key}>.+?)')
+        TEMPLATES.append((language, re.compile(''.join(parts), re.S), target))
+
+
 for line in (_PAIRS + _TERMS).strip().splitlines():
     if not line.strip(): continue
     en, ko = (s.replace('\\n', '\n') for s in line.split('|', 1))
     EN[ko], KO[en] = en, ko
     if '{' in en:
-        for source, target, language in ((en, ko, 'ko'), (ko, en, 'en')):
-            parts = []
-            for literal, key, spec, conversion in Formatter().parse(source):
-                parts.append(re.escape(literal))
-                if key is not None: parts.append(f'(?P<{key}>.+?)')
-            TEMPLATES.append((language, re.compile(''.join(parts), re.S), target))
+        _add_templates(en, ko)
 
 
 KO["Build && Test"] = KO["Build & Test"]
@@ -720,6 +727,16 @@ for _source, _target in {
 KO['Build && Test'] = KO['Build & Test']
 KO['Portfolio && Risk'] = KO['Portfolio & Risk']
 
+# Owner UI port (UI-D1/UI-D2, 2026-11-10): Claude's reviewed Korean display text for the owner's 14
+# screenshot issues, one module per screen area (quantgen_desktop/owner_ui_language/*.py). Later entries
+# win, so an area may correct an earlier display string; source text, combo data and exports stay as is.
+from .owner_ui_language import pairs as _owner_ui_pairs
+for _en, _ko in _owner_ui_pairs().items():
+    KO[_en], EN[_ko] = _ko, _en
+    if '{' in _en:
+        _add_templates(_en, _ko)
+
+
 def translate(text, language):
     """Translate only authored UI messages; unknown source text stays intact."""
     text = str(text)
@@ -733,6 +750,9 @@ def translate(text, language):
     if language == 'ko':
         schedule = cms_schedule_korean(text)
         if schedule != text: return schedule
+        from .source_notes import note_korean
+        note = note_korean(text)
+        if note != text: return note
     if '\n' in text:
         return '\n'.join(translate(line, language) for line in text.split('\n'))
     return text

@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QWidget,QVBoxLayout,QGridLayout,QLineEdit,QComboBox,
 from core.research.bond_analysis import BondRequest
 from .charts import LineChart
 from .bonds_portfolio_narrative import bond_notes, hedge_text, display_variants
+from .model_narrative_language import localize_columns
 
 
 def group_digits(text):
@@ -24,7 +25,7 @@ class BondsPane(QWidget):
         from .app import label,panel,table
         from .form_layout import CompactFieldGrid,bound_input_panel,add_compact_action
         layout=QVBoxLayout(self);layout.setContentsMargins(0,12,0,0);layout.setSpacing(18)
-        box,inner=panel('Bonds · 가격·위험·시나리오·선물 헤지')
+        box,inner=panel('Bonds · price, risk, scenarios and futures hedge')
         bound_input_panel(box,columns=4)
         pairs=[];self.fields={}
         fields=[('Coupon %','4.50'),('Maturity · years','10'),('Notional','1000000'),
@@ -48,7 +49,7 @@ class BondsPane(QWidget):
         self.source.setAccessibleName('Curve source');self.source.hide()
         self.form=CompactFieldGrid(pairs,max_columns=4)
         inner.addWidget(self.form)
-        inner.addWidget(label('가격과 수익률 중 하나만 입력하세요. Price를 입력할 때는 Yield를 비웁니다.','caption'))
+        inner.addWidget(label('Enter either price or yield, not both. Clear yield when entering price.','caption'))
         self.run=QPushButton('채권 분석 실행');self.run.setProperty('primary',True);self.run.clicked.connect(self.submit);add_compact_action(inner,self.run)
         self.status=label('곡선 출처와 관측일을 함께 표시합니다.','muted');self.status.setProperty('reading_help_keep_visible',True);inner.addWidget(self.status);layout.addWidget(box)
         from .result_layout import PairedResultPanels, fit_result_table
@@ -86,21 +87,24 @@ class BondsPane(QWidget):
             q.validate()
         except (ValueError,TypeError):
             self.clear_result()
-            self.status.setText('입력 오류 · 유한한 수치와 유효한 만기·금액을 입력하고 Price/Yield 중 하나만 남기세요.');return
+            self.status.setText('Input error · Enter finite values and valid maturity/amount; keep either price or yield.');return
         self.requested.emit(q)
 
     def show_result(self,o):
         from .app import table_rows
         a=o.analytics;cr=a.carry_roll
+        # Values are language-neutral (the unit 'y' as in tenors, DV01's unit in its caption), so a
+        # Korean window shows no English unit words (owner issues 03/14); captions translate.
         table_rows(self.metrics,[('Price',f'{a.price:.3f}'),('Yield',f'{a.ytm:.3%}'),
-            ('Macaulay duration',f'{a.macaulay:.3f} years'),('Modified duration',f'{a.modified:.3f}'),
-            ('Convexity',f'{a.convexity:.3f}'),('DV01',f'{a.dv01:,.2f} currency / bp'),
+            ('Macaulay duration',f'{a.macaulay:.3f}y'),('Modified duration',f'{a.modified:.3f}'),
+            ('Convexity',f'{a.convexity:.3f}'),('DV01 · currency per bp',f'{a.dv01:,.2f}'),
             ('z-spread',f'{a.z_spread*10000:.2f} bp'),('Curve price',f'{a.curve_price:.3f}'),
             (f'Carry · {cr.horizon:g} years',f'{cr.carry:+.3f}'),('Roll-down',f'{cr.rolldown:+.3f}'),
             ('Carry + roll',f'{cr.total:+.3f}'),('Breakeven',f'{cr.breakeven_bp:+.2f} bp')])
         self.chart.set_series(o.yield_axis,[('Price',o.price_curve),('Duration tangent',o.duration_tangent)])
         table_rows(self.krd,[[f'{k:g}',f'{v:,.2f}'] for k,v in sorted(a.krd.items())])
         table_rows(self.scenarios,[[r.name,str(r.shock_bp),f'{r.new_price:.3f}',f'{r.pnl:+,.2f}',f'{r.pnl_pct:+.2%}'] for r in o.scenarios])
+        localize_columns(self.scenarios,(0,))  # scenario names ('+25bp parallel', 'bear steepener')
         self.scenarios.setVisible(bool(o.scenarios))
         self.hedge.setText('')
         if o.hedge:

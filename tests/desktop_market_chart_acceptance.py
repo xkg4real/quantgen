@@ -37,9 +37,9 @@ if HAS_QT:
     from core.market.models import Candle, ChartRequest, MarketQuote, MarketSnapshot, MarketTick
     from quantgen_desktop.market_chart import MarketChartPane
 
-    def fixture(request):
+    def fixture(request, today=None):
         now = datetime.now(timezone(timedelta(hours=9)))
-        today = now.date()
+        today = today or now.date()
         bars = tuple(Candle((today - timedelta(days=119 - i)).isoformat(),
                     100 + i, 102 + i, 99 + i, 101 + i, 1000 + i) for i in range(120))
         stamp = now.isoformat(timespec="seconds")
@@ -53,6 +53,7 @@ if HAS_QT:
             self.threads = []
             self.fail = False
             self.entered = self.release = None
+            self.today = None  # the KST date of the newest daily bar; None means the clock's today
 
         def load(self, request):
             self.calls.append(request)
@@ -62,7 +63,7 @@ if HAS_QT:
                 self.release.wait(4)
             if self.fail:
                 raise RuntimeError("do not display raw provider URLs / secrets")
-            return fixture(request)
+            return fixture(request, self.today)
 
     class FakeStream:
         def __init__(self):
@@ -76,6 +77,25 @@ if HAS_QT:
 
         def stop(self):
             self.stopped = True
+
+
+def kst_clock(hour, minute):
+    """A `datetime` whose now() runs from the given KST wall time today, ticking at the real rate.
+
+    Patched over this module and quantgen_desktop.market_chart so the fixture, the ticks and the pane's
+    "observed N s ago" label all read one clock, whatever the machine's own time is.
+    """
+    real = datetime
+    kst = timezone(timedelta(hours=9))
+    start = real.now(kst)
+    offset = start.replace(hour=hour, minute=minute, second=0, microsecond=0) - start
+
+    class Clock(real):
+        @classmethod
+        def now(cls, tz=None):
+            return real.now(tz) + offset
+
+    return Clock
 
 
 @unittest.skipUnless(HAS_QT, "PyQt6 optional desktop dependency is unavailable")
@@ -174,8 +194,17 @@ class NativeChartLifecycleTests(unittest.TestCase):
         self.assertEqual(p.cursor_slider.maximum(), 119)
         p.visible_bars.setValue(30)
         p.move_cursor(0)
-        self.assertEqual(p.visible_bars.value(), 120)
+        # Owner 2026-11-11 (UI-D8): an older candle pans the window to it; the zoom (30 bars) is kept.
+        self.assertEqual(p.visible_bars.value(), 30)
+        self.assertEqual(p.chart.end, 29)
+        self.assertEqual(p.window(), (0, 30))
+        self.assertEqual(p.chart.cursor, 0)
         self.assertIn(p.snapshot.candles[0].timestamp, p.reading.text())
+        p.pan(10)
+        self.assertEqual((p.window(), p._cursor), ((10, 40), 10))
+        p.follow_latest()
+        self.assertEqual((p.window(), p._cursor, p.chart.end), ((90, 120), 119, None))
+        self.assertEqual(p.selected_indicators(), ("sma",))
         before = p.snapshot
         p.set_locale(LocaleContext("en_US"))
         self.assertEqual(p.load_button.text(), "Load / refresh")
@@ -239,17 +268,41 @@ class NativeChartLifecycleTests(unittest.TestCase):
         self.app.processEvents()
         self.assertIs(p.snapshot, retained)
 
-    def test_old_market_timestamp_is_labelled_stale_despite_fresh_transport(self):
+    def assert_old_tick_is_labelled_stale(self):
+        # The trade is 16 minutes old. Its KST date names the newest daily bar, so a run in the first
+        # minutes after midnight KST (trade dated yesterday) still merges it into the current candle;
+        # live.apply_tick rightly ignores a trade older than the newest bar.
+        old = datetime.now(timezone(timedelta(hours=9))) - timedelta(minutes=16)
+        self.service.today = old.date()
         self.load()
         p = self.pane
         self.connect_stream()
-        old = datetime.now(timezone(timedelta(hours=9))) - timedelta(minutes=16)
         tick = MarketTick(p.snapshot.request.instrument, old.isoformat(timespec="seconds"), 225,
                           volume=2, cumulative_volume=1121,
                           received_at=datetime.now(timezone.utc).isoformat(timespec="seconds"))
         self.streams[-1].on_tick(tick)
         self.wait_rendered_tick(tick)
         self.assertIn("지연·오래된 체결", p.status.text())
+
+    def test_old_market_timestamp_is_labelled_stale_despite_fresh_transport(self):
+        self.assert_old_tick_is_labelled_stale()
+
+    def assert_stale_label_at_kst(self, hour, minute):
+        import sys
+        clock = kst_clock(hour, minute)
+        with patch.object(sys.modules[__name__], "datetime", clock), \
+                patch("quantgen_desktop.market_chart.datetime", clock):
+            self.assert_old_tick_is_labelled_stale()
+
+    def test_old_market_timestamp_is_stale_just_before_midnight_kst(self):
+        self.assert_stale_label_at_kst(23, 58)
+
+    def test_old_market_timestamp_is_stale_just_after_midnight_kst(self):
+        # Observed 2026-11-11 00:09 KST: the trade fell on the previous KST date and was not rendered.
+        self.assert_stale_label_at_kst(0, 5)
+
+    def test_old_market_timestamp_is_stale_mid_session_kst(self):
+        self.assert_stale_label_at_kst(10, 0)
 
     def test_reconnect_gap_requires_authoritative_reload_before_merging(self):
         self.load()
@@ -447,6 +500,7 @@ class NativeChartLifecycleTests(unittest.TestCase):
         macd = p.indicator_boxes["macd"]
         QTest.mouseClick(macd, Qt.MouseButton.LeftButton, pos=macd.rect().center())
         self.assertEqual(p.chart.indicators, ("sma", "ema", "rsi", "macd"))
+        self.assertEqual(p.selected_indicators(), ("sma", "ema", "rsi", "macd"))  # registry keys mirror the buttons
         self.assertEqual(len(self.streams), 1)
         self.assertEqual(len(self.service.calls), 1)
         self.assertGreater(p.chart.renderer().viewBoxF().height(), 410)

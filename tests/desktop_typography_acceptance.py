@@ -31,7 +31,9 @@ from quantgen_desktop.typography import (NAV_PADDING, SIDEBAR_WIDTH_RANGE, TONE_
 
 ROOT = Path(__file__).resolve().parents[1]
 SYMBOL_FILES = ("qg-symbols.otf", "qg-symbols-medium.otf", "qg-symbols-semibold.otf")
-FONT_FILES = ("qg-interface.ttf", "qg-interface-medium.ttf", "qg-interface-semibold.ttf")
+# Owner UI-D6 (2026-11-11): text and figures in QG Interface (Pretendard OTF), QG Symbols the fallback.
+FONT_FILES = ("qg-interface.otf", "qg-interface-medium.otf", "qg-interface-semibold.otf")
+NUMBER_FILES = ("qg-interface.otf", "qg-interface-medium.otf", "qg-interface-semibold.otf")
 SVG = "{http://www.w3.org/2000/svg}"
 
 # Modules whose string literals the native window shows: its own widgets plus the
@@ -76,6 +78,7 @@ class BundledFontCoverageTests(unittest.TestCase):
         cls.app = QApplication.instance() or QApplication([])
         cls.faces = {name: QRawFont(str(ROOT / "assets/fonts" / name), 16) for name in FONT_FILES}
         cls.symbols = {name: QRawFont(str(ROOT / "assets/fonts" / name), 16) for name in SYMBOL_FILES}
+        cls.numbers = {name: QRawFont(str(ROOT / "assets/fonts" / name), 16) for name in NUMBER_FILES}
         for name, face in cls.faces.items():
             assert face.isValid(), name
 
@@ -87,8 +90,9 @@ class BundledFontCoverageTests(unittest.TestCase):
 
     def missing(self, text):
         return sorted({ch for ch in text if ord(ch) >= 0x20 and not self.noncharacter(ch)
-                       for face, supplement in zip(self.faces.values(), self.symbols.values())
-                       if not face.supportsCharacter(ord(ch)) and not supplement.supportsCharacter(ord(ch))})
+                       for face, number, supplement in zip(self.faces.values(), self.numbers.values(),
+                                                           self.symbols.values())
+                       if not any(f.supportsCharacter(ord(ch)) for f in (face, number, supplement))})
 
     def test_every_shown_string_literal_is_in_the_bundled_font(self):
         problems = []
@@ -272,7 +276,7 @@ class WindowTypographyTests(unittest.TestCase):
             self.app.processEvents()
 
     def test_bundled_family_is_registered(self):
-        self.assertEqual(self.family, "QG Interface")
+        self.assertEqual(self.family, "QG Interface")  # owner UI-D6 (plan A dropped)
 
     def test_sidebar_is_thinner_and_every_nav_label_fits_in_both_languages(self):
         w = self.window
@@ -328,7 +332,8 @@ class WindowTypographyTests(unittest.TestCase):
         sheet = w.styleSheet()
         self.assertNotRegex(sheet, r"font-weight:\s*(700|800|900|bold)")
         self.assertFalse("QGraphicsDropShadowEffect" in Path(desktop.__file__).read_text(encoding="utf-8"))
-        expected = {"title": (30, 600), "heading": (18, 600), "caption": (14, 500), "number": (32, 600),
+        # Owner UI-D6 (2026-11-11, font mockup N3): section headings 600→500 and captions 500→400.
+        expected = {"title": (30, 600), "heading": (18, 500), "caption": (14, 400), "number": (32, 600),
                     "brand": (17, 600), "": (15, 400)}
         seen = {}
         for widget in w.findChildren(QLabel):
@@ -341,16 +346,20 @@ class WindowTypographyTests(unittest.TestCase):
             probe = label("MARKETS", role)
             probe.setParent(w.stack.currentWidget().widget())
             probe.ensurePolished()
-            self.assertEqual((probe.font().pixelSize(), probe.font().weight()), (size, 600), role)
+            weight = 500 if role == "cardTitle" else 600  # owner UI-D6 (N3): card titles one step lighter
+            self.assertEqual((probe.font().pixelSize(), probe.font().weight()), (size, weight), role)
         for button in w.nav.values():
             button.ensurePolished()
             self.assertEqual(button.font().pixelSize(), 14)
         self.assertIn("QPushButton[nav='true']:checked { font-weight: 600; }", sheet)
         self.assertIn("font-size: 12px; font-weight: 600; }", sheet.split("QHeaderView::section")[1].split("\n")[0])
         self.assertIn("qlineargradient", sheet.split("QFrame#panel {")[1].split("}")[0])
-        self.assertIn("border-bottom: 2px solid #D2D5C9", sheet)
+        # Owner 2026-11-11: light section lines — panels keep their gradient but use one 1px line halfway
+        # from the border colour to the background (no 2px bottom edge), with roomier spacing.
+        self.assertIn("border: 1px solid #ecece6; border-radius: 16px;", sheet.split("QFrame#panel {")[1].split("}")[0])
+        self.assertNotIn("border-bottom: 2px solid #D2D5C9", sheet)
         w.theme.setCurrentIndex(1)
-        self.assertIn("border-bottom: 2px solid #0A110E", w.styleSheet())
+        self.assertIn("border: 1px solid #223028; border-radius: 16px;", w.styleSheet())  # dark: light line too
 
     def test_watchlist_score_header_uses_header_font_and_korean_tones(self):
         from tests.desktop_watchlist_acceptance import sample_rows
@@ -390,7 +399,7 @@ class FontLoadingTests(unittest.TestCase):
                 self.assertLogs("quantgen_desktop.app", level="WARNING") as logs:
             self.assertIsNone(desktop.load_interface_fonts(self.app))
         self.assertEqual(self.app.font(), before)
-        self.assertTrue(any("qg-interface.ttf" in line for line in logs.output))
+        self.assertTrue(any("qg-interface.otf" in line for line in logs.output))
         self.assertTrue(any("platform font" in line for line in logs.output))
 
 

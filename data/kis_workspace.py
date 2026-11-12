@@ -27,6 +27,10 @@ _CURRENCIES = {"NAS": "USD", "NYS": "USD", "AMS": "USD", "HKS": "HKD", "TSE": "J
                "SHS": "CNY", "SZS": "CNY", "HSX": "VND", "HNX": "VND"}
 _MAX_PAGES = 20
 _FUTURE_MARKETS = {"F", "O", "JF", "JO", "CF", "CM", "EU"}
+# Overseas price-detail: market cap 'tomv' and listed shares 'shar', read for US market cap by the Markets
+# ranked list (quantgen_desktop/market_rankings.py `kis_batch`, through `MarketDataService._get`). Read-only
+# quotation path, allowlisted with the owner's approval 2026-11-11.
+OVERSEAS_PRICE_DETAIL = ("/uapi/overseas-price/v1/quotations/price-detail", "HHDFS76200200")
 
 
 def _number(value):

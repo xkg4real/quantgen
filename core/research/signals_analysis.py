@@ -13,7 +13,8 @@ class SignalsRequest:
     cost_bps: float = 10
 
     def validate(self):
-        if self.tool not in {'ma_cross','momentum','rsi_revert'} or self.source not in {'auto','fmp','kis','synthetic'}:
+        # 'best': the app chooses the provider (selector hidden, owner UI review 2026-11-10).
+        if self.tool not in {'ma_cross','momentum','rsi_revert'} or self.source not in {'auto','best','fmp','kis','synthetic'}:
             raise ValueError('Unknown strategy/source')
         if not self.symbol.strip() or type(self.fast) is not int or self.fast<1:
             raise ValueError('Invalid symbol or lookback')

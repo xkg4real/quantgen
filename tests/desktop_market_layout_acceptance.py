@@ -24,7 +24,7 @@ class NativeMarketLayoutTests(unittest.TestCase):
     def setUpClass(cls):
         cls.app = QApplication.instance() or QApplication([])
         cls.original_font = cls.app.font()
-        font = Path(__file__).resolve().parents[1] / "assets/fonts/qg-interface.ttf"
+        font = Path(__file__).resolve().parents[1] / "assets/fonts/qg-interface.otf"  # production face (owner UI-D6)
         cls.font_id = QFontDatabase.addApplicationFont(str(font))
         families = QFontDatabase.applicationFontFamilies(cls.font_id)
         if families:
@@ -104,6 +104,9 @@ class NativeMarketLayoutTests(unittest.TestCase):
                                 f"{name} is outside the visible form: {bounds}")
 
     def test_stock_detail_opens_live_controls_without_starting_a_query(self):
+        """UI-D8 (owner 2026-11-11): the stock's screen fills the page viewport and the page does not scroll; its
+        toolbar (refresh included) and name are on screen at 1000x700 and 1360x940 in both languages."""
+        from PyQt6.QtCore import Qt as _Qt
         w = self.window
         self.assertFalse(hasattr(w, "live_chart_open"))
         for language in ("ko", "en"):
@@ -117,78 +120,97 @@ class NativeMarketLayoutTests(unittest.TestCase):
                     detail = w.watchlist.open_detail(6)
                     detail.chart_button.click()
                     # A stock's detail opens the chart on the next event.
-                    for _ in range(3):
+                    for _ in range(4):
                         self.app.processEvents()
                     self.assertEqual(w.stack.currentIndex(), w.route_indices["markets"])
                     self.assertIs(w.current_market_pane(), w.market_chart)
-                    viewport = w.stack.currentWidget().viewport()
+                    scroll = w.stack.currentWidget()
+                    viewport = scroll.viewport()
+                    stock = w.markets_view.stock
                     # Since 2026-11-04 the stock's screen names it in its header; the chart's own code field is hidden.
                     self.assertFalse(w.market_chart.symbol.isVisible())
-                    self.assertEqual(w.markets_view.stock.instrument.code, w.market_chart.symbol.text())
-                    for control in (w.markets_view.stock.name, w.market_chart.load_button):
+                    self.assertEqual(stock.instrument.code, w.market_chart.symbol.text())
+                    for control in (stock.name, stock.refresh_button, stock.periods):
                         self.assertTrue(control.isVisible())
                         bounds = QRect(control.mapTo(viewport, QPoint()), control.size())
                         self.assertTrue(viewport.rect().contains(bounds),
                                         f"Live chart control is offscreen: {bounds}")
+                    # The page lock: no page scroll bar, the view is exactly the viewport's height.
+                    self.assertEqual(scroll.verticalScrollBarPolicy(), _Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+                    self.assertEqual(stock.height(), viewport.height())
+                    self.assertEqual(stock.mapTo(viewport, QPoint()).y(), 0)
                     self.assertIsNone(w.market_chart.snapshot)
                     self.assertIsNone(w.market_chart._stream)
                     self.assertTrue(w.market_chart.empty_state.isVisible())
                     self.assertFalse(w.market_chart.chart.isVisible())
+        w.navigate("home")
+        self.app.processEvents()
+        # Leaving restores the page's own scroll bar.
+        self.assertEqual(w.stack.widget(w.route_indices["markets"]).verticalScrollBarPolicy(),
+                         Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.http.assert_not_called()
         self.jobs.assert_not_called()
 
-
     def test_dynamic_indicator_panels_never_overlap_readouts_after_theme_and_width_changes(self):
+        """UI-D8: the chart takes the height it is given (lower panels share it instead of growing the page);
+        panels never overlap each other, the price pane, the header overlays or the axis, at both sizes, in both
+        themes and languages, and the page never scrolls."""
         from tests.desktop_market_chart_acceptance import fixture
         w = self.window
         pane = w.market_chart
         self.select(pane)
+        stock = w.markets_view.stock
         pane.snapshot = fixture(pane.request())
         pane.render()
         scroll = w.stack.currentWidget()
 
-        def settle_and_check():
-            def ordered():
-                widgets = (pane.chart, pane.cursor_slider, pane.reading, pane.indicator_reading)
-                return all(b.y() >= a.y() + a.height() for a, b in zip(widgets, widgets[1:]))
-            deadline = time.monotonic() + 2
-            while time.monotonic() < deadline:
+        def settle():
+            for _ in range(6):
                 self.app.processEvents()
-                QTest.qWait(20)
-                if ordered():
-                    break
-            self.assertTrue(ordered(), str({name: getattr(pane, name).geometry().getRect()
-                for name in ('chart', 'cursor_slider', 'reading', 'indicator_reading')}))
+                QTest.qWait(15)
 
-        # The old tab retained its 410px-chart allocation after this sequence,
-        # although the SVG became 634px. Exercise the actual event path.
+        def check():
+            layout = pane.chart.layout_info
+            self.assertIsNotNone(layout)
+            self.assertEqual((layout.width, layout.height), (pane.chart.width(), pane.chart.height()))
+            edges = [(layout.price[0], layout.price[1])] + [(top, bottom) for _, top, bottom in layout.panels]
+            for (a_top, a_bottom), (b_top, b_bottom) in zip(edges, edges[1:]):
+                self.assertLessEqual(a_bottom, b_top)
+            self.assertLessEqual(edges[-1][1], layout.axis_top)
+            self.assertLessEqual(layout.axis_top, layout.height)
+            strip = stock.overlays.ohlc.geometry()
+            for key, top, bottom in layout.panels:
+                head = stock.overlays.heads[key]
+                self.assertTrue(head.isVisible())
+                self.assertFalse(head.geometry().intersects(strip))
+                self.assertTrue(pane.chart.rect().contains(head.geometry()))
+            viewport = scroll.viewport()
+            for control in (pane.chart, stock.periods, stock.toolbar):
+                bounds = QRect(control.mapTo(viewport, QPoint()), control.size())
+                self.assertTrue(viewport.rect().contains(bounds), str(bounds))
+            self.assertEqual(scroll.verticalScrollBar().value(), stock.lock.target)
+
         for language in ('ko', 'en'):
             w.set_language(language)
             for theme in (0, 1):
                 w.theme.setCurrentIndex(theme)
                 for width, height in ((1360, 940), (1000, 700)):
                     w.resize(width, height)
-                    self.app.processEvents()
-        for button in pane.indicator_boxes.values():
-            if not button.isChecked():
-                QTest.mouseClick(button, Qt.MouseButton.LeftButton)
+                    settle()
+                    check()
         for width, height in ((1360, 940), (1000, 700)):
             with self.subTest(width=width):
                 w.resize(width, height)
-                settle_and_check()
-                self.assertEqual(pane.chart.height(), 634)
-                scroll.verticalScrollBar().setValue(scroll.verticalScrollBar().maximum())
-                self.app.processEvents()
-                viewport = scroll.viewport()
-                for control in (pane.cursor_slider, pane.reading, pane.indicator_reading):
-                    bounds = QRect(control.mapTo(viewport, QPoint()), control.size())
-                    self.assertTrue(viewport.rect().contains(bounds), str(bounds))
-        expanded = pane.height()
-        for key in ('rsi', 'macd'):
-            QTest.mouseClick(pane.indicator_boxes[key], Qt.MouseButton.LeftButton)
-        settle_and_check()
-        self.assertEqual(pane.chart.height(), 410)
-        self.assertLess(pane.height(), expanded)
+                stock.set_studies(("sma", "bb", "rsi", "macd"))
+                settle()
+                height_with = pane.chart.height()
+                check()
+                self.assertEqual([key for key, _, _ in pane.chart.layout_info.panels], ["rsi", "macd"])
+                stock.set_studies(("sma",))
+                settle()
+                check()
+                self.assertEqual(pane.chart.height(), height_with)  # the chart never grows the page
+                self.assertEqual(pane.chart.layout_info.panels, ())
 
 
 if __name__ == "__main__":

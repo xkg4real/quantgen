@@ -79,6 +79,9 @@ class NativeStrategyTests(unittest.TestCase):
             try:
                 p = w.strategy
                 self.assertFalse(p.has_result)
+                # The source selector is hidden and defaults to the automatic 'best' (owner issues 04/12);
+                # this offline run asks for the synthetic series explicitly.
+                p.source.setCurrentIndex(p.source.findData('synthetic'))
                 p.fields['run']['cost'].setText('1')
                 p.fields['run']['symbols'].setText('SPY, QQQ')
                 p.submit()

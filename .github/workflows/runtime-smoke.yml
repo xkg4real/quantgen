@@ -51,7 +51,7 @@ jobs:
           - os: windows-latest
             python: '3.14'
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 45
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
         with:
@@ -127,10 +127,14 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
         run: python -m unittest tests.history_best_source_acceptance tests.curve_methods_acceptance tests.strategy_lab_display_acceptance tests.chart_reading_acceptance tests.ficc_pages_display_acceptance tests.build_pages_display_acceptance tests.flet_korean_narratives_acceptance -v
+      - name: Verify the owner's 14 UI issues on the native app (UI-D1..D4)
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m unittest tests.desktop_owner_ui_integration_acceptance tests.desktop_owner_ui_strategy_acceptance tests.desktop_owner_ui_ficc_acceptance tests.desktop_owner_ui_market_acceptance tests.desktop_owner_ui_risk_acceptance tests.desktop_owner_ui_charts_acceptance tests.desktop_home_markets_shell_acceptance tests.desktop_home_markets_home_acceptance tests.desktop_home_markets_markets_acceptance tests.market_rankings_acceptance -v
       - name: Verify shared KIS charts and realtime lifecycle with offline fixtures
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m unittest tests.home_watchlist_acceptance tests.qscore_acceptance tests.watchlist_live_acceptance tests.desktop_watchlist_acceptance tests.desktop_qscore_acceptance tests.desktop_home_live_acceptance tests.desktop_market_layout_acceptance tests.market_core_acceptance tests.market_routing_acceptance tests.market_symbols_acceptance tests.market_board_core_acceptance tests.market_directory_acceptance tests.stock_profile_acceptance tests.desktop_markets_watchlist_acceptance tests.desktop_market_tabs_acceptance tests.market_received_bars_acceptance tests.market_chart_presentation_acceptance tests.kis_workspace_acceptance tests.kis_stream_acceptance tests.desktop_market_chart_acceptance tests.web_market_chart_acceptance -v
+        run: python -m unittest tests.home_watchlist_acceptance tests.qscore_acceptance tests.watchlist_live_acceptance tests.desktop_watchlist_acceptance tests.desktop_qscore_acceptance tests.desktop_home_live_acceptance tests.desktop_market_layout_acceptance tests.market_core_acceptance tests.market_routing_acceptance tests.market_symbols_acceptance tests.market_board_core_acceptance tests.market_directory_acceptance tests.stock_profile_acceptance tests.desktop_markets_watchlist_acceptance tests.desktop_market_tabs_acceptance tests.market_received_bars_acceptance tests.market_chart_presentation_acceptance tests.kis_workspace_acceptance tests.kis_stream_acceptance tests.desktop_market_chart_acceptance tests.web_market_chart_acceptance tests.stock_detail_core_acceptance tests.desktop_stock_detail_acceptance tests.indicator_engine_acceptance -v
       - name: Verify recorded owner decision and readiness display
         env:
           QT_QPA_PLATFORM: offscreen

@@ -9,7 +9,7 @@ class FXPane(ToolPane):
         from core.quant.validate import cost_bp
         common = [('pair','Pair · base/quote','EURUSD'),('domestic_rate','Quote/domestic rate % · blank = provider',''),
                   ('foreign_rate','Base/foreign rate % · blank = provider','')]
-        super().__init__('FX · 현물·선물환·옵션·캐리',
+        super().__init__('FX · spot, forwards, options and carry',
             [('forward','Spot, forward & carry'),('option','Option & smile'),('carry','Carry basket')],
             [('auto','Auto · Yahoo spot / FRED rates'),('yfinance','Yahoo spot'),('synthetic','Synthetic demo')], {
             'forward': common+[('tenor','Tenor','3m'),('market_forward','Market forward · optional','')],
@@ -36,7 +36,8 @@ class FXPane(ToolPane):
         q,d = out.request,out.data
         if any(s.source=='SYNTHETIC' for s in out.sources): self.text('합성 데이터 포함 · 현재 시장 데이터가 아닙니다.')
         self.result_table('Data sources', ['Series','Provider','First','Last','Note'],
-                          [[s.id,s.source,s.first_date,s.last_date,s.note] for s in out.sources])
+                          [[s.id,s.source,s.first_date,s.last_date,s.note] for s in out.sources],
+                          localized_columns=[4])  # app-written notes read in Korean (source_notes)
         if q.tool == 'carry':
             rows,bt = d['rows'],d['backtest']
             best,hi = rows[0],max(rows,key=lambda x:x.carry)
@@ -70,7 +71,9 @@ class FXPane(ToolPane):
             metrics = [('Pair',d['pair']),('Spot',fmt(d['S'])),('Forward',fmt(d['forward'])),
                        (f"{d['quote']} domestic rate",fmt(d['rd'],'pct')),(f"{d['base']} foreign rate",fmt(d['rf'],'pct'))]
             typed = [ccy for ccy,v in ((d['quote'],q.domestic_rate),(d['base'],q.foreign_rate)) if v is not None]
-            self.text('Flat rates across tenors · typed rates: '+(', '.join(typed) if typed else 'none'))
+            typed_text = ', '.join(typed)
+            self.text('Flat rates across tenors · typed rates: '+(typed_text or 'none'),
+                      localized={'ko': '모든 만기에 동일 금리 적용 · 직접 입력한 금리: '+(typed_text or '없음')})
             if q.tool == 'forward':
                 metrics += [('Forward points',fmt(d['points'])),('Pip size','0.01' if d['S']>20 else '0.0001'),
                             (f"Carry · long {d['base']} / year",fmt(d['carry'],'pct')),('Implied basis',fmt(d['basis'],'bp'))]

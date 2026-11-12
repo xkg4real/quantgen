@@ -41,6 +41,14 @@ C형 차트 후속의 네이티브 ui/theme은 로컬 QSettings 선호 설정입
 
 네이티브 `markets/watchlist`(관심종목의 자산 구분·코드·거래소, 최대 20개)는 Qt의 로컬 QSettings 설정이며 방문자 브라우저 쿠키나 `localStorage`가 아닙니다. KIS 종목 마스터와 한 종목 화면의 자료는 프로세스 메모리에만 둡니다. Flet 화면과 브라우저 저장은 바꾸지 않았습니다. 이 사실은 quantgeneration.com의 실제 저장장치 조사 결과가 아닙니다. [변경 사실](FACTS.md#markets-watchlist-2026-11-04)을 따릅니다.
 
+### 2026-11-11 새 로컬 설정·상장주식수 캐시
+
+네이티브 `ui/sidebar_collapsed`(왼쪽 메뉴 접힘)와 `markets/detail/*`(켠 지표·기간·섹션 접힘·오른쪽 열)는 Qt의 로컬 QSettings 설정이고, 미국 상장주식수 `SHARES_YFINANCE_<기호>.json`은 FICC 캐시 폴더의 로컬 파일입니다. 방문자 브라우저 쿠키나 `localStorage`가 아니며 광고·추적 SDK를 추가하지 않았습니다. 종목 상세 화면의 "최근 본 종목"은 프로세스 메모리에만 둡니다. yfinance가 Yahoo 상장주식수·일봉 요청에서 Yahoo cookie/crumb을 요청하는 점은 [08번](08-third-parties.md)의 2026-11-10 절과 같고, 라이브러리 자체 캐시(`py-yfinance/`)는 [07번](07-data-minimization.md)·[20번](20-deletion.md)의 2026-11-10 절과 같습니다. Flet 화면과 브라우저 저장은 바꾸지 않았습니다. 이 사실은 quantgeneration.com의 실제 저장장치 조사 결과가 아닙니다. [변경 사실](FACTS.md#ui-d7-d8-uscap-2026-11-11)을 따릅니다.
+
+### 2026-11-11 시장 페이지(UI-D10)
+
+새 QSettings 항목·쿠키·브라우저 저장은 없습니다. 각 시장의 기준(분류·하위 시장·업종·검색어·조건)은 프로세스 메모리에만 두며 앱을 끄면 처음 상태로 돌아갑니다. 코인 목록 응답도 메모리에만 둡니다. 시장 페이지의 지수 띠는 연구 Home 카드와 같은 경로라 기존 FICC 캐시 폴더에 계열마다 로컬 JSON 파일(`YFINANCE__KQ11_400.json` 등)을 남길 수 있으며, 방문자 브라우저 쿠키나 `localStorage`가 아닙니다. 코인·지수의 Yahoo 요청에서 yfinance가 cookie/crumb을 요청하거나 라이브러리 자체 캐시를 쓸 수 있는 점은 위 절과 같습니다. 광고·추적 SDK는 추가하지 않았습니다. [변경 사실](FACTS.md#ui-d10-markets-2026-11-11)을 따릅니다.
+
 ## 정책 또는 구현 기준
 
 ### 공개 정책 문안

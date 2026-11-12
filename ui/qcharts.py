@@ -33,7 +33,8 @@ from core.quant.optimize import Frontier, OptimizedPortfolio
 from core.theme import active
 
 DPI = 110
-_FONT_FILES = ("qg-interface.ttf", "qg-interface-medium.ttf", "qg-interface-semibold.ttf")
+# The Flet screen font, also the native app font (owner UI-D4, 2026-11-11): Pretendard-derived OTF.
+_FONT_FILES = ("qg-interface.otf", "qg-interface-medium.otf", "qg-interface-semibold.otf")
 
 
 def _register_fonts() -> str:

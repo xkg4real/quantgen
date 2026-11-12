@@ -20,7 +20,6 @@ available in an expandable list under them.
 """
 from __future__ import annotations
 
-import re
 from typing import Callable, Sequence, Union
 
 import flet as ft
@@ -35,15 +34,9 @@ from ui.components import LocalText, chip, notice
 
 Sections = Sequence[tuple[str, Sequence[str]]]
 
-# A sentence ends at . ! ? followed by space and a capital, digit, Hangul or an opening bracket/quote;
-# decimals (0.72) and lower-case continuations (e.g. how) do not split.
-_SENTENCE_END = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9가-힣(\"'“‘\[{])")
-
-
-def split_sentences(text: str) -> list[str]:
-    """Sentences of a narrative; joined with single spaces they give the text back (whitespace aside)."""
-    parts = [p.strip() for p in _SENTENCE_END.split(str(text or "").strip())]
-    return [p for p in parts if p]
+# The sentence splitter lives in the Flet-free ui.narrative_sections so the native app can share it;
+# it is re-exported here for existing callers.
+from ui.narrative_sections import split_sentences  # noqa: E402,F401
 
 
 def _literal(value: str, **kwargs) -> ft.Text:
