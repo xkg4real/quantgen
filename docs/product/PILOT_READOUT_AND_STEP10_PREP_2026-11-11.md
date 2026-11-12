@@ -18,6 +18,14 @@ as their 가 (`log-now:951-954`). On 2026-11-12 (KST) this document was changed 
 (roadmap part ⑥-1/prep/2). "Decision <n>" below is row <n> of `table`; how each row is carried out is
 `log-now:963-983`.
 
+Decided on 2026-11-12 (KST). Claude put to the owner, at 03:39 KST in the Claude Code chat, five cases that `table`
+does not cover (X1 to X5), and the owner answered "X1~X5 모두 권장값으로 하겠습니다": every case as Claude
+recommended. X1, X3 and X4 keep what this document already said (report and ask; ask before the push; merge again
+and ask for the sentence again). X2 makes decision 4's pre-approved re-run one per pilot. X5 has Claude tell the
+owner to turn Windows Developer Mode on before F when L2-5b was NOT_RUN at E. The question and the answer are
+recorded verbatim in `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`, section "2026-11-12, Claude Code 채팅: 결정표에
+없는 경우 X1~X5에 대한 답" (roadmap part ⑥-1/rulings/2). "Answer X<n>" below is that answer.
+
 This file changes no code. It sits under `docs/product/`, which the compliance check monitors
 (`check:105-108`), so committing it on a main-side branch needs the same baseline refresh as section 3.1.
 
@@ -127,6 +135,7 @@ Owner decisions that bind this work:
 | H-D5 (2026-11-04) | "7A.5부터 Step 10 병합까지는 main을 연구 브랜치에 합치지 않음" | `log-main:508` |
 | Merge | the owner's own merge commit, `git merge --no-ff`, never a squash or a rebase, the branch ref kept. The merge line carries `--no-edit` (decision 9); the difference from the runbook goes into the execution record | `spec:1615-1619`, `runbook:211-221`; `table` row 9 |
 | Decisions 1 to 27 and 13a (2026-11-11) | "전부승인합노.": every row as its 가, 13a included. Not decided by it: row 2 is "not now"; the sentence of row 8 itself; the final disposal of row 19; the three items the table says are asked when they arise; the Notion page 1107; the BTC-USD diagnostic, which follows ruling BTC-나 and `results/RULINGS.md`; the fixed sentence of row 21 | `table`; `log-now:928-984` (the answer at 951, what it leaves open at 955-962, how each row is carried out at 963-983) |
+| X1 to X5 (2026-11-12) | "X1~X5 모두 권장값으로 하겠습니다": every case as recommended. X1: a pilot-2 parity failure is reported and the owner is asked. X2: decision 4's pre-approved re-run is one per pilot. X3: a FAIL other than the two known rows in the cache-free full run before the P3 push is reported and asked before pushing. X4: if main moved before the confirmation sentence is recorded, merge again and ask for the sentence again. X5: if L2-5b was NOT_RUN at E, tell the owner to turn Windows Developer Mode on before F; decision 7's three conditions stay | `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`, section "2026-11-12, Claude Code 채팅: 결정표에 없는 경우 X1~X5에 대한 답", committed with this change (not on `f263fb2`, so no `log-now` line) |
 | Gate before the pilots | section 1.1.5 below | `spec:1743-1747` |
 | P-D8 (2026-11-04) | "Pilot 1 전에 세 시계열 모두": all three series are compared before pilot 1 | `log-main:521`, `spec:1720-1721` |
 
@@ -627,13 +636,14 @@ line of his sheet (section G) with `<실행 이름>` filled with the earlier `br
 With both flags the R-17 re-run check passes whatever `runner:254` decides, as long as `--rerun-of` names an
 earlier run of the same table (`runner:290-293`; the two flags go together, `runner:1244-1245`); every other
 pre-registration check still applies. So the unverified C-06 rule above no longer matters for it. If the re-run ends with
-the same reason again, stop and ask; a second re-run is not approved. The line was not run, and whether
+the same reason again, stop and ask; a second re-run of that pilot is not approved. The line was not run, and whether
 PowerShell hands the Korean sentence to the runner unchanged is not verified.
 
-How many. Row 4 says "1회에 한해" and names no pilot; whether that is one re-run per pilot or one in all is not
-said. This document reads it narrowly: one pre-approved re-run in all. Once it has been used, for either pilot, a
-later C-06-only end is reported and the owner is asked. That reading is Claude's, not the table's; `sheet`
-section G says the same.
+How many. Row 4 says "1회에 한해" and names no pilot. This document first read it narrowly, as one pre-approved
+re-run in all. The owner settled it on 2026-11-12 (answer X2): one re-run per pilot, because the two pilots have
+different tables and their causes are checked separately. So pilot 1 may have one and pilot 2 may have one, whether
+or not pilot 1 used its own; a second re-run of the same pilot is not pre-approved (stop and ask, as above). The
+conditions, the reason sentence and the stop on the same reason are unchanged. `sheet` section G says the same.
 
 Which card counts after a re-run (`spec:853-854`): "the new record names that run in `supersedes`. The card of
 record is the latest `CARD_WRITTEN` card that no later record supersedes." When a table has more than one `NB-`
@@ -732,8 +742,8 @@ sentences below.)
 > 그 전에는 파일럿 2도, 재실행도, 커밋도 하지 마십시오.
 
 `WITHHELD` whose reasons are C-06 lines only (a child died or timed out), and Claude found the cause accidental
-(decision 4; the checks are in 1.2.3). Use it only while the one pre-approved re-run is unused ("How many", 1.2.3);
-otherwise report the cause and ask:
+(decision 4; the checks are in 1.2.3). Use it only while this pilot's pre-approved re-run is unused (one per pilot,
+answer X2; "How many", 1.2.3); otherwise report the cause and ask:
 
 > 파일럿 1이 WITHHELD(판정 보류)로 끝났습니다. 24번의 실행 가운데 `<n>`번이 중간에 `<시간을 넘겼습니다 | 프로세스가 끝났습니다>`: `<C-06 줄 그대로>`.
 > 올라온 run.json을 읽어 보니 사유는 C-06과 그 짝인 P13 줄뿐이고, 같은 입력에서 되풀이될 오류의 흔적은 없습니다.
@@ -778,8 +788,9 @@ section G.)
 
 What is decided and what the owner still decides. Decided on 2026-11-11: after a parity failure, stop and put the
 cause and the choices (decision 1); a WITHHELD with parity passed that is not "decision mismatch" does not end the
-step, and pilot 2 waits for the owner (decision 3); the one re-run of the C-06-only case, with its reason sentence
-(decision 4); every run folder with a record is committed, after Claude has read the lines (decision 5). Still the
+step, and pilot 2 waits for the owner (decision 3); the re-run of the C-06-only case, with its reason sentence
+(decision 4), one per pilot (answer X2, 2026-11-12); every run folder with a record is committed, after Claude has
+read the lines (decision 5). Still the
 owner's: which choice after a parity failure; what follows the report of decision 3; any other re-run and its
 reason sentence; what is done with a folder left behind a `record=-` that follows
 `the run record could not be written:` (not covered by row 5, 1.2.1 step 2); any change to code or a table,
@@ -901,14 +912,15 @@ R-11 refusal:
 The other cases use the sentences of 1.2.6 with "파일럿 2", 5 settings (10 runs, "등록된 5행"), and D4~D11 and D7
 in place of B4~B11 and B7, with two exceptions below. Which decisions apply to pilot 2 is partly Claude's reading:
 
-- Decisions 3, 4 and 5 name no pilot (`table` rows 3 to 5) and apply to pilot 2. Decision 4 is read narrowly (one
-  pre-approved re-run in all, 1.2.3 "How many"): if pilot 1 used it, a C-06-only end of pilot 2 is reported and
-  asked.
+- Decisions 3, 4 and 5 name no pilot (`table` rows 3 to 5) and apply to pilot 2. Decision 4 gives pilot 2 its own
+  pre-approved re-run (one per pilot, answer X2; 1.2.3 "How many"): a C-06-only end of pilot 2 with an accidental
+  cause gets one re-run whether or not pilot 1 used its own.
 - Decision 1 is worded for pilot 1 only ("파일럿 1이 패리티 실패", `table` row 1; `log-now:964`). Its choices, fix
   and run again or close without pilot 2, do not fit once pilot 2 has run, and the table has no row for a pilot-2
-  parity failure. Do not use 1.2.6's `hard_pass` false sentence for pilot 2 (its R-11 clause, "파일럿 2 없이 마감"
-  and "12행" are pilot 1's); use the sentence below: stop, report the cause, ask. The spec still counts a WITHHELD
-  that names the failing check as an end of Step 9, whose row takes Step 8's conditions (`spec:1632`).
+  parity failure. The owner kept the handling below on 2026-11-12 (answer X1): stop, report the cause, ask. Do not
+  use 1.2.6's `hard_pass` false sentence for pilot 2 (its R-11 clause, "파일럿 2 없이 마감" and "12행" are pilot
+  1's); use the sentence below. The spec still counts a WITHHELD that names the failing check as an end of Step 9,
+  whose row takes Step 8's conditions (`spec:1632`).
 - Decision 3's sentence for pilot 2: replace "러너는 파일럿 2를 막지 않지만, 정하실 때까지 파일럿 2는 시작하지
   않습니다" by "정하시기 전에 Windows 전체 검사(E)를 해도 되는지도 함께 여쭙니다". E already waits for this readout
   (decision 6); the table does not say whether it also waits for the owner's decision on decision 3.
@@ -918,7 +930,7 @@ in place of B4~B11 and B7, with two exceptions below. Which decisions apply to p
 > 파일럿 2가 WITHHELD(판정 보류)로 끝났습니다. 카드는 없습니다. 두 엔진의 결과가 기준 안에서 같다고 확인하지
 > 못했다는 뜻이며, 전략이 좋다 나쁘다는 판정이 아닙니다. 걸린 검사: `<withheld_reasons의 줄 그대로>`.
 > 등록된 5행은 원장에 그대로 남습니다. 스펙은 걸린 검사를 적은 이 기록도 Step 9의 끝으로 인정합니다.
-> 2026-11-11 결정표의 1번은 파일럿 1의 경우만 정했고, 파일럿 2의 이 경우는 표에 없습니다. 그래서 여기서 멈춥니다.
+> 2026-11-11 결정표의 1번은 파일럿 1의 경우만 정했습니다. 파일럿 2의 이 경우는 2026-11-12에 정하신 대로(X1) 여기서 멈춥니다.
 > 제가 원인을 정리해 보고드리고, 그 뒤에 어떻게 할지와 Windows 전체 검사(E)를 언제 할지 여쭙겠습니다. 그 전에는
 > 다시 실행하지 않고 코드도 고치지 않습니다.
 
@@ -931,8 +943,9 @@ report; `table` gives no procedure for it. The risk the table names: if this rea
 the full run of record is older than the last pilot and is run and committed again (30 to 40 minutes, about 16 of
 them the suite).
 
-The owner decides: the same points as pilot 1; what follows a pilot-2 parity failure, and whether E waits for his
-decision after a decision-3 end of pilot 2 (neither is in `table`); whether a reference drift is investigated
+The owner decides: the same points as pilot 1; what follows a pilot-2 parity failure (not in `table`; answer X1
+settled that Claude reports and asks, and the choice after the report stays the owner's); whether E waits for his
+decision after a decision-3 end of pilot 2 (not in `table`); whether a reference drift is investigated
 before Step 10 (asked when it arises, `table` "이 표에 없는 것"); whether Step 10 closes when pilot 2 did not run.
 Step 10's Done-when says "run folders ... are committed" (`spec:1633`) and no document says what happens when pilot 2 is blocked. Decision 2
 decided not to decide that now: when it arises, report the cause with the choices (close and merge / hold); if the
@@ -1003,7 +1016,11 @@ Both snippets were run on 2026-11-11 against the file as it is now (the 7A.2 fil
    `nautilus/test_l2_05b_input_linked_to_env_refused`, which needs Developer Mode (`spec:1624-1625`,
    `runbook:153-154`). Then: any other `nautilus/` NOT_RUN means the layer-2 tests did not run. Their reason text
    names the `.env` variable `QUANTGEN_NAUTILUS_PYTHON` (`spec:1057-1059`). Report it; do not count the suite as
-   run.
+   run. If L2-5b is NOT_RUN (reason "OWNER: enable Developer Mode, or accept this NotRun": Windows refused the
+   symbolic link with WinError 1314; research branch `tests/nautilus_acceptance.py:922-932`, `spec:1462`), E's
+   commit stands (`sheet` E5), but F's third condition will fail on that machine unless Developer Mode is turned
+   on. Say so in this report and tell the owner to turn it on before F (answer X5), with the sentence below. At
+   7A.2 the row passed (`spec:2104`).
 4. Read: the five `guard/` rows (`guard:66-94`): `guard/test_a_tag_is_annotated_and_peels_to_the_baseline`,
    `guard/test_b_tagged_pins_match_prereg_and_frozen_rule`, `guard/test_c_no_forward_look_before_it_opens`,
    `guard/test_d_library_versions_match_the_pins_while_a_readout_is_pending`,
@@ -1034,6 +1051,15 @@ One or more FAIL:
 > Windows 전체 검사에 실패가 `<n>`건 있습니다. Step 10은 실패 0이어야 닫힙니다. 실패한 검사: `<검사 이름>`, 사유: `<detail>`.
 > 원인을 확인해 보고하겠습니다. 연구 브랜치의 코드는 제가 고칠 수 없는 범위이므로, 고쳐야 하면 방법을 따로 여쭙겠습니다.
 
+`nautilus/test_l2_05b_input_linked_to_env_refused` NOT_RUN, everything else as expected (answer X5). Use the first
+sentence with the `nautilus` count as 56 passed and 1 not run, then add:
+
+> nautilus 묶음에서 한 건(L2-5b, `test_l2_05b_input_linked_to_env_refused`)이 미실행이었습니다. 이 PC에서 Windows가
+> 이 검사의 링크 만들기를 막았다는 뜻이고, 개발자 모드가 꺼져 있으면 이렇게 됩니다. E에서는 허용된 한 건이라 이번
+> 커밋은 그대로 씁니다. 다만 합친 상태의 검사(F)는 nautilus 57행이 모두 통과해야 해서, 이대로면 F8에서 멈춥니다.
+> 2026-11-12에 정하신 대로(X5) F 전에 Windows 개발자 모드를 켜 주십시오. 켜는 곳과 확인하는 법은 실행표 F1a에
+> 있습니다. 켜도 저장소의 파일은 바뀌지 않습니다.
+
 `nautilus/` rows NOT_RUN beyond L2-5b:
 
 > nautilus 묶음의 2층 검사 `<n>`개가 실행되지 않았습니다(미실행). 사유 문구는 `<reason>`입니다. Step 10은 nautilus 묶음이
@@ -1050,8 +1076,11 @@ What the owner does is in `sheet` section F: pull, check the tip, run `python te
 conditions on the E4 summary line (F8), stop if one fails, else commit and push `qa/acceptance_results.json` only
 (F10 to F15) and go on to the merge. The three conditions are the table's: FAIL 0; the total row count equals the
 number Claude announced; the 57 `nautilus` rows all PASS. The last one is stricter than E's: the one NOT_RUN that
-Step 7A allowed (`nautilus/test_l2_05b_input_linked_to_env_refused`) fails it; if E's file has that row NOT_RUN,
-say so before the announcement (2.11 step 7). The `guard` line is printed and sent but is not one of the conditions.
+Step 7A allowed (`nautilus/test_l2_05b_input_linked_to_env_refused`) fails it. If E's file has that row NOT_RUN,
+tell the owner to turn Windows Developer Mode on before F (answer X5): in the E report (1.4) and again before the
+announcement (2.11 step 7). His new step F1a, right after F1, checks the setting in Windows Settings and turns it on
+if it is off; it changes nothing in the repository. Decision 7's three conditions are unchanged. The `guard` line is
+printed and sent but is not one of the conditions.
 
 The number Claude announces (2.11 step 7) is the total row count of the cache-free cloud full run of the tip the
 owner will pull. NOT_RUN rows are rows, so the Windows run is expected to give the same total (not verified), as long
@@ -1304,6 +1333,7 @@ from its section "2026-10-28 ... ③-4 진행" to the end; main's `OWNER_RULINGS
 | <n> | 2026-11-11 | SPY-가 and BTC-나: "SPY-가-승인, BTC-나-승인" / "그리고 BTC-나 에 따라 문제의 원인 파악 완료 후 자동으로 해결 및 pilot 2 진행해주세요"; the second fixed tool version; Claude's reading rules for the BTC-USD diagnostic, written before its output | `results/RULINGS.md`; main's log, section "⑤-2 공급사 대조 첫 실행 결과에 대한 판정 (SPY-가, BTC-나)" | <...> |
 | <n> | <date> | <later 5-2 rulings on a series that is not PASS, if any> | `results/RULINGS.md` | <...> |
 | <n> | 2026-11-11 | Decisions 1 to 27 and 13a, "전부승인합노.", every row as its 가: among them the record's name kept (15), README two rows by Claude (12, 14), `--no-edit` (9), a second Windows full run of the merged branch at F (7), a confirmation sentence before the merge (8), what the P3 merge holds (13, 13a), the push of the closing commits (10), P2 not passed on (11), the Bonds choices (20 to 27) | `docs/product/DECISIONS_PILOT_CLOSE_MERGE_2026-11-11.md`; main's log, section "파일럿·마감·병합 결정 27건에 대한 답" | <...> |
+| <n> | 2026-11-12 | X1 to X5, "X1~X5 모두 권장값으로 하겠습니다", every case as Claude recommended: a pilot-2 parity failure is reported and asked (X1); decision 4's pre-approved re-run is one per pilot (X2); FAILs beyond the two known rows of the cache-free full run are asked before the P3 push (X3); main moving before the sentence is recorded means merge again and ask for a new sentence (X4); when L2-5b was NOT_RUN at E, the owner is told to turn Windows Developer Mode on before F (X5) | main's log, section "결정표에 없는 경우 X1~X5에 대한 답" | <...> |
 | <n> | <date> | <pilot re-runs with their reasons (the one of decision 4 included), the choices put after a parity failure (decision 1) or after decision 3's report, and the owner's answers> | <...> | <...> |
 | <n> | <date> | <decisions Claude made on the owner's behalf during this close-out> | <...> | <...> |
 
@@ -1389,7 +1419,7 @@ what was done or ruled; none is decided here:
 | "the manifest hashes" in the card | Step 8 Done-when lists them among the card's content | the card holds `row_md5s` and `ledger_hash_at_run`; the manifests are in `run.json` | `spec:1631`, `parity:332-339` |
 | Merge of main before the owner's merge | the runbook's four merge lines assume no conflict | ruling P3: Claude merges main into the branch after the Step 10 checks; decision 13: the merge commit also holds the review fixes F1 to F5, the rehearsal's Korean wording and the regenerated status snapshot, and S1 to S4 and the compliance baseline follow as separate commits, all before the owner's merge | `runbook:211-221`, `log-main:758`, `table` rows 13, 13a |
 | A second Windows full run | Step 10 names one Windows full run; `qa/acceptance_results.json` is committed "only from an owner's Windows full run (Step 7A.2 and this step)" | decision 7: the owner runs the full suite once more on the merged branch at the start of his merge sitting and commits the results file before he merges | `spec:1633`, `table` row 7 |
-| Re-run after a C-06-only WITHHELD | 5.3.5 and R-17: such a record may be re-run without `--rerun-of` | by the code as read, the reasons of that record also hold a `P13: column ...` line, so the all-C-06 test is false and a plain re-run is refused (not verified on a real run). Decision 4's one pre-approved re-run passes `--rerun-of` and the fixed reason, so it does not rely on either reading | `spec:851-852`, `spec:1279`, `parity:29`, `parity:375-377`, `runner:253-254`, `table` row 4 |
+| Re-run after a C-06-only WITHHELD | 5.3.5 and R-17: such a record may be re-run without `--rerun-of` | by the code as read, the reasons of that record also hold a `P13: column ...` line, so the all-C-06 test is false and a plain re-run is refused (not verified on a real run). Decision 4's pre-approved re-run (one per pilot, answer X2) passes `--rerun-of` and the fixed reason, so it does not rely on either reading | `spec:851-852`, `spec:1279`, `parity:29`, `parity:375-377`, `runner:253-254`, `table` row 4 |
 | WITHHELD with parity passed | Steps 8 and 9 name "decision mismatch" and "reference drift" as valid ends | the runner can also end WITHHELD with parity passed for `benchmark test dropped`, G-03 and G-05; decision 3: such a step is not counted as finished, and the owner decides after Claude's report | `spec:1631-1632`, `parity:277`, `parity:422`, `parity:430`, `parity:514`, `table` row 3 |
 | "the selection used" and "PBO for information only" in the card | Step 8 and Step 9 Done-when | the card holds a fixed selection sentence, `stats.chosen_last`, `tests.pbo` and `stats.prob_loss_oos`; the origins, the chosen columns and the predicates are in `run.json` | `spec:1631-1632`, `parity:33`, `parity:327-329`, `parity:348`, `parity:484-485` |
 | Merge message editor | the runbook's merge line has no `-m` and no `--no-edit` | decision 9: the owner's merge line carries `--no-edit` (`sheet` step F19), so no editor opens and git's default message is used | `runbook:218`, `table` row 9 |
@@ -1691,7 +1721,8 @@ git diff --name-only 563db54 HEAD -- tools/nautilus requirements-nautilus.txt do
 
 ### 2.11 After the closing commit: the P3 merge, the confirmation sentence and the opening of step F
 
-Decisions 7, 8, 13, 13a and 20 to 27 (`log-now:969-970`, `log-now:975`, `log-now:982-983`). The owner's side is
+Decisions 7, 8, 13, 13a and 20 to 27 (`log-now:969-970`, `log-now:975`, `log-now:982-983`), and answers X3, X4 and
+X5 of 2026-11-12 for the cases the table does not cover (steps 5 to 7). The owner's side is
 `sheet` section F, whose first part lists these same steps in Korean. Every step here is the session P2 names;
 a successor first gets the owner's one-line approval (decision 11).
 
@@ -1715,8 +1746,9 @@ a successor first gets the owner's one-line approval (decision 11).
    layer-2 `nautilus` rows do not run there, and two rows fail:
    `macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache` for want of the local cache and
    `papers/test_debate_run_kills_process_tree` for want of Windows' `taskkill` (`rehearsal` section 6); say so with the numbers. If FAILs other than those two appear (for example a missed S1,
-   which fails five `bonds` rows), `table` does not say whether to push: a pushed merge cannot be undone, since
-   force push is forbidden. Report them and ask before pushing.
+   which fails five `bonds` rows), report them and ask before pushing: a pushed merge cannot be undone, since force
+   push is forbidden. `table` did not cover this case; the owner kept "ask before pushing" on 2026-11-12 (answer
+   X3).
 6. The confirmation sentence (decision 8). Give the owner the 40-hex tip of step 5 and ask for one line in this
    form; the owner writes it in the chat:
 
@@ -1737,8 +1769,9 @@ a successor first gets the owner's one-line approval (decision 11).
    fails (main has moved), do not record the sentence. 7A.1's remedy, merging `origin/main` first (`runbook:41-42`),
    would put a merge commit the sentence does not cover between the owner's `<40자>` and the sentence commit, and it
    would change the count of step 7. Instead merge the new main as in steps 2 and 3, run step 5 again (report, then
-   push, decision 13), and ask the owner for a new sentence naming the new tip. `table` does not name this case;
-   the `sheet` tells the owner that a second request can come (section F, item 5).
+   push, decision 13), and ask the owner for a new sentence naming the new tip. `table` did not name this case; the
+   owner kept this procedure on 2026-11-12 (answer X4), and the `sheet` tells the owner that a second request can
+   come (section F, item 5).
 
    Record it as a new bullet at the top of the spec's Status block, and nothing else: a bold lead-in with the date,
    the owner's name, "decision 8" and where it was written (verbatim; Claude Code chat, the session id), as the
@@ -1761,15 +1794,22 @@ a successor first gets the owner's one-line approval (decision 11).
      with `git diff --name-only <E's commit> <tip> -- tests tools/paper`), and look for any suite reduced to one
      `import` row. Explain each difference, or repeat the cloud run in a matching environment, before the number
      goes to the owner.
-   - If E's file has `nautilus/test_l2_05b_input_linked_to_env_refused` NOT_RUN (E allowed it, `sheet` E5), F8's
-     third condition (57 `nautilus` rows all PASS) will fail on the same machine as things stand. Say so before
-     announcing F and put the next step to the owner; `table` gives no procedure for it.
+   - Developer Mode (answer X5). Read the `nautilus/test_l2_05b_input_linked_to_env_refused` row of E's file. If it
+     is NOT_RUN (E allowed it, `sheet` E5; its reason "OWNER: enable Developer Mode, or accept this NotRun" means
+     Windows refused the symbolic link, WinError 1314), F8's third condition (57 `nautilus` rows all PASS) will fail
+     on the same machine unless Developer Mode is turned on. Tell the owner to turn Windows Developer Mode on before
+     F, if the E report (1.4) has not already done so, and repeat it in the announcement below; his F1a checks the
+     setting and turns it on. Decision 7's conditions stay as they are: the row must PASS at F. If the owner reports
+     at F1a that he cannot turn it on (no admin rights, a managed PC), he stops before F2; report and ask, since
+     neither `table` nor answer X5 covers that. If the row is PASS in E's file, nothing is said; F1a still checks the
+     setting.
 
    Then tell the owner, in one message: "병합해도 됩니다"; the research tip after step 6, 40 hex, and that it is not
    the `<40자>` of his sentence (the sentence commit lies between them; his F2 compares with this one); the total row
    count the Windows full run must show, which is the total of step 5's cloud run (NOT_RUN rows are rows, so the two
-   totals are expected to match; not verified); and that his sentence is recorded. From then until his push of main
-   (his F21), no other pull request is merged into main.
+   totals are expected to match; not verified); that his sentence is recorded; and, when E's L2-5b row was NOT_RUN,
+   the reminder to turn Developer Mode on (his F1a). From then until his push of main (his F21), no other pull request
+   is merged into main.
 8. The owner's step F follows: the merged-state Windows full run with its three conditions, the results commit,
    the merge with `--no-edit`, the push of main. Read what he sends as in 1.5.
 9. After his F21: copy the confirmation sentence into main's rulings log (decision 8), verbatim, with what the spec
@@ -1974,8 +2014,14 @@ Ask after Step 10:
   copied expressions, not on the real runner. The re-run line of decision 4 (`--rerun-of` with the fixed Korean
   reason) was not run, and whether PowerShell hands the Korean sentence to Python unchanged is not verified. How to
   tell an accidental C-06 from one that repeats (1.2.3) is Claude's reading, not a rule of the table.
-- Decision 4 read as one pre-approved re-run in all, not one per pilot (1.2.3 "How many"); decisions 3, 4 and 5
-  applied to pilot 2, and decision 1 not (1.3): Claude's readings of rows that name no pilot or only pilot 1.
+- Decisions 3, 4 and 5 applied to pilot 2, and decision 1 not (1.3): Claude's readings of rows that name no pilot or
+  only pilot 1. Decision 4's count is no longer a reading: answer X2 (2026-11-12) makes it one re-run per pilot
+  (1.2.3 "How many").
+- Developer Mode (answer X5; `sheet` F1a): the Settings path and names, whether turning it on asks for admin rights
+  or a restart, and whether L2-5b then passes on the owner's machine. Neither the runbook nor the spec names a
+  Settings path or a check command (`runbook:153-154`, `spec:1462`, `spec:1624-1625`); the sheet gives the
+  Windows 11 path from general knowledge, marked 미검증, and no PowerShell check. At 7A.2 the row passed
+  (`spec:2104`); whether Developer Mode was on then is not recorded.
 - `record=-` with a folder behind it (1.2.1 step 2): read from `runner:1462-1485` and `runner:1394-1398`; no run
   whose record write fails was made.
 - The merged-state Windows full run of decision 7: its total, its time, that the 57 `nautilus` rows pass there, and
@@ -2023,7 +2069,8 @@ Ask after Step 10:
    re-validation and a new `owner_confirmed`), or close without pilot 2? No document gives the procedure.
    Answer (row 1): stop; Claude writes up the cause from the pushed `run.json` and puts the choices (fix and run
    again / close without pilot 2); no re-run and no code change before that. The C-06-only case follows row 4. Row 1
-   names pilot 1 only; a pilot-2 parity failure is not in `table` and is reported and asked (1.3).
+   names pilot 1 only; a pilot-2 parity failure is not in `table` and is reported and asked (1.3), as the owner kept
+   it on 2026-11-12 (answer X1).
 2. May Step 10 close, and the merge go ahead, when pilot 2 did not run? Step 10's Done-when says "run folders ... are
    committed".
    Answer (row 2): not decided now. When it arises, Claude reports the cause with the choices (close and merge /
@@ -2103,10 +2150,18 @@ Ask after Step 10:
     Answer (row 4): one re-run is approved in advance when Claude finds only C-06 lines and their P13 pairs and an
     accidental cause, with the reason
     "자식 실행의 시간 초과 또는 프로세스 종료(C-06)로 보류되어, 같은 표와 코드로 1회 다시 실행함"; the same reason again means stop and ask; a cause that repeats with the same input is reported
-    and decided by the owner (1.2.3). The row names no pilot; "1회" is read here as one re-run in all (1.2.3).
+    and decided by the owner (1.2.3). The row names no pilot; the owner's answer X2 of 2026-11-12 makes "1회" one
+    re-run per pilot (1.2.3).
 
 Questions 1, 7, 11, 12, 15, 16 and 17 are also in the owner's sheet (its section K, items 1, 2, 3, 4, 8, 5 and 7);
 its item 6 is question 3, its item 9 is question 14 and its item 10 is question 6.
+
+Five cases that `table` does not cover were put to the owner on 2026-11-12 at 03:39 KST as X1 to X5 and answered
+"X1~X5 모두 권장값으로 하겠습니다" (0.3; the rulings log section of 2026-11-12): X1, a pilot-2 parity failure, stays
+report and ask (1.3); X2 makes decision 4's re-run one per pilot (1.2.3); X3, FAILs beyond the two known rows
+before the P3 push, stays ask before pushing (2.11 step 5); X4, main moving before the sentence is recorded, stays
+merge again and ask for the sentence again (2.11 step 6); X5, L2-5b NOT_RUN at E, means telling the owner to turn
+Developer Mode on before F (1.4, 1.5, 2.11 step 7). The owner's sheet lists them in its section K.
 
 ## Appendix A. `read_summary.py`
 
