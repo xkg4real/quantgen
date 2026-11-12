@@ -307,27 +307,34 @@ SE_null 짝은 참고 줄)·Q3(검정력 부족이면 이겼더라도 자료 부
 function: no I/O, no recorder, no UI, no new import. It takes the gate's own verdict (S-1, one of
 `validate.DECISIONS`: PASS, REVISE, REJECT, INSUFFICIENT_DATA; a caller input, never re-decided), the
 `strategy_lines` result of the same run, and optionally a `dsr_two_n` result of the same series with another
-dispersion term. It recomputes nothing and returns a frozen `StrategyOutcome`: `outcome` (one of `OUTCOMES` =
-ADOPT, KEEP, REVISE, REJECT, INSUFFICIENT_DATA, or `NO_OUTCOME`), `basis` (the rule that named it, or why none
+dispersion term. It recomputes no statistic and returns a frozen `StrategyOutcome`: `outcome` (one of `OUTCOMES`
+= ADOPT, KEEP, REVISE, REJECT, INSUFFICIENT_DATA, or `NO_OUTCOME`), `basis` (the rule that named it, or why none
 was named), the reason lines, the B-Q2 reference lines and the collected lines themselves (`strategy`, the same
-object, unchanged). `provisional`, `provisional_basis` (B-Q1), `replaces_incumbent` and `kind` are read-only
-values derived from the outcome and the collected lines, not stored.
+object, unchanged). `provisional`, `provisional_basis` (B-Q1), `replaces_incumbent`, `not_covered` (`NOT_COVERED`
+= S-5, S-6, D-4) and `kind` are read-only values derived from the outcome and the collected lines, not stored.
+Before any step the collected lines are checked against what `strategy_lines` gives: every status must be one the
+producing function gives and the one its own value gives (`classify_dsr`, `classify_comparison`), the S-7 line
+must be against the S-3 incumbent with its flag equal to `MDE80 > expected dSR`, and the holdout line must equal
+`check_sample_end` of its own last session; anything else is refused, never read as a win.
 
 The rules, applied in this order:
 
 | Step | Condition | Outcome | Source |
 | --- | --- | --- | --- |
 | 1 | Gate REVISE and the DSR at N = G is NaN | INSUFFICIENT_DATA | 6.4 N12 ("DSR NaN은 S-2 미충족, INSUFFICIENT_DATA") |
+| 1a | Gate REVISE, R-FAM below 0.90 | REJECT, labelled "잠정 기준" | B-Q1; the gate rejects a DSR shortfall before REVISE (`validate.py:592-622`) |
+| 1b | Gate REVISE, R-FAM not supplied, or R-FAM NaN while the gate's DSR is finite | NO_OUTCOME | B-Q1 may apply / N12 and REVISE are not ordered |
+| 1c | Gate INSUFFICIENT_DATA with the gate's DSR passing, R-FAM below 0.90 or not supplied | NO_OUTCOME | the gate's sample floor comes before a DSR REJECT and its minimum record after it; the lines do not say which |
 | 2 | Any other gate verdict that is not PASS | the gate's verdict | 6.1 (REVISE, REJECT, INSUFFICIENT_DATA rows) |
 | 3 | Gate PASS, R-FAM (the reading of record) not supplied | NO_OUTCOME | ruling 7: L-FAM only compares |
 | 4 | R-FAM DSR NaN | INSUFFICIENT_DATA | 6.4 N12 |
 | 5 | R-FAM DSR below 0.90 (with the gate's dispersion term) | REJECT, labelled "잠정 기준" | B-Q1, M-3 |
-| 6 | Replacement, S-7 MDE80 above the registered expected dSR | INSUFFICIENT_DATA, incumbent not replaced, whatever S-3 says | S-7, B-Q3, 4.2.2, 4.0 rule 5 |
+| 6 | Replacement, S-7 MDE80 above the registered expected dSR | INSUFFICIENT_DATA, incumbent not replaced, whatever S-3 and S-4 say (each S-4 result is printed) | S-7, B-Q3, 4.2.2, 4.0 rule 5 |
 | 7 | Replacement, S-7 not run | NO_OUTCOME | B-Q3 cannot be applied |
 | 8 | R-FAM borderline [0.90, 0.95), or a counting S-3 / S-4 borderline or not won | KEEP | 6.1 KEEP ("경계 사례 포함"), 6.2, M-11 |
 | 9 | A counting comparison not run | NO_OUTCOME | 6.1 names no outcome for it |
 | 10 | Sample ends after 2026-12-31 (HOLDOUT_TOUCHED) | NO_OUTCOME | 4.0 rule 6, M-14: no ADOPT, and 6.1 names nothing else |
-| 11 | Otherwise | ADOPT; a replacement replaces the incumbent, an addition nothing | 6.1 ADOPT, 4.2.2, M-19 |
+| 11 | Otherwise | ADOPT (basis "criteria 6.1 ADOPT (S-5, S-6, D-4 not checked)"); a replacement replaces the incumbent, an addition nothing | 6.1 ADOPT, 4.2.2, M-19 |
 
 The counting comparisons are the S-3 of a replacement and every S-4 (criteria 4.2.2, M-19). An addition's S-3 is
 printed only and never counted. A declared cash baseline (`replaced`, criteria 2.3) is met by the gate's PASS.
@@ -346,9 +353,11 @@ not part of this outcome: S-5 (SPA when one registration has more than one rule)
 
 ### How each ruling is applied
 
-- **B-Q1.** After a gate PASS, R-FAM below 0.90 is REJECT. The header carries "[잠정 기준]", the reason line
-  carries the module's provisional note (M-3), and `provisional_basis` is True. A gate REJECT is not B-Q1 and
-  carries no such label. L-FAM below 0.90 decides nothing while R-FAM passes (ruling 7).
+- **B-Q1.** After a gate PASS or a gate REVISE, R-FAM below 0.90 is REJECT. The header carries "[잠정 기준]", the
+  reason line carries the module's provisional note (M-3), and `provisional_basis` is True (it is True for basis
+  B-Q1 only). A gate REJECT is not B-Q1 and carries no such label. L-FAM below 0.90 decides nothing while R-FAM
+  passes (ruling 7). Every outcome, the gate's own included, prints the S-2 N_raw lines, so a second DSR shortfall
+  is visible whatever names the outcome.
 - **B-Q2.** The second DSR that decides is R-FAM computed with the gate's own dispersion term, the term the N = G
   line already uses. `strategy_outcome` therefore refuses lines whose N_raw term differs from the gate's
   (`sr_sd_daily != sr_sd_grid`) and says how to collect them. Any other term (the log names the SE_null pairing)
@@ -368,9 +377,24 @@ not part of this outcome: S-5 (SPA when one registration has more than one rule)
   the gate itself rejects a DSR shortfall before it considers a short record (`validate.py:584-622`); M-17 keeps a
   short-record DSR REJECT as REJECT in adoption. Neither name adopts or replaces. If the owner meant otherwise,
   only step 5 and step 6 swap.
+- **B-Q1 after a gate REVISE or INSUFFICIENT_DATA (review round 2).** B-Q1 gives its reason as "기존 심사도 같은
+  점수 미달을 기각으로 처리합니다", and the gate's order (`validate.py:584-622`) is: sample floor
+  INSUFFICIENT_DATA, then REJECT (a finite DSR below 0.95 among others), then PASS, then the minimum-record
+  INSUFFICIENT_DATA, then REVISE. Read the same way, R-FAM below 0.90 turns a gate REVISE into REJECT
+  [잠정 기준] (step 1a). A gate INSUFFICIENT_DATA with the gate's own DSR passing can be either the sample floor
+  (before REJECT: INSUFFICIENT_DATA stands) or the minimum record (after it: B-Q1's REJECT would come first), and
+  the lines do not say which, so with R-FAM below 0.90 no outcome is named (step 1c). With the gate's DSR below
+  0.95 or NaN, a gate INSUFFICIENT_DATA can only be the sample floor and stands. With R-FAM not supplied, a gate
+  REVISE or such an INSUFFICIENT_DATA names nothing either, because B-Q1 might apply. This is a reading for the
+  owner to confirm next to "B-Q1 before B-Q3"; if the owner wants the gate's verdict to stand, steps 1a to 1c go.
+  A caller that knows the gate's branch could pass it later; this unit takes no such input.
 - **Short power outranks KEEP.** 4.2.2 makes the result INSUFFICIENT_DATA whenever S-3 is INSUFFICIENT_DATA, and
   the S-7 row sets S-3 to INSUFFICIENT_DATA without a condition on S-3's own result, so a borderline or lost S-3
-  with short power, or a borderline R-FAM with short power, is INSUFFICIENT_DATA, not KEEP.
+  with short power, a borderline R-FAM with short power, or a borderline or lost S-4 with short power, is
+  INSUFFICIENT_DATA, not KEEP. B-Q3 itself is about the incumbent comparison; the lost-S-4 case follows from
+  4.2.2's unconditional "결과도 INSUFFICIENT_DATA", and 6.1 KEEP also matches it. Neither adopts or replaces, and
+  the reason lines print every S-4 result next to the B-Q3 line, so a baseline loss is not hidden. Owner question:
+  should a lost or borderline S-4 give KEEP ahead of B-Q3?
 - **A borderline second DSR is KEEP.** 6.1 KEEP includes the borderline cases, and 6.2 lists the second DSR in
   [0.90, 0.95) while the gate's DSR passes among them (the reading the earlier units' questions already used: only
   the case below 0.90 was unmapped).
@@ -378,20 +402,33 @@ not part of this outcome: S-5 (SPA when one registration has more than one rule)
   gate's own DSR when the gate gave REVISE (the gate's mislabelled REVISE of N12). A gate REJECT or
   INSUFFICIENT_DATA with a NaN DSR stays as the gate said.
 - **No outcome named (`NO_OUTCOME`, with the reason in `basis` and the header):** R-FAM not supplied (an L-FAM-only
-  result), whatever L-FAM says; a replacement whose S-7 did not run; a counting comparison that did not run while
-  nothing else gives KEEP; a sample touching the 2027-01-01 holdout when everything else is met. With a gate
-  verdict other than PASS the gate's verdict is named in each of these cases, and a KEEP stays KEEP with a
-  touched holdout (the holdout only forbids ADOPT).
+  result), whatever L-FAM says, after a gate PASS or REVISE, or after a gate INSUFFICIENT_DATA whose DSR passes;
+  steps 1b and 1c; a replacement whose S-7 did not run; a counting comparison that did not run while nothing else
+  gives KEEP; a sample touching the 2027-01-01 holdout when everything else is met. A gate REJECT is named in each
+  of these cases, and a KEEP stays KEEP with a touched holdout (the holdout only forbids ADOPT).
+- **A comparison that did not run is not S-3 INSUFFICIENT_DATA.** 4.0 rule 5 makes INSUFFICIENT_DATA the result
+  when "검정력이 모자라 판단할 수 없으면" (power is short), and S-7 is the registered power check. A NOT_RUN line has
+  no statistic at all, for reasons that are not all about power (a zero HAC SE, a block longer than the sample,
+  fewer than 30 sessions), so this unit does not name INSUFFICIENT_DATA for it: a replacement's S-3 not run gives
+  NO_OUTCOME (never ADOPT, never replaced), and with another check lost or borderline KEEP, since KEEP is then
+  named by that check alone. Owner question: should a NOT_RUN S-3 (or S-7) be read as INSUFFICIENT_DATA under
+  4.0 rule 5? If so, it would also outrank KEEP, as short power does.
 - **Refused (`AdoptionInputError`):** a gate verdict outside `validate.DECISIONS` (including "pass", "ADOPT",
   " PASS", empty or not a string); a verdict `validate.score_strategy` cannot give for the status of its own DSR
   at N = G (PASS with that DSR below 0.95 or NaN, REVISE with it below 0.95: the gate rejects a finite DSR below
   0.95 unless its sample floor gave INSUFFICIENT_DATA first); lines that `strategy_lines` would not produce (a
-  replacement without a counting S-3 or without S-7, no S-4, an unknown kind, no R-FAM line, an OFF-REGISTRATION
-  comparison); B-Q2 pairing not met; a reference S-2 that does not match.
+  replacement without a counting S-3 or without S-7, an addition whose S-3 counts, no S-4, an unknown kind, no
+  R-FAM line, an unknown reading, a status outside those the producing function gives or not the one its value
+  gives, a comparison ending on another session than the sample, a cash baseline not replaced by S-1, an S-7 line
+  against another incumbent or whose flag, MDE80 or status is not what `power_line_s7` gives, a holdout line that
+  is not `check_sample_end` of its own last session, an OFF-REGISTRATION comparison); B-Q2 pairing not met; a
+  reference S-2 that does not match (series, G, session count, gate term, gate DSR, N_raw counts).
 - **Provisional.** `provisional` is derived from the collected lines (True while the module says the second DSR
   is provisional, that is until the R3 recorder exists), so every outcome is provisional, the gate's own included.
 - **Not covered.** S-5 (SPA when one registration has more than one rule), S-6 (break-even cost, a pre-gate
-  REJECT) and D-4 are later units; every outcome prints a line saying so, and an ADOPT here does not cover them.
+  REJECT) and D-4 are later units; every outcome prints a line saying so, `not_covered` lists them, and an ADOPT's
+  basis reads "criteria 6.1 ADOPT (S-5, S-6, D-4 not checked)". An ADOPT here, and `replaces_incumbent`, are not
+  actionable until those units exist.
   4.0 rule 4 (a tie keeps the simpler) needs no step: a tie is not a win, so it is KEEP.
 
 ### What changed in the earlier units' text
@@ -440,6 +477,32 @@ not part of this outcome: S-5 (SPA when one registration has more than one rule)
 Not verified here: the CI matrix (Windows, Python 3.10, 3.11, 3.12, 3.14 execution), any real gate verdict, P&L,
 R-FAM or L-FAM count, and any caller: nothing in the app, Lab or R3 calls `strategy_outcome` yet.
 
+### Review round 2 of ⑨-4/2/c (second commit)
+
+Seven verifier findings, each reproduced on the first commit (`5f08973`) before the fix:
+
+| Finding | Reproduced | Fix |
+| --- | --- | --- |
+| B-Q1 only after a gate PASS (major) | gate 0.97, R-FAM 0.85: PASS gave REJECT [잠정 기준], REVISE gave REVISE and INSUFFICIENT_DATA gave INSUFFICIENT_DATA, and neither printed the R-FAM line | steps 1a to 1c above, read from the gate's order and recorded as a reading for the owner; the S-2 N_raw lines are printed in every outcome; `provisional_basis` is True for basis B-Q1 only; tests for REVISE, INSUFFICIENT_DATA with the gate's DSR passing, below and NaN, R-FAM missing or NaN |
+| No test for a replacement's S-3 not run | the mutant that checks only S-4 for NOT_RUN survived and gave ADOPT with "S-3 vs incumbent: win" | test: NO_OUTCOME, not replaced, "S-3 vs incumbent: not run (HAC SE is zero)", no "win" line |
+| 18 further surviving mutants | gate map, provisional, `provisional_basis`, `_same`, reference checks, S-3/S-4 shape checks, N12 basis, the S-7 "within" line | assertions for each (gate INSUFFICIENT_DATA with the gate's DSR below and NaN; provisional from both flags; the label on B-Q3, N12, KEEP and gate outcomes; a NaN-grid reference; session count and gate term of a reference; an L-FAM-only reference; S-3 and S-4 rule and counting flags; the full S-7 line) |
+| Statuses trusted, fail open | hand-built S-3 "won" or "replaced", S-4 "WIN", a "win" with dSR -0.5 and p 0.9, R-FAM "pass" at 0.5 or "PASS", S-7 against another incumbent, a flag disagreeing with MDE80, MDE80 NaN, a 2027-03-01 sample marked not touched: each gave ADOPT | whitelist and re-derivation described under "What it does"; the ADOPT reasons print each comparison's own status; a test refuses 22 malformed shapes |
+| B-Q3 hid a lost S-4 | short power with S-4 not won gave INSUFFICIENT_DATA naming only S-3 | every other counting comparison is printed with the B-Q3 line; the reading names the lost S-4 and asks the owner |
+| S-3 NOT_RUN versus 4.0 rule 5 | S-3 not run gave NO_OUTCOME, with a lost S-4 KEEP | kept, with the reason stated under "Readings" and an owner question |
+| ADOPT without S-5, S-6 | ADOPT and `replaces_incumbent` carried no limit | `NOT_COVERED`, the `not_covered` property, the ADOPT basis and the reason line name S-5, S-6 and D-4; docstrings say an ADOPT is not actionable until they exist |
+
+No finding was rejected. Verification of this round (local, Linux, Python 3.13.17): the module has **46 tests**
+(42 before; in `OutcomeAssembly` 4 added, 3 extended and 2 adjusted as below), OK in 4.052 s and 4.044 s, and with `-W
+error::RuntimeWarning` in 4.004 s. Two existing cases built an inconsistent S-3 by hand (`status="borderline"` and
+`"not_won"` on a won comparison); the new checks refuse those, so they now take the S-3 of a stubbed run that is
+borderline or lost, with the same expected outcomes. A mutation run on a scratch copy (43 single-change mutants:
+the 33 of this round's new code and the 10 survivors of the verifier's run that still apply) killed 43 of 43; the
+copy was checked equal to the worktree file by SHA-256 afterwards. `tools.compliance.check --check`: FAIL before
+the baseline refresh (documents 1 to 20 need review), PASS after it (publication BLOCKED, as before), with only the
+four changed files' source hashes moved; `tests.compliance_acceptance` and `tests.compliance_export_acceptance` 47
+OK; `compile()` and `ast.parse(feature_version=(3, 10))` of the module and its test pass under Python 3.11.17 and
+3.12.3; `git diff --check` is clean. Not verified: the CI matrix, any real gate verdict, P&L or N_raw count.
+
 ## CI and compliance
 
 - `.github/workflows/runtime-smoke.yml`: `core/adoption/**` and the test file appended to the pull-request paths
@@ -455,8 +518,11 @@ R-FAM or L-FAM count, and any caller: nothing in the app, Lab or R3 calls `strat
 
 ## Next units
 
-Outcome assembly is done (⑨-4/2/c, above). Still to come: S-5/S-6 wrappers (until then an ADOPT does not cover
-them, and its last line says so), the SMA-200 and 60/40 baselines (B-Q7 of 2026-11-11: rebalanced every 21
+Outcome assembly is done (⑨-4/2/c, above). Owner questions from it: the order of B-Q1 against B-Q3 and against
+a gate REVISE or INSUFFICIENT_DATA (steps 1a to 1c, 5 and 6), whether a lost or borderline S-4 with short power is
+KEEP rather than INSUFFICIENT_DATA, and whether a NOT_RUN S-3 or S-7 is INSUFFICIENT_DATA under 4.0 rule 5. Still
+to come: S-5/S-6 wrappers (until then an ADOPT does not cover them: its basis, `not_covered` and last line say so,
+and neither the ADOPT nor `replaces_incumbent` is actionable), the SMA-200 and 60/40 baselines (B-Q7 of 2026-11-11: rebalanced every 21
 trading days, costs only on what is traded), forecast rules (B-Q4: decided by the existing DM test, Clark-West
 printed as a reference line only), risk rules with the exact zero-violation LR, D-4, and the registration loader
 (`docs/adoption/registrations/<card_id>.json`, M-15; B-Q5: all 12 items required, Claude drafts and the owner

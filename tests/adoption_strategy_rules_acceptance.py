@@ -740,6 +740,13 @@ class OutcomeAssembly(unittest.TestCase):
         self.assertIn("the incumbent is replaced", "\n".join(adopt.lines()))
         self.assertFalse(S.strategy_outcome(gate_verdict="PASS", lines=self.build(kind="add")).replaces_incumbent)
         self.assertIn(S._NOT_COVERED_NOTE, adopt.lines())
+        # An ADOPT says, in machine-readable form, which rules it has not checked (S-5, S-6, D-4: later units).
+        self.assertEqual((adopt.basis, adopt.not_covered), ("criteria 6.1 ADOPT (S-5, S-6, D-4 not checked)",
+                                                            ("S-5", "S-6", "D-4")))
+        self.assertIn("S-3 vs incumbent: win", adopt.reasons)
+        self.assertIn("S-4 vs cash: replaced by S-1 (criteria 2.3), met by the gate's PASS", adopt.reasons)
+        self.assertIn(f"S-7 vs incumbent: MDE80 {self.mde:.4f} within the registered expected dSR "
+                      f"{self.mde * 2:.4f}; B-Q3 does not apply", adopt.reasons)
 
     def test_b_q1_second_dsr_of_record_below_0p90_is_reject_labelled_provisional(self):
         below = math.nextafter(0.90, 0.0)
@@ -793,6 +800,8 @@ class OutcomeAssembly(unittest.TestCase):
         for bad, needle in ((same_term, "gate's own term"), (other_counts, "not for the same series"),
                             (replace(strict, n_grid=13), "not for the same series"),
                             (replace(strict, dsr_grid=0.5), "not for the same series"),
+                            (replace(strict, n_sessions=755), "not for the same series"),
+                            (replace(strict, sr_sd_grid=0.02), "not for the same series"),
                             (strict.readings[0], "dsr_two_n result")):
             with self.subTest(needle=needle), self.assertRaisesRegex(S.AdoptionInputError, needle):
                 S.strategy_outcome(gate_verdict="PASS", lines=lines, reference_s2=bad)
@@ -839,7 +848,7 @@ class OutcomeAssembly(unittest.TestCase):
                     self.assertIn("S-4 vs equal-weight: borderline: borderline, never adopted (criteria 6.2, M-11)",
                                   out.reasons)
         res = self.build()
-        s3_border = S.strategy_outcome(gate_verdict="PASS", lines=replace(res, s3=replace(res.s3, status="borderline")))
+        s3_border = S.strategy_outcome(gate_verdict="PASS", lines=replace(res, s3=self.build(count=300).s3))
         self.assertEqual((s3_border.outcome, s3_border.basis), ("KEEP", "criteria 6.1 KEEP"))
         for value, want in ((0.95, "ADOPT"), (math.nextafter(0.95, 0.0), "KEEP"), (0.90, "KEEP"),
                             (math.nextafter(0.90, 0.0), "REJECT")):
@@ -873,7 +882,7 @@ class OutcomeAssembly(unittest.TestCase):
         lone = S.strategy_outcome(gate_verdict="PASS", lines=replace(res, s4=(not_run, res.s4[1])))
         self.assertEqual(lone.outcome, "NO_OUTCOME")
         self.assertIn("S-4 vs equal-weight: not run (HAC SE is zero)", lone.reasons)
-        lost = replace(res, s3=replace(res.s3, status="not_won"), s4=(not_run, res.s4[1]))
+        lost = replace(res, s3=self.build(count=1000).s3, s4=(not_run, res.s4[1]))
         self.assertEqual(S.strategy_outcome(gate_verdict="PASS", lines=lost).outcome, "KEEP")
         s7_off = replace(res, s7=replace(res.s7, status="not_run", reason="HAC SE is zero or non-finite"))
         self.assertEqual(S.strategy_outcome(gate_verdict="PASS", lines=s7_off).basis, "S-7 power line not run")
@@ -901,6 +910,134 @@ class OutcomeAssembly(unittest.TestCase):
         with self.assertRaises(TypeError):
             S.strategy_outcome("PASS", res)                       # keyword-only
 
+    def test_b_q1_also_applies_after_the_gate_revise_and_is_not_guessed_after_insufficient_data(self):
+        nan = float("nan")
+        low = self.build(rfam=0.85)
+        # The gate rejects a DSR shortfall before it gives REVISE (validate.py:592-622), so B-Q1 names REJECT.
+        rev = S.strategy_outcome(gate_verdict="REVISE", lines=low)
+        self.assertEqual((rev.outcome, rev.basis, rev.provisional_basis), ("REJECT", "B-Q1", True))
+        self.assertTrue(rev.lines()[0].endswith(": REJECT [잠정 기준]"))
+        self.assertIn("S-2 DSR at N_raw R-FAM = 11: 0.8500 (below); the second DSR of record, with the gate's "
+                      "dispersion term (B-Q2)", rev.reasons)
+        self.assertEqual(S.strategy_outcome(gate_verdict="REVISE", lines=self.build(rfam=0.90)).outcome, "REVISE")
+        # INSUFFICIENT_DATA comes before a DSR REJECT for the sample floor and after it for the minimum record:
+        # with the gate's DSR passing these lines do not say which, so no outcome is named.
+        ins = S.strategy_outcome(gate_verdict="INSUFFICIENT_DATA", lines=low)
+        self.assertEqual((ins.outcome, ins.provisional_basis), ("NO_OUTCOME", False))
+        self.assertIn("the gate's branch is not known", ins.basis)
+        self.assertIn("S-2 DSR at N_raw R-FAM = 11: 0.8500 (below); the second DSR of record, with the gate's "
+                      "dispersion term (B-Q2)", ins.reasons)
+        # R-FAM not supplied: B-Q1 might apply, so neither REVISE nor INSUFFICIENT_DATA is named; REJECT stays.
+        only_l = self.build(n_raw={"L-FAM": self.L})
+        for verdict, want in (("REVISE", "NO_OUTCOME"), ("INSUFFICIENT_DATA", "NO_OUTCOME"), ("REJECT", "REJECT")):
+            with self.subTest(verdict=verdict):
+                self.assertEqual(S.strategy_outcome(gate_verdict=verdict, lines=only_l).outcome, want)
+        nan_record = self.build(rfam=nan)
+        self.assertEqual(S.strategy_outcome(gate_verdict="REVISE", lines=nan_record).basis, "R-FAM NaN with the gate's "
+                                                                                               "REVISE")
+        self.assertEqual(S.strategy_outcome(gate_verdict="INSUFFICIENT_DATA", lines=nan_record).outcome,
+                         "INSUFFICIENT_DATA")
+        # A gate DSR below 0.95 or NaN with INSUFFICIENT_DATA can only be the sample floor: the gate's verdict stands.
+        for grid, rfam in ((0.94, 0.85), (nan, nan), (nan, 0.85)):
+            with self.subTest(grid=grid, rfam=rfam):
+                out = S.strategy_outcome(gate_verdict="INSUFFICIENT_DATA", lines=self.build(grid=grid, rfam=rfam))
+                self.assertEqual((out.outcome, out.basis), ("INSUFFICIENT_DATA", "criteria 6.1 gate"))
+        # Every outcome prints the S-2 N_raw lines, the gate's own included.
+        for verdict in V.DECISIONS:
+            with self.subTest(verdict=verdict):
+                out = S.strategy_outcome(gate_verdict=verdict, lines=self.build())
+                self.assertIn("S-2 DSR at N_raw R-FAM = 11: 0.9600 (pass); the second DSR of record, with the gate's "
+                              "dispersion term (B-Q2)", out.reasons)
+                self.assertIn("S-2 DSR at N_raw L-FAM = 17: 0.9600 (pass); shown for comparison; decides nothing "
+                              "(owner ruling 7)", out.reasons)
+
+    def test_a_replacement_needs_every_counting_comparison_and_reports_each_one(self):
+        res = self.build()
+        s3_off = S.strategy_outcome(gate_verdict="PASS", lines=replace(res, s3=replace(res.s3, status="not_run",
+                                                                                          reason="HAC SE is zero")))
+        self.assertEqual((s3_off.outcome, s3_off.replaces_incumbent), ("NO_OUTCOME", False))
+        self.assertIn("S-3 vs incumbent: not run (HAC SE is zero)", s3_off.reasons)
+        self.assertFalse(any(line.endswith(": win") for line in s3_off.reasons))
+        lost_s4 = self.build(count=1000).s4[0]
+        self.assertEqual(lost_s4.status, "not_won")
+        both = replace(res, s3=replace(res.s3, status="not_run", reason="HAC SE is zero"), s4=(lost_s4, res.s4[1]))
+        self.assertEqual(S.strategy_outcome(gate_verdict="PASS", lines=both).outcome, "KEEP")
+        # Short power with a lost baseline: B-Q3 names INSUFFICIENT_DATA and the S-4 result is printed with it.
+        short = self.build(expected=self.mde / 2)
+        out = S.strategy_outcome(gate_verdict="PASS", lines=replace(short, s4=(lost_s4, short.s4[1])))
+        self.assertEqual((out.outcome, out.basis), ("INSUFFICIENT_DATA", "B-Q3"))
+        self.assertIn("S-4 vs equal-weight: not_won (printed; criteria 4.2.2 names INSUFFICIENT_DATA once S-3 is "
+                      "INSUFFICIENT_DATA)", out.reasons)
+        self.assertIn("S-4 vs cash: replaced (printed; criteria 4.2.2 names INSUFFICIENT_DATA once S-3 is "
+                      "INSUFFICIENT_DATA)", out.reasons)
+        self.assertEqual(S.strategy_outcome(gate_verdict="PASS", lines=replace(res, s4=(lost_s4, res.s4[1]))).outcome,
+                         "KEEP")
+
+    def test_lines_not_from_strategy_lines_are_refused_never_read_as_a_win(self):
+        res = self.build()
+        add = self.build(kind="add", with_incumbent=True)
+        rec = res.s2.readings
+        cases = (
+            (replace(res, s3=replace(res.s3, status="won")), "not one lw_compare gives"),
+            (replace(res, s3=replace(res.s3, status="replaced")), "not one lw_compare gives"),
+            (replace(res, s4=(replace(res.s4[0], status="WIN"), res.s4[1])), "not one lw_compare gives"),
+            (replace(res, s3=replace(res.s3, d_sr=-0.5, p=0.9)), "classify_comparison"),
+            (replace(res, s3=replace(res.s3, rule="S-4")), "counting S-3"),
+            (replace(add, s3=replace(add.s3, counts=True)), "printed-only S-3"),
+            (replace(res, s4=(replace(res.s4[0], counts=False), res.s4[1])), "counting S-4"),
+            (replace(res, s4=(replace(res.s4[0], rule="S-3"), res.s4[1])), "counting S-4"),
+            (replace(res, s4=(replace(res.s4[0], last_session=date(2017, 1, 2)), res.s4[1])), "not one run"),
+            (replace(res, s4=(res.s4[0], replace(res.s4[1], status="win"))), "cash baseline"),
+            (replace(res, s4=(res.s4[0], "cash")), "CASH_BASELINE"),
+            (replace(res, s2=replace(res.s2, readings=(rec[0], replace(rec[1], dsr=0.5)))), "is not what"),
+            (replace(res, s2=replace(res.s2, readings=(rec[0], replace(rec[1], status="PASS")))), "is not what"),
+            (replace(res, s2=replace(res.s2, readings=(rec[0], replace(rec[1], reading="X-FAM")))), "readings must"),
+            (replace(res, s2=replace(res.s2, status_grid="weird")), "S-2 at N = G"),
+            (replace(res, s2=replace(res.s2, status_grid="below")), "S-2 at N = G"),
+            (replace(res, s7=replace(res.s7, other="another incumbent")), "S-7 line"),
+            (replace(res, s7=replace(res.s7, expected_dsr=res.s7.mde80 / 3)), "power_line_s7"),
+            (replace(res, s7=replace(res.s7, mde80=float("nan"))), "power_line_s7"),
+            (replace(res, s7=replace(res.s7, status="other")), "power_line_s7"),
+            (replace(res, s7=replace(res.s7, status="not_run", underpowered_vs_expected=True)), "power_line_s7"),
+            (replace(res, sample_end=replace(res.sample_end, last_session=date(2027, 3, 1))), "check_sample_end"))
+        for bad, needle in cases:
+            with self.subTest(needle=needle), self.assertRaisesRegex(S.AdoptionInputError, needle):
+                S.strategy_outcome(gate_verdict="PASS", lines=bad)
+
+    def test_provisional_and_its_label_are_derived(self):
+        res = self.build()
+        final = replace(res, provisional=False, s2=replace(res.s2, provisional=False))
+        out = S.strategy_outcome(gate_verdict="PASS", lines=final)
+        self.assertFalse(out.provisional)
+        self.assertNotIn("[provisional]", out.lines()[0])
+        self.assertNotIn(S._OUTCOME_PROVISIONAL_NOTE, out.lines())
+        for one in (replace(res, provisional=False), replace(res, s2=replace(res.s2, provisional=False))):
+            self.assertTrue(S.strategy_outcome(gate_verdict="PASS", lines=one).provisional)
+        # "잠정 기준" is B-Q1's label only, not that of B-Q3, N12, KEEP or the gate's verdicts.
+        for verdict, lines in (("PASS", self.build(expected=self.mde / 2)), ("PASS", self.build(rfam=float("nan"))),
+                               ("PASS", self.build(count=300)), ("REJECT", self.build(rfam=0.85)),
+                               ("INSUFFICIENT_DATA", self.build())):
+            out = S.strategy_outcome(gate_verdict=verdict, lines=lines)
+            with self.subTest(outcome=out.outcome, basis=out.basis):
+                self.assertFalse(out.provisional_basis)
+                self.assertNotIn(S.PROVISIONAL_BASIS, out.lines()[0])
+        # B-Q2 references: a NaN gate DSR matches itself, and only supplied readings get a line.
+        nan = float("nan")
+        values = {self.G: nan, self.L: nan, self.R: nan}
+        with patch.object(V, "deflated_sharpe", side_effect=lambda d, *, n_trials, sr_sd_daily: values[n_trials]):
+            ref_nan = S.dsr_two_n(self.a, n_grid=self.G, sr_sd_grid=0.01, n_raw={"L-FAM": self.L, "R-FAM": self.R},
+                                  sr_sd_daily=0.03, sr_sd_label="stricter")
+            ref_l = S.dsr_two_n(self.a, n_grid=self.G, sr_sd_grid=0.01, n_raw={"L-FAM": self.L},
+                                sr_sd_daily=0.03, sr_sd_label="stricter")
+        out = S.strategy_outcome(gate_verdict="REVISE", lines=self.build(grid=nan, rfam=nan, lfam=nan),
+                                 reference_s2=ref_nan)
+        self.assertEqual((out.outcome, len(out.references)), ("INSUFFICIENT_DATA", 2))
+        only_l = S.strategy_outcome(gate_verdict="REJECT", lines=self.build(grid=nan, lfam=nan,
+                                                                            n_raw={"L-FAM": self.L}),
+                                    reference_s2=ref_l)
+        self.assertEqual(len(only_l.references), 1)
+        self.assertIn("DSR at N_raw L-FAM = 17 [shown for comparison]", only_l.references[0])
+
     def test_outcome_changes_no_number_or_line_of_earlier_units(self):
         a, inc = pair(T=756, seed=5, edge=0.0008)                # the gate's DSR at N = G passes (0.9952)
         rng = np.random.default_rng(2)
@@ -923,7 +1060,7 @@ class OutcomeAssembly(unittest.TestCase):
             self.assertIs(out.strategy, res)
             with self.assertRaises(FrozenInstanceError):
                 out.outcome = "ADOPT"
-            for name in ("provisional", "replaces_incumbent", "provisional_basis", "kind"):
+            for name in ("provisional", "replaces_incumbent", "provisional_basis", "kind", "not_covered"):
                 with self.subTest(name=name), self.assertRaises(AttributeError):
                     setattr(out, name, True)
         d11 = V.deflated_sharpe(a, n_trials=self.R, sr_sd_daily=0.011)
