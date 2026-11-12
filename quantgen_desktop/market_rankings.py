@@ -1693,8 +1693,26 @@ class RankingBoard(QFrame):
                     self.summary.updateGeometry()
                     self.updateGeometry()  # a smaller minimum reaches the scroll area now, not at the next relayout
             self._reflow()
+            self._fit_scroll_page()
         finally:
             self._fitting = False
+
+    def _fit_scroll_page(self):
+        """Give the scroll area's page the viewport's width as soon as the narrower columns allow it.
+
+        After a window shrinks, the rows keep their wider fixed columns until `_reflow`; the scroll area had already
+        sized its page to that old minimum and only widens or narrows it again at a later layout pass. On a slow
+        runner (PR 109, Windows CI) that pass had not come 3 s later, so the page scrolled sideways at 1000 px.
+        """
+        scroll = self._scroll
+        page = scroll.widget() if scroll is not None else None
+        if page is None or not scroll.widgetResizable():
+            return
+        if page.layout() is not None:
+            page.layout().activate()  # the rows' new fixed widths, now: the minimum below must be the new one
+        want = max(scroll.viewport().width(), page.minimumSizeHint().width())
+        if page.width() != want:
+            page.resize(want, page.height())
 
     def _set_head_wide(self, wide):
         if wide == self._head_wide:

@@ -23,9 +23,17 @@ class UiLabel(QLabel):
         self.retranslate()
 
     def retranslate(self):
-        language = getattr(self.window(), 'ui_language', None)
+        window = self.window()
+        language = getattr(window, 'ui_language', None)
+        ctx = getattr(window, 'ctx', None)
+        key = (self.source_text, language, str(ctx.locale) if ctx is not None else None,
+               tuple(sorted(getattr(self, 'localized_text', {}).items())))
+        if key == getattr(self, '_qg_rendered_key', None) and self.text() == getattr(self, '_qg_rendered', None):
+            return  # same source, language and locale as last time: the display text cannot differ
         localized = getattr(self, 'localized_text', {}).get(language)
-        super().setText(localized if localized is not None else display(self, self.source_text))
+        rendered = localized if localized is not None else display(self, self.source_text)
+        super().setText(rendered)
+        self._qg_rendered_key, self._qg_rendered = key, self.text()
 
     def event(self, event):
         result = super().event(event)
@@ -58,15 +66,32 @@ class LanguageController(QObject):
             self.schedule()
         return False
 
+    def _stamp(self, widget):
+        """The window language and locale a text was rendered for; a pass re-renders a text only when this or the
+        text itself changed. Without it every pass re-translated every text, about a second per pass once the
+        Markets list and the stock screen were added, and a pass runs after any layout change (a window resize
+        took over a second to settle; PR 109's Windows CI timed out on it)."""
+        window = widget.window()
+        stamp = self._stamps.get(id(window))
+        if stamp is None:
+            ctx = getattr(window, 'ctx', None)
+            stamp = (getattr(window, 'ui_language', None), str(ctx.locale) if ctx is not None else None)
+            self._stamps[id(window)] = stamp
+        return stamp
+
     def _text(self, widget, key, current, setter):
         cache = getattr(widget, '_qg_display_sources', {})
-        source, rendered = cache.get(key, (current, current))
+        stamp = self._stamp(widget)
+        entry = cache.get(key)
+        if entry is not None and current == entry[1] and entry[2] == stamp:
+            return  # rendered for this language from this source, and nobody has replaced it since
+        source, rendered = (entry[0], entry[1]) if entry is not None else (current, current)
         if current != rendered:
             source = current
         translated = display(widget, source)
         if key == 'text' and widget.property('nav'):
             translated = translated.replace('&&', '&').replace('&', '&&')
-        cache[key] = (source, translated)
+        cache[key] = (source, translated, stamp)
         widget._qg_display_sources = cache
         if current != translated:
             setter(translated)
@@ -76,6 +101,7 @@ class LanguageController(QObject):
             return
         self.pending = False
         self.applying = True
+        self._stamps = {}  # window language and locale, read once per pass
         ctx = getattr(self.window, "ctx", None)
         if ctx:
             self.window.setLocale(QLocale(str(ctx.locale)))

@@ -403,14 +403,14 @@
     "quantgen_desktop/indicator_guide.py": "ce6f8c970fcd2dea89e318e68785bacdf8367c0152ac800d5e38623f618a5559",
     "quantgen_desktop/indicator_picker.py": "72bab730f86ad77be79a07ea00fd9728ed5bf8c5833c027a9dfe5b5178e7dc3d",
     "quantgen_desktop/jobs.py": "2a0764c9c4f767a2c93d49b0fe929a1ad655d2195acc0c9a371f6229a1aa5ac1",
-    "quantgen_desktop/localization.py": "366f4c9e40c50c3e9b9dd5c000de98e692aba9bce5645ed57a0fb19d5be2238d",
+    "quantgen_desktop/localization.py": "3063adcf982e03ac6613baed9509f40b75a041d3f8ab72caf96bdca8988cd07f",
     "quantgen_desktop/macro.py": "87bc22e6d347999f796828dd82e95b13ce6d4df2c143b3d4d802548a8a75a224",
     "quantgen_desktop/macro_narrative_language.py": "cd19c8802aca9e9539f1955fe5a43b4a204e41bfe2afc05c8556517e7bafa929",
     "quantgen_desktop/macro_records.py": "bcb53ba2e952f70bc8c7dd8bce96a1155329f4be61231bebe020524db21b11c3",
     "quantgen_desktop/market_chart.py": "d6a952d676369febd23064ecbb8bf1e0b007649fd931de5711166a197897d251",
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
     "quantgen_desktop/market_narrative_language.py": "8bcb8f74ca7208370f5a4895cb4f643574d86d650c7f3ceb04a3a008044618aa",
-    "quantgen_desktop/market_rankings.py": "a939ef1ccb956865cb2cce3f22504efac3a777f2a5092e8f3ed3d5a0faa96d75",
+    "quantgen_desktop/market_rankings.py": "41423dd0627d7508208af9c484a1342e84ce93824a337391d8de7fa466095176",
     "quantgen_desktop/market_summary.py": "8ea24133b42f112a4c7225d171e5eb40300e11ff2d12f650e3378692ac306796",
     "quantgen_desktop/market_tools.py": "2bd38da5339071abb860ddc7f93019806e78490f7229b9b107b0937843c1e71e",
     "quantgen_desktop/markets_view.py": "1600e315f0315b911cc4141da4220ef84831ac390cde0a6f39fa2fcca8f57c23",
@@ -490,7 +490,7 @@
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
     "tests/desktop_home_live_acceptance.py": "a752117e0d0e40fd58d0bf8ae0010aa87397d6b82d177676b7601db9e7318533",
     "tests/desktop_home_markets_home_acceptance.py": "6f14c47fbc5faf01d3a80f81d9e210e7cc75b9e19f74a0771ff2fbcac89c7eef",
-    "tests/desktop_home_markets_markets_acceptance.py": "920fa02b404f9fd0e1fce0ccebf2c5d37e978951133093af5219a8501e637014",
+    "tests/desktop_home_markets_markets_acceptance.py": "03eea9002b3113ef070e2a35ea66fc2cb32affcf7f3b017afab18a0357cf6f27",
     "tests/desktop_home_markets_shell_acceptance.py": "25a5da36e3275b12f215a153a430b982cdd995cf5eca71667cbf7a1bfd1c1504",
     "tests/desktop_indicator_guide_acceptance.py": "9aa60d4d760fb09ef3e6c4cb4d48cbef972bffeb015d27b30a52658238c50438",
     "tests/desktop_language_acceptance.py": "9f41b4fddc57ccf1013c6551f72494bc09608d751aa7fe0b395943d4d8c2d47f",
@@ -724,163 +724,163 @@
   "reviews": {
     "1": {
       "document_sha256": "bacab46dd51ed03b4d3be4b9bc46a7733cbed73ba42653ce9695e5ca0e10b4b4",
-      "source_digest": "c0f9505aca7a34cf75b03a6938a67e32e966cba6c08507dc2ec2735e58dc2338",
+      "source_digest": "884ff544a2f79e8e64ef5b37b6d1cdf4409e8730450a33ce49df7f371933b804",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.663991+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.322763+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "c0f9505aca7a34cf75b03a6938a67e32e966cba6c08507dc2ec2735e58dc2338",
+      "source_digest": "884ff544a2f79e8e64ef5b37b6d1cdf4409e8730450a33ce49df7f371933b804",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.666114+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.325144+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "0d5ea04a2559298b71867908f037ed2da9b53d56669cf72dd983e3b43fa8c0c3",
+      "source_digest": "6fddb193a8fc618e9cbea581246e0498a7554f0300c8dcb90fde286402e0bb30",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.668651+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.327054+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "4": {
       "document_sha256": "f63c98563dc663611297f52c74457ea7ad2f052d918c45e505dd667652074c9b",
       "source_digest": "4b91ceb0d755d8de17b41945030c7a6be82220e3f0d4fcb158f787623721f226",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.670512+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.328985+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
       "source_digest": "cea295f07a95f681d2ec3d389a7fe42fc1b2fc074b31bddc0eb5f4d5d9802e4f",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.672649+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.330890+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "6": {
       "document_sha256": "60bb586d0bce26480feecc06f182c6ceaaea1700f1be0e95bac820f18ad484a8",
-      "source_digest": "6301b6788855262a0fa441a9b159d3e917a84e325e804360abad0e95a83e14ea",
+      "source_digest": "8db08a6b81048c80dd3a8be407efb2ed24f2590040e295014b10b44f6f699dad",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.674561+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.332580+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "7": {
       "document_sha256": "1eb6da7d87830c9abde24303464cd80f65f6a1bf5b66bc5b53ec81b2c2e4b1ed",
-      "source_digest": "c0f9505aca7a34cf75b03a6938a67e32e966cba6c08507dc2ec2735e58dc2338",
+      "source_digest": "884ff544a2f79e8e64ef5b37b6d1cdf4409e8730450a33ce49df7f371933b804",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.676233+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.334446+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "8": {
       "document_sha256": "e50e210234645ca8e2561662dae3a0afc5ab445e68fe523d320c3889c7e0d8a7",
-      "source_digest": "6301b6788855262a0fa441a9b159d3e917a84e325e804360abad0e95a83e14ea",
+      "source_digest": "8db08a6b81048c80dd3a8be407efb2ed24f2590040e295014b10b44f6f699dad",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.677864+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.336198+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "9": {
       "document_sha256": "ebdb3469ea72e45341719aae0805b46a526374d394dbdb0e1875fe1df2c01757",
-      "source_digest": "3016d037fb6726fcff6c565f3530fa90294794d636c27715b4c9bc3830f5450b",
+      "source_digest": "1fdb8e3598f85209ad4d6c5427f838ca41f3c8e3752c516eeaf3e1574e072c9e",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.679569+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.338210+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "10": {
       "document_sha256": "13ab9559eb6b5a0bf84c1575acd19d94cdb0b69273474fd5e686e05df5930fc3",
-      "source_digest": "4cff2c052239412acb3663dcda0eb332da65704b66274c07deaf1282b85c2c8f",
+      "source_digest": "d56a018c1a255ce7dd7e5f15978a57c1852601d7afb42f8fe85375420edb3f4a",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.681800+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.339906+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "92f1c0ebd32d8f46fc2e67161ad694f06b4e1214b5cba9118113c523d1b55e5a",
+      "source_digest": "a990fd4b66c52fb91316acc89d5e8e779ea52c94cf2bc83572aaea496b60bcd8",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.683960+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.341669+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "12": {
       "document_sha256": "55b14bd417df61e59c2e06eb37f397dcbe8457ec571342c27e6b0d3559d507dc",
-      "source_digest": "5b1d9caec54f27d10ab067806eac32f9375a1f8a6507d4e4ebd3db064e6e93d0",
+      "source_digest": "d7f60be69c2946de0a8f14423dcea5f85a3ada5dd6cb65b495b0a449bf881c80",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.685572+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.343459+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "13": {
       "document_sha256": "cbb62a2360f579617977c7d4bb0105eecfec4b091ef98d554d14f8f675508ac0",
-      "source_digest": "3016d037fb6726fcff6c565f3530fa90294794d636c27715b4c9bc3830f5450b",
+      "source_digest": "1fdb8e3598f85209ad4d6c5427f838ca41f3c8e3752c516eeaf3e1574e072c9e",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.687179+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.345320+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "14": {
       "document_sha256": "5098fa39312b4ce88a73080e61ad70473c9e736a2b7e93150c74e87fbb68d50c",
-      "source_digest": "3016d037fb6726fcff6c565f3530fa90294794d636c27715b4c9bc3830f5450b",
+      "source_digest": "1fdb8e3598f85209ad4d6c5427f838ca41f3c8e3752c516eeaf3e1574e072c9e",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.688744+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.347028+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "15": {
       "document_sha256": "6b12ffaeaed6ebd8b925ea4ff65ae5e6b0031dd9566739474f672cda1b7d0055",
-      "source_digest": "3016d037fb6726fcff6c565f3530fa90294794d636c27715b4c9bc3830f5450b",
+      "source_digest": "1fdb8e3598f85209ad4d6c5427f838ca41f3c8e3752c516eeaf3e1574e072c9e",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.690495+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.348779+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "247fc68162b0a06c02728d618cd1b25b81dc0b2e21db02a40b607c478e6e43d7",
+      "source_digest": "faf5666c3982c933dc49ad64c002e2ae8c4fe650be45f0061f0b524fe5adedbd",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.692105+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.350357+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "6301b6788855262a0fa441a9b159d3e917a84e325e804360abad0e95a83e14ea",
+      "source_digest": "8db08a6b81048c80dd3a8be407efb2ed24f2590040e295014b10b44f6f699dad",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.693905+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.352003+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "c0f9505aca7a34cf75b03a6938a67e32e966cba6c08507dc2ec2735e58dc2338",
+      "source_digest": "884ff544a2f79e8e64ef5b37b6d1cdf4409e8730450a33ce49df7f371933b804",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.695638+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.353907+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "19": {
       "document_sha256": "983c0b85fb10b1018222236a37b839667a1103472796b514a9419651b8af2a37",
       "source_digest": "73047684629bfa3137f7cf9fb96e460a5c0596c308ef58bd66309f370d6b7339",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.697177+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.355468+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     },
     "20": {
       "document_sha256": "b6019dd07ee24fdf3a53791a3e0adad1472bb14cbe843a38553f209b669d1551",
-      "source_digest": "c0f9505aca7a34cf75b03a6938a67e32e966cba6c08507dc2ec2735e58dc2338",
+      "source_digest": "884ff544a2f79e8e64ef5b37b6d1cdf4409e8730450a33ce49df7f371933b804",
       "reviewed_by": "Claude integration review",
-      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
-      "reviewed_at": "2026-11-12T03:03:20.698795+00:00",
-      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
+      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
+      "reviewed_at": "2026-11-12T04:15:56.357112+00:00",
+      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
     }
   }
 }

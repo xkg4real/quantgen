@@ -1073,6 +1073,25 @@ class MarketReviewTests(WindowBase):
         self.settle(0.2)
         self.assertEqual(asked, ["^GSPC"])
 
+    def sideways_report(self, scroll, language, page, size, category):
+        """What made the page wider than its viewport: sizes, then the widest and right-most visible widgets
+        (Windows CI failed this check where Linux passes; the message names the culprit)."""
+        from PyQt6.QtWidgets import QWidget
+        board, viewport = self.board, scroll.viewport()
+        widgets = [w for w in board.findChildren(QWidget) if w.isVisible()]
+
+        def name(w):
+            text = w.text() if hasattr(w, "text") and callable(w.text) else ""
+            return f"{type(w).__name__}#{w.objectName()}:{str(text)[:28]!r}"
+        widest = sorted(widgets, key=lambda w: -w.minimumSizeHint().width())[:6]
+        rightmost = sorted(widgets, key=lambda w: -w.mapTo(board, w.rect().topRight()).x())[:6]
+        return (f"{language}/{page}/{size}/{category}: window {self.window.width()}x{self.window.height()}, "
+                f"viewport {viewport.width()}x{viewport.height()}, hbar max {scroll.horizontalScrollBar().maximum()}, "
+                f"vbar {scroll.verticalScrollBar().isVisible()}, board {board.width()} min {board.minimumSizeHint().width()} "
+                f"hint {board.sizeHint().width()} minW {board.minimumWidth()}; widest "
+                + ", ".join(f"{name(w)}={w.minimumSizeHint().width()}" for w in widest)
+                + "; rightmost " + ", ".join(f"{name(w)}@{w.mapTo(board, w.rect().topRight()).x()}" for w in rightmost))
+
     def test_no_market_or_language_scrolls_sideways_at_1000_px(self):
         # Review: English 1000-1250 px overflowed (criteria stuck on one line, Refresh and columns cut off).
         self.board.loader = FakeLoader({"kr": every_domestic(), "us": every_us(), "crypto": crypto_batch()})
@@ -1090,7 +1109,11 @@ class MarketReviewTests(WindowBase):
                     self.window.resize(*size)
                     for category in ("value", "gainers"):
                         self.board.set_category(category)
-                        self.wait(lambda: scroll.horizontalScrollBar().maximum() == 0, 3)
+                        end = time.monotonic() + 3
+                        while time.monotonic() < end and scroll.horizontalScrollBar().maximum() != 0:
+                            self.app.processEvents(); time.sleep(0.01)
+                        self.assertEqual(scroll.horizontalScrollBar().maximum(), 0,
+                                         self.sideways_report(scroll, language, page, size, category))
                         self.assertLessEqual(self.board.width(), scroll.viewport().width(), (language, page, size))
         self.window.resize(1000, 700); self.view.show_market("us"); self.app.processEvents()
         self.assertTrue(self.board.refresh_button.isVisible())
