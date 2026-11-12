@@ -4,15 +4,15 @@ reason: usage_limit_weekly
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e
-next_ids: ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-12T16:53:00+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c
+next_ids: ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-12T17:08:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: main
-work_commit: 0786200
+work_commit: 9e00bf3
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/111
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -156,7 +156,7 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 #### 3. GPT가 할 일 (순서대로, 각각 완료 조건)
 
 1. **세션 시작:** `python3 tools/handoff/push_handoff.py --show` → status handoff 확인 후 taken으로 이어받음. `--ledger`로 끝난 ID 확인.
-2. **PR #111 (⑨-4/2/c, 채택 결과 조립) 마무리:** head `73be590`(main `0786200` 병합 포함). GitHub Runtime·Compliance가 녹색이면 병합(merge commit). 캐시 없는 전체 실행은 `351db88`에서 782/908(main과 같음, 바뀐 행 0). 시험 `tests.adoption_strategy_rules_acceptance` 46 OK. 병합 뒤 원장 `--done "⑨-4/2/c | …"`. Vercel 상태는 무시.
+2. **(끝남: Claude가 인계 직후 CI 녹색 확인 뒤 병합, main `9e00bf3`, 원장 ⑨-4/2/c)** PR #111 (⑨-4/2/c, 채택 결과 조립) 마무리: head `73be590`(main `0786200` 병합 포함). GitHub Runtime·Compliance가 녹색이면 병합(merge commit). 캐시 없는 전체 실행은 `351db88`에서 782/908(main과 같음, 바뀐 행 0). 시험 `tests.adoption_strategy_rules_acceptance` 46 OK. 병합 뒤 원장 `--done "⑨-4/2/c | …"`. Vercel 상태는 무시.
 3. **판정 기록 PR(main, 문서만):** `results/RULINGS.md`의 SPY-가 항목 아래에 "둘째 실행 `PP-20261112T073747Z-spy` PASS, 요약 sha256 4ad6c537…3c02, Pilot 1 관문 통과(DGS3MO PASS와 함께)"를, BTC-나 항목 아래에 "진단 출력 판독: 규칙 1 모두 일치, 합계 위 1절, 5번 경우, 원인 미확인, 소유자에게 질문"을 적음. 같은 내용을 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`의 SPY-가·BTC-나 절 뒤에 날짜 붙여 추가. 준법 기준선 갱신(`python3 -B -m tools.compliance.check --refresh-baseline --documents $(seq 1 20) --reviewed-by "…" --review-note "…"`). 병합 후 main을 실행 브랜치 `claude/provider-parity-runs-20261111`에 병합·push. 원장 `⑤-2/e`, `⑤-2/g`는 이미 기록됨(아래 4절).
 4. **Pilot 1 판독:** 소유자가 B2~B11 출력과 run 폴더(`docs/nautilus_bridge/runs/NB-…-d76d2d73/`)를 연구 브랜치에 올리면, `docs/product/PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md` 1.2절 점검표와 부록 B `read_run.py`로 판독하고 1.2.6의 한국어 문장으로 보고. 예상 결과: CARD_WRITTEN, 판정 INSUFFICIENT_DATA 또는 REJECT(실패 아님). 판정·재실행 규칙은 결정 1·3·4(파일럿마다 C-06 1회)·5.
 5. **그다음:** BTC 답에 따라 Pilot 2(실행표 D, 결정 6이면 같은 자리에서 E) → Windows 전체 검사 E → Claude/GPT가 마감 기록(P2 범위: 마감 기록, 스펙, README 두 줄, runs 폴더; 결정 10·11: **후속 세션은 연구 브랜치에 커밋하기 전에 소유자 한 줄 승인을 받아야 함**) → P3 병합 리허설 다시 → 실행표 F.
