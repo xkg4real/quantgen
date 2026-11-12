@@ -720,11 +720,15 @@ class ChartOverlays(QObject):
             head.info = QPushButton()
             head.info.setProperty("sd", "mini")
             head.info.setFocusPolicy(Qt.FocusPolicy.TabFocus)
+            # The buttons' own pointer: they would otherwise take the chart's drag hand (owner R-D12-2), though a
+            # press on them clicks and never drags.
+            head.info.setCursor(Qt.CursorShape.PointingHandCursor)
             head.info.clicked.connect(lambda checked=False, k=key: self.info_requested.emit(k))
             row.addWidget(head.info)
             head.off = QPushButton()
             head.off.setProperty("sd", "mini")
             head.off.setFocusPolicy(Qt.FocusPolicy.TabFocus)
+            head.off.setCursor(Qt.CursorShape.PointingHandCursor)
             head.off.clicked.connect(lambda checked=False, k=key: self.off_requested.emit(k))
             row.addWidget(head.off)
             head.full = ""
@@ -1342,6 +1346,9 @@ class StockDetailView(QWidget):
         self.chart.empty_hint = self._empty_hint
         self.chart.chart.key_handler = self.chart_key
         self.chart.set_detail_mode(True)
+        # The pane names the chart after its data source outside this screen; here the name says how to move and
+        # zoom it (a render in detail mode keeps it).
+        self.chart.chart.setAccessibleName(text(_lang(self.ctx), "chart_name"))
         if self.chart._studies is None:
             self.chart.set_indicators(self.studies)
         if self.chart.period is None and self.chart.snapshot is None:

@@ -457,6 +457,167 @@ class StockDetailTests(unittest.TestCase):
         self.assertEqual(page.value(), view.lock.target)
         self.assertEqual(len(self.service.calls), 1)                      # dragging never reloads
 
+    def test_a_drag_against_an_end_keeps_the_selection_under_the_pointer(self):
+        """Review of R-D12-2 ("the crosshair/readout follows after release"): when the window cannot follow the drag
+        (it is stopped at the latest or the first bar, or every loaded bar is shown) the selection and the OHLC strip
+        stay on the bar under the pointer, during the drag and after the release; with every bar shown the pointer
+        is the arrow, not the hand, and the hand comes back when a zoom lets the window move."""
+        self.open()
+        p, chart, view = self.pane, self.pane.chart, self.view
+        n = len(p.snapshot.candles)
+        layout = chart.layout_info
+        step, y = layout.step, sum(layout.price) / 2
+        self.assertEqual((layout.start, layout.stop), (n - 126, n))
+        # At the latest bar a drag toward newer bars moves nothing; the selection follows the pointer all the same.
+        x0 = layout.x_of(n - 60)
+        self.mouse(chart, "move", x0, y, held=False)
+        self.mouse(chart, "press", x0, y)
+        x1 = x0 - 30 * step
+        self.mouse(chart, "move", x1, y)
+        self.assertEqual((p.window(), p._end, p._cursor), ((n - 126, n), None, n - 90))
+        self.mouse(chart, "release", x1 - 2 * step, y)                     # released two bars further on
+        self.settle(2)
+        self.assertEqual((p.window(), p._end, p._cursor), ((n - 126, n), None, n - 92))
+        self.assertEqual(view.overlays.ohlc.date.text(), p.snapshot.candles[n - 92].timestamp[:10])
+        # At the first bar, a drag toward older bars: the same.
+        QTest.keyClick(chart, Qt.Key.Key_Home)
+        self.assertEqual(p.window(), (0, 126))
+        x0 = chart.layout_info.x_of(30)
+        self.mouse(chart, "press", x0, y)
+        self.mouse(chart, "move", x0 + 40 * step, y)
+        self.assertEqual((p.window(), p._cursor), ((0, 126), 70))
+        self.mouse(chart, "release", x0 + 40 * step, y)
+        self.settle(2)
+        self.assertEqual((p.window(), p._cursor), ((0, 126), 70))
+        self.assertEqual(view.overlays.ohlc.date.text(), p.snapshot.candles[70].timestamp[:10])
+        # Every loaded bar shown: no hand (nothing to drag), and a press-and-move only moves the selection.
+        for _ in range(30):
+            self.ctrl_wheel(chart, x0, -120, y)
+        self.assertEqual(p.window(), (0, n))
+        xa = chart.layout_info.x_of(200)
+        self.mouse(chart, "move", xa, y, held=False)
+        self.assertEqual(chart.pointer_shape(), Qt.CursorShape.ArrowCursor)
+        self.mouse(chart, "press", xa, y)
+        self.mouse(chart, "move", xa + 80, y)
+        under = chart.layout_info.index_at(xa + 80)
+        self.assertGreater(under, 200)
+        self.assertEqual(chart.pointer_shape(), Qt.CursorShape.ArrowCursor)
+        self.assertEqual((p.window(), p._cursor), ((0, n), under))
+        self.mouse(chart, "release", xa + 80, y)
+        self.assertEqual((p.window(), p._cursor), ((0, n), under))
+        # One Ctrl + wheel step in: the window can move again and the hand shows without a mouse move.
+        self.ctrl_wheel(chart, xa + 80, 120, y)
+        self.assertLess(p.visible_bars.value(), n)
+        self.assertEqual(chart.pointer_shape(), Qt.CursorShape.OpenHandCursor)
+        self.assertEqual(len(self.service.calls), 1)
+
+    def test_a_zoom_a_key_or_a_live_bar_during_a_drag_is_not_undone(self):
+        """Review of R-D12-2: Ctrl + wheel, Shift+arrow, 0 or a new live bar while the left button is held are kept by
+        the next mouse move: the drag goes on from the bar under the pointer at that moment (and, at the latest bar,
+        keeps following live data)."""
+        from dataclasses import replace
+        self.open()
+        p, chart = self.pane, self.pane.chart
+        n = len(p.snapshot.candles)
+        layout = chart.layout_info
+        step, y = layout.step, sum(layout.price) / 2
+        x0 = layout.x_of(n - 60)
+
+        def hold_still(x):
+            """A move to the middle of the bar under chart x (the same bar: a held drag must not pan)."""
+            current = chart.layout_info
+            centre = current.x_of(current.index_at(x))
+            self.mouse(chart, "move", centre, y)
+            return centre
+
+        self.mouse(chart, "press", x0, y)
+        x1 = x0 + 10 * step
+        self.mouse(chart, "move", x1, y)
+        self.assertEqual(p.window(), (n - 136, n - 10))
+        # Ctrl + wheel at the pointer: the bar under it stays there through the next moves, at the new bar width.
+        self.ctrl_wheel(chart, x1, 120, y)
+        zoomed = p.window()
+        self.assertEqual((p.visible_bars.value(), chart.layout_info.index_at(x1)), (round(126 * 0.8), n - 60))
+        x = hold_still(x1)
+        self.assertEqual((p.window(), chart.layout_info.index_at(x)), (zoomed, n - 60))
+        x += 5 * chart.layout_info.step + 1
+        self.mouse(chart, "move", x, y)
+        self.assertEqual((p.visible_bars.value(), chart.layout_info.index_at(x)), (round(126 * 0.8), n - 60))
+        # Shift+← during the drag: kept.
+        QTest.keyClick(chart, Qt.Key.Key_Left, Qt.KeyboardModifier.ShiftModifier)
+        shifted, held = p.window(), chart.layout_info.index_at(x)
+        x = hold_still(x)
+        self.assertEqual((p.window(), chart.layout_info.index_at(x)), (shifted, held))
+        # 0 during the drag: the default view, following the latest bar, is kept.
+        QTest.keyClick(chart, Qt.Key.Key_0)
+        self.assertEqual((p.window(), p._end, p.visible_bars.value()), ((n - 126, n), None, 126))
+        x = hold_still(x)
+        self.assertEqual((p.window(), p._end), ((n - 126, n), None))
+        # A new live bar while the press is held at the latest bar: the window keeps following live data.
+        last = p.snapshot.candles[-1]
+        p.snapshot = replace(p.snapshot, candles=p.snapshot.candles + (
+            Candle("2026-11-11", last.close, last.close * 1.01, last.close * 0.99, last.close * 1.005, last.volume),))
+        p.render()
+        self.assertEqual((p.window(), p._end), ((n - 125, n + 1), None))
+        x = hold_still(x)
+        self.assertEqual((p.window(), p._end), ((n - 125, n + 1), None))
+        # Dragging on from there pans as usual.
+        held = chart.layout_info.index_at(x)
+        self.mouse(chart, "move", x + 4 * chart.layout_info.step, y)
+        self.assertEqual(chart.layout_info.index_at(x + 4 * chart.layout_info.step), held)
+        self.assertEqual(p.window(), (n - 129, n - 3))
+        self.mouse(chart, "release", x + 4 * chart.layout_info.step, y)
+        self.assertEqual(len(self.service.calls), 1)
+
+    def test_overlay_pointer_shapes_and_the_chart_name(self):
+        """Review of R-D12-2: the panel header's ⓘ and × show the pointing hand (a press there clicks, never drags);
+        the labels over the chart show the drag hand over the plot and the arrow over the price axis however the
+        pointer reached them. The chart's accessible name says how to move and zoom it after every load (a render
+        no longer replaces it with the data source), in Korean and English."""
+        from quantgen_desktop.stock_detail_style import text
+        self.open()
+        p, chart, view = self.pane, self.pane.chart, self.view
+        self.assertEqual(chart.accessibleName(), text("ko", "chart_name"))
+        p.set_indicators(("rsi",))
+        self.settle()
+        layout = chart.layout_info
+        head = view.overlays.heads["rsi"]
+        handle = self.window.windowHandle()
+        at = lambda x, y: chart.mapTo(self.window, QPoint(round(x), round(y)))
+        price_y = sum(layout.price) / 2
+        # The header's title sits over the plot. Reached from the price axis (the arrow), it shows the hand.
+        title = head.title.mapTo(chart, head.title.rect().center())
+        self.assertLess(title.x(), layout.plot_right)
+        QTest.mouseMove(handle, at(layout.plot_right + 20, price_y))
+        self.assertEqual(chart.pointer_shape(), Qt.CursorShape.ArrowCursor)
+        QTest.mouseMove(handle, at(title.x(), title.y()))
+        self.assertIs(self.window.childAt(at(title.x(), title.y())), head.title)
+        self.assertEqual(head.title.cursor().shape(), Qt.CursorShape.OpenHandCursor)
+        # From the plot onto the ⓘ and × buttons: the pointing hand.
+        for button in (head.info, head.off):
+            QTest.mouseMove(handle, at(layout.x_of(layout.start + 50), price_y))
+            self.assertEqual(chart.pointer_shape(), Qt.CursorShape.OpenHandCursor)
+            centre = button.mapTo(self.window, button.rect().center())
+            QTest.mouseMove(handle, centre)
+            self.assertIs(self.window.childAt(centre), button)
+            self.assertEqual(button.cursor().shape(), Qt.CursorShape.PointingHandCursor)
+        # Over the header's part above the price axis (left of the buttons): the arrow, though reached from the plot.
+        spot = QPoint(round(layout.plot_right) + 2, title.y())
+        under = self.window.childAt(chart.mapTo(self.window, spot))
+        self.assertTrue(under is not chart and chart.isAncestorOf(under))
+        self.assertNotIn(under, (head.info, head.off))
+        QTest.mouseMove(handle, at(layout.x_of(layout.start + 50), price_y))
+        QTest.mouseMove(handle, chart.mapTo(self.window, spot))
+        self.assertEqual(under.cursor().shape(), Qt.CursorShape.ArrowCursor)
+        # The accessible name after a reload, in English too.
+        self.window.set_language("en")
+        self.settle()
+        p.refresh(manual=True)
+        self.wait(lambda: not p.jobs.busy)
+        self.settle()
+        self.assertEqual(len(self.service.calls), 2)
+        self.assertEqual(chart.accessibleName(), text("en", "chart_name"))
+
     def test_daily_periods_share_one_request_and_five_years_reload_weekly(self):
         self.open(profile=False)
         self.assertEqual((self.service.calls[0].interval, self.service.calls[0].limit), ("1d", 400))
