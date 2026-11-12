@@ -911,3 +911,14 @@ Gothic A1 기반 hinted TTF400/500/600과 별도 QG Symbols를 동봉하여 작�
 | 창(`ResearchWindow`)을 만들 때 번들 글꼴(QG Interface)이 아직 등록되지 않았으면 `main()`과 같은 방법으로 등록합니다(`use_interface_fonts`). `main()` 밖에서 만든 창(시험·캡처)이 운영체제 기본 글꼴(리눅스 Inter·DejaVu, Windows Segoe UI)로 그려져 배치 시험이 OS마다 다른 글꼴을 재던 문제입니다. 앱 실행 경로는 이미 `main()`에서 등록하므로 바뀌지 않습니다. | [`quantgen_desktop/__init__.py`](../../quantgen_desktop/__init__.py) `use_interface_fonts`, [`app.py`](../../quantgen_desktop/app.py) `ResearchWindow.__init__` |
 | 바뀌지 않는 것: 색 토큰, 스타일 시트, 글꼴 정책(같은 번들·같은 설정), 데이터 요청, 저장 항목. | 같은 커밋의 변경 파일 |
 | 미검증: Windows 화면 직접 측정(컨테이너에 Windows 없음). | — |
+
+<a id="chart-zoom-drag-2026-11-12"></a>
+## 종목 상세 차트 Ctrl+휠 확대·끌기 이동 — 2026-11-12 소스 검토
+
+| 사실 | 근거 |
+|---|---|
+| 소유자 원문: "차트 확대를 +-로 하지말고 컨트롤 + 마우스 휠 이렇게 하자", "차트 화면 좌클릭해서 좌우로 끌면 좌우도 움직일수잇게 !! 화살표도 유지하고". | 소유자 채팅 2026-11-12 |
+| 차트 위 Ctrl+휠(고해상도 휠은 한 칸으로 모아서)과 핀치가 기존 확대 단계(0.8×·1.25×)로 마우스 아래 봉을 기준으로 확대·축소합니다. 휠만은 아무 동작이 없고 페이지도 움직이지 않습니다. 오른쪽 열 위 Ctrl+휠은 차트에 닿지 않습니다. | [`market_chart.py`](../../quantgen_desktop/market_chart.py) `MarketChartPane.zoom_at`, `MarketChartSvg.wheelEvent` |
+| 왼쪽 버튼 끌기는 플랫폼 끌기 거리를 넘으면 잡은 봉이 포인터를 따라가게 옮기고 처음·최신 봉에서 멈춥니다. 끌기 거리 안의 클릭은 봉 선택입니다. 끌기 중 확대·키 입력·새 봉이 생기면 기준점을 다시 잡습니다. | 같은 파일 `MarketChartPane.drag_to`, `MarketChartSvg` 마우스 처리 |
+| `+`·`-`·`=`·`_` 확대 키와 기간 막대의 −·+ 버튼을 없앴습니다. 데이터 요청·저장 항목은 바뀌지 않습니다. | [`stock_detail.py`](../../quantgen_desktop/stock_detail.py) `PeriodBar`, `chart_key` |
+| 검증: offscreen 합성 입력 시험(상세·탭·차트 4묶음 95개, CI 10단계 393개) 통과. 실제 Windows 휠 감도·터치패드·스크린리더 미실행. | [`tests/desktop_stock_detail_acceptance.py`](../../tests/desktop_stock_detail_acceptance.py) |

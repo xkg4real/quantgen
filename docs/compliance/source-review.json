@@ -293,7 +293,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "5966bab853ea25809ef7195b7878f0a626d16b01e498858b46cd0723d8a06bca",
+    "docs/compliance/FACTS.md": "fa4521cded455c885901e83a04affe56b4ed5fa553b8a7ea2fb6bd5adbc5684e",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -407,7 +407,7 @@
     "quantgen_desktop/macro.py": "87bc22e6d347999f796828dd82e95b13ce6d4df2c143b3d4d802548a8a75a224",
     "quantgen_desktop/macro_narrative_language.py": "cd19c8802aca9e9539f1955fe5a43b4a204e41bfe2afc05c8556517e7bafa929",
     "quantgen_desktop/macro_records.py": "bcb53ba2e952f70bc8c7dd8bce96a1155329f4be61231bebe020524db21b11c3",
-    "quantgen_desktop/market_chart.py": "d6a952d676369febd23064ecbb8bf1e0b007649fd931de5711166a197897d251",
+    "quantgen_desktop/market_chart.py": "a95a9a26d4b89b865bfd42799216f600a8ed9d16392cf335f9010b452bca66bd",
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
     "quantgen_desktop/market_narrative_language.py": "8bcb8f74ca7208370f5a4895cb4f643574d86d650c7f3ceb04a3a008044618aa",
     "quantgen_desktop/market_rankings.py": "41423dd0627d7508208af9c484a1342e84ce93824a337391d8de7fa466095176",
@@ -424,7 +424,7 @@
     "quantgen_desktop/owner_ui_language/macro.py": "28193ab60c6759f2737a75575c6930baafadbfd211a43d9b3fe5db1df7e60c5d",
     "quantgen_desktop/owner_ui_language/market.py": "9973271ac07e6a9bb5cd4f77b7f81d354a92fe593fc067927d3e609ac29ac905",
     "quantgen_desktop/owner_ui_language/risk.py": "e9cc13e7cafc4d3ab390212f21042d2f43b8937222f1319524396d8609811a4f",
-    "quantgen_desktop/owner_ui_language/stock.py": "0dc99f5406e9077d286b0f533a318ba244c58a696d54a877ce209c223f947cf7",
+    "quantgen_desktop/owner_ui_language/stock.py": "d62047bf82a0f0178a73840ffc8fc57700c9e91d0ab6fb42f9d74a22850b5796",
     "quantgen_desktop/owner_ui_language/strategy.py": "a6a0d517185ef4a143baefaf6fffadf7902d3dc85b1655aa27da5b1183fc0b15",
     "quantgen_desktop/paper.py": "0aa317394730debf1b6438a820e87f16d0a6107518e2b1b094b483c69effd446",
     "quantgen_desktop/portfolio.py": "cd4af7d5976f87a35a406de70ff6fac6280ba60719b3bb23638bd155a7d34064",
@@ -440,9 +440,9 @@
     "quantgen_desktop/signals.py": "6e82099c4857046487d3878761083d89819ea28705dd817bc2391f1ed713678e",
     "quantgen_desktop/source_notes.py": "05820a66919f8840aeacf81dfcf96bacd8fa75ecd355f64a1090c2d9ec59a14e",
     "quantgen_desktop/status_language.py": "e23a11eb835b155bfc88685ea0f521e664b8b7fc080ce3f600042b1002427386",
-    "quantgen_desktop/stock_detail.py": "85efe97aeef732cd0a5eadbacd3570fb3b446e015757d3ea86bdf10fa4abf4e3",
+    "quantgen_desktop/stock_detail.py": "2d241e524a77d8a04fe9523a5373563109b889987d69a9c5c5c724929846a18e",
     "quantgen_desktop/stock_detail_side.py": "0d57ec608eb659e158930b34b6733b6b7f47ae536e45747f37e85e4dcde00a1c",
-    "quantgen_desktop/stock_detail_style.py": "a931a7c60ca933eb0d0f3dd4f3e56bc9c6e8b5857e05c243858f62fa9fc44ee9",
+    "quantgen_desktop/stock_detail_style.py": "974cbfec07bd7d42e2f18b94ef007b1720683b8bdf5f3332990dae2fcb4130b2",
     "quantgen_desktop/strategy.py": "0b44d9c87f8a174d5c87eff60ffe2a68671ac381644fa6243f26f06812ca5b66",
     "quantgen_desktop/strategy_view.py": "3d44b759bb806d92cc1a299fd61790c449be392a262c8b46c1a9bd46a1a0bff8",
     "quantgen_desktop/structuring.py": "5129a870305e9fefee5c92549879408f440cea19e15fba67ed3ee88b038a70fc",
@@ -504,7 +504,7 @@
     "tests/desktop_market_chart_acceptance.py": "d5bb0796ca1c8001a301b1f8e77f58da388093b82c649a7d3797f2c0e85ecceb",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_market_layout_acceptance.py": "e0d769e431161c5cd51ffabd163915f4241290620a9a080fd6d228b292757f9c",
-    "tests/desktop_market_tabs_acceptance.py": "1215aafb30f4a6f4e0025f6da8c518078b39cb6485f8f35c99f2caa6094e1570",
+    "tests/desktop_market_tabs_acceptance.py": "2f1e8c1cbfbfe18e054099c1fc1fc3c0e94158141d2395d57421c829f73629ba",
     "tests/desktop_markets_watchlist_acceptance.py": "39c54d208096f85635080c59c7b8db71fcbe29721cb081256dc70982b01a38d0",
     "tests/desktop_operation_fixes_acceptance.py": "e6c15c500e3c59d2fb25a8023cee574965fac873d1d3f963f88a7f8f332596f1",
     "tests/desktop_owner_ui_charts_acceptance.py": "071e406a16d7c0fe71c41ef463f85ace501d523cb87cc54676dad7455063b06e",
@@ -521,7 +521,7 @@
     "tests/desktop_responsive_tools_acceptance.py": "3fa58edd10fc71b8d739a2b573331448a0216dcd42a7c56ee99c1d796576e20e",
     "tests/desktop_sabr_diagnostics_acceptance.py": "08498faacb4e6a1d028ac56c7f8969858c1413c565b476fe258bc566ea3c665e",
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
-    "tests/desktop_stock_detail_acceptance.py": "909178aee830e4292f50022352ade95b1465bf16aa0c7df48b09b170a27a9663",
+    "tests/desktop_stock_detail_acceptance.py": "27f1c3bb38dbf307b619061d9057da531012123ecb6c3740bccf7d9917d8986f",
     "tests/desktop_strategy_acceptance.py": "6da05d532c1b74b807ba32ecc9e5cfbce7df042ba32f8d2f9e4a0433b49d6f40",
     "tests/desktop_strategy_exposure_acceptance.py": "30c7e9f5c9132d77e546827f15232f769c27f19a60c6b21c3664772207c10ce4",
     "tests/desktop_swaption_conversion_acceptance.py": "113e1af795d0a9d592827330a2fdf115487dc4bb0b496d4ee3f3ba0d3b9185af",
@@ -724,163 +724,163 @@
   "reviews": {
     "1": {
       "document_sha256": "bacab46dd51ed03b4d3be4b9bc46a7733cbed73ba42653ce9695e5ca0e10b4b4",
-      "source_digest": "884ff544a2f79e8e64ef5b37b6d1cdf4409e8730450a33ce49df7f371933b804",
+      "source_digest": "938e63e5c9232c9509b0ef02f4dedc7ad5d88798fcd37b940b15b0cdc68f88cd",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.322763+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.800119+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "884ff544a2f79e8e64ef5b37b6d1cdf4409e8730450a33ce49df7f371933b804",
+      "source_digest": "938e63e5c9232c9509b0ef02f4dedc7ad5d88798fcd37b940b15b0cdc68f88cd",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.325144+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.802325+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "6fddb193a8fc618e9cbea581246e0498a7554f0300c8dcb90fde286402e0bb30",
+      "source_digest": "a03251d84fe97cd5bef79447eac69b7e071375cec831a77fc4bdb9f1b5892cff",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.327054+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.805787+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "4": {
       "document_sha256": "f63c98563dc663611297f52c74457ea7ad2f052d918c45e505dd667652074c9b",
-      "source_digest": "4b91ceb0d755d8de17b41945030c7a6be82220e3f0d4fcb158f787623721f226",
+      "source_digest": "a8a814710ef8932496e967eea55add5886c4dc3ce786e00f1761602b5ab87fd9",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.328985+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.807537+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "cea295f07a95f681d2ec3d389a7fe42fc1b2fc074b31bddc0eb5f4d5d9802e4f",
+      "source_digest": "52a15d37a8f4278ad91b284b270f90ed503454aef6d5720dc374b98b3f8fb15b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.330890+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.809329+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "6": {
       "document_sha256": "60bb586d0bce26480feecc06f182c6ceaaea1700f1be0e95bac820f18ad484a8",
-      "source_digest": "8db08a6b81048c80dd3a8be407efb2ed24f2590040e295014b10b44f6f699dad",
+      "source_digest": "e347b3b67456b2391085b8265fe464c9e27c3ebe9d7614d46507ece6d12ee6f1",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.332580+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.811394+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "7": {
       "document_sha256": "1eb6da7d87830c9abde24303464cd80f65f6a1bf5b66bc5b53ec81b2c2e4b1ed",
-      "source_digest": "884ff544a2f79e8e64ef5b37b6d1cdf4409e8730450a33ce49df7f371933b804",
+      "source_digest": "938e63e5c9232c9509b0ef02f4dedc7ad5d88798fcd37b940b15b0cdc68f88cd",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.334446+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.813217+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "8": {
       "document_sha256": "e50e210234645ca8e2561662dae3a0afc5ab445e68fe523d320c3889c7e0d8a7",
-      "source_digest": "8db08a6b81048c80dd3a8be407efb2ed24f2590040e295014b10b44f6f699dad",
+      "source_digest": "e347b3b67456b2391085b8265fe464c9e27c3ebe9d7614d46507ece6d12ee6f1",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.336198+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.815039+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "9": {
       "document_sha256": "ebdb3469ea72e45341719aae0805b46a526374d394dbdb0e1875fe1df2c01757",
-      "source_digest": "1fdb8e3598f85209ad4d6c5427f838ca41f3c8e3752c516eeaf3e1574e072c9e",
+      "source_digest": "64ef47353f57064f5d61927eb0451542028d15725cde402770379793210f4d45",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.338210+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.816831+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "10": {
       "document_sha256": "13ab9559eb6b5a0bf84c1575acd19d94cdb0b69273474fd5e686e05df5930fc3",
-      "source_digest": "d56a018c1a255ce7dd7e5f15978a57c1852601d7afb42f8fe85375420edb3f4a",
+      "source_digest": "9f05d07e15ef750dc136079a64d84b703dea6099ab1b120f466514f76f3cca6f",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.339906+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.818678+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "a990fd4b66c52fb91316acc89d5e8e779ea52c94cf2bc83572aaea496b60bcd8",
+      "source_digest": "eb9985c3367c61f7ae8c1745625ec88f2caec9f53660e9ee6c1cc635e68db3f2",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.341669+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.820413+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "12": {
       "document_sha256": "55b14bd417df61e59c2e06eb37f397dcbe8457ec571342c27e6b0d3559d507dc",
-      "source_digest": "d7f60be69c2946de0a8f14423dcea5f85a3ada5dd6cb65b495b0a449bf881c80",
+      "source_digest": "f29b05c5322515b3fbd43afb32cabe405cc2d2a268af515b554fbe1eb5a01c8b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.343459+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.821956+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "13": {
       "document_sha256": "cbb62a2360f579617977c7d4bb0105eecfec4b091ef98d554d14f8f675508ac0",
-      "source_digest": "1fdb8e3598f85209ad4d6c5427f838ca41f3c8e3752c516eeaf3e1574e072c9e",
+      "source_digest": "64ef47353f57064f5d61927eb0451542028d15725cde402770379793210f4d45",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.345320+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.824175+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "14": {
       "document_sha256": "5098fa39312b4ce88a73080e61ad70473c9e736a2b7e93150c74e87fbb68d50c",
-      "source_digest": "1fdb8e3598f85209ad4d6c5427f838ca41f3c8e3752c516eeaf3e1574e072c9e",
+      "source_digest": "64ef47353f57064f5d61927eb0451542028d15725cde402770379793210f4d45",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.347028+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.825824+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "15": {
-      "document_sha256": "6b12ffaeaed6ebd8b925ea4ff65ae5e6b0031dd9566739474f672cda1b7d0055",
-      "source_digest": "1fdb8e3598f85209ad4d6c5427f838ca41f3c8e3752c516eeaf3e1574e072c9e",
+      "document_sha256": "0ab1f0563379f4792c0d9146c9bdb4267f6af11ed489173fa144a2b6134884d5",
+      "source_digest": "64ef47353f57064f5d61927eb0451542028d15725cde402770379793210f4d45",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.348779+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.828008+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "faf5666c3982c933dc49ad64c002e2ae8c4fe650be45f0061f0b524fe5adedbd",
+      "source_digest": "32ecd581f8c5430f2b6e5a26a6f562c7629db87689f945fffa933be4121cce47",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.350357+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.829795+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "8db08a6b81048c80dd3a8be407efb2ed24f2590040e295014b10b44f6f699dad",
+      "source_digest": "e347b3b67456b2391085b8265fe464c9e27c3ebe9d7614d46507ece6d12ee6f1",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.352003+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.831414+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "884ff544a2f79e8e64ef5b37b6d1cdf4409e8730450a33ce49df7f371933b804",
+      "source_digest": "938e63e5c9232c9509b0ef02f4dedc7ad5d88798fcd37b940b15b0cdc68f88cd",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.353907+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.833063+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "19": {
       "document_sha256": "983c0b85fb10b1018222236a37b839667a1103472796b514a9419651b8af2a37",
-      "source_digest": "73047684629bfa3137f7cf9fb96e460a5c0596c308ef58bd66309f370d6b7339",
+      "source_digest": "87363bf3a59ab560ee13b787361606b640ef78977defba15aba6c7b217bee6ef",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.355468+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.834812+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     },
     "20": {
       "document_sha256": "b6019dd07ee24fdf3a53791a3e0adad1472bb14cbe843a38553f209b669d1551",
-      "source_digest": "884ff544a2f79e8e64ef5b37b6d1cdf4409e8730450a33ce49df7f371933b804",
+      "source_digest": "938e63e5c9232c9509b0ef02f4dedc7ad5d88798fcd37b940b15b0cdc68f88cd",
       "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.357112+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
+      "reviewed_at": "2026-11-12T07:25:25.836510+00:00",
+      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
     }
   }
 }
