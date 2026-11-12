@@ -1,0 +1,325 @@
+{
+ "card_id": "NB_E1_trend_spy",
+ "kind": "strategy",
+ "hypothesis": "pre-specified on historical data; the SPY series was used inside S_E1_trend_us with the same 12-setting grid; not confirmatory: Faber SMA / MOP sign trend switch on SPY alone (long or cash) beats SPY buy-and-hold on Sharpe; the S_E1_trend_us grid on one sleeve",
+ "rules": {
+  "family": "trend_switch",
+  "grid": [
+   {
+    "rule": "sma",
+    "lookback": 126,
+    "step": 21
+   },
+   {
+    "rule": "sma",
+    "lookback": 126,
+    "step": 42
+   },
+   {
+    "rule": "sma",
+    "lookback": 210,
+    "step": 21
+   },
+   {
+    "rule": "sma",
+    "lookback": 210,
+    "step": 42
+   },
+   {
+    "rule": "sma",
+    "lookback": 252,
+    "step": 21
+   },
+   {
+    "rule": "sma",
+    "lookback": 252,
+    "step": 42
+   },
+   {
+    "rule": "tsmom",
+    "lookback": 126,
+    "step": 21
+   },
+   {
+    "rule": "tsmom",
+    "lookback": 126,
+    "step": 42
+   },
+   {
+    "rule": "tsmom",
+    "lookback": 210,
+    "step": 21
+   },
+   {
+    "rule": "tsmom",
+    "lookback": 210,
+    "step": 42
+   },
+   {
+    "rule": "tsmom",
+    "lookback": 252,
+    "step": 21
+   },
+   {
+    "rule": "tsmom",
+    "lookback": 252,
+    "step": 42
+   }
+  ],
+  "cost_bps_per_side": 50.0,
+  "embargo": 21,
+  "engine": "per-column event-driven replication (nautilus_trader 1.231.0 BacktestEngine, same-bar close); walk-forward column switches are not executed in either engine",
+  "selection": "QUANTGEN walk-forward selection (wf_qg.origins, wf_qg.chosen) applied to both engines' matrices",
+  "claim_label": "pre-specified on historical data; the SPY series was used inside S_E1_trend_us with the same 12-setting grid; not confirmatory",
+  "parity_scope": "parity validates the engine, not the data; P0 ties the inputs to the study's loaders",
+  "parity_bars": "corrected, spec 2026-10-26 §5.4"
+ },
+ "universe": {
+  "symbols": [
+   "SPY"
+  ],
+  "venue": "us"
+ },
+ "data": {
+  "sessions": 5489,
+  "start": "2004-12-01",
+  "end": "2026-09-25",
+  "source": "docs/asset_expansion/cache/yf_SPY.csv",
+  "prices_md5": "d2164597d576e1b2fcadde063065811d",
+  "rf_md5": "661722143f24930a29b58c535d227c1b"
+ },
+ "costs": {
+  "cost_bps": 50.0,
+  "stress_multiplier": 2.0
+ },
+ "protocol": {
+  "w_is": 756,
+  "w_oos": 126,
+  "min_is": 504,
+  "ci_level": 0.9,
+  "bootstrap_B": 2000,
+  "block": 10
+ },
+ "trials": {
+  "N_planned": 12,
+  "N_total": 36,
+  "family_id": "E1",
+  "family_n_raw": 12,
+  "market_n_raw": 12,
+  "U": 24,
+  "study_configs_absent": [
+   "0113ef71636c74edbedbf2b0f34c4311",
+   "15ac3c2de9f5efd26ef86aebc22cd8d0",
+   "1b6ab9442644460e3c8b5a02fff041b2",
+   "2279a92f6d433cc9d1522ae441f45962",
+   "2f7eba0574e3abe743c6302eed894beb",
+   "54d08c2f85afb2ba74cab066ae00faf1",
+   "5bfe5f05ac1a01fdeca33a5eb2ae2678",
+   "6fee300579b93aaf12b061e61ba2f092",
+   "753f68e80047daef72d5f1c8b2c8988d",
+   "7cd6d9aac137303205240b42d8768c59",
+   "9b6e410e1f47badbf97d4e892427f7c8",
+   "9d31e6eebadf8bd503fac0d3a5df234a",
+   "a2344abd2e5e0879fc37c2d1da471195",
+   "b2cec9a64746233c0c5adcf32d30a1f5",
+   "b36f50da4f14333d7c26ab4e4128e492",
+   "b61c55ccd9ed0154c93111ce5b72ac2b",
+   "b690a856edefe983fd95b0f970d8d167",
+   "bac3660dbf5d1c4ac5ab2211cc94dfbe",
+   "cff0c6f182b986bece8756a56b57f6d6",
+   "dc64818a47fb5743b0504df1a51dd7e0",
+   "dc886280bf48d573d7f157c8eca525c1",
+   "f662021df99c02bc9232b45a4ff99cac",
+   "fac27d2505912bbc896810436cb09337",
+   "fe36897ec27f280cf098a9eb7519bfe2"
+  ],
+  "config_ids": [
+   "d882d7f85c264243e0901d4844db9d7d",
+   "c6184f3ed963b61e8186672232acfaaa",
+   "60536c28bf60f6dce7faa49ed65c4adc",
+   "7819072c235cdf3ecf512f7b23a6c1d7",
+   "6edb40ef7f170899afe25813f8491dc3",
+   "5f95127f749d8ff098deec7b3e527f9d",
+   "a509a404091346ddd581bb4932e09ecc",
+   "a3e6006709ea46ac26f432e93d136a18",
+   "f78d7affb7d2d0b08a1528721ce7df3e",
+   "1a6fe89f968718c4076dad8e6dd855fd",
+   "2c5c9bf5a00b1b1e1e8159e0e62dec4b",
+   "fe609e8b3e7cff3660cc3a9f53097e2f"
+  ],
+  "row_md5s": [
+   "f30a5f25451f5fc40e5c41885b2fc911",
+   "1ae6ebb64ad5cc51ae7b0f398a662060",
+   "814dba928b002f7b80f91a3cf9ed29b7",
+   "8796043c2ac62d7d0a3bf02b2da9ad73",
+   "648f936bbb0eca0502b26a63793ac7ef",
+   "9412b082bb12eaeca0c57441b4546ecb",
+   "7ef88f87f067e342ea17c749e665a614",
+   "ce0ca4a6aa11df5df00146dbe8ed0ece",
+   "c86eb45e2e44252d01d6666055074fed",
+   "a31a5d4085f0736aecae1b396f33d7f0",
+   "db8424ce8a708f04ffdaa4e3fd968aa7",
+   "b738d3cefcd540065fee947ba6fb68ff"
+  ],
+  "ledger_hash_at_run": "27038e00c24c38b0351d12a73db2dfb1",
+  "ledger": "E1.jsonl: 12 rows before registration, 12 after; U = 24 of 24 study configurations absent"
+ },
+ "seed": 11,
+ "stats": {
+  "sr_oos": 0.49643142495288756,
+  "se_lo": 0.23133954241437346,
+  "ci90": [
+   0.12113590093153837,
+   0.8440113009632852
+  ],
+  "sr_is": 0.9450125889481996,
+  "oos_is": 0.525317261122856,
+  "dsr": 0.9608568791320016,
+  "pbo": 0.4731934731934732,
+  "pbo_slope": -0.8400422287890627,
+  "prob_loss_oos": 0.0,
+  "sr_stress": 0.433630682640311,
+  "turnover_annual": 1.6539189586334262,
+  "n_trades": 31,
+  "n_sessions": 4711,
+  "years_positive": 0.6842105263157895,
+  "n_years": 18,
+  "max_year_share": 0.11928890161015689,
+  "plateau": 1.0,
+  "edge": false,
+  "total_return": 1.930513156087235,
+  "max_drawdown": -0.28134469244199245,
+  "haircut_sr": 0.29785885497173253,
+  "bench_sr": 0.6447917307013725,
+  "n_trials": 36,
+  "n_configs": 12,
+  "bench_diff": -0.14836030574848497,
+  "bench_p": 0.81,
+  "bench_ci": [
+   -0.42617187059114425,
+   0.1206993417429247
+  ],
+  "bench_mdd": -0.51481445296197,
+  "decision": "REJECT",
+  "reason": "does not beat its benchmark (Sharpe difference -0.15, p 0.81)",
+  "revise_target": "the sleeve set or the cost model, not the rule: the benchmark is as good",
+  "regime": {
+   "high_vol": 0.2799379411535035,
+   "low_vol": 0.7653214815725714,
+   "up_market": 0.7306533088792504,
+   "down_market": 0.02216553803049018
+  },
+  "chosen_last": {
+   "rule": "sma",
+   "lookback": 210,
+   "step": 21
+  },
+  "bench_sharpe": 0.6447917307013725,
+  "walk_forward": "IS 756 / OOS 126 / embargo 21; 38 origins; 12 configs",
+  "parity": {
+   "hard_pass": true,
+   "worst_corr": 0.9999996240319662,
+   "worst_abs_dsr": 0.0006384421130428697,
+   "max_daily_gap": 0.00018698213801207272,
+   "P12": {
+    "1x": {
+     "corr": 0.9999999676773109,
+     "abs_dsr": 0.00011391013522676907,
+     "pass": true,
+     "owner_pass": true
+    },
+    "2x": {
+     "corr": 0.9999997387778333,
+     "abs_dsr": 0.0005575618474775168,
+     "pass": true,
+     "owner_pass": true
+    }
+   },
+   "warnings": [],
+   "bars": "corrected (spec 2026-10-26 §5.4); owner bars in the run record"
+  },
+  "quantgen_score": {
+   "sr_oos": 0.4963175148176608,
+   "se_lo": 0.23133951647384282,
+   "ci90": [
+    0.12101637448762598,
+    0.8439019640530384
+   ],
+   "sr_is": 0.9449396953116941,
+   "oos_is": 0.5252372371275476,
+   "dsr": 0.9608246264217999,
+   "pbo": 0.47311577311577313,
+   "pbo_slope": -0.8400435258074147,
+   "prob_loss_oos": 0.0,
+   "sr_stress": 0.4330731207928335,
+   "turnover_annual": 1.6582466567607728,
+   "n_trades": 31,
+   "n_sessions": 4711,
+   "years_positive": 0.6842105263157895,
+   "n_years": 18,
+   "max_year_share": 0.11928721941070099,
+   "plateau": 1.0,
+   "edge": false,
+   "regime": {
+    "high_vol": 0.27975479783997786,
+    "low_vol": 0.7652985565409567,
+    "up_market": 0.7304689520062925,
+    "down_market": 0.02219634718358822
+   },
+   "total_return": 1.929810052054187,
+   "max_drawdown": -0.28145200634885303,
+   "haircut_sr": 0.29779050889059644,
+   "bench_sr": 0.6447917307013725,
+   "n_trials": 36,
+   "n_configs": 12,
+   "bench_diff": -0.14847421588371174,
+   "bench_p": 0.8105,
+   "bench_ci": [
+    -0.4262780944983871,
+    0.1205461758135972
+   ],
+   "bench_mdd": -0.51481445296197,
+   "decision": "REJECT",
+   "reason": "does not beat its benchmark (Sharpe difference -0.15, p 0.81)",
+   "revise_target": "the sleeve set or the cost model, not the rule: the benchmark is as good"
+  }
+ },
+ "tests": {
+  "dsr": 0.9608568791320016,
+  "pbo": 0.4731934731934732,
+  "ci90": [
+   0.12113590093153837,
+   0.8440113009632852
+  ],
+  "sr_stress": 0.433630682640311
+ },
+ "decision": "REJECT",
+ "decision_reason": "does not beat its benchmark (Sharpe difference -0.15, p 0.81)",
+ "revise_target": "the sleeve set or the cost model, not the rule: the benchmark is as good",
+ "lines": [
+  "Out-of-sample Sharpe 0.50 over 4,711 sessions (18 full years); Lo standard error 0.23; 90 % block-bootstrap interval 0.12 to 0.84: passes (the interval must exclude zero).",
+  "Deflated Sharpe 0.96 after 36 trials: passes (needs ≥ 0.95).",
+  "Probability of backtest overfitting 0.47 over the 12-config grid; the in-sample winner loses out of sample in 0% of the splits: passes (PBO ≤ 0.05, or ≤ 10% losing splits because near-identical configurations put PBO at 0.5 by construction; rejected when PBO > 0.2 and the winner also loses).",
+  "Out-of-sample over in-sample Sharpe 0.53: passes (needs ≥ 0.5).",
+  "Against the benchmark (Sharpe 0.64): difference -0.15, paired block-bootstrap 90 % interval -0.43 to +0.12, one-sided p 0.81: fails (the claim 'beats the benchmark' needs p ≤ 0.1); max drawdown -28% against the benchmark's -51% (reported, not gated).",
+  "Positive in 68% of calendar years: passes (needs ≥ 60%); largest year carries 12% of the P&L.",
+  "Sharpe at 2× costs 0.43: passes (must stay positive); turnover 1.7× equity per year.",
+  "Parameter plateau 100% of neighbours keep half the Sharpe, not on a grid edge: passes.",
+  "31 position changes out of sample: fails (needs ≥ 100).",
+  "Regime split (Sharpe): high-vol 0.28 / low-vol 0.77, up 0.73 / down 0.02.",
+  "Expected live Sharpe after the McLean–Pontiff haircut: 0.30."
+ ],
+ "decay_haircut": {
+  "factor": 0.6,
+  "source": "McLean-Pontiff 2016 26-58%"
+ },
+ "created": "2026-11-13",
+ "author": "QUANTGEN validation gate",
+ "results_file": "NB-20261112T153028389916Z-d76d2d73",
+ "results_md5": "",
+ "citations": [
+  "Faber 2007/2013 SSRN 962461",
+  "Moskowitz, Ooi & Pedersen 2012 JFE 104",
+  "RN→FH §6.1, §6.5, §6.8 pp. 13–16"
+ ]
+}
