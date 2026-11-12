@@ -99,8 +99,13 @@ class ChartAxesTests(unittest.TestCase):
                 records = painted(chart)
                 plot_bottom = max(rect.bottom() for t, rect in records if t == 'Index points')
                 numbers = [(t, rect) for t, rect in records if re.fullmatch(r'[-−]?[\d,]*\.?\d+', t)]
-                y_labels = [t for t, rect in numbers if rect.right() < 80]
-                x_labels = [t for t, rect in numbers if rect.right() >= 80 and rect.bottom() < plot_bottom]
+                # The y labels sit in the left margin, which widens with their text (charts._chart_layout: at least
+                # 60 px, else the widest label + 20), so Windows' fonts put them past a fixed 80 px. The labels are
+                # told apart by row instead: the x ticks share one top (drawn at plot bottom + 6), each y tick has its own.
+                from collections import Counter
+                row = Counter(round(rect.top()) for t, rect in numbers).most_common(1)[0][0]
+                x_labels = [t for t, rect in numbers if abs(rect.top() - row) <= 1 and rect.bottom() < plot_bottom]
+                y_labels = [t for t, rect in numbers if abs(rect.top() - row) > 1]
                 self.assertGreaterEqual(len(y_labels), 3, y_labels)
                 self.assertEqual(len(y_labels), len(set(y_labels)), y_labels)
                 self.assertFalse([t for t in y_labels if re.fullmatch(r'[-−]0(\.0+)?', t)], y_labels)

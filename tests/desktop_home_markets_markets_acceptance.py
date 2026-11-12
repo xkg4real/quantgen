@@ -653,7 +653,9 @@ class MarketPageTests(WindowBase):
         self.assertEqual((heard, self.board.page, self.board.heading.text()), (["us"], "us", "미국 주식"))
         self.assertTrue(self.window.market_sections["us"].isChecked())  # the rail follows the page
         self.assertEqual([b.text() for b in self.board.sub_buttons.values()], ["전체", "나스닥", "NYSE"])
-        self.assertEqual(self.board.search.placeholderText(), "미국 주식에서 찾기 · 이름, 코드, 업종")
+        # The placeholder follows the field's width (`RankingBoard._render_placeholder`): the long or the short form,
+        # both naming this market. Which one fits depends on the platform's text widths (Windows CI chose the short).
+        self.assertIn(self.board.search.placeholderText(), ("미국 주식에서 찾기 · 이름, 코드, 업종", "미국 주식 안에서 찾기"))
         self.load()
         self.board.category_buttons["gainers"].click()
         self.board.sub_buttons["NYS"].click(); self.app.processEvents()

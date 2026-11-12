@@ -170,6 +170,8 @@ class ResearchWindow(QMainWindow):
                  macro_records_runner=execute_macro_records, paper_factory=None, commentary_runner=None, auto_refresh=True, language="en", language_store=None, locale=None, theme_mode="light",
                  symbol_directory=None, watchlist_store=None, card_router_factory=None, profile_loader=None):
         super().__init__()
+        from . import use_fusion_style
+        use_fusion_style()  # the look the style sheets and captures were made for, on Windows too
         self.ctx = LocaleContext(locale or ("ko_KR" if language == "ko" else "en_US"))
         self.auto_refresh = auto_refresh
         self.ui_language = self.ctx.language
@@ -1431,6 +1433,8 @@ def main():
             print("QUANTGEN: Windows did not accept the application ID; the taskbar may show the Python icon.",
                   file=sys.stderr)
     app = QApplication(sys.argv)
+    from . import use_fusion_style
+    use_fusion_style()
     app.setWindowIcon(app_icon())
     app.setApplicationName("QUANTGEN")
     app.setOrganizationName("QUANTGEN")
