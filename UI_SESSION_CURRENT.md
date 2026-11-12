@@ -18,6 +18,16 @@ GPT 인수 시 금지: 위 14건 화면을 GPT 이전 버전으로 되돌리기,
 
 ---
 
+# ⚠ 인계 상태 — 2026-11-12 16:55 KST (Claude → GPT, 사용량 소진) · 이 절이 아래 내용보다 우선
+
+- status: handoff · reason: Claude 주간 사용량 소진(소유자: "아 근데 너 토큰없네. 일단 GPT한테 내가 ㅈ마지막으로 명령한거까지 인계해서 정확하게 넘겨줘")
+- work_branch: `claude/friendly-bardeen-r6xe8f` · work_commit: `7402a43` (main `0786200` 위: R-D12 c508a0d·793a321·5916c36, 오른쪽 칸 잘림 수정 36d23b8, UI-D11 본체 840ae95, 기준선 7402a43)
+- **전체 인계서: [WEEKLY_HANDOFF_2026-11-12_ui-d11-d14_c958d211.md](WEEKLY_HANDOFF_2026-11-12_ui-d11-d14_c958d211.md)** — 소유자 원문 11개(마지막 지시까지), 해석 규칙 R-D11·R-D12·R-D13·R-D14·R-D15, 남은 일 명령·완료 기준, 법령 주의
+- 중간 작업 patch(시험 안 됨): `UI_WIP/ui-d11-review-fixes_base-840ae95.patch`, `UI_WIP/ui-d13-qscore-card_base-5916c36.patch`, `UI_WIP/ui-d14-export_base-5916c36.patch`
+- 남은 일: UI-D11 리뷰 수정·규정 문서, UI-D13 상세 화면 Q-SCORE 카드·배지, UI-D14 PDF/PNG/JSON/CSV 내보내기(Q-SCORE 포함), R-D15 시장 목록 Q-SCORE 순위(법령 검토 필요 — 매수·추천 문구 금지)
+
+---
+
 # 종목 상세 차트(UI-D8·UI-D9)·미국 시가총액·시장 화면 개편(UI-D10) 완료 — 2026-11-12 04:10 KST (Claude) · GPT 필독
 
 - status: PR https://github.com/xkg4real/quantgen/pull/109 소유자가 main에 병합(2026-11-12 15:13 KST, main `0786200`). 작업 브랜치 `claude/friendly-bardeen-r6xe8f`는 main `0786200`으로 다시 맞춤.
