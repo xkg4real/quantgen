@@ -450,7 +450,7 @@
     "quantgen_desktop/tools.py": "42bfa047f6c36960a98988fe6a343bc6423aec5db8fd0c20effa37c11d8b6730",
     "quantgen_desktop/translations.py": "2b94a001ff0d925a570ce1efff3d73f8a08e1de212343f23973e6ba753e6f943",
     "quantgen_desktop/typography.py": "f46973fc293a648f7affa11f26d65e4c5590bf33e9316b7dce6ae1d92407b2d4",
-    "quantgen_desktop/watchlist.py": "b6f23b31481c444fea248f7e5295b274cb654ba22cf183e3dc0ba41ab5fdb9ae",
+    "quantgen_desktop/watchlist.py": "5e28734d3c7c28b349d7a7f5b3da7efe740d09adcf99bad61dcde701a7d6000b",
     "quantgen_desktop/watchlist_live.py": "6d7b9dca2f18adf8a7b01a09ca395a6b776835f82d863669d00f90d426994597",
     "quantgen_desktop/wheel_guard.py": "44bfee9b20b358b794cfebdd71f0760b28b99bcd39a45cc36fa450a8d2ce68f6",
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
@@ -724,163 +724,163 @@
   "reviews": {
     "1": {
       "document_sha256": "bacab46dd51ed03b4d3be4b9bc46a7733cbed73ba42653ce9695e5ca0e10b4b4",
-      "source_digest": "7a71944fc4fd1e6ca755b346114966d694f268aeba13734a712f33f177910042",
+      "source_digest": "be0a010e18965ba0f7ba4be4c53fc7538711af3ec6034de8e21e187d61e22b83",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.140679+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.386876+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "7a71944fc4fd1e6ca755b346114966d694f268aeba13734a712f33f177910042",
+      "source_digest": "be0a010e18965ba0f7ba4be4c53fc7538711af3ec6034de8e21e187d61e22b83",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.142787+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.388926+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "0b67cb03093bfedee8dd1a4a61b834fbc08270e93aa0c4cde45d6b3d64489661",
+      "source_digest": "8c12b9210608b3c8451c09ef1912fedbe3cdd3cd4d5def35a10a4b8ebf76da10",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.144826+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.390877+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "4": {
       "document_sha256": "f63c98563dc663611297f52c74457ea7ad2f052d918c45e505dd667652074c9b",
       "source_digest": "fc0bf2a850d537cfb2dc86135d3edeaf98fe9a5bfc420cb47f346de7dfbab092",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.146488+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.392615+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
       "source_digest": "31c250ecc4baa596911bca0fb1b739b25b127e70e1e80f890bacad6ba8204858",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.148179+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.394878+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "6": {
       "document_sha256": "60bb586d0bce26480feecc06f182c6ceaaea1700f1be0e95bac820f18ad484a8",
-      "source_digest": "ac2f3f5538510f9e196b4e8a72d43c501cdd7c8ab6ab6584c92800d0fb1f9905",
+      "source_digest": "3b0158525cfa65a352906bb76869a7995506f57ac534921a39894d8705f806dd",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.149839+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.396553+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "7": {
       "document_sha256": "1eb6da7d87830c9abde24303464cd80f65f6a1bf5b66bc5b53ec81b2c2e4b1ed",
-      "source_digest": "7a71944fc4fd1e6ca755b346114966d694f268aeba13734a712f33f177910042",
+      "source_digest": "be0a010e18965ba0f7ba4be4c53fc7538711af3ec6034de8e21e187d61e22b83",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.151357+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.398248+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "8": {
       "document_sha256": "e50e210234645ca8e2561662dae3a0afc5ab445e68fe523d320c3889c7e0d8a7",
-      "source_digest": "ac2f3f5538510f9e196b4e8a72d43c501cdd7c8ab6ab6584c92800d0fb1f9905",
+      "source_digest": "3b0158525cfa65a352906bb76869a7995506f57ac534921a39894d8705f806dd",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.152978+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.400344+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "9": {
       "document_sha256": "ebdb3469ea72e45341719aae0805b46a526374d394dbdb0e1875fe1df2c01757",
-      "source_digest": "7abd642dc2707cff85f4d7304407458db20dec8d12b02bb496f1a22bf02a01e3",
+      "source_digest": "27cc7ba9c2496abe1cb5abc8b1724998bfcbe2079405afc9fde437d424739c85",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.154568+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.401964+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "10": {
       "document_sha256": "13ab9559eb6b5a0bf84c1575acd19d94cdb0b69273474fd5e686e05df5930fc3",
-      "source_digest": "9d891c0696e0cd7445344a4025921c7af5de0eb06adc2c18e770c7e74bdd0d36",
+      "source_digest": "52f804c265c8fe67cd0b4e6004d6088d3c675536f435b897c1ef0fa8e0051378",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.156179+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.403567+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "54a05c52b7f7c1c805b5d3c556b9a5a4e9c7d56725d14c35e51c342207c9d772",
+      "source_digest": "355d0d981eedf4d74e35ff896e8d2d66c2e91ced97a633082d4a4d90a28b07ad",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.157730+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.405718+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "12": {
       "document_sha256": "55b14bd417df61e59c2e06eb37f397dcbe8457ec571342c27e6b0d3559d507dc",
-      "source_digest": "41bca80781582d2b06475b334c3f96bdf74bcda82ad25dab0309e3a990fe558e",
+      "source_digest": "f8531cc186b650bdb21af27587c76b06819f228a7c25d9ef0540a6baaa9cff00",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.159355+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.407312+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "13": {
       "document_sha256": "cbb62a2360f579617977c7d4bb0105eecfec4b091ef98d554d14f8f675508ac0",
-      "source_digest": "7abd642dc2707cff85f4d7304407458db20dec8d12b02bb496f1a22bf02a01e3",
+      "source_digest": "27cc7ba9c2496abe1cb5abc8b1724998bfcbe2079405afc9fde437d424739c85",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.160914+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.408931+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "14": {
       "document_sha256": "5098fa39312b4ce88a73080e61ad70473c9e736a2b7e93150c74e87fbb68d50c",
-      "source_digest": "7abd642dc2707cff85f4d7304407458db20dec8d12b02bb496f1a22bf02a01e3",
+      "source_digest": "27cc7ba9c2496abe1cb5abc8b1724998bfcbe2079405afc9fde437d424739c85",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.162521+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.410497+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "15": {
       "document_sha256": "6b12ffaeaed6ebd8b925ea4ff65ae5e6b0031dd9566739474f672cda1b7d0055",
-      "source_digest": "7abd642dc2707cff85f4d7304407458db20dec8d12b02bb496f1a22bf02a01e3",
+      "source_digest": "27cc7ba9c2496abe1cb5abc8b1724998bfcbe2079405afc9fde437d424739c85",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.164189+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.412614+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "250a444c67440c4527be51f6e86a9dc144899bcee2349d08d9d0ac10c1ecf88f",
+      "source_digest": "403f2d2922d987572a818543012eff5f9e5f791113119c7c2affc8aed0fd9e45",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.165763+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.414323+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "ac2f3f5538510f9e196b4e8a72d43c501cdd7c8ab6ab6584c92800d0fb1f9905",
+      "source_digest": "3b0158525cfa65a352906bb76869a7995506f57ac534921a39894d8705f806dd",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.167250+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.415996+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "7a71944fc4fd1e6ca755b346114966d694f268aeba13734a712f33f177910042",
+      "source_digest": "be0a010e18965ba0f7ba4be4c53fc7538711af3ec6034de8e21e187d61e22b83",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.168813+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.417670+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "19": {
       "document_sha256": "983c0b85fb10b1018222236a37b839667a1103472796b514a9419651b8af2a37",
       "source_digest": "ccf8d0322141b594319a3441710f503684e07dd9b835e4f953de9091b8d7c95c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.170369+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.419763+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     },
     "20": {
       "document_sha256": "b6019dd07ee24fdf3a53791a3e0adad1472bb14cbe843a38553f209b669d1551",
-      "source_digest": "7a71944fc4fd1e6ca755b346114966d694f268aeba13734a712f33f177910042",
+      "source_digest": "be0a010e18965ba0f7ba4be4c53fc7538711af3ec6034de8e21e187d61e22b83",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
-      "reviewed_at": "2026-11-12T02:14:57.171966+00:00",
-      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
+      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
+      "reviewed_at": "2026-11-12T02:45:17.421522+00:00",
+      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
     }
   }
 }

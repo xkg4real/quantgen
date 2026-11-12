@@ -1044,6 +1044,18 @@ class WatchlistPanel(QWidget):
                          title.horizontalAdvance(label.text() if label else "")) + 2 * CELL_PADDING + 1
             if self.table.columnWidth(column) < needed:
                 self.table.setColumnWidth(column, needed)
+        # The Q-SCORE cell holds two short lines ('★★★★☆  79.99' / 'Paused · last score'); its column follows the
+        # longer line in the item's own face, so a platform whose glyphs run a pixel wider never cuts it
+        # (ubuntu CI on PR 109: 121 px of text in 120 px).
+        score_column = getattr(self, "score_column", SCORE_COLUMN)
+        widest = 0
+        for row in range(self.table.rowCount()):
+            item = self.table.item(row, score_column)
+            if item is not None and item.text():
+                metrics = QFontMetrics(item.font())
+                widest = max([widest] + [metrics.horizontalAdvance(line) for line in item.text().splitlines()])
+        if widest and self.table.columnWidth(score_column) < widest + 2 * CELL_PADDING + 1:
+            self.table.setColumnWidth(score_column, widest + 2 * CELL_PADDING + 1)
         self.table.viewport().update()
 
     def _sync_table_height(self, *args):
