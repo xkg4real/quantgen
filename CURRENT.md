@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1
 next_ids: ⑥-1/readout, ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T00:35:00+09:00
+updated_at: 2026-11-13T00:46:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: main
@@ -132,6 +132,8 @@ STATUS CARD_WRITTEN exit=0 record=C:\Users\whydi\OneDrive\Desktop\QUANTGEN\docs\
 ```
 
 `$LASTEXITCODE` 0. B4~B11대로 `run.json`과 `NB_E1_trend_spy.json`만 커밋·push: 연구 브랜치 `8a8c247..a2ac79b`, B11 빈 출력. 예상(스펙 10.3: INSUFFICIENT_DATA 또는 REJECT)과 같음. 패리티 통과이므로 러너의 Pilot 2 조건(R-11)도 열림.
+**UI 세션 상태 (소유자가 11-12에 전한 UI 세션의 마지막 보고, 요약):** UI 작업은 이 문서가 아니라 `handoff` 브랜치의 `UI_SESSION_CURRENT.md`와 `UI_WEEKLY_REQUESTS_2026-11-10_12.md`(26건 표, 확정 답과 규칙, 남은 일)를 따릅니다. 최신 앱은 작업 브랜치 `claude/friendly-bardeen-r6xe8f` `7402a43`(차트 Ctrl+휠 확대·끌기, 오른쪽 칸 잘림 수정, 시장 메뉴 개편)이고 main에는 아직 없습니다. 그 브랜치는 옛 main `0786200` 위에 있어 PR 전에 main(`9e00bf3` 이후)을 합쳐야 합니다(`docs/compliance/source-review.json` 충돌 예상: 도구로 다시 만들기). 시험 안 된 중간 작업 3개(시장 메뉴 리뷰 수정, Q-SCORE 카드, 내보내기)는 handoff 브랜치의 patch 파일로만 있습니다. UI PR을 main에 병합할 때는 PR마다 `docs/product/ui_website_updates/PR-<n>.json`을 더하고(소유자 규칙), 실행표 F가 시작된 뒤 F21이 끝날 때까지는 main에 다른 PR을 병합하지 않습니다(실행표 F의 시작 조건).
+
 **GPT 다음 일:** 3절 4번(Pilot 1 판독)을 `⑥-1/readout`으로: `git show origin/claude/amazing-gauss-tdiguu:docs/nautilus_bridge/runs/NB-20261112T153028389916Z-d76d2d73/run.json`을 판독 문서 1.2.1 점검표와 부록 B `read_run.py`로 읽고 1.2.6의 CARD_WRITTEN 문장으로 보고. 그다음 BTC 답(권장 BTC-라)이 오면 실행표 D(Pilot 2)·결정 6이면 같은 자리에서 E.
 
 작업: claude-resume-20261103 · 주기 2026-11-10 · 세션 https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
