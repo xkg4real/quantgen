@@ -16,13 +16,18 @@ read from `validate.GATE` and `gate_stats` and never redefined; the only new con
 (M-2), the borderline bounds 0.20 and 0.90 (M-11), the last session 2026-12-31 (M-14), the L1 note (M-20) and the
 cash-baseline marker (criteria 2.3, M-4).
 
-What it does not do. It assigns no outcome (ADOPT, KEEP, REVISE, REJECT, INSUFFICIENT_DATA): the outcome
-assembly waits for owner questions (the gate passing at G with a second DSR below 0.90 is mapped by neither KEEP
-nor REJECT in criteria 6.1, and whether S-7 converts S-3 into INSUFFICIENT_DATA was not answered by M-6). It never
-re-decides the gate (S-1 is the caller's precondition), reads no file, ledger, clock, environment or network, and
-imports only `core.quant.validate` and `core.quant.gate_stats` (never `core.quant.strategies`, `history` or
-`config`). S-5 and S-6 (tf_gov SPA and break-even), the baselines' own P&L and the forecast, risk and data rules
-are later units.
+Outcome assembly (roadmap ⑨-4/2/c). The collected lines assign no outcome. `strategy_outcome` assembles one of
+the criteria 6.1 names (ADOPT, KEEP, REVISE, REJECT, INSUFFICIENT_DATA) from the caller's gate verdict and the
+collected lines, under the owner's answers of 2026-11-11 ("전부승인", OWNER_RULINGS_LOG section "결정 요청
+P·A·B·C·D 묶음"): B-Q1, a second DSR of record below 0.90 is REJECT labelled "잠정 기준"; B-Q2, the second DSR
+that decides uses the gate's dispersion term and any other term is a reference line only; B-Q3, when S-7 says
+power is short a won incumbent comparison is INSUFFICIENT_DATA and nothing is replaced. Where the criteria and
+this module leave a case undecided it names no outcome (`NO_OUTCOME`, with the reason) or refuses the input.
+
+What it does not do. It never re-decides the gate (S-1 is the caller's precondition and its verdict a caller
+input), reads no file, ledger, clock, environment or network, and imports only `core.quant.validate` and
+`core.quant.gate_stats` (never `core.quant.strategies`, `history` or `config`). S-5 and S-6 (tf_gov SPA and
+break-even), D-4, the baselines' own P&L and the forecast, risk and data rules are later units.
 
 Provisional (M-3). The second DSR is labelled provisional until the ⑨-3c report and ⑨-3d. The meaning of the
 ledger N_raw was not decided by the owner's answer of 2026-11-10; owner ruling 7 of 2026-11-11 decided it
@@ -90,8 +95,8 @@ _PAIRING_NOTE = ("the DSR at N = G uses the gate's own dispersion term; the term
                  "reserved for ⑨-3d (R3 design 4.4, 10.2 B Q1), so the N_raw lines use the caller's labelled term")
 _BELOW_GRID_NOTE = ("N_raw below G is printed only: whether a ledger-based N may fall below G is R3 design "
                     "10.2 B Q4, reserved for ⑨-3d")
-_NO_OUTCOME_NOTE = ("no outcome label: the outcome assembly (criteria 6.1) waits for the owner's answers on a "
-                    "second DSR below 0.90 and on S-7")
+_NO_OUTCOME_NOTE = ("no outcome label on these lines: strategy_outcome (⑨-4/2/c) assembles the outcome of "
+                    "criteria 6.1 from them and the gate's verdict")
 _CASH_NOTE = ("criteria 2.3 (M-4): the cash baseline is replaced by the gate's check that the Sharpe interval "
               "excludes 0 (S-1, the caller's precondition); no LW test is run")
 _CASH_HINT = "; a cash baseline is declared with CASH_BASELINE (criteria 2.3), not as a constant series"
@@ -521,8 +526,10 @@ def power_line_s7(challenger, incumbent, challenger_dates: Sequence, incumbent_d
                   expected_dsr, other_label: str = "incumbent") -> PowerS7:
     """S-7 (criteria 4.2.2 S-7, 3.2 item 8, 5.3; ruling M-6): MDE80 = `gate_stats.MDE_FACTOR` x SE(dSR) with
     SE = `gate_stats.lw_hac_se(challenger, incumbent).se`, compared with the registered expected dSR (> 0, annual
-    Sharpe units). The flag `underpowered_vs_expected` is printed only: M-6 did not answer whether it turns S-3
-    into INSUFFICIENT_DATA (criteria section 9, decision 6). `gate_stats.power_line` is not used: it takes the
+    Sharpe units). On the collected lines the flag `underpowered_vs_expected` is printed only. M-6 did not answer
+    whether it turns S-3 into INSUFFICIENT_DATA (criteria section 9, decision 6); the owner's answer B-Q3 of
+    2026-11-11 did (even a won comparison), and `strategy_outcome` (⑨-4/2/c) applies it to a replacement's
+    outcome. `gate_stats.power_line` is not used: it takes the
     macro cards' SE plateau and only CARD-O / CARD-P. Sessions must align as in `lw_compare`."""
     other_label = _label(other_label, "other_label")
     expected = _real(expected_dsr, "expected_dsr")
@@ -631,3 +638,239 @@ def strategy_lines(*, kind: str, challenger, challenger_dates: Sequence, n_grid,
         s4.append(lw_compare(challenger, pair[0], sessions, pair[1], rule="S-4", other_label=name))
     return StrategyLines(kind=kind, s2=s2, s3=s3, s4=tuple(s4), s7=s7, sample_end=check_sample_end(sessions[-1]),
                          notes=tuple(notes))
+
+
+# --------------------------------------------------------------------------- #
+# Outcome assembly (⑨-4/2/c; criteria 6.1, 6.2, 6.4 N12; owner answers B-Q1, B-Q2, B-Q3 of 2026-11-11)
+# --------------------------------------------------------------------------- #
+OUTCOME_UNIT = "⑨-4/2/c"
+OUTCOMES = ("ADOPT", "KEEP", "REVISE", "REJECT", "INSUFFICIENT_DATA")   # criteria 6.1 (M-16)
+NO_OUTCOME = "NO_OUTCOME"        # labelled: the criteria and this module leave the case undecided; never guessed
+PROVISIONAL_BASIS = "잠정 기준"    # B-Q1: a REJECT from the second DSR of record below 0.90 carries this label
+
+# The gate verdicts `validate.score_strategy` can give for each status of its own DSR (the S-2 line at N = G):
+# a finite DSR below dsr_min is REJECT unless the sample floor gave INSUFFICIENT_DATA first, and a NaN DSR can be
+# neither PASS nor the short-record INSUFFICIENT_DATA (validate.py:584-622). Other pairs are not one run.
+_GATE_VERDICTS_FOR_GRID = MappingProxyType({
+    "pass": V.DECISIONS,
+    "below": ("INSUFFICIENT_DATA", "REJECT"),
+    "nan": ("INSUFFICIENT_DATA", "REJECT", "REVISE"),
+})
+_BQ_SOURCE = "owner answer of 2026-11-11, \"전부승인\""
+_OUTCOME_PROVISIONAL_NOTE = ("provisional (M-3): every outcome stays provisional while the second DSR is "
+                             "provisional (until the ⑨-3c report and ⑨-3d)")
+_NOT_COVERED_NOTE = ("not part of this outcome: S-5 (SPA when one registration has more than one rule), S-6 "
+                     "(break-even cost) and D-4 are later units")
+
+
+@dataclass(frozen=True)
+class StrategyOutcome:
+    outcome: str              # one of OUTCOMES, or NO_OUTCOME
+    basis: str                # the rule that named it ("criteria 6.1 gate", "B-Q1", "B-Q3", ...) or why none
+    gate_verdict: str         # the caller's gate verdict, one of validate.DECISIONS
+    reasons: tuple            # printed reason lines, in the order the rules were applied
+    references: tuple         # B-Q2 reference lines: another dispersion term, never deciding
+    strategy: StrategyLines   # the collected lines, unchanged
+    unit: str = OUTCOME_UNIT
+
+    @property
+    def kind(self) -> str:
+        return self.strategy.kind
+
+    @property
+    def provisional(self) -> bool:
+        """Derived from the collected lines: provisional while the module says the second DSR is provisional."""
+        return bool(self.strategy.provisional or self.strategy.s2.provisional)
+
+    @property
+    def provisional_basis(self) -> bool:
+        """True for B-Q1: after a gate PASS the only way to REJECT is the second DSR of record below 0.90."""
+        return self.gate_verdict == "PASS" and self.outcome == "REJECT"
+
+    @property
+    def replaces_incumbent(self) -> bool:
+        """Only an adopted replacement replaces its incumbent (criteria 3.2 item 12, 4.2.2; B-Q3)."""
+        return self.kind == "replace" and self.outcome == "ADOPT"
+
+    def lines(self) -> tuple:
+        head = f"{self.unit} strategy outcome ({self.kind})"
+        if self.provisional:
+            head += " [provisional]"
+        head += f": {self.outcome}"
+        if self.provisional_basis:
+            head += f" [{PROVISIONAL_BASIS}]"
+        if self.outcome == NO_OUTCOME:
+            head += f" (no outcome: {self.basis})"
+        tail = [_OUTCOME_PROVISIONAL_NOTE] if self.provisional else []
+        return (head,) + tuple(self.reasons) + tuple(self.references) + tuple(tail) + (_NOT_COVERED_NOTE,)
+
+
+def _same(a: float, b: float) -> bool:
+    return (math.isnan(a) and math.isnan(b)) if (math.isnan(a) or math.isnan(b)) else a == b
+
+
+def _reference_lines(deciding: DsrTwoN, reference) -> tuple:
+    """B-Q2: another dispersion term paired with N_raw, for the same series, printed only."""
+    if reference is None:
+        return ()
+    if not isinstance(reference, DsrTwoN):
+        raise AdoptionInputError(f"reference_s2 must be a dsr_two_n result, got {type(reference).__name__}")
+    same = (reference.n_grid == deciding.n_grid and reference.n_sessions == deciding.n_sessions
+            and reference.sr_sd_grid == deciding.sr_sd_grid and _same(reference.dsr_grid, deciding.dsr_grid)
+            and [(r.reading, r.n_raw) for r in reference.readings]
+            == [(r.reading, r.n_raw) for r in deciding.readings])
+    if not same:
+        raise AdoptionInputError("reference_s2 is not for the same series, G, gate term and N_raw counts as the "
+                                 "deciding S-2 lines")
+    if reference.sr_sd_daily == reference.sr_sd_grid:
+        raise AdoptionInputError("reference_s2 pairs N_raw with the gate's own term, which already decides (B-Q2); "
+                                 "a reference uses another term")
+    return tuple(f"S-2 reference only (B-Q2, never decides): DSR at N_raw {r.reading} = {r.n_raw} [{r.role()}] with "
+                 f"the term {reference.sr_sd_daily:.6g} per period [{reference.sr_sd_label}]: {_fmt(r.dsr)} "
+                 f"({r.status})" for r in reference.readings if r.n_raw is not None)
+
+
+def _counting(lines: StrategyLines) -> tuple:
+    """The comparisons that count (criteria 4.2.2): S-3 for a replacement, every S-4. Refuses a malformed result."""
+    if lines.kind not in KINDS:
+        raise AdoptionInputError(f"kind must be one of {KINDS}, got {lines.kind!r}")
+    out = []
+    if lines.kind == "replace":
+        if not (isinstance(lines.s3, Comparison) and lines.s3.rule == "S-3" and lines.s3.counts):
+            raise AdoptionInputError("a replacement's lines need a counting S-3 comparison (M-19)")
+        if not isinstance(lines.s7, PowerS7):
+            raise AdoptionInputError("a replacement's lines need the S-7 power line (criteria 3.2 item 8)")
+        out.append(lines.s3)
+    if not lines.s4:
+        raise AdoptionInputError("at least one registered baseline is required (S-4, M-4)")
+    for c in lines.s4:
+        if not (isinstance(c, (Comparison, CashBaseline)) and c.rule == "S-4" and c.counts):
+            raise AdoptionInputError(f"S-4 lines must be counting comparisons or CASH_BASELINE, got {c!r:.80}")
+        out.append(c)
+    for c in out:
+        if isinstance(c, Comparison) and not c.conforms_to_registration:
+            raise AdoptionInputError(f"{c.rule} vs {c.other} is OFF-REGISTRATION (B {c.B}, seed {c.seed}); it "
+                                     "cannot decide an outcome (criteria 3.2 item 11)")
+    return tuple(out)
+
+
+def strategy_outcome(*, gate_verdict: str, lines: StrategyLines,
+                     reference_s2: Optional[DsrTwoN] = None) -> StrategyOutcome:
+    """Assemble the strategy outcome (roadmap ⑨-4/2/c; criteria 6.1, 6.2, 6.4 N12, 4.0 rules 5 and 6, 4.2.2; rulings
+    M-3, M-11, M-14, M-16, M-17, M-19 and the owner's answers B-Q1, B-Q2, B-Q3 of 2026-11-11, "전부승인").
+
+    Inputs: `gate_verdict`, the gate's own verdict (S-1, one of `validate.DECISIONS`, the caller's); `lines`, the
+    `strategy_lines` result of the same run; `reference_s2`, optionally a `dsr_two_n` result of the same series with
+    another (for example stricter) dispersion term paired with N_raw. Pure: nothing is recomputed, no number of
+    `lines` is changed, and the result holds `lines` itself.
+
+    B-Q2: the second DSR that decides is the reading of record (R-FAM) computed with the gate's dispersion term, so
+    `lines.s2` must pair N_raw with `sr_sd_grid` (`sr_sd_daily == sr_sd_grid`); otherwise the input is refused.
+    `reference_s2` is printed as reference lines only and never decides.
+
+    Order, for a gate verdict other than PASS: the gate's verdict is the outcome (6.1), except that a gate REVISE
+    with a NaN DSR at N = G is INSUFFICIENT_DATA (6.4 N12). For PASS: R-FAM not supplied -> NO_OUTCOME (L-FAM only
+    compares); R-FAM NaN -> INSUFFICIENT_DATA (6.4 N12); R-FAM below 0.90 -> REJECT labelled "잠정 기준" (B-Q1);
+    a replacement whose S-7 MDE80 exceeds the expected dSR -> INSUFFICIENT_DATA whatever S-3 says, nothing replaced
+    (S-7, B-Q3, 4.2.2); a replacement whose S-7 did not run -> NO_OUTCOME; R-FAM borderline or any counting S-3 /
+    S-4 borderline or not won -> KEEP (6.1, 6.2); any counting comparison not run -> NO_OUTCOME; a sample touching
+    the 2027-01-01 holdout -> NO_OUTCOME (4.0 rule 6, M-14: no ADOPT, and 6.1 names nothing else); else ADOPT.
+
+    Refused (`AdoptionInputError`): a verdict outside `validate.DECISIONS`; a verdict the gate cannot give for the
+    status of its own DSR at N = G (a PASS with that DSR below 0.95 or NaN); lines not from `strategy_lines`
+    (missing S-3 or S-7 for a replacement, no S-4, an OFF-REGISTRATION comparison); B-Q2 pairing not met; a
+    reference S-2 for another series or with the gate's term. Every outcome stays provisional while the second DSR
+    is provisional (M-3); S-5, S-6 and D-4 are not part of it."""
+    if not isinstance(gate_verdict, str) or gate_verdict not in V.DECISIONS:
+        raise AdoptionInputError(f"gate_verdict must be one of {V.DECISIONS} (validate.DECISIONS), got "
+                                 f"{gate_verdict!r}")
+    if not isinstance(lines, StrategyLines) or not isinstance(lines.s2, DsrTwoN):
+        raise AdoptionInputError("lines must be a strategy_lines result")
+    s2 = lines.s2
+    if gate_verdict not in _GATE_VERDICTS_FOR_GRID.get(s2.status_grid, ()):
+        raise AdoptionInputError(f"gate verdict {gate_verdict} is not one validate.score_strategy gives when its DSR "
+                                 f"at N = G is {_fmt(s2.dsr_grid)} ({s2.status_grid}); the S-2 line at N = G is the "
+                                 "gate's DSR (criteria 6.2), so these inputs are not from one run")
+    if s2.sr_sd_daily != s2.sr_sd_grid:
+        raise AdoptionInputError(
+            f"B-Q2 ({_BQ_SOURCE}): the second DSR that decides uses the gate's dispersion term; these lines pair "
+            f"N_raw with {s2.sr_sd_daily:.6g} [{s2.sr_sd_label}], not the gate's {s2.sr_sd_grid:.6g}. Collect the "
+            "lines with sr_sd_daily = sr_sd_grid and pass the other term's dsr_two_n result as reference_s2")
+    counting = _counting(lines)
+    references = _reference_lines(s2, reference_s2)
+
+    def done(outcome: str, basis: str, reasons: list) -> StrategyOutcome:
+        return StrategyOutcome(outcome=outcome, basis=basis, gate_verdict=gate_verdict, reasons=tuple(reasons),
+                               references=references, strategy=lines)
+
+    reasons = [f"S-1 gate verdict (the caller's): {gate_verdict}; DSR at N = G = {s2.n_grid}: {_fmt(s2.dsr_grid)} "
+               f"({s2.status_grid}) [the gate's own term]"]
+    if gate_verdict != "PASS":
+        if gate_verdict == "REVISE" and s2.status_grid == "nan":
+            reasons.append("criteria 6.4 (N12): the gate's DSR is NaN, so its REVISE is read as S-2 not met: "
+                           "INSUFFICIENT_DATA")
+            return done("INSUFFICIENT_DATA", "criteria 6.4 N12", reasons)
+        reasons.append(f"criteria 6.1: the gate's {gate_verdict} is the adoption outcome")
+        return done(gate_verdict, "criteria 6.1 gate", reasons)
+
+    record = next((r for r in s2.readings if isinstance(r, RawReading) and r.of_record), None)
+    if record is None:
+        raise AdoptionInputError(f"the S-2 lines carry no {N_RAW_READING_OF_RECORD} line (dsr_two_n always shows it)")
+    for r in s2.readings:
+        if r.n_raw is None:
+            continue
+        role = ("the second DSR of record, with the gate's dispersion term (B-Q2)" if r.of_record
+                else "shown for comparison; decides nothing (owner ruling 7)")
+        reasons.append(f"S-2 DSR at N_raw {r.reading} = {r.n_raw}: {_fmt(r.dsr)} ({r.status}); {role}")
+    if record.status == "not_supplied":
+        reasons.append(f"S-2: the reading of record {record.reading} was not supplied and the other reading only "
+                       "compares (owner ruling 7), so no second DSR decides")
+        return done(NO_OUTCOME, f"{record.reading}, the reading of record, not supplied", reasons)
+    if record.status == "nan":
+        reasons.append("criteria 6.4 (N12): a NaN second DSR does not meet S-2: INSUFFICIENT_DATA")
+        return done("INSUFFICIENT_DATA", "criteria 6.4 N12", reasons)
+    if record.status == "below":
+        reasons.append(f"B-Q1 ({_BQ_SOURCE}): the second DSR of record is below {s2.borderline_min:.2f}: REJECT, "
+                       f"{PROVISIONAL_BASIS} ({_PROVISIONAL_NOTE})")
+        return done("REJECT", "B-Q1", reasons)
+    if lines.kind == "replace":
+        s7, s3 = lines.s7, lines.s3
+        if s7.status == "printed" and s7.underpowered_vs_expected:
+            reasons.append(f"S-7 and B-Q3 ({_BQ_SOURCE}): MDE80 {s7.mde80:.4f} is above the registered expected dSR "
+                           f"{s7.expected_dsr:.4f}, so S-3 ({s3.status}) is INSUFFICIENT_DATA even when won, and "
+                           "criteria 4.2.2 makes the replacement INSUFFICIENT_DATA: the incumbent is not replaced")
+            return done("INSUFFICIENT_DATA", "B-Q3", reasons)
+        if s7.status != "printed":
+            reasons.append(f"S-7 vs {s7.other}: not run ({s7.reason}); without the power line B-Q3 cannot be "
+                           "applied")
+            return done(NO_OUTCOME, "S-7 power line not run", reasons)
+        reasons.append(f"S-7 vs {s7.other}: MDE80 {s7.mde80:.4f} within the registered expected dSR "
+                       f"{s7.expected_dsr:.4f}; B-Q3 does not apply")
+    keep = []
+    if record.status == "borderline":
+        keep.append(f"S-2: the second DSR of record is in [{s2.borderline_min:.2f}, {s2.dsr_min:.2f}) while the "
+                    "gate's DSR passes: borderline, never adopted (criteria 6.2, M-11)")
+    for c in counting:
+        if c.status in ("borderline", "not_won"):
+            zone = "borderline, never adopted (criteria 6.2, M-11)" if c.status == "borderline" else "not won"
+            keep.append(f"{c.rule} vs {c.other}: {c.status}: {zone}")
+    if keep:
+        reasons += keep
+        reasons.append("criteria 6.1: the gate passes but a check outside it is not surely won (borderline "
+                       "included): KEEP")
+        return done("KEEP", "criteria 6.1 KEEP", reasons)
+    not_run = [c for c in counting if c.status == "not_run"]
+    if not_run:
+        reasons += [f"{c.rule} vs {c.other}: not run ({c.reason})" for c in not_run]
+        return done(NO_OUTCOME, "a counting comparison was not run; criteria 6.1 names no outcome for it", reasons)
+    for c in counting:
+        reasons.append(f"S-4 vs {c.other}: replaced by S-1 (criteria 2.3), met by the gate's PASS"
+                       if c.status == "replaced" else f"{c.rule} vs {c.other}: win")
+    reasons.append(lines.sample_end.line())
+    if lines.sample_end.holdout_touched:
+        return done(NO_OUTCOME, "HOLDOUT_TOUCHED: ADOPT is not allowed before decision 14 (4.0 rule 6, M-14) and "
+                                "criteria 6.1 names no other outcome", reasons)
+    reasons.append("criteria 6.1: every rule of 4.2.2 this unit checks is met: ADOPT"
+                   + ("; the incumbent is replaced" if lines.kind == "replace"
+                      else "; an addition replaces nothing (M-19)"))
+    return done("ADOPT", "criteria 6.1 ADOPT", reasons)
