@@ -6,10 +6,10 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2
 next_ids: ⑤-2/g, ⑤-2/e, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-12T09:52:00+09:00
+updated_at: 2026-11-12T15:04:00+09:00
 stale_after_hours: 3
-waiting_on: owner
-work_branch: main
+waiting_on: none
+work_branch: claude/adoption-outcome-20261112
 work_commit: b9dea9c
 uncommitted_changes: no
 pr: none
@@ -120,7 +120,15 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - **C:** 0b 채택 방침만 기록. Q12 = 7개 파일(`core/quant/strategies.py`, `validate.py`, `history.py`, `gate_ledger.py`, `core/research/strategy_workflow.py`, `core/quant/optimize.py`, `core/quant/risk.py`). Q13·Q14·Q16·Q17·Q18 기본값. 화면은 네이티브만(UI-D1), Flet 작업(Q19 포함) 안 함, PC 화면은 시안 먼저 + UI 세션 이식과 ⑦-2 병합 뒤. Q22의 잘라내기 여부는 2026-12 말 전에 따로 질문. 다음 단위 ⑨-3a/recorder/1(화면 없음, 결정 9 조건: run_family 안에서 PNL_COMPUTED보다 낮은 PROGRESS를 쓰지 않음).
 - **D:** 주문 한도 수치(1회 100만 원/5%, 하루 10건·300만 원/15%, 손실 중지 40만 원/2%, 종목 비중 20%/400만 원, 가격 이탈 3%·시세 15초·지정가만, 09:00~15:20, 모의 20거래일·30건 등)를 기본값으로 승인. **실거래는 켜지지 않음.** 순서: 안전 설계 문서 보고 → ⑦-2 병합 뒤 구현 → 모의투자 → 결과 보고 → 소유자의 실거래 전환 승인. D-14 법률 자문은 소유자가 의뢰.
 
-### ⑥-1/rulings/2 완료: 결정표에 없던 경우 X1~X5 (2026-11-12 09:52 KST) — 가장 최신
+### ⑨-4/2/c 시작: 채택 결과 조립 (2026-11-12 15:04 KST) — 가장 최신
+
+- 소유자 지시(원문): "이어서 할 일을 어서 진행해주세요. 한도가 많이 남지 않아 빠르게 진행해야합니다". 사용량이 얼마 남지 않았다고 하셨으므로, 끊기면 이 절부터 이어받으십시오.
+- 브랜치 `claude/adoption-outcome-20261112`(main `b9dea9c`에서 시작, 스크래치 `adopt` 워크트리, 아직 push 전). 범위: `core/adoption/` 안에 결과 조립 함수(기준 6.1·6.2, 판정 B-Q1 "둘째 DSR 0.90 미만 → 기각(잠정)", B-Q2 "게이트와 같은 분산 값으로 판정, 엄격한 값은 참고 줄", B-Q3 "검정력 부족이면 이겨도 자료 부족"), 시험, `docs/product/ADOPTION_STRATEGY_CHECKS_2026-11-10.md` 새 절. Q4·Q5·Q7은 다음 단위.
+- 진행: 구현 → 독립 검증 → 재수정 → PR → CI(Runtime·Compliance) → 병합 → 원장 `⑨-4/2/c`.
+- 끊겼을 때: 브랜치가 원격에 없으면 처음부터. 있으면 `git log b9dea9c..origin/claude/adoption-outcome-20261112`로 확인 후 PR.
+- 소유자에게 재실행 안내서를 다시 보냄(작업 폴더의 체크아웃이 옛 커밋이라 `docs/product/...` 경로가 열리지 않았음; 스크래치에 main 사본을 두고 파일로 전송).
+
+### ⑥-1/rulings/2 완료: 결정표에 없던 경우 X1~X5 (2026-11-12 09:52 KST)
 
 - 소유자 답(원문): "X1~X5 모두 권장값으로 하겠습니다" (2026-11-12 09:2x KST). 질문은 03:39 KST에 보낸 표.
 - 결과: X1·X3·X4는 문서의 "보고하고 여쭘"이 소유자 결정. X2: 결정 4의 C-06 재실행은 파일럿마다 1회. X5: F 전에 Claude가 E 결과에서 L2-5b 행을 보고 미실행이면 Windows 개발자 모드를 켜도록 안내, F1a에서 소유자가 확인.
