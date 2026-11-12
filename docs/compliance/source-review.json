@@ -293,7 +293,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "cb4dfa436fe5ee270a4ab76a7b162d55dd1e8511b59547e4863b876b8170f5a7",
+    "docs/compliance/FACTS.md": "5966bab853ea25809ef7195b7878f0a626d16b01e498858b46cd0723d8a06bca",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -382,9 +382,9 @@
     "main.py": "2f95c001a369306d5737aa456d918a4b8a62147e1b1421d6b80933ba888f7553",
     "mindmap/QUANTGEN Macro Neural Link.html": "4dbf731539d418aa67553bd5fd393dfc55550fac737ef89ca4c18c813f7c76c5",
     "pyproject.toml": "7c46a0addc7d5220351b73c8ad54d672dbbd6de80ebf1a053a42293a717c52d5",
-    "quantgen_desktop/__init__.py": "28ea7e1a03772bb3976a842601ac5b16e66387cae8b2ddd47bda160ed8f20759",
+    "quantgen_desktop/__init__.py": "1ec1396b13e4b6caae0b8dfcf6201af71ad9756428c5cbcaab9706083691e060",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "33a4aae47896f1012f2718a19a58f560745727a87b8e588220e05174a46a3590",
+    "quantgen_desktop/app.py": "6af56e64636b770b3dca1d55ad650f8e6b56706df0aabf3e5488bf5ca843a1b7",
     "quantgen_desktop/bonds.py": "ce7a4368103fc4842e095a20d1c261dbe5961a00cee1d4b5bfe183442ccee7b6",
     "quantgen_desktop/bonds_portfolio_narrative.py": "5514b58f6025261d2b1feab0b112a74fae5a5cf4a8b654eb6c8204c7513bbfcf",
     "quantgen_desktop/category_picker.py": "7061468ea7104e6a2a3ff6989dd61373f653fc9acfb8ec587e3c077b6ed9e18d",
@@ -510,7 +510,7 @@
     "tests/desktop_owner_ui_charts_acceptance.py": "071e406a16d7c0fe71c41ef463f85ace501d523cb87cc54676dad7455063b06e",
     "tests/desktop_owner_ui_ficc_acceptance.py": "f1e00489b0be49085595ad7b7f8b58285c0e86567d261c00ca9ec383b8439faa",
     "tests/desktop_owner_ui_integration_acceptance.py": "8adf9b8e656cc60f4ba5d54fc60ef51ecca531962a59c4e58472bf583d458573",
-    "tests/desktop_owner_ui_market_acceptance.py": "5696f94a1b60d38d8b8004a59fec4f01e7277da2274123f4d34fc9bced7f8f99",
+    "tests/desktop_owner_ui_market_acceptance.py": "6d4c94f71f347c5d3042462e4697751f0b1550d1c0712e4857ef1d6a68d7274e",
     "tests/desktop_owner_ui_risk_acceptance.py": "b1e171ccf27c90b5c35cc8f68ce6e5f9c25f1c53720f86fb06b9286d89db31da",
     "tests/desktop_owner_ui_strategy_acceptance.py": "d5319c7d4e659e7b1b370c313350d982d23859b76d579202a5877f04fd1195e0",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
@@ -724,163 +724,163 @@
   "reviews": {
     "1": {
       "document_sha256": "bacab46dd51ed03b4d3be4b9bc46a7733cbed73ba42653ce9695e5ca0e10b4b4",
-      "source_digest": "be0a010e18965ba0f7ba4be4c53fc7538711af3ec6034de8e21e187d61e22b83",
+      "source_digest": "c0f9505aca7a34cf75b03a6938a67e32e966cba6c08507dc2ec2735e58dc2338",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.386876+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.663991+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "be0a010e18965ba0f7ba4be4c53fc7538711af3ec6034de8e21e187d61e22b83",
+      "source_digest": "c0f9505aca7a34cf75b03a6938a67e32e966cba6c08507dc2ec2735e58dc2338",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.388926+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.666114+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "8c12b9210608b3c8451c09ef1912fedbe3cdd3cd4d5def35a10a4b8ebf76da10",
+      "source_digest": "0d5ea04a2559298b71867908f037ed2da9b53d56669cf72dd983e3b43fa8c0c3",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.390877+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.668651+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "4": {
       "document_sha256": "f63c98563dc663611297f52c74457ea7ad2f052d918c45e505dd667652074c9b",
-      "source_digest": "fc0bf2a850d537cfb2dc86135d3edeaf98fe9a5bfc420cb47f346de7dfbab092",
+      "source_digest": "4b91ceb0d755d8de17b41945030c7a6be82220e3f0d4fcb158f787623721f226",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.392615+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.670512+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "31c250ecc4baa596911bca0fb1b739b25b127e70e1e80f890bacad6ba8204858",
+      "source_digest": "cea295f07a95f681d2ec3d389a7fe42fc1b2fc074b31bddc0eb5f4d5d9802e4f",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.394878+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.672649+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "6": {
       "document_sha256": "60bb586d0bce26480feecc06f182c6ceaaea1700f1be0e95bac820f18ad484a8",
-      "source_digest": "3b0158525cfa65a352906bb76869a7995506f57ac534921a39894d8705f806dd",
+      "source_digest": "6301b6788855262a0fa441a9b159d3e917a84e325e804360abad0e95a83e14ea",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.396553+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.674561+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "7": {
       "document_sha256": "1eb6da7d87830c9abde24303464cd80f65f6a1bf5b66bc5b53ec81b2c2e4b1ed",
-      "source_digest": "be0a010e18965ba0f7ba4be4c53fc7538711af3ec6034de8e21e187d61e22b83",
+      "source_digest": "c0f9505aca7a34cf75b03a6938a67e32e966cba6c08507dc2ec2735e58dc2338",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.398248+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.676233+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "8": {
       "document_sha256": "e50e210234645ca8e2561662dae3a0afc5ab445e68fe523d320c3889c7e0d8a7",
-      "source_digest": "3b0158525cfa65a352906bb76869a7995506f57ac534921a39894d8705f806dd",
+      "source_digest": "6301b6788855262a0fa441a9b159d3e917a84e325e804360abad0e95a83e14ea",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.400344+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.677864+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "9": {
       "document_sha256": "ebdb3469ea72e45341719aae0805b46a526374d394dbdb0e1875fe1df2c01757",
-      "source_digest": "27cc7ba9c2496abe1cb5abc8b1724998bfcbe2079405afc9fde437d424739c85",
+      "source_digest": "3016d037fb6726fcff6c565f3530fa90294794d636c27715b4c9bc3830f5450b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.401964+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.679569+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "10": {
       "document_sha256": "13ab9559eb6b5a0bf84c1575acd19d94cdb0b69273474fd5e686e05df5930fc3",
-      "source_digest": "52f804c265c8fe67cd0b4e6004d6088d3c675536f435b897c1ef0fa8e0051378",
+      "source_digest": "4cff2c052239412acb3663dcda0eb332da65704b66274c07deaf1282b85c2c8f",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.403567+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.681800+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "355d0d981eedf4d74e35ff896e8d2d66c2e91ced97a633082d4a4d90a28b07ad",
+      "source_digest": "92f1c0ebd32d8f46fc2e67161ad694f06b4e1214b5cba9118113c523d1b55e5a",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.405718+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.683960+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "12": {
       "document_sha256": "55b14bd417df61e59c2e06eb37f397dcbe8457ec571342c27e6b0d3559d507dc",
-      "source_digest": "f8531cc186b650bdb21af27587c76b06819f228a7c25d9ef0540a6baaa9cff00",
+      "source_digest": "5b1d9caec54f27d10ab067806eac32f9375a1f8a6507d4e4ebd3db064e6e93d0",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.407312+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.685572+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "13": {
       "document_sha256": "cbb62a2360f579617977c7d4bb0105eecfec4b091ef98d554d14f8f675508ac0",
-      "source_digest": "27cc7ba9c2496abe1cb5abc8b1724998bfcbe2079405afc9fde437d424739c85",
+      "source_digest": "3016d037fb6726fcff6c565f3530fa90294794d636c27715b4c9bc3830f5450b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.408931+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.687179+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "14": {
       "document_sha256": "5098fa39312b4ce88a73080e61ad70473c9e736a2b7e93150c74e87fbb68d50c",
-      "source_digest": "27cc7ba9c2496abe1cb5abc8b1724998bfcbe2079405afc9fde437d424739c85",
+      "source_digest": "3016d037fb6726fcff6c565f3530fa90294794d636c27715b4c9bc3830f5450b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.410497+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.688744+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "15": {
       "document_sha256": "6b12ffaeaed6ebd8b925ea4ff65ae5e6b0031dd9566739474f672cda1b7d0055",
-      "source_digest": "27cc7ba9c2496abe1cb5abc8b1724998bfcbe2079405afc9fde437d424739c85",
+      "source_digest": "3016d037fb6726fcff6c565f3530fa90294794d636c27715b4c9bc3830f5450b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.412614+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.690495+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "403f2d2922d987572a818543012eff5f9e5f791113119c7c2affc8aed0fd9e45",
+      "source_digest": "247fc68162b0a06c02728d618cd1b25b81dc0b2e21db02a40b607c478e6e43d7",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.414323+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.692105+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "3b0158525cfa65a352906bb76869a7995506f57ac534921a39894d8705f806dd",
+      "source_digest": "6301b6788855262a0fa441a9b159d3e917a84e325e804360abad0e95a83e14ea",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.415996+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.693905+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "be0a010e18965ba0f7ba4be4c53fc7538711af3ec6034de8e21e187d61e22b83",
+      "source_digest": "c0f9505aca7a34cf75b03a6938a67e32e966cba6c08507dc2ec2735e58dc2338",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.417670+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.695638+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "19": {
       "document_sha256": "983c0b85fb10b1018222236a37b839667a1103472796b514a9419651b8af2a37",
-      "source_digest": "ccf8d0322141b594319a3441710f503684e07dd9b835e4f953de9091b8d7c95c",
+      "source_digest": "73047684629bfa3137f7cf9fb96e460a5c0596c308ef58bd66309f370d6b7339",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.419763+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.697177+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     },
     "20": {
       "document_sha256": "b6019dd07ee24fdf3a53791a3e0adad1472bb14cbe843a38553f209b669d1551",
-      "source_digest": "be0a010e18965ba0f7ba4be4c53fc7538711af3ec6034de8e21e187d61e22b83",
+      "source_digest": "c0f9505aca7a34cf75b03a6938a67e32e966cba6c08507dc2ec2735e58dc2338",
       "reviewed_by": "Claude integration review",
-      "review_note": "Watchlist Q-SCORE column fits its longest line in the item face (ubuntu CI on PR 109 had 121 px of text in 120 px); no data, wording or storage change",
-      "reviewed_at": "2026-11-12T02:45:17.421522+00:00",
-      "source_commit": "3d214a0d2882381a03658e047c106644f03f9d66"
+      "review_note": "Windows built outside main() register the bundled QG Interface fonts like main() (use_interface_fonts), so layout tests measure the app's face on every OS; FACTS fusion-style-2026-11-12 row added",
+      "reviewed_at": "2026-11-12T03:03:20.698795+00:00",
+      "source_commit": "0235319a6e46cbf2296295b1c151bfbdec744127"
     }
   }
 }

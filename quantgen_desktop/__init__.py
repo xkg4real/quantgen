@@ -20,4 +20,29 @@ def use_fusion_style():
         QApplication.setStyle("Fusion")
 
 
+def use_interface_fonts():
+    """Register the bundled interface fonts (QG Interface, owner UI-D6) once the QApplication exists.
+
+    main() loads them before the first window; a window built without main() (tests, capture scripts) used to
+    render with the platform's own sans instead: Inter or DejaVu on Linux, Segoe UI on Windows. Layout checks then
+    measured three different faces, none of them the app's (PR 109: the macro table 72 px wider and the Markets
+    page scrolling sideways on Windows only). Idempotent: does nothing when the family is already registered or
+    no application exists yet; a missing bundle keeps the platform font, as main() does.
+    """
+    try:
+        from PyQt6.QtGui import QFontDatabase
+        from PyQt6.QtWidgets import QApplication
+    except ImportError:
+        return None
+    app = QApplication.instance()
+    if app is None:
+        return None
+    from .font_policy import INTERFACE_FAMILY
+    if INTERFACE_FAMILY in QFontDatabase.families():
+        return INTERFACE_FAMILY
+    from core.app_paths import application_root
+    from .font_policy import configure_interface_font
+    return configure_interface_font(app, application_root() / "assets/fonts")
+
+
 use_fusion_style()

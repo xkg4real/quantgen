@@ -170,8 +170,9 @@ class ResearchWindow(QMainWindow):
                  macro_records_runner=execute_macro_records, paper_factory=None, commentary_runner=None, auto_refresh=True, language="en", language_store=None, locale=None, theme_mode="light",
                  symbol_directory=None, watchlist_store=None, card_router_factory=None, profile_loader=None):
         super().__init__()
-        from . import use_fusion_style
+        from . import use_fusion_style, use_interface_fonts
         use_fusion_style()  # the look the style sheets and captures were made for, on Windows too
+        use_interface_fonts()  # main() loads them first; a window built elsewhere gets the same face
         self.ctx = LocaleContext(locale or ("ko_KR" if language == "ko" else "en_US"))
         self.auto_refresh = auto_refresh
         self.ui_language = self.ctx.language

@@ -43,6 +43,10 @@ class WatchlistAlignmentTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.app = QApplication.instance() or QApplication([])
+        # Measure the app's own face (QG Interface), as a ResearchWindow does: the platform sans differs by OS
+        # (Segoe UI on Windows put the column title 4 px off its figures on PR 109's Windows CI).
+        from quantgen_desktop import use_interface_fonts
+        use_interface_fonts()
 
     def setUp(self):
         from tests.desktop_watchlist_acceptance import financial_rows

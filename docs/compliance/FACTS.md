@@ -908,5 +908,6 @@ Gothic A1 기반 hinted TTF400/500/600과 별도 QG Symbols를 동봉하여 작�
 |---|---|
 | 네이티브 앱은 모든 플랫폼에서 Qt Fusion 스타일로 그립니다. 패키지를 가져올 때, `main()`에서 `QApplication`을 만든 직후, `ResearchWindow`를 만들 때 지정합니다. | [`quantgen_desktop/__init__.py`](../../quantgen_desktop/__init__.py) `use_fusion_style`, [`quantgen_desktop/app.py`](../../quantgen_desktop/app.py) `main`·`ResearchWindow.__init__` |
 | 이전에는 스타일을 정하지 않아 Windows에서 Qt 기본 "windows11" 스타일이 쓰였고, PR 109의 Windows CI에서 열 제목·숫자 4px 어긋남, 매크로 표 72px 넘침, 1000px 시장 페이지 가로 스크롤이 나왔습니다. 스타일 시트·캡처·배치 시험은 Fusion(리눅스 기본)에서 만들어졌습니다. | PR 109 CI 로그(installed windows-latest 3.11·3.12), 커밋 a2e4daf |
-| 바뀌지 않는 것: 색 토큰, 스타일 시트, 글꼴 정책, 데이터 요청, 저장 항목. | 같은 커밋의 변경 파일 |
+| 창(`ResearchWindow`)을 만들 때 번들 글꼴(QG Interface)이 아직 등록되지 않았으면 `main()`과 같은 방법으로 등록합니다(`use_interface_fonts`). `main()` 밖에서 만든 창(시험·캡처)이 운영체제 기본 글꼴(리눅스 Inter·DejaVu, Windows Segoe UI)로 그려져 배치 시험이 OS마다 다른 글꼴을 재던 문제입니다. 앱 실행 경로는 이미 `main()`에서 등록하므로 바뀌지 않습니다. | [`quantgen_desktop/__init__.py`](../../quantgen_desktop/__init__.py) `use_interface_fonts`, [`app.py`](../../quantgen_desktop/app.py) `ResearchWindow.__init__` |
+| 바뀌지 않는 것: 색 토큰, 스타일 시트, 글꼴 정책(같은 번들·같은 설정), 데이터 요청, 저장 항목. | 같은 커밋의 변경 파일 |
 | 미검증: Windows 화면 직접 측정(컨테이너에 Windows 없음). | — |
