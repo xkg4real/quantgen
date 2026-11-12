@@ -20,7 +20,8 @@ GPT 인수 시 금지: 위 14건 화면을 GPT 이전 버전으로 되돌리기,
 
 # 종목 상세 차트(UI-D8·UI-D9)·미국 시가총액·시장 화면 개편(UI-D10) 완료 — 2026-11-12 04:10 KST (Claude) · GPT 필독
 
-- status: UI-D8·UI-D9·미국 시가총액·규정 후속·UI-D10 완료, main f4837ef 병합(`32c96a1`, 규정 기준선 재생성 PASS), PR https://github.com/xkg4real/quantgen/pull/109 (소유자 요청으로 생성, 병합 대기) · waiting_on: owner
+- status: UI-D8·UI-D9·미국 시가총액·규정 후속·UI-D10 완료, main b9dea9c까지 병합, PR https://github.com/xkg4real/quantgen/pull/109 CI 전부 통과(헤드 `27c3a10`: windows 3.11/3.12/3.14·ubuntu·문법·규정 일관성; Vercel 상태는 소유자 지시로 무시) · 병합은 소유자 결정 · waiting_on: owner
+- PR CI에서 찾아 고친 것(GPT 필독): ① 앱이 Qt 스타일을 정하지 않아 Windows에서 windows11 스타일로 그려짐 → `quantgen_desktop.use_fusion_style()`로 모든 OS에서 Fusion(`a2e4daf`) ② `main()` 밖에서 만든 창(시험·캡처)이 번들 글꼴을 등록하지 않아 OS 기본 글꼴로 측정 → `use_interface_fonts()`(`c5286ec`) ③ `LanguageController`가 레이아웃 변화마다 창 전체 글자(약 2만 개)를 다시 번역해 크기 조절이 1초씩 멈춤 → 같은 언어·로캘로 이미 그린 글자는 건너뜀, 1440→1000px 1.1초→0.37초(`27c3a10`) ④ 관심종목 Q-SCORE 칸 폭 맞춤(`0235319`) ⑤ CI installed 작업 제한 45→120분(`4e743e3`). 새 화면을 만들 때 Fusion·번들 글꼴 기준으로 확인할 것.
 - work_branch: `claude/friendly-bardeen-r6xe8f` (main 미병합, PR은 소유자 요청 시)
 - 소유자 확정 규칙 원문·해석(R-D9-1~4, R-D10-1~3)은 아래 절. 상세 차트·시장 화면을 고치기 전에 반드시 읽을 것.
 
