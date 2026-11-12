@@ -11,6 +11,7 @@ import ast
 import contextlib
 import csv
 import fnmatch
+import hashlib
 import io
 import json
 import math
@@ -281,12 +282,15 @@ LA02_CONVERTED = (                              # each runs a real body once its
     "macro_m2_risk.py::test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata",
     "macro_m2_risk.py::test_label_01_kospi_elevated_stressed_and_us_normal_refdata",
     "macro_m3_estimators.py::test_t_b5_01_kospi_golden_refdata",
+    # part 3 (2026-11-11, owner rulings 5 and 6)
+    "macro_m1_calendars.py::test_regime01_full_range_expected_values_file",
+    "macro_m8_forward.py::test_g_ref_01_s1_goldens_refdata",
 )
 LA02_REMAINING = {                              # not converted yet; a later part moves each up, so the list only shrinks
-    "macro_m1_pit.py::test_fix_01_regeneration_at_level_1_tolerance_refdata": "T-FIX-01: council archive outside the repo",
-    "macro_m1_calendars.py::test_regime01_full_range_expected_values_file": "T-REGIME-01: no ACQUISITION row for the file",
-    "macro_m7_cardp.py::test_i05_full_sample_lag_audit_over_compliant_goldens_refdata": "I-05: LA-07 and LA-30 first",
-    "macro_m8_forward.py::test_g_ref_01_s1_goldens_refdata": "G-REF-01: no product R-11 replay; owner inputs from 1997",
+    "macro_m1_pit.py::test_fix_01_regeneration_at_level_1_tolerance_refdata":
+        "T-FIX-01: council archive outside the repo; held by the owner (ruling 6 of 2026-11-11)",
+    "macro_m7_cardp.py::test_i05_full_sample_lag_audit_over_compliant_goldens_refdata":
+        "I-05: LA-07 and LA-30 first; the LA-30 vintages come with the reference data (ruling 12 of 2026-11-11)",
 }
 # Frozen at part 1 (2026-11-10); a part never edits LA02_SITES. LA02_CONVERTED_FLOOR holds every conversion made so
 # far: a later part that converts a site moves it from LA02_REMAINING to LA02_CONVERTED, adds it here and raises
@@ -326,8 +330,11 @@ LA02_CONVERTED_FLOOR = frozenset({
     "macro_m2_risk.py::test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata",
     "macro_m2_risk.py::test_label_01_kospi_elevated_stressed_and_us_normal_refdata",
     "macro_m3_estimators.py::test_t_b5_01_kospi_golden_refdata",
+    # part 3 (2026-11-11, owner rulings 5 and 6)
+    "macro_m1_calendars.py::test_regime01_full_range_expected_values_file",
+    "macro_m8_forward.py::test_g_ref_01_s1_goldens_refdata",
 })
-LA02_FLOOR_SIZE = 13                            # the floor's size after part 2; a later part raises it, never lowers it
+LA02_FLOOR_SIZE = 15                            # the floor's size after part 3; a later part raises it, never lowers it
 _GATES = ("require_fixture", "_refdata")
 _LA02_WORDS = ("unreachable", "not implemented")
 _CONST_NODES = (ast.Constant, ast.BoolOp, ast.UnaryOp, ast.BinOp, ast.Compare, ast.Tuple, ast.List, ast.expr_context,
@@ -552,8 +559,12 @@ test_t_pbo_01_noise_control_reproduces.test_ids = ["T-PBO-01"]
 #                                                           other columns (the market caps) are not read
 # Every row carries the series_id, value_status and available_at_source that docs/macro_fixtures.REFERENCE_FILES gives
 # its file (F27: either of its two series ids), obs_date = session_date (ISO), and obs_utc / available_at_utc written
-# YYYY-MM-DDTHH:MM:SSZ. F01, F13 and F16 hold one row per date and F27 one per code and date, in date order. One reader,
-# tests.macro_m1_calendars.read_close_layout, reads the four files here and in the other part 2 bodies. F20
+# YYYY-MM-DDTHH:MM:SSZ. F01, F13 and F16 hold one row per date and F27 one per code and date, in date order (F27: the
+# dates of each code; a file grouped by code is in order too, review of PR #101, R2). One reader,
+# tests.macro_m1_calendars.read_close_layout, reads the four files here and in the other part 2 bodies. A price is
+# compared as owner ruling 4 of 2026-11-11 sets it (tests.macro_m1_calendars.price_as_compared; an owner-approved
+# exception to spec L5735, Level 1 `price` "prices exact"): the Yahoo vendor closes of F13 and F16 rounded to two
+# decimals, the KRX official closes of F01 and F27 exactly. F20
 # (results/QX_DLA_postpatch.csv, the result table the rows were printed from) is gated with the others because
 # goldens.csv lists it for kospi_close_2oct; its layout is not declared and the body does not read it (T-FIX-01
 # regenerates it).
@@ -561,6 +572,10 @@ GPOST_READ = ("F01", "F13", "F16", "F27")
 GPOST_COLUMNS = ("close", "series_id", "obs_date", "session_date", "obs_utc", "available_at_utc", "available_at_source",
                  "value_status")
 GPOST_F27_CODES = ("005930", "000660")     # REFERENCE_FILES F27; G-POST-01/samsung_close_2oct and hynix_close_2oct
+# The file each M1 price row of G-POST-01 is read from, which sets how it is compared (owner ruling 4 of 2026-11-11):
+# the ^KS11 close (F13) and the KRW=X last row (F16) are Yahoo vendor prices, the two won closes (F27) KRX official.
+GPOST_PRICE_FILES = {"kospi_close_2oct": "F13", "samsung_close_2oct": "F27", "hynix_close_2oct": "F27",
+                     "krwx_last_row": "F16"}
 # The decision: the KRX close of 2 Oct 2026 (goldens.csv G-POST-01 quantities "... 2 Oct 2026"), scheduled at 06:30:00Z
 # (spec L1289) and stamped 06:30:30Z, close_print_bound_utc('KR', 2026-10-02) (L2096, L6278). A datum enters it only if
 # its available_at_utc is at or before that instant (L539); goldens.csv times every M1 row COMPLIANT.
@@ -596,8 +611,11 @@ def check_gpost01_rows(ks: list[dict], fx: list[dict], samsung: float, hynix: fl
     rows it reads, and `samsung` / `hynix` the 2-Oct KRX closes; `label` says how the caller read them. Asserts 200
     closes for close_over_200d and 21 KRW=X rows for the 20-observation dlog, KRW=X's last row on 1 Oct (the
     provisional 2-Oct row dropped), that the computed rows are exactly goldens.csv's M1 rows, every row at Level 1
-    (`G.assert_golden`: a price exactly, kind `price`, spec L5735), and the peak, 9,114.55 on 22 Jun 2026, compared as
-    a price. Returns the values and the peak."""
+    (`G.assert_golden`), and the peak, 9,114.55 on 22 Jun 2026. A price (kind `price`) is compared as
+    tests.macro_m1_calendars.price_as_compared reads it, owner ruling 4 of 2026-11-11: the Yahoo vendor prices (the
+    ^KS11 close, the peak and the KRW=X last row) rounded to two decimals, the KRX won prices of Samsung and SK hynix
+    exactly (spec L5735). Returns the values as read, unrounded, and the peak."""
+    from tests.macro_m1_calendars import price_as_compared
     assert len(ks) >= GPOST_SMA_N, f"G-POST-01: {len(ks)} KS11 rows {label}, fewer than the {GPOST_SMA_N} of close_over_200d"
     assert fx and fx[-1]["date"] == GPOST_KRWX_LAST, (
         f"G-POST-01: the last KRW=X row {label} is {fx[-1]['date'] if fx else None}, not {GPOST_KRWX_LAST} (the "
@@ -613,14 +631,25 @@ def check_gpost01_rows(ks: list[dict], fx: list[dict], samsung: float, hynix: fl
            "hynix_close_2oct": hynix,
            "krwx_last_row": fx[-1]["close"],
            "krwx_dlog20": math.log(fx[-1]["close"] / fx[-1 - GPOST_DLOG_N]["close"])}
-    m1 = {r.sub_id for r in G.golden("G-POST-01").rows if r.runs_from == "M1"}
+    m1_rows = [r for r in G.golden("G-POST-01").rows if r.runs_from == "M1"]
+    m1 = {r.sub_id for r in m1_rows}
     assert set(got) == m1, f"G-POST-01: goldens.csv M1 rows {sorted(m1)} != the computed rows {sorted(got)}"
+    prices = {r.sub_id for r in m1_rows if r.kind == "price"}
+    assert prices == set(GPOST_PRICE_FILES), (f"G-POST-01: goldens.csv M1 price rows {sorted(prices)} != the rows with "
+                                              f"a price rule {sorted(GPOST_PRICE_FILES)}")
     print(f"PRINTED G-POST-01 M1 rows on {GPOST_DAY} ({label}): " + ", ".join(f"{k} {v:.6g}" for k, v in got.items())
           + f"; peak {peak['close']} on {peak['date']}")
-    G.assert_golden("G-POST-01", got)
-    assert peak["date"] == GPOST_PEAK[0] and G.within("price", peak["close"], GPOST_PEAK[1]), (
+    # Owner ruling 4 of 2026-11-11, an owner-approved exception to spec L5735 (Level 1 `price`: "prices exact"), for
+    # vendor prices only: the Yahoo ^KS11 close, its peak and the KRW=X last row are compared after rounding to two
+    # decimals (their goldens are printed at two decimals; a vendor file may carry float artefacts such as
+    # 7003.740234375). The KRX official won prices of Samsung and SK hynix stay exact.
+    G.assert_golden("G-POST-01", {k: price_as_compared(GPOST_PRICE_FILES[k], v) if k in GPOST_PRICE_FILES else v
+                                  for k, v in got.items()})
+    peak_price = price_as_compared("F13", peak["close"])
+    assert peak["date"] == GPOST_PEAK[0] and G.within("price", peak_price, GPOST_PEAK[1]), (
         f"G-POST-01: the peak of the KS11 closes {label} is {peak['close']} on {peak['date']}, not {GPOST_PEAK[1]} on "
-        f"{GPOST_PEAK[0]} (G-POST-01/drawdown_from_peak; a price, exact: L5735)")
+        f"{GPOST_PEAK[0]} (G-POST-01/drawdown_from_peak; a Yahoo vendor price, compared at two decimals: owner ruling "
+        "4 of 2026-11-11, an exception to L5735)")
     return {**got, "peak": (peak["date"], peak["close"])}
 
 
@@ -632,8 +661,10 @@ def _check_g_post_01(f01: list[dict], f13: list[dict], f16: list[dict], f27: lis
     at the scheduled close 06:30:00Z: an intraday print is not a close (the pre-patch 6,943.66 came from a file written
     at 10:56 KST, L6286). The previous visible KS11 row is dated the previous KRX session of the signed calendar `cal`
     (`clocks.prev_session`). Then `check_gpost01_rows` on the visible KS11 and KRW=X rows and the two stock closes, and
-    F01's official close against kospi_close_2oct at Level 1 (a price, exact). Returns the values."""
+    F01's official close against kospi_close_2oct at Level 1: a KRX official price, compared exactly (spec L5735; owner
+    ruling 4 of 2026-11-11 rounds vendor prices only). Returns the values."""
     from core.calendars import clocks
+    from tests.macro_m1_calendars import price_as_compared
     label = f"visible at the {GPOST_DAY} decision"
 
     def visible(rows):
@@ -662,7 +693,7 @@ def _check_g_post_01(f01: list[dict], f13: list[dict], f16: list[dict], f27: lis
     official = close_of(f01, "KOSPI_OFFICIAL_CLOSE")
     print(f"PRINTED G-POST-01 F01 official close on {GPOST_DAY}: {official}")
     try:
-        G.assert_golden("G-POST-01", {"kospi_close_2oct": official})
+        G.assert_golden("G-POST-01", {"kospi_close_2oct": price_as_compared("F01", official)})   # official: exact
     except AssertionError as exc:
         raise AssertionError(f"G-POST-01 on the F01 official close: {exc}") from None
     return {**got, "kospi_official_close_2oct": official}
@@ -743,24 +774,27 @@ def _gpost_fails(fn, needle: str) -> str:
 
 
 def test_g_post_01_body_passes_and_fails_on_invented_rows():
-    """LA-02 part 2: the G-POST-01 M1 body can PASS and can FAIL. Invented rows in the declared layouts (no KRX, Yahoo or
-    QX data) built to the goldens.csv values pass. It fails, naming the clause, when: a 2-Oct row is not visible at
-    06:30:30Z or is an intraday print (F13, F01, F27); a later row is visible; the KS11 close (also by a float32
-    artefact: a price is exact), the F01 official close, the previous close, the peak (beyond and within the drawdown
-    tolerance, or on another day), the flat level, a stock close, KRW=X's last close or its row 20 observations back is
-    off; the previous visible KS11 row is not 1 Oct (that row missing with 30 Sep at its level, or available only at
-    07:00Z); the provisional 2-Oct KRW=X row is visible; there are too few KS11 or KRW=X rows; and, at the layout (the
-    shared reader), a declared column is absent, a row is not of its file's series and status, rows are out of order, a
-    row is available before its obs_utc, a close is blank, ".", 0 or negative, a date repeats (F16; F27 date and code),
-    obs_date is not session_date or not written YYYY-MM-DD, an instant is not written zero-padded YYYY-MM-DDTHH:MM:SSZ
-    (unpadded, or with fractional seconds), or the file holds no row. The row 201 closes back is outside the 200-close
-    window (its level does not move the ratio) and the row 200 back inside it. tests/macro_m1_pit.py's G-POST-01 body
-    returns the same eight rows on the same files. A KRW=X row dated 2026-10-05, after F16's last day, stamped available
-    on 1 Oct (a look-ahead stamp) FAILs here while the by-date body returns the same eight rows (it does not read the
-    row); stamped on 5 Oct, it is visible at neither and both pass. The calendar is the
-    calendars module's synthetic signed set, through the owner gate. While a fixture is absent, the real test's REFDATA
-    reason names it."""
-    from tests.macro_m1_calendars import F01_COLUMNS, _official_calendar, _official_calendar_on, drafts_set, fixture_set
+    """LA-02 part 2: the G-POST-01 M1 body can PASS and can FAIL. Invented rows in the declared layouts (no KRX, Yahoo
+    or QX data) built to the goldens.csv values pass. It fails, naming the clause, when: a 2-Oct row is not visible at
+    06:30:30Z or is an intraday print (F13, F01, F27); a later row is visible; the KS11 close (by a cent), the F01
+    official close (also by a float32 artefact: a KRX official price is exact), the previous close, the peak (beyond and
+    within the drawdown tolerance, by a cent, or on another day), the flat level, a stock close (also by less than a
+    cent), KRW=X's last close (by a cent) or its row 20 observations back is off; the previous visible KS11 row is not 1
+    Oct (that row missing with 30 Sep at its level, or available only at 07:00Z); the provisional 2-Oct KRW=X row is
+    visible; there are too few KS11 or KRW=X rows; and, at the layout (the shared reader), a declared column is absent,
+    a row is not of its file's series and status, rows are out of order, a row is available before its obs_utc, a close
+    is blank, ".", 0 or negative, a date repeats (F16; F27 date and code), obs_date is not session_date or not written
+    YYYY-MM-DD, an instant is not written zero-padded YYYY-MM-DDTHH:MM:SSZ (unpadded, or with fractional seconds), or
+    the file holds no row. The row 201 closes back is outside the 200-close window (its level does not move the ratio)
+    and the row 200 back inside it. tests/macro_m1_pit.py's G-POST-01 body returns the same eight rows on the same
+    files. A KRW=X row dated 2026-10-05, after F16's last day, stamped available on 1 Oct (a look-ahead stamp) FAILs
+    here while the by-date body returns the same eight rows (it does not read the row); stamped on 5 Oct, it is visible
+    at neither and both pass. A float32 artefact of the Yahoo files on the KS11 close, on the peak or on KRW=X's last
+    row passes: a vendor price is compared at two decimals (owner ruling 4 of 2026-11-11, an owner-approved exception to
+    spec L5735). The calendar is the calendars module's synthetic signed set, through the owner gate. While a fixture is
+    absent, the real test's REFDATA reason names it."""
+    from tests.macro_m1_calendars import (F01_COLUMNS, VENDOR_PRICE_FILES, _official_calendar, _official_calendar_on,
+                                          close_layout_file, drafts_set, fixture_set, price_as_compared)
     assert GPOST_COLUMNS == F01_COLUMNS                     # one declared F01 layout (part 1)
     inv = _gpost_invented()
     texts = {fid: _gpost_csv(fid, inv[fid]) for fid in GPOST_READ}
@@ -833,12 +867,41 @@ def test_g_post_01_body_passes_and_fails_on_invented_rows():
          "the peak of the KS11 closes visible at the 2026-10-02 decision is 9114.55 on 2026-06-23"),
         (dict(F13=lambda rows: rows[-150:]), "150 KS11 rows visible at the 2026-10-02 decision, fewer than the 200"),
         (dict(F16=lambda rows: rows[-15:]), "15 KRW=X rows visible at the 2026-10-02 decision, too few for a 20-observation"),
-        # a price is compared exactly at both G-POST-01 sites (Level 1 `price`, spec L5735; owner question 4): a float32
-        # artefact on the 2-Oct close is not 7,003.74
-        (dict(F13=at(oct2, close=7003.740234375)), "G-POST-01 deviations: kospi_close_2oct: got 7003.740234375"),
+        # owner ruling 4 of 2026-11-11: a vendor price a cent away at two decimals is off (7,003.7451 rounds to
+        # 7,003.75; the peak 9,114.56 is inside the drawdown tolerance and fails the peak clause)
+        (dict(F13=at(oct2, close=7003.7451)), "G-POST-01 deviations: kospi_close_2oct: got 7003.75, want 7003.74"),
+        (dict(F13=at(GPOST_PEAK[0], close=9114.56)),
+         "the peak of the KS11 closes visible at the 2026-10-02 decision is 9114.56 on 2026-06-22"),
+        # ... and a KRX official price stays exact (spec L5735): the won closes of F27 and F01's official KOSPI close
+        # fail on less than a cent, F01 also on the float32 artefact that F13 may carry
+        (dict(F27=at(oct2, "005930", close=276000.004)), "G-POST-01 deviations: samsung_close_2oct: got 276000.004"),
+        (dict(F27=at(oct2, "000660", close=1841000.004)), "G-POST-01 deviations: hynix_close_2oct: got 1841000.004"),
+        (dict(F01=at(oct2, close=7003.740234375)),
+         "G-POST-01 on the F01 official close: G-POST-01 deviations: kospi_close_2oct: got 7003.740234375"),
     )
     for edits, needle in cases:
         _gpost_fails(lambda: run(**edits), needle)
+    # Owner ruling 4 of 2026-11-11, an owner-approved exception to spec L5735 ("prices exact") for vendor prices only: a
+    # Yahoo price is compared after rounding to two decimals, so a float32 artefact of the vendor file passes, on the
+    # 2-Oct KS11 close, on KRW=X's last row and on the peak, and so does 7,003.7449 (it rounds to 7,003.74). The rows
+    # are returned as read. The goldens of the vendor rows are printed at two decimals, so the rounding loses nothing.
+    for edits, key, as_read in ((dict(F13=at(oct2, close=7003.740234375)), "kospi_close_2oct", 7003.740234375),
+                                (dict(F13=at(oct2, close=7003.7449)), "kospi_close_2oct", 7003.7449),
+                                (dict(F16=at(GPOST_KRWX_LAST, close=1356.8399658203125)), "krwx_last_row",
+                                 1356.8399658203125)):
+        assert run(**edits)[key] == as_read, key
+    assert run(F13=at(GPOST_PEAK[0], close=9114.5498046875))["peak"] == (GPOST_PEAK[0], 9114.5498046875)
+    assert VENDOR_PRICE_FILES == ("F13", "F16") and GPOST_PRICE_FILES == {
+        "kospi_close_2oct": "F13", "samsung_close_2oct": "F27", "hynix_close_2oct": "F27", "krwx_last_row": "F16"}
+    assert [close_layout_file(f)[2] for f in ("F13", "F16", "F27", "F01")] == ["vendor_close", "vendor_close",
+                                                                               "official_close", "official_close"]
+    assert all(round(g.want(k), 2) == g.want(k) for k in ("kospi_close_2oct", "krwx_last_row"))
+    assert round(GPOST_PEAK[1], 2) == GPOST_PEAK[1]
+    assert price_as_compared("F13", 7003.740234375) == 7003.74
+    assert price_as_compared("F16", 1356.8399658203125) == 1356.84
+    assert price_as_compared("F27", 276000.004) == 276000.004           # a KRX official price is not rounded
+    assert price_as_compared("F01", 7003.740234375) == 7003.740234375
+    _gpost_fails(lambda: price_as_compared("F14", 5000.0), "F14: no price comparison rule for a vendor_close file")
     # the layout
     _gpost_fails(lambda: _gpost_rows("F13", texts["F13"].replace(",close,", ",Close,", 1)),
                  "yahoo_KS11_1996-12_2026-10-02.csv: declared columns ['close'] absent")
@@ -987,7 +1050,10 @@ def _fake_reference(ref: Path) -> None:
     for i, (fid, rel, series, status, *_rest) in enumerate(MF.REFERENCE_FILES):
         p = ref / rel
         p.parent.mkdir(parents=True, exist_ok=True)
-        if status:
+        if "code" in MF.CLOSE_LAYOUT.get(fid, ()):         # F27, long form: one row per code and day (owner ruling 1)
+            p.write_text("date,code,close\n" + "".join(f"{d},{code},{100 + i + k}\n" for d in ("2026-09-30", "2026-10-01")
+                                                       for k, code in enumerate(series.split(";"))), encoding="utf-8")
+        elif status:
             p.write_text(f"date,close\n2026-09-30,{100 + i}\n2026-10-01,{101 + i}.5\n", encoding="utf-8")
         else:
             p.write_text(f"item,value\n{fid},{i}\n", encoding="utf-8")
@@ -1045,6 +1111,1346 @@ def test_macro_fixtures_generates_provenance_and_freezes_md5():
             raise AssertionError("must not infer instants from retrieval")
         except RuntimeError as exc:
             assert "inferred" in str(exc)
+
+
+# --------------------------------------------------------------------------- #
+# The reference close files F13, F14, F16 and F27 (owner rulings 1 and 2 of 2026-11-11,
+# docs/nautilus_bridge/OWNER_RULINGS_LOG.md): one layout for the generator and its readers, and the instants of their
+# unregistered series from the market calendar. Invented rows only: no Yahoo or KRX data.
+# --------------------------------------------------------------------------- #
+REFERENCE_CLOSE_FILES = ("F13", "F14", "F16", "F27")
+REFERENCE_RETRIEVED = datetime(2026, 10, 2, 9, 0, tzinfo=timezone.utc)
+
+
+def _reference_row(fid: str) -> tuple:
+    rows = [r for r in MF.REFERENCE_FILES if r[0] == fid]
+    assert len(rows) == 1, (fid, len(rows))
+    return rows[0]
+
+
+def _invented_reference(fid: str, days) -> str:
+    """An invented reference file (no Yahoo or KRX data) in the declared layout of `fid`: a `date` column, then
+    MF.CLOSE_LAYOUT[fid]; F27 holds one row per code and day."""
+    codes = _reference_row(fid)[2].split(";") if "code" in MF.CLOSE_LAYOUT[fid] else [None]
+    buf = io.StringIO()
+    out = csv.writer(buf, lineterminator="\n")
+    out.writerow(("date",) + MF.CLOSE_LAYOUT[fid])
+    for i, d in enumerate(days):
+        for k, code in enumerate(codes):
+            close = f"{1000.0 * (k + 1) + 37.0 * math.sin(i) + 0.5 * i:.2f}"
+            out.writerow((d.isoformat(), close) if code is None else (d.isoformat(), code, close))
+    return buf.getvalue()
+
+
+def _refused(fn, exc_type, *needles):
+    """`fn` raises `exc_type` with every needle in its message; returns the exception."""
+    try:
+        fn()
+    except exc_type as exc:
+        text = exc.args[0] if exc.args and isinstance(exc.args[0], str) else str(exc)
+        missing = [n for n in needles if n not in text]
+        assert not missing, f"expected {missing} in: {text}"
+        return exc
+    raise AssertionError(f"expected {exc_type.__name__} naming {needles}")
+
+
+def test_macro_fixtures_stamps_reference_series_from_the_market_calendar():
+    """Owner ruling 2 (2026-11-11): the series of the reference close files are not registered, and the generator
+    stamps each from the market calendar its REFERENCE_FILES row names. On invented rows over the synthetic signed
+    calendars, F13 (KS11, KR), F14 (GSPC, US) and F27 (005930 / 000660, KR) come out observed at the scheduled close
+    and available at the close-print bound of their session (`clocks.close_stamp`, calendar_bound), values unchanged,
+    in the layout the shared reader accepts, and they pass the post-close check: retrieved at the bound + 10 min is
+    accepted and one second earlier is refused (spec L1493 rule 5). A row of F27, the long form, is stamped with its
+    own code as its series_id, so both 005930 and 000660 are stamped. F16 (KRWX) names FX, which no signed calendar
+    carries: since owner ruling A-1 (2026-11-11) it is stamped at the New York 17:00 FX day close
+    (test_macro_fixtures_stamps_krwx_at_the_new_york_fx_close; until then it was refused). A non-session and a date
+    outside signed coverage raise from the clocks, so nothing is inferred. An id that is neither registered nor declared is refused with the error it
+    always had, a declared series is stamped only as its row's value_status, and the registry knows none of the five
+    ids."""
+    from core.calendars import clocks as K
+    from core.calendars.adapter import CalendarClocks
+    from core.calendars.store import CalendarCoverageError, NotASession
+    from core.ficc import contracts, pit
+    from tests.macro_m1_calendars import fixture_set, read_close_layout
+    registry, cal = contracts.default_registry(), fixture_set()
+    clk = CalendarClocks(registry, cal=cal)
+    available_at, check = MF.calendar_available_at(registry, clk), MF.calendar_check_fixture(registry, clk)
+    # the declaration: the five ids the ruling names, each on the market and status of its REFERENCE_FILES row
+    assert set(MF.REFERENCE_SERIES) == {"KS11", "GSPC", "KRWX", "005930", "000660"}
+    assert MF.REFERENCE_SERIES == {sid: (_reference_row(fid)[5], _reference_row(fid)[3])
+                                   for fid in REFERENCE_CLOSE_FILES for sid in _reference_row(fid)[2].split(";")}
+    assert not any(registry.is_series(sid) for sid in MF.REFERENCE_SERIES)              # nothing is registered
+    # only a close stamped calendar_bound on a named market can be declared: not a result table, not a published series
+    _refused(lambda: MF._reference_series(("F20",)), ValueError, "F20 results/QX_DLA_postpatch.csv: a reference close")
+    _refused(lambda: MF._reference_series(("F02",)), ValueError, "F02 ecos_bok_call_rate_1997_2026-10.csv: a reference")
+    # KRX: scheduled close 06:30:00Z, close-print bound 06:30:30Z (spec L1289); the registered official close of the
+    # same session is stamped the same. NYSE in EDT: 20:00:00Z, bound + 30 s (spec L1290, L1310)
+    for sid, status in (("KS11", "vendor_close"), ("005930", "official_close"), ("000660", "official_close")):
+        assert available_at(sid, GPOST_DAY, status) == (GPOST_CLOSE_UTC, GPOST_DECISION_UTC), sid
+    assert available_at("KOSPI_OFFICIAL_CLOSE", GPOST_DAY, "official_close") == (GPOST_CLOSE_UTC, GPOST_DECISION_UTC)
+    us_close = datetime(2026, 10, 1, 20, 0, tzinfo=timezone.utc)
+    assert available_at("GSPC", date(2026, 10, 1), "vendor_close") == (us_close, us_close + timedelta(seconds=30))
+    spans = {"F13": (date(2026, 9, 14), GPOST_DAY), "F14": (date(2026, 9, 14), date(2026, 10, 1)),
+             "F27": (date(2026, 9, 28), GPOST_DAY)}
+    quarantine = timedelta(minutes=pit.QUARANTINE_MINUTES)
+    with tempfile.TemporaryDirectory() as tmp:
+        for fid, (lo, hi) in spans.items():
+            _fid, rel, series, status, source, market, _tests = _reference_row(fid)
+            ids = series.split(";")
+            days = K.sessions_between(market, lo, hi, cal=cal)
+            src, dst = Path(tmp) / f"reference_{Path(rel).name}", Path(tmp) / Path(rel).name
+            src.write_text(_invented_reference(fid, days), encoding="utf-8")
+
+            def stamped(retrieved):
+                return MF.fixture_rows(src, series_id=ids[0], value_status=status, available_at_source=source,
+                                       retrieved_at_utc=retrieved, available_at=available_at,
+                                       columns=MF.CLOSE_LAYOUT[fid], series=tuple(ids))
+            fields, rows = stamped(REFERENCE_RETRIEVED)
+            text = MF.fixture_text(fields, rows)
+            assert "\r" not in text and text.count("\n") == len(rows) + 1, fid          # LF lines, as `generate` writes
+            got = read_close_layout(fid, text)
+            assert len(days) > 3 and [r["date"] for r in got] == [d for d in days for _ in ids], fid
+            for r in got:
+                stamp = K.close_stamp(market, r["date"], cal=cal)
+                assert (r["obs_utc"], r["available_at_utc"]) == (stamp.obs_utc, stamp.available_at_utc), (fid, r)
+                assert stamp.available_at_source == source == "calendar_bound", fid
+            reference = list(csv.DictReader(io.StringIO(src.read_text(encoding="utf-8"))))
+            assert [{c: r[c] for c in reference[0]} for r in rows] == reference, fid    # values copied unchanged
+            # a long-form row carries its own code; every other file's rows carry the file's id
+            assert [r["series_id"] for r in rows] == [r.get("code", ids[0]) for r in rows], fid
+            assert {r["series_id"] for r in rows} == set(ids), fid
+            bound = clk.close_print_bound_utc(market, days[-1])
+            dst.write_text(MF.fixture_text(*stamped(bound + quarantine)), encoding="utf-8")
+            assert check(dst) == len(rows), fid
+            _refused(lambda: pit.check_fixture(dst, registry=registry, clocks=clk), KeyError, ids[0])
+            dst.write_text(MF.fixture_text(*stamped(bound + quarantine - timedelta(seconds=1))), encoding="utf-8")
+            _refused(lambda: check(dst), pit.FixtureRefused, "close + 10 min")
+        # the post-close check reads a registered series through the registry, as before, and an id that is neither
+        # registered nor declared (F08's SOX, stamped here by the stub) raises as the registry raises
+        src, dst = Path(tmp) / f"reference_{FILE_OF['F13']}", Path(tmp) / "other.csv"
+
+        def other(sid, status, stamp):
+            fields, rows = MF.fixture_rows(src, series_id=sid, value_status=status, available_at_source="calendar_bound",
+                                           retrieved_at_utc=REFERENCE_RETRIEVED, available_at=stamp)
+            dst.write_text(MF.fixture_text(fields, rows), encoding="utf-8")
+            return len(rows)
+        n = other("KOSPI_OFFICIAL_CLOSE", "official_close", available_at)
+        assert n > 3 and check(dst) == pit.check_fixture(dst, registry=registry, clocks=clk) == n
+        other("SOX", "vendor_close", _available_at)
+        assert _refused(lambda: check(dst), KeyError).args == ("SOX",)
+        assert _refused(lambda: pit.check_fixture(dst, registry=registry, clocks=clk), KeyError).args == ("SOX",)
+        view = MF._ReferenceMarkets(registry)                       # the registry as the check reads it: nothing added
+        assert [view.is_series(sid) for sid in ("KS11", "KOSPI_OFFICIAL_CLOSE")] == [False, True]
+        assert (view.market("KS11"), view.market("KOSPI_OFFICIAL_CLOSE"), view.schedule("DGS10")) == (
+            "KR", registry.market("KOSPI_OFFICIAL_CLOSE"), registry.schedule("DGS10"))
+        # F16: REFERENCE_FILES names FX. The spec's market clocks are KRX, NYSE and CRYPTO (L1289-1291) and
+        # core.calendars has no FX clock; owner ruling A-1 stamps KRW=X at the New York 17:00 FX day close
+        _fid, rel, series, status, source, market, _tests = _reference_row("F16")
+        assert (series, market) == ("KRWX", "FX") and market not in K.M1_MARKETS
+        _refused(lambda: clk.decision_time_utc(market, GPOST_KRWX_LAST), KeyError, "not an M1 market")   # still none
+        src = Path(tmp) / f"reference_{Path(rel).name}"
+        fx_days = _gpost_weekdays(GPOST_KRWX_LAST, 5)
+        src.write_text(_invented_reference("F16", fx_days), encoding="utf-8")
+        _fields, fx_rows = MF.fixture_rows(src, series_id=series, value_status=status, available_at_source=source,
+                                           retrieved_at_utc=REFERENCE_RETRIEVED, available_at=available_at,
+                                           columns=MF.CLOSE_LAYOUT["F16"])
+        assert [(r["obs_utc"], r["available_at_utc"]) for r in fx_rows] == [
+            (f"{d}T21:00:00Z", f"{d}T21:00:00Z") for d in fx_days]                    # 17:00 EDT, before November
+        # a long-form file is stamped by code, so it is refused without the ids its codes may name
+        f27 = Path(tmp) / f"reference_{FILE_OF['F27']}"
+        _refused(lambda: MF.fixture_rows(f27, series_id="005930", value_status="official_close",
+                                         available_at_source="calendar_bound", retrieved_at_utc=REFERENCE_RETRIEVED,
+                                         available_at=available_at, columns=MF.CLOSE_LAYOUT["F27"]), ValueError,
+                 f"reference_{FILE_OF['F27']}: a long-form file (declared column `code`) is stamped by code")
+    for sid in ("SOX", "KODEX200_PRICE", "NOT_A_SERIES"):          # F08's series, F03's series, and no series at all
+        exc = _refused(lambda: available_at(sid, GPOST_KRWX_LAST, "vendor_close"), KeyError)
+        assert exc.args == (f"{sid}: not a registered series id (every fixture series is named)",), exc.args
+    _refused(lambda: available_at("KS11", GPOST_DAY, "official_close"), ValueError,
+             "KS11: a reference series is stamped as its REFERENCE_FILES row declares it (vendor_close)")
+    # a Saturday is never rolled to a session, and the synthetic NYSE file starts in 2006
+    _refused(lambda: available_at("KS11", date(2026, 10, 3), "vendor_close"), NotASession)
+    _refused(lambda: available_at("GSPC", date(2005, 12, 30), "vendor_close"), CalendarCoverageError)
+
+
+def test_macro_fixtures_stamps_krwx_at_the_new_york_fx_close():
+    """Owner ruling A-1 (2026-11-11, docs/nautilus_bridge/OWNER_RULINGS_LOG.md): the generator stamps KRW=X (F16,
+    whose REFERENCE_FILES row names the market FX) at the New York 17:00 FX day close. No signed calendar carries FX
+    and none is added; KRWX stays unregistered. A row dated d is observed at 17:00 America/New_York on d, in UTC by the
+    zone's own rules, and available at that same instant (no ruling names a print delay): 22:00Z in standard time and
+    21:00Z in daylight time, on both sides of both 2026 changes (8 Mar, 1 Nov) and of the 2006 ones (2 Apr, 29 Oct),
+    where today's month rule would give the wrong hour on 13 Mar and 30 Oct 2006. A weekday is stamped without a
+    holiday list (none is signed for FX), 25 Dec included. A Saturday or a Sunday has no FX day close (the week closes
+    on Friday at 17:00 and reopens on Sunday at 17:00): refused by the instant function and by the post-close check,
+    and in a reference file with the file and line named, writing nothing. At the KRX decision of 2 Oct 2026
+    (06:30:30Z) the 1-Oct row is visible and the 2-Oct row is not, as the ruling's note says. T-FIX-01 on an F16
+    fixture: retrieved at its last close + 10 min it is written and accepted, one second earlier it is refused and
+    nothing is written; the shared reader accepts the file; a fixture the generator did not write that holds a
+    Saturday row is refused by the check, naming the fixture file and the date (it was a bare NoFXDayClose naming
+    neither). The clocks of every other market are read unchanged."""
+    from core.calendars import clocks as K
+    from core.calendars.adapter import CalendarClocks
+    from core.ficc import contracts, pit
+    from tests.macro_m1_calendars import fixture_set, read_close_layout
+    registry, cal = contracts.default_registry(), fixture_set()
+    clk = CalendarClocks(registry, cal=cal)
+    available_at, check = MF.calendar_available_at(registry, clk), MF.calendar_check_fixture(registry, clk)
+    _fid, rel, series, status, source, market, _tests = _reference_row("F16")
+    assert (series, status, source, market) == ("KRWX", "vendor_close", "calendar_bound", MF.FX_MARKET) and (
+        MF.FX_MARKET == "FX")
+    assert MF.REFERENCE_SERIES["KRWX"] == (MF.FX_MARKET, "vendor_close") and not registry.is_series("KRWX")
+    assert MF.FX_MARKET not in K.M1_MARKETS and (MF.FX_CLOSE_LOCAL.hour, MF.FX_CLOSE_LOCAL.minute, MF.FX_CLOSE_TZ,
+                                                 MF.FX_PRINT_BOUND_S) == (17, 0, "America/New_York", 0)
+
+    def utc(d, hour):
+        return datetime(d.year, d.month, d.day, hour, tzinfo=timezone.utc)
+    stamps = {date(2026, 3, 6): 22, date(2026, 3, 9): 21,        # Fri before and Mon after Sun 8 Mar 2026 (EST -> EDT)
+              date(2026, 10, 30): 21, date(2026, 11, 2): 22,     # Fri before and Mon after Sun 1 Nov 2026 (EDT -> EST)
+              date(2006, 3, 13): 22, date(2006, 4, 3): 21,       # 2006: EDT from 2 Apr, not from the 2nd Sunday of March
+              date(2006, 10, 27): 21, date(2006, 10, 30): 22,    # ... to 29 Oct, not to the 1st Sunday of November
+              date(2026, 10, 1): 21, date(2026, 10, 2): 21,      # a Thursday and a Friday
+              date(2026, 12, 25): 22}                             # a weekday holiday: no FX holiday list is signed
+    for d, hour in stamps.items():
+        assert MF.fx_close_utc(d) == utc(d, hour) and available_at("KRWX", d, status) == (utc(d, hour),) * 2, d
+    reference_clocks = MF._ReferenceClocks(clk)
+    for m, d in (("KR", GPOST_DAY), ("US", date(2026, 10, 1))):
+        assert (reference_clocks.decision_time_utc(m, d), reference_clocks.close_print_bound_utc(m, d)) == (
+            clk.decision_time_utc(m, d), clk.close_print_bound_utc(m, d)), m
+    assert reference_clocks.is_session("KR", GPOST_DAY) and reference_clocks.cal is clk.cal
+    # the ruling's note: at the KRX close of 2 Oct only the value dated the day before is visible
+    assert available_at("KRWX", GPOST_KRWX_LAST, status)[1] <= GPOST_DECISION_UTC < available_at("KRWX", GPOST_DAY,
+                                                                                                    status)[1]
+    for d in (date(2026, 3, 7), date(2026, 3, 8), date(2026, 10, 3), date(2026, 10, 4), date(2026, 10, 31),
+              date(2026, 11, 1)):
+        _refused(lambda: available_at("KRWX", d, status), MF.NoFXDayClose, f"KRWX: FX {d} is a {d:%A}", "no day close")
+        _refused(lambda: reference_clocks.close_print_bound_utc("FX", d), MF.NoFXDayClose, f"FX {d} is a {d:%A}")
+    _refused(lambda: MF.fx_close_utc(datetime(2026, 10, 2, 12)), TypeError, "must be a datetime.date")
+    _refused(lambda: available_at("KRWX", GPOST_DAY, "official_close"), ValueError,
+             "KRWX: a reference series is stamped as its REFERENCE_FILES row declares it (vendor_close)")
+    days, name = _gpost_weekdays(GPOST_KRWX_LAST, 10), FILE_OF["F16"]
+    quarantine = timedelta(minutes=pit.QUARANTINE_MINUTES)
+    with tempfile.TemporaryDirectory() as tmp:
+        ref, out = Path(tmp) / "ref", Path(tmp) / "out"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+        f16 = ref / rel
+
+        def generate(retrieved):
+            return MF.generate(ref, out, retrieved_at_utc=retrieved, licence="test licence", owner="package D",
+                               available_at=available_at, check_fixture=check, only=("F16",))
+        for weekend in (date(2026, 9, 19), date(2026, 9, 20)):                  # a Saturday, a Sunday, on line 3
+            f16.write_text(_invented_reference("F16", days[:1] + [weekend] + days[1:]), encoding="utf-8")
+            _refused(lambda: generate(REFERENCE_RETRIEVED), MF.NoFXDayClose,
+                     f"{name} line 3: KRWX: FX {weekend} is a {weekend:%A}", "no fixture is written")
+            assert not out.exists()
+        f16.write_text(_invented_reference("F16", days), encoding="utf-8")
+        bound = available_at("KRWX", days[-1], status)[1]
+        assert bound == utc(days[-1], 21)
+        _refused(lambda: generate(bound + quarantine - timedelta(seconds=1)), pit.FixtureRefused,
+                 f"{name}:{len(days)}: KRWX {days[-1]}", "close + 10 min")
+        assert not out.exists()
+        rows = generate(bound + quarantine)
+        assert [(r["file"], r["span"]) for r in rows] == [(name, f"{days[0]}..{days[-1]}")]
+        got = read_close_layout("F16", (out / name).read_text(encoding="utf-8"))
+        assert [(r["date"], r["obs_utc"], r["available_at_utc"]) for r in got] == [(d, utc(d, 21), utc(d, 21))
+                                                                                   for d in days]
+        assert check(out / name) == len(days)
+        _refused(lambda: pit.check_fixture(out / name, registry=registry, clocks=clk), KeyError, "KRWX")
+        # a fixture the generator did not write (archived, hand-made) with a Saturday row: T-FIX-01 has no bound for
+        # it, and the refusal names the fixture file and the row's date
+        lines = (out / name).read_text(encoding="utf-8").rstrip("\n").split("\n")
+        saturday = date(2026, 10, 3)
+        hand_made = Path(tmp) / "hand_made_krwx.csv"
+        hand_made.write_text("\n".join(lines + [lines[-1].replace(days[-1].isoformat(), saturday.isoformat())]) + "\n",
+                             encoding="utf-8")
+        _refused(lambda: check(hand_made), MF.NoFXDayClose, f"hand_made_krwx.csv: FX {saturday} is a Saturday",
+                 "no close-print bound for T-FIX-01")
+
+
+def test_macro_fixtures_close_layout_is_one_layout_for_three_readers():
+    """Owner ruling 1 (2026-11-11): F13, F14 and F16 carry their value in `close`, and F27 is long form with `code`,
+    `series_id` and `close`, the series_id of a row being its own code. The generator's declaration (MF.CLOSE_LAYOUT),
+    the shared test reader's and the product reader's (docs/vol_backtest.FIXTURE_COLUMNS) name the same columns. On an
+    invented reference set `generate` writes the four files as `date`, the declared columns and the section 4.1
+    provenance columns, and the shared reader accepts each. From F13 the product reader `fixture_closes` reads the
+    dates and closes the test reader reads, and `fixture_lines`, given a manifest that lists the file, returns the B5
+    harness lines on them. `generate` refuses a reference file whose header lacks a declared column (Yahoo's own
+    `Close`; F27 without `code`). The product reader refuses the old `value` column, a blank, "." or negative close, a
+    repeated or badly written date and a one-row file, and `fixture_lines` raises on a listed file in the old layout:
+    it does not report NOT_RUN."""
+    from docs import vol_backtest as VB
+    from tests.macro_m1_calendars import CLOSE_LAYOUT_FILES, CLOSE_LAYOUT_KEYS, F01_COLUMNS, read_close_layout
+    from tests.notrun import md5_of
+    assert MF.CLOSE_LAYOUT == {"F13": ("close",), "F14": ("close",), "F16": ("close",), "F27": ("code", "close")}
+    assert tuple(MF.CLOSE_LAYOUT) == REFERENCE_CLOSE_FILES
+    for fid, cols in MF.CLOSE_LAYOUT.items():
+        key = CLOSE_LAYOUT_KEYS.get(fid)
+        assert fid in CLOSE_LAYOUT_FILES and cols == ((key,) if key else ()) + ("close",), (fid, cols)
+    assert F01_COLUMNS[0] == "close" and set(F01_COLUMNS[1:]) <= set(MF.PROVENANCE_FIELDS)
+    assert VB.FIXTURE_COLUMNS == ("obs_date", "close") and set(VB.FIXTURE_COLUMNS) <= set(F01_COLUMNS)
+    name = FILE_OF["F13"]
+    with tempfile.TemporaryDirectory() as tmp:
+        ref, out = Path(tmp) / "ref", Path(tmp) / "out"
+        ref.mkdir()
+        _fake_reference(ref)
+        f13_ref, f27_ref = ref / _reference_row("F13")[1], ref / _reference_row("F27")[1]
+        f13_ref.write_text(_invented_reference("F13", _gpost_weekdays(GPOST_DAY, 80)), encoding="utf-8")
+
+        def generate():
+            return MF.generate(ref, out, retrieved_at_utc=REFERENCE_RETRIEVED, licence="test licence",
+                               owner="package D", available_at=_available_at)
+        rows = generate()
+        read = {}
+        for fid in REFERENCE_CLOSE_FILES:
+            text = (out / FILE_OF[fid]).read_bytes().decode("utf-8")
+            assert "\r" not in text and text.endswith("\n"), fid
+            assert text.split("\n", 1)[0].split(",") == ["date", *MF.CLOSE_LAYOUT[fid], *MF.PROVENANCE_FIELDS], fid
+            read[fid] = read_close_layout(fid, text)
+        assert [len(read[fid]) for fid in REFERENCE_CLOSE_FILES] == [80, 2, 2, 4]
+        # F27, long form: `code` is the row's stock and `series_id` is that same code, so a 000660 row is not labelled
+        # 005930 (the shared reader accepts either id of the file; the generator writes the row's own)
+        codes = _reference_row("F27")[2].split(";")
+        assert [(r["code"], r["series_id"]) for r in read["F27"]] == [(c, c) for _ in range(2) for c in codes]
+        # the product reader on the generator's F13
+        dates, closes = [r["date"].isoformat() for r in read["F13"]], [r["close"] for r in read["F13"]]
+        got_dates, got_closes = VB.fixture_closes(out / name)
+        assert got_dates == dates and got_closes.tolist() == closes
+        manifest = out / "MANIFEST.csv"
+        assert MF.freeze(manifest, [r for r in rows if r["file"] == name]) == 1
+        lines = VB.fixture_lines(manifest=manifest)
+        want = [dict(x, label=f"FIXTURE G-B5-01: {name}")
+                for x in VB.spec_form(dates, np.asarray(closes, dtype=float), "KR", "G-B5-01")]
+        assert len(want) == 4 and repr([x for x in lines if x["symbol"] == "G-B5-01"]) == repr(want)
+        assert want[0]["sample"] == f"{VB.ORIGINS_FROM}..{dates[-1]} (pool from {dates[1]})", want[0]["sample"]
+        rest = [x for x in lines if x["symbol"] != "G-B5-01"]              # SPY and the U1 alias are not listed
+        assert [x["symbol"] for x in rest] == ["G-B5-02", "G-B5-03"]
+        assert all(x["b5_status"] == "NOT_RUN" and x["label"].startswith("REFDATA: ") for x in rest), rest
+        # the generator refuses a reference header without a declared column, and renames none
+        good13, good27 = f13_ref.read_text(encoding="utf-8"), f27_ref.read_text(encoding="utf-8")
+        f13_ref.write_text(good13.replace("date,close", "Date,Close", 1), encoding="utf-8")
+        _refused(generate, ValueError,
+                 f"{name}: declared columns ['close'] absent from the reference header ['Date', 'Close']")
+        f13_ref.write_text(good13, encoding="utf-8")
+        f27_ref.write_text("date,close\n2026-09-30,1\n2026-10-01,2\n", encoding="utf-8")
+        _refused(generate, ValueError, f"{FILE_OF['F27']}: declared columns ['code'] absent")
+        f27_ref.write_text(good27, encoding="utf-8")
+        assert [r["md5"] for r in generate()] == [r["md5"] for r in rows]
+        # the product reader refuses what the shared reader refuses in the columns it reads
+        text = (out / name).read_text(encoding="utf-8")
+        head, *body = text.rstrip("\n").split("\n")
+        i_close, i_obs = head.split(",").index("close"), head.split(",").index("obs_date")
+        old_layout = text.replace(",close,", ",value,", 1)
+        assert old_layout.split("\n", 1)[0].split(",")[1] == "value"
+
+        def edited(line: int, col: int, cell: str) -> str:
+            cells = body[line].split(",")
+            cells[col] = cell
+            return "\n".join([head, *body[:line], ",".join(cells), *body[line + 1:]]) + "\n"
+        bad = Path(tmp) / name
+        for broken, needle in (
+                (old_layout, f"{name}: declared columns ['close'] absent"),
+                (edited(4, i_close, "."), f"{name} line 6: close '.' is not a finite number > 0"),
+                (edited(4, i_close, ""), f"{name} line 6: close '' is not a finite number > 0"),
+                (edited(4, i_close, "-5"), f"{name} line 6: close '-5' is not a finite number > 0"),
+                (edited(5, i_obs, dates[4]), f"{name} line 7: rows out of date order or repeated"),
+                (edited(4, i_obs, dates[4].replace("-", "")), f"{name} line 6: obs_date '{dates[4].replace('-', '')}'"),
+                ("\n".join([head, body[0]]) + "\n", f"{name}: 1 rows; a return needs two closes")):
+            bad.write_text(broken, encoding="utf-8")
+            _refused(lambda: VB.fixture_closes(bad), ValueError, needle)
+        old = Path(tmp) / "old"
+        old.mkdir()
+        (old / name).write_text(old_layout, encoding="utf-8")
+        listed = dict(next(r for r in rows if r["file"] == name), md5=md5_of(old / name))
+        assert MF.freeze(old / "MANIFEST.csv", [listed]) == 1
+        _refused(lambda: VB.fixture_lines(manifest=old / "MANIFEST.csv"), ValueError,
+                 f"{name}: declared columns ['close'] absent")
+
+
+def test_macro_fixtures_refuses_close_rows_no_reader_accepts():
+    """The generator holds a close file to its readers' rules before it writes anything (review of LA-02 part 3: it
+    checked column names only, so it wrote, and `freeze` would have md5-listed, close files that both readers then
+    refuse). MF.CLOSE_FILES is every file a reader reads in the close layout: the four of owner ruling 1, plus F01 and
+    F15, which the same readers read and no ruling names; they declare no reference series. MF.CLOSE_MIN_ROWS is the
+    two files the product reader reads. On invented rows over the synthetic signed calendars, through
+    `generate(only=...)` with the real calendar function and the post-close check: a blank, "null", ".", zero,
+    negative, nan or inf close, a repeated date, newest-first dates, a one-row F13 and a header with no rows are each
+    refused naming the reference file and line, and so are an F27 code that is not one of the file's ids, a repeated
+    date and code pair and F27 rows out of date order, and a blank close or a repeated date in F01. Each refused run
+    leaves no output directory. For every case the same rows, stamped as the generator stamped them before (no row
+    rule), are refused by a reader: the shared test reader, or for the one-row file the product reader. A good F13, a
+    one-row F14 and a good F27 are written and both readers accept them. F15's rows are held to the same rules, and
+    its SPY is still refused when stamped: it is neither registered nor declared."""
+    from core.calendars import clocks as K
+    from core.calendars.adapter import CalendarClocks
+    from core.ficc import contracts
+    from docs import vol_backtest as VB
+    from tests.macro_m1_calendars import CLOSE_LAYOUT_FILES, fixture_set, read_close_layout
+    registry, cal = contracts.default_registry(), fixture_set()
+    clk = CalendarClocks(registry, cal=cal)
+    available_at, check = MF.calendar_available_at(registry, clk), MF.calendar_check_fixture(registry, clk)
+    # the declarations
+    assert MF.CLOSE_FILES == {"F01": ("close",), "F15": ("close",), **MF.CLOSE_LAYOUT}
+    assert set(MF.CLOSE_FILES) == set(CLOSE_LAYOUT_FILES) | {"F15"}
+    product_names = {name for name, _market in VB.FIXTURES.values()}
+    product = {fid for fid, rel, *_rest in MF.REFERENCE_FILES if Path(rel).name in product_names}
+    assert product == {"F13", "F15"} == set(MF.CLOSE_MIN_ROWS) and set(MF.CLOSE_MIN_ROWS.values()) == {2}
+    assert set(MF.REFERENCE_SERIES) == {"KS11", "GSPC", "KRWX", "005930", "000660"}     # F01 and F15 declare none
+    assert registry.is_series("KOSPI_OFFICIAL_CLOSE") and not registry.is_series("SPY")
+    kr = K.sessions_between("KR", date(2026, 9, 21), GPOST_DAY, cal=cal)
+    us = K.sessions_between("US", date(2026, 9, 21), date(2026, 10, 1), cal=cal)
+    assert len(kr) >= 5 and len(us) >= 5
+    with tempfile.TemporaryDirectory() as tmp:
+        ref, out = Path(tmp) / "ref", Path(tmp) / "out"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+
+        def generate(fid, text, stamp=available_at):
+            (ref / _reference_row(fid)[1]).write_text(text, encoding="utf-8")
+            return MF.generate(ref, out, retrieved_at_utc=REFERENCE_RETRIEVED, licence="test licence",
+                               owner="package D", available_at=stamp, check_fixture=check, only=(fid,))
+
+        def unruled(fid, text) -> str:
+            """The fixture the generator wrote before the row rules: the same rows, every one stamped with the file's
+            first id (through the stub for F15, whose SPY the calendar function refuses)."""
+            src = Path(tmp) / "unruled.csv"
+            src.write_text(text, encoding="utf-8")
+            _f, _rel, series, status, source, *_rest = _reference_row(fid)
+            return MF.fixture_text(*MF.fixture_rows(
+                src, series_id=series.split(";")[0], value_status=status, available_at_source=source,
+                retrieved_at_utc=REFERENCE_RETRIEVED, available_at=_available_at if fid == "F15" else available_at))
+
+        def cell(lines, i, close) -> str:
+            cells = lines[i].split(",")
+            return "\n".join(lines[:i] + [",".join(cells[:-1] + [close])] + lines[i + 1:]) + "\n"
+
+        good = {fid: _invented_reference(fid, kr[-3:] if fid == "F27" else us if fid == "F14" else kr)
+                for fid in REFERENCE_CLOSE_FILES}
+        l13, l27 = good["F13"].rstrip("\n").split("\n"), good["F27"].rstrip("\n").split("\n")
+        n13, n27, n01, n14, n15 = (FILE_OF[f] for f in ("F13", "F27", "F01", "F14", "F15"))
+        not_a_close = "is not a finite number > 0"
+        cases = [("F13", cell(l13, 3, bad), f"{n13} line 4: close {bad!r} {not_a_close}", f"{n13} line 4: close {bad!r}")
+                 for bad in ("", "null", ".", "0", "-5", "nan", "inf")]
+        cases += [
+            ("F13", "\n".join(l13[:4] + [l13[3]] + l13[4:]) + "\n", f"{n13} line 5: rows out of date order or repeated",
+             f"{n13} line 5: rows out of date order or repeated"),
+            ("F13", "\n".join([l13[0]] + l13[:0:-1]) + "\n", f"{n13} line 3: rows out of date order or repeated",
+             f"{n13} line 3: rows out of date order or repeated"),
+            ("F13", l13[0] + "\n", f"{n13}: 0 row(s); its readers need at least 2", f"{n13}: no rows"),
+            ("F14", good["F14"].split("\n", 1)[0] + "\n", f"{n14}: 0 row(s); its readers need at least 1",
+             f"{n14}: no rows"),
+            ("F27", good["F27"].replace(",000660,", ",005935,", 1),
+             f"{n27} line 3: code '005935' is not one of the file's series ('005930', '000660')",
+             f"{n27} line 3: code '005935' not in ('005930', '000660')"),
+            ("F27", good["F27"].replace(",005930,", ",5930,", 1),
+             f"{n27} line 2: code '5930' is not one of the file's series", f"{n27} line 2: code '5930' not in"),
+            ("F27", "\n".join(l27[:3] + [l27[1]] + l27[3:]) + "\n", f"{n27} line 4: rows out of date order or repeated",
+             f"{n27} line 4: rows out of date order or repeated"),
+            ("F27", "\n".join([l27[0]] + l27[:0:-1]) + "\n", f"{n27} line 4: rows out of date order or repeated",
+             f"{n27} line 4: rows out of date order or repeated"),
+            ("F27", cell(l27, 2, ""), f"{n27} line 3: close '' {not_a_close}", f"{n27} line 3: close ''"),
+            ("F01", cell(l13, 2, "."), f"{n01} line 3: close '.' {not_a_close}", f"{n01} line 3: close '.'"),
+            ("F01", "\n".join(l13[:3] + [l13[2]] + l13[3:]) + "\n", f"{n01} line 4: rows out of date order or repeated",
+             f"{n01} line 4: rows out of date order or repeated"),
+        ]
+        assert len(cases) == 18
+        for fid, text, needle, reader_needle in cases:
+            _refused(lambda: generate(fid, text), ValueError, needle)
+            assert not out.exists(), (fid, needle)                              # a refused run writes nothing
+            before = unruled(fid, text)                                         # ... and a reader refuses the same rows
+            _refused(lambda: read_close_layout(fid, before), AssertionError, reader_needle)
+        # a one-row F13: the shared reader takes it, the product reader does not (a return needs two closes)
+        one = "\n".join(l13[:2]) + "\n"
+        _refused(lambda: generate("F13", one), ValueError, f"{n13}: 1 row(s); its readers need at least 2")
+        assert not out.exists() and len(read_close_layout("F13", unruled("F13", one))) == 1
+        bad = Path(tmp) / n13
+        bad.write_text(unruled("F13", one), encoding="utf-8")
+        _refused(lambda: VB.fixture_closes(bad), ValueError, f"{n13}: 1 rows; a return needs two closes")
+        # F15 (SPY, the product reader's other file): the same rules; stamping SPY is refused as it always was
+        f15 = good["F14"].rstrip("\n").split("\n")
+        _refused(lambda: generate("F15", "\n".join(f15[:2]) + "\n", _available_at), ValueError,
+                 f"{n15}: 1 row(s); its readers need at least 2")
+        _refused(lambda: generate("F15", cell(f15, 2, ""), _available_at), ValueError,
+                 f"{n15} line 3: close '' {not_a_close}")
+        exc = _refused(lambda: generate("F15", good["F14"]), KeyError)
+        assert exc.args == ("SPY: not a registered series id (every fixture series is named)",) and not out.exists()
+        # what the readers accept is written: a good F13, a one-row F14, a good F27 (each row stamped with its own code)
+        assert [r["file"] for r in generate("F13", good["F13"])] == [n13]
+        got = read_close_layout("F13", (out / n13).read_text(encoding="utf-8"))
+        assert [r["date"] for r in got] == kr and VB.fixture_closes(out / n13)[0] == [d.isoformat() for d in kr]
+        assert [r["span"] for r in generate("F14", "\n".join(f15[:2]) + "\n")] == [f"{us[0]}..{us[0]}"]
+        assert len(read_close_layout("F14", (out / n14).read_text(encoding="utf-8"))) == 1
+        assert [r["file"] for r in generate("F27", good["F27"])] == [n27]
+        f27 = read_close_layout("F27", (out / n27).read_text(encoding="utf-8"))
+        assert [(r["date"], r["code"], r["series_id"]) for r in f27] == [
+            (d, c, c) for d in kr[-3:] for c in ("005930", "000660")]
+        assert sorted(p.name for p in out.iterdir()) == sorted((n13, n14, n27))
+
+
+def test_macro_fixtures_writes_nothing_when_refused_and_only_the_selected_files():
+    """A refused run writes nothing, and `only` selects the files a run writes (review of LA-02 part 3). `generate`
+    wrote each file as it went: on a whole invented reference set the real calendar function refuses F02
+    (BOK_CALL_RATE has no scheduled publication instant), and by then F01's fixture was in the output directory with
+    no manifest row; in tests/fixtures/macro, the default, an unlisted file fails T-HERM-01. It also wrote the whole
+    set or nothing, so F13, F14 and F27, which owner rulings 1 and 2 made writable, could not be written from the
+    command line. Now every file is built and checked in a temporary directory first: the refused run leaves no
+    output directory, and a refused regeneration leaves an earlier generation byte for byte as it was. With
+    `only=("F13", "F14", "F27")` a reference directory holding CATALOG.md and those three files is enough: the three
+    fixtures are written in REFERENCE_FILES order, pass the post-close check and are frozen; without `only` the same
+    directory is refused, listing the other files. An unknown id and an empty selection are refused; a selected file
+    that is absent is the only one listed; a selection whose F16 holds a Saturday row (no FX day close, owner ruling
+    A-1; before that ruling any F16 was refused) or a file retrieved one second before its bound + 10 min writes none
+    of the selected files. The command line takes `--only` and
+    writes the same three files and manifest rows, on the calendars it is given."""
+    from core.calendars import clocks as K
+    from core.calendars.adapter import CalendarClocks
+    from core.ficc import contracts, pit
+    from tests.macro_m1_calendars import fixture_set, read_close_layout
+    from tests.notrun import md5_of
+    registry, cal = contracts.default_registry(), fixture_set()
+    clk = CalendarClocks(registry, cal=cal)
+    available_at, check = MF.calendar_available_at(registry, clk), MF.calendar_check_fixture(registry, clk)
+    kwargs = {"licence": "test licence", "owner": "package D"}
+    three = ("F13", "F14", "F27")
+    names = [FILE_OF[fid] for fid in three]
+    # the selection
+    assert MF.selected_files() is MF.REFERENCE_FILES and MF.selected_files(None) is MF.REFERENCE_FILES
+    assert [r[0] for r in MF.selected_files(("F27", "F13", "F14", "F13"))] == list(three)      # REFERENCE_FILES order
+    assert len(MF.selected_files(("F18",))) == len(MF.FRED_IDS) == 17 and len(MF.selected_files(("F10", "F23"))) == 10
+    _refused(lambda: MF.selected_files(("F13", "F12")), ValueError, "--only names ['F12']; the fixture ids are F01, F02")
+    _refused(lambda: MF.selected_files(()), ValueError, "--only names no fixture id")
+    with tempfile.TemporaryDirectory() as tmp:
+        # 1. a whole invented set, the real calendar function: refused at F02, and nothing is left behind
+        ref, out = Path(tmp) / "ref", Path(tmp) / "out"
+        ref.mkdir()
+        _fake_reference(ref)
+        f01 = ref / _reference_row("F01")[1]
+        assert MF.REFERENCE_FILES[0][0] == "F01" and MF.REFERENCE_FILES[1][:3] == (
+            "F02", "ecos_bok_call_rate_1997_2026-10.csv", "BOK_CALL_RATE")
+        assert len(MF.fixture_rows(f01, series_id="KOSPI_OFFICIAL_CLOSE", value_status="official_close",
+                                   available_at_source="calendar_bound", retrieved_at_utc=REFERENCE_RETRIEVED,
+                                   available_at=available_at)[1]) == 2                   # F01 itself stamps
+
+        def whole(stamp):
+            return MF.generate(ref, out, retrieved_at_utc=REFERENCE_RETRIEVED, available_at=stamp,
+                               check_fixture=check if stamp is available_at else None, **kwargs)
+        _refused(lambda: whole(available_at), ValueError, "BOK_CALL_RATE: no scheduled publication instant")
+        assert not out.exists()
+        # 2. an earlier generation (the stub stamps every row) is left byte for byte as it was by a refused regeneration
+        rows = whole(_available_at)
+        frozen = {p.name: md5_of(p) for p in out.iterdir()}
+        assert frozen == {r["file"]: r["md5"] for r in rows} and len(frozen) == len(MF.REFERENCE_FILES)
+        f01.write_text("date,close\n2026-09-30,555\n2026-10-01,556\n", encoding="utf-8")   # F01 would change first
+        _refused(lambda: whole(available_at), ValueError, "BOK_CALL_RATE: no scheduled publication instant")
+        assert {p.name: md5_of(p) for p in out.iterdir()} == frozen
+        changed = {r["file"]: r["md5"] for r in whole(_available_at)}                        # the same edit, not refused
+        assert [n for n in frozen if changed[n] != frozen[n]] == [FILE_OF["F01"]]
+        # 3. `only`: a reference directory holding CATALOG.md and three files
+        ref3, out3, manifest = Path(tmp) / "ref3", Path(tmp) / "out3", Path(tmp) / "MANIFEST.csv"
+        ref3.mkdir()
+        (ref3 / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+        kr = K.sessions_between("KR", date(2026, 9, 21), GPOST_DAY, cal=cal)
+        us = K.sessions_between("US", date(2026, 9, 21), date(2026, 10, 1), cal=cal)
+        for fid in three:
+            (ref3 / _reference_row(fid)[1]).write_text(_invented_reference(fid, us if fid == "F14" else kr),
+                                                       encoding="utf-8")
+
+        def some(only, retrieved=REFERENCE_RETRIEVED, target=out3):
+            return MF.generate(ref3, target, retrieved_at_utc=retrieved, available_at=available_at, check_fixture=check,
+                               only=only, **kwargs)
+        assert MF.missing_files(ref3, three) == [] and len(MF.missing_files(ref3)) == len(MF.REFERENCE_FILES) - 3
+        exc = _refused(lambda: some(None), MF.ReferenceMissing, "incomplete", "sox_daily.csv")
+        assert len(exc.missing) == len(MF.REFERENCE_FILES) - 3 and not out3.exists()
+        exc = _refused(lambda: some(("F13", "F15")), MF.ReferenceMissing, "1 file(s) missing")
+        assert exc.missing == [_reference_row("F15")[1]] and not out3.exists()
+        _refused(lambda: some(("F13", "F12")), ValueError, "--only names ['F12']")
+        _refused(lambda: some(()), ValueError, "--only names no fixture id")
+        # a selection the generator refuses part-way writes none of it: an F16 row dated on a Saturday has no FX day
+        # close (owner ruling A-1); a file retrieved one second before its close-print bound + 10 min fails the
+        # post-close check on the staged file
+        saturday = date(2026, 10, 3)
+        (ref3 / _reference_row("F16")[1]).write_text(_invented_reference("F16", us + [saturday]), encoding="utf-8")
+        _refused(lambda: some(("F13", "F16")), MF.NoFXDayClose,
+                 f"{FILE_OF['F16']} line {len(us) + 2}: KRWX: FX {saturday} is a Saturday")
+        early = clk.close_print_bound_utc("KR", GPOST_DAY) + timedelta(minutes=pit.QUARANTINE_MINUTES, seconds=-1)
+        _refused(lambda: some(three, retrieved=early), pit.FixtureRefused, "close + 10 min")
+        assert not out3.exists()
+        got = some(("F27", "F13", "F14", "F13"))
+        assert [r["file"] for r in got] == names and sorted(p.name for p in out3.iterdir()) == sorted(names)
+        assert [r["md5"] for r in got] == [md5_of(out3 / n) for n in names]
+        assert [len(read_close_layout(fid, (out3 / FILE_OF[fid]).read_text(encoding="utf-8"))) for fid in three] == [
+            len(kr), len(us), 2 * len(kr)]
+        assert MF.freeze(manifest, got) == 3 and set(load_manifest(manifest)) == set(names)
+        assert [r["md5"] for r in some(three)] == [r["md5"] for r in got] and MF.freeze(manifest, some(three)) == 0
+        # 4. the command line
+        out4, manifest4 = Path(tmp) / "out4", Path(tmp) / "MANIFEST4.csv"
+        argv = ["--reference", str(ref3), "--out", str(out4), "--manifest", str(manifest4),
+                "--retrieved-at-utc", "2026-10-02T09:00:00Z", "--licence", "test licence", "--owner", "package D"]
+
+        class Given:                                 # the clocks handed to the command line, counting their use
+            used = 0
+
+            def __getattr__(self, name):
+                Given.used += 1
+                return getattr(clk, name)
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = MF.main(argv + ["--only", *three], clocks=Given())
+        assert rc == 0 and buf.getvalue().startswith("3 fixtures written under "), buf.getvalue()
+        assert Given.used > 0                        # stamped on the calendars it was given, not on the shipped set
+        assert {n: md5_of(out4 / n) for n in names} == {r["file"]: r["md5"] for r in got}
+        assert {n: r["md5"] for n, r in load_manifest(manifest4).items()} == {r["file"]: r["md5"] for r in got}
+        for extra, needle in ((["--only", "F12"], "--only names ['F12']"), (["--only"], "expected at least one")):
+            err = io.StringIO()
+            with contextlib.redirect_stderr(err):
+                try:
+                    MF.main(argv + extra, clocks=clk)
+                    raise AssertionError(f"{extra}: argparse must refuse")
+                except SystemExit as stop:
+                    assert stop.code == 2 and needle in err.getvalue(), (extra, err.getvalue())
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = MF.main(argv + ["--only", "F01", "F13"], clocks=clk)
+        assert rc == 2 and "1 file(s) missing" in buf.getvalue() and FILE_OF["F01"] in buf.getvalue(), buf.getvalue()
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = MF.main(argv, clocks=clk)                                # no --only: the whole set, as before
+        assert rc == 2 and f"{len(MF.REFERENCE_FILES) - 4} file(s) missing" in buf.getvalue(), buf.getvalue()
+        assert sorted(p.name for p in out4.iterdir()) == sorted(names) and len(load_manifest(manifest4)) == 3
+
+
+# --------------------------------------------------------------------------- #
+# Code review of PR #101 (96cca1f), findings R1 to R5 (⑨-1/2/d/2). Each test below failed on that commit.
+# --------------------------------------------------------------------------- #
+def _calendar_generator(only, ref: Path, out: Path, **kw):
+    """`generate` over the synthetic signed calendars with the real calendar function and the post-close check."""
+    from core.calendars.adapter import CalendarClocks
+    from core.ficc import contracts
+    from tests.macro_m1_calendars import fixture_set
+    registry = contracts.default_registry()
+    clk = CalendarClocks(registry, cal=fixture_set())
+    return MF.generate(ref, out, retrieved_at_utc=kw.pop("retrieved_at_utc", REFERENCE_RETRIEVED), licence="test licence",
+                       owner="package D", available_at=MF.calendar_available_at(registry, clk),
+                       check_fixture=MF.calendar_check_fixture(registry, clk), only=only, **kw)
+
+
+def test_macro_fixtures_long_form_date_order_is_per_code():
+    """R2: the long form (F27) is in date order code by code. The generator refused a file grouped by code (every row
+    of 005930, then every row of 000660) at its first 000660 row, and so did the reader (tests/macro_m1_calendars
+    .test_close_layout_long_form_date_order_is_per_code). No consumer of F27 rows reads them by position: both
+    G-POST-01 sites pick a row by code and date. The one thing that did was the manifest `span`, taken from the first
+    and last row. Now F27 in date order and grouped by code are both written, row for row in the reference order, and
+    the reader takes either with the same rows per code; the span is the file's first and last observation, also when
+    the codes end on different days. Still refused, naming the file and line, with the last good generation left as
+    it was: a code's dates out of order, a repeated date and code pair, a code that is not one of the file's ids."""
+    from core.calendars import clocks as K
+    from tests.macro_m1_calendars import fixture_set, read_close_layout
+    days = K.sessions_between("KR", date(2026, 9, 21), GPOST_DAY, cal=fixture_set())
+    codes = tuple(_reference_row("F27")[2].split(";"))
+    name, n = FILE_OF["F27"], len(days)
+    with tempfile.TemporaryDirectory() as tmp:
+        ref, out = Path(tmp) / "ref", Path(tmp) / "out"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+
+        def generate(pairs):
+            (ref / _reference_row("F27")[1]).write_text("date,code,close\n" + "".join(
+                f"{d},{c},{1000 + 10 * days.index(d) + (c == codes[1])}\n" for d, c in pairs), encoding="utf-8")
+            return _calendar_generator(("F27",), ref, out)
+        by_date = [(d, c) for d in days for c in codes]
+        by_code = [(d, c) for c in codes for d in days]
+        read = {}
+        for label, pairs in (("by date", by_date), ("by code", by_code)):
+            rows = generate(pairs)
+            assert [r["span"] for r in rows] == [f"{days[0]}..{days[-1]}"], (label, rows)
+            got = read_close_layout("F27", (out / name).read_text(encoding="utf-8"))
+            assert [(r["date"], r["code"], r["series_id"]) for r in got] == [(d, c, c) for d, c in pairs], label
+            read[label] = sorted((r["code"], r["date"], r["close"], r["obs_utc"], r["available_at_utc"]) for r in got)
+        assert read["by date"] == read["by code"] and len(read["by code"]) == 2 * n
+        short = [(d, codes[0]) for d in days] + [(d, codes[1]) for d in days[:-2]]      # 000660 ends two sessions early
+        assert [r["span"] for r in generate(short)] == [f"{days[0]}..{days[-1]}"]
+        before = (out / name).read_bytes()
+        for pairs, needle in (
+                (by_code[:n + 2] + [by_code[n + 3], by_code[n + 2]] + by_code[n + 4:],
+                 f"{name} line {n + 5}: rows out of date order or repeated"),
+                (by_code[:n + 1] + [by_code[n]] + by_code[n + 1:], f"{name} line {n + 3}: rows out of date order or repeated"),
+                ([(d, "005935" if i == n else c) for i, (d, c) in enumerate(by_code)],
+                 f"{name} line {n + 2}: code '005935' is not one of the file's series ('005930', '000660')")):
+            _refused(lambda: generate(pairs), ValueError, needle)
+            assert (out / name).read_bytes() == before
+
+
+def test_macro_fixtures_finds_the_date_column_by_name():
+    """R3: the observation date was read from the first column whatever its name, and parsed unguarded, so F27 with
+    `code` before `date`, or a malformed or blank date, ended in a bare "Invalid isoformat string" with no file or
+    line. Now the date column is the header cell named `date` in any letter case, or FRED's `observation_date` (the
+    names core/ficc/data.py reads FRED rows by), wherever it stands, and `date` when both are present. F27 with `code`
+    first is written with its columns unchanged and in their order, stamped as the same rows with `date` first. A
+    date that is not ISO (2026/10/02, blank) and a header with two date columns are refused naming the reference file
+    (and the line), and nothing is written. Follow-up of the independent check: the first ten characters were taken,
+    so 2026-09-301 became 2026-09-30 and 2026-W40-3 was read without a word; these are now refused with the file and
+    line. A leading byte order mark is dropped when the file is read, so F27 with `code` first saved as Excel's
+    "CSV UTF-8" is no longer refused as lacking `code`. A row with fewer or more cells than the header is refused with
+    the file and line (it ended in a bare TypeError or "dict contains fields not in fieldnames"). Review of PR #107,
+    F1: R3 also refused what the generator read before it, a header with no date name (it read the first column) and
+    a cell written YYYYMMDD (date.fromisoformat takes it on Python 3.11 and later). Now such a header falls back to
+    its first column, so `code,day,close` is refused at its first row naming `code` as the first column, and a cell
+    of exactly eight digits YYYYMMDD is read as that date; every other shape above stays refused
+    (test_macro_fixtures_reads_the_first_column_and_basic_dates_as_before_r3 covers the fallback). Since the fallback,
+    a date name the lookup failed to recognise would pass unseen where it stands first, so `observation_date` and
+    ` Date ` (blanks around the name) are also tested where they are not first; and a YYYYMMDD cell written in
+    full-width digits is refused (only ASCII digits are read)."""
+    from core.calendars import clocks as K
+    from tests.macro_m1_calendars import fixture_set, read_close_layout
+    days = K.sessions_between("KR", date(2026, 9, 28), GPOST_DAY, cal=fixture_set())
+    codes = tuple(_reference_row("F27")[2].split(";"))
+    name = FILE_OF["F27"]
+    with tempfile.TemporaryDirectory() as tmp:
+        ref = Path(tmp) / "ref"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+
+        def generate(text, out):
+            (ref / _reference_row("F27")[1]).write_text(text, encoding="utf-8")
+            return _calendar_generator(("F27",), ref, out)
+        pairs = [(d, c) for d in days for c in codes]
+        code_first = "code,date,close\n" + "".join(f"{c},{d},{1000 + i}\n" for i, (d, c) in enumerate(pairs))
+        date_first = "date,code,close\n" + "".join(f"{d},{c},{1000 + i}\n" for i, (d, c) in enumerate(pairs))
+        out_cd, out_dc = Path(tmp) / "out_cd", Path(tmp) / "out_dc"
+        generate(code_first, out_cd)
+        generate(date_first, out_dc)
+        text_cd, text_dc = ((o / name).read_text(encoding="utf-8") for o in (out_cd, out_dc))
+        assert text_cd.split("\n", 1)[0].split(",")[:3] == ["code", "date", "close"]    # columns unchanged, in order
+        got_cd, got_dc = read_close_layout("F27", text_cd), read_close_layout("F27", text_dc)
+        assert [(r["date"], r["code"]) for r in got_cd] == pairs and got_cd == got_dc
+        # refusals name the file and the line; nothing is written
+        out = Path(tmp) / "out"
+        lines = code_first.rstrip("\n").split("\n")
+        n = len(lines)
+        for text, needle in (
+                (code_first.replace(f",{days[2]},", f",{days[2].strftime('%Y/%m/%d')},", 1),
+                 f"{name} line 6: date '{days[2].strftime('%Y/%m/%d')}' in column 'date' is not an ISO date"),
+                ("\n".join(lines[:3] + [lines[3].replace(f",{days[1]},", ",,")] + lines[4:]) + "\n",
+                 f"{name} line 4: date '' in column 'date' is not an ISO date"),
+                (code_first + "005930\n", f"{name} line {n + 1}: 1 cell(s), the header has 3"),
+                (code_first.replace(f",{days[2]},", f",{days[2]}1,", 1),           # a typed extra digit
+                 f"{name} line 6: date '{days[2]}1' in column 'date' is not an ISO date"),
+                (code_first.replace("code,date,close", "code,day,close", 1),            # F1: the first column
+                 f"{name} line 2: date '{codes[0]}' in column 'code' (the first column: no header cell is named date "
+                 "or observation_date) is not an ISO date"),
+                (code_first.replace("code,date,close", "code,date,close,Date", 1),
+                 f"{name}: more than one date column ['date', 'Date']")):
+            _refused(lambda: generate(text, out), ValueError, needle)
+            assert not out.exists(), needle
+        # F27 with `code` first saved with a byte order mark (Excel's "CSV UTF-8"): the mark hides no declared column,
+        # and the fixture is the one written from the same file without the mark
+        out_bom = Path(tmp) / "out_bom"
+        generate("\ufeff" + code_first, out_bom)
+        assert (out_bom / name).read_bytes() == (out_cd / name).read_bytes()
+        # an undeclared file: Yahoo's `Date`, FRED's `DATE` and `observation_date` (first, and last, where the first
+        # column cannot stand in for it), a byte order mark, the date last, the name with blanks around it; with both
+        # `date` and `observation_date` the date is read from `date`
+        src = Path(tmp) / "plain.csv"
+
+        def obs_dates(text):
+            src.write_text(text, encoding="utf-8")
+            _fields, rows = MF.fixture_rows(src, series_id="DGS10", value_status="first_release",
+                                            available_at_source="calendar_bound", retrieved_at_utc=REFERENCE_RETRIEVED,
+                                            available_at=_available_at)
+            return [r["obs_date"] for r in rows]
+        for head, body in (("Date,Close", "{d},4.1"), ("DATE,DGS10", "{d},4.1"), ("observation_date,DGS10", "{d},4.1"),
+                           ("DGS10,observation_date", "4.1,{d}"), ("\ufeffdate,value", "{d},4.1"),
+                           ("value,Date", "4.1,{d}"), ("value, Date ", "4.1,{d}"),
+                           ("observation_date,date,value", "2026-01-02,{d},4.1")):
+            assert obs_dates(head + "\n" + "".join(body.format(d=d) + "\n" for d in days[:2])) == [
+                d.isoformat() for d in days[:2]], head
+        # a date cell is YYYY-MM-DD, alone or followed by 'T' or a space and a time (as pandas writes a timestamp), or
+        # exactly eight ASCII digits YYYYMMDD (F1): the date as written. Anything else is refused with the file and
+        # line, the week date Python's own ISO parser also takes (2026-W40-3) and full-width digits (which the regular
+        # expression class \d would take) included; so are the week dates and the times after the date that the
+        # generator before R3 read through its first ten characters (2026W404, 2026-10-01T16, ... EST, T24:00)
+        for cell in ("2026-10-01 00:00:00", "2026-10-01T00:00:00Z", "2026-10-01 00:00:00+09:00", " 2026-10-01 ",
+                     "2026-10-01T23:59:59.5-04:00", "20261001", " 20261001 "):
+            assert obs_dates(f"DATE,DGS10\n2026-09-30,4.1\n{cell},4.2\n") == ["2026-09-30", "2026-10-01"], cell
+        wide = "".join(chr(0xFF10 + int(c)) for c in "20261001")             # 20261001 in full-width digits
+        for cell in ("not-a-date", "2026-10-011", "2026-W40-4", "2026-10-01Tjunk", "2026-10-01 25:00", "2026-13-01",
+                     "2026-10-01x", "2026-10-01xyz", "2026/10/01", "", "202610011", "2026101", "202610", "20261301",
+                     "20261032", "20261001T00:00", "20261001 00:00:00", "2026-1001", "+20261001", wide,
+                     f"{wide[:4]}-{wide[4:6]}-{wide[6:]}", "2026W404", "2026-10-01T16", "2026-10-01 16:00:00 EST",
+                     "2026-10-01T24:00", "20261001T1600"):
+            _refused(lambda: obs_dates(f"DATE,DGS10\n2026-09-30,4.1\n{cell},4.2\n"), ValueError,
+                     f"plain.csv line 3: date '{cell}' in column 'DATE' is not an ISO date written YYYY-MM-DD "
+                     "(a time may follow after 'T' or a space) or YYYYMMDD")
+        # a row with fewer or more cells than the header, in a file without the close rules: named with its line
+        for text, needle in (("DATE,DGS10\n2026-09-30,4.1\n2026-10-01\n", "plain.csv line 3: 1 cell(s), the header has 2"),
+                             ("DATE,DGS10\n2026-09-30,4.1\n2026-10-01,4.2,9\n",
+                              "plain.csv line 3: 3 cell(s), the header has 2")):
+            _refused(lambda: obs_dates(text), ValueError, needle)
+
+
+def test_macro_fixtures_reads_the_first_column_and_basic_dates_as_before_r3():
+    """Review of PR #107, F1: R3 found the date column only by its name and took only YYYY-MM-DD, so it refused files
+    the generator read before (the first column, through date.fromisoformat): Ken French's raw daily layout (a blank
+    first header cell, dates written YYYYMMDD), a first column with another name, a `date` column written YYYYMMDD.
+    No real reference file has been checked against either rule. Now a header with no cell named date or
+    observation_date falls back to its first column, and a cell of exactly eight digits is read as that calendar
+    date, so these files come out with the observation dates the generator gave them before R3. The date cell is
+    copied as written (the fixture keeps 19261103), and obs_date and session_date are written YYYY-MM-DD; the readers
+    of the fixtures read those, so F13 dated YYYYMMDD goes through the real calendar function and the post-close check
+    and is read by the shared reader and by docs/vol_backtest.fixture_closes exactly as F13 dated YYYY-MM-DD is. A
+    first column that holds no dates is refused naming the file, the line and the column as the first column."""
+    from core.calendars import clocks as K
+    from docs import vol_backtest as VB
+    from tests.macro_m1_calendars import fixture_set, read_close_layout
+    days = K.sessions_between("KR", date(2026, 9, 21), GPOST_DAY, cal=fixture_set())
+    with tempfile.TemporaryDirectory() as tmp:
+        src = Path(tmp) / "plain.csv"
+
+        def stamped(text):
+            src.write_text(text, encoding="utf-8")
+            return MF.fixture_rows(src, series_id="FRENCH_MOM_D", value_status="vendor_derived",
+                                   available_at_source="published", retrieved_at_utc=REFERENCE_RETRIEVED,
+                                   available_at=_available_at)
+        # Ken French's raw daily layout: the first header cell blank, the dates YYYYMMDD; the cell is copied as written
+        fields, rows = stamped(",Mom   \n19261103,   0.56\n19261104,  -0.12\n")
+        assert fields[:2] == ["", "Mom   "] and [(r[""], r["obs_date"], r["session_date"]) for r in rows] == [
+            ("19261103", "1926-11-03", "1926-11-03"), ("19261104", "1926-11-04", "1926-11-04")]
+        assert MF.fixture_text(fields, rows).split("\n")[1].startswith("19261103,   0.56,FRENCH_MOM_D,1926-11-03,")
+        for head, cells in (("day,value", ("2026-09-30,4.1", "2026-10-01,4.2")),         # another first-column name
+                            ("Day,value", ("20260930,4.1", "20261001,4.2")),
+                            ("date,value", ("20260930,4.1", "20261001,4.2")),          # the named column, YYYYMMDD
+                            ("\ufeff,Mom", ("20260930,0.5", "20261001,0.6")),           # a byte order mark before ""
+                            ("value,DATE", ("4.1,20260930", "4.2,20261001"))):         # named, not first
+            got = [r["obs_date"] for r in stamped(head + "\n" + "".join(c + "\n" for c in cells))[1]]
+            assert got == ["2026-09-30", "2026-10-01"], head
+        # the byte order mark is gone when the header is read (utf-8-sig), so `_date_column` strips none (F9)
+        fields, _rows = stamped("\ufeffDate,value\n20260930,4.1\n")
+        assert fields[:2] == ["Date", "value"] and MF._date_column(src, fields) == "Date"
+        _refused(lambda: stamped("value,day\n4.1,2026-09-30\n"), ValueError,
+                 "plain.csv line 2: date '4.1' in column 'value' (the first column: no header cell is named date or "
+                 "observation_date) is not an ISO date")
+        # F13 dated YYYYMMDD and dated YYYY-MM-DD: the same rows for both readers of the declared close layout
+        ref = Path(tmp) / "ref"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+        f13, name = ref / _reference_row("F13")[1], FILE_OF["F13"]
+        iso = _invented_reference("F13", days)
+        basic = iso.replace("-", "")
+        assert iso.count("-") == 2 * len(days) and basic.split("\n")[1].startswith(days[0].strftime("%Y%m%d") + ",")
+        read = {}
+        for label, text in (("iso", iso), ("basic", basic)):
+            f13.write_text(text, encoding="utf-8")
+            out = Path(tmp) / label
+            assert [r["span"] for r in _calendar_generator(("F13",), ref, out)] == [f"{days[0]}..{days[-1]}"], label
+            fixture = (out / name).read_text(encoding="utf-8")
+            assert fixture.split("\n")[1].split(",")[0] == text.split("\n")[1].split(",")[0], label   # as written
+            read[label] = (read_close_layout("F13", fixture), VB.fixture_closes(out / name)[0])
+        assert read["basic"] == read["iso"] and [r["date"] for r in read["basic"][0]] == days
+        assert read["basic"][1] == [d.isoformat() for d in days]
+
+
+def test_macro_fixtures_names_the_reference_row_of_every_calendar_refusal():
+    """Review of PR #107, F4: of the refusals `available_at` raises for a reference row, only NoFXDayClose was
+    re-raised with the reference file and line; a KS11 row on a day that is not a KRX session (NotASession), a date
+    outside the calendar's coverage (CalendarCoverageError), an id neither registered nor declared (KeyError) and a
+    value_status other than the declared one (ValueError) named only the series and the date. Now each reaches the
+    caller with the type and str() `available_at` gave it, plus a note naming the reference file, the line, the date
+    cell and the series, which the traceback prints under the message (Python 3.11 and later); `generate` writes
+    nothing. NoFXDayClose keeps its own message with the file and line, and gets no note. A refusal raised from another
+    error keeps that cause: KS11 on clocks that lack the KR market is the KeyError `available_at` raises from the
+    clocks' own KeyError, which stays its __cause__ (the note is added and the same exception raised again)."""
+    import sys
+    import traceback
+    from core.calendars.adapter import CalendarClocks
+    from core.calendars.store import CalendarCoverageError, NotASession
+    from core.ficc import contracts
+    from tests.macro_m1_calendars import fixture_set
+    registry = contracts.default_registry()
+    clk = CalendarClocks(registry, cal=fixture_set())
+    available_at = MF.calendar_available_at(registry, clk)
+    good, saturday, early = date(2026, 10, 1), date(2026, 10, 3), date(1980, 1, 3)
+    with tempfile.TemporaryDirectory() as tmp:
+        src = Path(tmp) / "reference.csv"
+
+        def stamped(sid, status, days):
+            src.write_text("date,close\n" + "".join(f"{d},{100 + i}\n" for i, d in enumerate(days)), encoding="utf-8")
+            return MF.fixture_rows(src, series_id=sid, value_status=status, available_at_source="calendar_bound",
+                                   retrieved_at_utc=REFERENCE_RETRIEVED, available_at=available_at, columns=("close",))
+
+        def direct(sid, status, day, exc_type):
+            try:
+                available_at(sid, day, status)
+            except exc_type as exc:
+                return str(exc)
+            raise AssertionError(f"available_at({sid}, {day}) did not raise {exc_type.__name__}")
+        for sid, status, days, exc_type in (("KS11", "vendor_close", (good, saturday), NotASession),
+                                            ("KS11", "vendor_close", (early,), CalendarCoverageError),
+                                            ("NOPE", "vendor_close", (good,), KeyError),
+                                            ("KS11", "official_close", (good,), ValueError)):
+            day, line = days[-1], len(days) + 1
+            note = (f"reference row: reference.csv line {line}, date '{day}' in column 'date', series {sid}; no "
+                    "fixture is written")
+            try:
+                stamped(sid, status, days)
+                raise AssertionError(f"{sid} {day}: not refused")
+            except exc_type as exc:
+                assert type(exc) is exc_type and str(exc) == direct(sid, status, day, exc_type), (sid, day, exc)
+                assert getattr(exc, "__notes__", None) == [note], (sid, day, getattr(exc, "__notes__", None))
+                if sys.version_info >= (3, 11):
+                    assert note in "".join(traceback.format_exception(exc)), (sid, day)
+        # a refusal raised from another error keeps its cause: the clocks lack the KR market (as a calendar set
+        # without it would), so KS11 is refused with the KeyError `available_at` raises from the clocks' KeyError
+
+        class NoKR:
+            def __getattr__(self, name):
+                return getattr(clk, name)
+
+            def decision_time_utc(self, market, day):
+                if market == "KR":
+                    raise KeyError("KR: no calendar in this set")
+                return clk.decision_time_utc(market, day)
+        src.write_text(f"date,close\n{good},100\n", encoding="utf-8")
+        no_kr = MF.calendar_available_at(registry, NoKR())
+        exc = _refused(lambda: MF.fixture_rows(src, series_id="KS11", value_status="vendor_close",
+                                               available_at_source="calendar_bound",
+                                               retrieved_at_utc=REFERENCE_RETRIEVED, available_at=no_kr,
+                                               columns=("close",)),
+                       KeyError, "KS11: no market calendar for its REFERENCE_FILES market 'KR'")
+        assert type(exc.__cause__) is KeyError and exc.__cause__.args == ("KR: no calendar in this set",), exc.__cause__
+        assert exc.__notes__ == [f"reference row: reference.csv line 2, date '{good}' in column 'date', series KS11; "
+                                 "no fixture is written"]
+        # NoFXDayClose: its message names the file and line as before, and no note repeats them
+        exc = _refused(lambda: stamped("KRWX", "vendor_close", (good, saturday)), MF.NoFXDayClose,
+                       f"reference.csv line 3: KRWX: FX {saturday} is a Saturday", "no fixture is written")
+        assert getattr(exc, "__notes__", None) is None
+        # through `generate` on the real calendar function: refused, the reference file and line named, nothing written
+        ref, out = Path(tmp) / "ref", Path(tmp) / "out"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+        (ref / _reference_row("F13")[1]).write_text(f"date,close\n2026-09-30,100\n{good},101\n{saturday},102\n",
+                                                    encoding="utf-8")
+        try:
+            _calendar_generator(("F13",), ref, out)
+            raise AssertionError("a KS11 row on a Saturday must be refused")
+        except NotASession as exc:
+            assert exc.__notes__ == [f"reference row: {FILE_OF['F13']} line 4, date '{saturday}' in column 'date', "
+                                     "series KS11; no fixture is written"]
+        assert not out.exists()
+
+
+def test_macro_fixtures_copies_result_tables_byte_for_byte():
+    """R5: a result table was read as text and written with LF line ends, so a CRLF table was not copied byte for
+    byte although REFERENCE_FILES says it is, and a byte that is not UTF-8 stopped the run. Now the bytes are copied:
+    CRLF, LF, no final line end, a byte that is not UTF-8 and a byte order mark all come out identical, the md5 listed
+    is the md5 of the bytes on disk, `freeze` lists it and the fixture gate (`require_fixture`) accepts the file.
+    Review of PR #107, F7: the table was also written to the staging directory, where nothing reads it (no check
+    runs on a result table; the md5 and the final write use the bytes in memory); it is no longer staged, so the
+    one write of it is the final one into the output directory."""
+    from tests.notrun import md5_of, unlisted
+    rel, name = _reference_row("F20")[1], FILE_OF["F20"]
+    with tempfile.TemporaryDirectory() as tmp:
+        ref, out = Path(tmp) / "ref", Path(tmp) / "out"
+        (ref / "results").mkdir(parents=True)
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+        for label, data in (("CRLF", b"golden_id,sub_id,value\r\nG-POST-01,gkr05_share,0.42\r\n"),
+                            ("LF", b"golden_id,sub_id,value\nG-POST-01,gkr05_share,0.42\n"),
+                            ("no final line end", b"item,value\nF20,1"),
+                            ("a byte that is not UTF-8", b"item,value\nF20,\xff\n"),
+                            ("a byte order mark and CRLF", b"\xef\xbb\xbfitem,value\r\nF20,1\r\n")):
+            (ref / rel).write_bytes(data)
+            staged, real = [], MF._atomic_write
+            MF._atomic_write = lambda path, data, **kw: (staged.append(Path(path)), real(path, data, **kw))[1]
+            try:
+                rows = MF.generate(ref, out, retrieved_at_utc=REFERENCE_RETRIEVED, licence="test licence",
+                                   owner="package D", available_at=_available_at, only=("F20",))
+            finally:
+                MF._atomic_write = real
+            assert staged == [], (label, staged)                       # F7: not staged; written once, by `_commit`
+            assert (out / name).read_bytes() == data, label
+            assert [r["md5"] for r in rows] == [hashlib.md5(data).hexdigest()] == [md5_of(out / name)], label
+            assert rows[0]["span"] == "result table" and rows[0]["value_status_rule"].startswith("result table"), label
+        manifest = out / "MANIFEST.csv"
+        assert MF.freeze(manifest, rows) == 1 and load_manifest(manifest)[name]["md5"] == md5_of(out / name)
+        assert b"\r" not in manifest.read_bytes()                       # the manifest itself is written with LF
+        assert require_fixture(name, manifest=manifest) == out / name and unlisted(manifest) == []
+
+
+def test_macro_fixtures_command_line_counts_the_appended_rows_once():
+    """Review of PR #107, F8: the command line read the manifest a second time only to count the rows it appended,
+    while `_manifest_bytes` had counted them for the final write and the count was dropped. Now `MF._generate`
+    returns that count with the rows and `main` prints it, so the manifest is read once per run (not at all while it
+    is absent) and the count is the one the final write used. The printed line keeps its wording: a first run
+    appends 1 row, the same run again 0, a run adding a second file 1."""
+    from core.calendars.adapter import CalendarClocks
+    from core.ficc import contracts
+    from tests.macro_m1_calendars import fixture_set
+    clk = CalendarClocks(contracts.default_registry(), cal=fixture_set())
+    with tempfile.TemporaryDirectory() as tmp:
+        ref, out = Path(tmp) / "ref", Path(tmp) / "out"
+        manifest = out / "MANIFEST.csv"
+        (ref / "results").mkdir(parents=True)
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+        for fid in ("F20", "F21"):
+            (ref / _reference_row(fid)[1]).write_bytes(f"item,value\n{fid},1\n".encode("utf-8"))
+        reads, real = [], MF.load_manifest
+
+        def run(*only):
+            argv = ["--reference", str(ref), "--out", str(out), "--manifest", str(manifest), "--retrieved-at-utc",
+                    "2026-10-02T09:00:00Z", "--licence", "test licence", "--owner", "package D", "--only", *only]
+            reads.clear()
+            printed = io.StringIO()
+            MF.load_manifest = lambda path: (reads.append(Path(path)), real(path))[1]
+            try:
+                with contextlib.redirect_stdout(printed):
+                    assert MF.main(argv, clocks=clk) == 0
+            finally:
+                MF.load_manifest = real
+            return printed.getvalue(), len(reads)
+        for only, written, appended, read in ((("F20",), 1, 1, 0), (("F20",), 1, 0, 1), (("F20", "F21"), 2, 1, 1)):
+            assert run(*only) == (f"{written} fixtures written under {out}; {appended} manifest rows appended to "
+                                  f"{manifest}\n", read), (only, appended, read)
+        assert sorted(load_manifest(manifest)) == sorted(FILE_OF[f] for f in ("F20", "F21"))
+
+
+def test_macro_fixtures_compares_the_manifest_before_the_final_write():
+    """R1: on the command line `generate` wrote the output directory and only then did `freeze` compare the md5s, so
+    a regeneration refused with FixtureChanged had already overwritten the frozen file, which then no longer matched
+    its manifest row. Now the built files are compared with the manifest before anything is written: the refused
+    regeneration leaves every frozen byte and the manifest as they were, with a new file selected beside the changed
+    one nothing is written either, and `generate(manifest=...)` refuses the same way. An unchanged regeneration
+    rewrites the same bytes and adds no row, also when the manifest writes its md5 in upper case, and the manifest is
+    written with LF line ends; once the reference is restored the new file is written and listed. The
+    manifest is written in the same final write as the fixtures, last (R4): with MANIFEST.csv locked, a run that
+    adds a file fails and leaves that file neither written nor unlisted (`freeze` used to write the manifest after
+    the fixtures were in place, so the new file stayed in the folder with no manifest row)."""
+    from core.calendars import clocks as K
+    from core.calendars.adapter import CalendarClocks
+    from core.ficc import contracts
+    from tests.macro_m1_calendars import fixture_set
+    from tests.notrun import unlisted
+    cal = fixture_set()
+    clk = CalendarClocks(contracts.default_registry(), cal=cal)
+    kr = K.sessions_between("KR", date(2026, 9, 21), GPOST_DAY, cal=cal)
+    us = K.sessions_between("US", date(2026, 9, 21), date(2026, 10, 1), cal=cal)
+    n13, n14 = FILE_OF["F13"], FILE_OF["F14"]
+    with tempfile.TemporaryDirectory() as tmp:
+        ref, out = Path(tmp) / "ref", Path(tmp) / "out"
+        manifest = out / "MANIFEST.csv"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+        f13, f14 = ref / _reference_row("F13")[1], ref / _reference_row("F14")[1]
+        good13 = _invented_reference("F13", kr)
+        f13.write_text(good13, encoding="utf-8")
+        f14.write_text(_invented_reference("F14", us), encoding="utf-8")
+
+        def run(*only):
+            argv = ["--reference", str(ref), "--out", str(out), "--manifest", str(manifest), "--retrieved-at-utc",
+                    "2026-10-02T09:00:00Z", "--licence", "test licence", "--owner", "package D", "--only", *only]
+            with contextlib.redirect_stdout(io.StringIO()):
+                return MF.main(argv, clocks=clk)
+
+        def state():
+            return {p.name: p.read_bytes() for p in out.iterdir()}
+        assert run("F13") == 0
+        frozen = state()
+        md5 = hashlib.md5(frozen[n13]).hexdigest()
+        assert sorted(frozen) == sorted(["MANIFEST.csv", n13]) and unlisted(manifest) == []
+        assert load_manifest(manifest)[n13]["md5"] == md5 and b"\r" not in frozen["MANIFEST.csv"]
+        assert run("F13") == 0 and state() == frozen                     # the same reference: same bytes, no new row
+        # an md5 the manifest writes in upper case is the same md5: the unchanged regeneration is not refused
+        upper = frozen["MANIFEST.csv"].replace(md5.encode(), md5.upper().encode())
+        assert upper != frozen["MANIFEST.csv"]
+        manifest.write_bytes(upper)
+        assert run("F13") == 0 and manifest.read_bytes() == upper
+        manifest.write_bytes(frozen["MANIFEST.csv"])
+        lines = good13.rstrip("\n").split("\n")
+        f13.write_text("\n".join(lines[:-1] + [lines[-1].rsplit(",", 1)[0] + ",9999.00"]) + "\n", encoding="utf-8")
+        _refused(lambda: run("F13"), MF.FixtureChanged, f"{n13}: {md5} -> ", "L5492")
+        assert state() == frozen and unlisted(manifest) == []
+        _refused(lambda: run("F13", "F14"), MF.FixtureChanged, f"{n13}: {md5} -> ")
+        assert state() == frozen                                         # F14 is not written either
+        _refused(lambda: _calendar_generator(("F13",), ref, out, manifest=manifest), MF.FixtureChanged, n13)
+        assert state() == frozen
+        f13.write_text(good13, encoding="utf-8")
+        # R4 on the command line: the manifest is the last file of the same final write. With MANIFEST.csv locked (on
+        # Windows, open in a spreadsheet) a run that adds F14 fails and leaves no F14 that the manifest does not list
+        import os
+        real = os.replace
+
+        def locked(src, dst, *args, **kwargs):
+            if Path(dst) == manifest:
+                raise PermissionError(13, "simulated: MANIFEST.csv is open in another program", str(dst))
+            return real(src, dst, *args, **kwargs)
+        os.replace = locked
+        try:
+            _refused(lambda: run("F13", "F14"), PermissionError, "simulated: MANIFEST.csv")
+        finally:
+            os.replace = real
+        assert state() == frozen and unlisted(manifest) == []
+        assert run("F13", "F14") == 0
+        after = state()
+        assert after[n13] == frozen[n13] and sorted(after) == sorted(["MANIFEST.csv", n13, n14])
+        assert sorted(load_manifest(manifest)) == sorted([n13, n14]) and unlisted(manifest) == []
+
+
+def test_macro_fixtures_final_write_is_all_or_nothing():
+    """R4: the final write renamed one file after another into the output directory, so a rename that failed part way
+    (on Windows, a destination open in another program) left the earlier files new and the rest old, and on a first
+    generation left files no manifest lists. Now (`MF._commit`) every file is written whole beside its destination and
+    the bytes it replaces are read first, then the renames run, and a failure undoes the renames already made. With
+    the second of three files locked: a regeneration leaves every byte as it was, a first generation leaves no output
+    directory (nor the parent directories it created), and the error reaching the caller is the PermissionError
+    itself; a Ctrl+C (KeyboardInterrupt) at the same rename is undone the same way. A destination that cannot be read
+    (here a directory with a fixture's name) stops the run before any
+    rename. If the undo itself fails, FinalWriteIncomplete names the file left with its new bytes, and that is the
+    only file changed. No temporary file is left in any case. What a stopped process can leave is stated in
+    `MF._commit` and is not demonstrated here."""
+    import os
+    from tests.notrun import md5_of
+    three = ("F13", "F14", "F27")
+    n13, n14, n27 = (FILE_OF[f] for f in three)
+    with tempfile.TemporaryDirectory() as tmp:
+        ref = Path(tmp) / "ref"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+
+        def write_reference(base):
+            for fid, b in (("F13", base), ("F14", base + 100)):
+                (ref / _reference_row(fid)[1]).write_text(f"date,close\n2026-09-30,{b}\n2026-10-01,{b + 1}\n",
+                                                          encoding="utf-8")
+            (ref / _reference_row("F27")[1]).write_text(f"date,code,close\n2026-10-01,005930,{base}\n"
+                                                        f"2026-10-01,000660,{base + 1}\n", encoding="utf-8")
+
+        def generate(out):
+            return MF.generate(ref, out, retrieved_at_utc=REFERENCE_RETRIEVED, licence="test licence",
+                               owner="package D", available_at=_available_at, only=three)
+
+        def state(out):
+            return {p.name: p.read_bytes() if p.is_file() else "a directory" for p in out.iterdir()}
+        real = os.replace
+
+        def with_locked(out, fn, fail_restore_of=None, error=None):
+            """Run `fn` with every rename onto out/F14 refused (with `error`, by default a PermissionError), and the
+            second rename onto `fail_restore_of` too."""
+            seen: dict = {}
+
+            def replace(src, dst, *args, **kwargs):
+                dst = Path(dst)
+                if dst.parent == out:                                     # renames into `out` only, not the staging
+                    seen[dst.name] = seen.get(dst.name, 0) + 1
+                    if dst.name == n14 or (dst.name == fail_restore_of and seen[dst.name] > 1):
+                        raise error or PermissionError(13, "simulated: the file is open in another program", str(dst))
+                return real(src, dst, *args, **kwargs)
+            os.replace = replace
+            try:
+                return fn()
+            finally:
+                os.replace = real
+        write_reference(100)
+        out = Path(tmp) / "out"
+        rows = generate(out)
+        frozen = state(out)
+        assert sorted(frozen) == sorted([n13, n14, n27]) and {r["file"]: r["md5"] for r in rows} == {
+            n: hashlib.md5(b).hexdigest() for n, b in frozen.items()}
+        write_reference(500)                                              # every file would change
+        _refused(lambda: with_locked(out, lambda: generate(out)), PermissionError, "simulated", n14)
+        assert state(out) == frozen
+        # Ctrl+C at the second rename (KeyboardInterrupt is not an Exception): undone the same way, then re-raised
+        _refused(lambda: with_locked(out, lambda: generate(out), error=KeyboardInterrupt("simulated Ctrl+C")),
+                 KeyboardInterrupt, "simulated Ctrl+C")
+        assert state(out) == frozen
+        fresh = Path(tmp) / "new" / "deeper" / "out"                      # a first generation, two parents created
+        _refused(lambda: with_locked(fresh, lambda: generate(fresh)), PermissionError, "simulated")
+        assert not (Path(tmp) / "new").exists()
+        # a destination that cannot be read stops the run before any rename
+        blocked = Path(tmp) / "blocked"
+        generate(blocked)                                                 # the current reference, then one more change
+        (blocked / n27).unlink()
+        (blocked / n27).mkdir()
+        before = state(blocked)
+        write_reference(900)
+        _refused(lambda: generate(blocked), OSError)
+        assert state(blocked) == before and (blocked / n27).is_dir()
+        # the undo fails for F13: named, and F13 is the only file changed
+        write_reference(500)
+        exc = _refused(lambda: with_locked(out, lambda: generate(out), fail_restore_of=n13), MF.FinalWriteIncomplete,
+                       f"writing {n14} into {out} failed (PermissionError", f"{n13}: left with its new bytes")
+        assert len(exc.left) == 1 and isinstance(exc.__cause__, PermissionError)
+        now = state(out)
+        assert sorted(now) == sorted(frozen) and now[n14] == frozen[n14] and now[n27] == frozen[n27]
+        assert now[n13] != frozen[n13] and md5_of(out / n13) == next(
+            r["md5"] for r in generate(Path(tmp) / "check") if r["file"] == n13)   # the new bytes, whole
+
+
+def test_macro_fixtures_final_write_fsyncs_each_file_before_its_rename():
+    """Review of PR #107, F2: `MF._commit` and `MF._atomic_write` renamed their temporary files with neither flush nor
+    fsync, while the docstring promised whole files after a power loss. Now every temporary file is fsynced before it
+    is renamed over its destination (watched by wrapping os.fsync and os.replace and matching files by inode); a
+    failing file fsync fails the run and is undone like any other error. On POSIX each destination directory is then
+    fsynced, best effort: a directory fsync that fails does not fail the run; on Windows (os.name 'nt') no directory
+    is opened. What a power loss can still leave is stated in `MF._commit` and is not demonstrated here. Verifier
+    round: an exception other than an OSError in the directory fsyncs (a Ctrl+C) comes after the last rename, so it
+    reaches the caller and undoes nothing, as the docstring now says; and `_atomic_write` synced every file it wrote,
+    each data fixture `generate` stages in a directory it deletes included (one file and one directory fsync per
+    data fixture, which protect nothing). Now the staging write passes durable=False, which skips both: a run that
+    writes F13 makes one file fsync (the fixture's final write) where it made two, and on POSIX two directory fsyncs
+    (the new output directory and its parent) where it made three."""
+    import os
+    import stat
+    from core.calendars import clocks as K
+    from tests.macro_m1_calendars import fixture_set
+    events: list = []
+    real_fsync, real_replace, real_open, real_name = os.fsync, os.replace, os.open, os.name
+
+    def key(st):
+        return st.st_dev, st.st_ino
+
+    def fsync(fd):
+        st = os.fstat(fd)
+        events.append(("fsync", key(st), stat.S_ISDIR(st.st_mode)))
+        return real_fsync(fd)
+
+    def replace(src, dst, *args, **kwargs):
+        events.append(("replace", key(os.stat(src)), Path(dst).name))
+        return real_replace(src, dst, *args, **kwargs)
+    with tempfile.TemporaryDirectory() as tmp:
+        out = Path(tmp) / "new" / "out"
+        os.fsync, os.replace = fsync, replace
+        try:
+            MF._commit([(out / "a.csv", b"a\n"), (out / "b.csv", b"b\n"), (out / "MANIFEST.csv", b"m\n")])
+            MF._atomic_write(out / "c.csv", b"c\n")
+        finally:
+            os.fsync, os.replace = real_fsync, real_replace
+        assert {p.name: p.read_bytes() for p in out.iterdir()} == {"a.csv": b"a\n", "b.csv": b"b\n",
+                                                                   "MANIFEST.csv": b"m\n", "c.csv": b"c\n"}
+        renames = [(i, k, name) for i, (kind, k, name) in enumerate(events) if kind == "replace"]
+        assert [name for *_i, name in renames] == ["a.csv", "b.csv", "MANIFEST.csv", "c.csv"]
+        for i, k, name in renames:
+            assert ("fsync", k, False) in events[:i], f"{name}: renamed before its bytes were fsynced"
+        if os.name != "nt":                                 # the directory after the final write's last rename
+            assert ("fsync", key(os.stat(out)), True) in events[renames[2][0] + 1:renames[3][0]], events
+        # a failing file fsync fails the run before any rename; a failing directory fsync does not fail it
+
+        def failing(kind):
+            def fn(fd):
+                if stat.S_ISDIR(os.fstat(fd).st_mode) == (kind == "directory"):
+                    raise OSError(5, f"simulated: the {kind} cannot be synced")
+                return real_fsync(fd)
+            return fn
+        before = {p.name: p.read_bytes() for p in out.iterdir()}
+        for kind in ("file", "directory"):
+            os.fsync = failing(kind)
+            try:
+                if kind == "file":
+                    _refused(lambda: MF._commit([(out / "a.csv", b"a2\n"), (out / "d.csv", b"d\n")]), OSError,
+                             "simulated: the file cannot be synced")
+                else:
+                    MF._commit([(out / "a.csv", b"a3\n")])
+            finally:
+                os.fsync = real_fsync
+            if kind == "file":
+                assert {p.name: p.read_bytes() for p in out.iterdir()} == before
+        assert (out / "a.csv").read_bytes() == b"a3\n"
+        # a Ctrl+C in the directory fsyncs, after the last rename: it reaches the caller, and nothing is undone
+        if os.name != "nt":
+            def interrupted(fd):
+                if stat.S_ISDIR(os.fstat(fd).st_mode):
+                    raise KeyboardInterrupt
+                return real_fsync(fd)
+            os.fsync = interrupted
+            try:
+                MF._commit([(out / "a.csv", b"a4\n"), (out / "MANIFEST.csv", b"m4\n")])
+                raise AssertionError("the KeyboardInterrupt of the directory fsync did not reach the caller")
+            except KeyboardInterrupt:
+                pass
+            finally:
+                os.fsync = real_fsync
+            assert {p.name: p.read_bytes() for p in out.iterdir()} == {"a.csv": b"a4\n", "b.csv": b"b\n",
+                                                                       "MANIFEST.csv": b"m4\n", "c.csv": b"c\n"}
+        # `generate` stages a data fixture with durable=False: neither the staged copy nor the staging directory is
+        # synced, and the final write syncs the fixture and its directories as above
+        days = K.sessions_between("KR", date(2026, 9, 21), GPOST_DAY, cal=fixture_set())
+        ref, fresh = Path(tmp) / "ref", Path(tmp) / "out2"
+        ref.mkdir()
+        (ref / "CATALOG.md").write_text("invented catalog\n", encoding="utf-8")
+        (ref / _reference_row("F13")[1]).write_text(_invented_reference("F13", days), encoding="utf-8")
+        writes, synced, real_write = [], [], MF._atomic_write
+        MF._atomic_write = lambda path, data, **kw: (writes.append(kw), real_write(path, data, **kw))[1]
+        os.fsync = lambda fd: (synced.append(stat.S_ISDIR(os.fstat(fd).st_mode)), real_fsync(fd))[1]
+        try:
+            _calendar_generator(("F13",), ref, fresh)
+        finally:
+            MF._atomic_write, os.fsync = real_write, real_fsync
+        assert writes == [{"durable": False}] and [p.name for p in fresh.iterdir()] == [FILE_OF["F13"]]
+        assert synced.count(False) == 1 and synced.count(True) == (0 if os.name == "nt" else 2), synced
+        # Windows: no directory is opened for an fsync
+        opened: list = []
+        os.open = lambda *args, **kwargs: opened.append(args) or real_open(*args, **kwargs)
+        os.name = "nt"
+        try:
+            MF._fsync_dir(out)
+        finally:
+            os.open, os.name = real_open, real_name
+        assert opened == []
+
+
+def test_macro_fixtures_final_write_refuses_a_destination_named_twice():
+    """Review of PR #107, F5: `MF._commit` kept its temporary files in a table keyed by destination, so two items with
+    one destination lost the first temporary file from the table: the first rename put the second item's bytes in
+    place, the second rename ended in a KeyError, and the undo left the lost `.tmp` file and the directory behind
+    (FinalWriteIncomplete). Now a destination named twice (also spelled another way, `sub/../a.csv`) is refused with
+    a ValueError naming it before anything is written: no directory is made, an existing file keeps its bytes, and no
+    temporary file is left. Verifier round: the paths were compared by their text, so the same file reached through a
+    symlinked folder was written twice, the second bytes kept; now the parent directories are compared as resolved
+    by os.path.realpath, and that spelling is refused too (where the system lets the test make a symlink)."""
+    import os
+    with tempfile.TemporaryDirectory() as tmp:
+        fresh, kept = Path(tmp) / "fresh", Path(tmp) / "kept"
+        kept.mkdir()
+        (kept / "a.csv").write_bytes(b"earlier\n")
+        for folder in (fresh, kept):
+            a = folder / "a.csv"
+            for again in (a, folder / "sub" / ".." / "a.csv"):
+                _refused(lambda: MF._commit([(a, b"one\n"), (folder / "b.csv", b"two\n"), (again, b"three\n")]),
+                         ValueError, f"the final write names {a} more than once", "nothing is written")
+        alias = Path(tmp) / "alias"
+        try:
+            os.symlink(kept, alias, target_is_directory=True)
+        except (OSError, NotImplementedError):            # Windows without the symlink privilege
+            alias = None
+        if alias is not None:
+            _refused(lambda: MF._commit([(kept / "a.csv", b"one\n"), (alias / "a.csv", b"two\n")]), ValueError,
+                     f"the final write names {kept / 'a.csv'} more than once", "nothing is written")
+        assert not fresh.exists() and [p.name for p in kept.iterdir()] == ["a.csv"]
+        assert (kept / "a.csv").read_bytes() == b"earlier\n"
+
+
+def test_macro_fixtures_final_write_removes_every_directory_it_made():
+    """Review of PR #107, F6: `MF._commit` created the destination directories before its guarded block, so when a
+    later one could not be created (no permission, a file holding the name) the error left the directories already
+    created for the earlier destinations behind. Now each directory is created inside the guarded block and recorded
+    as soon as it exists: with the second destination's directory refused (simulated by patching Path.mkdir), the
+    error reaching the caller is that PermissionError and every directory the run created is removed, the existing
+    ones kept. A file standing where a directory would go is refused the same way."""
+    real = Path.mkdir
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        (root / "kept").mkdir()
+        first, second = root / "new1" / "deep", root / "kept" / "new2" / "deeper"
+
+        def mkdir(self, *args, **kwargs):
+            if self == second:
+                raise PermissionError(13, "simulated: the directory cannot be created", str(self))
+            return real(self, *args, **kwargs)
+        Path.mkdir = mkdir
+        try:
+            _refused(lambda: MF._commit([(first / "a.csv", b"a\n"), (second / "b.csv", b"b\n")]), PermissionError,
+                     "simulated: the directory cannot be created")
+        finally:
+            Path.mkdir = real
+        assert [p.name for p in root.iterdir()] == ["kept"] and list((root / "kept").iterdir()) == []
+        (root / "blocker").write_bytes(b"a file\n")
+        _refused(lambda: MF._commit([(first / "a.csv", b"a\n"), (root / "blocker" / "c.csv", b"c\n")]), OSError)
+        assert sorted(p.name for p in root.iterdir()) == ["blocker", "kept"]
+        assert (root / "blocker").read_bytes() == b"a file\n"
 
 
 # --------------------------------------------------------------------------- #

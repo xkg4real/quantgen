@@ -495,12 +495,14 @@ test_fix_01_regeneration_at_level_1_tolerance_refdata.test_ids = ["T-FIX-01"]
 # caps, :73; long form, one row per `code` and KRX session, the market-cap columns unread). The three files are read by
 # the one reader of the declared close layout, tests.macro_m1_calendars.read_close_layout (part 1's F01 layout), as
 # tests/macro_m1_fixtures.py reads them, and the eight rows come from the helper both sites share,
-# tests.macro_m1_fixtures.check_gpost01_rows (a price compared exactly: Level 1 `price`, spec L5735). The two sites read
-# different rows. This one reads by date: every row dated up to the 2-Oct decision and none after it (F13 ends on 2 Oct
-# and F16 on 1 Oct by their names, so a later-dated row is outside the decision by its date and is not read). It does
-# not use the instants: the point-in-time reading (a row available after the 06:30:30Z decision is not visible, a later
-# row visible at the decision is a look-ahead FAIL, the 2-Oct closes are stamped at 06:30:00Z) is
-# tests/macro_m1_fixtures.py's, which also reads F01's official close.
+# tests.macro_m1_fixtures.check_gpost01_rows. A price is compared as owner ruling 4 of 2026-11-11 sets it, an
+# owner-approved exception to spec L5735 (Level 1 `price`, "prices exact"): the Yahoo vendor prices (the ^KS11 closes,
+# KRW=X) rounded to two decimals, the KRX won prices of Samsung and SK hynix exactly. The two sites read different rows.
+# This one reads by date: every row dated up to the 2-Oct decision and none after it (F13 ends on 2 Oct and F16 on 1 Oct
+# by their names, so a later-dated row is outside the decision by its date and is not read). It does not use the
+# instants: the point-in-time reading (a row available after the 06:30:30Z decision is not visible, a later row visible
+# at the decision is a look-ahead FAIL, the 2-Oct closes are stamped at 06:30:00Z) is tests/macro_m1_fixtures.py's,
+# which also reads F01's official close.
 F13 = "yahoo_KS11_1996-12_2026-10-02.csv"
 F16 = "yahoo_KRWX_2004_2026-10-01.csv"
 F27 = "krx_005930_000660_closes_mcap.csv"
@@ -518,10 +520,10 @@ def _check_gpost01_m1(ks11: list[dict], krwx: list[dict], stocks: list[dict], ca
     """G-POST-01, the M1 data rows, read by date: the ^KS11, KRW=X and KRX stock rows dated up to 2 Oct, none later.
     Exactly one ^KS11 row and one row per code (005930, 000660) on 2 Oct; the ^KS11 row before it must be dated the
     previous KRX session of the signed calendar `cal` (`clocks.prev_session`, as T-PRINT-01's helper checks); then
-    tests.macro_m1_fixtures.check_gpost01_rows: the eight rows at Level 1 against goldens.csv (read only; a price
-    exactly, spec L5735, so neither the 6,943.66 intraday print nor a float artefact is 7,003.74), KRW=X's last row on
-    1 Oct (the provisional 2-Oct row dropped), the 200-close and 20-observation windows and the peak 9,114.55 on
-    2026-06-22. Returns the values."""
+    tests.macro_m1_fixtures.check_gpost01_rows: the eight rows at Level 1 against goldens.csv (read only; a Yahoo vendor
+    price at two decimals and a KRX won price exactly, owner ruling 4 of 2026-11-11, so the 6,943.66 intraday print is
+    not 7,003.74 and a float artefact of the vendor file is), KRW=X's last row on 1 Oct (the provisional 2-Oct row
+    dropped), the 200-close and 20-observation windows and the peak 9,114.55 on 2026-06-22. Returns the values."""
     from core.calendars import clocks
     from tests.macro_m1_fixtures import check_gpost01_rows
     day = GPOST01_DAY
@@ -629,14 +631,18 @@ def test_g_post_01_body_passes_and_fails_on_invented_rows():
     after F16's last day, stamped available on 1 Oct (a look-ahead stamp, which tests/macro_m1_fixtures.py's
     point-in-time site FAILs) or on 5 Oct (not read either way; read, it would be KRW=X's last row). The row exactly 200
     closes back is inside the 200-close window (its level moves the ratio) and the row 201 back is outside it (its level
-    does not). Each value clause fails on its own: the pre-patch 6,943.66 intraday print as the close (spec L5819), a
-    float32 artefact on the close or on KRW=X's last row (a price is exact, spec L5735), a previous close of 7,100, the
-    1-Oct row missing with 30-Sep at the previous close's level (a two-session return), a peak of 9,300 (drawdown
-    -24.7%), a lower 200-day mean, the pre-patch Samsung 273,750 and SK hynix 1,832,000 (L5833), no 2-Oct stock rows, a
+    does not). A float32 artefact of the Yahoo files on the close, on KRW=X's last row or on the peak passes: a vendor
+    price is compared at two decimals (owner ruling 4 of 2026-11-11, an owner-approved exception to spec L5735). Each
+    value clause fails on its own: the pre-patch 6,943.66 intraday print as the close (spec L5819), a close one cent
+    away (7,003.75) or rounding to it (7,003.7451), a KRW=X last row one cent away (1,356.85), a previous close of
+    7,100, the 1-Oct row missing with 30-Sep at the previous close's level (a two-session return), a peak of 9,300
+    (drawdown -24.7%), a lower 200-day mean, the pre-patch Samsung 273,750 and SK hynix 1,832,000 (L5833), a won price
+    off by less than a cent (276,000.004 or 1,841,000.004: a KRX official price stays exact), no 2-Oct stock rows, a
     KRW=X last row of 1,360.63, the provisional 2-Oct KRW=X row kept (L5834), a 20th-back KRW=X value off by 2%, a peak
-    of 9,200 (within the drawdown tolerance) and the 9,114.55 peak on 2026-06-23. The shared layout refuses the 6,943.66
-    print beside the close (a repeated date), a repeated earlier ^KS11 or KRW=X date, a stock row of another code (the
-    preferred share 005935), a "." close and a missing `code` column. Each file name is the generator's."""
+    of 9,200 (within the drawdown tolerance), a peak one cent away (9,114.56) and the 9,114.55 peak on 2026-06-23. The
+    shared layout refuses the 6,943.66 print beside the close (a repeated date), a repeated earlier ^KS11 or KRW=X date,
+    a stock row of another code (the preferred share 005935), a "." close and a missing `code` column. Each file name is
+    the generator's."""
     from tests.macro_m1_calendars import close_layout_file
     assert GPOST01_FIXTURES == (F13, F16, F27) == tuple(close_layout_file(f)[0] for f in ("F13", "F16", "F27"))
     got = _gpost01_run(_gpost01_invented())
@@ -656,10 +662,27 @@ def test_g_post_01_body_passes_and_fails_on_invented_rows():
     assert _gpost01_run(_gpost01_invented(levels=((day201, 3000.0),)))["close_over_200d"] == got["close_over_200d"]
     moved = _gpost01_run(_gpost01_invented(levels=((day200, 9000.0),)))["close_over_200d"]
     assert abs(moved - 7003.74 / (7003.74 / got["close_over_200d"] + (9000.0 - 6305.93) / 200)) < 1e-9, moved
+    # Owner ruling 4 of 2026-11-11, an owner-approved exception to spec L5735 ("prices exact"): a Yahoo vendor price is
+    # compared at two decimals, so a float32 artefact of the vendor file passes, on the 2-Oct close, on KRW=X's last row
+    # and on the peak, and so does 7,003.7449 (it rounds to 7,003.74). The other rows stay inside their tolerances.
+    for kw in (dict(close=7003.740234375), dict(close=7003.7449), dict(fx_last=1356.8399658203125),
+               dict(peak=(date(2026, 6, 22), 9114.5498046875))):
+        art = _gpost01_run(_gpost01_invented(**kw))
+        assert all(abs(art[k] - got[k]) < 0.005 for k in got if k != "peak"), (kw, art)
+        assert art["peak"][0] == got["peak"][0], (kw, art)
+    as_read = _gpost01_run(_gpost01_invented(close=7003.740234375))
+    assert as_read["kospi_close_2oct"] == 7003.740234375                   # the rows are returned as read, unrounded
     cases = (
         (dict(close=6943.66), "G-POST-01 deviations: kospi_close_2oct: got 6943.66, want 7003.74"),
-        (dict(close=7003.740234375), "G-POST-01 deviations: kospi_close_2oct: got 7003.740234375, want 7003.74"),
-        (dict(fx_last=1356.8399658203125), "G-POST-01 deviations: krwx_last_row: got 1356.8399658203125, want 1356.84"),
+        # one cent away is not the close, read at two decimals (7,003.7451 rounds to 7,003.75)
+        (dict(close=7003.75), "G-POST-01 deviations: kospi_close_2oct: got 7003.75, want 7003.74"),
+        (dict(close=7003.7451), "G-POST-01 deviations: kospi_close_2oct: got 7003.75, want 7003.74"),
+        (dict(fx_last=1356.85), "G-POST-01 deviations: krwx_last_row: got 1356.85, want 1356.84"),
+        (dict(peak=(date(2026, 6, 22), 9114.56)),
+         "the peak of the KS11 closes dated up to 2026-10-02 is 9114.56 on 2026-06-22, not 9114.55"),
+        # a KRX official won price stays exact (ruling 4; spec L5735): less than a cent off is a FAIL
+        (dict(stocks=(276000.004, 1841000.0)), "G-POST-01 deviations: samsung_close_2oct: got 276000.004, want 276000"),
+        (dict(stocks=(276000.0, 1841000.004)), "G-POST-01 deviations: hynix_close_2oct: got 1841000.004, want 1841000"),
         (dict(prev=7100.0), "G-POST-01 deviations: kospi_return_2oct: got"),
         (dict(levels=((date(2026, 9, 30), 6971.67),), drop=(date(2026, 10, 1),)),
          "G-POST-01: the ^KS11 row before 2026-10-02 is 2026-09-30, not the previous KRX session 2026-10-01"),
@@ -817,25 +840,29 @@ test_print_01_circuit_breaker_print_is_never_a_close.test_ids = ["T-PRINT-01"]
 
 # T-PRINT-01 on the Yahoo ^KS11 history (F13, read by tests.macro_m1_calendars.read_close_layout as above; spec L5631,
 # L1382): "The KOSPI close on 2026-03-09 is 5,251.87 (-5.96%). The intraday -8.11% is never stored as a close." The
-# close is a price, compared exactly as the G-POST-01 prices are (Level 1 `price`, spec L5735; owner question 4 asks
-# whether a vendor file's float artefacts may be read at the printed two decimals instead); the return within the
-# printed precision of -5.96% (+/- 0.005 pp), against the previous KRX session's row.
+# close is a Yahoo vendor price: it is compared after rounding to two decimals, as the G-POST-01 vendor prices are
+# (tests.macro_m1_calendars.price_as_compared; owner ruling 4 of 2026-11-11, an owner-approved exception to spec L5735,
+# Level 1 `price` "prices exact"), so a float artefact of the vendor file is 5,251.87 and 5,251.88 is not; the return
+# within the printed precision of -5.96% (+/- 0.005 pp), against the previous KRX session's row.
 PRINT01_DATE, PRINT01_CLOSE, PRINT01_RETURN_PCT = date(2026, 3, 9), 5251.87, -5.96      # spec L5631
 PRINT01_PRINTED_PCT = 0.005                                                              # half the last printed digit
 
 
 def _check_print01_ks11(rows: list[dict], cal) -> float:
-    """T-PRINT-01 on the Yahoo ^KS11 vendor closes: exactly one row on 2026-03-09, its close 5,251.87 exactly (a price,
-    spec L5735: so neither the 10:31 print nor any other value, a float artefact included, is stored as the close), the
-    row before it on the previous KRX session of the signed calendar `cal`, and -5.96% against that row within the
-    printed precision. Returns the return in percent."""
+    """T-PRINT-01 on the Yahoo ^KS11 vendor closes: exactly one row on 2026-03-09, its close 5,251.87 at two decimals (a
+    vendor price: owner ruling 4 of 2026-11-11, an owner-approved exception to spec L5735; so neither the 10:31 print
+    nor a value a cent away is stored as the close, while a float artefact of the vendor file is the close), the row
+    before it on the previous KRX session of the signed calendar `cal`, and -5.96% against that row within the printed
+    precision. Returns the return in percent."""
     from core.calendars import clocks
+    from tests.macro_m1_calendars import price_as_compared
     d = PRINT01_DATE
     on_day = [r for r in rows if r["date"] == d]
     assert len(on_day) == 1, f"T-PRINT-01 (F13): {len(on_day)} rows on {d}; exactly one close is stored"
     close = on_day[0]["close"]
-    assert G.within("price", close, PRINT01_CLOSE), (
-        f"T-PRINT-01 (F13): close {close!r} != {PRINT01_CLOSE} (spec L5631; a price, exact: L5735)")
+    assert G.within("price", price_as_compared("F13", close), PRINT01_CLOSE), (
+        f"T-PRINT-01 (F13): close {close!r} != {PRINT01_CLOSE} (spec L5631; a Yahoo vendor price, compared at two "
+        "decimals: owner ruling 4 of 2026-11-11, an exception to L5735)")
     before = [r for r in rows if r["date"] < d]
     prev_day = clocks.prev_session("KR", d, cal=cal)
     assert before and before[-1]["date"] == prev_day, (
@@ -861,13 +888,14 @@ test_print_01_real_kospi_close_refdata.test_ids = ["T-PRINT-01"]
 
 
 def test_print_01_body_passes_and_fails_on_invented_ks11_closes():
-    """LA-02 part 2: the T-PRINT-01 (F13) body can PASS and can FAIL. Invented closes in the declared close layout on the
-    synthetic signed calendars (no Yahoo data): 5,584.71 then 5,251.87 passes, and so does a previous close of 5,585.01
-    (-5.9649%, just inside the printed precision). It fails when the 10:31 KST print (5,131.12) is stored as the
-    2026-03-09 close, when the close is 5,251.88 or carries a float32 artefact (a price is exact), when the previous close
-    is 5,560 (-5.54%) or 5,585.05 (-5.9656%, just outside), and when the 2026-03-06 row is missing; the shared layout
-    refuses the print stored beside the close (a repeated date) and a file whose rows are marked official_close. The
-    calendar gate covers that fortnight on the synthetic set and refuses the unsigned one."""
+    """LA-02 part 2: the T-PRINT-01 (F13) body can PASS and can FAIL. Invented closes in the declared close layout on
+    the synthetic signed calendars (no Yahoo data): 5,584.71 then 5,251.87 passes, and so does a previous close of
+    5,585.01 (-5.9649%, just inside the printed precision), and so does a close carrying a float32 artefact
+    (5,251.8701171875: a vendor price is compared at two decimals, owner ruling 4 of 2026-11-11). It fails when the
+    10:31 KST print (5,131.12) is stored as the 2026-03-09 close, when the close is a cent away (5,251.88 or 5,251.86),
+    when the previous close is 5,560 (-5.54%) or 5,585.05 (-5.9656%, just outside), and when the 2026-03-06 row is
+    missing; the shared layout refuses the print stored beside the close (a repeated date) and a file whose rows are
+    marked official_close. The calendar gate covers that fortnight on the synthetic set and refuses the unsigned one."""
     from core.calendars import clocks
     from tests.macro_m1_calendars import (_official_calendar, _official_calendar_on, close_layout_text, drafts_set,
                                           fixture_set, read_close_layout)
@@ -890,9 +918,13 @@ def test_print_01_body_passes_and_fails_on_invented_ks11_closes():
     # the printed precision's edge: a previous close of 5,585.01 gives -5.96490% (inside +/- 0.005 pp), 5,585.05 gives
     # -5.96557% (outside)
     assert abs(run(text((5585.01, PRINT01_CLOSE))) - PRINT01_RETURN_PCT) <= PRINT01_PRINTED_PCT
+    # owner ruling 4 of 2026-11-11 (an exception to spec L5735): a float32 artefact of the vendor file is 5,251.87 at
+    # two decimals; a cent away on either side is not
+    assert abs(run(text((5584.71, 5251.8701171875))) - PRINT01_RETURN_PCT) <= PRINT01_PRINTED_PCT
     for t, needle in ((text((5584.71, 5131.12)), "close 5131.12 != 5251.87 (spec L5631"),
                       (text((5584.71, 5251.88)), "close 5251.88 != 5251.87 (spec L5631"),
-                      (text((5584.71, 5251.8701171875)), "close 5251.8701171875 != 5251.87 (spec L5631"),
+                      (text((5584.71, 5251.86)), "close 5251.86 != 5251.87 (spec L5631; a Yahoo vendor price, compared "
+                                                 "at two decimals: owner ruling 4 of 2026-11-11, an exception to L5735"),
                       (text((5560.0, PRINT01_CLOSE)), "return -5.5419% != -5.96% (spec L5631)"),
                       (text((5585.05, PRINT01_CLOSE)), "return -5.9656% != -5.96% (spec L5631)"),
                       (text((5584.71, PRINT01_CLOSE), drop=(date(2026, 3, 6),)),
