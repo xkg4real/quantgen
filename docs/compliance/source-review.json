@@ -293,7 +293,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "18f8d0b646908418abf75dfb0386e3e82f5d1fdc93b1d3bd59168429518e1d5a",
+    "docs/compliance/FACTS.md": "cb4dfa436fe5ee270a4ab76a7b162d55dd1e8511b59547e4863b876b8170f5a7",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -382,9 +382,9 @@
     "main.py": "2f95c001a369306d5737aa456d918a4b8a62147e1b1421d6b80933ba888f7553",
     "mindmap/QUANTGEN Macro Neural Link.html": "4dbf731539d418aa67553bd5fd393dfc55550fac737ef89ca4c18c813f7c76c5",
     "pyproject.toml": "7c46a0addc7d5220351b73c8ad54d672dbbd6de80ebf1a053a42293a717c52d5",
-    "quantgen_desktop/__init__.py": "b4377c781313c4c405cb69f993f46adc31debeac8d59a618e28024a31984f295",
+    "quantgen_desktop/__init__.py": "28ea7e1a03772bb3976a842601ac5b16e66387cae8b2ddd47bda160ed8f20759",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "a399ac15ac09bc5065bf11fd52b27a0bac78e19d526addf2154ccbe054b8209d",
+    "quantgen_desktop/app.py": "33a4aae47896f1012f2718a19a58f560745727a87b8e588220e05174a46a3590",
     "quantgen_desktop/bonds.py": "ce7a4368103fc4842e095a20d1c261dbe5961a00cee1d4b5bfe183442ccee7b6",
     "quantgen_desktop/bonds_portfolio_narrative.py": "5514b58f6025261d2b1feab0b112a74fae5a5cf4a8b654eb6c8204c7513bbfcf",
     "quantgen_desktop/category_picker.py": "7061468ea7104e6a2a3ff6989dd61373f653fc9acfb8ec587e3c077b6ed9e18d",
@@ -490,7 +490,7 @@
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
     "tests/desktop_home_live_acceptance.py": "a752117e0d0e40fd58d0bf8ae0010aa87397d6b82d177676b7601db9e7318533",
     "tests/desktop_home_markets_home_acceptance.py": "6f14c47fbc5faf01d3a80f81d9e210e7cc75b9e19f74a0771ff2fbcac89c7eef",
-    "tests/desktop_home_markets_markets_acceptance.py": "3566fa2e6bb9b06b5e76d2a9d85dbc11b36c7b180ac480e08dd74b4bd8140e5f",
+    "tests/desktop_home_markets_markets_acceptance.py": "920fa02b404f9fd0e1fce0ccebf2c5d37e978951133093af5219a8501e637014",
     "tests/desktop_home_markets_shell_acceptance.py": "25a5da36e3275b12f215a153a430b982cdd995cf5eca71667cbf7a1bfd1c1504",
     "tests/desktop_indicator_guide_acceptance.py": "9aa60d4d760fb09ef3e6c4cb4d48cbef972bffeb015d27b30a52658238c50438",
     "tests/desktop_language_acceptance.py": "9f41b4fddc57ccf1013c6551f72494bc09608d751aa7fe0b395943d4d8c2d47f",
@@ -507,7 +507,7 @@
     "tests/desktop_market_tabs_acceptance.py": "1215aafb30f4a6f4e0025f6da8c518078b39cb6485f8f35c99f2caa6094e1570",
     "tests/desktop_markets_watchlist_acceptance.py": "39c54d208096f85635080c59c7b8db71fcbe29721cb081256dc70982b01a38d0",
     "tests/desktop_operation_fixes_acceptance.py": "e6c15c500e3c59d2fb25a8023cee574965fac873d1d3f963f88a7f8f332596f1",
-    "tests/desktop_owner_ui_charts_acceptance.py": "3d285922edb25d1477668a16d99fc4d69d4826255cfcae4641b092c5c08333ff",
+    "tests/desktop_owner_ui_charts_acceptance.py": "071e406a16d7c0fe71c41ef463f85ace501d523cb87cc54676dad7455063b06e",
     "tests/desktop_owner_ui_ficc_acceptance.py": "f1e00489b0be49085595ad7b7f8b58285c0e86567d261c00ca9ec383b8439faa",
     "tests/desktop_owner_ui_integration_acceptance.py": "8adf9b8e656cc60f4ba5d54fc60ef51ecca531962a59c4e58472bf583d458573",
     "tests/desktop_owner_ui_market_acceptance.py": "5696f94a1b60d38d8b8004a59fec4f01e7277da2274123f4d34fc9bced7f8f99",
@@ -724,163 +724,163 @@
   "reviews": {
     "1": {
       "document_sha256": "bacab46dd51ed03b4d3be4b9bc46a7733cbed73ba42653ce9695e5ca0e10b4b4",
-      "source_digest": "36d85372446c10d6dcf99cdc51da2d21966e558cc86bd07b460908bf92f7d9c3",
+      "source_digest": "7a71944fc4fd1e6ca755b346114966d694f268aeba13734a712f33f177910042",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.659261+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.140679+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "36d85372446c10d6dcf99cdc51da2d21966e558cc86bd07b460908bf92f7d9c3",
+      "source_digest": "7a71944fc4fd1e6ca755b346114966d694f268aeba13734a712f33f177910042",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.661355+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.142787+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "4bb837eefd795386163314a8a25e3ef61861f4e84a97aa157c48c1a4ec229264",
+      "source_digest": "0b67cb03093bfedee8dd1a4a61b834fbc08270e93aa0c4cde45d6b3d64489661",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.663117+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.144826+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "4": {
       "document_sha256": "f63c98563dc663611297f52c74457ea7ad2f052d918c45e505dd667652074c9b",
-      "source_digest": "4b9ca41a20991e347353d6f6defea91bf917c3c1cf621ae5eab1898d403420da",
+      "source_digest": "fc0bf2a850d537cfb2dc86135d3edeaf98fe9a5bfc420cb47f346de7dfbab092",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.664769+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.146488+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "99ea97a16e43cc4abb761d35aa416df3f32639ad9d7ec3bc6741712041d2005c",
+      "source_digest": "31c250ecc4baa596911bca0fb1b739b25b127e70e1e80f890bacad6ba8204858",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.666311+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.148179+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "6": {
       "document_sha256": "60bb586d0bce26480feecc06f182c6ceaaea1700f1be0e95bac820f18ad484a8",
-      "source_digest": "1aaadd692c8e248e31f46a7e04108d8c32a187adb90e21c1367417980a252f63",
+      "source_digest": "ac2f3f5538510f9e196b4e8a72d43c501cdd7c8ab6ab6584c92800d0fb1f9905",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.667987+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.149839+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "7": {
       "document_sha256": "1eb6da7d87830c9abde24303464cd80f65f6a1bf5b66bc5b53ec81b2c2e4b1ed",
-      "source_digest": "36d85372446c10d6dcf99cdc51da2d21966e558cc86bd07b460908bf92f7d9c3",
+      "source_digest": "7a71944fc4fd1e6ca755b346114966d694f268aeba13734a712f33f177910042",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.669618+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.151357+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "8": {
       "document_sha256": "e50e210234645ca8e2561662dae3a0afc5ab445e68fe523d320c3889c7e0d8a7",
-      "source_digest": "1aaadd692c8e248e31f46a7e04108d8c32a187adb90e21c1367417980a252f63",
+      "source_digest": "ac2f3f5538510f9e196b4e8a72d43c501cdd7c8ab6ab6584c92800d0fb1f9905",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.671207+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.152978+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "9": {
       "document_sha256": "ebdb3469ea72e45341719aae0805b46a526374d394dbdb0e1875fe1df2c01757",
-      "source_digest": "3b06f0446fadf646e58460f021837515386fd78c7cb757ddef5f7231d17d3468",
+      "source_digest": "7abd642dc2707cff85f4d7304407458db20dec8d12b02bb496f1a22bf02a01e3",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.672887+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.154568+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "10": {
       "document_sha256": "13ab9559eb6b5a0bf84c1575acd19d94cdb0b69273474fd5e686e05df5930fc3",
-      "source_digest": "1448288236ddcbca6594a2a43aacf0e07d1368bd7d73bc5081b50e72355bcf49",
+      "source_digest": "9d891c0696e0cd7445344a4025921c7af5de0eb06adc2c18e770c7e74bdd0d36",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.674439+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.156179+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "d381f911d652c1d5c2d35713347791d4f9b095c51bff4ad294536d36336f60a8",
+      "source_digest": "54a05c52b7f7c1c805b5d3c556b9a5a4e9c7d56725d14c35e51c342207c9d772",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.676081+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.157730+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "12": {
       "document_sha256": "55b14bd417df61e59c2e06eb37f397dcbe8457ec571342c27e6b0d3559d507dc",
-      "source_digest": "10486f5adfb7b903490fa8b26ac816a7c5d42c5a88d8a4e544793ed0aa6301e1",
+      "source_digest": "41bca80781582d2b06475b334c3f96bdf74bcda82ad25dab0309e3a990fe558e",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.677758+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.159355+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "13": {
       "document_sha256": "cbb62a2360f579617977c7d4bb0105eecfec4b091ef98d554d14f8f675508ac0",
-      "source_digest": "3b06f0446fadf646e58460f021837515386fd78c7cb757ddef5f7231d17d3468",
+      "source_digest": "7abd642dc2707cff85f4d7304407458db20dec8d12b02bb496f1a22bf02a01e3",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.679462+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.160914+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "14": {
-      "document_sha256": "afe03ddc02088367ca6e918721184f91ee895405c555f7b65a7633aec2cbb686",
-      "source_digest": "3b06f0446fadf646e58460f021837515386fd78c7cb757ddef5f7231d17d3468",
+      "document_sha256": "5098fa39312b4ce88a73080e61ad70473c9e736a2b7e93150c74e87fbb68d50c",
+      "source_digest": "7abd642dc2707cff85f4d7304407458db20dec8d12b02bb496f1a22bf02a01e3",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.681039+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.162521+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "15": {
       "document_sha256": "6b12ffaeaed6ebd8b925ea4ff65ae5e6b0031dd9566739474f672cda1b7d0055",
-      "source_digest": "3b06f0446fadf646e58460f021837515386fd78c7cb757ddef5f7231d17d3468",
+      "source_digest": "7abd642dc2707cff85f4d7304407458db20dec8d12b02bb496f1a22bf02a01e3",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.682641+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.164189+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "373aeb145e8855e3df6b7ac4574995f5d0adb7367f201a6b9e77719f46f99188",
+      "source_digest": "250a444c67440c4527be51f6e86a9dc144899bcee2349d08d9d0ac10c1ecf88f",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.684221+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.165763+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "1aaadd692c8e248e31f46a7e04108d8c32a187adb90e21c1367417980a252f63",
+      "source_digest": "ac2f3f5538510f9e196b4e8a72d43c501cdd7c8ab6ab6584c92800d0fb1f9905",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.685789+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.167250+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "36d85372446c10d6dcf99cdc51da2d21966e558cc86bd07b460908bf92f7d9c3",
+      "source_digest": "7a71944fc4fd1e6ca755b346114966d694f268aeba13734a712f33f177910042",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.687489+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.168813+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "19": {
       "document_sha256": "983c0b85fb10b1018222236a37b839667a1103472796b514a9419651b8af2a37",
-      "source_digest": "8eebc8bd3fcc8ea6fedebdde21ceae5b51b355f8638a6c08eac6d29b2070b282",
+      "source_digest": "ccf8d0322141b594319a3441710f503684e07dd9b835e4f953de9091b8d7c95c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.689088+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.170369+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     },
     "20": {
       "document_sha256": "b6019dd07ee24fdf3a53791a3e0adad1472bb14cbe843a38553f209b669d1551",
-      "source_digest": "36d85372446c10d6dcf99cdc51da2d21966e558cc86bd07b460908bf92f7d9c3",
+      "source_digest": "7a71944fc4fd1e6ca755b346114966d694f268aeba13734a712f33f177910042",
       "reviewed_by": "Claude integration review",
-      "review_note": "Main b9dea9c (PR #110) merged into the UI branch. UI-D7 to UI-D10 (2026-11-11/12): research Home, Markets per market (국내 주식/미국 주식/코인) with criteria and search, stock detail screen (full chart, no overlay, 분/일/주/월/년, short guide cards, 27 studies), US market cap via owner-approved KIS price-detail, polled-state wording and checked domestic cap; docs 01,04,06-10,12-15,19,20 and FACTS updated after independent checks",
-      "reviewed_at": "2026-11-12T01:31:43.690676+00:00",
-      "source_commit": "4e743e37618ae8bf54457b1a4c85b48a65fa18c8"
+      "review_note": "Native app forced to Qt Fusion on every platform (use_fusion_style) after PR 109 Windows CI showed windows11-style layout drift; docs 14 and FACTS (anchor fusion-style-2026-11-12) note it; two Windows-fragile test checks made width-independent",
+      "reviewed_at": "2026-11-12T02:14:57.171966+00:00",
+      "source_commit": "a2e4daf934305e69ad4c46e3755cf6fe66f5ce1b"
     }
   }
 }
