@@ -135,9 +135,9 @@
     "core/market/market_cap.py": "22c744ceb761efee53519f3967230aa48bb9e4438ab80c11ffc461eac3c39fd5",
     "core/market/models.py": "84e3032c81ce962d5af98f1a33bce7825df353bd4b29be554b044349798aa758",
     "core/market/presentation.py": "394b47b9b4ecf4f927795d5cfced03b9d7a852537c09dec7580d10f7876f6295",
-    "core/market/rankings.py": "c1f2f317a7f597fa38b0050b282170fcec3a7523a855ccd6bb0a89cbba2a9d47",
+    "core/market/rankings.py": "af909e1712366b3a01d952e95a619861ef8312baa02937f41ba50f665a6a69dd",
     "core/market/routing.py": "184b7fe14b8fcdd771868a31190e94e379bc3ad8fd9de02551874cbc5f23a42b",
-    "core/market/screen.py": "97d12d9230c08c74585b7089a814027bb64806c7a2c9cdefcfd2a8bd18776f7c",
+    "core/market/screen.py": "1f12ba72889f2083400ca6e1370eb781e914591f42389bc15cbd345e90a7a75a",
     "core/market/symbols.py": "75f77c78fa240abb9096b8e8419e11b782801375e2b6b7783306f7d7e7d498a3",
     "core/markets.py": "0477d1af9f064f69e2619f22b2672af45dd88cba346d83704e9ed3e9c7dcf088",
     "core/numfmt.py": "0bab47658c7aac8d07915437386deb8aec49596f0482737bc68f383389a8df45",
@@ -384,7 +384,7 @@
     "pyproject.toml": "7c46a0addc7d5220351b73c8ad54d672dbbd6de80ebf1a053a42293a717c52d5",
     "quantgen_desktop/__init__.py": "1ec1396b13e4b6caae0b8dfcf6201af71ad9756428c5cbcaab9706083691e060",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "6af56e64636b770b3dca1d55ad650f8e6b56706df0aabf3e5488bf5ca843a1b7",
+    "quantgen_desktop/app.py": "62712eb6219e47802fee5cbe35931f01b9554c5e0b99b41e71d39a7febbf41b2",
     "quantgen_desktop/bonds.py": "ce7a4368103fc4842e095a20d1c261dbe5961a00cee1d4b5bfe183442ccee7b6",
     "quantgen_desktop/bonds_portfolio_narrative.py": "5514b58f6025261d2b1feab0b112a74fae5a5cf4a8b654eb6c8204c7513bbfcf",
     "quantgen_desktop/category_picker.py": "7061468ea7104e6a2a3ff6989dd61373f653fc9acfb8ec587e3c077b6ed9e18d",
@@ -403,32 +403,33 @@
     "quantgen_desktop/indicator_guide.py": "ce6f8c970fcd2dea89e318e68785bacdf8367c0152ac800d5e38623f618a5559",
     "quantgen_desktop/indicator_picker.py": "72bab730f86ad77be79a07ea00fd9728ed5bf8c5833c027a9dfe5b5178e7dc3d",
     "quantgen_desktop/jobs.py": "2a0764c9c4f767a2c93d49b0fe929a1ad655d2195acc0c9a371f6229a1aa5ac1",
-    "quantgen_desktop/localization.py": "3063adcf982e03ac6613baed9509f40b75a041d3f8ab72caf96bdca8988cd07f",
+    "quantgen_desktop/localization.py": "ebb7f3310f7aa5be9b79c0a639b1df5aa4edacc129b754dea902845626ec142d",
     "quantgen_desktop/macro.py": "87bc22e6d347999f796828dd82e95b13ce6d4df2c143b3d4d802548a8a75a224",
     "quantgen_desktop/macro_narrative_language.py": "cd19c8802aca9e9539f1955fe5a43b4a204e41bfe2afc05c8556517e7bafa929",
     "quantgen_desktop/macro_records.py": "bcb53ba2e952f70bc8c7dd8bce96a1155329f4be61231bebe020524db21b11c3",
     "quantgen_desktop/market_chart.py": "a95a9a26d4b89b865bfd42799216f600a8ed9d16392cf335f9010b452bca66bd",
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
     "quantgen_desktop/market_narrative_language.py": "8bcb8f74ca7208370f5a4895cb4f643574d86d650c7f3ceb04a3a008044618aa",
-    "quantgen_desktop/market_rankings.py": "41423dd0627d7508208af9c484a1342e84ce93824a337391d8de7fa466095176",
-    "quantgen_desktop/market_summary.py": "8ea24133b42f112a4c7225d171e5eb40300e11ff2d12f650e3378692ac306796",
+    "quantgen_desktop/market_rankings.py": "f4c0013775d9a6800e776148fbfd9d2fd3b1cc6b09ef3d8faf25fd07b0b28739",
+    "quantgen_desktop/market_summary.py": "a49beeb99913312619f06f5ebbb1abfc42dcba63e6e508e7a1f5fe5a6bb682ce",
     "quantgen_desktop/market_tools.py": "2bd38da5339071abb860ddc7f93019806e78490f7229b9b107b0937843c1e71e",
-    "quantgen_desktop/markets_view.py": "1600e315f0315b911cc4141da4220ef84831ac390cde0a6f39fa2fcca8f57c23",
+    "quantgen_desktop/markets_view.py": "3bb73921f5ca9a58a88c534d3382c8e30213ec14de848c59a420e86b488e2da2",
     "quantgen_desktop/model_narrative_language.py": "0416069d60f16d181998e7beeab004236e5a783803f1c2ab8b8f7f9d84f9997a",
     "quantgen_desktop/narrative_view.py": "da288f16826b720506e8465dfd6df414bed1635dd4eb48e13c5d2d94bc5e93a6",
     "quantgen_desktop/owner_ui_language/__init__.py": "08d0feae8e21f50e8dac421a345475092a627a5cd2ce5653c53166c8af4ff2ae",
     "quantgen_desktop/owner_ui_language/charts.py": "664545f93d478e54d25e88ac38f5840e5512ec1ffd33f39084cfdbe4e4627df3",
-    "quantgen_desktop/owner_ui_language/common.py": "cb2c9cf863357a164a8d50bff9fdaf29dea43e8c634616e36b8df017a62f911a",
+    "quantgen_desktop/owner_ui_language/common.py": "dd4ef1a7bda2ba84e854dcb6531b50afd623717b5a03e5f528d55ffb71709717",
     "quantgen_desktop/owner_ui_language/ficc.py": "c102adfd7d21bc3c0b29e5eebbc3a98c44887c5566f2944eaf208cefa94e4906",
     "quantgen_desktop/owner_ui_language/home.py": "f267056df7a28e156a007532d16ea9c3cad7d00cea6b499e5de9271e4d52fe01",
     "quantgen_desktop/owner_ui_language/macro.py": "28193ab60c6759f2737a75575c6930baafadbfd211a43d9b3fe5db1df7e60c5d",
-    "quantgen_desktop/owner_ui_language/market.py": "9973271ac07e6a9bb5cd4f77b7f81d354a92fe593fc067927d3e609ac29ac905",
+    "quantgen_desktop/owner_ui_language/market.py": "03a2100865df00363a3ce29290bac1e361e267970cb97b87c98928c5e5aaa5c4",
     "quantgen_desktop/owner_ui_language/risk.py": "e9cc13e7cafc4d3ab390212f21042d2f43b8937222f1319524396d8609811a4f",
     "quantgen_desktop/owner_ui_language/stock.py": "d62047bf82a0f0178a73840ffc8fc57700c9e91d0ab6fb42f9d74a22850b5796",
     "quantgen_desktop/owner_ui_language/strategy.py": "a6a0d517185ef4a143baefaf6fffadf7902d3dc85b1655aa27da5b1183fc0b15",
     "quantgen_desktop/paper.py": "0aa317394730debf1b6438a820e87f16d0a6107518e2b1b094b483c69effd446",
     "quantgen_desktop/portfolio.py": "cd4af7d5976f87a35a406de70ff6fac6280ba60719b3bb23638bd155a7d34064",
     "quantgen_desktop/qscore.py": "a495a5412195c98eddc5c3cca4ae0a7665e284a9803aceaa82e9dd46b881842f",
+    "quantgen_desktop/rail_menu.py": "b729ddc9f565a901156d4c5272dd326a8bdb8dd91cc75d6f89237d4af400fb5f",
     "quantgen_desktop/rates.py": "cf5fca9b27ec7ae361a354ca3686ea1f192628ccd9087ce905607248d42b7072",
     "quantgen_desktop/rates_narrative.py": "02c91da4c06b650bf1b0da6493bc75cd387723a807eb67dae89f29bab7f991ae",
     "quantgen_desktop/reading_language.py": "ee8a55044482598fbcece2dfde3fca73e9b4ff9b2405db13c16dc2c0bc911adf",
@@ -436,7 +437,7 @@
     "quantgen_desktop/report_actions.py": "fbf48c2350434f8c4e953fd1efd99ed666f60e74e6da5154bb529a43ec50115d",
     "quantgen_desktop/result_layout.py": "078bc46d781853cd871d691160fa030be9c5f46b50f207c229085343f37e84c6",
     "quantgen_desktop/risk_display.py": "3b923adebc9629da78b8ef278c22044119f40d10387a954cd1e9c839721a2c87",
-    "quantgen_desktop/shell_rail.py": "7d7df1586b9663e346835a1064d9f82a5521d79eb89edd240cb1202b6500219f",
+    "quantgen_desktop/shell_rail.py": "b5e2fb6f70d988091d3683d99095c73055ca8099762b3caf898a9b50100a72d5",
     "quantgen_desktop/signals.py": "6e82099c4857046487d3878761083d89819ea28705dd817bc2391f1ed713678e",
     "quantgen_desktop/source_notes.py": "05820a66919f8840aeacf81dfcf96bacd8fa75ecd355f64a1090c2d9ec59a14e",
     "quantgen_desktop/status_language.py": "e23a11eb835b155bfc88685ea0f521e664b8b7fc080ce3f600042b1002427386",
@@ -449,7 +450,7 @@
     "quantgen_desktop/table_layout.py": "88fe45b9e8df59328bee520d1147f4189d4e4fffc1e8cf488340bb8eeb744eeb",
     "quantgen_desktop/tools.py": "42bfa047f6c36960a98988fe6a343bc6423aec5db8fd0c20effa37c11d8b6730",
     "quantgen_desktop/translations.py": "2b94a001ff0d925a570ce1efff3d73f8a08e1de212343f23973e6ba753e6f943",
-    "quantgen_desktop/typography.py": "f46973fc293a648f7affa11f26d65e4c5590bf33e9316b7dce6ae1d92407b2d4",
+    "quantgen_desktop/typography.py": "42a0199fe4d2807eced8a22aa05605f9aefe4ba116adfcbade47c458dbfde0a2",
     "quantgen_desktop/watchlist.py": "5e28734d3c7c28b349d7a7f5b3da7efe740d09adcf99bad61dcde701a7d6000b",
     "quantgen_desktop/watchlist_live.py": "6d7b9dca2f18adf8a7b01a09ca395a6b776835f82d863669d00f90d426994597",
     "quantgen_desktop/wheel_guard.py": "44bfee9b20b358b794cfebdd71f0760b28b99bcd39a45cc36fa450a8d2ce68f6",
@@ -490,8 +491,8 @@
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
     "tests/desktop_home_live_acceptance.py": "a752117e0d0e40fd58d0bf8ae0010aa87397d6b82d177676b7601db9e7318533",
     "tests/desktop_home_markets_home_acceptance.py": "6f14c47fbc5faf01d3a80f81d9e210e7cc75b9e19f74a0771ff2fbcac89c7eef",
-    "tests/desktop_home_markets_markets_acceptance.py": "03eea9002b3113ef070e2a35ea66fc2cb32affcf7f3b017afab18a0357cf6f27",
-    "tests/desktop_home_markets_shell_acceptance.py": "25a5da36e3275b12f215a153a430b982cdd995cf5eca71667cbf7a1bfd1c1504",
+    "tests/desktop_home_markets_markets_acceptance.py": "ffabb45368565c603ddeb54a39259c0a5a9e95b4f08eb507e04c97b51ad53dca",
+    "tests/desktop_home_markets_shell_acceptance.py": "66424a14521f53131fcb3789da419be29e4296c01ae41fdfd1fcdb185b038f63",
     "tests/desktop_indicator_guide_acceptance.py": "9aa60d4d760fb09ef3e6c4cb4d48cbef972bffeb015d27b30a52658238c50438",
     "tests/desktop_language_acceptance.py": "9f41b4fddc57ccf1013c6551f72494bc09608d751aa7fe0b395943d4d8c2d47f",
     "tests/desktop_letf_ai_acceptance.py": "2f896568aabeb52181681d11f3cc7c27d0664c60765770055407a4eaff2c9be0",
@@ -597,7 +598,7 @@
     "tests/market_chart_presentation_acceptance.py": "6fe863f83008534a669d4c14baa2f4e06d6ca1eb31e4bf30d21d5e89aa78dbeb",
     "tests/market_core_acceptance.py": "da7c6f4df956acccb02e469ff6e632a7dad264f43f1f68421b76ef8e7a5da89d",
     "tests/market_directory_acceptance.py": "9660a2d9042bb69c17d20d59fcc0dd5a844885fa9919affdf3d2f0b62f6f590e",
-    "tests/market_rankings_acceptance.py": "8419f2aede4fa1e081ffc8a27613d6ae7856f0bba96f06d04b187efca3205253",
+    "tests/market_rankings_acceptance.py": "7f8524a7230b8b6a85948b84fca85f571b405d720c06a014705aa37137165419",
     "tests/market_received_bars_acceptance.py": "d813ac382849703a0d06cdf23fb2ace46d2319187956150dc86b750b79890f92",
     "tests/market_routing_acceptance.py": "76cefd5084a08c8aec8d108323f2147b39b05ca20febc81b0c687d9a99614301",
     "tests/market_symbols_acceptance.py": "dac7d8af68db34e0ecf7ce451fddc288618eae24988c080d8784b5e480526d78",
@@ -724,163 +725,163 @@
   "reviews": {
     "1": {
       "document_sha256": "bacab46dd51ed03b4d3be4b9bc46a7733cbed73ba42653ce9695e5ca0e10b4b4",
-      "source_digest": "664a6f7c511092dd87e2efca24e3b89efd6bbdb3eb445f1101a32abbc3ea3e3b",
+      "source_digest": "8630e7a3cbd40957c97af0a7b328472f4b220ae82a4cae7f09111aa6be5c12b1",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.718496+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.238532+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "664a6f7c511092dd87e2efca24e3b89efd6bbdb3eb445f1101a32abbc3ea3e3b",
+      "source_digest": "8630e7a3cbd40957c97af0a7b328472f4b220ae82a4cae7f09111aa6be5c12b1",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.720951+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.241521+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "9dcb596e7e096f86ad146a6aa2289983b43374b7d979049856a2c2fcdc78c527",
+      "source_digest": "c468833c736992cc7545174409b089d214c05c007b33d68c6d49c36a53de62c5",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.722836+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.243481+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "4": {
       "document_sha256": "f63c98563dc663611297f52c74457ea7ad2f052d918c45e505dd667652074c9b",
-      "source_digest": "a8a814710ef8932496e967eea55add5886c4dc3ce786e00f1761602b5ab87fd9",
+      "source_digest": "17d089a85f32b45d57297d3139903f23bec13b43fb2b783918a0478c9502a031",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.724780+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.245380+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "52a15d37a8f4278ad91b284b270f90ed503454aef6d5720dc374b98b3f8fb15b",
+      "source_digest": "5ab1daf66834e4be83992a0eee0b8bb759f385a019e01aaa1433a4a452155937",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.726500+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.247565+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "6": {
       "document_sha256": "60bb586d0bce26480feecc06f182c6ceaaea1700f1be0e95bac820f18ad484a8",
-      "source_digest": "19494d34ceacf7c7169f27034110ea14aadd71d4ec0b9c7d5d6538034545000c",
+      "source_digest": "f8e08eea25e15457a8a75c7b3e291cd50457d37d06b7a57dc23628fdc5c5bb9c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.728856+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.249355+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "7": {
       "document_sha256": "1eb6da7d87830c9abde24303464cd80f65f6a1bf5b66bc5b53ec81b2c2e4b1ed",
-      "source_digest": "664a6f7c511092dd87e2efca24e3b89efd6bbdb3eb445f1101a32abbc3ea3e3b",
+      "source_digest": "8630e7a3cbd40957c97af0a7b328472f4b220ae82a4cae7f09111aa6be5c12b1",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.730644+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.251326+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "8": {
       "document_sha256": "e50e210234645ca8e2561662dae3a0afc5ab445e68fe523d320c3889c7e0d8a7",
-      "source_digest": "19494d34ceacf7c7169f27034110ea14aadd71d4ec0b9c7d5d6538034545000c",
+      "source_digest": "f8e08eea25e15457a8a75c7b3e291cd50457d37d06b7a57dc23628fdc5c5bb9c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.732414+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.253111+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "9": {
       "document_sha256": "ebdb3469ea72e45341719aae0805b46a526374d394dbdb0e1875fe1df2c01757",
-      "source_digest": "52066ac8d1420426cdf9dc5b4341d2ca3420419ccacdd598ddace3bbd8067a20",
+      "source_digest": "27d9b18cbab09dcb852ae59b34af067e341eb91a50c60a9e94df13ab0981b069",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.734616+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.254792+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "10": {
       "document_sha256": "13ab9559eb6b5a0bf84c1575acd19d94cdb0b69273474fd5e686e05df5930fc3",
-      "source_digest": "163ffccd83bf5e9bb186ba16ab8e6c9495ff74e03a28610ab3aaff70a1aa3b84",
+      "source_digest": "312cb337b86536b356e15c4a9be134725a57b739d576611a2f8000a4387ffb5b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.736448+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.256610+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "629cd2f88aa40a92e725ca2a21a2176e18165a046e6534d485e4ef800fec8ee8",
+      "source_digest": "ae49e70cd60c9f8f696ac909a085658d1d95a156d8d5ab1fbddf5acf62fc0602",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.738126+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.258737+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "12": {
       "document_sha256": "55b14bd417df61e59c2e06eb37f397dcbe8457ec571342c27e6b0d3559d507dc",
-      "source_digest": "5a2b2b7e3f6a45766df9f80b65428e7485acf837a49a9cfd748fe63ab651bb98",
+      "source_digest": "0e6080a52cd17a57f3f13a1be82ebadbfdbcdb056bbfab3e43e2e9620e91d4a1",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.739807+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.260674+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "13": {
       "document_sha256": "cbb62a2360f579617977c7d4bb0105eecfec4b091ef98d554d14f8f675508ac0",
-      "source_digest": "52066ac8d1420426cdf9dc5b4341d2ca3420419ccacdd598ddace3bbd8067a20",
+      "source_digest": "27d9b18cbab09dcb852ae59b34af067e341eb91a50c60a9e94df13ab0981b069",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.741760+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.262466+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "14": {
       "document_sha256": "5098fa39312b4ce88a73080e61ad70473c9e736a2b7e93150c74e87fbb68d50c",
-      "source_digest": "52066ac8d1420426cdf9dc5b4341d2ca3420419ccacdd598ddace3bbd8067a20",
+      "source_digest": "27d9b18cbab09dcb852ae59b34af067e341eb91a50c60a9e94df13ab0981b069",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.744031+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.264720+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "15": {
       "document_sha256": "0ab1f0563379f4792c0d9146c9bdb4267f6af11ed489173fa144a2b6134884d5",
-      "source_digest": "52066ac8d1420426cdf9dc5b4341d2ca3420419ccacdd598ddace3bbd8067a20",
+      "source_digest": "27d9b18cbab09dcb852ae59b34af067e341eb91a50c60a9e94df13ab0981b069",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.745734+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.266438+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "f42ea9a45516512d29638a7477a9acd0f30adc9b7566aa0748c9cf607fc07ae9",
+      "source_digest": "b7a3f91ff5c0a1702008aeee9acf413d4b3e14fc22760ee243d6d8b73ce32069",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.747497+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.269001+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "19494d34ceacf7c7169f27034110ea14aadd71d4ec0b9c7d5d6538034545000c",
+      "source_digest": "f8e08eea25e15457a8a75c7b3e291cd50457d37d06b7a57dc23628fdc5c5bb9c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.749420+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.270946+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "664a6f7c511092dd87e2efca24e3b89efd6bbdb3eb445f1101a32abbc3ea3e3b",
+      "source_digest": "8630e7a3cbd40957c97af0a7b328472f4b220ae82a4cae7f09111aa6be5c12b1",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.751124+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.273166+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "19": {
       "document_sha256": "983c0b85fb10b1018222236a37b839667a1103472796b514a9419651b8af2a37",
-      "source_digest": "87363bf3a59ab560ee13b787361606b640ef78977defba15aba6c7b217bee6ef",
+      "source_digest": "9c4d8e1d68a17e93d1534217732a8a54c4ed055ffdbbcc5be12423299cd2f2da",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.753053+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.275514+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     },
     "20": {
       "document_sha256": "b6019dd07ee24fdf3a53791a3e0adad1472bb14cbe843a38553f209b669d1551",
-      "source_digest": "664a6f7c511092dd87e2efca24e3b89efd6bbdb3eb445f1101a32abbc3ea3e3b",
+      "source_digest": "8630e7a3cbd40957c97af0a7b328472f4b220ae82a4cae7f09111aa6be5c12b1",
       "reviewed_by": "Claude integration review",
-      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
-      "reviewed_at": "2026-11-12T07:51:18.755416+00:00",
-      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
+      "review_note": "UI-D11 rail categories with hover flyouts, ETF lists from existing KIS ranking paths, 크립토 wording; no new hosts or KIS paths",
+      "reviewed_at": "2026-11-12T07:51:29.277188+00:00",
+      "source_commit": "840ae95af3a07b5e432c29f66337e22c5d3e0fff"
     }
   }
 }
