@@ -147,11 +147,12 @@ The owner's steps for the pilots, the full run and the merge are in the sibling 
 `docs/product/PILOT_OWNER_RUN_2026-11-11.md` (`sheet`, committed with this file). Its section I lists what the
 owner pastes: for each pilot the two A6 lines, the five A7 lines, the last four console lines from `parity:` to
 `STATUS`, every `reason:` line and the exit code; for the full run its last line and the three E4 lines; for the
-last sitting the F6 line, the three F8 lines, the F15 line (the owner's results commit on the merged branch) and
-the F20 line with three commit ids. Its section K lists the ten points it put to the owner, now decided, and what
-is still open; they overlap with section 5 here. Its steps B2 and D2 are the two pilot commands, E2 the full run,
-F6 the full run of the merged branch, F19 the merge and F21 the push to main. Its section G holds the one
-pre-approved re-run of decision 4.
+last sitting first the F1a result (Developer Mode "이미 켜져 있었음", "켰음" or "켤 수 없었음", answer X5), then
+the F6 line, the three F8 lines, the F15 line (the owner's results commit on the merged branch) and the F20 line
+with three commit ids. Its section K lists the ten points it put to the owner, now decided, and what is still open;
+they overlap with section 5 here. Its steps B2 and D2 are the two pilot commands, E2 the full run, F6 the full run
+of the merged branch, F19 the merge and F21 the push to main. Its section G holds decision 4's pre-approved re-run
+(one per pilot, answer X2).
 
 ### 1.1 Provider parity (5-2): the pasted lines and the three summaries
 
@@ -1052,13 +1053,19 @@ One or more FAIL:
 > 원인을 확인해 보고하겠습니다. 연구 브랜치의 코드는 제가 고칠 수 없는 범위이므로, 고쳐야 하면 방법을 따로 여쭙겠습니다.
 
 `nautilus/test_l2_05b_input_linked_to_env_refused` NOT_RUN, everything else as expected (answer X5). Use the first
-sentence with the `nautilus` count as 56 passed and 1 not run, then add:
+sentence, but replace its second sentence ("nautilus 묶음은 `<57>`개가 모두 통과했고, 동결 연구 보호
+검사(frozen_guard) (a), (b), (d)도 통과했습니다.") with this one, word for word:
+
+> nautilus 묶음은 57개 가운데 56개가 통과했고 1개가 미실행입니다. 동결 연구 보호 검사(frozen_guard) (a), (b), (d)는
+> 통과했습니다.
+
+Then add:
 
 > nautilus 묶음에서 한 건(L2-5b, `test_l2_05b_input_linked_to_env_refused`)이 미실행이었습니다. 이 PC에서 Windows가
 > 이 검사의 링크 만들기를 막았다는 뜻이고, 개발자 모드가 꺼져 있으면 이렇게 됩니다. E에서는 허용된 한 건이라 이번
 > 커밋은 그대로 씁니다. 다만 합친 상태의 검사(F)는 nautilus 57행이 모두 통과해야 해서, 이대로면 F8에서 멈춥니다.
-> 2026-11-12에 정하신 대로(X5) F 전에 Windows 개발자 모드를 켜 주십시오. 켜는 곳과 확인하는 법은 실행표 F1a에
-> 있습니다. 켜도 저장소의 파일은 바뀌지 않습니다.
+> 2026-11-12에 정하신 대로(X5) Windows 개발자 모드를 켜 주십시오. F 전에 미리 켜 두셔도 되고, F를 시작해 F1a에서
+> 켜셔도 됩니다. 켜는 곳과 확인하는 법은 실행표 F1a에 있습니다. 켜도 저장소의 파일은 바뀌지 않습니다.
 
 `nautilus/` rows NOT_RUN beyond L2-5b:
 
@@ -1078,9 +1085,9 @@ conditions on the E4 summary line (F8), stop if one fails, else commit and push 
 number Claude announced; the 57 `nautilus` rows all PASS. The last one is stricter than E's: the one NOT_RUN that
 Step 7A allowed (`nautilus/test_l2_05b_input_linked_to_env_refused`) fails it. If E's file has that row NOT_RUN,
 tell the owner to turn Windows Developer Mode on before F (answer X5): in the E report (1.4) and again before the
-announcement (2.11 step 7). His new step F1a, right after F1, checks the setting in Windows Settings and turns it on
-if it is off; it changes nothing in the repository. Decision 7's three conditions are unchanged. The `guard` line is
-printed and sent but is not one of the conditions.
+announcement (2.11 step 7). He may turn it on beforehand or at his new step F1a; F1a, right after F1, checks the
+setting in Windows Settings either way and turns it on if it is off; it changes nothing in the repository.
+Decision 7's three conditions are unchanged. The `guard` line is printed and sent but is not one of the conditions.
 
 The number Claude announces (2.11 step 7) is the total row count of the cache-free cloud full run of the tip the
 owner will pull. NOT_RUN rows are rows, so the Windows run is expected to give the same total (not verified), as long
@@ -1092,16 +1099,19 @@ has 37 rows, not 33 (decision 13a).
 
 Reading what comes back:
 
-1. The pasted F6 line, the F8 lines and, if run, the F9 lines. If the owner stopped, nothing was committed and
+1. The F1a result comes first (answer X5): "이미 켜져 있었음", "켰음" or "켤 수 없었음". If it is "켤 수 없었음",
+   he stopped before F2: nothing was run, committed or merged, and nothing else follows. Neither `table` nor answer
+   X5 says what comes next: report what his screen said and ask (2.11 step 7). Otherwise go on.
+2. The pasted F6 line, the F8 lines and, if run, the F9 lines. If the owner stopped, nothing was committed and
    nothing was merged. `table` gives no procedure after a failed condition: report what failed and its cause, and
    put the next step to the owner.
-2. If he went on: the F15 line is the owner's results commit on the research branch, and the third id of the F20
+3. If he went on: the F15 line is the owner's results commit on the research branch, and the third id of the F20
    line must equal it. Read the pushed file as in 1.4 (`REF=origin/claude/amazing-gauss-tdiguu`), check the three
    conditions again on it, and compare it row by row with the rows of the cloud run that set the announced count:
    added or removed rows are named; status changes are expected only for the layer-2 rows and the two rows above.
-3. The commit that last changed `qa/acceptance_results.json` is the owner's F13 commit, changing that file only, on
+4. The commit that last changed `qa/acceptance_results.json` is the owner's F13 commit, changing that file only, on
    top of the commit that records the confirmation sentence.
-4. After F21 these numbers go into main through one pull request (2.11 step 9). Until it merges, main's README
+5. After F21 these numbers go into main through one pull request (2.11 step 9). Until it merges, main's README
    Total row shows E's numbers and date.
 
 ## Part 2. Step 10 closing record
@@ -1334,7 +1344,7 @@ from its section "2026-10-28 ... ③-4 진행" to the end; main's `OWNER_RULINGS
 | <n> | <date> | <later 5-2 rulings on a series that is not PASS, if any> | `results/RULINGS.md` | <...> |
 | <n> | 2026-11-11 | Decisions 1 to 27 and 13a, "전부승인합노.", every row as its 가: among them the record's name kept (15), README two rows by Claude (12, 14), `--no-edit` (9), a second Windows full run of the merged branch at F (7), a confirmation sentence before the merge (8), what the P3 merge holds (13, 13a), the push of the closing commits (10), P2 not passed on (11), the Bonds choices (20 to 27) | `docs/product/DECISIONS_PILOT_CLOSE_MERGE_2026-11-11.md`; main's log, section "파일럿·마감·병합 결정 27건에 대한 답" | <...> |
 | <n> | 2026-11-12 | X1 to X5, "X1~X5 모두 권장값으로 하겠습니다", every case as Claude recommended: a pilot-2 parity failure is reported and asked (X1); decision 4's pre-approved re-run is one per pilot (X2); FAILs beyond the two known rows of the cache-free full run are asked before the P3 push (X3); main moving before the sentence is recorded means merge again and ask for a new sentence (X4); when L2-5b was NOT_RUN at E, the owner is told to turn Windows Developer Mode on before F (X5) | main's log, section "결정표에 없는 경우 X1~X5에 대한 답" | <...> |
-| <n> | <date> | <pilot re-runs with their reasons (the one of decision 4 included), the choices put after a parity failure (decision 1) or after decision 3's report, and the owner's answers> | <...> | <...> |
+| <n> | <date> | <pilot re-runs with their reasons (decision 4's, one per pilot by answer X2, included), the choices put after a parity failure (decision 1) or after decision 3's report, and the owner's answers> | <...> | <...> |
 | <n> | <date> | <decisions Claude made on the owner's behalf during this close-out> | <...> | <...> |
 
 Number the rows from 20 in date order once the list is complete.
