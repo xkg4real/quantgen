@@ -35,7 +35,8 @@ TEXT = {
     'side_show': ('Show the stock and indicator column', '종목·지표 패널 보기'),
     'side_hide': ('Hide the stock and indicator column', '종목·지표 패널 숨기기'),
     'indicators_button': ('Indicators', '지표'),
-    'chart_name': ('Candlestick chart · left/right arrows move, + and − zoom', '캔들 차트 · 좌우 화살표로 이동, +와 −로 확대·축소'),
+    'chart_name': ('Candlestick chart · drag or the left/right arrows move it, Ctrl+wheel zooms',
+                   '캔들 차트 · 끌거나 좌우 화살표로 이동, Ctrl+휠로 확대·축소'),
     # Notes popover
     'notes_title': ('Data notes', '데이터 설명'),
     'notes_poll': ('Reload every 5 seconds', '5초마다 새로 불러오기'),
@@ -65,13 +66,13 @@ TEXT = {
     'period_bond_daily': ('Bonds come in daily candles only', '채권은 일 단위만 제공해요'),
     'pan_left': ('10 steps back (Shift+←) · ← moves one', '왼쪽으로 10칸 (Shift+←) · ←는 한 칸씩'),
     'pan_right': ('10 steps forward (Shift+→) · → moves one', '오른쪽으로 10칸 (Shift+→) · →는 한 칸씩'),
-    'zoom_out': ('Zoom out (−)', '축소 (−)'),
-    'zoom_in': ('Zoom in (+)', '확대 (+)'),
     'reset': ('Default view', '기본 보기'),
     'reset_tip': ("The period's own view, following the latest data (0)", '기간 기본 보기 · 가장 최근 따라가기 (0)'),
-    'keys_hint': ('← → move · + zoom in · − zoom out', '← → 이동 · + 확대 · − 축소'),
-    'wheel_hint': ('The wheel does not move the chart: ← → move it, + zooms in, − zooms out',
-                   '휠로는 차트가 움직이지 않아요. ← →로 옮기고, +로 확대 · −로 축소해요'),
+    # Owner R-D12-1/2 (2026-11-12): "차트 확대를 +-로 하지말고 컨트롤 + 마우스 휠 이렇게 하자" — no zoom keys or buttons;
+    # "차트 화면 좌클릭해서 좌우로 끌면 좌우도 움직일수잇게 !! 화살표도 유지하고" — a left-drag pans, the arrows stay.
+    'keys_hint': ('← → · drag pan · Ctrl+wheel zoom', '← → · 끌기 이동 · Ctrl+휠 확대·축소'),
+    'wheel_hint': ('The wheel alone does not move the chart: drag it or use ← →, Ctrl+wheel zooms',
+                   '휠만으로는 차트가 움직이지 않아요. 끌거나 ← →로 옮기고, Ctrl+휠로 확대·축소해요'),
     # Chart overlays ---------------------------------------------------------------------------
     'o': ('O', '시가'), 'h': ('H', '고가'), 'l': ('L', '저가'), 'c': ('C', '종가'), 'v': ('Vol', '거래량'),
     'o_short': ('O', '시'), 'h_short': ('H', '고'), 'l_short': ('L', '저'), 'c_short': ('C', '종'),

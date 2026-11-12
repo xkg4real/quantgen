@@ -177,6 +177,28 @@ class StockDetailTests(unittest.TestCase):
         APP.sendEvent(widget, event)
         return event.isAccepted()
 
+    def ctrl_wheel(self, widget, x, dy, y=None, modifiers=Qt.KeyboardModifier.ControlModifier):
+        """A wheel turn at chart x (Ctrl held by default); returns whether the widget took it."""
+        y = widget.height() / 2 if y is None else y
+        event = QWheelEvent(QPointF(x, y), QPointF(widget.mapToGlobal(QPoint(int(x), int(y)))), QPoint(0, 0),
+                            QPoint(0, dy), Qt.MouseButton.NoButton, modifiers, Qt.ScrollPhase.NoScrollPhase, False)
+        APP.sendEvent(widget, event)
+        return event.isAccepted()
+
+    def mouse(self, widget, kind, x, y, held=True):
+        """A left-button press, move or release at (x, y) sent straight to `widget`."""
+        from PyQt6.QtCore import QEvent
+        from PyQt6.QtGui import QMouseEvent
+        left, none = Qt.MouseButton.LeftButton, Qt.MouseButton.NoButton
+        kind = {"press": QEvent.Type.MouseButtonPress, "move": QEvent.Type.MouseMove,
+                "release": QEvent.Type.MouseButtonRelease}[kind]
+        button = none if kind == QEvent.Type.MouseMove else left
+        buttons = left if (kind == QEvent.Type.MouseButtonPress or (kind == QEvent.Type.MouseMove and held)) else none
+        event = QMouseEvent(kind, QPointF(x, y), QPointF(widget.mapToGlobal(QPoint(int(x), int(y)))), button, buttons,
+                            Qt.KeyboardModifier.NoModifier)
+        APP.sendEvent(widget, event)
+        return event.isAccepted()
+
     def visible_texts(self, root):
         out = []
         for widget in [*root.findChildren(QLabel), *root.findChildren(QAbstractButton)]:
@@ -251,7 +273,10 @@ class StockDetailTests(unittest.TestCase):
         self.assertEqual(state(), before)
 
     # Keyboard ------------------------------------------------------------------------------------
-    def test_arrows_pan_through_end_and_keys_zoom(self):
+    def test_arrows_pan_through_end_and_ctrl_wheel_zooms(self):
+        """Arrows, Shift+arrows, Home/End and 0 as before. Owner R-D12-1 (2026-11-12, "차트 확대를 +-로 하지말고
+        컨트롤 + 마우스 휠 이렇게 하자"): the zoom steps that + and - gave until then now come from Ctrl + wheel, and
+        the keys no longer zoom."""
         self.open(profile=False)
         p, chart = self.pane, self.pane.chart
         n = len(p.snapshot.candles)
@@ -275,9 +300,13 @@ class StockDetailTests(unittest.TestCase):
         self.assertEqual((p._cursor, p.window()), (0, (0, 126)))
         QTest.keyClick(chart, Qt.Key.Key_End)
         self.assertEqual((p._cursor, p._end), (n - 1, None))
-        QTest.keyClick(chart, Qt.Key.Key_Plus)
+        for key in (Qt.Key.Key_Plus, Qt.Key.Key_Minus, Qt.Key.Key_Equal, Qt.Key.Key_Underscore):
+            QTest.keyClick(chart, key)
+            self.assertEqual((p.visible_bars.value(), p._end), (126, None))
+        middle = chart.layout_info.x_of(n - 10)
+        self.ctrl_wheel(chart, middle, 120)
         self.assertEqual(p.visible_bars.value(), round(126 * 0.8))
-        QTest.keyClick(chart, Qt.Key.Key_Minus); QTest.keyClick(chart, Qt.Key.Key_Minus)
+        self.ctrl_wheel(chart, middle, -120); self.ctrl_wheel(chart, middle, -120)
         self.assertGreater(p.visible_bars.value(), 126)
         QTest.keyClick(chart, Qt.Key.Key_0)
         self.assertEqual((p.visible_bars.value(), p._end), (126, None))
@@ -287,6 +316,146 @@ class StockDetailTests(unittest.TestCase):
         self.view.overlays.latest_button.click()
         self.assertIsNone(p._end)
         self.assertEqual(len(self.service.calls), 1)  # moving never reloads
+
+    # Pointer: Ctrl + wheel zooms, a left-drag pans (owner R-D12-1/2, 2026-11-12) --------------------------------
+    def test_ctrl_wheel_zooms_on_the_bar_under_the_pointer(self):
+        """Owner R-D12-1: "차트 확대를 +-로 하지말고 컨트롤 + 마우스 휠 이렇게 하자". Over the chart, Ctrl + wheel up zooms
+        in and down out, one notch one step (0.8 / 1.25 times the bars), on the bar under the pointer, which stays
+        under it; 20 bars and every loaded bar are the limits. The plain wheel and + - = _ change nothing, Ctrl +
+        wheel over the right column does not zoom the chart, and the page never moves."""
+        from PyQt6.QtGui import QNativeGestureEvent, QPointingDevice
+        self.open()
+        p, chart, view = self.pane, self.pane.chart, self.view
+        n = len(p.snapshot.candles)
+        page = self.window.stack.currentWidget().verticalScrollBar()
+        state = lambda: (p.visible_bars.value(), p._end, p._cursor, page.value())
+        chart.setFocus()
+        for _ in range(3):
+            QTest.keyClick(chart, Qt.Key.Key_Left, Qt.KeyboardModifier.ShiftModifier)   # room on both sides
+        self.settle(2)
+        self.assertEqual((p.visible_bars.value(), p._end), (126, n - 31))
+        before = state()
+        layout = chart.layout_info
+        bar = layout.start + 40
+        x, y = layout.x_of(bar) + layout.step * 0.3, sum(layout.price) / 2     # off the bar's centre, still on it
+        # The plain wheel either way, and the keys that zoomed until R-D12-1: nothing.
+        for dy in (120, -120):
+            self.assertTrue(self.ctrl_wheel(chart, x, dy, y, Qt.KeyboardModifier.NoModifier))
+        for key in (Qt.Key.Key_Plus, Qt.Key.Key_Minus, Qt.Key.Key_Equal, Qt.Key.Key_Underscore):
+            QTest.keyClick(chart, key)
+        self.settle(2)
+        self.assertEqual(state(), before)
+        # One notch up: one step in; the bar stays under the pointer and becomes the selected one.
+        self.assertTrue(self.ctrl_wheel(chart, x, 120, y))
+        self.assertEqual(p.visible_bars.value(), round(126 * 0.8))
+        self.assertEqual((chart.layout_info.index_at(x), p._cursor), (bar, bar))
+        self.assertFalse(view.periods.buttons["6M"].isChecked())          # a manual zoom leaves the period's view
+        # A two-notch turn down: two steps out, past the first view; the bar is still under the pointer.
+        self.assertTrue(self.ctrl_wheel(chart, x, -240, y))
+        self.assertEqual(p.visible_bars.value(), round(round(126 * 0.8) * 1.25 ** 2))
+        self.assertEqual(chart.layout_info.index_at(x), bar)
+        self.assertIsNotNone(p._end)
+        # A high-resolution wheel: two half notches make one step.
+        shown = p.visible_bars.value()
+        self.ctrl_wheel(chart, x, 60, y)
+        self.assertEqual(p.visible_bars.value(), shown)
+        self.ctrl_wheel(chart, x, 60, y)
+        self.assertEqual(p.visible_bars.value(), round(shown * 0.8))
+        self.assertEqual(chart.layout_info.index_at(x), bar)
+        # The limits: 20 bars in, every loaded bar out; a turn past a limit changes nothing.
+        for _ in range(30):
+            self.ctrl_wheel(chart, x, 120, y)
+        self.assertEqual(p.visible_bars.value(), 20)
+        held = state()
+        self.ctrl_wheel(chart, x, 120, y)
+        self.assertEqual(state(), held)
+        for _ in range(30):
+            self.ctrl_wheel(chart, x, -120, y)
+        self.assertEqual((p.visible_bars.value(), p.window()), (n, (0, n)))
+        # A trackpad pinch zooms too.
+        pinch = QNativeGestureEvent(Qt.NativeGestureType.ZoomNativeGesture, QPointingDevice.primaryPointingDevice(), 2,
+                                    QPointF(x, y), QPointF(x, y), QPointF(chart.mapToGlobal(QPoint(int(x), int(y)))),
+                                    0.25, QPointF(0, 0))
+        APP.sendEvent(chart, pinch)
+        self.assertEqual(p.visible_bars.value(), round(n * 0.8))
+        # Ctrl + wheel over the right column does not zoom (nor pan) the chart.
+        before = state()
+        side = view.side.stock_scroll
+        sideways = side.horizontalScrollBar().value()
+        for dy in (120, -120):
+            self.ctrl_wheel(side.viewport(), 40, dy, 40)
+        self.settle(2)
+        self.assertEqual(state(), before)
+        self.assertEqual(side.horizontalScrollBar().value(), sideways)
+        self.assertEqual(page.value(), view.lock.target)
+        self.assertEqual(len(self.service.calls), 1)                      # zooming never reloads
+
+    def test_left_drag_pans_the_chart_and_a_click_still_selects_a_bar(self):
+        """Owner R-D12-2: "차트 화면 좌클릭해서 좌우로 끌면 좌우도 움직일수잇게 !! 화살표도 유지하고". A left-drag on the
+        plot pans by the bars dragged (the grabbed bar follows the pointer), stops at the first and the latest bar,
+        keeps the zoom and never moves the page; an open hand over the plot, a closed one while dragging; a click
+        without a drag still selects the bar under it; the arrows still pan."""
+        self.open()
+        p, chart, view = self.pane, self.pane.chart, self.view
+        n = len(p.snapshot.candles)
+        page = self.window.stack.currentWidget().verticalScrollBar()
+        layout = chart.layout_info
+        self.assertEqual((layout.start, layout.stop, p._end, p.visible_bars.value()), (n - 126, n, None, 126))
+        step, y = layout.step, sum(layout.price) / 2
+        grabbed = n - 60
+        x0 = layout.x_of(grabbed)
+        # Hover: the open hand over the plot, the arrow over the price axis.
+        self.mouse(chart, "move", x0, y, held=False)
+        self.assertEqual(chart.pointer_shape(), Qt.CursorShape.OpenHandCursor)
+        self.mouse(chart, "move", layout.plot_right + 10, y, held=False)
+        self.assertEqual(chart.pointer_shape(), Qt.CursorShape.ArrowCursor)
+        # Drag right by ten bars: ten older bars come in and the grabbed bar stays under the pointer.
+        self.assertTrue(self.mouse(chart, "press", x0, y))
+        self.mouse(chart, "move", x0 + 1, y)                              # within the drag distance: nothing yet
+        self.assertEqual((p._end, chart.layout_info.start), (None, n - 126))
+        x1 = x0 + 10 * step
+        self.assertTrue(self.mouse(chart, "move", x1, y))
+        self.assertEqual(chart.pointer_shape(), Qt.CursorShape.ClosedHandCursor)
+        self.assertEqual((chart.layout_info.start, p._end, p.visible_bars.value()), (n - 136, n - 11, 126))
+        self.assertEqual((chart.layout_info.index_at(x1), p._cursor), (grabbed, grabbed))
+        self.assertEqual(page.value(), view.lock.target)
+        self.assertFalse(view.periods.buttons["6M"].isChecked())          # a manual pan leaves the period's view
+        # Far past the first bar the window stops at it; far past the latest it stops there and follows live data.
+        self.mouse(chart, "move", x0 + 400 * step, y)
+        self.assertEqual((p.window(), p.visible_bars.value()), ((0, 126), 126))
+        self.assertEqual(page.value(), view.lock.target)
+        self.mouse(chart, "move", x0 - 400 * step, y)
+        self.assertEqual((p.window(), p._end), ((n - 126, n), None))
+        x2 = x0 + 5 * step
+        self.mouse(chart, "move", x2, y)
+        self.assertTrue(self.mouse(chart, "release", x2, y))
+        self.assertEqual(chart.pointer_shape(), Qt.CursorShape.OpenHandCursor)
+        self.assertEqual((p.window(), p._end, p._cursor), ((n - 131, n - 5), n - 6, grabbed))
+        self.assertEqual(page.value(), view.lock.target)
+        # After the release the selection follows the pointer again.
+        self.mouse(chart, "move", chart.layout_info.x_of(n - 100), y, held=False)
+        self.assertEqual(p._cursor, n - 100)
+        # A click (press and release, or a jitter within the drag distance) selects the bar under it, no pan.
+        window = p.window()
+        for target, jitter in ((n - 120, 0), (n - 20, 1)):
+            p.move_cursor(n - 50)
+            x = chart.layout_info.x_of(target)
+            self.mouse(chart, "press", x, y)
+            if jitter:
+                self.mouse(chart, "move", x + jitter, y)
+            self.mouse(chart, "release", x + jitter, y)
+            self.assertEqual((p._cursor, p.window()), (target, window))
+        # A press over the price axis grabs nothing.
+        self.mouse(chart, "press", layout.plot_right + 10, y)
+        self.mouse(chart, "move", layout.plot_right - 200, y)
+        self.mouse(chart, "release", layout.plot_right - 200, y)
+        self.assertEqual(p.window(), window)
+        # The arrows still pan.
+        chart.setFocus()
+        QTest.keyClick(chart, Qt.Key.Key_Left)
+        self.assertEqual(p._end, window[1] - 2)
+        self.assertEqual(page.value(), view.lock.target)
+        self.assertEqual(len(self.service.calls), 1)                      # dragging never reloads
 
     def test_daily_periods_share_one_request_and_five_years_reload_weekly(self):
         self.open(profile=False)
@@ -1050,7 +1219,7 @@ class StockDetailTests(unittest.TestCase):
         # Register and pointers: the full watchlist, the Q-SCORE chip, the key hint.
         self.assertEqual(text("ko", "watch_full", limit=20), "관심종목은 20개까지 담을 수 있어요.")
         self.assertNotIn("?", text("ko", "qscore_tip"))
-        self.assertEqual(view.periods.hint.text(), "← → 이동 · + 확대 · − 축소")
+        self.assertEqual(view.periods.hint.text(), "← → · 끌기 이동 · Ctrl+휠 확대·축소")   # owner R-D12-1/2
         self.assertNotIn("⤢", text("ko", "picker_panel_limit", count=3) + text("ko", "hidden_panels_tip", names="x"))
         # The English legend shows the volume average in the strip's unit.
         self.window.set_language("en"); self.settle()

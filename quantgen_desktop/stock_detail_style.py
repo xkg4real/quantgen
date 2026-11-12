@@ -326,10 +326,6 @@ def icon(kind, color, size=18):
         c = s / 2
         p.drawLine(QPointF(c - d * s * .12, s * .28), QPointF(c + d * s * .12, s / 2))
         p.drawLine(QPointF(c + d * s * .12, s / 2), QPointF(c - d * s * .12, s * .72))
-    elif kind in ("minus", "plus"):
-        p.drawLine(QPointF(s * .28, s / 2), QPointF(s * .72, s / 2))
-        if kind == "plus":
-            p.drawLine(QPointF(s / 2, s * .28), QPointF(s / 2, s * .72))
     elif kind == "more":
         p.setBrush(QColor(color))
         for x in (s * .28, s * .5, s * .72):

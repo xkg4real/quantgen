@@ -10,8 +10,11 @@ Owner, verbatim: "검색해서 한 차트를 구체적으로 볼때에는, 해�
 Layout: a one-row toolbar; under it the chart column (the shared MarketChartPane in detail mode, drawn by
 core.market.detail_svg at its exact size, and the period bar) on the left, and one fixed-width right column
 (stock_detail_side.RightColumn) that is the only thing that scrolls. While a stock is open the page never scrolls
-(`PageLock`); the wheel over the chart does nothing; ←/→ (Shift: 10 bars), Home/End, +/− and 0 move the chart.
-Focus mode (⤢, Shift+F) collapses the window's rail and hides the right column.
+(`PageLock`); the plain wheel over the chart does nothing; ←/→ (Shift: 10 bars), Home/End and 0 move the chart.
+Focus mode (⤢, Shift+F) collapses the window's rail and hides the right column. Owner 2026-11-12 (R-D12-1): "차트 확대를
++-로 하지말고 컨트롤 + 마우스 휠 이렇게 하자" — Ctrl + wheel over the chart zooms on the bar under the pointer; no key or
+button zooms. Owner 2026-11-12 (R-D12-2): "차트 화면 좌클릭해서 좌우로 끌면 좌우도 움직일수잇게 !! 화살표도 유지하고" — a
+left-drag on the chart pans it (the grabbed bar follows the pointer), the arrows stay.
 
 Owner 2026-11-11 (R-D9-1): "우측 가이드가 차트를 가리면 어떡해 차트영역은 절대 침범하면안돼" — nothing ever covers the chart. The
 right column is always docked beside it (the chart takes the rest of the width); in a narrow window the rail folds
@@ -497,7 +500,7 @@ class IntervalCombo(QComboBox):
 
 class ChartColumn(QFrame):
     """The chart and its period bar. It holds the keyboard focus while the chart itself is hidden (loading, empty
-    or failed), so the arrows, +/−, 0 and Shift+F already belong to the chart the moment a stock opens; the chart
+    or failed), so the arrows, Home/End, 0 and Shift+F already belong to the chart the moment a stock opens; the chart
     takes the focus over when it appears."""
 
     def __init__(self, view):
@@ -514,12 +517,12 @@ class ChartColumn(QFrame):
 
 
 class ChartKeys(QObject):
-    """Owner 2026-11-11: "pc기준 좌우화살표로 차트 좌우 확인할수있게". While the stock screen is shown, ←/→, Home/End,
-    +/− and 0 move the chart wherever the focus is on it: after a click on a picker switch, a fold header, a tab,
+    """Owner 2026-11-11: "pc기준 좌우화살표로 차트 좌우 확인할수있게". While the stock screen is shown, ←/→, Home/End
+    and 0 move the chart wherever the focus is on it: after a click on a picker switch, a fold header, a tab,
     the column's background or a toolbar button too (buttons and the scroll areas would otherwise take the arrows).
-    Text inputs keep their keys, and nothing is taken while a menu or a list is open."""
-    KEYS = (Qt.Key.Key_Left, Qt.Key.Key_Right, Qt.Key.Key_Home, Qt.Key.Key_End, Qt.Key.Key_Plus, Qt.Key.Key_Equal,
-            Qt.Key.Key_Minus, Qt.Key.Key_Underscore, Qt.Key.Key_0)
+    Text inputs keep their keys, and nothing is taken while a menu or a list is open. No key zooms (owner R-D12-1:
+    Ctrl + wheel over the chart does), so +, −, = and _ reach the focused widget as typed."""
+    KEYS = (Qt.Key.Key_Left, Qt.Key.Key_Right, Qt.Key.Key_Home, Qt.Key.Key_End, Qt.Key.Key_0)
 
     def __init__(self, view):
         super().__init__(view)
@@ -674,7 +677,8 @@ class ChartOverlays(QObject):
         notice = QHBoxLayout(self.notice)
         notice.setContentsMargins(0, 0, 0, 0)
         notice.setSpacing(6)
-        # A wheel turn over the chart changes nothing (owner 2026-11-11); for a moment the keys are named instead.
+        # A plain wheel turn over the chart changes nothing (owner 2026-11-11); for a moment the keys, the drag and
+        # Ctrl + wheel are named instead.
         self.wheel_label = label("notice")
         self.wheel_label.hide()
         notice.addWidget(self.wheel_label)
@@ -922,7 +926,8 @@ class ChartOverlays(QObject):
                 head.hide()
 
 class PeriodBar(QWidget):
-    """Period chips on the left; pan, zoom and the default view on the right."""
+    """Period chips on the left; the key hint, the pan arrows and the default view on the right. No zoom buttons:
+    the chart zooms with Ctrl + wheel (owner R-D12-1)."""
 
     def __init__(self, view):
         super().__init__()
@@ -948,9 +953,8 @@ class PeriodBar(QWidget):
         self.hint = label("hint")
         row.addWidget(self.hint)
         row.addSpacing(8)
-        self.left, self.right, self.zoom_out, self.zoom_in = (QPushButton() for _ in range(4))
-        actions = ((self.left, lambda: view.chart.pan(-10)), (self.right, lambda: view.chart.pan(10)),
-                   (self.zoom_out, lambda: view.chart.zoom(-1)), (self.zoom_in, lambda: view.chart.zoom(1)))
+        self.left, self.right = QPushButton(), QPushButton()
+        actions = ((self.left, lambda: view.chart.pan(-10)), (self.right, lambda: view.chart.pan(10)))
         for button, action in actions:
             button.setProperty("sd", "tool")
             button.setFocusPolicy(Qt.FocusPolicy.TabFocus)
@@ -970,19 +974,18 @@ class PeriodBar(QWidget):
         self.fit()
 
     def fit(self):
-        """Keep the period chips; then, as room allows, the zoom buttons, '기본 보기', the pan arrows and the
-        key hint '← → 이동 · + − 확대' (the wheel no longer moves the chart, so the keys are named on the bar
-        whenever it fits; spec 4.1)."""
+        """Keep the period chips; then, as room allows, '기본 보기', the pan arrows and the key hint
+        '← → · 끌기 이동 · Ctrl+휠 확대·축소' (the plain wheel does not move the chart, so the keys, the drag and
+        Ctrl + wheel are named on the bar whenever it fits; spec 4.1, owner R-D12-1/2)."""
         layout = self.layout()
         margins = layout.contentsMargins()
         spacing = layout.spacing()
         room = self.width() - margins.left() - margins.right()
         chips = sum(button.sizeHint().width() + spacing for button in self.buttons.values())
-        zoom = sum(button.sizeHint().width() + spacing for button in (self.zoom_out, self.zoom_in))
         reset = self.reset.sizeHint().width() + spacing + 4
         pan = sum(button.sizeHint().width() + spacing for button in (self.left, self.right))
         hint = self.hint.sizeHint().width() + spacing + 8
-        used = chips + zoom + 16
+        used = chips + 16
         show_reset = used + reset <= room
         used += reset if show_reset else 0
         show_pan = used + pan <= room
@@ -1932,7 +1935,7 @@ class StockDetailView(QWidget):
         super().keyPressEvent(event)
 
     def chart_key(self, event):
-        """The chart's keys: Shift+F and Esc here, everything else the pane's (arrows, Home/End, +/-, 0)."""
+        """The chart's keys: Shift+F and Esc here, everything else the pane's (arrows, Home/End, 0)."""
         if event.key() == Qt.Key.Key_F and event.modifiers() & Qt.KeyboardModifier.ShiftModifier:
             self.set_focus_mode(not self.body.focus)
             return True
@@ -2491,8 +2494,7 @@ class StockDetailView(QWidget):
         for key, button in periods.buttons.items():
             button.setText(text(lang, f"period_{key}"))
         periods.hint.setText(text(lang, "keys_hint"))
-        for button, kind, tip in ((periods.left, "left", "pan_left"), (periods.right, "right", "pan_right"),
-                                  (periods.zoom_out, "minus", "zoom_out"), (periods.zoom_in, "plus", "zoom_in")):
+        for button, kind, tip in ((periods.left, "left", "pan_left"), (periods.right, "right", "pan_right")):
             button.setIcon(icon(kind, p.muted))
             button.setToolTip(text(lang, tip))
             button.setAccessibleName(text(lang, tip))
