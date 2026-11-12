@@ -4,13 +4,13 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2
 next_ids: ⑤-2/g, ⑤-2/e, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-12T03:40:00+09:00
+updated_at: 2026-11-12T09:52:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: main
-work_commit: f4837ef
+work_commit: b9dea9c
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -120,7 +120,15 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - **C:** 0b 채택 방침만 기록. Q12 = 7개 파일(`core/quant/strategies.py`, `validate.py`, `history.py`, `gate_ledger.py`, `core/research/strategy_workflow.py`, `core/quant/optimize.py`, `core/quant/risk.py`). Q13·Q14·Q16·Q17·Q18 기본값. 화면은 네이티브만(UI-D1), Flet 작업(Q19 포함) 안 함, PC 화면은 시안 먼저 + UI 세션 이식과 ⑦-2 병합 뒤. Q22의 잘라내기 여부는 2026-12 말 전에 따로 질문. 다음 단위 ⑨-3a/recorder/1(화면 없음, 결정 9 조건: run_family 안에서 PNL_COMPUTED보다 낮은 PROGRESS를 쓰지 않음).
 - **D:** 주문 한도 수치(1회 100만 원/5%, 하루 10건·300만 원/15%, 손실 중지 40만 원/2%, 종목 비중 20%/400만 원, 가격 이탈 3%·시세 15초·지정가만, 09:00~15:20, 모의 20거래일·30건 등)를 기본값으로 승인. **실거래는 켜지지 않음.** 순서: 안전 설계 문서 보고 → ⑦-2 병합 뒤 구현 → 모의투자 → 결과 보고 → 소유자의 실거래 전환 승인. D-14 법률 자문은 소유자가 의뢰.
 
-### ⑥-1/prep/2 완료: PR #108 병합(main `f4837ef`, 트리 = head `bc0ce66`, Compliance 성공, 독립 검증 3관점 24건 반영). 소유자에게 결정표에 없는 경우 X1~X5를 권장과 함께 올림(답 대기, 급하지 않음: X2 C-06 재실행 1회를 파일럿마다로, X5 F 전에 Windows 개발자 모드 켜기 안내 권장; X1·X3·X4는 그대로). 시작 (2026-11-12 02:33 KST) — 가장 최신
+### ⑥-1/rulings/2 완료: 결정표에 없던 경우 X1~X5 (2026-11-12 09:52 KST) — 가장 최신
+
+- 소유자 답(원문): "X1~X5 모두 권장값으로 하겠습니다" (2026-11-12 09:2x KST). 질문은 03:39 KST에 보낸 표.
+- 결과: X1·X3·X4는 문서의 "보고하고 여쭘"이 소유자 결정. X2: 결정 4의 C-06 재실행은 파일럿마다 1회. X5: F 전에 Claude가 E 결과에서 L2-5b 행을 보고 미실행이면 Windows 개발자 모드를 켜도록 안내, F1a에서 소유자가 확인.
+- 기록·반영: PR #110 병합(main `b9dea9c`, 트리 = head `00855a3`, Compliance 성공). 결정 기록 맨 끝 절, 실행표·판독 문서. 원장 `⑥-1/rulings/2`.
+- 참고: UI 세션의 PR #109(네이티브 앱 UI-D1~D10, 미국 시총)가 열려 있음. 그 세션의 일이라 손대지 않음. `source-review.json`이 겹치므로 나중에 병합되는 쪽이 기준선을 다시 만들어야 함.
+- 다음: ⑤-2/g·⑤-2/e(소유자 PC 재실행) 대기. 실행 브랜치는 여전히 `648e1d8`.
+
+### ⑥-1/prep/2 완료: PR #108 병합(main `f4837ef`, 트리 = head `bc0ce66`, Compliance 성공, 독립 검증 3관점 24건 반영). 소유자에게 결정표에 없는 경우 X1~X5를 권장과 함께 올림(답 대기, 급하지 않음: X2 C-06 재실행 1회를 파일럿마다로, X5 F 전에 Windows 개발자 모드 켜기 안내 권장; X1·X3·X4는 그대로). 시작 (2026-11-12 02:33 KST)
 
 - 브랜치 `claude/pilot-sheet-rulings-20261112`(main `f263fb2`에서 시작, 스크래치 `sheet` 워크트리, 아직 push 전). 고치는 파일: `docs/product/PILOT_OWNER_RUN_2026-11-11.md`(K), `docs/product/PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md`(R), 준법 기준선.
 - 핵심: K의 F절을 결정 7·8·9·13 순서로 다시 씀(합친 상태 Windows 전체 검사 → FAIL 0·행 수 일치·nautilus 57 PASS → 결과 파일만 커밋·push → `--no-edit` 병합), D 끝과 E(결정 6), G(결정 1·3·4·5), K절 K를 "정해진 것"으로, R 2절(결정 10·12·14·15·16·18, 자료 접근 이력에 11-12 자진 보고 포함).
