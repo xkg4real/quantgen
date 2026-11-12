@@ -9,10 +9,12 @@ PAIRS = {
     "Show menu": "메뉴 펼치기",
     "Show menu (Ctrl+B)": "메뉴 펼치기 (Ctrl+B)",
     "Markets sections": "시장 하위 메뉴",
-    # The Markets sub-items are the markets since owner ruling UI-D10 (2026-11-11): 국내 주식, 미국 주식, 코인. Their
-    # text comes from core.market.screen.PAGES, set in the window language by app.retitle_market_sections, because
-    # the English "Crypto" already reads 가상자산 for the analysis tool. The pairs below are the five ranking
-    # category names the sub-menu showed until then (UI-D7); other screens still show them in English source.
+    # The Markets sub-items are the big categories of a TradingView-style menu since owner ruling UI-D11
+    # (2026-11-12): 지수, 주식, 크립토, 선물, 외환, 국채, 회사채, ETF, 월드 이코노미, never 코인. Their text and their
+    # flyouts' text come from quantgen_desktop.shell_rail (MARKET_CATEGORIES, market_menu), set in the window language
+    # by app.retitle_market_sections, because the English "Crypto" already reads 가상자산 for the analysis tool. The
+    # pairs below are the five ranking category names the sub-menu showed under UI-D7; other screens still show them
+    # in English source.
     "Korean stocks": "국내 주식",
     "US stocks": "미국 주식",
     "Trading value": "거래대금",

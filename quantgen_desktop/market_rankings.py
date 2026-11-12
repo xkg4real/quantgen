@@ -2,7 +2,9 @@
 
 Owner ruling UI-D10 (2026-11-11): "시장에서 그냥 국장 미장 코인 이런걸 하부ui로 두고, 너가 지금 하부ui로 깔아놓은건 해당
 시장의 하부ui 선택하고 차후에 검색기준으로 저걸 쓸수있게 구현하면 좋을 거 같은데, 공간 잘써서 센스있게해봐". The rail
-lists 국내 주식 / 미국 주식 / 코인 (`core.market.screen.PAGES`); `RankingBoard` is that market's page: one compact
+lists the markets (`core.market.screen.PAGES`: 국내 주식, 미국 주식, 크립토, 국내 ETF, 미국 ETF; since owner ruling UI-D11
+of 2026-11-12 the rail reaches them through its 시장 › 주식 / 크립토 / ETF flyouts, `shell_rail.market_menu`, and this
+page itself is unchanged, "지금 시장 안의 ui는 괜찮다"); `RankingBoard` is that market's page: one compact
 header row (market name, data state, a search scoped to this market, refresh), a slim index strip
 (`market_summary.MarketSummary`), a criteria row (the ranking categories as chips, the sub-market, the sector and a
 "조건" control that opens beginner conditions: 등락률 range, 거래대금 at least, 시가총액 at least), chips for the
@@ -37,7 +39,12 @@ Data, off the UI thread and only while the list is visible with automatic refres
   FMP's stated figure from one batch request when FMP_API_KEY is set and the plan allows it; otherwise Yahoo
   share counts (cached a day) x the row's price, headed "시가총액(계산값)". A stock whose figure could not be
   read is listed last without a rank and shows '—'; when none could be read the list says why instead.
-One fetch serves every category of its group ('kr' or 'us'): switching category re-ranks the cached quotes.
+* ETFs (UI-D11): the curated `rankings.ETF_KR` / `ETF_US` lists on the stocks' paths above (KIS quotes when configured,
+  else Yahoo daily bars), the same page and rows; an ETF row opens the stock screen like a stock. No market-cap
+  ranking: an ETF's size is its net assets (AUM), which no source the app uses states (the chip is left out and the
+  footnote says why, as for coins).
+One fetch serves every category of its group ('kr', 'us', 'crypto', 'etf_kr' or 'etf_us'): switching category
+re-ranks the cached quotes.
 
 The source state is always shown ("KIS 조회 · 45초마다" for KIS quotes during the regular session, "KIS · 장
 마감", "KIS · 갱신 지연", "지연·일별", "자료 없음") with the time since the last update; nothing polled, stale or
@@ -120,7 +127,7 @@ def kis_batch(service, group, members, *, cancelled=None, progress=None, sleep=t
         if cancelled is not None and cancelled():
             break
         try:
-            if member.market == "US":
+            if member.overseas:  # a US stock or ETF
                 params = {"AUTH": "", "EXCD": member.exchange, "SYMB": member.code}
                 record = R.parse_kis_overseas(member, paced(*OVERSEAS_PRICE, params).get("output"))
                 if details is not None and member.code not in R.ADR_CODES:
@@ -160,9 +167,11 @@ def _yahoo_candidates(member):
     """(Yahoo symbol, listing market it implies), curated market first."""
     if member.market == "CRYPTO":
         return ((R.crypto_symbol(member), ""),)
-    if member.market == "US":
+    if member.overseas:
         from core.market.routing import yahoo_symbols
         return tuple((symbol, "") for symbol in yahoo_symbols(member.instrument))
+    if member.market == "ETF_KR":  # KRX ETFs are listed on the KOSPI board: '.KS'
+        return ((f"{member.code}.KS", ""),)
     first, second = (("KS", "KOSPI"), ("KQ", "KOSDAQ")) if member.market == "KOSPI" else (("KQ", "KOSDAQ"), ("KS", "KOSPI"))
     return tuple((f"{member.code}.{suffix}", market) for suffix, market in (first, second))
 
@@ -611,7 +620,7 @@ class RankRow(QFrame):
         self.rank.setText(str(row.rank) if row.rank else "")  # 0: no figure, listed after the ranked rows
         # A US stock's or a coin's mark is its ticker's letters (AP, MS, BT): a Korean reading of an English name
         # ('마이' for Microsoft) or shared initials told nothing; a Korean name keeps one script (`mark_name`).
-        letters = ticker_mark(member.code) if member.group in ("us", "crypto") else mark_name(name)
+        letters = ticker_mark(member.code) if member.group in ("us", "crypto", "etf_us") else mark_name(name)
         self.mark.set_identity(member.code, letters)
         self.mark.setAccessibleName(name)
         self.mark.setToolTip(f"{name} · {member.code}")
@@ -1808,8 +1817,12 @@ class RankingBoard(QFrame):
         (its accessible name says the same)."""
         name = S.page_text(self.page, self._lang())
         short = self._t("Search within {market}", market=name)
-        text = self._p("find_coins") if self.page == "crypto" else \
-            self._t("Find in {market}: name, code, sector", market=name)
+        if self.page == "crypto":
+            text = self._p("find_coins")
+        elif self.page in R.ETF_GROUPS:  # an ETF list has no sectors to search by
+            text = self._p("find_etfs", market=name)
+        else:
+            text = self._t("Find in {market}: name, code, sector", market=name)
         room = self.search.width() - 48  # its padding and the clear button
         if self.search.fontMetrics().horizontalAdvance(text) > room:
             text = short
@@ -1963,7 +1976,8 @@ class RankingBoard(QFrame):
         self.clear_button.setToolTip(self._p("clear_all_tip"))
         self.clear_button.setVisible(len(chips) > 1 and not panel)  # one clear action at a time
         ranked = sum(1 for row in rows if row.rank)
-        self.count.setText(self._p("coin_results" if self.page == "crypto" else "results", count=ranked))
+        counted = {"crypto": "coin_results", "etf_kr": "etf_results", "etf_us": "etf_results"}.get(self.page, "results")
+        self.count.setText(self._p(counted, count=ranked))
         counted = bool(rows) and bool(chips or screen.limits)
         self.count.setVisible(counted)
         pointers = self._other_markets()
@@ -2235,6 +2249,12 @@ class RankingBoard(QFrame):
             parts.append(self._t("Coins have no volume or market-cap ranking: one coin's unit is worth very "
                                  "different amounts from another's, and no source this app uses states coin "
                                  "market cap."))
+        elif self.page in R.ETF_GROUPS:
+            parts = [self._t("Ranked among {count} major ETFs, not the whole market. Open a row for its chart.",
+                             count=len(listed)),
+                     # The market-cap chip is left out (`screen.category_note`); said where a keyboard reaches it.
+                     self._t("ETFs have no market-cap ranking: their size is net assets (AUM), which no source this "
+                             "app uses states.")]
         else:
             parts = [self._t("Ranked among {count} major stocks, not the whole market. Open a row for its chart.",
                              count=len(listed))]
@@ -2332,7 +2352,7 @@ class RankingBoard(QFrame):
         if round_ is not None and round_[1] > seconds:
             tip += " " + self._t("The last round of requests took {took} s, longer than {seconds} s, so each stock "
                                  "was asked less often than that.", took=math.ceil(round_[1]), seconds=seconds)
-        if batch.group == "us":
+        if batch.group in ("us", "etf_us"):
             tip += " " + self._t("US quotes are KIS's free feed and can differ from paid consolidated quotes.")
         return tip
 

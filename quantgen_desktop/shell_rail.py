@@ -1,12 +1,23 @@
-"""Left rail chrome: the hide/show toggle, the Markets sub-menu and keyboard moves (owner 2026-11-11, UI-D7).
+"""Left rail chrome: the hide/show toggle, the 시장 menu and keyboard moves (owner 2026-11-11, UI-D7).
 
 Owner points 2 and 3: clicking Markets shows sub-items to pick what to look at, and the rail can be hidden to
-give the page the full width. Owner ruling UI-D10 (2026-11-11): the sub-items are the markets, 국내 주식 / 미국 주식
-/ 코인 (`core.market.screen.PAGES`); the ranking categories moved into each market's page. The window
-(`app.ResearchWindow`) owns the state; this module holds the pieces that do not need the window:
-the section list, the painted toggle icons and the rail's arrow-key handling.
+give the page the full width. Owner ruling UI-D10 (2026-11-11) made the sub-items the markets.
+
+Owner ruling UI-D11 (2026-11-12, with a TradingView-style menu image), verbatim: "좋은데 시장 하위 유아이를 저렇게
+두지 말고 이런식으로 큰 범주로 묶고 저기 뭐 주식 하부 유야이다 그러면 거기 마우스 휠 올려놓으면 더 하부로 국내, 미국,
+글로벌 뭐 이런 식으로 볼수있고 거기서 국내에 마우스 올려놓으면 다시 거래대금 거래량 급상승 급하락 이렇게 누를수있게.
+누르면 지금 ui랑 똑같이 저 화면으로 바로 넘어갈수잇게 그니까 바꾸라는게 아니야. 지금 시장 안의 ui는 괜찮다. 새꺄 그리고
+코인이 뭐야 ETF라해야지". So the sub-items are the image's big categories (`MARKET_CATEGORIES`: 지수 · 주식 · 크립토 ·
+선물 · 외환 · 국채 · 회사채 · ETF · 월드 이코노미), each opening cascading flyouts (`rail_menu.RailFlyouts`) whose
+leaves open what the app already has (`market_menu`): a market page ranked by a category, a Research Home market
+card, or an analysis tool. 글로벌 is left out: no data path for it exists, and no dead item is shown.
+
+The window (`app.ResearchWindow`) owns the state; this module holds the pieces that do not need the window: the
+menu tree, the painted icons and the rail's arrow-key handling.
 """
 from __future__ import annotations
+
+from dataclasses import dataclass
 
 from PyQt6.QtCore import QEvent, QObject, QPointF, QRectF, Qt
 from PyQt6.QtGui import QColor, QIcon, QPainter, QPainterPath, QPen, QPixmap
@@ -14,18 +25,147 @@ from PyQt6.QtWidgets import QPushButton, QScrollArea
 
 SETTINGS_KEY = "ui/sidebar_collapsed"
 
+# The 시장 menu's big categories, in the order of the owner's image (R-D11-1): (key, English, Korean).
+MARKET_CATEGORIES = (("indices", "Indices", "지수"), ("stocks", "Stocks", "주식"), ("crypto", "Crypto", "크립토"),
+                     ("futures", "Futures", "선물"), ("fx", "Forex", "외환"), ("govt", "Government bonds", "국채"),
+                     ("corp", "Corporate bonds", "회사채"), ("etf", "ETFs", "ETF"),
+                     ("economy", "World economy", "월드 이코노미"))
+# The market pages under 주식 / 크립토 / ETF: (category, ((page, English, Korean), ...)). 크립토 has one page, so its
+# flyout lists the ranking categories directly.
+MARKET_SUBS = {"stocks": (("kr", "Korea", "국내"), ("us", "US", "미국")),
+               "crypto": (("crypto", "Crypto", "크립토"),),
+               "etf": (("etf_kr", "Korea", "국내"), ("etf_us", "US", "미국"))}
+PAGE_CATEGORY = {page: category for category, pages in MARKET_SUBS.items() for page, _en, _ko in pages}
+# 지수: the index cards of Research Home (`core.research.markets.SPECS`), opened there with the card selected.
+INDEX_CARDS = ("^KS11", "^GSPC", "VIXCLS")
+# The other categories open the analysis tools that cover them, or a Home card: (category, ((leaf, English,
+# Korean), ...)); a tool leaf is ('tool', pane attribute, its sub-tool or ''), a card leaf ('home', symbol).
+TOOL_LEAVES = {
+    "futures": ((("tool", "derivatives", "board"), "KOSPI 200 futures & options", "코스피200 선물·옵션"),),
+    "fx": ((("home", "DEXKOUS"), "US dollar / Korean won", "달러/원 환율"),
+           (("tool", "fx", "forward"), "Spot, forward & carry", "현물·선물환·캐리"),
+           (("tool", "fx", "option"), "Option & smile", "옵션 및 스마일"),
+           (("tool", "fx", "carry"), "Carry basket", "캐리 바스켓")),
+    "govt": ((("home", "DGS10"), "US 10-year yield", "미국 10년 국채 금리"),
+             (("tool", "rates", "curve"), "Yield curve", "수익률 곡선"),
+             (("tool", "rates", "sim"), "Rate simulation", "금리 시뮬레이션")),
+    "corp": ((("tool", "bonds", ""), "Bond price & spread", "채권 가격·스프레드"),),
+    "economy": ((("tool", "macro", "sheet"), "Macro sheet", "매크로 지표"),
+                (("tool", "macro", "daily"), "Daily commentary", "일일 시장 해설"),
+                (("tool", "macro", "weekly"), "Weekly rates & FX", "주간 금리·외환")),
+}
+# What a page reached from the menu shows, as its category (the rail row highlighted there).
+TOOL_CATEGORY = {"derivatives": "futures", "fx": "fx", "rates": "govt", "bonds": "corp", "macro": "economy"}
+HOME_CATEGORY = {"^KS11": "indices", "^GSPC": "indices", "VIXCLS": "indices", "DEXKOUS": "fx", "DGS10": "govt"}
+# Where a tool leaf opens and what it shows, for its tooltip.
+_TOOL_TIPS = {"derivatives": ("Analysis tools › Derivatives", "분석 도구 › 파생상품"),
+              "fx": ("Analysis tools › FX", "분석 도구 › 외환"), "rates": ("Analysis tools › Rates", "분석 도구 › 금리"),
+              "bonds": ("Analysis tools › Bonds: price, yield and z-spread over the Treasury curve",
+                        "분석 도구 › 채권: 가격·수익률과 국채 곡선 대비 스프레드(z-spread)"),
+              "macro": ("Analysis tools › Macro sheet", "분석 도구 › 매크로 지표")}
+_HOME_TIP = ("Research Home › Major markets: the daily chart", "연구 홈 › 주요 시장: 일별 차트")
+_HINTS = {"home": ("Chart", "차트"), "tool": ("Analysis", "분석")}
+
+
+@dataclass(frozen=True)
+class MenuNode:
+    """One row of the 시장 menu. A row with `children` opens a flyout; a leaf row opens `leaf`: ('market', page,
+    category), ('home', symbol) or ('tool', pane, sub-tool). `mark` names what the row stands for, so the row of
+    what is shown can be marked; `hint` is a muted word at the row's right saying where a leaf opens outside
+    Markets ('차트' for a Research Home chart, '분석' for an analysis tool); `note` is a muted line under a flyout's
+    rows (why a ranking is left out), with `note_tip` as its tooltip."""
+    key: str
+    text: str
+    children: tuple = ()
+    leaf: tuple = ()
+    mark: tuple = ()
+    tip: str = ""
+    note: str = ""
+    note_tip: str = ""
+    hint: str = ""
+
+
+def _pick(language, english, korean):
+    return korean if language == "ko" else english
+
+
+def page_categories(page):
+    """The ranking categories a market page can rank by (`screen.category_note` leaves the others out)."""
+    from core.market import rankings as R
+    from core.market.screen import category_note
+    return tuple(key for key in R.CATEGORY_KEYS if not category_note(page, key))
+
+
+def _left_out(page, language):
+    """(note, tooltip) for the rankings a page leaves out: '시가총액 순위 없음' and why; ('', '') when none."""
+    from core.market import rankings as R
+    from core.market.screen import category_note
+    from .translations import translate
+    missing = [key for key in R.CATEGORY_KEYS if category_note(page, key)]
+    if not missing:
+        return "", ""
+    names = [R.text(R.CATEGORIES, key, language) for key in missing]
+    note = "·".join(names) + " 순위 없음" if language == "ko" else "No ranking by " + " or ".join(n.lower() for n in names)
+    reasons = [category_note(page, key) for key in missing]
+    tip = " ".join(translate(reason, "ko") if language == "ko" else reason for reason in reasons)
+    return note, tip
+
+
+def _ranking_nodes(page, language):
+    from core.market import rankings as R
+    return tuple(MenuNode(key, R.text(R.CATEGORIES, key, language), leaf=("market", page, key),
+                          mark=("market", page, key)) for key in page_categories(page))
+
+
+def market_menu(language):
+    """The 시장 menu in `language`: one `MenuNode` per `MARKET_CATEGORIES` row, each with its flyout's rows.
+
+    주식 › 국내 / 미국 › the rankings that market has; 크립토 › its rankings; ETF › 국내 / 미국 › rankings (no market
+    cap: the note says why); 지수 › Research Home's index cards; 선물 · 외환 · 국채 · 회사채 · 월드 이코노미 › the analysis
+    tools (and Home cards) that cover them. Pure apart from reading the text tables; nothing is fetched."""
+    from .owner_ui_language.home import MARKETS as HOME_NAMES
+    language = "ko" if language == "ko" else "en"
+    rows = []
+    for key, english, korean in MARKET_CATEGORIES:
+        text = _pick(language, english, korean)
+        if key == "indices":
+            children = tuple(MenuNode(symbol, _pick(language, *HOME_NAMES[symbol]), leaf=("home", symbol),
+                                      mark=("home", symbol), tip=_pick(language, *_HOME_TIP),
+                                      hint=_pick(language, *_HINTS["home"]))
+                             for symbol in INDEX_CARDS)
+        elif key == "crypto":
+            note, note_tip = _left_out("crypto", language)
+            rows.append(MenuNode(key, text, _ranking_nodes("crypto", language), mark=("category", key),
+                                 note=note, note_tip=note_tip))
+            continue
+        elif key in MARKET_SUBS:
+            children = []
+            for page, sub_en, sub_ko in MARKET_SUBS[key]:
+                note, note_tip = _left_out(page, language)
+                children.append(MenuNode(page, _pick(language, sub_en, sub_ko), _ranking_nodes(page, language),
+                                         mark=("page", page), note=note, note_tip=note_tip))
+            children = tuple(children)
+        else:
+            children = tuple(
+                MenuNode(":".join(leaf), _pick(language, leaf_en, leaf_ko), leaf=leaf, mark=leaf,
+                         tip=_pick(language, *(_HOME_TIP if leaf[0] == "home" else _TOOL_TIPS[leaf[1]])),
+                         hint=_pick(language, *_HINTS[leaf[0]]))
+                for leaf, leaf_en, leaf_ko in TOOL_LEAVES[key])
+        rows.append(MenuNode(key, text, children, mark=("category", key)))
+    return tuple(rows)
+
 
 def market_sections():
-    """(key, English title) for each Markets sub-item: the markets (interface contract with the Markets page:
-    `markets_view.MARKET_PAGES`, the table of `core.market.screen.PAGES`)."""
-    from core.market.screen import PAGES
-    return tuple((key, english) for key, english, _korean in PAGES)
+    """(key, English title) for each 시장 row (`MARKET_CATEGORIES`)."""
+    return tuple((key, english) for key, english, _korean in MARKET_CATEGORIES)
 
 
 def market_section_text(key, language):
-    """A Markets sub-item's text in the window language ('국내 주식', 'US stocks')."""
-    from core.market.screen import page_text
-    return page_text(key, "ko" if language == "ko" else "en")
+    """A 시장 row's text in the window language ('주식', 'Stocks')."""
+    for each, english, korean in MARKET_CATEGORIES:
+        if each == key:
+            return _pick("ko" if language == "ko" else "en", english, korean)
+    raise KeyError(key)
 
 
 def stored_flag(store, key=SETTINGS_KEY):
@@ -104,6 +244,26 @@ def stop_icon(color, size=16):
     return _pixmaps(size, paint)
 
 
+def markets_icon(color, size=18):
+    """A small line chart over a baseline: the 시장 menu's button in the hidden rail."""
+    stroke = QColor(color)
+
+    def paint(painter):
+        pen = QPen(stroke, 1.5)
+        pen.setJoinStyle(Qt.PenJoinStyle.RoundJoin)
+        pen.setCapStyle(Qt.PenCapStyle.RoundCap)
+        painter.setPen(pen)
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        unit = size / 18
+        painter.drawLine(QPointF(2.5 * unit, 15 * unit), QPointF(15.5 * unit, 15 * unit))
+        line = QPainterPath(QPointF(3 * unit, 11.5 * unit))
+        for x, y in ((6.5, 7.5), (9.5, 10), (14.5, 4)):
+            line.lineTo(QPointF(x * unit, y * unit))
+        painter.drawPath(line)
+
+    return _pixmaps(size, paint)
+
+
 def icon_button(accessible_name, tooltip, size):
     """A square, text-free rail button (styled by QPushButton[railIcon='true'] in typography)."""
     button = QPushButton()
@@ -134,13 +294,17 @@ def set_focus_ring(button, shown):
 class RailKeys(QObject):
     """Up/Down (Home/End) move between the rail's visible buttons; Return/Enter press the focused one.
 
+    A button with the `flyout` property (the 시장 rows, UI-D11) also opens its flyout with Right (`expand`) and
+    closes it with Left or Esc (`collapse`); moving to another rail button closes it too.
+
     The focus ring follows keyboard focus only: Tab, Backtab and these arrow moves show it; a mouse
     click or the window gaining focus does not, so no ring lingers on a clicked menu item.
     """
 
-    def __init__(self, buttons, parent=None):
+    def __init__(self, buttons, parent=None, *, expand=None, collapse=None):
         super().__init__(parent)
         self.buttons = buttons  # callable returning the rail's buttons in visual order
+        self.expand, self.collapse = expand, collapse
 
     def watch(self, button):
         button.installEventFilter(self)
@@ -166,8 +330,16 @@ class RailKeys(QObject):
         if key in (Qt.Key.Key_Return, Qt.Key.Key_Enter):
             watched.click()
             return True
+        if watched.property("flyout"):
+            if key == Qt.Key.Key_Right and self.expand is not None:
+                self.expand(watched)
+                return True
+            if key in (Qt.Key.Key_Left, Qt.Key.Key_Escape) and self.collapse is not None:
+                return bool(self.collapse(watched))
         if key not in (Qt.Key.Key_Up, Qt.Key.Key_Down, Qt.Key.Key_Home, Qt.Key.Key_End):
             return False
+        if self.collapse is not None:
+            self.collapse(None)  # another rail button: an open flyout closes
         shown = [b for b in self.buttons() if b.isVisible() and b.isEnabled()]
         if watched not in shown:
             return False
@@ -178,5 +350,7 @@ class RailKeys(QObject):
         return True
 
 
-__all__ = ["SETTINGS_KEY", "KEYBOARD_FOCUS", "market_sections", "market_section_text",
-           "stored_flag", "toggle_icon", "stop_icon", "icon_button", "set_focus_ring", "RailKeys"]
+__all__ = ["SETTINGS_KEY", "KEYBOARD_FOCUS", "MARKET_CATEGORIES", "MARKET_SUBS", "PAGE_CATEGORY", "INDEX_CARDS",
+           "TOOL_LEAVES", "TOOL_CATEGORY", "HOME_CATEGORY", "MenuNode", "market_menu", "page_categories",
+           "market_sections", "market_section_text", "stored_flag", "toggle_icon", "stop_icon", "markets_icon",
+           "icon_button", "set_focus_ring", "RailKeys"]

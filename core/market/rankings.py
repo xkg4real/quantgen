@@ -34,6 +34,14 @@ daily volume in US dollars, so it is the coin's trading value as stated (not est
 derived from it: ranking coins by count would compare 1 BTC with 1 DOGE. No source the app uses states a coin's
 market cap, so coins have none. A coin has no `Instrument` (the stock screen cannot open it).
 
+ETFs (owner ruling UI-D11, 2026-11-12: "ETF라해야지"; the rail's 시장 › ETF › 국내 / 미국): two curated lists of liquid
+ETFs, `ETF_KR` (KRX, group 'etf_kr') and `ETF_US` (group 'etf_us', the US ETFs the bundled symbol directory lists as
+ETFs, with its KIS exchange codes). They are read exactly as stocks are: KIS ``inquire-price`` / the overseas
+``price`` quote when KIS is configured, else the Yahoo daily path (``069500.KS``, ``SPY``). An ETF's size is its net
+assets (AUM), which no source the app uses states, and KIS's domestic ``hts_avls`` for an ETF is not a figure the
+list may call market cap, so ETFs have no market-cap ranking (`core.market.screen.CATEGORY_NOTES`). An ETF opens the
+stock screen like a stock (`Member.instrument`).
+
 Pure: no Qt, no network, nothing read on import. Universe as of 2026-11 (listing market per stock as curated
 here; a KIS quote that names its representative market, or a Yahoo answer under the other suffix, overrides it).
 """
@@ -46,7 +54,7 @@ import math
 from core.market.models import Instrument
 
 __all__ = ("CATEGORIES", "CATEGORY_KEYS", "MARKETS", "MARKET_KEYS", "SECTORS", "STATES", "POLL_SECONDS", "COLUMNS",
-           "Member", "GROUPS", "CRYPTO", "crypto_symbol",
+           "Member", "GROUPS", "ETF_GROUPS", "CRYPTO", "ETF_KR", "ETF_US", "crypto_symbol",
            "DOMESTIC", "US", "QuoteRecord", "Batch", "RankedRow", "group_of", "universe", "members_of", "member_for",
            "sectors_in", "rank", "ranking_value", "value_unit", "parse_kis_domestic", "parse_kis_overseas",
            "record_from_bars", "drop_stale", "compact", "price_text", "change_text", "source_state",
@@ -61,7 +69,10 @@ CATEGORY_KEYS = tuple(key for key, _en, _ko in CATEGORIES)
 MARKETS = (("kr", "All Korea", "국내 전체"), ("kospi", "KOSPI", "코스피"), ("kosdaq", "KOSDAQ", "코스닥"),
            ("us", "US", "미국"))
 MARKET_KEYS = tuple(key for key, _en, _ko in MARKETS)
-GROUPS = ("kr", "us", "crypto")   # one fetch per group; 'crypto' is also its own market key (`group_of`)
+# One fetch per group; 'crypto', 'etf_kr' and 'etf_us' are also their own market keys (`group_of`).
+GROUPS = ("kr", "us", "crypto", "etf_kr", "etf_us")
+ETF_GROUPS = ("etf_kr", "etf_us")
+_GROUP_OF_MARKET = {"US": "us", "CRYPTO": "crypto", "ETF_KR": "etf_kr", "ETF_US": "etf_us"}
 SECTORS = (("semis", "Semiconductors", "반도체"), ("battery", "Batteries", "2차전지"), ("auto", "Autos", "자동차"),
            ("bio", "Bio & healthcare", "바이오·헬스케어"), ("finance", "Financials", "금융"),
            ("tech", "Tech & electronics", "IT·전자"), ("internet", "Internet & games", "인터넷·게임"),
@@ -113,8 +124,8 @@ def text(table, key, language):
 @dataclass(frozen=True)
 class Member:
     code: str
-    market: str          # 'KOSPI', 'KOSDAQ', 'US' or 'CRYPTO'
-    sector: str          # a SECTORS key ('' for a coin)
+    market: str          # 'KOSPI', 'KOSDAQ', 'US', 'CRYPTO', 'ETF_KR' (a KRX ETF) or 'ETF_US' (a US ETF)
+    sector: str          # a SECTORS key ('' for a coin or an ETF)
     name_ko: str
     name_en: str
     exchange: str = ""   # KIS overseas exchange code for US members ('NAS', 'NYS')
@@ -122,28 +133,34 @@ class Member:
 
     @property
     def group(self):
-        return {"US": "us", "CRYPTO": "crypto"}.get(self.market, "kr")
+        return _GROUP_OF_MARKET.get(self.market, "kr")
+
+    @property
+    def overseas(self):
+        """A US stock or ETF: KIS's overseas quote, Yahoo's bare ticker, prices in dollars."""
+        return self.market in ("US", "ETF_US")
 
     @property
     def instrument(self):
-        """The stock screen's instrument; None for a coin (`core.market.models` has no coin asset)."""
+        """The stock screen's instrument (an ETF is a listed security like a stock); None for a coin
+        (`core.market.models` has no coin asset)."""
         if self.market == "CRYPTO":
             return None
-        if self.market == "US":
+        if self.overseas:
             return Instrument("overseas_stock", self.code, self.exchange)
         return Instrument("domestic_stock", self.code)
 
     @property
     def currency(self):
-        return "KRW" if self.group == "kr" else "USD"
+        return "KRW" if self.group in ("kr", "etf_kr") else "USD"
 
     def label(self, language):
         return self.name_ko if language == "ko" else self.name_en
 
     def place(self, language, market=None):
         """'KOSPI'/'코스피' for a domestic member (its observed market when known), the exchange for a US one,
-        '' for a coin."""
-        if self.market == "CRYPTO":
+        '' for a coin or an ETF (KIS files NYSE Arca under its AMS code, so an exchange name could mislead)."""
+        if self.market in ("CRYPTO", "ETF_KR", "ETF_US"):
             return ""
         if self.market == "US":
             names = _EXCHANGE_NAMES.get(self.exchange, (self.exchange, self.exchange))
@@ -258,7 +275,49 @@ _CRYPTO = (
     ("ETC", "이더리움클래식", "Ethereum Classic", ()),
 )
 CRYPTO = tuple(Member(code, "CRYPTO", "", ko, en, aliases=aliases) for code, ko, en, aliases in _CRYPTO)
-_BY_KEY = {(m.instrument.asset, m.code, m.exchange): m for m in DOMESTIC + US}
+
+# Liquid KRX ETFs (UI-D11). (code, Korean name, English name). Brands are also searchable in Hangul (코덱스, 타이거).
+_ETF_KR = (
+    ("069500", "KODEX 200", "KODEX 200"), ("102110", "TIGER 200", "TIGER 200"),
+    ("122630", "KODEX 레버리지", "KODEX Leverage"), ("114800", "KODEX 인버스", "KODEX Inverse"),
+    ("252670", "KODEX 200선물인버스2X", "KODEX 200 Futures Inverse 2X"),
+    ("229200", "KODEX 코스닥150", "KODEX KOSDAQ150"), ("233740", "KODEX 코스닥150레버리지", "KODEX KOSDAQ150 Leverage"),
+    ("251340", "KODEX 코스닥150선물인버스", "KODEX KOSDAQ150 Futures Inverse"),
+    ("360750", "TIGER 미국S&P500", "TIGER US S&P500"), ("133690", "TIGER 미국나스닥100", "TIGER US NASDAQ100"),
+    ("379800", "KODEX 미국S&P500TR", "KODEX US S&P500 TR"),
+    ("381170", "TIGER 미국테크TOP10 INDXX", "TIGER US Tech TOP10 INDXX"),
+    ("305540", "TIGER 2차전지테마", "TIGER Secondary Battery Theme"), ("091160", "KODEX 반도체", "KODEX Semiconductor"),
+    ("091230", "TIGER 반도체", "TIGER Semiconductor"), ("132030", "KODEX 골드선물(H)", "KODEX Gold Futures (H)"),
+    ("261240", "KODEX 미국달러선물", "KODEX USD Futures"), ("153130", "KODEX 단기채권", "KODEX Short-term Bond"),
+    ("278530", "KODEX 200TR", "KODEX 200 TR"), ("102780", "KODEX 삼성그룹", "KODEX Samsung Group"),
+)
+
+
+def _brand_alias(name):
+    return (name.replace("KODEX", "코덱스").replace("TIGER", "타이거"),)
+
+
+ETF_KR = tuple(Member(code, "ETF_KR", "", ko, en, aliases=_brand_alias(ko)) for code, ko, en in _ETF_KR)
+# Liquid US ETFs (UI-D11): only those the bundled symbol directory (core/market/data/overseas_symbols.json) lists
+# as ETFs, with its KIS exchange code (AMS also covers NYSE Arca). VTI, SMH, XLK, XLF, XLE, JEPI and ARKK are not
+# in it, so they are not offered. (exchange, code, Korean, English, other names)
+_ETF_US = (
+    ("AMS", "SPY", "SPDR S&P 500", "SPDR S&P 500 ETF", ("S&P500",)),
+    ("NAS", "QQQ", "인베스코 QQQ", "Invesco QQQ Trust", ("나스닥100",)),
+    ("AMS", "VOO", "뱅가드 S&P 500", "Vanguard S&P 500 ETF", ("S&P500",)),
+    ("AMS", "IVV", "iShares 코어 S&P 500", "iShares Core S&P 500 ETF", ("S&P500",)),
+    ("AMS", "DIA", "SPDR 다우존스", "SPDR Dow Jones Industrial Average ETF", ("다우",)),
+    ("AMS", "IWM", "iShares 러셀 2000", "iShares Russell 2000 ETF", ("러셀2000",)),
+    ("NAS", "TLT", "iShares 미국 장기채 20년+", "iShares 20+ Year Treasury Bond ETF", ("장기채", "국채")),
+    ("AMS", "GLD", "SPDR 금", "SPDR Gold Shares", ("골드",)),
+    ("NAS", "SOXX", "iShares 반도체", "iShares Semiconductor ETF", ()),
+    ("AMS", "SCHD", "슈왑 미국 배당", "Schwab US Dividend Equity ETF", ("배당",)),
+    ("NAS", "TQQQ", "프로셰어즈 나스닥 3배", "ProShares UltraPro QQQ", ("레버리지",)),
+    ("NAS", "SQQQ", "프로셰어즈 나스닥 인버스 3배", "ProShares UltraPro Short QQQ", ("인버스",)),
+    ("AMS", "SOXL", "디렉시온 반도체 3배", "Direxion Daily Semiconductor Bull 3X", ("레버리지",)),
+)
+ETF_US = tuple(Member(code, "ETF_US", "", ko, en, exchange, aliases) for exchange, code, ko, en, aliases in _ETF_US)
+_BY_KEY = {(m.instrument.asset, m.code, m.exchange): m for m in DOMESTIC + US + ETF_KR + ETF_US}
 
 
 def crypto_symbol(member):
@@ -267,16 +326,17 @@ def crypto_symbol(member):
 
 
 def group_of(market):
-    """'kr' for the domestic list keys (one fetch serves all three), 'us' for the US one, 'crypto' for coins."""
-    if market == "crypto":
-        return "crypto"
+    """'kr' for the domestic list keys (one fetch serves all three), 'us' for the US one, 'crypto' for coins and
+    'etf_kr' / 'etf_us' for the ETF lists."""
+    if market in ("crypto",) + ETF_GROUPS:
+        return market
     if market not in MARKET_KEYS:
         raise ValueError(f"Unknown market {market!r}")
     return "us" if market == "us" else "kr"
 
 
 def members_of(group):
-    return {"us": US, "crypto": CRYPTO}.get(group, DOMESTIC)
+    return {"us": US, "crypto": CRYPTO, "etf_kr": ETF_KR, "etf_us": ETF_US}.get(group, DOMESTIC)
 
 
 def universe(market, sector=""):
@@ -367,7 +427,7 @@ def ranking_value(record, category):
 
 def value_unit(category, group):
     """What the right-hand column shows: ('trading value' | 'volume' | 'market cap', unit for `compact`)."""
-    money = "krw" if group == "kr" else "usd"
+    money = "krw" if group in ("kr", "etf_kr") else "usd"
     if category == "volume":
         return "volume", "shares"
     if category == "cap":
@@ -702,7 +762,7 @@ def session_open(group, moment=None):
         return True
     from core.markets import is_open
     moment = moment or datetime.now(timezone.utc)
-    return bool(is_open("US" if group == "us" else "KRX", moment))
+    return bool(is_open("US" if group in ("us", "etf_us") else "KRX", moment))
 
 
 def source_state(batch, *, open_now, age_seconds=0.0, live_limit=None, round_seconds=None):
@@ -720,5 +780,5 @@ def source_state(batch, *, open_now, age_seconds=0.0, live_limit=None, round_sec
             return "stale"
         if round_seconds is not None and round_seconds > POLL_SECONDS:
             return "stale"
-        return "polled_us" if batch.group == "us" else "polled"
+        return "polled_us" if batch.group in ("us", "etf_us") else "polled"
     return "daily"

@@ -30,8 +30,10 @@ from core.market import rankings as R
 from .jobs import Jobs
 
 # page -> ((Yahoo symbol, unit), ...); names (English, Korean) in owner_ui_language/market.py INDEX_NAMES.
+# The ETF pages (UI-D11) show their home market's indices.
 SUMMARY = {"kr": (("^KS11", "pt"), ("^KQ11", "pt")), "us": (("^GSPC", "pt"), ("^IXIC", "pt")),
            "crypto": (("BTC-USD", "USD"), ("ETH-USD", "USD"))}
+SUMMARY.update(etf_kr=SUMMARY["kr"], etf_us=SUMMARY["us"])
 SPARK_POINTS = 22            # about a month of trading days
 RETRY_SECONDS = 300
 TILE_SPARK = (64, 22)
@@ -152,7 +154,7 @@ class MarketSummary(QWidget):
         self.clock = clock or (lambda: datetime.now(timezone.utc))
         self.page = "kr"
         self.histories = {}          # symbol -> MarketHistory
-        self._fetched = {}           # page -> when its last load finished
+        self._fetched = {}           # a page's series (SUMMARY[page]) -> when their last load finished
         self._loading = None         # page while its job runs
         self._epoch, self._stopped, self._pending, self._cancel = 0, False, False, None
         self.compact = False
@@ -165,6 +167,8 @@ class MarketSummary(QWidget):
         self.tiles = {}
         for page, rows in SUMMARY.items():
             for symbol, unit in rows:
+                if symbol in self.tiles:  # an ETF page shares its home market's tiles
+                    continue
                 tile = SummaryTile(symbol, unit)
                 tile.hide()
                 self.tiles[symbol] = tile
@@ -181,7 +185,7 @@ class MarketSummary(QWidget):
     # Loading ---------------------------------------------------------------------------------
     def due(self, page=None):
         page = page or self.page
-        fetched = self._fetched.get(page)
+        fetched = self._fetched.get(SUMMARY[page])
         if fetched is None:
             return True
         ok = all(self.histories.get(symbol) is not None and self.histories[symbol].ok
@@ -226,7 +230,7 @@ class MarketSummary(QWidget):
             kept = self.histories.get(history.symbol)
             if history.ok or kept is None or not kept.ok:
                 self.histories[history.symbol] = history  # a failed reload keeps the last good closes
-        self._fetched[page] = self.clock()
+        self._fetched[SUMMARY[page]] = self.clock()
         self.render()
         self.loaded.emit(page)
         self._follow_up(page)
@@ -236,7 +240,7 @@ class MarketSummary(QWidget):
         if self._stopped:
             return
         page, self._loading = self._loading or self.page, None
-        self._fetched[page] = self.clock()
+        self._fetched[SUMMARY[page]] = self.clock()
         self.render()
         self._follow_up(page)
 

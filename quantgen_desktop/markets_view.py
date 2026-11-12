@@ -1,4 +1,4 @@
-"""Markets workspace: one page per market (국내 주식 / 미국 주식 / 코인) and one screen per stock.
+"""Markets workspace: one page per market (국내 주식 / 미국 주식 / 크립토 / 국내 ETF / 미국 ETF) and one screen per stock.
 
 Owner ruling 2026-11-11 (UI-D10): the rail lists the markets; each market's page ranks its list by the categories
 that were the sub-menu, which double as search criteria (`MarketsWorkspace`, `market_rankings.RankingBoard`,
@@ -38,12 +38,17 @@ from .company_identity import CompanyMark, company_icon
 from .jobs import Jobs
 from .tools import CurrentPageStack
 
-# Interface contract between the native UI areas: the rail's Markets sub-menu lists MARKET_PAGES and calls
-# `MarketsWorkspace.show_market(key)` (owner ruling UI-D10, 2026-11-11). `show_category(key)` keeps taking a
-# RANKING_CATEGORIES key, or "search", for earlier callers (UI-D7).
+# Interface contract between the native UI areas: the rail's 시장 flyouts (owner ruling UI-D11, 2026-11-12;
+# `shell_rail.market_menu`) open a MARKET_PAGES page with `MarketsWorkspace.show_market(key)` and rank it with
+# `show_category(key)`, a RANKING_CATEGORIES key (or "search", for earlier callers, UI-D7).
 RANKING_CATEGORIES = _rankings.CATEGORIES
 MARKET_PAGES = _screen.PAGES
 MARKET_PAGE_KEYS = _screen.PAGE_KEYS
+# Pages whose rows are listed securities the stock screen opens, by asset (UI-D11: the ETF pages too).
+PAGE_ASSETS = {"kr": ("domestic_stock",), "us": ("overseas_stock",), "etf_kr": ("domestic_stock",),
+               "etf_us": ("overseas_stock",)}
+STOCK_PAGES = tuple(PAGE_ASSETS)
+ASSET_PAGES = {"domestic_stock": ("kr", "etf_kr"), "overseas_stock": ("us", "etf_us")}
 WATCHLIST_KEY = "markets/watchlist"
 WATCHLIST_LIMIT = 20
 DEFAULT_CODES = ("005930", "000660", "005380", "105560", "373220", "207940")
@@ -779,8 +784,9 @@ from .stock_detail import ProfileSectionPanel, StockDetailView as StockView  # n
 class MarketsWorkspace(QWidget):
     """One market's page (`market_rankings.RankingBoard`), or one stock's screen.
 
-    Owner ruling UI-D10 (2026-11-11): the rail's Markets sub-menu lists the markets (`MARKET_PAGES`: 국내 주식,
-    미국 주식, 코인) and calls `show_market(key)`; the ranking categories are that market's own chips and search
+    Owner ruling UI-D10 (2026-11-11): one page per market (`MARKET_PAGES`: 국내 주식, 미국 주식, 크립토, and since
+    UI-D11 국내 ETF, 미국 ETF), opened with `show_market(key)`; the ranking categories are that market's own chips
+    and search
     criteria. The page has no title, description or separate search card: its header row carries the market's
     name, data state and a search scoped to the market (`search`), which narrows the list as it is typed and on
     Enter opens the one stock it names (the list's, or any stock of that market in the symbol directory).
@@ -859,7 +865,7 @@ class MarketsWorkspace(QWidget):
             self.market_changed.emit(self.rankings.page)
 
     def show_market(self, key):
-        """Show one market's page (a MARKET_PAGES key): the rail's 국내 주식 / 미국 주식 / 코인.
+        """Show one market's page (a MARKET_PAGES key): 국내 주식, 미국 주식, 크립토, 국내 ETF or 미국 ETF.
 
         An open stock's screen gives way to the list; the market keeps its own criteria from its last visit.
         """
@@ -899,8 +905,8 @@ class MarketsWorkspace(QWidget):
     def focus_search(self):
         """The list's search for a stock (Home's "add to watchlist", the window's live-chart action). A coin page
         cannot find or open a stock (UI-D10 review: Home's add landed on the coin search), so it gives way to the
-        stock market shown last."""
-        if self.rankings.page not in ("kr", "us"):
+        stock market shown last. An ETF page keeps its search: ETFs open like stocks."""
+        if self.rankings.page not in STOCK_PAGES:
             self.rankings.set_page(self._stock_market)
         self._scroll_to_top()
         self.search.setFocus(Qt.FocusReason.OtherFocusReason)
@@ -946,9 +952,10 @@ class MarketsWorkspace(QWidget):
         # market's list): switched while hidden, the list starts no fetch behind the stock screen (UI-D10
         # review); it loads when Back shows it.
         self.pages.setCurrentIndex(1)
-        market = {"domestic_stock": "kr", "overseas_stock": "us"}.get(instrument.asset)
-        if market and market != self.rankings.page:
-            self.rankings.set_page(market)
+        pages = ASSET_PAGES.get(instrument.asset, ())
+        if pages and self.rankings.page not in pages:  # an ETF opened from an ETF page keeps that page under it
+            member = _rankings.member_for(instrument)
+            self.rankings.set_page(member.group if member is not None and member.group in pages else pages[0])
         self.stock.show_instrument(instrument, load=load)
         if not was_stock:
             self.category_changed.emit("")
@@ -982,7 +989,7 @@ class MarketsWorkspace(QWidget):
             return  # several, a coin, or one the criteria leave out: the list and its empty state answer
         if replace(board.screen, sub="", sector="").members():
             return  # the market has it outside the sub-market or sector chosen: the empty state says so
-        own = {"kr": ("domestic_stock",), "us": ("overseas_stock",)}.get(page, ())
+        own = PAGE_ASSETS.get(page, ())
         other = tuple(asset for asset in STOCK_ASSETS if asset not in own)
         listing = self.directory.resolve(text, assets=own) if own and self.directory is not None else None
         if listing is not None:
@@ -1025,7 +1032,7 @@ class MarketsWorkspace(QWidget):
         out = list(_code_choices(text, page, lang))
         if self.directory is None:
             return out
-        assets = ("domestic_stock",) if page == "kr" else ("overseas_stock",)
+        assets = PAGE_ASSETS.get(page, ("overseas_stock",))
         rows = self.directory.search(text, limit=12, assets=assets)
         for listing in rows:
             kind = getattr(listing, "kind", "stock")

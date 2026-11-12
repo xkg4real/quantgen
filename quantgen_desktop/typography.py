@@ -46,6 +46,13 @@ BRAND_SYMBOL_SIZE = 32
 BRAND_SPACING = 6
 SUBNAV_INDENT = 14           # from the nav buttons' left edge to the sub-menu guide line
 SUBNAV_PADDING = (7, 12)     # vertical, horizontal (after the 2px guide line): airy rows
+# Owner ruling UI-D11 (2026-11-12): the 시장 rows are the big categories of a TradingView-style menu, roomy rows
+# with a chevron at the right (painted by rail_menu.ChevronButton inside the right padding). 36 px while the rail
+# has the room; a shorter window tightens them (to MARKET_ROW_MIN_HEIGHT) before the rail has to scroll
+# (`app.ResearchWindow.fit_market_rows`).
+MARKET_ROW_PADDING = (12, 30)  # left (after the guide line), right (room for the chevron); the height is fixed
+MARKET_ROW_HEIGHT = 36
+MARKET_ROW_MIN_HEIGHT = 26
 
 
 def is_dark(palette) -> bool:
@@ -183,6 +190,7 @@ def rail_stylesheet(p, dark: bool) -> str:
     """
     nav_v, nav_h = NAV_PADDING
     sub_v, sub_h = SUBNAV_PADDING
+    row_l, row_r = MARKET_ROW_PADDING
     edge, guide = mix(p.surface, p.border, 0.45), mix(p.surface, p.border, 0.8)
     return f"""
           QFrame#sidebar {{ background: {p.surface}; border: 0; border-right: 1px solid {edge}; }}
@@ -202,6 +210,36 @@ def rail_stylesheet(p, dark: bool) -> str:
           QPushButton[subnav='true'][focusRing='true'] {{ color: {p.text}; background: {p.accent_soft}; border-left-color: {p.accent};
                                                          border-top-right-radius: 6px; border-bottom-right-radius: 6px; }}
           QPushButton[subnav='true'][focusRing='true']:checked {{ color: {p.accent}; }}
+          QPushButton[marketRow='true'] {{ padding: 0 {row_r}px 0 {row_l}px; min-height: {MARKET_ROW_MIN_HEIGHT}px;
+                                         font-size: 14px; }}
+        """
+
+
+def flyout_tint(p, dark: bool) -> str:
+    """The pointed row of the 시장 menu (and the rail row whose flyout is open, painted by rail_menu.RailAnchor): a
+    quiet neutral tint, not the accent, so the accent stays for what the window shows."""
+    return mix(p.surface, p.border, 0.55 if dark else 0.5)
+
+
+def flyout_stylesheet(p, dark: bool) -> str:
+    """The 시장 menu's flyouts (owner ruling UI-D11, 2026-11-12; rail_menu.FlyoutPanel paints the box itself).
+
+    Roomy 38 px rows in the window font at 14 px, a 2 px transparent border that turns accent for keyboard focus
+    (`focusRing`, as in the rail), the pointed row and the row whose flyout is open on a neutral tint, and the row
+    of what the window shows in the accent colour. The note under a flyout's rows is muted 12 px text.
+    """
+    tint = flyout_tint(p, dark)
+    return f"""
+          QWidget#railFlyout {{ background: transparent; }}
+          QPushButton[flyoutRow='true'] {{ text-align: left; padding: 0 28px 0 12px; border: 2px solid transparent;
+                                          border-radius: 6px; background: transparent; color: {p.text};
+                                          font-size: 14px; font-weight: 400; letter-spacing: -0.1px; }}
+          QPushButton[flyoutRow='true']:hover, QPushButton[flyoutRow='true'][open='true'] {{ background: {tint}; }}
+          QPushButton[flyoutRow='true'][focusRing='true'] {{ background: {tint}; border-color: {p.accent}; }}
+          QPushButton[flyoutRow='true'][current='true'] {{ color: {p.accent}; font-weight: 600; }}
+          QPushButton[flyoutRow='true']:focus {{ outline: none; }}
+          QLabel#flyoutNote {{ background: transparent; color: {p.muted}; font-size: 12px; font-weight: 400;
+                              padding: 6px 12px 4px 11px; }}
         """
 
 
@@ -287,6 +325,8 @@ def window_stylesheet(p, dark: bool) -> str:
 
 __all__ = ["TONES", "TONE_COLORS", "PANEL_DEPTH", "RAIL_MARGINS", "RAIL_SPACING", "NAV_PADDING",
            "NAV_SLACK", "SIDEBAR_WIDTH_RANGE", "RAIL_COLLAPSED_WIDTH", "RAIL_TOGGLE_SIZE", "BRAND_SYMBOL_SIZE",
-           "BRAND_SPACING", "SUBNAV_INDENT", "SUBNAV_PADDING", "is_dark", "tone_colors", "tone_for", "set_tone",
+           "BRAND_SPACING", "SUBNAV_INDENT", "SUBNAV_PADDING", "MARKET_ROW_PADDING", "MARKET_ROW_HEIGHT",
+           "MARKET_ROW_MIN_HEIGHT", "flyout_tint", "flyout_stylesheet",
+           "is_dark", "tone_colors", "tone_for", "set_tone",
            "scaled_font", "mix", "window_stylesheet", "rail_stylesheet", "controls_stylesheet",
            "popup_stylesheet", "icon_dir"]

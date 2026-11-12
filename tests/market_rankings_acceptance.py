@@ -760,6 +760,80 @@ class CoinUniverseTests(unittest.TestCase):
         self.assertEqual(R.source_state(batch, open_now=True), "daily")
 
 
+class EtfUniverseTests(unittest.TestCase):
+    """Owner ruling UI-D11 (2026-11-12, "ETF라해야지"): ETF lists on the stocks' data paths and ranking page."""
+
+    def test_domestic_etfs_are_liquid_krx_etfs_apart_from_the_stocks(self):
+        self.assertEqual(len(R.ETF_KR), 20)
+        codes = [m.code for m in R.ETF_KR]
+        self.assertEqual(len(set(codes)), 20)
+        self.assertFalse(set(codes) & {m.code for m in R.DOMESTIC})
+        for name in ("KODEX 200", "TIGER 200", "KODEX 레버리지", "KODEX 인버스", "KODEX 200선물인버스2X",
+                     "TIGER 미국S&P500", "TIGER 미국나스닥100", "KODEX 미국S&P500TR", "KODEX 코스닥150",
+                     "TIGER 2차전지테마"):
+            self.assertIn(name, [m.name_ko for m in R.ETF_KR])
+        # Codes the app already trades or studies as KRX ETFs (paper_live/config.py, the ETF tool's default).
+        for code in ("069500", "229200", "114800", "251340", "132030", "261240", "122630"):
+            self.assertIn(code, codes)
+        for m in R.ETF_KR:
+            with self.subTest(code=m.code):
+                self.assertTrue(re.fullmatch(r"\d{6}", m.code))
+                self.assertEqual((m.group, m.currency, m.sector, m.place("ko")), ("etf_kr", "KRW", "", ""))
+                self.assertEqual(m.instrument, Instrument("domestic_stock", m.code))  # opens the stock screen
+                self.assertIs(R.member_for(m.instrument), m)
+                self.assertTrue(m.name_ko.startswith(("KODEX", "TIGER")) and m.name_en)
+                self.assertFalse(re.search("[가-힣]", m.name_en))
+                self.assertTrue(re.search("코덱스|타이거", m.aliases[0]))  # the brand typed in Hangul finds it
+
+    def test_us_etfs_are_those_the_symbol_directory_lists_as_etfs(self):
+        from unittest.mock import Mock
+        from core.market.directory import SymbolDirectory
+        directory = SymbolDirectory(master_loader=Mock(side_effect=AssertionError("No master download")))
+        self.assertGreaterEqual(len(R.ETF_US), 10)
+        self.assertEqual(R.ETF_US[0].code, "SPY")
+        for m in R.ETF_US:
+            with self.subTest(code=m.code):
+                listing = directory.lookup("overseas_stock", m.code, m.exchange)
+                self.assertIsNotNone(listing)
+                self.assertEqual(listing.kind, "etf")
+                self.assertEqual((m.group, m.currency, m.sector, m.place("en")), ("etf_us", "USD", "", ""))
+                self.assertEqual(m.instrument, Instrument("overseas_stock", m.code, m.exchange))
+                self.assertIs(R.member_for(m.instrument), m)
+        for missing in ("VTI", "SMH", "XLK", "JEPI", "ARKK"):  # not in the bundled directory: not offered
+            self.assertNotIn(missing, [m.code for m in R.ETF_US])
+
+    def test_etf_groups_rank_as_stocks_without_market_cap(self):
+        from core.market import screen as S
+        self.assertEqual(R.GROUPS, ("kr", "us", "crypto", "etf_kr", "etf_us"))
+        self.assertEqual(R.MARKET_KEYS, ("kr", "kospi", "kosdaq", "us"))  # the earlier list keys are unchanged
+        for group, members, money in (("etf_kr", R.ETF_KR, "krw"), ("etf_us", R.ETF_US, "usd")):
+            self.assertEqual((R.group_of(group), R.members_of(group), R.universe(group)), (group, members, members))
+            self.assertEqual(R.sectors_in(group), ())
+            self.assertEqual(R.value_unit("value", group), ("value", money))
+            self.assertTrue(S.category_note(group, "cap"))
+            self.assertFalse(any(S.category_note(group, key) for key in ("value", "volume", "gainers", "losers")))
+            self.assertEqual([c.key for c in S.Screen(group).conditions()], ["change", "value"])
+        bars = [("2026-11-09", 1, 1, 1, 30000.0, 1000.0), ("2026-11-10", 1, 1, 1, 30300.0, 2000.0)]
+        leverage = R.record_from_bars(R.ETF_KR[2], bars)
+        self.assertEqual((leverage.trading_value, leverage.volume, leverage.estimated_value), (30300.0 * 2000, 2000.0,
+                                                                                               True))
+        records = (leverage, R.record_from_bars(R.ETF_KR[0], [bars[0], ("2026-11-10", 1, 1, 1, 29000.0, 5000.0)]))
+        self.assertEqual([r.record.member.code for r in S.Screen("etf_kr", "value").apply(records)],
+                         ["069500", "122630"])
+        self.assertEqual(S.Screen("etf_kr", "cap").apply(records), [])  # no market-cap ranking for ETFs
+        self.assertEqual([m.code for m in S.Screen("etf_kr", text="레버리지").members()], ["122630", "233740"])
+        self.assertEqual([m.code for m in S.Screen("etf_us", text="레버리지").members()], ["TQQQ", "SOXL"])
+        self.assertEqual(S.threshold_text(1e10, "money", "etf_kr", "ko"), "100억")
+        self.assertEqual(S.threshold_text(1e9, "money", "etf_us", "ko"), "$1B")
+        us = R.Batch("etf_us", (R.QuoteRecord(R.ETF_US[0], 600.0, 1.0, 0.2, 1e6, 6e8, None, "KIS", "kis", "x"),),
+                     "kis", "2026-11-11T05:20:00+00:00")
+        self.assertEqual(R.source_state(us, open_now=True), "polled_us")  # KIS's free US feed, as US stocks
+        for hour in (16, 2):  # 11:00 New York, then 11:00 Seoul
+            moment = datetime(2026, 11, 11, hour, 0, tzinfo=timezone.utc)
+            self.assertEqual(R.session_open("etf_us", moment), R.session_open("us", moment))
+            self.assertEqual(R.session_open("etf_kr", moment), R.session_open("kr", moment))
+
+
 class ScreenTests(unittest.TestCase):
     """Owner ruling UI-D10: the categories are each market's ranking and search criteria (core.market.screen)."""
 
@@ -782,13 +856,15 @@ class ScreenTests(unittest.TestCase):
 
     def test_pages_and_sub_markets(self):
         S = self.S
+        # Owner ruling UI-D11: the coin market is 크립토 (never 코인), and two ETF pages follow.
         self.assertEqual(S.PAGES, (("kr", "Korean stocks", "국내 주식"), ("us", "US stocks", "미국 주식"),
-                                   ("crypto", "Crypto", "코인")))
+                                   ("crypto", "Crypto", "크립토"), ("etf_kr", "Korean ETFs", "국내 ETF"),
+                                   ("etf_us", "US ETFs", "미국 ETF")))
         self.assertEqual([k for k, _e, _k in S.SUBS["kr"]], ["", "kospi", "kosdaq"])
         self.assertEqual([k for k, _e, _k in S.SUBS["us"]], ["", "NAS", "NYS"])
-        self.assertEqual(S.SUBS["crypto"], ())
+        self.assertEqual((S.SUBS["crypto"], S.SUBS["etf_kr"], S.SUBS["etf_us"]), ((), (), ()))
         self.assertEqual({m.exchange for m in R.US}, {"NAS", "NYS"})  # the data has these two exchanges
-        self.assertEqual((S.page_text("crypto", "ko"), S.sub_text("us", "NAS", "ko")), ("코인", "나스닥"))
+        self.assertEqual((S.page_text("crypto", "ko"), S.sub_text("us", "NAS", "ko")), ("크립토", "나스닥"))
 
     def test_text_category_sub_market_sector_and_conditions_combine(self):
         S = self.S
