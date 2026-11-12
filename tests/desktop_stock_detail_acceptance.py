@@ -207,6 +207,34 @@ class StockDetailTests(unittest.TestCase):
         return out
 
     # Layout --------------------------------------------------------------------------------------
+    def test_the_right_column_never_moves_sideways_with_seven_digit_prices(self):
+        """Owner's PC, 2026-11-12: SK하이닉스 at 1,255,000 KRW put price and change side by side wider than the column, the
+        column shifted sideways and both edges were cut. The change now drops under the price and the column stays put."""
+        global candles
+        real = candles
+
+        def big(code, n, interval="1d"):
+            rows = real(code, n, interval)
+            scale = 1255000 / 190000 if code == "000660" else 1
+            return tuple(Candle(c.timestamp, c.open * scale, c.high * scale, c.low * scale, c.close * scale, c.volume)
+                         for c in rows)
+        candles = big
+        self.addCleanup(lambda: globals().__setitem__("candles", real))
+        for size in ((1440, 900), (1280, 800), (1000, 700)):
+            self.window.resize(*size); self.settle()
+            self.open(HYNIX); self.settle()
+            scroll = self.view.side.current_scroll()
+            page, bar = scroll.widget(), scroll.horizontalScrollBar()
+            self.assertLessEqual(page.minimumSizeHint().width(), scroll.viewport().width(), size)
+            self.assertEqual((page.width(), bar.maximum()), (scroll.viewport().width(), 0), size)
+            bar.setValue(30); scroll.ensureWidgetVisible(self.view.side.card.change); self.settle(2)
+            self.assertEqual(bar.value(), 0, size)  # nothing can shift the column sideways
+            card = self.view.side.card
+            for label in (card.price, card.change, card.name):
+                right = label.mapTo(scroll.viewport(), label.rect().topRight()).x()
+                self.assertLessEqual(right, scroll.viewport().width(), (size, label.text()))
+                self.assertGreaterEqual(label.mapTo(scroll.viewport(), label.rect().topLeft()).x(), 0, size)
+
     def test_large_chart_left_one_right_column_and_the_page_never_scrolls(self):
         self.open()
         view, body = self.view, self.view.body

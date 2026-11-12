@@ -441,7 +441,7 @@
     "quantgen_desktop/source_notes.py": "05820a66919f8840aeacf81dfcf96bacd8fa75ecd355f64a1090c2d9ec59a14e",
     "quantgen_desktop/status_language.py": "e23a11eb835b155bfc88685ea0f521e664b8b7fc080ce3f600042b1002427386",
     "quantgen_desktop/stock_detail.py": "2d241e524a77d8a04fe9523a5373563109b889987d69a9c5c5c724929846a18e",
-    "quantgen_desktop/stock_detail_side.py": "0d57ec608eb659e158930b34b6733b6b7f47ae536e45747f37e85e4dcde00a1c",
+    "quantgen_desktop/stock_detail_side.py": "f5a9d6d50f7af96382c15a88cef8dbbfa907b98502f23e8fe6bc53d600d2b59d",
     "quantgen_desktop/stock_detail_style.py": "974cbfec07bd7d42e2f18b94ef007b1720683b8bdf5f3332990dae2fcb4130b2",
     "quantgen_desktop/strategy.py": "0b44d9c87f8a174d5c87eff60ffe2a68671ac381644fa6243f26f06812ca5b66",
     "quantgen_desktop/strategy_view.py": "3d44b759bb806d92cc1a299fd61790c449be392a262c8b46c1a9bd46a1a0bff8",
@@ -521,7 +521,7 @@
     "tests/desktop_responsive_tools_acceptance.py": "3fa58edd10fc71b8d739a2b573331448a0216dcd42a7c56ee99c1d796576e20e",
     "tests/desktop_sabr_diagnostics_acceptance.py": "08498faacb4e6a1d028ac56c7f8969858c1413c565b476fe258bc566ea3c665e",
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
-    "tests/desktop_stock_detail_acceptance.py": "27f1c3bb38dbf307b619061d9057da531012123ecb6c3740bccf7d9917d8986f",
+    "tests/desktop_stock_detail_acceptance.py": "fe22556178eb42636034918dc6772406b0400b8393d66d122e2bc5d4a63a0832",
     "tests/desktop_strategy_acceptance.py": "6da05d532c1b74b807ba32ecc9e5cfbce7df042ba32f8d2f9e4a0433b49d6f40",
     "tests/desktop_strategy_exposure_acceptance.py": "30c7e9f5c9132d77e546827f15232f769c27f19a60c6b21c3664772207c10ce4",
     "tests/desktop_swaption_conversion_acceptance.py": "113e1af795d0a9d592827330a2fdf115487dc4bb0b496d4ee3f3ba0d3b9185af",
@@ -724,163 +724,163 @@
   "reviews": {
     "1": {
       "document_sha256": "bacab46dd51ed03b4d3be4b9bc46a7733cbed73ba42653ce9695e5ca0e10b4b4",
-      "source_digest": "938e63e5c9232c9509b0ef02f4dedc7ad5d88798fcd37b940b15b0cdc68f88cd",
+      "source_digest": "664a6f7c511092dd87e2efca24e3b89efd6bbdb3eb445f1101a32abbc3ea3e3b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.800119+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.718496+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "938e63e5c9232c9509b0ef02f4dedc7ad5d88798fcd37b940b15b0cdc68f88cd",
+      "source_digest": "664a6f7c511092dd87e2efca24e3b89efd6bbdb3eb445f1101a32abbc3ea3e3b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.802325+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.720951+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "a03251d84fe97cd5bef79447eac69b7e071375cec831a77fc4bdb9f1b5892cff",
+      "source_digest": "9dcb596e7e096f86ad146a6aa2289983b43374b7d979049856a2c2fcdc78c527",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.805787+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.722836+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "4": {
       "document_sha256": "f63c98563dc663611297f52c74457ea7ad2f052d918c45e505dd667652074c9b",
       "source_digest": "a8a814710ef8932496e967eea55add5886c4dc3ce786e00f1761602b5ab87fd9",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.807537+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.724780+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
       "source_digest": "52a15d37a8f4278ad91b284b270f90ed503454aef6d5720dc374b98b3f8fb15b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.809329+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.726500+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "6": {
       "document_sha256": "60bb586d0bce26480feecc06f182c6ceaaea1700f1be0e95bac820f18ad484a8",
-      "source_digest": "e347b3b67456b2391085b8265fe464c9e27c3ebe9d7614d46507ece6d12ee6f1",
+      "source_digest": "19494d34ceacf7c7169f27034110ea14aadd71d4ec0b9c7d5d6538034545000c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.811394+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.728856+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "7": {
       "document_sha256": "1eb6da7d87830c9abde24303464cd80f65f6a1bf5b66bc5b53ec81b2c2e4b1ed",
-      "source_digest": "938e63e5c9232c9509b0ef02f4dedc7ad5d88798fcd37b940b15b0cdc68f88cd",
+      "source_digest": "664a6f7c511092dd87e2efca24e3b89efd6bbdb3eb445f1101a32abbc3ea3e3b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.813217+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.730644+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "8": {
       "document_sha256": "e50e210234645ca8e2561662dae3a0afc5ab445e68fe523d320c3889c7e0d8a7",
-      "source_digest": "e347b3b67456b2391085b8265fe464c9e27c3ebe9d7614d46507ece6d12ee6f1",
+      "source_digest": "19494d34ceacf7c7169f27034110ea14aadd71d4ec0b9c7d5d6538034545000c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.815039+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.732414+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "9": {
       "document_sha256": "ebdb3469ea72e45341719aae0805b46a526374d394dbdb0e1875fe1df2c01757",
-      "source_digest": "64ef47353f57064f5d61927eb0451542028d15725cde402770379793210f4d45",
+      "source_digest": "52066ac8d1420426cdf9dc5b4341d2ca3420419ccacdd598ddace3bbd8067a20",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.816831+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.734616+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "10": {
       "document_sha256": "13ab9559eb6b5a0bf84c1575acd19d94cdb0b69273474fd5e686e05df5930fc3",
-      "source_digest": "9f05d07e15ef750dc136079a64d84b703dea6099ab1b120f466514f76f3cca6f",
+      "source_digest": "163ffccd83bf5e9bb186ba16ab8e6c9495ff74e03a28610ab3aaff70a1aa3b84",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.818678+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.736448+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "eb9985c3367c61f7ae8c1745625ec88f2caec9f53660e9ee6c1cc635e68db3f2",
+      "source_digest": "629cd2f88aa40a92e725ca2a21a2176e18165a046e6534d485e4ef800fec8ee8",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.820413+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.738126+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "12": {
       "document_sha256": "55b14bd417df61e59c2e06eb37f397dcbe8457ec571342c27e6b0d3559d507dc",
-      "source_digest": "f29b05c5322515b3fbd43afb32cabe405cc2d2a268af515b554fbe1eb5a01c8b",
+      "source_digest": "5a2b2b7e3f6a45766df9f80b65428e7485acf837a49a9cfd748fe63ab651bb98",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.821956+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.739807+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "13": {
       "document_sha256": "cbb62a2360f579617977c7d4bb0105eecfec4b091ef98d554d14f8f675508ac0",
-      "source_digest": "64ef47353f57064f5d61927eb0451542028d15725cde402770379793210f4d45",
+      "source_digest": "52066ac8d1420426cdf9dc5b4341d2ca3420419ccacdd598ddace3bbd8067a20",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.824175+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.741760+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "14": {
       "document_sha256": "5098fa39312b4ce88a73080e61ad70473c9e736a2b7e93150c74e87fbb68d50c",
-      "source_digest": "64ef47353f57064f5d61927eb0451542028d15725cde402770379793210f4d45",
+      "source_digest": "52066ac8d1420426cdf9dc5b4341d2ca3420419ccacdd598ddace3bbd8067a20",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.825824+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.744031+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "15": {
       "document_sha256": "0ab1f0563379f4792c0d9146c9bdb4267f6af11ed489173fa144a2b6134884d5",
-      "source_digest": "64ef47353f57064f5d61927eb0451542028d15725cde402770379793210f4d45",
+      "source_digest": "52066ac8d1420426cdf9dc5b4341d2ca3420419ccacdd598ddace3bbd8067a20",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.828008+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.745734+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "32ecd581f8c5430f2b6e5a26a6f562c7629db87689f945fffa933be4121cce47",
+      "source_digest": "f42ea9a45516512d29638a7477a9acd0f30adc9b7566aa0748c9cf607fc07ae9",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.829795+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.747497+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "e347b3b67456b2391085b8265fe464c9e27c3ebe9d7614d46507ece6d12ee6f1",
+      "source_digest": "19494d34ceacf7c7169f27034110ea14aadd71d4ec0b9c7d5d6538034545000c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.831414+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.749420+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "938e63e5c9232c9509b0ef02f4dedc7ad5d88798fcd37b940b15b0cdc68f88cd",
+      "source_digest": "664a6f7c511092dd87e2efca24e3b89efd6bbdb3eb445f1101a32abbc3ea3e3b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.833063+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.751124+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "19": {
       "document_sha256": "983c0b85fb10b1018222236a37b839667a1103472796b514a9419651b8af2a37",
       "source_digest": "87363bf3a59ab560ee13b787361606b640ef78977defba15aba6c7b217bee6ef",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.834812+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.753053+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     },
     "20": {
       "document_sha256": "b6019dd07ee24fdf3a53791a3e0adad1472bb14cbe843a38553f209b669d1551",
-      "source_digest": "938e63e5c9232c9509b0ef02f4dedc7ad5d88798fcd37b940b15b0cdc68f88cd",
+      "source_digest": "664a6f7c511092dd87e2efca24e3b89efd6bbdb3eb445f1101a32abbc3ea3e3b",
       "reviewed_by": "Claude integration review",
-      "review_note": "Stock chart zoom moved to Ctrl+wheel and pinch (no +/- keys or buttons), left-drag pans (owner R-D12-1/2); docs 15 and FACTS chart-zoom-drag-2026-11-12",
-      "reviewed_at": "2026-11-12T07:25:25.836510+00:00",
-      "source_commit": "793a321a17ca405aed9d1f1bbfa3dc78c18f3419"
+      "review_note": "Right stock column keeps 7-digit prices inside the viewport; layout-only change, no new data or claims",
+      "reviewed_at": "2026-11-12T07:51:18.755416+00:00",
+      "source_commit": "5916c3659a7f1b92c2384354bc146ee4c422a488"
     }
   }
 }

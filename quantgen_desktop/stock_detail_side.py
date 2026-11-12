@@ -12,9 +12,9 @@ from __future__ import annotations
 from datetime import datetime, timezone
 import threading
 
-from PyQt6.QtCore import QPointF, QRectF, QTimer, Qt, pyqtSignal, pyqtSlot
+from PyQt6.QtCore import QPointF, QRectF, QSize, QTimer, Qt, pyqtSignal, pyqtSlot
 from PyQt6.QtGui import QColor, QPainter, QPen
-from PyQt6.QtWidgets import (QFrame, QGridLayout, QHBoxLayout, QPushButton, QScrollArea, QSizePolicy,
+from PyQt6.QtWidgets import (QBoxLayout, QFrame, QGridLayout, QHBoxLayout, QPushButton, QScrollArea, QSizePolicy,
                              QStackedWidget, QVBoxLayout, QWidget)
 
 from core.i18n import LocaleContext
@@ -650,12 +650,15 @@ class SymbolCard(QWidget):
         self.sector = label("sector")
         head.addWidget(self.sector)
         layout.addLayout(head)
-        figures = QHBoxLayout()
+        # Price and change sit on one line when the column has room and the change drops under the price when it
+        # does not: a seven-digit won price beside its change ('1,255,000  ▼ −22,000 (−1.72%)') is wider than a
+        # 300-330 px column, and the column then shifted sideways and cut both edges (owner's PC, 2026-11-12).
+        self.figures = figures = QBoxLayout(QBoxLayout.Direction.LeftToRight)
         figures.setSpacing(10)
         self.price = numbers(label("price", selectable=True))
-        figures.addWidget(self.price, 0, Qt.AlignmentFlag.AlignBottom)
+        figures.addWidget(self.price, 0, Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignLeft)
         self.change = numbers(label("change"))
-        figures.addWidget(self.change, 0, Qt.AlignmentFlag.AlignBottom)
+        figures.addWidget(self.change, 0, Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignLeft)
         figures.addStretch(1)
         layout.addLayout(figures)
         self.state = label("state", wrap=True)
@@ -688,6 +691,26 @@ class SymbolCard(QWidget):
         layout.addLayout(ends)
         self.range_from = numbers(label("body", wrap=True))
         layout.addWidget(self.range_from)
+
+    def minimumSizeHint(self):
+        # The figures may stack, so the card asks only for its widest single figure, never for both side by side.
+        hint = super().minimumSizeHint()
+        margins = self.layout().contentsMargins()
+        widest = max(self.price.sizeHint().width(), self.change.sizeHint().width()) + margins.left() + margins.right()
+        return QSize(min(hint.width(), max(widest, 160)), hint.height())
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._fit_figures()
+
+    def _fit_figures(self):
+        margins = self.layout().contentsMargins()
+        room = self.width() - margins.left() - margins.right()
+        need = self.price.sizeHint().width() + self.figures.spacing() + self.change.sizeHint().width()
+        direction = QBoxLayout.Direction.LeftToRight if need <= room else QBoxLayout.Direction.TopToBottom
+        if self.figures.direction() != direction:
+            self.figures.setDirection(direction)
+            self.figures.setSpacing(10 if direction == QBoxLayout.Direction.LeftToRight else 4)
 
 
 class NowRow(QFrame):
@@ -845,6 +868,11 @@ class RightColumn(QFrame):
         page = QWidget()
         page.setObjectName("sdPage")
         scroll.setWidget(page)
+        # The column never moves sideways: a focused row or a selected price label asking to be made visible
+        # used to scroll a page wider than the column, so both edges were cut and no scroll bar showed why.
+        bar = scroll.horizontalScrollBar()
+        bar.rangeChanged.connect(lambda *_: bar.setValue(0))
+        bar.valueChanged.connect(lambda value: bar.setValue(0) if value else None)
         return scroll, page
 
     def set_page(self, index):
