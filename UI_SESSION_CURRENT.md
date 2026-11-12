@@ -20,7 +20,7 @@ GPT 인수 시 금지: 위 14건 화면을 GPT 이전 버전으로 되돌리기,
 
 # 종목 상세 차트(UI-D8·UI-D9)·미국 시가총액·시장 화면 개편(UI-D10) 완료 — 2026-11-12 04:10 KST (Claude) · GPT 필독
 
-- status: UI-D8·UI-D9·미국 시가총액·규정 후속·UI-D10 완료·푸시(`a6d780b`, 규정 기준선 갱신 PASS) · 다음 작업 없음, 소유자 지시 대기 · waiting_on: owner
+- status: UI-D8·UI-D9·미국 시가총액·규정 후속·UI-D10 완료, main f4837ef 병합(`32c96a1`, 규정 기준선 재생성 PASS), PR https://github.com/xkg4real/quantgen/pull/109 (소유자 요청으로 생성, 병합 대기) · waiting_on: owner
 - work_branch: `claude/friendly-bardeen-r6xe8f` (main 미병합, PR은 소유자 요청 시)
 - 소유자 확정 규칙 원문·해석(R-D9-1~4, R-D10-1~3)은 아래 절. 상세 차트·시장 화면을 고치기 전에 반드시 읽을 것.
 
