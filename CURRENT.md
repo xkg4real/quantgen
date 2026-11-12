@@ -1,18 +1,18 @@
 ---
-status: checkpoint
-reason: manual
+status: handoff
+reason: usage_limit_weekly
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2
-next_ids: ⑤-2/g, ⑤-2/e, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-12T15:04:00+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e
+next_ids: ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-4/2/c, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-12T16:53:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: claude/adoption-outcome-20261112
-work_commit: b9dea9c
+work_branch: main
+work_commit: 0786200
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/111
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -120,7 +120,77 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - **C:** 0b 채택 방침만 기록. Q12 = 7개 파일(`core/quant/strategies.py`, `validate.py`, `history.py`, `gate_ledger.py`, `core/research/strategy_workflow.py`, `core/quant/optimize.py`, `core/quant/risk.py`). Q13·Q14·Q16·Q17·Q18 기본값. 화면은 네이티브만(UI-D1), Flet 작업(Q19 포함) 안 함, PC 화면은 시안 먼저 + UI 세션 이식과 ⑦-2 병합 뒤. Q22의 잘라내기 여부는 2026-12 말 전에 따로 질문. 다음 단위 ⑨-3a/recorder/1(화면 없음, 결정 9 조건: run_family 안에서 PNL_COMPUTED보다 낮은 PROGRESS를 쓰지 않음).
 - **D:** 주문 한도 수치(1회 100만 원/5%, 하루 10건·300만 원/15%, 손실 중지 40만 원/2%, 종목 비중 20%/400만 원, 가격 이탈 3%·시세 15초·지정가만, 09:00~15:20, 모의 20거래일·30건 등)를 기본값으로 승인. **실거래는 켜지지 않음.** 순서: 안전 설계 문서 보고 → ⑦-2 병합 뒤 구현 → 모의투자 → 결과 보고 → 소유자의 실거래 전환 승인. D-14 법률 자문은 소유자가 의뢰.
 
-### ⑨-4/2/c 시작: 채택 결과 조립 (2026-11-12 15:04 KST) — 가장 최신
+### 인계: Claude 주간 사용량 소진 (2026-11-12 KST) — 가장 최신, 여기서 이어받으십시오
+
+작업: claude-resume-20261103 · 주기 2026-11-10 · 세션 https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
+이 문서는 `handoff` 브랜치의 `CURRENT.md`(status: handoff, reason: usage_limit_weekly)와 같은 내용을 소유자가 GPT에게 넘기기 쉽게 한 장으로 줄인 것입니다. 끝난 일의 기록은 `LEDGER.md`에 있습니다(`python3 tools/handoff/push_handoff.py --ledger`).
+
+#### 0. 지금 한 줄
+
+**Pilot 1 관문이 열렸습니다.** SPY 둘째 대조가 PASS, 금리(DGS3MO)는 이미 PASS. 소유자가 PC에서 Pilot 1을 돌릴 차례입니다. BTC는 진단 결과가 판독 규칙 5번(원인 미확인)이라 소유자 한 줄 답(`BTC-라/마/바`)을 기다립니다.
+
+#### 1. 소유자 PC 재실행 결과 (2026-11-12, 소유자가 채팅에 붙인 출력)
+
+- 도구 클론 `%LOCALAPPDATA%\quantgen\pp_clone`: `git pull --ff-only`로 `648e1d8`, 고정 커밋 `1be43ec`이 브랜치에 있음, sha256 `78dd1f50…ca80c` 일치, selftest PASS.
+- fmp 재수신(`fetch2-spy-fmp`): `rows 5515, first 2004-11-01, last 2026-10-02, weekend dates 0`, `FETCH spy fmp OK exit=0`, 확인 줄 `rows 5515 blank 0`. 멈춤 조건 (a)~(d) 모두 충족.
+- SPY 대조(`compare2-spy`): `PARITY spy PASS exit=0`. 요약 `results/PP-20261112T073747Z-spy/summary.json`이 실행 브랜치 `claude/provider-parity-runs-20261111`에 `77d2647`로 올라옴.
+  - Claude가 요약만 읽어 확인: sha256 `4ad6c537fa5649a2f5d0ba069fd88a0d8e1a4398ca23308defcc017b118b3c02`, 도구 sha256 = 둘째 고정 버전, 고정 파일 md5 일치, outcome PASS, withheld 없음. fmp(독립) PASS(공통 5,489일, 허용치 초과 0일), yahoo_now(최신본) PASS, kis(보조) coverage WITHHELD(시작 2007-08-21, 첫 실행과 같음).
+  - 판정 SPY-가에 따라 이 둘째 실행이 Pilot 1 관문에 쓰임. 첫 실행(WITHHELD)은 기록으로 남음.
+- 연구 클론 상태: `git -C $rc status --porcelain` → `?? .agents/` (다시 생김). **Pilot 1의 A5에서 멈추고 러너가 R-01로 거부하므로**, 소유자에게 클론 밖으로 옮기라고 안내함:
+  `Move-Item "C:\Users\whydi\OneDrive\Desktop\QUANTGEN\.agents" "C:\Users\whydi\OneDrive\Desktop\QUANTGEN_agents_20261112"`
+- BTC 진단(`btc_diagnose`, `BTCDIAG OK exit=0`): 판독 규칙(`results/RULINGS.md`의 BTC-나 항목) 1번 파일 확인 모두 일치(도구·스크립트 sha256, 두 파일 sha256과 fetch_record=yes, common 4086/4392, tool_over/allowed 43/20·47/21, late 3555일).
+  - 합계: `split total both=20 coinbase_only=9 bitstamp_only=9 coinbase_edge=14 bitstamp_edge=12 coinbase_unpaired=0 bitstamp_unpaired=6`; `venues total both=20 agree=20 differ=0`.
+  - 3번(각 거래소 탓) 조건: over − only = 34(허용 20), 38(허용 21) → 아님. 4번(고정 파일만 따로) 조건: agree 20 > 허용 20/21 → 아님. **→ 5번, 원인 미확인.** 규칙대로 자동 통과하지 않고 소유자에게 물음.
+  - 연도별(채팅에만 있음, 저장소에는 합계만 적을 것): 불일치가 2015~2017년에 몰림(Coinbase 26일·Bitstamp 30일이 2017년), 2022~2026년 0일. Coinbase–Bitstamp끼리도 수익률 19일 불일치, 후기 가격차 상위 1% 1.6%(기준 1.5% 초과).
+
+#### 2. 소유자에게 올린 질문 (답 대기)
+
+| 답 | 내용 |
+|---|---|
+| `BTC-라-승인` (Claude 권장) | 불일치를 숫자와 함께 마감 기록·자료 접근 이력(10.4)에 적고, Pilot 1이 통과하면 Pilot 2 진행(스펙 10.5 관문이 허용하는 처리). |
+| `BTC-마-승인` | Pilot 2 보류, Pilot 1만으로 마감·병합(결정 2가 그때 다시 질문됨). |
+| `BTC-바-승인` | 고정 파일 교체(비추천: owner_confirmed 무효, Windows 재검증). |
+
+답이 오면 원문 그대로 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`와 `results/RULINGS.md`의 BTC 항목 아래에 적습니다.
+
+#### 3. GPT가 할 일 (순서대로, 각각 완료 조건)
+
+1. **세션 시작:** `python3 tools/handoff/push_handoff.py --show` → status handoff 확인 후 taken으로 이어받음. `--ledger`로 끝난 ID 확인.
+2. **PR #111 (⑨-4/2/c, 채택 결과 조립) 마무리:** head `73be590`(main `0786200` 병합 포함). GitHub Runtime·Compliance가 녹색이면 병합(merge commit). 캐시 없는 전체 실행은 `351db88`에서 782/908(main과 같음, 바뀐 행 0). 시험 `tests.adoption_strategy_rules_acceptance` 46 OK. 병합 뒤 원장 `--done "⑨-4/2/c | …"`. Vercel 상태는 무시.
+3. **판정 기록 PR(main, 문서만):** `results/RULINGS.md`의 SPY-가 항목 아래에 "둘째 실행 `PP-20261112T073747Z-spy` PASS, 요약 sha256 4ad6c537…3c02, Pilot 1 관문 통과(DGS3MO PASS와 함께)"를, BTC-나 항목 아래에 "진단 출력 판독: 규칙 1 모두 일치, 합계 위 1절, 5번 경우, 원인 미확인, 소유자에게 질문"을 적음. 같은 내용을 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`의 SPY-가·BTC-나 절 뒤에 날짜 붙여 추가. 준법 기준선 갱신(`python3 -B -m tools.compliance.check --refresh-baseline --documents $(seq 1 20) --reviewed-by "…" --review-note "…"`). 병합 후 main을 실행 브랜치 `claude/provider-parity-runs-20261111`에 병합·push. 원장 `⑤-2/e`, `⑤-2/g`는 이미 기록됨(아래 4절).
+4. **Pilot 1 판독:** 소유자가 B2~B11 출력과 run 폴더(`docs/nautilus_bridge/runs/NB-…-d76d2d73/`)를 연구 브랜치에 올리면, `docs/product/PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md` 1.2절 점검표와 부록 B `read_run.py`로 판독하고 1.2.6의 한국어 문장으로 보고. 예상 결과: CARD_WRITTEN, 판정 INSUFFICIENT_DATA 또는 REJECT(실패 아님). 판정·재실행 규칙은 결정 1·3·4(파일럿마다 C-06 1회)·5.
+5. **그다음:** BTC 답에 따라 Pilot 2(실행표 D, 결정 6이면 같은 자리에서 E) → Windows 전체 검사 E → Claude/GPT가 마감 기록(P2 범위: 마감 기록, 스펙, README 두 줄, runs 폴더; 결정 10·11: **후속 세션은 연구 브랜치에 커밋하기 전에 소유자 한 줄 승인을 받아야 함**) → P3 병합 리허설 다시 → 실행표 F.
+
+#### 4. 이번 주기에 끝난 것 (원장에 기록됨)
+
+| ID | 내용 | 커밋 |
+|---|---|---|
+| ⑥-1/rulings | 결정 27건 "전부승인합노." 기록 | PR #106 `6285430` |
+| ⑨-1/2/d/2, ⑨-1/2/e | 픽스처 생성기 검토 수정 R1~R5, KRW=X 뉴욕 17:00 | PR #107 `f263fb2` |
+| ⑥-1/prep/2 | 결정 27건을 실행표·판독 문서에 반영(F절 재작성 등) | PR #108 `f4837ef` |
+| ⑥-1/rulings/2 | X1~X5 "모두 권장값"(C-06 재실행 파일럿마다 1회, F 전 개발자 모드) | PR #110 `b9dea9c` |
+| ⑤-2/g | SPY 둘째 대조 PASS, Pilot 1 관문 통과 | 실행 브랜치 `77d2647` |
+| ⑤-2/e | BTC 진단 판독: 5번 경우, 소유자 질문 | (기록 PR은 3절 3번) |
+
+#### 5. 열려 있는 것
+
+- PR #111 (위 3절 2번).
+- 소유자 답: BTC-라/마/바. A-2(G-REF-01 파일 이름), C-Q22(2026-12 말 전), D-14(법률 자문)는 이전부터 대기.
+- 결정 8의 확인 문장(병합 직전에 소유자가 씀), 결정 19의 detail.json 최종 처리(Step 10 뒤).
+- 승인됐지만 시작 안 한 일: ⑨-3a/recorder/1(화면 없는 R3 기록기, Q12의 7개 파일, 결정 9 조건), 주문 모듈 안전 설계 문서(문서만, 코드는 ⑦-2 병합 뒤), §10 남은 36개 묶음. N-M1-02/b는 보류.
+- 다른 세션: UI 세션의 PR #109는 병합됨(main `0786200`). UI 작업은 그 세션 담당(handoff `UI_SESSION_CURRENT.md`, `AGENTS.md` 6절).
+
+#### 6. 반드시 지킬 것
+
+- 보호 캐시 `docs/asset_expansion/cache/`는 열거·읽기·목록·해시·검색·순회 금지. git 경로 패턴 `*`는 `/`를 넘으므로 `docs/asset_expansion` 아래를 찾을 때는 항상 `':!docs/asset_expansion/cache'`를 붙일 것(11-12 Claude 자진 보고 참고, 결정 기록 맨 끝 절).
+- `.env`, `~/.nextgen` 열지 않음. `tests/run_all.py` 직접 실행 금지(캐시 없는 사본에서만), `tests.macro_m9_lab`·`tests.macro_m8_pipeline` 실행 금지.
+- 공급사 대조: 소유자 PC에서 나오는 것은 `summary.json`만(BTC 진단 출력은 BTC-나 예외, 저장소에는 합계만). `detail.json`·수신 CSV 요청 금지.
+- 연구 브랜치 `claude/amazing-gauss-tdiguu`: 후속 세션은 커밋 전에 소유자 한 줄 승인(결정 11). main은 Step 10 확인 전에는 연구 브랜치에 합치지 않음(H-D5).
+- `qa/acceptance_results.json`은 소유자 Windows 실행에서만. `owner_confirmed`·`host_fingerprint` 쓰지 않음. 태그 push 금지.
+- 노션은 REMAINING WORK(4065c916fe0c80d2af08c0e7f68817fa) 한 곳에만 반영. 1107 페이지는 복원하지 않음(소유자 지시 11-12).
+- Vercel 상태는 무시하고 언급하지 않음. CI 통과 시 병합(merge commit).
+
+### ⑨-4/2/c 시작: 채택 결과 조립 (2026-11-12 15:04 KST)
 
 - 소유자 지시(원문): "이어서 할 일을 어서 진행해주세요. 한도가 많이 남지 않아 빠르게 진행해야합니다". 사용량이 얼마 남지 않았다고 하셨으므로, 끊기면 이 절부터 이어받으십시오.
 - 브랜치 `claude/adoption-outcome-20261112`(main `b9dea9c`에서 시작, 스크래치 `adopt` 워크트리, 아직 push 전). 범위: `core/adoption/` 안에 결과 조립 함수(기준 6.1·6.2, 판정 B-Q1 "둘째 DSR 0.90 미만 → 기각(잠정)", B-Q2 "게이트와 같은 분산 값으로 판정, 엄격한 값은 참고 줄", B-Q3 "검정력 부족이면 이겨도 자료 부족"), 시험, `docs/product/ADOPTION_STRATEGY_CHECKS_2026-11-10.md` 새 절. Q4·Q5·Q7은 다음 단위.
