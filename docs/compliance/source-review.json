@@ -50,7 +50,7 @@
     "config.py": "9c2af5ad4ac12ee3b442fb1d16b17bd9c95ab972e543eeb24308aafc0c80e77f",
     "core/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "core/adoption/__init__.py": "592263c22647b24151038499489911ec409ac81177e99ed3c33f3a359947953a",
-    "core/adoption/strategy_rules.py": "b3c1463fb226895304efc7939d4a03efe23f8fffa838e4f72de32ce2cdafacb2",
+    "core/adoption/strategy_rules.py": "aab90e61f8a793022e823cb9d4311d85fc5120343e9bb47105b828753f9bebc3",
     "core/app_paths.py": "87cd28f423db0975e62402f09d29366d81aa1ac02b71cfb11f757c42a0f0d4cd",
     "core/calendars/__init__.py": "51bbdbd4d2326fb2ebfb2875db644b35fd874952769a7b0f07d051af3c76f8f2",
     "core/calendars/adapter.py": "fe925a34aeab1dca873aaac530a4aa5f2ba3be7b26f15ddc09f9c115324c7574",
@@ -293,14 +293,14 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "5966bab853ea25809ef7195b7878f0a626d16b01e498858b46cd0723d8a06bca",
+    "docs/compliance/FACTS.md": "6756f91c0ff1118d886866b4e58772e9827f0ed514372af4a246229625638358",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/A1_TERMINOLOGY_2026-11-06.md": "c52f3a6e72b2cd0cd04263597a77570545c9b037e50a0c34586c7d4e552b93ff",
     "docs/product/A3_READING_LAYOUT_2026-11-06.md": "b0f6595caae843d4a912fc332adc78882f65f9eb579cd7f97f2d33519821cc64",
-    "docs/product/ADOPTION_STRATEGY_CHECKS_2026-11-10.md": "a4c64ad6e92761e188d353bf8012e292bfed6648fa51c4bba8e60403181986ae",
+    "docs/product/ADOPTION_STRATEGY_CHECKS_2026-11-10.md": "995b2ee0508e86291b38735d57b064ecc78549759adb5dd654e5e64e6dd872d4",
     "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "0e854fc8af3bab5e75bc4690e4697ae3b11ebf0d07d762df2c8ab50ca97c13da",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
@@ -458,7 +458,7 @@
     "test_npu.py": "fae9f28fa1772b834ede1f22315b93f66feefc586e5afd061e188f091d48b4d4",
     "tests/__init__.py": "db1fcd9d60745c7af2cbaf67c78afaabeb6d3daa51bcab04b786fcd3432658e3",
     "tests/acceptance.py": "52145dced05c3eb193c6eab1905096a478b1940490bba608a44024e24ea7d7fc",
-    "tests/adoption_strategy_rules_acceptance.py": "f1b57cf6ec5613986f57ed5f81f4ed136e064c40c1511e4c265b15de18a0ed6f",
+    "tests/adoption_strategy_rules_acceptance.py": "dddcfc9a1eab900437e0d62fddd62f35fc4b5bcfe46cd7c55cf6211698ae7f8d",
     "tests/ai_connection_acceptance.py": "b074a2f0c8d708c68a28a19ff187b9e3ab1095c10c83c1a47cb6ede9d338f79f",
     "tests/ai_output_check_acceptance.py": "01c54460c470062df057d398b08233cae41c420115ee24693f19ab3711a02972",
     "tests/ai_payload_acceptance.py": "a4efa39af3a06c6859607306729a9190c4f44da320556a4567388f7ab107e138",
@@ -724,163 +724,163 @@
   "reviews": {
     "1": {
       "document_sha256": "bacab46dd51ed03b4d3be4b9bc46a7733cbed73ba42653ce9695e5ca0e10b4b4",
-      "source_digest": "884ff544a2f79e8e64ef5b37b6d1cdf4409e8730450a33ce49df7f371933b804",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.322763+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "5b2513bb6786c471539a27fa16bcb82222aaf803e158c97d9f27f58bfb9f0315",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.372122+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "884ff544a2f79e8e64ef5b37b6d1cdf4409e8730450a33ce49df7f371933b804",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.325144+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "5b2513bb6786c471539a27fa16bcb82222aaf803e158c97d9f27f58bfb9f0315",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.375445+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "6fddb193a8fc618e9cbea581246e0498a7554f0300c8dcb90fde286402e0bb30",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.327054+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "61eefbbe782accdd9b3b63ec477934b95d3dd0b608ad49a1569721ec681bde6d",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.378021+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "4": {
       "document_sha256": "f63c98563dc663611297f52c74457ea7ad2f052d918c45e505dd667652074c9b",
-      "source_digest": "4b91ceb0d755d8de17b41945030c7a6be82220e3f0d4fcb158f787623721f226",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.328985+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "507753a3c0c266d63bfded22f65470a3a18de4de50d4e8ddab2a177db33150f7",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.380051+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "cea295f07a95f681d2ec3d389a7fe42fc1b2fc074b31bddc0eb5f4d5d9802e4f",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.330890+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "e4316441ddb0d7e81b578162813232b40b46439fd9ce4ac218298cb563f683c8",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.382072+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "6": {
       "document_sha256": "60bb586d0bce26480feecc06f182c6ceaaea1700f1be0e95bac820f18ad484a8",
-      "source_digest": "8db08a6b81048c80dd3a8be407efb2ed24f2590040e295014b10b44f6f699dad",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.332580+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "cae54e40274e6d86cbfc292107510f4bb92670c2507aa48351654c73eb4deb5f",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.383935+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "7": {
       "document_sha256": "1eb6da7d87830c9abde24303464cd80f65f6a1bf5b66bc5b53ec81b2c2e4b1ed",
-      "source_digest": "884ff544a2f79e8e64ef5b37b6d1cdf4409e8730450a33ce49df7f371933b804",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.334446+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "5b2513bb6786c471539a27fa16bcb82222aaf803e158c97d9f27f58bfb9f0315",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.385702+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "8": {
       "document_sha256": "e50e210234645ca8e2561662dae3a0afc5ab445e68fe523d320c3889c7e0d8a7",
-      "source_digest": "8db08a6b81048c80dd3a8be407efb2ed24f2590040e295014b10b44f6f699dad",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.336198+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "cae54e40274e6d86cbfc292107510f4bb92670c2507aa48351654c73eb4deb5f",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.387696+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "9": {
       "document_sha256": "ebdb3469ea72e45341719aae0805b46a526374d394dbdb0e1875fe1df2c01757",
-      "source_digest": "1fdb8e3598f85209ad4d6c5427f838ca41f3c8e3752c516eeaf3e1574e072c9e",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.338210+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "37ed778ccc1928f777f0b01df5f426e5eff85a75f32bc208524404305759ac0e",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.390025+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "10": {
       "document_sha256": "13ab9559eb6b5a0bf84c1575acd19d94cdb0b69273474fd5e686e05df5930fc3",
-      "source_digest": "d56a018c1a255ce7dd7e5f15978a57c1852601d7afb42f8fe85375420edb3f4a",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.339906+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "e2a99f13b5c2043f246e0a39a27231e2fc5d269d6aacd7773a82afab516b31be",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.391870+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "a990fd4b66c52fb91316acc89d5e8e779ea52c94cf2bc83572aaea496b60bcd8",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.341669+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "06de257226a54ecbf519bb841e76d570f9a10a9efeea1c27ed782b3fbc411895",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.393706+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "12": {
       "document_sha256": "55b14bd417df61e59c2e06eb37f397dcbe8457ec571342c27e6b0d3559d507dc",
-      "source_digest": "d7f60be69c2946de0a8f14423dcea5f85a3ada5dd6cb65b495b0a449bf881c80",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.343459+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "0a7d5f2868f6cee12471e8a8cc78fd42da529f267a08236f2a9df860e0e7e09b",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.396049+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "13": {
       "document_sha256": "cbb62a2360f579617977c7d4bb0105eecfec4b091ef98d554d14f8f675508ac0",
-      "source_digest": "1fdb8e3598f85209ad4d6c5427f838ca41f3c8e3752c516eeaf3e1574e072c9e",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.345320+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "37ed778ccc1928f777f0b01df5f426e5eff85a75f32bc208524404305759ac0e",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.398117+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "14": {
       "document_sha256": "5098fa39312b4ce88a73080e61ad70473c9e736a2b7e93150c74e87fbb68d50c",
-      "source_digest": "1fdb8e3598f85209ad4d6c5427f838ca41f3c8e3752c516eeaf3e1574e072c9e",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.347028+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "37ed778ccc1928f777f0b01df5f426e5eff85a75f32bc208524404305759ac0e",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.400140+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "15": {
       "document_sha256": "6b12ffaeaed6ebd8b925ea4ff65ae5e6b0031dd9566739474f672cda1b7d0055",
-      "source_digest": "1fdb8e3598f85209ad4d6c5427f838ca41f3c8e3752c516eeaf3e1574e072c9e",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.348779+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "37ed778ccc1928f777f0b01df5f426e5eff85a75f32bc208524404305759ac0e",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.401996+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "faf5666c3982c933dc49ad64c002e2ae8c4fe650be45f0061f0b524fe5adedbd",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.350357+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "81cb43961c6a0f6e3c09da7bb28f3d689650d67b48673ff396149f65c0b23ab7",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.404281+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "8db08a6b81048c80dd3a8be407efb2ed24f2590040e295014b10b44f6f699dad",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.352003+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "cae54e40274e6d86cbfc292107510f4bb92670c2507aa48351654c73eb4deb5f",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.406224+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "884ff544a2f79e8e64ef5b37b6d1cdf4409e8730450a33ce49df7f371933b804",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.353907+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "5b2513bb6786c471539a27fa16bcb82222aaf803e158c97d9f27f58bfb9f0315",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.408410+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "19": {
       "document_sha256": "983c0b85fb10b1018222236a37b839667a1103472796b514a9419651b8af2a37",
-      "source_digest": "73047684629bfa3137f7cf9fb96e460a5c0596c308ef58bd66309f370d6b7339",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.355468+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "e26053754929921323d2140eef95e3e067f2995f87db869ca0aeb37f6aa16051",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.410581+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     },
     "20": {
       "document_sha256": "b6019dd07ee24fdf3a53791a3e0adad1472bb14cbe843a38553f209b669d1551",
-      "source_digest": "884ff544a2f79e8e64ef5b37b6d1cdf4409e8730450a33ce49df7f371933b804",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Language pass skips texts already rendered for the window's language and locale (performance); Markets page fits its scroll page right after replanning columns; no wording, data or storage change",
-      "reviewed_at": "2026-11-12T04:15:56.357112+00:00",
-      "source_commit": "c5286eca7603610ba506df2f9089cf0abd625267"
+      "source_digest": "5b2513bb6786c471539a27fa16bcb82222aaf803e158c97d9f27f58bfb9f0315",
+      "reviewed_by": "Claude adoption outcome assembly",
+      "review_note": "Merge of main 0786200 (PR 109, the native app UI decisions UI-D1 to UI-D10 and the US market cap path, with its own compliance updates) into the branch for the adoption outcome assembly (⑨-4/2/c). FACTS.md merged by git without conflict: this branch's rows on core/adoption and PR 109's UI rows are separate lines. No numbered policy document changed on this branch; PR 109's document changes were reviewed by its own session and are taken as merged. The adoption unit adds a pure function and sends, stores or deletes nothing.",
+      "reviewed_at": "2026-11-12T07:13:54.412891+00:00",
+      "source_commit": "351db88f09fe100de39ab19677d9b7a6241c4c7e"
     }
   }
 }
