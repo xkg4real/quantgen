@@ -79,7 +79,7 @@ with tempfile.TemporaryDirectory(prefix='quantgen-installed-smoke-') as folder, 
         window.navigate('markets');window.show_market_pane(window.market_chart)
         assert window.current_market_pane() is window.market_chart,'Installed chart must be reachable from Markets'
         assert window.tool_host.count()==10 and window.market_chart.asset.currentData()=='domestic_stock'
-        assert window.markets_view.showing_stock() and len(window.markets_view.grid.cards)==6
+        assert window.markets_view.showing_stock() and len(window.home_view.grid.cards)==6  # watchlist cards on Home (UI-D7)
         app.processEvents()
         assert window.market_chart.snapshot is None
         assert not window.market_chart.jobs.busy

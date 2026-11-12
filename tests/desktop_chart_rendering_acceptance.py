@@ -74,8 +74,11 @@ class ChartRenderingTests(unittest.TestCase):
                         for i, name in enumerate(names)}))
         records = self.painted_text(chart)
         self.assert_inside(chart, records)
-        legends = [rect for text, rect in records if text in names]
+        # Display names, not raw objective ids (risk area request, 2026-11-10); longer, so a harder fit.
+        shown = set(charts.FrontierChart.OBJECTIVE_NAMES.values())
+        legends = [rect for text, rect in records if text in shown]
         self.assertEqual(len(legends), 4)
+        self.assertFalse(any(text in names for text, _ in records))
         for i, rect in enumerate(legends):
             for other in legends[i+1:]:
                 self.assertFalse(rect.intersects(other), (rect, other))

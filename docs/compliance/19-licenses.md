@@ -147,3 +147,23 @@ OFL 5항은 글꼴로 만든 문서에 라이선스 유지 요건을 적용하�
 새 패키지·글꼴·이미지 파일은 없습니다(`pyproject.toml`, `requirements.txt` 변경 없음). 곡선 방법은 기존 scipy(BSD-3-Clause) 함수만 씁니다. Strategy Lab 카드 설명의 SPY·KODEX·TIGER·삼성전자 등은 검증 대상을 가리키는 이름이며 로고나 제휴·보증 표시가 아닙니다. Yahoo 자료는 연구 화면 다섯 곳에서 키가 없을 때 자동 대체로 쓰이며 표시 권리는 `rights_replace` 그대로입니다([08번](08-third-parties.md)).
 
 OFL 판단은 법률 의견이 아닙니다. 실제 배포 패키지의 고지 포함 여부와 데이터 권리 승인은 별도로 확인하며 `review-required`와 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#owner-ui-review-2026-11-10)
+
+### 2026-11-11 네이티브 앱 통일(UI-D1~D4)
+
+네이티브 앱과 Flet 차트 PNG가 모두 Pretendard 1.3.9 파생 OTF(이름 QG Interface, [OFL.txt](../../assets/fonts/OFL.txt), Reserved Font Name Pretendard는 파생물 가족 이름에 쓰지 않음)를 씁니다([차트 글꼴](../../ui/qcharts.py), [글꼴 정책](../../quantgen_desktop/font_policy.py)). 2026-11-07 절의 "Flet OTF를 네이티브에 중복 등록하지 않습니다"는 소유자 결정 UI-D4로 바뀌었고, Gothic A1 TTF와 [OFL-GothicA1.txt](../../assets/fonts/OFL-GothicA1.txt)는 되돌림에 대비해 남깁니다. 새 글꼴·패키지 파일은 없습니다. 소유자가 요청한 다른 글꼴 시안은 SIL OFL 1.1 또는 Apache 2.0처럼 앱 동봉·재배포를 허용하는 라이선스만 후보로 삼으며, 채택 전에 이 문서와 [글꼴 기록](../../assets/fonts/README.txt)을 갱신합니다. [변경 사실](FACTS.md#owner-ui-native-2026-11-11)
+
+### 2026-11-11 글꼴 A안(UI-D5)
+
+소유자가 글꼴 시안 14종 가운데 A안을 고르고 숫자는 기존 글꼴로 두라고 했습니다("일단 A로 바꾸고 숫자는 지금 폰트 유지해줘"). 네이티브 앱의 글자는 IBM Plex Sans KR 400/500/600(`OFL-IBMPlexSansKR.txt`, SIL OFL 1.1 — 같은 날 UI-D6으로 파일 제거, Copyright 2017 IBM Corp., Reserved Font Name "Plex")으로 그리고, 숫자는 기존 Pretendard 파생 QG Interface로 그립니다([글꼴 정책](../../quantgen_desktop/font_policy.py)). Plex 파일은 google/fonts `ofl/ibmplexsanskr`의 원본을 수정 없이 동봉하므로 예약 이름 규정상 이름을 바꾸지 않으며, 출처·SHA256·크기는 [글꼴 기록](../../assets/fonts/README.txt)에 있습니다. 파일 3개(약 8.5MB)가 설치본에 더해집니다(`pyproject.toml`의 `assets/fonts/*.ttf` 규칙, 설정 변경 없음). 글꼴 파일을 따로 판매하지 않는다는 OFL 조건을 유지합니다. Flet 화면과 Flet 차트 PNG는 계속 QG Interface입니다. OFL 판단은 법률 의견이 아니며 `review-required`와 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#owner-ui-native-2026-11-11)
+
+### 2026-11-11 글꼴 N3(UI-D6)
+
+소유자가 A안 적용 결과를 보고 거절했고("좃구린데"), Pretendard와 비슷한 글꼴로 다시 만든 2차 시안 16종 중 N3를 골랐습니다("N3 진행해줘"). N3는 새 글꼴 없이 기존 Pretendard 파생 QG Interface를 쓰고 자간과 굵기만 조정합니다. 그래서 A안에서 더했던 IBM Plex Sans KR 파일 3개와 OFL-IBMPlexSansKR.txt를 저장소와 설치본에서 뺐습니다. 위 "글꼴 A안(UI-D5)" 절은 같은 날 대체되었으며 기록으로만 남깁니다. 새 글꼴·패키지 파일은 없습니다. [변경 사실](FACTS.md#owner-ui-native-2026-11-11)
+
+### 2026-11-11 연구 Home·순위 목록·종목 상세 화면(UI-D7·UI-D8)
+
+새 패키지·글꼴·이미지 파일은 없습니다(`pyproject.toml`, `requirements.txt`, `assets/` 변경 없음). 왼쪽 메뉴와 종목 상세 화면 도구 막대의 아이콘(메뉴 접기·멈춤·정보·크게 보기·오른쪽 열 등)은 앱 코드가 직접 그리고([메뉴 부품](../../quantgen_desktop/shell_rail.py), [상세 스타일](../../quantgen_desktop/stock_detail_style.py)), 섹션 접기 꺾쇠는 2026-11-04 절의 저장소 SVG를 다시 씁니다. 순위 목록·Home 카드의 회사 문자 마크는 2026-11-06 절의 로컬 식별자이며 공식 로고가 아닙니다. 지표 27개는 새 의존성 없이 numpy로 계산합니다([지표](../../core/education/indicators.py)). 순위 목록은 KIS·Yahoo 시세, KIS·FMP가 밝힌 시가총액, Yahoo 상장주식수로 계산한 시가총액을 보입니다. 표시 권리는 [권리 목록](../../core/research/display_rights.json)의 `kis_krx`·`fmp` `rights_conditional`, `yahoo` `rights_replace` 그대로이며, 계산 시가총액 같은 파생값의 표시·재배포 허락을 새로 얻지 않았습니다([08번](08-third-parties.md)). `review-required`와 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#ui-d7-d8-uscap-2026-11-11)
+
+### 2026-11-11 시장 페이지(UI-D10)
+
+새 패키지·글꼴·이미지 파일은 없습니다(`pyproject.toml`, `requirements.txt`, `assets/` 변경 없음). "조건" 단추의 꺾쇠는 2026-11-04 절의 저장소 SVG(`assets/ui/chevron-*`)를 다시 쓰고, 미국 종목·코인의 회사 문자 마크는 기호의 두 글자로 그린 로컬 식별자이며 공식 로고가 아닙니다([목록](../../quantgen_desktop/market_rankings.py) `ticker_mark`). 코인 15개의 값과 지수 띠(코스피·코스닥·S&P 500·나스닥 종합·비트코인·이더리움)는 Yahoo Finance 일별 값이고 표시 권리는 [권리 목록](../../core/research/display_rights.json)의 `yahoo` `rights_replace` 판정 그대로입니다. 지수 이름과 값은 각 지수 산출 기관의 것이며 이 변경으로 그 상업 표시·재배포 허락을 새로 얻지 않았습니다([08번](08-third-parties.md)). `review-required`와 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#ui-d10-markets-2026-11-11)

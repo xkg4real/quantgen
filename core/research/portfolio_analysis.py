@@ -16,7 +16,8 @@ class PortfolioRequest:
             raise ValueError("Choose 2–15 distinct symbols")
         if any(not s.strip() or len(s)>120 for s in self.symbols):
             raise ValueError("Invalid symbol")
-        if self.source not in {"auto", "fmp", "kis", "yfinance", "synthetic"}:
+        # "best": the app chooses the provider (selector hidden, owner UI review 2026-11-10).
+        if self.source not in {"auto", "best", "fmp", "kis", "yfinance", "synthetic"}:
             raise ValueError("Unknown source")
         if self.objective not in {"max_sharpe", "min_vol", "risk_parity", "equal_weight"}:
             raise ValueError("Unknown objective")

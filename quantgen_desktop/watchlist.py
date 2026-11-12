@@ -10,9 +10,9 @@ from babel.dates import format_date
 from PyQt6.QtCore import QEvent, QRect, Qt, pyqtSignal
 from PyQt6.QtGui import QBrush, QColor, QFontMetrics, QPainter, QPalette
 from PyQt6.QtWidgets import (
-    QAbstractItemView, QDialog, QFormLayout, QFrame, QHBoxLayout, QHeaderView,
+    QAbstractItemView, QApplication, QDialog, QFormLayout, QFrame, QHBoxLayout, QHeaderView,
     QLabel, QPushButton, QScrollArea, QSizePolicy, QTableWidget,
-    QStyle, QStyledItemDelegate, QTableWidgetItem, QVBoxLayout, QWidget,
+    QStyle, QStyledItemDelegate, QStyleOptionViewItem, QTableWidgetItem, QVBoxLayout, QWidget,
 )
 
 from core.i18n import LocaleContext
@@ -24,6 +24,14 @@ from .typography import scaled_font, tone_colors, tone_for
 ROW_HEIGHT = 44
 DETAIL_COLUMN = 8
 SCORE_COLUMN = 9
+# Owner issue 05 (2026-11-10, "오와 열 맞추고 글씨 조정"): one inset for every header label and cell
+# text, numbers right-aligned on their digits with the unit in a fixed slot after them, one body size.
+CELL_PADDING = 10
+UNIT_GAP = 4
+BODY_PX = 13
+NUMERIC_COLUMNS = (1, 2, 3, 4, 5, 6)
+UNIT_COLUMNS = (1, 2, 3, 4)
+_NUMBER_UNIT = re.compile(r"([+\-−]?\d[\d,]*(?:\.\d+)?)(\s*)(\S.*)?")
 _KST = timezone(timedelta(hours=9))
 _SECTORS_EN = {"전기전자": "Electronics", "전기,전자": "Electronics", "전기·전자": "Electronics",
                "운수장비": "Transport equipment", "금융업": "Financials", "의약품": "Pharmaceuticals",
@@ -366,6 +374,70 @@ def _reason(row, ctx):
                  "This is a daily provider observation, with a different update schedule from live trades.")
 
 
+def _split_number(text):
+    """'1,387.50 KRW/USD' -> ('1,387.50', 'KRW/USD', True); '+1.45%' -> ('+1.45', '%', False);
+    '—' -> ('—', '', False). The flag says whether the text had a space before its unit."""
+    match = _NUMBER_UNIT.fullmatch(str(text).strip())
+    return (match.group(1), match.group(3) or "", bool(match.group(2))) if match else (str(text), "", False)
+
+
+class _CellDelegate(QStyledItemDelegate):
+    """Draws watchlist cells at the header's inset (owner issue 05).
+
+    Numeric columns put the number's last digit on one edge and the unit in a slot after it, so
+    digits line up down the column whatever the unit (pt, %, KRW, KRW/USD). The item text, tooltip
+    and accessible text are unchanged; only where the text is drawn changes.
+    """
+
+    def __init__(self, panel):
+        super().__init__(panel.table)
+        self.panel = panel
+        self.unit_widths = {}
+
+    @staticmethod
+    def unit_font(font):
+        return scaled_font(font, font.pixelSize() if font.pixelSize() > 0 else BODY_PX, 400)
+
+    def paint(self, painter, option, index):
+        opt = QStyleOptionViewItem(option)
+        self.initStyleOption(opt, index)
+        text = opt.text
+        opt.text = ""
+        widget = opt.widget
+        style = widget.style() if widget is not None else QApplication.style()
+        style.drawControl(QStyle.ControlElement.CE_ItemViewItem, opt, painter, widget)
+        if not text:
+            return
+        rect = option.rect.adjusted(CELL_PADDING, 0, -CELL_PADDING, 0)
+        brush = index.data(Qt.ItemDataRole.ForegroundRole)
+        color = brush.color() if isinstance(brush, QBrush) else opt.palette.color(QPalette.ColorRole.Text)
+        painter.save()
+        painter.setFont(opt.font)
+        painter.setPen(color)
+        column = index.column()
+        if column in NUMERIC_COLUMNS:
+            from .font_policy import number_font
+            opt.font = number_font(opt.font)  # owner UI-D5: figures keep the number face
+            painter.setFont(opt.font)
+            number, unit, spaced = _split_number(text)
+            slot = self.unit_widths.get(column, 0)
+            right = rect.right() - (slot + UNIT_GAP if slot else 0)
+            box = QRect(rect.left(), rect.top(), max(0, right - rect.left() + 1), rect.height())
+            number = QFontMetrics(opt.font).elidedText(number, Qt.TextElideMode.ElideLeft, box.width())
+            painter.drawText(box, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter, number)
+            if unit and slot:
+                painter.setFont(self.unit_font(opt.font))
+                if column != 2:  # a change keeps its rise/fall colour on its unit too
+                    painter.setPen(QColor(self.panel.colors.muted))
+                # '+1.45%', '21.35M' and '1,155T KRW' keep their unit against the digits; '4.31 %' its space.
+                start = right + (UNIT_GAP if spaced else 1)
+                painter.drawText(QRect(start, rect.top(), slot + UNIT_GAP, rect.height()),
+                                 Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter, unit)
+        else:
+            painter.drawText(rect, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter, text)
+        painter.restore()
+
+
 class _WatchlistTable(QTableWidget):
     detail_activated = pyqtSignal(int)
 
@@ -448,9 +520,10 @@ class _WatchlistHeader(QHeaderView):
         return scaled_font(self.font(), 12, 600)
 
     def _group_geometry(self):
+        # Left-aligned at the cell inset, over the score values; it used to be centred in the wide
+        # last column, to the right of every value (owner issue 05).
         title_width = QFontMetrics(self.title_font()).horizontalAdvance("Q-SCORE") + 1
-        width = title_width + 6 + self.help_button.width()
-        left = self.sectionViewportPosition(self.score_column) + (self.sectionSize(self.score_column) - width) // 2
+        left = self.sectionViewportPosition(self.score_column) + CELL_PADDING
         return left, title_width
 
     def _position_help(self, *args):
@@ -490,15 +563,24 @@ class _WatchlistHeader(QHeaderView):
         self._position_help()
 
     def paintSection(self, painter, rect, logical_index):
-        if logical_index != self.score_column:
-            return super().paintSection(painter, rect, logical_index)
-        left, title_width = self._group_geometry()
+        # Every title is drawn at the same inset as its cells (`_CellDelegate`): a number column and its
+        # title share a right edge, text columns a left edge, and the details title sits over its buttons.
         painter.save()
         painter.setClipRect(rect)
         painter.fillRect(rect, QColor(self.colors.surface_2))
         painter.setPen(QColor(self.colors.muted))
         painter.setFont(self.title_font())
-        painter.drawText(QRect(left, rect.y(), title_width, rect.height()), Qt.AlignmentFlag.AlignCenter, "Q-SCORE")
+        if logical_index == self.score_column:
+            left, title_width = self._group_geometry()
+            painter.drawText(QRect(left, rect.y(), title_width, rect.height()),
+                             Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter, "Q-SCORE")
+        else:
+            text = str(self.model().headerData(logical_index, Qt.Orientation.Horizontal) or "")
+            inner = rect.adjusted(CELL_PADDING, 0, -CELL_PADDING, 0)
+            side = (Qt.AlignmentFlag.AlignRight if logical_index in NUMERIC_COLUMNS else
+                    Qt.AlignmentFlag.AlignHCenter if logical_index == DETAIL_COLUMN else Qt.AlignmentFlag.AlignLeft)
+            text = QFontMetrics(self.title_font()).elidedText(text, Qt.TextElideMode.ElideRight, inner.width())
+            painter.drawText(inner, side | Qt.AlignmentFlag.AlignVCenter, text)
         painter.restore()
 
 
@@ -689,6 +771,7 @@ class WatchlistPanel(QWidget):
         self.busy = False
         self.live_state = "idle"
         self.live_detail = ""
+        self._rendering = False
         outer = QVBoxLayout(self)
         outer.setContentsMargins(0, 0, 0, 0)
         outer.setSpacing(12)
@@ -720,6 +803,9 @@ class WatchlistPanel(QWidget):
         self.score_help = self.table.horizontalHeader().help_button
         self.score_help.clicked.connect(self.open_score_help)
         self.table.setItemDelegateForColumn(0, _IdentityDelegate(self.table))
+        self.cell_delegate = _CellDelegate(self)
+        for column in (*NUMERIC_COLUMNS, 7, SCORE_COLUMN):
+            self.table.setItemDelegateForColumn(column, self.cell_delegate)
         self.table.setAccessibleName("Market watchlist")
         self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
@@ -840,7 +926,7 @@ class WatchlistPanel(QWidget):
             QTableWidget::item:selected {{ background: {p.accent_soft}; color: {p.text}; }}
             QHeaderView::section {{ background: {p.surface_2}; color: {p.muted}; padding: 6px 8px; border: 0; font-size: 12px; font-weight: 600; }}
             QWidget#watchlistIdentity {{ background: transparent; }}
-            QWidget#watchlistIdentity QLabel {{ background: transparent; color: {p.text}; font-size: 14px; font-weight: 500; }}
+            QWidget#watchlistIdentity QLabel {{ background: transparent; color: {p.text}; font-size: {BODY_PX}px; font-weight: 500; }}
             QWidget#watchlistIdentity QLabel#watchlistTicker {{ background: {p.surface_2}; color: {p.text}; border-radius: 7px; padding: 3px 4px; font-size: 12px; font-weight: 600; }}
             QPushButton {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; border-radius: 8px; padding: 7px 10px; }}
             QPushButton:hover {{ background: {p.accent_soft}; }}
@@ -888,6 +974,7 @@ class WatchlistPanel(QWidget):
             return
         selected = self.table.currentRow()
         self.table.setRowCount(len(self.rows))
+        self._rendering = True
         for index, row in enumerate(self.rows):
             name = _name(row, self.ctx)
             self._update_row_items(index)
@@ -920,9 +1007,56 @@ class WatchlistPanel(QWidget):
             button.clicked.connect(lambda checked=False, row_index=index: self.open_detail(row_index))
             self.table.setCellWidget(index, self.detail_column, button)
             self.table.setRowHeight(index, ROW_HEIGHT)
+        self._rendering = False
         if self.rows:
             self.table.setCurrentCell(min(max(selected, 0), len(self.rows) - 1), 0)
+        self._fit_columns()
         self._sync_table_height()
+
+    def _fit_columns(self):
+        """Unit slots and widths from the shown text (owner issue 05).
+
+        A column grows to fit its widest number, unit and title instead of eliding them
+        ('1,387.50 KRW/USD' was cut to 'KRW…', volumes to '987.6…'). It never shrinks below
+        the default widths, and a width the user dragged wider stays.
+        """
+        if not hasattr(self, "cell_delegate"):
+            return
+        title = QFontMetrics(self.table.horizontalHeader().title_font())
+        for column in (*NUMERIC_COLUMNS, 7):
+            numbers, units = [0], [0]
+            for row in range(self.table.rowCount()):
+                item = self.table.item(row, column)
+                if item is None or not item.text():
+                    continue
+                number, unit, _ = _split_number(item.text()) if column in NUMERIC_COLUMNS else (item.text(), "", False)
+                # Measure with the face the delegate draws in: figures use number_font (owner UI-D5),
+                # whose digits can be wider than the text face's ('…4.27T KRW' was cut otherwise).
+                from .font_policy import number_font
+                face = number_font(item.font()) if column in NUMERIC_COLUMNS else item.font()
+                numbers.append(QFontMetrics(face).horizontalAdvance(number))
+                if unit and column in UNIT_COLUMNS:
+                    units.append(QFontMetrics(_CellDelegate.unit_font(face)).horizontalAdvance(unit) + 1)
+            slot = max(units)
+            self.cell_delegate.unit_widths[column] = slot
+            label = self.table.horizontalHeaderItem(column)
+            needed = max(max(numbers) + (slot + UNIT_GAP if slot else 0),
+                         title.horizontalAdvance(label.text() if label else "")) + 2 * CELL_PADDING + 1
+            if self.table.columnWidth(column) < needed:
+                self.table.setColumnWidth(column, needed)
+        # The Q-SCORE cell holds two short lines ('★★★★☆  79.99' / 'Paused · last score'); its column follows the
+        # longer line in the item's own face, so a platform whose glyphs run a pixel wider never cuts it
+        # (ubuntu CI on PR 109: 121 px of text in 120 px).
+        score_column = getattr(self, "score_column", SCORE_COLUMN)
+        widest = 0
+        for row in range(self.table.rowCount()):
+            item = self.table.item(row, score_column)
+            if item is not None and item.text():
+                metrics = QFontMetrics(item.font())
+                widest = max([widest] + [metrics.horizontalAdvance(line) for line in item.text().splitlines()])
+        if widest and self.table.columnWidth(score_column) < widest + 2 * CELL_PADDING + 1:
+            self.table.setColumnWidth(score_column, widest + 2 * CELL_PADDING + 1)
+        self.table.viewport().update()
 
     def _sync_table_height(self, *args):
         # Outer-page vertical scrolling; reserve scrollbar space only when used.
@@ -944,7 +1078,8 @@ class WatchlistPanel(QWidget):
                 item = QTableWidgetItem()
                 self.table.setItem(index, column, item)
             item.setText(value)
-            font = scaled_font(self.table.font(), 14 if column == 1 else 13, 500 if column in (1, 2) else 400)
+            # One body size for every cell (owner issue 05); the price leads by weight, not by size.
+            font = scaled_font(self.table.font(), BODY_PX, 600 if column == 1 else 500 if column in (0, 2) else 400)
             item.setFont(font)
             item.setData(Qt.ItemDataRole.UserRole, row.get("symbol"))
             tooltip = f"{value} · {row.get('symbol', '')}" if column == 0 else value
@@ -968,6 +1103,8 @@ class WatchlistPanel(QWidget):
             if column == self.score_column:
                 color = self.colors.accent if "★" in value else self.colors.muted
             item.setForeground(QBrush(QColor(color)))
+        if not self._rendering:
+            self._fit_columns()  # a live quote can widen a column; the unit slots follow it
 
     def open_score_help(self):
         if self.score_help_dialog is None:

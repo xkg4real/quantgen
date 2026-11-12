@@ -24,6 +24,12 @@ Tuesday 17:00 KST. One task runs at a time.
   - `status: handoff`, or a fresh `checkpoint` of another session, for a task other than the one you were
     given: start no new work over it; ask the owner whether to resume it here or leave it.
   - When the owner resumes an existing session, run `--show` again before continuing.
+- **UI work:** the UI base is the native PyQt app (`quantgen_desktop/`) for every agent (owner decision
+  UI-D1..D4, 2026-11-11); Flet (`main.py`, `ui/*.py`) is kept but is not the base for new UI work, even when the
+  owner's screenshot shows it. Native font (UI-D6): QG Interface (Pretendard OTF) with
+  the N3 tracking and lighter weights in `quantgen_desktop/typography.py`. Before UI work read the owner-decision block of
+  `git show origin/handoff:UI_SESSION_CURRENT.md` and the `⑬-2/` ledger rows, and record finished UI work in
+  `LEDGER.md` under a `⑬-2/` ID (a side document alone does not reach GPT).
 - **Before starting any roadmap item:** look it up in the ledger by ID and by the files it would change. An ID
   already there is finished: do not do it again. IDs come from `docs/nautilus_bridge/REMAINING_WORK_*.md`
   (the newest); a part of an item is `③-2/a`, more work the owner asks for on a finished item is `③-2/2`.

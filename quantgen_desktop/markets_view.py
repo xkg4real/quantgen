@@ -1,22 +1,26 @@
-"""Markets workspace (owner request, 2026-11-04): watchlist charts and one screen per stock.
+"""Markets workspace: one page per market (국내 주식 / 미국 주식 / 코인) and one screen per stock.
 
-Replaces the UI-7 indicator board and the UI-8 asset-class tab strip on Markets:
+Owner ruling 2026-11-11 (UI-D10): the rail lists the markets; each market's page ranks its list by the categories
+that were the sub-menu, which double as search criteria (`MarketsWorkspace`, `market_rankings.RankingBoard`,
+`core.market.screen`). The page's header search narrows the shown market's list and opens a stock by name or code.
 
-- one search bar takes a stock code or a stock name (Korean, English, 초성) through
-  core.market.directory; futures and bonds keep code entry through the kind selector;
-- the watchlist the user builds is shown as chart cards (QSettings ``markets/watchlist``);
-- choosing a stock opens one screen with its price chart and every profile section
-  core.research.stock_profile provides.
+Owner request 2026-11-04: one search bar takes a stock code or a stock name (Korean, English, 초성) through
+core.market.directory (futures and bonds keep code entry through the kind selector), and choosing a stock
+opens one screen with its price chart and every profile section core.research.stock_profile provides.
 
-Provider and observation-date fields are not shown as columns or lines (owner request).
-They stay in tooltips, and delayed, fallback, stale and failed states stay labelled
-(docs/compliance/09-dark-patterns.md).
+Owner request 2026-11-11 (point 5, "토스증권처럼 실시간 차트를 다양한 분류기준으로"): below the search, Markets
+shows Toss-style ranked lists (`market_rankings.RankingBoard`: trading value, volume, top gainers, top losers,
+market cap; all of Korea, KOSPI, KOSDAQ or the US). The watchlist chart cards (`WatchlistGrid`, kept here
+with its constructor) moved to Research Home (point 4); the user's watchlist store stays shared.
+
+Provider and observation-date fields are not shown as columns or lines (owner request). They stay in
+tooltips, and delayed, fallback, stale and failed states stay labelled (docs/compliance/09-dark-patterns.md).
 """
 from __future__ import annotations
 
 import json
 import threading
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import date, datetime, timezone
 
 from PyQt6.QtCore import (QAbstractListModel, QByteArray, QModelIndex, QObject, QSize, QTimer, Qt, pyqtSignal,
@@ -26,12 +30,20 @@ from PyQt6.QtWidgets import (QComboBox, QCompleter, QFrame, QGridLayout, QHBoxLa
                              QSizePolicy, QVBoxLayout, QWidget)
 
 from core.i18n import LocaleContext
+from core.market import rankings as _rankings
+from core.market import screen as _screen
 from core.market.models import ChartRequest, Instrument
 from core.theme import DARK, LIGHT
 from .company_identity import CompanyMark, company_icon
 from .jobs import Jobs
 from .tools import CurrentPageStack
 
+# Interface contract between the native UI areas: the rail's Markets sub-menu lists MARKET_PAGES and calls
+# `MarketsWorkspace.show_market(key)` (owner ruling UI-D10, 2026-11-11). `show_category(key)` keeps taking a
+# RANKING_CATEGORIES key, or "search", for earlier callers (UI-D7).
+RANKING_CATEGORIES = _rankings.CATEGORIES
+MARKET_PAGES = _screen.PAGES
+MARKET_PAGE_KEYS = _screen.PAGE_KEYS
 WATCHLIST_KEY = "markets/watchlist"
 WATCHLIST_LIMIT = 20
 DEFAULT_CODES = ("005930", "000660", "005380", "105560", "373220", "207940")
@@ -40,6 +52,14 @@ DELAYED_POLL_SECONDS = 900
 RETRY_SECONDS = (60, 120, 300, 900)
 STALE_DAYS = 7
 CARD_BARS = 120
+# Owner, 2026-11-11: watchlist cards looked flat ("좌우를 줄이고 상하 살짝 늘려줘"): four columns on a
+# wide page and a taller sparkline; raised again the same day (210px).
+CARD_CHART_HEIGHT = 210  # owner 2026-11-11 (2nd): still "위아래로 납작해" at 150; about 3:2 on a 300px card
+
+
+def card_columns(width):
+    """Watchlist card columns for a page width: about 300px per card on a wide page."""
+    return 4 if width >= 1200 else 3 if width >= 900 else 2 if width >= 600 else 1
 STOCK_ASSETS = ("domestic_stock", "overseas_stock")
 # US tickers load by their bare code in the analysis tools; HKS/TSE codes ('00700', '7203') would not.
 US_EXCHANGES = ("NAS", "NYS", "AMS")
@@ -442,7 +462,7 @@ class WatchCard(QFrame):
         figures.addStretch()
         layout.addLayout(figures)
         self.chart = QSvgWidget()
-        self.chart.setFixedHeight(112)
+        self.chart.setFixedHeight(CARD_CHART_HEIGHT)  # owner 2026-11-11: narrower, taller cards
         self.chart.setMinimumWidth(200)
         layout.addWidget(self.chart)
         self.state = label("", "caption", wrap=False)
@@ -467,8 +487,9 @@ class WatchCard(QFrame):
             self.price.setText("—")
             self.change.setText("")
             set_tone(self.change, "")
+            self.change.hide()  # an empty delta pill showed as a blank grey box
             if self.result is None:
-                self._state(_text(ctx, "시장 화면을 열면 불러옵니다.", "Loads when Markets is shown."))
+                self._state(_text(ctx, "화면을 열면 불러옵니다.", "Loads when shown."))
             else:
                 self._state(_text(ctx, "불러오지 못했습니다", "Could not load") + f" ({self.result.error})")
             self.render_chart()
@@ -483,6 +504,7 @@ class WatchCard(QFrame):
         text, tone = _change_text(pct)
         self.change.setText(text)
         set_tone(self.change, tone)
+        self.change.setVisible(bool(text))  # no change, no empty grey pill
         self.render_chart()
         # Not shown as text: provider and observation date (owner request). They stay in the tooltip.
         source = str(getattr(snapshot, "source", "") or "")
@@ -508,7 +530,7 @@ class WatchCard(QFrame):
         snapshot = self.result.snapshot if self.result else None
         dates, closes = _closes(snapshot) if snapshot is not None else ((), ())
         decimals = 0 if self.instrument.asset == "domestic_stock" else 2
-        svg = card_svg(dates, closes, width=max(self.chart.width(), 220), height=112, dark=self._dark,
+        svg = card_svg(dates, closes, width=max(self.chart.width(), 220), height=CARD_CHART_HEIGHT, dark=self._dark,
                        label=self.name(), decimals=decimals)
         self.chart.load(QByteArray(svg.encode("utf-8")))
 
@@ -597,19 +619,19 @@ class WatchlistGrid(QWidget):
     def _arrange(self, order=None):
         order = order if order is not None else list(self.cards.values())
         width = self.width()
-        columns = 3 if width >= 1060 else 2 if width >= 640 else 1
+        columns = card_columns(width)
         self._columns = columns
         for card in order:
             self.grid.removeWidget(card)
         for index, card in enumerate(order):
             self.grid.addWidget(card, index // columns, index % columns)
-        for column in range(3):
+        for column in range(4):
             self.grid.setColumnStretch(column, 1 if column < columns else 0)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
         width = event.size().width()
-        columns = 3 if width >= 1060 else 2 if width >= 640 else 1
+        columns = card_columns(width)
         if columns != self._columns:
             self._columns = 0
             self._arrange(list(self.cards.values()))
@@ -716,379 +738,106 @@ class WatchlistGrid(QWidget):
         self.heading.setText(_text(ctx, "관심종목", "Watchlist") + (f"  {count}/{self.store.limit}" if count else ""))
         self.refresh_button.setText(_text(ctx, "새로고침", "Refresh"))
         self.refresh_button.setAccessibleName(_text(ctx, "관심종목 새로고침", "Refresh watchlist"))
-        self.empty.setText(_text(ctx, "관심종목이 없습니다. 위에서 종목을 검색한 뒤 ☆를 눌러 추가하세요.",
-                                 "No stocks yet. Search above and press ☆ to add one."))
+        # The grid lives on Research Home since 2026-11-11; stocks are added from their screen on Markets.
+        self.empty.setText(_text(ctx, "관심종목이 없습니다. 시장에서 종목을 연 뒤 ☆를 눌러 추가하세요.",
+                                 "No stocks yet. Open a stock on Markets and press ☆ to add it."))
         self.empty.setVisible(count == 0)
         for card in self.cards.values():
             card.render(ctx, self.dark)
 
 
+# Codes of other kinds typed in a market's search (the former kind selector, UI-D10): offered, never guessed.
+_CODE_PATTERNS = (("domestic_future", "kr", r"[1-4]\d{2}[A-Z0-9]{3,5}"), ("bond", "kr", r"KR[0-9A-Z]{10}"),
+                  ("overseas_future", "us", r"[A-Z]{1,3}[FGHJKMNQUVXZ]\d{2}"))
+
+
+def _code_choices(text, page, lang):
+    """(label, Instrument) for each other kind whose code pattern the typed text fits on this market's page."""
+    import re
+    code = str(text or "").strip().upper()
+    out = []
+    for kind, where, pattern in _CODE_PATTERNS:
+        if where != page or not re.fullmatch(pattern, code):
+            continue
+        if kind == "domestic_future" and not re.search("[A-Z]", code):
+            continue  # six digits are a stock code
+        try:
+            instrument = Instrument(kind, code)
+        except ValueError:
+            continue
+        name = next(ko if lang == "ko" else en for key, ko, en, _example in KINDS if key == kind)
+        out.append((f"{name} {code}", instrument))
+    return out
+
+
 # One stock on one screen ---------------------------------------------------------------------
-class ProfileSectionPanel(QFrame):
-    def __init__(self):
-        super().__init__()
-        from .app import label
-        self.setObjectName("panel")
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(16, 14, 16, 14)
-        layout.setSpacing(6)
-        self.title = label("", "heading", wrap=False)
-        layout.addWidget(self.title)
-        self.rows = QGridLayout()
-        self.rows.setHorizontalSpacing(12)
-        self.rows.setVerticalSpacing(5)
-        self.rows.setColumnStretch(0, 1)
-        layout.addLayout(self.rows)
-        self.note = label("", "caption")
-        layout.addWidget(self.note)
-        self._labels = []
-
-    def show_section(self, section):
-        from .app import label
-        self.title.setText(section.title)
-        for widget in self._labels:
-            self.rows.removeWidget(widget)
-            _discard(widget)
-        self._labels = []
-        for index, row in enumerate(section.rows):
-            name = label(row.label, "muted")
-            value = label(row.value, "delta" if row.tone else "", wrap=False)
-            value.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-            if row.tone:
-                set_tone(value, row.tone)
-            if row.hint:
-                name.setToolTip(row.hint)
-                value.setToolTip(row.hint)
-            self.rows.addWidget(name, index, 0)
-            self.rows.addWidget(value, index, 1)
-            self._labels += [name, value]
-        self.note.setText(section.note)
-        self.note.setVisible(bool(section.note))
-
-
-class StockView(QWidget):
-    """Header, the shared price chart and every profile section for one instrument."""
-    back_requested = pyqtSignal()
-    watch_toggled = pyqtSignal(object, bool)
-
-    def __init__(self, chart, *, store, profile_loader=None, name_fn=None, locale=None, auto_load=True):
-        super().__init__()
-        from .app import label
-        self.chart, self.store = chart, store
-        self.profile_loader = profile_loader
-        self.name_fn = name_fn or (lambda instrument, lang: instrument.code)
-        self.ctx, self.dark, self.auto_load = locale or LocaleContext("ko_KR"), False, auto_load
-        self.instrument, self.profile = None, None
-        self._epoch = 0
-        self._live_price = None
-        self._reload, self._job_epoch = False, -1
-        self.jobs = Jobs(self)
-        self.jobs.succeeded.connect(self._profile_loaded)
-        self.jobs.failed.connect(self._profile_failed)
-        self.jobs.busy_changed.connect(self._jobs_busy)
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(14)
-        top = QHBoxLayout()
-        self.back_button = QPushButton()
-        self.back_button.clicked.connect(self.back_requested)
-        top.addWidget(self.back_button)
-        top.addStretch()
-        self.watch_button = QPushButton()
-        self.watch_button.setCheckable(True)
-        self.watch_button.clicked.connect(self._toggle_watch)
-        top.addWidget(self.watch_button)
-        layout.addLayout(top)
-        header = QHBoxLayout()
-        header.setSpacing(12)
-        self.mark = CompanyMark("", size=44)
-        self.mark.hide()
-        header.addWidget(self.mark, 0, Qt.AlignmentFlag.AlignVCenter)
-        names = QVBoxLayout()
-        names.setSpacing(2)
-        self.code = label("", "eyebrow", wrap=False)
-        self.name = label("", "title", wrap=False)
-        names.addWidget(self.code)
-        names.addWidget(self.name)
-        header.addLayout(names, 1)
-        figures = QVBoxLayout()
-        figures.setSpacing(2)
-        self.price = label("", "number", wrap=False)
-        self.price.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-        self.change = label("", "delta", wrap=False)
-        self.change.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-        figures.addWidget(self.price)
-        figures.addWidget(self.change, 0, Qt.AlignmentFlag.AlignRight)
-        header.addLayout(figures)
-        layout.addLayout(header)
-        self.chart_slot = QVBoxLayout()
-        self.chart_slot.setContentsMargins(0, 0, 0, 0)
-        layout.addLayout(self.chart_slot)
-        self.profile_status = label("", "caption")
-        layout.addWidget(self.profile_status)
-        self.sections_grid = QGridLayout()
-        self.sections_grid.setSpacing(12)
-        layout.addLayout(self.sections_grid)
-        self.section_panels = []
-        self._columns = 0
-        chart.snapshot_loaded.connect(self._chart_loaded)
-        chart.trade_received.connect(self._chart_tick)
-        store.changed.connect(self._sync_watch)
-        self.set_locale(self.ctx)
-
-    def adopt_chart(self):
-        """Move the shared chart pane into this view (it lives in one place at a time)."""
-        if self.chart.parent() is not self:
-            self.chart_slot.addWidget(self.chart)
-        # The view's header names the instrument; the pane keeps intervals, indicators and live data.
-        self.chart.intro.hide()
-        self.chart.symbol.hide()
-        self.chart.form_labels[1].hide()
-        self._fit_form()
-        self.chart.show()
-
-    def _fit_form(self):
-        # With the code field hidden, keep the interval (and the derivatives market selector) at the left.
-        # Changing the chart's asset class resets column 0, so this runs again after set_asset_class.
-        form = self.chart._form
-        for column in range(3):
-            form.setColumnStretch(column, 0)
-        form.setColumnStretch(3, 1)
-
-    def show_instrument(self, instrument, *, load=True):
-        self.instrument = instrument
-        self.profile = None
-        self._live_price = None
-        self._epoch += 1
-        self.adopt_chart()
-        if self.chart.asset.currentData() != instrument.asset:
-            self.chart.set_asset_class(instrument.asset)
-            self._fit_form()
-        index = self.chart.exchange.findData(instrument.exchange)
-        if index >= 0:
-            self.chart.exchange.setCurrentIndex(index)
-        self.chart.symbol.setText(instrument.code)
-        self._clear_sections()
-        self.render_header()
-        self._sync_watch()
-        self.profile_status.setText("" if instrument.asset in STOCK_ASSETS else
-                                    _text(self.ctx, "종목 정보는 주식에만 제공합니다. 차트는 위에 있습니다.",
-                                          "Stock details are for stocks only; the chart is above."))
-        if load and self.auto_load:
-            # Opening a stock loads its chart and details; with automatic refresh off (tests) both
-            # stay explicit, exactly like the chart pane's own Load button.
-            self.chart.refresh(manual=True)
-            self.load_profile()
-
-    def load_profile(self):
-        if self.instrument is None or self.profile_loader is None or self.instrument.asset not in STOCK_ASSETS:
-            self.profile_status.setText("" if self.instrument is None or self.instrument.asset in STOCK_ASSETS else
-                                        _text(self.ctx, "종목 정보는 주식에만 제공합니다. 차트는 위에 있습니다.",
-                                              "Stock details are for stocks only; the chart is above."))
-            return False
-        self.profile_status.setText(_text(self.ctx, "종목 정보를 불러오는 중…", "Loading stock details…"))
-        if self.jobs.busy:
-            # Another stock's details are still loading; load this one when that job ends.
-            self._reload = True
-            return False
-        self._reload = False
-        epoch, instrument, loader = self._epoch, self.instrument, self.profile_loader
-        self._job_epoch = epoch
-        return self.jobs.start(lambda: (epoch, loader(instrument)))
-
-    @pyqtSlot(bool)
-    def _jobs_busy(self, busy):
-        # Jobs emits succeeded/failed before it clears its job, so a refused load is retried here.
-        if not busy and self._reload and self._job_epoch != self._epoch:
-            QTimer.singleShot(0, self.load_profile)
-
-    @pyqtSlot(object)
-    def _profile_loaded(self, value):
-        epoch, profile = value
-        if epoch != self._epoch:
-            return  # a newer stock was opened meanwhile; _jobs_busy loads it
-        self.profile = profile
-        self.profile_status.setText("")
-        self.render_header()
-        self.render_sections()
-
-    @pyqtSlot(str)
-    def _profile_failed(self, code):
-        if self._job_epoch != self._epoch:
-            return  # the failure belongs to a stock that is no longer open
-        self.profile_status.setText(_text(self.ctx, "종목 정보를 불러오지 못했습니다", "Could not load stock details")
-                                    + f" ({code})")
-
-    def _chart_loaded(self, snapshot):
-        instrument = snapshot.request.instrument
-        if self.instrument is None or _key(instrument) != _key(self.instrument):
-            return
-        quote = getattr(snapshot, "quote", None)
-        if quote is not None and quote.price is not None:
-            self._live_price = (quote.price, quote.change_pct)
-            self.render_header()
-
-    def _chart_tick(self, tick):
-        if self.instrument is None or _key(tick.instrument) != _key(self.instrument):
-            return
-        self._live_price = (tick.price, tick.change_pct)
-        self.render_header()
-
-    def _toggle_watch(self):
-        if self.instrument is None:
-            return
-        if self.store.contains(self.instrument):
-            self.store.remove(self.instrument)
-            self.watch_toggled.emit(self.instrument, False)
-        elif self.store.add(self.instrument):
-            self.watch_toggled.emit(self.instrument, True)
-        self._sync_watch()
-
-    def _sync_watch(self):
-        watched = self.instrument is not None and self.store.contains(self.instrument)
-        self.watch_button.setChecked(watched)
-        full = not watched and self.store.full()
-        self.watch_button.setEnabled(self.instrument is not None and not full)
-        self.watch_button.setText(("★ " + _text(self.ctx, "관심종목", "Watching")) if watched else
-                                  ("☆ " + _text(self.ctx, "관심종목 추가", "Add to watchlist")))
-        self.watch_button.setToolTip(_text(self.ctx, f"관심종목은 {self.store.limit}개까지입니다.",
-                                           f"Up to {self.store.limit} stocks.") if full else "")
-
-    def render_header(self):
-        ctx = self.ctx
-        instrument = self.instrument
-        if instrument is None:
-            self.mark.hide()
-            for field in (self.code, self.name, self.price, self.change):
-                field.setText("")
-            return
-        # The directory name (the one on the card) first, so the header does not change name when the
-        # details arrive; the profile's name only when the directory does not know the stock.
-        name = self.name_fn(instrument, ctx.language)
-        if self.profile is not None and name == instrument.code:
-            from core.research.stock_profile import display_name
-            name = display_name(self.profile, ctx.language) or name
-        self.mark.set_identity(instrument.code, name)
-        self.mark.setVisible(instrument.asset in STOCK_ASSETS)
-        place = instrument.exchange or ("KRX" if instrument.asset == "domestic_stock" else "")
-        self.code.setText(f"{instrument.code} · {place}" if place else instrument.code)
-        self.name.setText(name)
-        price = pct = None
-        if self._live_price is not None:
-            price, pct = self._live_price
-        elif self.profile is not None:
-            price, pct = self.profile.last_price, self.profile.change_pct
-        self.price.setText(_price_text(price, instrument))
-        text, tone = _change_text(pct)
-        self.change.setText(text)
-        set_tone(self.change, tone)
-
-    def _clear_sections(self):
-        for panel in self.section_panels:
-            self.sections_grid.removeWidget(panel)
-            _discard(panel)
-        self.section_panels = []
-
-    def render_sections(self):
-        from core.research.stock_profile import sections
-        self._clear_sections()
-        if self.profile is None:
-            return
-        for section in sections(self.profile, self.ctx.language):
-            panel = ProfileSectionPanel()
-            panel.show_section(section)
-            self.section_panels.append(panel)
-        self._columns = 0
-        self._arrange()
-
-    def _arrange(self):
-        columns = 3 if self.width() >= 1060 else 2 if self.width() >= 640 else 1
-        if columns == self._columns:
-            return
-        self._columns = columns
-        for panel in self.section_panels:
-            self.sections_grid.removeWidget(panel)
-        for index, panel in enumerate(self.section_panels):
-            self.sections_grid.addWidget(panel, index // columns, index % columns, Qt.AlignmentFlag.AlignTop)
-        for column in range(3):
-            self.sections_grid.setColumnStretch(column, 1 if column < columns else 0)
-
-    def resizeEvent(self, event):
-        super().resizeEvent(event)
-        self._arrange()
-
-    def set_locale(self, ctx):
-        self.ctx = ctx
-        self.back_button.setText("← " + _text(ctx, "관심종목", "Watchlist"))
-        self.back_button.setAccessibleName(_text(ctx, "관심종목으로 돌아가기", "Back to watchlist"))
-        self._sync_watch()
-        self.render_header()
-        if self.profile is not None:
-            self.render_sections()
-
-    def set_theme(self, dark):
-        self.dark = bool(dark)
-        self.mark.set_theme(DARK if self.dark else LIGHT)
-
-    def stop(self):
-        self._epoch += 1
+# Owner 2026-11-11 (UI-D8): the stock's screen is quantgen_desktop.stock_detail (a chart that fills the screen,
+# the period bar, and one scrolling right column); the name StockView is kept for the app and its tests.
+from .stock_detail import ProfileSectionPanel, StockDetailView as StockView  # noqa: E402  UI-D8
 
 
 class MarketsWorkspace(QWidget):
-    """Search bar, then either the watchlist cards or one stock's screen."""
+    """One market's page (`market_rankings.RankingBoard`), or one stock's screen.
 
-    def __init__(self, chart, *, store, directory=None, directory_loader=None, card_router_factory=None,
-                 profile_loader=None, locale=None, auto_load=True):
+    Owner ruling UI-D10 (2026-11-11): the rail's Markets sub-menu lists the markets (`MARKET_PAGES`: 국내 주식,
+    미국 주식, 코인) and calls `show_market(key)`; the ranking categories are that market's own chips and search
+    criteria. The page has no title, description or separate search card: its header row carries the market's
+    name, data state and a search scoped to the market (`search`), which narrows the list as it is typed and on
+    Enter opens the one stock it names (the list's, or any stock of that market in the symbol directory).
+    """
+    # The shown list's RANKING_CATEGORIES key when it changes (chips inside the page too), and "" when a
+    # stock's screen replaces the list. Kept for callers of the category sub-menu (UI-D7).
+    category_changed = pyqtSignal(str)
+    # The shown market's MARKET_PAGES key when it changes; the rail's sub-menu highlight follows it.
+    market_changed = pyqtSignal(str)
+
+    def __init__(self, chart, *, store, directory=None, directory_loader=None, ranking_loader=None,
+                 profile_loader=None, summary_loader=None, locale=None, auto_load=True):
         super().__init__()
-        from .app import label
+        from .market_rankings import RankingBoard
         self.ctx = locale or LocaleContext("ko_KR")
         self.store, self.directory, self.chart = store, directory, chart
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(16)
-        bar = QFrame()
-        bar.setObjectName("panel")
-        bar.setProperty("card", "search")
-        bar_layout = QHBoxLayout(bar)
-        bar_layout.setContentsMargins(14, 10, 14, 10)
-        bar_layout.setSpacing(10)
-        self.kind = QComboBox()
-        for key, ko, en, _example in KINDS:
-            self.kind.addItem(ko, key)
-        self.kind.setAccessibleName("Kind")
-        self.kind.currentIndexChanged.connect(self._kind_changed)
-        bar_layout.addWidget(self.kind)
-        self.search = QLineEdit()
-        self.search.setObjectName("marketSearch")
-        self.search.setClearButtonEnabled(True)
+        layout.setSpacing(0)
+        self.pages = CurrentPageStack()
+        name_fn = self.display_name
+        self.rankings = RankingBoard(loader=ranking_loader, locale=self.ctx, auto_load=auto_load,
+                                     summary_loader=summary_loader)
+        self.rankings.open_requested.connect(self.open_instrument)
+        self.rankings.listing_requested.connect(self._open_other)
+        self.rankings.category_changed.connect(self.category_changed)
+        self.rankings.page_changed.connect(self.market_changed)
+        self.rankings.page_changed.connect(self._remember_stock_market)
+        self.rankings.others_fn = self._others
+        self._stock_market = "kr"   # the stock market a search for stocks returns to from the coin page
+        self.search = self.rankings.search
         self.search.returnPressed.connect(self.submit)
-        bar_layout.addWidget(self.search, 1)
-        self.open_button = QPushButton()
-        self.open_button.setProperty("primary", True)
-        self.open_button.clicked.connect(self.submit)
-        bar_layout.addWidget(self.open_button)
-        layout.addWidget(bar)
-        self.message = label("", "caption")
-        self.message.hide()
-        layout.addWidget(self.message)
+        self.rankings.search_submitted.connect(self.submit)  # Enter in the pinned bar's search
+        self.message = self.rankings.message
+        # The directory's code-or-name matching, without its popup: the list narrows in place, and stocks of
+        # this market outside the list are offered under it (`RankingBoard._others`). Focusing the search starts
+        # the symbol master download (as before).
         self.completer = attach_symbol_search(self.search, directory, assets=STOCK_ASSETS, locale=self.ctx,
                                               loader=directory_loader)
+        self.completer.enabled = False
         self.completer.chosen.connect(self.open_listing)
         if directory_loader is not None:
             directory_loader.loaded.connect(self._directory_loaded)
-        self.pages = CurrentPageStack()
-        name_fn = self.display_name
-        self.grid = WatchlistGrid(store, router_factory=card_router_factory, name_fn=name_fn, locale=self.ctx,
-                                  auto_load=auto_load)
-        self.grid.open_requested.connect(self.open_instrument)
         self.stock = StockView(chart, store=store, profile_loader=profile_loader, name_fn=name_fn, locale=self.ctx,
-                               auto_load=auto_load)
-        self.stock.back_requested.connect(self.show_watchlist)
-        self.pages.addWidget(self.grid)
+                               auto_load=auto_load, directory=directory, directory_loader=directory_loader)
+        self.stock.back_requested.connect(self.show_rankings)
+        self.stock.open_requested.connect(self.open_instrument)
+        self.pages.addWidget(self.rankings)
         self.pages.addWidget(self.stock)
         layout.addWidget(self.pages)
         self.set_locale(self.ctx)
+
+    @property
+    def grid(self):
+        """The list page. Kept for `ResearchWindow.current_market_pane()`; the watchlist grid is on Home."""
+        return self.rankings
 
     # Names ---------------------------------------------------------------------------------
     def display_name(self, instrument, lang):
@@ -1096,98 +845,225 @@ class MarketsWorkspace(QWidget):
             listing = self.directory.lookup(instrument.asset, instrument.code, instrument.exchange)
             if listing is not None:
                 return listing.label(lang)
+        member = _rankings.member_for(instrument)
+        if member is not None:
+            return member.label("ko" if lang == "ko" else "en")
         return instrument.code
 
     # Navigation ----------------------------------------------------------------------------
-    def show_watchlist(self):
+    def show_rankings(self):
+        was_stock = self.showing_stock()
         self.pages.setCurrentIndex(0)
+        if was_stock:
+            self.category_changed.emit(self.rankings.category)
+            self.market_changed.emit(self.rankings.page)
+
+    def show_market(self, key):
+        """Show one market's page (a MARKET_PAGES key): the rail's 국내 주식 / 미국 주식 / 코인.
+
+        An open stock's screen gives way to the list; the market keeps its own criteria from its last visit.
+        """
+        if key not in MARKET_PAGE_KEYS:
+            raise ValueError(f"Unknown market {key!r}")
+        self.rankings.set_page(key)
+        self.show_rankings()
+        self._scroll_to_top()
+        return True
+
+    def show_category(self, key):
+        """Earlier callers (UI-D7 category sub-menu, Home's 'add to watchlist'): a RANKING_CATEGORIES key ranks the
+        shown market's list by it; "search" focuses the search; a MARKET_PAGES key shows that market.
+
+        An open stock's screen gives way to the list; the search keeps whatever page is shown.
+        """
+        if key in MARKET_PAGE_KEYS:
+            return self.show_market(key)
+        if key == "search":
+            if self.showing_stock():
+                # The stock screen locks the page, so the list's search above it cannot be reached: its toolbar
+                # search takes the focus instead (a stock chosen there opens in place). Without one the list comes
+                # back with its search.
+                if self.stock.focus_search():
+                    return True
+                self.show_rankings()
+            return self.focus_search()
+        if key not in _rankings.CATEGORY_KEYS:
+            raise ValueError(f"Unknown ranking category {key!r}")
+        if _screen.category_note(self.rankings.page, key):
+            self.rankings.set_page(self._stock_market)  # coins cannot rank by it; the stock market shown last can
+        self.rankings.set_category(key)
+        self.show_rankings()
+        self._scroll_to_top()  # a newly chosen list starts at its first rank
+        return True
+
+    def focus_search(self):
+        """The list's search for a stock (Home's "add to watchlist", the window's live-chart action). A coin page
+        cannot find or open a stock (UI-D10 review: Home's add landed on the coin search), so it gives way to the
+        stock market shown last."""
+        if self.rankings.page not in ("kr", "us"):
+            self.rankings.set_page(self._stock_market)
+        self._scroll_to_top()
+        self.search.setFocus(Qt.FocusReason.OtherFocusReason)
+        self.search.selectAll()
+        return True
+
+    def _remember_stock_market(self, page):
+        if page in ("kr", "us"):
+            self._stock_market = page
+
+    def _scroll_to_top(self):
+        from PyQt6.QtWidgets import QScrollArea
+        parent = self.parentWidget()
+        while parent is not None and not isinstance(parent, QScrollArea):
+            parent = parent.parentWidget()
+        if parent is not None:
+            parent.verticalScrollBar().setValue(0)
+
+    def current_category(self):
+        """The RANKING_CATEGORIES key of the list shown, or None while a stock's screen is shown.
+        The first visit shows "value" (trading value)."""
+        return None if self.showing_stock() else self.rankings.category
+
+    def current_market(self):
+        """The MARKET_PAGES key of the market page: the one shown, or the one a stock's screen was opened over."""
+        return self.rankings.page
 
     def showing_stock(self):
         return self.pages.currentIndex() == 1
 
     def open_listing(self, listing):
+        """A stock chosen from the directory (a suggestion under the search): its code was not typed in the list's
+        search as a filter, so the search is cleared."""
+        self.search.clear()
         self.open_instrument(Instrument(listing.asset, listing.code, listing.exchange))
 
     def open_instrument(self, instrument, *, load=True):
-        self._say("")
-        # The header names the open stock; a leftover query would name another one.
-        self.completer.completer.popup().hide()
-        self.search.clear()
+        self._say()
+        if instrument is None:
+            return  # a coin: the stock screen has no instrument for it
+        was_stock = self.showing_stock()
+        # The stock's screen first, then the market page under it follows the stock (so Back returns to its
+        # market's list): switched while hidden, the list starts no fetch behind the stock screen (UI-D10
+        # review); it loads when Back shows it.
         self.pages.setCurrentIndex(1)
+        market = {"domestic_stock": "kr", "overseas_stock": "us"}.get(instrument.asset)
+        if market and market != self.rankings.page:
+            self.rankings.set_page(market)
         self.stock.show_instrument(instrument, load=load)
+        if not was_stock:
+            self.category_changed.emit("")
 
     def submit(self):
+        """Enter in the search: open the one stock the text names, else leave the answer to the page.
+
+        In order: the list's single row; the single stock of this market's curated list the text names (whether
+        or not its quote is loaded or passes the criteria: `Screen.members`, UI-D10 review); when the list has
+        none by that name, a directory match in this market, a six-digit domestic code, the single stock of
+        another market's curated list, or a directory match in the other stock markets (as the earlier "종목
+        검색" did). Several names, a coin, or a name the criteria leave out: the narrowed list and its empty
+        state say why. A code of another kind (derivatives, bonds) is offered under the list, never guessed."""
         text = self.search.text().strip()
         if not text:
             return
-        kind = self.kind.currentData()
-        try:
-            if kind == "stock":
-                listing = self.directory.resolve(text, assets=STOCK_ASSETS) if self.directory is not None else None
-                if listing is not None:
-                    self.open_listing(listing)
-                    return
-                rows = self.completer.results(text)
-                if len(rows) == 1:
-                    self.open_listing(rows[0])
-                    return
-                code = text.upper()
-                if code.isdigit() and len(code) == 6:
-                    self.open_instrument(Instrument("domestic_stock", code))
-                    return
-                self._say(_text(self.ctx, f"'{text}'와 일치하는 종목을 찾지 못했습니다. 목록에서 고르거나 종목 코드를 입력하세요.",
-                                f"No stock matches '{text}'. Pick one from the list or enter its code."))
-                if rows:
-                    self.completer._edited(text)
-                return
-            self.open_instrument(Instrument(kind, text.upper()))
-        except ValueError:
-            self._say(_text(self.ctx, "코드 형식이 맞지 않습니다.", "That code is not valid for this kind."))
+        board, page = self.rankings, self.rankings.page
+        shown = [row.record.member for row in board.ranked]
+        if len(shown) == 1 and shown[0].instrument is not None:
+            self.open_instrument(shown[0].instrument)
+            return
+        named = board.screen.members()
+        if len(named) > 1:  # '카카오' names 카카오 itself among 카카오뱅크 and 카카오페이
+            from core.search_text import normal
+            wanted = normal(text)
+            exact = [m for m in named if wanted in {normal(m.name_ko), normal(m.name_en), normal(m.code)}]
+            named = exact if len(exact) == 1 else named
+        if named:
+            if len(named) == 1 and named[0].instrument is not None:
+                self.open_instrument(named[0].instrument)
+            return  # several, a coin, or one the criteria leave out: the list and its empty state answer
+        if replace(board.screen, sub="", sector="").members():
+            return  # the market has it outside the sub-market or sector chosen: the empty state says so
+        own = {"kr": ("domestic_stock",), "us": ("overseas_stock",)}.get(page, ())
+        other = tuple(asset for asset in STOCK_ASSETS if asset not in own)
+        listing = self.directory.resolve(text, assets=own) if own and self.directory is not None else None
+        if listing is not None:
+            self.open_listing(listing)
+            return
+        code = text.upper()
+        if code.isdigit() and len(code) == 6:
+            self.search.clear()
+            self.open_instrument(Instrument("domestic_stock", code))
+            return
+        if board._others():
+            return  # the suggestions under the search are the answer
+        elsewhere = [member for each in MARKET_PAGE_KEYS if each != page
+                     for member in _screen.Screen(each, text=text).members()]
+        if len(elsewhere) == 1 and elsewhere[0].instrument is not None:
+            self.search.clear()
+            self.open_instrument(elsewhere[0].instrument)  # its screen, and Back to its market's list
+            return
+        if elsewhere:
+            return  # the '…에서 보기' pointers under the search are the answer
+        listing = self.directory.resolve(text, assets=other) if self.directory is not None else None
+        if listing is not None:
+            self.open_listing(listing)  # the stock is in the other market: its screen, and Back to that list
+            return
+        self._say("no_coin" if page == "crypto" else "not_found", text=text)
+
+    def _open_other(self, payload):
+        if isinstance(payload, Instrument):
+            self.search.clear()
+            self.open_instrument(payload)
+        else:
+            self.open_listing(payload)
+
+    def _others(self, text, page):
+        """What the search text names outside the list: stocks of this market in the symbol directory, and a code
+        of another kind (국내 파생, 해외 파생, 채권) offered as an explicit choice, never guessed: (label, payload)."""
+        if page == "crypto":
+            return []
+        lang = "ko" if self.ctx.language == "ko" else "en"
+        out = list(_code_choices(text, page, lang))
+        if self.directory is None:
+            return out
+        assets = ("domestic_stock",) if page == "kr" else ("overseas_stock",)
+        rows = self.directory.search(text, limit=12, assets=assets)
+        for listing in rows:
+            kind = getattr(listing, "kind", "stock")
+            if listing.asset == "overseas_stock":
+                # 미국 주식's search also reaches the other overseas listings the earlier search opened (TSE, HKS).
+                tail = "" if listing.exchange in US_EXCHANGES else f" · {listing.exchange}"
+            else:
+                tail = "" if kind in ("stock", "") else " · " + (_KIND_KO if lang == "ko" else _KIND_EN).get(kind, kind)
+            out.append((f"{listing.label(lang)} {listing.code}{tail}", listing))
+        return out
 
     def _directory_loaded(self, _added):
         if self.directory is not None and getattr(self.directory, "error", None):
-            self._say(_text(self.ctx, "국내 종목 이름 목록을 불러오지 못했습니다. 국내 종목은 6자리 코드로 검색하세요.",
-                            "Could not load the domestic stock names. Search domestic stocks by their 6-digit code."))
+            self._say("directory_failed")
+        elif self.rankings.query and not self.showing_stock():
+            self.rankings.render()  # the suggestions under the search can now name more stocks
 
-    def _say(self, text):
-        self.message.setText(text)
-        self.message.setVisible(bool(text))
-
-    def _kind_changed(self, *_):
-        stock = self.kind.currentData() == "stock"
-        self.completer.enabled = stock
-        if not stock:
-            self.completer.completer.popup().hide()
-        self._placeholder()
-
-    def _placeholder(self):
-        kind = self.kind.currentData()
-        example = next(e for k, _ko, _en, e in KINDS if k == kind)
-        self.search.setPlaceholderText(
-            _text(self.ctx, "종목 코드나 이름 (예: 005930, 삼성전자, ㅅㅅㅈㅈ, AAPL, 애플)",
-                  "Stock code or name (e.g. 005930, Samsung Electronics, AAPL, Apple)") if kind == "stock"
-            else _text(self.ctx, f"종목 코드 (예: {example})", f"Code (e.g. {example})"))
+    def _say(self, key=None, **fields):
+        """A message under the search, as a PAGE_TEXT key (re-rendered in the new language on a switch)."""
+        self.rankings.say(key, **fields)
 
     # Presentation --------------------------------------------------------------------------
     def set_locale(self, ctx):
         self.ctx = ctx
-        for index, (_key_, ko, en, _example) in enumerate(KINDS):
-            self.kind.setItemText(index, ko if ctx.language == "ko" else en)
-        self.open_button.setText(_text(ctx, "열기", "Open"))
-        self.search.setAccessibleName(_text(ctx, "종목 검색", "Search stocks"))
-        self._placeholder()
         self.completer.set_locale(ctx)
-        self.grid.set_locale(ctx)
+        self.rankings.set_locale(ctx)
         self.stock.set_locale(ctx)
 
     def set_theme(self, dark):
-        self.grid.set_theme(dark)
+        self.rankings.set_theme(dark)
         self.stock.set_theme(dark)
 
     def stop(self):
-        self.grid.stop()
+        self.rankings.stop()
+        self.rankings.summary.stop()
         self.stock.stop()
 
 
 __all__ = ["WatchlistStore", "WatchlistGrid", "WatchCard", "StockView", "MarketsWorkspace", "SymbolCompleter",
-           "DirectoryLoader", "attach_symbol_search", "load_cards", "set_tone", "WATCHLIST_KEY", "WATCHLIST_LIMIT"]
+           "DirectoryLoader", "attach_symbol_search", "load_cards", "set_tone", "WATCHLIST_KEY", "WATCHLIST_LIMIT",
+           "RANKING_CATEGORIES", "MARKET_PAGES", "MARKET_PAGE_KEYS"]

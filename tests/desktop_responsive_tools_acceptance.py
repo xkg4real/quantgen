@@ -90,10 +90,22 @@ class ResponsiveToolTests(unittest.TestCase):
                     scroll=w.stack.currentWidget();self.assertIsInstance(scroll,QScrollArea)
                     self.assertEqual(scroll.horizontalScrollBar().maximum(),0,
                                      self.overflow_context(w,pane,width,language))
+                    # Owner issue 11: headed bullets are shown; the full paragraph is folded below them.
+                    view=pane.narrative_view
+                    x=view.mapTo(scroll.viewport(),QPoint(0,0)).x()
+                    self.assertGreaterEqual(x,0);self.assertLessEqual(x+view.width(),scroll.viewport().width())
+                    from quantgen_desktop.narrative_view import NarrativeLine
+                    lines=[l for l in view.findChildren(NarrativeLine) if l.isVisible() and l.property('narrative_line')]
+                    self.assertTrue(lines)
+                    for line in lines:
+                        self.assertGreaterEqual(line.height()+2,line.heightForWidth(line.width()))
                     narrative=next(x for x in pane.findChildren(UiLabel) if x.source_text==out.narrative)
+                    fold=narrative.parentWidget();fold.toggle.setChecked(True);self.settle()
+                    self.assertEqual(scroll.horizontalScrollBar().maximum(),0)
                     x=narrative.mapTo(scroll.viewport(),QPoint(0,0)).x()
                     self.assertGreaterEqual(x,0);self.assertLessEqual(x+narrative.width(),scroll.viewport().width())
                     self.assertGreaterEqual(narrative.height()+2,narrative.heightForWidth(narrative.width()))
+                    fold.toggle.setChecked(False);self.settle()
                     self.assertEqual(pane.report,before)
 
     def test_platform_wide_header_options_fit_without_losing_selection_or_text(self):

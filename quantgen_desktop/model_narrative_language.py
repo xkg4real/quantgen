@@ -31,6 +31,29 @@ def localize_cell(table, row, column):
     if item is not None: item.setData(CAPTION_ROLE, item.text())
 
 
+def show_as(table, *, cells=(), headers=()):
+    """Display-only wording for chosen cells and headers (owner issues 07/14: no raw keys on screen).
+
+    `cells` holds (row, column, english) and `headers` (column, english): that English caption is shown
+    instead of the table's own text and translated like any caption when the window language changes.
+    The rows given to `result_table` (export sections, report, AI payload) keep their own text."""
+    from .localization import CAPTION_ROLE
+    from .translations import display
+    columns = set(table.property('localized_columns') or ())
+    for row, column, english in cells:
+        item = table.item(row, column)
+        if item is not None:
+            item.setData(CAPTION_ROLE, english)
+            item.setText(display(table, english))
+            columns.add(column)
+    table.setProperty('localized_columns', sorted(columns))
+    for column, english in headers:
+        item = table.horizontalHeaderItem(column)
+        if item is not None:
+            item.setData(CAPTION_ROLE, english)
+            item.setText(display(table, english))
+
+
 def signals_korean(s, b):
     current = b.execution_statistics_verified
     side_basis = '실행된 진입·청산 편도 횟수' if current else '집계 기준 미검증 기록 거래 수'

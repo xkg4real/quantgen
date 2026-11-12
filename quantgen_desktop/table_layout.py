@@ -34,7 +34,9 @@ class CompactTableLayout(QObject):
                     widget=t.cellWidget(r,c)
                     if widget:width=max(width,widget.sizeHint().width())
                 widths.append(min(width,round(360*max(1,m.height()/17))))
-            natural=max(120,sum(widths)+2*t.frameWidth()+t.verticalScrollBar().sizeHint().width())
+            # Hidden columns (e.g. provider/date kept for export) take no width (owner UI port, 2026-11-11).
+            shown=sum(w for c,w in enumerate(widths) if not t.isColumnHidden(c))
+            natural=max(120,shown+2*t.frameWidth()+t.verticalScrollBar().sizeHint().width())
             if t.maximumWidth()!=natural:t.setMaximumWidth(natural);t.updateGeometry()
             available=t.viewport().width()
             if 0<len(widths)<=3 and sum(widths)>available>=len(widths)*80:
@@ -47,6 +49,10 @@ class CompactTableLayout(QObject):
                         side=Qt.AlignmentFlag.AlignRight if c>0 and _NUMBER.fullmatch(item.text().strip()) else Qt.AlignmentFlag.AlignLeft
                         # Explicit alignment set by result contracts takes priority.
                         if not item.data(Qt.ItemDataRole.TextAlignmentRole):item.setTextAlignment(side|Qt.AlignmentFlag.AlignVCenter)
+                        # Owner UI-D5: a cell that is only a figure keeps the number face (QG Interface).
+                        if _NUMBER.fullmatch(item.text().strip()) and item.data(Qt.ItemDataRole.FontRole) is None:
+                            from .font_policy import number_font
+                            item.setFont(number_font(t.font()))
             t.verticalHeader().setMinimumSectionSize(max(34,m.height()+10));t.resizeRowsToContents()
         finally:self.measuring=False
 def configure_compact_table(table):

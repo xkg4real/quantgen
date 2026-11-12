@@ -168,6 +168,7 @@ class AuthoredProseLanguageTests(unittest.TestCase):
         from tests.strategy_exposure_acceptance import fixture
         from core.research.strategy_analysis import StrategyRequest, StrategyOutput
         from core.research.strategy_workflow import narrative, payload
+        from quantgen_desktop.strategy_view import CODE_ROLE
         for cost in (50, 1):
             data = fixture(cost=cost)
             variants = strategy_variants(data)
@@ -198,7 +199,11 @@ class AuthoredProseLanguageTests(unittest.TestCase):
                 text = '\n'.join(x.text() for x in w.strategy.findChildren(UiLabel))
                 self.assertIn('Historical 원문', text); self.assertIn('Historical evidence 12.34', text)
                 self.assertIn('Provider: ORIGINAL', text)
-                self.assertEqual(w.strategy.tables['Study scorecard'].item(0, 2).text(), 'REJECT')
+                # The verdict code stays visible and raw; a Korean window shows its meaning beside it
+                # ('기각 · REJECT', owner issue 09).
+                verdict = w.strategy.tables['Study scorecard'].item(0, 2)
+                self.assertEqual(verdict.text(), {'ko': '기각 · REJECT', 'en': 'REJECT'}[language])
+                self.assertEqual(verdict.data(CODE_ROLE), 'REJECT')
         finally:
             w.strategy.clear_result();w.deleteLater();self.app.sendPostedEvents(None, QEvent.Type.DeferredDelete)
 
@@ -261,7 +266,8 @@ class AuthoredProseLanguageTests(unittest.TestCase):
                             self.assertEqual(pane.tables['Metrics'].item(0, 1).text(),
                                              translate(out.report.product, language))
                             note = next(x for x in pane.findChildren(UiLabel) if x.source_text.startswith('Hedge 부호:'))
-                            self.assertTrue(note.text().startswith('Hedge sign:' if language == 'en' else 'Hedge 부호:'))
+                            # Owner issue 14 (2026-11-11): the Korean window shows the heading in Korean.
+                            self.assertTrue(note.text().startswith('Hedge sign:' if language == 'en' else '헤지 부호:'))
                             greeks = pane.tables['Greeks']
                             self.assertEqual(greeks.horizontalHeaderItem(0).text(), 'Risk' if language == 'en' else '위험')
                             self.assertEqual(greeks.item(0, 0).text(), 'Delta · per +1% spot' if language == 'en' else '델타 · 현물 +1%당')

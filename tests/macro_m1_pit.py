@@ -1945,7 +1945,8 @@ def test_ro_02_kis_client_accepts_only_allowlisted_quotation_paths():
     from data.krx import kis_client as K
     allow = K.QUOTATION_ALLOWLIST
     assert allow is config.KIS_QUOTATION_ALLOWLIST and isinstance(allow, frozenset)      # frozen in config.py
-    assert len(allow) == 31 and all("/quotations/" in p and p.startswith("/uapi/") for p in allow)
+    # 32: overseas price-detail (US market cap) added with the owner's approval, 2026-11-11 ("승인.").
+    assert len(allow) == 32 and all("/quotations/" in p and p.startswith("/uapi/") for p in allow)
     used = set()
     for rel in ("data/krx/kis_client.py", "data/kis_markets.py", "data/kis_workspace.py", "docs/kis_quote_check.py"):
         used |= set(re.findall(r"[\"'](/uapi/[^\"']+)[\"']", _code_only(ROOT / rel)))

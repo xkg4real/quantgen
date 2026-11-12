@@ -1,4 +1,4 @@
-"""Actual Korean hint programs and compact controls preserve user operations."""
+"""The native font and type (owner UI-D6) and compact controls preserve user operations."""
 import os
 os.environ.setdefault('QT_QPA_PLATFORM','offscreen')
 import unittest
@@ -19,21 +19,42 @@ class CompactUiTests(unittest.TestCase):
         cls.app=QApplication.instance() or QApplication([]);load_interface_fonts(cls.app)
     def settle(self):
         for _ in range(8):self.app.processEvents()
-    def test_each_real_weight_has_hinted_components_for_all_modern_hangul(self):
-        for filename,weight in zip(INTERFACE_FILES,(400,500,600)):
+    def test_interface_face_has_real_weights_and_all_modern_hangul(self):
+        """Owner UI-D6 (2026-11-11, second font mockup round, N3): text and figures in QG Interface, the
+        Pretendard-derived CFF OTF, with real 400/500/600 faces and all 11,172 modern Hangul syllables.
+        Plan A (IBM Plex Sans KR) was dropped; the Gothic A1 TTFs stay unused, for rollback only."""
+        from quantgen_desktop.font_policy import INTERFACE_FAMILY, NUMBER_FAMILY, number_font
+        self.assertEqual((INTERFACE_FAMILY, NUMBER_FAMILY), ('QG Interface', 'QG Interface'))
+        for filename, weight in zip(INTERFACE_FILES, (400, 500, 600)):
+            self.assertTrue(filename.endswith('.otf'), filename)
             with TTFont(ROOT/'assets/fonts'/filename) as face:
-                self.assertEqual(face['OS/2'].usWeightClass,weight)
-                for tag in ('fpgm','prep','cvt ','gasp'):self.assertIn(tag,face)
-                cmap=face.getBestCmap();glyf=face['glyf'];seen=set()
-                def check(name):
-                    if name in seen:return
-                    seen.add(name);glyph=glyf[name]
-                    if glyph.isComposite():
-                        for c in glyph.components:check(c.glyphName)
-                    else:self.assertGreater(len(glyph.program.getBytecode()),0,name)
-                for code in range(0xAC00,0xD7A4):self.assertIn(code,cmap);check(cmap[code])
-            font=QFont(self.app.font());font.setWeight(QFont.Weight(weight));raw=QRawFont.fromFont(font)
-            self.assertEqual(raw.weight(),weight);self.assertTrue(raw.fontTable('fpgm'))
+                self.assertEqual(face['OS/2'].usWeightClass, weight)
+                self.assertIn('CFF ', face)
+                cmap = face.getBestCmap()
+                for code in range(0xAC00, 0xD7A4): self.assertIn(code, cmap)
+        for weight in (400, 500, 600):
+            font = QFont(self.app.font()); font.setWeight(QFont.Weight(weight))
+            raw = QRawFont.fromFont(font)
+            self.assertEqual(raw.familyName(), INTERFACE_FAMILY); self.assertEqual(raw.weight(), weight)
+            self.assertTrue(raw.fontTable('CFF '))
+            self.assertEqual(QRawFont.fromFont(number_font(font)).familyName(), NUMBER_FAMILY)
+        self.assertFalse(list((ROOT/'assets/fonts').glob('IBMPlexSansKR-*')))
+        for kept in ('qg-interface.ttf', 'qg-interface-medium.ttf', 'qg-interface-semibold.ttf'):
+            self.assertTrue((ROOT/'assets/fonts'/kept).is_file(), kept)
+            self.assertNotIn(kept, INTERFACE_FILES)
+
+    def test_type_follows_owner_plan_n3(self):
+        """UI-D6: section headings and card titles 500, captions 400, buttons/menu 400 (selected menu and
+        tool 600), primary button 500, table headers 500; tighter tracking, figures at their own tracking."""
+        from quantgen_desktop.typography import window_stylesheet
+        from core.theme import LIGHT
+        css = window_stylesheet(LIGHT, False)
+        n3 = css[css.index('Owner UI-D6'):]
+        for rule in ("QLabel[role='heading'], QLabel#watchlistTitle {{ font-weight: 500; letter-spacing: -0.36px; }}",
+                     "QLabel[role='caption'] {{ font-weight: 400; }}", "QHeaderView::section {{ font-weight: 500; }}",
+                     "QPushButton[nav='true']:checked, QPushButton[tool='true']:checked {{ font-weight: 600; }}",
+                     "QLabel[role='price'], QLabel[role='delta'], QFrame#panel QLabel[role='delta'] {{ letter-spacing: 0px; }}"):
+            self.assertIn(rule.replace('{{', '{').replace('}}', '}'), n3)
     def test_categories_and_forms_reflow_preserving_keyboard_and_request(self):
         with patch('quantgen_desktop.jobs.Jobs.start',side_effect=AssertionError('unexpected request')):
             w=ResearchWindow(auto_refresh=False,language='ko');self.addCleanup(delete_owned_widget,w)

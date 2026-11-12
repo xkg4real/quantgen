@@ -14,6 +14,14 @@ from core.research.presentation import safe_detail
 from .tools import ToolPane, fmt
 
 
+def _notes(english):
+    """Both display variants of a closing note (owner issue 14): the reviewed English and the all-Korean text.
+
+    The note passed to `finished` stays the export text; only the analysis panel shows these."""
+    from .translations import translate
+    return {'en': english, 'ko': translate(english, 'ko')}
+
+
 def display_fields(value):
     """Keep the original P19 display boundary at every nesting level."""
     if isinstance(value, dict):
@@ -112,7 +120,9 @@ class MacroRecordsPane(ToolPane):
             actions.addWidget(button)
         self.input_box.layout().addLayout(actions)
         self.tool.currentIndexChanged.connect(self.action_visibility)
-        self.status.setText('기록은 명시적으로 읽습니다. Live 실행은 기존 서명 달력·연결 조건을 충족해야 합니다.')
+        # Owner issue 14: English source; the Korean display says 실제 실행, not "Live".
+        self.status.setText('Records are read explicitly. Live execution requires existing signed-calendar and '
+                            'connection conditions.')
 
     def action_visibility(self):
         enabled = self.tool.currentData() == 'overlay'
@@ -200,7 +210,9 @@ class MacroRecordsPane(ToolPane):
             self.result_table(title, ['Card', 'Verdict', 'Disposition', 'Reason', 'Label', 'Book'], rows)
         self.details('Tech-fund drafts · NOT_RUN / not a recommendation', d.get('techfund', []))
         self.details('CRY-1 controls · vendor trials, not formal card results', d.get('cry1', []))
-        self.finished('검증된 원문 기록을 표시했습니다. 조회가 공식 판정이나 권장 book을 바꾸지 않습니다.')
+        self.finished('검증된 원문 기록을 표시했습니다. 조회가 공식 판정이나 권장 book을 바꾸지 않습니다.',
+                      localized=_notes('Verified source records displayed. Reading does not change official verdicts '
+                                       'or recommended books.'))
 
     def show_research(self, d):
         from ui.research_view import DISCLAIMERS, WEIGHT_CAPTION, PAGES
@@ -222,7 +234,9 @@ class MacroRecordsPane(ToolPane):
             button.setToolTip('Opens the shipped offline document' if button.isEnabled() else 'Document unavailable in this installation')
             button.clicked.connect(lambda checked=False, p=path: QDesktopServices.openUrl(QUrl.fromLocalFile(str(p))))
             self.result_layout.addWidget(button)
-        self.finished('Research register · 표시 전용. 설계 가중치를 노출·규칙·book 입력으로 보내지 않습니다.')
+        self.finished('Research register · 표시 전용. 설계 가중치를 노출·규칙·book 입력으로 보내지 않습니다.',
+                      localized=_notes('Research register · display only. Design weights are not sent as exposure, '
+                                       'rule or book inputs.'))
 
     def show_overlay(self, d):
         from ui.macro_state_panel import verdict_of, _book_ids, composition_lines
@@ -271,7 +285,9 @@ class MacroRecordsPane(ToolPane):
         self.show_overlay_support(d, state)
         self.details('Provenance', {k: state.get(k) for k in ('schema', 'schema_version', 'git_hash',
             'tree_hash', 'knowledge_utc', 'data_snapshot_id', 'config_hash', 'generated_at_utc')})
-        self.finished('기록된 구성 값을 표시했습니다. 화면에서 노출을 재계산하지 않습니다. FORWARD-SIM·refusal은 권장이 아닙니다.')
+        self.finished('기록된 구성 값을 표시했습니다. 화면에서 노출을 재계산하지 않습니다. FORWARD-SIM·refusal은 권장이 아닙니다.',
+                      localized=_notes('Recorded settings displayed. Exposure is not recalculated in the UI. '
+                                       'FORWARD-SIM/refusal are not recommendations.'))
 
     def show_overlay_support(self, d, state=None):
         """Keep diagnostics visible even when the calculation artifact is refused."""

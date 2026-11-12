@@ -317,14 +317,20 @@ class PaperPane(QWidget):
             ('tick','한 번 평가',session.tick),('reset','모의 기록 초기화',self.reset)]:
             b=QPushButton(title);b.clicked.connect(lambda checked=False,f=fn:self.guard(f));actions.addWidget(b);self.buttons[key]=b
         layout.addLayout(actions)
-        self.dashboard=label('아직 세션을 읽지 않았습니다.');layout.addWidget(self.dashboard)
+        # Before a session is open there is nothing to list: say what to do instead of showing three
+        # empty tables (owner UI review, 2026-11-10).
+        self.dashboard=label('No paper session is open yet. Press [Open paper session] to show venue states, '
+                             'simulated orders and the decision log here.');layout.addWidget(self.dashboard)
         self.venues=table(['Market','Trading state','Reason','Active rules']);self.venues.setMinimumHeight(150);layout.addWidget(self.venues)
         self.orders=table(['ID','Symbol','Side','Quantity','Kind','Trigger','Limit']);self.orders.setMinimumHeight(200);layout.addWidget(self.orders)
-        settle=QHBoxLayout()
+        settle=QHBoxLayout();self.session_widgets=[self.venues,self.orders]
         for title,fn in [('선택 모의 체결',lambda:self.settle(True)),('선택 모의 취소',lambda:self.settle(False))]:
             b=QPushButton(title);b.clicked.connect(lambda checked=False,f=fn:self.guard(f));settle.addWidget(b)
+            self.session_widgets.append(b)
         layout.addLayout(settle)
         self.decisions=table(['UTC','Rule','Outcome','Reason','Quoted price']);self.decisions.setMinimumHeight(240);layout.addWidget(self.decisions)
+        self.session_widgets.append(self.decisions)
+        layout.addStretch()   # with the tables hidden, keep the controls together at the top
         session.changed.connect(self.refresh);session.notified.connect(self.status.setText);self.refresh()
 
     def guard(self,fn):
@@ -339,6 +345,7 @@ class PaperPane(QWidget):
         from .app import table_rows
         runtime=self.session.runtime
         for key,b in self.buttons.items():b.setEnabled(key=='open' or runtime is not None)
+        for widget in self.session_widgets:widget.setVisible(runtime is not None)
         if runtime is None:return
         self.buttons['tick'].setEnabled(not self.session.jobs.busy)
         d=runtime.dashboard()
@@ -350,6 +357,15 @@ class PaperPane(QWidget):
             f"{d['halt_detail'] or ''}\n"+
             '\n'.join(f'Quote unavailable: {symbol} · {misses} attempts · {reason}' for symbol,misses,reason in d['degraded'])+
             ('\nStale calendars: '+str(d['calendar_stale']) if d['calendar_stale'] else ''),limit=None))
+        # Owner issue 14: the same counts under Korean labels; engine and provider text stays as written.
+        self.dashboard.localized_text={'en':self.dashboard.source_text,'ko':safe_detail(
+            f"{d['describe']}\n활성 규칙 {d['active_rules']} / {d['total_rules']} · 오늘 실행 {d['fired_today']} · 거부 {d['rejected_today']}\n"
+            f"모의 주문 · 미체결 {counts['OPEN']} · 체결 {counts['FILLED']} · 취소 {counts['CANCELLED']} · 거부 {counts['REJECTED']}\n"
+            f"오늘 주문 금액 {d['notional_today']} · 마지막 평가 {d['last_tick'] or '실행 전'}\n"
+            f"{d['halt_detail'] or ''}\n"+
+            '\n'.join(f'시세 없음: {symbol} · {misses}회 시도 · {reason}' for symbol,misses,reason in d['degraded'])+
+            ('\n휴장일 달력 갱신 필요: '+str(d['calendar_stale']) if d['calendar_stale'] else ''),limit=None)}
+        self.dashboard.retranslate()
         table_rows(self.venues,[[v['code'], 'OPEN' if v['open'] else 'CLOSED' if v['open'] is False else 'UNKNOWN',safe_detail(v['why'] or v['describe']),v['rules']] for v in d['venues']])
         self.buttons['ack'].setEnabled(d['needs_ack']);self.buttons['arm'].setEnabled(not d['needs_ack'] and runtime.mode is not EngineMode.ARMED)
         selected=self.orders.item(self.orders.currentRow(),0) if self.orders.currentRow()>=0 else None

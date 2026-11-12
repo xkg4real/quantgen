@@ -84,7 +84,7 @@ class ToolPane(QWidget):
         self._details_fold = None
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 12, 0, 0)
-        layout.setSpacing(18)
+        layout.setSpacing(26)  # owner 2026-11-11: roomy blocks with light lines
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.input_box, inner = panel(title)
         bound_input_panel(self.input_box)
@@ -140,7 +140,7 @@ class ToolPane(QWidget):
         self.result = QWidget()
         self.result_layout = QVBoxLayout(self.result)
         self.result_layout.setContentsMargins(0, 0, 0, 0)
-        self.result_layout.setSpacing(16)
+        self.result_layout.setSpacing(22)
         self.result_reading=QWidget()
         self.result_reading_layout=QVBoxLayout(self.result_reading)
         self.result_reading_layout.setContentsMargins(0,0,0,0)
@@ -167,6 +167,9 @@ class ToolPane(QWidget):
         self.source.hide()
         self.source_label.hide()
         self._top_grid.setColumnStretch(1, 0)
+        # With no selector the prompt must not ask for a source (owner issues 04/12).
+        if self.status.source_text == '도구와 출처를 선택한 후 실행하세요.':
+            self.status.setText('Choose a tool, then run.')
 
     def set_source_caption(self, text):
         self.source_label.setText(text)
@@ -269,15 +272,38 @@ class ToolPane(QWidget):
         chart.set_series(x, series)
         self.result_layout.addWidget(chart)
         self.charts[name] = chart
+        self._add_chart_reading(name, chart)
 
-    def finished(self, narrative, *, localized=None):
+    def _add_chart_reading(self, name, chart):
+        """'How to read this chart' under a chart with an authored guide (owner issue 02); display only."""
+        from .chart_study import chart_reading
+        chart.reading = chart_reading(name)
+        if chart.reading is not None:
+            self.result_layout.addWidget(chart.reading)
+
+    def finished(self, narrative, *, localized=None, sections=None):
+        """Show the narrative as headed bullets (owner issue 11), the full paragraph folded below.
+
+        `localized` gives reviewed per-language texts ({'ko': ...}); `sections` optionally gives ready
+        headed bullets per language ({'ko': [(heading, [line, ...]), ...]}). Export text is unchanged."""
         from .app import label
+        from .narrative_view import FullTextFold, NarrativeView
         notice = ('Analysis narrative · display language; original retained in export' if localized else
                   'Analysis narrative · original source language retained')
         self.result_reading_layout.addWidget(label(notice, 'caption'))
         narrative_widget=self.text(narrative, localized=localized)
         self.result_layout.removeWidget(narrative_widget)
-        self.result_reading_layout.addWidget(narrative_widget)
+        variants = {'en': narrative_widget.source_text}
+        if localized:
+            variants.update({k: v for k, v in narrative_widget.localized_text.items() if v})
+        if sections:
+            variants.update(sections)
+        self.narrative_view = NarrativeView(variants)
+        self.result_reading_layout.addWidget(self.narrative_view)
+        # The folded paragraph is secondary: closed by default, so it does not ask to stay visible.
+        narrative_widget.setProperty('reading_help_keep_visible', False)
+        self.result_reading_layout.addWidget(FullTextFold(narrative_widget))
+        narrative_widget.retranslate()  # it was reparented through the fold before the fold joined the window
         self.result_reading.show()
         self.has_result = True
         self.status.setText('계산 완료 · 출처·관측일·가정을 확인하세요. 공식 검증 판정은 별도입니다.')
@@ -290,6 +316,7 @@ class ToolPane(QWidget):
         chart.colors=self.window().colors
         self.result_layout.addWidget(chart)
         self.charts[name]=chart
+        self._add_chart_reading(name, chart)
 
     def bind_output(self, name, output):
         if not self.has_result: return
