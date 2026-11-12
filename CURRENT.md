@@ -4,9 +4,9 @@ reason: usage_limit_weekly
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c
-next_ids: ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-12T17:08:00+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1
+next_ids: ⑥-1/readout, ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-13T00:35:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: main
@@ -121,6 +121,18 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - **D:** 주문 한도 수치(1회 100만 원/5%, 하루 10건·300만 원/15%, 손실 중지 40만 원/2%, 종목 비중 20%/400만 원, 가격 이탈 3%·시세 15초·지정가만, 09:00~15:20, 모의 20거래일·30건 등)를 기본값으로 승인. **실거래는 켜지지 않음.** 순서: 안전 설계 문서 보고 → ⑦-2 병합 뒤 구현 → 모의투자 → 결과 보고 → 소유자의 실거래 전환 승인. D-14 법률 자문은 소유자가 의뢰.
 
 ### 인계: Claude 주간 사용량 소진 (2026-11-12 KST) — 가장 최신, 여기서 이어받으십시오
+
+**추가 (인계 뒤, 같은 날): Pilot 1 실행 끝, 결과 폴더 올라감.** 소유자가 `.agents`를 클론 밖으로 옮기고(A5 빈 출력) A1~A10을 통과(A6 `git:8a8c2475…` anchor ok; A7 table `d76d2d7301ffe92c`·code `f995600b36c75523`·host `4931117f`·STATUS OK; A8 reach ok; A9 규칙 Enabled/Outbound/Block)한 뒤 B2를 한 번 실행. 출력(원문):
+
+```text
+parity: hard_pass True; worst corr 0.9999996240319662 (bar 0.9999, owner 0.99); worst abs dSR 0.0006384421130428697 (bar 0.01, owner 0.05)
+trial counts: len_grid 12, family_n_raw 12, market_n_raw 12, U 24, n_trials 36
+decisions: quantgen REJECT, nautilus REJECT
+STATUS CARD_WRITTEN exit=0 record=C:\Users\whydi\OneDrive\Desktop\QUANTGEN\docs\nautilus_bridge\runs\NB-20261112T153028389916Z-d76d2d73\run.json
+```
+
+`$LASTEXITCODE` 0. B4~B11대로 `run.json`과 `NB_E1_trend_spy.json`만 커밋·push: 연구 브랜치 `8a8c247..a2ac79b`, B11 빈 출력. 예상(스펙 10.3: INSUFFICIENT_DATA 또는 REJECT)과 같음. 패리티 통과이므로 러너의 Pilot 2 조건(R-11)도 열림.
+**GPT 다음 일:** 3절 4번(Pilot 1 판독)을 `⑥-1/readout`으로: `git show origin/claude/amazing-gauss-tdiguu:docs/nautilus_bridge/runs/NB-20261112T153028389916Z-d76d2d73/run.json`을 판독 문서 1.2.1 점검표와 부록 B `read_run.py`로 읽고 1.2.6의 CARD_WRITTEN 문장으로 보고. 그다음 BTC 답(권장 BTC-라)이 오면 실행표 D(Pilot 2)·결정 6이면 같은 자리에서 E.
 
 작업: claude-resume-20261103 · 주기 2026-11-10 · 세션 https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 이 문서는 `handoff` 브랜치의 `CURRENT.md`(status: handoff, reason: usage_limit_weekly)와 같은 내용을 소유자가 GPT에게 넘기기 쉽게 한 장으로 줄인 것입니다. 끝난 일의 기록은 `LEDGER.md`에 있습니다(`python3 tools/handoff/push_handoff.py --ledger`).
