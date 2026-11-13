@@ -249,3 +249,59 @@ What follows (how Claude takes "BTC-나-승인" and the second line):
   enforces that, R-11).
 - State when this entry was written: the diagnostic has not been run, the cause is not identified and the BTC-USD
   gate is not passed. The cause and what follows from it are added under this entry.
+
+
+## 2026-11-13 — SPY follow-up, Pilot 1 readout and owner ruling BTC-라
+
+This dated addendum preserves the earlier entries as history. No provider comparison, pilot, research-ledger
+registration, repricing or source-data replacement was performed by this documentation action.
+
+### Verified SPY and Pilot 1 evidence
+
+- The second SPY summary, `PP-20261112T073747Z-spy`, at provider-run commit
+  `77d2647857325d9a2809f6d8ba0c730097d6ffaf` is PASS. Its SHA256 is
+  `4ad6c537fa5649a2f5d0ba069fd88a0d8e1a4398ca23308defcc017b118b3c02`.
+  Independent fmp: 5,489 common days, zero days above tolerance; yahoo_now PASS. Auxiliary KIS coverage
+  remains WITHHELD. The earlier SPY run remains in the historical record.
+- Pilot 1 `NB-20261112T153028389916Z-d76d2d73`, pushed to research commit
+  `a2ac79b04bf2e31055c7bc486cb9cffb3727f2c4`, is CARD_WRITTEN. All 24 setting/cost combinations pass hard
+  parity; lowest correlation 0.9999996240319662, largest absolute Sharpe difference 0.0006384421130428697.
+  Both engines say REJECT, as anticipated; that verdict is not a bridge failure. Trial counts are
+  grid/family/market 12/12/12, U=24, n_trials=36; no new E1 registration was appended.
+- The card MD5 `dd4e580addeea60359cdd0442f1e9932` matches run.json. P11 independent choices differ at
+  2 of 38 origins, a diagnostic observation, not a new hard failure. The two Step 8 wording issues already
+  identified in the readout procedure (full selection and child manifests in run.json rather than the card)
+  carry forward to Step 10.
+
+### BTC diagnosis and the new owner decision
+
+The original BTC run `PP-20261111T075328Z-btc` remains FAIL: Coinbase 43 disagreement days versus 20
+allowed, Bitstamp 47 versus 21; late level checks also fail. This is not converted to PASS.
+Claude's handoff records the owner's diagnostic output as: both=20, coinbase_only=9, bitstamp_only=9,
+coinbase_edge=14, bitstamp_edge=12, coinbase_unpaired=0, bitstamp_unpaired=6; venues agree=20, differ=0.
+These aggregate diagnostic values were read from the handoff, not recomputed from protected input files.
+Case 3 fails (43-9=34>20; 47-9=38>21); case 4 also fails (20 is not above both allowances).
+The diagnosis is therefore case 5: the cause is not identified. BTC-나 did not automatically open the gate.
+
+The owner was shown a comparison of BTC-마/바/라 and an explanation of Pilot 2's five settings, two cost
+conditions, persistent research registration, and the distinction between engine parity and data accuracy.
+The owner's direct reply on 2026-11-13, recorded verbatim:
+
+> 그러면 라 옵션으로 가겠습니다
+
+This selects **BTC-라**: record the mismatch and unresolved cause in the closing execution record and spec 10.4
+data-access history, and let Pilot 2 go ahead under spec 10.5's explicit owner-ruling gate.
+**Pilot 1 has parity.hard_pass=true, and the BTC-USD gate is now passed by this owner ruling; the BTC provider
+comparison itself remains FAIL.** The owner may proceed with section D of
+`docs/product/PILOT_OWNER_RUN_2026-11-11.md`, including its preparation checks, on the owner's Windows PC.
+
+The pinned inputs, registration tables, fingerprinted code, criteria, owner_confirmed, host fingerprint and
+all original runner/retry conditions remain unchanged. This approval is not evidence that Pilot 2 ran, that
+BTC data are accurate, or that a strategy is profitable. Windows full checks, Step 10 closing, the separate
+subsequent-session research-branch commit approval (decision 11), and final merge conditions remain in force.
+Formal optional GPT/Gemini spec disclosure/review remains NOT_PERFORMED.
+
+GPT's reading of the pushed run/card and provider summaries is a new data-access-history entry to carry to
+Step 10; no raw price/fill arrays are reproduced here and no new trial is registered.
+
+Full checklist and immutable readout evidence: [Pilot 1 readout](https://github.com/xkg4real/quantgen/blob/d6a814f8a95bc66eeec5a209fbd21227d0188deb/PILOT1_READOUT_2026-11-13_gpt.md).
