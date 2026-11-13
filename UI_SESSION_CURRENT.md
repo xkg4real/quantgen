@@ -8,7 +8,7 @@
   창/viewport 크기 변화 없이 부모 여백48px 변경으로 로컬 재현: 수정 전48 != 0 실패, 수정 후PASS.
 - 8f69c73: PageLock이 view~page content의 Move/Resize/LayoutRequest 및 scroll range 변화 후 소유 QTimer로 실제 위치를 재측정·고정. toolbar refit은 반복하지 않음. release 시 예약/필터 제거. fixture는 실제 DeferredDelete로 정리.
 - 재현·기존 Windows 실패검사를 CI 초기 단계에도 추가(기존 후속 전체검사 유지). 새HEAD Runtime/Compliance IDs를 조회해야 함.
-- 로컬 `tests.desktop_market_layout_acceptance` 5개 통과, 이어서 `tests.desktop_stock_detail_acceptance` 진행 중: /tmp/qg-scroll-fixed.log, exec session9490. syntax1 PASS, compliance consistency20 PASS/publication BLOCKED.
+- 로컬 chart layout5 + stock detail34 = **39개 PASS**(341.213s): /tmp/qg-scroll-fixed.log. syntax1 PASS. 최신 Runtime **43410118821 진행 중**, Windows3.11/3.12/3.14 모두 초기 로고·선표시·두 차트 고정 회귀 검사 PASS. Compliance **43410118850 성공**, consistency20 PASS/publication BLOCKED. 나머지 전체 Runtime 검사 완료까지 확인해야 함.
 - 작업 상세/whydi CMD: docs/product/UI_MARKET_GUIDE_2026-11-13.md. AWS 큐 초안 /workspace/shared/ui-20261113-v2/PR-115.json은 최종head/검증/merge 갱신 필요.
 - next_ids: ⑬-2/market-nav-v2, ⑬-2/guide-catalog-v2, ⑬-2/taskbar-brand-v2, ⑬-2/market-first-paint.
 - 다음: 최신HEAD의 새 Windows 초기2회귀 검사 확인 → 전체Runtime6/6·Compliance 성공 → PR115 expected_head_sha merge → main 확인 → docs-only PR(완료상태+웹큐) → UI returned·LEDGER4개 → whydi CMD 안내.
