@@ -39,7 +39,10 @@ class OutageTests(unittest.TestCase):
 
     def test_constructor_does_not_create_a_file_or_sidecar(self):
         self.assertEqual(list(self.root.iterdir()), [])
-        self.assertEqual(self.writer.path, self.path)
+        # Windows can expand a short temporary-directory name (RUNNER~1) when
+        # resolving the trusted parent. Check its identity, not its spelling.
+        self.assertEqual(self.writer.path.name, self.path.name)
+        self.assertTrue(self.writer.path.parent.samefile(self.root))
 
     def test_canonical_utf8_lf_and_no_chain_fields(self):
         record = failure()
