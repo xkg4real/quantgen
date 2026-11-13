@@ -1,3 +1,21 @@
+# PR115 차트 고정 회귀 수정 — 2026-11-13T10:34Z (이 절 우선)
+
+- status: taken · owner: GPT UI. work_branch: gpt/ui-market-navigation-guide-20261113.
+- 최신 work_commit: **8f69c734ab06823fce8aa79ad09872eb8dbc87d7**, push 완료. PR115 main 미병합.
+- 이전043b2cd Runtime43404291007: Linux 전체 성공·syntax2 성공·Windows3버전 로고/선표시/기본 desktop 단계 성공.
+  Windows3.14의 후속 shared KIS 단계에서 `desktop_market_layout_acceptance.test_dynamic_indicator_panels_never_overlap_readouts_after_theme_and_width_changes` 실패. 상단 컨트롤 QRect(16,-24,920,38).
+- 원인 경로: 시장 목적지 CurrentPageStack 중첩 레이아웃이 뒤늦게 이동해도 PageLock이 기존 target만 고정함.
+  창/viewport 크기 변화 없이 부모 여백48px 변경으로 로컬 재현: 수정 전48 != 0 실패, 수정 후PASS.
+- 8f69c73: PageLock이 view~page content의 Move/Resize/LayoutRequest 및 scroll range 변화 후 소유 QTimer로 실제 위치를 재측정·고정. toolbar refit은 반복하지 않음. release 시 예약/필터 제거. fixture는 실제 DeferredDelete로 정리.
+- 재현·기존 Windows 실패검사를 CI 초기 단계에도 추가(기존 후속 전체검사 유지). 새HEAD Runtime/Compliance IDs를 조회해야 함.
+- 로컬 `tests.desktop_market_layout_acceptance` 5개 통과, 이어서 `tests.desktop_stock_detail_acceptance` 진행 중: /tmp/qg-scroll-fixed.log, exec session9490. syntax1 PASS, compliance consistency20 PASS/publication BLOCKED.
+- 작업 상세/whydi CMD: docs/product/UI_MARKET_GUIDE_2026-11-13.md. AWS 큐 초안 /workspace/shared/ui-20261113-v2/PR-115.json은 최종head/검증/merge 갱신 필요.
+- next_ids: ⑬-2/market-nav-v2, ⑬-2/guide-catalog-v2, ⑬-2/taskbar-brand-v2, ⑬-2/market-first-paint.
+- 다음: 최신HEAD의 새 Windows 초기2회귀 검사 확인 → 전체Runtime6/6·Compliance 성공 → PR115 expected_head_sha merge → main 확인 → docs-only PR(완료상태+웹큐) → UI returned·LEDGER4개 → whydi CMD 안내.
+- 이전head의 Linux 성공만으로 새HEAD 전체 통과라고 쓰지 말 것. CURRENT.md/웹 담당 문서는 변경하지 않음.
+
+---
+
 # PR115 최신 검증 체크포인트 — 2026-11-13T10:01Z (이 절 우선)
 
 - status: taken · owner: GPT UI. work_commit: **043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158**.
