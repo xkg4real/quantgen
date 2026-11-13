@@ -1,14 +1,14 @@
 ---
-status: returned
-reason: milestone
+status: taken
+reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1
 next_ids: ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T21:20:34+09:00
+updated_at: 2026-11-13T21:36:42+09:00
 stale_after_hours: 3
-waiting_on: owner
+waiting_on: none
 work_branch: gpt/order-safety-design-20261113
 work_commit: b3231213af6d9799303b0fde58bcdd9d0399c765
 uncommitted_changes: no
@@ -17,9 +17,18 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
 session: 01a183c6-632a-70cc-a0e6-32e764f43087
-execution_id: 2633226e-9755-40fb-87a4-44d1fc290756
+execution_id: 42710822-a1b3-4677-9377-ed644d5aca21
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## 소유자 직접 요청 — Pilot 2 판독과 Step 10 준비 (2026-11-13T21:36:42+09:00)
+
+- 소유자가 D2~D11 전체 출력을 보내고 "정상적으로 완료되었는지 판독해주세요. 만약 정상적으로 완료 되었다면 이 이후 해야되는 작업을 Goal에 맞춰 진행해주세요"라고 요청했다. 반복 운영 메시지를 별도 지시 전까지 무시하라는 앞선 요청은 유지한다. 이번 작업은 이 새 직접 요청의 실행 결과 판독·기록·E절 안내다. 자동 감시 또는 예약 변경 요청으로 해석하지 않는다.
+- 새 execution_id **42710822-a1b3-4677-9377-ed644d5aca21**, OS RUN.lock 확보. 이전 저장 execution/task/handoff/branch/commit과 최신 CURRENT를 대조한 뒤 최신 blob SHA CAS로 재개한다.
+- 소유자 연구 브랜치 head **8a3d171fa3e920e26c0b33b0a808f36fc89cd67a**, parent a2ac79b04bf2e31055c7bc486cb9cffb3727f2c4. 변경은 Pilot 2 run/card 두 파일뿐. D2 CARD_WRITTEN/exit0, D3=0, D11 빈 출력. 처음 $run 파일 경로 오입력으로 git add가 실패했으나 폴더로 수정 후 두 파일만 커밋·push했다. 파일럿 재실행 증거는 없다.
+- 원격 기록의 10개 child 정상 종료, 두 엔진 PASS, hard_pass=True, reference drift=[]를 확인했다. 카드 해시·판독 점검표 대조·완료 기록은 진행 중이다. 소유자에게 기존 E1 뒤 Windows 전체 검사를 안내했다. E 결과/Step 10 완료/병합은 아직 확인하지 않았다.
+- 이 단위는 handoff 판독 문서와 지정 Remaining Work·소유자 실행표만 갱신한다. 프로젝트 코드 작업 head는 기존 work_branch/work_commit 그대로이며 연구 브랜치·qa/acceptance_results.json·스펙·동결 연구·원장을 수정하거나 실행하지 않는다. P2/P3 후속 연구 마감의 E 선행 조건과 결정11·8·F 조건을 별도로 유지한다.
+
 
 ## 부분 반환 — 주문 안전 설계 초안 완료 (2026-11-13T21:20:34+09:00)
 
