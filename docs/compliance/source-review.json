@@ -812,9 +812,9 @@
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
       "source_digest": "ea12fca4e6367f4337c2509b1406d2825785b13a66c8e5261e0cbd005f8b7f77",
       "reviewed_by": "GPT R3 detached outage change review",
-      "review_note": "Reviewed exact six outage fields, unknown identity/time, first-error callback, no discovery or redaction; operational minimization remains open. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:57:22+00:00",
-      "source_commit": "ed92dc90b2b32fd6bd2a9254e7a568e45e3e553e"
+      "review_note": "Reviewed exact six outage fields, null identity/time retained when unavailable, first-error callback, no discovery or redaction; operational minimization remains open. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T17:02:00+00:00",
+      "source_commit": "250b9639291e485f7d07727b250628470cff8ac0"
     },
     "8": {
       "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
