@@ -76,5 +76,12 @@ class WorkflowGuidanceTests(unittest.TestCase):
                 self.assertEqual(raw.familyName(),'QG Interface')
                 self.assertTrue(all(raw.glyphIndexesForString('QUANTGEN 123 한글')))
 
+    def test_window_destruction_cancels_pending_initial_scroll(self):
+        w=self.window
+        w.navigate('tools')
+        self.assertTrue(w._navigation_scroll_timer.isActive())
+        delete_owned_widget(w)
+        self.settle()  # no callback may touch the deleted QStackedWidget
+
 
 if __name__=='__main__':unittest.main()

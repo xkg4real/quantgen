@@ -969,3 +969,5 @@ Claude UI-D11~D15 인계와 소유자 A1~A4 답변을 기준으로 시장 레일
 근거: `data/kis_workspace.py`, `core/market/{routing,detail_model}.py`,
 `quantgen_desktop/{market_chart,indicator_guide,choice_cards,workspace_guide,typography,app,bonds}.py`,
 `tests/{market_progressive,desktop_indicator_guide,desktop_workflow_guidance}_acceptance.py`.
+
+후속 검증: 첫 방문 스크롤 예약은 창이 소유하는 단발 타이머로 처리하여, 창 파괴 시 예약도 취소한다. 화면 파괴 뒤 Qt 객체를 참조하는 종료 오류를 막는다. 데이터·권리·공개 상태 변경은 없다.

@@ -295,7 +295,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "8c888bcff3f73b39d6589d4366a06cded1de704b4649aee52bbe1924a32172f7",
+    "docs/compliance/FACTS.md": "982042c8b6ff782a1f4d0d2a71257344cc9ee4d92edc7e1743b014f04fb07f14",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -377,7 +377,7 @@
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
     "docs/product/TERMINAL_TARGET_2026-10-30.md": "5c3e2eac999534371560def0e00d3ef45d0b7abcd960a6b1d7d7c3c9c3b05c29",
     "docs/product/TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md": "eeb6a1394c46fd67859dc5c8066d9adc125802efa24c29add93b5d8528404314",
-    "docs/product/UI_D11_D15_2026-11-13.md": "a5a63fb27c95a5ff497ca3367ddb9cb3612c5a11baa96fdce7131336bf5585c2",
+    "docs/product/UI_D11_D15_2026-11-13.md": "adb259a05d87a3f93f48d0dc60adfdc59581b71c37f984943ca89f7428e8ae4f",
     "docs/product/UI_LOCALIZATION.md": "7a8bc3a69e4e3728e18e0bf62b0613f792079b0a5f3d7b03742dfd5f4596b512",
     "docs/product/UI_RENDERING_2026-10-31.md": "f006b261d10a28594dc3b31d05424ac144004ca4edca18646ca00b5c0f8a19f6",
     "docs/product/UI_SESSION_PROGRESS_2026-10-31.md": "6f8fd39bdfc77df266095c1e46170c1a679e3267d200a0fc3f6995b196dd0de4",
@@ -387,7 +387,7 @@
     "pyproject.toml": "7c46a0addc7d5220351b73c8ad54d672dbbd6de80ebf1a053a42293a717c52d5",
     "quantgen_desktop/__init__.py": "1ec1396b13e4b6caae0b8dfcf6201af71ad9756428c5cbcaab9706083691e060",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "d83fcc90b0461c1b021b3f79622f7d6862ad18df4d6d591dbd34f89a2cf5347e",
+    "quantgen_desktop/app.py": "20a75b838838baffb700c2796b5ba6d3029794d7bf049926edd018790354a4a6",
     "quantgen_desktop/bonds.py": "087474eeb82afa94997c3a933985461dde874f40213041ba0fcc794b93425c75",
     "quantgen_desktop/bonds_portfolio_narrative.py": "5514b58f6025261d2b1feab0b112a74fae5a5cf4a8b654eb6c8204c7513bbfcf",
     "quantgen_desktop/category_picker.py": "7061468ea7104e6a2a3ff6989dd61373f653fc9acfb8ec587e3c077b6ed9e18d",
@@ -537,7 +537,7 @@
     "tests/desktop_swaption_conversion_acceptance.py": "113e1af795d0a9d592827330a2fdf115487dc4bb0b496d4ee3f3ba0d3b9185af",
     "tests/desktop_typography_acceptance.py": "c187e23db02426732f71a5c8f322903e79714f47177d8013c19f8b82f3e8b794",
     "tests/desktop_watchlist_acceptance.py": "69dbc5d65982e483b51b835203442fae31ad826c619cefd74df9005cc17a202d",
-    "tests/desktop_workflow_guidance_acceptance.py": "b72e5f182f33b66a8a7fa805c9df5ea5bac65057899c68237e7024f7b78af5e8",
+    "tests/desktop_workflow_guidance_acceptance.py": "3400a44c00fb4d0c235af8f6cfbb519358e37344a7faacac8c40c26c89d053ce",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
     "tests/etf_sleeve_disclosure_acceptance.py": "fa0338f032dfa63d6b003b42b8803cef1d6391be8b36d83e18c021d53cb7fe8a",
     "tests/expansion_acceptance.py": "7c9bff8790d88abdc324057a1e49426c5c0f2b5072acd15e652258a6fb27fc7e",
@@ -737,163 +737,163 @@
   "reviews": {
     "1": {
       "document_sha256": "bfb0f2a777e39eb935057f6b54fb72bb1ee242dc49d6168946ee63156f294299",
-      "source_digest": "36369dcf99c7367b1d7b3aa31b3a72067150d8ef7221f0f5380e11af88f272fc",
+      "source_digest": "1312300bb9c5e4d94927eebb90c30e4cca6c0de950d4a9cd1fdce2b45ad8e4cd",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.846238+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.293673+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "2": {
       "document_sha256": "927fd2e6fa3f911b2318caeb2c6b76e7a22a5acf511a7a5bf089bf8cfaa5eb5e",
-      "source_digest": "36369dcf99c7367b1d7b3aa31b3a72067150d8ef7221f0f5380e11af88f272fc",
+      "source_digest": "1312300bb9c5e4d94927eebb90c30e4cca6c0de950d4a9cd1fdce2b45ad8e4cd",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.848937+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.295767+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "3": {
       "document_sha256": "b08dcb02f98a4b65afbcf42b626bc5135615ef365222e54904f286e059b87cd2",
-      "source_digest": "7b864aaf19205c8d403158e109ad8ca275dcca7a68fe8e02c28f205e68df422e",
+      "source_digest": "193346072c50a110459e72b4d856391d02bba4b8995e0e1d7897fe0c991c2900",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.850531+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.297951+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "4": {
       "document_sha256": "cd74c1dcd526ba9c91277ef8ddb75cc901c103234de2911c369752d4cd7f110e",
-      "source_digest": "194fc04574c7fbdaed236c0265cd04c3e9e4e8eb9c1ede9c60713f103935b3e9",
+      "source_digest": "86cd930d5b72edbc05c0e224827cb299590697f755bbfcff1866e1ee4b1f0190",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.852072+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.299515+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "5": {
       "document_sha256": "2b1d8abea35e59a3aaadde163aba0e4dd322ab3765912e3587203e47dc205b72",
-      "source_digest": "4e211426b6b6d35408703dc810a35bce3ea50f832b333a885ce60c1a13a91106",
+      "source_digest": "d7afcca7967eac52c3c55ea76b04405d5181cb236c9fe268568e57ff5a777b5c",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.853368+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.300978+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "6": {
       "document_sha256": "b523d4ac0040a8c52355ee46e43d7a2dac6bdfc42f245d6801f02b6619ae20e0",
-      "source_digest": "f398aaa3fddd3715ca66b130f5371185b93f95bf34f72adc0f49c68b3fe4b270",
+      "source_digest": "3f433c2fbcc7f3ce3571722e2f175ab8baf553bcea46fa94ff3b07504275ce70",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.854828+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.302847+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "7": {
       "document_sha256": "4bf4ebfcdadc1ab1b190229f5f356c0f6d8bf42cce76bde5e91847681c404d2b",
-      "source_digest": "36369dcf99c7367b1d7b3aa31b3a72067150d8ef7221f0f5380e11af88f272fc",
+      "source_digest": "1312300bb9c5e4d94927eebb90c30e4cca6c0de950d4a9cd1fdce2b45ad8e4cd",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.856360+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.304617+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "8": {
       "document_sha256": "f869f1529ea234c34a2c0c87ed2cb2ee0ab215fa1ecd9f0c2c011a6b4813b159",
-      "source_digest": "f398aaa3fddd3715ca66b130f5371185b93f95bf34f72adc0f49c68b3fe4b270",
+      "source_digest": "3f433c2fbcc7f3ce3571722e2f175ab8baf553bcea46fa94ff3b07504275ce70",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.857737+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.306409+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "9": {
       "document_sha256": "a685944f95d0ce2dadeaf582fc791a66483fcc89d2990a7e5b58d46b54e7bba1",
-      "source_digest": "e0a481b5e63eccc4528cab3604b3938421e5f37317252b38cc99ae82bc07265b",
+      "source_digest": "dc130c6ec235e0fe1bf090fc4c665fdfd595ba5afd35d948909cf96d9dee1cc6",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.859089+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.307762+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "10": {
       "document_sha256": "d4d119a650bc8a1810fe0fb3b7559368d93949c927385f980b23cfc55e73f07b",
-      "source_digest": "629fe2f4c5b39f9953152dfacce635ddb2ef018aaa43ae169a50ed04f49ff315",
+      "source_digest": "3a944498793c09823547836baf648a78c5ec1080583b35f27ba752c13e0726ae",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.860481+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.308968+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "11": {
       "document_sha256": "70071bd9e2db9ed7b6cc43b225d9250a562d031d16e29c8e4b8cbeeddbfca5a7",
-      "source_digest": "877dbecfffe643cd8f6fa3c4d51d21bc59312d3f0186d0f1fe0c3168e905515e",
+      "source_digest": "0f5bcd3ba44764fb5d56da518e9598fed00466e9fd068c911227277ec7937ec4",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.861983+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.310898+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "12": {
       "document_sha256": "d55f42db2c4e7090622fecfe2593ca03034a49a01b3cdd997ba46731af0f1b93",
-      "source_digest": "dd3a8338edfa80ccf431fdd241c0c145db28c3863c992e567339af0dd2b59dd9",
+      "source_digest": "8e745910400fee91d04eaaf6e19e3eb683a7b900478d3b4d90aec91f09d925c0",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.863847+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.312544+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "13": {
       "document_sha256": "d69c960aa52d70181e7c8899ec9520dc218b416ac70b4209c5c761ac9d1eeb96",
-      "source_digest": "e0a481b5e63eccc4528cab3604b3938421e5f37317252b38cc99ae82bc07265b",
+      "source_digest": "dc130c6ec235e0fe1bf090fc4c665fdfd595ba5afd35d948909cf96d9dee1cc6",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.865128+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.314249+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "14": {
       "document_sha256": "5cdae46d33eea6d9b2ebbe7373775a7be2b6f30012a8b2a6126ea614fa08e62c",
-      "source_digest": "e0a481b5e63eccc4528cab3604b3938421e5f37317252b38cc99ae82bc07265b",
+      "source_digest": "dc130c6ec235e0fe1bf090fc4c665fdfd595ba5afd35d948909cf96d9dee1cc6",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.866408+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.315677+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "15": {
       "document_sha256": "f945de2c1499a7d563e3bcc81db95003bf44bbc6bf90e30c7de5bf993bb67ad1",
-      "source_digest": "e0a481b5e63eccc4528cab3604b3938421e5f37317252b38cc99ae82bc07265b",
+      "source_digest": "dc130c6ec235e0fe1bf090fc4c665fdfd595ba5afd35d948909cf96d9dee1cc6",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.868179+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.317253+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "16": {
       "document_sha256": "958fd2485a7aa29ec1954cef03182734225c97bb8ae82d95e7f295e957773ff2",
-      "source_digest": "95af5a52efa7db3b67ba392fd88fdb778b794c441dcf044bb2a1f9165ce6f898",
+      "source_digest": "9ba3475e56d53275db847855e5cc16ff8daec681c328af85207327ec1cb60439",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.869762+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.318749+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "17": {
       "document_sha256": "6236eef665087d5bc2b7cb0f337c9688945968bb037019b98db7b144ddfd773d",
-      "source_digest": "f398aaa3fddd3715ca66b130f5371185b93f95bf34f72adc0f49c68b3fe4b270",
+      "source_digest": "3f433c2fbcc7f3ce3571722e2f175ab8baf553bcea46fa94ff3b07504275ce70",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.871511+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.320572+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "18": {
       "document_sha256": "75e98a89e4600b1acde57226ea739577b1419ac489ee1401bffe78e895206436",
-      "source_digest": "36369dcf99c7367b1d7b3aa31b3a72067150d8ef7221f0f5380e11af88f272fc",
+      "source_digest": "1312300bb9c5e4d94927eebb90c30e4cca6c0de950d4a9cd1fdce2b45ad8e4cd",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.873003+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.321908+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "19": {
       "document_sha256": "442034dff0de1c425c642b1311b534a43f28117737aef090dfed545e9c483ed6",
-      "source_digest": "79e09350934e378afa3ece182fd163eee4288ad52603af9379deb73482d0b45d",
+      "source_digest": "6718c9a272d8e64ee875e44911c802787eb068498d79bc3e90ecd28291606c84",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.874809+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.323819+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     },
     "20": {
       "document_sha256": "0bd62dde94f8f1c3a8ecf90c630d198a9335f99a71b1da50ac756a932904e3ff",
-      "source_digest": "36369dcf99c7367b1d7b3aa31b3a72067150d8ef7221f0f5380e11af88f272fc",
+      "source_digest": "1312300bb9c5e4d94927eebb90c30e4cca6c0de950d4a9cd1fdce2b45ad8e4cd",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed progressive KIS display, objective guide choices, workflow orientation and explicit approved font; no new endpoints or publication approval.",
-      "reviewed_at": "2026-11-13T06:17:09.876432+00:00",
-      "source_commit": "30c5546092a6c5783cf751590e04d44d2c435b18"
+      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
+      "reviewed_at": "2026-11-13T06:26:49.325773+00:00",
+      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
     }
   }
 }

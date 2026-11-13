@@ -1154,8 +1154,20 @@ class ResearchWindow(QMainWindow):
             scroll = self.stack.currentWidget()
             # Qt may scroll to the first input as a page is first shown. Start
             # at its purpose/header; subsequent visits retain the reading place.
-            QTimer.singleShot(0, lambda: scroll.verticalScrollBar().setValue(0)
-                              if self.stack.currentWidget() is scroll else None)
+            self._first_visit_scroll = scroll
+            if not hasattr(self, '_navigation_scroll_timer'):
+                # An owned timer is cancelled when the window is destroyed.
+                # A free singleShot closure can outlive the underlying Qt stack.
+                self._navigation_scroll_timer = QTimer(self)
+                self._navigation_scroll_timer.setSingleShot(True)
+                self._navigation_scroll_timer.timeout.connect(self._show_first_page_top)
+            self._navigation_scroll_timer.start(0)
+
+    def _show_first_page_top(self):
+        scroll = self._first_visit_scroll
+        if self.stack.currentWidget() is scroll:
+            scroll.verticalScrollBar().setValue(0)
+        self._first_visit_scroll = None
 
     def setup_live_watchlist(self):
         from .watchlist_live import WatchlistLiveController
