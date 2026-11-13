@@ -3,7 +3,7 @@
   "source_pr": "https://github.com/xkg4real/quantgen/pull/112",
   "source_branch": "gpt/ui-d11-d15-20261113",
   "source_commit": "d46ca5e",
-  "summary": "Claude UI-D11-D15 follow-up: cascading market menu, chart cursor, domestic/US Q-SCORE card, local frozen chart reports, bounded daily score sorting. Approved native Pretendard/N3 retained.",
+  "summary": "Claude UI-D11-D15 follow-up: cascading market menu, chart cursor, domestic/US Q-SCORE card, local frozen chart reports, bounded daily score sorting. Approved native Pretendard/N3 retained. Progressive first-page chart display, multiple-choice indicator guide and contextual workspace orientation; explicit approved font on styled widgets.",
   "changed_files": [
     "quantgen_desktop/rail_menu.py",
     "quantgen_desktop/stock_detail.py",
@@ -12,16 +12,23 @@
     "quantgen_desktop/market_rankings.py",
     "core/research/qscore.py",
     "core/market/qscore_rankings.py",
-    "core/market/stock_report.py"
+    "core/market/stock_report.py",
+    "data/kis_workspace.py",
+    "core/market/routing.py",
+    "quantgen_desktop/indicator_guide.py",
+    "quantgen_desktop/choice_cards.py",
+    "quantgen_desktop/workspace_guide.py",
+    "quantgen_desktop/typography.py",
+    "quantgen_desktop/app.py"
   ],
   "verification": {
-    "local": "64 menu/ranking tests; 33 Q-SCORE/KIS/export tests; 58 integration/compliance tests; 4 repaired screen assertions passed. Eight ko/en light/dark menu captures at 1440x900 and 1000x700. PDF Korean fonts embedded and numeric extraction checked.",
-    "remote": "Runtime Windows/Linux CI in progress; not merged yet",
+    "local": "64 menu/ranking tests; 33 Q-SCORE/KIS/export tests; 58 integration/compliance tests; 4 repaired screen assertions passed. Eight ko/en light/dark menu captures at 1440x900 and 1000x700. PDF Korean fonts embedded and numeric extraction checked. New speed/guide group: 90 passed; workflow/layout group: 60 passed. 1000px English/dark and 1440px Korean/light previews fit horizontally; actual styled font glyphs verified.",
+    "remote": "Final expanded PR head awaiting Windows/Linux Runtime and compliance checks; prior head had obsolete score-card test and Windows export failure under investigation. Not merged.",
     "limitations": "Offline synthetic market data only; no user account/API/Windows-DPI or website deployment claim"
   },
   "website_impact": {
     "classification": "native-only implementation; shared presentation/copy review",
-    "action": "Preserve the approved site palette. If web supports stock detail: mirror Q-SCORE v0.2 domestic/US scope and provenance, no-score reasons, report snapshot semantics and bounded daily ranking disclaimer. No Qt code copying. Website HTML unchanged."
+    "action": "Preserve the approved site palette. If web supports stock detail: mirror Q-SCORE v0.2 domestic/US scope and provenance, no-score reasons, report snapshot semantics and bounded daily ranking disclaimer. No Qt code copying. Website HTML unchanged. Review multiple-choice indicator cards, same-sample comparison, purpose/steps guidance, and partial-history loading labels against the actual web UI."
   },
   "delivery": {
     "status": "queued",

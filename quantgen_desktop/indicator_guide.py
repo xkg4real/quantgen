@@ -1,5 +1,5 @@
 """Native reference indicator guide and reusable market-history explorer."""
-from PyQt6.QtCore import QByteArray, Qt, pyqtSignal
+from PyQt6.QtCore import QByteArray, QTimer, Qt, pyqtSignal
 from PyQt6.QtGui import QPainter, QColor, QPen
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (QWidget,QVBoxLayout,QHBoxLayout,QComboBox,QPushButton,QSlider,
@@ -163,7 +163,7 @@ class IndicatorGuide(QWidget):
         self.terms=QComboBox();self.terms.setEditable(False)
         for term in glossary.TERMS:
             if term.key not in BY_KEY:self.terms.addItem('',term.key)
-        self.terms.activated.connect(lambda i:self.choose(self.terms.itemData(i)))
+        self.terms.activated.connect(self.choose_term)
         terms_layout.addWidget(self.terms);layout.addWidget(terms)
         self.export=QPushButton();self.export.clicked.connect(self.save_report)
         layout.addWidget(self.export,0,Qt.AlignmentFlag.AlignLeft)
@@ -178,6 +178,13 @@ class IndicatorGuide(QWidget):
         return ('지표를 골라 차트에서 확인해 보세요. 여러 개를 선택하면 같은 기간의 신호를 함께 비교할 수 있어요.'
                 if self.ctx.language=='ko' else
                 'Choose an indicator and see it on the chart. Select more than one to compare signals over the same period.')
+
+    def choose_term(self,index):
+        self.choose(self.terms.itemData(index))
+        from PyQt6.QtWidgets import QScrollArea
+        parent=self.parentWidget()
+        while parent is not None and not isinstance(parent,QScrollArea):parent=parent.parentWidget()
+        if parent is not None:QTimer.singleShot(0,lambda:parent.ensureWidgetVisible(self.detail,0,20))
 
     def choose(self,key):
         """Show a term's explanation; an indicator is also drawn on the chart."""

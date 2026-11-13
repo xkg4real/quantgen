@@ -257,7 +257,7 @@ def window_stylesheet(p, dark: bool) -> str:
     nav_v, nav_h = NAV_PADDING
     line = mix(p.border, p.bg, 0.5)  # owner 2026-11-11: light section lines ("구획 선을 연하게")
     return f"""
-          QWidget {{ background: {p.bg}; color: {p.text}; font-size: 13px; font-weight: 400; }}
+          QWidget {{ background: {p.bg}; color: {p.text}; font-family: "QG Interface"; font-size: 13px; font-weight: 400; }}
           QFrame#sidebar {{ background: {p.surface}; border-right: 1px solid {p.border}; }}
           QFrame#panel {{ background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 {d['top']}, stop:1 {d['bottom']});
                           border: 1px solid {line}; border-radius: 16px; }}
@@ -303,6 +303,7 @@ def window_stylesheet(p, dark: bool) -> str:
           QFrame#workspaceGuide QLabel[role='workflowNumber'] {{ background: {p.accent}; color: {p.on_accent}; border-radius: 12px; font-size: 12px; }}
           QLabel[role='workflowStep'] {{ font-size: 13px; font-weight: 500; color: {p.text}; }}
           QLabel[role='choiceTitle'] {{ font-size: 14px; font-weight: 500; color: {p.text}; }}
+          QFrame#workspaceGuide QLabel[role='caption'], QAbstractButton#guideChoice QLabel[role='caption'] {{ color: {p.text}; }}
           QListWidget#guideSuggestions {{ background: {p.surface}; border: 1px solid {line}; border-radius: 14px; padding: 4px; outline: 0; }}
           QListWidget#guideSuggestions::item {{ border-radius: 9px; color: transparent; }}
           QListWidget#guideSuggestions::item:selected, QListWidget#guideSuggestions::item:hover {{ background: {p.accent_soft}; }}

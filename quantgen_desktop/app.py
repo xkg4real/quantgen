@@ -996,8 +996,13 @@ class ResearchWindow(QMainWindow):
         self.quant_notes.setProperty('reading_help_keep_visible', True)
         from .chart_study import ChartStudy
         self.quant_study = ChartStudy(self.quant_chart, self.quant_notes)
+        from .chart_study import LocalLabel
+        self.quant_empty = LocalLabel({'ko':'분석을 실행하면 가격 분포와 위험 지표가 여기에 나타나요.',
+                                      'en':'Run the analysis to see the price distribution and risk metrics here.'}, 'muted')
+        inner.addWidget(self.quant_empty)
         inner.addWidget(self.quant_study)
         inner.addWidget(self.quant_metrics)
+        self.quant_study.hide();self.quant_metrics.hide()
         notice = label("계산 완료 ≠ 투자 검증. 이 화면은 NOT_RUN 판정을 유지하며 주문이나 전략 원장을 생성하지 않습니다.", "caption")
         notice.setProperty('reading_help_keep_visible', True)
         inner.addWidget(notice)
@@ -1142,6 +1147,15 @@ class ResearchWindow(QMainWindow):
         self.stack.setCurrentIndex(self.route_indices[route])
         for name, button in self.nav.items(): button.setChecked(name == route)
         self.sync_market_section()
+        visited = getattr(self, '_visited_routes', set())
+        if route not in visited:
+            visited.add(route)
+            self._visited_routes = visited
+            scroll = self.stack.currentWidget()
+            # Qt may scroll to the first input as a page is first shown. Start
+            # at its purpose/header; subsequent visits retain the reading place.
+            QTimer.singleShot(0, lambda: scroll.verticalScrollBar().setValue(0)
+                              if self.stack.currentWidget() is scroll else None)
 
     def setup_live_watchlist(self):
         from .watchlist_live import WatchlistLiveController
@@ -1365,6 +1379,7 @@ class ResearchWindow(QMainWindow):
             self.session.put(value.run)
             self.outputs[value.run["run_id"]] = value
             self.quant_chart.set_result(value.result)
+            self.quant_empty.hide();self.quant_study.show();self.quant_metrics.show()
             r, h = value.result, value.history
             vol_info = volatility_disclosure(r)
             table_rows(self.quant_metrics, [("Spot", f"{r.spot:,.2f}"), ("P5 / P50 / P95", f"{r.p05:,.2f} / {r.median_terminal:,.2f} / {r.p95:,.2f}"),

@@ -95,7 +95,7 @@ class ExportTests(unittest.TestCase):
             self.assertTrue((Path(folder) / 'report.pdf').read_bytes().startswith(b'%PDF'))
             import shutil, subprocess
             if shutil.which('pdftotext'):
-                copied = subprocess.check_output(['pdftotext', str(Path(folder) / 'report.pdf'), '-']).decode('utf-8')
+                copied = subprocess.check_output(['pdftotext', '-enc', 'UTF-8', str(Path(folder) / 'report.pdf'), '-']).decode('utf-8')
                 self.assertIn('005930', copied)
                 self.assertIn('-0.34%', copied)
                 self.assertIn('삼성전자', copied)

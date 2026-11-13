@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import QAbstractButton, QLabel, QGridLayout, QVBoxLayout, Q
 class ChoiceCard(QAbstractButton):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.setObjectName('guideChoice')
         self.setCheckable(True)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)

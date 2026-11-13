@@ -110,7 +110,13 @@ class WorkspaceGuide(QFrame):
                            *((self.steps[i][1],copy) for i,copy in enumerate(steps))):
             label.texts=dict(zip(('ko','en'),copy));label.sync()
         self.setAccessibleName(self.purpose.text())
+        self.setAccessibleDescription(self.scope.text())
         self.updateGeometry()
+
+    def _reserve_text_space(self):
+        for label in (self.purpose,self.scope,*(title for _,title in self.steps)):label.sync()
+        self.setAccessibleName(self.purpose.text())
+        self.setAccessibleDescription(self.scope.text())
 
     def _reflow(self):
         columns=3 if self.width()>=650 else 1

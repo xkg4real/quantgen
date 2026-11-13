@@ -946,3 +946,26 @@ Claude UI-D11~D15 인계와 소유자 A1~A4 답변을 기준으로 시장 레일
   (자본시장법 투자자문/유사투자자문)과 데이터 재배포·내보내기 이용권 검토는 미완료이며,
   이 구현은 공개 준비 승인이나 수익 예측력 입증이 아니다. 기존 publication BLOCKED를 해제하지 않는다.
 - 검증은 합성 자료의 오프라인 Qt/엔진 시험이다. 실제 KIS 계정·사용자 Windows DPI·웹 배포는 별도 확인이다.
+
+
+<a id="ui-progressive-guide-2026-11-13"></a>
+## 차트 선표시·선택형 가이드·작업 안내 — 2026-11-13
+
+- KIS 이력 조회는 기존 GET·페이지 한도·최종 결과를 유지하면서 받은 페이지를 순서대로 화면에 전달한다.
+  전체 이력·현재가 응답을 기다리기 전에 관측한 구간을 표시한다. 중간 화면은 조회 중으로 표시하고,
+  최종 응답 전에는 실시간 연결이나 Q-SCORE 결과를 발행하지 않는다. 새 종목·기간 선택 뒤 늦게 도착한
+  응답은 폐기한다. 초기 표시 순서는 오프라인 지연 응답으로 확인했으며 실제 네트워크 개선율은 측정하지 않았다.
+- 기술지표 가이드의 직접 입력 검색을 제거했다. 기존 역사 예제를 지원하는 SMA·EMA·RSI·MACD·BB
+  다섯 지표를 복수 선택 카드로 표시한다. 동일한 예제·시간축과 지표 색을 유지하며 간단 해설, 반례,
+  펼칠 수 있는 상세 해설을 제공한다. 추가 용어는 편집 불가능한 선택 목록으로 찾는다.
+- 분석 도구 10종·설계/검증 2종·분석 3종에 한국어/영어 목적·범위·3단계 사용 안내를 추가했다.
+  계산 전 채권과 Monte Carlo의 빈 결과 영역은 접고 짧은 안내를 표시한다. 입력·계산식·엔진 결과·저장
+  내용은 바꾸지 않는다. 첫 페이지 방문은 제목부터 보이며 재방문은 읽던 위치를 유지한다.
+- 공통 QWidget 스타일에 승인된 QG Interface 글꼴을 명시했다. 일부 스타일 자식이 Sans Serif에서
+  기호 전용 글꼴로 대체되어 본문이 빠지던 문제를 수정한다. Pretendard OTF 파일·N3 자간/굵기는 유지한다.
+- 카드 이름과 설명, 선택 상태, Tab/Space 조작, 폭에 따른 카드 줄바꿈을 검증한다. 실제 Windows DPI,
+  스크린리더와 사용자 KIS 계정의 성능은 별도 확인이다. 웹 HTML·배포·공개 준비 승인은 변경하지 않는다.
+
+근거: `data/kis_workspace.py`, `core/market/{routing,detail_model}.py`,
+`quantgen_desktop/{market_chart,indicator_guide,choice_cards,workspace_guide,typography,app,bonds}.py`,
+`tests/{market_progressive,desktop_indicator_guide,desktop_workflow_guidance}_acceptance.py`.

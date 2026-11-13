@@ -701,6 +701,8 @@ class MarketChartPane(QWidget):
         }
         for original, translated in translations.items():
             note = note.replace(original, translated)
+        note = re.sub(r"Loading history: (\d+)/(\d+)\.",
+                      r"이력 조회 중 · 요청한 \2개 중 \1개를 먼저 표시합니다.", note)
         # The yearly chart's monthly request, with or without the KIS paging remark (Yahoo writes none).
         note = re.sub(r"Partial history: (\d+)/(\d+) requested monthly bars \(provider window or paging limit\)\.",
                       r"부분 이력 · 요청한 \2개월 중 \1개월만 조회됐습니다(공급자 조회 범위·페이지 한도).", note)
