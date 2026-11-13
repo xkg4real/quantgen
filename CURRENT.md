@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2
 next_ids: ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T21:05:26+09:00
+updated_at: 2026-11-13T21:09:12+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: ci
 work_branch: gpt/order-safety-design-20261113
-work_commit: 795165cb45b6a37a6bf9bfc0ccd8cc6e6cb2acf0
+work_commit: e7104287377acfccdc5449cdb09b9c476178a99f
 uncommitted_changes: no
-pr: none
+pr: 116
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -20,6 +20,13 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2633226e-9755-40fb-87a4-44d1fc290756
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## 문서 초안 PR 게시 — 2026-11-13T21:09:12+09:00
+
+- M-12/design-draft/1: docs/product/ORDER_SAFETY_DESIGN_2026-11-13.md 한 파일(169줄)을 gpt/order-safety-design-20261113 @ e7104287377acfccdc5449cdb09b9c476178a99f로 push 후 원격 내용·변경 경로 read-back했다. PR116 https://github.com/xkg4real/quantgen/pull/116.
+- D1~D14 승인 근거 14행 대조, 합성 min 계산 12건·잔여 한도 2건, UTF-8/공백 검증 통과. D8의 나머지 세 조건과 D10 상세 원문은 미확인으로 남겼다. 확인·접수 불명·중지·기록의 세부안은 승인된 정책으로 바꾸지 않았다.
+- 코드/기준선/주문 경로 변경 없음. 이 문서 경로는 Runtime workflow 필터 대상이 아니므로 Runtime 재실행/Windows 증거를 주장하지 않는다. Compliance CI 및 PR 병합은 아직 대기다. 전체 M-12는 미완료이며 LEDGER/Notion 최종 기록도 아직 하지 않았다.
+
 
 ## 작업 브랜치 확인 — 2026-11-13T21:05:26+09:00
 
