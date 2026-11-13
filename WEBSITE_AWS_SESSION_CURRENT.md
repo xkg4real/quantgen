@@ -1,4 +1,4 @@
-# 2026-11-13 웹사이트 작업 재개 — 인계 대조 완료 / 최신 소스 대기
+# 2026-11-13 웹사이트 작업 재개 — 원본 확인 완료 / 정책 수정 중
 
 사용자의 재개 요청과 첨부 `QUANTGEN_WEBSITE_GPT_HANDOFF_2026-11-12.md`를 기준으로 워크플로우를 수립했습니다. 이번 인계의 핵심은 **Gmail 문의 메일 경로를 Microsoft 365로 전환하고 웹 정책 한영 문구를 정렬하는 작업**입니다.
 
@@ -28,6 +28,17 @@
 
 사용자에게 최신 소스 ZIP과 Microsoft 한국 테넌트 구매를 안내했습니다. 추가 Track A 클릭 질문은 답변 대기 상태이며 새 개발 스택을 만들지 않았습니다.
 현재 산출물 폴더: `/workspace/work/quantgen-web-20261113`. 최종 전달 사본/묶음: `/workspace/outputs/quantgen-20261113`. 웹 HTML 및 정책 원문/후보 전체는 GitHub에 게시하지 않았습니다.
+
+## W3 완료 및 이번 사용자 확정 범위
+
+- 사용자 제공 `2026-11-03-motion.zip` / `2026-11-11-privacy.zip`을 복원했습니다.
+- privacy 원본: 8,619,355 bytes / SHA256 `de434d3a19fd9648009b978dc841d566dde46addbc49bce60349b33b5b5685c8`, 인계 값 일치.
+- motion 기준: 8,552,698 bytes / SHA256 `3d22c3342f893e9d153df14b869cc292e44d891ab0b41f707820f2ada6c9cacb`.
+- 원본 빌드 도구+백업+motion 기준에서 Gmail HTML을 다시 생성한 결과도 privacy 원본과 바이트 단위 일치했습니다. 원본 폴더를 보관하고 별도 release 사본에서 수정합니다.
+- 사용자 선택은 **현재 범위 유지**입니다. Cognito·SES·API 신규 구현/리소스 생성을 하지 않습니다. **기존 Cognito 사용자 풀, 서울 SES 도메인 인증 및 production/sandbox, 기존 개발 API의 존재만 읽기 전용 조사**합니다.
+- AWS 기존 세션 만료로 같은 quantgen 프로필 인증 갱신 링크를 사용자에게 제공했습니다. Authorization code/자격증명은 공유 기록에 남기지 않습니다. 인증 대기 중 HTML 작업은 계속합니다.
+- 최신 main 재조회는 `7e0567373ba50e6131fb24e1f6012c82d268cecb`이며 PR112는 이제 병합 상태입니다. 아래 W1의 OPEN 기록은 그 시점 관측 이력입니다. 새 앱 UI 큐의 웹 적용은 여전히 별도 검토/미확인으로 구분합니다.
+- W4: Microsoft 정책 수정 중, W5: 기존 검사 실행환경을 Linux Chromium에 맞춰 준비 중. 새 HTML·프리뷰·운영 배포 완료로 표시하지 않습니다.
 
 ## 다음 작업과 의존성
 1. W2 준비 완료: 공식 Microsoft/Cloudflare 자료 기반 설정 가이드와 KO/EN 정책 후보. 실제 HTML 통합은 아직 미완료.
