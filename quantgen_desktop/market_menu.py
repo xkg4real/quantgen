@@ -31,6 +31,7 @@ class MenuPanel(QWidget):
             row.setToolTip(node.tip)
             row.setCheckable(True)
             row.setChecked(node.mark in menu.current())
+            row.setProperty('current',row.isChecked())
             row.clicked.connect(lambda checked=False, r=row: menu.activate(r))
             row.installEventFilter(menu)
             column.addWidget(row)
@@ -85,7 +86,9 @@ class InlineMarketMenu(QObject):
         row.setProperty('inlineMenu', True)
         row.installEventFilter(self)
 
-    def open_root(self, *, keyboard=False):
+    def open_root(self, row=None, *, keyboard=False):
+        if row is not None:
+            return self.root_clicked(row,keyboard=keyboard)
         if self.container is None:
             return
         self.keyboard = keyboard
@@ -96,6 +99,9 @@ class InlineMarketMenu(QObject):
         self.container.show()
         if keyboard:
             next(iter(self.window.market_sections.values())).setFocus(Qt.FocusReason.TabFocusReason)
+
+    def open_child(self,row,*,keyboard=False):
+        return self._open(row.level+1,row,row.node.children,keyboard=keyboard)
 
     def root_clicked(self, row, *, keyboard=False):
         self.open_root(keyboard=keyboard)
@@ -122,6 +128,8 @@ class InlineMarketMenu(QObject):
         return panel
 
     def _close_from(self, depth):
+        self.open_timer.stop()
+        self.pending=None
         for panel in reversed(self.panels[depth:]):
             panel.anchor.set_open(False)
             panel.hide()

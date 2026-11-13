@@ -258,7 +258,10 @@ class ShellRailTests(unittest.TestCase):
         self.assertEqual(w.markets_content.currentWidget().symbol,'^KQ11')
         self.assertTrue(w.market_submenu.isHidden())
         menu.root_clicked(w.market_sections['stocks'],keyboard=True);self.settle()
+        # Closing during the hover delay must not later dereference a deleted row.
+        QTest.mouseMove(menu.panels[0].rows[0])
         QTest.keyClick(menu.panels[0].rows[0],Qt.Key.Key_Escape);self.settle()
+        QTest.qWait(OPEN_DELAY_MS+50)
         self.assertTrue(w.market_sections['stocks'].hasFocus())
         QTest.keyClick(w.market_sections['stocks'],Qt.Key.Key_Escape)
         self.assertTrue(w.market_submenu.isHidden())

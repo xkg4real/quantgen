@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "9063dc21f507120e02f7bafdcac4e880c1ae48089c12081d05e54b3d917471d6",
+    ".github/workflows/runtime-smoke.yml": "deb8d589114d2a975f1860d63ae9035973fb8ad8fb7187a9b037ea07336940e1",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -416,7 +416,7 @@
     "quantgen_desktop/market_chart.py": "0cf4574a3451f2af5b58b5a9122eaf44708384a43167bb3fb9ea84781cc87811",
     "quantgen_desktop/market_destinations.py": "5d2465ad87e36de598642f6411e2e78c37660375947af09a131037ff316e7c3a",
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
-    "quantgen_desktop/market_menu.py": "f069c4ce5fd3edd517b484f0812b148abcdeb6bbbcf36fb7ada459cf3bb9602e",
+    "quantgen_desktop/market_menu.py": "3be8567762ac284bc138ca01aa98739cc4c736cced2bba0bb39fda763843cb44",
     "quantgen_desktop/market_narrative_language.py": "8bcb8f74ca7208370f5a4895cb4f643574d86d650c7f3ceb04a3a008044618aa",
     "quantgen_desktop/market_rankings.py": "83207c08eae4a5dd9d16999f0ed378c4c20365e03ac36d72f259b56e85a382ea",
     "quantgen_desktop/market_summary.py": "a49beeb99913312619f06f5ebbb1abfc42dcba63e6e508e7a1f5fe5a6bb682ce",
@@ -507,7 +507,7 @@
     "tests/desktop_home_live_acceptance.py": "ecb61d6a1bc846bee0dd53b70c8852976af8aa627948d91574c204480f394e73",
     "tests/desktop_home_markets_home_acceptance.py": "6f14c47fbc5faf01d3a80f81d9e210e7cc75b9e19f74a0771ff2fbcac89c7eef",
     "tests/desktop_home_markets_markets_acceptance.py": "4ed1c9ec141bef2b386b3fb3b915e8a2b77be432b8293c11af515a8a1463a2d9",
-    "tests/desktop_home_markets_shell_acceptance.py": "33fc64639b9a2aa42d1ee774f60d88963306fe43d70bcea403170f434cdff73c",
+    "tests/desktop_home_markets_shell_acceptance.py": "5a2288ce3cb8366d25cad26e15758f433474a83799fbfb6124622c899edf7e17",
     "tests/desktop_indicator_guide_acceptance.py": "1b7df46a23e17c27cdca100784761c11b422409fd1e28f0fda16da15011f046e",
     "tests/desktop_language_acceptance.py": "9f41b4fddc57ccf1013c6551f72494bc09608d751aa7fe0b395943d4d8c2d47f",
     "tests/desktop_letf_ai_acceptance.py": "2f896568aabeb52181681d11f3cc7c27d0664c60765770055407a4eaff2c9be0",
@@ -746,163 +746,163 @@
   "reviews": {
     "1": {
       "document_sha256": "18dc413362efd7488995e9e930286226046e1c272263157600aa593baafdd714",
-      "source_digest": "81e24e8f12de8caace4d3c2dbc2167a6c65b6d74da764fdd3c29042b6c23821b",
+      "source_digest": "32497e1f643e703bcdbc0e1aa0366b886a5e5942a4c5a037c86e4d2dcfdea7d2",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.855121+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.350721+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "2": {
       "document_sha256": "8ddd0502d6c8767c9c7c7f8827706ca929946c6244c565558c77ffefc7c038ee",
-      "source_digest": "81e24e8f12de8caace4d3c2dbc2167a6c65b6d74da764fdd3c29042b6c23821b",
+      "source_digest": "32497e1f643e703bcdbc0e1aa0366b886a5e5942a4c5a037c86e4d2dcfdea7d2",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.857210+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.352954+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "3": {
       "document_sha256": "122df861c40d2ce416603e3ac4b32cf892df92612a6bc66347eaeba9715e65b8",
-      "source_digest": "f530bab671e84601d9d0bd4b10a47d4bc51a43fa13ade09b14c8f66677a6c89b",
+      "source_digest": "2299cd8eb4db97c37ccfd2a07e5ed38557579d507902b0a6da56f9e7c6812731",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.858537+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.354370+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "4": {
       "document_sha256": "8f9b0a3908a2099cc18ee5848763cee629a75a01eeea86853bb6985519170344",
-      "source_digest": "3411b4f12c0402bfa44c52b044c1b254a435f42cfd6a72858cb07ebe9e34034c",
+      "source_digest": "bbf94ba470186a6f433c5216744048fbce9a3fa93632a8f7cb78c2d4856cf6bc",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.860141+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.357471+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "5": {
       "document_sha256": "060f9c93d00e4086e6763cb669dec1fde2d5f11f083087bed5ef8e4136684bed",
-      "source_digest": "6da529b803d93ca535441294e234ee68181d660b8622535d740ca37307e81104",
+      "source_digest": "e3c864c68708e7a939658f229653ccd775beb15d5a166eb8205010254c0bbc07",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.862167+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.359662+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "6": {
       "document_sha256": "e8486a47510bcb774261d13798eeea001007fd6b28e6d4d9e2ac23fe64d895e1",
-      "source_digest": "240a69f3474915c8fd2fa98edca8e45113c89e1289fea191cc686a68597d82a8",
+      "source_digest": "6796e5ce66936a4746b5fcc7b5fb2560843e02e130246be53c62b07611d2ecad",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.863524+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.361039+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "7": {
       "document_sha256": "a7f592f442e1da195efc95d786c9112e70f36356e2fed747a1108318138e4ad2",
-      "source_digest": "81e24e8f12de8caace4d3c2dbc2167a6c65b6d74da764fdd3c29042b6c23821b",
+      "source_digest": "32497e1f643e703bcdbc0e1aa0366b886a5e5942a4c5a037c86e4d2dcfdea7d2",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.865060+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.362517+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "8": {
       "document_sha256": "c53b0f56867226eae0c3eabb1503fa8f8c6c7ec639afc9033b39cae8ffe10f3a",
-      "source_digest": "240a69f3474915c8fd2fa98edca8e45113c89e1289fea191cc686a68597d82a8",
+      "source_digest": "6796e5ce66936a4746b5fcc7b5fb2560843e02e130246be53c62b07611d2ecad",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.866278+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.364851+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "9": {
       "document_sha256": "9b1af75b366f5aab5b2e630629f30f00d0057877170f4801aa9f14b2a70e3c96",
-      "source_digest": "25c4388a8ca89f6b79611caf71c92d4141348b520e9907f843b2aac1e0faf4cd",
+      "source_digest": "47ff82053813707be46799b96c8d12a46f6a42acc777b3b4928090d63f63c191",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.867575+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.366235+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "10": {
       "document_sha256": "8cbb750332530a5c736f743e4e5c148e1fcfe2e18a457593b442d54d9ecada71",
-      "source_digest": "60f60f6cbc6716a05b4b2f45712c0abfff1ac87b91aff7274eb673ea9207a807",
+      "source_digest": "c57afc7dfd7b3bcffcd076154d761453a8f67e139d23489321759b59ba7cf2e6",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.869156+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.367850+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "11": {
       "document_sha256": "b290a8ee69ff5c9c6ff4535ed91a08cb26ad167afc504d6e17771bee1856ae44",
-      "source_digest": "e09067d8c24767515bfde6adb33398b5a7b105069b007b88eddcc4652465a962",
+      "source_digest": "bb4f5e696fdbf4f6af7feeb7243a89185fa8f5782cefb4207744c09fe3a308d0",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.870361+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.369151+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "12": {
       "document_sha256": "5b29917ba7a0aa9da347fe1eb9594775ba02cd6d5ba649f4f90e03b958b7ef26",
-      "source_digest": "ef91af4b4c5a38dcb90a48ca0efce38eebd61e9a9913652eeddf79c52cabda4b",
+      "source_digest": "dc51e25dc0f3b5e6acfd1394f8f0dee2fbd734f2c0923efbc4debf10b0e56869",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.871715+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.371711+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "13": {
       "document_sha256": "e27cbbe6536609fe8299522ecd66032e48b7494d3ccb5c0656ea457f75e220c5",
-      "source_digest": "25c4388a8ca89f6b79611caf71c92d4141348b520e9907f843b2aac1e0faf4cd",
+      "source_digest": "47ff82053813707be46799b96c8d12a46f6a42acc777b3b4928090d63f63c191",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.873642+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.373319+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "14": {
       "document_sha256": "0830fda21f72f77f30f0b52a74b52c425916ec5dd4688507008f3337ad627258",
-      "source_digest": "25c4388a8ca89f6b79611caf71c92d4141348b520e9907f843b2aac1e0faf4cd",
+      "source_digest": "47ff82053813707be46799b96c8d12a46f6a42acc777b3b4928090d63f63c191",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.874819+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.375116+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "15": {
       "document_sha256": "09b2945ed78373174a9c3bfb24c79c70d1d06ef22a5fc0aa74ac3804fc25f7c2",
-      "source_digest": "25c4388a8ca89f6b79611caf71c92d4141348b520e9907f843b2aac1e0faf4cd",
+      "source_digest": "47ff82053813707be46799b96c8d12a46f6a42acc777b3b4928090d63f63c191",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.876170+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.376538+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "16": {
       "document_sha256": "fa6d90124e3706e75b63d90a177382c3a009f799d38ad088bdc229f62caa0dba",
-      "source_digest": "6fad7edbe335f88f24bc98b3676501c8003df273a7a54820a9bc6d2df33ee25a",
+      "source_digest": "6380444dfeff076688d374860b1281f70930897272a1006ce9a4de6f5176a4bf",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.877575+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.378412+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "17": {
       "document_sha256": "d15a9af3cf32276b2ce6696db902d09ac26a14e0b5b92ebbad384865c61b13d3",
-      "source_digest": "240a69f3474915c8fd2fa98edca8e45113c89e1289fea191cc686a68597d82a8",
+      "source_digest": "6796e5ce66936a4746b5fcc7b5fb2560843e02e130246be53c62b07611d2ecad",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.878952+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.379814+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "18": {
       "document_sha256": "9a43174723a1dc551db1aef590e8833b368877f543e21a833798f0e039f4099a",
-      "source_digest": "81e24e8f12de8caace4d3c2dbc2167a6c65b6d74da764fdd3c29042b6c23821b",
+      "source_digest": "32497e1f643e703bcdbc0e1aa0366b886a5e5942a4c5a037c86e4d2dcfdea7d2",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.880568+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.382235+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "19": {
       "document_sha256": "1e01361156c01fc1920818f3472dae95a741f2f3481ee62462561ac8fe4d2f53",
-      "source_digest": "b971e4b1a432471df47cd639866118b81861ad9747cc25195e2d0867ddae620b",
+      "source_digest": "76d583ec510dc8043d970420b64ec10b36ffe82ad46f196c8343e983b8650d4e",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.881887+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.383395+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     },
     "20": {
       "document_sha256": "e7265d03dabb582d79c63f1e69ca64c103f565f24e1c3ee0b19c4b4a85204ed9",
-      "source_digest": "81e24e8f12de8caace4d3c2dbc2167a6c65b6d74da764fdd3c29042b6c23821b",
+      "source_digest": "32497e1f643e703bcdbc0e1aa0366b886a5e5942a4c5a037c86e4d2dcfdea7d2",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed complete market menu, progressive first quote, 27-study guide, per-window Windows icon and updated tests against policies 01-20; publication remains blocked.",
-      "reviewed_at": "2026-11-13T09:37:54.883074+00:00",
-      "source_commit": "7e0567373ba50e6131fb24e1f6012c82d268cecb"
+      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
+      "reviewed_at": "2026-11-13T09:41:15.384784+00:00",
+      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
     }
   }
 }

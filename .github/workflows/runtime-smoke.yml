@@ -101,7 +101,7 @@ jobs:
       - name: Verify live score and frozen report integration before long UI suites
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m unittest tests.desktop_market_first_paint_acceptance tests.desktop_home_live_acceptance tests.ui_followup_acceptance tests.market_progressive_acceptance tests.desktop_stock_detail_acceptance.StockDetailTests.test_the_right_column_never_moves_sideways_with_seven_digit_prices -f -v
+        run: python -m unittest tests.desktop_windows_branding_acceptance tests.desktop_market_first_paint_acceptance tests.desktop_home_live_acceptance tests.ui_followup_acceptance tests.market_progressive_acceptance tests.desktop_stock_detail_acceptance.StockDetailTests.test_the_right_column_never_moves_sideways_with_seven_digit_prices -f -v
       - name: Verify A3 native result layout and local reading help
         env:
           QT_QPA_PLATFORM: offscreen
@@ -125,7 +125,7 @@ jobs:
       - name: Verify preference recovery and native macro language switching
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m unittest tests.desktop_windows_branding_acceptance tests.desktop_startup_acceptance tests.desktop_macro_language_acceptance tests.desktop_authored_prose_language_acceptance -v
+        run: python -m unittest tests.desktop_startup_acceptance tests.desktop_macro_language_acceptance tests.desktop_authored_prose_language_acceptance -v
       - name: Verify financial result interpretation across native and Flet outputs
         env:
           QT_QPA_PLATFORM: offscreen
