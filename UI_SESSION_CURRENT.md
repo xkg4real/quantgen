@@ -1,3 +1,25 @@
+# PR115 Windows 검증 수정 — 2026-11-13 (이 절 우선)
+
+- status: taken · owner: GPT UI · work_branch: gpt/ui-market-navigation-guide-20261113
+- work_commit: **043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158**, 원격 push 확인. **main 미병합**.
+- PR115: https://github.com/xkg4real/quantgen/pull/115. 아래 684b226 체크포인트의 요구/구현 범위는 유효.
+- aeb7577: 기존 메뉴 open_root/open_child 호출 호환, 닫힌 메뉴의 호버 예약 취소. 회귀2개+키보드1개 OK.
+- 5ddb2a6: 이전 빈/실패 조회 뒤에도 새 부분 시세 표시. 선표시/로더9개 OK.
+- aeb7577 Runtime43403416093 Windows3.11/3.12/3.14의 **실제 Win32 아이콘 검사 subprocess 종료 0xC0000409**.
+  Linux는 진행 중. 043b2cd에서 WindowIconChange/WinIdChange 필터 내 WM_SETICON 재진입을 제거:
+  show() 후 한 번 HWND 아이콘 설정, 창 종료 때 해제. 테스트에 단계별 출력/faulthandler 추가.
+  이 원인이 유일 원인이라고 아직 단정하지 말고 043b2cd의 Windows CI로 확인할 것.
+- 이전 5ddb2a6 Runtime43403870642는 수정 전 검사이므로 완료 기준에 사용하지 말 것.
+- 새 HEAD 기준 Runtime/Compliance run ID 조회 후 실제6 jobs 통과해야 main 병합.
+- 로컬 넓은 회귀 /tmp/qg-regression-v2.log 진행 중(초기2건 옛 API 오류는 aeb7577에서 수정·개별 통과).
+- website queue 초안: /workspace/shared/ui-20261113-v2/PR-115.json. 아직 Git main 문서로 반영 전.
+- next_ids: ⑬-2/market-nav-v2, ⑬-2/guide-catalog-v2, ⑬-2/taskbar-brand-v2, ⑬-2/market-first-paint.
+- 다음: Windows 아이콘 검사 실패 단계 확인/필요 시 수정 → 최신HEAD 전체CI통과 → expected_head_sha merge →
+  main 확인/PR115 큐·기록 갱신 → UI_SESSION_CURRENT returned 및 LEDGER → whydi CMD 안내.
+- CURRENT.md(엔진), WEBSITE_AWS_SESSION_CURRENT.md(다른 웹 담당자)는 수정하지 않음.
+
+---
+
 # UI PR115 검증 중 — 2026-11-13 (이 절이 최신)
 
 - status: taken · owner: GPT UI. 엔진 CURRENT.md는 변경하지 않음.
