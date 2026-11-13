@@ -6,11 +6,11 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2
 next_ids: ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T21:09:12+09:00
+updated_at: 2026-11-13T21:13:24+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: gpt/order-safety-design-20261113
-work_commit: e7104287377acfccdc5449cdb09b9c476178a99f
+work_commit: b3231213af6d9799303b0fde58bcdd9d0399c765
 uncommitted_changes: no
 pr: 116
 usage_weekly_pct: unknown
@@ -20,6 +20,13 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2633226e-9755-40fb-87a4-44d1fc290756
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## 문서 정합성 기록 갱신 — 2026-11-13T21:13:24+09:00
+
+- PR116 head b3231213af6d9799303b0fde58bcdd9d0399c765. 새 설계 문서 추가에 따른 감시 목록 변경으로 첫 Compliance43422710025가 검토 지문 단계에서 실패했다(47개 합성 검사 통과). 원인을 무시하지 않고 20종 정책의 해당 변경 영향을 대조하고 source-review.json을 갱신했다.
+- 기준선 계산은 원격 한 파일 추가 diff로 확인한 이전 소스 목록에 새 문서만 더했으며, 20개 정책 원문 지문과 구조를 확인했다. 로컬 전체 소스 순회를 수행했다는 주장은 하지 않는다. 전체 소스 지문·문서 패키지는 최신 Compliance43423231017로 확인 중이다. 정책 본문/운영 프로필/공개 검토는 변경하지 않고 review-required·publication BLOCKED를 유지한다.
+- 원격 두 파일 내용과 diff read-back 완료. 제품 코드/주문 경로/안전 검사 변경 없음. 초안과 기준선은 Runtime 경로 필터 밖이며 Windows 또는 주문 운영 완료 증거가 아니다.
+
 
 ## 문서 초안 PR 게시 — 2026-11-13T21:09:12+09:00
 
