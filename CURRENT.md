@@ -4,9 +4,9 @@ reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout
 next_ids: ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-14T01:15:48+09:00
+updated_at: 2026-11-14T01:21:31+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/order-safety-design-20261113
@@ -20,6 +20,15 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 79a2083a-ca5d-477a-a04d-42e2cdfc4d67
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## Windows E 판독 완료·Step 10 변경 검토안 준비 — 2026-11-14T01:21:31+09:00
+
+- **⑦-1/E-readout만 완료.** [원격 결과 판독](WINDOWS_E_READOUT_2026-11-14_gpt.md): 소유자 cdbbe61e689ea56904bb56c23e0824ba71ced0f5, 844/964 PASS·FAIL0·NOT_RUN120, Nautilus57·guard5 PASS. 563db54의 검사 이름/상태와 추가0·삭제0·변경0. 최초 파일럿 HEAD8a8c247부터 3커밋·결과5경로만 변경. 보호 데이터 접근/실제 실행 없음.
+- [Step10 변경 검토안](STEP10_CHANGE_REVIEW_2026-11-14_gpt.md)을 준비했다. 비공개 step10-draft-20261114에 원본 blob9개 검증, README995줄 CRLF·정확히2행 변경, 공급사 요약4개 바이트 동일 사본·SHA256·고정 도구 지문 확인을 보존했다. 실행 기록/spec 추가 문안은 **검토용 초안**이며 전체 후속 판정·접근 이력·최종 diff를 완료한 연구 마감 commit이 아니다.
+- 결정11 P2 후속 담당 승인, 10.5 도구 본문 처리(제안: 기존 문단 보존·Status/실행기록에 최신 사실 명시), 옛 접근 이력의 미확인 세부를 명확히 한 후 연구 브랜치 마감으로 간다. 이번에 연구/main/runner/qa를 수정하지 않았으며 F를 시작하지 않았다.
+- 소유자 E 최종 상태의 미추적 .agents/skills/quantgen-paper/SKILL.md는 보존돼 있다. qa-only commit/push 성공과 전체 worktree clean을 구분한다. F1/A5 전 별도 정리 필요.
+- 지정 Notion7-1에는 E 하위 완료만 최소 반영할 예정이며, 성공 여부는 후속 기록과 비공개 큐에 저장한다. 자동감시·자동 인수 취소 유지. execution_id79a2083a-ca5d-477a-a04d-42e2cdfc4d67.
+
 
 ## 소유자 Windows E 결과 판독·마감안 준비 — 2026-11-14T01:15:48+09:00
 
