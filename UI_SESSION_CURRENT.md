@@ -6,6 +6,20 @@
 
 ---
 
+# UI 요청 추가·검증 checkpoint — 2026-11-14
+
+- status: taken · owner: GPT UI · execution_id: ui-market-menu-click-20261114. 최신 직접 요청을 기존 작업에 추가. 사용량 unknown. 자동감시/다른 담당 인수 없음.
+- 사용자 최신 원문: “아 아니야 아니야 해설 길이는 오히려 길어 지금, 근데 알맹이가 좀 없는 느낌. 좀만 더 잘해보자 새꺄”. 길이를 늘리지 않고 실제 수치 → 구체 확인 → 실패 조건으로 정리한다.
+- 추가 범위: 분석/설계 화면 잘림·공통 스타일, 손익비 영역 가로세로 이동·폭/가격 조절·선택 후 Delete·정돈된 카드. 기존 메뉴 클릭과 얕은 단계 요청도 유지.
+- work_branch: gpt/market-menu-click-20261114 · base73ed4bf · /workspace/quantgen-risk-reward-20261113. 아직 미커밋/미배포.
+- 구현: market_menu의 QWindow 입력 선처리로 클릭 전 닫히던 오류 복구, shell_rail 국가까지만/단일 직접 목적지. research_style/app/workspace_guide 및 paper CategoryFlow로 1000px 영어 모의투자 가로넘침 수정. risk_reward의 영역 XY/폭/모서리 조절, 숫자편집 중 Delete 보호. reading_cues 27종 구체 교차확인, 상세 설명 접기 유지.
+- 검증: /tmp/qg-ui-final-targeted.log 34 PASS(146.894s). 실제 QWindow 클릭 재현은 수정 전 FAIL/후 PASS. 화면 검사에서 새 손익비 NoButtons 스타일이 입력창을 1px로 줄이는 Qt6.12 오류 발견: 대체 스타일 수정·회귀검사 추가 중. 이 수정 이후 다시 검사 필요.
+- 캡처 /workspace/shared/ui-menu-workspaces-20261114. 실제 소유자 Windows/브로커 속도 미검증.
+- 다음: 숫자 표시/가이드/차트 회귀검사 → compliance 검토 갱신 → PR/push/CI/main → 웹 큐/이 문서 returned·LEDGER 추가 → skymi/whydi CMD 안내. 앱 변경 외 웹 소스/AWS 배포 없음.
+- 신규 ID: ⑬-2/market-menu-click/1, ⑬-2/market-menu-depth/1, ⑬-2/research-workspace-readability/1, ⑬-2/chart-risk-reward/2, ⑬-2/indicator-reading-cues/1. 완료 원장에는 아직 추가하지 않음. 메인 CURRENT.md 및 AWS 문서 보존.
+
+---
+
 # 시장 메뉴 클릭 복구·단계 축소 — 2026-11-14T00:19:24+09:00
 
 - status: taken · owner: GPT UI · execution_id: ui-market-menu-click-20261114. 사용자가 이 세션에 직접 새 수정 요청. 다른 담당 인수/예약 없음.
