@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "deb8d589114d2a975f1860d63ae9035973fb8ad8fb7187a9b037ea07336940e1",
+    ".github/workflows/runtime-smoke.yml": "c13d00bd4c4b2075feb52b2767e5afd4eedfec595196e5d8fe35bbdc45b88e68",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -296,7 +296,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "1805ccc3f9ccd6db1e513045a1494b90548bf0604a6620e8ca8e87b2acb74b52",
+    "docs/compliance/FACTS.md": "aa692e8a3a07c159b93e6bf18654cfa23076d877a880ce3be9c44dbb55dddf5b",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -380,7 +380,7 @@
     "docs/product/TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md": "eeb6a1394c46fd67859dc5c8066d9adc125802efa24c29add93b5d8528404314",
     "docs/product/UI_D11_D15_2026-11-13.md": "227e4f629f772b9d43f9f902e92f11f1189e0b145d06adeae75ca627dba5760d",
     "docs/product/UI_LOCALIZATION.md": "7a8bc3a69e4e3728e18e0bf62b0613f792079b0a5f3d7b03742dfd5f4596b512",
-    "docs/product/UI_MARKET_GUIDE_2026-11-13.md": "9d25fef6dc5e01d7944622a5ee565c5af821519ec11a812304846cf7b7cdb10a",
+    "docs/product/UI_MARKET_GUIDE_2026-11-13.md": "e1f02a4738f5259c620e2da4c77e91ffa699740d0e5d9c31695e7dacceda68f8",
     "docs/product/UI_RENDERING_2026-10-31.md": "f006b261d10a28594dc3b31d05424ac144004ca4edca18646ca00b5c0f8a19f6",
     "docs/product/UI_SESSION_PROGRESS_2026-10-31.md": "6f8fd39bdfc77df266095c1e46170c1a679e3267d200a0fc3f6995b196dd0de4",
     "docs/product/UI_WEBSITE_SYNC.md": "37b62baa94dece046c08e70c01d49e4658937cbaa21d3b980c9fcb9099913363",
@@ -452,7 +452,7 @@
     "quantgen_desktop/signals.py": "6e82099c4857046487d3878761083d89819ea28705dd817bc2391f1ed713678e",
     "quantgen_desktop/source_notes.py": "05820a66919f8840aeacf81dfcf96bacd8fa75ecd355f64a1090c2d9ec59a14e",
     "quantgen_desktop/status_language.py": "e23a11eb835b155bfc88685ea0f521e664b8b7fc080ce3f600042b1002427386",
-    "quantgen_desktop/stock_detail.py": "ba11f8d4ec1f730b6d8b1b21a57361e26ad9ce803a0ac61659e13b96eaab20bc",
+    "quantgen_desktop/stock_detail.py": "515af8b84af1a2fee99c0e455656c4393407bc19fe1672d0c7a04bbe167baa2e",
     "quantgen_desktop/stock_detail_side.py": "76a1f0b6ef08d9e398e56bd336bc9c3382448410d8c007d2fa586b23388f8176",
     "quantgen_desktop/stock_detail_style.py": "b0d0b3da04a686a8968d75cc76c986cbacd763f48abdd49a30c37d8624443e27",
     "quantgen_desktop/stock_qscore.py": "f1cd095e271e06ab23e460982a76d26ef484e9ef52ec319bb8fc4ddf628b4371",
@@ -520,7 +520,7 @@
     "tests/desktop_market_chart_acceptance.py": "f6cc71f30269e34e3fb137134e49268e9a30d7d46a623b1c020c2516b8e2bfef",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_market_first_paint_acceptance.py": "b2fc5d138f12ea6e1b72c598aa96cca2551260b2432cb245727cbd070d99e5fa",
-    "tests/desktop_market_layout_acceptance.py": "e0d769e431161c5cd51ffabd163915f4241290620a9a080fd6d228b292757f9c",
+    "tests/desktop_market_layout_acceptance.py": "055ea42223fa7241f7b3ae1019e9e33df45820376c7e8d2b534337107e2efbbb",
     "tests/desktop_market_tabs_acceptance.py": "2f1e8c1cbfbfe18e054099c1fc1fc3c0e94158141d2395d57421c829f73629ba",
     "tests/desktop_markets_watchlist_acceptance.py": "39c54d208096f85635080c59c7b8db71fcbe29721cb081256dc70982b01a38d0",
     "tests/desktop_operation_fixes_acceptance.py": "e6c15c500e3c59d2fb25a8023cee574965fac873d1d3f963f88a7f8f332596f1",
@@ -746,163 +746,163 @@
   "reviews": {
     "1": {
       "document_sha256": "18dc413362efd7488995e9e930286226046e1c272263157600aa593baafdd714",
-      "source_digest": "adb01fc50ea3d0f6040d5820ed98ce1627ce4d81ed17d2101b3d73d56255588a",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.540479+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "dd207ba22df4d54cea91efb6bd9ea57bdbf5bb431017df374e98f7fe315238e5",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.528790+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "2": {
       "document_sha256": "8ddd0502d6c8767c9c7c7f8827706ca929946c6244c565558c77ffefc7c038ee",
-      "source_digest": "adb01fc50ea3d0f6040d5820ed98ce1627ce4d81ed17d2101b3d73d56255588a",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.542489+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "dd207ba22df4d54cea91efb6bd9ea57bdbf5bb431017df374e98f7fe315238e5",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.533196+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "3": {
       "document_sha256": "122df861c40d2ce416603e3ac4b32cf892df92612a6bc66347eaeba9715e65b8",
-      "source_digest": "55247bdafa2ae063ec4e1332183c16fc995c334299600b92883b6a0f6622b77e",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.544028+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "9f8291534c6e92b4062fbe346b42b23d0859e43a8c39352a08ed15fb155bdef2",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.534842+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "4": {
       "document_sha256": "8f9b0a3908a2099cc18ee5848763cee629a75a01eeea86853bb6985519170344",
-      "source_digest": "bbf94ba470186a6f433c5216744048fbce9a3fa93632a8f7cb78c2d4856cf6bc",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.545436+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "5c4e1fbadc60176f70b0f0115a48be7450aa64a342b4d0e7049991089da8c4d0",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.537798+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "5": {
       "document_sha256": "060f9c93d00e4086e6763cb669dec1fde2d5f11f083087bed5ef8e4136684bed",
-      "source_digest": "e3c864c68708e7a939658f229653ccd775beb15d5a166eb8205010254c0bbc07",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.546694+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "ae2324bf9290cbb91478ef7ff96f4f79dc83ef3aadb7c8110b0bebdab929c086",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.539146+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "6": {
       "document_sha256": "e8486a47510bcb774261d13798eeea001007fd6b28e6d4d9e2ac23fe64d895e1",
-      "source_digest": "9a7150aa36a00909d711f845a1259a0d464b56b9142cc3e30a44e0837ace8706",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.548024+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "62f1c9eb326b45dc13eb6519a42a2a2b52dd44c0a514057c907c3abd6d51b8d7",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.540455+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "7": {
       "document_sha256": "a7f592f442e1da195efc95d786c9112e70f36356e2fed747a1108318138e4ad2",
-      "source_digest": "adb01fc50ea3d0f6040d5820ed98ce1627ce4d81ed17d2101b3d73d56255588a",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.549991+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "dd207ba22df4d54cea91efb6bd9ea57bdbf5bb431017df374e98f7fe315238e5",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.542183+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "8": {
       "document_sha256": "c53b0f56867226eae0c3eabb1503fa8f8c6c7ec639afc9033b39cae8ffe10f3a",
-      "source_digest": "9a7150aa36a00909d711f845a1259a0d464b56b9142cc3e30a44e0837ace8706",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.551237+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "62f1c9eb326b45dc13eb6519a42a2a2b52dd44c0a514057c907c3abd6d51b8d7",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.543595+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "9": {
       "document_sha256": "9b1af75b366f5aab5b2e630629f30f00d0057877170f4801aa9f14b2a70e3c96",
-      "source_digest": "b5d58011edf1ddb5d69e698c3074a638d44a75897ed9148742601ef6fbadcc30",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.552555+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "0b55c536716ae3f44e702188fdf2bae94d3c76bc6a6190569dd0ef518de2d3c6",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.545110+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "10": {
       "document_sha256": "8cbb750332530a5c736f743e4e5c148e1fcfe2e18a457593b442d54d9ecada71",
-      "source_digest": "5bbbb218808a805b4df989f4430a14cc8c9c23cdfaa0b54aa0fc05d0a8b2ca5f",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.553772+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "2195c8d3c94895edc6611aade4eef190af67cdfe9abeb9afcabf2a47b1081ac8",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.546689+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "11": {
       "document_sha256": "b290a8ee69ff5c9c6ff4535ed91a08cb26ad167afc504d6e17771bee1856ae44",
-      "source_digest": "ef44512e3278fe33f1f0ddea2672de501b548f3dcfa7811c830d060cb0029c31",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.554993+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "46a4488869a11bcc8f88b742b406a61fd6a3d6925a55186e1e29322a34b00e42",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.548246+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "12": {
       "document_sha256": "5b29917ba7a0aa9da347fe1eb9594775ba02cd6d5ba649f4f90e03b958b7ef26",
-      "source_digest": "f7636d5202c3874c6c1ab5b1ae8fee9eb837f02fd1ba21ebc780271151a090bd",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.556493+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "7e4ab9fd7dfd520acb86cc6dc0de2ea0faaaf3639f7c45603512c8f3cee77baf",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.550077+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "13": {
       "document_sha256": "e27cbbe6536609fe8299522ecd66032e48b7494d3ccb5c0656ea457f75e220c5",
-      "source_digest": "b5d58011edf1ddb5d69e698c3074a638d44a75897ed9148742601ef6fbadcc30",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.557999+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "0b55c536716ae3f44e702188fdf2bae94d3c76bc6a6190569dd0ef518de2d3c6",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.551679+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "14": {
       "document_sha256": "0830fda21f72f77f30f0b52a74b52c425916ec5dd4688507008f3337ad627258",
-      "source_digest": "b5d58011edf1ddb5d69e698c3074a638d44a75897ed9148742601ef6fbadcc30",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.559419+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "0b55c536716ae3f44e702188fdf2bae94d3c76bc6a6190569dd0ef518de2d3c6",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.553598+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "15": {
       "document_sha256": "09b2945ed78373174a9c3bfb24c79c70d1d06ef22a5fc0aa74ac3804fc25f7c2",
-      "source_digest": "b5d58011edf1ddb5d69e698c3074a638d44a75897ed9148742601ef6fbadcc30",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.561388+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "0b55c536716ae3f44e702188fdf2bae94d3c76bc6a6190569dd0ef518de2d3c6",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.554912+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "16": {
       "document_sha256": "fa6d90124e3706e75b63d90a177382c3a009f799d38ad088bdc229f62caa0dba",
-      "source_digest": "6170fca6ea595109c224a5a28f859e181d9dfb1aba3c2cd05f4c5ef658c4e2f6",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.562876+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "ad5054ecf9c2a630043aa16761d2bee8b25a20a9ba3e77aa5118d5ef137805c8",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.556375+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "17": {
       "document_sha256": "d15a9af3cf32276b2ce6696db902d09ac26a14e0b5b92ebbad384865c61b13d3",
-      "source_digest": "9a7150aa36a00909d711f845a1259a0d464b56b9142cc3e30a44e0837ace8706",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.564505+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "62f1c9eb326b45dc13eb6519a42a2a2b52dd44c0a514057c907c3abd6d51b8d7",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.558161+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "18": {
       "document_sha256": "9a43174723a1dc551db1aef590e8833b368877f543e21a833798f0e039f4099a",
-      "source_digest": "adb01fc50ea3d0f6040d5820ed98ce1627ce4d81ed17d2101b3d73d56255588a",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.565955+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "dd207ba22df4d54cea91efb6bd9ea57bdbf5bb431017df374e98f7fe315238e5",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.559868+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "19": {
       "document_sha256": "1e01361156c01fc1920818f3472dae95a741f2f3481ee62462561ac8fe4d2f53",
-      "source_digest": "76d583ec510dc8043d970420b64ec10b36ffe82ad46f196c8343e983b8650d4e",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.567403+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "73c4ba18963eeeeafe0fd063f1ba9eddedffc485982b0f3308d20ef88b10613d",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.561412+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     },
     "20": {
       "document_sha256": "e7265d03dabb582d79c63f1e69ca64c103f565f24e1c3ee0b19c4b4a85204ed9",
-      "source_digest": "adb01fc50ea3d0f6040d5820ed98ce1627ce4d81ed17d2101b3d73d56255588a",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
-      "reviewed_at": "2026-11-13T09:47:13.568952+00:00",
-      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
+      "source_digest": "dd207ba22df4d54cea91efb6bd9ea57bdbf5bb431017df374e98f7fe315238e5",
+      "reviewed_by": "GPT UI review",
+      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
+      "reviewed_at": "2026-11-13T10:33:52.563009+00:00",
+      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
     }
   }
 }

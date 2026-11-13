@@ -56,7 +56,8 @@ class NativeMarketLayoutTests(unittest.TestCase):
     def close_window(self):
         with patch.object(QMessageBox, "question", return_value=QMessageBox.StandardButton.Yes):
             self.window.close()
-        self.window.deleteLater()
+        from tests.qt_fixture_cleanup import delete_owned_widget
+        delete_owned_widget(self.window)
         self.app.processEvents()
         self.http.assert_not_called()
         self.jobs.assert_not_called()
@@ -211,6 +212,27 @@ class NativeMarketLayoutTests(unittest.TestCase):
                 check()
                 self.assertEqual(pane.chart.height(), height_with)  # the chart never grows the page
                 self.assertEqual(pane.chart.layout_info.panels, ())
+
+    def test_chart_stays_pinned_when_its_market_container_reflows(self):
+        """A nested destination can move after Qt finishes a theme/layout pass without resizing the viewport."""
+        w = self.window
+        self.select(w.market_chart)
+        scroll = w.stack.currentWidget()
+        stock = w.markets_view.stock
+        for _ in range(8):
+            self.app.processEvents()
+            QTest.qWait(20)
+        viewport_size = scroll.viewport().size()
+        layout = w.markets_content.layout()
+        margins = layout.contentsMargins()
+        for top in (margins.top() + 48, margins.top()):
+            layout.setContentsMargins(margins.left(), top, margins.right(), margins.bottom())
+            for _ in range(8):
+                self.app.processEvents()
+                QTest.qWait(20)
+            self.assertEqual(scroll.viewport().size(), viewport_size)
+            self.assertEqual(stock.mapTo(scroll.viewport(), QPoint()).y(), 0)
+            self.assertEqual(scroll.verticalScrollBar().value(), stock.lock.target)
 
 
 if __name__ == "__main__":

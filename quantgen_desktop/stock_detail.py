@@ -229,6 +229,10 @@ class PageLock(QObject):
         self._pinning = False
         self._value = None      # the page position before the stock opened (Back returns to it)
         self._margins = None    # the page's side margins, narrowed to PAGE_SIDE while locked (spec 2: 24 + 24)
+        self._layout_hosts = []
+        self._layout_timer = QTimer(self)
+        self._layout_timer.setSingleShot(True)
+        self._layout_timer.timeout.connect(self._measure_target)
 
     def _find(self):
         parent = self.view.parentWidget()
@@ -260,6 +264,13 @@ class PageLock(QObject):
             self.bar.valueChanged.connect(self._repin)
             self.bar.rangeChanged.connect(self._range)
             scroll.viewport().installEventFilter(self)
+            host = self.view
+            while host is not None:
+                self._layout_hosts.append(host)
+                host.installEventFilter(self)
+                if host is scroll.widget():
+                    break
+                host = host.parentWidget()
         self.refit()
         return True
 
@@ -272,9 +283,17 @@ class PageLock(QObject):
         content = self.scroll.widget()
         if content is not None and content.layout() is not None:
             content.layout().activate()
-        self.target = self.view.mapTo(content, QPoint(0, 0)).y() if content is not None else 0
-        self._pin()
+        self._measure_target()
         self.view._fit_toolbar()
+
+    def _measure_target(self):
+        # Nested market destinations can move in a later Qt layout pass without
+        # resizing the viewport. Re-read their position, not the previous target.
+        # Do not refit the toolbar here: its responsive controls can request layout.
+        if self.scroll is not None:
+            content = self.scroll.widget()
+            self.target = self.view.mapTo(content, QPoint()).y() if content is not None else 0
+            self._pin()
 
     def _pin(self):
         if self.bar is None or self._pinning:
@@ -292,8 +311,12 @@ class PageLock(QObject):
 
     def _range(self, *_):
         self._pin()
+        self._layout_timer.start(0)
 
     def eventFilter(self, watched, event):
+        if watched in self._layout_hosts and event.type() in (
+                QEvent.Type.Move, QEvent.Type.Resize, QEvent.Type.LayoutRequest):
+            self._layout_timer.start(0)
         if self.scroll is not None and watched is self.scroll.viewport():
             if event.type() == QEvent.Type.Wheel:
                 event.accept()
@@ -303,6 +326,13 @@ class PageLock(QObject):
         return False
 
     def release(self):
+        self._layout_timer.stop()
+        for host in self._layout_hosts:
+            try:
+                host.removeEventFilter(self)
+            except RuntimeError:
+                pass  # a parent can already be gone during window teardown
+        self._layout_hosts.clear()
         if self.scroll is None:
             return
         try:
