@@ -346,6 +346,7 @@
     "docs/product/NATIVE_LANGUAGE_2026-10-31.md": "c9b68cf82c3a9bf858d9e0649871116f7d618a86ae8e4ba12dab87872db8fe32",
     "docs/product/NAUTILUS_AND_DATA_SOURCES_2026-10-31.md": "b2b0fdb675bd2e04e79863d872fc6101f40a10744b5bd0516da17957a26e7936",
     "docs/product/OPTION_DISCLOSURE_2026-11-04.md": "ff314ee2043b524cdb8456f4af5c2ffe5f19f19d341ac28be471a6d3c7588373",
+    "docs/product/ORDER_SAFETY_DESIGN_2026-11-13.md": "504db57a82d426c7dfc6b36bdb52c3b13a707939b6fa467caaeb02eca70f5784",
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
     "docs/product/PILOT_OWNER_RUN_2026-11-11.md": "269ba6831332ea63c49067d0af8f1a588d934e75bc9b919af520e45347ac4484",
     "docs/product/PILOT_READOUT_AND_STEP10_PREP_2026-11-11.md": "67784df20a1ad8471f8d0afeadd99e9c6c3b6320c7fa712a60c377d3175c2e04",
@@ -737,163 +738,163 @@
   "reviews": {
     "1": {
       "document_sha256": "bfb0f2a777e39eb935057f6b54fb72bb1ee242dc49d6168946ee63156f294299",
-      "source_digest": "019b5ab622f23554efab210c31750ab1ac13ae401af92c96afeea881312b633f",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.562718+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "6162183b6146564567a58a2207429537d63bd463d98aeac45112d74c0b76953c",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "2": {
       "document_sha256": "927fd2e6fa3f911b2318caeb2c6b76e7a22a5acf511a7a5bf089bf8cfaa5eb5e",
-      "source_digest": "019b5ab622f23554efab210c31750ab1ac13ae401af92c96afeea881312b633f",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.564613+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "6162183b6146564567a58a2207429537d63bd463d98aeac45112d74c0b76953c",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "3": {
       "document_sha256": "b08dcb02f98a4b65afbcf42b626bc5135615ef365222e54904f286e059b87cd2",
-      "source_digest": "c03dccaf56fda4a03d50df0059ca5ad919dd1d7ec1d068692d913c90a5551b98",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.566096+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "6a8889c2719ee548930bc25c1cfff5372409fdcc464812db20f96571a0bbe6a4",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "4": {
       "document_sha256": "cd74c1dcd526ba9c91277ef8ddb75cc901c103234de2911c369752d4cd7f110e",
-      "source_digest": "d19e76d5103da3f6e777da9f9396973aedf27036f4de862fc72f395ce95ebf62",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.568100+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "1693bc69d34ff3f89781f47c8e4311124a129d6c8d6c0c572f94da23a4763b7b",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "5": {
       "document_sha256": "2b1d8abea35e59a3aaadde163aba0e4dd322ab3765912e3587203e47dc205b72",
-      "source_digest": "bfc5acf6c96f326dc689ab89068a50211d24300194f66b16d2e8197d742a0594",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.569699+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "0878d1e0c316a6a3b1650c2b65e924bba33d01fae961561c70180b4c0975fe94",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "6": {
       "document_sha256": "b523d4ac0040a8c52355ee46e43d7a2dac6bdfc42f245d6801f02b6619ae20e0",
-      "source_digest": "bc046d8198c41bdbcd4d81f71e650d291dbcd0b9d22e6fff72b2d32139f869b6",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.571013+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "8c427d7dae787766a06f8a44a3d7b1e3b364451c59fb8cfbc1a85103935da590",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "7": {
       "document_sha256": "4bf4ebfcdadc1ab1b190229f5f356c0f6d8bf42cce76bde5e91847681c404d2b",
-      "source_digest": "019b5ab622f23554efab210c31750ab1ac13ae401af92c96afeea881312b633f",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.572629+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "6162183b6146564567a58a2207429537d63bd463d98aeac45112d74c0b76953c",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "8": {
       "document_sha256": "f869f1529ea234c34a2c0c87ed2cb2ee0ab215fa1ecd9f0c2c011a6b4813b159",
-      "source_digest": "bc046d8198c41bdbcd4d81f71e650d291dbcd0b9d22e6fff72b2d32139f869b6",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.574098+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "8c427d7dae787766a06f8a44a3d7b1e3b364451c59fb8cfbc1a85103935da590",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "9": {
       "document_sha256": "a685944f95d0ce2dadeaf582fc791a66483fcc89d2990a7e5b58d46b54e7bba1",
-      "source_digest": "6080e3ee302bd730b4cef9d94363ef0bb5216c9d960725645f01254cb13d257c",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.575869+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "8176810033d82f51df29164a420e6583bf605fdb1fdb1516740d87a8722a7530",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "10": {
       "document_sha256": "d4d119a650bc8a1810fe0fb3b7559368d93949c927385f980b23cfc55e73f07b",
-      "source_digest": "9916fb9f66b501c3b56a98d2b4a4260a35e9147e47d5023ece197f68f028988e",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.577454+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "ea4acfa2c847ea44c2e657f74edd430b8caa7110e3570cc902c4231e18ec9574",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "11": {
       "document_sha256": "70071bd9e2db9ed7b6cc43b225d9250a562d031d16e29c8e4b8cbeeddbfca5a7",
-      "source_digest": "76f5d6e12fd7f9bede227163ec26610f528bf719bfea9108b8d12f08a7506900",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.578952+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "783c1ceb43518ce8bd8c4bf6fbe576fbf7e32faf21c5726cf80f622311081696",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "12": {
       "document_sha256": "d55f42db2c4e7090622fecfe2593ca03034a49a01b3cdd997ba46731af0f1b93",
-      "source_digest": "f89ea949db7fbb06b8af81a5347f59e8aa7a3db3ad7256d705ddedd69f590d9e",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.580383+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "45f63e6d097457ddbf76c97ad3b8165fa764519dfbfa1352f998db0bb45d1ccb",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "13": {
       "document_sha256": "d69c960aa52d70181e7c8899ec9520dc218b416ac70b4209c5c761ac9d1eeb96",
-      "source_digest": "6080e3ee302bd730b4cef9d94363ef0bb5216c9d960725645f01254cb13d257c",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.581991+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "8176810033d82f51df29164a420e6583bf605fdb1fdb1516740d87a8722a7530",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "14": {
       "document_sha256": "5cdae46d33eea6d9b2ebbe7373775a7be2b6f30012a8b2a6126ea614fa08e62c",
-      "source_digest": "6080e3ee302bd730b4cef9d94363ef0bb5216c9d960725645f01254cb13d257c",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.583676+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "8176810033d82f51df29164a420e6583bf605fdb1fdb1516740d87a8722a7530",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "15": {
       "document_sha256": "f945de2c1499a7d563e3bcc81db95003bf44bbc6bf90e30c7de5bf993bb67ad1",
-      "source_digest": "6080e3ee302bd730b4cef9d94363ef0bb5216c9d960725645f01254cb13d257c",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.584917+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "8176810033d82f51df29164a420e6583bf605fdb1fdb1516740d87a8722a7530",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "16": {
       "document_sha256": "958fd2485a7aa29ec1954cef03182734225c97bb8ae82d95e7f295e957773ff2",
-      "source_digest": "6d04a89b1449ba7d67e0a132cc7f0de672f7052df45a5f2c89f9909b94c67d73",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.586225+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "e66520c90ebbe2ca1019874b7c0fa2337916dc372fc9b3d63a0cb55a2ebc0285",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "17": {
       "document_sha256": "6236eef665087d5bc2b7cb0f337c9688945968bb037019b98db7b144ddfd773d",
-      "source_digest": "bc046d8198c41bdbcd4d81f71e650d291dbcd0b9d22e6fff72b2d32139f869b6",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.587580+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "8c427d7dae787766a06f8a44a3d7b1e3b364451c59fb8cfbc1a85103935da590",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "18": {
       "document_sha256": "75e98a89e4600b1acde57226ea739577b1419ac489ee1401bffe78e895206436",
-      "source_digest": "019b5ab622f23554efab210c31750ab1ac13ae401af92c96afeea881312b633f",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.589793+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "6162183b6146564567a58a2207429537d63bd463d98aeac45112d74c0b76953c",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "19": {
       "document_sha256": "442034dff0de1c425c642b1311b534a43f28117737aef090dfed545e9c483ed6",
-      "source_digest": "36a2d85636d0b46b64855d3bbaac8cde5643a41f3f47b4a6a1b0ff8c824521e3",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.591210+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "0fdd5689651066df6acfa16bdc811203c31781f2eeabe6dd0cfc5863f8d8a77e",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     },
     "20": {
       "document_sha256": "0bd62dde94f8f1c3a8ecf90c630d198a9335f99a71b1da50ac756a932904e3ff",
-      "source_digest": "019b5ab622f23554efab210c31750ab1ac13ae401af92c96afeea881312b633f",
-      "reviewed_by": "GPT UI integration review",
-      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
-      "reviewed_at": "2026-11-13T08:08:19.594006+00:00",
-      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
+      "source_digest": "6162183b6146564567a58a2207429537d63bd463d98aeac45112d74c0b76953c",
+      "reviewed_by": "GPT (M-12 documentation delta consistency review)",
+      "review_note": "M-12 documentation-only delta at e7104287377acfccdc5449cdb09b9c476178a99f: reviewed new safety design draft against policy topics 1-20 and 2026-11-11 approved P4/D1-D14. Draft clearly separates future order design from current analysis/paper-only code; D8/D10 missing source details remain unresolved; no new data collection, API, consent, billing, tracking, UI, credentials, marketing, retention/deletion behavior or license grant. Prior source/policy bytes unchanged by exact one-file remote compare from 795165c. Retain all review-required/publication BLOCKED and actual evidence gaps. Incremental fingerprint calculation using existing sources plus the sole new document; full inventory validation delegated to PR CI, not claimed as a local full scan.",
+      "reviewed_at": "2026-11-13T12:11:37+00:00",
+      "source_commit": "e7104287377acfccdc5449cdb09b9c476178a99f"
     }
   }
 }
