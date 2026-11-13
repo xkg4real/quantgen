@@ -2383,6 +2383,7 @@ class StockDetailView(QWidget):
         from core.education import indicators as engine
         from core.education.study_guide import availability_short, availability_text, line_readout, unit_count
         from core.education.signal_context import signal_note, alignment_note
+        from core.education.reading_cues import reading_tip
         from core.market.presentation import study_colors
         from .indicator_picker import GuideCard, guide_parts, state_tone, state_word
         lang = _lang(self.ctx)
@@ -2460,8 +2461,8 @@ class StockDetailView(QWidget):
                 card.show_guide(language=lang, name=spec.name(lang), reading=reading,
                                 state=state_word(key, code, lang), tone=state_tone(code),
                                 gauge=gauge, gauge_labels=self.picker.gauge_labels(key, gauge, lang),
-                                long_texts=long_texts[:1], colors=self.gauge_colors(),
-                                context=signal_note(key, bars, language=lang, values=values))
+                                long_texts=(*long_texts[:1], signal_note(key, bars, language=lang, values=values)) if ready else long_texts[:1], colors=self.gauge_colors(),
+                                context=reading_tip(key, lang))
                 card.set_open(key in self._technical_open)
                 card.show()
             out.append(block)

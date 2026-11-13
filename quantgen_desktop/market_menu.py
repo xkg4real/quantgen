@@ -1,7 +1,8 @@
-"""Markets disclosure: every level opens below its row, inside the left rail.
+"""Shallow Markets disclosure, inside the left rail.
 
 The owner replaced the always-visible/right-flyout design on 2026-11-13.
-One branch per depth is open. The rail scrolls; nothing covers a chart.
+Country choices open below their category. Rankings belong in the market page.
+The rail scrolls; nothing covers a chart.
 """
 from PyQt6.QtCore import QEvent, QObject, QTimer, Qt, pyqtSignal
 from PyQt6.QtGui import QCursor
@@ -240,9 +241,12 @@ class InlineMarketMenu(QObject):
                 self.keyboard = True
                 self.window.rail_scroll.ensureWidgetVisible(rows[at], 0, 12)
                 return True
-        elif kind == QEvent.Type.MouseButtonPress and self.is_open():
+        elif kind == QEvent.Type.MouseButtonPress and self.is_open() and isinstance(watched, QWidget):
+            # A real OS click first reaches QWindow, before Qt dispatches it to
+            # the child widget. Closing on that first event removes the target
+            # before it can receive its press/release and emit clicked.
             if watched is not self.header and watched is not self.container and not (
-                    isinstance(watched, QWidget) and self.container.isAncestorOf(watched)):
+                    self.container.isAncestorOf(watched)):
                 self.close_all()
         elif kind in (QEvent.Type.WindowDeactivate, QEvent.Type.Close) and watched is self.window:
             self.close_all()

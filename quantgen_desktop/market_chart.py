@@ -223,7 +223,7 @@ class MarketChartSvg(QSvgWidget):
                 event.accept()
                 return
             if self._press is None and self.risk_tool.hit(event.position()):
-                self.setCursor(Qt.CursorShape.SizeVerCursor)
+                self.setCursor(self.risk_tool.cursor(self.risk_tool.hit(event.position())))
                 event.accept()
                 return
         x = event.position().x()
@@ -379,6 +379,9 @@ class MarketChartSvg(QSvgWidget):
         return super().event(event)
 
     def keyPressEvent(self, event):
+        if self.risk_tool is not None and self.risk_tool.key_press(event):
+            event.accept()
+            return
         handler = getattr(self, "key_handler", None)
         if handler is not None and handler(event):
             event.accept()
