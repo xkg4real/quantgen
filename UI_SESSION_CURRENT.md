@@ -6,6 +6,29 @@
 
 ---
 
+# 시장 개선 main 완료 · 손익비/조건 해설 검증 중 — 2026-11-13T22:15:46+09:00
+
+- status: taken · owner: GPT UI. 기존 직접 맡긴 UI 작업을 진행 중이며 자동감시/다른 작업 인수 없음.
+- **PR115 main 병합 완료**: https://github.com/xkg4real/quantgen/pull/115 · main 1006b5ee80067fae4b61c26b322794d6906a05bb.
+- Runtime43419701530: 5d98193의 Windows3.11/3.12/3.14·Linux3.12·syntax3.10/3.11 **6/6 PASS**.
+  이후 main 문서만 통합한 d743695는 앱/테스트/자산/Runtime 설정이 byte-identical(diff exit0).
+  통합HEAD Compliance43429242181 PASS. 자동 반복 Runtime43429242177는 별도 진행 중이므로 그 완료로 혼동하지 말 것.
+- 완료: 아래 펼치는 시장 하위 메뉴, 시장 내부 지수/목적지, 27종 객관식 가이드·상세 스타일, 시세 선표시/시총 후조회/전환 취소, CMD 실행 앱의 Win32 QUANTGEN 로고. 완료4ID를 LEDGER에 기록함.
+- **새 사용자 요청(이어서 진행)**: “차트에 손익비 계산할수있게 트뷰처럼 구현도 돼야해”. 이어서 RSI 변화·추가 확인·한계 설명 예시에 “너가 예시준거 좋다 저정도로” 승인.
+- work_branch: gpt/chart-risk-reward-20261113 · work_commit: **395119531ea7b64f29ccf25954d47748d5314744** push 완료.
+- PR117 OPEN: https://github.com/xkg4real/quantgen/pull/117 · /workspace/quantgen-risk-reward-20261113 · 미커밋 없음.
+- 구현: core/market/risk_reward.py, quantgen_desktop/risk_reward.py의 롱/숏 진입·손절·목표 입력/드래그, 진입선 묶음 이동, 가격 손익%·손익비, 종목전환초기화/실시간갱신유지. stock_detail/market_chart/detail_svg에 연결. 오른쪽 도킹, 좁으면 ⋯. 수수료/세금/슬리피지 미포함, 실제 주문/현금P&L 아님.
+- core/education/signal_context.py: RSI 구간 이탈/지속, SMA/EMA/MACD 교차, 볼린저 재진입, 선택 지표 방향 불일치. 현재/직전 관측만, 미래수익/확률/매매권고 없음. 지표 카드·가이드·로컬 보고서 공유. 이는 법률상 면제판정 아님.
+- 로컬: /tmp/qg-risk-regression.log 47 PASS(조건 해설 추가 전 차트/손익비/레이아웃); /tmp/qg-risk-signals.log 26 PASS; /tmp/qg-signal-integration.log 7 PASS; **최종 /tmp/qg-risk-final-local.log 20 PASS**(그룹 겹침, 합산 금지). Compliance20 consistency PASS/publication BLOCKED. Light/dark 1440·1000px 캡처 /workspace/shared/ui-risk-reward-20261113/ 검사함.
+- 다음 첫 단계: PR117 head3951195의 workflow IDs 조회 → Windows/Linux 초기 새 손익비·신호 검사와 전체CI 확인(실패시 로그→수정) → expected_head_sha merge → main ancestry 확인 → docs-only 후속 PR에 PR-117 웹큐와 최종검증/merge 상태 → 이 파일 returned·LEDGER새2ID → whydi CMD 안내.
+- PR115 완료/웹큐는 PR117에 포함(docs/product/UI_MARKET_GUIDE_2026-11-13.md, ui_website_updates/PR-115.json). PR117 큐는 번호 확정 후 최종 기록 필요. 전송 도구 없으므로 queued. 웹 코드/배포 완료 주장 금지.
+- done_ids: ⑬-2/market-nav-v2, ⑬-2/guide-catalog-v2, ⑬-2/taskbar-brand-v2, ⑬-2/market-first-paint.
+- next_ids: ⑬-2/chart-risk-reward, ⑬-2/indicator-signal-context.
+- whydi CMD: 앱 종료; 프롬프트 PS이면 먼저 cmd. cd /d "C:\Users\whydi\OneDrive\Desktop\QUANTGEN" → GitHubDesktop app-*의 git.exe 찾기 → switch main && pull --ff-only origin main && .venv\Scripts\python.exe -X utf8 -m quantgen_desktop. 전체 명령은 UI_MARKET_GUIDE 문서.
+- 메인 CURRENT.md·AWS 담당 문서/운영 예약은 수정하지 않음. 실제 PC Explorer/DPI/실계정 속도·법률 분류는 미검증.
+
+---
+
 # PR115 최종 검증·main 문서 통합 준비 — 2026-11-13T12:53Z (이 절 우선)
 
 - status: taken · owner: GPT UI. Runtime43419701530의5d98193 앱 전체 검증 대기, 주요 Windows3버전 초기 검사는 PASS. Compliance43419701618 PASS.
