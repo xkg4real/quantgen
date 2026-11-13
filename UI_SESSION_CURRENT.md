@@ -1,3 +1,30 @@
+# UI PR115 검증 중 — 2026-11-13 (이 절이 최신)
+
+- status: taken · owner: GPT UI. 엔진 CURRENT.md는 변경하지 않음.
+- PR: https://github.com/xkg4real/quantgen/pull/115
+- work_branch: gpt/ui-market-navigation-guide-20261113
+- work_commit: 684b22659cf1684d227924b95a8f40459111eed3 (원격 push 확인)
+- base main: 7e05673. **아직 main 미병합.** Runtime43403009880 진행 중.
+- 사용자 정정: 바탕화면 바로가기는 생성하지 않음. CMD로 실행한 앱의 작업표시줄 로고를 요구함.
+- 추가 최신 요청: “시장 들어가면 데이터 불러오는게 너무오래걸리노. 한번 고쳐보라노”.
+- 구현: 시장 하위 메뉴 초기 숨김/아래 펼침/시장 내부 목적지/지수 전용 화면, 27개 지표 객관식 가이드,
+  분석도구·가이드 상세차트 스타일, 실제 HWND 작은/큰 아이콘과 QUANTGEN AppUserModelID.
+- 속도: 첫 시세부터 부분 목록 표시, 미국 가격을 시총 추가조회보다 먼저 받음, 시장 전환 시 이전 묶음 취소.
+  완성 전 순위 미확정/후보 Q-SCORE 미시작, 재조회는 완성 목록 유지. 신규 공급자/요청 한도 없음.
+- 로컬: 메뉴/가이드/작업안내/카탈로그30 OK, 카탈로그/지표엔진/렌더56 OK, 선표시/로더/카탈로그12 OK
+  (겹치는 그룹이므로 합산 금지), 별도 선표시3 OK. 정책20개 consistency PASS/공개 BLOCKED.
+- 넓은 로컬 회귀 실행 중: /tmp/qg-regression-v2.log. 변경 전 테스트의 5지표/우측메뉴 기대는 최신 사용자
+  지시에 맞게 실제 인터랙션 검사로 교체. Windows native HWND 아이콘 검사는 Runtime에 추가.
+- 화면 캡처: /workspace/shared/ui-20261113-v2/ (오프라인). 사용자 계정 속도/Explorer/DPI 실기기 미검증.
+- next_ids: ⑬-2/market-nav-v2, ⑬-2/guide-catalog-v2, ⑬-2/taskbar-brand-v2, ⑬-2/market-first-paint.
+- 다음: 684b226의 Runtime/Compliance 통과 확인(실패 수정) → expected_head_sha로 PR115 병합 → main
+  fetch/조상 확인 → docs/product/ui_website_updates/PR-115.json queued 기록 → UI_SESSION_CURRENT/LEDGER 완료.
+- 웹 HTML/AWS 배포 미변경. 지원 대화간 발송 도구 없음; 큐 파일은 메시지 발송으로 표현하지 말 것.
+- whydi 실행 설명은 docs/product/UI_MARKET_GUIDE_2026-11-13.md. PowerShell이면 먼저 cmd 입력.
+  앱 종료 → whydi/Desktop/QUANTGEN에서 main pull → .venv\Scripts\python.exe -X utf8 -m quantgen_desktop.
+
+---
+
 # UI 메뉴·가이드 재개 — 2026-11-13 (이 절이 최신)
 
 - status: taken · owner: GPT UI · work_branch: gpt/ui-market-navigation-guide-20261113 · base main 7e05673.
