@@ -38,6 +38,15 @@
 - 다음은 기존 개발 API endpoint 읽기 전용 확인입니다. API Gateway v2/v1 목록을 먼저 확인하며 목록이 비어도 EC2 API 부재로 판단하지 않습니다.
 - 서울 SES는 여전히 SCP 차단으로 상태 미확인입니다. 리소스 생성·권한/설정 변경·메일 발송·운영 배포는 하지 않았습니다.
 
+## R1 후속 — Sydney API Gateway 목록 두 종류 모두 비어 있음 (2026-11-13)
+
+사용자 CloudShell의 Sydney GetApis(v2) 결과는 **HTTP_WebSocket_APIs=[]**, GetRestApis(v1) 결과는 **REST_APIs=[]**였습니다. 두 API Gateway 목록에서 API를 찾지 못했습니다.
+
+- API Gateway 목록에 없는 EC2 API나 다른 리전 API까지 부재로 결론내리지 않았습니다.
+- 기존 Notion 출시 계획의 `https://api.quantgeneration.com/healthz`는 실제 응답을 추가 확인해야 합니다. 에이전트 웹 도구는 이 URL에 접근할 수 없다는 오류만 반환했으므로 실제 HTTP 상태/DNS 결과는 미확인입니다. 사용자 CloudShell의 제한된 read-only GET 확인을 안내합니다.
+- 기존 Cognito quantgen-dev 및 Sydney SES production/domain/DKIM 확인 결과는 유지합니다. 서울 SES는 여전히 SCP 차단/상태미확인입니다.
+- 리소스 생성·설정 변경·메일 발송·로그인/가입 시험·운영 배포는 하지 않았습니다. 조회 결과와 다음 확인 절차만 로컬 작업표/보고서에 기록했습니다.
+
 ## 현재 범위와 상태
 사용자는 **메일 전환·웹 정책 범위 유지**를 선택했고, 추가로 **기존 Cognito 풀·서울 SES 인증/production 상태·개발 API 존재의 읽기 전용 조회만** 요청했습니다. 신규 리소스 생성·설정 변경·메일 발송·앱 기능 구현·운영 배포는 하지 않았습니다. Microsoft 365도 아직 구매·설정 전입니다.
 
