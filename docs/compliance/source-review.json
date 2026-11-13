@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "d9fa4c1f4c6b95d68942e853db87079c1bc92e27b407255c2dd85b4112acca1c",
+    ".github/workflows/runtime-smoke.yml": "8be18772b45bd565f3f697a24f9925f102c47ed5c8747125b21b5909b5c6bcf6",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -295,7 +295,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "982042c8b6ff782a1f4d0d2a71257344cc9ee4d92edc7e1743b014f04fb07f14",
+    "docs/compliance/FACTS.md": "1adf6ca27ec309fcb762ab8c1d7292e068f08f3b05094aa53147d57bb2d01b52",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -377,7 +377,7 @@
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
     "docs/product/TERMINAL_TARGET_2026-10-30.md": "5c3e2eac999534371560def0e00d3ef45d0b7abcd960a6b1d7d7c3c9c3b05c29",
     "docs/product/TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md": "eeb6a1394c46fd67859dc5c8066d9adc125802efa24c29add93b5d8528404314",
-    "docs/product/UI_D11_D15_2026-11-13.md": "adb259a05d87a3f93f48d0dc60adfdc59581b71c37f984943ca89f7428e8ae4f",
+    "docs/product/UI_D11_D15_2026-11-13.md": "0d6954f062a0dcc2c6b42a95ca4d3615bee54173f5bce8a862120e15a57851b1",
     "docs/product/UI_LOCALIZATION.md": "7a8bc3a69e4e3728e18e0bf62b0613f792079b0a5f3d7b03742dfd5f4596b512",
     "docs/product/UI_RENDERING_2026-10-31.md": "f006b261d10a28594dc3b31d05424ac144004ca4edca18646ca00b5c0f8a19f6",
     "docs/product/UI_SESSION_PROGRESS_2026-10-31.md": "6f8fd39bdfc77df266095c1e46170c1a679e3267d200a0fc3f6995b196dd0de4",
@@ -498,7 +498,7 @@
     "tests/desktop_compact_ui_acceptance.py": "5b3059f7358b43e9ea678b2f72ad16d1995fb79174029b4c397fd4677fe19c54",
     "tests/desktop_funding_inference_acceptance.py": "ebc0c752e57c8dc0c88024eaa171064eea6701e5b22671e437fdf3c8428295dc",
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
-    "tests/desktop_home_live_acceptance.py": "93253d246dc76443af9a8f853ba0b4bb8de0a97ac9991b11f464e2cdd07b4e5f",
+    "tests/desktop_home_live_acceptance.py": "ecb61d6a1bc846bee0dd53b70c8852976af8aa627948d91574c204480f394e73",
     "tests/desktop_home_markets_home_acceptance.py": "6f14c47fbc5faf01d3a80f81d9e210e7cc75b9e19f74a0771ff2fbcac89c7eef",
     "tests/desktop_home_markets_markets_acceptance.py": "4ed1c9ec141bef2b386b3fb3b915e8a2b77be432b8293c11af515a8a1463a2d9",
     "tests/desktop_home_markets_shell_acceptance.py": "3bfa660fd37106aea2a0fc9cb70cc69654d2ab123328cb2cf779e758a979be72",
@@ -511,7 +511,7 @@
     "tests/desktop_macro_acceptance.py": "e221eb4a7b4d5db5d941f5d7d33902677b20f7611dbbcf940ef02fa41f2b2fee",
     "tests/desktop_macro_language_acceptance.py": "714ec7acf5c4733e83dbc7910c9bb4cfceb107c5e70c76fe2594738c67f2a670",
     "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
-    "tests/desktop_market_chart_acceptance.py": "d5bb0796ca1c8001a301b1f8e77f58da388093b82c649a7d3797f2c0e85ecceb",
+    "tests/desktop_market_chart_acceptance.py": "f6cc71f30269e34e3fb137134e49268e9a30d7d46a623b1c020c2516b8e2bfef",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_market_layout_acceptance.py": "e0d769e431161c5cd51ffabd163915f4241290620a9a080fd6d228b292757f9c",
     "tests/desktop_market_tabs_acceptance.py": "2f1e8c1cbfbfe18e054099c1fc1fc3c0e94158141d2395d57421c829f73629ba",
@@ -531,7 +531,7 @@
     "tests/desktop_responsive_tools_acceptance.py": "3fa58edd10fc71b8d739a2b573331448a0216dcd42a7c56ee99c1d796576e20e",
     "tests/desktop_sabr_diagnostics_acceptance.py": "08498faacb4e6a1d028ac56c7f8969858c1413c565b476fe258bc566ea3c665e",
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
-    "tests/desktop_stock_detail_acceptance.py": "0ac8b777c00496803d30a51757b125804e8e2ce8d7d3c178c8a6841de98ce5f2",
+    "tests/desktop_stock_detail_acceptance.py": "c4ad0edcc8228ca322701414bea909cf421f708caa99b13e7f271edcb6b4bbbc",
     "tests/desktop_strategy_acceptance.py": "6da05d532c1b74b807ba32ecc9e5cfbce7df042ba32f8d2f9e4a0433b49d6f40",
     "tests/desktop_strategy_exposure_acceptance.py": "30c7e9f5c9132d77e546827f15232f769c27f19a60c6b21c3664772207c10ce4",
     "tests/desktop_swaption_conversion_acceptance.py": "113e1af795d0a9d592827330a2fdf115487dc4bb0b496d4ee3f3ba0d3b9185af",
@@ -608,7 +608,7 @@
     "tests/market_chart_presentation_acceptance.py": "6fe863f83008534a669d4c14baa2f4e06d6ca1eb31e4bf30d21d5e89aa78dbeb",
     "tests/market_core_acceptance.py": "da7c6f4df956acccb02e469ff6e632a7dad264f43f1f68421b76ef8e7a5da89d",
     "tests/market_directory_acceptance.py": "9660a2d9042bb69c17d20d59fcc0dd5a844885fa9919affdf3d2f0b62f6f590e",
-    "tests/market_progressive_acceptance.py": "b571b49ad8c795837c8f8dea07a87b47cb7ed55b52b0e0ec3b63375d1b825280",
+    "tests/market_progressive_acceptance.py": "4e1ee0e143fb42afa640539c514c8f6235a8febf67ea99185b305da720007615",
     "tests/market_rankings_acceptance.py": "65299e83089e188525dbe4b6eebe68a977b611693200d2e4fad886b72ccc7992",
     "tests/market_received_bars_acceptance.py": "d813ac382849703a0d06cdf23fb2ace46d2319187956150dc86b750b79890f92",
     "tests/market_routing_acceptance.py": "76cefd5084a08c8aec8d108323f2147b39b05ca20febc81b0c687d9a99614301",
@@ -737,163 +737,163 @@
   "reviews": {
     "1": {
       "document_sha256": "bfb0f2a777e39eb935057f6b54fb72bb1ee242dc49d6168946ee63156f294299",
-      "source_digest": "1312300bb9c5e4d94927eebb90c30e4cca6c0de950d4a9cd1fdce2b45ad8e4cd",
+      "source_digest": "26da0b988cb1b5786a14b0de35a1ed12912815a905debd50f1c9c2aefa06c67d",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.293673+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.825106+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "2": {
       "document_sha256": "927fd2e6fa3f911b2318caeb2c6b76e7a22a5acf511a7a5bf089bf8cfaa5eb5e",
-      "source_digest": "1312300bb9c5e4d94927eebb90c30e4cca6c0de950d4a9cd1fdce2b45ad8e4cd",
+      "source_digest": "26da0b988cb1b5786a14b0de35a1ed12912815a905debd50f1c9c2aefa06c67d",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.295767+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.827296+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "3": {
       "document_sha256": "b08dcb02f98a4b65afbcf42b626bc5135615ef365222e54904f286e059b87cd2",
-      "source_digest": "193346072c50a110459e72b4d856391d02bba4b8995e0e1d7897fe0c991c2900",
+      "source_digest": "49de372f285b934d661712023ab2bdf9d862a39699ef1d07477e91bb07406654",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.297951+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.829561+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "4": {
       "document_sha256": "cd74c1dcd526ba9c91277ef8ddb75cc901c103234de2911c369752d4cd7f110e",
-      "source_digest": "86cd930d5b72edbc05c0e224827cb299590697f755bbfcff1866e1ee4b1f0190",
+      "source_digest": "f1f72c6e963adaaae1bb25435898d008fe2f4a260d68f6c69dbc3a42a629ff33",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.299515+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.830978+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "5": {
       "document_sha256": "2b1d8abea35e59a3aaadde163aba0e4dd322ab3765912e3587203e47dc205b72",
-      "source_digest": "d7afcca7967eac52c3c55ea76b04405d5181cb236c9fe268568e57ff5a777b5c",
+      "source_digest": "ab1dad9950f4a5b932a8f80a8f14b5b029056a87e712f472064cf733bc66e453",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.300978+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.832650+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "6": {
       "document_sha256": "b523d4ac0040a8c52355ee46e43d7a2dac6bdfc42f245d6801f02b6619ae20e0",
-      "source_digest": "3f433c2fbcc7f3ce3571722e2f175ab8baf553bcea46fa94ff3b07504275ce70",
+      "source_digest": "e5c8e9fbccf6aed5cfc9da770dfc6bf88405e4eecdff77107998eb3640012b0d",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.302847+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.833963+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "7": {
       "document_sha256": "4bf4ebfcdadc1ab1b190229f5f356c0f6d8bf42cce76bde5e91847681c404d2b",
-      "source_digest": "1312300bb9c5e4d94927eebb90c30e4cca6c0de950d4a9cd1fdce2b45ad8e4cd",
+      "source_digest": "26da0b988cb1b5786a14b0de35a1ed12912815a905debd50f1c9c2aefa06c67d",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.304617+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.835522+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "8": {
       "document_sha256": "f869f1529ea234c34a2c0c87ed2cb2ee0ab215fa1ecd9f0c2c011a6b4813b159",
-      "source_digest": "3f433c2fbcc7f3ce3571722e2f175ab8baf553bcea46fa94ff3b07504275ce70",
+      "source_digest": "e5c8e9fbccf6aed5cfc9da770dfc6bf88405e4eecdff77107998eb3640012b0d",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.306409+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.837135+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "9": {
       "document_sha256": "a685944f95d0ce2dadeaf582fc791a66483fcc89d2990a7e5b58d46b54e7bba1",
-      "source_digest": "dc130c6ec235e0fe1bf090fc4c665fdfd595ba5afd35d948909cf96d9dee1cc6",
+      "source_digest": "8d78371faa07f1836bf08a81ab39a9ce3dfeccb6595d5c6a4665ee8ce3d2bb11",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.307762+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.839039+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "10": {
       "document_sha256": "d4d119a650bc8a1810fe0fb3b7559368d93949c927385f980b23cfc55e73f07b",
-      "source_digest": "3a944498793c09823547836baf648a78c5ec1080583b35f27ba752c13e0726ae",
+      "source_digest": "dc9bb93b3f37fe0a73f68702593870fd2e5ed48eb6d9e7c39b898d4e45ac87dd",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.308968+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.840934+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "11": {
       "document_sha256": "70071bd9e2db9ed7b6cc43b225d9250a562d031d16e29c8e4b8cbeeddbfca5a7",
-      "source_digest": "0f5bcd3ba44764fb5d56da518e9598fed00466e9fd068c911227277ec7937ec4",
+      "source_digest": "a2d588d90d9d76ffd11da9493489b085236307781439b897eddcff09521ff779",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.310898+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.842445+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "12": {
       "document_sha256": "d55f42db2c4e7090622fecfe2593ca03034a49a01b3cdd997ba46731af0f1b93",
-      "source_digest": "8e745910400fee91d04eaaf6e19e3eb683a7b900478d3b4d90aec91f09d925c0",
+      "source_digest": "caa124c0f95fbaceed7e1cca8d955dc96b616d142ec2a120e681f150a469f0df",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.312544+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.844051+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "13": {
       "document_sha256": "d69c960aa52d70181e7c8899ec9520dc218b416ac70b4209c5c761ac9d1eeb96",
-      "source_digest": "dc130c6ec235e0fe1bf090fc4c665fdfd595ba5afd35d948909cf96d9dee1cc6",
+      "source_digest": "8d78371faa07f1836bf08a81ab39a9ce3dfeccb6595d5c6a4665ee8ce3d2bb11",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.314249+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.845636+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "14": {
       "document_sha256": "5cdae46d33eea6d9b2ebbe7373775a7be2b6f30012a8b2a6126ea614fa08e62c",
-      "source_digest": "dc130c6ec235e0fe1bf090fc4c665fdfd595ba5afd35d948909cf96d9dee1cc6",
+      "source_digest": "8d78371faa07f1836bf08a81ab39a9ce3dfeccb6595d5c6a4665ee8ce3d2bb11",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.315677+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.847085+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "15": {
       "document_sha256": "f945de2c1499a7d563e3bcc81db95003bf44bbc6bf90e30c7de5bf993bb67ad1",
-      "source_digest": "dc130c6ec235e0fe1bf090fc4c665fdfd595ba5afd35d948909cf96d9dee1cc6",
+      "source_digest": "8d78371faa07f1836bf08a81ab39a9ce3dfeccb6595d5c6a4665ee8ce3d2bb11",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.317253+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.848559+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "16": {
       "document_sha256": "958fd2485a7aa29ec1954cef03182734225c97bb8ae82d95e7f295e957773ff2",
-      "source_digest": "9ba3475e56d53275db847855e5cc16ff8daec681c328af85207327ec1cb60439",
+      "source_digest": "0f39b6838c0c0b06eb332464649f2f31c1481cc359d814363d6d3d99b1c1bace",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.318749+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.850066+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "17": {
       "document_sha256": "6236eef665087d5bc2b7cb0f337c9688945968bb037019b98db7b144ddfd773d",
-      "source_digest": "3f433c2fbcc7f3ce3571722e2f175ab8baf553bcea46fa94ff3b07504275ce70",
+      "source_digest": "e5c8e9fbccf6aed5cfc9da770dfc6bf88405e4eecdff77107998eb3640012b0d",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.320572+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.851518+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "18": {
       "document_sha256": "75e98a89e4600b1acde57226ea739577b1419ac489ee1401bffe78e895206436",
-      "source_digest": "1312300bb9c5e4d94927eebb90c30e4cca6c0de950d4a9cd1fdce2b45ad8e4cd",
+      "source_digest": "26da0b988cb1b5786a14b0de35a1ed12912815a905debd50f1c9c2aefa06c67d",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.321908+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.853125+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "19": {
       "document_sha256": "442034dff0de1c425c642b1311b534a43f28117737aef090dfed545e9c483ed6",
-      "source_digest": "6718c9a272d8e64ee875e44911c802787eb068498d79bc3e90ecd28291606c84",
+      "source_digest": "3221c20ac4c6a9e29a9206287f97ab295396fb8df158b65ad841311f0f250a49",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.323819+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.854481+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     },
     "20": {
       "document_sha256": "0bd62dde94f8f1c3a8ecf90c630d198a9335f99a71b1da50ac756a932904e3ff",
-      "source_digest": "1312300bb9c5e4d94927eebb90c30e4cca6c0de950d4a9cd1fdce2b45ad8e4cd",
+      "source_digest": "26da0b988cb1b5786a14b0de35a1ed12912815a905debd50f1c9c2aefa06c67d",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed owned navigation timer cancellation on window destruction; chart and policy contracts unchanged.",
-      "reviewed_at": "2026-11-13T06:26:49.325773+00:00",
-      "source_commit": "b658cde3b3280a2358b01f5e0f8d130f108b630a"
+      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
+      "reviewed_at": "2026-11-13T07:06:57.855751+00:00",
+      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
     }
   }
 }

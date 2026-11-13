@@ -1,6 +1,7 @@
 name: Runtime packaging smoke
 env:
   PYTHONUTF8: '1'
+  PYTHONFAULTHANDLER: '1'
 on:
   push:
     branches: ['gpt/product-workflow-20261029', 'gpt/ui-apply-main-20261029']
@@ -100,7 +101,7 @@ jobs:
       - name: Verify live score and frozen report integration before long UI suites
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m unittest tests.desktop_home_live_acceptance tests.ui_followup_acceptance -f -v
+        run: python -m unittest tests.desktop_home_live_acceptance tests.ui_followup_acceptance tests.market_progressive_acceptance tests.desktop_stock_detail_acceptance.StockDetailTests.test_the_right_column_never_moves_sideways_with_seven_digit_prices -f -v
       - name: Verify A3 native result layout and local reading help
         env:
           QT_QPA_PLATFORM: offscreen
@@ -140,7 +141,11 @@ jobs:
       - name: Verify shared KIS charts and realtime lifecycle with offline fixtures
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m unittest tests.home_watchlist_acceptance tests.qscore_acceptance tests.watchlist_live_acceptance tests.desktop_watchlist_acceptance tests.desktop_qscore_acceptance tests.desktop_home_live_acceptance tests.desktop_market_layout_acceptance tests.market_core_acceptance tests.market_routing_acceptance tests.market_symbols_acceptance tests.market_board_core_acceptance tests.market_directory_acceptance tests.stock_profile_acceptance tests.desktop_markets_watchlist_acceptance tests.desktop_market_tabs_acceptance tests.market_received_bars_acceptance tests.market_chart_presentation_acceptance tests.kis_workspace_acceptance tests.market_progressive_acceptance tests.kis_stream_acceptance tests.desktop_market_chart_acceptance tests.web_market_chart_acceptance tests.ui_followup_acceptance tests.stock_detail_core_acceptance tests.desktop_stock_detail_acceptance tests.indicator_engine_acceptance -v
+        shell: bash
+        run: |
+          python -m unittest tests.home_watchlist_acceptance tests.qscore_acceptance tests.watchlist_live_acceptance tests.desktop_watchlist_acceptance tests.desktop_qscore_acceptance tests.desktop_home_live_acceptance tests.desktop_market_layout_acceptance tests.market_core_acceptance tests.market_routing_acceptance tests.market_symbols_acceptance tests.market_board_core_acceptance tests.market_directory_acceptance tests.stock_profile_acceptance tests.desktop_markets_watchlist_acceptance tests.desktop_market_tabs_acceptance tests.market_received_bars_acceptance tests.market_chart_presentation_acceptance tests.kis_workspace_acceptance tests.market_progressive_acceptance tests.kis_stream_acceptance tests.desktop_market_chart_acceptance tests.web_market_chart_acceptance tests.ui_followup_acceptance tests.stock_detail_core_acceptance -f -v
+          python -m unittest tests.desktop_stock_detail_acceptance -f -v
+          python -m unittest tests.indicator_engine_acceptance -f -v
       - name: Verify recorded owner decision and readiness display
         env:
           QT_QPA_PLATFORM: offscreen

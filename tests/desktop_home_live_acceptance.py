@@ -108,8 +108,8 @@ class HomeLiveIntegrationTests(unittest.TestCase):
                                     w.q_scores.jobs.busy or w.chart_scores.jobs.busy))
         with patch.object(QMessageBox, "question", return_value=QMessageBox.StandardButton.Yes):
             w.close()
-        w.deleteLater()
-        self.app.processEvents()
+        from tests.qt_fixture_cleanup import delete_owned_widget
+        delete_owned_widget(w)
         self.network.assert_not_called()
 
     def start_home(self):

@@ -144,10 +144,17 @@ class StockDetailTests(unittest.TestCase):
         self.settle()
 
     def close(self):
+        from quantgen_desktop.jobs import Jobs
+        from tests.qt_fixture_cleanup import delete_owned_widget
         self.pane.stop()
-        self.window.hide()
-        self.window.deleteLater()
+        self.window.markets_view.stop()
+        self.window.home_view.stop()
+        for jobs in self.window.findChildren(Jobs):
+            self.assertTrue(jobs.pool.waitForDone(6000), "Fixture worker did not stop")
         APP.processEvents()
+        # processEvents alone never delivers DeferredDelete outside app.exec().
+        # Every detail fixture used to retain a complete hidden research window.
+        delete_owned_widget(self.window)
 
     def settle(self, rounds=6):
         for _ in range(rounds):

@@ -129,8 +129,8 @@ class NativeChartLifecycleTests(unittest.TestCase):
             self.service.release.set()
         self.wait_idle()
         self.pane.close()
-        self.pane.deleteLater()
-        self.app.processEvents()
+        from tests.qt_fixture_cleanup import delete_owned_widget
+        delete_owned_widget(self.pane)
 
     def wait_idle(self):
         for _ in range(400):

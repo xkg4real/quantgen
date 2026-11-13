@@ -58,7 +58,9 @@ class ProgressiveHistoryTests(unittest.TestCase):
             def load_progressive(self, request, callback):
                 full = fixture(request)
                 callback(replace(full, candles=full.candles[-20:], quote=None))
-                if not release.wait(5): raise TimeoutError("Fixture release was not signalled")
+                # This proves ordering, not CI machine speed. Hold the final
+                # response until the GUI has inspected the partial one.
+                if not release.wait(30): raise TimeoutError("Fixture release was not signalled")
                 return full
         streams = []
         def stream():
@@ -68,7 +70,7 @@ class ProgressiveHistoryTests(unittest.TestCase):
             pane.resize(900, 700); pane.show()
             try:
                 pane.refresh(manual=True)
-                end = time.monotonic() + 4
+                end = time.monotonic() + 20
                 while pane.snapshot is None and time.monotonic() < end: QTest.qWait(10)
                 self.assertIsNotNone(pane.snapshot)
                 self.assertTrue(pane.jobs.busy)
@@ -79,7 +81,7 @@ class ProgressiveHistoryTests(unittest.TestCase):
                 pane._history_preview(pane._epoch - 1, pane.request(), fixture(pane.request()))
                 self.assertIs(pane.snapshot, before)
                 release.set()
-                end = time.monotonic() + 4
+                end = time.monotonic() + 20
                 while pane.jobs.busy and time.monotonic() < end: QTest.qWait(10)
                 self.assertFalse(pane.jobs.busy)
                 self.assertEqual(len(pane.snapshot.candles), 120)
