@@ -1,3 +1,15 @@
+# PR115 최종 검증·main 문서 통합 준비 — 2026-11-13T12:53Z (이 절 우선)
+
+- status: taken · owner: GPT UI. Runtime43419701530의5d98193 앱 전체 검증 대기, 주요 Windows3버전 초기 검사는 PASS. Compliance43419701618 PASS.
+- 그 사이 origin/main이 eba94f0(PR114·116 문서 변경만)로 전진. PR115는 source-review.json 충돌로 API 즉시 병합 불가.
+- /workspace/quantgen-main-check는 gpt/ui-market-integration-20261113: eba94f0에서5d98193을 --no-commit merge한 상태. 유일 충돌 source-review를 최신 main 기준으로 재검토·생성하고 git add 완료. 아직 merge commit 없음.
+- 통합본에서 `git diff --exit-code 5d98193 -- quantgen_desktop core tests assets .github/workflows/runtime-smoke.yml` 성공. 원격에서 검증 중인 앱/테스트/설정과 동일. 바뀐 것은 main의 기존 문서3개와 source-review뿐. 로컬 compliance20 consistency PASS, publication BLOCKED.
+- 다음: 5d98193 Runtime6jobs PASS → 준비한 문서 충돌 해소 merge commit → 기존 PR115 소스 브랜치로 정상 fast-forward push(HEAD:gpt/ui-market-navigation-guide-20261113) → 최신 Compliance PASS와 제품 코드 동일성 확인 후 PR115 expected_head_sha로 merge. 문서만 바뀐 통합HEAD는 5d98193에서 검증한 동일 앱 코드라는 증거를 명시한다. main에 직접 push하지 않는다.
+- 이후 완료/웹큐 문서, shared UI returned·LEDGER4개, whydi CMD. 기존 CURRENT.md/웹 담당 소유권 유지.
+- next_ids: ⑬-2/market-nav-v2, ⑬-2/guide-catalog-v2, ⑬-2/taskbar-brand-v2, ⑬-2/market-first-paint.
+
+---
+
 # PR115 Windows 검사 fixture 정리 — 2026-11-13 (이 절 우선)
 
 - status: taken · owner: GPT UI. work_branch: gpt/ui-market-navigation-guide-20261113.
