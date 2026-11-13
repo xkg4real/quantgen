@@ -6,6 +6,18 @@
 
 ---
 
+# 시장 메뉴 클릭 복구·단계 축소 — 2026-11-14T00:19:24+09:00
+
+- status: taken · owner: GPT UI · execution_id: ui-market-menu-click-20261114. 사용자가 이 세션에 직접 새 수정 요청. 다른 담당 인수/예약 없음.
+- 사용자: 하위 메뉴는 떠도 클릭 이동이 안 됨. 왼쪽은 주식→국내/미국까지만, 급상승/급하락 등은 진입한 시장 내부에만. 추가로 크립토에는 하위 UI 불필요.
+- base main73ed4bf · work_branch gpt/market-menu-click-20261114 · /workspace/quantgen-risk-reward-20261113. ID ⑬-2/market-menu-click/1, ⑬-2/market-menu-depth/1 신규 작업. 기존 완료 메뉴를 새 요청으로 수정한다.
+- QWindow를 거치는 실제 마우스 이벤트로 미이동 재현 검사 작성 중. 종전 버튼.click()는 OS 입력 경로를 생략했다. 원인 확정 전.
+- 우선 범위: 클릭 경로 복구, 주식/ETF 지역까지만·크립토 바로 이동, 실제 클릭/키보드/작은 창 검사, PR/main 병합·웹 큐·인계·skymi 및 whydi 실행 안내.
+- 직전 PR117 Runtime43432023421은 이제6/6 PASS 확인(Windows3.11/3.12/3.14, Linux3.12, syntax3.10/3.11). 아래 과거 진행 중 기록은 당시 상태다.
+- 미커밋: tests/desktop_home_markets_shell_acceptance.py 재현 검사. 제품 수정 전. CURRENT.md/AWS 담당 문서 보존.
+
+---
+
 # UI 작업 main 반영 · 메인/Claude 인계 — 2026-11-13T22:28:36+09:00
 
 - status: returned · owner: GPT UI · reason: requested_changes_merged.
