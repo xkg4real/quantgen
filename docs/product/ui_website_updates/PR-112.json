@@ -1,0 +1,34 @@
+{
+  "id": "PR-112",
+  "source_pr": "https://github.com/xkg4real/quantgen/pull/112",
+  "source_branch": "gpt/ui-d11-d15-20261113",
+  "source_commit": "d46ca5e",
+  "summary": "Claude UI-D11-D15 follow-up: cascading market menu, chart cursor, domestic/US Q-SCORE card, local frozen chart reports, bounded daily score sorting. Approved native Pretendard/N3 retained.",
+  "changed_files": [
+    "quantgen_desktop/rail_menu.py",
+    "quantgen_desktop/stock_detail.py",
+    "quantgen_desktop/stock_qscore.py",
+    "quantgen_desktop/stock_report.py",
+    "quantgen_desktop/market_rankings.py",
+    "core/research/qscore.py",
+    "core/market/qscore_rankings.py",
+    "core/market/stock_report.py"
+  ],
+  "verification": {
+    "local": "64 menu/ranking tests; 33 Q-SCORE/KIS/export tests; 58 integration/compliance tests; 4 repaired screen assertions passed. Eight ko/en light/dark menu captures at 1440x900 and 1000x700. PDF Korean fonts embedded and numeric extraction checked.",
+    "remote": "Runtime Windows/Linux CI in progress; not merged yet",
+    "limitations": "Offline synthetic market data only; no user account/API/Windows-DPI or website deployment claim"
+  },
+  "website_impact": {
+    "classification": "native-only implementation; shared presentation/copy review",
+    "action": "Preserve the approved site palette. If web supports stock detail: mirror Q-SCORE v0.2 domestic/US scope and provenance, no-score reasons, report snapshot semantics and bounded daily ranking disclaimer. No Qt code copying. Website HTML unchanged."
+  },
+  "delivery": {
+    "status": "queued",
+    "destination": "웹사이트 작업공간(AWS)",
+    "reason": "No supported cross-chat send tool available. Shared handoff branch also records this queue."
+  },
+  "website_application": "unverified",
+  "deployment": "unverified",
+  "merge_status": "open"
+}

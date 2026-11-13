@@ -108,6 +108,20 @@ class ExportTests(unittest.TestCase):
         self.case.view.side.card.price.setText('CHANGED')
         self.assertEqual(report_json(self.report), original)
 
+    def test_format_choice_changes_suffix_but_does_not_overwrite_unconfirmed_file(self):
+        from quantgen_desktop.stock_report import export_dialog, text
+        with tempfile.TemporaryDirectory() as folder:
+            target = Path(folder) / 'report.json'
+            target.write_text('keep')
+            with patch('quantgen_desktop.stock_report.capture', return_value=(self.report, self.image)), \
+                    patch('quantgen_desktop.stock_report.QFileDialog.getSaveFileName',
+                          return_value=(str(Path(folder) / 'report.pdf'), text('ko', 'filter_json'))), \
+                    patch('quantgen_desktop.stock_report.QMessageBox.question', return_value=0), \
+                    patch('quantgen_desktop.stock_report.write_report') as writer:
+                self.assertFalse(export_dialog(self.case.view))
+                writer.assert_not_called()
+                self.assertEqual(target.read_text(), 'keep')
+
     def test_qscore_criterion_displays_sorted_scores_and_retains_unknown_rows(self):
         board = self.case.window.markets_view.rankings
         board.clock = lambda: NOW

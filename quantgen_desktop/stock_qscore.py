@@ -22,6 +22,7 @@ from __future__ import annotations
 from datetime import date, datetime, timedelta, timezone
 import math
 import time
+from zoneinfo import ZoneInfo
 
 from PyQt6.QtCore import QObject, QRectF, QSize, QTimer, Qt, pyqtSignal, pyqtSlot
 from PyQt6.QtGui import QColor, QPainter
@@ -200,7 +201,9 @@ def _moment(result):
     try:
         if len(value) == 10:
             day = date.fromisoformat(value)
-            return datetime(day.year, day.month, day.day, 16, 0, tzinfo=__import__("zoneinfo").ZoneInfo("America/New_York")) if result.get("asset") == "overseas_stock" else datetime(day.year, day.month, day.day, 15, 30, tzinfo=_KST)   # a day's prices: its close
+            if result.get("asset") == "overseas_stock":
+                return datetime(day.year, day.month, day.day, 16, 0, tzinfo=ZoneInfo("America/New_York"))
+            return datetime(day.year, day.month, day.day, 15, 30, tzinfo=_KST)
         stamp = datetime.fromisoformat(value.replace("Z", "+00:00"))
         if stamp.tzinfo is not None:
             return stamp

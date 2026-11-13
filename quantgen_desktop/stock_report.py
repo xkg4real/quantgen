@@ -190,7 +190,7 @@ def export_dialog(view):
         return False
     _, extension, include_all = next((c for c in choices if c[0] == selected), choices[0])
     path = Path(path)
-    if not path.suffix:
+    if path.suffix.lower() != '.' + extension:
         path = path.with_suffix('.' + extension)
         if path.exists() and QMessageBox.question(view, text(lang, 'export'),
                 ('이미 있는 파일을 덮어쓸까요?' if lang == 'ko' else 'Replace the existing file?')) != QMessageBox.StandardButton.Yes:
