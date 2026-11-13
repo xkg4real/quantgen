@@ -112,7 +112,11 @@ class ChevronButton(QPushButton):
         if self.chevron:
             painter = QPainter(self)
             painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
-            draw_chevron(painter, self.width() - CHEVRON_RIGHT, self.height() / 2, self.chevron_color())
+            x,y=self.width()-CHEVRON_RIGHT,self.height()/2
+            if self.property('inlineMenu'):
+                painter.translate(x,y);painter.rotate(90 if not self.open else -90)
+                draw_chevron(painter,0,0,self.chevron_color())
+            else:draw_chevron(painter,x,y,self.chevron_color())
             painter.end()
 
 

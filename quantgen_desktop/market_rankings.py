@@ -104,7 +104,7 @@ def _utc_now():
 
 # Loading ----------------------------------------------------------------------------------------
 def kis_batch(service, group, members, *, cancelled=None, progress=None, sleep=time.sleep, clock=time.monotonic,
-              per_second=KIS_MAX_PER_SECOND, details=None, now=time.monotonic):
+              per_second=KIS_MAX_PER_SECOND, details=None, now=time.monotonic, partial=None):
     """One allowlisted KIS quote per member, at most `per_second` a second; failures stay per stock.
 
     With `details` (a dict the caller keeps between fetches), a US member also gets KIS's overseas
@@ -130,7 +130,7 @@ def kis_batch(service, group, members, *, cancelled=None, progress=None, sleep=t
             if member.overseas:  # a US stock or ETF
                 params = {"AUTH": "", "EXCD": member.exchange, "SYMB": member.code}
                 record = R.parse_kis_overseas(member, paced(*OVERSEAS_PRICE, params).get("output"))
-                if details is not None and member.code not in R.ADR_CODES:
+                if partial is None and details is not None and member.code not in R.ADR_CODES:
                     record = _with_detail(record, details, lambda: paced(*_overseas_detail(), params), now)
                 records.append(record)
             else:
@@ -140,6 +140,17 @@ def kis_batch(service, group, members, *, cancelled=None, progress=None, sleep=t
             failures.append((member.code, type(exc).__name__))
         if progress is not None:
             progress(index + 1, len(members))
+        if partial is not None and records:
+            partial(R.Batch(group,tuple(records),'kis',_utc_now().isoformat(timespec='seconds'),tuple(failures)))
+    # On an interactive first load, expose prices before slower optional market
+    # cap requests. All requests keep the same allowlist and shared rate limit.
+    if partial is not None and details is not None:
+        for index,record in enumerate(records):
+            if cancelled is not None and cancelled():break
+            member=record.member
+            if member.overseas and member.code not in R.ADR_CODES:
+                params={'AUTH':'','EXCD':member.exchange,'SYMB':member.code}
+                records[index]=_with_detail(record,details,lambda: paced(*_overseas_detail(),params),now)
     return R.Batch(group, tuple(records), "kis" if records else "none", _utc_now().isoformat(timespec="seconds"),
                    tuple(failures))
 
@@ -176,7 +187,7 @@ def _yahoo_candidates(member):
     return tuple((f"{member.code}.{suffix}", market) for suffix, market in (first, second))
 
 
-def daily_batch(group, members, *, fetch=None, cancelled=None, progress=None, workers=DAILY_WORKERS):
+def daily_batch(group, members, *, fetch=None, cancelled=None, progress=None, workers=DAILY_WORKERS, partial=None):
     """Delayed daily bars through the existing Yahoo path (`core.market.routing._yahoo_frame`)."""
     from concurrent.futures import ThreadPoolExecutor, as_completed
     from core.market import routing
@@ -207,6 +218,9 @@ def daily_batch(group, members, *, fetch=None, cancelled=None, progress=None, wo
             done += 1
             if progress is not None:
                 progress(done, len(members))
+            if partial is not None and records:
+                kept,stale=R.drop_stale(records)
+                partial(R.Batch(group,kept,'daily',_utc_now().isoformat(timespec='seconds'),tuple(failures),stale))
             if cancelled is not None and cancelled():
                 break
     finally:
@@ -226,6 +240,8 @@ class ProductionRankingLoader:
 
     Nothing is constructed or fetched until the first call (a window with automatic refresh off never calls).
     """
+
+    supports_partial = True
 
     def __init__(self, *, service_factory=None, fetch=None, caps=None):
         self._factory, self._fetch = service_factory, fetch
@@ -251,8 +267,9 @@ class ProductionRankingLoader:
                 self._caps = MarketCapSource()
             return self._caps
 
-    def __call__(self, group, members, cancelled=None, progress=None):
-        batch = self._quotes(group, members, cancelled, progress)
+    def __call__(self, group, members, cancelled=None, progress=None, partial=None):
+        batch = self._quotes(group, members, cancelled, progress, partial)
+        if partial is not None and batch.records:partial(batch)
         if group != "us" or not batch.records or (cancelled is not None and cancelled()):
             return batch
         try:
@@ -260,18 +277,18 @@ class ProductionRankingLoader:
         except Exception:  # a market-cap failure must not cost the quotes
             return replace(batch, caps="none")
 
-    def _quotes(self, group, members, cancelled, progress):
+    def _quotes(self, group, members, cancelled, progress, partial=None):
         if group == "crypto":  # coins: Yahoo daily only; KIS is never asked (nor constructed) for them
-            return daily_batch(group, members, fetch=self._fetch, cancelled=cancelled, progress=progress)
+            return daily_batch(group, members, fetch=self._fetch, cancelled=cancelled, progress=progress,partial=partial)
         service = self.service()
         if getattr(service, "ready", False):
             batch = kis_batch(service, group, members, cancelled=cancelled, progress=progress,
-                              details=self._details if group == "us" else None)
+                              details=self._details if group == "us" else None,partial=partial)
             if batch.records or (cancelled is not None and cancelled()):
                 return batch
-            daily = daily_batch(group, members, fetch=self._fetch, cancelled=cancelled, progress=progress)
+            daily = daily_batch(group, members, fetch=self._fetch, cancelled=cancelled, progress=progress,partial=partial)
             return replace(daily, fallback=True)
-        return daily_batch(group, members, fetch=self._fetch, cancelled=cancelled, progress=progress)
+        return daily_batch(group, members, fetch=self._fetch, cancelled=cancelled, progress=progress,partial=partial)
 
 
 # Widgets ----------------------------------------------------------------------------------------
@@ -960,6 +977,7 @@ class RankingBoard(QFrame):
     page_changed = pyqtSignal(str)          # set_page() showed another market
     search_submitted = pyqtSignal()         # Enter in the pinned bar's search (the header search's is the view's)
     _progress = pyqtSignal(int, int, int)   # epoch, done, total; emitted on the worker thread, queued here
+    _partial = pyqtSignal(int, object)
 
     def __init__(self, *, loader=None, locale=None, auto_load=True, clock=None, open_fn=None, limit=LIST_LIMIT,
                  summary_loader=None):
@@ -974,6 +992,7 @@ class RankingBoard(QFrame):
         self.screens = {page: S.Screen(page) for page in S.PAGE_KEYS}  # each market keeps its own criteria
         self.others_fn = None        # (text, page) -> [(label, payload)]: stocks outside the curated list
         self.batches = {}            # group -> Batch: one fetch serves every category of its group
+        self._preview = None        # first-load rows only; never a completed/polled ranking
         self.ranked = []
         self._attempted = {}         # group -> when the last fetch failed outright
         self._rounds = {}            # group -> (Batch, when the round that fetched it started, seconds it took)
@@ -993,6 +1012,7 @@ class RankingBoard(QFrame):
         self.jobs.failed.connect(self._failed)
         self.jobs.busy_changed.connect(self._busy)
         self._progress.connect(self._on_progress)
+        self._partial.connect(self._on_partial)
         from .ranking_scores import RankingScores
         self.scores = RankingScores(self)
         self.scores.changed.connect(self.render)
@@ -1332,6 +1352,11 @@ class RankingBoard(QFrame):
             raise ValueError(f"Unknown market page {page!r}")
         changed, group_before = page != self.page, self.group()
         self.page = page
+        if self.group()!=group_before and self.jobs.busy and self._cancel is not None:
+            self._cancel.set()  # do not finish the old market's entire universe first
+            self._epoch+=1
+            self._loading=self._preview=None
+            self._pending=self.auto_load
         if changed:
             self._message = None  # a 'not found' answered the other market's search
         self.summary.set_page(page)
@@ -1566,12 +1591,23 @@ class RankingBoard(QFrame):
         self._job_started = self.clock()   # the next round is timed from here (`due`)
         members = R.members_of(group)
         self._loading = (group, 0, len(members))
+        self._preview=None
         self._pending = False
 
         def progress(done, total):
             self._progress.emit(epoch, done, total)
 
-        started = self.jobs.start(lambda: (epoch, group, loader(group, members, cancel.is_set, progress)))
+        last_preview=[None]
+        def partial(batch):
+            now=time.monotonic()
+            quotes_complete=len(batch.records)+len(batch.failures)+len(batch.stale)>=len(members)
+            if not cancel.is_set() and (last_preview[0] is None or now-last_preview[0]>=0.25 or quotes_complete):
+                last_preview[0]=now
+                self._partial.emit(epoch,batch)
+        def load():
+            options={'partial':partial} if getattr(loader,'supports_partial',False) else {}
+            return epoch,group,loader(group,members,cancel.is_set,progress,**options)
+        started = self.jobs.start(load)
         self.render()
         return started
 
@@ -1581,12 +1617,22 @@ class RankingBoard(QFrame):
             self._loading = (self._loading[0], done, total)
             self._render_status()
 
+    @pyqtSlot(int,object)
+    def _on_partial(self,epoch,batch):
+        if epoch!=self._epoch or self._stopped or self._loading is None:return
+        if not isinstance(batch,R.Batch) or batch.group!=self.group():return
+        kept=self.batches.get(batch.group)
+        if kept is not None and kept.records:return  # keep a complete ranking stable on refresh
+        self._preview=batch
+        self.render()
+
     @pyqtSlot(object)
     def _loaded(self, value):
         epoch, group, batch = value
         if epoch != self._epoch:
             return
         self._loading = None
+        self._preview=None
         if isinstance(batch, R.Batch):
             self.batches[group] = batch
             self._attempted.pop(group, None)
@@ -1601,6 +1647,7 @@ class RankingBoard(QFrame):
         if self._stopped:
             return
         self._loading = None
+        self._preview=None
         self._error = code
         if self._job_group is not None:
             self._attempted[self._job_group] = self.clock()
@@ -1643,6 +1690,7 @@ class RankingBoard(QFrame):
         self._stopped, self._pending = True, False
         self._epoch += 1
         self._loading = None
+        self._preview=None
         if self._cancel is not None:
             self._cancel.set()
 
@@ -2056,12 +2104,14 @@ class RankingBoard(QFrame):
         lang, group, screen = self._lang(), self.group(), self.screen
         self._render_chrome()
         batch = self.batches.get(group)
+        previewing=(batch is None or not batch.records) and self._preview is not None and self._preview.group==group
+        if previewing:batch=self._preview
         # Market cap: a stock whose figure could not be read (US) or was refused (domestic: KIS's hts_avls
         # disagreed with listed shares x price, or could not be checked) is listed last, unranked, as '—'.
         missing = "last" if screen.category in ("cap", "qscore") else "omit"
         records = batch.records if batch is not None else ()
         if group in ("kr", "us"):
-            if self.category == "qscore" and self.auto_load and self.isVisible() and not self._stopped:
+            if self.category == "qscore" and not previewing and self.auto_load and self.isVisible() and not self._stopped:
                 self.scores.ensure(group, records, self.clock())
             from core.market.qscore_rankings import CANDIDATES
             candidates = {r.member.code for r in sorted(records, key=lambda r: (r.trading_value is None, -(r.trading_value or 0), r.member.code))[:CANDIDATES]}
@@ -2074,6 +2124,7 @@ class RankingBoard(QFrame):
                 enriched.append(replace(record, q_score=score, q_result=result))
             records = enriched
         rows = screen.apply(records, limit=self.limit, missing=missing) if batch is not None else []
+        if previewing:rows=[replace(row,rank=0) for row in rows]
         self.ranked = rows
         figure, _unit = R.value_unit(screen.category, group)
         figures = tuple(key for key in FIGURES if key == figure or (
@@ -2112,6 +2163,9 @@ class RankingBoard(QFrame):
             button.setVisible(action is not None)
         self.empty_actions_host.setVisible(bool(actions) and not rows)
         self.footnote.setText(self._footnote(batch) + (("\nQ-SCORE · 실험적 지표 · 투자 권유 아님 · 거래대금 기준 최대 20개 후보 · 수정 일별 기준" if lang == "ko" else "\nQ-SCORE · Experimental indicator · Not investment advice · Up to 20 trading-value candidates · Adjusted daily basis") if self.category == "qscore" else ""))
+        if previewing:
+            self.footnote.setText(('받은 시세부터 보여드려요. 전체 조회가 끝나면 순위를 확정합니다. ' if lang=='ko' else
+                                  'Showing received quotes first. Ranks settle after the full list loads. ')+self.footnote.text())
         self._render_active(rows)
         self._sync_summary()
         self._render_status()
@@ -2325,6 +2379,8 @@ class RankingBoard(QFrame):
         batch = self.batches.get(group)
         state = self.state()
         self.badge.setText(R.text(R.STATES, state, lang))
+        if (batch is None or not batch.records) and self._preview is not None and self._preview.group==group:
+            self.badge.setText('불러오는 중' if lang=='ko' else 'Loading')
         if self.badge.property("state") != state:
             self.badge.setProperty("state", state)
             _repolish(self.badge)

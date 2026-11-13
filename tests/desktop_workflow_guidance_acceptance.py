@@ -56,7 +56,9 @@ class WorkflowGuidanceTests(unittest.TestCase):
         self.assertTrue(w.quant_study.isHidden());self.assertTrue(w.quant_metrics.isHidden())
 
     def test_first_visit_shows_heading_and_return_keeps_reading_position(self):
-        w=self.window;w.navigate('guide');self.settle()
+        w=self.window;w.navigate('tools');self.settle()
+        self.assertEqual(w.stack.currentWidget().verticalScrollBar().value(),0)
+        w.navigate('guide');self.settle()
         scroll=w.stack.currentWidget().verticalScrollBar()
         self.assertEqual(scroll.value(),0)
         self.assertGreater(scroll.maximum(),100)

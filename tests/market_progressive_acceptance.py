@@ -53,11 +53,14 @@ class ProgressiveHistoryTests(unittest.TestCase):
         from tests.qt_fixture_cleanup import delete_owned_widget
         app = QApplication.instance() or QApplication([])
         release = threading.Event()
+        entered, published = threading.Event(), threading.Event()
         class Service:
             ready = True
             def load_progressive(self, request, callback):
+                entered.set()
                 full = fixture(request)
                 callback(replace(full, candles=full.candles[-20:], quote=None))
+                published.set()
                 # This proves ordering, not CI machine speed. Hold the final
                 # response until the GUI has inspected the partial one.
                 if not release.wait(30): raise TimeoutError("Fixture release was not signalled")
@@ -67,12 +70,19 @@ class ProgressiveHistoryTests(unittest.TestCase):
             value = FakeStream(); streams.append(value); return value
         with patch("requests.sessions.Session.request", side_effect=AssertionError("Network forbidden")):
             pane = MarketChartPane(service=Service(), stream_factory=stream)
+            failures = []
+            pane.jobs.failed.connect(failures.append)
             pane.resize(900, 700); pane.show()
             try:
-                pane.refresh(manual=True)
+                self.assertTrue(pane.refresh(manual=True))
                 end = time.monotonic() + 20
                 while pane.snapshot is None and time.monotonic() < end: QTest.qWait(10)
-                self.assertIsNotNone(pane.snapshot)
+                self.assertIsNotNone(pane.snapshot, {
+                    "worker_entered": entered.is_set(), "preview_published": published.is_set(),
+                    "failure_types": failures, "epoch": pane._epoch, "job_epoch": pane._job_epoch,
+                    "request_current": pane._last_request == pane.request(), "mode": pane._mode,
+                    "top_level_widgets": len(app.topLevelWidgets()),
+                })
                 self.assertTrue(pane.jobs.busy)
                 self.assertTrue(pane.chart.isVisible())
                 self.assertEqual(len(pane.snapshot.candles), 20)

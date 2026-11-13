@@ -88,7 +88,7 @@ class WorkspaceGuide(QFrame):
         super().__init__()
         self.setObjectName('workspaceGuide')
         self.setMaximumWidth(1100)
-        column=QVBoxLayout(self);column.setContentsMargins(20,17,20,17);column.setSpacing(10)
+        column=QVBoxLayout(self);column.setContentsMargins(0,8,0,14);column.setSpacing(8)
         self.purpose=LocalLabel({},'workflowTitle');column.addWidget(self.purpose)
         self.scope=LocalLabel({},'caption');column.addWidget(self.scope)
         self.step_host=QWidget();self.steps_grid=QGridLayout(self.step_host)
@@ -98,7 +98,7 @@ class WorkspaceGuide(QFrame):
         for i in range(3):
             host=QWidget();row=QHBoxLayout(host);row.setContentsMargins(0,0,0,0);row.setSpacing(8)
             number=LocalLabel({'ko':str(i+1),'en':str(i+1)},'workflowNumber')
-            number.setAlignment(Qt.AlignmentFlag.AlignCenter);number.setFixedSize(24,24)
+            number.setAlignment(Qt.AlignmentFlag.AlignCenter);number.setFixedSize(20,20)
             title=LocalLabel({},'workflowStep');row.addWidget(number);row.addWidget(title,1)
             self.steps.append((host,title))
         self.set_key(key);self._reflow()

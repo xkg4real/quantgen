@@ -7,8 +7,11 @@ from PyQt6.QtWidgets import (QWidget,QVBoxLayout,QHBoxLayout,QComboBox,QPushButt
 
 from core.i18n import LocaleContext
 from core.education import glossary
-from core.education.indicators import INDICATORS, BY_KEY, historical_case, counterexamples, from_history, selection
-from core.education.chart import chart_svg, cursor_text, reading_text, learning_bundle, plot_bounds
+from core.education.indicators import from_history, study, CATEGORIES, CATEGORY_NAMES
+from core.education import study_guide
+from core.education.catalog import (INDICATORS, BY_KEY, historical_case, counterexamples, selection,
+    chart_svg, cursor_text, reading_text, learning_bundle, plot_bounds, from_snapshot, missing_reason)
+
 
 
 class TechnicalChart(QSvgWidget):
@@ -84,6 +87,10 @@ class IndicatorGuide(QWidget):
         self.keys=();self.external=from_history(history) if history else None
         self.series=None;self.cursor=0;self.meta={};self.case_name='2020'
         self.focus=None
+        self.detail_timer=QTimer(self);self.detail_timer.setSingleShot(True)
+        self.detail_timer.timeout.connect(self.reveal_detail)
+        self.market_series=None;self.category='all'
+        self.setObjectName('studyGuide')
         layout=QVBoxLayout(self);layout.setContentsMargins(0,12,0,0);layout.setSpacing(14)
         # The guide is embedded in a scroll page: long translated labels must
         # wrap within its viewport instead of setting the entire page width.
@@ -92,22 +99,33 @@ class IndicatorGuide(QWidget):
         self.intro=label('');layout.addWidget(self.intro)
         self.steps=label('','caption');layout.addWidget(self.steps)
         box,inner=panel('')
-        from .choice_cards import ChoiceCard, ChoiceGrid
         self.selection_title=label('', 'heading');inner.addWidget(self.selection_title)
+        from .category_picker import CategoryFlow
+        filter_host=QWidget();filter_row=CategoryFlow(filter_host);inner.addWidget(filter_host)
+        self.categories={}
+        for key in ('all',*CATEGORIES):
+            button=QPushButton();button.setCheckable(True);button.setProperty('sd','period')
+            button.clicked.connect(lambda checked=False,k=key:self.filter_category(k))
+            filter_row.addWidget(button);self.categories[key]=button
         self.options={}
         for spec in INDICATORS:
-            button=ChoiceCard();button.swatch=spec.color
+            button=QPushButton();button.setCheckable(True);button.setProperty('sd','text')
+            button.setProperty('studyChoice',True)
+            button.setMaximumWidth(215)
             button.clicked.connect(lambda checked,k=spec.key:self.toggle(k,checked))
             self.options[spec.key]=button
-        self.choices=ChoiceGrid(self.options.values());inner.addWidget(self.choices)
+        self.choices=QWidget();self.choices.setMaximumWidth(1040)
+        self.choice_flow=CategoryFlow(self.choices)
+        for button in self.options.values():self.choice_flow.addWidget(button)
+        inner.addWidget(self.choices)
         selected=QHBoxLayout()
         self.selected_label=label('', 'caption');selected.addWidget(self.selected_label,1)
         self.clear=QPushButton();self.clear.clicked.connect(self.clear_selection);selected.addWidget(self.clear)
         inner.addLayout(selected)
-        from .category_picker import CategoryFlow
         self.chip_host=QWidget();self.chip_row=CategoryFlow(self.chip_host)
         inner.addWidget(self.chip_host);self.chips={}
         self.case=QComboBox()
+        self.case.setObjectName('sdInterval');self.case.setMaximumWidth(420)
         for key in ('auto','2020','2022','2019'):self.case.addItem(key,key)
         self.case.currentIndexChanged.connect(self.render)
         self.case.setVisible(self.external is None);inner.addWidget(self.case)
@@ -170,8 +188,33 @@ class IndicatorGuide(QWidget):
         self.notice=label('','caption');layout.addWidget(self.notice)
         self.render()
 
+    def filter_category(self,key):
+        self.category=key
+        for name,button in self.categories.items():button.setChecked(name==key)
+        for name,button in self.options.items():
+            self.choice_flow.removeWidget(button)
+            shown=key=='all' or study(name).category==key
+            button.setVisible(shown)
+            if shown:self.choice_flow.addWidget(button)
+        self.choice_flow.invalidate();self.choices.updateGeometry()
+
+    def set_market_snapshot(self,snapshot,supply=None):
+        if len(snapshot.candles)<2:return
+        self.market_series=from_snapshot(snapshot,supply)
+        if self.case.findData('market')<0:self.case.addItem('', 'market')
+        self.case.setItemText(self.case.findData('market'),
+            '최근 조회한 시장 차트 · '+self.market_series.symbol if self.ctx.language=='ko' else
+            'Last observed market chart · '+self.market_series.symbol)
+        if self.case.currentData()=='market':self.render()
+
     def set_locale(self,ctx):
         self.ctx=ctx
+        self.render()
+
+    def set_theme(self,colors):
+        from .research_style import apply
+        from .typography import is_dark
+        apply(self,colors,is_dark(colors))
         self.render()
 
     def intro_text(self):
@@ -181,14 +224,17 @@ class IndicatorGuide(QWidget):
 
     def choose_term(self,index):
         self.choose(self.terms.itemData(index))
+        self.detail_timer.start(0)
+
+    def reveal_detail(self):
         from PyQt6.QtWidgets import QScrollArea
         parent=self.parentWidget()
         while parent is not None and not isinstance(parent,QScrollArea):parent=parent.parentWidget()
-        if parent is not None:QTimer.singleShot(0,lambda:parent.ensureWidgetVisible(self.detail,0,20))
+        if parent is not None:parent.ensureWidgetVisible(self.detail,0,20)
 
     def choose(self,key):
         """Show a term's explanation; an indicator is also drawn on the chart."""
-        if key not in glossary.BY_KEY:
+        if key not in glossary.BY_KEY and key not in BY_KEY:
             raise ValueError('Unknown guide term')
         self.focus=key
         if key in BY_KEY:self.keys=selection(set(self.keys)|{key})
@@ -218,7 +264,10 @@ class IndicatorGuide(QWidget):
         from .app import label,panel
         ctx=self.ctx
         old_date=self.series.dates[self.cursor] if self.series else None
-        if self.external:
+        if self.case.currentData()=='market' and self.market_series:
+            self.series=self.market_series;self.case_name='market'
+            self.meta={'provider':self.series.source,'symbol':self.series.symbol,'interval':self.series.interval,'rights':'NOT_VERIFIED'}
+        elif self.external:
             self.series=self.external;self.case_name='research'
             self.meta={'provider':self.series.source,'symbol':self.series.symbol,'rights':'NOT_VERIFIED'}
         else:
@@ -228,18 +277,17 @@ class IndicatorGuide(QWidget):
         self.intro.setText(self.intro_text())
         self.steps.setText('① 지표 선택   →   ② 차트 위 날짜 이동   →   ③ 신호와 한계 비교' if ko else
                            '1 Choose indicators   →   2 Move across dates   →   3 Compare signals and limitations')
-        self.selection_title.setText('어떤 흐름이 궁금한가요? · 복수 선택' if ko else 'What would you like to see? · Choose several')
-        purposes={
-            'sma':('가격의 큰 방향','The broader price trend'),
-            'ema':('최근 가격 변화에 빠르게 반응','Responds faster to recent prices'),
-            'rsi':('최근 상승과 하락의 강도','The strength of recent gains and losses'),
-            'macd':('추세의 힘이 바뀌는 구간','Changes in trend momentum'),
-            'bb':('평소보다 커지거나 줄어든 변동','Expanding and contracting volatility')}
+        self.selection_title.setText('기술지표 27 · 함께 비교하기' if ko else '27 indicators · Choose several')
+        for key,button in self.categories.items():
+            button.setText(('전체' if ko else 'All') if key=='all' else CATEGORY_NAMES[key][0 if ko else 1])
+            button.setChecked(key==self.category)
         for spec in INDICATORS:
             button=self.options[spec.key]
-            button.set_copy(ctx.t(spec.key),purposes[spec.key][0 if ko else 1])
+            info=study(spec.key);copy=study_guide.short_guide(spec.key,ctx.language)
+            button.setText(info.name(ctx.language) if ko else info.label('en'))
+            button.setAccessibleName(info.name(ctx.language));button.setAccessibleDescription(copy.one_liner)
             button.blockSignals(True);button.setChecked(spec.key in self.keys);button.blockSignals(False)
-            button.setToolTip(glossary.summary(spec.key,ctx));button.update()
+            button.setToolTip(info.name(ctx.language)+' · '+copy.one_liner);button.update()
         self.terms_title.setText('다른 투자 용어도 알아보세요' if ko else 'Explore other investing concepts')
         self.terms.setAccessibleName(self.terms_title.text())
         for i in range(self.terms.count()):
@@ -265,34 +313,45 @@ class IndicatorGuide(QWidget):
                 row.addWidget(chip.show_button);row.addWidget(chip.remove_button)
                 self.chips[spec.key]=chip
             if self.chip_row.indexOf(chip)<0:self.chip_row.addWidget(chip)
-            chip.show_button.setText(spec.letter+'  '+spec.key.upper())
-            chip.show_button.setToolTip(ctx.t(spec.key));chip.show_button.setAccessibleName(ctx.t(spec.key))
+            name=study(spec.key).name(ctx.language)
+            from core.market.presentation import study_colors
+            from core.theme import LIGHT
+            colors=getattr(self.window(),'colors',LIGHT)
+            chip.show_button.setStyleSheet('QPushButton { border-left: 3px solid '+next(iter(study_colors(spec.key,colors.bg!=LIGHT.bg).values()))+'; }')
+            chip.show_button.setText(study(spec.key).short if ko else study(spec.key).label('en'))
+            chip.show_button.setToolTip(name);chip.show_button.setAccessibleName(name)
             chip.show_button.setProperty('current',spec.key==self.focus)
-            chip.remove_button.setToolTip(ctx.t('remove_from_chart')+' · '+ctx.t(spec.key))
-            chip.remove_button.setAccessibleName(ctx.t('remove_from_chart')+' · '+ctx.t(spec.key))
+            chip.remove_button.setToolTip(ctx.t('remove_from_chart')+' · '+name)
+            chip.remove_button.setAccessibleName(ctx.t('remove_from_chart')+' · '+name)
         self.chip_host.setVisible(bool(self.keys))
         self._render_detail()
         self.case.setAccessibleName(ctx.t('sample'))
         self.case.blockSignals(True)
         for i,key in enumerate(('auto','2020','2022','2019')):self.case.setItemText(i,ctx.t('auto_sample' if key=='auto' else 'sample_'+key))
+        if self.market_series:
+            self.case.setItemText(self.case.findData('market'),('최근 조회한 시장 차트 · ' if ko else
+                                 'Last observed market chart · ')+self.market_series.symbol)
         self.case.blockSignals(False)
-        self.why.setText(ctx.t('why_sample')+' · '+ctx.t('why_'+self.case_name))
-        self.source.setText((ctx.t('historical_source') if not self.external else self.series.source)
+        self.why.setText(('실제 시장에서 조회한 같은 종목·기간을 비교합니다.' if ko else 'Compare the same observed instrument and period.')
+            if self.case_name=='market' else ctx.t('why_sample')+' · '+ctx.t('why_'+self.case_name))
+        self.source.setText((ctx.t('historical_source') if self.case_name not in ('research','market') else self.series.source)
             +'\n'+self.series.symbol+' · '+ctx.date(self.series.dates[0])+' → '+ctx.date(self.series.dates[-1]))
         self.slider.blockSignals(True);self.slider.setRange(0,len(self.series.closes)-1)
         self.slider.setValue(self.cursor);self.slider.setAccessibleName(ctx.t('cursor'));self.slider.blockSignals(False)
         self.ohlcv_notice.setText(ctx.t('no_ohlcv_close' if self.external else 'no_ohlcv') if not self.series.ohlc else '')
-        self.line_styles.setText(ctx.t('line_styles') if self.keys else '')
+        self.line_styles.setText(('같은 지표는 선택 표시와 차트에서 같은 색으로 표시합니다.' if ko else
+                                 'Selected indicators use matching colours on the chart.') if self.keys else '')
         self.combination.setText(ctx.t('combination')+'\n'+ctx.t('combination_text') if len(self.keys)>1 else ctx.t('search_no_selection') if not self.keys else '')
         self.fail_title.setText(ctx.t('failed_signals'));self.fail_note.setText(ctx.t('failure_note'))
-        self.fail_title.setVisible(bool(self.keys));self.fail_note.setVisible(bool(self.keys))
+        covered=any(key in ('sma','ema','rsi','macd','bb') for key in self.keys)
+        self.fail_title.setVisible(covered);self.fail_note.setVisible(covered)
         self.clear_layout(self.event_layout)
         self.events=counterexamples(self.series,self.keys)
         for event in self.events:
             b=QPushButton(ctx.t('event',date=ctx.date(event['date']),indicator=ctx.t(event['indicator']),change=ctx.percent(event['change'])))
             b.clicked.connect(lambda checked=False,i=event['index']:self.move_cursor(i));self.event_layout.addWidget(b)
         # With nothing selected the reading column already says so once.
-        if not self.events and self.keys:self.event_layout.addWidget(label(ctx.t('no_events'),'muted'))
+        if not self.events and covered:self.event_layout.addWidget(label(ctx.t('no_events'),'muted'))
         self.export.setText(ctx.t('report'));self.notice.setText(ctx.t('education_only'))
         self.move_cursor(self.cursor)
 
@@ -301,15 +360,23 @@ class IndicatorGuide(QWidget):
         self.detail.setVisible(key is not None)
         if key is None:return
         spec=BY_KEY.get(key)
-        self.detail.setStyleSheet('QFrame#panel { border-left: 4px solid '+spec.color+'; }' if spec else '')
+        self.detail.setStyleSheet('')
         self.detail.setProperty('term',key)
-        self.detail_title.setText((spec.letter+'  ' if spec else '')+glossary.name(key,ctx))
-        self.detail_category.setText(glossary.category(key,ctx))
-        self.detail_summary.setText(glossary.summary(key,ctx))
+        if spec:
+            info=study_guide.guide(key,ctx.language,getattr(self.series,'interval','1d'))
+            brief=study_guide.short_guide(key,ctx.language)
+            self.detail_title.setText(info.name);self.detail_category.setText(info.category)
+            self.detail_summary.setText(brief.one_liner)
+            place=('가격 위의 선' if study(key).panel=='price' else '가격 아래의 보조 영역') if ctx.language=='ko' else (
+                'Overlay on the price' if study(key).panel=='price' else 'Study area below the price')
+            parts=tuple(zip((ctx.t(f) for f in ('meaning','look','interpret','limit')),
+                            (info.what,place+' · '+', '.join(l.name(ctx.language) for l in study(key).lines),info.how,info.caution)))
+        else:
+            self.detail_title.setText(glossary.name(key,ctx));self.detail_category.setText(glossary.category(key,ctx))
+            self.detail_summary.setText(glossary.summary(key,ctx));parts=glossary.sections(key,ctx)
         self.detail_chart.setVisible(spec is not None)
         if spec is not None:
             self.detail_chart.setText(ctx.t('remove_from_chart' if key in self.keys else 'add_to_chart'))
-        parts=glossary.sections(key,ctx)
         for i,(heading,body) in enumerate(self.detail_sections):
             shown=i<len(parts)
             heading.setVisible(shown);body.setVisible(shown)

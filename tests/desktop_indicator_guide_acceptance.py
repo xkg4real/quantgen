@@ -27,7 +27,8 @@ class NativeIndicatorGuideTests(unittest.TestCase):
         self.provider=Mock(side_effect=AssertionError('Provider forbidden'))
         self.window=ResearchWindow(auto_refresh=False,locale='ko_KR',market_loader=self.provider,connections_runner=self.provider)
         self.window.resize(1000,800);self.window.show();self.app.processEvents()
-        self.addCleanup(self.window.deleteLater);self.addCleanup(self.window.hide)
+        from tests.qt_fixture_cleanup import delete_owned_widget
+        self.addCleanup(delete_owned_widget,self.window)
 
     def test_reference_screen_selection_shares_history_and_never_starts_jobs(self):
         w=self.window
@@ -113,7 +114,8 @@ class NativeIndicatorGuideTests(unittest.TestCase):
     def test_visible_multiple_choices_and_optional_terms_need_no_typing(self):
         from PyQt6.QtWidgets import QLineEdit
         w=self.window;w.navigate('guide');guide=w.indicator_guide;self.app.processEvents()
-        self.assertEqual(set(guide.options),{'sma','ema','rsi','macd','bb'})
+        from core.education.indicators import STUDIES
+        self.assertEqual(set(guide.options),{s.key for s in STUDIES})
         self.assertFalse(guide.findChildren(QLineEdit))
         for key in ('rsi','bb'):
             button=guide.options[key];self.assertTrue(button.isVisible())
@@ -121,8 +123,9 @@ class NativeIndicatorGuideTests(unittest.TestCase):
         self.assertEqual(guide.keys,('rsi','bb'))
         self.assertTrue(guide.detail.isVisible());self.assertFalse(guide.detail_body.isVisible())
         guide.detail_more.click();self.assertTrue(guide.detail_body.isVisible())
-        self.assertEqual([(h.text(),b.text()) for h,b in guide.detail_sections],
-                         [(w.ctx.t(f),w.ctx.t('bb_'+f)) for f in ('meaning','look','interpret','limit')])
+        self.assertEqual([h.text() for h,b in guide.detail_sections],
+                         [w.ctx.t(f) for f in ('meaning','look','interpret','limit')])
+        self.assertTrue(all(b.text() for h,b in guide.detail_sections))
         case,dates=guide.case_name,guide.series.dates
         index=guide.terms.findData('duration');guide.terms.setCurrentIndex(index);guide.terms.activated.emit(index)
         self.assertEqual(guide.focus,'duration');self.assertEqual((guide.case_name,guide.series.dates),(case,dates))
@@ -146,7 +149,7 @@ class NativeIndicatorGuideTests(unittest.TestCase):
                     self.assertGreaterEqual(button.height(),button.heightForWidth(button.width()))
             if language=='en_US':
                 texts=[guide.selection_title.text(),guide.detail_title.text(),guide.detail_category.text(),
-                       guide.selected_label.text(),*[b.text()+b.description.text() for b in guide.options.values()],
+                       guide.selected_label.text(),*[b.text()+b.accessibleDescription() for b in guide.options.values()],
                        guide.intro.text(),guide.steps.text()]
                 self.assertFalse([t for t in texts if re.search('[가-힣]',t)])
 

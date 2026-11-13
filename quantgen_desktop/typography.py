@@ -213,6 +213,13 @@ def rail_stylesheet(p, dark: bool) -> str:
           QPushButton[subnav='true'][focusRing='true']:checked {{ color: {p.accent}; }}
           QPushButton[marketRow='true'] {{ padding: 0 {row_r}px 0 {row_l}px; min-height: {MARKET_ROW_MIN_HEIGHT}px;
                                          font-size: 14px; }}
+          QWidget#marketDropdown {{ background: transparent; border: 0; }}
+          QPushButton[marketMenuItem='true'] {{ text-align: left; padding: 5px 18px 5px 6px;
+               min-height: 20px; border: 0; border-radius: 6px; background: transparent;
+               color: {p.muted}; font-size: 12px; font-weight: 400; }}
+          QPushButton[marketMenuItem='true']:hover, QPushButton[marketMenuItem='true']:focus {{
+               background: {p.accent_soft}; color: {p.text}; }}
+          QPushButton[marketMenuItem='true']:checked {{ color: {p.accent}; font-weight: 600; }}
         """
 
 
