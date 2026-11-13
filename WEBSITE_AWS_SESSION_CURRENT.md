@@ -1,3 +1,27 @@
+# 2026-11-13 후속 main 커밋 Amplify SUCCEED 확인 — 파이프라인 운영 기록 완료
+
+## 확인된 결과
+사용자가 CloudShell Amplify ListJobs 결과를 제공했습니다.
+- commit `599bd8ccb1474493b64a5c30c8223c3283dba248` → **Status SUCCEED**, Type null.
+- 초기 HEAD job도 SUCCEED였으나 검증 기준은 실제 SHA가 식별된599bd8c입니다.
+- 앞선 기본/root/www 세 HTTPS 주소의 HTML SHA도 모두 `1dbd9ded79bd25a964061ac896a03bd7846f6d264428ca2dfb7b3aaad6bb14de`로 일치했습니다.
+
+따라서 **공개 HTML 반영과 후속 main push의 동일 commit 배포 성공**을 확인했습니다. 에이전트는 수동 StartJob을 호출하지 않았습니다. Type null의 원인은 미확인이므로 WEB_HOOK 분류 자체를 확인했다고 기록하지 않습니다. 공식 API/CLI 문서 및 로컬CLI2.39.2 모델에는 jobType이 있어 단순 필드명/버전 오류로도 단정하지 않았습니다. 추가 사용자 검사 명령은 요구하지 않습니다.
+
+## 최종 기록
+- website 최종 문서 HEAD: [15cfae2af84619f9d5dd7775d6fe962bb0505897](https://github.com/xkg4real/website/commit/15cfae2af84619f9d5dd7775d6fe962bb0505897).
+- 실제 확인된 배포 커밋: **599bd8ccb1474493b64a5c30c8223c3283dba248**.
+- 마지막 기록은 문서4개만 바꾸고 메시지 끝에 공식 `[skip-cd]`를 사용했습니다. 기록→새 배포→다시 기록의 순환을 피하기 위한 문서 전용 처리이며 브랜치 AutoBuild/AWS 설정은 변경하지 않았습니다. 이 문서 HEAD가 새로 배포됐다고 주장하지 않습니다.
+- npm build·정책/번역 해시·JSON·diff 검사 PASS, 사이트 HTML/authoring/빌드 코드 변화0. source/dist HTML SHA는 기존1dbd9ded... 유지.
+- GitHub/Notion 및 `/workspace/outputs/quantgen-20261113/AMPLIFY_DEPLOYMENT_VERIFICATION.md`, `WEBSITE_PIPELINE_VERIFICATION.json`, 작업표·TASK_LOG를 갱신했습니다.
+
+## 현재 운영과 남은 범위
+웹 수정은 website의 변경→검사→main push→해당 커밋 Amplify 결과/공개 URL 확인 흐름으로 진행합니다. 이후 실제 UI/코드 변경은 문서 전용 skip 처리의 대상이 아닙니다. 기존 로고·글꼴·차트·한영 구조는 유지합니다.
+
+Microsoft 문서는 여전히 미설정 검토본이며 실제 구매·계약/데이터 위치·보존 설정·Cloudflare 수신/회신 및 운영 정책 확정은 남아 있습니다. 공개 브라우저 상호작용·로그인/API·메일 기능을 Hosting 결과만으로 완료 표시하지 않습니다. 메인/앱 소유권은 변경하지 않았습니다.
+
+---
+
 ## 소유자 최신 지시 — 자동감시 취소·수동 인계 (2026-11-13T22:03:26+09:00)
 
 **메인·연구·UI·웹사이트의 GPT/Claude 세션 공통:** 상시 관찰·매시간 감시·자동 인수는 취소됐다. 각자 사용량/실행 한도에 가까워지거나 세션을 끝내기 전에 인계문서를 남기고, 사용자가 인계를 읽고 이어받으라고 지시할 때 진행한다. 기존 직접 요청으로 진행 중인 작업의 범위는 유지한다. 이전의 주간 자동감시 일정·stale 상태만으로 재개하지 않는다.
