@@ -1,3 +1,35 @@
+# 2026-11-13 Microsoft 정책 HTML 구현·검사 완료 — 프리뷰 전달 / AWS 조회 인증 대기
+
+## 현재 범위와 상태
+사용자는 **메일 전환·웹 정책 범위 유지**를 선택했고, 추가로 **기존 Cognito 풀·서울 SES 인증/production 상태·개발 API 존재의 읽기 전용 조회만** 요청했습니다. 신규 리소스 생성·설정 변경·메일 발송·앱 기능 구현·운영 배포는 하지 않았습니다. Microsoft 365도 아직 구매·설정 전입니다.
+
+## W3–W6 완료: 원본 확보·정책 수정·로컬 검증·검토용 HTML 전달
+- 입력 ZIP2개를 복원하고 privacy 원본 8,619,355 bytes / SHA256 `de434d3a19fd9648009b978dc841d566dde46addbc49bce60349b33b5b5685c8` 일치를 확인했습니다. 기존 빌드 도구·백업·motion 기준에서 재생성한 Gmail HTML도 바이트 단위 일치했습니다.
+- 최종 **검토용** 단일 HTML: `QUANTGEN-Microsoft-policy-preview-2026-11-13.html`, **8,634,680 bytes**, SHA256 **`1dbd9ded79bd25a964061ac896a03bd7846f6d264428ca2dfb7b3aaad6bb14de`**.
+- 문서1·7·8·16·20의 KO/EN만 개정 `2026-11-13.1`. Microsoft 미설정/현재 운영 상태 아님을 다섯 문서에 표시했습니다. 국내 메일함 저장 범위와 전송·필터링·지원, 문의3년 보유와 복구/hold 예외를 구분했고 실제 계약 주체·국가·연락처는 임의 확정하지 않았습니다.
+- 나머지15종 공개 본문, 모든 CSS·정책 외 JS·로고/글꼴/차트 포함 자산66개, 기존 coming_soon manifest와 경로를 원본 그대로 보존했습니다.
+- 반복 빌드 일치, 독립 한영 의미 검토 PASS. 기존3검사+모바일 표, 20종×한영40본문, 1440/375/320폭, 언어·테마·직접URL/새로고침·하단링크·키보드·없는 번역 안내 PASS.
+- 실제 ArrowRight로 모바일 표 가로 스크롤 및 오른쪽 Microsoft 열을 확인했습니다. 실제 휴대전화 시험이 아닌 Chromium 에뮬레이션입니다.
+- 번역/원문 변경 주입11건 모두 재검토 요구로 거부. 다운로드 부정 시험의 의도된 manifest404 콘솔 메시지3건은 예상 결과로 기록했습니다.
+- 편집 소스 ZIP을 풀고 포함된 motion 기준으로 재빌드한 HTML SHA도 일치했습니다. 코드·단일 파일 준비와 운영 적용은 구분합니다.
+
+## 전달과 기록
+- 폴더: `/workspace/outputs/quantgen-20261113`.
+- `QUANTGEN-Microsoft-preview-package-2026-11-13.zip`: HTML/manifest/기존 releases.json/설정·AWS 안내/검증/작업 기록.
+- `QUANTGEN-Microsoft-editable-source-2026-11-13.zip`: 원본 HTML 입력·편집용 빌드·변경내역·검사·근거. 중복 과거 스크린샷은 작업공간에 보관하고 ZIP에는 선별 화면을 포함합니다.
+- `FINAL_DELIVERY.md`, `WORKFLOW.md`, `TASK_LOG.md`, `VALIDATION_SUMMARY.md`, `AWS_MANUAL_STEPS_KO.md`, `AWS_READONLY_STATUS.md`.
+- 로컬 preview-package를 풀고 `python -m http.server 8124 --bind 127.0.0.1` 실행 후 해당 HTML의 `?lang=ko#/docs/privacy-policy` 또는 `?lang=en#/docs/privacy-policy`로 확인할 수 있습니다.
+- 웹 HTML·소스·개인 인증값은 GitHub 비게시. 공유 진행 기록만 갱신했으며 main CURRENT/LEDGER/AUTO_STATE와 타 세션 checkpoint를 보존했습니다.
+
+## 원문 기준과 미완료
+- 현재 main `7e0567373ba50e6131fb24e1f6012c82d268cecb` 정책20종/지침·registry4개 원격 blob을 검증했고, 이전 `8b401043...` 이후 원문20종 모두 변경됐음을 기록했습니다.
+- 역사적 source_ref/hash를 보존하고 이번 메일 개정의 입력/본문/상대 언어 검토 해시와 audited_main_ref를 별도 기록했습니다. **현재 앱 정책 전체 번역 재정합화 완료가 아닙니다.**
+- R1 AWS: 기존 quantgen 인증은 만료됐고 새 로그인 코드 대기입니다. Cognito·서울SES 인증/production·개발API 실제 상태는 **모두 미확인**입니다. Get/List/Describe 조회 코드를 준비했으나 아직 원격 인벤토리 호출0회이며, HTML에 연결 문자열이 없다는 정적 결과를 자원 부재로 해석하지 않았습니다.
+- W8 운영 게시: Microsoft 구매·한국 데이터 위치·계약·보존 설정·Cloudflare 전달/회신·기존 Gmail 잔존 자료, 국외 이전 상세/법률 검토와 현 운영본 대조·백업 확인이 필요합니다. 현재 검토본을 운영 index.html로 교체하지 않습니다.
+- 공개 URL https://quantgeneration.com/?lang=ko#/docs/privacy-policy 와 영어 대응 경로는 **향후 확인 예정**입니다. 이번 파일의 실제 배포·공개 가입·메일 전환 완료를 뜻하지 않습니다.
+
+---
+
 # 2026-11-13 웹사이트 작업 재개 — 원본 확인 완료 / 정책 수정 중
 
 사용자의 재개 요청과 첨부 `QUANTGEN_WEBSITE_GPT_HANDOFF_2026-11-12.md`를 기준으로 워크플로우를 수립했습니다. 이번 인계의 핵심은 **Gmail 문의 메일 경로를 Microsoft 365로 전환하고 웹 정책 한영 문구를 정렬하는 작업**입니다.
