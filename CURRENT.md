@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout
 next_ids: ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T16:53:17.000Z
+updated_at: 2026-11-14T02:00:26+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: ci
 work_branch: gpt/r3-outage-20261114
-work_commit: ed92dc90b2b32fd6bd2a9254e7a568e45e3e553e
+work_commit: 250b9639291e485f7d07727b250628470cff8ac0
 uncommitted_changes: no
-pr: none
+pr: 122
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -20,6 +20,15 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 8c8f36ab-1913-436b-9b99-f3975d0d95e5
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## R3 오류 기록 파일 게시·두 PR 전체 CI 대기 — 2026-11-14T02:00:26+09:00
+
+- **⑨-3a/recorder/1/outage 구현 검증 중:** [PR122](https://github.com/xkg4real/quantgen/pull/122), `gpt/r3-outage-20261114` / `250b9639291e485f7d07727b250628470cff8ac0`. 선행 lifecycle ed92dc9 기준의 변경10파일을 push하고 내용/blob·branch head를 대조했다. main 대비는 선행PR121을 포함한2커밋·13파일이다. 순서: PR121 성공·병합 후 PR122의 exact head CI와 main 트리를 재확인한다.
+- **신규 outage27 / 합동154 PASS(1.017초)**. 앞선127개를 포함하므로 합산하지 않는다. Python3.10 grammar/compile 신규2파일 통과. 프로세스 내 동시64쓰기·flush/fsync·fsync/짧은쓰기 실패·불완전tail보존·경로/lock 거부·시각 미상·기존 계산 예외 보존 및 실제 callback 연결은 모두 합성 임시 파일만 사용했다. FIFO는POSIX전용, symlink는호스트권한따라skip한다.
+- 공급된6필드만 명시적 unrecorded.jsonl에 쓰며 ENG-16에 따라process lock만 사용한다. 다중프로세스·OS잠금·비밀필터·자동재시도/복구·보유/삭제·실제앱/운영저장소는 제공하지 않는다. module/API·정책01/07/20·FACTS·제품 범위 기록 및752경로 source-review를 준비했다. 전체PR CI는 아직 대기; 공개BLOCKED와 Step10 승인대기 유지.
+- 큰tree요청 첫422 timeout은 ref변경 전에 발생했다. FACTS/source-review를blob으로나눠 저장하고 일치SHA 검증 후 tree→commit→exact expected-head CAS→10파일readback이 성공했다. 실패를 code push 성공으로 혼동하지 않는다.
+- PR121은 별도head ed92dc9 유지. 문서정합성 PASS749/20문서·20양식·47검사, Runtime syntax2건 및4OS bounded 단계성공; 전체4개설치job은 진행 중이다. 완료ID/부모취소선/병합을 아직 추가하지 않는다. 다음은 두PR exact CI 확인·승인된독립코드만 순서대로PR병합·LEDGER/Notion 하위기록. 자동감시/자동인수는 취소 상태이며본직접작업의CI확인만 진행한다.
+
 
 ## R3 후속 오류 기록 파일 단위 시작 — 2026-11-13T16:53:17.000Z
 
