@@ -6,6 +6,66 @@
 
 ---
 
+# UI 최신 요청 main 완료 · 메인/Claude 인계 — 2026-11-14T00:51:45+09:00
+
+- status: returned · owner: GPT UI · execution_id: ui-market-menu-click-20261114 · reason: directly_requested_changes_merged.
+- **이 요약이 아래 과거 checkpoint보다 우선함.** 사용자가 직접 맡긴 이번 앱 수정 범위를 마침. 사용량 unknown. 자동감시/예약/타 담당 인수 없음.
+- main: **e01e1526be28b8a6374583ce3802510e07819598**. 구현 PR119 https://github.com/xkg4real/quantgen/pull/119 → merge51d7ffb758d1393f1713cd4dafd32ed3673738c2. 최종 기록 PR120 https://github.com/xkg4real/quantgen/pull/120 → e01e152.
+- source_branch: gpt/market-menu-click-20261114 · source_commit: b8d5ac889bc89372cac7cc8595c252fa6bc49705 · /workspace/quantgen-risk-reward-20261113 (clean/pushed).
+- work_branch: gpt/ui-interaction-delivery-20261114 · work_commit: cedf910ff33612649422f4cae8c8674b633280f9 · /workspace/quantgen-ui-delivery-20261114 (main으로 ff한 clean worktree). main ancestry 및 b8d5ac8 대비 앱/코어/자산/테스트/Runtime workflow 동일 diff exit0 확인.
+
+## 사용자 요청과 결과
+
+사용자: “하부 ui 스크롤 올리면 뜨긴 하는데 누르면 바로가기가안됨”, “주식 - 국내,미국 이 범주까지만”, “크립토 같은건 아예 그 하부 ui가 필요가 없겠지”. 이어 분석/설계 화면 잘림·미감, 손익비 XY이동/너비/높이 조절·“딜리트 치면 바로 사라지게”·지표가이드 같은 카드 디자인 요청. 최신 정정 원문: “아 아니야 아니야 해설 길이는 오히려 길어 지금, 근데 알맹이가 좀 없는 느낌. 좀만 더 잘해보자 새꺄”. 길이 증가가 아니라 구체적 읽기 근거로 반영했다.
+
+1. 시장 메뉴: QApplication 필터가 QWidget보다 먼저 도착한 QWindow press를 외부 클릭으로 처리해 메뉴를 닫던 원인 복구. 실제 QWindow 클릭으로 전 FAIL/후 PASS. 주식·ETF는 국가까지만, 크립토/선물/회사채는 바로 목적지. 랭킹은 시장 내부. 지수와 모든 목적지는 Markets 안에 유지.
+2. 분석·설계/검증: 상세 차트의 공통 테마/작은 탭/자연 폭 단계/제한된 본문 폭 적용. 영어1000px 모의투자 액션 74px 가로넘침을 감싸는 배치로 해결. 포트폴리오 빈 안내도 짧게 정리. 계산/세션/주문 동작은 기존대로.
+3. 손익비: 영역·진입선 XY 이동, 좌우 가장자리 폭, 손절/목표선 높이, 모서리 동시 조절. 위치는 봉 인덱스로 보존. 클릭 선택 후 Delete 삭제, Esc 선택 해제. 숫자 편집 중 Delete는 글자만 지움. 그림 폭은 손익비에 영향 없음. 가격 입력·방향·비율·조건부 이익/손실·접힌 설명의 카드로 정리.
+4. 화면 검사 중 Qt6.12 NoButtons와 스타일 조합이 숫자 editor를1px로 줄이는 현상을 발견해 정상 geometry+숨긴 subcontrol로 해결; 명암 실제 입력 표시 회귀검사 추가.
+5. 지표27종: 현재 관측값 → 구체 교차확인 → 짧은 한계. RSI는30/70과가격고저점, ADX는DI방향과강도구분, 공매도비중은전체거래량분모 등. 긴 정의와 기존5종 사건 해설은 펼침 안에 유지. 미래수익/승률/매매추천을 만들지 않음. 승인 QG Interface OTF/N3 유지.
+
+## 검증과 정확한 한계
+
+- /tmp/qg-ui-final-targeted.log: 34 PASS(146.894s), 메뉴 실제 클릭·기본 손익비·연구1000/1360/2000px 한영/명암. 이 그룹은 숫자 editor 수정 전.
+- **/tmp/qg-ui-regression-final.log: 최종59 PASS(185.232s)**. 숫자editor 포함 손익비, 지표/가이드/출력, 압축폼/좁은 결과, 모의투자 경계. /tmp/qg-ui-syntax.log 1 PASS. 겹치는 그룹이므로 합산 금지.
+- Runtime43454709190 headb8d5ac8: Windows Python3.11/3.12/3.14 및Linux3.12 모두 새 메뉴 QWindow/손익비/연구화면 검사와 초기 native/시장 통합 단계9 PASS; A3 단계10도 PASS. Syntax3.10/3.11 PASS. **전체 Runtime은 인계 시 계속 실행 중**(Windows단계11, Linux단계13); 전체 완료를 주장하지 않음. 기준 PR117 Runtime43432023421은6/6 완료를 확인했지만 새 head 전체검증을 대신하지 않음.
+- PR119 Compliance43454709248 SUCCESS; PR120 문서전용 Compliance43456489471 SUCCESS. 20문서 consistency PASS/publication BLOCKED 유지.
+- 캡처 /workspace/shared/ui-menu-workspaces-20261114/: risk-light.png, risk-dark.png, risk-small.png, risk-workspace.png, quant-workspace.png, guide-card.png, menu.png. 실제 소유자Windows DPI/보조기술·실계정 응답 속도/체결·웹 프리뷰/배포는 미검증.
+
+## 인계 위치·남은 확인
+
+- 구현/사용/검증: docs/product/UI_INTERACTION_POLISH_2026-11-14.md. 핵심 파일: quantgen_desktop/market_menu.py, shell_rail.py, app.py, research_style.py, workspace_guide.py, paper.py, portfolio.py, risk_reward.py, market_chart.py, indicator_picker.py, stock_detail.py; core/education/reading_cues.py, catalog.py. 이번 새 테스트는 desktop_workspace_readability_acceptance.py 및 메뉴/손익비/해설 기존 acceptance의 회귀 항목.
+- done_ids: ⑬-2/market-menu-click/1, ⑬-2/market-menu-depth/1, ⑬-2/research-workspace-readability/1, ⑬-2/chart-risk-reward/2, ⑬-2/indicator-reading-cues/1. next_ids: none (직접 요청 구현 범위). 과거 모든 웹/연구 과제를 완료했다는 뜻은 아님.
+- 사용자가 다시 이어받으라고 지시하면 첫 확인은 Runtime43454709190 결과. 실패는 해당 실제 로그+b8d5ac8에서 재현. 완료5ID 다시 구현 금지. 새 UI 피드백은 새 ID/PR로. 자동 감시를 켜지 말 것.
+- AWS: docs/product/ui_website_updates/PR-119.json **queued**, 지원되는 채팅 발송 도구가 없어 직접 전송/수신/열람을 확인하지 못함. 네이티브 적용과 웹 적용은 별개. 웹 원본·HTML·배포 설정·AWS 로그인 변경 없음.
+- 메인 CURRENT.md, OWNER 정책, AWS 담당 문서, 기존 원장 행 보존. 메인/Claude는 이 파일과 LEDGER를 통합 인계에 포함할 수 있음. PR attach 도구는 연결/handler 오류여서 앱 첨부 성공으로 주장하지 않음; GitHub URL은 위와 같음.
+
+## 두 PC 실행
+
+기존 앱 종료. 터미널이 PS로 시작하면 먼저 `cmd` 입력 후 Enter. 아래 경로 하나를 먼저 실행:
+
+```bat
+cd /d "C:\Users\skymi\OneDrive\문서\GitHub\quantgen"
+```
+
+whydi PC:
+
+```bat
+cd /d "C:\Users\whydi\OneDrive\Desktop\QUANTGEN"
+```
+
+이후 공통:
+
+```bat
+set "QG_GIT=git"
+for /d %G in ("%LOCALAPPDATA%\GitHubDesktop\app-*") do @if exist "%G\resources\app\git\cmd\git.exe" set "QG_GIT=%G\resources\app\git\cmd\git.exe"
+"%QG_GIT%" switch main && "%QG_GIT%" --no-pager pull --ff-only origin main && "%QG_GIT%" --no-pager log -1 --oneline && call Start-QUANTGEN-Desktop.cmd
+```
+
+main e01e152 또는 후속 버전. 기존 .env/KIS 키 유지, 새 바로가기 불필요. 실행은 native이며 main.py/Flet이 아님. pull 실패는 원문 오류를 확인하고 로컬 수정 강제 삭제 금지.
+
+---
+
 # PR119 구현·로컬 검증 완료 / CI 중 — 2026-11-14
 
 - status: taken · owner: GPT UI · execution_id: ui-market-menu-click-20261114. 기존 직접 요청 진행; 사용량 unknown, 자동감시/타 담당 인수 없음.
