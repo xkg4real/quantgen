@@ -6,11 +6,11 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout
 next_ids: ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-14T02:00:26+09:00
+updated_at: 2026-11-14T02:02:00+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: gpt/r3-outage-20261114
-work_commit: 250b9639291e485f7d07727b250628470cff8ac0
+work_commit: 6bb6c1c9df5f185c2becd3922f9ca7f1369217c4
 uncommitted_changes: no
 pr: 122
 usage_weekly_pct: unknown
@@ -20,6 +20,13 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 8c8f36ab-1913-436b-9b99-f3975d0d95e5
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## PR122 문서 검토 메모 수정·실패 이력 보존 — 2026-11-14T02:02:00+09:00
+
+- PR122 최초250b963의 Compliance43468416562는47검사후 **FAIL: documents need review:7**이었다. 실제 검토 메모의 영어 `unknown identity/time`이 검사기의 미작성 토큰 필터에 걸린 것을 재현했다. 7번의 문구를 `null identity/time retained when unavailable`로 구체화하고 검토시각/출처만 기록했다. 기능/문서본문/판정/검사기는 바꾸지 않았다.
+- 새head **6bb6c1c9df5f185c2becd3922f9ca7f1369217c4**, parent250b963, 변경은source-review.json 한 파일뿐임을 원격commit에서 확인했고 최신blob CAS/read-back도 일치했다. local20검토자/메모 meaningful·문서지문·source digest 일치와 구조오류0을 확인했다. 전체CI 성공을 아직 주장하지 않는다. 제품소스는250b963과 동일하므로 합성154검사를 불필요하게 재실행하지 않았다.
+- 다음은 PR121 ed92dc9의 전체Runtime과 PR122 **새head6bb6c1**의 검사 결과를 확인한다. 옛head의결과를새head의전체CI로대체하지 않는다. 부모완료/새완료ID/병합은 아직 없다. execution_id8c8f36ab-1913-436b-9b99-f3975d0d95e5.
+
 
 ## R3 오류 기록 파일 게시·두 PR 전체 CI 대기 — 2026-11-14T02:00:26+09:00
 
