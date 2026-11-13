@@ -4,11 +4,11 @@ reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1
 next_ids: ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T21:13:24+09:00
+updated_at: 2026-11-13T21:16:33+09:00
 stale_after_hours: 3
-waiting_on: ci
+waiting_on: none
 work_branch: gpt/order-safety-design-20261113
 work_commit: b3231213af6d9799303b0fde58bcdd9d0399c765
 uncommitted_changes: no
@@ -20,6 +20,15 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2633226e-9755-40fb-87a4-44d1fc290756
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## M-12 안전 설계 초안 완료 — 2026-11-13T21:16:33+09:00
+
+- [PR116](https://github.com/xkg4real/quantgen/pull/116) main 병합 **eba94f043765b04fdaa0b7ac41110d2cdfd47efc**, 검증 head **b3231213af6d9799303b0fde58bcdd9d0399c765**. merged 상태·main ref·두 파일 내용 read-back 일치. 설계서는 docs/product/ORDER_SAFETY_DESIGN_2026-11-13.md.
+- Compliance [43423231017](https://github.com/xkg4real/quantgen/actions/runs/43423231017) 성공: 47개 검사, 정책20/감시소스728 지문 정합성 PASS, Word40·문서20/양식20 산출물 검증 PASS. 공개 준비 BLOCKED 유지. 제품 Runtime 경로 비대상이며 실제 Windows·브로커·주문 실행 증거를 만들지 않았다.
+- LEDGER에 **M-12/design-draft/1만** 추가(563aa3b0daa9f257a9fcb51a394a2651482cca33)하고 read-back했다. sapientia Remaining Work의 기존 M-12 원문은 보존하고 새 초안 하위 항목만 취소선 처리했다. 앞뒤 본문 동일, 새 D1~D14의 Notion 물결표 이스케이프만 정규화됨을 확인. 비공개 NOTION_SYNC_QUEUE에 정확한 변경 및 실제 성공/read-back 기록을 원자 저장했다.
+- 미완료: M-12 최종 설계/구현/모의운영/실거래 전환, D8 나머지3조건·D10 원문 및 세부 집계 정의. 구현은 ⑦-2 뒤. Pilot 2 A5 정리 결과·D/E 실행·Step 10/⑦-2·법률/라이선스/실제 API 증거는 여전히 미확인이다.
+- PR115는 별도 UI taken 상태를 유지한다. 뒤에 main을 합치는 세션은 새 설계 문서와 해당 source-review 지문을 보존하고 통합 기준선을 다시 확인해야 한다. 이 세션은 UI 또는 연구 브랜치를 변경하지 않았다.
+
 
 ## 문서 정합성 기록 갱신 — 2026-11-13T21:13:24+09:00
 
