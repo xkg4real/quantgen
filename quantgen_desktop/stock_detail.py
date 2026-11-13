@@ -1181,6 +1181,9 @@ class StockDetailView(QWidget):
         self.notes.hide()
         page = self.side.stock_page.layout()
         page.insertWidget(page.count() - 1, self.notes)
+        from .risk_reward import RiskRewardTool
+        self.risk = RiskRewardTool(self)
+        page.insertWidget(0, self.risk.panel)
         self.overlays = ChartOverlays(self)
         self.overlays.info_requested.connect(self.explain)
         self.overlays.off_requested.connect(self.turn_off)
@@ -1292,6 +1295,11 @@ class StockDetailView(QWidget):
         self.indicators_button.setProperty("qg_literal", True)
         self.indicators_button.clicked.connect(self.show_indicators)
         row.addWidget(self.indicators_button)
+        self.risk_button = QPushButton()
+        self.risk_button.setProperty("sd", "text")
+        self.risk_button.setProperty("qg_literal", True)
+        self.risk_button.clicked.connect(self.show_risk_reward)
+        row.addWidget(self.risk_button)
         self.export_button = QPushButton()
         self.export_button.setProperty("sd", "text")
         self.export_button.setProperty("qg_literal", True)
@@ -1331,6 +1339,8 @@ class StockDetailView(QWidget):
         self.more_notes.triggered.connect(lambda: self._show_notes(anchor=self.more_button))
         self.more_export = self.more_menu.addAction("")
         self.more_export.triggered.connect(self.export_report)
+        self.more_risk = self.more_menu.addAction("")
+        self.more_risk.triggered.connect(self.show_risk_reward)
         self.more_button.clicked.connect(self._show_more)
         self.more_button.hide()
         return bar
@@ -1421,6 +1431,7 @@ class StockDetailView(QWidget):
 
     def show_instrument(self, instrument, *, load=True):
         self.instrument = instrument
+        self.risk.sync()
         self.profile = None
         self._live_price = None
         self._epoch += 1
@@ -1669,6 +1680,17 @@ class StockDetailView(QWidget):
         self.body.relayout()
         self._sync_side_button()
         self.side.set_page(1)
+
+    def show_risk_reward(self):
+        if self.body.focus:
+            self.set_focus_mode(False)
+        self.body.side_pref = True
+        self._sync_rail()
+        self.body.relayout()
+        self._sync_side_button()
+        self.side.set_page(0)
+        self.risk.open()
+        self.side.stock_scroll.verticalScrollBar().setValue(0)
 
     # Period and interval -----------------------------------------------------------------------
     def routable(self):
@@ -1953,6 +1975,7 @@ class StockDetailView(QWidget):
         self.search.setFixedWidth(SEARCH_NARROW if level >= 3 else SEARCH_WIDE)
         menu = level >= 4
         self.export_button.setVisible(not menu)
+        self.risk_button.setVisible(not menu)
         self.pause_button.setVisible(not menu)
         self.notes_button.setVisible(not menu)
         self.more_button.setVisible(menu)
@@ -2359,6 +2382,7 @@ class StockDetailView(QWidget):
         from PyQt6 import sip
         from core.education import indicators as engine
         from core.education.study_guide import availability_short, availability_text, line_readout, unit_count
+        from core.education.signal_context import signal_note, alignment_note
         from core.market.presentation import study_colors
         from .indicator_picker import GuideCard, guide_parts, state_tone, state_word
         lang = _lang(self.ctx)
@@ -2376,7 +2400,7 @@ class StockDetailView(QWidget):
         asset = self.instrument.asset if self.instrument is not None else "domestic_stock"
         interval = snapshot.request.interval if snapshot is not None else "1d"
         has_volume = bool(bars is not None and any(math.isfinite(v) for v in bars.volume))
-        out = []
+        out, observed = [], {}
         for key in self.studies:
             spec = engine.study(key)
             if key not in cache:
@@ -2432,13 +2456,22 @@ class StockDetailView(QWidget):
                                            for line, (n, v) in zip(spec.lines, readout)))
                 reading, code, gauge, _short, long_texts = guide_parts(
                     key, bars, language=lang, interval=interval, supply=self.chart.supply, values=values)
+                observed[key] = values
                 card.show_guide(language=lang, name=spec.name(lang), reading=reading,
                                 state=state_word(key, code, lang), tone=state_tone(code),
                                 gauge=gauge, gauge_labels=self.picker.gauge_labels(key, gauge, lang),
-                                long_texts=long_texts[:1], colors=self.gauge_colors())
+                                long_texts=long_texts[:1], colors=self.gauge_colors(),
+                                context=signal_note(key, bars, language=lang, values=values))
                 card.set_open(key in self._technical_open)
                 card.show()
             out.append(block)
+        disagreement = alignment_note(self.studies, bars, language=lang, values=observed)
+        if disagreement:
+            note = label("rowNote", wrap=True)
+            note.setProperty("sdOwned", True)
+            note.setObjectName("indicatorDisagreement")
+            note.setText(disagreement)
+            out.insert(0, note)
         return out
 
     @staticmethod
@@ -2659,6 +2692,7 @@ class StockDetailView(QWidget):
 
     def set_locale(self, ctx):
         self.ctx = ctx
+        self.risk.translate()
         lang = _lang(ctx)
         self.chart.chart.months = text(lang, "months")
         if self.completer is not None:
