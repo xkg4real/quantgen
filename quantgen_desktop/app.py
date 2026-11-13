@@ -764,9 +764,10 @@ class ResearchWindow(QMainWindow):
 
     def make_indicator_guide(self):
         from .indicator_guide import IndicatorGuide
-        layout = self.page("Technical indicator guide", self.ctx.t('search_intro'))
+        layout = self.page("Technical indicator guide", '')
         self.guide_subtitle = layout.itemAt(1).widget()
         self.indicator_guide = IndicatorGuide(locale=self.ctx)
+        self.guide_subtitle.setText(self.indicator_guide.intro_text())
         self.indicator_guide.intro.hide()
         layout.addWidget(self.indicator_guide)
         layout.addStretch()
@@ -818,6 +819,7 @@ class ResearchWindow(QMainWindow):
         from .market_tools import DerivativesPane, ETFPane, CryptoPane, KRXPane
         from .tools import CurrentPageStack
         layout = self.page("Analysis tools", "채권·금리·외환·파생·ETF·KRX·가상자산·매크로 분석 도구")
+        layout.itemAt(1).widget().hide()  # contextual guidance below the picker replaces the category inventory
         self.tools_subtitle = layout.itemAt(1).widget()
         self.tools_subtitle.localized_text = {
             "ko": "채권·금리·외환·파생·ETF·KRX·가상자산·매크로 분석 도구입니다. 아래에서 하나를 고르세요.",
@@ -862,6 +864,9 @@ class ResearchWindow(QMainWindow):
             self.tool_host.addWidget(pane)
         self.tool_buttons[TOOL_PANES[0][0]].setChecked(True)
         layout.addWidget(picker)
+        from .workspace_guide import WorkspaceGuide
+        self.tools_guide = WorkspaceGuide('bonds')
+        layout.addWidget(self.tools_guide)
         layout.addWidget(self.tool_host)
         layout.addStretch()
 
@@ -891,6 +896,8 @@ class ResearchWindow(QMainWindow):
                 self.tool_host.setCurrentIndex(index)
                 for name, button in self.tool_buttons.items():
                     button.setChecked(getattr(self, name) is pane)
+                    if getattr(self, name) is pane and hasattr(self, 'tools_guide'):
+                        self.tools_guide.set_key(name)
                 return pane
         raise ValueError('Pane is not one of the analysis tools')
 
@@ -913,6 +920,10 @@ class ResearchWindow(QMainWindow):
 
     def make_quant(self):
         outer = self.page("Build & Test", "Quant Lab · 기존 계산 엔진으로 가격 분포 분석")
+        outer.itemAt(1).widget().hide()
+        from .workspace_guide import WorkspaceGuide
+        self.quant_guide = WorkspaceGuide('monte_carlo')
+        outer.addWidget(self.quant_guide)
         # Only the selected page sets the scroll width. The inactive Strategy
         # form has platform-dependent font/combobox hints of its own.
         self.quant_tabs = CurrentPageTabs()
@@ -924,6 +935,7 @@ class ResearchWindow(QMainWindow):
         self.strategy = StrategyPane()
         self.strategy.requested.connect(lambda q: self.run_tool('strategy', q))
         self.quant_tabs.addTab(self.strategy, 'Strategy Lab')
+        self.quant_tabs.currentChanged.connect(lambda i:self.quant_guide.set_key(('monte_carlo','strategy')[i]))
         box, inner = panel("분석 설정")
         self.symbol = QLineEdit("AAPL")
         self.symbol.setMaxLength(120)
@@ -996,6 +1008,7 @@ class ResearchWindow(QMainWindow):
         from .portfolio import PortfolioPane
         from .signals import SignalsPane
         layout = self.page("Portfolio & Risk", "현재 세션 분석의 분포 위험을 확인하세요.")
+        layout.itemAt(1).widget().hide()
         self.portfolio = PortfolioPane()
         self.portfolio.requested.connect(self.run_portfolio)
         self.signals=SignalsPane();self.signals.requested.connect(lambda q:self.run_tool('signals',q))
@@ -1006,6 +1019,10 @@ class ResearchWindow(QMainWindow):
         self.paper = PaperPane(self.paper_session)
         self.paper.setProperty("reading_help_keep_visible", True)
         self.risk_tabs.addTab(self.paper, 'Paper Trading')
+        from .workspace_guide import WorkspaceGuide
+        self.risk_guide = WorkspaceGuide('portfolio')
+        self.risk_tabs.currentChanged.connect(lambda i:self.risk_guide.set_key(('portfolio','signals','paper')[i]))
+        layout.addWidget(self.risk_guide)
         layout.addWidget(self.risk_tabs)
         layout.addWidget(label("개별 가격 시뮬레이션 위험", "heading"))
         self.risk_table = table(["Symbol", "Model", "P(loss)", "VaR 95", "CVaR", "Source"])
@@ -1279,7 +1296,7 @@ class ResearchWindow(QMainWindow):
         self.language.blockSignals(False)
         self.data_rights.set_locale(self.ctx)
         self.indicator_guide.set_locale(self.ctx)
-        self.guide_subtitle.setText(self.ctx.t('search_intro'))
+        self.guide_subtitle.setText(self.indicator_guide.intro_text())
         self.watchlist.set_locale(self.ctx)
         self.market_chart.set_locale(self.ctx)
         self.markets_view.set_locale(self.ctx)

@@ -33,6 +33,7 @@ _INTERVAL_NAMES = {"1m": "1분", "3m": "3분", "5m": "5분", "15m": "15분", "30
 class _StreamBridge(QObject):
     tick = pyqtSignal(int, object)
     status = pyqtSignal(int, str)
+    history = pyqtSignal(int, object, object)
 
 
 class MarketChartSvg(QSvgWidget):
@@ -422,6 +423,7 @@ class MarketChartPane(QWidget):
         self.bridge = _StreamBridge(self)
         self.bridge.tick.connect(self._tick)
         self.bridge.status.connect(self._stream_status)
+        self.bridge.history.connect(self._history_preview)
         self.poll_timer = QTimer(self)
         self.poll_timer.setInterval(5000)
         self.poll_timer.timeout.connect(self.refresh)
@@ -1338,7 +1340,29 @@ class MarketChartPane(QWidget):
         # Attempts travel with the result: the router runs one job at a time on this pane's Jobs.
         router = self.router
         from core.market.detail_model import load_chart   # the yearly interval is built from the monthly history
-        return self.jobs.start(lambda: (epoch, request, load_chart(router, request), tuple(router.last_attempts)))
+        def preview(snapshot):
+            self.bridge.history.emit(epoch, request, snapshot)
+        return self.jobs.start(lambda: (epoch, request, load_chart(router, request, on_snapshot=preview),
+                                       tuple(router.last_attempts)))
+
+    @pyqtSlot(int, object, object)
+    def _history_preview(self, epoch, request, snapshot):
+        """Paint received history while paging continues; no live connection or score publication yet."""
+        if epoch != self._epoch or request != self.request() or snapshot.request != request or not snapshot.candles:
+            return
+        selected = self._selected_timestamp()
+        self.snapshot = snapshot
+        self._restore_cursor(selected)
+        self._last_received = snapshot.fetched_at
+        if selected is None and self.period and self.period_view:
+            from core.market.detail_model import visible_for
+            self.visible_bars.blockSignals(True)
+            self.visible_bars.setValue(max(self.visible_bars.minimum(), visible_for(self.period, snapshot.candles)))
+            self.visible_bars.blockSignals(False)
+        self._mode = "loading"
+        self._status_detail = self._text("먼저 받은 차트를 표시하고 있어요 · 나머지 기간을 불러오는 중",
+                                        "Showing received history · loading the remaining period")
+        self.render()
 
     @pyqtSlot(object)
     def _loaded(self, result):

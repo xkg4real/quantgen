@@ -87,12 +87,27 @@ class ChartRouter:
         finally:
             self.last_attempts = tuple(attempts)
 
-    def _load(self, request, attempts):
+    def load_progressive(self, request, on_snapshot) -> MarketSnapshot:
+        attempts = []
+
+        def publish(snapshot):
+            if not self._validate(request, snapshot, 1):
+                on_snapshot(snapshot)
+
+        try:
+            return self._load(request, attempts, on_snapshot=publish)
+        finally:
+            self.last_attempts = tuple(attempts)
+
+    def _load(self, request, attempts, on_snapshot=None):
         primary_error = None
         if self._ready(self.primary, request, attempts):
             start = self._clock()
             try:
-                snapshot = self.primary.load(request)
+                progressive = getattr(type(self.primary), "load_progressive", None)
+                snapshot = (progressive(self.primary, request, on_snapshot)
+                            if on_snapshot is not None and callable(progressive)
+                            else self.primary.load(request))
             except Exception as exc:  # the class name is the whole record
                 primary_error = exc
                 attempts.append(Attempt(self.primary.name, FAILED, type(exc).__name__,
@@ -174,6 +189,12 @@ class KISChartProvider:
 
     def load(self, request):
         return self.service.load(request)
+
+    def load_progressive(self, request, on_snapshot):
+        service = self.service
+        progressive = getattr(type(service), "load_progressive", None)
+        return (progressive(service, request, on_snapshot) if callable(progressive)
+                else service.load(request))
 
 
 _YAHOO_SUFFIX = {"NAS": "", "NYS": "", "AMS": "", "HKS": ".HK", "TSE": ".T", "SHS": ".SS", "SZS": ".SZ"}

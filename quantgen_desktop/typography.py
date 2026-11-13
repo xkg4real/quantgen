@@ -297,7 +297,12 @@ def window_stylesheet(p, dark: bool) -> str:
           QTabBar::tab:selected {{ background: {p.accent}; color: {p.on_accent}; font-weight: 600; }}
           QTabWidget#marketInnerTabs QTabBar::tab {{ background: transparent; color: {p.muted}; padding: 7px 14px; margin-right: 6px; border: 0; border-bottom: 2px solid transparent; border-radius: 0; }}
           QTabWidget#marketInnerTabs QTabBar::tab:selected {{ background: transparent; color: {p.accent}; border-bottom: 2px solid {p.accent}; font-weight: 600; }}
-          QLineEdit#guideSearch {{ min-height: 34px; padding: 6px 12px; border-radius: 20px; font-size: 14px; }}
+          QFrame#workspaceGuide {{ background: {p.accent_soft}; border: 1px solid {p.border}; border-radius: 12px; }}
+          QFrame#workspaceGuide QWidget {{ background: transparent; border: none; }}
+          QLabel[role='workflowTitle'] {{ font-size: 19px; font-weight: 500; color: {p.text}; letter-spacing: -0.36px; }}
+          QFrame#workspaceGuide QLabel[role='workflowNumber'] {{ background: {p.accent}; color: {p.on_accent}; border-radius: 12px; font-size: 12px; }}
+          QLabel[role='workflowStep'] {{ font-size: 13px; font-weight: 500; color: {p.text}; }}
+          QLabel[role='choiceTitle'] {{ font-size: 14px; font-weight: 500; color: {p.text}; }}
           QListWidget#guideSuggestions {{ background: {p.surface}; border: 1px solid {line}; border-radius: 14px; padding: 4px; outline: 0; }}
           QListWidget#guideSuggestions::item {{ border-radius: 9px; color: transparent; }}
           QListWidget#guideSuggestions::item:selected, QListWidget#guideSuggestions::item:hover {{ background: {p.accent_soft}; }}
