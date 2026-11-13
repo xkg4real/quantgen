@@ -6,6 +6,60 @@
 
 ---
 
+# UI 작업 main 반영 · 메인/Claude 인계 — 2026-11-13T22:28:36+09:00
+
+- status: returned · owner: GPT UI · reason: requested_changes_merged.
+- **이 최신 요약이 아래 과거 checkpoint보다 우선한다.** 이번에 직접 맡긴 앱 작업만 완료했다. 사용량은 unknown이며 자동감시·예약·다른 담당의 작업 인수는 하지 않는다.
+- main: 73ed4bf81d70b90f784f8a08945adbd6d52ca15f · 완료 기록 PR118: https://github.com/xkg4real/quantgen/pull/118.
+- 구현 PR115: https://github.com/xkg4real/quantgen/pull/115 · head d743695a7cf01b435703767ea72a2468dfa7900a · merge 1006b5ee80067fae4b61c26b322794d6906a05bb.
+- 구현 PR117: https://github.com/xkg4real/quantgen/pull/117 · head 395119531ea7b64f29ccf25954d47748d5314744 · merge 3db656c4fd3573b66c171bcc55e07eda384115bb.
+- work_branch: gpt/chart-ui-delivery-20261113 · work_commit: d6f1217967cf254f4c41c576cfaa8561ad66c8e3. 앱 브랜치 gpt/chart-risk-reward-20261113도 보존. /workspace/quantgen-risk-reward-20261113에는 미커밋 변경 없음.
+
+## 사용자 결정과 구현
+
+소유자 원문: “차트에 손익비 계산할수있게 트뷰처럼 구현도 돼야해 !”
+추가로 매수/매도 시점을 귀띔하는 교육을 요청했고, RSI 과매도 이탈을 관측 변화 → 함께 확인할 조건 → 한계로 설명하는 예시에 “ㅇㅇ. 너가 예시준거 좋다 저정도로 ~”라고 승인했다. 문구를 교육용으로 붙이는 것만으로 투자자문 규제에서 제외되지 않는다는 설명도 전달했다. 법률상 면제/등록 불필요를 판정한 것이 아니다.
+
+- 시장 목록: 전체 종목/추가 시총 조회 완료를 기다리기 전에 받은 가격부터 표시. 진행 중 목록은 임시이고, 최종 순위·Q-SCORE 후보 계산은 완성 후 수행. 시장 전환 시 오래된 요청의 남은 종목 조회 취소. 기존 공급자와 요청 제한 유지. 실계정 속도 개선률은 측정하지 않았다.
+- 시장 메뉴: 처음 숨김, hover/클릭/키보드로 레일 아래 펼침. 지수·자산별 목적지는 시장 안에 유지한다. 연구 홈 바로가기로 바꾸지 않는다.
+- 기술지표: 지원하는 27종을 짧은 복수 선택 형태로 제공. 실제 관측 샘플과 같은 계산 엔진을 공유하고 부족한 OHLCV는 만들어 채우지 않는다. 상세 차트와 같은 연구 UI를 사용하며 승인된 Pretendard OTF/N3는 유지한다.
+- 로고: CMD 실행 native 앱에 QUANTGEN AppUserModelID/Win32 아이콘을 설정. 새 바탕화면 바로가기는 만들지 않는다.
+- 손익비: 시장 → 종목 상세 → 손익비(좁으면 ⋯). 오른쪽에 설정, 차트에 진입·손절·목표 선과 손실/이익 영역. 롱/숏, 가격 입력/드래그, 진입선 묶음 이동, 표시/삭제/현재가 초기화. 실시간 갱신·기간/테마 변경은 작성한 가격 유지, 종목 변경은 초기화. 가격 순서 오류와 손실 0은 비율 미표시. 초기 1%/2%는 편집 예시. 수수료·세금·슬리피지 미포함이며 현금 P/L·실제 주문 기능이 아니다.
+- 신호 해설: RSI 구간 이탈/지속, SMA/EMA/MACD 교차, 볼린저 재진입과 선택 지표 방향 불일치를 현재/직전 데이터로 설명. 카드·가이드·로컬 출력에 같은 함수를 쓴다. 27종의 기존 기본 설명은 유지하지만 새 사건 감지는 위 5종이다. 확정 매매 신호·승률·수익 확률을 만들지 않았다.
+
+## 검증 근거와 아직 확인하지 않은 것
+
+- PR115: Runtime43419701530의5d98193 **6/6 PASS**(Windows3.11/3.12/3.14, Linux3.12, syntax3.10/3.11). d743695는 main 문서 통합으로 앱/시험/자산/Runtime 설정 diff exit0. d743695 Compliance43429242181 PASS. 자동 반복 Runtime43429242177는 별도 진행 중으로 기록하며 전체 통과로 대신 쓰지 않는다.
+- PR117: 최종 로컬 신호/손익비/카탈로그/문법 **20 PASS**. 앞선 차트/상세/레이아웃47, 신호/가이드 포함26, 실제 상세통합7도 PASS(겹치는 그룹이므로 합산하지 말 것). 로그 /tmp/qg-risk-regression.log, qg-risk-signals.log, qg-signal-integration.log, qg-risk-final-local.log.
+- PR117 Runtime43432023421: Windows3.11/3.12/3.14 및 Linux3.12 모두 새 신호·손익비 검사와 초기 native 로고/선표시/차트 고정/market fixture 단계 PASS. syntax3.10/3.11 PASS. **전체 Runtime은 인계 시 진행 중**이다. 관련 변경의 로컬/다중 OS 검사와 기준 앱 전체 통과를 근거로 병합했으며, 전체 Runtime 완료를 주장하지 않는다.
+- PR117 Compliance43432023436 PASS. PR118 docs-only Compliance43433702854 PASS. 정책20 consistency PASS와 publication BLOCKED는 별개이며 공개 승인으로 바꾸지 않았다.
+- Light/dark 1440px 및1000px 오프라인 캡처 검사: /workspace/shared/ui-risk-reward-20261113/light.png, dark.png, narrow.png, signal-guide.png. 실제 소유자 Windows DPI/Explorer/스크린리더·실계정 지연·브로커 체결은 미검증이다.
+
+## 인계 위치 및 후속 범위
+
+- 구현/사용/검증: docs/product/CHART_RISK_REWARD_2026-11-13.md, UI_MARKET_GUIDE_2026-11-13.md.
+- 핵심 파일: core/market/risk_reward.py, detail_svg.py; core/education/signal_context.py, catalog.py; quantgen_desktop/risk_reward.py, stock_detail.py, market_chart.py, indicator_picker.py; tests/desktop_risk_reward_acceptance.py, indicator_signal_context_acceptance.py.
+- done_ids: ⑬-2/market-nav-v2, ⑬-2/guide-catalog-v2, ⑬-2/taskbar-brand-v2, ⑬-2/market-first-paint, ⑬-2/chart-risk-reward, ⑬-2/indicator-signal-context.
+- next_ids: none (이번 직접 요청 구현 범위). 남은 확인: 실행 중 전체 CI 결과, 소유자 PC 시각/실계정 확인, 별도 AWS 적용/배포. 다른 역사적 웹/연구 요구 전체 완료라는 뜻이 아니다.
+- 사용자가 다음 담당에게 이어받으라고 지시하면 첫 단계는 `git fetch origin main handoff` 후 PR117 Runtime43432023421 결과 확인. 실패가 있으면 실제 실패 로그와3951195부터 조사한다. 이미 완료된6ID를 다시 구현하지 않는다. main/다른 담당 브랜치 직접 push 금지; 앱 변경은 새 PR. 감시 예약을 켜지 않는다.
+- AWS 큐: docs/product/ui_website_updates/PR-115.json, PR-117.json. `delivery.status=queued`, 웹 적용/배포 unverified. 지원되는 채팅 전송 도구가 없으므로 직접 메시지를 보냈다고 주장하지 않는다. 웹 담당은 실제 소스를 보고 적용 가능한 메뉴·교육·손익비 UX를 검토한다. Qt 그림 코드를 HTML에 직접 복사하지 않는다. 웹 HTML/GitHub 웹 소스/AWS 로그인은 이 작업에서 변경하지 않았다.
+- 메인 CURRENT.md/실제 연구 원장/WEBSITE_AWS_SESSION_CURRENT.md는 수정하지 않는다. 메인/Claude는 이 UI_SESSION_CURRENT.md와LEDGER를 통합 인계에 포함할 수 있다. 공용 문서 저장은 상대 채팅 열람 확인이 아니다.
+
+## whydi PC에서 최신 native 앱 실행
+
+앱을 닫는다. 터미널 앞에 PS가 있으면 먼저 `cmd` 입력 후 Enter. 아래만 복사하고 프롬프트는 복사하지 않는다.
+
+```bat
+cd /d "C:\Users\whydi\OneDrive\Desktop\QUANTGEN"
+set "QG_GIT=git"
+for /d %G in ("%LOCALAPPDATA%\GitHubDesktop\app-*") do @if exist "%G\resources\app\git\cmd\git.exe" set "QG_GIT=%G\resources\app\git\cmd\git.exe"
+"%QG_GIT%" switch main && "%QG_GIT%" --no-pager pull --ff-only origin main && "%QG_GIT%" --no-pager log -1 --oneline && call Start-QUANTGEN-Desktop.cmd
+```
+
+기존 `.env`/KIS 키를 다시 넣지 않는다. 기존 launcher가 저장소 .venv 또는 LOCALAPPDATA QUANTGEN venv를 사용한다. pull 실패 시 실행을 멈추며 사용자 파일을 강제로 삭제/초기화하지 않는다.
+
+---
+
 # 시장 개선 main 완료 · 손익비/조건 해설 검증 중 — 2026-11-13T22:15:46+09:00
 
 - status: taken · owner: GPT UI. 기존 직접 맡긴 UI 작업을 진행 중이며 자동감시/다른 작업 인수 없음.
