@@ -1,3 +1,21 @@
+# PR115 Windows 검사 fixture 정리 — 2026-11-13 (이 절 우선)
+
+- status: taken · owner: GPT UI. work_branch: gpt/ui-market-navigation-guide-20261113.
+- 최신 HEAD **5d981931b5d25237cfe60509f982b7021c039a62**, push 완료. **PR115 main 미병합**.
+- 제품 앱 코드는 **8f69c73과 동일**: git diff --exit-code 8f69c73 HEAD -- quantgen_desktop core assets = 0.
+- 8f69c73 Runtime43410118821: Linux 전체 성공, syntax2 성공. Windows3버전 모두 로고/선표시/차트 고정 초기 검사와 native·owner UI 전체 검사는 통과했으나, shared KIS 단계의 234번째 근처 `market_progressive_acceptance.test_native_paints_before_worker_finishes_and_ignores_old_selection`에서 snapshot None(20초) 실패. 동일 검사는 초기 단계에서는 모두 성공.
+- 실제 fixture 누수 확인: desktop_market_tabs의 기존 cleanup 후 sip.isdeleted(window)=False, 소유 DeferredDelete 처리 후True. 다음 테스트 전에 숨은 전체 앱 창이 남음.
+- 5d98193: tests.qt_fixture_cleanup.dispose_market_fixture가 자체 생산자/작업을 멈추고 worker 종료를 확인한 뒤 소유 창을 실제 삭제. desktop_markets_watchlist·desktop_market_tabs가 이를 사용. progressive 시험은 기존20초/30초를 유지하고 worker 진입/preview발행/epoch/오류타입 진단 추가.
+- 기존 모든 테스트 모듈 유지(전후 module set 동일). 문제를 만든 market fixture chain6모듈을 CI 초기 별도 Python 프로세스로 이동, 긴 후속 프로세스에서만 발생하는 간섭 방지. 테스트 삭제/스킵/대기 완화 없음.
+- 로컬 해당 chain **66 PASS, 87.790s**: /tmp/qg-market-fixture-chain.log. syntax PASS, compliance20 consistency PASS/publication BLOCKED.
+- 최신 Runtime **43419701530 진행 중**, Compliance **43419701618 진행 중**. 먼저 Windows의 초기 chain 검사 통과를 확인할 것. 이후 Runtime 전체6 jobs 통과해야 main 병합.
+- 추가 측정 /tmp/qg-pin-idle.log: 차트 위치 보정 idle 초당0회, 부모 재배치3회, 재배치 후idle0회, stock viewport y0. 지속 재계산 루프 없음. 39개 차트/상세 로컬 PASS는 바로 아래 절 참조.
+- 다음: 최신HEAD 원격 검증 → PR115 expected_head_sha=5d98193... merge → main ancestry 확인 → docs-only PR(완료 상태 및 PR-115.json 웹 큐) → UI returned·LEDGER4개 → whydi CMD 안내.
+- next_ids: ⑬-2/market-nav-v2, ⑬-2/guide-catalog-v2, ⑬-2/taskbar-brand-v2, ⑬-2/market-first-paint.
+- 웹 큐 초안 /workspace/shared/ui-20261113-v2/PR-115.json은 source/Runtime/Compliance/merge 갱신 필요. 메시지 전송 도구 없음: queued 유지. CURRENT.md/WEBSITE_AWS_SESSION_CURRENT.md는 수정하지 않음.
+
+---
+
 # PR115 차트 고정 회귀 수정 — 2026-11-13T10:34Z (이 절 우선)
 
 - status: taken · owner: GPT UI. work_branch: gpt/ui-market-navigation-guide-20261113.
