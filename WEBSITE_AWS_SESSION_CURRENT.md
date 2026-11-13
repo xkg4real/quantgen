@@ -1,3 +1,31 @@
+# 2026-11-13 website 전용 GitHub/Amplify 파이프라인 — 1단계 완료
+
+## 최신 사용자 지시와 운영 방식
+사용자가 새 **website** 저장소에 웹 소스를 올리고 GitHub→AWS Amplify 자동 배포를 준비하도록 요청했습니다. **이 요청은 이전 웹 소스 GitHub 비게시 방침을 새 비공개 website 저장소 범위에서 변경합니다.** quantgen 앱 저장소에는 웹 HTML을 올리지 않았으며 공유 진행 기록만 유지합니다.
+
+사용자가 생성한 https://github.com/xkg4real/website 를 확인했습니다(private, ID1456488264). 준비한 소스47파일을 main에 업로드했습니다. **Amplify 연결2단계는 사용자가 수동 완료 후 알려주기로 했으며 AWS 앱 생성·DNS/운영 도메인 전환은 실행하지 않았습니다.**
+
+## P1 완료와 근거
+- 커밋: [516b3cd6c7e4f8931a164b25500cc68eea7c2c27](https://github.com/xkg4real/website/commit/516b3cd6c7e4f8931a164b25500cc68eea7c2c27).
+- 원격 main ref와 recursive tree47개 blob을 로컬 커밋과 대조해 전부 일치. Git 체크아웃 복원 후 npm build PASS.
+- 기술: 일반 HTML/CSS/JavaScript, Node 내장 모듈만 사용하는 빌드. 사이트 본문/디자인은 기존 검증 HTML과 동일.
+- `site/index.html`: 8,634,680 bytes / SHA256 `1dbd9ded79bd25a964061ac896a03bd7846f6d264428ca2dfb7b3aaad6bb14de`.
+- `AGENTS.md`: 웹 요청 수정→검사→요청 파일만 커밋→main push→배포 상태/공개 URL 확인. 별도 승인 대기 지시는 우선하고 force push하지 않음.
+- `amplify.yml`: `npm run build` → `dist`. 공개 파일은 index.html/release manifest2개이며 편집 원본·검사·보고서는 공개 artifact에 포함하지 않음.
+- 원문/한영 검토 해시 검사, 실제 원문/번역 변경 주입 거부, 정책 재생성→빌드 왕복 PASS. 입력 CRLF 바이트를 Git에서 보존.
+- 로컬 프로젝트 `/workspace/work/website-pipeline-20261113`, 기록 `docs/WORK_LOG.md` 및 `docs/BUILD_VALIDATION.json`.
+- 별도 완료 안내 `/workspace/outputs/quantgen-20261113/WEBSITE_PIPELINE_SETUP.md`, `WEBSITE_PIPELINE_VERIFICATION.json`.
+
+## 사용자 P2 연결값 / 미완료
+1. Sydney(ap-southeast-2)의 Amplify → GitHub → xkg4real/website, main.
+2. 저장소 amplify.yml 사용. Build command npm run build, output directory dist.
+3. 배포 성공 후 발급된 실제 amplifyapp.com 기본 URL을 이 채팅에 전달하면 브라우저 검증.
+4. 현재 quantgeneration.com의 EC2·Cloudflare DNS/MX는 그대로다. 기본 URL 확인과 운영 도메인 연결은 구분한다.
+
+현재 Microsoft 정책은 여전히 미설정 검토본이다. GitHub 업로드·Hosting 설정이 실제 메일/로그인/API 연결이나 정책 시행 완료를 뜻하지 않는다. 기존 R1 API health 확인은 사용자 파이프라인 우선 요청에 따라 보류했다. 메인 CURRENT/LEDGER/AUTO_STATE·다른 앱/UI 세션 소유권을 변경하지 않았다.
+
+---
+
 # 2026-11-13 Microsoft 정책 HTML 구현·검사 완료 — 프리뷰 전달 / AWS 조회 인증 대기
 
 ## R1 후속 — 서울 SES GetAccount 조직 SCP 차단 (2026-11-13)
