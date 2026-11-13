@@ -1,5 +1,16 @@
 # 2026-11-13 Microsoft 정책 HTML 구현·검사 완료 — 프리뷰 전달 / AWS 조회 인증 대기
 
+## R1 후속 — 서울 SES GetAccount 조직 SCP 차단 (2026-11-13)
+
+사용자가 CloudShell에서 실행한 `sesv2 get-account --region ap-northeast-2`가 계정503891328543의 AccountFullAccessRole에 대해 `ses:GetAccount` resource*를 조직 SCP `p-yizbsie1`의 explicit deny로 거부했습니다. 정책 ARN: `arn:aws:organizations::171452893710:policy/o-r1mi4xx10u/service_control_policy/p-yizbsie1`. 세션 고유 ID는 기록하지 않습니다.
+
+- **확정:** 해당 호출의 조직 정책 차단. 서울 SES 도메인 인증·ProductionAccessEnabled·SendingEnabled 및 샌드박스 해제 여부는 여전히 미확인입니다. 실패를 리소스 없음으로 표시하지 않았습니다.
+- **유력 가설:** [새로운 AWS 경험의 공식 RegionFloor](https://docs.aws.amazon.com/accounts/latest/reference/scps-and-rcps-for-projects.html)는 선택 리전 밖의 대부분 리전을 제한합니다. 프로젝트 Sydney와 서울 호출이라는 상황에 부합하지만 실제 p-yizbsie1 본문은 미확인입니다. 무료 플랜의 SES 전체 미지원이라고도 단정하지 않습니다.
+- **다음 읽기 전용 확인:** Sydney에서 동일 GetAccount를 비교하고, 관리/위임 관리자 권한이 있는 경우 DescribePolicy로 실제 Deny/RequestedRegion 조건을 확인합니다. 일반 멤버/플랫폼 관리 조직이면 정책 열람도 거부될 수 있어 관리 주체 확인이 필요합니다. 재로그인·IAM Allow 추가를 SCP 해결책으로 안내하지 않았습니다.
+- 안내문 `AWS_MANUAL_STEPS_KO.md`, 상태 보고 `AWS_READONLY_STATUS.md`, 작업표/기록과 전달 ZIP의 문서만 갱신했습니다. 웹 HTML SHA `1dbd9ded79bd25a964061ac896a03bd7846f6d264428ca2dfb7b3aaad6bb14de`는 동일합니다.
+- SCP/IAM 변경, 새 리소스, Advanced features 활성화, SES 신청/메일 발송·운영 배포는 하지 않았습니다. [Advanced features](https://docs.aws.amazon.com/accounts/latest/reference/activate-advanced-features.html)는 별도 변경이며 활성화 후에도 RegionFloor가 남을 수 있어 자동 해결책으로 삼지 않았습니다.
+- 증거는 사용자 제공 실행 출력입니다. 에이전트 로컬 quantgen 인증 만료 상태와 사용자 CloudShell 인증 역할은 구분합니다.
+
 ## 현재 범위와 상태
 사용자는 **메일 전환·웹 정책 범위 유지**를 선택했고, 추가로 **기존 Cognito 풀·서울 SES 인증/production 상태·개발 API 존재의 읽기 전용 조회만** 요청했습니다. 신규 리소스 생성·설정 변경·메일 발송·앱 기능 구현·운영 배포는 하지 않았습니다. Microsoft 365도 아직 구매·설정 전입니다.
 
