@@ -52,8 +52,10 @@ Linux에서는 해당 검사를 건너뛴다. 사용자 PC의 Explorer 캐시·D
 cd /d "C:\Users\whydi\OneDrive\Desktop\QUANTGEN"
 set "QG_GIT=git"
 for /d %G in ("%LOCALAPPDATA%\GitHubDesktop\app-*") do @if exist "%G\resources\app\git\cmd\git.exe" set "QG_GIT=%G\resources\app\git\cmd\git.exe"
-"%QG_GIT%" switch main && "%QG_GIT%" --no-pager pull --ff-only origin main && "%QG_GIT%" --no-pager log -1 --oneline && .venv\Scripts\python.exe -X utf8 -m quantgen_desktop
+"%QG_GIT%" switch main && "%QG_GIT%" --no-pager pull --ff-only origin main && "%QG_GIT%" --no-pager log -1 --oneline && call Start-QUANTGEN-Desktop.cmd
 ```
 
 `.env`/KIS 키나 가상환경을 다시 만들 필요는 없다. `pull`이 오류로 멈추면 앱을 실행하기 전에
 그 오류를 확인한다. 기존 변경 파일을 강제로 덮거나 삭제하는 명령은 포함하지 않는다.
+기존 실행 스크립트는 저장소 `.venv`를 우선 사용하고, 없으면 `%LOCALAPPDATA%\QUANTGEN\venv`를
+찾는다. 새 바로가기를 만들지 않으며 네이티브 `quantgen_desktop`을 실행한다.
