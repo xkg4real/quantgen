@@ -2,7 +2,7 @@
   "schema_version": 1,
   "normalization": "UTF-8 text CRLF to LF; binary assets raw bytes",
   "scope": "named source/document consistency review; not legal or operational certification",
-  "source_state": "CI-verified base e01e1526be28b8a6374583ce3802510e07819598 manifest with exact reviewed tree overlays; not a full local checkout scan; target-tree full CI required before merge",
+  "source_state": "Document-CI-verified base ed92dc90b2b32fd6bd2a9254e7a568e45e3e553e with reviewed test-only overlays; production source and all policy documents unchanged; not a full local checkout scan; target-tree full CI required",
   "registry_sha256": "d1a62050d33e6c53ac9027db0eb8661317a4aec7fc7eb7b10488cf709b0b8f0f",
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
@@ -515,7 +515,7 @@
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
     "tests/desktop_home_live_acceptance.py": "ecb61d6a1bc846bee0dd53b70c8852976af8aa627948d91574c204480f394e73",
     "tests/desktop_home_markets_home_acceptance.py": "6f14c47fbc5faf01d3a80f81d9e210e7cc75b9e19f74a0771ff2fbcac89c7eef",
-    "tests/desktop_home_markets_markets_acceptance.py": "4ed1c9ec141bef2b386b3fb3b915e8a2b77be432b8293c11af515a8a1463a2d9",
+    "tests/desktop_home_markets_markets_acceptance.py": "4ff74144b8d276fcab2bd6f40ab675da8b24c9bf7cac72ba871e02535d3c033f",
     "tests/desktop_home_markets_shell_acceptance.py": "805a72c0c2c371657a1e5b7e784ed4da73e4c1ff4356abf6809349ce15c3014f",
     "tests/desktop_indicator_guide_acceptance.py": "1b7df46a23e17c27cdca100784761c11b422409fd1e28f0fda16da15011f046e",
     "tests/desktop_language_acceptance.py": "9f41b4fddc57ccf1013c6551f72494bc09608d751aa7fe0b395943d4d8c2d47f",
@@ -537,7 +537,7 @@
     "tests/desktop_owner_ui_ficc_acceptance.py": "f1e00489b0be49085595ad7b7f8b58285c0e86567d261c00ca9ec383b8439faa",
     "tests/desktop_owner_ui_integration_acceptance.py": "8adf9b8e656cc60f4ba5d54fc60ef51ecca531962a59c4e58472bf583d458573",
     "tests/desktop_owner_ui_market_acceptance.py": "6d4c94f71f347c5d3042462e4697751f0b1550d1c0712e4857ef1d6a68d7274e",
-    "tests/desktop_owner_ui_risk_acceptance.py": "b1e171ccf27c90b5c35cc8f68ce6e5f9c25f1c53720f86fb06b9286d89db31da",
+    "tests/desktop_owner_ui_risk_acceptance.py": "663b70521999dff49d0281ece22fcbbc55526daa4864905d794f41fa059369e6",
     "tests/desktop_owner_ui_strategy_acceptance.py": "d5319c7d4e659e7b1b370c313350d982d23859b76d579202a5877f04fd1195e0",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
@@ -847,11 +847,11 @@
     },
     "12": {
       "document_sha256": "4f677b15fac1ab1f8b8d52f005575b9e3fc9d8a579e77ef926412d85687faf8e",
-      "source_digest": "1b9500b6e1602bac45eee664ecb752304a3494aa777ba1c84fc4f8815a143bb7",
-      "reviewed_by": "GPT R3 detached lifecycle change review",
-      "review_note": "127 synthetic tests describe only this bounded lifecycle child; no Windows-owner, Step10, whole-R3 or performance certification claimed. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:44:27+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "bbd5e123e4f0e2b518e074c1b563e0f0521001aa766014b251fcaf1b53952f8e",
+      "reviewed_by": "GPT CI fixture follow-up review",
+      "review_note": "127 synthetic tests describe only this bounded lifecycle child; no Windows-owner, Step10, whole-R3 or performance certification claimed. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI. Follow-up: reviewed test-only alignment with the approved country-only rail, in-page rankings and compact bilingual portfolio instructions; provider-call and empty-result checks retained. Production code, policy text and release blockers unchanged.",
+      "reviewed_at": "2026-11-14T02:59:35+09:00",
+      "source_commit": "ed92dc90b2b32fd6bd2a9254e7a568e45e3e553e"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
