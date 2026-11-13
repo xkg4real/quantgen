@@ -467,7 +467,7 @@
     "quantgen_desktop/watchlist.py": "5e28734d3c7c28b349d7a7f5b3da7efe740d09adcf99bad61dcde701a7d6000b",
     "quantgen_desktop/watchlist_live.py": "6d7b9dca2f18adf8a7b01a09ca395a6b776835f82d863669d00f90d426994597",
     "quantgen_desktop/wheel_guard.py": "44bfee9b20b358b794cfebdd71f0760b28b99bcd39a45cc36fa450a8d2ce68f6",
-    "quantgen_desktop/windows_branding.py": "f78d288060c0157decafe0ee8e8b8049ed59995a7834ce0dba17c77e5056621f",
+    "quantgen_desktop/windows_branding.py": "f6de000c8f8fff07b1db63028dc59cf16a40602a36bb216d7a6b41162a5b1c41",
     "quantgen_desktop/workspace_guide.py": "4c63f20f347de427990ff554452a56a98c661991810c4ffd0054ead982f1b13b",
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
     "requirements.txt": "efe528fea6e00d9edb734ada7e11c75ece2e7b8996d2697fca643e15eefc000e",
@@ -544,7 +544,7 @@
     "tests/desktop_swaption_conversion_acceptance.py": "113e1af795d0a9d592827330a2fdf115487dc4bb0b496d4ee3f3ba0d3b9185af",
     "tests/desktop_typography_acceptance.py": "c187e23db02426732f71a5c8f322903e79714f47177d8013c19f8b82f3e8b794",
     "tests/desktop_watchlist_acceptance.py": "69dbc5d65982e483b51b835203442fae31ad826c619cefd74df9005cc17a202d",
-    "tests/desktop_windows_branding_acceptance.py": "1c06f5b9fe748ba28b8e8230f51f565647bd72a7b665f056e6b61c1c8e9887a6",
+    "tests/desktop_windows_branding_acceptance.py": "811fb37cf6bdb7550df8abbedfe3a08449b17787d15a28180146a876cfb19a9c",
     "tests/desktop_workflow_guidance_acceptance.py": "12dccb1fc2c3052718d1660da13991ed869f8f139a0de685c98a6438eb14f947",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
     "tests/etf_sleeve_disclosure_acceptance.py": "fa0338f032dfa63d6b003b42b8803cef1d6391be8b36d83e18c021d53cb7fe8a",
@@ -746,163 +746,163 @@
   "reviews": {
     "1": {
       "document_sha256": "18dc413362efd7488995e9e930286226046e1c272263157600aa593baafdd714",
-      "source_digest": "87767b9155fd83a79a0663747d41656da75ab9b4c821b42c7f1f56811b4f12ed",
+      "source_digest": "adb01fc50ea3d0f6040d5820ed98ce1627ce4d81ed17d2101b3d73d56255588a",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.749133+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.540479+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "2": {
       "document_sha256": "8ddd0502d6c8767c9c7c7f8827706ca929946c6244c565558c77ffefc7c038ee",
-      "source_digest": "87767b9155fd83a79a0663747d41656da75ab9b4c821b42c7f1f56811b4f12ed",
+      "source_digest": "adb01fc50ea3d0f6040d5820ed98ce1627ce4d81ed17d2101b3d73d56255588a",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.752057+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.542489+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "3": {
       "document_sha256": "122df861c40d2ce416603e3ac4b32cf892df92612a6bc66347eaeba9715e65b8",
-      "source_digest": "f8c67c872768960ebcb25d64aac069a2b1d4f2e754c8c1dc73fbe63a406132f2",
+      "source_digest": "55247bdafa2ae063ec4e1332183c16fc995c334299600b92883b6a0f6622b77e",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.753575+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.544028+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "4": {
       "document_sha256": "8f9b0a3908a2099cc18ee5848763cee629a75a01eeea86853bb6985519170344",
       "source_digest": "bbf94ba470186a6f433c5216744048fbce9a3fa93632a8f7cb78c2d4856cf6bc",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.754926+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.545436+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "5": {
       "document_sha256": "060f9c93d00e4086e6763cb669dec1fde2d5f11f083087bed5ef8e4136684bed",
       "source_digest": "e3c864c68708e7a939658f229653ccd775beb15d5a166eb8205010254c0bbc07",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.756258+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.546694+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "6": {
       "document_sha256": "e8486a47510bcb774261d13798eeea001007fd6b28e6d4d9e2ac23fe64d895e1",
-      "source_digest": "46121e6467f05ffec81a605b50deea56a7bd7f6deb7f02e9c290010850f279c6",
+      "source_digest": "9a7150aa36a00909d711f845a1259a0d464b56b9142cc3e30a44e0837ace8706",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.757655+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.548024+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "7": {
       "document_sha256": "a7f592f442e1da195efc95d786c9112e70f36356e2fed747a1108318138e4ad2",
-      "source_digest": "87767b9155fd83a79a0663747d41656da75ab9b4c821b42c7f1f56811b4f12ed",
+      "source_digest": "adb01fc50ea3d0f6040d5820ed98ce1627ce4d81ed17d2101b3d73d56255588a",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.759157+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.549991+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "8": {
       "document_sha256": "c53b0f56867226eae0c3eabb1503fa8f8c6c7ec639afc9033b39cae8ffe10f3a",
-      "source_digest": "46121e6467f05ffec81a605b50deea56a7bd7f6deb7f02e9c290010850f279c6",
+      "source_digest": "9a7150aa36a00909d711f845a1259a0d464b56b9142cc3e30a44e0837ace8706",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.760868+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.551237+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "9": {
       "document_sha256": "9b1af75b366f5aab5b2e630629f30f00d0057877170f4801aa9f14b2a70e3c96",
-      "source_digest": "838975b495075cf36404abd993e233eb54c6925a9f25538ec1725acd5d8c5cf0",
+      "source_digest": "b5d58011edf1ddb5d69e698c3074a638d44a75897ed9148742601ef6fbadcc30",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.762655+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.552555+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "10": {
       "document_sha256": "8cbb750332530a5c736f743e4e5c148e1fcfe2e18a457593b442d54d9ecada71",
-      "source_digest": "54262f87593153d0a861f237917046a3cf9b3e247d8cf1a5620e41a27770b0c8",
+      "source_digest": "5bbbb218808a805b4df989f4430a14cc8c9c23cdfaa0b54aa0fc05d0a8b2ca5f",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.764058+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.553772+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "11": {
       "document_sha256": "b290a8ee69ff5c9c6ff4535ed91a08cb26ad167afc504d6e17771bee1856ae44",
-      "source_digest": "f35531f796e6ba67c7e7e952eb2443411cc5dbd11caac346e4e73668df78ab8c",
+      "source_digest": "ef44512e3278fe33f1f0ddea2672de501b548f3dcfa7811c830d060cb0029c31",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.765560+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.554993+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "12": {
       "document_sha256": "5b29917ba7a0aa9da347fe1eb9594775ba02cd6d5ba649f4f90e03b958b7ef26",
-      "source_digest": "4e8401bd881340638c2af6df292d5f79205cfbdf2125cb5c96b514f7e7aac516",
+      "source_digest": "f7636d5202c3874c6c1ab5b1ae8fee9eb837f02fd1ba21ebc780271151a090bd",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.766982+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.556493+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "13": {
       "document_sha256": "e27cbbe6536609fe8299522ecd66032e48b7494d3ccb5c0656ea457f75e220c5",
-      "source_digest": "838975b495075cf36404abd993e233eb54c6925a9f25538ec1725acd5d8c5cf0",
+      "source_digest": "b5d58011edf1ddb5d69e698c3074a638d44a75897ed9148742601ef6fbadcc30",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.768892+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.557999+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "14": {
       "document_sha256": "0830fda21f72f77f30f0b52a74b52c425916ec5dd4688507008f3337ad627258",
-      "source_digest": "838975b495075cf36404abd993e233eb54c6925a9f25538ec1725acd5d8c5cf0",
+      "source_digest": "b5d58011edf1ddb5d69e698c3074a638d44a75897ed9148742601ef6fbadcc30",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.770508+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.559419+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "15": {
       "document_sha256": "09b2945ed78373174a9c3bfb24c79c70d1d06ef22a5fc0aa74ac3804fc25f7c2",
-      "source_digest": "838975b495075cf36404abd993e233eb54c6925a9f25538ec1725acd5d8c5cf0",
+      "source_digest": "b5d58011edf1ddb5d69e698c3074a638d44a75897ed9148742601ef6fbadcc30",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.771809+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.561388+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "16": {
       "document_sha256": "fa6d90124e3706e75b63d90a177382c3a009f799d38ad088bdc229f62caa0dba",
-      "source_digest": "81848d3524bedc00447f7298e02e55460d7bcc8ae0ac43ed34a3f66126be7793",
+      "source_digest": "6170fca6ea595109c224a5a28f859e181d9dfb1aba3c2cd05f4c5ef658c4e2f6",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.773281+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.562876+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "17": {
       "document_sha256": "d15a9af3cf32276b2ce6696db902d09ac26a14e0b5b92ebbad384865c61b13d3",
-      "source_digest": "46121e6467f05ffec81a605b50deea56a7bd7f6deb7f02e9c290010850f279c6",
+      "source_digest": "9a7150aa36a00909d711f845a1259a0d464b56b9142cc3e30a44e0837ace8706",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.774731+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.564505+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "18": {
       "document_sha256": "9a43174723a1dc551db1aef590e8833b368877f543e21a833798f0e039f4099a",
-      "source_digest": "87767b9155fd83a79a0663747d41656da75ab9b4c821b42c7f1f56811b4f12ed",
+      "source_digest": "adb01fc50ea3d0f6040d5820ed98ce1627ce4d81ed17d2101b3d73d56255588a",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.776056+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.565955+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "19": {
       "document_sha256": "1e01361156c01fc1920818f3472dae95a741f2f3481ee62462561ac8fe4d2f53",
       "source_digest": "76d583ec510dc8043d970420b64ec10b36ffe82ad46f196c8343e983b8650d4e",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.777506+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.567403+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     },
     "20": {
       "document_sha256": "e7265d03dabb582d79c63f1e69ca64c103f565f24e1c3ee0b19c4b4a85204ed9",
-      "source_digest": "87767b9155fd83a79a0663747d41656da75ab9b4c821b42c7f1f56811b4f12ed",
+      "source_digest": "adb01fc50ea3d0f6040d5820ed98ce1627ce4d81ed17d2101b3d73d56255588a",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
-      "reviewed_at": "2026-11-13T09:44:28.778735+00:00",
-      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
+      "review_note": "Windows native icon binding applies once after show, with no icon/WinId event re-entry during native teardown; diagnostic integration phases added. No public policy or data change.",
+      "reviewed_at": "2026-11-13T09:47:13.568952+00:00",
+      "source_commit": "5ddb2a693738c9737b9d7a627b93991434845561"
     }
   }
 }

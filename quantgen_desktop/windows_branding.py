@@ -23,7 +23,7 @@ def bind_window_icons(window, icon_path):
     """Supplement Qt's icon on Windows, with pointer-sized handles on 64-bit Python."""
     if sys.platform != "win32":
         return None
-    from PyQt6.QtCore import QEvent, QObject
+    from PyQt6.QtCore import QObject
     from ctypes import wintypes
 
     user = ctypes.windll.user32
@@ -46,23 +46,13 @@ def bind_window_icons(window, icon_path):
         if handle:
             handles.append((kind, handle))
 
-    class Binding(QObject):
-        def apply(self):
-            native = window.effectiveWinId()
-            if not native:
-                return  # destruction/reparenting must not create another native window
-            hwnd = int(native)
-            for kind, handle in handles:
-                send(hwnd, 0x80, kind, handle)  # WM_SETICON
-
-        def eventFilter(self, watched, event):
-            if event.type() in (QEvent.Type.Show, QEvent.Type.WindowIconChange, QEvent.Type.WinIdChange):
-                self.apply()
-            return False
-
-    binding = Binding(window)
-    binding.apply()
-    window.installEventFilter(binding)
+    # Called after show(). Do not send WM_SETICON from a Qt icon/WinId event:
+    # native icon messages can themselves cause Qt icon events, and destruction
+    # emits WinId changes while the underlying QWidget is being torn down.
+    binding = QObject(window)
+    hwnd=int(window.winId())
+    for kind,handle in handles:
+        send(hwnd,0x80,kind,handle)  # WM_SETICON
 
     def release(*_):
         for _kind, handle in handles:
@@ -70,4 +60,4 @@ def bind_window_icons(window, icon_path):
         handles.clear()
 
     window.destroyed.connect(release)
-    return binding  # retain the Python event-filter wrapper for the window's lifetime
+    return binding

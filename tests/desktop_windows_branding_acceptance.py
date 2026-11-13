@@ -17,10 +17,15 @@ from ctypes import wintypes
 from pathlib import Path
 from PyQt6.QtWidgets import QApplication,QWidget
 from quantgen_desktop.windows_branding import APP_ID,set_app_identity,bind_window_icons
+print('imports ready',flush=True)
 assert set_app_identity()
+print('identity set',flush=True)
 app=QApplication([])
+print('QApplication created',flush=True)
 window=QWidget();window.show();app.processEvents()
+print('window shown',flush=True)
 binding=bind_window_icons(window,Path('assets/icon.ico').resolve())
+print('window icons bound',flush=True)
 assert binding is not None
 getid=ctypes.windll.shell32.GetCurrentProcessExplicitAppUserModelID
 getid.argtypes=[ctypes.POINTER(ctypes.c_void_p)];getid.restype=ctypes.c_long
@@ -28,10 +33,12 @@ value=ctypes.c_void_p()
 assert getid(ctypes.byref(value))==0
 assert ctypes.wstring_at(value)==APP_ID
 free=ctypes.windll.ole32.CoTaskMemFree;free.argtypes=[ctypes.c_void_p];free(value)
+print('identity read back',flush=True)
 send=ctypes.windll.user32.SendMessageW
 send.argtypes=[wintypes.HWND,wintypes.UINT,ctypes.c_size_t,ctypes.c_ssize_t]
 send.restype=ctypes.c_ssize_t
 for kind in (0,1):assert send(int(window.winId()),0x7F,kind,0)!=0  # WM_GETICON
+print('both native icons verified',flush=True)
 window.hide();window.show();app.processEvents()
 for kind in (0,1):assert send(int(window.winId()),0x7F,kind,0)!=0
 from PyQt6 import sip
@@ -39,7 +46,7 @@ sip.delete(window)
 print('QUANTGEN native identity and small/large window icons verified')
 '''
         env=dict(os.environ,QT_QPA_PLATFORM='windows')
-        result=subprocess.run([sys.executable,'-X','utf8','-c',program],env=env,
+        result=subprocess.run([sys.executable,'-X','utf8','-X','faulthandler','-c',program],env=env,
                               cwd=Path(__file__).resolve().parents[1],capture_output=True,text=True,timeout=30)
         self.assertEqual(result.returncode,0,result.stdout+'\n'+result.stderr)
 
