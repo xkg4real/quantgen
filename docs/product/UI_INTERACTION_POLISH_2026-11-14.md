@@ -15,10 +15,18 @@ Approved QG Interface/Pretendard OTF typography remains unchanged. No new provid
 ## Verification
 
 - Before-fix actual-window submenu click reproduced failure; after-fix targeted suite: 34 tests passed in 146.894s (menu, drawing, explanations, workspace geometry).
-- Final numeric-editor regression and existing guide/chart/form checks are recorded in the PR and shared handoff after completion; the earlier 34-test pass preceded the numeric-editor correction.
+- Final numeric-editor and existing guide/form/paper regressions: 59 tests PASS (185.232s); syntax: 1 PASS. The earlier 34-test pass preceded the numeric-editor correction. Groups overlap and must not be summed.
 - Offline captures: `/workspace/shared/ui-menu-workspaces-20261114/` (1440px light/dark, 1000px chart, 1360px research workspaces). Linux offscreen capture is not owner Windows DPI or screen-reader confirmation.
 - Multi-OS native regression checks are included in Runtime CI. Completion status belongs to the PR/hand-off evidence, not assumed from local results.
 - Compliance review preserves 20 documents' publication blockers; source consistency is not legal or publication approval.
+
+## Main delivery evidence
+
+PR [119](https://github.com/xkg4real/quantgen/pull/119), source `b8d5ac889bc89372cac7cc8595c252fa6bc49705`, merged as `51d7ffb758d1393f1713cd4dafd32ed3673738c2`. Main ancestry was fetched and verified.
+
+Runtime [43454709190](https://github.com/xkg4real/quantgen/actions/runs/43454709190): the new actual-window menu clicks, drawing/editor and research geometry checks, together with the early native/market integration step, passed on Windows Python 3.11/3.12/3.14 and Linux 3.12. Syntax Python 3.10/3.11 passed. **The long full runtime suite remains in progress at this delivery checkpoint.** Merge relied on these cross-platform feature checks, the local 59-test regression and prior baseline Runtime117's completed six-job success; the prior baseline does not substitute for completion of the new full run. Compliance [43454709248](https://github.com/xkg4real/quantgen/actions/runs/43454709248) passed. No required check was bypassed.
+
+Website queue: [PR-119.json](ui_website_updates/PR-119.json). Delivery is queued, not sent.
 
 ## Delivery / remaining boundaries
 

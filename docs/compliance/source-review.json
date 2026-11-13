@@ -384,7 +384,7 @@
     "docs/product/TERMINAL_TARGET_2026-10-30.md": "5c3e2eac999534371560def0e00d3ef45d0b7abcd960a6b1d7d7c3c9c3b05c29",
     "docs/product/TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md": "eeb6a1394c46fd67859dc5c8066d9adc125802efa24c29add93b5d8528404314",
     "docs/product/UI_D11_D15_2026-11-13.md": "227e4f629f772b9d43f9f902e92f11f1189e0b145d06adeae75ca627dba5760d",
-    "docs/product/UI_INTERACTION_POLISH_2026-11-14.md": "84ae91688fbe5bc7acd0e22e6aeb8cb61e64cfc72f8c128f5fea68c5ad046bed",
+    "docs/product/UI_INTERACTION_POLISH_2026-11-14.md": "6e0ec8ef2e1e7916ce2f11ace2d50ae8751e9862ea9d61d8bc142a7f9a883e01",
     "docs/product/UI_LOCALIZATION.md": "7a8bc3a69e4e3728e18e0bf62b0613f792079b0a5f3d7b03742dfd5f4596b512",
     "docs/product/UI_MARKET_GUIDE_2026-11-13.md": "7dcf73785dcb35d71214bc72b8864c0e12899e9f458eec313d8883e86146bed7",
     "docs/product/UI_RENDERING_2026-10-31.md": "f006b261d10a28594dc3b31d05424ac144004ca4edca18646ca00b5c0f8a19f6",
@@ -756,163 +756,163 @@
   "reviews": {
     "1": {
       "document_sha256": "546a396893b50ef5d8e95c18be4103f5a2302253d397429859957bd1540724cf",
-      "source_digest": "b9737de9bc5cd55e663eed1f2c898ba54298022a4418de63edb421180839482c",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.286945+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "48283e5e19abfabfdbe0057fdc2c738a76fe66562fb3ffb2beb5a81c72f40945",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.236309+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "2": {
       "document_sha256": "1c7eb9b60585b1fd4d1a23723051454e768b6ea6b31b9e58bd8122ac73cdd5e1",
-      "source_digest": "b9737de9bc5cd55e663eed1f2c898ba54298022a4418de63edb421180839482c",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.289453+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "48283e5e19abfabfdbe0057fdc2c738a76fe66562fb3ffb2beb5a81c72f40945",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.238648+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "3": {
       "document_sha256": "50fcceb8fb66b30a535ff6015a66ff5e5cee801b61433cc3aa99acd3673c4393",
-      "source_digest": "9d6a442d13ad17efd4581c1684ce996792efca29fa66f594992a1b9a4426028c",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.291454+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "17c77cd9e30390e23a8d5fcd7244c280f6feb6b5e0e181834cefd73c74430ed3",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.241715+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "4": {
       "document_sha256": "4a2528a8c62c60983069941ff506c41c6b251ff1f402ef6cf7723e9901bb7a91",
-      "source_digest": "21deac6fc95cfec9cbfd2403f3afe82b31aee827d8355fbcd334327761efe208",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.292940+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "7688cd2c659d0cc0b6ca7d4fe16de537258503d006006810ff856b4204159795",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.243440+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "5": {
       "document_sha256": "54164c56f4c3999b8ed65115e411151dca9dd6a46fea7bc57d0a750774d7b555",
-      "source_digest": "cd60cd5eecce049ac88b39ff432639be2431566c59a51f7a3701111e53345d17",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.294535+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "16f24e6a106fcee5398d54fca58eb6bc3a23e17099a6b9a5844d6624c98c93d2",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.245018+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "6": {
       "document_sha256": "5871443de50226c2680aa2c41059c06b4d1290f28f1c859d5ed979fd17a2918e",
-      "source_digest": "d3dcae672da1407e67bbce0d68be9141afdb487d351063f396862fea81c5ade2",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.295957+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "105852b4c912e095e6fe5d3c2227612bf47d11ebd5e3b29310e4f31ca994ab1c",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.246709+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "7": {
       "document_sha256": "437529f84b2cf492d8e04e5e0190c1cd1f15ea06a17ca4da24bbacc070d77ba1",
-      "source_digest": "b9737de9bc5cd55e663eed1f2c898ba54298022a4418de63edb421180839482c",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.297960+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "48283e5e19abfabfdbe0057fdc2c738a76fe66562fb3ffb2beb5a81c72f40945",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.248174+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "8": {
       "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
-      "source_digest": "d3dcae672da1407e67bbce0d68be9141afdb487d351063f396862fea81c5ade2",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.299464+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "105852b4c912e095e6fe5d3c2227612bf47d11ebd5e3b29310e4f31ca994ab1c",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.250151+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "b89517749bd468368bd9c0846d18bdd34abce2af16b1b80fe23741b9e02c9ea3",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.301336+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "189032d527998c2c8b7cc3fed684460e2255319e23713af907db9f16563316dc",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.252319+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "10": {
       "document_sha256": "ce304488b177e5fa81046782034d9a3c23a411ca3cef859d46b7df13ba0c5f5f",
-      "source_digest": "bc79c615b67c23b32b8a559f1fc8af52ae5d5a7f005ce01c447ab1e7ea41033a",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.303107+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "a7635c10b1aa3d89d4b91b998d942079d8d0fa917778670dba0d7001db68650f",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.253706+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "11": {
       "document_sha256": "11a071fe459f3d6f622ec4ee4480200c3e7ed131153e00bd6823e552e43a7004",
-      "source_digest": "36d67c9ba667b81a5b34fce21b381e83d872ea10d60fcbae63277f20e571fb93",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.304589+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "50d91ac26dbc647d7607f1312caaea1c235e362d30acf033cc063222c2fee6cb",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.255346+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "12": {
       "document_sha256": "4f677b15fac1ab1f8b8d52f005575b9e3fc9d8a579e77ef926412d85687faf8e",
-      "source_digest": "5975cd348005b7f7829cf221611026549589cb12dc6ea096e1f7f48e2a591f9f",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.306427+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "7b0bde7496fc76526d591f6fdf9e0a21bb2185f47a8284fbd3864ec7e5b992fe",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.256954+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "b89517749bd468368bd9c0846d18bdd34abce2af16b1b80fe23741b9e02c9ea3",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.308052+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "189032d527998c2c8b7cc3fed684460e2255319e23713af907db9f16563316dc",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.258687+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "b89517749bd468368bd9c0846d18bdd34abce2af16b1b80fe23741b9e02c9ea3",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.309468+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "189032d527998c2c8b7cc3fed684460e2255319e23713af907db9f16563316dc",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.260405+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "15": {
       "document_sha256": "99b8253de2d54323b48c1dc8edb663bb6105930c24bb15e8f70800aec2a49cf1",
-      "source_digest": "b89517749bd468368bd9c0846d18bdd34abce2af16b1b80fe23741b9e02c9ea3",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.311133+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "189032d527998c2c8b7cc3fed684460e2255319e23713af907db9f16563316dc",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.262215+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "16": {
       "document_sha256": "ff89cdb2a5ee70c3f830162c8e3c8a287291c89fddd7c850ac5b6048d9217f98",
-      "source_digest": "9f4a9e3e450ac779f8e7141f22d4d71b2d7d18c750ed883e68dc2c9d80faeeff",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.313008+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "4ccbfab81ee9b2962f0cdf142408e2e2213c4e54a61c53a11cceb2f96d6c45e9",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.264114+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "17": {
       "document_sha256": "dde1a8a05a26c612255f5858d272019e11cb7caf4542aa017b626ecea968713d",
-      "source_digest": "d3dcae672da1407e67bbce0d68be9141afdb487d351063f396862fea81c5ade2",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.315107+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "105852b4c912e095e6fe5d3c2227612bf47d11ebd5e3b29310e4f31ca994ab1c",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.265481+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "18": {
       "document_sha256": "f41494e3a28b54cd191916f9ee985f795849e6bf67d69c8dffebd7d081d1187d",
-      "source_digest": "b9737de9bc5cd55e663eed1f2c898ba54298022a4418de63edb421180839482c",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.316812+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "48283e5e19abfabfdbe0057fdc2c738a76fe66562fb3ffb2beb5a81c72f40945",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.266834+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "f0d92d257448ff588965ef20542b9de2ff867c2ec08c67560d2d3f16a6a4c309",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.319197+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "c91afa7b741d519a9cab3d1f90806a02f525487382e53c5c5b7c2d8e0b372180",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.268542+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     },
     "20": {
       "document_sha256": "0bb26298409489acde50b160abaa10068a84cc0e5b756041665f5277435b19eb",
-      "source_digest": "b9737de9bc5cd55e663eed1f2c898ba54298022a4418de63edb421180839482c",
-      "reviewed_by": "GPT UI review",
-      "review_note": "Reviewed native menu click dispatch, shallow destinations, research layout, editable chart drawings and concise study checks; existing publication blockers remain unchanged.",
-      "reviewed_at": "2026-11-13T15:37:34.320872+00:00",
-      "source_commit": "73ed4bf81d70b90f784f8a08945adbd6d52ca15f"
+      "source_digest": "48283e5e19abfabfdbe0057fdc2c738a76fe66562fb3ffb2beb5a81c72f40945",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
+      "reviewed_at": "2026-11-13T15:49:05.270431+00:00",
+      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
     }
   }
 }
