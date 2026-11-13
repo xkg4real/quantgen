@@ -1,3 +1,28 @@
+# 2026-11-13 수정 HTML 실제 반영 확인 — 기본/root/www 원본 일치
+
+## 완료: 초기 공개 배포와 HTTPS 제공
+사용자가 기존 CloudShell에서 인증서 검증을 유지한 curl GET과 SHA256 비교를 실행했습니다. 아래 **세 주소가 모두 최종 HTML SHA256과 일치**했습니다.
+
+- https://main.d3nfykcepl196i.amplifyapp.com/
+- https://quantgeneration.com/
+- https://www.quantgeneration.com/
+- SHA256: `1dbd9ded79bd25a964061ac896a03bd7846f6d264428ca2dfb7b3aaad6bb14de`.
+- 초기 소스 커밋 `516b3cd6c7e4f8931a164b25500cc68eea7c2c27`, HTML8,634,680 bytes. 증거는 사용자 제공 실제 실행 결과이며 에이전트 직접 라이브 브라우저 검사와 구분합니다.
+- 따라서 이전 절의 “운영 HTML 미배포/기본주소 미검증”은 그 시점 이력입니다. **현재 수정 HTML의 공개 제공은 확인 완료**입니다. 실제 브라우저 상호작용·Microsoft 운영 설정·로그인/API 연동까지 완료한 것은 아닙니다.
+
+## 자동 재배포 검증을 위한 완료 기록 push
+- 새 문서 커밋 [599bd8ccb1474493b64a5c30c8223c3283dba248](https://github.com/xkg4real/website/commit/599bd8ccb1474493b64a5c30c8223c3283dba248)을 website/main에 push했습니다. AGENTS/README/WORK_LOG와 배포 증거 JSON만 갱신했고 HTML·authoring·빌드 코드는 그대로입니다.
+- npm build·해시·JSON·diff 검사 PASS. 원격 변경과 충돌 없음 확인 후 정상 push했으며 force push하지 않았습니다.
+- 이 자연스러운 완료 기록 push로 자동 트리거를 확인합니다. GitHub status/check-run 등록이 없어 성공/실패로 단정하지 않았습니다. 해당 commit의 Amplify job `WEB_HOOK / SUCCEED` 확인은 아직 남아 있습니다.
+- 사용자에게 기존 CloudShell의 읽기 전용 list-jobs 명령을 안내할 수 있도록 준비했습니다. 새 리소스·AWS 설정·DNS·메일 발송은 하지 않았습니다.
+
+## 기록과 남은 조건
+`/workspace/outputs/quantgen-20261113/AMPLIFY_DEPLOYMENT_VERIFICATION.md`, `PUBLIC_HTML_DEPLOYMENT_VERIFIED.json`, 작업표/기록을 갱신했습니다. website 저장소 docs/DEPLOYMENT_VERIFICATION.json에도 사용자 출처를 명시했습니다.
+
+Microsoft 문서는 공개 검토본 상태이며 실제 Microsoft 구매·계약/데이터 위치·보존 설정·메일 연결과 정책 시행은 아직 미확정입니다. Amplify 도메인 관리 UI의 Available 새 화면도 직접 확인하지 않았으며, 실제 HTTPS·원본 일치와 UI 상태 확인을 구분합니다. 앱/메인 CURRENT·LEDGER·AUTO_STATE 소유권을 변경하지 않았습니다.
+
+---
+
 # 2026-11-13 website 전용 GitHub/Amplify 파이프라인 — 1단계 완료
 
 ## 최신 사용자 지시와 운영 방식
