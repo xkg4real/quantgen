@@ -9,6 +9,11 @@ Tests that pinned the UI-D7 page (title "실시간 차트", the 국내 전체·�
 sub-market is a filter inside a market page and the market is chosen in the rail. The watchlist chart cards moved
 to Research Home; Markets keeps the one-stock screen.
 
+Owner ruling UI-D11 (2026-11-12, "코인이 뭐야 ETF라해야지"; the page itself unchanged): the coin page is 크립토 and its
+prose says 가상자산 (the tests that pinned "코인" now pin those words), the rail's 시장 rows are the big categories
+(주식 is highlighted for both stock pages; `open_market_section(page)` replaces clicking the old per-market items),
+and two ETF pages (국내 ETF, 미국 ETF) reuse the page (`MarketPageTests.test_etf_pages...`).
+
 Offline: the ranking loader is a fake; HTTP and Yahoo attempts fail the test unless a test patches Yahoo
 with fixture bars; KIS is a fake service whose paths are checked against the frozen allowlist; the index strip's
 production loader is patched to fail the test, and strips that load are given fixture series.
@@ -34,7 +39,7 @@ with patch.object(dotenv, "load_dotenv", return_value=False):
     from quantgen_desktop.markets_view import MARKET_PAGES, RANKING_CATEGORIES, MarketsWorkspace, WatchlistGrid
 from PyQt6.QtCore import Qt
 from PyQt6.QtTest import QTest
-from PyQt6.QtWidgets import QApplication, QComboBox, QLabel, QPushButton
+from PyQt6.QtWidgets import QApplication, QComboBox, QLabel, QPushButton, QWidget
 from core.i18n import LocaleContext
 from core.market import rankings as R
 from core.market.directory import SymbolDirectory
@@ -187,9 +192,10 @@ class MarketsPageTests(WindowBase):
     def test_interface_contract_and_page_structure(self):
         self.assertEqual(RANKING_CATEGORIES, (("value", "Trading value", "거래대금"), ("volume", "Volume", "거래량"),
                                               ("gainers", "Top gainers", "급상승"), ("losers", "Top losers", "급하락"),
-                                              ("cap", "Market cap", "시가총액")))
+                                              ("cap", "Market cap", "시가총액"), ("qscore", "Q-SCORE highest first", "Q-SCORE 높은 순")))
         self.assertEqual(MARKET_PAGES, (("kr", "Korean stocks", "국내 주식"), ("us", "US stocks", "미국 주식"),
-                                        ("crypto", "Crypto", "코인")))
+                                        ("crypto", "Crypto", "크립토"), ("etf_kr", "Korean ETFs", "국내 ETF"),
+                                        ("etf_us", "US ETFs", "미국 ETF")))
         self.assertTrue(callable(self.view.show_market) and callable(self.view.show_category)
                         and callable(self.view.showing_stock))
         self.assertIsInstance(self.view, MarketsWorkspace)
@@ -208,7 +214,7 @@ class MarketsPageTests(WindowBase):
         self.assertFalse([w for w in page.findChildren(QComboBox) if w.isVisible() and w.findData("bond") >= 0])
         self.assertEqual(self.board.heading.text(), "국내 주식")
         self.assertEqual([b.text() for b in self.board.category_buttons.values()],
-                         ["거래대금", "거래량", "급상승", "급하락", "시가총액"])
+                         ["거래대금", "거래량", "급상승", "급하락", "시가총액", "Q-SCORE 높은 순"])
         self.assertEqual([b.text() for b in self.board.sub_buttons.values()], ["전체", "코스피", "코스닥"])
         self.assertFalse(self.board.summary_section.isVisible())  # nothing loaded, nothing loads: no empty strip
         self.assertFalse(self.board.conditions_section.isVisible())
@@ -625,6 +631,20 @@ def crypto_batch(fetched_at=NOW):
     return R.Batch("crypto", records, "daily", fetched_at.isoformat())
 
 
+def etf_batch(group, fetched_at=NOW):
+    """KIS quotes of four ETFs of a list (UI-D11): ranked as stocks are; no market cap."""
+    members = R.ETF_KR if group == "etf_kr" else R.ETF_US
+    rows = ((0, 1.2, 4.0e6, 1.6e11), (1, -0.8, 9.0e6, 8.0e10), (2, 2.4, 2.0e7, 3.0e11), (3, -1.9, 3.0e6, 1.0e10))
+    at = fetched_at.isoformat()
+    records = []
+    for index, pct, volume, value in rows:
+        price = 40000.0 - index * 5000 if group == "etf_kr" else 500.0 - index * 50
+        scale = 1 if group == "etf_kr" else 1e-3
+        records.append(R.QuoteRecord(members[index], price, price * pct / 100, pct, volume, value * scale, None, "KIS",
+                                     "kis", at))
+    return R.Batch(group, tuple(records), "kis", at)
+
+
 def fixture_series(symbol, source="yfinance", days=400):
     """Index and coin daily closes for the strip, as `core.ficc.data.load_series` answers them."""
     from types import SimpleNamespace
@@ -648,10 +668,13 @@ class MarketPageTests(WindowBase):
         heard = []
         self.view.market_changed.connect(heard.append)
         self.assertEqual((self.view.current_market(), self.board.heading.text()), ("kr", "국내 주식"))
-        self.assertTrue(self.window.market_sections["kr"].isChecked())
+        self.assertTrue(self.window.market_sections["stocks"].isChecked())
         self.assertTrue(self.view.show_market("us")); self.app.processEvents()
         self.assertEqual((heard, self.board.page, self.board.heading.text()), (["us"], "us", "미국 주식"))
-        self.assertTrue(self.window.market_sections["us"].isChecked())  # the rail follows the page
+        self.assertTrue(self.window.market_sections["stocks"].isChecked())  # the rail follows the page
+        self.view.show_market("crypto"); self.app.processEvents()
+        self.assertEqual([k for k, b in self.window.market_sections.items() if b.isChecked()], ["crypto"])
+        self.view.show_market("us"); self.app.processEvents()
         self.assertEqual([b.text() for b in self.board.sub_buttons.values()], ["전체", "나스닥", "NYSE"])
         # The placeholder follows the field's width (`RankingBoard._render_placeholder`): the long or the short form,
         # both naming this market. Which one fits depends on the platform's text widths (Windows CI chose the short).
@@ -676,7 +699,7 @@ class MarketPageTests(WindowBase):
         QTest.mouseClick(self.shown_rows()[0], Qt.MouseButton.LeftButton); self.app.processEvents()
         self.assertTrue(self.view.showing_stock())
         self.window.navigate("markets")
-        self.assertTrue(self.window.market_sections["us"].isChecked())
+        self.assertTrue(self.window.market_sections["stocks"].isChecked())
         self.view.open_instrument(member("005930").instrument)  # a Korean stock from elsewhere (Home's cards)
         self.view.stock.back_button.click(); self.app.processEvents()
         self.assertEqual((self.board.page, self.view.showing_stock()), ("kr", False))
@@ -688,7 +711,7 @@ class MarketPageTests(WindowBase):
         self.assertEqual(self.names(), ["SK하이닉스", "삼성전자"])  # ranked by trading value
         chips = [c for c in self.board.filter_chips if c.isVisible()]
         self.assertEqual([c.text() for c in chips], ["‘반도체’  ×"])
-        self.assertEqual(self.board.count.text(), "종목 2개")  # UI-D10 review: as the coin page's "코인 2개"
+        self.assertEqual(self.board.count.text(), "종목 2개")  # UI-D10 review: as the crypto page's "자산 2개"
         self.board.category_buttons["gainers"].click(); self.app.processEvents()
         self.assertEqual(self.names(), ["삼성전자"])  # the same search, ranked by the rise
         self.board.category_buttons["value"].click()
@@ -763,7 +786,7 @@ class MarketPageTests(WindowBase):
 
     def test_coin_market_degrades_cleanly(self):
         self.view.show_market("crypto"); self.load()
-        self.assertEqual(self.board.heading.text(), "코인")
+        self.assertEqual(self.board.heading.text(), "크립토")
         self.assertEqual(self.board.badge.text(), "지연·일별")  # Yahoo daily bars, never live
         self.assertEqual(self.names(), ["비트코인", "이더리움", "리플", "도지코인"])
         top = self.shown_rows()[0]
@@ -773,19 +796,19 @@ class MarketPageTests(WindowBase):
         # in a tooltip no keyboard reaches); the footnote says why.
         self.assertEqual([k for k, b in self.board.category_buttons.items() if b.isVisible()],
                          ["value", "gainers", "losers"])
-        self.assertIn("코인은 거래량·시가총액 순위가 없습니다", self.board.footnote.text())
-        self.assertIn("코인 시가총액이 없습니다", self.board.footnote.text())
+        self.assertIn("가상자산은 거래량·시가총액 순위가 없습니다", self.board.footnote.text())
+        self.assertIn("가상자산 시가총액이 없습니다", self.board.footnote.text())
         self.assertFalse(any(b.isVisible() for b in self.board.sub_buttons.values()))
         self.assertFalse(self.board.sector_box.isVisible())
         self.board.conditions_button.click(); self.app.processEvents()
         self.assertFalse(self.board.condition_groups["cap"].isVisible())
         self.assertTrue(self.board.condition_groups["value"].isVisible())
         self.board.set_category("cap")  # set from code all the same: the list says why instead of ranking nothing
-        self.assertEqual(self.board.empty.text(), "이 앱이 쓰는 자료에는 코인 시가총액이 없어 시가총액 순위를 매기지 않습니다.")
+        self.assertEqual(self.board.empty.text(), "이 앱이 쓰는 자료에는 가상자산 시가총액이 없어 시가총액 순위를 매기지 않습니다.")
         self.board.set_category("gainers")
         self.assertEqual(self.names(), ["리플", "도지코인", "비트코인"])  # +5.00%, +3.03%, +1.18%
         row = self.shown_rows()[0]
-        self.assertIn("코인은 아직 종목 화면이 없어", row.toolTip())
+        self.assertIn("가상자산은 아직 종목 화면이 없어", row.toolTip())
         QTest.mouseClick(row, Qt.MouseButton.LeftButton); self.app.processEvents()
         row.setFocus(); QTest.keyClick(row, Qt.Key.Key_Return); self.app.processEvents()
         self.assertFalse(self.view.showing_stock())  # nothing opens, nothing breaks
@@ -853,10 +876,21 @@ class MarketPageTests(WindowBase):
         self.assertEqual([t.name.text() for t in self.board.summary.tiles.values() if t.isVisible()],
                          ["KOSPI", "KOSDAQ"])
         self.assertEqual([b.text() for b in self.window.market_sections.values()],
-                         ["Korean stocks", "US stocks", "Crypto"])
+                         ["Indices", "Stocks", "Crypto", "Futures", "Forex", "Government bonds", "Corporate bonds",
+                          "ETFs", "World economy"])
         self.assertEqual([t for t in self.page_text() if re.search("[가-힣]", t)], [])
+        fly = self.window.rail_flyouts
+        fly.open_child(fly.open_root(self.window.market_sections["stocks"]).rows[0])
+        self.assertEqual([r.text() for r in fly.panels[1].rows],
+                         ["Trading value", "Volume", "Top gainers", "Top losers", "Market cap", "Q-SCORE highest first"])
         self.window.set_language("ko"); self.app.processEvents()
-        self.assertEqual([b.text() for b in self.window.market_sections.values()], ["국내 주식", "미국 주식", "코인"])
+        self.assertFalse(fly.is_open())
+        self.assertEqual([b.text() for b in self.window.market_sections.values()],
+                         ["지수", "주식", "크립토", "선물", "외환", "국채", "회사채", "ETF", "월드 이코노미"])
+        fly.open_child(fly.open_root(self.window.market_sections["stocks"]).rows[0])
+        self.assertEqual([r.text() for r in fly.panels[1].rows], ["거래대금", "거래량", "급상승", "급하락", "시가총액", "Q-SCORE 높은 순"])
+        self.assertEqual([bool(r.property("current")) for r in fly.panels[1].rows], [True, False, False, False, False, False])
+        fly.close_all()
         self.assertEqual((self.loader.calls, self.series.call_count), (["kr"], series_calls))
 
     def test_every_control_shows_the_windows_focus_ring(self):
@@ -932,6 +966,128 @@ def clear_mark_shown(edit):
     return any((button.property("opacity") or 0) > 0 for button in edit.findChildren(QToolButton))
 
 
+class EtfAndCryptoNameTests(WindowBase):
+    """Owner ruling UI-D11 (2026-11-12): "코인이 뭐야 ETF라해야지" — ETF markets on the same page and paths as stocks,
+    and the coin market called 크립토 (가상자산 in sentences), never 코인; the page itself unchanged (R-D11-3)."""
+
+    def setUp(self):
+        super().setUp()
+        self.loader = FakeLoader({"kr": kr_batch(), "us": us_batch(), "crypto": crypto_batch(),
+                                  "etf_kr": etf_batch("etf_kr"), "etf_us": etf_batch("etf_us")})
+        self.board.loader = self.loader
+        self.series = Mock(side_effect=fixture_series)
+        self.board.summary.loader = self.series
+        self.addCleanup(self.idle)
+
+    def idle(self):
+        self.board.stop()
+        self.wait(lambda: not self.board.jobs.busy and not self.board.summary.jobs.busy)
+
+    def test_etf_pages_reuse_the_market_page_and_open_the_stock_screen(self):
+        opened = []
+        self.view.stock.show_instrument = lambda instrument, load=True: opened.append(instrument)
+        self.window.open_market_leaf(("market", "etf_kr", "volume"))  # 시장 › ETF › 국내 › 거래량
+        self.load()
+        self.assertEqual((self.board.heading.text(), self.board.category), ("국내 ETF", "volume"))
+        self.assertEqual([k for k, b in self.window.market_sections.items() if b.isChecked()], ["etf"])
+        self.assertEqual(self.names(), ["KODEX 레버리지", "TIGER 200", "KODEX 200", "KODEX 인버스"])
+        self.assertEqual(self.board.badge.text(), "KIS 조회 · 45초마다")
+        # No market cap for ETFs: the chip, the column and the condition are left out, and the footnote says why.
+        self.assertEqual([k for k, b in self.board.category_buttons.items() if b.isVisible()],
+                         ["value", "volume", "gainers", "losers"])
+        self.assertNotIn("cap", dict(self.board.column_header.plan))
+        self.assertIn("ETF는 시가총액 순위가 없습니다", self.board.footnote.text())
+        self.assertIn("순자산(AUM)", self.board.footnote.text())
+        self.assertIn("주요 ETF 20개 안에서 매긴 순위", self.board.footnote.text())
+        self.assertFalse(self.board.sector_box.isVisible())
+        self.assertFalse(any(segment.isVisible() for segment in self.board.segments.values()))
+        self.board.conditions_button.click(); self.app.processEvents()
+        self.assertFalse(self.board.condition_groups["cap"].isVisible())
+        self.board.conditions_button.click(); self.app.processEvents()
+        self.assertIn(self.board.search.placeholderText(), ("국내 ETF에서 찾기 · 이름이나 코드", "국내 ETF 안에서 찾기"))
+        self.board.set_category("cap")  # from code all the same: the list says why
+        self.assertIn("ETF의 규모는 시가총액이 아니라 순자산(AUM)", self.board.empty.text())
+        self.board.set_category("value")
+        top = self.shown_rows()[0]
+        self.assertEqual((top.name.full, top.code.full, top.price.text(), top.value.text()),
+                         ("KODEX 레버리지", "122630", "30,000", "3,000억"))
+        QTest.mouseClick(top, Qt.MouseButton.LeftButton); self.app.processEvents()
+        self.assertEqual(opened[-1], R.ETF_KR[2].instrument)  # an ETF opens the stock screen like a stock
+        self.assertEqual(opened[-1].asset, "domestic_stock")
+        self.view.stock.back_button.click(); self.app.processEvents()
+        self.assertEqual((self.board.page, self.view.showing_stock()), ("etf_kr", False))  # back to the ETF list
+        self.view.search.setText("레버리지"); self.app.processEvents()
+        self.assertEqual(self.names(), ["KODEX 레버리지"])
+        self.assertEqual(self.board.count.text(), "ETF 1개")
+        self.view.search.setText("")
+        self.window.open_market_leaf(("market", "etf_us", "gainers"))
+        self.load()
+        self.assertEqual((self.board.heading.text(), self.board.page, self.board.category), ("미국 ETF", "etf_us",
+                                                                                              "gainers"))
+        self.assertEqual(self.board.badge.text(), "KIS 무료 시세 · 45초마다")
+        self.assertEqual(self.names(), ["뱅가드 S&P 500", "SPDR S&P 500"])
+        top = self.shown_rows()[0]
+        self.assertEqual((top.code.full, top.mark.spec.letters), ("VOO", "VO"))  # a ticker's letters, as US stocks
+        QTest.mouseClick(top, Qt.MouseButton.LeftButton); self.app.processEvents()
+        self.assertEqual((opened[-1].asset, opened[-1].code, opened[-1].exchange), ("overseas_stock", "VOO", "AMS"))
+        self.view.stock.back_button.click(); self.app.processEvents()
+        self.assertEqual(self.board.page, "etf_us")
+        # The index strip shows the ETF's home market; one fetch per list, and the strip's series are shared.
+        self.assertEqual(self.loader.calls, ["etf_kr", "etf_us"])
+
+    def test_no_coin_label_in_the_korean_window(self):
+        from quantgen_desktop.markets_view import MARKET_PAGES
+        from PyQt6.QtWidgets import QAbstractButton, QLineEdit
+        everyone = R.DOMESTIC + R.US + R.CRYPTO + R.ETF_KR + R.ETF_US
+        names = sorted({n for m in everyone for n in (m.name_ko, m.name_en, *m.aliases)}, key=len, reverse=True)
+
+        def scrub(text):
+            for name in names:  # an asset's own name (비트코인, 라이트코인, 코인베이스) is not a label
+                text = text.replace(name, "")
+            return text
+
+        def texts(root):
+            out = []
+            for widget in (root, *root.findChildren(QWidget)):
+                if not widget.isVisible():
+                    continue
+                out += [widget.toolTip(), widget.accessibleName(), widget.accessibleDescription()]
+                if isinstance(widget, (QLabel, QAbstractButton)):
+                    out.append(widget.text())
+                if isinstance(widget, QLineEdit):
+                    out += [widget.text(), widget.placeholderText()]
+                if isinstance(widget, QComboBox):
+                    out += [widget.itemText(i) for i in range(widget.count())]
+            return [t for t in out if t]
+
+        seen = []
+        for page, _english, korean in MARKET_PAGES:
+            self.window.open_market_section(page)
+            self.load()
+            self.board.summary.refresh(manual=True)
+            self.wait(lambda: not self.board.summary.jobs.busy)
+            self.app.processEvents()
+            self.assertEqual(self.board.heading.text(), korean)
+            for key, chip in self.board.category_buttons.items():
+                if chip.isVisible():
+                    chip.click(); self.app.processEvents()
+                    seen += texts(self.window)
+            self.view.search.setText("zzz"); self.app.processEvents()  # the empty states
+            seen += texts(self.window)
+            self.view.search.setText("")
+        fly = self.window.rail_flyouts
+        for row in self.window.market_sections.values():
+            seen.append(row.text())
+            panel = fly.open_root(row)
+            seen += texts(panel)
+            for sub in [r for r in panel.rows if r.node.children]:
+                seen += texts(fly.open_child(sub))
+            fly.close_all()
+        self.assertIn("크립토", seen)
+        self.assertIn("가상자산", " ".join(seen))
+        self.assertEqual([t for t in seen if "코인" in scrub(t)], [])
+
+
 class MarketReviewTests(WindowBase):
     """UI-D10 review (2026-11-11): two independent reviewers' findings, each pinned by its scenario."""
 
@@ -969,7 +1125,7 @@ class MarketReviewTests(WindowBase):
         self.window.activateWindow(); self.app.processEvents()
         opened = []
         self.view.stock.show_instrument = lambda instrument, load=True: opened.append(instrument.code)
-        self.window.market_sections["us"].click(); self.window.market_sections["crypto"].click()
+        self.window.open_market_section("us"); self.window.open_market_section("crypto")
         self.window.navigate("home"); self.window.home_view.add_requested.emit(); self.app.processEvents()
         self.assertEqual(self.board.page, "us")  # the stock market shown last, never the coin page
         self.assertIs(self.app.focusWidget(), self.view.search)
@@ -987,7 +1143,7 @@ class MarketReviewTests(WindowBase):
         self.assertEqual((opened[-1], self.board.message.isVisible()), ("AAPL", False))
         self.view.show_rankings(); self.view.show_market("crypto")
         self.view.search.setText("zzz"); QTest.keyClick(self.view.search, Qt.Key.Key_Return)
-        self.assertEqual(self.board.message.text(), "이 목록에는 ‘zzz’에 맞는 코인이 없습니다.")
+        self.assertEqual(self.board.message.text(), "이 목록에는 ‘zzz’에 맞는 가상자산이 없습니다.")
         self.assertEqual(self.loader.calls, [])
 
     def test_enter_reads_the_markets_own_list_and_says_no_match_only_when_true(self):
@@ -1007,10 +1163,10 @@ class MarketReviewTests(WindowBase):
         self.view.search.setText("ETH"); QTest.keyClick(self.view.search, Qt.Key.Key_Return)
         self.assertFalse(self.board.message.isVisible())
         self.assertEqual(self.board.empty.text(),
-                         "급상승은 오른 코인만 보여 줍니다. 지금 기준에 맞는 코인 1개는 오르지 않았습니다.")
+                         "급상승은 오른 가상자산만 보여 줍니다. 지금 기준에 맞는 가상자산 1개는 오르지 않았습니다.")
         action = next(b for b in self.board.empty_actions if b.isVisible())
         self.assertEqual(action.text(), "거래대금 순으로 보기")
-        self.assertFalse(self.board.count.isVisible())  # no "코인 0개" beside the empty state
+        self.assertFalse(self.board.count.isVisible())  # no "자산 0개" beside the empty state
         action.click(); self.app.processEvents()
         self.assertEqual((self.board.category, self.names()), ("value", ["이더리움"]))
         self.assertEqual(opened, ["035720"])
@@ -1275,11 +1431,11 @@ class MarketReviewTests(WindowBase):
                       " ".join(self.board.styleSheet().split()))
         self.assertNotIn("시가총액", self.board.conditions_button.toolTip())
         self.assertEqual(self.board.conditions_button.toolTip(), "등락률, 거래대금으로 목록을 좁힙니다.")
-        self.assertEqual(self.board.search.placeholderText(), "코인 찾기 · 이름이나 티커(BTC)")
+        self.assertEqual(self.board.search.placeholderText(), "크립토 찾기 · 이름이나 티커(BTC)")
         self.view.search.setText("반도체"); self.app.processEvents()
-        self.assertEqual(self.board.empty.text(), "이 목록에는 ‘반도체’에 맞는 코인이 없습니다.")
+        self.assertEqual(self.board.empty.text(), "이 목록에는 ‘반도체’에 맞는 가상자산이 없습니다.")
         self.view.search.setText("이더"); self.app.processEvents()
-        self.assertEqual(self.board.count.text(), "코인 1개")
+        self.assertEqual(self.board.count.text(), "자산 1개")
         self.view.show_market("us"); self.app.processEvents()
         self.assertEqual(self.board.conditions_button.toolTip(), "등락률, 거래대금, 시가총액으로 목록을 좁힙니다.")
 
@@ -1321,7 +1477,7 @@ class MarketReviewTests(WindowBase):
         self.assertEqual((self.board.page, self.view.search.text()), ("us", "테슬라"))
         self.view.show_market("kr"); self.view.search.setText("비트"); self.app.processEvents()
         self.assertEqual([b.text() for b in self.board.market_buttons if b.isVisible()],
-                         ["코인에서 보기: 비트코인 BTC 외 1개"])
+                         ["크립토에서 보기: 비트코인 BTC 외 1개"])
         self.view.search.setText("삼성"); self.app.processEvents()
         self.assertFalse(any(b.isVisible() for b in self.board.market_buttons))  # this market has it
         # US letter marks come from the ticker (the review found 마이, 마스 and two 'AC').
@@ -1495,6 +1651,39 @@ class LoaderTests(Base):
             live = ProductionRankingLoader(service_factory=lambda: FakeService(ready=True))("kr", members[:2])
             self.assertEqual((live.mode, live.fallback), ("kis", False))
         self.assertEqual(daily_batch("kr", members[:1], fetch=lambda s: [], workers=2).mode, "none")
+
+    def test_etf_lists_take_the_stocks_allowlisted_kis_quotes_or_yahoo_daily_and_no_market_cap(self):
+        service = FakeService()
+        kr = kis_batch(service, "etf_kr", R.ETF_KR[:2], sleep=lambda s: None)
+        us = kis_batch(service, "etf_us", R.ETF_US[:2], sleep=lambda s: None)
+        self.assertEqual([(c[1], c[2]) for c in service.calls],
+                         [("FHKST01010100", {"FID_COND_MRKT_DIV_CODE": "J", "FID_INPUT_ISCD": "069500"}),
+                          ("FHKST01010100", {"FID_COND_MRKT_DIV_CODE": "J", "FID_INPUT_ISCD": "102110"}),
+                          ("HHDFS00000300", {"AUTH": "", "EXCD": "AMS", "SYMB": "SPY"}),
+                          ("HHDFS00000300", {"AUTH": "", "EXCD": "NAS", "SYMB": "QQQ"})])
+        self.assertTrue(all(path in config.KIS_QUOTATION_ALLOWLIST for path, _tr, _p in service.calls))
+        self.assertEqual(([r.member.code for r in kr.records], kr.group), (["069500", "102110"], "etf_kr"))
+        self.assertEqual((us.group, us.mode), ("etf_us", "kis"))
+        # The production loader: no price-detail (market cap) request and no market-cap source for ETFs.
+        caps = Mock(side_effect=AssertionError("ETFs have no market cap"))
+        live = FakeService()
+        batch = ProductionRankingLoader(service_factory=lambda: live, caps=caps)("etf_us", R.ETF_US[:3])
+        self.assertEqual([c[1] for c in live.calls], ["HHDFS00000300"] * 3)
+        caps.assert_not_called()
+        self.assertEqual(R.source_state(batch, open_now=True), "polled_us")
+        asked = []
+
+        def frame(symbol, interval, period):
+            asked.append(symbol)
+            return [("2026-11-09", 1, 1, 1, 100.0, 10.0), ("2026-11-10", 1, 1, 1, 101.0, 20.0)]
+        with patch("core.market.routing._yahoo_frame", side_effect=frame):
+            idle = ProductionRankingLoader(service_factory=lambda: FakeService(ready=False), caps=caps)
+            daily_kr = idle("etf_kr", R.ETF_KR[:3])
+            daily_us = idle("etf_us", R.ETF_US[:2])
+        self.assertEqual(sorted(asked), ["069500.KS", "102110.KS", "122630.KS", "QQQ", "SPY"])  # KRX ETFs: .KS only
+        self.assertEqual((daily_kr.mode, daily_kr.group, len(daily_kr.records)), ("daily", "etf_kr", 3))
+        self.assertTrue(all(r.estimated_value for r in daily_us.records))  # close x volume, as for stocks
+        caps.assert_not_called()
 
     def test_kis_price_detail_market_cap_in_the_paced_us_batch(self):
         # Owner approval 2026-11-11 ("승인."): KIS overseas price-detail added to the read-only allowlist.

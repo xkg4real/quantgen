@@ -7,6 +7,10 @@ from .wheel_guard import guard as guard_wheel
 from .status_language import STATUS_ROLE, status_text
 
 CAPTION_ROLE = Qt.ItemDataRole.UserRole + 802
+# A widget built in the window language and rebuilt on a language switch (the 시장 menu's flyouts, UI-D11) carries
+# this property from before it gets its parent: no pass visits it or its children, and adding it schedules none.
+# A pass over the whole window takes about a tenth of a second, too slow to follow every flyout a pointer opens.
+SKIP_PASS = 'qg_no_language_pass'
 
 
 class UiLabel(QLabel):
@@ -53,7 +57,22 @@ class LanguageController(QObject):
         super().__init__(window)
         self.window = window
         self.pending = self.applying = False
+        self._quiet = {}  # id(widget) -> open quiet windows (`quiet`)
         self.apply()
+
+    def quiet(self, widget, ms=60):
+        """The layout requests a widget gets in the next `ms` come from a `SKIP_PASS` child shown or hidden over it
+        (a flyout, which is in no layout): they need no pass. Requests on any other widget still schedule one."""
+        key = id(widget)
+        self._quiet[key] = self._quiet.get(key, 0) + 1
+        QTimer.singleShot(ms, lambda: self._unquiet(key))
+
+    def _unquiet(self, key):
+        left = self._quiet.get(key, 0) - 1
+        if left > 0:
+            self._quiet[key] = left
+        else:
+            self._quiet.pop(key, None)
 
     def schedule(self, *args):
         if not self.applying and not self.pending:
@@ -63,6 +82,10 @@ class LanguageController(QObject):
     def eventFilter(self, watched, event):
         if event.type() in (QEvent.Type.LayoutRequest, QEvent.Type.ChildAdded,
                             QEvent.Type.PolishRequest):
+            if event.type() == QEvent.Type.ChildAdded and not _new_widget(event.child()):
+                return False  # a skipped widget, or no widget at all (a style animation, a timer): nothing to translate
+            if event.type() == QEvent.Type.LayoutRequest and id(watched) in self._quiet:
+                return False
             self.schedule()
         return False
 
@@ -107,7 +130,12 @@ class LanguageController(QObject):
             self.window.setLocale(QLocale(str(ctx.locale)))
             self.window.setLayoutDirection(Qt.LayoutDirection.RightToLeft if ctx.rtl else Qt.LayoutDirection.LeftToRight)
         try:
-            for widget in [self.window, *self.window.findChildren(QWidget)]:
+            widgets = [self.window, *self.window.findChildren(QWidget)]
+            skipped = [widget for widget in widgets if _skipped(widget)]
+            if skipped:
+                left_out = {id(widget) for root in skipped for widget in (root, *root.findChildren(QWidget))}
+                widgets = [widget for widget in widgets if id(widget) not in left_out]
+            for widget in widgets:
                 if not getattr(widget, '_qg_watched', False):
                     widget.installEventFilter(self)
                     widget._qg_watched = True
@@ -167,6 +195,17 @@ class LanguageController(QObject):
                     widget.update()
         finally:
             self.applying = False
+
+
+def _skipped(obj):
+    return isinstance(obj, QWidget) and bool(obj.property(SKIP_PASS))
+
+
+def _new_widget(child):
+    """Whether a ChildAdded brings a widget a pass must visit. Only widgets carry text; the style adds and removes
+    animation objects whenever a widget over the page is shown or hidden (UI-D11 review: each flyout opened or closed
+    started a pass over the whole window, about 0.14 s). `isWidgetType` holds while the child is still being built."""
+    return child is not None and child.isWidgetType() and not _skipped(child)
 
 
 def locale_picker(ctx,parent=None):

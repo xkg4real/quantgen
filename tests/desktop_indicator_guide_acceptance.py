@@ -38,9 +38,9 @@ class NativeIndicatorGuideTests(unittest.TestCase):
         guide=w.indicator_guide
         self.assertTrue(guide.isVisible());self.assertEqual(guide.keys,())
         baseline=guide.series.dates
-        guide.search.setFocus();QTest.keyClicks(guide.search,'sma');QTest.keyClick(guide.search,Qt.Key.Key_Return)
+        guide.options['sma'].setFocus();QTest.keyClick(guide.options['sma'],Qt.Key.Key_Space)
         self.assertEqual(guide.keys,('sma',));self.assertEqual(guide.case_name,'2022')
-        guide.choose('rsi');guide.popular['macd'].click();self.app.processEvents()
+        guide.choose('rsi');guide.options['macd'].click();self.app.processEvents()
         self.assertEqual(guide.case_name,'2020');self.assertEqual(guide.series.dates,baseline)
         self.assertEqual(guide.keys,('sma','rsi','macd'))
         self.assertGreater(guide.chart.renderer().viewBoxF().height(),0)
@@ -57,9 +57,9 @@ class NativeIndicatorGuideTests(unittest.TestCase):
         original=(w.symbol.text(),w.target.text(),w.seed.value(),w.source.currentData(),w.model.currentData())
         w.locale_picker.setCurrentIndex(w.locale_picker.findData('en_US'));self.app.processEvents()
         self.assertEqual(w.nav['home'].text(),'Research Home')
-        self.assertIn('Search technical',guide.intro.text())
-        self.assertEqual(guide.search_title.text(),'Search what you want to explore')
-        self.assertEqual(guide.search.text(),'Relative strength · RSI');self.assertEqual(guide.focus,'rsi')
+        self.assertIn('Choose an indicator',guide.intro.text())
+        self.assertIn('Choose several',guide.selection_title.text())
+        self.assertEqual(guide.focus,'rsi');self.assertTrue(guide.options['rsi'].isChecked())
         self.assertEqual(guide.keys,('rsi',));self.assertEqual(guide.cursor,100)
         self.assertEqual((w.symbol.text(),w.target.text(),w.seed.value(),w.source.currentData(),w.model.currentData()),original)
         w.locale_picker.setCurrentIndex(w.locale_picker.findData('fr_FR'));self.app.processEvents()
@@ -110,65 +110,45 @@ class NativeIndicatorGuideTests(unittest.TestCase):
         w.navigate('home');self.assertFalse(guide.isVisible())
         w.nav['guide'].click();self.assertEqual(guide.keys,('sma','ema','rsi','macd','bb'))
 
-    def test_search_suggests_while_typing_and_keyboard_chooses_like_a_browser(self):
-        w=self.window;w.nav['guide'].click();guide=w.indicator_guide;self.app.processEvents()
-        self.assertEqual(guide.search_title.text(),w.ctx.t('search_title'))
-        self.assertEqual(guide.search_title.text(),'궁금한 내용을 검색해 보세요')
-        self.assertFalse(guide.suggestions.isVisible());self.assertFalse(guide.detail.isVisible())
-        guide.search.setFocus();QTest.keyClicks(guide.search,'rs');self.app.processEvents()
-        self.assertTrue(guide.suggestions.isVisible());self.assertEqual(guide.suggestion_keys()[0],'rsi')
-        self.assertLessEqual(len(guide.suggestion_keys()),guide.MAX_SUGGESTIONS)
-        QTest.keyClick(guide.search,Qt.Key.Key_Down);self.assertTrue(guide.suggestions.hasFocus())
-        QTest.keyClick(guide.suggestions,Qt.Key.Key_Return);self.app.processEvents()
-        self.assertEqual(guide.keys,('rsi',));self.assertEqual(guide.focus,'rsi')
-        self.assertFalse(guide.suggestions.isVisible());self.assertTrue(guide.detail.isVisible())
-        shown=[(h.text(),b.text()) for h,b in guide.detail_sections if not h.isHidden()]
-        self.assertEqual(shown,[(w.ctx.t(f),w.ctx.t('rsi_'+f)) for f in ('meaning','look','interpret','limit')])
-        # Hangul initial consonants match like a prefix; mouse clicks choose too.
-        guide.search.setText('ㅂㄹㅈ');self.app.processEvents();self.assertEqual(guide.suggestion_keys()[0],'bb')
-        rect=guide.suggestions.visualItemRect(guide.suggestions.item(0))
-        QTest.mouseClick(guide.suggestions.viewport(),Qt.MouseButton.LeftButton,pos=rect.center());self.app.processEvents()
-        self.assertEqual(guide.keys,('rsi','bb'));self.assertEqual(guide.search.text(),w.ctx.t('bb'))
-        # A market term explains without changing the chart selection or sample.
+    def test_visible_multiple_choices_and_optional_terms_need_no_typing(self):
+        from PyQt6.QtWidgets import QLineEdit
+        w=self.window;w.navigate('guide');guide=w.indicator_guide;self.app.processEvents()
+        self.assertEqual(set(guide.options),{'sma','ema','rsi','macd','bb'})
+        self.assertFalse(guide.findChildren(QLineEdit))
+        for key in ('rsi','bb'):
+            button=guide.options[key];self.assertTrue(button.isVisible())
+            button.setFocus();QTest.keyClick(button,Qt.Key.Key_Space)
+        self.assertEqual(guide.keys,('rsi','bb'))
+        self.assertTrue(guide.detail.isVisible());self.assertFalse(guide.detail_body.isVisible())
+        guide.detail_more.click();self.assertTrue(guide.detail_body.isVisible())
+        self.assertEqual([(h.text(),b.text()) for h,b in guide.detail_sections],
+                         [(w.ctx.t(f),w.ctx.t('bb_'+f)) for f in ('meaning','look','interpret','limit')])
         case,dates=guide.case_name,guide.series.dates
-        guide.search.setText('듀레이션');self.app.processEvents();QTest.keyClick(guide.search,Qt.Key.Key_Return)
-        self.assertEqual(guide.focus,'duration');self.assertEqual(guide.keys,('rsi','bb'))
-        self.assertEqual((guide.case_name,guide.series.dates),(case,dates))
-        self.assertTrue(guide.detail_chart.isHidden());self.assertEqual(guide.detail_category.text(),'금리·채권')
-        self.assertIn('수정 듀레이션',guide.detail_sections[0][1].text())
-        # No match is stated; Escape closes it; clearing the box hides everything.
-        guide.search.setText('zzzz');self.app.processEvents()
-        self.assertTrue(guide.no_match.isVisible());self.assertIn('zzzz',guide.no_match.text())
-        QTest.keyClick(guide.search,Qt.Key.Key_Escape);self.assertFalse(guide.no_match.isVisible())
-        guide.search.clear();self.app.processEvents()
-        self.assertFalse(guide.suggestions.isVisible());self.assertFalse(guide.no_match.isVisible())
-        # A chip's name reopens that explanation; its × removes it from the chart.
-        guide.chips['rsi'].show_button.click();self.assertEqual(guide.focus,'rsi')
-        self.assertEqual(guide.detail_sections[0][1].text(),w.ctx.t('rsi_meaning'))
-        guide.chips['bb'].remove_button.click();self.assertEqual(guide.keys,('rsi',))
-        # Enter after Escape still chooses the best match for the typed text.
-        guide.search.setText('macd');self.app.processEvents();QTest.keyClick(guide.search,Qt.Key.Key_Escape)
-        QTest.keyClick(guide.search,Qt.Key.Key_Return);self.assertEqual(guide.focus,'macd')
-        guide.remove('macd')
-        # The detail button adds the focused indicator back.
-        guide.choose('macd');guide.detail_chart.click();self.assertEqual(guide.keys,('rsi',))
-        guide.detail_chart.click();self.assertEqual(guide.keys,('rsi','macd'))
-        guide.clear.click();self.assertEqual(guide.keys,());self.assertTrue(guide.clear.isHidden())
-        self.assertFalse(w.jobs.busy);self.assertEqual(w.session.runs(),[]);self.provider.assert_not_called()
+        index=guide.terms.findData('duration');guide.terms.setCurrentIndex(index);guide.terms.activated.emit(index)
+        self.assertEqual(guide.focus,'duration');self.assertEqual((guide.case_name,guide.series.dates),(case,dates))
+        self.assertFalse(guide.terms.isEditable());self.assertEqual(guide.detail_category.text(),'금리·채권')
+        guide.options['rsi'].click();self.assertEqual(guide.keys,('bb',))
+        guide.chips['bb'].remove_button.click();self.assertEqual(guide.keys,())
+        self.assertFalse(w.jobs.busy);self.provider.assert_not_called()
 
-    def test_search_language_switch_relocalizes_choice_and_english_has_no_hangul(self):
+    def test_choice_language_switch_and_layout_preserve_selection(self):
         import re
-        w=self.window;guide=w.indicator_guide;guide.choose('var');guide.choose('sma')
-        guide.search.setText('vol');self.app.processEvents()
-        w.locale_picker.setCurrentIndex(w.locale_picker.findData('en_US'));self.app.processEvents()
-        self.assertEqual((guide.focus,guide.keys),('sma',('sma',)))
-        self.assertEqual(guide.search.text(),'vol');self.assertEqual(guide.suggestion_keys()[:2],('volatility','volume'))
-        guide.choose('cvar');self.app.processEvents()
-        texts=[guide.search_title.text(),guide.search.placeholderText(),guide.detail_title.text(),guide.detail_category.text(),
-               guide.popular_label.text(),guide.selected_label.text(),*[b.text() for b in guide.popular.values()],
-               *[h.text()+b.text() for h,b in guide.detail_sections],guide.intro.text(),guide.steps.text()]
-        self.assertFalse([t for t in texts if re.search('[가-힣]',t)])
-        self.assertEqual(guide.search.text(),'Conditional VaR · CVaR')
+        w=self.window;w.navigate('guide');guide=w.indicator_guide;guide.choose('sma');guide.choose('rsi')
+        for language in ('en_US','ko_KR'):
+            w.locale_picker.setCurrentIndex(w.locale_picker.findData(language));self.app.processEvents()
+            for width in (1000,1440):
+                w.resize(width,800)
+                for _ in range(8):self.app.processEvents()
+                self.assertEqual(guide.keys,('sma','rsi'))
+                self.assertEqual(w.stack.currentWidget().horizontalScrollBar().maximum(),0)
+                for button in guide.options.values():
+                    self.assertTrue(button.parentWidget().rect().contains(button.geometry()))
+                    self.assertGreaterEqual(button.height(),button.heightForWidth(button.width()))
+            if language=='en_US':
+                texts=[guide.selection_title.text(),guide.detail_title.text(),guide.detail_category.text(),
+                       guide.selected_label.text(),*[b.text()+b.description.text() for b in guide.options.values()],
+                       guide.intro.text(),guide.steps.text()]
+                self.assertFalse([t for t in texts if re.search('[가-힣]',t)])
 
     def test_region_preference_round_trips_without_changing_financial_inputs(self):
         with tempfile.TemporaryDirectory() as folder:

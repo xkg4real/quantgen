@@ -1,12 +1,13 @@
 """Native KIS chart workspace; all data and chart calculations are shared with Flet."""
 from __future__ import annotations
 
+import math
 from datetime import datetime, timezone
 
 from PyQt6.QtCore import QByteArray, QEvent, QObject, QTimer, Qt, QSize, pyqtSignal, pyqtSlot
 from PyQt6.QtGui import QColor, QIcon, QPixmap
 from PyQt6.QtSvgWidgets import QSvgWidget
-from PyQt6.QtWidgets import (QAbstractItemView, QCheckBox, QComboBox, QGridLayout, QHBoxLayout,
+from PyQt6.QtWidgets import (QAbstractItemView, QApplication, QCheckBox, QComboBox, QGridLayout, QHBoxLayout,
     QLabel, QLineEdit, QListWidget, QListWidgetItem, QPushButton, QSizePolicy, QSlider, QSpinBox, QVBoxLayout, QWidget)
 
 from core.i18n import LocaleContext
@@ -32,18 +33,24 @@ _INTERVAL_NAMES = {"1m": "1분", "3m": "3분", "5m": "5분", "15m": "15분", "30
 class _StreamBridge(QObject):
     tick = pyqtSignal(int, object)
     status = pyqtSignal(int, str)
+    history = pyqtSignal(int, object, object)
 
 
 class MarketChartSvg(QSvgWidget):
     """The same SVG as the web view with native keyboard and pointer selection.
 
     Detail mode (the stock screen, owner 2026-11-11): the chart is drawn by core.market.detail_svg at exactly the
-    widget's size, the wheel does nothing over it ("스크롤로 차트좌우이동 ... 그냥 막아버리고"), and the arrow keys pan
-    (`key_handler`, the pane). Outside detail mode it keeps the document-height chart_svg drawing.
+    widget's size, the plain wheel does nothing over it ("스크롤로 차트좌우이동 ... 그냥 막아버리고"), Ctrl + wheel
+    (and a trackpad pinch) zooms on the bar under the pointer (`zoom_handler`, owner R-D12-1 "차트 확대를 +-로 하지말고
+    컨트롤 + 마우스 휠 이렇게 하자"), a left-button drag on the plot pans it (`drag_handler`, owner R-D12-2 "차트 화면
+    좌클릭해서 좌우로 끌면 좌우도 움직일수잇게"), and the arrow keys pan (`key_handler`, the pane). Outside detail mode it keeps
+    the document-height chart_svg drawing.
     """
     cursor_changed = pyqtSignal(int)
     layout_changed = pyqtSignal(object)   # detail_svg.ChartLayout after each detail redraw (None when empty)
-    wheel_ignored = pyqtSignal()          # detail: a wheel turn that changed nothing (the screen names the keys)
+    wheel_ignored = pyqtSignal()          # detail: a plain wheel turn that changed nothing (the screen names the keys)
+    WHEEL_NOTCH = 120                     # one wheel notch (QWheelEvent.angleDelta) = one zoom step
+    PINCH_STEP = 0.2                      # pinch scale change worth one zoom step
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -59,6 +66,16 @@ class MarketChartSvg(QSvgWidget):
         self.theme = None        # detail: palette colours (bg, text, muted, border)
         self.months = None       # detail: month names in the window language
         self.layout_info = None
+        self.zoom_handler = None   # detail: handler(steps, x) zooms keeping the bar at chart x in place
+        self.drag_handler = None   # detail: handler(start, x) shows the window from bar `start` (left-drag pan)
+        self._wheel_rest = 0       # Ctrl+wheel delta short of a notch (high-resolution wheels, trackpads)
+        self._pinch_rest = 0.0
+        self._press = None         # detail: where a left press on the plot went down (the drag distance counts from it)
+        self._grab = None          # detail: (pointer x, window start, bar width, plot left) the held press pans from
+        self._grab_layout = None   # detail: the window (`_layout_key`) the held press last left the chart at
+        self._pointer_x = None     # detail: chart x of the pointer while the press is held
+        self._hover_x = None       # detail: chart x of the pointer over the chart or its overlays (None: elsewhere)
+        self._dragging = False     # the press has moved the platform drag distance: it pans until release
         self.setMinimumWidth(260)
         self.setMinimumHeight(300)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
@@ -68,12 +85,20 @@ class MarketChartSvg(QSvgWidget):
         self._geometry_timer.timeout.connect(self._propagate_chart_height)
 
     def set_detail(self, on):
-        """Fill the space the layout gives (no fixed height); the wheel never moves the chart."""
+        """Fill the space the layout gives (no fixed height); the plain wheel never moves the chart (Ctrl + wheel zooms,
+        a left-drag pans)."""
         self.detail = bool(on)
+        # Hover moves reach the chart over its overlay labels too (Qt drops plain moves over a child that does not
+        # track the mouse), so the pointer shape there follows the plot under them (owner R-D12-2).
+        self.setAttribute(Qt.WidgetAttribute.WA_Hover, self.detail)
         if self.detail:
             self.setMinimumHeight(220)
             self.setMaximumHeight(16777215)
             self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        else:
+            self._release_drag()
+            self._hover_x = None
+            self.unsetCursor()
         self.redraw()
 
     def set_snapshot(self, snapshot, cursor=0, *, visible_bars=120, indicators=None, dark=False, language="en",
@@ -98,6 +123,7 @@ class MarketChartSvg(QSvgWidget):
             if self.detail:
                 self.layout_info = None
                 self.layout_changed.emit(None)
+                self._sync_pointer()
             return
         if self.detail:
             from core.market.detail_svg import EN_MONTHS, render
@@ -107,6 +133,7 @@ class MarketChartSvg(QSvgWidget):
             self.load(QByteArray(svg.encode("utf-8")))
             self.layout_info = layout
             self.layout_changed.emit(layout)
+            self._sync_pointer()
             return
         from core.market.presentation import chart_svg
         svg = chart_svg(self.snapshot, indicators=self.indicators, cursor=self.cursor,
@@ -135,10 +162,68 @@ class MarketChartSvg(QSvgWidget):
         super().resizeEvent(event)
         self.redraw()
 
+    def _on_plot(self, x):
+        """Detail mode: chart x lies over the drawn bars (where a drag grabs the chart)."""
+        layout = self.layout_info
+        return bool(self.detail and self.snapshot and self.snapshot.candles and layout is not None
+                    and layout.stop > layout.start and layout.plot_left <= x < layout.plot_right)
+
+    def _pannable(self):
+        """Detail mode: fewer bars are shown than were loaded, so a drag can move the window."""
+        layout = self.layout_info
+        return bool(self.detail and self.snapshot and layout is not None
+                    and 0 < layout.stop - layout.start < len(self.snapshot.candles))
+
+    def _layout_key(self):
+        """The drawn window and bar geometry a held press pans from (None when nothing is drawn)."""
+        layout = self.layout_info
+        return None if layout is None else (layout.start, layout.stop, layout.step, layout.plot_left)
+
+    def pointer_shape(self):
+        """The mouse pointer's shape over the chart (`self.cursor` is the selected bar, not QWidget.cursor())."""
+        return QWidget.cursor(self).shape()
+
+    def _set_pointer(self, shape):
+        """Show `shape` over the chart and the overlays that take its pointer (None: the usual arrow)."""
+        if shape is None:
+            if self.testAttribute(Qt.WidgetAttribute.WA_SetCursor):
+                self.unsetCursor()
+        elif self.pointer_shape() != shape:
+            self.setCursor(shape)
+
+    def _hover_cursor(self, x):
+        """Owner R-D12/A1: an open hand everywhere over the detail chart, including its axes and full history."""
+        self._set_pointer(Qt.CursorShape.OpenHandCursor if self.detail and 0 <= x <= self.width() else None)
+
+    def _sync_pointer(self):
+        """After a redraw (a zoom, a reload, a new live bar) the pointer shape says whether a drag can move the
+        window now, without waiting for the next mouse move."""
+        if not self.detail:
+            return
+        if self._press is not None:
+            if self._dragging:
+                self._set_pointer(Qt.CursorShape.ClosedHandCursor)
+        elif self._hover_x is not None:
+            self._hover_cursor(self._hover_x)
+
+    def _release_drag(self):
+        self._press, self._grab, self._grab_layout, self._pointer_x = None, None, None, None
+        self._dragging = False
+
     def mouseMoveEvent(self, event):
+        x = event.position().x()
+        if self._press is not None:
+            if self.detail and event.buttons() & Qt.MouseButton.LeftButton:
+                self._drag_move(event)
+                event.accept()
+                return
+            self._release_drag()     # the release went elsewhere (a popup, the window lost the mouse)
+        if self.detail:
+            self._hover_x = x
+            self._hover_cursor(x)
         if self.snapshot and self.snapshot.candles:
             if self.detail and self.layout_info is not None:
-                self.cursor_changed.emit(self.layout_info.index_at(event.position().x()))
+                self.cursor_changed.emit(self.layout_info.index_at(x))
             else:
                 start, stop = self.window()
                 visible = stop - start
@@ -151,16 +236,121 @@ class MarketChartSvg(QSvgWidget):
 
     def mousePressEvent(self, event):
         self.setFocus(Qt.FocusReason.MouseFocusReason)
+        x = event.position().x()
+        if event.button() == Qt.MouseButton.LeftButton and self._on_plot(x):
+            # Owner R-D12-2: a left press on the plot grabs the chart; it pans once the press moves the platform
+            # drag distance, and a press released before that is a click that selects the bar under it.
+            layout = self.layout_info
+            self._press, self._pointer_x = event.position(), x
+            self._grab = (x, layout.start, layout.step, layout.plot_left)
+            self._grab_layout = self._layout_key()
+            self._dragging = False
+            event.accept()
+            return
         super().mousePressEvent(event)
 
-    def wheelEvent(self, event):
-        """Owner 2026-11-11: the wheel never moves or zooms the chart. Over the stock screen's chart it does
-        nothing at all (accepted, so the page does not scroll either); elsewhere the page scrolls."""
-        if self.detail:
+    def _drag_move(self, event):
+        """Grab-and-drag: the bar grabbed at the press stays under the pointer (the window starts that many bars
+        earlier or later; the pane stops it at the first and the latest bar, the selection staying on the bar under
+        the pointer). The zoom is kept, the page never moves. When something else moved or zoomed the window while
+        the press was held (Ctrl + wheel, a key, a period chip, a new live bar), the drag goes on from the bar under
+        the pointer at that moment instead of undoing that change."""
+        position = event.position()
+        x = position.x()
+        if not self._dragging:
+            if (position - self._press).manhattanLength() < QApplication.startDragDistance():
+                self._pointer_x = x
+                return
+            self._dragging = True
+        layout = self.layout_info
+        if layout is None or layout.stop <= layout.start:
+            self._pointer_x = x
+            return
+        if self._layout_key() != self._grab_layout:
+            self._grab = (self._pointer_x, layout.start, layout.step, layout.plot_left)
+        self._pointer_x = x
+        self._set_pointer(Qt.CursorShape.ClosedHandCursor)
+        origin, start, step, left = self._grab
+        step = max(float(step), 1e-9)
+        grabbed = math.floor((origin - left) / step)    # the grabbed bar's slot ...
+        now = math.floor((x - left) / step)             # ... and the slot under the pointer now
+        if self.drag_handler is not None:
+            self.drag_handler(start + grabbed - now, x)
+        self._grab_layout = self._layout_key()
+
+    def mouseReleaseEvent(self, event):
+        if self._press is not None and event.button() == Qt.MouseButton.LeftButton:
+            self._release_drag()
+            x = event.position().x()
+            if self.detail:
+                self._hover_x = x if self.rect().contains(event.position().toPoint()) else None
+                self._hover_cursor(x)
+                if self.layout_info is not None and self.snapshot and self.snapshot.candles:
+                    # A click selects the bar under it, as before; after a drag the selection (and the readout) is
+                    # the bar under the pointer too, also when the drag ended against the first or the latest bar.
+                    self.cursor_changed.emit(self.layout_info.index_at(x))
             event.accept()
+            return
+        super().mouseReleaseEvent(event)
+
+    def hideEvent(self, event):
+        self._release_drag()
+        super().hideEvent(event)
+
+    def wheelEvent(self, event):
+        """Owner 2026-11-11: the plain wheel never moves or zooms the chart. Over the stock screen's chart it does
+        nothing at all (accepted, so the page does not scroll either); elsewhere the page scrolls.
+
+        Owner R-D12-1 (2026-11-12): Ctrl + wheel over the stock screen's chart zooms, wheel up in, one notch one
+        step, on the bar under the pointer (it stays under the pointer). Sideways turns never pan or zoom."""
+        if not self.detail:
+            event.ignore()
+            return
+        event.accept()
+        if not event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+            self._wheel_rest = 0
             self.wheel_ignored.emit()
             return
-        event.ignore()
+        delta = event.angleDelta()
+        if abs(delta.x()) > abs(delta.y()):
+            return
+        turn = -delta.y() if event.inverted() else delta.y()   # the wheel's own direction: away from the hand = in
+        if not turn:
+            return
+        if (turn > 0) != (self._wheel_rest > 0):
+            self._wheel_rest = 0                                # a turn back starts afresh
+        self._wheel_rest += turn
+        steps = int(self._wheel_rest / self.WHEEL_NOTCH)
+        if not steps:
+            return
+        self._wheel_rest -= steps * self.WHEEL_NOTCH
+        if self.zoom_handler is not None:
+            self.zoom_handler(steps, event.position().x())
+
+    def event(self, event):
+        """A trackpad pinch (QNativeGestureEvent ZoomNativeGesture) zooms like Ctrl + wheel (R-D12-1). Hover moves,
+        which also come while the pointer is over an overlay label, keep the pointer shape (R-D12-2)."""
+        kind = event.type()
+        if self.detail and kind in (QEvent.Type.HoverEnter, QEvent.Type.HoverMove):
+            x = self.mapFromGlobal(event.globalPosition()).x()
+            self._hover_x = x
+            if self._press is None:
+                self._hover_cursor(x)
+        elif kind in (QEvent.Type.HoverLeave, QEvent.Type.Leave):
+            self._hover_x = None
+        if self.detail and kind == QEvent.Type.NativeGesture:
+            if event.gestureType() == Qt.NativeGestureType.ZoomNativeGesture:
+                self._pinch_rest += event.value()
+                steps = int(self._pinch_rest / self.PINCH_STEP)
+                if steps:
+                    self._pinch_rest -= steps * self.PINCH_STEP
+                    if self.zoom_handler is not None:
+                        self.zoom_handler(steps, event.position().x())
+                event.accept()
+                return True
+            if event.gestureType() in (Qt.NativeGestureType.BeginNativeGesture, Qt.NativeGestureType.EndNativeGesture):
+                self._pinch_rest = 0.0
+        return super().event(event)
 
     def keyPressEvent(self, event):
         handler = getattr(self, "key_handler", None)
@@ -233,6 +423,7 @@ class MarketChartPane(QWidget):
         self.bridge = _StreamBridge(self)
         self.bridge.tick.connect(self._tick)
         self.bridge.status.connect(self._stream_status)
+        self.bridge.history.connect(self._history_preview)
         self.poll_timer = QTimer(self)
         self.poll_timer.setInterval(5000)
         self.poll_timer.timeout.connect(self.refresh)
@@ -270,7 +461,7 @@ class MarketChartPane(QWidget):
         self.interval.setCurrentIndex(self.interval.findData("1d"))
         self.bar_count = QSpinBox()
         self.bar_count.setRange(20, 500)
-        # Owner UI-16: no 조회 봉 수 input. Load 240 bars so the wheel can zoom out past the 120 shown.
+        # Owner UI-16: no 조회 봉 수 input. Load 240 bars so Ctrl + wheel can zoom out past the 120 shown.
         self.bar_count.setValue(240)
         self.form_labels = [self._label() for _ in range(5)]
         for column, index in enumerate((0, 1, 3)):
@@ -341,7 +532,7 @@ class MarketChartPane(QWidget):
         self.visible_bars.setRange(20, 500)
         self.visible_bars.setValue(120)
         self.visible_bars.valueChanged.connect(self.render)
-        # History size and visible bars are internal state now: the wheel zooms the chart.
+        # History size and visible bars are internal state now: Ctrl + wheel zooms the chart (R-D12-1).
         for column, (caption, control) in enumerate(((self.form_labels[4], self.bar_count), (self.zoom_label, self.visible_bars))):
             advanced_form.addWidget(caption, 0, column)
             advanced_form.addWidget(control, 1, column)
@@ -411,7 +602,8 @@ class MarketChartPane(QWidget):
         layout.addWidget(self.empty_actions)
         self.empty_actions.hide()
         self.chart = MarketChartSvg()
-        self.chart.zoom_handler = self.zoom
+        self.chart.zoom_handler = self.zoom_at
+        self.chart.drag_handler = self.drag_to
         self.chart.key_handler = self.chart_key
         self.chart.cursor_changed.connect(self.move_cursor)
         layout.addWidget(self.chart)
@@ -509,6 +701,8 @@ class MarketChartPane(QWidget):
         }
         for original, translated in translations.items():
             note = note.replace(original, translated)
+        note = re.sub(r"Loading history: (\d+)/(\d+)\.",
+                      r"이력 조회 중 · 요청한 \2개 중 \1개를 먼저 표시합니다.", note)
         # The yearly chart's monthly request, with or without the KIS paging remark (Yahoo writes none).
         note = re.sub(r"Partial history: (\d+)/(\d+) requested monthly bars \(provider window or paging limit\)\.",
                       r"부분 이력 · 요청한 \2개월 중 \1개월만 조회됐습니다(공급자 조회 범위·페이지 한도).", note)
@@ -674,6 +868,37 @@ class MarketChartPane(QWidget):
         self.render()
         return True
 
+    def drag_to(self, start, x=None):
+        """Owner R-D12-2 ("차트 화면 좌클릭해서 좌우로 끌면 좌우도 움직일수잇게 !! 화살표도 유지하고"): a left-drag on the
+        chart shows the window from bar `start`, stopped at the first and the latest bar; the zoom is kept and a
+        window that reaches the latest bar follows live data again. The selected candle is the one under the pointer
+        at chart x (the grabbed one, while the window is not stopped at an end), also when the window cannot move.
+        Returns whether the window moved."""
+        n = len(self.snapshot.candles) if self.snapshot else 0
+        if n < 2:
+            return False
+        first, stop = self.window()
+        visible = stop - first
+        start = max(0, min(n - visible, int(start)))
+        moved = start != first
+        end = start + visible - 1
+        cursor = self._cursor
+        layout = self.chart.layout_info
+        if x is not None and layout is not None and layout.step > 0:
+            # Also when the window is stopped at an end (or every bar is shown): the readout follows the pointer.
+            slot = math.floor((float(x) - layout.plot_left) / layout.step)
+            cursor = start + max(0, min(visible - 1, slot))
+        elif moved:
+            cursor = max(start, min(end, self._cursor + start - first))
+        if not moved and cursor == self._cursor:
+            return False
+        if moved:
+            self._end = None if end >= n - 1 else end
+            self.period_view = False
+        self._cursor = cursor
+        self.render()
+        return moved
+
     def go_first(self):
         """Home: the earliest loaded candles, the selection on the first one."""
         if not self.snapshot or not self.snapshot.candles:
@@ -771,7 +996,8 @@ class MarketChartPane(QWidget):
     def chart_key(self, event):
         """Owner 2026-11-11: "좌우화살표로 차트 좌우 확인할수있게" — ←/→ move the chart itself one step (Shift: ten),
         the selected candle moving with it; when every loaded candle is already in view they move the selection
-        instead. Home/End go to the first loaded / the latest data, +/- zoom and 0 restores the view."""
+        instead. Home/End go to the first loaded / the latest data and 0 restores the view. No key zooms: the
+        chart zooms with Ctrl + wheel (owner R-D12-1 "차트 확대를 +-로 하지말고 컨트롤 + 마우스 휠 이렇게 하자")."""
         key, shift = event.key(), bool(event.modifiers() & Qt.KeyboardModifier.ShiftModifier)
         if self.snapshot is None or not self.snapshot.candles:
             return False
@@ -785,12 +1011,6 @@ class MarketChartPane(QWidget):
             return True
         if key == Qt.Key.Key_End:
             self.follow_latest()
-            return True
-        if key in (Qt.Key.Key_Plus, Qt.Key.Key_Equal):
-            self.zoom(1)
-            return True
-        if key in (Qt.Key.Key_Minus, Qt.Key.Key_Underscore):
-            self.zoom(-1)
             return True
         if key == Qt.Key.Key_0 and not shift:
             self.reset_view()
@@ -830,10 +1050,18 @@ class MarketChartPane(QWidget):
         self._q_score_shown = visible
 
     def q_score_text(self):
-        """(text, tooltip) of the open stock's Q-SCORE, or None; the stock screen shows it on its card."""
+        """(text, tooltip) of the open stock's Q-SCORE, or None."""
         if not getattr(self, "_q_score_shown", False):
             return None
         return self.q_score_label.text(), self.q_score_label.toolTip()
+
+    def q_score_result(self):
+        """The open stock's Q-SCORE result as the app's controllers last gave it (the watchlist feed or the chart's
+        score history), or None; the stock screen weighs it against its own (stock_qscore.pick)."""
+        if (not self._q_score or self.asset.currentData() != 'domestic_stock'
+                or self._q_score[0] != self.symbol.text().strip()):
+            return None
+        return self._q_score[1]
 
     def request(self):
         asset = self.asset.currentData()
@@ -918,20 +1146,43 @@ class MarketChartPane(QWidget):
             return True
         return False
 
-    def zoom(self, steps):
-        """+/- zoom: fewer bars per step in, more out; returns False at a limit. A panned window keeps its
-        last bar; the wheel never zooms (owner 2026-11-11)."""
+    def _zoom_target(self, steps):
+        """(n, bars shown now, bars shown after `steps` zoom steps): each step in shows 0.8 times the bars, each step
+        out 1.25 times, never fewer than 20 nor more than were loaded."""
         n = len(self.snapshot.candles) if self.snapshot else 0
-        if n < 2:
-            return False
         current = min(self.visible_bars.value(), n)
-        target = round(current * (0.8 ** steps))
-        target = max(min(20, n), min(n, target))
-        if target == current:
+        target = max(min(20, n), min(n, round(current * (0.8 ** steps))))
+        return n, current, target
+
+    def zoom(self, steps):
+        """Zoom `steps` steps (positive: in) keeping the window's last bar; returns False at a limit."""
+        n, current, target = self._zoom_target(steps)
+        if n < 2 or target == current:
             return False
         if self._end is not None and target > self._end + 1:
             end = min(n - 1, target - 1)
             self._end = None if end >= n - 1 else end
+        self.period_view = False
+        self.visible_bars.setValue(target)
+        return True
+
+    def zoom_at(self, steps, x):
+        """Owner R-D12-1: Ctrl + wheel (one notch one step, wheel up in) zooms on the bar under the pointer at chart
+        x, which stays under the pointer and becomes the selected candle; near the first or the latest bar the
+        window stops at that end. Returns False at a limit (nothing changes)."""
+        layout = self.chart.layout_info
+        n, current, target = self._zoom_target(steps)
+        if n < 2 or target == current:
+            return False
+        if layout is None or layout.stop <= layout.start or layout.plot_right <= layout.plot_left:
+            return self.zoom(steps)
+        bar = layout.index_at(x)
+        step = (layout.plot_right - layout.plot_left) / target   # the bar width after the zoom (detail_svg.render)
+        slot = max(0, min(target - 1, int((float(x) - layout.plot_left) // step)))
+        start = max(0, min(n - target, bar - slot))
+        end = start + target - 1
+        self._end = None if end >= n - 1 else end
+        self._cursor = bar
         self.period_view = False
         self.visible_bars.setValue(target)
         return True
@@ -1091,7 +1342,29 @@ class MarketChartPane(QWidget):
         # Attempts travel with the result: the router runs one job at a time on this pane's Jobs.
         router = self.router
         from core.market.detail_model import load_chart   # the yearly interval is built from the monthly history
-        return self.jobs.start(lambda: (epoch, request, load_chart(router, request), tuple(router.last_attempts)))
+        def preview(snapshot):
+            self.bridge.history.emit(epoch, request, snapshot)
+        return self.jobs.start(lambda: (epoch, request, load_chart(router, request, on_snapshot=preview),
+                                       tuple(router.last_attempts)))
+
+    @pyqtSlot(int, object, object)
+    def _history_preview(self, epoch, request, snapshot):
+        """Paint received history while paging continues; no live connection or score publication yet."""
+        if epoch != self._epoch or request != self.request() or snapshot.request != request or not snapshot.candles:
+            return
+        selected = self._selected_timestamp()
+        self.snapshot = snapshot
+        self._restore_cursor(selected)
+        self._last_received = snapshot.fetched_at
+        if selected is None and self.period and self.period_view:
+            from core.market.detail_model import visible_for
+            self.visible_bars.blockSignals(True)
+            self.visible_bars.setValue(max(self.visible_bars.minimum(), visible_for(self.period, snapshot.candles)))
+            self.visible_bars.blockSignals(False)
+        self._mode = "loading"
+        self._status_detail = self._text("먼저 받은 차트를 표시하고 있어요 · 나머지 기간을 불러오는 중",
+                                        "Showing received history · loading the remaining period")
+        self.render()
 
     @pyqtSlot(object)
     def _loaded(self, result):
@@ -1526,7 +1799,9 @@ class MarketChartPane(QWidget):
                                 supply=self.supply if self.detail else None)
         self.reading.setText(readout(snapshot, self._cursor, language=self.ctx.language))
         self.chart.setAccessibleDescription(self.reading.text())
-        self.chart.setAccessibleName(self._text("캔들 차트", "Candlestick chart") + f" · {snapshot.source}")
+        if not self.detail:
+            # The stock screen names its chart itself (how to move and zoom it: owner_ui_language 'chart_name').
+            self.chart.setAccessibleName(self._text("캔들 차트", "Candlestick chart") + f" · {snapshot.source}")
         values = {key: data[self._cursor] for key, data in indicator_series(snapshot).items()}
         keys = {"sma": ("SMA20",), "ema": ("EMA12", "EMA26"), "bollinger": ("BB_UPPER", "BB_LOWER"),
                 "rsi": ("RSI14",), "macd": ("MACD", "SIGNAL", "HISTOGRAM")}

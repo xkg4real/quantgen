@@ -52,6 +52,13 @@ class BondsPane(QWidget):
         inner.addWidget(label('Enter either price or yield, not both. Clear yield when entering price.','caption'))
         self.run=QPushButton('채권 분석 실행');self.run.setProperty('primary',True);self.run.clicked.connect(self.submit);add_compact_action(inner,self.run)
         self.status=label('곡선 출처와 관측일을 함께 표시합니다.','muted');self.status.setProperty('reading_help_keep_visible',True);inner.addWidget(self.status);layout.addWidget(box)
+        from .chart_study import LocalLabel
+        self.empty=LocalLabel({'ko':'채권 조건을 입력하고 실행하면 가격·위험·시나리오가 여기에 나타나요.',
+                               'en':'Enter bond terms and run the analysis to see value, risk and scenarios here.'},'muted')
+        layout.addWidget(self.empty)
+        self.result_host=QWidget();layout.addWidget(self.result_host)
+        layout=QVBoxLayout(self.result_host);layout.setContentsMargins(0,0,0,0);layout.setSpacing(18)
+        self.result_host.hide()
         from .result_layout import PairedResultPanels, fit_result_table
         self.metrics=fit_result_table(table(['Metric','Value']));self.metrics.setProperty('localized_columns', [0])
         metrics_box,metrics_layout=panel('Key metrics')
@@ -92,6 +99,7 @@ class BondsPane(QWidget):
 
     def show_result(self,o):
         from .app import table_rows
+        self.empty.hide();self.result_host.show()
         a=o.analytics;cr=a.carry_roll
         # Values are language-neutral (the unit 'y' as in tenors, DV01's unit in its caption), so a
         # Korean window shows no English unit words (owner issues 03/14); captions translate.
@@ -129,6 +137,7 @@ class BondsPane(QWidget):
 
     def clear_result(self):
         self.exports.clear()
+        self.result_host.hide();self.empty.show()
         for widget in (self.metrics, self.krd, self.scenarios):
             widget.setRowCount(0)
         self.chart.set_series([], [])

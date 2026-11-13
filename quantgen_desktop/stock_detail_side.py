@@ -4,17 +4,18 @@ Owner: "그냥 좌측에 존나큰차트 존나크게, 이런 공간 부족해�
 "오른쪽의 스크롤 필요한 메뉴들은 움직이는거고, 차트쪽은 스크롤로 위아래 이동이 안되는거야. 오른쪽만 움직이는거지 스크롤이".
 One fixed-width column, the only part of the screen that scrolls: a compact watchlist with folding groups, the
 symbol card (big price, change, an honest market state, volume against its 30-session average, the 52-week bar),
-"지금 이 차트" (four plain readings), then folding sections that show 3-4 figures each with the rest behind
-"더 보기", and one muted line naming what this screen does not provide. A second page holds the indicator picker.
+the open stock's Q-SCORE card (owner UI-D13), "지금 이 차트" (four plain readings), then folding sections that show
+3-4 figures each with the rest behind "더 보기", and one muted line naming what this screen does not provide. A second
+page holds the indicator picker.
 """
 from __future__ import annotations
 
 from datetime import datetime, timezone
 import threading
 
-from PyQt6.QtCore import QPointF, QRectF, QTimer, Qt, pyqtSignal, pyqtSlot
+from PyQt6.QtCore import QPointF, QRectF, QSize, QTimer, Qt, pyqtSignal, pyqtSlot
 from PyQt6.QtGui import QColor, QPainter, QPen
-from PyQt6.QtWidgets import (QFrame, QGridLayout, QHBoxLayout, QPushButton, QScrollArea, QSizePolicy,
+from PyQt6.QtWidgets import (QBoxLayout, QFrame, QGridLayout, QHBoxLayout, QPushButton, QScrollArea, QSizePolicy,
                              QStackedWidget, QVBoxLayout, QWidget)
 
 from core.i18n import LocaleContext
@@ -650,19 +651,19 @@ class SymbolCard(QWidget):
         self.sector = label("sector")
         head.addWidget(self.sector)
         layout.addLayout(head)
-        figures = QHBoxLayout()
+        # Price and change sit on one line when the column has room and the change drops under the price when it
+        # does not: a seven-digit won price beside its change ('1,255,000  ▼ −22,000 (−1.72%)') is wider than a
+        # 300-330 px column, and the column then shifted sideways and cut both edges (owner's PC, 2026-11-12).
+        self.figures = figures = QBoxLayout(QBoxLayout.Direction.LeftToRight)
         figures.setSpacing(10)
         self.price = numbers(label("price", selectable=True))
-        figures.addWidget(self.price, 0, Qt.AlignmentFlag.AlignBottom)
+        figures.addWidget(self.price, 0, Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignLeft)
         self.change = numbers(label("change"))
-        figures.addWidget(self.change, 0, Qt.AlignmentFlag.AlignBottom)
+        figures.addWidget(self.change, 0, Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignLeft)
         figures.addStretch(1)
         layout.addLayout(figures)
         self.state = label("state", wrap=True)
         layout.addWidget(self.state)
-        self.qscore = label("qscore")
-        self.qscore.hide()
-        layout.addWidget(self.qscore, 0, Qt.AlignmentFlag.AlignLeft)
         layout.addSpacing(6)
         volume = QHBoxLayout()
         self.volume = numbers(label("body"))
@@ -688,6 +689,26 @@ class SymbolCard(QWidget):
         layout.addLayout(ends)
         self.range_from = numbers(label("body", wrap=True))
         layout.addWidget(self.range_from)
+
+    def minimumSizeHint(self):
+        # The figures may stack, so the card asks only for its widest single figure, never for both side by side.
+        hint = super().minimumSizeHint()
+        margins = self.layout().contentsMargins()
+        widest = max(self.price.sizeHint().width(), self.change.sizeHint().width()) + margins.left() + margins.right()
+        return QSize(min(hint.width(), max(widest, 160)), hint.height())
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._fit_figures()
+
+    def _fit_figures(self):
+        margins = self.layout().contentsMargins()
+        room = self.width() - margins.left() - margins.right()
+        need = self.price.sizeHint().width() + self.figures.spacing() + self.change.sizeHint().width()
+        direction = QBoxLayout.Direction.LeftToRight if need <= room else QBoxLayout.Direction.TopToBottom
+        if self.figures.direction() != direction:
+            self.figures.setDirection(direction)
+            self.figures.setSpacing(10 if direction == QBoxLayout.Direction.LeftToRight else 4)
 
 
 class NowRow(QFrame):
@@ -809,6 +830,10 @@ class RightColumn(QFrame):
         body.addWidget(rule())
         self.card = SymbolCard()
         body.addWidget(self.card)
+        # Owner UI-D13 (R-D13-1): the open stock's Q-SCORE card right under the price, high in the 종목 tab.
+        from .stock_qscore import QScoreCard
+        self.qscore = QScoreCard()
+        body.addWidget(self.qscore)
         body.addWidget(rule())
         self.now = NowCard()
         body.addWidget(self.now)
@@ -845,6 +870,11 @@ class RightColumn(QFrame):
         page = QWidget()
         page.setObjectName("sdPage")
         scroll.setWidget(page)
+        # The column never moves sideways: a focused row or a selected price label asking to be made visible
+        # used to scroll a page wider than the column, so both edges were cut and no scroll bar showed why.
+        bar = scroll.horizontalScrollBar()
+        bar.rangeChanged.connect(lambda *_: bar.setValue(0))
+        bar.valueChanged.connect(lambda value: bar.setValue(0) if value else None)
         return scroll, page
 
     def set_page(self, index):

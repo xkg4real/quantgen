@@ -134,7 +134,8 @@ class ToolPane(QWidget):
         self.run.clicked.connect(self.submit)
         add_compact_action(inner, self.run)
         layout.addWidget(self.input_box)
-        self.status = label('도구와 출처를 선택한 후 실행하세요.', 'muted')
+        self.prompt = '도구와 출처를 선택한 후 실행하세요.'  # the status with nothing run yet
+        self.status = label(self.prompt, 'muted')
         self.status.setProperty('reading_help_keep_visible', True)
         layout.addWidget(self.status)
         self.result = QWidget()
@@ -168,8 +169,9 @@ class ToolPane(QWidget):
         self.source_label.hide()
         self._top_grid.setColumnStretch(1, 0)
         # With no selector the prompt must not ask for a source (owner issues 04/12).
+        self.prompt = 'Choose a tool, then run.'
         if self.status.source_text == '도구와 출처를 선택한 후 실행하세요.':
-            self.status.setText('Choose a tool, then run.')
+            self.status.setText(self.prompt)
 
     def set_source_caption(self, text):
         self.source_label.setText(text)
@@ -179,6 +181,19 @@ class ToolPane(QWidget):
         self.forms.setCurrentIndex(index)
         self.clear_result()
         self.status.setText('도구가 변경됐습니다. 다시 실행하세요.')
+
+    def select_tool(self, key):
+        """Show one tool's form as a destination (the rail's 시장 menu, owner ruling UI-D11): with no result shown,
+        the status keeps the plain prompt rather than 'Tool changed. Run again.', which reads as a stale result on a
+        pane nobody ran (UI-D11 review). With a result shown, the switch says it is gone as a picker change does."""
+        index = self.tool.findData(key)
+        if index < 0:
+            raise ValueError(f"Unknown tool {key!r}")
+        had_result = self.has_result
+        self.tool.setCurrentIndex(index)
+        if not had_result:
+            self.status.setText(self.prompt)
+        return True
 
     def values(self):
         return {k:w.currentData() if isinstance(w, QComboBox) else w.text()

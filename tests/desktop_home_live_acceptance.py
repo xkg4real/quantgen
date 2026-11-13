@@ -108,8 +108,8 @@ class HomeLiveIntegrationTests(unittest.TestCase):
                                     w.q_scores.jobs.busy or w.chart_scores.jobs.busy))
         with patch.object(QMessageBox, "question", return_value=QMessageBox.StandardButton.Yes):
             w.close()
-        w.deleteLater()
-        self.app.processEvents()
+        from tests.qt_fixture_cleanup import delete_owned_widget
+        delete_owned_widget(w)
         self.network.assert_not_called()
 
     def start_home(self):
@@ -183,12 +183,16 @@ class HomeLiveIntegrationTests(unittest.TestCase):
         self.assertEqual(p.snapshot.candles[-1].close, 121)
         self.assertTrue(p.chart.renderer().isValid())
         self.assertIn("121", p.quote.text())
-        # UI-D8: the stock screen hides the pane's own labels; its symbol card shows the price and the Q-SCORE.
-        card = w.markets_view.stock.side.card
+        # UI-D13: price stays in the symbol card; the separate score card and
+        # toolbar badge must display the same live result as the chart.
+        stock = w.markets_view.stock
+        card = stock.side.card
         self.assertIn("121", card.price.text())
-        self.assertTrue(card.qscore.isVisible())
-        self.assertIn("★", card.qscore.text())
-        self.assertEqual(card.qscore.text(), p.q_score_label.text())
+        self.assertTrue(stock.qscore_badge.isVisible())
+        self.assertIn("★", stock.qscore_badge.text())
+        self.assertEqual(stock.side.qscore.result, p.q_score_result())
+        self.assertEqual(stock.side.qscore.result["last_price"], 121)
+        self.assertIn("★", stock.side.qscore.stars.text())
         self.assertEqual(w.chart_scores.scores()["005930"]["last_price"], 121)
         self.assertEqual(w.watchlist.rows[6]["q_score"]["last_price"], 121)
         self.assertEqual(len(self.home_service.calls), 6)

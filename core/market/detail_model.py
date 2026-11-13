@@ -229,13 +229,22 @@ def yearly_span(snapshot, now=None):
     return out
 
 
-def load_chart(router, request):
+def load_chart(router, request, *, on_snapshot=None):
     """`router.load(request)`, or for the yearly interval the monthly history folded into years."""
+    progressive = getattr(type(router), "load_progressive", None)
+
+    def load(query, callback):
+        return (progressive(router, query, callback)
+                if callback is not None and callable(progressive) else router.load(query))
+
     if getattr(request, "interval", "") != "1Y":
-        return router.load(request)
+        return load(request, on_snapshot)
     from core.market.models import ChartRequest
     monthly = ChartRequest(request.instrument, "1M", YEARLY_MONTHS, adjusted=request.adjusted)
-    return yearly_snapshot(router.load(monthly), request)
+    def publish(snapshot):
+        on_snapshot(yearly_snapshot(snapshot, request))
+
+    return yearly_snapshot(load(monthly, publish if on_snapshot is not None else None), request)
 
 
 def period_reason(key, instrument, intervals):

@@ -185,3 +185,13 @@ KIS 종목 마스터의 원본 줄(`_MASTER_CACHE`)과 검색 색인, 관심종�
 - 외부 AI: [`core/quant/insights.py`](../../core/quant/insights.py) `deep_analysis`; [`core/research/ai_payload.py`](../../core/research/ai_payload.py), [`ai_connection.py`](../../core/research/ai_connection.py) `reply_result`, [`네이티브 표시·내보내기`](../../quantgen_desktop/commentary.py) `finished`. 외부 제공자·계약 검토는 [8번 문서](08-third-parties.md) 참조.
 - 공식 법령: [개인정보 보호법](https://www.law.go.kr/법령/개인정보보호법) 제21조·제35조·제36조·제37조 등, [동법 시행령](https://www.law.go.kr/법령/개인정보보호법시행령), [전자상거래 등에서의 소비자보호에 관한 법률](https://www.law.go.kr/법령/전자상거래등에서의소비자보호에관한법률).
 - 적용되는 삭제·통지 기한과 거래기록 보존 의무의 최신 시행·적용 범위는 [출처 대장](SOURCES.md)에 기록한다. 모든 로컬 연구자료에 거래기록 보존 의무가 있다고 일괄 적용하지 않는다.
+
+
+### 2026-11-13 UI-D11~D15 변경 검토
+
+[시장 메뉴·Q-SCORE v0.2·종목 보고서의 자료 흐름과 제한](FACTS.md#ui-d11-d15-2026-11-13)을 대조했다. 선택한 로컬 파일 저장과 KIS 수정 일별 후보 조회를 기존 무전송 UI 수정과 구분한다. 미확정 사업자·요금·환불·권리 조건을 신설하지 않았으며 기존 공개 준비 보류를 유지한다.
+
+
+### 2026-11-13 차트 선표시와 작업 안내 검토
+
+[차트의 부분 조회 상태·선택형 지표 가이드·한영 작업 안내·기존 글꼴 적용 수정](FACTS.md#ui-progressive-guide-2026-11-13)을 대조했다. 새 전송 대상·API·계정·계산 기능·정책 조건을 추가하지 않는다. 실제 응답 속도와 Windows 보조기술 검증은 완료 주장에 포함하지 않으며, 기존 공개 준비 보류와 미확정 조건을 유지한다.

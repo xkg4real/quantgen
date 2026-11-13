@@ -189,6 +189,17 @@ class MarketDataService:
         return self.client._get(path, tr_id, params)
 
     def load(self, request: ChartRequest) -> MarketSnapshot:
+        return self._load(request)
+
+    def load_progressive(self, request: ChartRequest, on_snapshot) -> MarketSnapshot:
+        """Publish observed history pages before the remaining pages/quote arrive.
+
+        The final result and request count are identical to load(). A preview has
+        no quote and never represents an established live subscription.
+        """
+        return self._load(request, on_snapshot=on_snapshot)
+
+    def _load(self, request: ChartRequest, on_snapshot=None) -> MarketSnapshot:
         instrument = request.instrument
         paper = urlparse(getattr(self.client, "base_url", "")).hostname == "openapivts.koreainvestment.com"
         if request.interval not in supported_intervals(instrument, paper=paper):
@@ -209,10 +220,19 @@ class MarketDataService:
             except KISError:
                 note += " Current quote unavailable; waiting for a valid streaming execution."
             return MarketSnapshot(request, (), quote, utc_now(), "KIS WebSocket", note)
+        def progress(candles):
+            if request.interval in ("1w", "1M"):
+                candles = _period_candles(candles, request.interval)
+            candles = candles[-request.limit:]
+            if candles:
+                on_snapshot(MarketSnapshot(request, candles, None, utc_now(), "KIS REST",
+                    availability_note(instrument) + f" Loading history: {len(candles)}/{request.limit}."))
+
+        options = {"on_page": progress} if on_snapshot is not None else {}
         if request.interval.endswith("m"):
-            candles = self._minutes(request)
+            candles = self._minutes(request, **options)
         else:
-            candles = self._daily(request)
+            candles = self._daily(request, **options)
         if not candles:
             raise KISError("KIS returned no valid OHLC bars for this instrument and interval")
         if request.interval in ("1w", "1M"):
@@ -283,11 +303,11 @@ class MarketDataService:
                            *(_number(o.get(k)) for k in keys[4:]), currency="quote units" if asset == "domestic_future" else _CURRENCIES.get(instrument.exchange, "KRW"),
                            received_at=utc_now(), source="KIS REST", note=availability_note(instrument) + " REST snapshot; market timestamp not provided.")
 
-    def _daily(self, request):
+    def _daily(self, request, on_page=None):
         ins = request.instrument
         period = {"1d": "D", "1w": "W", "1M": "M"}[request.interval]
         if ins.asset == "overseas_future":
-            return self._overseas_future_daily(request)
+            return self._overseas_future_daily(request, on_page=on_page)
         zone = ZoneInfo(_EXCHANGE_ZONES[ins.exchange]) if ins.asset == "overseas_stock" else _KST
         end = self._now().astimezone(zone).date()
         span = request.limit * {"D": 2, "W": 9, "M": 40}[period] + 40
@@ -319,6 +339,8 @@ class MarketDataService:
             previous = len(seen)
             for c in page:
                 seen.setdefault(c.timestamp, c)
+            if on_page is not None and len(seen) > previous:
+                on_page(tuple(seen[k] for k in sorted(seen)))
             if not page or len(seen) == previous or len(seen) >= request.limit or ins.asset == "bond":
                 break
             earliest = datetime.fromisoformat(min(c.timestamp for c in page)).date()
@@ -360,7 +382,7 @@ class MarketDataService:
         self._future_cache[instrument] = matches[0]
         return matches[0]
 
-    def _overseas_future_daily(self, request):
+    def _overseas_future_daily(self, request, on_page=None):
         ins = request.instrument
         scale, exchange = self._future_metadata(ins)
         endpoint, tr_id = {"1d": ("/uapi/overseas-futureoption/v1/quotations/daily-ccnl", "HHDFC55020100"),
@@ -378,6 +400,8 @@ class MarketDataService:
             previous = len(seen)
             for c in page:
                 seen.setdefault(c.timestamp, c)
+            if on_page is not None and len(seen) > previous:
+                on_page(tuple(seen[k] for k in sorted(seen)))
             if not page or len(seen) == previous or len(seen) >= request.limit:
                 break
             meta = p.get("output1") or {}
@@ -387,7 +411,7 @@ class MarketDataService:
             key = next_key
         return tuple(seen[k] for k in sorted(seen))
 
-    def _minutes(self, request):
+    def _minutes(self, request, on_page=None):
         ins = request.instrument
         minutes = int(request.interval[:-1])
         now = self._now().astimezone(_KST)
@@ -432,6 +456,8 @@ class MarketDataService:
             previous = len(seen)
             for c in page:
                 seen.setdefault(c.timestamp, c)
+            if on_page is not None and len(seen) > previous:
+                on_page(self._minute_bars(tuple(seen[k] for k in sorted(seen)), minutes, now, ins))
             if not page or len(seen) == previous or len(seen) >= target:
                 break
             earliest = datetime.fromisoformat(min(c.timestamp for c in page))
@@ -447,6 +473,10 @@ class MarketDataService:
                     break
                 cursor = nxt
         candles = tuple(seen[k] for k in sorted(seen))
+        return self._minute_bars(candles, minutes, now, ins)
+
+    @staticmethod
+    def _minute_bars(candles, minutes, now, ins):
         if ins.asset == "domestic_stock":
             forming = now.replace(second=0, microsecond=0)
             candles = tuple(replace(c, volume=None) if datetime.fromisoformat(c.timestamp) == forming else c for c in candles)

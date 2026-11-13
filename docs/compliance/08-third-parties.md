@@ -212,3 +212,13 @@ Macro·Rates·FX·Bonds·Structuring은 기존 `auto` 경로(키 없이 FRED·Ya
 - AI: [`ai_payload.py`](../../core/research/ai_payload.py) `ai_payload_json`, [`quant/insights.py`](../../core/quant/insights.py) `deep_analysis`, [`ai_connection.py`](../../core/research/ai_connection.py) `reply_result`, [`ui/ai_panel.py`](../../ui/ai_panel.py), [`commentary.py`](../../quantgen_desktop/commentary.py).
 - 공식 확인 창구: [개인정보 보호법](https://www.law.go.kr/법령/개인정보보호법), [FRED 이용 조건](https://fred.stlouisfed.org/legal/), [KIS 개발자센터](https://apiportal.koreainvestment.com/), [OpenDART](https://opendart.fss.or.kr/), [KRX 정보데이터시스템](https://data.krx.co.kr/), [Anthropic 개인정보 안내](https://www.anthropic.com/legal/privacy), [Qt 라이선스 안내](https://www.qt.io/licensing/), [PyQt 라이선스 안내](https://www.riverbankcomputing.com/commercial/license-faq).
 - 법령·외부 계약의 최신 시행·계약 범위 확인 기록은 [출처 대장](SOURCES.md)에 남긴다. 위 링크는 현재 계약 또는 허락을 획득했다는 증거가 아니다.
+
+
+### 2026-11-13 UI-D11~D15 변경 검토
+
+[시장 메뉴·Q-SCORE v0.2·종목 보고서의 자료 흐름과 제한](FACTS.md#ui-d11-d15-2026-11-13)을 대조했다. 선택한 로컬 파일 저장과 KIS 수정 일별 후보 조회를 기존 무전송 UI 수정과 구분한다. 미확정 사업자·요금·환불·권리 조건을 신설하지 않았으며 기존 공개 준비 보류를 유지한다.
+
+
+### 2026-11-13 차트 선표시와 작업 안내 검토
+
+[차트의 부분 조회 상태·선택형 지표 가이드·한영 작업 안내·기존 글꼴 적용 수정](FACTS.md#ui-progressive-guide-2026-11-13)을 대조했다. 새 전송 대상·API·계정·계산 기능·정책 조건을 추가하지 않는다. 실제 응답 속도와 Windows 보조기술 검증은 완료 주장에 포함하지 않으며, 기존 공개 준비 보류와 미확정 조건을 유지한다.

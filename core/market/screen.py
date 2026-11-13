@@ -3,9 +3,11 @@
 Owner: "저거 시장 있지. 시장에서 그냥 국장 미장 코인 이런걸 하부ui로 두고, 너가 지금 하부ui로 깔아놓은건 해당 시장의
 하부ui 선택하고 차후에 검색기준으로 저걸 쓸수있게 구현하면 좋을 거 같은데, 공간 잘써서 센스있게해봐".
 
-So the rail lists markets (`PAGES`: 국내 주식, 미국 주식, 코인) and each market's page ranks its own list by one of
-`rankings.CATEGORIES`, the old sub-menu. The categories double as search criteria: a `Screen` is one market's
-list as the user narrowed it, combining
+So each market has a page (`PAGES`: 국내 주식, 미국 주식, 크립토, and since owner ruling UI-D11 of 2026-11-12, 국내 ETF
+and 미국 ETF) that ranks its own list by one of `rankings.CATEGORIES`, the old sub-menu. Owner ruling UI-D11
+("코인이 뭐야"): the coin market is called 크립토 (Crypto), never 코인; the rail's 시장 menu reaches these pages through
+its big categories (`quantgen_desktop.shell_rail.market_menu`). The categories double as search criteria: a
+`Screen` is one market's list as the user narrowed it, combining
 
 * the ranking category (how the list is ordered: trading value, volume, top gainers, top losers, market cap),
 * a sub-market (`SUBS`: 코스피/코스닥 for 국내, the exchange for 미국; none for coins),
@@ -18,7 +20,8 @@ Criteria are data: a new condition is one more `Condition` in `CONDITIONS` (its 
 that have the figure and, for a minimum, the thresholds offered); the page builds its controls from that
 table, so adding one needs no UI rewrite. A category a market cannot rank (`category_note`) says why instead
 of ranking nothing silently: coins have no unit count worth comparing and no market cap in any source the app
-uses (`rankings` module docstring).
+  uses (`rankings` module docstring); ETFs have no market cap either (their size is net assets, AUM, which no
+  source here states).
 
 A stock whose figure is missing never passes a condition on that figure (unknown is not "at least").
 Pure: no Qt, no network, nothing read on import.
@@ -31,23 +34,32 @@ import math
 from core.market import rankings as R
 from core.search_text import best_score, normal
 
-__all__ = ("PAGES", "PAGE_KEYS", "SUBS", "CONDITIONS", "CONDITION_KEYS", "Condition", "Screen", "condition",
+__all__ = ("PAGES", "PAGE_KEYS", "SUBS", "WON_PAGES",
+           "CONDITIONS", "CONDITION_KEYS", "Condition", "Screen", "condition",
            "category_note", "page_text", "sub_text", "matches_text", "threshold_text", "CATEGORY_NOTES")
 
-# (key, English, Korean): the rail's Markets sub-items, in this order (owner ruling R-D10-1).
-PAGES = (("kr", "Korean stocks", "국내 주식"), ("us", "US stocks", "미국 주식"), ("crypto", "Crypto", "코인"))
+# (key, English, Korean): the market pages, in this order (owner rulings R-D10-1; R-D11-1: 크립토, not 코인; R-D11-4:
+# the ETF pages). Their names head the page; the rail's 시장 menu groups them under 주식 / 크립토 / ETF.
+PAGES = (("kr", "Korean stocks", "국내 주식"), ("us", "US stocks", "미국 주식"), ("crypto", "Crypto", "크립토"),
+         ("etf_kr", "Korean ETFs", "국내 ETF"), ("etf_us", "US ETFs", "미국 ETF"))
 PAGE_KEYS = tuple(key for key, _en, _ko in PAGES)
 # Sub-market filter of each page: '' is the whole market. US exchanges are the KIS codes the universe carries.
 SUBS = {"kr": (("", "All", "전체"), ("kospi", "KOSPI", "코스피"), ("kosdaq", "KOSDAQ", "코스닥")),
         "us": (("", "All", "전체"), ("NAS", "NASDAQ", "나스닥"), ("NYS", "NYSE", "NYSE")),
-        "crypto": ()}
+        "crypto": (), "etf_kr": (), "etf_us": ()}
+_ETF_CAP = ("An ETF's size is its net assets (AUM), not a market cap, and no source this app uses states it, so "
+            "ETFs are not ranked by market cap.")
 # Why a market cannot rank by a category (English; the Korean is in quantgen_desktop/owner_ui_language/market.py).
 # The page disables that chip and gives this as its tooltip.
 CATEGORY_NOTES = {
     ("crypto", "volume"): "Coins are not ranked by units traded: one coin is worth very different amounts from "
                           "another. See trading value.",
     ("crypto", "cap"): "No source this app uses states coin market cap, so coins are not ranked by it.",
+    ("etf_kr", "cap"): _ETF_CAP,
+    ("etf_us", "cap"): _ETF_CAP,
 }
+# Pages whose prices and money figures are in won (the rest are in US dollars).
+WON_PAGES = ("kr", "etf_kr")
 
 
 def page_text(page, language):
@@ -60,6 +72,10 @@ def sub_text(page, sub, language):
 
 def category_note(page, category):
     """Why `page` cannot rank by `category` (English source text), or '' when it can."""
+    if category == "qscore":
+        from .qscore_rankings import ENABLED
+        if not ENABLED or page not in ("kr", "us"):
+            return "Q-SCORE is available for Korean and US stocks only."
     return CATEGORY_NOTES.get((page, category), "")
 
 
@@ -74,7 +90,7 @@ def threshold_text(value, unit, page, language):
             return "0%"
         return f"{value:+g}%".replace("-", "−")
     v = float(value)
-    if unit == "money" and page == "kr":
+    if unit == "money" and page in WON_PAGES:
         if language == "ko":
             return f"{v / 1e12:g}조" if v >= 1e12 else f"{v / 1e8:,.0f}억"
         return f"₩{v / 1e12:g}T" if v >= 1e12 else f"₩{v / 1e9:g}B"
@@ -120,7 +136,8 @@ class Condition:
 CONDITIONS = (
     Condition("change", "Change", "등락률", "range", "pct", lambda r: r.change_pct),
     Condition("value", "Trading value", "거래대금", "min", "money", lambda r: r.trading_value,
-              steps={"kr": (1e10, 5e10, 1e11, 5e11), "us": (1e8, 5e8, 1e9, 5e9), "crypto": (1e8, 1e9, 1e10)}),
+              steps={"kr": (1e10, 5e10, 1e11, 5e11), "us": (1e8, 5e8, 1e9, 5e9), "crypto": (1e8, 1e9, 1e10),
+                     "etf_kr": (1e9, 1e10, 5e10, 1e11), "etf_us": (1e8, 1e9, 5e9)}),
     Condition("cap", "Market cap", "시가총액", "min", "money", lambda r: r.market_cap, pages=("kr", "us"),
               steps={"kr": (1e12, 1e13, 5e13, 1e14), "us": (1e10, 1e11, 5e11, 1e12)}),
 )

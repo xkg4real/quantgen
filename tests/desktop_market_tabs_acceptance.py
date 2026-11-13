@@ -125,7 +125,8 @@ class MarketTabsTests(unittest.TestCase):
 class SearchZoomTests(unittest.TestCase):
     """Owner UI-16 inside the pane: name search, no exchange/bar-count inputs; since 2026-11-04 no provider or time
     lines (a delay notice only when the data is not domestic real-time). Since 2026-11-11 (UI-D8) the stock screen
-    searches from its toolbar and the wheel never moves the chart: arrows pan, +/- zoom."""
+    searches from its toolbar and the plain wheel never moves the chart: arrows pan; since 2026-11-12 (owner R-D12-1)
+    Ctrl + wheel zooms and no key does."""
     @classmethod
     def setUpClass(cls):
         cls.app = QApplication.instance() or QApplication([])
@@ -203,9 +204,11 @@ class SearchZoomTests(unittest.TestCase):
         self.assertIn('출처', stock.price.toolTip()); self.assertIn('한국시간', stock.price.toolTip())
         self.assertNotIn('출처', stock.state_chip.text()); self.assertNotIn('KIS', stock.state_chip.text())
 
-    def test_wheel_never_moves_the_chart_and_keys_zoom(self):
-        """Owner 2026-11-11 ("스크롤로 차트좌우이동 ... 그냥 막아버리고"): over the stock screen's chart the wheel,
-        vertical or sideways, changes nothing (not the zoom, the pan, the candle or the page); + and - zoom."""
+    def test_plain_wheel_never_moves_the_chart_and_ctrl_wheel_zooms(self):
+        """Owner 2026-11-11 ("스크롤로 차트좌우이동 ... 그냥 막아버리고"): over the stock screen's chart the plain wheel,
+        vertical or sideways, changes nothing (not the zoom, the pan, the candle or the page). Owner R-D12-1
+        ("차트 확대를 +-로 하지말고 컨트롤 + 마우스 휠 이렇게 하자"): Ctrl + wheel zooms between 20 bars and every loaded
+        bar, and the + and - keys (which zoomed until then) change nothing."""
         from PyQt6.QtCore import QPoint, QPointF, Qt
         from PyQt6.QtGui import QWheelEvent
         from PyQt6.QtTest import QTest
@@ -215,9 +218,9 @@ class SearchZoomTests(unittest.TestCase):
         n = len(p.snapshot.candles)
         page = self.window.stack.currentWidget().verticalScrollBar()
 
-        def wheel(dx, dy):
+        def wheel(dx, dy, modifiers=Qt.KeyboardModifier.NoModifier):
             event = QWheelEvent(QPointF(100, 100), QPointF(100, 100), QPoint(0, 0), QPoint(dx, dy),
-                                Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False)
+                                Qt.MouseButton.NoButton, modifiers, Qt.ScrollPhase.NoScrollPhase, False)
             self.app.sendEvent(p.chart, event)
             return event.isAccepted()
 
@@ -229,12 +232,18 @@ class SearchZoomTests(unittest.TestCase):
             self.app.processEvents()
             self.assertEqual((p.visible_bars.value(), p._end, p._cursor, page.value()), before)
         p.chart.setFocus()
+        for key in (Qt.Key.Key_Plus, Qt.Key.Key_Minus, Qt.Key.Key_Equal, Qt.Key.Key_Underscore):
+            QTest.keyClick(p.chart, key)
+            self.assertEqual((p.visible_bars.value(), p._end, p._cursor, page.value()), before)
+        ctrl = Qt.KeyboardModifier.ControlModifier
         for _ in range(30):
-            QTest.keyClick(p.chart, Qt.Key.Key_Plus)
+            self.assertTrue(wheel(0, 120, ctrl))
         self.assertEqual(p.visible_bars.value(), 20)
+        self.assertEqual(page.value(), before[3])
         for _ in range(30):
-            QTest.keyClick(p.chart, Qt.Key.Key_Minus)
+            self.assertTrue(wheel(0, -120, ctrl))
         self.assertEqual(p.visible_bars.value(), n)
+        self.assertEqual(page.value(), before[3])
         self.assertEqual(len(self.service.calls), 1)
         self.assertGreaterEqual(p._cursor, n - p.visible_bars.value())
 

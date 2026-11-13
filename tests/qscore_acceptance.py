@@ -47,7 +47,7 @@ class QScoreTests(unittest.TestCase):
         self.assertFalse(first["live"])
         self.assertEqual(first["as_of"], "2026-10-30")
         self.assertEqual(first["sessions"], 252)
-        self.assertEqual(first["methodology"], "Q-SCORE v0.1")
+        self.assertEqual(first["methodology"], "Q-SCORE v0.2")
         self.assertEqual(set(first["components"]["technical"]["signals"]),
                          {"trend50", "trend200", "momentum", "rsi", "macd", "vol"})
         self.assertEqual(first["components"]["drawdown"]["engine"], "core.quant.risk.analyze_history")
@@ -159,7 +159,7 @@ class QScoreTests(unittest.TestCase):
         self.assertIn("예측력은 검증되지", q_score_help("ko"))
         self.assertIn("unvalidated predictive power", q_score_help("en"))
         for lang in ("ko", "en"):
-            self.assertIn("Q-SCORE v0.1", q_score_help(lang))
+            self.assertIn("Q-SCORE v0.2", q_score_help(lang))
             self.assertNotIn("70%", q_score_help(lang))
             self.assertNotIn("15%", q_score_help(lang))
 

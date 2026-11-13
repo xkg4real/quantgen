@@ -68,7 +68,9 @@ class CompactUiTests(unittest.TestCase):
                 for width in (1000,1360,1920):
                     w.resize(width,900);self.settle()
                     for button in w.tool_buttons.values():
-                        self.assertTrue(button.parentWidget().rect().contains(button.geometry()))
+                        self.assertTrue(button.parentWidget().rect().contains(button.geometry()),
+                                        (language, width, button.text(), button.geometry(),
+                                         button.parentWidget().rect()))
                         self.assertLessEqual(button.width(),button.sizeHint().width()+2)
                     self.assertEqual(w.stack.currentWidget().horizontalScrollBar().maximum(),0)
                     self.assertLess(w.bonds.fields['Notional'].width(),300)

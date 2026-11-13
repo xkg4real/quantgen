@@ -9,7 +9,7 @@ Display only: widgets keep their English source text, combo data and export payl
 """
 from importlib import import_module
 
-AREAS = ("common", "strategy", "charts", "macro", "ficc", "market", "home", "risk", "stock")
+AREAS = ("common", "strategy", "charts", "macro", "ficc", "market", "home", "risk", "stock", "report")
 
 
 def pairs():

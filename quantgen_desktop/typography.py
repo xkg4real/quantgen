@@ -46,6 +46,14 @@ BRAND_SYMBOL_SIZE = 32
 BRAND_SPACING = 6
 SUBNAV_INDENT = 14           # from the nav buttons' left edge to the sub-menu guide line
 SUBNAV_PADDING = (7, 12)     # vertical, horizontal (after the 2px guide line): airy rows
+# Owner ruling UI-D11 (2026-11-12): the 시장 rows are the big categories of a TradingView-style menu, roomy rows
+# with a chevron at the right (painted by rail_menu.ChevronButton inside the right padding). 36 px while the rail
+# has the room; a shorter window tightens them (to MARKET_ROW_MIN_HEIGHT) before the rail has to scroll
+# (`app.ResearchWindow.fit_market_rows`). UI-D11 review: 26 px rows beside the flyouts' 38 px broke the roomy rhythm,
+# and the rail scrolled anyway; 32 px stays close to the flyouts.
+MARKET_ROW_PADDING = (12, 30)  # left (after the guide line), right (room for the chevron); the height is fixed
+MARKET_ROW_HEIGHT = 36
+MARKET_ROW_MIN_HEIGHT = 32
 
 
 def is_dark(palette) -> bool:
@@ -183,6 +191,7 @@ def rail_stylesheet(p, dark: bool) -> str:
     """
     nav_v, nav_h = NAV_PADDING
     sub_v, sub_h = SUBNAV_PADDING
+    row_l, row_r = MARKET_ROW_PADDING
     edge, guide = mix(p.surface, p.border, 0.45), mix(p.surface, p.border, 0.8)
     return f"""
           QFrame#sidebar {{ background: {p.surface}; border: 0; border-right: 1px solid {edge}; }}
@@ -202,6 +211,34 @@ def rail_stylesheet(p, dark: bool) -> str:
           QPushButton[subnav='true'][focusRing='true'] {{ color: {p.text}; background: {p.accent_soft}; border-left-color: {p.accent};
                                                          border-top-right-radius: 6px; border-bottom-right-radius: 6px; }}
           QPushButton[subnav='true'][focusRing='true']:checked {{ color: {p.accent}; }}
+          QPushButton[marketRow='true'] {{ padding: 0 {row_r}px 0 {row_l}px; min-height: {MARKET_ROW_MIN_HEIGHT}px;
+                                         font-size: 14px; }}
+        """
+
+
+def flyout_tint(p, dark: bool) -> str:
+    """The pointed row of the 시장 menu (and the rail row whose flyout is open, painted by rail_menu.RailAnchor): a
+    quiet neutral tint, not the accent, so the accent stays for what the window shows."""
+    return mix(p.surface, p.border, 0.55 if dark else 0.5)
+
+
+def flyout_stylesheet(p, dark: bool) -> str:
+    """The 시장 menu's flyouts (owner ruling UI-D11, 2026-11-12; rail_menu.FlyoutPanel paints the box itself).
+
+    Roomy 38 px rows in the window font at 14 px, a 2 px transparent border that turns accent for keyboard focus
+    (`focusRing`, as in the rail), the pointed row and the row whose flyout is open on a neutral tint, and the row
+    of what the window shows in the accent colour.
+    """
+    tint = flyout_tint(p, dark)
+    return f"""
+          QWidget#railFlyout {{ background: transparent; }}
+          QPushButton[flyoutRow='true'] {{ text-align: left; padding: 0 28px 0 12px; border: 2px solid transparent;
+                                          border-radius: 6px; background: transparent; color: {p.text};
+                                          font-size: 14px; font-weight: 400; letter-spacing: -0.1px; }}
+          QPushButton[flyoutRow='true']:hover, QPushButton[flyoutRow='true'][open='true'] {{ background: {tint}; }}
+          QPushButton[flyoutRow='true'][focusRing='true'] {{ background: {tint}; border-color: {p.accent}; }}
+          QPushButton[flyoutRow='true'][current='true'] {{ color: {p.accent}; font-weight: 600; }}
+          QPushButton[flyoutRow='true']:focus {{ outline: none; }}
         """
 
 
@@ -220,7 +257,7 @@ def window_stylesheet(p, dark: bool) -> str:
     nav_v, nav_h = NAV_PADDING
     line = mix(p.border, p.bg, 0.5)  # owner 2026-11-11: light section lines ("구획 선을 연하게")
     return f"""
-          QWidget {{ background: {p.bg}; color: {p.text}; font-size: 13px; font-weight: 400; }}
+          QWidget {{ background: {p.bg}; color: {p.text}; font-family: "QG Interface"; font-size: 13px; font-weight: 400; }}
           QFrame#sidebar {{ background: {p.surface}; border-right: 1px solid {p.border}; }}
           QFrame#panel {{ background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 {d['top']}, stop:1 {d['bottom']});
                           border: 1px solid {line}; border-radius: 16px; }}
@@ -260,7 +297,13 @@ def window_stylesheet(p, dark: bool) -> str:
           QTabBar::tab:selected {{ background: {p.accent}; color: {p.on_accent}; font-weight: 600; }}
           QTabWidget#marketInnerTabs QTabBar::tab {{ background: transparent; color: {p.muted}; padding: 7px 14px; margin-right: 6px; border: 0; border-bottom: 2px solid transparent; border-radius: 0; }}
           QTabWidget#marketInnerTabs QTabBar::tab:selected {{ background: transparent; color: {p.accent}; border-bottom: 2px solid {p.accent}; font-weight: 600; }}
-          QLineEdit#guideSearch {{ min-height: 34px; padding: 6px 12px; border-radius: 20px; font-size: 14px; }}
+          QFrame#workspaceGuide {{ background: {p.accent_soft}; border: 1px solid {p.border}; border-radius: 12px; }}
+          QFrame#workspaceGuide QWidget {{ background: transparent; border: none; }}
+          QLabel[role='workflowTitle'] {{ font-size: 19px; font-weight: 500; color: {p.text}; letter-spacing: -0.36px; }}
+          QFrame#workspaceGuide QLabel[role='workflowNumber'] {{ background: {p.accent}; color: {p.on_accent}; border-radius: 12px; font-size: 12px; }}
+          QLabel[role='workflowStep'] {{ font-size: 13px; font-weight: 500; color: {p.text}; }}
+          QLabel[role='choiceTitle'] {{ font-size: 14px; font-weight: 500; color: {p.text}; }}
+          QFrame#workspaceGuide QLabel[role='caption'], QAbstractButton#guideChoice QLabel[role='caption'] {{ color: {p.text}; }}
           QListWidget#guideSuggestions {{ background: {p.surface}; border: 1px solid {line}; border-radius: 14px; padding: 4px; outline: 0; }}
           QListWidget#guideSuggestions::item {{ border-radius: 9px; color: transparent; }}
           QListWidget#guideSuggestions::item:selected, QListWidget#guideSuggestions::item:hover {{ background: {p.accent_soft}; }}
@@ -287,6 +330,8 @@ def window_stylesheet(p, dark: bool) -> str:
 
 __all__ = ["TONES", "TONE_COLORS", "PANEL_DEPTH", "RAIL_MARGINS", "RAIL_SPACING", "NAV_PADDING",
            "NAV_SLACK", "SIDEBAR_WIDTH_RANGE", "RAIL_COLLAPSED_WIDTH", "RAIL_TOGGLE_SIZE", "BRAND_SYMBOL_SIZE",
-           "BRAND_SPACING", "SUBNAV_INDENT", "SUBNAV_PADDING", "is_dark", "tone_colors", "tone_for", "set_tone",
+           "BRAND_SPACING", "SUBNAV_INDENT", "SUBNAV_PADDING", "MARKET_ROW_PADDING", "MARKET_ROW_HEIGHT",
+           "MARKET_ROW_MIN_HEIGHT", "flyout_tint", "flyout_stylesheet",
+           "is_dark", "tone_colors", "tone_for", "set_tone",
            "scaled_font", "mix", "window_stylesheet", "rail_stylesheet", "controls_stylesheet",
            "popup_stylesheet", "icon_dir"]

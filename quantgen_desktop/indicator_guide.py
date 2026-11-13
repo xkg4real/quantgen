@@ -1,9 +1,9 @@
 """Native reference indicator guide and reusable market-history explorer."""
-from PyQt6.QtCore import QByteArray, QEvent, QPointF, QTimer, Qt, pyqtSignal
-from PyQt6.QtGui import QPainter, QColor, QPen, QIcon, QPixmap
+from PyQt6.QtCore import QByteArray, QTimer, Qt, pyqtSignal
+from PyQt6.QtGui import QPainter, QColor, QPen
 from PyQt6.QtSvgWidgets import QSvgWidget
-from PyQt6.QtWidgets import (QWidget,QVBoxLayout,QHBoxLayout,QComboBox,QFrame,QLabel,QLineEdit,QListWidget,
-                            QListWidgetItem,QPushButton,QSlider,QFileDialog,QSizePolicy,QLayout,QAbstractItemView)
+from PyQt6.QtWidgets import (QWidget,QVBoxLayout,QHBoxLayout,QComboBox,QPushButton,QSlider,
+                            QFileDialog,QSizePolicy,QLayout)
 
 from core.i18n import LocaleContext
 from core.education import glossary
@@ -74,31 +74,8 @@ class TechnicalChart(QSvgWidget):
         super().keyPressEvent(event)
 
 
-_ICON=None
-
-
-def _search_icon():
-    """A plain magnifier drawn once at runtime: no bundled image or font glyph is needed."""
-    global _ICON
-    if _ICON is None:_ICON=_draw_search_icon()
-    return _ICON
-
-
-def _draw_search_icon():
-    pixmap=QPixmap(18,18);pixmap.fill(Qt.GlobalColor.transparent)
-    painter=QPainter(pixmap);painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-    painter.setPen(QPen(QColor('#7B8794'),1.8));painter.drawEllipse(QPointF(7.5,7.5),5,5)
-    painter.drawLine(QPointF(11.2,11.2),QPointF(16,16));painter.end()
-    return QIcon(pixmap)
-
-
 class IndicatorGuide(QWidget):
-    """Search-first guide: type, pick a suggestion, read the explanation below.
-
-    Choosing a technical indicator also draws it on the shared historical chart, so
-    several indicators can still be compared on one sample and time axis.
-    """
-    MAX_SUGGESTIONS=8
+    """Visible multiple choices and one shared historical chart; no search required."""
 
     def __init__(self, *, locale=None, history=None):
         super().__init__()
@@ -106,7 +83,7 @@ class IndicatorGuide(QWidget):
         self.ctx=locale or LocaleContext()
         self.keys=();self.external=from_history(history) if history else None
         self.series=None;self.cursor=0;self.meta={};self.case_name='2020'
-        self.focus=None;self._shown_name='';self._row_icon=_search_icon().pixmap(16,16)
+        self.focus=None
         layout=QVBoxLayout(self);layout.setContentsMargins(0,12,0,0);layout.setSpacing(14)
         # The guide is embedded in a scroll page: long translated labels must
         # wrap within its viewport instead of setting the entire page width.
@@ -115,35 +92,21 @@ class IndicatorGuide(QWidget):
         self.intro=label('');layout.addWidget(self.intro)
         self.steps=label('','caption');layout.addWidget(self.steps)
         box,inner=panel('')
-        self.search_title=label('','heading');inner.addWidget(self.search_title)
-        self.search=QLineEdit();self.search.setMaxLength(60);self.search.setClearButtonEnabled(True)
-        self.search.setObjectName('guideSearch')
-        self.search.addAction(_search_icon(),QLineEdit.ActionPosition.LeadingPosition)
-        self.search.textChanged.connect(self._query_changed)
-        self.search.installEventFilter(self);inner.addWidget(self.search)
-        self.suggestions=QListWidget();self.suggestions.setObjectName('guideSuggestions')
-        self.suggestions.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
-        self.suggestions.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.suggestions.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.suggestions.itemClicked.connect(self._suggestion_chosen)
-        self.suggestions.itemActivated.connect(self._suggestion_chosen)
-        self.suggestions.installEventFilter(self);self.suggestions.hide();inner.addWidget(self.suggestions)
-        self.no_match=label('','caption');self.no_match.hide();inner.addWidget(self.no_match)
-        popular=QHBoxLayout();popular.setSpacing(8)
-        self.popular_label=label('','caption',wrap=False);popular.addWidget(self.popular_label)
-        self.popular={}
-        for key in glossary.POPULAR:
-            b=QPushButton();b.setProperty('chip',True);b.setCursor(Qt.CursorShape.PointingHandCursor)
-            b.clicked.connect(lambda checked=False,k=key:self.choose(k))
-            self.popular[key]=b;popular.addWidget(b)
-        popular.addStretch();inner.addLayout(popular)
-        chips=QHBoxLayout();chips.setSpacing(8)
-        self.selected_label=label('','caption',wrap=False);chips.addWidget(self.selected_label)
-        self.chip_row=QHBoxLayout();self.chip_row.setSpacing(6);chips.addLayout(self.chip_row)
-        chips.addStretch()
-        self.clear=QPushButton();self.clear.clicked.connect(self.clear_selection);chips.addWidget(self.clear)
-        inner.addLayout(chips)
-        self.chips={}
+        from .choice_cards import ChoiceCard, ChoiceGrid
+        self.selection_title=label('', 'heading');inner.addWidget(self.selection_title)
+        self.options={}
+        for spec in INDICATORS:
+            button=ChoiceCard();button.swatch=spec.color
+            button.clicked.connect(lambda checked,k=spec.key:self.toggle(k,checked))
+            self.options[spec.key]=button
+        self.choices=ChoiceGrid(self.options.values());inner.addWidget(self.choices)
+        selected=QHBoxLayout()
+        self.selected_label=label('', 'caption');selected.addWidget(self.selected_label,1)
+        self.clear=QPushButton();self.clear.clicked.connect(self.clear_selection);selected.addWidget(self.clear)
+        inner.addLayout(selected)
+        from .category_picker import CategoryFlow
+        self.chip_host=QWidget();self.chip_row=CategoryFlow(self.chip_host)
+        inner.addWidget(self.chip_host);self.chips={}
         self.case=QComboBox()
         for key in ('auto','2020','2022','2019'):self.case.addItem(key,key)
         self.case.currentIndexChanged.connect(self.render)
@@ -163,9 +126,18 @@ class IndicatorGuide(QWidget):
             heading=label('','heading');body=label('')
             detail_layout.addWidget(heading);detail_layout.addWidget(body)
             self.detail_sections.append((heading,body))
-        layout.addWidget(self.detail)
-        self.why=label('','muted');layout.addWidget(self.why)
-        self.source=label('','caption');layout.addWidget(self.source)
+        self.detail_summary=label('');detail_layout.insertWidget(1,self.detail_summary)
+        self.detail_body=QWidget();body_layout=QVBoxLayout(self.detail_body)
+        body_layout.setContentsMargins(0,0,0,0)
+        for heading,body in self.detail_sections:
+            detail_layout.removeWidget(heading);detail_layout.removeWidget(body)
+            body_layout.addWidget(heading);body_layout.addWidget(body)
+        self.detail_more=QPushButton();self.detail_more.setCheckable(True)
+        self.detail_more.toggled.connect(self.detail_body.setVisible)
+        detail_layout.addWidget(self.detail_more,0,Qt.AlignmentFlag.AlignLeft)
+        detail_layout.addWidget(self.detail_body);self.detail_body.hide()
+        self.why=label('','muted')
+        self.source=label('','caption')
         self.chart_area=QWidget();chart_layout=QVBoxLayout(self.chart_area)
         chart_layout.setContentsMargins(0,0,0,0)
         self.reading_area=QWidget();reading_layout=QVBoxLayout(self.reading_area)
@@ -178,82 +150,41 @@ class IndicatorGuide(QWidget):
         self.slider=QSlider(Qt.Orientation.Horizontal);self.slider.valueChanged.connect(self.move_cursor);chart_layout.addWidget(self.slider)
         self.ohlcv_notice=label('','caption');chart_layout.addWidget(self.ohlcv_notice)
         self.line_styles=label('','caption');chart_layout.addWidget(self.line_styles)
+        chart_layout.addWidget(self.why);chart_layout.addWidget(self.source)
+        reading_layout.addWidget(self.detail)
         self.combination=label('');reading_layout.addWidget(self.combination)
         self.fail_title=label('','heading');reading_layout.addWidget(self.fail_title)
         self.fail_note=label('','caption');reading_layout.addWidget(self.fail_note)
         self.event_host=QWidget();self.event_layout=QVBoxLayout(self.event_host)
         self.event_layout.setContentsMargins(0,0,0,0);reading_layout.addWidget(self.event_host)
         reading_layout.addStretch()
-        self.export=QPushButton();self.export.clicked.connect(self.save_report);layout.addWidget(self.export)
+        terms,terms_layout=panel('')
+        self.terms_title=label('', 'heading');terms_layout.addWidget(self.terms_title)
+        self.terms=QComboBox();self.terms.setEditable(False)
+        for term in glossary.TERMS:
+            if term.key not in BY_KEY:self.terms.addItem('',term.key)
+        self.terms.activated.connect(self.choose_term)
+        terms_layout.addWidget(self.terms);layout.addWidget(terms)
+        self.export=QPushButton();self.export.clicked.connect(self.save_report)
+        layout.addWidget(self.export,0,Qt.AlignmentFlag.AlignLeft)
         self.notice=label('','caption');layout.addWidget(self.notice)
         self.render()
 
     def set_locale(self,ctx):
         self.ctx=ctx
-        if self.focus and self.search.text()==self._shown_name:
-            self._set_search_text(glossary.name(self.focus,ctx))
-        self.render();self._query_changed(self.search.text(),reveal=not self.suggestions.isHidden())
+        self.render()
 
-    # Search ---------------------------------------------------------------
-    def _set_search_text(self,text):
-        self._shown_name=text
-        self.search.blockSignals(True);self.search.setText(text);self.search.blockSignals(False)
+    def intro_text(self):
+        return ('지표를 골라 차트에서 확인해 보세요. 여러 개를 선택하면 같은 기간의 신호를 함께 비교할 수 있어요.'
+                if self.ctx.language=='ko' else
+                'Choose an indicator and see it on the chart. Select more than one to compare signals over the same period.')
 
-    def _query_changed(self,text,*,reveal=True):
-        from .app import label
-        keys=glossary.search(text,self.MAX_SUGGESTIONS)
-        self.suggestions.clear()
-        for key in keys:
-            # One row per suggestion, like a browser search box: icon, name, then the muted category.
-            item=QListWidgetItem();item.setData(Qt.ItemDataRole.UserRole,key)
-            name=glossary.name(key,self.ctx);item.setText(name);item.setToolTip(glossary.summary(key,self.ctx))
-            row=QWidget();row.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-            row.setStyleSheet('background: transparent;')
-            line=QHBoxLayout(row);line.setContentsMargins(10,7,12,7);line.setSpacing(10)
-            icon=QLabel();icon.setPixmap(self._row_icon);line.addWidget(icon)
-            title=label(name,wrap=False);line.addWidget(title,1)
-            line.addWidget(label(glossary.category(key,self.ctx),'caption',wrap=False))
-            item.setSizeHint(row.sizeHint());item.setForeground(QColor(0,0,0,0))
-            self.suggestions.addItem(item);self.suggestions.setItemWidget(item,row)
-        if keys:
-            self.suggestions.setCurrentRow(0)
-            height=sum(self.suggestions.sizeHintForRow(i) for i in range(len(keys)))
-            self.suggestions.setFixedHeight(height+2*self.suggestions.frameWidth()+10)
-        self.suggestions.setVisible(bool(keys) and reveal)
-        typed=bool(text.strip())
-        self.no_match.setText(self.ctx.t('search_no_match',query=text.strip()) if typed and not keys else '')
-        self.no_match.setVisible(typed and not keys and reveal)
-
-    def suggestion_keys(self):
-        return tuple(self.suggestions.item(i).data(Qt.ItemDataRole.UserRole) for i in range(self.suggestions.count()))
-
-    def _suggestion_chosen(self,item):
-        if item is not None:self.choose(item.data(Qt.ItemDataRole.UserRole))
-
-    def _hide_suggestions(self):
-        self.suggestions.hide();self.no_match.hide()
-
-    def eventFilter(self,watched,event):
-        if watched is self.search and event.type()==QEvent.Type.FocusIn and self.focus and self.search.text()==self._shown_name:
-            # Like a browser search box: a chosen term is selected, so typing replaces it.
-            QTimer.singleShot(0,self.search.selectAll)
-        if event.type()!=QEvent.Type.KeyPress:return False
-        key=event.key()
-        if watched is self.search:
-            if key==Qt.Key.Key_Down and self.suggestions.count():
-                self.suggestions.show();self.suggestions.setCurrentRow(0);self.suggestions.setFocus();return True
-            if key in (Qt.Key.Key_Return,Qt.Key.Key_Enter):
-                if self.suggestions.isHidden():self._query_changed(self.search.text())
-                if self.suggestions.count():
-                    self._suggestion_chosen(self.suggestions.currentItem() or self.suggestions.item(0))
-                return True
-            if key==Qt.Key.Key_Escape and (self.suggestions.isVisible() or self.no_match.isVisible()):
-                self._hide_suggestions();return True
-        elif watched is self.suggestions:
-            if key==Qt.Key.Key_Escape or (key==Qt.Key.Key_Up and self.suggestions.currentRow()<=0):
-                if key==Qt.Key.Key_Escape:self._hide_suggestions()
-                self.search.setFocus();return True
-        return False
+    def choose_term(self,index):
+        self.choose(self.terms.itemData(index))
+        from PyQt6.QtWidgets import QScrollArea
+        parent=self.parentWidget()
+        while parent is not None and not isinstance(parent,QScrollArea):parent=parent.parentWidget()
+        if parent is not None:QTimer.singleShot(0,lambda:parent.ensureWidgetVisible(self.detail,0,20))
 
     def choose(self,key):
         """Show a term's explanation; an indicator is also drawn on the chart."""
@@ -261,17 +192,17 @@ class IndicatorGuide(QWidget):
             raise ValueError('Unknown guide term')
         self.focus=key
         if key in BY_KEY:self.keys=selection(set(self.keys)|{key})
-        self._set_search_text(glossary.name(key,self.ctx));self._hide_suggestions()
         self.render()
 
     def remove(self,key):
-        self.keys=selection(set(self.keys)-{key});self.render()
+        self.keys=selection(set(self.keys)-{key})
+        self.render()
 
     def toggle(self,key,checked):
         self.choose(key) if checked else self.remove(key)
 
     def clear_selection(self):
-        self.keys=();self.render()
+        self.keys=();self.focus=None;self.render()
 
     def _toggle_detail_chart(self):
         if self.focus in BY_KEY:
@@ -293,14 +224,28 @@ class IndicatorGuide(QWidget):
         else:
             self.case_name,self.series,self.meta=historical_case(self.keys,self.case.currentData() or 'auto')
         self.cursor=self.series.dates.index(old_date) if old_date in self.series.dates else len(self.series.dates)*2//3
-        self.intro.setText(ctx.t('search_intro'));self.steps.setText(ctx.t('search_steps'))
-        self.search_title.setText(ctx.t('search_title'))
-        self.search.setPlaceholderText(ctx.t('search_placeholder'));self.search.setAccessibleName(ctx.t('search_title'))
-        self.suggestions.setAccessibleName(ctx.t('search_suggestions'))
-        self.popular_label.setText(ctx.t('search_popular'))
-        for key,b in self.popular.items():
-            b.setText(glossary.name(key,ctx).split(' · ')[-1] if key in BY_KEY else glossary.name(key,ctx).split(' · ')[0])
-            b.setToolTip(glossary.summary(key,ctx));b.setAccessibleName(glossary.name(key,ctx))
+        ko=ctx.language=='ko'
+        self.intro.setText(self.intro_text())
+        self.steps.setText('① 지표 선택   →   ② 차트 위 날짜 이동   →   ③ 신호와 한계 비교' if ko else
+                           '1 Choose indicators   →   2 Move across dates   →   3 Compare signals and limitations')
+        self.selection_title.setText('어떤 흐름이 궁금한가요? · 복수 선택' if ko else 'What would you like to see? · Choose several')
+        purposes={
+            'sma':('가격의 큰 방향','The broader price trend'),
+            'ema':('최근 가격 변화에 빠르게 반응','Responds faster to recent prices'),
+            'rsi':('최근 상승과 하락의 강도','The strength of recent gains and losses'),
+            'macd':('추세의 힘이 바뀌는 구간','Changes in trend momentum'),
+            'bb':('평소보다 커지거나 줄어든 변동','Expanding and contracting volatility')}
+        for spec in INDICATORS:
+            button=self.options[spec.key]
+            button.set_copy(ctx.t(spec.key),purposes[spec.key][0 if ko else 1])
+            button.blockSignals(True);button.setChecked(spec.key in self.keys);button.blockSignals(False)
+            button.setToolTip(glossary.summary(spec.key,ctx));button.update()
+        self.terms_title.setText('다른 투자 용어도 알아보세요' if ko else 'Explore other investing concepts')
+        self.terms.setAccessibleName(self.terms_title.text())
+        for i in range(self.terms.count()):
+            key=self.terms.itemData(i)
+            self.terms.setItemText(i,glossary.category(key,ctx)+' · '+glossary.name(key,ctx))
+        self.detail_more.setText('자세한 해설과 주의점' if ko else 'Full explanation and limitations')
         self.selected_label.setText(ctx.t('chart_selection'));self.selected_label.setVisible(bool(self.keys))
         self.clear.setText(ctx.t('clear_selection'));self.clear.setVisible(bool(self.keys))
         for key in [k for k in self.chips if k not in self.keys]:
@@ -319,12 +264,13 @@ class IndicatorGuide(QWidget):
                 chip.remove_button.clicked.connect(lambda checked=False,k=spec.key:self.remove(k))
                 row.addWidget(chip.show_button);row.addWidget(chip.remove_button)
                 self.chips[spec.key]=chip
-            self.chip_row.addWidget(chip)
+            if self.chip_row.indexOf(chip)<0:self.chip_row.addWidget(chip)
             chip.show_button.setText(spec.letter+'  '+spec.key.upper())
             chip.show_button.setToolTip(ctx.t(spec.key));chip.show_button.setAccessibleName(ctx.t(spec.key))
             chip.show_button.setProperty('current',spec.key==self.focus)
             chip.remove_button.setToolTip(ctx.t('remove_from_chart')+' · '+ctx.t(spec.key))
             chip.remove_button.setAccessibleName(ctx.t('remove_from_chart')+' · '+ctx.t(spec.key))
+        self.chip_host.setVisible(bool(self.keys))
         self._render_detail()
         self.case.setAccessibleName(ctx.t('sample'))
         self.case.blockSignals(True)
@@ -359,6 +305,7 @@ class IndicatorGuide(QWidget):
         self.detail.setProperty('term',key)
         self.detail_title.setText((spec.letter+'  ' if spec else '')+glossary.name(key,ctx))
         self.detail_category.setText(glossary.category(key,ctx))
+        self.detail_summary.setText(glossary.summary(key,ctx))
         self.detail_chart.setVisible(spec is not None)
         if spec is not None:
             self.detail_chart.setText(ctx.t('remove_from_chart' if key in self.keys else 'add_to_chart'))
@@ -372,7 +319,7 @@ class IndicatorGuide(QWidget):
         self.cursor=max(0,min(len(self.series.closes)-1,int(index)))
         self.chart.set_chart(self.series,self.keys,self.ctx,self.cursor)
         self.readout.setText(cursor_text(self.series,self.keys,self.cursor,self.ctx))
-        self.combination.setText(reading_text(self.series,self.keys,self.cursor,self.ctx) if self.keys else self.ctx.t('search_no_selection'))
+        self.combination.setText(reading_text(self.series,self.keys,self.cursor,self.ctx) if self.keys else ('위에서 지표를 선택하면 이 날짜의 신호를 함께 읽을 수 있어요.' if self.ctx.language=='ko' else 'Choose an indicator above to read its signal at this date.'))
         self.slider.blockSignals(True);self.slider.setValue(self.cursor);self.slider.blockSignals(False)
 
     def save_report(self):

@@ -188,14 +188,22 @@ PAIRS = {
         '시가총액(계산값) = KIS 응답의 상장주식수 × 현재가입니다.',
     "No usable market cap for {count} of these stocks; listed last without a rank (each row's tooltip says why).":
         '{count}개 종목은 쓸 수 있는 시가총액이 없어 순위 없이 맨 아래에 둡니다(이유는 각 값의 설명에 있습니다).',
-    # Market pages (owner ruling UI-D10, 2026-11-11: 국내 주식 / 미국 주식 / 코인 in the rail; the ranking categories as
-    # each market's criteria; quantgen_desktop/market_rankings.py, market_summary.py, core/market/screen.py).
+    # Market pages (owner ruling UI-D10, 2026-11-11: one page per market; the ranking categories as each market's
+    # criteria; quantgen_desktop/market_rankings.py, market_summary.py, core/market/screen.py). Owner ruling UI-D11
+    # (2026-11-12, "코인이 뭐야"): no "코인" in the Korean window; the market is 크립토 and its members 가상자산.
     # Whole sentences only here: short or generic templates ('Open {name}', '{count} results') would rewrite
     # unrelated text anywhere in the window, so they are in PAGE_TEXT below, used by the market page alone.
     "Coins are not ranked by units traded: one coin is worth very different amounts from another. See trading value.":
-        '코인은 종류마다 1개의 값이 크게 달라 거래 개수로는 순위를 매기지 않습니다. 거래대금을 보세요.',
+        '가상자산은 종류마다 1개의 값이 크게 달라 거래 개수로는 순위를 매기지 않습니다. 거래대금을 보세요.',
     'No source this app uses states coin market cap, so coins are not ranked by it.':
-        '이 앱이 쓰는 자료에는 코인 시가총액이 없어 시가총액 순위를 매기지 않습니다.',
+        '이 앱이 쓰는 자료에는 가상자산 시가총액이 없어 시가총액 순위를 매기지 않습니다.',
+    "An ETF's size is its net assets (AUM), not a market cap, and no source this app uses states it, so ETFs are not "
+    "ranked by market cap.":
+        'ETF의 규모는 시가총액이 아니라 순자산(AUM)이고 이 앱이 쓰는 자료에는 그 값이 없어 시가총액 순위를 매기지 않습니다.',
+    'Ranked among {count} major ETFs, not the whole market. Open a row for its chart.':
+        '주요 ETF {count}개 안에서 매긴 순위이며 전체 시장 순위가 아닙니다. 행을 누르면 차트가 열립니다.',
+    'ETFs have no market-cap ranking: their size is net assets (AUM), which no source this app uses states.':
+        'ETF는 시가총액 순위가 없습니다. ETF의 규모는 순자산(AUM)인데 이 앱이 쓰는 자료에는 그 값이 없습니다.',
     'Find in {market}: name, code, sector': '{market}에서 찾기 · 이름, 코드, 업종',
     'Search within {market}': '{market} 안에서 찾기',
     'Conditions: {count} set': '조건 {count}개 적용 중',
@@ -205,13 +213,13 @@ PAIRS = {
     'Remove filter: {name}': '조건 지우기: {name}',
     'Outside this list:': '목록 밖에서 찾은 종목',
     'Coins have no stock screen yet, so this row opens nothing.':
-        '코인은 아직 종목 화면이 없어 눌러도 열리지 않습니다.',
+        '가상자산은 아직 종목 화면이 없어 눌러도 열리지 않습니다.',
     "Coins have no volume or market-cap ranking: one coin's unit is worth very different amounts from another's, "
     "and no source this app uses states coin market cap.":
-        '코인은 거래량·시가총액 순위가 없습니다. 코인마다 1개의 값이 크게 달라 개수로 비교할 수 없고, 이 앱이 쓰는 '
-        '자료에는 코인 시가총액이 없습니다.',
+        '가상자산은 거래량·시가총액 순위가 없습니다. 종류마다 1개의 값이 크게 달라 개수로 비교할 수 없고, 이 앱이 '
+        '쓰는 자료에는 가상자산 시가총액이 없습니다.',
     'Ranked among {count} major coins, not the whole market. Prices in US dollars.':
-        '주요 코인 {count}개 안에서 매긴 순위이며 전체 시장 순위가 아닙니다. 가격은 미국 달러입니다.',
+        '주요 가상자산 {count}개 안에서 매긴 순위이며 전체 시장 순위가 아닙니다. 가격은 미국 달러입니다.',
     "Delayed · daily: Yahoo Finance daily bars by UTC day, today's still moving; trading value is Yahoo's daily "
     "dollar volume.":
         '지연·일별: Yahoo Finance 일별 값(UTC 날짜 기준, 오늘 값은 아직 움직이는 중)이며 거래대금은 Yahoo가 주는 '
@@ -223,10 +231,10 @@ PAIRS = {
     # The index strip (market_summary.py).
     '{source} daily close, last {day}; during the session the last value can still be moving.':
         '{source} 일별 종가 · 마지막 {day} · 장중에는 마지막 값이 아직 움직이는 중일 수 있습니다.',
-    "US dollars; a coin's day is the UTC calendar day.": '미국 달러 · 코인의 하루는 UTC 날짜 기준입니다.',
+    "US dollars; a coin's day is the UTC calendar day.": '미국 달러 · 가상자산의 하루는 UTC 날짜 기준입니다.',
     'Could not load this index ({code}).': '이 지수를 불러오지 못했습니다 ({code}).',
     'Index and coin figures are Yahoo Finance daily closes, read with a delay; not live.':
-        '지수와 코인 값은 Yahoo Finance 일별 종가를 늦게 받아 온 것이며 실시간이 아닙니다.',
+        '지수와 가상자산 값은 Yahoo Finance 일별 종가를 늦게 받아 온 것이며 실시간이 아닙니다.',
 }
 
 # Short words and templates of the market pages (UI-D10), (English, Korean) by key. Not merged into the window's
@@ -234,7 +242,7 @@ PAIRS = {
 PAGE_TEXT = {
     "conditions": ("Conditions", "조건"),
     "loading": ("Loading…", "불러오는 중…"),
-    "coin": ("Coin", "코인"),
+    "coin": ("Asset", "자산"),
     "min": ("min", "최소"),
     "max": ("max", "최대"),
     "any": ("Any", "제한 없음"),
@@ -243,11 +251,13 @@ PAGE_TEXT = {
     "at_least": ("{name} at least {value}", "{name} {value} 이상"),
     "at_most": ("{name} at most {value}", "{name} {value} 이하"),
     "results": ("{count} stocks", "종목 {count}개"),
-    "coin_results": ("{count} coins", "코인 {count}개"),
+    "coin_results": ("{count} assets", "자산 {count}개"),
+    "etf_results": ("{count} ETFs", "ETF {count}개"),
     "clear_all": ("Clear all", "모두 지우기"),
     "clear_all_tip": ("Clear the search, market, sector and conditions", "검색어, 시장, 업종, 조건을 모두 지웁니다"),
     "open": ("Open {name}", "{name} 열기"),
-    "find_coins": ("Find coins: name or ticker (BTC)", "코인 찾기 · 이름이나 티커(BTC)"),
+    "find_coins": ("Find crypto: name or ticker (BTC)", "크립토 찾기 · 이름이나 티커(BTC)"),
+    "find_etfs": ("Find in {market}: name or code", "{market}에서 찾기 · 이름이나 코드"),
     "conditions_tip": ("Narrow this list by {names}.", "{names}{ro} 목록을 좁힙니다."),
     "sub_market": ("Listing market", "상장 시장"),
     "ranked_by": ("By {name}", "{name} 순"),
@@ -257,20 +267,20 @@ PAGE_TEXT = {
     "in_market": ("See in {market}: {name}", "{market}에서 보기: {name}"),
     "in_market_more": ("See in {market}: {name} and {count} more", "{market}에서 보기: {name} 외 {count}개"),
     "no_match": ("Nothing in this list matches ‘{text}’.", "이 목록에는 ‘{text}’에 맞는 종목이 없습니다."),
-    "no_coin": ("No coin in this list matches ‘{text}’.", "이 목록에는 ‘{text}’에 맞는 코인이 없습니다."),
+    "no_coin": ("No asset in this list matches ‘{text}’.", "이 목록에는 ‘{text}’에 맞는 가상자산이 없습니다."),
     "outside_place": ("‘{text}’ is outside the market or sector chosen.",
                       "‘{text}’에 맞는 종목은 지금 고른 시장·업종 밖에 있습니다."),
     "show_all_place": ("Show every market and sector", "전체 시장·업종으로 보기"),
     "no_condition": ("No stock here meets these conditions.", "조건에 맞는 종목이 없습니다."),
-    "no_condition_coin": ("No coin here meets these conditions.", "조건에 맞는 코인이 없습니다."),
+    "no_condition_coin": ("No asset here meets these conditions.", "조건에 맞는 가상자산이 없습니다."),
     "none_up": ("Top gainers lists only stocks that are up; none of the {count} matching stocks is.",
                 "급상승은 오른 종목만 보여 줍니다. 지금 기준에 맞는 종목 {count}개는 오르지 않았습니다."),
-    "none_up_coin": ("Top gainers lists only coins that are up; none of the {count} matching coins is.",
-                     "급상승은 오른 코인만 보여 줍니다. 지금 기준에 맞는 코인 {count}개는 오르지 않았습니다."),
+    "none_up_coin": ("Top gainers lists only assets that are up; none of the {count} matching assets is.",
+                     "급상승은 오른 가상자산만 보여 줍니다. 지금 기준에 맞는 가상자산 {count}개는 오르지 않았습니다."),
     "none_down": ("Top losers lists only stocks that are down; none of the {count} matching stocks is.",
                   "급하락은 내린 종목만 보여 줍니다. 지금 기준에 맞는 종목 {count}개는 내리지 않았습니다."),
-    "none_down_coin": ("Top losers lists only coins that are down; none of the {count} matching coins is.",
-                       "급하락은 내린 코인만 보여 줍니다. 지금 기준에 맞는 코인 {count}개는 내리지 않았습니다."),
+    "none_down_coin": ("Top losers lists only assets that are down; none of the {count} matching assets is.",
+                       "급하락은 내린 가상자산만 보여 줍니다. 지금 기준에 맞는 가상자산 {count}개는 내리지 않았습니다."),
     "not_found": ("No stock matches ‘{text}’. Check the name or enter its code.",
                   "‘{text}’에 맞는 종목을 찾지 못했습니다. 이름을 고치거나 종목 코드를 입력하세요."),
     "directory_failed": ("Could not load the domestic stock names. Search domestic stocks by their 6-digit code.",
