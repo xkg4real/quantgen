@@ -3,7 +3,7 @@
 - status: taken
 - owner: GPT UI 세션; 메인 엔진 CURRENT.md는 변경하지 않음.
 - work_branch: gpt/ui-d11-d15-20261113
-- work_commit: 5b7f7dd3369b14e4497e90b76b62f08265fb1144
+- work_commit: f74c63c8d615db602d5b3e805ef35f30b9ae305c
 - PR: https://github.com/xkg4real/quantgen/pull/112 (Windows CI 대기, main 미병합)
 - 사용자 요청: "클로드가 ui작업 ... 변경된 버전 ... 인계문서에 잇으니 확인해서 진행 ... 실행법"
 
@@ -26,9 +26,11 @@ Pretendard OTF/N3, 네이티브 기준, 기존 승인 차트 모양을 유지한
 - 메뉴 ko/en×light/dark×1440x900/1000x700 8개 패널 경계 확인; 상세 큰/작은 창 캡처 확인.
 - compliance consistency PASS, publication BLOCKED 유지. 법률·데이터 이용권 승인 주장 없음.
 
+추가 CI 수정: 5b7f7dd Linux에서 영어 1000px 분석 도구 선택기 잘림 재현. Fixed 높이를 Preferred로 바꿔 줄바꿈 높이를 반영. 차트/폰트/압축 UI 36개 모두 통과. f74c63c로 새 CI 진행.
+
 ## 다음 단계 (GPT 계속 진행 중)
 
-1. PR112 최신 head 5b7f7dd의 Runtime Windows 3.11/3.12/3.14 + Ubuntu 3.12와 compliance 결과 확인.
+1. PR112 최신 head f74c63c의 Runtime Windows 3.11/3.12/3.14 + Ubuntu 3.12와 compliance 결과 확인.
 2. 실패 시 실제 실패를 수정하고 해당 검사를 다시 확인. CI 진행 중에 병합하지 않는다(PR89 교훈).
 3. 검증 통과 후 사용자 기존 main 병합 지시에 따라 PR ready/main merge. attach_artifact 이미 완료.
 4. 이 문서와 LEDGER 완료 기록에 병합 SHA/검증 결과 추가, 사용자에게 최종 CMD/버전 표시 안내.
