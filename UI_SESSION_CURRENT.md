@@ -1,3 +1,14 @@
+# GPT UI 인수 체크포인트 — 2026-11-13
+
+- 사용자 요청: 클로드 변경본 확인, 인계된 미완성 UI 작업 계속, 같은 버전을 확인할 CMD 실행법 제공.
+- 확인한 main9e00bf3(PR109 UI 포함), UI작업원격 claude/friendly-bardeen-r6xe8f7402a43ec9fed7279967e5c71eea848e8207206a. UI-D11/D12 후속은 main미병합. UI-D13/D14 패치는시험되지않은중간작업, D15는구현전.
+- 새 작업브랜치 gpt/ui-d11-d15-20261113, /workspace/quantgen-ui-20261113. 클로드7402a43에서 시작. 사용자에게현재main9e00bf3 확인CMD를 먼저 안내함.
+- UI-D1..D6(PretendardOTF+N3), Fusion, R-D9차트비침범, 최신A1~A4(차트항상손커서·미국Qscore·크립토+ETF·기본표시순위/중앙off설정)를 그대로따름. 이전GPT글꼴로되돌리지않음.
+- 다음: 최신main통합, D11리뷰patch점검/시험, D13카드+Qscorev0.2/미국, D14PDFPNGJSONCSV, D15순위. 새호스트/KIS경로추가없음. 완료단위만⑬-2원장기록. CURRENT/다른엔진작업은건드리지않음.
+- 실제API/키/웹HTML/배포는범위밖. 사용자기존main업데이트선호와병합권한을유지하되, 이전PR89처럼원격Windows검사가진행중인상태를완료로넘기지않음.
+
+---
+
 # 소유자 결정 — 2026-11-11 05:40 KST (UI 앱 통일) · 모든 에이전트(Claude·GPT) 필독
 
 소유자 원문(2026-11-11, Claude Code 채팅):
