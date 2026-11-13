@@ -1,14 +1,14 @@
 ---
-status: returned
+status: taken
 reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout
 next_ids: ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-14T02:08:08+09:00
+updated_at: 2026-11-14T02:49:24+09:00
 stale_after_hours: 3
-waiting_on: ci
+waiting_on: none
 work_branch: gpt/r3-outage-20261114
 work_commit: 6bb6c1c9df5f185c2becd3922f9ca7f1369217c4
 uncommitted_changes: no
@@ -17,9 +17,16 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
 session: 01a183c6-632a-70cc-a0e6-32e764f43087
-execution_id: 8c8f36ab-1913-436b-9b99-f3975d0d95e5
+execution_id: 2c285afe-264f-4ef3-8c2d-fef1d64f0e89
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## 기존 직접 요청 계속 — CI 실패 판독·수정 — 2026-11-14T02:49:24+09:00
+
+- 직전 execution 8c8f36ab-1913-436b-9b99-f3975d0d95e5, task/handoff/branch/commit과 비공개 STATE 일치, OS 배타 잠금 확인 후 본 실행 2c285afe-264f-4ef3-8c2d-fef1d64f0e89으로 CAS 재개한다. 자동감시·자동인수·예약은 취소 유지하며 새로운 작업 승인으로 해석하지 않는다.
+- PR122 Windows3.11/3.12/3.14 bounded 실패: 임시 경로 RUNNER~1과 정규화된 runneradmin 경로의 문자열 비교가 어긋난 회귀검사. PR121 Linux/Windows UI suite 실패: 현재 승인된 2단 시장 메뉴/짧은 포트폴리오 안내에 대해 오래된 테스트가 3단 메뉴·옛 문구를 기대한다. 실패 원문을 보존하고 실제 구현과 소유자 UI 지시를 대조해 정당한 검사만 수정한다. 검사 삭제/약화, UI 재설계, 실제 연구·원장 실행은 하지 않는다.
+- 전체 CI 실패 상태에서 두 PR을 병합하지 않는다. Step10 P2 후속승인 미응답, Windows E 844PASS/0FAIL/120NOT_RUN 및 미추적 SKILL 보존. 코드 변경 전에 이 CURRENT를 원격 read-back한다.
+
 
 ## 부분 인계 — R3 두 하위 구현 게시·전체 CI 대기 — 2026-11-14T02:08:08+09:00
 
