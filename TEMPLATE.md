@@ -7,7 +7,7 @@ cycle: <YYYY-MM-DD>           # 이번 주기가 시작된 화요일 날짜(17:0
 done_ids: none                # 이 작업에서 끝낸 로드맵 ID. 쉼표로 구분. 모두 LEDGER.md에 있어야 함
 next_ids: none                # 남은 로드맵 ID를 순서대로, 쉼표로 구분. LEDGER.md에 이미 있는 ID는 넣지 않음
 updated_at: <YYYY-MM-DDTHH:MM:SS+09:00>
-stale_after_hours: 3          # 이 시간 넘게 갱신이 없으면 말없이 끊긴 것으로 봄
+stale_after_hours: 3          # 과거 기록 호환 필드; 자동 인수/감시 근거 아님
 waiting_on: none              # none | owner | ci | review
 work_branch: <claude/... 또는 gpt/...>
 work_commit: <작업 브랜치의 마지막 커밋 해시 7자리. 원격에 push된 커밋이어야 함>
@@ -20,6 +20,8 @@ session: <Claude 세션 링크 또는 GPT 대화 식별자>
 ---
 
 # 인수인계: <작업 제목>
+
+운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md). 한도 징후/세션 종료 전에 작성하며, 다음 담당은 사용자가 인계를 읽고 이어받으라고 지시할 때 진행합니다.
 
 ## 0. 한 줄 요약
 
@@ -88,12 +90,12 @@ session: <Claude 세션 링크 또는 GPT 대화 식별자>
 아래 블록을 그대로 첫 지시로 사용합니다. 이 문서를 쓴 에이전트가 직접 작성합니다.
 
 ```
-너는 xkg4real/quantgen 레포의 "<작업 제목>" 작업을 이어받는다.
+사용자가 이번 인수를 지시했을 때만 xkg4real/quantgen 레포의 "<작업 제목>" 작업을 이어받는다. 인계문서만으로 자동 인수하거나 감시를 재개하지 않는다.
 1. handoff 브랜치의 CURRENT.md, AGENTS.md, LEDGER.md를 먼저 읽어라. LEDGER.md에 있는 ID는 다시 하지 마라.
-2. CURRENT.md의 status를 taken으로, from을 gpt로 바꾸고 updated_at을 갱신해 handoff 브랜치에 push해라.
+2. 실제 소유권을 확인하고 고유 execution ID와 최신 SHA CAS로 CURRENT.md의 status/from/updated_at을 갱신한 뒤 원격 read-back해라. 다른 실행의 taken을 선점하지 마라.
 3. AGENTS.md 2절 5번에 따라 시작 지점을 정해 gpt/<task> 브랜치를 만들어 작업해라. 보통은 <work_branch>의 <work_commit>이다.
 4. <이 작업에 필요한 구체적 지시>
-5. ID 하나를 끝낼 때마다 LEDGER.md에 한 줄을 덧붙이고 CURRENT.md를 같은 양식으로 갱신해라. 끝나거나 멈출 때, 늦어도 화요일 17:00(KST) 전에 status를 returned로 바꿔라.
+5. ID 하나를 끝낼 때마다 LEDGER.md에 한 줄을 덧붙이고 CURRENT.md를 같은 양식으로 갱신해라. 끝나거나 한도에 가까워져 멈추기 전에 status를 returned로 바꾸고 상세 인계를 남겨라. 다음 담당은 사용자의 지시로 이어받는다.
 ```
 
 ## 10. 결과 확인 방법
