@@ -2,12 +2,12 @@
   "schema_version": 1,
   "normalization": "UTF-8 text CRLF to LF; binary assets raw bytes",
   "scope": "named source/document consistency review; not legal or operational certification",
-  "source_state": "HEAD commit identifier plus observed working-tree fingerprints; not a clean-checkout attestation",
+  "source_state": "CI-verified base e01e1526be28b8a6374583ce3802510e07819598 manifest with exact reviewed tree overlays; not a full local checkout scan; target-tree full CI required before merge",
   "registry_sha256": "d1a62050d33e6c53ac9027db0eb8661317a4aec7fc7eb7b10488cf709b0b8f0f",
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "ad11d9bbf68ab2a7418847a37c18b4a77a61636a6c4d8ac5d4477cbd091013c8",
+    ".github/workflows/runtime-smoke.yml": "e5c07edd32423f65f6d7c3c648faddef5a0a8ce19149aebdbc8b9b6027799b50",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -175,11 +175,12 @@
     "core/quant/run_registry_data_hash.py": "f78a28ea0709f3d10a593aa82f77b8ef601b171f17e3ff89e54bcf237c360699",
     "core/quant/run_registry_fold.py": "cb3b6aec8acea30a9cded039b1288c97b793dc5edb5e077b614b58a8f9fd24c2",
     "core/quant/run_registry_keys.py": "04fc64aab8dbcecbeb7850072715553d594d547afca05676ce05a372680a3069",
+    "core/quant/run_registry_recorder.py": "d37db8e1745c4abda3520971e0295432d25deafcc6aedbc6340f485a4301d249",
     "core/quant/run_registry_series_files.py": "734a6ed470bdf3631becec5f0a686128210309f03168c9b1a9e6a7d3e4c4a146",
     "core/quant/run_registry_series_format.py": "241155355a459b06f9aeb33996b41ab57327b059049256d7acf92aa8c26280dc",
     "core/quant/run_registry_series_hash.py": "96c257121ac564329148804418499f997d4127bbc6d72074a6b4b3c411fa6043",
     "core/quant/run_registry_source_hash.py": "f38239e969a0127f8db00cbaf47fa9e1721c1642c525dff0ef5f7aa463e3bef6",
-    "core/quant/run_registry_store.py": "77522bd80cb158bfac8b400435ede567c35514779ee37006be1007e8094a5eae",
+    "core/quant/run_registry_store.py": "5beb37fbdbeb1ee39bf79b08d438d204c20fa3723548f24cd344c70aa6710258",
     "core/quant/scenarios.py": "e65dda28f6cb9a3cd29cab547ae1093f556aa0e467f2c86b9d3c616090fbd205",
     "core/quant/signals.py": "d033d0f146e45ac59db6e1125a2b2256cc96c9c1744093e954adf45e2ccec64a",
     "core/quant/sleeves.py": "39bcdf9a73400ebe9634e75ae8278a3616cb41d90156749b369c1ae9042ef2ac",
@@ -299,7 +300,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "4ac8e456e1611ce830b8a55d77b4c70e47e969b9a589d4c8a1a5e9254a27b1c7",
+    "docs/compliance/FACTS.md": "87311f682e4e262019403645dc129206d53574064a35483b9d0c7b2a20ec4ae5",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -362,6 +363,7 @@
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
     "docs/product/R3_DETACHED_KEYS_2026-11-06.md": "9008ba197899d9cc797c017381a3094d21fa995b70db9c3deba62c92bb656bc4",
+    "docs/product/R3_DETACHED_RECORDER_2026-11-14.md": "e877faf61f6625e895f31228ddafcf91a010f27f6c7dbeca0bb458a379ebb034",
     "docs/product/R3_DETACHED_RUN_FOLD_2026-11-10.md": "f524a2a1afc51ec04809fdc50dc45c220e4a7ec38898cfcebef4c17157066cf9",
     "docs/product/R3_DETACHED_SERIES_FILES_2026-11-10.md": "51f38281e1859acf2df37b78e25747a46c5e6ef604aa87596ffac5c09da797c4",
     "docs/product/R3_DETACHED_SERIES_FORMAT_2026-11-06.md": "04634e2e49b8b9c7e7cb4ada8d4d9669f8bf2fb2f54ea76b77f40f3ed0f11d71",
@@ -655,6 +657,7 @@
     "tests/run_registry_data_hash_acceptance.py": "b4907328da604bbcf6e9e4acb99c54b16fe4cc40190e47661e75255d4b5fa8ad",
     "tests/run_registry_fold_acceptance.py": "7627a1ed0ba20bf04feecab8f607a59730ed3e4877626f8b5543bcc8f8f53e3a",
     "tests/run_registry_keys_acceptance.py": "5c05abc6f512e80d38ce09af191296ff6019d17d05a892ed60e5316e19035708",
+    "tests/run_registry_recorder_acceptance.py": "05a608897f87771ff1c396620b4b824392e638a0fa11ac7e8e65933eb1e12a78",
     "tests/run_registry_series_files_acceptance.py": "4936d5f20319b1f1cc0e91856caa605bec18eb5f96c1ddd2be6a2331b21598fe",
     "tests/run_registry_series_format_acceptance.py": "2f93b3bed613189eef720367ac1dfcde1a8820bab4f2dac3ef87df98dac77b73",
     "tests/run_registry_series_hash_acceptance.py": "f38a05fca045b00b3bf401a2ba3d0f2a71a6cc589acf5e790655c1e4fc76a156",
@@ -755,164 +758,164 @@
   },
   "reviews": {
     "1": {
-      "document_sha256": "546a396893b50ef5d8e95c18be4103f5a2302253d397429859957bd1540724cf",
-      "source_digest": "48283e5e19abfabfdbe0057fdc2c738a76fe66562fb3ffb2beb5a81c72f40945",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.236309+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "document_sha256": "bb088f99ac7321f91ce644d074f87a00da13ab103268ccc145f7a6c802b258b9",
+      "source_digest": "88012589b9a31237efbef444b03d59730e97d6ebd1ba38b867477f80288e1a64",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "Explicit caller-supplied metadata/store and bounded but unredacted errors; updated disclosure, no production adapter or account access. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "2": {
       "document_sha256": "1c7eb9b60585b1fd4d1a23723051454e768b6ea6b31b9e58bd8122ac73cdd5e1",
-      "source_digest": "48283e5e19abfabfdbe0057fdc2c738a76fe66562fb3ffb2beb5a81c72f40945",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.238648+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "88012589b9a31237efbef444b03d59730e97d6ebd1ba38b867477f80288e1a64",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "No new offered service, trading execution, sales or contract flow; detached scope and existing contractual gaps preserved. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "3": {
       "document_sha256": "50fcceb8fb66b30a535ff6015a66ff5e5cee801b61433cc3aa99acd3673c4393",
-      "source_digest": "17c77cd9e30390e23a8d5fcd7244c280f6feb6b5e0e181834cefd73c74430ed3",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.241715+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "e4718732e0c0e79c6a28539a31d3408ad7ea89b2554e49823cc36ea1e016cfde",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "No payment, subscription, refund or cancellation behavior changed; existing operating-evidence gaps remain. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "4": {
       "document_sha256": "4a2528a8c62c60983069941ff506c41c6b251ff1f402ef6cf7723e9901bb7a91",
-      "source_digest": "7688cd2c659d0cc0b6ca7d4fe16de537258503d006006810ff856b4204159795",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.243440+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "b6859f3a488c344abb857935f0cacbc31faa12842cbd951597e895502f351eff",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "No browser cookies, web storage, tracking or default storage discovery added; no operational cookie absence claim. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "5": {
       "document_sha256": "54164c56f4c3999b8ed65115e411151dca9dd6a46fea7bc57d0a750774d7b555",
-      "source_digest": "16f24e6a106fcee5398d54fca58eb6bc3a23e17099a6b9a5844d6624c98c93d2",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.245018+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "4131ef9f0d5b264fdc3e631499da533a2e9a84839f362fdd16c6871fc215bd81",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "No consent banner, preference or optional request path changed; no consent inferred from construction. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "6": {
       "document_sha256": "5871443de50226c2680aa2c41059c06b4d1290f28f1c859d5ed979fd17a2918e",
-      "source_digest": "105852b4c912e095e6fe5d3c2227612bf47d11ebd5e3b29310e4f31ca994ab1c",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.246709+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "6492f70a1b17bb80dff7910367b0db47f240139c2b939df22b66013b40b92e83",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "No consent form or external transmission added; supplied metadata and future adapter obligations stated. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "7": {
-      "document_sha256": "437529f84b2cf492d8e04e5e0190c1cd1f15ea06a17ca4da24bbacc070d77ba1",
-      "source_digest": "48283e5e19abfabfdbe0057fdc2c738a76fe66562fb3ffb2beb5a81c72f40945",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.248174+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "document_sha256": "4cf48fd8716169b4ded0defa828fc426203197147cdfb656b40b444d6b3ef499",
+      "source_digest": "88012589b9a31237efbef444b03d59730e97d6ebd1ba38b867477f80288e1a64",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "Reviewed supplied Q12 digests, memory-only early stages, first-error callback and missing minimization/redaction integration; updated document. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "8": {
       "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
-      "source_digest": "105852b4c912e095e6fe5d3c2227612bf47d11ebd5e3b29310e4f31ca994ab1c",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.250151+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "6492f70a1b17bb80dff7910367b0db47f240139c2b939df22b66013b40b92e83",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "No provider calls, recipient changes or external data collection; callback is caller-supplied with no implicit network sink. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "189032d527998c2c8b7cc3fed684460e2255319e23713af907db9f16563316dc",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.252319+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "e82f17f33d7837756f83aa09c9f9885a04b432b105544055b6b20a64ba0328d1",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "No visible controls or hidden acceptance added; diagnostic booleans cannot authorize a verdict or operation. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "10": {
       "document_sha256": "ce304488b177e5fa81046782034d9a3c23a411ca3cef859d46b7df13ba0c5f5f",
-      "source_digest": "a7635c10b1aa3d89d4b91b998d942079d8d0fa917778670dba0d7001db68650f",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.253706+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "26fe6d71243c46759f16e34bdaa965bcbceffe75fb738d19aede97fd851b15c7",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "No pricing, tax, billing or recurring charge change; lock budgets are technical limits, not performance promises. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "11": {
       "document_sha256": "11a071fe459f3d6f622ec4ee4480200c3e7ed131153e00bd6823e552e43a7004",
-      "source_digest": "50d91ac26dbc647d7607f1312caaea1c235e362d30acf033cc063222c2fee6cb",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.255346+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "58263e839fb99f1fcd89da208bd3d4ebc16d1df2d625c939c33d25c75844b28c",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "No testimonial, rating, endorsement or user-outcome evidence added. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "12": {
       "document_sha256": "4f677b15fac1ab1f8b8d52f005575b9e3fc9d8a579e77ef926412d85687faf8e",
-      "source_digest": "7b0bde7496fc76526d591f6fdf9e0a21bb2185f47a8284fbd3864ec7e5b992fe",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.256954+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "1b9500b6e1602bac45eee664ecb752304a3494aa777ba1c84fc4f8815a143bb7",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "127 synthetic tests describe only this bounded lifecycle child; no Windows-owner, Step10, whole-R3 or performance certification claimed. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "189032d527998c2c8b7cc3fed684460e2255319e23713af907db9f16563316dc",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.258687+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "e82f17f33d7837756f83aa09c9f9885a04b432b105544055b6b20a64ba0328d1",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "No images or alternate-text surfaces changed; detached API is not an accessibility validation. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "189032d527998c2c8b7cc3fed684460e2255319e23713af907db9f16563316dc",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.260405+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "e82f17f33d7837756f83aa09c9f9885a04b432b105544055b6b20a64ba0328d1",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "No colors, themes, contrast or rendering changed; existing manual evidence gaps retained. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "15": {
       "document_sha256": "99b8253de2d54323b48c1dc8edb663bb6105930c24bb15e8f70800aec2a49cf1",
-      "source_digest": "189032d527998c2c8b7cc3fed684460e2255319e23713af907db9f16563316dc",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.262215+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "e82f17f33d7837756f83aa09c9f9885a04b432b105544055b6b20a64ba0328d1",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "No keyboard/focus/UI integration; existing complete-journey accessibility checks remain separate. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "16": {
       "document_sha256": "ff89cdb2a5ee70c3f830162c8e3c8a287291c89fddd7c850ac5b6048d9217f98",
-      "source_digest": "4ccbfab81ee9b2962f0cdf142408e2e2213c4e54a61c53a11cceb2f96d6c45e9",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.264114+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "486d62e886becf59768f6acbf0ec73164a454cf9aea47a4b6d5c0248dca82dc2",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "No business identity, contact channel or registration evidence changed or invented. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "17": {
       "document_sha256": "dde1a8a05a26c612255f5858d272019e11cb7caf4542aa017b626ecea968713d",
-      "source_digest": "105852b4c912e095e6fe5d3c2227612bf47d11ebd5e3b29310e4f31ca994ab1c",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.265481+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "6492f70a1b17bb80dff7910367b0db47f240139c2b939df22b66013b40b92e83",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "No age check, minor account, contact form or new collection path; future metadata handling still needs operator review. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "18": {
       "document_sha256": "f41494e3a28b54cd191916f9ee985f795849e6bf67d69c8dffebd7d081d1187d",
-      "source_digest": "48283e5e19abfabfdbe0057fdc2c738a76fe66562fb3ffb2beb5a81c72f40945",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.266834+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "88012589b9a31237efbef444b03d59730e97d6ebd1ba38b867477f80288e1a64",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "No email address collection, marketing, unsubscribe or mail sending added. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "c91afa7b741d519a9cab3d1f90806a02f525487382e53c5c5b7c2d8e0b372180",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.268542+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "source_digest": "55916b97ac660013fdbc1b8c405f2817314a9e0056996b4b1f70034da1e7a45d",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "Python standard library and existing project helpers only; no new packages/assets/data rights; licensing gaps unchanged. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     },
     "20": {
-      "document_sha256": "0bb26298409489acde50b160abaa10068a84cc0e5b756041665f5277435b19eb",
-      "source_digest": "48283e5e19abfabfdbe0057fdc2c738a76fe66562fb3ffb2beb5a81c72f40945",
-      "reviewed_by": "GPT UI delivery review",
-      "review_note": "Reviewed PR119 merge evidence and website follow-up record; application source and existing publication blockers are unchanged.",
-      "reviewed_at": "2026-11-13T15:49:05.270431+00:00",
-      "source_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+      "document_sha256": "0ca39ab6ced125eaff2f9b45f62655b132ceb6f86671b808c8057f3e4839dd82",
+      "source_digest": "88012589b9a31237efbef444b03d59730e97d6ebd1ba38b867477f80288e1a64",
+      "reviewed_by": "GPT R3 detached lifecycle change review",
+      "review_note": "No deletion, truncation, rotation, retention or durable outage disposal implemented; updated limits and no temporary-test cleanup equivalence. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
+      "reviewed_at": "2026-11-13T16:44:27+00:00",
+      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
     }
   }
 }
