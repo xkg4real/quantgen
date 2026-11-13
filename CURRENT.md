@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout
 next_ids: ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-14T01:29:40+09:00
+updated_at: 2026-11-14T01:46:35+09:00
 stale_after_hours: 3
-waiting_on: none
-work_branch: gpt/order-safety-design-20261113
-work_commit: b3231213af6d9799303b0fde58bcdd9d0399c765
+waiting_on: ci
+work_branch: gpt/r3-recorder-20261114
+work_commit: ed92dc90b2b32fd6bd2a9254e7a568e45e3e553e
 uncommitted_changes: no
-pr: 116
+pr: 121
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -20,6 +20,15 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 8c8f36ab-1913-436b-9b99-f3975d0d95e5
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## R3 수명주기 하위 구현 게시·CI 대기 — 2026-11-14T01:46:35+09:00
+
+- **⑨-3a/recorder/1/lifecycle 구현 검증 중:** 코드 `ed92dc90b2b32fd6bd2a9254e7a568e45e3e553e`, 브랜치 `gpt/r3-recorder-20261114`, [PR121](https://github.com/xkg4real/quantgen/pull/121). base main e01e152에서 exact expected-head CAS push, 변경10파일 내용/blob 및 branch parent/head read-back 일치. 부모 recorder/1·⑨-3a는 미완료이며 CI/병합 전 완료 ID를 추가하지 않는다.
+- 신규47 + 기존 store/codec/fold80 = **127 PASS**, Python3.10 grammar/compile 3파일 통과. 임시 합성 저장소에서 실제 fsync 실패·ID 충돌5회·공유2/10초 잠금 예산·중단 후 무동작·원래 계산 예외 보존·결정9 PNL 아래 progress 금지를 검증했다. 실제 Windows owner/연구/원장/보호 캐시는 실행하지 않았다.
+- 기존 완료 store child의 재작업은 재시도마다 기본 timeout이 초기화되지 않도록 append의 per-call 축소 예산을 추가한 범위뿐이다. 기본 호출 동작은 유지한다. 새 recorder는 공급된 메타데이터와 outage callback만 쓰며 UI/Lab/실제 수집·durable outage·sync-folder 검사·ledger link·fingerprint/shadow 계산·rotation/recovery는 미완료다.
+- 01/07/20 정책과 FACTS/제품 기록을 최소 추가하고 20문서 영향검토를 남겼다. 소스 지문은 CI 성공 base manifest에 exact 변경만 합성했다(부분 로컬 전체 스캔 주장 없음). 목표 PR의 full consistency CI가 이를 검증해야 하며 공개 BLOCKED·법률/라이선스 증거 공백은 유지한다.
+- 다음 안전 시작: PR121의 exact head CI와 CURRENT 소유권/F 병합자리 미진행을 확인하고 승인된 독립 코드만 PR로 병합한다. 성공 후 해당 lifecycle 하위만 LEDGER·sapientia에 기록한다. Step10 P2 후속 담당 승인은 계속 대기하며 E를 재실행하지 않는다. 자동감시/자동인수는 취소 유지. execution_id `8c8f36ab-1913-436b-9b99-f3975d0d95e5`.
+
 
 ## 승인된 독립 작업 재개 — R3 기록기 본체 — 2026-11-14T01:29:40+09:00
 
