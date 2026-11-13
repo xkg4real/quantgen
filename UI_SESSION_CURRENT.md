@@ -3,8 +3,8 @@
 - status: taken
 - owner: GPT UI 세션; 메인 엔진 CURRENT.md는 변경하지 않음.
 - work_branch: gpt/ui-d11-d15-20261113
-- work_commit: 5572e786d2f760c894bb8f521624731e0cf459d0
-- PR: https://github.com/xkg4real/quantgen/pull/112 (draft, Windows CI 대기, main 미병합)
+- work_commit: 5b7f7dd3369b14e4497e90b76b62f08265fb1144
+- PR: https://github.com/xkg4real/quantgen/pull/112 (Windows CI 대기, main 미병합)
 - 사용자 요청: "클로드가 ui작업 ... 변경된 버전 ... 인계문서에 잇으니 확인해서 진행 ... 실행법"
 
 ## 완료한 구현 및 로컬 확인
@@ -17,7 +17,7 @@ Pretendard OTF/N3, 네이티브 기준, 기존 승인 차트 모양을 유지한
   기존 국내 v0.1 점수/부분 점수 일치(71.57/50.34/63.59); 자료 부족 이유 표시. 프로필 자료 재사용,
   작업 스레드 계산과 5초 재계산 간격, 다른 종목/오래된 결과 폐기.
 - D14: 동결된 화면의 PDF/PNG/JSON/CSV; 취소 시 파일 없음, 원자적 저장, 형식 변경 시 기존 파일
-  덮어쓰기 재확인. 한글 내장 확인(pdffonts), 숫자 검색을 위해 PDF 문서에서만 tnum/liga/kern=0.
+  덮어쓰기 재확인. 한글 내장 확인(pdffonts), 숫자 검색을 위해 PDF 문서에서만 tnum/liga/kern=0 및 PreferNoShaping. 한글·숫자·음수 부호 복사 검사 추가, 후속 9개 재통과.
 - D15 A4: 국내·미국 Q-SCORE 높은 순, 최대 20개 거래대금 후보, 순차 KIS 수정 일별 조회,
   날짜별 메모리 캐시/실패 5분 제한/이탈 중단. 미산정 아래에 유지. ENABLED 한 곳으로 숨김.
 - 사용자 지정 면책 "실험적 지표 · 투자 권유 아님"은 이전 해요체 검사에서 이 정확한 문구만 예외.
@@ -28,7 +28,7 @@ Pretendard OTF/N3, 네이티브 기준, 기존 승인 차트 모양을 유지한
 
 ## 다음 단계 (GPT 계속 진행 중)
 
-1. PR112 최신 head 5572e78의 Runtime Windows 3.11/3.12/3.14 + Ubuntu 3.12와 compliance 결과 확인.
+1. PR112 최신 head 5b7f7dd의 Runtime Windows 3.11/3.12/3.14 + Ubuntu 3.12와 compliance 결과 확인.
 2. 실패 시 실제 실패를 수정하고 해당 검사를 다시 확인. CI 진행 중에 병합하지 않는다(PR89 교훈).
 3. 검증 통과 후 사용자 기존 main 병합 지시에 따라 PR ready/main merge. attach_artifact 이미 완료.
 4. 이 문서와 LEDGER 완료 기록에 병합 SHA/검증 결과 추가, 사용자에게 최종 CMD/버전 표시 안내.
