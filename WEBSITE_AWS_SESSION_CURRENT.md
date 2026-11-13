@@ -1,3 +1,30 @@
+# 2026-11-13 웹사이트 작업 재개 — 인계 대조 완료 / 최신 소스 대기
+
+사용자의 재개 요청과 첨부 `QUANTGEN_WEBSITE_GPT_HANDOFF_2026-11-12.md`를 기준으로 워크플로우를 수립했습니다. 이번 인계의 핵심은 **Gmail 문의 메일 경로를 Microsoft 365로 전환하고 웹 정책 한영 문구를 정렬하는 작업**입니다.
+
+## W1 완료: 인계·출시 계획·현재 환경 대조
+- main `9e00bf326acbfd512d6479026946358967dfc078`, handoff 조회 head `7e2d40d5cfc6b2c641d77c51920de205f8792ba2`. 웹 공통 인계 최신은 11/7, 이 파일의 이전 최신은 11/2였습니다.
+- Notion [launch plan](https://app.notion.com/p/68c577d259f847798171caad8a546c1d), [REMAINING WORK](https://app.notion.com/p/4065c916fe0c80d2af08c0e7f68817fa), [DEPLOY_EN](https://app.notion.com/p/55b5c916fe0c83319a24817a27c21bad)을 대조했습니다. 11/10 배포 안내/HTML 해시 기록은 실제 공개 URL 검증 완료로 간주하지 않습니다.
+- 현재 환경에 11/11 privacy HTML, `_build/`, 11/3 motion 기준 HTML이 없습니다. GitHub main/handoff 전체 tree 및 Releases에도 없어 사용자에게 최신 ZIP을 요청했습니다. 11/2 파일을 최신 원본으로 대체하지 않습니다.
+- 첨부 인계의 Gmail 초안 예상값: 8,619,355 bytes / SHA256 `de434d3a19fd9648009b978dc841d566dde46addbc49bce60349b33b5b5685c8`. 아직 실물 검증 전이며 첨부에 따르면 미배포입니다.
+- 사용자 확인: Microsoft 365 구매·설정 전. 설정과 송수신 검증 전 Microsoft 처리방침을 운영에 게시하지 않습니다.
+- AWS CLI2.39.2 존재, 기존 quantgen STS는 session expired. MCP endpoint TLS/HTTP405 도달은 확인했지만 인증된 MCP 성공은 미확인. 운영 도메인의 환경 프록시 CONNECT403은 사이트 장애 증거가 아닙니다.
+- Sydney `ap-southeast-2` 유지. Launch plan의 Seoul/이전 support 메일 및 결제 계획은 최신 실제 리소스·사용자 결정과 재대조해야 합니다.
+- 앱 UI PR112는 별도 GPT UI 세션 작업(조회 당시 OPEN/head `c45adc8dca1682069d9c88956c844f5c33b7d827`). 이번 웹 작업에서 인수·병합하지 않았습니다.
+- [karpathy-guidelines](https://github.com/multica-ai/andrej-karpathy-skills/blob/main/skills/karpathy-guidelines/SKILL.md) blob `6a62d0441753157ca6ca50479e490c2948033adb`를 읽고 최소 변경·명시적 가정·검증 기준을 반영했습니다.
+
+## 다음 작업과 의존성
+1. W2: 공식 Microsoft/Cloudflare 자료로 설정 가이드와 KO/EN 정책 변경 초안 검토.
+2. W3–W6: 최신 ZIP 확보·해시 대조 → 정책 수정 → 기존 3개 검사/모바일 표/한영/테마 회귀 → 단일 HTML·SHA·변경내역·현 운영본 기준 업로드/복구 안내.
+3. W7: 웹 기록만 GitHub handoff에 누적하고 Notion 기존 REMAINING WORK에 완료/대기를 분리하여 갱신.
+4. W8: 실제 Microsoft 설정·메일 경로·미확정 공개 조건 해결 후 운영 적용. 현재 미착수.
+5. Notion Track A의 추가 개발 연결(Cognito/SES/API)은 별도 클릭 질문으로 범위 확인 중. 신규 과금 리소스와 공개 출시 승인을 추정하지 않습니다.
+
+로컬 작업표: `/workspace/work/quantgen-web-20261113/WORKFLOW.md`, `TASK_LOG.md`.
+**현재 완료는 인계 대조·작업 흐름 수립입니다. 새 HTML 구현/프리뷰/운영 배포/공개 가입 검증은 완료되지 않았습니다.** 웹 소스/HTML·비밀값은 GitHub 비게시. 메인 CURRENT/LEDGER/AUTO_STATE와 타 세션 checkpoint는 보존했습니다.
+
+---
+
 # 2026-11-02 AWS 웹 HTML 갱신 완료 — 사용자 수동 적용 대기
 
 원본 ZIP을 사용자 첨부로 확보하고 인계 HTML SHA256 ce48aea0… 일치를 확인했습니다. 소개 화면·Docs20종 KO/EN을 현재 main `8b4010430a9ece2a4e1b05b234abe81d3796771f` 기준으로 갱신하고 최종 단일 HTML 검증을 완료했습니다. **운영 배포 및 공개 URL의 새 버전 확인은 아직 실행하지 않았습니다.**
