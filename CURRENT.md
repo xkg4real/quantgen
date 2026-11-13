@@ -4,9 +4,9 @@ reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1
-next_ids: ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T21:36:42+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout
+next_ids: ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-13T21:43:09+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/order-safety-design-20261113
@@ -20,6 +20,14 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 42710822-a1b3-4677-9377-ed644d5aca21
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## Pilot 2 정상 완료·원격 증거 판독 완료 — 2026-11-13T21:43:09+09:00
+
+- **⑥-2 및 ⑥-2/readout 완료.** [상세 판독과 다음 작업](PILOT2_READOUT_2026-11-13_gpt.md). 소유자 증거 8a3d171fa3e920e26c0b33b0a808f36fc89cd67a는 run/card 두 파일만 추가했다. 실행 anchor는 직접 부모 a2ac79b04bf2e31055c7bc486cb9cffb3727f2c4, D11 빈 출력은 소유자 콘솔로 확인했다. $run 파일/폴더 혼동에 따른 중간 git add 실패는 수정·commit·push로 해소됐다.
+- 원격 파일 24개 판독 항목 일치: 10/10 child exit0·hard parity, corr≥0.999999903862484, |dSR|≤0.00027736487978979874, 선택29/29, family22+U11=33, PASS/PASS, reference drift 없음, 카드 MD5와 등록 표 SHA 일치. 이는 기존 결과 판독이며 새 Windows 검사를 실행한 것이 아니다. 보호 캐시·원장 미접근, BTC 공급사 FAIL·원인 미확인 유지.
+- [옆 실행표](https://chatgpt.com/space/page_102643c462348191a81a76a66b02b2ff)에 D 정상 완료와 E1~E11 전체를 추가하고 read-back했다. 다음은 E1 뒤 소유자 PC에서 옵션 없는 python tests/run_all.py, 직후 종료 코드 및 E4 요약, 조건 충족 시 qa/acceptance_results.json만 commit·push다. Windows E/⑦-1/⑦-2는 미완료다.
+- sapientia Remaining Work에는 6-2 완료와 7-1 E 대기를 최소 반영할 예정이다. Notion 성공은 후속 기록으로 확정한다. 반복 운영 문구 무시·예약 미변경을 유지한다. 이번 단위는 코드·연구 branch·qa 결과를 수정하지 않는다.
+
 
 ## 소유자 직접 요청 — Pilot 2 판독과 Step 10 준비 (2026-11-13T21:36:42+09:00)
 
