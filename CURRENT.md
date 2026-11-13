@@ -1,14 +1,14 @@
 ---
-status: taken
+status: returned
 reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout
 next_ids: ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T21:43:09+09:00
+updated_at: 2026-11-13T21:45:11+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: owner
 work_branch: gpt/order-safety-design-20261113
 work_commit: b3231213af6d9799303b0fde58bcdd9d0399c765
 uncommitted_changes: no
@@ -20,6 +20,16 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 42710822-a1b3-4677-9377-ed644d5aca21
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## 부분 반환 — Pilot 2 판독·기록 완료, Windows E 결과 대기 (2026-11-13T21:45:11+09:00)
+
+- **소유자 D2~D11 정상 완료, ⑥-2 및 ⑥-2/readout 완료.** 상세 근거·24개 판독 항목·해시·다음 순서는 [PILOT2_READOUT_2026-11-13_gpt.md](PILOT2_READOUT_2026-11-13_gpt.md)에 있다. 보고서/LEDGER/CURRENT를 handoff **1b6f68793369c906fd65f65dad983eac22ccd445**에 게시하고 세 파일 원격 내용을 정확히 read-back했다. 실제 실행은 소유자 PC의 **8a3d171fa3e920e26c0b33b0a808f36fc89cd67a**, 실행 anchor는 부모 a2ac79b이다.
+- sapientia Remaining Work **6-2 하위 항목 취소선 및 7-1 E 결과 대기 안내** 두 곳만 update_content로 반영했고 도구가 경고 없이 성공을 반환했다. Notion 재-fetch 검증은 하지 않았으며, 쓰기 성공 응답과 정확한 변경 내역은 비공개 NOTION_SYNC_QUEUE에 보존한다. 부모 6/7 전체와 ⑦-1·⑦-2는 완료로 바꾸지 않았다.
+- [옆 실행표](https://chatgpt.com/space/page_102643c462348191a81a76a66b02b2ff)는 **Pilot 2 소유자 PC 실행표와 Step 10 Windows 검사**로 갱신했다. 기존 A/D 절 보존, E1~E11 전체 추가, D 완료·다음 E 안내 및 반환 결과 목록 갱신을 read-back 확인했다.
+- **다음 안전 시작점:** 소유자 PC E1 후 옵션 없는 python tests/run_all.py → 즉시 종료 코드 → E4 요약. 예상964행·FAIL0·nautilus 포함·guard5 PASS 및 기존 E5 예외 조건을 확인한 뒤 소유자가 qa/acceptance_results.json만 커밋·push한다. 실제 E 결과/커밋을 받은 후 Step 10 실행 기록·README 집계·스펙 Status 후속을 구체화한다. P2/P3 권한·결정8·F 절차는 그대로다. 이번에 연구 브랜치·qa 결과·main을 변경하거나 F를 시작하지 않았다.
+- waiting_on=owner는 **아직 없는 실제 Windows E 결과**에 한정한다. 기존 BTC 공급사 FAIL·원인 미확인, 실제 법률/라이선스/주문 검증 미완료를 유지한다. ⑦-1/⑦-2 및 전체 Goal 완료를 주장하지 않는다.
+- 저장 execution_id **42710822-a1b3-4677-9377-ed644d5aca21**. 프로젝트 코드 head는 기존 work_branch/work_commit 그대로이며 이번 단위는 handoff/Notion/실행표 기록만 갱신했다. 사용자가 무시하라고 한 반복 운영 문구는 계속 무시한다. 예약 생성·변경·run_now 및 자동 감시 재개는 하지 않았다. 아래 이전 기록의 예약 유지 문구는 이번 작업의 재개 근거가 아니다.
+
 
 ## Pilot 2 정상 완료·원격 증거 판독 완료 — 2026-11-13T21:43:09+09:00
 
