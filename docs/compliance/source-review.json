@@ -418,7 +418,7 @@
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
     "quantgen_desktop/market_menu.py": "3be8567762ac284bc138ca01aa98739cc4c736cced2bba0bb39fda763843cb44",
     "quantgen_desktop/market_narrative_language.py": "8bcb8f74ca7208370f5a4895cb4f643574d86d650c7f3ceb04a3a008044618aa",
-    "quantgen_desktop/market_rankings.py": "83207c08eae4a5dd9d16999f0ed378c4c20365e03ac36d72f259b56e85a382ea",
+    "quantgen_desktop/market_rankings.py": "73d09707ec9277d3a4428b0f5e4d43fbc6adb9681a986e74472a1e0e4ac8425d",
     "quantgen_desktop/market_summary.py": "a49beeb99913312619f06f5ebbb1abfc42dcba63e6e508e7a1f5fe5a6bb682ce",
     "quantgen_desktop/market_tools.py": "2bd38da5339071abb860ddc7f93019806e78490f7229b9b107b0937843c1e71e",
     "quantgen_desktop/markets_view.py": "3bb73921f5ca9a58a88c534d3382c8e30213ec14de848c59a420e86b488e2da2",
@@ -519,7 +519,7 @@
     "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
     "tests/desktop_market_chart_acceptance.py": "f6cc71f30269e34e3fb137134e49268e9a30d7d46a623b1c020c2516b8e2bfef",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
-    "tests/desktop_market_first_paint_acceptance.py": "10b9a4f35d554a70e24b6d726e8110678e96eae47d9348e775142455eee7b97a",
+    "tests/desktop_market_first_paint_acceptance.py": "b2fc5d138f12ea6e1b72c598aa96cca2551260b2432cb245727cbd070d99e5fa",
     "tests/desktop_market_layout_acceptance.py": "e0d769e431161c5cd51ffabd163915f4241290620a9a080fd6d228b292757f9c",
     "tests/desktop_market_tabs_acceptance.py": "2f1e8c1cbfbfe18e054099c1fc1fc3c0e94158141d2395d57421c829f73629ba",
     "tests/desktop_markets_watchlist_acceptance.py": "39c54d208096f85635080c59c7b8db71fcbe29721cb081256dc70982b01a38d0",
@@ -746,163 +746,163 @@
   "reviews": {
     "1": {
       "document_sha256": "18dc413362efd7488995e9e930286226046e1c272263157600aa593baafdd714",
-      "source_digest": "32497e1f643e703bcdbc0e1aa0366b886a5e5942a4c5a037c86e4d2dcfdea7d2",
+      "source_digest": "87767b9155fd83a79a0663747d41656da75ab9b4c821b42c7f1f56811b4f12ed",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.350721+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.749133+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "2": {
       "document_sha256": "8ddd0502d6c8767c9c7c7f8827706ca929946c6244c565558c77ffefc7c038ee",
-      "source_digest": "32497e1f643e703bcdbc0e1aa0366b886a5e5942a4c5a037c86e4d2dcfdea7d2",
+      "source_digest": "87767b9155fd83a79a0663747d41656da75ab9b4c821b42c7f1f56811b4f12ed",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.352954+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.752057+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "3": {
       "document_sha256": "122df861c40d2ce416603e3ac4b32cf892df92612a6bc66347eaeba9715e65b8",
-      "source_digest": "2299cd8eb4db97c37ccfd2a07e5ed38557579d507902b0a6da56f9e7c6812731",
+      "source_digest": "f8c67c872768960ebcb25d64aac069a2b1d4f2e754c8c1dc73fbe63a406132f2",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.354370+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.753575+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "4": {
       "document_sha256": "8f9b0a3908a2099cc18ee5848763cee629a75a01eeea86853bb6985519170344",
       "source_digest": "bbf94ba470186a6f433c5216744048fbce9a3fa93632a8f7cb78c2d4856cf6bc",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.357471+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.754926+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "5": {
       "document_sha256": "060f9c93d00e4086e6763cb669dec1fde2d5f11f083087bed5ef8e4136684bed",
       "source_digest": "e3c864c68708e7a939658f229653ccd775beb15d5a166eb8205010254c0bbc07",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.359662+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.756258+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "6": {
       "document_sha256": "e8486a47510bcb774261d13798eeea001007fd6b28e6d4d9e2ac23fe64d895e1",
-      "source_digest": "6796e5ce66936a4746b5fcc7b5fb2560843e02e130246be53c62b07611d2ecad",
+      "source_digest": "46121e6467f05ffec81a605b50deea56a7bd7f6deb7f02e9c290010850f279c6",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.361039+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.757655+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "7": {
       "document_sha256": "a7f592f442e1da195efc95d786c9112e70f36356e2fed747a1108318138e4ad2",
-      "source_digest": "32497e1f643e703bcdbc0e1aa0366b886a5e5942a4c5a037c86e4d2dcfdea7d2",
+      "source_digest": "87767b9155fd83a79a0663747d41656da75ab9b4c821b42c7f1f56811b4f12ed",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.362517+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.759157+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "8": {
       "document_sha256": "c53b0f56867226eae0c3eabb1503fa8f8c6c7ec639afc9033b39cae8ffe10f3a",
-      "source_digest": "6796e5ce66936a4746b5fcc7b5fb2560843e02e130246be53c62b07611d2ecad",
+      "source_digest": "46121e6467f05ffec81a605b50deea56a7bd7f6deb7f02e9c290010850f279c6",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.364851+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.760868+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "9": {
       "document_sha256": "9b1af75b366f5aab5b2e630629f30f00d0057877170f4801aa9f14b2a70e3c96",
-      "source_digest": "47ff82053813707be46799b96c8d12a46f6a42acc777b3b4928090d63f63c191",
+      "source_digest": "838975b495075cf36404abd993e233eb54c6925a9f25538ec1725acd5d8c5cf0",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.366235+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.762655+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "10": {
       "document_sha256": "8cbb750332530a5c736f743e4e5c148e1fcfe2e18a457593b442d54d9ecada71",
-      "source_digest": "c57afc7dfd7b3bcffcd076154d761453a8f67e139d23489321759b59ba7cf2e6",
+      "source_digest": "54262f87593153d0a861f237917046a3cf9b3e247d8cf1a5620e41a27770b0c8",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.367850+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.764058+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "11": {
       "document_sha256": "b290a8ee69ff5c9c6ff4535ed91a08cb26ad167afc504d6e17771bee1856ae44",
-      "source_digest": "bb4f5e696fdbf4f6af7feeb7243a89185fa8f5782cefb4207744c09fe3a308d0",
+      "source_digest": "f35531f796e6ba67c7e7e952eb2443411cc5dbd11caac346e4e73668df78ab8c",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.369151+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.765560+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "12": {
       "document_sha256": "5b29917ba7a0aa9da347fe1eb9594775ba02cd6d5ba649f4f90e03b958b7ef26",
-      "source_digest": "dc51e25dc0f3b5e6acfd1394f8f0dee2fbd734f2c0923efbc4debf10b0e56869",
+      "source_digest": "4e8401bd881340638c2af6df292d5f79205cfbdf2125cb5c96b514f7e7aac516",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.371711+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.766982+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "13": {
       "document_sha256": "e27cbbe6536609fe8299522ecd66032e48b7494d3ccb5c0656ea457f75e220c5",
-      "source_digest": "47ff82053813707be46799b96c8d12a46f6a42acc777b3b4928090d63f63c191",
+      "source_digest": "838975b495075cf36404abd993e233eb54c6925a9f25538ec1725acd5d8c5cf0",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.373319+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.768892+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "14": {
       "document_sha256": "0830fda21f72f77f30f0b52a74b52c425916ec5dd4688507008f3337ad627258",
-      "source_digest": "47ff82053813707be46799b96c8d12a46f6a42acc777b3b4928090d63f63c191",
+      "source_digest": "838975b495075cf36404abd993e233eb54c6925a9f25538ec1725acd5d8c5cf0",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.375116+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.770508+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "15": {
       "document_sha256": "09b2945ed78373174a9c3bfb24c79c70d1d06ef22a5fc0aa74ac3804fc25f7c2",
-      "source_digest": "47ff82053813707be46799b96c8d12a46f6a42acc777b3b4928090d63f63c191",
+      "source_digest": "838975b495075cf36404abd993e233eb54c6925a9f25538ec1725acd5d8c5cf0",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.376538+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.771809+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "16": {
       "document_sha256": "fa6d90124e3706e75b63d90a177382c3a009f799d38ad088bdc229f62caa0dba",
-      "source_digest": "6380444dfeff076688d374860b1281f70930897272a1006ce9a4de6f5176a4bf",
+      "source_digest": "81848d3524bedc00447f7298e02e55460d7bcc8ae0ac43ed34a3f66126be7793",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.378412+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.773281+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "17": {
       "document_sha256": "d15a9af3cf32276b2ce6696db902d09ac26a14e0b5b92ebbad384865c61b13d3",
-      "source_digest": "6796e5ce66936a4746b5fcc7b5fb2560843e02e130246be53c62b07611d2ecad",
+      "source_digest": "46121e6467f05ffec81a605b50deea56a7bd7f6deb7f02e9c290010850f279c6",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.379814+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.774731+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "18": {
       "document_sha256": "9a43174723a1dc551db1aef590e8833b368877f543e21a833798f0e039f4099a",
-      "source_digest": "32497e1f643e703bcdbc0e1aa0366b886a5e5942a4c5a037c86e4d2dcfdea7d2",
+      "source_digest": "87767b9155fd83a79a0663747d41656da75ab9b4c821b42c7f1f56811b4f12ed",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.382235+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.776056+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "19": {
       "document_sha256": "1e01361156c01fc1920818f3472dae95a741f2f3481ee62462561ac8fe4d2f53",
       "source_digest": "76d583ec510dc8043d970420b64ec10b36ffe82ad46f196c8343e983b8650d4e",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.383395+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.777506+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     },
     "20": {
       "document_sha256": "e7265d03dabb582d79c63f1e69ca64c103f565f24e1c3ee0b19c4b4a85204ed9",
-      "source_digest": "32497e1f643e703bcdbc0e1aa0366b886a5e5942a4c5a037c86e4d2dcfdea7d2",
+      "source_digest": "87767b9155fd83a79a0663747d41656da75ab9b4c821b42c7f1f56811b4f12ed",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Menu hover timer disposal and compatibility entrypoints; verify native Windows icons early. No policy, data or public readiness changes.",
-      "reviewed_at": "2026-11-13T09:41:15.384784+00:00",
-      "source_commit": "684b22659cf1684d227924b95a8f40459111eed3"
+      "review_note": "A prior empty market result no longer suppresses newly received partial quotes; same unranked/loading and complete-result gates. No provider, policy or readiness change.",
+      "reviewed_at": "2026-11-13T09:44:28.778735+00:00",
+      "source_commit": "aeb7577619627d76a806798d546cf978ebba18ec"
     }
   }
 }

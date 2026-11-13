@@ -1621,7 +1621,8 @@ class RankingBoard(QFrame):
     def _on_partial(self,epoch,batch):
         if epoch!=self._epoch or self._stopped or self._loading is None:return
         if not isinstance(batch,R.Batch) or batch.group!=self.group():return
-        if batch.group in self.batches:return  # keep the last complete ranking stable on refresh
+        kept=self.batches.get(batch.group)
+        if kept is not None and kept.records:return  # keep a complete ranking stable on refresh
         self._preview=batch
         self.render()
 
@@ -2103,7 +2104,7 @@ class RankingBoard(QFrame):
         lang, group, screen = self._lang(), self.group(), self.screen
         self._render_chrome()
         batch = self.batches.get(group)
-        previewing=batch is None and self._preview is not None and self._preview.group==group
+        previewing=(batch is None or not batch.records) and self._preview is not None and self._preview.group==group
         if previewing:batch=self._preview
         # Market cap: a stock whose figure could not be read (US) or was refused (domestic: KIS's hts_avls
         # disagreed with listed shares x price, or could not be checked) is listed last, unranked, as '—'.
@@ -2378,7 +2379,7 @@ class RankingBoard(QFrame):
         batch = self.batches.get(group)
         state = self.state()
         self.badge.setText(R.text(R.STATES, state, lang))
-        if batch is None and self._preview is not None and self._preview.group==group:
+        if (batch is None or not batch.records) and self._preview is not None and self._preview.group==group:
             self.badge.setText('불러오는 중' if lang=='ko' else 'Loading')
         if self.badge.property("state") != state:
             self.badge.setProperty("state", state)

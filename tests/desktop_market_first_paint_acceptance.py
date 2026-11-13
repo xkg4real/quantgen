@@ -51,6 +51,11 @@ class MarketFirstPaintTests(Base):
         board._epoch+=1;board._loading=('kr',1,81)
         board._on_partial(board._epoch,replace(batch,records=batch.records[:1]))
         self.assertIsNone(board._preview)
+        # A previously empty/failed result must not suppress newly arriving data.
+        board.batches['kr']=replace(batch,records=(),mode='none')
+        board._on_partial(board._epoch,replace(batch,records=batch.records[:1]))
+        self.assertEqual(len(board.ranked),1)
+        self.assertEqual(board.ranked[0].rank,0)
 
     def test_market_switch_cancels_old_round_and_ignores_its_late_preview(self):
         release=threading.Event();cancelled_seen=threading.Event();batch=kr_batch()
