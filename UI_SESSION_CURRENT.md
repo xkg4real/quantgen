@@ -1,3 +1,41 @@
+# UI 완료 인계 — 2026-11-13T17:09:14+09:00 (이 절이 최신)
+
+- status: returned · owner: GPT UI. 메인 엔진 `CURRENT.md`는 변경하지 않음.
+- **PR112 main 병합 완료**: d01ec735bc2fc158fe44d56a0963f2c7226018ca. 검증한 head: c45adc8dca1682069d9c88956c844f5c33b7d827.
+- PR: https://github.com/xkg4real/quantgen/pull/112
+- 최종 상태 기록 PR: https://github.com/xkg4real/quantgen/pull/113
+- Runtime43383685578의 Windows3.11/3.12/3.14, Ubuntu3.12, syntax3.10/3.11 **6/6 성공**.
+- Compliance43383685540 성공. 20종 일관성 PASS, 공개 정책 승인 BLOCKED 유지.
+- 아래 과거 체크포인트의 "미병합/진행 중"은 과거 상태이며 이 절이 대체함.
+
+## 완료 범위
+
+1. Claude UI-D11 메뉴 리뷰, D12 차트 커서/확대/끌기 유지, D13 국내·미국 Q-SCORE v0.2,
+   D14 화면 동결 PDF/전체 지표 PDF/PNG/JSON/CSV, D15 최대20개 거래대금 후보의 일별 점수 정렬.
+2. 추가 사용자3요청: KIS 전체 응답 전 첫 이력 페이지 표시, 직접 입력 없는5개 지표 복수 선택 카드,
+   분석 도구10종/설계·검증2종/분석3종의 목적·범위·3단계 안내 및 빈 결과 접기.
+3. QSS 자식의 기호 폰트 대체를 막도록 QG Interface 명시. 승인된 Pretendard OTF/N3 유지.
+4. 창 소유 첫 방문 스크롤 QTimer. 테스트 fixture의 실제 DeferredDelete 정리와 CI 프로세스 분리.
+   제품 소스는4ab349f, 이후c45adc8은 시험/CI/기록 보강. 모든 기존136개 시험 모듈 유지.
+
+## 한계 및 다음 담당자
+
+- 실제 계정의 네트워크 속도 개선율·사용자 Windows DPI·스크린리더는 미검증.
+- 시장 데이터를 꾸미거나 API 요청 수/최종 결과를 바꾸지 않음. 점수 정렬은 전체시장 실시간 매수순위가 아님.
+- 웹 HTML과 AWS 설정 미변경. `docs/product/ui_website_updates/PR-112.json`은 **queued**.
+  지원되는 대화간 발송 도구가 없으므로 메인/AWS에 메시지를 전송했다고 주장하지 않음.
+- 메인/Claude는 이 파일과 `docs/product/UI_D11_D15_2026-11-13.md`를 기준으로 다음 작업을 이어갈 것.
+- 사용자 앱을 닫고 CMD에서 main pull 후 `python -m quantgen_desktop`로 실행. Flet `main.py`로 돌아가지 않음.
+
+```bat
+cd /d "C:\Users\skymi\OneDrive\문서\GitHub\quantgen"
+set "QG_GIT=git"
+for /d %G in ("%LOCALAPPDATA%\GitHubDesktop\app-*") do @if exist "%G\resources\app\git\cmd\git.exe" set "QG_GIT=%G\resources\app\git\cmd\git.exe"
+"%QG_GIT%" switch main && "%QG_GIT%" --no-pager pull --ff-only origin main && "%QG_GIT%" --no-pager log -1 --oneline && .venv\Scripts\python.exe -X utf8 -m quantgen_desktop
+```
+
+---
+
 # 최신 CI 안정성 수정 — 2026-11-13 (이 절 우선)
 
 - status: taken · owner: GPT UI. 메인 엔진 CURRENT.md는 변경하지 않음.
