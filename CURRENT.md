@@ -4,11 +4,11 @@ reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2
 next_ids: ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T18:52:35+09:00
+updated_at: 2026-11-13T19:15:21+09:00
 stale_after_hours: 3
-waiting_on: ci
+waiting_on: none
 work_branch: gpt/pilot-readout-btc-ra-20261113
 work_commit: 661c6b878442e5c8e2b864766ade379e042825f1
 uncommitted_changes: no
@@ -20,6 +20,14 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 0b664cd3-df59-47ce-80d7-a9b0e78d8cf8
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## BTC-라 판정 문서 병합 완료 — 2026-11-13T19:15:21+09:00
+
+- [PR114](https://github.com/xkg4real/quantgen/pull/114) main 병합: **795165cb45b6a37a6bf9bfc0ccd8cc6e6cb2acf0**. 검증한 head **661c6b878442e5c8e2b864766ade379e042825f1**. PR merged 상태, main head, 판정 문서 두 파일의 내용이 검증본과 같은 것을 원격 read-back했다.
+- Runtime [43399706772](https://github.com/xkg4real/quantgen/actions/runs/43399706772) **6/6 성공**: Windows3.11/3.12/3.14, Ubuntu3.12, syntax3.10/3.11. Compliance [43399706971](https://github.com/xkg4real/quantgen/actions/runs/43399706971) 성공. 모두 같은 head. Vercel 상태는 기존 범위 지시에 따라 작업·배포하지 않았다.
+- 완료 하위 ID는 **⑤-2/e/2**(SPY 후속/Pilot 1 판독/BTC-라 판정 문서의 main 기록)만 LEDGER에 추가했다. 원래 BTC 대조 FAIL·원인 미확인, ⑥-2/⑦-1/⑦-2 미완료는 그대로다.
+- sapientia Notion에는 앞서 승인·⑥-1/readout를 반영했다. 지금은 PR114의 CI/병합 대기 문구를 실제 병합 상태로 바꾸고 최종 인수인계를 저장하는 중이다.
+- UI 별도 세션 최신: PR115 head **043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158**, taken, Runtime43404291007 진행 중, Compliance43404290984 성공이라는 UI 인계. 이 작업은 인수하지 않는다. PR114가 OWNER_RULINGS_LOG.md에 끝 문단을 추가했으므로 이후 UI main 통합 때 양쪽 기록을 보존해야 한다.
 
 ## CI 대기 체크포인트 — 2026-11-13T18:52:35+09:00
 
