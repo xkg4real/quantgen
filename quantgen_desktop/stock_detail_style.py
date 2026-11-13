@@ -176,6 +176,7 @@ _POLITE_WORDS = {
     "삽니다": "사요", "팝니다": "팔아요", "지납니다": "지나요", "움직입니다": "움직여요", "보입니다": "보여요",
     "쌓입니다": "쌓여요", "줄어듭니다": "줄어들어요", "늘어납니다": "늘어나요", "나뉩니다": "나뉘어요",
     "바꿉니다": "바꿔요", "모읍니다": "모아요", "채웁니다": "채워요", "맞춥니다": "맞춰요", "그칩니다": "그쳐요",
+    "살핍니다": "살펴요", "돕습니다": "도와요",
 }
 _HA_SUFFIX = ("합니다",)          # 필요합니다 -> 필요해요, 표시합니다 -> 표시해요
 _FINAL = lambda ch: "가" <= ch <= "힣" and (ord(ch) - 0xAC00) % 28 != 0
@@ -208,6 +209,8 @@ def _polite_word(match):
         return noun + _copula(before)
     if word.endswith(_HA_SUFFIX):                        # X합니다
         return word[:-3] + "해요"
+    if word.endswith("됩니다"):                           # 갱신됩니다 -> 갱신돼요
+        return word[:-3] + "돼요"
     if stem.endswith("습") and len(stem) >= 2:
         prior = stem[-2]
         jong = (ord(prior) - 0xAC00) % 28 if "가" <= prior <= "힣" else -1
@@ -452,8 +455,6 @@ def sheet(p, dark):
       QLabel[sd='nowDetail'] {{ font-size: 12px; color: {p.muted}; }}
       QLabel[sd='topic'] {{ font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 8px;
                             color: {p.accent}; background: {p.accent_soft}; }}
-      QLabel[sd='qscore'] {{ font-size: 12px; font-weight: 500; padding: 3px 9px; border-radius: 9px;
-                             color: {p.text}; background: {p.surface_2}; }}
       QFrame[sd='nowRow'] {{ background: transparent; border: 0; border-radius: 9px; }}
       QFrame[sd='nowRow']:hover {{ background: {soft}; }}
       QFrame[sd='watchRow'] {{ background: transparent; border: 0; border-radius: 9px; }}
@@ -500,6 +501,22 @@ def sheet(p, dark):
       QLabel[sd='pill'][tone='up'] {{ color: {t['up']}; background: {t['up_tint']}; border-color: {t['up_tint']}; }}
       QLabel[sd='pill'][tone='down'] {{ color: {t['down']}; background: {t['down_tint']}; border-color: {t['down_tint']}; }}
       QLabel[sd='limitNote'] {{ font-size: 12px; color: {p.warning}; background: {t['flat_tint']}; border-radius: 9px; }}
+      QPushButton[sd='qbadge'] {{ padding: 3px 10px; min-height: 18px; border: 0; border-radius: 11px;
+                                  background: {p.surface_2}; color: {p.muted}; font-size: 12px; font-weight: 600;
+                                  letter-spacing: 0px; }}
+      QPushButton[sd='qbadge'][tone='ready'] {{ background: {p.accent_soft}; color: {p.accent}; }}
+      QPushButton[sd='qbadge']:hover {{ background: {p.accent_soft}; color: {p.accent}; }}
+      QPushButton[sd='qbadge']:focus {{ border: 2px solid {p.accent}; }}
+      QFrame#sdQScore QWidget {{ background: transparent; }}
+      QLabel[sd='qsTitle'] {{ font-size: 13px; font-weight: 600; color: {p.accent}; letter-spacing: 0px; }}
+      QLabel[sd='qsAsOf'] {{ font-size: 12px; color: {p.muted}; }}
+      QLabel[sd='qsScore'] {{ font-size: 34px; font-weight: 600; color: {p.text}; letter-spacing: -0.8px; }}
+      QLabel[sd='qsOutOf'] {{ font-size: 13px; color: {p.muted}; padding-bottom: 5px; }}
+      QLabel[sd='qsStars'] {{ font-size: 18px; letter-spacing: 1px; padding-bottom: 4px; }}
+      QLabel[sd='qsReading'] {{ font-size: 15px; font-weight: 500; color: {p.text}; letter-spacing: -0.3px; }}
+      QLabel[sd='qsPart'] {{ font-size: 13px; color: {p.text}; }}
+      QLabel[sd='qsWeight'] {{ font-size: 12px; color: {p.muted}; letter-spacing: 0px; }}
+      QLabel[sd='qsValue'] {{ font-size: 13px; font-weight: 600; color: {p.text}; letter-spacing: 0px; }}
       QFrame[sd='notesBox'] {{ background: {soft}; border: 0; border-radius: 12px; }}
     """
 

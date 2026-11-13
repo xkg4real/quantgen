@@ -111,3 +111,8 @@
 - [현재 제품과 상업화 안내](../../README.md), [연구 거래비용 입력](../../ui/strategy_lab_page.py).
 - [전자상거래법 제17조](https://www.law.go.kr/LSW/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1024961473), [제18조](https://www.law.go.kr/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1022341921): 2026-10-31 확인 화면은 시행 2026-07-21, 법률 제21312호입니다.
 - [공식 근거와 검토 범위](SOURCES.md), [이용약관](02-terms-of-service.md), [요금 공개 기준](10-pricing.md).
+
+
+### 2026-11-13 UI-D11~D15 변경 검토
+
+[시장 메뉴·Q-SCORE v0.2·종목 보고서의 자료 흐름과 제한](FACTS.md#ui-d11-d15-2026-11-13)을 대조했다. 선택한 로컬 파일 저장과 KIS 수정 일별 후보 조회를 기존 무전송 UI 수정과 구분한다. 미확정 사업자·요금·환불·권리 조건을 신설하지 않았으며 기존 공개 준비 보류를 유지한다.

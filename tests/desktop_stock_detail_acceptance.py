@@ -436,7 +436,7 @@ class StockDetailTests(unittest.TestCase):
         self.mouse(chart, "move", x0, y, held=False)
         self.assertEqual(chart.pointer_shape(), Qt.CursorShape.OpenHandCursor)
         self.mouse(chart, "move", layout.plot_right + 10, y, held=False)
-        self.assertEqual(chart.pointer_shape(), Qt.CursorShape.ArrowCursor)
+        self.assertEqual(chart.pointer_shape(), Qt.CursorShape.OpenHandCursor)
         # Drag right by ten bars: ten older bars come in and the grabbed bar stays under the pointer.
         self.assertTrue(self.mouse(chart, "press", x0, y))
         self.mouse(chart, "move", x0 + 1, y)                              # within the drag distance: nothing yet
@@ -524,12 +524,12 @@ class StockDetailTests(unittest.TestCase):
         self.assertEqual(p.window(), (0, n))
         xa = chart.layout_info.x_of(200)
         self.mouse(chart, "move", xa, y, held=False)
-        self.assertEqual(chart.pointer_shape(), Qt.CursorShape.ArrowCursor)
+        self.assertEqual(chart.pointer_shape(), Qt.CursorShape.OpenHandCursor)
         self.mouse(chart, "press", xa, y)
         self.mouse(chart, "move", xa + 80, y)
         under = chart.layout_info.index_at(xa + 80)
         self.assertGreater(under, 200)
-        self.assertEqual(chart.pointer_shape(), Qt.CursorShape.ArrowCursor)
+        self.assertEqual(chart.pointer_shape(), Qt.CursorShape.ClosedHandCursor)
         self.assertEqual((p.window(), p._cursor), ((0, n), under))
         self.mouse(chart, "release", xa + 80, y)
         self.assertEqual((p.window(), p._cursor), ((0, n), under))
@@ -617,7 +617,7 @@ class StockDetailTests(unittest.TestCase):
         title = head.title.mapTo(chart, head.title.rect().center())
         self.assertLess(title.x(), layout.plot_right)
         QTest.mouseMove(handle, at(layout.plot_right + 20, price_y))
-        self.assertEqual(chart.pointer_shape(), Qt.CursorShape.ArrowCursor)
+        self.assertEqual(chart.pointer_shape(), Qt.CursorShape.OpenHandCursor)
         QTest.mouseMove(handle, at(title.x(), title.y()))
         self.assertIs(self.window.childAt(at(title.x(), title.y())), head.title)
         self.assertEqual(head.title.cursor().shape(), Qt.CursorShape.OpenHandCursor)
@@ -636,7 +636,7 @@ class StockDetailTests(unittest.TestCase):
         self.assertNotIn(under, (head.info, head.off))
         QTest.mouseMove(handle, at(layout.x_of(layout.start + 50), price_y))
         QTest.mouseMove(handle, chart.mapTo(self.window, spot))
-        self.assertEqual(under.cursor().shape(), Qt.CursorShape.ArrowCursor)
+        self.assertEqual(under.cursor().shape(), Qt.CursorShape.OpenHandCursor)
         # The accessible name after a reload, in English too.
         self.window.set_language("en")
         self.settle()
@@ -904,7 +904,8 @@ class StockDetailTests(unittest.TestCase):
         self.assertIsNot(self.pane.chart.layout_info, svg_before)       # redrawn, not reloaded
         hangul = [t for t in self.visible_texts(self.view) if HANGUL.search(t)]
         self.assertEqual(hangul, [])
-        self.assertEqual(self.view.back_button.text(), "← Real-time charts")
+        self.assertEqual(self.view.back_button.text(), "←" if self.view._level >= 2 else "← Real-time charts")
+        self.assertNotRegex(self.view.back_button.accessibleName(), "[가-힣]")
         self.assertEqual(self.view.side.sections["key_figures"].title.text(), "Key figures")
         self.view.show_indicators(); self.settle()
         hangul = [t for t in self.visible_texts(self.view.side) if HANGUL.search(t)]
@@ -1209,7 +1210,8 @@ class StockDetailTests(unittest.TestCase):
 
     def assert_plain_korean(self, root, where):
         """No '봉' (owner R-D9-2) and one register, 해요체 (no 합니다체, no '…음' sentence endings)."""
-        texts = self.all_texts(root)
+        # Owner D13 explicitly chose this short disclaimer; other prose keeps 해요체.
+        texts = [t for t in self.all_texts(root) if t != "실험적 지표 · 투자 권유 아님"]
         self.assertTrue(texts, where)
         self.assertEqual([t for t in texts if "봉" in t], [], where)
         self.assertEqual([t for t in texts if "니다" in t], [], where)

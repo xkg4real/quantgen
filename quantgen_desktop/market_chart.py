@@ -191,9 +191,8 @@ class MarketChartSvg(QSvgWidget):
             self.setCursor(shape)
 
     def _hover_cursor(self, x):
-        """Owner R-D12-2: an open hand over the plot says it can be dragged; elsewhere, and while every loaded bar is
-        already shown (a drag cannot move the window), the usual arrow."""
-        self._set_pointer(Qt.CursorShape.OpenHandCursor if self._on_plot(x) and self._pannable() else None)
+        """Owner R-D12/A1: an open hand everywhere over the detail chart, including its axes and full history."""
+        self._set_pointer(Qt.CursorShape.OpenHandCursor if self.detail and 0 <= x <= self.width() else None)
 
     def _sync_pointer(self):
         """After a redraw (a zoom, a reload, a new live bar) the pointer shape says whether a drag can move the
@@ -202,7 +201,7 @@ class MarketChartSvg(QSvgWidget):
             return
         if self._press is not None:
             if self._dragging:
-                self._set_pointer(Qt.CursorShape.ClosedHandCursor if self._pannable() else None)
+                self._set_pointer(Qt.CursorShape.ClosedHandCursor)
         elif self._hover_x is not None:
             self._hover_cursor(self._hover_x)
 
@@ -269,7 +268,7 @@ class MarketChartSvg(QSvgWidget):
         if self._layout_key() != self._grab_layout:
             self._grab = (self._pointer_x, layout.start, layout.step, layout.plot_left)
         self._pointer_x = x
-        self._set_pointer(Qt.CursorShape.ClosedHandCursor if self._pannable() else None)
+        self._set_pointer(Qt.CursorShape.ClosedHandCursor)
         origin, start, step, left = self._grab
         step = max(float(step), 1e-9)
         grabbed = math.floor((origin - left) / step)    # the grabbed bar's slot ...
@@ -1047,10 +1046,18 @@ class MarketChartPane(QWidget):
         self._q_score_shown = visible
 
     def q_score_text(self):
-        """(text, tooltip) of the open stock's Q-SCORE, or None; the stock screen shows it on its card."""
+        """(text, tooltip) of the open stock's Q-SCORE, or None."""
         if not getattr(self, "_q_score_shown", False):
             return None
         return self.q_score_label.text(), self.q_score_label.toolTip()
+
+    def q_score_result(self):
+        """The open stock's Q-SCORE result as the app's controllers last gave it (the watchlist feed or the chart's
+        score history), or None; the stock screen weighs it against its own (stock_qscore.pick)."""
+        if (not self._q_score or self.asset.currentData() != 'domestic_stock'
+                or self._q_score[0] != self.symbol.text().strip()):
+            return None
+        return self._q_score[1]
 
     def request(self):
         asset = self.asset.currentData()

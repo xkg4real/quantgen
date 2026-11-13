@@ -1,0 +1,511 @@
+"""One report of what the stock screen's engine judged, for export (owner request 2026-11-12, UI-D14).
+
+Owner, verbatim: "그리고 기술지표들 우리 사이트 내에서 판단한걸 묶어서 pdf나 이런걸로 내보내기 하는 기능도 되면 좋겠다
+상세차트에서". R-D14-1: the report holds the header (name, code, market, interval and period, data source and as-of,
+export time), the chart as shown, the price summary, the readings of the indicators that are on (value and the guide
+card's short reading in 해요체) and optionally all available ones, the "지금 이 차트" summary, the Q-SCORE (or why there
+is none) and the disclaimer ("교육용 해설 · 투자 권유 아님"); PDF first, then PNG of the chart and JSON/CSV of the same
+readings.
+
+This module is the report's model and its own words, and nothing else: no Qt, no I/O, no network, no engine run. The
+desktop (quantgen_desktop.stock_report) hands it what the screen already shows — display texts exactly as the guide
+cards and the right column wrote them, the numbers behind them, the chart's request and window, the Q-SCORE the
+screen holds — and writes the files. Text from the screen is redacted like other exports (provider URLs, tokens:
+core.research.presentation.safe_detail) and never carries markup. JSON and CSV are built from the same StockReport as
+the PDF, so the three never disagree.
+"""
+from __future__ import annotations
+
+import csv
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta, timezone
+import io
+import json
+import math
+import re
+
+FORMAT = "quantgen.stock-report/1"
+KST = timezone(timedelta(hours=9))
+EXTENSIONS = ("pdf", "png", "json", "csv")
+CSV_COLUMNS = ("code", "as_of", "interval", "key", "name", "on_chart", "value", "state", "reading", "note")
+
+# Words this report never uses: it explains, it does not advise (the stock screen's catalogue test uses the same list).
+ADVICE_WORDS = ("사세요", "파세요", "매수하세요", "매도하세요", "추천", "목표가", "진입", "청산")
+ADVICE_EN = re.compile(r"(?i)\b(you should|time to) (buy|sell)\b|\b(buy|sell) (now|signal)\b|\btarget price\b")
+
+# The report's own words: key -> (English, Korean). Korean in 해요체, no '봉' (owner R-D9-2), no advice.
+TEXT = {
+    "brand": ("QUANTGEN", "QUANTGEN"),
+    "title": ("Technical reading report", "기술 지표 리포트"),
+    "tagline": ("For learning · not investment advice", "교육용 해설 · 투자 권유 아님"),
+    "disclaimer": ("Indicators summarise prices and volume that already happened. This report explains how the app "
+                   "read this chart; it neither forecasts prices nor recommends buying or selling.",
+                   "지표는 이미 지나간 가격과 거래량을 요약한 거예요. 이 리포트는 앱이 이 차트를 어떻게 읽었는지 "
+                   "설명할 뿐, 앞으로의 가격을 예측하거나 사고팔기를 권하지 않아요."),
+    "section_chart": ("Chart", "차트"),
+    "section_price": ("Price", "가격"),
+    "section_indicators": ("Indicators on the chart", "켜 둔 지표"),
+    "section_more": ("Other indicators (not on the chart)", "다른 지표 (차트에 켜지 않음)"),
+    "section_now": ("On this chart now", "지금 이 차트"),
+    "section_qscore": ("Q-SCORE", "Q-SCORE"),
+    "section_notes": ("Data and basis", "자료와 기준"),
+    "col_name": ("Indicator", "지표"),
+    "col_value": ("Value", "값"),
+    "col_state": ("State", "상태"),
+    "col_reading": ("Reading", "읽기"),
+    "none_on": ("No indicator is on. Turn some on in the Indicators tab to see their readings here.",
+                "켜 둔 지표가 없어요. 지표 탭에서 켜면 여기에 읽기가 담겨요."),
+    "window": ("{interval} · {period}{first} – {last} · {count}", "{interval} · {period}{first} – {last} · {count}"),
+    "latest_bar": ("Latest {interval} · {date}", "가장 최근 {interval} · {date}"),
+    "open": ("Open", "시가"), "high": ("High", "고가"), "low": ("Low", "저가"), "close": ("Close", "종가"),
+    "volume": ("Volume", "거래량"),
+    "source": ("Source", "자료"),
+    "as_of": ("As of", "기준"),
+    "fetched": ("Fetched", "조회"),
+    "exported": ("Exported", "내보낸 시각"),
+    "kst": ("Korea time", "한국시간"),
+    "network": ("Made from what the screen showed; nothing was fetched for this report.",
+                "화면에 있던 내용으로만 만들었어요. 이 리포트를 위해 새로 불러온 자료는 없어요."),
+    "page": ("Page {page} of {pages}", "{page} / {pages}쪽"),
+    "q_parts": ("Parts", "구성"),
+    "q_technical": ("Technical signals", "기술 신호"),
+    "q_drawdown": ("Largest past fall", "최대 낙폭"),
+    "q_tail_loss": ("Tail loss", "꼬리 손실"),
+    "q_as_of": ("Score as of {date}", "점수 기준 {date}"),
+    "q_daily": ("daily data", "일별 자료"),
+    "q_note": ("{method} · experimental indicator · not investment advice", "{method} · 실험적 지표 · 투자 권유 아님"),
+    "q_high": ("The combined score of price behaviour and past risk is high.",
+               "가격 흐름과 과거 위험을 함께 본 점수가 높은 편이에요."),
+    "q_upper": ("The combined score of price behaviour and past risk is fairly high.",
+                "가격 흐름과 과거 위험을 함께 본 점수가 조금 높은 편이에요."),
+    "q_middle": ("The combined score of price behaviour and past risk is about in the middle.",
+                 "가격 흐름과 과거 위험을 함께 본 점수가 중간쯤이에요."),
+    "q_lower": ("The combined score of price behaviour and past risk is fairly low.",
+                "가격 흐름과 과거 위험을 함께 본 점수가 조금 낮은 편이에요."),
+    "q_low": ("The combined score of price behaviour and past risk is low.",
+              "가격 흐름과 과거 위험을 함께 본 점수가 낮은 편이에요."),
+    "q_paused": ("Updates stopped: this is the last score.", "수신이 멈춰서 마지막 점수예요."),
+    # Why there is no Q-SCORE (owner R-D13-1: never a bare "산정 불가").
+    "q_absent": ("There is no Q-SCORE on this screen yet. It needs a Korean or US stock, a KIS connection and at least "
+                 "200 sessions of daily data.",
+                 "이 화면에는 아직 Q-SCORE가 없어요. 국내·미국 주식만 · KIS 연결과 200거래일 이상 일별 자료가 있어야 계산돼요."),
+    "q_unsupported_instrument": ("Q-SCORE is calculated for Korean and US stocks only.", "Q-SCORE는 국내·미국 주식만 계산돼요."),
+    "q_insufficient_history": ("Only {sessions} sessions of daily data: it needs at least 200.",
+                               "일별 자료가 {sessions}거래일이에요. 200거래일 이상 있어야 계산돼요."),
+    "q_insufficient_history_none": ("It needs at least 200 sessions of daily data.",
+                                    "200거래일 이상 일별 자료가 있어야 계산돼요."),
+    "q_unverified_source": ("It needs daily data received through the KIS connection.",
+                            "KIS 연결로 받은 일별 자료가 있어야 계산돼요."),
+    "q_adjusted_history_required": ("It needs adjusted daily prices.", "수정주가 일별 자료가 있어야 계산돼요."),
+    "q_daily_history_required": ("It is calculated from daily data only.", "일별 자료로만 계산돼요."),
+    "q_stale_history": ("The daily data is too old for a new score.", "일별 자료가 오래돼서 새 점수를 만들지 않았어요."),
+    "q_flat_history": ("The price did not move, so there is nothing to score.",
+                       "가격 변화가 없어서 점수를 만들 수 없어요."),
+    "q_other": ("It could not be calculated from the data on screen.", "지금 화면의 자료로는 계산하지 못했어요."),
+    "asset_domestic_stock": ("Korean stock", "국내 주식"),
+    "asset_overseas_stock": ("US stock", "미국 주식"),
+    "asset_crypto": ("Crypto", "크립토"),
+    "asset_domestic_etf": ("Korean ETF", "국내 ETF"),
+    "asset_overseas_etf": ("US ETF", "미국 ETF"),
+    "asset_domestic_future": ("Korean futures", "국내 선물"),
+    "asset_bond": ("Bond", "채권"),
+}
+
+Q_PARTS = (("technical", "q_technical"), ("drawdown", "q_drawdown"), ("tail_loss", "q_tail_loss"))
+_REASONS = {"unsupported_instrument", "insufficient_history", "unverified_source", "adjusted_history_required",
+            "daily_history_required", "stale_history", "flat_history"}
+_TAGS = re.compile(r"<[^>]+>")
+
+
+def lang_of(language):
+    return "ko" if str(language or "ko").lower().startswith("ko") else "en"
+
+
+def text(language, key, **fields):
+    """TEXT[key] in `language` ('ko' or anything else = English), templates filled."""
+    en, ko = TEXT[key]
+    value = ko if lang_of(language) == "ko" else en
+    return value.format(**fields) if fields else value
+
+
+def clean(value, limit=600):
+    """Screen text as the report keeps it: no markup, no provider URL or token, one paragraph per line."""
+    from core.research.presentation import safe_detail
+    if value is None:
+        return ""
+    value = _TAGS.sub("", str(value)).replace(" ", " ").replace("&nbsp;", " ")
+    value = re.sub(r"[ \t]+", " ", value).strip()
+    return safe_detail(value, limit=limit)
+
+
+def _finite(value):
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    return number if math.isfinite(number) else None
+
+
+# The model ---------------------------------------------------------------------------------------------------------
+@dataclass(frozen=True)
+class IndicatorRow:
+    """One study as the screen read it at the latest bar: its values, the pill and the guide card's short reading."""
+    key: str
+    name: str
+    values: tuple = ()        # ((line name, value text), ...) as the panel header and the tooltip print them
+    state: str = ""           # core.market.detail_model.study_state code
+    state_word: str = ""      # the pill's word ("30~70 사이", "선 위")
+    tone: str = ""            # up / down / flat / ''
+    reading: str = ""         # the guide card's one-line reading (해요체)
+    detail: str = ""          # the fuller reading behind '자세히' (해요체)
+    on_chart: bool = True
+    note: str = ""            # why there is no reading yet (not drawable here, warming up)
+
+    def value_text(self):
+        """'31.2' for one line; 'MACD −593 · 신호선 −182 · 막대 −411' for several."""
+        if len(self.values) == 1:
+            return self.values[0][1]
+        return " · ".join(f"{name} {value}" for name, value in self.values)
+
+
+@dataclass(frozen=True)
+class NowRow:
+    topic: str                # 흐름 / 힘 / 움직임 / 거래
+    text: str
+
+
+@dataclass(frozen=True)
+class PriceBox:
+    price: str = ""           # display, as the symbol card shows it
+    change: str = ""          # '▲ 1,200 (+1.52%)'
+    tone: str = ""            # up / down / flat
+    state: str = ""           # market state line ('○ 장 마감 · 마지막 거래 기준')
+    volume: str = ""          # '거래량 9,412,000주'
+    volume_ratio: str = ""    # '30일 평균의 1.1배'
+    range_title: str = ""
+    range_text: str = ""      # '52주 최저 … · 최고 …'
+    range_from: str = ""
+    latest: tuple = ()        # ((label, value text), ...) of the latest bar: open, high, low, close, volume
+    numbers: dict = field(default_factory=dict, hash=False)   # price, change, change_pct, open .. volume (floats)
+
+
+@dataclass(frozen=True)
+class QScoreBox:
+    status: str               # ready / insufficient_data / unavailable / absent
+    score: float | None = None
+    stars: int | None = None
+    reading: str = ""
+    parts: tuple = ()         # ((key, name, weight, score), ...)
+    as_of: str = ""
+    note: str = ""            # 'Q-SCORE v0.2 · 실험적 지표 · 투자 권유 아님'
+    reason: str = ""          # why there is no score (plain words)
+    reason_code: str = ""
+    methodology: str = ""
+
+    @property
+    def ready(self):
+        return self.status == "ready" and self.score is not None
+
+
+@dataclass(frozen=True)
+class StockReport:
+    language: str
+    name: str
+    code: str
+    market: str               # 'KRX · 국내 주식'
+    asset: str
+    interval: str             # core.market.models interval key
+    interval_name: str        # '일 단위'
+    period: str               # detail_model.PERIODS key or ''
+    period_name: str          # '6개월'
+    first: str                # first bar shown (display)
+    last: str                 # last bar shown (display)
+    bars_shown: int
+    count_text: str           # '126일'
+    price: PriceBox
+    indicators: tuple
+    now_title: str
+    now_caption: str
+    now: tuple
+    qscore: QScoreBox
+    source: str
+    as_of: str                # the latest bar or quote time (display)
+    fetched_at: str
+    exported_at: datetime
+    notes: tuple = ()
+    include_all: bool = False
+
+    @property
+    def on_chart(self):
+        return tuple(row for row in self.indicators if row.on_chart)
+
+    @property
+    def others(self):
+        return tuple(row for row in self.indicators if not row.on_chart)
+
+    def word(self, key, **fields):
+        return text(self.language, key, **fields)
+
+    @property
+    def window_text(self):
+        period = f"{self.period_name} · " if self.period_name else ""
+        return self.word("window", interval=self.interval_name, period=period, first=self.first, last=self.last,
+                         count=self.count_text)
+
+    @property
+    def exported_text(self):
+        return f"{local_time(self.exported_at)} ({self.word('kst')})"
+
+    @property
+    def disclaimer(self):
+        return self.word("disclaimer")
+
+    @property
+    def tagline(self):
+        return self.word("tagline")
+
+
+def local_time(moment):
+    """'2026.11.12 15:52' in Korea time."""
+    return moment.astimezone(KST).strftime("%Y.%m.%d %H:%M")
+
+
+def bar_time(stamp, interval):
+    """A bar's time as the report prints it: '2026.11.10' (daily or longer), '2026.11' (monthly), '2026' (yearly),
+    '2026.11.10 14:35' (minutes)."""
+    stamp = str(stamp or "")
+    if not stamp:
+        return "—"
+    day = stamp[:10].replace("-", ".")
+    if interval == "1Y":
+        return stamp[:4]
+    if interval == "1M":
+        return day[:7]
+    if interval in ("1d", "1w"):
+        return day
+    clock = stamp[11:16] if len(stamp) >= 16 else ""
+    return f"{day} {clock}".strip()
+
+
+def file_name(code, extension, when=None):
+    """QUANTGEN_<code>_<YYYYMMDD>.<ext>, the date in Korea time; the code keeps letters, digits, '.', '_' and '-'."""
+    extension = str(extension).lower().lstrip(".")
+    if extension not in EXTENSIONS:
+        raise ValueError(f"Unsupported report format: {extension}")
+    when = when or datetime.now(timezone.utc)
+    safe = re.sub(r"[^A-Za-z0-9._-]", "_", str(code or "")).strip("._") or "STOCK"
+    return f"QUANTGEN_{safe}_{when.astimezone(KST):%Y%m%d}.{extension}"
+
+
+# Q-SCORE -----------------------------------------------------------------------------------------------------------
+def qscore_box(score, language="ko", *, asset="domestic_stock"):
+    """The report's Q-SCORE block from the engine result the screen holds (core.research.qscore.compute_q_score), or
+    the plain reason there is none. `score` None means the screen has no Q-SCORE for this stock."""
+    lang = lang_of(language)
+    if not isinstance(score, dict):
+        code = "unsupported_instrument" if asset not in ("domestic_stock", "overseas_stock") else "absent"
+        key = "q_unsupported_instrument" if code == "unsupported_instrument" else "q_absent"
+        return QScoreBox("absent", reason=text(lang, key), reason_code=code)
+    method = clean(score.get("methodology") or "Q-SCORE", 40)
+    status = str(score.get("status") or "")
+    points, stars = _finite(score.get("score")), score.get("stars")
+    if (status == "ready" and points is not None and 0 <= points <= 100 and isinstance(stars, int)
+            and not isinstance(stars, bool) and 1 <= stars <= 5):
+        band = "q_high" if points >= 80 else "q_upper" if points >= 60 else "q_middle" if points >= 40 else \
+            "q_lower" if points >= 20 else "q_low"
+        reading = text(lang, band)
+        if score.get("feed_state") in ("stale", "stopped", "error"):
+            reading += " " + text(lang, "q_paused")
+        parts = []
+        components = score.get("components") if isinstance(score.get("components"), dict) else {}
+        for key, word in Q_PARTS:
+            part = components.get(key) if isinstance(components.get(key), dict) else {}
+            weight, value = _finite(part.get("weight")), _finite(part.get("score"))
+            if value is not None:
+                parts.append((key, text(lang, word), weight, max(0.0, min(100.0, value))))
+        as_of = str(score.get("as_of") or "")
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", as_of):
+            shown = f"{as_of.replace('-', '.')} · {text(lang, 'q_daily')}"
+        elif as_of:
+            try:
+                shown = f"{local_time(datetime.fromisoformat(as_of.replace('Z', '+00:00')))} ({text(lang, 'kst')})"
+            except ValueError:
+                shown = clean(as_of, 40)
+        else:
+            shown = "—"
+        return QScoreBox("ready", score=round(points, 2), stars=stars, reading=reading, parts=tuple(parts),
+                         as_of=text(lang, "q_as_of", date=shown), note=text(lang, "q_note", method=method) + " · " + clean(score.get("source"), 40) +
+                         (" · 수정 일별 · " if lang == "ko" else " · adjusted daily · ") + str(score.get("sessions", 0)),
+                         methodology=method)
+    reason = str(score.get("reason") or "")
+    if status == "insufficient_data" and reason in ("", "insufficient_history"):
+        reason = "insufficient_history"
+    sessions = score.get("sessions")
+    if reason == "insufficient_history":
+        words = text(lang, "q_insufficient_history", sessions=sessions) if isinstance(sessions, int) and sessions > 0 \
+            else text(lang, "q_insufficient_history_none")
+    elif reason in _REASONS:
+        words = text(lang, f"q_{reason}")
+    else:
+        words = text(lang, "q_other")
+    return QScoreBox(status or "unavailable", reason=words, reason_code=reason or "unknown",
+                     note=text(lang, "q_note", method=method), methodology=method)
+
+
+# Building ----------------------------------------------------------------------------------------------------------
+def market_text(language, asset, exchange):
+    """'KRX · 국내 주식' / 'NAS · US stock'."""
+    key = f"asset_{asset}"
+    kind = text(language, key) if key in TEXT else str(asset or "")
+    return " · ".join(part for part in (str(exchange or ""), kind) if part)
+
+
+def indicator_row(key, name, *, values=(), state="", state_word="", tone="", reading="", detail="", on_chart=True,
+                  note=""):
+    """An IndicatorRow with every text cleaned (no markup, nothing redacted that a reader needs)."""
+    return IndicatorRow(str(key), clean(name, 80),
+                        tuple((clean(line, 40), clean(value, 40)) for line, value in values),
+                        str(state or ""), clean(state_word, 40), str(tone or ""), clean(reading, 300),
+                        clean(detail, 600), bool(on_chart), clean(note, 200))
+
+
+def build_report(*, language, name, code, asset="domestic_stock", exchange="", interval="1d", interval_name="",
+                 period="", period_name="", first="", last="", bars_shown=0, count_text="", price=None,
+                 indicators=(), now_title="", now_caption="", now=(), qscore=None, source="", as_of="",
+                 fetched_at="", exported_at=None, notes=(), include_all=False):
+    """A StockReport from what the screen shows. `indicators` are IndicatorRows (the ones on the chart first, in the
+    screen's order); `now` (topic, text) pairs; `qscore` a QScoreBox or the engine dict the screen holds (None: no
+    score on screen); `exported_at` an aware datetime (now when omitted)."""
+    lang = lang_of(language)
+    exported_at = exported_at or datetime.now(timezone.utc)
+    if exported_at.tzinfo is None:
+        raise ValueError("exported_at needs a time zone")
+    rows = tuple(row for row in indicators if isinstance(row, IndicatorRow))
+    if not include_all:
+        rows = tuple(row for row in rows if row.on_chart)
+    rows = tuple(sorted(rows, key=lambda row: not row.on_chart))      # stable: the screen's order within each group
+    if not isinstance(qscore, QScoreBox):
+        qscore = qscore_box(qscore, lang, asset=asset)
+    price = price or PriceBox()
+    price = PriceBox(clean(price.price, 40), clean(price.change, 60), price.tone, clean(price.state, 160),
+                     clean(price.volume, 80), clean(price.volume_ratio, 80), clean(price.range_title, 60),
+                     clean(price.range_text, 120), clean(price.range_from, 120),
+                     tuple((clean(k, 20), clean(v, 40)) for k, v in price.latest),
+                     {k: _finite(v) for k, v in dict(price.numbers).items()})
+    now_rows = tuple(NowRow(clean(topic, 20), clean(body, 400)) for topic, body in now if clean(body))
+    note_lines = tuple(dict.fromkeys(line for line in (clean(n, 400) for n in notes) if line))
+    return StockReport(lang, clean(name, 80) or str(code), clean(code, 20), market_text(lang, asset, exchange),
+                       str(asset or ""), str(interval or ""), clean(interval_name, 30) or str(interval or ""),
+                       str(period or ""), clean(period_name, 30), clean(first, 30), clean(last, 30),
+                       int(bars_shown or 0), clean(count_text, 30), price, rows, clean(now_title, 40),
+                       clean(now_caption, 80), now_rows, qscore, clean(source, 60), clean(as_of, 60),
+                       clean(fetched_at, 60), exported_at, note_lines, bool(include_all))
+
+
+# Outputs -----------------------------------------------------------------------------------------------------------
+def report_dict(report):
+    """The report as JSON-safe data (format quantgen.stock-report/1): the same content as the PDF, plus the numbers."""
+    q = report.qscore
+    return {
+        "format": FORMAT,
+        "language": report.language,
+        "title": report.word("title"),
+        "purpose": "education",
+        "advice": "none",
+        "disclaimer": report.disclaimer,
+        "tagline": report.tagline,
+        "instrument": {"name": report.name, "code": report.code, "market": report.market, "asset": report.asset},
+        "chart": {"interval": report.interval, "interval_name": report.interval_name, "period": report.period or None,
+                  "period_name": report.period_name or None, "first": report.first, "last": report.last,
+                  "bars_shown": report.bars_shown, "window": report.window_text,
+                  "studies_on": [row.key for row in report.on_chart]},
+        "price": {"price": report.price.price, "change": report.price.change, "tone": report.price.tone,
+                  "state": report.price.state, "volume": report.price.volume,
+                  "volume_ratio": report.price.volume_ratio, "range": report.price.range_text,
+                  "range_from": report.price.range_from,
+                  "latest_bar": [{"label": k, "value": v} for k, v in report.price.latest],
+                  "numbers": dict(report.price.numbers)},
+        "indicators": [{"key": row.key, "name": row.name, "on_chart": row.on_chart,
+                        "values": [{"line": line, "value": value} for line, value in row.values],
+                        "state": row.state or None, "state_word": row.state_word or None, "tone": row.tone or None,
+                        "reading": row.reading or None, "detail": row.detail or None, "note": row.note or None}
+                       for row in report.indicators],
+        "now": {"title": report.now_title, "caption": report.now_caption,
+                "rows": [{"topic": row.topic, "text": row.text} for row in report.now]},
+        "q_score": {"status": q.status, "score": q.score, "stars": q.stars, "reading": q.reading or None,
+                    "parts": [{"key": key, "name": name, "weight": weight, "score": value}
+                              for key, name, weight, value in q.parts],
+                    "as_of": q.as_of or None, "note": q.note or None, "reason": q.reason or None,
+                    "reason_code": q.reason_code or None, "methodology": q.methodology or None,
+                    "experimental": True},
+        "provenance": {"source": report.source, "as_of": report.as_of, "fetched_at": report.fetched_at or None,
+                       "exported_at": report.exported_at.astimezone(KST).isoformat(timespec="seconds"),
+                       "basis": report.word("network"), "network": "none", "notes": list(report.notes),
+                       "generator": "QUANTGEN desktop · stock screen"},
+    }
+
+
+def report_json(report):
+    return (json.dumps(report_dict(report), ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode("utf-8")
+
+
+def indicator_csv(report):
+    """The indicator table as CSV (UTF-8 with a byte-order mark so spreadsheet apps read Korean): CSV_COLUMNS."""
+    buffer = io.StringIO()
+    writer = csv.writer(buffer)
+    def write_row(values):
+        # Spreadsheet formula injection: imported names/values remain text.
+        writer.writerow(tuple("'" + str(v) if str(v).lstrip().startswith(("=", "+", "-", "@")) else v for v in values))
+    write_row(CSV_COLUMNS)
+    for row in report.indicators:
+        write_row((report.code, report.as_of, report.interval, row.key, row.name,
+                         "true" if row.on_chart else "false", row.value_text(), row.state_word, row.reading,
+                         row.note))
+    q = report.qscore
+    write_row((report.code, report.as_of, report.interval, "q_score", "Q-SCORE", "false", q.score if q.ready else "", q.status, q.reading or q.reason, q.note))
+    for key, name, weight, value in q.parts:
+        write_row((report.code, q.as_of, report.interval, "q_score." + key, name, "false", value, "", "", q.note))
+    write_row((report.code, report.as_of, report.interval, "provenance", report.word("source"), "false", report.source, "", report.word("network"), report.disclaimer))
+    return buffer.getvalue().encode("utf-8-sig")
+
+
+def report_lines(report):
+    """Every text the report prints, in reading order (tests, accessibility and the PDF's search text)."""
+    lines = [report.word("brand"), report.word("title"), report.name, f"{report.code} · {report.market}",
+             report.window_text, report.word("section_price"), report.price.price, report.price.change,
+             report.price.state, report.price.volume, report.price.volume_ratio, report.price.range_text,
+             report.price.range_from]
+    lines += [f"{k} {v}" for k, v in report.price.latest]
+    for title, rows in (("section_indicators", report.on_chart), ("section_more", report.others)):
+        if not rows and title == "section_more":
+            continue
+        lines.append(report.word(title))
+        if not rows:
+            lines.append(report.word("none_on"))
+        for row in rows:
+            lines += [row.name, row.value_text(), row.state_word, row.reading or row.note]
+    if report.now:
+        lines += [report.now_title, report.now_caption] + [f"{row.topic} {row.text}" for row in report.now]
+    q = report.qscore
+    lines += [report.word("section_qscore")]
+    if q.ready:
+        lines += [f"{q.score:.2f}", q.reading, *(f"{name} {value:.0f}" for _, name, _, value in q.parts), q.as_of, q.note]
+    else:
+        lines += [q.reason]
+    lines += [report.word("section_notes"), f"{report.word('source')} {report.source}",
+              f"{report.word('as_of')} {report.as_of}", f"{report.word('exported')} {report.exported_text}",
+              report.word("network"), *report.notes, report.disclaimer, report.tagline]
+    return [line for line in lines if line]
+
+
+def advice_free(lines):
+    """True when no line uses advice wording (ADVICE_WORDS, ADVICE_EN)."""
+    for line in lines:
+        if any(word in line for word in ADVICE_WORDS) or ADVICE_EN.search(line):
+            return False
+    return True
+
+
+__all__ = ["FORMAT", "TEXT", "EXTENSIONS", "CSV_COLUMNS", "IndicatorRow", "NowRow", "PriceBox", "QScoreBox",
+           "StockReport", "build_report", "indicator_row", "qscore_box", "market_text", "report_dict", "report_json",
+           "indicator_csv", "report_lines", "file_name", "bar_time", "local_time", "advice_free", "text", "clean"]

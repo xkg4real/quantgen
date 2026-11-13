@@ -200,3 +200,8 @@ Yahoo 응답은 기존 시세 캐시 규칙에 따라 FICC 캐시 폴더에 `HIS
 - [AI 필터의 범위](../../core/research/ai_payload.py), [질문 전송](../../core/quant/insights.py), [규칙·이력 저장](../../core/rules/store.py), [모의기록](../../core/engine/runtime.py).
 - [설정·TTL·저장 경로](../../config.py), [KIS 토큰](../../data/krx/kis_client.py), [시계열 캐시](../../core/quant/history.py), [삭제 절차](20-deletion.md).
 - [공식 근거와 검토 범위](SOURCES.md), [개인정보 보호법](https://www.law.go.kr/법령/개인정보보호법).
+
+
+### 2026-11-13 UI-D11~D15 변경 검토
+
+[시장 메뉴·Q-SCORE v0.2·종목 보고서의 자료 흐름과 제한](FACTS.md#ui-d11-d15-2026-11-13)을 대조했다. 선택한 로컬 파일 저장과 KIS 수정 일별 후보 조회를 기존 무전송 UI 수정과 구분한다. 미확정 사업자·요금·환불·권리 조건을 신설하지 않았으며 기존 공개 준비 보류를 유지한다.

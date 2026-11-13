@@ -49,10 +49,11 @@ SUBNAV_PADDING = (7, 12)     # vertical, horizontal (after the 2px guide line): 
 # Owner ruling UI-D11 (2026-11-12): the 시장 rows are the big categories of a TradingView-style menu, roomy rows
 # with a chevron at the right (painted by rail_menu.ChevronButton inside the right padding). 36 px while the rail
 # has the room; a shorter window tightens them (to MARKET_ROW_MIN_HEIGHT) before the rail has to scroll
-# (`app.ResearchWindow.fit_market_rows`).
+# (`app.ResearchWindow.fit_market_rows`). UI-D11 review: 26 px rows beside the flyouts' 38 px broke the roomy rhythm,
+# and the rail scrolled anyway; 32 px stays close to the flyouts.
 MARKET_ROW_PADDING = (12, 30)  # left (after the guide line), right (room for the chevron); the height is fixed
 MARKET_ROW_HEIGHT = 36
-MARKET_ROW_MIN_HEIGHT = 26
+MARKET_ROW_MIN_HEIGHT = 32
 
 
 def is_dark(palette) -> bool:
@@ -226,7 +227,7 @@ def flyout_stylesheet(p, dark: bool) -> str:
 
     Roomy 38 px rows in the window font at 14 px, a 2 px transparent border that turns accent for keyboard focus
     (`focusRing`, as in the rail), the pointed row and the row whose flyout is open on a neutral tint, and the row
-    of what the window shows in the accent colour. The note under a flyout's rows is muted 12 px text.
+    of what the window shows in the accent colour.
     """
     tint = flyout_tint(p, dark)
     return f"""
@@ -238,8 +239,6 @@ def flyout_stylesheet(p, dark: bool) -> str:
           QPushButton[flyoutRow='true'][focusRing='true'] {{ background: {tint}; border-color: {p.accent}; }}
           QPushButton[flyoutRow='true'][current='true'] {{ color: {p.accent}; font-weight: 600; }}
           QPushButton[flyoutRow='true']:focus {{ outline: none; }}
-          QLabel#flyoutNote {{ background: transparent; color: {p.muted}; font-size: 12px; font-weight: 400;
-                              padding: 6px 12px 4px 11px; }}
         """
 
 

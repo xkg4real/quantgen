@@ -12,6 +12,10 @@ Owner ruling UI-D11 (2026-11-12, with a TradingView-style menu image), verbatim:
 leaves open what the app already has (`market_menu`): a market page ranked by a category, a Research Home market
 card, or an analysis tool. 글로벌 is left out: no data path for it exists, and no dead item is shown.
 
+UI-D11 review: the nine rows show on every page, so the rail never reflows under the pointer (they appeared only on
+Markets, and choosing a page below them moved it about 320 px), and a row is highlighted only for the Markets page
+shown. A row with one page of its own opens it on a click (국내 / 미국 under 주식 and ETF, 크립토, 선물, 회사채).
+
 The window (`app.ResearchWindow`) owns the state; this module holds the pieces that do not need the window: the
 menu tree, the painted icons and the rail's arrow-key handling.
 """
@@ -54,35 +58,29 @@ TOOL_LEAVES = {
                 (("tool", "macro", "daily"), "Daily commentary", "일일 시장 해설"),
                 (("tool", "macro", "weekly"), "Weekly rates & FX", "주간 금리·외환")),
 }
-# What a page reached from the menu shows, as its category (the rail row highlighted there).
-TOOL_CATEGORY = {"derivatives": "futures", "fx": "fx", "rates": "govt", "bonds": "corp", "macro": "economy"}
-HOME_CATEGORY = {"^KS11": "indices", "^GSPC": "indices", "VIXCLS": "indices", "DEXKOUS": "fx", "DGS10": "govt"}
-# Where a tool leaf opens and what it shows, for its tooltip.
+# Where a tool leaf opens and what it shows, for its tooltip (the menu names no page on the row itself).
 _TOOL_TIPS = {"derivatives": ("Analysis tools › Derivatives", "분석 도구 › 파생상품"),
               "fx": ("Analysis tools › FX", "분석 도구 › 외환"), "rates": ("Analysis tools › Rates", "분석 도구 › 금리"),
               "bonds": ("Analysis tools › Bonds: price, yield and z-spread over the Treasury curve",
                         "분석 도구 › 채권: 가격·수익률과 국채 곡선 대비 스프레드(z-spread)"),
               "macro": ("Analysis tools › Macro sheet", "분석 도구 › 매크로 지표")}
 _HOME_TIP = ("Research Home › Major markets: the daily chart", "연구 홈 › 주요 시장: 일별 차트")
-_HINTS = {"home": ("Chart", "차트"), "tool": ("Analysis", "분석")}
 
 
 @dataclass(frozen=True)
 class MenuNode:
-    """One row of the 시장 menu. A row with `children` opens a flyout; a leaf row opens `leaf`: ('market', page,
-    category), ('home', symbol) or ('tool', pane, sub-tool). `mark` names what the row stands for, so the row of
-    what is shown can be marked; `hint` is a muted word at the row's right saying where a leaf opens outside
-    Markets ('차트' for a Research Home chart, '분석' for an analysis tool); `note` is a muted line under a flyout's
-    rows (why a ranking is left out), with `note_tip` as its tooltip."""
+    """One row of the 시장 menu. A row with `children` opens a flyout when pointed at; `leaf` is what a click opens:
+    ('market', page, category), ('home', symbol) or ('tool', pane, sub-tool). A row with both (국내 under 주식, 크립토,
+    선물) opens its page on a click (category '': the page's own last ranking) and its flyout when pointed at. `mark`
+    names what the row stands for, so the row of what is shown can be marked; `tip` says where a leaf opens.
+    The flyouts carry no notes about rankings a page leaves out (UI-D11 review: they read as disabled items); the
+    page's footnote says why."""
     key: str
     text: str
     children: tuple = ()
     leaf: tuple = ()
     mark: tuple = ()
     tip: str = ""
-    note: str = ""
-    note_tip: str = ""
-    hint: str = ""
 
 
 def _pick(language, english, korean):
@@ -96,21 +94,6 @@ def page_categories(page):
     return tuple(key for key in R.CATEGORY_KEYS if not category_note(page, key))
 
 
-def _left_out(page, language):
-    """(note, tooltip) for the rankings a page leaves out: '시가총액 순위 없음' and why; ('', '') when none."""
-    from core.market import rankings as R
-    from core.market.screen import category_note
-    from .translations import translate
-    missing = [key for key in R.CATEGORY_KEYS if category_note(page, key)]
-    if not missing:
-        return "", ""
-    names = [R.text(R.CATEGORIES, key, language) for key in missing]
-    note = "·".join(names) + " 순위 없음" if language == "ko" else "No ranking by " + " or ".join(n.lower() for n in names)
-    reasons = [category_note(page, key) for key in missing]
-    tip = " ".join(translate(reason, "ko") if language == "ko" else reason for reason in reasons)
-    return note, tip
-
-
 def _ranking_nodes(page, language):
     from core.market import rankings as R
     return tuple(MenuNode(key, R.text(R.CATEGORIES, key, language), leaf=("market", page, key),
@@ -121,37 +104,33 @@ def market_menu(language):
     """The 시장 menu in `language`: one `MenuNode` per `MARKET_CATEGORIES` row, each with its flyout's rows.
 
     주식 › 국내 / 미국 › the rankings that market has; 크립토 › its rankings; ETF › 국내 / 미국 › rankings (no market
-    cap: the note says why); 지수 › Research Home's index cards; 선물 · 외환 · 국채 · 회사채 · 월드 이코노미 › the analysis
-    tools (and Home cards) that cover them. Pure apart from reading the text tables; nothing is fetched."""
+    cap); 지수 › Research Home's index cards; 선물 · 외환 · 국채 · 회사채 · 월드 이코노미 › the analysis tools (and Home
+    cards) that cover them. A row with one page of its own also opens it on a click (`MenuNode.leaf`). Pure apart
+    from reading the text tables; nothing is fetched."""
     from .owner_ui_language.home import MARKETS as HOME_NAMES
     language = "ko" if language == "ko" else "en"
     rows = []
     for key, english, korean in MARKET_CATEGORIES:
         text = _pick(language, english, korean)
+        leaf = ()
         if key == "indices":
             children = tuple(MenuNode(symbol, _pick(language, *HOME_NAMES[symbol]), leaf=("home", symbol),
-                                      mark=("home", symbol), tip=_pick(language, *_HOME_TIP),
-                                      hint=_pick(language, *_HINTS["home"]))
+                                      mark=("home", symbol), tip=_pick(language, *_HOME_TIP))
                              for symbol in INDEX_CARDS)
         elif key == "crypto":
-            note, note_tip = _left_out("crypto", language)
-            rows.append(MenuNode(key, text, _ranking_nodes("crypto", language), mark=("category", key),
-                                 note=note, note_tip=note_tip))
-            continue
+            children, leaf = _ranking_nodes("crypto", language), ("market", "crypto", "")
         elif key in MARKET_SUBS:
-            children = []
-            for page, sub_en, sub_ko in MARKET_SUBS[key]:
-                note, note_tip = _left_out(page, language)
-                children.append(MenuNode(page, _pick(language, sub_en, sub_ko), _ranking_nodes(page, language),
-                                         mark=("page", page), note=note, note_tip=note_tip))
-            children = tuple(children)
+            children = tuple(MenuNode(page, _pick(language, sub_en, sub_ko), _ranking_nodes(page, language),
+                                      leaf=("market", page, ""), mark=("page", page))
+                             for page, sub_en, sub_ko in MARKET_SUBS[key])
         else:
             children = tuple(
                 MenuNode(":".join(leaf), _pick(language, leaf_en, leaf_ko), leaf=leaf, mark=leaf,
-                         tip=_pick(language, *(_HOME_TIP if leaf[0] == "home" else _TOOL_TIPS[leaf[1]])),
-                         hint=_pick(language, *_HINTS[leaf[0]]))
+                         tip=_pick(language, *(_HOME_TIP if leaf[0] == "home" else _TOOL_TIPS[leaf[1]])))
                 for leaf, leaf_en, leaf_ko in TOOL_LEAVES[key])
-        rows.append(MenuNode(key, text, children, mark=("category", key)))
+            if len(children) == 1:  # 선물, 회사채: one tool, so a click opens it
+                leaf = children[0].leaf
+        rows.append(MenuNode(key, text, children, leaf=leaf, mark=("category", key)))
     return tuple(rows)
 
 
@@ -351,6 +330,6 @@ class RailKeys(QObject):
 
 
 __all__ = ["SETTINGS_KEY", "KEYBOARD_FOCUS", "MARKET_CATEGORIES", "MARKET_SUBS", "PAGE_CATEGORY", "INDEX_CARDS",
-           "TOOL_LEAVES", "TOOL_CATEGORY", "HOME_CATEGORY", "MenuNode", "market_menu", "page_categories",
+           "TOOL_LEAVES", "MenuNode", "market_menu", "page_categories",
            "market_sections", "market_section_text", "stored_flag", "toggle_icon", "stop_icon", "markets_icon",
            "icon_button", "set_focus_ring", "RailKeys"]

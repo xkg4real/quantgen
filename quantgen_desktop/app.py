@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from yaml import YAMLError
 
-from PyQt6.QtCore import Qt, QEvent, QTimer, pyqtSlot, QByteArray, QPoint, QSettings, QSize
+from PyQt6.QtCore import Qt, QEvent, QTimer, pyqtSlot, QByteArray, QSettings, QSize
 from PyQt6.QtGui import QFont, QFontDatabase, QFontMetrics, QIcon, QKeySequence, QShortcut
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFileDialog,
@@ -214,9 +214,7 @@ class ResearchWindow(QMainWindow):
         # Owner ruling UI-D11 (2026-11-12): the 시장 rows open cascading flyouts drawn over the page.
         self.rail_flyouts = rail_menu.RailFlyouts(root, self)
         self.rail_flyouts.activated.connect(self.open_market_leaf)
-        self.rail_flyouts.left_edge = lambda: self.sidebar.mapTo(root, QPoint(self.sidebar.width(), 0)).x()
         self.rail_flyouts.current = self.market_marks
-        self.market_menu_route = None  # the page a 시장 flyout opened outside Markets (its rows stay shown there)
         self._market_choice = None     # the 시장 row of the market page shown last on Markets
         outer = QHBoxLayout(root)
         outer.setContentsMargins(0, 0, 0, 0)
@@ -321,7 +319,7 @@ class ResearchWindow(QMainWindow):
         self.market_strip.clicked.connect(
             lambda: self.rail_flyouts.root_clicked(self.market_strip,
                                                    keyboard=bool(self.market_strip.property("focusRing"))))
-        self.rail_flyouts.watch_root(self.market_strip, lambda: (shell_rail.market_menu(self.ui_language), "", ""))
+        self.rail_flyouts.watch_root(self.market_strip, lambda: shell_rail.market_menu(self.ui_language))
         strip.addWidget(self.market_strip, 0, Qt.AlignmentFlag.AlignHCenter)
         # The paper engine's emergency stop stays one click away while the engine runs.
         self.paper_halt_strip = shell_rail.icon_button("Stop paper engine", "Stop paper engine",
@@ -410,9 +408,10 @@ class ResearchWindow(QMainWindow):
         (2026-11-12): they are the big categories of a TradingView-style menu (지수 · 주식 · 크립토 · 선물 · 외환 · 국채 ·
         회사채 · ETF · 월드 이코노미, `shell_rail.MARKET_CATEGORIES`), each a roomy row with a chevron that opens its
         cascading flyout (`rail_menu.RailFlyouts`); a leaf opens the Markets page with that market and ranking, a
-        Research Home card or an analysis tool (`open_market_leaf`). Shown while Markets is the page, and on a page
-        a flyout opened. The rows carry their text in the window's language (`retitle_market_sections`): the
-        English "Crypto" means 가상자산 elsewhere in the app."""
+        Research Home card or an analysis tool (`open_market_leaf`). Shown on every page (UI-D11 review: shown only
+        on Markets, the nine rows moved every rail item below them by about 320 px under the pointer). The rows carry
+        their text in the window's language (`retitle_market_sections`): the English "Crypto" means 가상자산
+        elsewhere in the app."""
         self.market_submenu = QWidget()
         self.market_submenu.setObjectName("marketSubmenu")
         self.market_submenu.setAccessibleName("Markets sections")
@@ -428,7 +427,6 @@ class ResearchWindow(QMainWindow):
             column.addWidget(row)
             self.market_sections[key] = row
         self.retitle_market_sections()
-        self.market_submenu.hide()
         return self.market_submenu
 
     def retitle_market_sections(self):
@@ -447,27 +445,34 @@ class ResearchWindow(QMainWindow):
 
     def fit_market_rows(self):
         """The 시장 rows at MARKET_ROW_HEIGHT while the rail has the room; a shorter window tightens them, down to
-        MARKET_ROW_MIN_HEIGHT, before the rail has to scroll."""
+        MARKET_ROW_MIN_HEIGHT (close to the flyouts' rows, UI-D11 review), before the rail has to scroll."""
         rows = list(self.market_sections.values())
         full, low = typography.MARKET_ROW_HEIGHT, typography.MARKET_ROW_MIN_HEIGHT
-        height = full
-        if not self.market_submenu.isHidden():
-            content = self.rail_scroll.widget().layout().sizeHint().height()
-            others = content - sum(row.row_height for row in rows)
-            room = self.rail_scroll.viewport().height() - others
-            height = max(low, min(full, room // len(rows)))
+        content = self.rail_scroll.widget().layout().sizeHint().height()
+        others = content - sum(row.row_height for row in rows)
+        room = self.rail_scroll.viewport().height() - others
+        height = max(low, min(full, room // len(rows)))
         for row in rows:
             row.set_row_height(height)
         return height
 
+    def _market_node(self, key):
+        """A 시장 row's `shell_rail.MenuNode`, in the window language."""
+        return next(node for node in shell_rail.market_menu(self.ui_language) if node.key == key)
+
     def _market_flyout(self, key):
-        """(rows, note, note tooltip) of a 시장 row's flyout, in the window language."""
-        node = next(node for node in shell_rail.market_menu(self.ui_language) if node.key == key)
-        return node.children, node.note, node.note_tip
+        """The rows of a 시장 row's flyout, in the window language."""
+        return self._market_node(key).children
 
     def open_market_category(self, key, *, keyboard=None):
-        """A 시장 row clicked (or Enter / Space / → on it): its flyout opens; from the keyboard, with focus in it."""
+        """A 시장 row clicked (or Enter / Space on it): a row with one page of its own (크립토, 선물, 회사채) opens it,
+        the others open their flyout; from the keyboard, with focus in it (→ always opens the flyout)."""
         row = self.market_sections[key]
+        leaf = self._market_node(key).leaf
+        if leaf:
+            self.rail_flyouts.close_all()
+            self.open_market_leaf(leaf)
+            return None
         if keyboard is None:
             keyboard = bool(row.property("focusRing"))
         panel = self.rail_flyouts.root_clicked(row, keyboard=keyboard)
@@ -499,18 +504,17 @@ class ResearchWindow(QMainWindow):
             if category and hasattr(view, "show_category"):
                 view.show_category(category)
         elif kind == "home":
-            self.navigate("home", from_menu=True)
+            self.navigate("home")
             self.home_view.select(leaf[1])
             scroll = self.stack.widget(self.route_indices["home"])
             QTimer.singleShot(0, lambda: scroll.verticalScrollBar().setValue(0))
         elif kind == "tool":
             _kind, name, sub = leaf
             pane = getattr(self, name)
-            self.navigate("tools", from_menu=True)
+            self.navigate("tools")
             self.show_tool(pane)
-            picker = getattr(pane, "tool", None)
-            if sub and isinstance(picker, QComboBox) and picker.findData(sub) >= 0:
-                picker.setCurrentIndex(picker.findData(sub))
+            if sub and hasattr(pane, "select_tool"):
+                pane.select_tool(sub)  # a destination chosen, not a change to rerun: no "Tool changed" prompt
             scroll = self.stack.widget(self.route_indices["tools"])
             QTimer.singleShot(0, lambda: scroll.verticalScrollBar().setValue(0))
         else:
@@ -544,9 +548,11 @@ class ResearchWindow(QMainWindow):
         return next((route for route, i in self.route_indices.items() if i == index), None)
 
     def market_marks(self):
-        """The `shell_rail.MenuNode.mark`s of what the window shows (its 시장 rows and flyout rows are marked)."""
-        route, marks = self._route(), set()
-        if route == "markets":
+        """The `shell_rail.MenuNode.mark`s of what Markets shows (the market page and its ranking): its 시장 row and
+        flyout rows are marked. Another page marks nothing: its own rail item says where the window is (UI-D11
+        review, a 시장 row lit under another selected page was a second 'you are here')."""
+        marks = set()
+        if self._route() == "markets":
             view = self.markets_view
             current = getattr(view, "current_market", None)
             page = current() if callable(current) else None
@@ -556,32 +562,19 @@ class ResearchWindow(QMainWindow):
                 category = getattr(view, "current_category", None)
                 if callable(category) and not (callable(showing) and showing()):
                     marks.add(("market", page, category()))
-        elif route == "home" and self.market_menu_route == "home":
-            symbol = getattr(self.home_view, "selected", None)
-            marks |= {("home", symbol), ("category", shell_rail.HOME_CATEGORY.get(symbol, ""))}
-        elif route == "tools" and self.market_menu_route == "tools":
-            shown = self.tool_host.currentWidget()
-            name = next((n for n in shell_rail.TOOL_CATEGORY if getattr(self, n, None) is shown), None)
-            if name is not None:
-                picker = getattr(getattr(self, name), "tool", None)
-                sub = picker.currentData() if isinstance(picker, QComboBox) else ""
-                marks |= {("tool", name, sub or ""), ("category", shell_rail.TOOL_CATEGORY[name])}
         return frozenset(marks)
 
     def sync_market_section(self, key=None):
-        """Highlight the 시장 row of what the window shows: on Markets the row of the market page shown (`key`, a
-        market page key, else the page's own market, also while a stock's screen is open over it, else the last
-        choice); on a page a 시장 flyout opened, the row of the card or tool shown; elsewhere none."""
-        route = self._route()
-        if route == "markets":
+        """Highlight the 시장 row of the market page Markets shows (`key`, a market page key, else the page's own
+        market, also while a stock's screen is open over it, else the last choice); on any other page none."""
+        category = None
+        if self._route() == "markets":
             view = getattr(self, "markets_view", None)
             if key is None and view is not None:
                 current = getattr(view, "current_market", None)
                 key = current() if callable(current) else None
             category = shell_rail.PAGE_CATEGORY.get(key) if key else self._market_choice
             self._market_choice = category
-        else:
-            category = next((mark[1] for mark in self.market_marks() if mark[0] == "category"), None)
         self.market_section = category if category in self.market_sections else None
         for name, button in self.market_sections.items():
             button.setChecked(name == self.market_section)
@@ -714,8 +707,6 @@ class ResearchWindow(QMainWindow):
             name_fn=lambda instrument, language: directory_name(self.symbol_directory, instrument, language),
             rows_source=lambda: self.watchlist.rows, locale=self.ctx, auto_load=self.auto_refresh)
         self.home_view.refresh_requested.connect(self.refresh_markets)
-        for card in self.home_view.cards.values():  # a card chosen on a page a 시장 flyout opened moves its highlight
-            card.activated.connect(lambda _symbol: self.sync_market_section())
         self.home_view.stock_requested.connect(open_watch)
         self.home_view.add_requested.connect(add_watch)
         self.jobs.busy_changed.connect(self.home_view.set_busy)
@@ -898,8 +889,6 @@ class ResearchWindow(QMainWindow):
                 self.tool_host.setCurrentIndex(index)
                 for name, button in self.tool_buttons.items():
                     button.setChecked(getattr(self, name) is pane)
-                if hasattr(self, "market_sections"):
-                    self.sync_market_section()  # a tool a 시장 flyout opened keeps its row highlighted
                 return pane
         raise ValueError('Pane is not one of the analysis tools')
 
@@ -1125,17 +1114,14 @@ class ResearchWindow(QMainWindow):
         layout.addWidget(box)
         layout.addStretch()
 
-    def navigate(self, route, *, from_menu=False):
-        """Show a page. The 시장 rows show on Markets, and on a page a 시장 flyout opened (`from_menu`) until another
-        page is chosen, so the next category is one move away (owner ruling UI-D11)."""
+    def navigate(self, route):
+        """Show a page. The 시장 rows stay in the rail on every page (`make_market_submenu`); one is highlighted only
+        for the market Markets shows."""
         if route != 'home' and hasattr(self, 'home_feed') and self.home_feed.active:
             self.home_feed.stop()
         self.rail_flyouts.close_all()
-        self.market_menu_route = route if from_menu and route != 'markets' else None
         self.stack.setCurrentIndex(self.route_indices[route])
         for name, button in self.nav.items(): button.setChecked(name == route)
-        self.market_submenu.setVisible(route == 'markets' or self.market_menu_route == route)
-        self.fit_market_rows()
         self.sync_market_section()
 
     def setup_live_watchlist(self):

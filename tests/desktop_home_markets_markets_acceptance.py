@@ -192,7 +192,7 @@ class MarketsPageTests(WindowBase):
     def test_interface_contract_and_page_structure(self):
         self.assertEqual(RANKING_CATEGORIES, (("value", "Trading value", "거래대금"), ("volume", "Volume", "거래량"),
                                               ("gainers", "Top gainers", "급상승"), ("losers", "Top losers", "급하락"),
-                                              ("cap", "Market cap", "시가총액")))
+                                              ("cap", "Market cap", "시가총액"), ("qscore", "Q-SCORE highest first", "Q-SCORE 높은 순")))
         self.assertEqual(MARKET_PAGES, (("kr", "Korean stocks", "국내 주식"), ("us", "US stocks", "미국 주식"),
                                         ("crypto", "Crypto", "크립토"), ("etf_kr", "Korean ETFs", "국내 ETF"),
                                         ("etf_us", "US ETFs", "미국 ETF")))
@@ -214,7 +214,7 @@ class MarketsPageTests(WindowBase):
         self.assertFalse([w for w in page.findChildren(QComboBox) if w.isVisible() and w.findData("bond") >= 0])
         self.assertEqual(self.board.heading.text(), "국내 주식")
         self.assertEqual([b.text() for b in self.board.category_buttons.values()],
-                         ["거래대금", "거래량", "급상승", "급하락", "시가총액"])
+                         ["거래대금", "거래량", "급상승", "급하락", "시가총액", "Q-SCORE 높은 순"])
         self.assertEqual([b.text() for b in self.board.sub_buttons.values()], ["전체", "코스피", "코스닥"])
         self.assertFalse(self.board.summary_section.isVisible())  # nothing loaded, nothing loads: no empty strip
         self.assertFalse(self.board.conditions_section.isVisible())
@@ -882,14 +882,14 @@ class MarketPageTests(WindowBase):
         fly = self.window.rail_flyouts
         fly.open_child(fly.open_root(self.window.market_sections["stocks"]).rows[0])
         self.assertEqual([r.text() for r in fly.panels[1].rows],
-                         ["Trading value", "Volume", "Top gainers", "Top losers", "Market cap"])
+                         ["Trading value", "Volume", "Top gainers", "Top losers", "Market cap", "Q-SCORE highest first"])
         self.window.set_language("ko"); self.app.processEvents()
         self.assertFalse(fly.is_open())
         self.assertEqual([b.text() for b in self.window.market_sections.values()],
                          ["지수", "주식", "크립토", "선물", "외환", "국채", "회사채", "ETF", "월드 이코노미"])
         fly.open_child(fly.open_root(self.window.market_sections["stocks"]).rows[0])
-        self.assertEqual([r.text() for r in fly.panels[1].rows], ["거래대금", "거래량", "급상승", "급하락", "시가총액"])
-        self.assertEqual([bool(r.property("current")) for r in fly.panels[1].rows], [True, False, False, False, False])
+        self.assertEqual([r.text() for r in fly.panels[1].rows], ["거래대금", "거래량", "급상승", "급하락", "시가총액", "Q-SCORE 높은 순"])
+        self.assertEqual([bool(r.property("current")) for r in fly.panels[1].rows], [True, False, False, False, False, False])
         fly.close_all()
         self.assertEqual((self.loader.calls, self.series.call_count), (["kr"], series_calls))
 

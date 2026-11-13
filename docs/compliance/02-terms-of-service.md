@@ -148,3 +148,8 @@ Q-SCORE v0.1은 가격 추세와 과거 위험을 1–5개 별·0–100점으로
 - [현재 상품 범위와 상업화 안내](../../README.md), [네이티브 전환 범위](../DESKTOP_MIGRATION_2026-10-30.md), [기존 배포 검토 문서](../product/DISTRIBUTION_REVIEW_2026-10-29.md).
 - [읽기 전용 KIS 범위](../../data/krx/kis_client.py), [설정](../../config.py), [AI 처리](../../core/quant/insights.py), [AI 필드 경계](../../core/research/ai_payload.py).
 - [공식 근거와 검토 범위](SOURCES.md), [약관의 규제에 관한 법률](https://www.law.go.kr/법령/약관의규제에관한법률), [전자상거래 등에서의 소비자보호에 관한 법률](https://www.law.go.kr/법령/전자상거래등에서의소비자보호에관한법률).
+
+
+### 2026-11-13 UI-D11~D15 변경 검토
+
+[시장 메뉴·Q-SCORE v0.2·종목 보고서의 자료 흐름과 제한](FACTS.md#ui-d11-d15-2026-11-13)을 대조했다. 선택한 로컬 파일 저장과 KIS 수정 일별 후보 조회를 기존 무전송 UI 수정과 구분한다. 미확정 사업자·요금·환불·권리 조건을 신설하지 않았으며 기존 공개 준비 보류를 유지한다.

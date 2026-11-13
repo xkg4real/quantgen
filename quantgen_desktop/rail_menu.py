@@ -4,7 +4,9 @@ Owner: "주식 하부 유야이다 그러면 거기 마우스 휠 올려놓으�
 국내에 마우스 올려놓으면 다시 거래대금 거래량 급상승 급하락 이렇게 누를수있게. 누르면 지금 ui랑 똑같이 저 화면으로 바로
 넘어갈수잇게". Under 시장 the rail lists the big categories (`shell_rail.MARKET_CATEGORIES`) as `MarketRailRow`s with
 a chevron; pointing at one (or Enter, →, a click) opens a flyout to its right (`FlyoutPanel`), and pointing at a row
-of that flyout opens the next one, like a desktop menu bar's cascades. A leaf goes straight to what it names.
+of that flyout opens the next one, like a desktop menu bar's cascades. A leaf goes straight to what it names; so does
+a click on a row that has one page of its own (국내 or 미국 under 주식 and ETF, 크립토, 선물, 회사채: `MenuNode.leaf`),
+while pointing at it still opens its flyout (UI-D11 review).
 
 The flyouts are children of the window's central widget drawn over the page, not popup windows: the pointer moves
 freely between the rail and the flyouts (a popup would grab it), the window's captures include them, and the window
@@ -12,7 +14,8 @@ sheet's fonts and colours apply. `RailFlyouts` keeps the open chain (one panel p
 pointer has left the rail rows and every flyout for `CLOSE_DELAY_MS`, on a click elsewhere, on Esc, when the window
 moves, resizes or loses focus, and when the page changes. Moving to a sibling row switches the open flyout after
 `SWITCH_DELAY_MS`, cancelled when the pointer reaches the flyout already open (a diagonal move to it does not flick
-the menu over to the row it crosses).
+the menu over to the row it crosses). A switch still waiting when the pointer leaves the flyouts, or when the level it
+targets closes, is dropped (UI-D11 review: it reopened a menu the pointer had left, and ran on a closed level).
 
 Keyboard: in a flyout ↑/↓ (Home/End) move, → / Enter / Space open the next flyout and focus its first row, Enter /
 Space on a leaf opens it, ← / Esc close the flyout and return to the row it came from, Tab closes them all. The rail
@@ -21,7 +24,8 @@ focus only), the pointed row as a tint, the row whose flyout is open stays tinte
 shows is in the accent colour.
 
 No shadow effect (`QGraphicsDropShadowEffect` blurs text at fractional scaling, see `typography.PANEL_DEPTH`): each
-panel paints its own soft shadow and its rounded 8 px box with the light line token.
+panel paints its rounded 8 px box with the light line token, and a `FlyoutShadow` behind it paints the soft shadow.
+The shadow lets the pointer through, so a click just outside the box reaches the page (UI-D11 review).
 """
 from __future__ import annotations
 
@@ -29,7 +33,7 @@ import time
 
 from PyQt6.QtCore import QEvent, QObject, QPoint, QPointF, QRectF, QTimer, Qt, pyqtSignal
 from PyQt6.QtGui import QColor, QPainter, QPainterPath, QPen
-from PyQt6.QtWidgets import QApplication, QLabel, QPushButton, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget
 
 from core.theme import LIGHT
 from .localization import SKIP_PASS
@@ -38,8 +42,8 @@ from .shell_rail import KEYBOARD_FOCUS, set_focus_ring
 ROW_HEIGHT = 38            # flyout rows (owner: roomy rows, 36-40 px)
 PANEL_PADDING = 6          # inside the box, around the rows
 PANEL_RADIUS = 8
-SHADOW = 12                # room around the box for its painted shadow
-PANEL_GAP = 6              # between the rail (or a flyout) and the flyout it opens
+SHADOW = 12                # how far the painted shadow reaches around a box
+PANEL_GAP = 6              # between a row and the flyout it opens (a rail row, the strip button or a flyout's box)
 PANEL_MIN_WIDTH = 168
 PANEL_MAX_WIDTH = 320
 EDGE_MARGIN = 8            # a flyout keeps this far from the window's edges
@@ -194,12 +198,9 @@ class StripMenuButton(RailAnchor, QPushButton):
         super().paintEvent(event)
 
 
-HINT_GAP = 18              # between a row's text and its hint
-
-
 class FlyoutRow(ChevronButton):
-    """One row of a flyout: a sub-market or category that opens the next flyout, or a leaf (with a muted hint at
-    its right when it opens outside Markets: '차트', '분석')."""
+    """One row of a flyout: a sub-market or category that opens the next flyout, or a leaf. Where a leaf opens is
+    its tooltip (UI-D11 review: a muted '분석' on every row named another rail page)."""
 
     def __init__(self, node, level, flyouts):
         super().__init__(node.text.replace("&", "&&"), chevron=bool(node.children))  # '&' is not a mnemonic here
@@ -211,27 +212,6 @@ class FlyoutRow(ChevronButton):
         if node.tip:
             self.setToolTip(node.tip)
         self.clicked.connect(lambda: flyouts.row_clicked(self))
-
-    def _hint_font(self):
-        from .typography import scaled_font
-        return scaled_font(self.font(), 12, 400)
-
-    def sizeHint(self):
-        size = super().sizeHint()
-        if self.node.hint:
-            from PyQt6.QtGui import QFontMetrics
-            size.setWidth(size.width() + QFontMetrics(self._hint_font()).horizontalAdvance(self.node.hint) + HINT_GAP)
-        return size
-
-    def paintEvent(self, event):
-        super().paintEvent(event)
-        if self.node.hint:
-            painter = QPainter(self)
-            painter.setFont(self._hint_font())
-            painter.setPen(QColor(self.tones[0]))
-            area = self.rect().adjusted(0, 0, -16, 0)
-            painter.drawText(area, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter, self.node.hint)
-            painter.end()
 
     def enterEvent(self, event):
         super().enterEvent(event)
@@ -257,17 +237,44 @@ class FlyoutRow(ChevronButton):
         super().focusOutEvent(event)
 
 
-class FlyoutPanel(QWidget):
-    """One flyout: a rounded box of rows, with an optional muted note under them (why a ranking is left out,
-    with the reason as its tooltip). The widget is `SHADOW` larger than the box on every side for its shadow."""
+class FlyoutShadow(QWidget):
+    """The soft shadow under a flyout's box: rings that add up toward the box, a little lower than it. It lets the
+    pointer through (a click beside the box reaches the page) and follows its panel (`FlyoutPanel.moveEvent`)."""
 
-    def __init__(self, flyouts, nodes, level, *, note="", note_tip="", parent=None):
+    def __init__(self, flyouts, parent=None):
+        super().__init__(parent)
+        self.flyouts = flyouts
+        self.setObjectName("railFlyoutShadow")
+        self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
+        self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+
+    def follow(self, panel):
+        self.setGeometry(panel.geometry().adjusted(-SHADOW, -SHADOW, SHADOW, SHADOW))
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        painter.setPen(Qt.PenStyle.NoPen)
+        box = QRectF(self.rect()).adjusted(SHADOW, SHADOW, -SHADOW, -SHADOW)
+        step = 10 if self.flyouts.dark else 3
+        for spread in range(SHADOW, 0, -1):
+            painter.setBrush(QColor(0, 0, 0, step))
+            painter.drawRoundedRect(box.adjusted(-spread, -spread + 4, spread, spread + 4),
+                                    PANEL_RADIUS + spread, PANEL_RADIUS + spread)
+        painter.end()
+
+
+class FlyoutPanel(QWidget):
+    """One flyout: a rounded box of rows. The widget is the box itself, so the pointer is inside the menu exactly
+    where the box is drawn; its shadow is a separate `FlyoutShadow` behind it."""
+
+    def __init__(self, flyouts, nodes, level, parent=None):
         super().__init__(parent)
         self.setObjectName("railFlyout")
         self.flyouts, self.level = flyouts, level
+        self.shadow = None
         layout = QVBoxLayout(self)
-        inset = SHADOW + PANEL_PADDING
-        layout.setContentsMargins(inset, inset, inset, inset)
+        layout.setContentsMargins(PANEL_PADDING, PANEL_PADDING, PANEL_PADDING, PANEL_PADDING)
         layout.setSpacing(2)
         self.rows = []
         for node in nodes:
@@ -275,50 +282,34 @@ class FlyoutPanel(QWidget):
             row.panel = self
             layout.addWidget(row)
             self.rows.append(row)
-        self.note = None
-        if note:
-            self.note = QLabel(note)
-            self.note.setObjectName("flyoutNote")
-            self.note.setProperty("qg_literal", True)
-            self.note.setToolTip(note_tip)
-            self.note.setAccessibleDescription(note_tip)
-            layout.addSpacing(2)
-            layout.addWidget(self.note)
 
     def fit(self):
-        """Size to the widest row (and the note), within PANEL_MIN_WIDTH..PANEL_MAX_WIDTH."""
+        """Size to the widest row, within PANEL_MIN_WIDTH..PANEL_MAX_WIDTH."""
         self.ensurePolished()
         widths = [row.sizeHint().width() for row in self.rows]
-        if self.note is not None:
-            widths.append(self.note.sizeHint().width())
         inner = max(PANEL_MIN_WIDTH, min(PANEL_MAX_WIDTH, max(widths or [0])))
         for row in self.rows:
             row.setFixedWidth(inner)
         self.layout().activate()
-        inset = SHADOW + PANEL_PADDING
-        self.setFixedSize(inner + 2 * inset, self.layout().sizeHint().height())
+        self.setFixedSize(inner + 2 * PANEL_PADDING, self.layout().sizeHint().height())
 
     def box(self):
-        """The visible box, in this widget's coordinates."""
-        return QRectF(self.rect()).adjusted(SHADOW, SHADOW, -SHADOW, -SHADOW)
+        """The visible box, in this widget's coordinates (the whole widget)."""
+        return QRectF(self.rect())
+
+    def moveEvent(self, event):
+        super().moveEvent(event)
+        if self.shadow is not None:
+            self.shadow.follow(self)
 
     def paintEvent(self, event):
         palette, dark = self.flyouts.palette, self.flyouts.dark
+        from .typography import mix
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
-        painter.setPen(Qt.PenStyle.NoPen)
-        box = self.box()
-        # A soft shadow: rings that add up toward the box, a little lower than it.
-        step = 10 if dark else 3
-        for spread in range(SHADOW, 0, -1):
-            shade = QColor(0, 0, 0, step)
-            painter.setBrush(shade)
-            painter.drawRoundedRect(box.adjusted(-spread, -spread + 4, spread, spread + 4),
-                                    PANEL_RADIUS + spread, PANEL_RADIUS + spread)
-        from .typography import mix
         painter.setBrush(QColor(palette.surface))
         painter.setPen(QPen(QColor(mix(palette.border, palette.surface, 0.15 if dark else 0.0)), 1))
-        painter.drawRoundedRect(box.adjusted(0.5, 0.5, -0.5, -0.5), PANEL_RADIUS, PANEL_RADIUS)
+        painter.drawRoundedRect(self.box().adjusted(0.5, 0.5, -0.5, -0.5), PANEL_RADIUS, PANEL_RADIUS)
         painter.end()
 
     def enterEvent(self, event):
@@ -340,8 +331,7 @@ class RailFlyouts(QObject):
         super().__init__(window)
         self.host, self.window = host, window
         self.panels, self.anchors = [], []   # one panel per level, and the widget it opened from
-        self.roots = {}                      # anchor (rail row, strip button) -> () -> (nodes, note, note tip)
-        self.left_edge = None                # () -> x in host coordinates where a first flyout starts
+        self.roots = {}                      # anchor (rail row, strip button) -> () -> its flyout's nodes
         self.current = lambda: frozenset()   # () -> the `MenuNode.mark`s of what the window shows
         self.palette, self.dark, self.sheet = LIGHT, False, ""
         self._pending = None                 # (level it replaces or closes, action)
@@ -357,7 +347,7 @@ class RailFlyouts(QObject):
 
     # Setup ------------------------------------------------------------------------------------
     def watch_root(self, anchor, nodes):
-        """A rail row or strip button that opens a first flyout; `nodes()` gives (nodes, note, note tip)."""
+        """A rail row or strip button that opens a first flyout; `nodes()` gives its rows' `MenuNode`s."""
         self.roots[anchor] = nodes
         anchor.installEventFilter(self)
 
@@ -391,27 +381,34 @@ class RailFlyouts(QObject):
         return focus is not None and any(panel.isAncestorOf(focus) for panel in self.panels)
 
     def _hit(self, point):
-        """Whether a global point is on a flyout or on a rail row that opens one (by position: a press a row
-        ignores, a right click, reaches its parents too)."""
+        """Whether a global point is on a flyout's box or on a rail row that opens one (by position: a press a row
+        ignores, a right click, reaches its parents too). A flyout's shadow is not the flyout."""
         widgets = [*self.panels, *(root for root in self.roots if root.isVisible())]
         return any(widget.rect().contains(widget.mapFromGlobal(point)) for widget in widgets)
 
     # Opening and closing ----------------------------------------------------------------------
     def open_root(self, anchor, *, focus=False):
-        nodes, note, note_tip = self.roots[anchor]()
-        return self.open(0, anchor, nodes, note=note, note_tip=note_tip, focus=focus)
+        return self.open(0, anchor, self.roots[anchor](), focus=focus)
 
     def open_child(self, row, *, focus=False):
-        node = row.node
-        return self.open(row.level + 1, row, node.children, note=node.note, note_tip=node.note_tip, focus=focus)
+        """The flyout of a row in the open chain; nothing when its panel has closed meanwhile (a switch the pointer
+        scheduled, run after ← / Esc closed that level)."""
+        if row.level >= len(self.panels) or self.panels[row.level] is not getattr(row, "panel", None):
+            return None
+        return self.open(row.level + 1, row, row.node.children, focus=focus)
 
-    def open(self, level, anchor, nodes, *, note="", note_tip="", focus=False):
+    def open(self, level, anchor, nodes, *, focus=False):
         self._cancel()
-        self._closer.stop()
         self.close(level)
-        panel = FlyoutPanel(self, nodes, level, note=note, note_tip=note_tip)
-        panel.setProperty(SKIP_PASS, True)  # rows already in the window language: no window-wide language pass
-        panel.setParent(self.host)
+        self._closer.stop()  # after the close: hiding a flyout under the pointer reports a leave
+        if level > len(self.panels):
+            return None  # its parent flyout is gone: nothing to open beside
+        shadow = FlyoutShadow(self)
+        panel = FlyoutPanel(self, nodes, level)
+        panel.shadow = shadow
+        for widget in (shadow, panel):
+            widget.setProperty(SKIP_PASS, True)  # rows already in the window language: no window-wide language pass
+            widget.setParent(self.host)
         panel.setStyleSheet(self.sheet)
         current, tones = self.current(), self.tones()
         for row in panel.rows:
@@ -424,6 +421,9 @@ class RailFlyouts(QObject):
         anchor.set_open(True)
         self._quiet()
         panel.keyboard, panel.opened_at = bool(focus), time.monotonic()
+        shadow.follow(panel)
+        shadow.show()
+        shadow.raise_()
         panel.show()
         panel.raise_()
         self._listen(True)
@@ -433,20 +433,21 @@ class RailFlyouts(QObject):
         return panel
 
     def _place(self, panel, anchor, level):
-        """Right of the rail (level 0) or of the parent flyout, its first row level with the row it came from,
+        """PANEL_GAP right of the row it came from (a rail row or the strip button at level 0, the parent flyout's
+        box deeper: UI-D11 review, the first flyout sat 19 px off its row), its first row level with that row,
         kept inside the window."""
         host = self.host
         if level == 0:
-            left = self.left_edge() if self.left_edge is not None else anchor.mapTo(host, QPoint(anchor.width(), 0)).x()
+            left = anchor.mapTo(host, QPoint(anchor.width(), 0)).x()
         else:
             parent = self.panels[level - 1]
-            left = parent.x() + parent.width() - SHADOW
+            left = parent.x() + parent.width()
         left += PANEL_GAP
         middle = anchor.mapTo(host, QPoint(0, 0)).y() + anchor.height() / 2
-        top = round(middle - (SHADOW + PANEL_PADDING + ROW_HEIGHT / 2))
-        lowest = host.height() - EDGE_MARGIN - (panel.height() - SHADOW)
-        top = max(EDGE_MARGIN - SHADOW, min(top, lowest))
-        x = min(left - SHADOW, host.width() - EDGE_MARGIN - (panel.width() - SHADOW))
+        top = round(middle - (PANEL_PADDING + ROW_HEIGHT / 2))
+        lowest = host.height() - EDGE_MARGIN - panel.height()
+        top = max(EDGE_MARGIN, min(top, lowest))
+        x = min(left, host.width() - EDGE_MARGIN - panel.width())
         panel.move(x, top)
 
     def close(self, level=0, *, keyboard=False):
@@ -454,6 +455,7 @@ class RailFlyouts(QObject):
         ring when the keyboard closed them)."""
         if len(self.panels) <= level:
             return
+        self._cancel()  # a switch waiting on the pointer targets a level that is closing (UI-D11 review)
         returning = self._focus_inside() or keyboard
         target = self.anchors[level]
         while len(self.panels) > level:
@@ -467,9 +469,11 @@ class RailFlyouts(QObject):
                 else:
                     focus.clearFocus()
             self._quiet()
-            panel.hide()
-            panel.setParent(None)
-            panel.deleteLater()
+            for widget in (panel, panel.shadow):
+                if widget is not None:
+                    widget.hide()
+                    widget.setParent(None)
+                    widget.deleteLater()
         if keyboard and target.isVisible() and not target.hasFocus():
             target.setFocus(Qt.FocusReason.TabFocusReason)
         if not self.panels:
@@ -550,20 +554,30 @@ class RailFlyouts(QObject):
         self._cancel(panel.level)  # reached the flyout already open: no switch away from it
 
     def pointer_out(self, _panel=None):
+        """The pointer left a rail row or a flyout: a switch it scheduled is dropped (a quick swipe out over a lower
+        row must not open that row's flyout after the pointer has gone, UI-D11 review), and unless it comes back
+        everything closes after CLOSE_DELAY_MS."""
+        self._cancel()
         if self.panels:
             self._closer.start()
 
     # Activation and keys ----------------------------------------------------------------------
     def row_clicked(self, row):
+        """A click, Enter or Space: a row with a page of its own (a leaf, or 국내 / 미국 under 주식 and ETF) opens it;
+        a row with only a flyout opens that, with focus in it from the keyboard."""
+        if row.node.leaf:
+            self.activate(row)
+        elif row.node.children:
+            self.descend(row)
+
+    def descend(self, row):
+        """The row's flyout, open (from the keyboard, with focus on its first row)."""
         keyboard = bool(row.property("focusRing"))
-        if row.node.children:
-            if len(self.panels) > row.level + 1 and self.anchors[row.level + 1] is row:
-                if keyboard and self.panels[row.level + 1].rows:
-                    self.panels[row.level + 1].rows[0].setFocus(Qt.FocusReason.TabFocusReason)
-                return
-            self.open_child(row, focus=keyboard)
+        if len(self.panels) > row.level + 1 and self.anchors[row.level + 1] is row:
+            if keyboard and self.panels[row.level + 1].rows:
+                self.panels[row.level + 1].rows[0].setFocus(Qt.FocusReason.TabFocusReason)
             return
-        self.activate(row)
+        self.open_child(row, focus=keyboard)
 
     def activate(self, row):
         """A leaf: every flyout closes, then the window opens it (`activated`). From the keyboard, focus goes
@@ -590,13 +604,14 @@ class RailFlyouts(QObject):
             self.close(level + 1)
             rows[target].setFocus(Qt.FocusReason.TabFocusReason)
             return True
-        if key in (Qt.Key.Key_Right, Qt.Key.Key_Return, Qt.Key.Key_Enter, Qt.Key.Key_Space):
+        if key == Qt.Key.Key_Right:
             if row.node.children:
                 set_focus_ring(row, True)
-                self.row_clicked(row)
-            elif key != Qt.Key.Key_Right:
-                set_focus_ring(row, True)
-                self.activate(row)
+                self.descend(row)
+            return True
+        if key in (Qt.Key.Key_Return, Qt.Key.Key_Enter, Qt.Key.Key_Space):
+            set_focus_ring(row, True)
+            self.row_clicked(row)
             return True
         if key in (Qt.Key.Key_Left, Qt.Key.Key_Escape):
             self.close(level, keyboard=True)
@@ -626,8 +641,7 @@ class RailFlyouts(QObject):
             if kind == QEvent.Type.Enter:
                 self.root_entered(watched)
             elif kind == QEvent.Type.Leave:
-                self._cancel(0)  # passing over a rail row opens nothing
-                self.pointer_out()
+                self.pointer_out()  # passing over a rail row opens nothing
             return False
         if watched is self.window:
             if kind in (QEvent.Type.Resize, QEvent.Type.Move, QEvent.Type.WindowDeactivate, QEvent.Type.Hide):
@@ -644,7 +658,8 @@ class RailFlyouts(QObject):
         return False
 
 
-__all__ = ["RailFlyouts", "FlyoutPanel", "FlyoutRow", "MarketRailRow", "StripMenuButton", "RailAnchor", "ChevronButton",
+__all__ = ["RailFlyouts", "FlyoutPanel", "FlyoutShadow", "FlyoutRow", "MarketRailRow", "StripMenuButton", "RailAnchor",
+           "ChevronButton",
            "draw_chevron", "set_flag",
            "ROW_HEIGHT", "PANEL_PADDING", "PANEL_RADIUS", "SHADOW", "PANEL_GAP", "OPEN_DELAY_MS", "SWITCH_DELAY_MS",
            "CLOSE_DELAY_MS"]

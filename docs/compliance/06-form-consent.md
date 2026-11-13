@@ -169,3 +169,8 @@
 - [Flet AI 전송 흐름](../../ui/ai_panel.py), [네이티브 AI 선택과 미리보기](../../quantgen_desktop/commentary.py), [실제 AI 질문 전송](../../core/quant/insights.py), [필터의 제한](../../core/research/ai_payload.py).
 - [Flet 자산조회 기본값](../../core/research/crypto_workflow.py), [네이티브 자산조회 제어](../../quantgen_desktop/market_tools.py), [Upbit 조회 항목](../../data/crypto/crypto_client.py).
 - [개인정보 방침](01-privacy-policy.md), [공식 근거와 검토 범위](SOURCES.md), [개인정보 보호법](https://www.law.go.kr/법령/개인정보보호법).
+
+
+### 2026-11-13 UI-D11~D15 변경 검토
+
+[시장 메뉴·Q-SCORE v0.2·종목 보고서의 자료 흐름과 제한](FACTS.md#ui-d11-d15-2026-11-13)을 대조했다. 선택한 로컬 파일 저장과 KIS 수정 일별 후보 조회를 기존 무전송 UI 수정과 구분한다. 미확정 사업자·요금·환불·권리 조건을 신설하지 않았으며 기존 공개 준비 보류를 유지한다.

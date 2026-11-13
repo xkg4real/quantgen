@@ -44,6 +44,7 @@ from core.theme import DARK, LIGHT
 from .company_identity import CompanyMark
 from .jobs import Jobs
 from .stock_detail_side import FoldSection, RightColumn
+from .stock_qscore import StockScore
 from .stock_detail_style import (ElidedLabel, icon, icon_size, label, numbers, polite, rich, set_prop, sheet,
                                  text)
 
@@ -1103,6 +1104,11 @@ class StockDetailView(QWidget):
         self.jobs.succeeded.connect(self._profile_loaded)
         self.jobs.failed.connect(self._profile_failed)
         self.jobs.busy_changed.connect(self._jobs_busy)
+        # Owner UI-D13: the open stock's own Q-SCORE, from the daily history the profile loads (stock_qscore).
+        self.score = StockScore(self)
+        self.score.changed.connect(self._render_qscore)
+        self._qscore_key = None
+        self._badge = ("", "")
         self.lock = PageLock(self)
         self.keys = ChartKeys(self)
         root = QVBoxLayout(self)
@@ -1170,7 +1176,8 @@ class StockDetailView(QWidget):
         self.set_theme(False)
         self.set_locale(self.ctx)
 
-    def _feed_state_changed(self, _mode):
+    def _feed_state_changed(self, mode):
+        self.score.set_feed(mode)
         self._render_state()
 
     def _chart_layout_changed(self, _layout):
@@ -1216,6 +1223,15 @@ class StockDetailView(QWidget):
         row.addSpacing(6)
         self.state_chip = label("chip")
         row.addWidget(self.state_chip, 0, Qt.AlignmentFlag.AlignVCenter)
+        # Owner UI-D13: the Q-SCORE badge beside the stock's name (in the toolbar, never over the chart, R-D9-1);
+        # it opens the column's Q-SCORE card.
+        self.qscore_badge = QPushButton()
+        self.qscore_badge.setProperty("sd", "qbadge")
+        self.qscore_badge.setProperty("qg_literal", True)
+        self.qscore_badge.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.qscore_badge.clicked.connect(self.show_qscore)
+        self.qscore_badge.hide()
+        row.addWidget(self.qscore_badge, 0, Qt.AlignmentFlag.AlignVCenter)
         row.addStretch(1)
         self.search = QLineEdit()
         self.search.setObjectName("sdSearch")
@@ -1246,6 +1262,11 @@ class StockDetailView(QWidget):
         self.indicators_button.setProperty("qg_literal", True)
         self.indicators_button.clicked.connect(self.show_indicators)
         row.addWidget(self.indicators_button)
+        self.export_button = QPushButton()
+        self.export_button.setProperty("sd", "text")
+        self.export_button.setProperty("qg_literal", True)
+        self.export_button.clicked.connect(self.export_report)
+        row.addWidget(self.export_button)
         self.watch_button = QPushButton()
         self.watch_button.setCheckable(True)
         self.watch_button.setProperty("sd", "text")
@@ -1278,6 +1299,8 @@ class StockDetailView(QWidget):
         self.more_pause.triggered.connect(self._pause_clicked)
         self.more_notes = self.more_menu.addAction("")
         self.more_notes.triggered.connect(lambda: self._show_notes(anchor=self.more_button))
+        self.more_export = self.more_menu.addAction("")
+        self.more_export.triggered.connect(self.export_report)
         self.more_button.clicked.connect(self._show_more)
         self.more_button.hide()
         return bar
@@ -1372,6 +1395,7 @@ class StockDetailView(QWidget):
         self._live_price = None
         self._epoch += 1
         self._side_snapshot = None
+        self.score.open(instrument)
         self.adopt_chart()
         if self.chart.asset.currentData() != instrument.asset:
             self.chart.set_asset_class(instrument.asset)
@@ -1463,13 +1487,16 @@ class StockDetailView(QWidget):
         self._reload = False
         epoch, instrument, loader = self._epoch, self.instrument, self.profile_loader
         self._job_epoch = epoch
-        return self.jobs.start(lambda: (epoch, loader(instrument)))
+        started = self.jobs.start(lambda: (epoch, loader(instrument)))
+        self._render_qscore()   # 'loading' while the daily history is on its way
+        return started
 
     @pyqtSlot(bool)
     def _jobs_busy(self, busy):
         # Jobs emits succeeded/failed before it clears its job, so a refused load is retried here.
         if not busy and self._reload and self._job_epoch != self._epoch:
             QTimer.singleShot(0, self.load_profile)
+        self._render_qscore()
 
     @pyqtSlot(object)
     def _profile_loaded(self, value):
@@ -1479,6 +1506,7 @@ class StockDetailView(QWidget):
         self.profile = profile
         self.profile_status.setText("")
         self.profile_status.hide()
+        self.score.set_history(*self._score_history(profile))
         self.chart.supply = self._supply()
         self.render_header()
         self.render_sections()
@@ -1493,6 +1521,18 @@ class StockDetailView(QWidget):
         self.profile_status.show()
         self.side.retry_button.setText(text(_lang(self.ctx), "retry"))
         self.side.retry_button.show()
+        if self.profile is None:
+            self.score.set_history(None, "history_unavailable")
+
+    @staticmethod
+    def _score_history(profile):
+        """(daily history, reason) for the Q-SCORE: the profile's adjusted daily request (StockProfile.daily_snapshot;
+        the chart's own request is unadjusted, which the engine refuses), or None and why there is none."""
+        snapshot = profile.daily_snapshot() if hasattr(profile, "daily_snapshot") else None
+        if snapshot is not None:
+            return snapshot, ""
+        codes = set((getattr(profile, "reasons", None) or {}).values())
+        return None, "future_history" if "future_history" in codes else "history_unavailable"
 
     def _supply(self):
         """KIS supply/demand rows the profile already read (investor flows, short sales) for the chart studies."""
@@ -1521,6 +1561,7 @@ class StockDetailView(QWidget):
         if self.instrument is None or not _same(tick.instrument, self.instrument):
             return
         self._live_price = (tick.price, tick.change_pct, tick.change)
+        self.score.accept_tick(tick)
         self.render_header()
 
     def _chart_rendered(self):
@@ -1706,6 +1747,10 @@ class StockDetailView(QWidget):
         self.notes.show()
         QTimer.singleShot(0, lambda: self.side.stock_scroll.ensureWidgetVisible(self.notes, 0, 24))
 
+    def export_report(self):
+        from .stock_report import export_dialog
+        return export_dialog(self)
+
     def _show_more(self):
         """⋯ (narrow windows): stop or reconnect, and the data notes."""
         lang = _lang(self.ctx)
@@ -1713,6 +1758,8 @@ class StockDetailView(QWidget):
         streaming = facts["streaming"] or facts["polling"] or facts["busy"] or facts["auto"]
         self.more_pause.setText(text(lang, "pause" if streaming else "resume"))
         self.more_notes.setText(text(lang, "notes"))
+        from .stock_report import text as export_text
+        self.more_export.setText(export_text(lang, "export"))
         self.more_menu.popup(self.more_button.mapToGlobal(QPoint(0, self.more_button.height() + 4)))
 
     def set_focus_mode(self, on):
@@ -1863,9 +1910,9 @@ class StockDetailView(QWidget):
 
     # Toolbar compaction (spec 2.3), applied one step at a time until the stock's name has its room:
     # 1 the star drops its words, 2 back keeps only its arrow, 3 the search narrows to 140, 4 stop/reconnect and
-    # the data notes move into ⋯, 5 the company mark goes, 6 the market state moves under the name. Only when the
-    # name would still get less than NAME_LEAST: 7 the search, 8 the Indicators button give way (the column and
-    # its tab remain).
+    # the data notes move into ⋯, 5 the company mark goes and the Q-SCORE badge drops its stars, 6 the market state
+    # moves under the name. Only when the name would still get less than NAME_LEAST: 7 the search, 8 the Indicators
+    # button give way (the column and its tab remain).
     LEVELS = 8
 
     def _apply_level(self, level):
@@ -1875,11 +1922,15 @@ class StockDetailView(QWidget):
         self.back_button.setText("←" if level >= 2 else text(lang, "back"))
         self.search.setFixedWidth(SEARCH_NARROW if level >= 3 else SEARCH_WIDE)
         menu = level >= 4
+        self.export_button.setVisible(not menu)
         self.pause_button.setVisible(not menu)
         self.notes_button.setVisible(not menu)
         self.more_button.setVisible(menu)
         self.mark.setVisible(level < 5 and self.instrument is not None and
                              self.instrument.asset in ("domestic_stock", "overseas_stock"))
+        badge = self._badge[1] if level >= 5 else self._badge[0]
+        if badge != self.qscore_badge.text():
+            self.qscore_badge.setText(badge)
         inline = level >= 6
         self.state_chip.setVisible(not inline)
         self.state_inline.setVisible(inline and bool(self.state_inline.text()))
@@ -2140,14 +2191,71 @@ class StockDetailView(QWidget):
         if changed:
             self._fit_toolbar()   # the chip's words changed width
 
+    def qscore_shown(self):
+        """(result, state) the Q-SCORE card and badge show: the newer ready score of the screen's own and the app's
+        (stock_qscore.pick), else the screen's own answer; result None with state 'waiting', 'loading' or
+        'computing' while the daily history or the first calculation is on its way."""
+        from .stock_qscore import pick, ready
+        own = self.score.result
+        shown = pick(own, self.chart.q_score_result())
+        if ready(shown) or own is not None or self.score.state not in ("waiting", "computing"):
+            return shown, ""
+        if self.score.state == "computing":
+            return None, "computing"
+        return None, "loading" if self.jobs.busy else "waiting"
+
     def _render_qscore(self):
-        """The Q-SCORE chip says what Q-SCORE is (the glossary summary), not where a table's '?' would be."""
-        chip = self.side.card.qscore
-        shown = self.chart.q_score_text()
-        chip.setVisible(shown is not None)
-        if shown is not None:
-            chip.setText(shown[0])
-            chip.setToolTip(text(_lang(self.ctx), "qscore_tip"))
+        """The Q-SCORE card in the column and the badge in the toolbar (owner UI-D13); drawn again only when the
+        score, its state, the language or the theme changed, so the chart's frequent renders cost nothing here."""
+        from .stock_qscore import as_of_text, badge_text, reading, ready, reason, shown_score
+        from .typography import mix
+        if self.instrument is None:
+            self.qscore_badge.hide()
+            self._qscore_key = None
+            return
+        lang = _lang(self.ctx)
+        shown, state = self.qscore_shown()
+        key = (lang, self.dark, shown, state)
+        if key == self._qscore_key:
+            return
+        self._qscore_key = key
+        p = self.palette
+        track = mix(p.border, p.bg, 0.2)
+        self.side.qscore.show_score(shown, language=lang, state=state,
+                                    colors=(track, p.accent, mix(p.border, p.bg, 0.05), p.accent))
+        self._badge = (badge_text(shown, lang, state=state), badge_text(shown, lang, state=state, short=True))
+        badge = self.qscore_badge
+        good = ready(shown)
+        set_prop(badge, "tone", "ready" if good else "none")
+        if good:
+            tip = "\n".join(t for t in (reading(shown, lang), as_of_text(shown, lang), text(lang, "qscore_tip")) if t)
+            name = text(lang, "qs_badge_name", score=shown_score(shown), stars=int(shown["stars"]))
+        else:
+            why, fix = reason(shown, lang, state=state)
+            tip = "\n".join(t for t in (why, fix, text(lang, "qscore_tip")) if t)
+            name = text(lang, "qs_badge_none_name", why=why)
+        badge.setToolTip(tip)
+        badge.setAccessibleName(name)
+        badge.show()
+        wanted = self._badge[1] if self._level >= 5 else self._badge[0]
+        if badge.text() != wanted:
+            badge.setText(wanted)
+            self._fit_toolbar()    # the badge's width changed
+
+    def show_qscore(self):
+        """The badge: the column (shown again if hidden or in focus mode), its 종목 tab, scrolled to the card."""
+        if self.instrument is None:
+            return
+        if not self.body.side_shown():
+            self.set_side_shown(True)
+        self.side.set_page(0)
+        self._scroll_to_qscore()
+        QTimer.singleShot(0, self._scroll_to_qscore)   # again once a column shown just now has its layout
+
+    def _scroll_to_qscore(self):
+        card, page = self.side.qscore, self.side.stock_page
+        bar = self.side.stock_scroll.verticalScrollBar()
+        bar.setValue(max(0, card.mapTo(page, QPoint(0, 0)).y() - 8))
 
     def _clear_sections(self):
         self.__dict__["_technical_blocks"] = {}     # the sections delete their blocks: build new ones
@@ -2487,6 +2595,9 @@ class StockDetailView(QWidget):
         self.interval_combo.setAccessibleName(text(lang, "interval_name"))
         self.interval_combo.setToolTip(text(lang, "interval_name"))
         self.indicators_button.setText(text(lang, "indicators_button"))
+        from .stock_report import text as export_text
+        self.export_button.setText(export_text(lang, "export"))
+        self.export_button.setToolTip(export_text(lang, "export_tip"))
         for button, kind, tip in ((self.refresh_button, "refresh", "refresh"), (self.notes_button, "info", "notes")):
             button.setIcon(icon(kind, p.muted))
             button.setToolTip(text(lang, tip))
@@ -2532,6 +2643,7 @@ class StockDetailView(QWidget):
         self.render_header()
         self.render_sections()
         self._sync_periods()
+        self._render_qscore()      # relabelled from the result it has: nothing is computed again
         if self.instrument is not None:
             self._refresh_side(force=True)
             if self.chart.detail:
@@ -2552,6 +2664,7 @@ class StockDetailView(QWidget):
         self._toolbar_texts()
         if not self.notes.isHidden():
             self.notes.fill()     # its close icon follows the theme
+        self._render_qscore()
         if self.instrument is not None:
             self._refresh_side(force=True)
             if self.chart.detail and self.chart.snapshot is not None:
@@ -2559,6 +2672,7 @@ class StockDetailView(QWidget):
 
     def stop(self):
         self._epoch += 1
+        self.score.stop()
         self.side.watchlist.stop()
         self.side_timer.stop()
         if self.body.focus:

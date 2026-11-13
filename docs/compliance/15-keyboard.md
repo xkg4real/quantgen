@@ -244,3 +244,8 @@ Qt offscreen 합성 키 입력 시험(메뉴 키·Ctrl+B·하위 항목, Home �
 - **지수 띠:** 칸은 포커스를 받지 않아 출처·마지막 날짜는 tooltip(마우스)으로만 읽습니다. 값과 등락은 화면 글자와 칸의 접근성 이름에 있습니다([지수 띠](../../quantgen_desktop/market_summary.py) `SummaryTile`).
 
 Qt offscreen 합성 키 입력 시험은 통과했습니다([화면 시험](../../tests/desktop_home_markets_markets_acceptance.py) `MarketPageTests`·`MarketReviewTests`, [메뉴 시험](../../tests/desktop_home_markets_shell_acceptance.py)). 화면 전체의 실제 Tab 순서, 실제 Windows 키보드·IME, 스크린리더는 확인하지 않았습니다. `review-required`와 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#ui-d10-markets-2026-11-11)
+
+
+### 2026-11-13 UI-D11~D15 변경 검토
+
+[시장 메뉴·Q-SCORE v0.2·종목 보고서의 자료 흐름과 제한](FACTS.md#ui-d11-d15-2026-11-13)을 대조했다. 선택한 로컬 파일 저장과 KIS 수정 일별 후보 조회를 기존 무전송 UI 수정과 구분한다. 미확정 사업자·요금·환불·권리 조건을 신설하지 않았으며 기존 공개 준비 보류를 유지한다.

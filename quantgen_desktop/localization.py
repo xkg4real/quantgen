@@ -82,8 +82,8 @@ class LanguageController(QObject):
     def eventFilter(self, watched, event):
         if event.type() in (QEvent.Type.LayoutRequest, QEvent.Type.ChildAdded,
                             QEvent.Type.PolishRequest):
-            if event.type() == QEvent.Type.ChildAdded and _skipped(event.child()):
-                return False
+            if event.type() == QEvent.Type.ChildAdded and not _new_widget(event.child()):
+                return False  # a skipped widget, or no widget at all (a style animation, a timer): nothing to translate
             if event.type() == QEvent.Type.LayoutRequest and id(watched) in self._quiet:
                 return False
             self.schedule()
@@ -199,6 +199,13 @@ class LanguageController(QObject):
 
 def _skipped(obj):
     return isinstance(obj, QWidget) and bool(obj.property(SKIP_PASS))
+
+
+def _new_widget(child):
+    """Whether a ChildAdded brings a widget a pass must visit. Only widgets carry text; the style adds and removes
+    animation objects whenever a widget over the page is shown or hidden (UI-D11 review: each flyout opened or closed
+    started a pass over the whole window, about 0.14 s). `isWidgetType` holds while the child is still being built."""
+    return child is not None and child.isWidgetType() and not _skipped(child)
 
 
 def locale_picker(ctx,parent=None):

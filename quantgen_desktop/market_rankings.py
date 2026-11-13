@@ -504,9 +504,9 @@ class Chip(QPushButton):
 # numbers at 1440 px. The row now shows the figures the quotes carry (거래대금 · 거래량 · 시가총액, the ranked one
 # emphasised), the sector as a tag and, on the daily path, the sparkline right after the name; whatever width is
 # left beyond NAME_TARGET is shared among the columns so the numbers sit near the names they belong to.
-FIGURES = ("value", "volume", "cap")
+FIGURES = ("value", "volume", "cap", "qscore")
 COLUMN_KEYS = ("spark", "sector", "price", "change") + FIGURES  # the sparkline right after the name
-COLUMN_MIN = {"sector": 84, "spark": SPARK_WIDTH, "price": 96, "change": 80, "value": 92, "volume": 96, "cap": 96}
+COLUMN_MIN = {"sector": 84, "spark": SPARK_WIDTH, "price": 96, "change": 80, "value": 92, "volume": 96, "cap": 96, "qscore": 106}
 COLUMN_MAX = {"sector": 100, "spark": 220}
 COLUMN_MAX_NUMBER = 200
 NAME_MIN, NAME_TARGET = 150, 200
@@ -643,10 +643,15 @@ class RankRow(QFrame):
         set_tone(self.change, tone)
         tips = tips or {}
         for key, label in self.figures.items():
-            amount = {"value": record.trading_value, "volume": record.volume, "cap": record.market_cap}[key]
+            amount = {"value": record.trading_value, "volume": record.volume, "cap": record.market_cap, "qscore": record.q_score}[key]
             _kind, unit = R.value_unit(key, member.group)
-            label.setText(R.compact(amount, unit, language))
+            label.setText(("—" if amount is None else f"{int(amount)} " + "★" * min(5, 1 + int(amount // 20)))
+                          if key == "qscore" else R.compact(amount, unit, language))
             label.setToolTip(tips.get(key, ""))
+            if key == "qscore":
+                from .stock_qscore import reason, as_of_text
+                label.setToolTip(as_of_text(record.q_result, language) if amount is not None else
+                                 " · ".join(reason(record.q_result, language)))
             _set_flag(label, "ranked", key == ranked)
         tones = TONE_COLORS[bool(dark)]
         closes = record.closes
@@ -943,7 +948,7 @@ def _ro(word):
     return "(으)로"
 
 
-FIGURE_FIELDS = {"value": "trading_value", "volume": "volume", "cap": "market_cap"}
+FIGURE_FIELDS = {"value": "trading_value", "volume": "volume", "cap": "market_cap", "qscore": "q_score"}
 
 
 class RankingBoard(QFrame):
@@ -988,6 +993,9 @@ class RankingBoard(QFrame):
         self.jobs.failed.connect(self._failed)
         self.jobs.busy_changed.connect(self._busy)
         self._progress.connect(self._on_progress)
+        from .ranking_scores import RankingScores
+        self.scores = RankingScores(self)
+        self.scores.changed.connect(self.render)
         self.tick = QTimer(self)
         self.tick.setInterval(1000)
         self.tick.timeout.connect(self._tick)
@@ -1623,12 +1631,14 @@ class RankingBoard(QFrame):
 
     def hideEvent(self, event):
         self.tick.stop()
+        self.scores.stop()
         self.sticky.hide()
         super().hideEvent(event)
 
     def stop(self):
         """Window closing: cancel the fetch between requests, drop its answer, start nothing more."""
         self.tick.stop()
+        self.scores.stop()
         self.sticky.hide()
         self._stopped, self._pending = True, False
         self._epoch += 1
@@ -2048,8 +2058,22 @@ class RankingBoard(QFrame):
         batch = self.batches.get(group)
         # Market cap: a stock whose figure could not be read (US) or was refused (domestic: KIS's hts_avls
         # disagreed with listed shares x price, or could not be checked) is listed last, unranked, as '—'.
-        missing = "last" if screen.category == "cap" else "omit"
-        rows = screen.apply(batch.records, limit=self.limit, missing=missing) if batch is not None else []
+        missing = "last" if screen.category in ("cap", "qscore") else "omit"
+        records = batch.records if batch is not None else ()
+        if group in ("kr", "us"):
+            if self.category == "qscore" and self.auto_load and self.isVisible() and not self._stopped:
+                self.scores.ensure(group, records, self.clock())
+            from core.market.qscore_rankings import CANDIDATES
+            candidates = {r.member.code for r in sorted(records, key=lambda r: (r.trading_value is None, -(r.trading_value or 0), r.member.code))[:CANDIDATES]}
+            enriched = []
+            for record in records:
+                result = self.scores.result(record.member.instrument, self.clock())
+                if result is None:
+                    result = {"status": "unavailable", "reason": "ranking_waiting" if record.member.code in candidates else "not_in_candidates"}
+                score = result.get("score") if result.get("status") == "ready" else None
+                enriched.append(replace(record, q_score=score, q_result=result))
+            records = enriched
+        rows = screen.apply(records, limit=self.limit, missing=missing) if batch is not None else []
         self.ranked = rows
         figure, _unit = R.value_unit(screen.category, group)
         figures = tuple(key for key in FIGURES if key == figure or (
@@ -2087,7 +2111,7 @@ class RankingBoard(QFrame):
             button.setText(action[0] if action else "")
             button.setVisible(action is not None)
         self.empty_actions_host.setVisible(bool(actions) and not rows)
-        self.footnote.setText(self._footnote(batch))
+        self.footnote.setText(self._footnote(batch) + (("\nQ-SCORE · 실험적 지표 · 투자 권유 아님 · 거래대금 기준 최대 20개 후보 · 수정 일별 기준" if lang == "ko" else "\nQ-SCORE · Experimental indicator · Not investment advice · Up to 20 trading-value candidates · Adjusted daily basis") if self.category == "qscore" else ""))
         self._render_active(rows)
         self._sync_summary()
         self._render_status()

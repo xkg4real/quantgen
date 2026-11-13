@@ -205,7 +205,7 @@ class ShellRailTests(unittest.TestCase):
         self.assertEqual(tuple(b.text() for b in w.market_sections.values()), ENGLISH)
         self.assertNotIn("search", w.nav)
         self.assertEqual(len(w.nav), 8)
-        self.assertFalse(w.market_submenu.isVisible())
+        self.assertTrue(w.market_submenu.isVisible())
         w.nav["markets"].click()
         self.settle()
         self.assertTrue(w.market_submenu.isVisible())
@@ -213,7 +213,7 @@ class ShellRailTests(unittest.TestCase):
         self.assertTrue(w.market_submenu.isVisible())
         for route in w.nav:
             w.navigate(route)
-            self.assertEqual(w.market_submenu.isVisible(), route == "markets", route)
+            self.assertTrue(w.market_submenu.isVisible(), route)
         w.navigate("markets")
         self.settle()
         for row in w.market_sections.values():
@@ -224,7 +224,7 @@ class ShellRailTests(unittest.TestCase):
         w.markets_view.show_market = Mock()
         fly = w.rail_flyouts
         for key, title in zip(CATEGORY_KEYS, ENGLISH):
-            w.market_sections[key].click()
+            fly.open_root(w.market_sections[key])
             self.settle()
             with self.subTest(key=key):
                 self.assertEqual(fly.open_path(), (title,))
@@ -266,11 +266,10 @@ class ShellRailTests(unittest.TestCase):
         self.assertEqual(shell_rail.page_categories("crypto"), ("value", "gainers", "losers"))
         for page in ("etf_kr", "etf_us"):
             self.assertEqual(shell_rail.page_categories(page), ("value", "volume", "gainers", "losers"))
-        self.assertEqual(shell_rail.page_categories("kr"), ("value", "volume", "gainers", "losers", "cap"))
+        self.assertEqual(shell_rail.page_categories("kr"), ("value", "volume", "gainers", "losers", "cap", "qscore"))
         etf = next(node for node in shell_rail.market_menu("ko") if node.key == "etf")
         self.assertEqual([n.text for n in etf.children], ["국내", "미국"])
-        self.assertEqual({n.note for n in etf.children}, {"시가총액 순위 없음"})
-        self.assertTrue(all("순자산(AUM)" in n.note_tip for n in etf.children))  # the reason, as a tooltip
+        self.assertTrue(all(n.leaf == ("market", n.key, "") for n in etf.children))
         self.assertEqual(shell_rail.market_sections(), tuple(zip(CATEGORY_KEYS, ENGLISH)))
 
     def test_hover_opens_three_levels_aligned_with_their_rows_and_leaving_closes_them(self):
@@ -286,16 +285,16 @@ class ShellRailTests(unittest.TestCase):
         first = fly.panels[0]
         self.assertEqual([r.text() for r in first.rows], ["Korea", "US"])
         self.assertLessEqual(abs(middle(first.rows[0]) - middle(stocks)), 1)  # level with the row it came from
-        self.assertEqual(first.x() + SHADOW, w.sidebar.width() + PANEL_GAP)  # right of the rail
+        self.assertEqual(first.x(), stocks.mapTo(host, QPoint(stocks.width(), 0)).x() + PANEL_GAP)  # right of the rail
         self.assertTrue(stocks.open)
         self.hover(first.rows[0])
         self.assertEqual(fly.open_path(), ("Stocks", "Korea"))
         second = fly.panels[1]
         self.assertEqual([r.text() for r in second.rows], ["Trading value", "Volume", "Top gainers", "Top losers",
-                                                          "Market cap"])
+                                                          "Market cap", "Q-SCORE highest first"])
         self.assertEqual([r.node.leaf for r in second.rows][0], ("market", "kr", "value"))
         self.assertLessEqual(abs(middle(second.rows[0]) - middle(first.rows[0])), 1)
-        self.assertEqual(second.x() + SHADOW, first.x() + first.width() - SHADOW + PANEL_GAP)
+        self.assertEqual(second.x(), first.x() + first.width() + PANEL_GAP)
         self.assertTrue(all(r.height() == ROW_HEIGHT for r in (*first.rows, *second.rows)))
         self.assertEqual([r.chevron for r in first.rows], [True, True])
         self.assertFalse(any(r.chevron for r in second.rows))
@@ -360,7 +359,7 @@ class ShellRailTests(unittest.TestCase):
                         self.assertEqual(w.stack.currentIndex(), w.route_indices["home"])
                         self.assertEqual(w.home_view.selected, leaf.leaf[1])
                         self.assertTrue(w.nav["home"].isChecked())
-                        self.assertEqual(highlighted, [shell_rail.HOME_CATEGORY[leaf.leaf[1]]])
+                        self.assertEqual(highlighted, [])
                     else:
                         _kind, name, sub = leaf.leaf
                         pane = getattr(w, name)
@@ -369,15 +368,15 @@ class ShellRailTests(unittest.TestCase):
                         self.assertTrue(w.tool_buttons[name].isChecked())
                         if sub:
                             self.assertEqual(pane.tool.currentData(), sub)
-                        self.assertEqual(highlighted, [shell_rail.TOOL_CATEGORY[name]])
+                        self.assertEqual(highlighted, [])
         # Another tool picked on that page: the rows stay; the highlight follows the tool.
         w.show_tool(w.structuring)
         self.assertTrue(w.market_submenu.isVisible())
         self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], [])
         w.show_tool(w.rates)
-        self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], ["govt"])
+        self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], [])
         w.nav["guide"].click()  # a page chosen in the rail: the 시장 rows fold away again
-        self.assertFalse(w.market_submenu.isVisible())
+        self.assertTrue(w.market_submenu.isVisible())
 
     def test_keyboard_opens_walks_and_closes_the_flyouts(self):
         w = self.window()
@@ -413,7 +412,7 @@ class ShellRailTests(unittest.TestCase):
         self.assertTrue(etf.property("focusRing"))
         QTest.keyClick(etf, Qt.Key.Key_Return)  # Enter opens it too
         self.assertIs(focus(), fly.panels[0].rows[0])
-        QTest.keyClick(focus(), Qt.Key.Key_Return)  # 국내
+        QTest.keyClick(focus(), Qt.Key.Key_Right)  # 국내 rankings; Enter opens its page
         QTest.keyClick(focus(), Qt.Key.Key_Down)  # 거래량
         QTest.keyClick(focus(), Qt.Key.Key_Return)
         self.settle()
@@ -513,7 +512,7 @@ class ShellRailTests(unittest.TestCase):
         self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], ["stocks"])
         view.current_market = lambda: None  # the page reports nothing: the last choice is kept
         view.showing_stock = lambda: False
-        w.market_sections["crypto"].click()  # a click opens the flyout; it does not move the highlight
+        w.rail_flyouts.open_root(w.market_sections["crypto"])  # hovering only opens the flyout
         self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], ["stocks"])
         w.rail_flyouts.close_all()
         w.navigate("guide")
@@ -574,8 +573,7 @@ class ShellRailTests(unittest.TestCase):
                 self.assertEqual([r.text() for r in fly.panels[1].rows],
                                  ["거래대금", "거래량", "급상승", "급하락"] if korean
                                  else ["Trading value", "Volume", "Top gainers", "Top losers"])
-                self.assertEqual(fly.panels[1].note.text(), "시가총액 순위 없음" if korean else "No ranking by market cap")
-                self.assertIn("순자산" if korean else "net assets", fly.panels[1].note.toolTip())
+                self.assertTrue(all(r.node.leaf[2] != "cap" for r in fly.panels[1].rows))
                 fly.close_all()
                 fly.open_root(buttons["fx"])
                 self.assertEqual(fly.panels[0].rows[1].text(), "현물·선물환·캐리" if korean else "Spot, forward && carry")
@@ -653,7 +651,7 @@ class ShellRailTests(unittest.TestCase):
         self.settle()
         self.assertEqual(w.stack.currentIndex(), w.route_indices["tools"])
         self.assertFalse(w.nav["tools"].property("focusRing"))
-        self.assertFalse(w.market_submenu.isVisible())
+        self.assertTrue(w.market_submenu.isVisible())
 
     def test_short_window_scrolls_the_rail_to_the_focused_item(self):
         w = self.window()
@@ -685,8 +683,8 @@ class ShellRailTests(unittest.TestCase):
             with self.subTest(theme=index):
                 image = w.sidebar.grab().toImage()
                 nav_host = w.rail_scroll.widget()
-                spot = nav_host.mapTo(w.sidebar, nav_host.rect().bottomLeft())
-                self.assertEqual(QColor(image.pixel(spot.x() + 20, spot.y() - 3)).name(), palette.surface.lower())
+                spot = w.rail_scroll.viewport().mapTo(w.sidebar, QPoint(2, 2))
+                self.assertEqual(QColor(image.pixel(spot.x(), spot.y())).name(), palette.surface.lower())
                 self.assertFalse(w.sidebar_hide.icon().isNull())
                 self.assertFalse(w.sidebar_show.icon().isNull())
                 rail = w.sidebar.styleSheet()
@@ -717,8 +715,8 @@ class ShellRailTests(unittest.TestCase):
                 self.assertEqual(panel.styleSheet(), flyout_stylesheet(palette, bool(index)))
                 self.assertNotRegex(panel.styleSheet(), r"font-weight:\s*(700|800|900|bold)")
                 shot = panel.grab().toImage()
-                self.assertEqual(QColor(shot.pixel(SHADOW + 3, panel.height() // 2)).name(), palette.surface.lower())
-                edge = QColor(shot.pixel(SHADOW, panel.height() // 2))
+                self.assertEqual(QColor(shot.pixel(3, panel.height() // 2)).name(), palette.surface.lower())
+                edge = QColor(shot.pixel(0, panel.height() // 2))
                 self.assertNotEqual(edge.name(), palette.surface.lower())  # the line
                 self.assertLess(abs(edge.lightness() - surface.lightness()), 60)  # a light one
                 self.assertTrue(checked.open)

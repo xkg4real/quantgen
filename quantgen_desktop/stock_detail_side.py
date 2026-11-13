@@ -4,8 +4,9 @@ Owner: "그냥 좌측에 존나큰차트 존나크게, 이런 공간 부족해�
 "오른쪽의 스크롤 필요한 메뉴들은 움직이는거고, 차트쪽은 스크롤로 위아래 이동이 안되는거야. 오른쪽만 움직이는거지 스크롤이".
 One fixed-width column, the only part of the screen that scrolls: a compact watchlist with folding groups, the
 symbol card (big price, change, an honest market state, volume against its 30-session average, the 52-week bar),
-"지금 이 차트" (four plain readings), then folding sections that show 3-4 figures each with the rest behind
-"더 보기", and one muted line naming what this screen does not provide. A second page holds the indicator picker.
+the open stock's Q-SCORE card (owner UI-D13), "지금 이 차트" (four plain readings), then folding sections that show
+3-4 figures each with the rest behind "더 보기", and one muted line naming what this screen does not provide. A second
+page holds the indicator picker.
 """
 from __future__ import annotations
 
@@ -663,9 +664,6 @@ class SymbolCard(QWidget):
         layout.addLayout(figures)
         self.state = label("state", wrap=True)
         layout.addWidget(self.state)
-        self.qscore = label("qscore")
-        self.qscore.hide()
-        layout.addWidget(self.qscore, 0, Qt.AlignmentFlag.AlignLeft)
         layout.addSpacing(6)
         volume = QHBoxLayout()
         self.volume = numbers(label("body"))
@@ -832,6 +830,10 @@ class RightColumn(QFrame):
         body.addWidget(rule())
         self.card = SymbolCard()
         body.addWidget(self.card)
+        # Owner UI-D13 (R-D13-1): the open stock's Q-SCORE card right under the price, high in the 종목 tab.
+        from .stock_qscore import QScoreCard
+        self.qscore = QScoreCard()
+        body.addWidget(self.qscore)
         body.addWidget(rule())
         self.now = NowCard()
         body.addWidget(self.now)

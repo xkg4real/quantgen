@@ -44,7 +44,7 @@ class UniverseTests(unittest.TestCase):
     def test_contract_keys_and_tables(self):
         self.assertEqual(R.CATEGORIES, (("value", "Trading value", "거래대금"), ("volume", "Volume", "거래량"),
                                         ("gainers", "Top gainers", "급상승"), ("losers", "Top losers", "급하락"),
-                                        ("cap", "Market cap", "시가총액")))
+                                        ("cap", "Market cap", "시가총액"), ("qscore", "Q-SCORE highest first", "Q-SCORE 높은 순")))
         self.assertEqual(R.MARKET_KEYS, ("kr", "kospi", "kosdaq", "us"))
         self.assertEqual({k for k, _e, _k in R.STATES}, {"polled", "polled_us", "closed", "stale", "daily", "none"})
         self.assertEqual(R.CAP_LABELS, (("provider", "Market cap", "시가총액"),

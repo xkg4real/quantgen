@@ -64,7 +64,8 @@ __all__ = ("CATEGORIES", "CATEGORY_KEYS", "MARKETS", "MARKET_KEYS", "SECTORS", "
 
 # (key, English, Korean). The interface contract between the native UI areas pins CATEGORIES exactly.
 CATEGORIES = (("value", "Trading value", "거래대금"), ("volume", "Volume", "거래량"),
-              ("gainers", "Top gainers", "급상승"), ("losers", "Top losers", "급하락"), ("cap", "Market cap", "시가총액"))
+              ("gainers", "Top gainers", "급상승"), ("losers", "Top losers", "급하락"), ("cap", "Market cap", "시가총액"),
+              ("qscore", "Q-SCORE highest first", "Q-SCORE 높은 순"))
 CATEGORY_KEYS = tuple(key for key, _en, _ko in CATEGORIES)
 MARKETS = (("kr", "All Korea", "국내 전체"), ("kospi", "KOSPI", "코스피"), ("kosdaq", "KOSDAQ", "코스닥"),
            ("us", "US", "미국"))
@@ -387,6 +388,9 @@ class QuoteRecord:
                                   # a positive whole number), 'unverified' (hts_avls without a share count to
                                   # check it), 'absent' (neither in the answer)
 
+    q_score: float | None = None
+    q_result: dict | None = None
+
     @property
     def listing(self):
         return self.market or self.member.market
@@ -422,11 +426,15 @@ def ranking_value(record, category):
         return record.change_pct
     if category == "cap":
         return record.market_cap
+    if category == "qscore":
+        return record.q_score
     raise ValueError(f"Unknown category {category!r}")
 
 
 def value_unit(category, group):
     """What the right-hand column shows: ('trading value' | 'volume' | 'market cap', unit for `compact`)."""
+    if category == "qscore":
+        return "qscore", "score"
     money = "krw" if group in ("kr", "etf_kr") else "usd"
     if category == "volume":
         return "volume", "shares"
@@ -466,10 +474,10 @@ def rank(records, category, *, market="kr", sector="", limit=30, missing="omit")
         keyed = [(v, r) for v, r in keyed if _finite(v) and v < 0]
         keyed.sort(key=lambda item: (item[0], item[1].member.code))
     else:
-        keyed = [(v, r) for v, r in keyed if _finite(v) and v > 0]
+        keyed = [(v, r) for v, r in keyed if _finite(v) and (v >= 0 if category == "qscore" else v > 0)]
         keyed.sort(key=lambda item: (-item[0], item[1].member.code))
     rows = [RankedRow(index + 1, record, value) for index, (value, record) in enumerate(keyed[:max(0, int(limit))])]
-    if missing == "last" and rows and category not in ("gainers", "losers"):
+    if missing == "last" and (rows or category == "qscore") and category not in ("gainers", "losers"):
         ranked = {id(r) for _v, r in keyed}
         rows += [RankedRow(0, r, None) for r in pool if id(r) not in ranked]
     return rows

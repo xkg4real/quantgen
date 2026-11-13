@@ -72,6 +72,10 @@ def sub_text(page, sub, language):
 
 def category_note(page, category):
     """Why `page` cannot rank by `category` (English source text), or '' when it can."""
+    if category == "qscore":
+        from .qscore_rankings import ENABLED
+        if not ENABLED or page not in ("kr", "us"):
+            return "Q-SCORE is available for Korean and US stocks only."
     return CATEGORY_NOTES.get((page, category), "")
 
 
