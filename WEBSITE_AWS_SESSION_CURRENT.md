@@ -29,6 +29,15 @@
 - 서울 SES는 여전히 SCP 차단으로 상태 미확인입니다. Sydney의 결과를 서울에 적용하지 않습니다. 리소스 생성·설정 변경·메일 발송·웹 정책의 리전 변경은 하지 않습니다.
 - 다음은 프로젝트 리전 Sydney의 기존 Cognito 풀 목록 조회이며 새 풀/클라이언트를 만들지 않습니다. 개발 API는 후속 읽기 전용 확인 대상입니다.
 
+## R1 후속 — Sydney Cognito 개발 풀 존재 확인 (2026-11-13)
+
+사용자 CloudShell `ListUserPools --region ap-southeast-2` 출력에서 **Name=quantgen-dev, Id=ap-southeast-2_fV38AjJFg**를 확인했습니다. 이 조회 결과에 기존 개발 풀이 존재하며 새 풀을 만들지 않습니다.
+
+- Sydney SES 계정 production/sending=true 및 quantgeneration.com 도메인·DKIM SUCCESS는 앞선 별도 사용자 출력으로 확인된 상태입니다.
+- 풀 목록만으로 앱 클라이언트·웹 로그인·SES EmailConfiguration 연결·실제 가입/인증 성공까지 확인된 것은 아닙니다. 사용자를 조회하거나 가입 시험을 하지 않았습니다.
+- 다음은 기존 개발 API endpoint 읽기 전용 확인입니다. API Gateway v2/v1 목록을 먼저 확인하며 목록이 비어도 EC2 API 부재로 판단하지 않습니다.
+- 서울 SES는 여전히 SCP 차단으로 상태 미확인입니다. 리소스 생성·권한/설정 변경·메일 발송·운영 배포는 하지 않았습니다.
+
 ## 현재 범위와 상태
 사용자는 **메일 전환·웹 정책 범위 유지**를 선택했고, 추가로 **기존 Cognito 풀·서울 SES 인증/production 상태·개발 API 존재의 읽기 전용 조회만** 요청했습니다. 신규 리소스 생성·설정 변경·메일 발송·앱 기능 구현·운영 배포는 하지 않았습니다. Microsoft 365도 아직 구매·설정 전입니다.
 
