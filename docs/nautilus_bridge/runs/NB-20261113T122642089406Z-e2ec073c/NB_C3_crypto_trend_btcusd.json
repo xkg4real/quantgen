@@ -1,0 +1,251 @@
+{
+ "card_id": "NB_C3_crypto_trend_btcusd",
+ "kind": "strategy",
+ "hypothesis": "pre-specified on historical data, engine replication: stored card S_C3_crypto_trend_btcusd on the same file and configurations, grid revised on this file; not new evidence about the rule: Short-horizon sign votes plus price/MA ratios (long/flat with hysteresis) beat buy-and-hold BTC on Sharpe with a 25 % smaller drawdown",
+ "rules": {
+  "family": "crypto_trend",
+  "grid": [
+   {
+    "hysteresis": 0.0
+   },
+   {
+    "hysteresis": 0.222
+   },
+   {
+    "hysteresis": 0.444
+   },
+   {
+    "hysteresis": 0.667
+   },
+   {
+    "hysteresis": 0.889
+   }
+  ],
+  "cost_bps_per_side": 10.0,
+  "embargo": 1,
+  "engine": "per-column event-driven replication (nautilus_trader 1.231.0 BacktestEngine, same-bar close); walk-forward column switches are not executed in either engine",
+  "selection": "QUANTGEN walk-forward selection (wf_qg.origins, wf_qg.chosen) applied to both engines' matrices",
+  "claim_label": "pre-specified on historical data, engine replication: stored card S_C3_crypto_trend_btcusd on the same file and configurations, grid revised on this file; not new evidence about the rule",
+  "parity_scope": "parity validates the engine, not the data; P0 ties the inputs to the study's loaders",
+  "parity_bars": "corrected, spec 2026-10-26 §5.4"
+ },
+ "universe": {
+  "symbols": [
+   "BTC-USD"
+  ],
+  "venue": "crypto"
+ },
+ "data": {
+  "sessions": 4392,
+  "start": "2014-09-17",
+  "end": "2026-09-25",
+  "source": "docs/asset_expansion/cache/yf_BTC-USD.csv",
+  "prices_md5": "bc76f530ff24ab445367fe826150bc10",
+  "rf_md5": null
+ },
+ "costs": {
+  "cost_bps": 10.0,
+  "stress_multiplier": 2.0
+ },
+ "protocol": {
+  "w_is": 756,
+  "w_oos": 126,
+  "min_is": 504,
+  "ci_level": 0.9,
+  "bootstrap_B": 2000,
+  "block": 10
+ },
+ "trials": {
+  "N_planned": 5,
+  "N_total": 33,
+  "family_id": "C3",
+  "family_n_raw": 22,
+  "market_n_raw": 8,
+  "U": 11,
+  "study_configs_absent": [
+   "2021038e8dbb5628abccaee12f1dbd1d",
+   "39cca9d6efc95fd6fd7549f6ac34ddd7",
+   "4df88e8a42a7f1f43e0a5bcbe6474fb8",
+   "52dea8a362a1671a08fe41dba6929fcf",
+   "574dbdb2981eab72ac86dde9f3c922fc",
+   "73089b141dea66efb5b9c646269eef78",
+   "8456ca5384ea36a69cc35e86ccf5d905",
+   "a95a32dcda8934862b3fb4a90a6286b6",
+   "b023f0293f55415f5453c8c6dc95ea15",
+   "ed34bbc911b8cd08af832270373cf692",
+   "f1c2800610078703cc6ec27ed42f96e2"
+  ],
+  "config_ids": [
+   "c68227a827fe344f492918f17c16b779",
+   "2286dfbfece3e5837d8c60d143e709d3",
+   "61e73a84fa49d59df3175ecbe8c1f67e",
+   "d596c990078d7401eb9547cdb4383bb1",
+   "027355b840bf0c6057ec7b3a2843f327"
+  ],
+  "row_md5s": [
+   "5e94463decdf221bd402585764eb8800",
+   "71daaa5a7e850441f3440e533fdca362",
+   "861a810a1bc02b223bfd6233539d1c45",
+   "033668aef96f0e116cd49ae12384438d",
+   "73277b89e38621a666166046d84ce6de"
+  ],
+  "ledger_hash_at_run": "8031a31fbf9bd14af948cdf2cca02752",
+  "ledger": "C3.jsonl: 17 rows before registration, 22 after; U = 11 of 11 study configurations absent"
+ },
+ "seed": 11,
+ "stats": {
+  "sr_oos": 1.1869744675362457,
+  "se_lo": 0.2637023420535702,
+  "ci90": [
+   0.7226758899083114,
+   1.6413346527618926
+  ],
+  "sr_is": 1.3261598133256909,
+  "oos_is": 0.8950463251933403,
+  "dsr": 0.9999565403503795,
+  "pbo": 0.19044289044289045,
+  "pbo_slope": -0.854708921968692,
+  "prob_loss_oos": 0.0,
+  "sr_stress": 1.1621213061361024,
+  "turnover_annual": 9.980702842898118,
+  "n_trades": 144,
+  "n_sessions": 3634,
+  "years_positive": 0.8181818181818182,
+  "n_years": 9,
+  "max_year_share": 0.3167782331162616,
+  "plateau": 1.0,
+  "edge": false,
+  "total_return": 315.5213912052899,
+  "max_drawdown": -0.5282412319312217,
+  "haircut_sr": 0.7121846805217474,
+  "bench_sr": 0.8883795780545937,
+  "n_trials": 33,
+  "n_configs": 5,
+  "bench_diff": 0.298594889481652,
+  "bench_p": 0.07,
+  "bench_ci": [
+   -0.03253173892396091,
+   0.6226349218456342
+  ],
+  "bench_mdd": -0.8339900882218976,
+  "decision": "PASS",
+  "reason": "every gate criterion met",
+  "revise_target": null,
+  "regime": {
+   "high_vol": 1.3308141400656148,
+   "low_vol": 1.0262578787492502,
+   "up_market": 1.577241146121677,
+   "down_market": 0.13853881335366758
+  },
+  "chosen_last": {
+   "hysteresis": 0.0
+  },
+  "bench_sharpe": 0.8883795780545937,
+  "walk_forward": "IS 756 / OOS 126 / embargo 1; 29 origins; 5 configs",
+  "parity": {
+   "hard_pass": true,
+   "worst_corr": 0.999999903862484,
+   "worst_abs_dsr": 0.00027736487978979874,
+   "max_daily_gap": 0.00026367205035815466,
+   "P12": {
+    "1x": {
+     "corr": 0.9999999907772481,
+     "abs_dsr": 4.1827024417129266e-05,
+     "pass": true,
+     "owner_pass": true
+    },
+    "2x": {
+     "corr": 0.9999999629645056,
+     "abs_dsr": 0.0001076051918691423,
+     "pass": true,
+     "owner_pass": true
+    }
+   },
+   "warnings": [],
+   "bars": "corrected (spec 2026-10-26 §5.4); owner bars in the run record"
+  },
+  "quantgen_score": {
+   "sr_oos": 1.1869326405118286,
+   "se_lo": 0.2637023161498696,
+   "ci90": [
+    0.7226009658539977,
+    1.6413220786950655
+   ],
+   "sr_is": 1.3261447084516758,
+   "oos_is": 0.8950249795119398,
+   "dsr": 0.9999565586410757,
+   "pbo": 0.19090909090909092,
+   "pbo_slope": -0.854622724832113,
+   "prob_loss_oos": 0.0,
+   "sr_stress": 1.1620137009442333,
+   "turnover_annual": 9.98569069895432,
+   "n_trades": 144,
+   "n_sessions": 3634,
+   "years_positive": 0.8181818181818182,
+   "n_years": 9,
+   "max_year_share": 0.3167753351001775,
+   "plateau": 1.0,
+   "edge": false,
+   "regime": {
+    "high_vol": 1.3307349289570474,
+    "low_vol": 1.02626692768731,
+    "up_market": 1.5772107901944776,
+    "down_market": 0.13849740294365923
+   },
+   "total_return": 315.4716219391241,
+   "max_drawdown": -0.5282568580953755,
+   "haircut_sr": 0.7121595843070971,
+   "bench_sr": 0.8883795780545937,
+   "n_trials": 33,
+   "n_configs": 5,
+   "bench_diff": 0.2985530624572349,
+   "bench_p": 0.07,
+   "bench_ci": [
+    -0.03254803954750759,
+    0.6226385071032633
+   ],
+   "bench_mdd": -0.8339900882218976,
+   "decision": "PASS",
+   "reason": "every gate criterion met",
+   "revise_target": null
+  }
+ },
+ "tests": {
+  "dsr": 0.9999565403503795,
+  "pbo": 0.19044289044289045,
+  "ci90": [
+   0.7226758899083114,
+   1.6413346527618926
+  ],
+  "sr_stress": 1.1621213061361024
+ },
+ "decision": "PASS",
+ "decision_reason": "every gate criterion met",
+ "revise_target": null,
+ "lines": [
+  "Out-of-sample Sharpe 1.19 over 3,634 sessions (9 full years); Lo standard error 0.26; 90 % block-bootstrap interval 0.72 to 1.64: passes (the interval must exclude zero).",
+  "Deflated Sharpe 1.00 after 33 trials: passes (needs ≥ 0.95).",
+  "Probability of backtest overfitting 0.19 is reported only: with 5 configurations the CSCV rank is too coarse (needs ≥ 8); the over-search check uses the share of splits where the in-sample winner loses out of sample, 0.00: passes (needs ≤ 0.1).",
+  "Out-of-sample over in-sample Sharpe 0.90: passes (needs ≥ 0.5).",
+  "Against the benchmark (Sharpe 0.89): difference +0.30, paired block-bootstrap 90 % interval -0.03 to +0.62, one-sided p 0.07: passes (the claim 'beats the benchmark' needs p ≤ 0.1); max drawdown -53% against the benchmark's -83% (reported, not gated).",
+  "Positive in 82% of calendar years: passes (needs ≥ 60%); largest year carries 32% of the P&L.",
+  "Sharpe at 2× costs 1.16: passes (must stay positive); turnover 10.0× equity per year.",
+  "Parameter plateau 100% of neighbours keep half the Sharpe, not on a grid edge: passes.",
+  "144 position changes out of sample: passes (needs ≥ 100).",
+  "Regime split (Sharpe): high-vol 1.33 / low-vol 1.03, up 1.58 / down 0.14.",
+  "Expected live Sharpe after the McLean–Pontiff haircut: 0.71."
+ ],
+ "decay_haircut": {
+  "factor": 0.6,
+  "source": "McLean-Pontiff 2016 26-58%"
+ },
+ "created": "2026-11-13",
+ "author": "QUANTGEN validation gate",
+ "results_file": "NB-20261113T122642089406Z-e2ec073c",
+ "results_md5": "",
+ "citations": [
+  "Liu & Tsyvinski 2021 RFS 34",
+  "Detzel et al. 2021 FM",
+  "MTSA §5.2 p. 161"
+ ]
+}
