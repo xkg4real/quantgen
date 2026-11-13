@@ -1,14 +1,14 @@
 ---
-status: taken
-reason: manual
+status: returned
+reason: milestone
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2
 next_ids: ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T19:15:21+09:00
+updated_at: 2026-11-13T19:17:51+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: owner
 work_branch: gpt/pilot-readout-btc-ra-20261113
 work_commit: 661c6b878442e5c8e2b864766ade379e042825f1
 uncommitted_changes: no
@@ -20,6 +20,15 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 0b664cd3-df59-47ce-80d7-a9b0e78d8cf8
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## 반환 — BTC-라 판정/판독 후속 단위 완료 (2026-11-13T19:17:51+09:00)
+
+- 상세 주간 인수인계: [WEEKLY_HANDOFF_2026-11-13_0b664cd3.md](WEEKLY_HANDOFF_2026-11-13_0b664cd3.md). 이번 주기 전체 완료 ID 색인과 이전 검증 기록 링크, 이번 실행의 정확한 완료/미완료/재현/다음 단계를 포함한다.
+- PR114 main **795165cb45b6a37a6bf9bfc0ccd8cc6e6cb2acf0**, 검증 head **661c6b878442e5c8e2b864766ade379e042825f1**, Runtime6/6 및 Compliance 성공. 변경 문서 두 파일·PR/main 원격 read-back 일치. LEDGER ⑥-1/readout·⑤-2/e/2와 sapientia Notion 반영/재확인 완료.
+- **Pilot 1 hard_pass=True이며 BTC-USD 관문은 소유자 BTC-라 판정으로 통과했다. 원래 BTC 공급사 FAIL·원인 미확인은 유지한다.** 다음 소유자 PC 작업은 기존 A1~A10 → D절. 정상 D 종료 조건을 모두 만족할 때만 같은 자리에서 E로 간다. 실제 Pilot 2/E/F/Step 10 완료로 기록하지 않는다.
+- 이번 판정 문서 단위를 반환한다. ⑥-2/⑦-1/⑦-2는 소유자 실행/증거가 필요하다. 다른 독립 next_ids는 미완료로 보존했고, 전체 Remaining Work나 주기 전체를 완료로 돌리지 않는다. 직접 작업이 남으므로 기존 매시간 예약을 유지하며 다음 목요일 유예를 적용하지 않는다.
+- 별도 UI는 PR115 @ 043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158, taken 상태의 담당 세션을 따른다. 후속 main 통합에서는 이번 OWNER_RULINGS_LOG.md 추가를 보존한다. F 시작 통보는 아직 없으며, F 시작 후에는 기존 main 병합 제한을 따른다.
+- 다음 실행은 저장된 execution_id **0b664cd3-df59-47ce-80d7-a9b0e78d8cf8**, task/handoff ID, branch/commit과 최신 CURRENT를 대조하고 OS 잠금·최신 SHA CAS·원격 read-back을 거쳐 진행한다. 연구 브랜치 후속 커밋은 별도 결정11 승인을 지킨다.
 
 ## BTC-라 판정 문서 병합 완료 — 2026-11-13T19:15:21+09:00
 
