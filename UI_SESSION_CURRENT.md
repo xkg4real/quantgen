@@ -1,3 +1,17 @@
+# UI 메뉴·가이드 재개 — 2026-11-13 (이 절이 최신)
+
+- status: taken · owner: GPT UI · work_branch: gpt/ui-market-navigation-guide-20261113 · base main 7e05673.
+- 사용자 최신 지시가 예전 상시 노출/우측 플라이아웃 규칙을 대체함.
+- 요청 원문: “시장에 커서를 갔다대면 하위메뉴가 보이게, 처음엔 숨겨야지”, “시장의 하부 ui에서 시장이 아닌 다른 좌측 ui로 바로넘어가게 ... 안된다”, “하위 ui ... 국내, 미국 ... 밑으로 떠야되는거야. 우측에 뜨지말고”.
+- 요청: 지수 전용 시장 화면, 시장 내부 목적지 유지. 기술지표 가이드 전체27종과 짧고 좁은 선택 UI. 분석도구/가이드를 상세차트 디자인에 맞춤.
+- 마지막 정정: 바탕화면 바로가기 생성은 취소. “cmd로 켯을때 작업표시줄에 우리로고로 뜨게하라고”. Windows 앱/창 아이콘만 확인·보강.
+- next_ids: ⑬-2/market-nav-v2, ⑬-2/guide-catalog-v2, ⑬-2/taskbar-brand-v2.
+- 수정 예정: quantgen_desktop의 메뉴/시장 전용 화면/가이드/공통 연구 스타일/Windows 아이콘, 필요한 education 표시 어댑터, 관련 UI 시험과 정책 검토 기록.
+- 엔진 CURRENT.md와 메인 연구 작업, 웹 HTML은 수정하지 않음. 기존 Pretendard OTF/N3·상세차트 엔진 유지.
+- 다음: 구현 → 해당 화면의 조작·한영/다크·좁은 폭 검증 → PR/CI/main 병합 → handoff/LEDGER/웹 큐 → whydi CMD 실행 안내.
+
+---
+
 # UI 완료 인계 — 2026-11-13T17:09:14+09:00 (이 절이 최신)
 
 - status: returned · owner: GPT UI. 메인 엔진 `CURRENT.md`는 변경하지 않음.
