@@ -4,15 +4,15 @@ reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1
-next_ids: ⑥-1/readout, ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T18:05:38+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout
+next_ids: ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-13T18:08:10+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: ci
 work_branch: gpt/pilot-readout-btc-ra-20261113
-work_commit: 7e0567373ba50e6131fb24e1f6012c82d268cecb
+work_commit: a90c90b88d5b5202e8dfafaf893c09c997587572
 uncommitted_changes: no
-pr: none
+pr: 114
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -20,6 +20,13 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 0b664cd3-df59-47ce-80d7-a9b0e78d8cf8
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## 최신 진척 — 2026-11-13T18:08:10+09:00
+
+- ⑥-1/readout 판독 보고서 원격 게시·내용 read-back 완료: handoff d6a814f8a95bc66eeec5a209fbd21227d0188deb. 24항목 체크리스트, 24/24 hard parity, 두 엔진 REJECT, P11 진단 2/38, Step 8 문구 쟁점과 자료 접근 이력 보존. 새 실행은 하지 않았다. LEDGER에 이 하위 ID만 기록한다.
+- BTC-라 승인 원문·SPY 둘째 PASS·BTC 진단 case 5를 기존 판정 문서 끝에 추가한 PR114: gpt/pilot-readout-btc-ra-20261113 @ a90c90b88d5b5202e8dfafaf893c09c997587572. 기존 문서 원문 보존/원격 두 파일 read-back 통과, CI 진행 중. 전체 정책 정합성은 CI 확인 전 미확인이다.
+- 남은 이번 단위: PR114 CI/병합 → ⑤-2/e/2 판정 기록 완료와 Notion 동기화 → 소유자 Pilot 2 실행표 D 안내. Pilot 2·Windows E·Step 10·최종 연구 병합은 미완료. GPT/Gemini 선택 심사는 NOT_PERFORMED.
+
 
 ## Pilot 1 판독 게시 및 BTC-라 기록 준비
 
