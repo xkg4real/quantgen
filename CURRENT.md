@@ -1,12 +1,12 @@
 ---
-status: handoff
-reason: usage_limit_weekly
-from: claude
+status: taken
+reason: manual
+from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1
 next_ids: ⑥-1/readout, ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T00:46:00+09:00
+updated_at: 2026-11-13T17:59:06+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: main
@@ -16,8 +16,19 @@ pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
-session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
+session: 01a183c6-632a-70cc-a0e6-32e764f43087
+execution_id: 0b664cd3-df59-47ce-80d7-a9b0e78d8cf8
+handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## 최신 GPT 인수 — 2026-11-13T17:59:06+09:00
+
+- 사용자 최신 결정 원문: “그러면 라 옵션으로 가겠습니다”. BTC-라 승인으로 기록한다. 원래 BTC 대조 FAIL과 진단 case 5(원인 미확인)는 유지하며, 불일치를 기록하고 Pilot 2 진행을 허용한다. Pilot 2는 소유자 Windows PC에서 기존 실행표 D·준비 조건을 따라 수행하고 클라우드에서 실행하지 않는다.
+- 실행 0b664cd3-df59-47ce-80d7-a9b0e78d8cf8: STATE 재구성 승인 뒤 새 Claude handoff를 인수한다. 과거 4bf1f03c 반환을 현재 소유권으로 재사용하지 않는다. 검증된 환경·OS 배타 잠금·현재 6문서 동일 ref·CURRENT 전체 변경 이력 목록과 원장을 대조했다. 이전 로컬 STATE/BOOTSTRAP/PAUSED 증거의 복구 누락 표시는 보존한다.
+- 이번 범위: ⑥-1/readout 기존 판독 근거 게시, SPY 둘째 PASS·BTC 진단 case 5·BTC-라 승인 판정 기록을 문서 PR로 main에 반영하고 최신 Notion REMAINING WORK와 원장을 최소 갱신한다. 연구 브랜치·등록표·고정 자료·실제 원장 실행·실제 주문 코드는 변경하지 않는다. 후속 연구 브랜치 커밋의 결정 11은 별도 조건으로 남는다.
+- 시작 근거: CURRENT work_commit 9e00bf3; 최신 main 7e0567373ba50e6131fb24e1f6012c82d268cecb에는 다른 UI 세션 PR112/113 완료가 추가됐다. 새 gpt/pilot-readout-btc-ra-20261113 브랜치에서 최신 main을 반영하며 UI 완료 작업을 중복하지 않는다.
+- 다음: 소유권 CAS/read-back → 문서 수정/검증 → PR·CI → 병합 가능 조건 확인 → CURRENT/LEDGER/Notion 기록 → 소유자 Pilot 2 실행표 D 안내. Pilot 2 실행·Windows 전체·마감·최종 연구 병합은 미완료다.
+
 
 # 인수인계: Claude 재개 (2026-11-10) — GPT 반환 확인, PR89 CI 실패 수정부터
 
