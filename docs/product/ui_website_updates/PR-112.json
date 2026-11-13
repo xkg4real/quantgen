@@ -2,7 +2,7 @@
   "id": "PR-112",
   "source_pr": "https://github.com/xkg4real/quantgen/pull/112",
   "source_branch": "gpt/ui-d11-d15-20261113",
-  "source_commit": "d46ca5e",
+  "source_commit": "c45adc8dca1682069d9c88956c844f5c33b7d827",
   "summary": "Claude UI-D11-D15 follow-up: cascading market menu, chart cursor, domestic/US Q-SCORE card, local frozen chart reports, bounded daily score sorting. Approved native Pretendard/N3 retained. Progressive first-page chart display, multiple-choice indicator guide and contextual workspace orientation; explicit approved font on styled widgets.",
   "changed_files": [
     "quantgen_desktop/rail_menu.py",
@@ -22,9 +22,11 @@
     "quantgen_desktop/app.py"
   ],
   "verification": {
-    "local": "64 menu/ranking tests; 33 Q-SCORE/KIS/export tests; 58 integration/compliance tests; 4 repaired screen assertions passed. Eight ko/en light/dark menu captures at 1440x900 and 1000x700. PDF Korean fonts embedded and numeric extraction checked. New speed/guide group: 90 passed; workflow/layout group: 60 passed. 1000px English/dark and 1440px Korean/light previews fit horizontally; actual styled font glyphs verified.",
-    "remote": "Final expanded PR head awaiting Windows/Linux Runtime and compliance checks; prior head had obsolete score-card test and Windows export failure under investigation. Not merged.",
-    "limitations": "Offline synthetic market data only; no user account/API/Windows-DPI or website deployment claim"
+    "local": "64 menu/ranking tests; 33 Q-SCORE/KIS/export tests; 58 integration/compliance tests; 4 repaired screen assertions passed. Eight ko/en light/dark menu captures at 1440x900 and 1000x700. PDF Korean fonts embedded and numeric extraction checked. New speed/guide group: 90 passed; workflow/layout group: 60 passed. 1000px English/dark and 1440px Korean/light previews fit horizontally; actual styled font glyphs verified. Follow-up: 11 navigation-lifetime checks and 78 consecutive chart/detail/live/export checks passed after explicit Qt fixture disposal (overlapping groups, not a unique total).",
+    "remote": "Runtime 43383685578: all six jobs passed (Windows Python 3.11/3.12/3.14, Ubuntu Python 3.12, syntax Python 3.10/3.11). Compliance 43383685540 passed. Verified source head c45adc8dca1682069d9c88956c844f5c33b7d827.",
+    "limitations": "Offline synthetic market data only; no user account/API/Windows-DPI or website deployment claim",
+    "runtime_url": "https://github.com/xkg4real/quantgen/actions/runs/43383685578",
+    "compliance_url": "https://github.com/xkg4real/quantgen/actions/runs/43383685540"
   },
   "website_impact": {
     "classification": "native-only implementation; shared presentation/copy review",
@@ -37,5 +39,6 @@
   },
   "website_application": "unverified",
   "deployment": "unverified",
-  "merge_status": "open"
+  "merge_status": "merged",
+  "merge_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
 }
