@@ -6,6 +6,21 @@
 
 ---
 
+# PR119 구현·로컬 검증 완료 / CI 중 — 2026-11-14
+
+- status: taken · owner: GPT UI · execution_id: ui-market-menu-click-20261114. 기존 직접 요청 진행; 사용량 unknown, 자동감시/타 담당 인수 없음.
+- work_branch: gpt/market-menu-click-20261114 · work_commit: b8d5ac889bc89372cac7cc8595c252fa6bc49705 · clean/pushed. /workspace/quantgen-risk-reward-20261113.
+- PR119 OPEN https://github.com/xkg4real/quantgen/pull/119. **아직 main 병합 전**. 아래 checkpoint의 미커밋/제품 수정 전 상태는 해소됨.
+- 최종 로컬 /tmp/qg-ui-regression-final.log **59 PASS**(185.232s): 손익비 실제 조작/숫자표시, 27지표·가이드·내보내기·압축형폼·모의투자 안전 경계. /tmp/qg-ui-syntax.log 1 PASS. 앞선34 PASS와 겹치는 그룹이므로 합산 금지.
+- 숫자 미표시 Qt6.12 문제 해결: NoButtons 대신 정상 editor에 subcontrol 스타일만 숨김. 실제 lineEdit 폭과 숫자 표시를 light/dark 검사함.
+- 캡처: /workspace/shared/ui-menu-workspaces-20261114/{risk-light,risk-dark,risk-small,risk-workspace,quant-workspace,guide-card,menu}.png. 실제 계정/사용자 Windows DPI는 미검증.
+- GitHub: Compliance43454709248 SUCCESS. Runtime43454709190은 설치/검증 진행 중. 전체통과 주장 금지. 최초 Runtime117 전체6/6은 이미 별도 확인했으나 이새변경검증과 혼동하지 말 것.
+- 최종 사용자 방향: 긴 설명 추가가 아니라 수치 의미·구체 확인·한계. 지표27종 reading_cues에서 공통 문구 관리, 원래 긴 정의/5종 사건 설명은 접힌 상세로 보존.
+- 다음: Runtime의 새 메뉴QWindow/손익비/연구폭 단계를 Windows3.11/3.12/3.14 및Linux에서 확인, 실패시 해당로그 수정 → expected_head=b8d5ac8 PR119 merge → fetch main ancestry → docs-only 기록/PR-119 웹 큐 → 여기 returned 및5개ID 원장 → 두 PC CMD 보고.
+- 웹은 별도: 코드/프리뷰/AWS배포 미실행. 지원되는 채팅 발송 도구 부재로 queued만 기록할 것. 메인 CURRENT.md와 AWS 담당 문서는 수정하지 않았음.
+
+---
+
 # UI 요청 추가·검증 checkpoint — 2026-11-14
 
 - status: taken · owner: GPT UI · execution_id: ui-market-menu-click-20261114. 최신 직접 요청을 기존 작업에 추가. 사용량 unknown. 자동감시/다른 담당 인수 없음.
