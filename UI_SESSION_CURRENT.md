@@ -1,3 +1,18 @@
+# 최신 검증 수정 — 2026-11-13
+
+- PR112 현재 head **4ab349f7a1a646fd4c03db2d418330c02a95d596**, branch gpt/ui-d11-d15-20261113, 원격 push 확인.
+- 바로 아래 b658cde 통합은 포함됨. b658cde에서 **Windows3.11/3.12/3.14 모두 점수/PDF/저장 선행 검사 통과**.
+- b658cde Runtime43377677334 Linux 전체 desktop 단계가 창 파괴 뒤 초기 스크롤 lambda 실행으로
+  QStackedWidget deleted/abort. app.navigate의 자유 singleShot을 창 소유 QTimer+bound slot으로 수정해
+  창 파괴 시 취소. 새 파괴 회귀검사+LET F 관련 재현 순서 포함 **11개 OK**, 정책 consistency PASS.
+- 종목 상세 실제 UI 오프라인검사: 전체400개를 받기 전 40개 차트가 표시되고 loading상태/stream없음,
+  나중에400개/자동구독 전환 확인. /workspace/shared/ui-20261113/progressive-{first-page,final}.png.
+  화면 배치가 정착한 후 캡처에서 오른쪽 관심종목/설명 겹침 없음(즉시grab은 Qt reflow 전 중간상태).
+- **아직 main 미병합. 4ab349f의 새 Runtime/Compliance를 확인 후 통과해야 병합한다.**
+- status: taken. CURRENT.md는 다른 메인 엔진 작업이므로 변경 금지. 아래 원래사용자요청/검증/남은병합명령 유효.
+
+---
+
 # GPT UI 통합 검증 체크포인트 — 2026-11-13 (이 절이 최신)
 
 - status: taken · owner: GPT UI · main 엔진 CURRENT.md 변경 없음.
