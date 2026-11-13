@@ -1,3 +1,29 @@
+# 최신 CI 안정성 수정 — 2026-11-13 (이 절 우선)
+
+- status: taken · owner: GPT UI. 메인 엔진 CURRENT.md는 변경하지 않음.
+- PR112 head **c45adc8dca1682069d9c88956c844f5c33b7d827**, gpt/ui-d11-d15-20261113 push 확인.
+- **제품 앱 소스는 4ab349f와 동일**. 마지막 커밋은 시험용 창 수명·CI 실행 방식·기록 수정.
+- 최신 Runtime **43383685578** 실행 중, Compliance **43383685540** 성공. **main 미병합**.
+- 이전 Runtime43378865774 Windows3.14: 점수/저장/전체 native/소유자14 UI는 통과했으나,
+  shared KIS에서 progressive fixture FAIL 후 7자리 가격 테스트 중 traceback 없이 exit1.
+  (초기 head에서도 Windows가 같은 늦은 테스트에서 끝남.)
+- 원인 확인: StockDetailTests 기존 cleanup 뒤 sip.isdeleted(window)=False, 명시적 DeferredDelete 뒤True.
+  숨긴 전체 앱 창을 테스트마다 유지하던 문제를 고쳤다: 작업 풀 종료 확인, 소유 창 delete_owned_widget.
+  home-live/chart fixture도 동일 정리. 실제 Windows 종료의 유일 원인이라고 단정하지 않고 새 CI로 확인한다.
+- progressive fake의 마지막 응답 5초 대기는 느린 CI에서 GUI 검증 전에 만료될 수 있으므로30초,
+  UI 응답 대기20초로 바꿈. 검증은 속도 수치가 아니라 마지막 응답을 차단한 동안의 표시 순서/수신 미시작.
+- CI 기존136개 테스트 모듈 보존. shared 단계는 기존 계약/연결 → 상세 → 지표 엔진의3프로세스로
+  분리, bash -e/failfast, PYTHONFAULTHANDLER=1. early step에 선표시+7자리 가격 검사도 포함.
+- 로컬 결과: 수정된 실시간/선표시/저장44 OK, **상세34 포함 연속78 OK(293.753s)**,
+  7자리 가격 단독1 OK. 서로 겹치는 검사이므로 고유 수로 합산하지 않음. 정책 consistency PASS.
+- 로그 /tmp/qg-lifecycle-regression.log, /tmp/qg-fixture-disposal.log. 두 UI worktree HEAD c45adc8 일치.
+- 다음: 최신 Runtime6 jobs와 Compliance 통과 확인 → expected_head_sha=c45adc8... PR112 merge →
+  main fetch/조상 확인 → 동일 PR112 웹 큐의 merge/head/검증 기록 갱신 → LEDGER 완료/최신인계 → 최종CMD.
+- 원격 전체 성공 전 완료/배포 주장 금지. 실제 계정 속도·Windows DPI·스크린리더 미검증.
+- AWS 큐는 queued, 직접 대화 발송 도구 없음. 원래 요청·구현 요약은 아래 절 참조.
+
+---
+
 # 최신 검증 수정 — 2026-11-13
 
 - PR112 현재 head **4ab349f7a1a646fd4c03db2d418330c02a95d596**, branch gpt/ui-d11-d15-20261113, 원격 push 확인.
