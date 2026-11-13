@@ -841,7 +841,9 @@ class ResearchWindow(QMainWindow):
         picker.setObjectName('toolPicker')
         from .category_picker import CategoryFlow
         categories = CategoryFlow(picker)
-        picker.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        # Fixed caps the picker at its single-row sizeHint, even when translated
+        # buttons wrap. Let CategoryFlow's heightForWidth reserve every row.
+        picker.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         self.tool_group = QButtonGroup(self)
         self.tool_group.setExclusive(True)
         self.tool_host = CurrentPageStack()

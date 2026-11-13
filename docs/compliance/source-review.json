@@ -295,7 +295,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "60696fe661af202993bfd1ec3488ccefb2a556e6ea80229d275a6475772d7661",
+    "docs/compliance/FACTS.md": "119e7e6ce96f096fac07c34db65b571c44ba0ed3d7ecd2a57c93b75c2d6b1ead",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -377,7 +377,7 @@
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
     "docs/product/TERMINAL_TARGET_2026-10-30.md": "5c3e2eac999534371560def0e00d3ef45d0b7abcd960a6b1d7d7c3c9c3b05c29",
     "docs/product/TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md": "eeb6a1394c46fd67859dc5c8066d9adc125802efa24c29add93b5d8528404314",
-    "docs/product/UI_D11_D15_2026-11-13.md": "22f40283a87d4c6b363ea60f8b3c0f0e5aab4bc8f2e03a9259239fe76e40c0b9",
+    "docs/product/UI_D11_D15_2026-11-13.md": "91da8eb52e30b22d07fb50451dc431d5d716a2acf4401312f90710292f11eb4c",
     "docs/product/UI_LOCALIZATION.md": "7a8bc3a69e4e3728e18e0bf62b0613f792079b0a5f3d7b03742dfd5f4596b512",
     "docs/product/UI_RENDERING_2026-10-31.md": "f006b261d10a28594dc3b31d05424ac144004ca4edca18646ca00b5c0f8a19f6",
     "docs/product/UI_SESSION_PROGRESS_2026-10-31.md": "6f8fd39bdfc77df266095c1e46170c1a679e3267d200a0fc3f6995b196dd0de4",
@@ -387,7 +387,7 @@
     "pyproject.toml": "7c46a0addc7d5220351b73c8ad54d672dbbd6de80ebf1a053a42293a717c52d5",
     "quantgen_desktop/__init__.py": "1ec1396b13e4b6caae0b8dfcf6201af71ad9756428c5cbcaab9706083691e060",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "1eed1e890ca845b58de3a3dea4b9d08fbc4f26b7c6d7b82cebde657f11925642",
+    "quantgen_desktop/app.py": "414db612fb3eedc72963a475140b6e4b234bf5f362d05c8d0fb6ea4c08b6c06f",
     "quantgen_desktop/bonds.py": "ce7a4368103fc4842e095a20d1c261dbe5961a00cee1d4b5bfe183442ccee7b6",
     "quantgen_desktop/bonds_portfolio_narrative.py": "5514b58f6025261d2b1feab0b112a74fae5a5cf4a8b654eb6c8204c7513bbfcf",
     "quantgen_desktop/category_picker.py": "7061468ea7104e6a2a3ff6989dd61373f653fc9acfb8ec587e3c077b6ed9e18d",
@@ -493,7 +493,7 @@
     "tests/desktop_carry_language_acceptance.py": "7f58ba4b867a9b0b4b6e672d564f5663931359880096d08e6ff930d2ff23df53",
     "tests/desktop_chart_rendering_acceptance.py": "1c23ec3b8fe6fc0d327cefb361ebd9866614e58c4a98e87a5c6bf066cb17bac9",
     "tests/desktop_commentary_acceptance.py": "ed1f58c2e133796d77ba3b6cdc5d187321f7491c1091ba3b36853aff773c8250",
-    "tests/desktop_compact_ui_acceptance.py": "00157b98311f27444929170d8d27783b3684c2615652023c9c2037d493515df6",
+    "tests/desktop_compact_ui_acceptance.py": "5b3059f7358b43e9ea678b2f72ad16d1995fb79174029b4c397fd4677fe19c54",
     "tests/desktop_funding_inference_acceptance.py": "ebc0c752e57c8dc0c88024eaa171064eea6701e5b22671e437fdf3c8428295dc",
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
     "tests/desktop_home_live_acceptance.py": "a752117e0d0e40fd58d0bf8ae0010aa87397d6b82d177676b7601db9e7318533",
@@ -733,163 +733,163 @@
   "reviews": {
     "1": {
       "document_sha256": "445d48928658a50036ba6ccabe0882ff243a13dc33ab47919e5d771c664c6541",
-      "source_digest": "e1dc95807bd75501dd3288034cd7be4abb3694e397f809142bb5fab47badd83f",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.679596+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "af99e6306b252319500227ffc4294a9c922f1b9312c6d888fb4c504d8c35de97",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.579264+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "2": {
       "document_sha256": "b9ff6edf97d750bb30428682f5b2f9bfd848e54be6605ddd0bdd038eed2e1f32",
-      "source_digest": "e1dc95807bd75501dd3288034cd7be4abb3694e397f809142bb5fab47badd83f",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.681926+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "af99e6306b252319500227ffc4294a9c922f1b9312c6d888fb4c504d8c35de97",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.581278+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "3": {
       "document_sha256": "fce663606f32cbbf86bb7b95ce2d50e88a350567ce46fac42f81cdc4f1186760",
-      "source_digest": "502bb7e222d86e57389b117224e70887f748dc0dab77466e451c3f37b15ea6d4",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.683491+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "027843e33213c6c7c6be50ff5a94a39951e20690687d3cdf879dea1ad48bdb05",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.584432+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "4": {
       "document_sha256": "239c1a76031e60125a783cad35011444c96e7a8979945d1de344639fddebe418",
-      "source_digest": "250ec9bf4c993448347cbe0dabee0b7762816be70b7759b3edc7c0e1a618bf4f",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.684853+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "7090d9023db8e209d437b593d90564c62cf252df425806cdc2c2a2d41d9e4b27",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.586207+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "5": {
       "document_sha256": "5c89e8c8f3bcd6162760d7a0ea2f1e6a2dd29d03aa704e7929a11f85d9cc56c5",
-      "source_digest": "412e7ead5c508c3b81b2341ba89739a56336229a02227e9a366fb5d78c0fd752",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.686726+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "5afe46c7217da9c8644fa51b78404a9e0d7e95f75894b6434e03e86784762591",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.587939+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "6": {
       "document_sha256": "aa1d08b268d0cc9ac8611947f4c1f09a13816cd37459863f72b102c362ac2247",
-      "source_digest": "a1efe227d67125add952836269db212c5f5d1025af81464e4ad331d2a8336dee",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.689031+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "89516379167982a90d1c18a091488092e7bd5df98996cde3cfb2c60783410c64",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.589785+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "7": {
       "document_sha256": "c9ab56ef83f8cfcb1042962fea7e1e1df6b3ad247f6aa3215827994d0afdf5f1",
-      "source_digest": "e1dc95807bd75501dd3288034cd7be4abb3694e397f809142bb5fab47badd83f",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.691157+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "af99e6306b252319500227ffc4294a9c922f1b9312c6d888fb4c504d8c35de97",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.591866+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "8": {
       "document_sha256": "31dc784dc971b706e0a18ca3d5fc3c62477ea7688c56bf4ee2fee13a4b5e9221",
-      "source_digest": "a1efe227d67125add952836269db212c5f5d1025af81464e4ad331d2a8336dee",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.692708+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "89516379167982a90d1c18a091488092e7bd5df98996cde3cfb2c60783410c64",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.593165+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "9": {
       "document_sha256": "2b1fcc7e41f8e773486780c8cd0bf64bdb096215bb294ee31c35311781557e30",
-      "source_digest": "31a9521de8e1c53cfe595db198ededf8633dccdf9f444bfa242edeb7afa25093",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.694175+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "76682a8432095a1a8da0dd8c1d17a0f9b82e04c9a8258614ccac789d5e0e9e0a",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.594600+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "10": {
       "document_sha256": "306e0fa9640b4ee342b277cedaa11e74728848c2fcc3a4f51079869e91d1ad9f",
-      "source_digest": "a3d881fc0e787bdf147d2b3bd8f51fbab3f539e637109a1ded2ee0f32f592a1a",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.695408+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "d4c6bad6f4bcff703a3ace294ab7a3d385c2d2ea0609dd6f228c59a8fa8a4f6d",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.596209+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "11": {
       "document_sha256": "f898da31bd00c210d86ee4f785fb1ca8aa1286dd5dfc8ad33e8ca309cf4d0eab",
-      "source_digest": "9d0d2040deaa1b00fd556d8b6411f384e39e34a2c77020b241354796f9c5be85",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.696934+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "0937c992ba3b0a8099217400d26d8de616a999b5d703d7cce2fd13d0873fd292",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.597668+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "12": {
       "document_sha256": "891932e84ec49ef737058d444acdcae60b6c7be1bf566ba82a6599dc28b52e8a",
-      "source_digest": "afadba822a1233954e3298f82b3c9b85b5008f3febbacec073d020ef3f11826c",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.698428+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "0689dd6d763399156504b4d7553e2a719849956f416652692a55fa5b8ac60fe0",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.599088+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "13": {
       "document_sha256": "d14cdeb256507805cc2d4813bf86ca67c8f7b4577aed8a58071fff01d8716db0",
-      "source_digest": "31a9521de8e1c53cfe595db198ededf8633dccdf9f444bfa242edeb7afa25093",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.699807+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "76682a8432095a1a8da0dd8c1d17a0f9b82e04c9a8258614ccac789d5e0e9e0a",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.600573+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "14": {
       "document_sha256": "293eea1d4653a944bc7ba21391cd7a158b0179b3d8da627cac3e7f3a7d5f3939",
-      "source_digest": "31a9521de8e1c53cfe595db198ededf8633dccdf9f444bfa242edeb7afa25093",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.701063+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "76682a8432095a1a8da0dd8c1d17a0f9b82e04c9a8258614ccac789d5e0e9e0a",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.602116+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "15": {
       "document_sha256": "3b60cb1dae2a099fdcb6c5aa90b1f9d5761b4e18cfb641c36b7860e49579e373",
-      "source_digest": "31a9521de8e1c53cfe595db198ededf8633dccdf9f444bfa242edeb7afa25093",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.702586+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "76682a8432095a1a8da0dd8c1d17a0f9b82e04c9a8258614ccac789d5e0e9e0a",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.603687+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "16": {
       "document_sha256": "9ba16fb5ad792212115d5eec4e977ee2e7adc281e5be52a78871632b953d5f2f",
-      "source_digest": "b2d6537723f5ece211b8681c6f037cd7317fb81ede562d4199e845f5824ddbce",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.703923+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "01fc7a4f207d8a58cbf7847f08db84b8b230a7c5b426d464f3261e1c6dd7eac2",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.605084+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "17": {
       "document_sha256": "52114c07cb2e0ddf191dec19dcc98738b29123db8ec0c03bd172e521824556b5",
-      "source_digest": "a1efe227d67125add952836269db212c5f5d1025af81464e4ad331d2a8336dee",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.705482+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "89516379167982a90d1c18a091488092e7bd5df98996cde3cfb2c60783410c64",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.606373+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "18": {
       "document_sha256": "e141ae24e1a03ecea6c0742d325f933e3a689fbd6e1162336adea30bad14b794",
-      "source_digest": "e1dc95807bd75501dd3288034cd7be4abb3694e397f809142bb5fab47badd83f",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.706672+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "af99e6306b252319500227ffc4294a9c922f1b9312c6d888fb4c504d8c35de97",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.607826+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "19": {
       "document_sha256": "db369339867e0e8f50214c853ea581fdb44eec62cc5086f67fcce5395ce73a6f",
-      "source_digest": "bee1ece3a2ef9fe4a0b969f019331b35e75c7e76bf2ca37caa0f01d5b8f3e94a",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.707927+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "2b0188ec7e52d888ddbf204c465f49601b67daf86f1e5f54d377f9b15a7f516b",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.609149+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     },
     "20": {
       "document_sha256": "cbe27189377404847146292e19f838e81d3e01cee47208a6a24b9649c492b04d",
-      "source_digest": "e1dc95807bd75501dd3288034cd7be4abb3694e397f809142bb5fab47badd83f",
-      "reviewed_by": "GPT UI followup",
-      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
-      "reviewed_at": "2026-11-13T05:21:27.709647+00:00",
-      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
+      "source_digest": "af99e6306b252319500227ffc4294a9c922f1b9312c6d888fb4c504d8c35de97",
+      "reviewed_by": "GPT UI integration review",
+      "review_note": "Reviewed D11-D15 integration and the CI-reproduced translated category-picker wrap fix; source and policy flows unchanged, publication remains blocked.",
+      "reviewed_at": "2026-11-13T05:29:57.610393+00:00",
+      "source_commit": "5b7f7dd3369b14e4497e90b76b62f08265fb1144"
     }
   }
 }
