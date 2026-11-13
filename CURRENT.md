@@ -1,14 +1,14 @@
 ---
-status: taken
-reason: manual
+status: returned
+reason: milestone
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1
 next_ids: ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T21:16:33+09:00
+updated_at: 2026-11-13T21:20:34+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: owner
 work_branch: gpt/order-safety-design-20261113
 work_commit: b3231213af6d9799303b0fde58bcdd9d0399c765
 uncommitted_changes: no
@@ -20,6 +20,16 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2633226e-9755-40fb-87a4-44d1fc290756
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## 부분 반환 — 주문 안전 설계 초안 완료 (2026-11-13T21:20:34+09:00)
+
+- 상세 주간 인수인계: [WEEKLY_HANDOFF_2026-11-13_2633226e.md](WEEKLY_HANDOFF_2026-11-13_2633226e.md). 이번 주 기존 완료 색인, 이번 실행의 검증·실패 이력·재현 명령·실제 미완료·다음 안전 시작점을 함께 보존했다.
+- **M-12/design-draft/1만 완료.** PR116 main eba94f043765b04fdaa0b7ac41110d2cdfd47efc, 검증 head b3231213af6d9799303b0fde58bcdd9d0399c765. Compliance43423231017 성공, LEDGER 및 지정 Notion 최소 반영/read-back 완료. 설계 최종 승인·주문 구현·실제 운영 완료가 아니다.
+- waiting_on=owner는 **Pilot 2의 PC A5 확인/실제 실행 결과와 M-12 누락 원문·최종 결정**에 적용한다. 다른 승인된 독립 미완료 작업을 차단하지 않는다. ⑥-2/⑦-1/⑦-2와 기존 next_ids는 미완료로 유지한다. 직접 작업이 남으므로 기존 매시간 예약과 next_eligible_at=null을 유지한다.
+- 다음 시작: RUN.lock과 저장 execution_id **2633226e-9755-40fb-87a4-44d1fc290756**, task/handoff ID, 이 문서의 branch/commit을 대조하고 최신 CURRENT blob CAS·새 execution ID read-back 후 진행한다. 완료 초안을 다시 구현하지 않는다. ⑨-3a/recorder/1은 Claude 인계의 승인된 Q12 범위와 로컬 직접 작업 기록을 대조한 뒤 별도 단위로 이어간다. 실제 원장/파일럿/연구 변경은 포함하지 않는다.
+- 별도 UI PR115 taken 소유권은 유지한다. 후속 main 통합 시 새 설계 문서와 준법 검토 지문을 보존·재검증한다. F 시작~F21 완료의 main 병합 제한은 그대로이며 이번 실행에서 F를 시작하지 않았다.
+- 이것은 문서 단위 부분 반환이며 Remaining Work 전체/주기 전체 완료가 아니다. 화요일 2026-11-17 16:00 준비·17:00 반환 기한을 유지한다. 계정 사용량은 unknown, 추가 GPT/Gemini spec 심사는 NOT_PERFORMED다.
+
 
 ## M-12 안전 설계 초안 완료 — 2026-11-13T21:16:33+09:00
 
