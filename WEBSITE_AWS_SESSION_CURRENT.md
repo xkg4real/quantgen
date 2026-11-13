@@ -11,6 +11,16 @@
 - SCP/IAM 변경, 새 리소스, Advanced features 활성화, SES 신청/메일 발송·운영 배포는 하지 않았습니다. [Advanced features](https://docs.aws.amazon.com/accounts/latest/reference/activate-advanced-features.html)는 별도 변경이며 활성화 후에도 RegionFloor가 남을 수 있어 자동 해결책으로 삼지 않았습니다.
 - 증거는 사용자 제공 실행 출력입니다. 에이전트 로컬 quantgen 인증 만료 상태와 사용자 CloudShell 인증 역할은 구분합니다.
 
+## R1 후속 — Sydney SES 계정 production/sending 확인 (2026-11-13)
+
+사용자가 CloudShell에서 실행한 Sydney `sesv2 get-account --region ap-southeast-2`의 실제 결과는 **ProductionAccessEnabled=true / SendingEnabled=true**였습니다. Sydney SES는 계정 수준에서 샌드박스 해제 및 발송 활성 상태입니다. 증거는 사용자 제공 출력이며 에이전트가 해당 API를 직접 호출한 결과는 아닙니다.
+
+- 서울(ap-northeast-2)은 기존 `ses:GetAccount`의 SCP explicit deny로 여전히 production/sandbox 상태 미확인입니다. Sydney 결과를 서울에 적용하지 않습니다.
+- 같은 GetAccount의 Sydney 성공·서울 차단은 새로운 AWS 경험의 선택 리전 제한 가설을 더 뒷받침하지만 실제 p-yizbsie1 본문은 미확인입니다.
+- 계정 발송 활성은 quantgeneration.com 도메인/DKIM 인증, 실제 발신/수신 성공, Cognito 연결을 입증하지 않습니다.
+- 다음은 Sydney의 해당 도메인 GetEmailIdentity 상태를 읽기 전용 확인합니다. 메일 발송·도메인 생성·SCP/IAM 변경·리전 이동·운영 배포는 하지 않습니다.
+- 로컬 상태/안내/작업 기록에 업데이트하며 웹 HTML은 변경하지 않습니다. 현재 Microsoft 미설정 검토본 및 공개 조건은 유지합니다.
+
 ## 현재 범위와 상태
 사용자는 **메일 전환·웹 정책 범위 유지**를 선택했고, 추가로 **기존 Cognito 풀·서울 SES 인증/production 상태·개발 API 존재의 읽기 전용 조회만** 요청했습니다. 신규 리소스 생성·설정 변경·메일 발송·앱 기능 구현·운영 배포는 하지 않았습니다. Microsoft 365도 아직 구매·설정 전입니다.
 
