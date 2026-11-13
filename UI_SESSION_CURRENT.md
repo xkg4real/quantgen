@@ -1,3 +1,30 @@
+# GPT UI 추가 요청 진행 — 2026-11-13 (최신)
+
+- status: taken · owner: GPT UI; 메인 엔진 CURRENT.md는 변경하지 않음.
+- 이전 인계 작업: PR112 head f74c63c, Runtime run 43372599852 진행 중. main 미병합.
+  Linux는 shared KIS 검사, Windows는 owner UI 검사까지 진행(아직 완료로 기록하지 않음).
+- 추가 사용자 원문:
+  1. "지금 시장의 ui들 차트 데이터 받아오는게 너무느리다. 좀 빠르게 못하나?"
+  2. "기술지표 가이드를 주관식으로 검색하게 하면 안돼. 객관식으로 선택할 수잇게 해줘야 하고, 전체적으로 기술지표 가이드 ui의 디자인 부분을 개선해줘야돼."
+  3. "분석 도구, 설계/검증, 분석 등.. 해당 ui가 뭘하는건지도 모르겠고 ... 충분한 안내와 접근성 좋은 고퀄ui로 개선필요해"
+- 추가 작업 work_branch: gpt/ui-guide-speed-20261113, work_commit: 30c5546 (원격 push 완료, 중간 작업).
+  작업 공간 /workspace/quantgen-ui-accessibility-20261113. PR112의 CI 버전을 건드리지 않고 그 위에서 작업.
+- 구현 중: KIS 페이지를 먼저 받은 순서대로 차트에 표시(기존 요청 개수·최종 결과 유지, 새 endpoint 없음).
+  기본 지표 5개 복수 선택 카드, 검색창 제거, 선택형 용어 목록, 차트 옆 간단 해설·펼칠 수 있는 상세.
+  분석 도구 10종·설계/검증 2종·분석 3종에 목적과 실제 3단계 사용 안내(한/영, 표시 전용).
+- 검증: 차트 선표시/가이드 조작 11개 OK. progressive/KIS/router/detail 53개 중 기대 호출 수만 4→3 수정
+  (limit20은 최대2페이지+현재가1; 수정 후 해당 검사 통과). 신규 완성본의 원격 CI·정책 기준선은 아직 미실행.
+- 지금 조사: Linux offscreen 캡처에서 일반 QLabel/입력 텍스트가 빠짐. 실제 텍스트는 있고 QRawFont가
+  QG Symbols, QFont는 Sans Serif로 나옴. 이전 f74c63c에서도 같은 캡처를 만들어 비교 중.
+  use_interface_fonts의 family 등록 검사와 QApplication 기본 글꼴 설정을 확인할 것. Pretendard/N3 변경 금지.
+- 다음: 캡처 글꼴 원인 수정·확인 → 새 가이드/작업 안내 1000/1440px 한영·밝게/어둡게 검증,
+  표시만 바뀌고 요청/결과가 동일한지 검사 → 정책 20종/FACTS/source-review 갱신 → 새 PR/CI/main 병합.
+  PR112는 통과하면 사용자 기존 승인에 따라 먼저 병합 가능. 실패 시 해당 worktree에서 수정.
+- 아직 사용자에게 새 버전 완료 또는 main 적용이라고 알리지 않음. 최종 CMD는 main 병합 SHA 확인 후.
+- 웹 HTML 변경 없음, AWS 실제 대화 발송 도구 없음(큐만 보존). 실계정 시세·Windows DPI 직접 미검증.
+
+---
+
 # GPT UI 진행 체크포인트 — 2026-11-13 (최신)
 
 - status: taken
