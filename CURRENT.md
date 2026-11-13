@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout
 next_ids: ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T18:15:40+09:00
+updated_at: 2026-11-13T18:52:35+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: gpt/pilot-readout-btc-ra-20261113
@@ -20,6 +20,14 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 0b664cd3-df59-47ce-80d7-a9b0e78d8cf8
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## CI 대기 체크포인트 — 2026-11-13T18:52:35+09:00
+
+- 소유권: 같은 execution_id, task/handoff ID, gpt/pilot-readout-btc-ra-20261113 @ 661c6b878442e5c8e2b864766ade379e042825f1를 최신 CURRENT와 재대조했다.
+- PR114: Compliance 43399706971 성공. Runtime 43399706772는 syntax 3.10/3.11 및 Windows3.14 성공(3/6); Ubuntu3.12와 Windows3.11/3.12는 실행 중. 네 환경 모두 앞선 문서 지문/오프라인 앱 검사를 통과했고, 아직 전체 CI 성공이나 main 병합으로 기록하지 않는다. 이전 성공 Runtime43383685578의 환경별 실제 시간은 30.5~58.1분이었다.
+- 소유자에게 Pilot 1 hard_pass=True와 BTC-라 판정에 따른 BTC 관문 통과를 함께 알렸다. 기존 A1~A10 → D절을 따른다. Pilot 2와 그 뒤 Windows 전체 검사/Step 10은 여전히 미완료다.
+- 최신 UI_SESSION_CURRENT 최상단은 별도 GPT UI의 taken, gpt/ui-market-navigation-guide-20261113이다. 이전 returned 절만 보고 이 UI 작업을 인수하지 않는다.
+- 기존 같은 환경의 매시간 감시 예약 활성 설정을 확인했고 그대로 유지했다. 새 예약/run_now/다음 목요일 유예 없음. 설정 확인은 자동 실행 성공 증거가 아니다.
 
 ## 검증 갱신 — 2026-11-13T18:15:40+09:00
 
