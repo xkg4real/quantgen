@@ -1,3 +1,16 @@
+# PR115 최신 검증 체크포인트 — 2026-11-13T10:01Z (이 절 우선)
+
+- status: taken · owner: GPT UI. work_commit: **043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158**.
+- PR115 아직 main 미병합: https://github.com/xkg4real/quantgen/pull/115.
+- Runtime **43404291007** 진행 중. Python3.10/3.11 syntax 성공, Windows3.11/3.12/3.14의 초기 native identity/WM_GETICON·first-paint 검사는 **모두 성공**. 이전 Windows 0xC0000409는 최신 구현에서 재현되지 않음.
+- Compliance **43404290984 성공**. 20종 consistency PASS, 공개 승인 BLOCKED 유지.
+- 넓은 로컬 회귀 /tmp/qg-regression-v2.log는 93개 중 초기 API 호환 오류2개로 끝남. 해당2개는 aeb7577에서 수정하고 /tmp/qg-menu-compat.log 개별 재검증 성공. 전체 성공으로 잘못 보고하지 말 것. 최신 원격 CI가 전체 재검증 중.
+- 마지막 응답을 막은 동안 첫 행 표시·실제 클릭 확인, 빈 결과 뒤 복구, 시장 전환 취소를 검증함. 실제 공급자 응답 시간의 개선율은 미측정.
+- 다음: 최신 Runtime6 jobs 전부 성공 확인 → PR115 expected_head_sha=043b2cd... main merge → main ancestry 확인 → 문서 전용 PR로 PR-115.json/완료 기록 → shared UI returned 및 LEDGER4개 → whydi CMD 안내.
+- 웹 큐 초안 /workspace/shared/ui-20261113-v2/PR-115.json, 전달 도구 없어 queued. CURRENT.md/WEBSITE_AWS_SESSION_CURRENT.md는 변경하지 않음.
+
+---
+
 # PR115 Windows 검증 수정 — 2026-11-13 (이 절 우선)
 
 - status: taken · owner: GPT UI · work_branch: gpt/ui-market-navigation-guide-20261113
