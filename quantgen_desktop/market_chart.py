@@ -66,6 +66,7 @@ class MarketChartSvg(QSvgWidget):
         self.theme = None        # detail: palette colours (bg, text, muted, border)
         self.months = None       # detail: month names in the window language
         self.layout_info = None
+        self.risk_tool = None
         self.zoom_handler = None   # detail: handler(steps, x) zooms keeping the bar at chart x in place
         self.drag_handler = None   # detail: handler(start, x) shows the window from bar `start` (left-drag pan)
         self._wheel_rest = 0       # Ctrl+wheel delta short of a notch (high-resolution wheels, trackpads)
@@ -129,7 +130,8 @@ class MarketChartSvg(QSvgWidget):
             from core.market.detail_svg import EN_MONTHS, render
             svg, layout = render(self.snapshot, studies=self.indicators, cursor=self.cursor, end=self.end,
                                  visible=self.visible_bars, width=max(240, self.width()), height=max(200, self.height()),
-                                 dark=self.dark, theme=self.theme, months=self.months or EN_MONTHS, supply=self.supply)
+                                 dark=self.dark, theme=self.theme, months=self.months or EN_MONTHS, supply=self.supply,
+                                 price_levels=self.risk_tool.price_levels if self.risk_tool is not None else ())
             self.load(QByteArray(svg.encode("utf-8")))
             self.layout_info = layout
             self.layout_changed.emit(layout)
@@ -161,6 +163,11 @@ class MarketChartSvg(QSvgWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.redraw()
+
+    def paintEvent(self, event):
+        super().paintEvent(event)
+        if self.detail and self.risk_tool is not None:
+            self.risk_tool.paint()
 
     def _on_plot(self, x):
         """Detail mode: chart x lies over the drawn bars (where a drag grabs the chart)."""
@@ -211,6 +218,14 @@ class MarketChartSvg(QSvgWidget):
         self._dragging = False
 
     def mouseMoveEvent(self, event):
+        if self.detail and self.risk_tool is not None:
+            if self.risk_tool.move(event):
+                event.accept()
+                return
+            if self._press is None and self.risk_tool.hit(event.position()):
+                self.setCursor(Qt.CursorShape.SizeVerCursor)
+                event.accept()
+                return
         x = event.position().x()
         if self._press is not None:
             if self.detail and event.buttons() & Qt.MouseButton.LeftButton:
@@ -236,6 +251,10 @@ class MarketChartSvg(QSvgWidget):
 
     def mousePressEvent(self, event):
         self.setFocus(Qt.FocusReason.MouseFocusReason)
+        if self.detail and self.risk_tool is not None and self.risk_tool.press(event):
+            self._release_drag()
+            event.accept()
+            return
         x = event.position().x()
         if event.button() == Qt.MouseButton.LeftButton and self._on_plot(x):
             # Owner R-D12-2: a left press on the plot grabs the chart; it pans once the press moves the platform
@@ -279,6 +298,11 @@ class MarketChartSvg(QSvgWidget):
         self._grab_layout = self._layout_key()
 
     def mouseReleaseEvent(self, event):
+        if (self.risk_tool is not None and event.button() == Qt.MouseButton.LeftButton
+                and self.risk_tool.release()):
+            self._hover_cursor(event.position().x())
+            event.accept()
+            return
         if self._press is not None and event.button() == Qt.MouseButton.LeftButton:
             self._release_drag()
             x = event.position().x()
@@ -295,6 +319,8 @@ class MarketChartSvg(QSvgWidget):
 
     def hideEvent(self, event):
         self._release_drag()
+        if self.risk_tool is not None:
+            self.risk_tool.release()
         super().hideEvent(event)
 
     def wheelEvent(self, event):

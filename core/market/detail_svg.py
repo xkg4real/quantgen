@@ -76,6 +76,18 @@ class ChartLayout:
     axis_top: float = 0.0
     hidden_panels: tuple = ()     # sub-panel keys that did not fit
     unavailable: dict = field(default_factory=dict, hash=False)   # key -> engine availability code
+    price_range: tuple = (0.0, 1.0)  # low, high used by the price renderer
+    price_scale: tuple = (0.0, 1.0)  # pixel top, bottom of that exact scale
+
+    def y_of_price(self, value):
+        low, high = self.price_range
+        top, bottom = self.price_scale
+        return bottom - (value - low) / (high - low) * (bottom - top)
+
+    def price_at(self, y):
+        low, high = self.price_range
+        top, bottom = self.price_scale
+        return low + (bottom - y) / max(bottom - top, 1e-9) * (high - low)
 
     def index_at(self, x):
         """The bar under a pointer x (clamped to the window)."""
@@ -241,7 +253,7 @@ def _time_ticks(bars, start, x, *, intraday, months, min_gap):
 
 
 def render(snapshot, *, studies=(), cursor=None, end=None, visible=120, width=900, height=600, dark=False,
-           theme=None, months=EN_MONTHS, supply=None, values=None):
+           theme=None, months=EN_MONTHS, supply=None, values=None, price_levels=()):
     """(svg text, ChartLayout) of `snapshot` at exactly width x height.
 
     `studies`: registry keys (core.education.indicators.STUDIES; 'bollinger' is accepted for 'bb'). `end` is the
@@ -344,6 +356,9 @@ def render(snapshot, *, studies=(), cursor=None, end=None, visible=120, width=90
             seen = [v for v in window(key, line_spec.id) if v is not None]
             if seen:
                 lo, hi = min(lo, min(seen)), max(hi, max(seen))
+    levels = [float(v) for v in price_levels if math.isfinite(float(v)) and float(v) > 0]
+    if levels:
+        lo, hi = min(lo, *levels), max(hi, *levels)
     pad = (hi - lo) * .04 or max(abs(hi) * .01, .01)
     lo, hi = lo - pad, hi + pad
     pane = price_bottom - price_top
@@ -471,7 +486,7 @@ def render(snapshot, *, studies=(), cursor=None, end=None, visible=120, width=90
 
     layout = ChartLayout(width, height, plot_left, plot_right, step, start, stop, selected,
                          (price_top, price_bottom), (volume_top, price_bottom), tuple(panels), axis_top,
-                         tuple(hidden), dict(unavailable))
+                         tuple(hidden), dict(unavailable), (lo, hi), (scale_top, scale_bottom))
     return "".join(parts) + "</svg>", layout
 
 

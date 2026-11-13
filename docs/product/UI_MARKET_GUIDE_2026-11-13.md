@@ -1,5 +1,13 @@
 # 시장 메뉴·지표 가이드·첫 시세 표시·작업표시줄 로고
 
+**2026-11-13 main 반영 완료:** [PR115](https://github.com/xkg4real/quantgen/pull/115),
+병합 `1006b5ee80067fae4b61c26b322794d6906a05bb`. 앱/테스트/자산/Runtime 설정이 같은
+`5d98193`의 [Runtime 43419701530](https://github.com/xkg4real/quantgen/actions/runs/43419701530)
+6개 작업(Windows3.11·3.12·3.14, Linux3.12, 문법3.10·3.11)이 통과했다. 이후 문서만 통합한
+`d743695`의 [Compliance 43429242181](https://github.com/xkg4real/quantgen/actions/runs/43429242181)도 통과했다.
+문서 통합 때 자동 재시작된 Runtime43429242177의 완료와 혼동하지 않는다.
+웹 후속은 [PR-115 큐](ui_website_updates/PR-115.json)를 따른다.
+
 사용자의 2026-11-13 정정이 과거 UI-D11의 상시 메뉴와 우측 플라이아웃 요구를 대체한다.
 바탕화면 바로가기는 만들지 않는다. 대상 앱은 `python -m quantgen_desktop` 네이티브 앱이다.
 

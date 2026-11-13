@@ -180,9 +180,17 @@ def cursor_text(series,keys,index,locale=None):
 
 
 def reading_text(series,keys,index,locale=None):
+    from .signal_context import signal_note, alignment_note
     ctx=locale or LocaleContext();selected=selection(keys);values=values_for(series,selected);bars=bars_for(series)
-    return '\n'.join(I.study(k).name(ctx.language)+' · '+(missing_reason(series,k,ctx.language) or
-        G.short_reading(k,bars,index,language=ctx.language,values=values.get(k),supply=getattr(series,'supply',None))) for k in selected)
+    parts=[]
+    for key in selected:
+        missing=missing_reason(series,key,ctx.language)
+        reading=missing or G.short_reading(key,bars,index,language=ctx.language,values=values.get(key),supply=getattr(series,'supply',None))
+        note='' if missing else signal_note(key,bars,index,language=ctx.language,values=values.get(key))
+        parts.append(I.study(key).name(ctx.language)+' · '+reading+('\n'+note if note else ''))
+    difference=alignment_note(selected,bars,index,language=ctx.language,values=values)
+    if difference:parts.append(difference)
+    return '\n\n'.join(parts)
 
 
 def counterexamples(series,keys,*,limit=4):
@@ -202,7 +210,9 @@ def learning_bundle(series,keys,meta,*,case_name,locale=None,cursor=None):
         for title,value in ((ctx.t('meaning'),item.what),(ctx.t('look'),item.how),(ctx.t('limit'),item.caution)):
             body.append('<h3>'+escape(title)+'</h3><p>'+escape(value)+'</p>')
         body.append('<p>'+escape(missing_reason(series,key,ctx.language))+'</p></section>')
-    if cursor is not None:body.append('<p>'+escape(cursor_text(series,selected,cursor,ctx))+'</p>')
+    if cursor is not None:
+        body.append('<p>'+escape(cursor_text(series,selected,cursor,ctx))+'</p>')
+        body.append('<p>'+escape(reading_text(series,selected,cursor,ctx)).replace('\n','<br>')+'</p>')
     body.append('</html>')
     record={'format':'quantgen.study-education/2','selected_indicators':list(selected),'locale':str(ctx.locale),
             'case':case_name,'source':meta,'education_only':True,'verdict':'NOT_RUN',

@@ -357,6 +357,11 @@ class GuideCard(QFrame):
             layout.addWidget(self.headline)
         self.gauge = Gauge()
         layout.addWidget(self.gauge)
+        self.context_note = label("guideCaution", wrap=True)
+        self.context_note.setObjectName("indicatorContextNote")
+        self.context_note.setProperty("qg_literal", True)
+        layout.addWidget(self.context_note)
+        self.context_note.hide()
         self.one_liner = label("guideOne", wrap=True)
         layout.addWidget(self.one_liner)
         self.cues = ChipRow()
@@ -401,12 +406,14 @@ class GuideCard(QFrame):
         self.more.setChecked(bool(on))
 
     def show_guide(self, *, language, name, reading, state="", tone="", gauge=None, gauge_labels=("", ""),
-                   short=None, long_texts=(), colors=None):
+                   short=None, long_texts=(), colors=None, context=""):
         """reading: the short sentence now ('' hides it); state: the pill's word; gauge: study_guide.gauge_value
         output or None; short: study_guide.ShortGuide (full card); long_texts: what sits behind 자세히, in order."""
         self.language = language
         self.headline.setText(reading)
         self.headline.setVisible(bool(reading))
+        self.context_note.setText(context)
+        self.context_note.setVisible(bool(context))
         self.pill.setText(state)
         set_prop(self.pill, "tone", tone or "flat")
         self.pill.setVisible(bool(state))
@@ -876,6 +883,7 @@ class IndicatorPicker(QWidget):
             self._filter(self.search.text())
 
     def fill_guide(self, card, key, lang, bars, interval, supply, values=None, index=-1):
+        from core.education.signal_context import signal_note
         reading, code, gauge, short, long_texts = guide_parts(key, bars, language=lang, interval=interval,
                                                               supply=supply, values=values, index=index)
         from core.education.indicators import availability, study
@@ -887,7 +895,8 @@ class IndicatorPicker(QWidget):
         card.show_guide(language=lang, name=study(key).name(lang), reading=reading,
                         state=state_word(key, code, lang), tone=state_tone(code), gauge=gauge,
                         gauge_labels=self.gauge_labels(key, gauge, lang), short=short, long_texts=long_texts,
-                        colors=self.gauge_colors)
+                        colors=self.gauge_colors,
+                        context="" if reason else signal_note(key, bars, index, language=lang, values=values))
 
 
 _GAUGE_NAMES = ("gauge_name_sma", "gauge_name_ema", "gauge_name_vwap", "gauge_name_psar", "gauge_name_macd",

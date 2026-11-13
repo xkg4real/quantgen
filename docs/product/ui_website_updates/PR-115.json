@@ -1,0 +1,55 @@
+{
+  "id": "PR-115",
+  "source_pr": "https://github.com/xkg4real/quantgen/pull/115",
+  "source_branch": "gpt/ui-market-navigation-guide-20261113",
+  "source_commit": "d743695a7cf01b435703767ea72a2468dfa7900a",
+  "summary": "Hidden downward market navigation; dedicated index and asset destinations within Markets; progressive first quotes and cancellation on market switch; compact 27-study guide; stock-detail research styling; native Windows taskbar identity and logo.",
+  "changed_files": [
+    "quantgen_desktop/app.py",
+    "quantgen_desktop/market_menu.py",
+    "quantgen_desktop/market_destinations.py",
+    "quantgen_desktop/market_rankings.py",
+    "quantgen_desktop/indicator_guide.py",
+    "quantgen_desktop/research_style.py",
+    "quantgen_desktop/windows_branding.py",
+    "quantgen_desktop/workspace_guide.py",
+    "quantgen_desktop/typography.py",
+    "quantgen_desktop/tools.py",
+    "quantgen_desktop/shell_rail.py",
+    "core/education/catalog.py",
+    "core/education/indicators.py",
+    "core/market/presentation.py",
+    "quantgen_desktop/rail_menu.py",
+    "quantgen_desktop/stock_detail.py"
+  ],
+  "verification": {
+    "local": "30 navigation/guide/workflow/catalog checks passed; 56 catalogue/engine/rendering checks passed; 9 first-display/loader checks passed; 3 click/first-display checks passed; 2 old menu API compatibility checks and 1 hover lifetime check passed (overlapping groups, not a unique total). Wider 93-test run used the old menu API implementation: 91 passed, 2 failed; both failures were fixed and individually rechecked. Syntax and 20-document consistency passed. Follow-up: 39 stock-chart layout/detail checks passed; nested layout reflow reproduced 48 px displacement before the fix and passes after it. Market fixture chain 66 passed (87.790s); owned windows now destroyed after cleanup; all existing CI test module occurrences and deadlines preserved.",
+    "remote": "Runtime43419701530: all six jobs PASS on 5d98193 (Windows3.11/3.12/3.14, Ubuntu3.12, syntax3.10/3.11). Integration d743695 changes only documentation, preserving the byte-identical app/tests/assets/Runtime workflow. Its Compliance43429242181 PASS; automatically repeated Runtime43429242177 was still in progress when this record was written.",
+    "limitations": "No real account latency measurement, owner Windows Explorer/DPI/screen-reader check, or website deployment claim.",
+    "runtime_url": "https://github.com/xkg4real/quantgen/actions/runs/43419701530",
+    "compliance_url": "https://github.com/xkg4real/quantgen/actions/runs/43429242181",
+    "verified_runtime_head": "5d981931b5d25237cfe60509f982b7021c039a62"
+  },
+  "website_impact": {
+    "classification": "review_required",
+    "native_only": [
+      "Win32 AppUserModelID and HWND icons; no shortcut creation."
+    ],
+    "browser_review": [
+      "Use downward disclosure and market-owned destinations if the browser has these surfaces.",
+      "Compact multiple-choice catalogue and matching indicator colours, full explanations, and explicit missing-data states.",
+      "Show observed partial rows as loading; never label partial ordering as a final ranking."
+    ],
+    "requested_action": "웹사이트 작업공간(AWS): 실제 웹 소스에서 해당 화면이 있는지 검토하고 적용/검증/배포 상태를 각각 기록하세요. Python Qt 코드를 HTML에 복사하지 마세요."
+  },
+  "delivery": {
+    "status": "queued",
+    "destination": "웹사이트 작업공간(AWS)",
+    "reason": "Supported cross-chat send tool unavailable; shared handoff is a durable record, not a delivered chat message."
+  },
+  "website_application": "unverified",
+  "deployment": "unverified",
+  "merge_status": "merged",
+  "product_source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7",
+  "merge_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+}
