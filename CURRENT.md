@@ -1,12 +1,12 @@
 ---
-status: taken
+status: returned
 reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout
 next_ids: ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-14T03:02:40+09:00
+updated_at: 2026-11-14T03:07:32+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: gpt/r3-outage-20261114
@@ -20,6 +20,15 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2c285afe-264f-4ef3-8c2d-fef1d64f0e89
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## 부분 인계 — CI 검사 수정 완료·새 전체 CI 대기 — 2026-11-14T03:07:32+09:00
+
+- [주간 누적 인계·실패 이력·재현·다음 시작점](WEEKLY_HANDOFF_2026-11-14_2c285afe.md). execution **2c285afe-264f-4ef3-8c2d-fef1d64f0e89**. 자동감시·예약·자동 인수는 취소 유지다.
+- PR121 **ea3d596**: 최신 승인 UI와 달랐던 회귀검사2파일+검토12만 수정. PR122 **197c0e1**: Windows 경로 동일성 검사와 선행 수정 merge 이력 포함. 두 commit의 parent·경로·원격 내용/blob·branch head를 대조했다. 제품 코드/정책 본문은 이번 변경에서 동일하다.
+- 로컬 **R3 합동154 PASS**, **UI 수정3+주변8 PASS**. Qt6.12/QG 글꼴/Linux offscreen/합성 UI 자료만 사용. 이전 CI의 UI3건·Windows1건 실패와 격리 UI 구성 실패를 인계에 보존했다.
+- 새 Compliance **43478588069/43478852613 성공**(각47검사, source749/752,20문서/20양식,publication BLOCKED). 새 Runtime **43478587544/43478852671 진행 중**: syntax2개 및4환경 bounded 단계 성공, installed4개 전체 미완료. 두 PR OPEN·미병합, main e01e152 유지 확인. 새 완료ID/LEDGER 행/부모 취소선 없음.
+- sapientia Remaining Work 두 하위 줄에 위 근거·새 commit·전체CI대기를 최소 반영했고 warning 없는 성공 응답을 private queue revision과 함께 저장했다. Windows E/cdbbe61 판독 완료는 보존하며 재실행 요구 없음. Step10 P2 후속승인 답은 아직 없고 연구 브랜치/P3/F는 변경하지 않았다.
+- 다음: 소유권 검증 후 **각 새 head 전체CI → F 미진행·최신main 확인 → PR121→122 병합 → child만 완료기록**. 전체 Goal·recorder/1·R3·⑦-1/⑦-2 완료가 아니다.
 
 ## CI 회귀검사 수정 게시·재검증 대기 — 2026-11-14T03:02:40+09:00
 
