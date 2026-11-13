@@ -315,7 +315,7 @@
     "docs/product/CARRY_LANGUAGE_2026-10-31.md": "7cf0c8152b053bfaeaf44dd72e7244acb076426ae5618fd20291eb2b2b26a691",
     "docs/product/CHART_C_DESIGN_2026-10-31.md": "4ef295e78271c6335666df6ac1456459235a0a0b35ddfd9de813952e524221ae",
     "docs/product/CHART_RECEIVED_BARS_REVIEW_20261102.md": "3f05520af76a14bbeb8fab8f7db874b25f18e52d4e884ec6b46e305e58f7ca44",
-    "docs/product/CHART_RISK_REWARD_2026-11-13.md": "473dec95294fd4f049774d4dacaeca9ffb055606ecc8f727edf283bac94878ca",
+    "docs/product/CHART_RISK_REWARD_2026-11-13.md": "9c5456fcd3842f6ea318b9ada390176600ab49ad155cd740b560f85de5b2eef9",
     "docs/product/CLAUDE_CONNECTION_2026-10-31.md": "2bfa046706999da34447f4aa896e19bdb350e1c1eabc436126c5adc527c44242",
     "docs/product/CMS_COUPON_DISCLOSURE_2026-11-02.md": "50d1460fdea1e4b6837dc6c2a4da4c65996dde55e5c0da35fcb98cd7d07e6f00",
     "docs/product/COMPACT_NATIVE_UI_20261107.md": "1749bda315e43413f59f68a250d6424566451f3919db7a1cfc7c4d9a1947578b",
@@ -384,7 +384,7 @@
     "docs/product/TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md": "eeb6a1394c46fd67859dc5c8066d9adc125802efa24c29add93b5d8528404314",
     "docs/product/UI_D11_D15_2026-11-13.md": "227e4f629f772b9d43f9f902e92f11f1189e0b145d06adeae75ca627dba5760d",
     "docs/product/UI_LOCALIZATION.md": "7a8bc3a69e4e3728e18e0bf62b0613f792079b0a5f3d7b03742dfd5f4596b512",
-    "docs/product/UI_MARKET_GUIDE_2026-11-13.md": "5481170e3129458d86e30e3f043cd43cda007a8350841a314e2b1fbd8d211fb9",
+    "docs/product/UI_MARKET_GUIDE_2026-11-13.md": "7dcf73785dcb35d71214bc72b8864c0e12899e9f458eec313d8883e86146bed7",
     "docs/product/UI_RENDERING_2026-10-31.md": "f006b261d10a28594dc3b31d05424ac144004ca4edca18646ca00b5c0f8a19f6",
     "docs/product/UI_SESSION_PROGRESS_2026-10-31.md": "6f8fd39bdfc77df266095c1e46170c1a679e3267d200a0fc3f6995b196dd0de4",
     "docs/product/UI_WEBSITE_SYNC.md": "37b62baa94dece046c08e70c01d49e4658937cbaa21d3b980c9fcb9099913363",
@@ -753,163 +753,163 @@
   "reviews": {
     "1": {
       "document_sha256": "5af551f2c51f152b5c4b5deb9875bc6642df5cfbc81712f95cf6540adab08164",
-      "source_digest": "445f8724594c4a795a378994a8d2672e7b25427916bf484016ee7f6c9e6a2b56",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.893740+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "1def21b7733d994359206247e919eb54c06dc293b95724293cd6ed78dd5b6e0a",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.710999+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "2": {
       "document_sha256": "ef84127ee99c925ee968cc0c5daf0842f86d2442e4feca6355a980be7c7c9de1",
-      "source_digest": "445f8724594c4a795a378994a8d2672e7b25427916bf484016ee7f6c9e6a2b56",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.895888+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "1def21b7733d994359206247e919eb54c06dc293b95724293cd6ed78dd5b6e0a",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.713125+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "3": {
       "document_sha256": "3ca21f319ec59aec287f2dc0ba46e20f9d964cc477171eee574ba307ab670bae",
-      "source_digest": "716e467a50886f01ebdf0b7d84e92b8ccb8988e302b5fa4b83bf45d469908e08",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.897243+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "c5ef0ca6491031f6e7c03f9f3e8d8c9752173fb416f70f05786522c172969b7e",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.714629+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "4": {
       "document_sha256": "50b475544836279e505eadeb6cfcbe2c968a9438b5ea1563485d02ef19e77eca",
-      "source_digest": "a0516682b771e95ff5ecb71022e773243a6a2281d0770c3a2d92a1ba7900a3ec",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.898563+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "37a3055129ba9c1d45dc03f4927cb89ded01293ff24737c90aa3c422d033dd0a",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.715992+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "5": {
       "document_sha256": "8af6f984e25c502b318d3be2f780cd626b13b8118f44aabb25f8a86733129301",
-      "source_digest": "47c96e5d0087c7a0bc0206fdd40089ef9198256ff9c968f3aa0d9889ec1bd8bb",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.900074+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "4e6475928159f0452fb8184d07b3bc605b36b3a4e5e93a0ce10316a5e2260038",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.717426+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "6": {
       "document_sha256": "5bcbfbd3d40249dd6dbb2c0148877abd2f1db578a8c63cb516527783bc7ae5a0",
-      "source_digest": "88ad6116a946774b37b90e10441b6e3661d0cfe6c3d14a9ef96386c8a25694ed",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.901864+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "6d50c3f553e092477d9262c8b065a1e5f1fea3e293e98cf3914f230234197876",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.719367+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "7": {
       "document_sha256": "af4c5d6cb7bbf0a6fcb26ec3569a45cc2d7e816d40deecd72ecd9747c1c951fd",
-      "source_digest": "445f8724594c4a795a378994a8d2672e7b25427916bf484016ee7f6c9e6a2b56",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.903784+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "1def21b7733d994359206247e919eb54c06dc293b95724293cd6ed78dd5b6e0a",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.720760+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "8": {
       "document_sha256": "34e0aa30f3d1db280d009c6c675af8e0f80e7769cff3c26ec9245d4733230185",
-      "source_digest": "88ad6116a946774b37b90e10441b6e3661d0cfe6c3d14a9ef96386c8a25694ed",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.905444+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "6d50c3f553e092477d9262c8b065a1e5f1fea3e293e98cf3914f230234197876",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.722194+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "9": {
       "document_sha256": "be7468925deb2a2cf37a4528c7f2facaa72e0891cf075a5a25707516e03a3184",
-      "source_digest": "fb351ec8f826a065ea6d2646443158e98afd51e7ae2286c3cff7ced4c6d5f324",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.906770+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "1d76f2a01292cb02952be9a5dfd26e7776c979bad5357b20fbd58a220f9b012e",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.724052+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "10": {
       "document_sha256": "7cd9fa77ca3f76b03960d0582910951a8916da5a5525b82dd95bad506252324e",
-      "source_digest": "5121f97f168353ec2f3989b133e45e7df424f70ee099da61a191577c0f4104a1",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.909144+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "6adff5f735b82efe928ee9e559be2b195e541bbc8509a4a8e732eb21a0afc897",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.727032+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "11": {
       "document_sha256": "3dcf152c2373f2700255bad746445e7c56923d7cc5ce363edcbbdb021f35c434",
-      "source_digest": "63abb767aef616961154f08fcaa1b5308e638979be80aa5d48e4f1fb64fd79bf",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.910957+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "da9d0b33630505df6757a2dad95f689b75c833da365c0c15402767f73bb3dd1e",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.728654+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "12": {
       "document_sha256": "e96193867a959cfd1c312d4a7e58bad499a4e34a62001d95befdc39729e5476a",
-      "source_digest": "16362f994345954d7cd4a489bc678090cda35dc713349727cb48451b91456a70",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.912452+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "6cb3cbda14a51ac538657f8d81e786b6c761b24e690f4eedffec31b53494bf82",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.730287+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "13": {
       "document_sha256": "cc61b1ae098eba361b1f65fa918e5b3067f8a578b36a350c3aa88979e80e283a",
-      "source_digest": "fb351ec8f826a065ea6d2646443158e98afd51e7ae2286c3cff7ced4c6d5f324",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.913746+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "1d76f2a01292cb02952be9a5dfd26e7776c979bad5357b20fbd58a220f9b012e",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.732425+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "14": {
       "document_sha256": "9c834670ae8f7366d40ae67da55cabed34f06b801a3d630801f576b737689cc5",
-      "source_digest": "fb351ec8f826a065ea6d2646443158e98afd51e7ae2286c3cff7ced4c6d5f324",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.915136+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "1d76f2a01292cb02952be9a5dfd26e7776c979bad5357b20fbd58a220f9b012e",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.733891+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "15": {
       "document_sha256": "2c5730906295327eeed1b9d76c1ce76c9d57fafc991707dbe049c899e6c6fcfa",
-      "source_digest": "fb351ec8f826a065ea6d2646443158e98afd51e7ae2286c3cff7ced4c6d5f324",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.916398+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "1d76f2a01292cb02952be9a5dfd26e7776c979bad5357b20fbd58a220f9b012e",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.736016+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "16": {
       "document_sha256": "918c900d3bb755d31e777bc81c75254350abba28508d9adb7e5523d2acf3e0b6",
-      "source_digest": "f988e1f66e079ee7f1e63e2c6a96bd06276d931afd1ed1488028035e86c92a1a",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.917588+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "cdeb1bcb8bb34f0ee1bbd3412593e7f00a77b70fbb437e48eeb2b628babab57c",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.740375+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "17": {
       "document_sha256": "5c6711f75dbe63f095ecbc2d69ed05c5e32b8ff1893bc289d2247fa1bdbcb750",
-      "source_digest": "88ad6116a946774b37b90e10441b6e3661d0cfe6c3d14a9ef96386c8a25694ed",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.919157+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "6d50c3f553e092477d9262c8b065a1e5f1fea3e293e98cf3914f230234197876",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.742915+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "18": {
       "document_sha256": "f8735287ded6907dc0bd3f76f93bb5b01e24ccc09a9f7f32c9d879e250098adf",
-      "source_digest": "445f8724594c4a795a378994a8d2672e7b25427916bf484016ee7f6c9e6a2b56",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.920602+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "1def21b7733d994359206247e919eb54c06dc293b95724293cd6ed78dd5b6e0a",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.744629+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "19": {
       "document_sha256": "d4be6ee969407ef5c3d6cbd49f4768987793ccc45ca4b30b58db14bd1a064970",
-      "source_digest": "68e6040eaed94da214ab3ebc10872f1e7b0cc89152ac287051bb73959cff7a17",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.924203+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "f73aa119177e05aa289d18347d76a3434455a5601bc01cab7eded4d27a81ee15",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.746283+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     },
     "20": {
       "document_sha256": "9449b84dcbe09bc6cb52c054b494ebc51b31a7d0969813ce189250b64e2a9628",
-      "source_digest": "445f8724594c4a795a378994a8d2672e7b25427916bf484016ee7f6c9e6a2b56",
-      "reviewed_by": "GPT chart UI review",
-      "review_note": "Review user-authored chart risk/reward and approved conditional indicator explanations, including educational export; no order, profit promise, regulatory-exemption claim or publication approval.",
-      "reviewed_at": "2026-11-13T13:14:22.925825+00:00",
-      "source_commit": "1006b5ee80067fae4b61c26b322794d6906a05bb"
+      "source_digest": "1def21b7733d994359206247e919eb54c06dc293b95724293cd6ed78dd5b6e0a",
+      "reviewed_by": "GPT UI delivery review",
+      "review_note": "Reviewed merged chart documentation, recorded completed checks and running Runtime, Windows launcher and queued website record. Product behavior and publication blockers remain as reviewed at 3951195.",
+      "reviewed_at": "2026-11-13T13:26:15.749904+00:00",
+      "source_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
     }
   }
 }

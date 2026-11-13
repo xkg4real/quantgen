@@ -1,5 +1,23 @@
 # 차트 손익비와 관측 신호 해설
 
+## 반영 상태 — 2026-11-13
+
+[PR117](https://github.com/xkg4real/quantgen/pull/117)은 **main에 병합됐다**.
+구현 커밋은 `395119531ea7b64f29ccf25954d47748d5314744`, 병합 커밋은
+`3db656c4fd3573b66c171bcc55e07eda384115bb`다. PR115의 시장·가이드·로고 개선도 포함한다.
+
+- 최종 로컬 신호/손익비/카탈로그/문법 검사 20개 PASS. 앞선 차트/레이아웃 47개,
+  가이드 포함 26개, 실제 상세 화면 통합 7개 검사도 통과했다. 서로 겹치는 그룹이므로 합산하지 않는다.
+- [Runtime43432023421](https://github.com/xkg4real/quantgen/actions/runs/43432023421):
+  Windows Python 3.11·3.12·3.14와 Linux 3.12에서 새 기능 검사 및 초기
+  native 로고/선표시/차트 고정/market fixture 단계 PASS. 문법 3.10·3.11 PASS.
+  **전체 Runtime은 이 기록 시점에 진행 중**이며 전체 성공으로 보고하지 않는다.
+- [Compliance43432023436](https://github.com/xkg4real/quantgen/actions/runs/43432023436) PASS.
+  20종 정책 문서의 일관성 PASS와 실제 공개 준비 BLOCKED는 별개다.
+- 소유자 Windows의 실제 DPI/Explorer 표시와 실계정 속도는 미검증이다.
+- [AWS 후속 기록](ui_website_updates/PR-117.json)은 queued다. 채팅 전송 도구가 없어
+  직접 전송하지 못했으며 웹 구현·배포 완료를 뜻하지 않는다.
+
 소유자 요청: “차트에 손익비 계산할수있게 트뷰처럼 구현도 돼야해”.
 후속 승인: RSI 과매도 이탈을 설명하면서 함께 확인할 조건과 추세 반전이 확정되지 않았음을
 알려주는 예시에 “너가 예시준거 좋다 저정도로”라고 답했다.
@@ -41,4 +59,4 @@
 - 오프라인 화면: `/workspace/shared/ui-risk-reward-20261113/`. 실계정 수익이나 체결 검증이 아니다.
 
 실행은 [whydi PC CMD 안내](UI_MARKET_GUIDE_2026-11-13.md#whydi-pc-실행)를 따른다.
-최종 PR/병합/CI 상태는 같은 세션의 UI 인수인계와 웹 작업 큐에 기록한다.
+메인/Claude용 최신 인계는 공용 `handoff` 브랜치의 `UI_SESSION_CURRENT.md`와 `LEDGER.md`에 기록한다.
