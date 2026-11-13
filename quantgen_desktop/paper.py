@@ -311,7 +311,8 @@ class PaperPane(QWidget):
         self.session=session;layout=QVBoxLayout(self)
         layout.addWidget(label('Paper Trading · 실제 주문 없음','heading'))
         self.status=label('명시적으로 세션을 열기 전에는 규칙/모의 기록을 읽지 않습니다.','muted');layout.addWidget(self.status)
-        actions=QHBoxLayout();self.buttons={}
+        from .category_picker import CategoryFlow
+        actions=CategoryFlow();self.buttons={}
         for key,title,fn in [('open','모의 세션 읽기',session.open),('arm','Arm',self.arm),('disarm','Disarm',lambda:session.runtime.disarm()),
             ('halt','긴급 정지',lambda:session.runtime.halt()),('ack','HALT 확인',lambda:session.runtime.acknowledge()),
             ('tick','한 번 평가',session.tick),('reset','모의 기록 초기화',self.reset)]:

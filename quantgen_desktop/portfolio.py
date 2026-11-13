@@ -66,6 +66,11 @@ class PortfolioPane(QWidget):
         self.status.setProperty("reading_help_keep_visible", True)
         inner.addWidget(self.status);layout.addWidget(box)
         self.empty=label(EMPTY_STATE,"muted")
+        self.empty.localized_text = {
+            'ko': '종목과 목적함수를 정한 뒤 분석을 실행하세요. 결과에서 네 가지 배분 방식과 위험을 비교할 수 있어요.',
+            'en': 'Choose assets and an objective, then run the analysis to compare four allocations and their risks.'}
+        self.empty.retranslate()
+        self.empty.setMaximumWidth(960)
         self.empty.setProperty("reading_help_keep_visible", True)
         layout.addWidget(self.empty)
 

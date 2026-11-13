@@ -88,7 +88,7 @@ class WorkspaceGuide(QFrame):
         super().__init__()
         self.setObjectName('workspaceGuide')
         self.setMaximumWidth(1100)
-        column=QVBoxLayout(self);column.setContentsMargins(0,8,0,14);column.setSpacing(8)
+        column=QVBoxLayout(self);column.setContentsMargins(0,4,0,12);column.setSpacing(7)
         self.purpose=LocalLabel({},'workflowTitle');column.addWidget(self.purpose)
         self.scope=LocalLabel({},'caption');column.addWidget(self.scope)
         self.step_host=QWidget();self.steps_grid=QGridLayout(self.step_host)
@@ -121,8 +121,9 @@ class WorkspaceGuide(QFrame):
     def _reflow(self):
         columns=3 if self.width()>=650 else 1
         while self.steps_grid.count():self.steps_grid.takeAt(0)
-        for i,(host,_) in enumerate(self.steps):self.steps_grid.addWidget(host,i//columns,i%columns)
-        for col in range(3):self.steps_grid.setColumnStretch(col,int(col<columns))
+        for i,(host,_) in enumerate(self.steps):
+            self.steps_grid.addWidget(host,i//columns,i%columns,Qt.AlignmentFlag.AlignLeft)
+        for col in range(4):self.steps_grid.setColumnStretch(col,int(col==columns))
 
     def resizeEvent(self,event):
         super().resizeEvent(event)

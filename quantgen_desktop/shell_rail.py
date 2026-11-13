@@ -7,14 +7,10 @@ Owner ruling UI-D11 (2026-11-12, with a TradingView-style menu image), verbatim:
 두지 말고 이런식으로 큰 범주로 묶고 저기 뭐 주식 하부 유야이다 그러면 거기 마우스 휠 올려놓으면 더 하부로 국내, 미국,
 글로벌 뭐 이런 식으로 볼수있고 거기서 국내에 마우스 올려놓으면 다시 거래대금 거래량 급상승 급하락 이렇게 누를수있게.
 누르면 지금 ui랑 똑같이 저 화면으로 바로 넘어갈수잇게 그니까 바꾸라는게 아니야. 지금 시장 안의 ui는 괜찮다. 새꺄 그리고
-코인이 뭐야 ETF라해야지". So the sub-items are the image's big categories (`MARKET_CATEGORIES`: 지수 · 주식 · 크립토 ·
-선물 · 외환 · 국채 · 회사채 · ETF · 월드 이코노미), each opening cascading flyouts (`rail_menu.RailFlyouts`) whose
-leaves open what the app already has (`market_menu`): a market page ranked by a category, a Research Home market
-card, or an analysis tool. 글로벌 is left out: no data path for it exists, and no dead item is shown.
-
-UI-D11 review: the nine rows show on every page, so the rail never reflows under the pointer (they appeared only on
-Markets, and choosing a page below them moved it about 320 px), and a row is highlighted only for the Markets page
-shown. A row with one page of its own opens it on a click (국내 / 미국 under 주식 and ETF, 크립토, 선물, 회사채).
+코인이 뭐야 ETF라해야지". So the sub-items are the image's big categories (`MARKET_CATEGORIES`). They disclose below the
+category inside the rail. Stocks and ETFs stop at country choices; rankings live inside their
+market page. Single destinations (crypto, futures, corporate bonds) open directly. Every leaf
+stays in Markets, including observed series and independent analytical workspaces.
 
 The window (`app.ResearchWindow`) owns the state; this module holds the pieces that do not need the window: the
 menu tree, the painted icons and the rail's arrow-key handling.
@@ -35,7 +31,7 @@ MARKET_CATEGORIES = (("indices", "Indices", "지수"), ("stocks", "Stocks", "주
                      ("corp", "Corporate bonds", "회사채"), ("etf", "ETFs", "ETF"),
                      ("economy", "World economy", "월드 이코노미"))
 # The market pages under 주식 / 크립토 / ETF: (category, ((page, English, Korean), ...)). 크립토 has one page, so its
-# flyout lists the ranking categories directly.
+# row opens its page directly.
 MARKET_SUBS = {"stocks": (("kr", "Korea", "국내"), ("us", "US", "미국")),
                "crypto": (("crypto", "Crypto", "크립토"),),
                "etf": (("etf_kr", "Korea", "국내"), ("etf_us", "US", "미국"))}
@@ -80,14 +76,8 @@ def page_categories(page):
     return tuple(key for key in R.CATEGORY_KEYS if not category_note(page, key))
 
 
-def _ranking_nodes(page, language):
-    from core.market import rankings as R
-    return tuple(MenuNode(key, R.text(R.CATEGORIES, key, language), leaf=("market", page, key),
-                          mark=("market", page, key)) for key in page_categories(page))
-
-
 def market_menu(language):
-    """Localized market categories with rankings, observed series and asset workspaces."""
+    """Destinations only: stock/ETF countries; ranking filters stay inside Markets."""
     from .owner_ui_language.home import MARKETS as HOME_NAMES
     names = {**HOME_NAMES, '^KQ11': ('KOSDAQ', '코스닥'), '^IXIC': ('NASDAQ Composite', '나스닥 종합')}
     language = "ko" if language == "ko" else "en"
@@ -101,9 +91,9 @@ def market_menu(language):
                              for symbol in INDEX_CARDS)
             leaf = ('series', key, '^KS11')
         elif key == "crypto":
-            children, leaf = _ranking_nodes("crypto", language), ("market", "crypto", "")
+            children, leaf = (), ("market", "crypto", "")
         elif key in MARKET_SUBS:
-            children = tuple(MenuNode(page, _pick(language, sub_en, sub_ko), _ranking_nodes(page, language),
+            children = tuple(MenuNode(page, _pick(language, sub_en, sub_ko),
                                       leaf=("market", page, ""), mark=("page", page))
                              for page, sub_en, sub_ko in MARKET_SUBS[key])
         else:
@@ -116,6 +106,7 @@ def market_menu(language):
             children=tuple(items)
             if len(children) == 1:  # 선물, 회사채: one tool, so a click opens it
                 leaf = children[0].leaf
+                children = ()
         rows.append(MenuNode(key, text, children, leaf=leaf, mark=("category", key)))
     return tuple(rows)
 

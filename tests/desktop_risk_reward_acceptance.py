@@ -86,6 +86,51 @@ class ChartScenarioTests(unittest.TestCase):
         self.assertEqual(self.tool.plan.target - self.tool.plan.entry, before.target - before.entry)
         self.assertEqual(self.tool.plan.entry - self.tool.plan.stop, before.entry - before.stop)
 
+    def gesture(self, start, end):
+        QTest.mousePress(self.chart, Qt.MouseButton.LeftButton, pos=start.toPoint())
+        APP.sendEvent(self.chart, QMouseEvent(QMouseEvent.Type.MouseMove, end,
+                      QPointF(self.chart.mapToGlobal(end.toPoint())), Qt.MouseButton.NoButton,
+                      Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier))
+        QTest.mouseRelease(self.chart, Qt.MouseButton.LeftButton, pos=end.toPoint())
+        APP.processEvents()
+
+    def test_box_moves_both_axes_and_resizes_independently_of_chart(self):
+        tool, layout = self.tool, self.chart.layout_info
+        area = tool.region(); span = tool.span; plan = tool.plan; window = self.chart.window()
+        start = QPointF(area.center().x(), layout.y_of_price((plan.entry + plan.target) / 2))
+        self.gesture(start, start + QPointF(-25, -12))
+        self.assertLess(tool.span[0], span[0]); self.assertGreater(tool.plan.entry, plan.entry)
+        self.assertAlmostEqual(tool.plan.metrics['ratio'], plan.metrics['ratio'], places=3)
+        self.assertEqual(self.chart.window(), window)
+        plan, span = tool.plan, tool.span
+        area, layout = tool.region(), self.chart.layout_info
+        start = QPointF(area.right(), layout.y_of_price((plan.entry + plan.target) / 2))
+        self.gesture(start, start + QPointF(-35, 0))
+        self.assertEqual(tool.plan, plan)
+        self.assertEqual(tool.span[0], span[0]); self.assertLess(tool.span[1], span[1])
+        area, layout = tool.region(), self.chart.layout_info
+        start = QPointF(area.left(), layout.y_of_price(tool.plan.target))
+        self.gesture(start, start + QPointF(15, -10))
+        self.assertGreater(tool.span[0], span[0]); self.assertGreater(tool.plan.target, plan.target)
+        self.assertEqual(tool.plan.stop, plan.stop)
+
+    def test_delete_only_removes_selected_drawing_when_chart_has_focus(self):
+        field = self.tool.fields['entry']
+        field.setFocus(); field.selectAll(); QTest.keyClick(field, Qt.Key.Key_Delete)
+        self.assertIsNotNone(self.tool.plan)
+        self.tool._edited()
+        area, layout = self.tool.region(), self.chart.layout_info
+        point = QPoint(round(area.center().x()), round(layout.y_of_price(self.tool.plan.entry)))
+        QTest.mouseClick(self.chart, Qt.MouseButton.LeftButton, pos=point)
+        QTest.keyClick(self.chart, Qt.Key.Key_Escape)
+        QTest.keyClick(self.chart, Qt.Key.Key_Delete)
+        self.assertIsNotNone(self.tool.plan)
+        QTest.mouseClick(self.chart, Qt.MouseButton.LeftButton, pos=point)
+        QTest.keyClick(self.chart, Qt.Key.Key_Delete)
+        self.assertIsNone(self.tool.plan)
+        self.assertEqual(self.tool.price_levels, ())
+        self.assertFalse(self.tool.toggle.isChecked())
+
     def test_price_mapping_roundtrip_and_view_changes_keep_authored_levels(self):
         plan = self.tool.plan
         for width in (440, 1000):
@@ -153,13 +198,23 @@ class StockScenarioIntegrationTests(unittest.TestCase):
         fixture.window.set_language("en")
         fixture.settle()
         self.assertEqual(view.risk.title.text(), "Risk / reward")
+        # Native styled spin boxes must expose their text, not a one-pixel editor.
+        for dark in (0, 1):
+            fixture.window.change_theme(dark)
+            fixture.settle()
+            for edit in view.risk.fields.values():
+                self.assertGreaterEqual(edit.lineEdit().width(), edit.width() - 40)
+                self.assertLess(edit.lineEdit().x(), 24)
+                self.assertTrue(edit.lineEdit().isVisible())
+                self.assertEqual(edit.lineEdit().text(), edit.text())
         view.set_studies(("rsi",))
         view._refresh_side(force=True)
         fixture.settle()
         # The fixture ends in an actual falling stretch: the live guide explains persistence,
         # rather than turning its low RSI into a buying instruction.
         card = view._technical_blocks["rsi"][2]
-        self.assertIn("Oversold conditions can persist", card.context_note.text())
+        self.assertIn("price lows", card.context_note.text())
+        self.assertIn("Oversold conditions can persist", '\n'.join(card.long_texts))
         self.assertNotRegex(card.context_note.text(), "[가-힣]")
 
 

@@ -4,7 +4,7 @@ import math
 
 from PyQt6.QtCore import QObject, QPointF, QRectF, Qt
 from PyQt6.QtGui import QColor, QPainter, QPen
-from PyQt6.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFrame, QGridLayout,
+from PyQt6.QtWidgets import (QButtonGroup, QComboBox, QDoubleSpinBox, QFrame, QGridLayout,
                             QHBoxLayout, QPushButton, QVBoxLayout)
 
 from core.market.risk_reward import RiskRewardPlan
@@ -19,50 +19,85 @@ class RiskRewardTool(QObject):
         self.scale_levels = ()
         self._instrument = None
         self._drag = None
+        self.span = None
+        self.selected = False
         self.panel = QFrame()
-        self.panel.setProperty("sd", "notesBox")
+        self.panel.setProperty("sd", "guideCard")
         self.panel.setObjectName("riskRewardPanel")
         box = QVBoxLayout(self.panel)
-        box.setContentsMargins(14, 12, 14, 12)
-        box.setSpacing(8)
+        box.setContentsMargins(16, 14, 16, 16)
+        box.setSpacing(12)
         head = QHBoxLayout()
-        self.title = label("cardTitle")
+        self.title = label("guideReading")
         self.close = QPushButton("×")
         self.close.setProperty("sd", "mini")
         self.close.clicked.connect(self.panel.hide)
+        from .indicator_picker import Switch
+        self.toggle = Switch()
+        self.toggle.toggled.connect(self._toggle)
         head.addWidget(self.title, 1)
+        head.addWidget(self.toggle)
         head.addWidget(self.close)
         box.addLayout(head)
-        self.toggle = QCheckBox()
-        self.toggle.toggled.connect(self._toggle)
-        box.addWidget(self.toggle)
         self.direction = QComboBox()
         self.direction.addItem("", "long")
         self.direction.addItem("", "short")
         self.direction.currentIndexChanged.connect(self._direction)
         box.addWidget(self.direction)
+        self.direction.hide()
+        choices = QHBoxLayout()
+        choices.setSpacing(6)
+        self.direction_group = QButtonGroup(self.panel)
+        self.direction_buttons = []
+        for i in range(2):
+            button = QPushButton()
+            button.setCheckable(True)
+            button.setProperty('sd', 'chip')
+            button.clicked.connect(lambda checked=False, i=i: self.direction.setCurrentIndex(i))
+            self.direction_group.addButton(button, i)
+            self.direction_buttons.append(button)
+            choices.addWidget(button)
+        self.direction_buttons[0].setChecked(True)
+        box.addLayout(choices)
         grid = QGridLayout()
         grid.setContentsMargins(0, 0, 0, 0)
         grid.setHorizontalSpacing(8)
         self.fields, self.labels = {}, {}
         for row, key in enumerate(("entry", "stop", "target")):
-            title, edit = label("muted"), QDoubleSpinBox()
+            title, edit = label("guideOne"), QDoubleSpinBox()
             edit.setObjectName("riskReward" + key.title())
             edit.setDecimals(4)
             edit.setRange(0.0001, 1e12)
             edit.setGroupSeparatorShown(True)
             edit.setKeyboardTracking(False)
+            # Qt 6.12 + themed spin subcontrols collapses the editor with NoButtons.
+            # Hide subcontrols in the sheet while retaining the normal editor geometry.
+            edit.lineEdit().setTextMargins(8, 0, 8, 0)
+            edit.setAlignment(Qt.AlignmentFlag.AlignRight)
+            edit.setMinimumWidth(0)
             edit.valueChanged.connect(self._edited)
             grid.addWidget(title, row, 0)
             grid.addWidget(edit, row, 1)
             self.labels[key], self.fields[key] = title, edit
         grid.setColumnStretch(1, 1)
         box.addLayout(grid)
-        self.result = label("body", wrap=True, selectable=True)
+        self.result = label("rrRatio", wrap=True, selectable=True)
         self.result.setObjectName("riskRewardResult")
         box.addWidget(self.result)
+        payoffs = QHBoxLayout()
+        self.gain, self.loss = label('rrGain', wrap=True), label('rrLoss', wrap=True)
+        payoffs.addWidget(self.gain, 1); payoffs.addWidget(self.loss, 1)
+        box.addLayout(payoffs)
+        self.instruction = label('guideCaution', wrap=True)
+        box.addWidget(self.instruction)
+        self.more = QPushButton()
+        self.more.setProperty('sd', 'link'); self.more.setCheckable(True)
+        box.addWidget(self.more, 0, Qt.AlignmentFlag.AlignLeft)
         self.hint = label("muted", wrap=True)
+        self.hint.setProperty('sd', 'guideLong')
         box.addWidget(self.hint)
+        self.hint.hide()
+        self.more.toggled.connect(self._show_details)
         actions = QHBoxLayout()
         self.reset, self.remove = QPushButton(), QPushButton()
         self.reset.clicked.connect(self.seed)
@@ -72,7 +107,8 @@ class RiskRewardTool(QObject):
             actions.addWidget(button)
         box.addLayout(actions)
         for widget in (self.panel, self.title, self.toggle, self.direction, self.result, self.hint,
-                       self.close, self.reset, self.remove, *self.labels.values()):
+                       self.close, self.reset, self.remove, self.gain, self.loss, self.instruction,
+                       self.more, *self.direction_buttons, *self.labels.values()):
             widget.setProperty("qg_literal", True)
         self.panel.hide()
         self.chart.risk_tool = self
@@ -104,6 +140,7 @@ class RiskRewardTool(QObject):
         if instrument != self._instrument:
             self._instrument = instrument
             self.plan, self.scale_levels, self._drag = None, (), None
+            self.span, self.selected = None, False
             self.toggle.blockSignals(True)
             self.toggle.setChecked(False)
             self.toggle.blockSignals(False)
@@ -113,6 +150,10 @@ class RiskRewardTool(QObject):
         self.remove.setEnabled(self.plan is not None)
         for widget in (self.direction, *self.fields.values()):
             widget.setEnabled(available and self.plan is not None)
+        for button in self.direction_buttons:
+            button.setEnabled(available and self.plan is not None)
+        self.direction_buttons[self.direction.currentIndex()].setChecked(True)
+        self._style()
         self._result()
         self.chart.update()
 
@@ -121,11 +162,14 @@ class RiskRewardTool(QObject):
         self.panel.show()
         if self.plan is None and self.available:
             self.seed()
+        self.selected = self.plan is not None
         self.fields["entry"].setFocus(Qt.FocusReason.OtherFocusReason)
 
     def seed(self):
         if not self.available:
             return
+        self.span = None
+        self.selected = True
         entry = self.chart.snapshot.candles[-1].close
         domestic = self.view.instrument.asset == "domestic_stock"
         decimals = 0 if domestic else (8 if entry < 1 else 4)
@@ -185,6 +229,7 @@ class RiskRewardTool(QObject):
 
     def clear(self):
         self.plan, self.scale_levels, self._drag = None, (), None
+        self.span, self.selected = None, False
         self.toggle.setChecked(False)
         self.chart.redraw()
         self.sync()
@@ -197,8 +242,11 @@ class RiskRewardTool(QObject):
         self.view.more_risk.setText(name)
         self.close.setAccessibleName(self.words("손익비 설정 닫기", "Close risk / reward settings"))
         self.toggle.setText(self.words("차트에 표시", "Show on chart"))
+        self.toggle.setAccessibleName(self.toggle.text())
         self.direction.setItemText(0, self.words("매수 관점 · 롱", "Long · price rises"))
         self.direction.setItemText(1, self.words("매도 관점 · 숏", "Short · price falls"))
+        for i, button in enumerate(self.direction_buttons):
+            button.setText(self.words(('롱 · 상승', '숏 · 하락')[i], ('Long', 'Short')[i]))
         self.direction.setAccessibleName(self.words("손익비 방향", "Scenario direction"))
         for key, ko, en in (("entry", "진입가", "Entry"), ("stop", "손절가", "Stop"),
                             ("target", "목표가", "Target")):
@@ -207,15 +255,20 @@ class RiskRewardTool(QObject):
             self.labels[key].setBuddy(self.fields[key])
         self.reset.setText(self.words("현재가로 초기화", "Reset at latest price"))
         self.remove.setText(self.words("삭제", "Remove"))
+        self.instruction.setText(self.words('영역을 끌어 이동 · 가장자리로 크기 조절 · 선택 후 Delete로 삭제',
+                                           'Drag to move · resize at edges · select and press Delete to remove'))
         self.hint.setText(self.words(
-            "선을 끌거나 가격을 입력하세요. 진입선을 끌면 세 선이 함께 이동합니다.\n"
+            "진입선을 끌면 세 가격이 함께 이동합니다. 좌우 폭은 표시 범위이며 손익비를 바꾸지 않습니다.\n"
             "초기선은 편집용 예시입니다. 가격 기준 손익이며 수수료·세금·슬리피지는 제외합니다. 주문은 실행하지 않습니다.",
-            "Drag a line or enter a price. Dragging entry moves all three levels.\n"
+            "Dragging entry moves all three prices. Horizontal width changes the drawing only, not the ratio.\n"
             "Initial levels are editable examples. Price-based returns exclude fees, tax and slippage. No orders are placed."))
+        self._show_details(self.more.isChecked())
         self._result()
         self.chart.update()
 
     def _result(self):
+        valid = bool(self.available and self.plan and self.plan.metrics)
+        self.gain.setVisible(valid); self.loss.setVisible(valid)
         if not self.available:
             message = self.words("실제 차트를 조회한 뒤 손익비를 설정할 수 있습니다.",
                                  "Load a chart before setting a price scenario.")
@@ -227,32 +280,88 @@ class RiskRewardTool(QObject):
             message = "—\n" + message
         else:
             m, n = self.plan.metrics, self.view.ctx.number
-            message = self.words("손익비", "Risk / reward") + "  1 : " + n(m["ratio"], 2)
-            message += "\n" + self.words("예상 이익", "Potential gain") + "  +" + n(m["reward_pct"], 2) + "%"
-            message += "\n" + self.words("예상 손실", "Potential loss") + "  −" + n(m["risk_pct"], 2) + "%"
+            message = "1 : " + n(m["ratio"], 2)
+            self.gain.setText(self.words("목표 도달 시", "At target") + "\n+" + n(m["reward_pct"], 2) + "%")
+            self.loss.setText(self.words("손절가 도달 시", "At stop") + "\n−" + n(m["risk_pct"], 2) + "%")
         if self.result.text() != message:
             self.result.setText(message)
+
+    def _show_details(self, shown):
+        self.hint.setVisible(shown)
+        self.more.setText(self.words('안내 접기' if shown else '계산 기준 및 조작 안내',
+                                    'Hide details' if shown else 'Calculation and controls'))
+
+    def _style(self):
+        p, dark = self.view.palette, getattr(self.view, 'dark', self.chart.dark)
+        key = (p.bg, dark)
+        if getattr(self, '_style_key', None) == key:
+            return
+        self._style_key = key
+        self.toggle.colors = (p.accent, p.border, p.on_accent)
+        self.panel.setStyleSheet(f'''
+          QFrame#riskRewardPanel {{ background: {p.surface}; border: 1px solid {p.border}; border-radius: 14px; }}
+          QLabel[sd='rrRatio'] {{ font-size: 24px; font-weight: 600; color: {p.text}; letter-spacing: 0px; }}
+          QLabel[sd='rrGain'] {{ font-size: 13px; color: {'#5CCBB2' if dark else '#288575'}; }}
+          QLabel[sd='rrLoss'] {{ font-size: 13px; color: {'#F17B86' if dark else '#C34D59'}; }}
+          QDoubleSpinBox {{ min-width: 0px; padding: 7px 10px; border-radius: 8px; }}
+          QDoubleSpinBox::up-button, QDoubleSpinBox::down-button {{ width: 0px; height: 0px; }}
+          QDoubleSpinBox::up-arrow, QDoubleSpinBox::down-arrow {{ image: none; }}
+          QDoubleSpinBox QLineEdit {{ border: 0; padding: 0; min-height: 0; background: transparent; }}
+          QPushButton[sd='chip'] {{ padding: 6px 10px; border-radius: 8px; color: {p.muted}; background: {p.surface_2}; }}
+          QPushButton[sd='chip']:checked {{ background: {p.accent_soft}; color: {p.accent}; }}
+        ''')
 
     def region(self):
         layout = self.chart.layout_info
         if layout is None:
             return QRectF()
-        width = layout.plot_right - layout.plot_left
-        return QRectF(layout.plot_left + width * .42, layout.price[0], width * .53,
-                      layout.price[1] - layout.price[0])
+        if self.span is None:
+            count = (layout.plot_right - layout.plot_left) / layout.step
+            self.span = (layout.start - .5 + count * .42, layout.start - .5 + count * .95)
+        left, right = (layout.x_of(index) for index in self.span)
+        return QRectF(left, layout.price[0], right - left, layout.price[1] - layout.price[0])
+
+    def plot(self):
+        layout = self.chart.layout_info
+        return QRectF(layout.plot_left, layout.price[0], layout.plot_right - layout.plot_left,
+                      layout.price[1] - layout.price[0]) if layout else QRectF()
 
     def hit(self, point):
-        if not self.active or not self.region().contains(point):
+        if not self.active or not self.plot().contains(point):
             return None
+        area = self.region()
         layout = self.chart.layout_info
         key = min(self.fields, key=lambda k: abs(point.y() - layout.y_of_price(getattr(self.plan, k))))
-        return key if abs(point.y() - layout.y_of_price(getattr(self.plan, key))) <= 8 else None
+        near_line = abs(point.y() - layout.y_of_price(getattr(self.plan, key))) <= 8
+        ys = [layout.y_of_price(getattr(self.plan, k)) for k in self.fields]
+        for edge, x in (('left', area.left()), ('right', area.right())):
+            if abs(point.x() - x) <= 7 and min(ys)-8 <= point.y() <= max(ys)+8:
+                return edge + (':' + key if near_line and key != 'entry' else '')
+        if area.left() <= point.x() <= area.right():
+            if near_line:
+                return key
+            if self.plan.metrics and min(ys) <= point.y() <= max(ys):
+                return 'body'
+        return None
+
+    def cursor(self, hit):
+        if ':' in hit:
+            edge, key = hit.split(':')
+            top = getattr(self.plan, key) > self.plan.entry
+            return Qt.CursorShape.SizeFDiagCursor if (edge == 'left') == top else Qt.CursorShape.SizeBDiagCursor
+        if hit in ('left', 'right'):
+            return Qt.CursorShape.SizeHorCursor
+        return Qt.CursorShape.SizeAllCursor if hit in ('body', 'entry') else Qt.CursorShape.SizeVerCursor
 
     def press(self, event):
         key = self.hit(event.position())
-        if event.button() != Qt.MouseButton.LeftButton or key is None:
+        if event.button() != Qt.MouseButton.LeftButton:
             return False
-        self._drag = (key, self.plan, self.chart.layout_info.price_at(event.position().y()))
+        self.selected = key is not None
+        self.chart.update()
+        if key is None:
+            return False
+        self._drag = (key, self.plan, self.span, QPointF(event.position()), self.chart.layout_info)
         return True
 
     def move(self, event):
@@ -261,13 +370,26 @@ class RiskRewardTool(QObject):
         if not event.buttons() & Qt.MouseButton.LeftButton:
             self.release()
             return False
-        key, original, grabbed = self._drag
-        layout = self.chart.layout_info
-        if layout is not None:
-            y = min(max(event.position().y(), layout.price[0]), layout.price[1])
-            value = getattr(original, key) + layout.price_at(y) - grabbed
-            self.set_plan(original.moved(key, value))
-        self.chart.setCursor(Qt.CursorShape.SizeVerCursor)
+        hit, original, span, grabbed, layout = self._drag
+        dx = (event.position().x() - grabbed.x()) / layout.step
+        dy = layout.price_at(event.position().y()) - layout.price_at(grabbed.y())
+        left, right = span
+        edge, _, key = hit.partition(':')
+        minimum = max(.5, 28 / layout.step)
+        if edge == 'left':
+            left = min(right - minimum, left + dx)
+        elif edge == 'right':
+            right = max(left + minimum, right + dx)
+        elif hit in ('body', 'entry'):
+            left, right = left + dx, right + dx
+        self.span = (left, right)
+        field = key or ('entry' if hit == 'body' else hit)
+        if field in self.fields:
+            if field == 'entry':
+                dy = max(self.fields['entry'].minimum() - min(original.entry, original.stop, original.target), dy)
+            self.set_plan(original.moved(field, getattr(original, field) + dy))
+        self.chart.setCursor(self.cursor(hit))
+        self.chart.update()
         return True
 
     def release(self):
@@ -278,13 +400,26 @@ class RiskRewardTool(QObject):
             self.set_plan(self.plan, fit=True)
         return True
 
+    def key_press(self, event):
+        if event.key() == Qt.Key.Key_Delete and self.selected and self.active:
+            self.clear()
+            return True
+        if event.key() == Qt.Key.Key_Escape and self.selected:
+            self.selected = False
+            self._drag = None
+            self.chart.update()
+            return True
+        return False
+
     def paint(self):
         if not self.active or self.chart.layout_info is None:
             return
         p, layout, area = self.plan, self.chart.layout_info, self.region()
+        if not area.intersects(self.plot()):
+            return
         painter = QPainter(self.chart)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        painter.setClipRect(area)
+        painter.setClipRect(self.plot())
         ys = {key: layout.y_of_price(getattr(p, key)) for key in self.fields}
         dark = getattr(self.view, "dark", self.chart.dark)
         colors = {"target": QColor("#288575" if not dark else "#5CCBB2"),
@@ -295,6 +430,9 @@ class RiskRewardTool(QObject):
                 tint = QColor(colors[key]); tint.setAlpha(32)
                 painter.fillRect(QRectF(area.left(), min(ys[key], ys["entry"]), area.width(),
                                        abs(ys[key] - ys["entry"])), tint)
+            painter.setPen(QPen(QColor(self.view.palette.muted), 1, Qt.PenStyle.DotLine))
+            for x in (area.left(), area.right()):
+                painter.drawLine(QPointF(x, min(ys.values())), QPointF(x, max(ys.values())))
         font = self.chart.font()
         font.setPixelSize(13)
         painter.setFont(font)
@@ -309,14 +447,16 @@ class RiskRewardTool(QObject):
             y = ys[key]
             painter.setPen(QPen(colors[key], 1.5, Qt.PenStyle.DashLine if key == "entry" else Qt.PenStyle.SolidLine))
             painter.drawLine(QPointF(area.left(), y), QPointF(area.right(), y))
-            painter.setBrush(QColor(self.view.palette.bg))
-            painter.drawEllipse(QPointF(area.right() - 6, y), 4, 4)
+            if self.selected:
+                painter.setBrush(QColor(self.view.palette.surface))
+                for x in (area.left(), area.right()):
+                    painter.drawRect(QRectF(x - 3, y - 3, 6, 6))
             caption = self.labels[key].text() + "  " + self.view.price_text(getattr(p, key))
             if key == "entry" and p.metrics:
                 caption += "  ·  1 : " + self.view.ctx.number(p.metrics["ratio"], 2)
             caption = painter.fontMetrics().elidedText(caption, Qt.TextElideMode.ElideRight,
                                                        max(10, int(area.width()) - 28))
-            rect = QRectF(area.left() + 5, positions[key],
+            rect = QRectF(max(area.left(), layout.plot_left) + 5, positions[key],
                           painter.fontMetrics().horizontalAdvance(caption) + 10, 21)
             painter.fillRect(rect, QColor(self.view.palette.bg))
             painter.setPen(colors[key])

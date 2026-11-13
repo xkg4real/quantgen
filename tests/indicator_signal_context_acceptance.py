@@ -65,5 +65,23 @@ class SignalContextTests(unittest.TestCase):
                                                    "rsi": {"RSI14": (60, 35, 40)}}), "[가-힣]")
 
 
+class ReadingCueTests(unittest.TestCase):
+    def test_every_supported_study_has_a_concrete_bounded_bilingual_cross_check(self):
+        from core.education.indicators import STUDIES
+        from core.education.reading_cues import CHECKS, reading_tip
+        self.assertEqual(set(CHECKS), {study.key for study in STUDIES})
+        for key in CHECKS:
+            for lang in ('ko', 'en'):
+                text = reading_tip(key, lang)
+                self.assertEqual(len(text.splitlines()), 2)
+                self.assertLessEqual(len(text), 310)
+                self.assertNotIn('승률', text)
+                if lang == 'en':
+                    self.assertNotRegex(text, '[가-힣]')
+        self.assertIn('고저점', reading_tip('rsi'))
+        self.assertIn('전체 거래량', reading_tip('short_ratio'))
+        self.assertIn('하락', reading_tip('psychology'))
+
+
 if __name__ == "__main__":
     unittest.main()

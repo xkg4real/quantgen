@@ -180,13 +180,14 @@ def cursor_text(series,keys,index,locale=None):
 
 
 def reading_text(series,keys,index,locale=None):
-    from .signal_context import signal_note, alignment_note
+    from .signal_context import alignment_note
+    from .reading_cues import reading_tip
     ctx=locale or LocaleContext();selected=selection(keys);values=values_for(series,selected);bars=bars_for(series)
     parts=[]
     for key in selected:
         missing=missing_reason(series,key,ctx.language)
         reading=missing or G.short_reading(key,bars,index,language=ctx.language,values=values.get(key),supply=getattr(series,'supply',None))
-        note='' if missing else signal_note(key,bars,index,language=ctx.language,values=values.get(key))
+        note='' if missing else reading_tip(key,ctx.language)
         parts.append(I.study(key).name(ctx.language)+' · '+reading+('\n'+note if note else ''))
     difference=alignment_note(selected,bars,index,language=ctx.language,values=values)
     if difference:parts.append(difference)

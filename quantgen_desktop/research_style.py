@@ -23,8 +23,23 @@ def sheet(p,dark):
       QPushButton[chip='true'] {{ padding: 4px 9px; border: 0; border-radius: 7px;
                                 font-size: 12px; background: {p.surface_2}; color: {p.text}; }}
       QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox {{ border-color: {line}; border-radius: 8px; }}
+      QTabWidget::pane {{ border: 0; background: transparent; }}
+      QTabBar::tab {{ background: transparent; border: 0; border-radius: 8px;
+                       color: {p.muted}; padding: 7px 14px; margin: 0 5px 8px 0; }}
+      QTabBar::tab:selected {{ background: {p.accent_soft}; color: {p.accent}; font-weight: 600; }}
+      QTabBar::tab:hover {{ background: {p.surface_2}; color: {p.text}; }}
     '''
 
 
 def apply(widget,colors,dark):
     widget.setStyleSheet(sheet(colors,dark))
+
+
+def prepare_page(layout):
+    """Bound prose and forms together; long results still scroll vertically."""
+    page = layout.parentWidget()
+    page.setObjectName('researchWorkspace')
+    page.setMaximumWidth(1200)
+    layout.setContentsMargins(24, 22, 24, 28)
+    layout.setSpacing(16)
+    return page

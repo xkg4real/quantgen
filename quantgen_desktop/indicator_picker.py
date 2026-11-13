@@ -427,8 +427,13 @@ class GuideCard(QFrame):
             self.caution.setText(short.caution)
             for widget, shown in ((self.one_liner, short.one_liner), (self.cues, short.cues), (self.caution, short.caution)):
                 widget.setVisible(bool(shown))
+        # Current values + one specific cross-check are the default. Definitions
+        # and event detail remain available without repeating the same warning.
+        if context:
+            self.one_liner.hide(); self.cues.hide(); self.caution.hide()
         self.long_texts = tuple(part for part in long_texts if part)
-        for part, value in zip(self.detail_labels, (*self.long_texts, "", "", "", "")):
+        displayed = self.long_texts[:3] + (("\n\n".join(self.long_texts[3:]),) if len(self.long_texts) > 3 else ())
+        for part, value in zip(self.detail_labels, (*displayed, "", "", "", "")):
             part.setText(paragraph(value) if value else "")
             part.setVisible(bool(value))
         self.more.setVisible(bool(self.long_texts))
@@ -884,6 +889,7 @@ class IndicatorPicker(QWidget):
 
     def fill_guide(self, card, key, lang, bars, interval, supply, values=None, index=-1):
         from core.education.signal_context import signal_note
+        from core.education.reading_cues import reading_tip
         reading, code, gauge, short, long_texts = guide_parts(key, bars, language=lang, interval=interval,
                                                               supply=supply, values=values, index=index)
         from core.education.indicators import availability, study
@@ -892,11 +898,14 @@ class IndicatorPicker(QWidget):
         if reason:
             from core.education.study_guide import availability_short
             reading = polite(availability_short(reason, lang), lang)
+        event_note = "" if reason else signal_note(key, bars, index, language=lang, values=values)
+        if event_note:
+            long_texts = (*long_texts, event_note)
         card.show_guide(language=lang, name=study(key).name(lang), reading=reading,
                         state=state_word(key, code, lang), tone=state_tone(code), gauge=gauge,
                         gauge_labels=self.gauge_labels(key, gauge, lang), short=short, long_texts=long_texts,
                         colors=self.gauge_colors,
-                        context="" if reason else signal_note(key, bars, index, language=lang, values=values))
+                        context="" if reason else reading_tip(key, lang))
 
 
 _GAUGE_NAMES = ("gauge_name_sma", "gauge_name_ema", "gauge_name_vwap", "gauge_name_psar", "gauge_name_macd",

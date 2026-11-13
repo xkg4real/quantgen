@@ -431,6 +431,7 @@ class ResearchWindow(QMainWindow):
             title = shell_rail.market_section_text(key, self.ui_language)
             button.setText(title)
             button.setAccessibleName(title)
+            button.chevron = bool(self._market_node(key).children)
 
     def eventFilter(self, watched, event):
         if event.type() == QEvent.Type.Resize and watched is self.rail_scroll.viewport():
@@ -934,6 +935,8 @@ class ResearchWindow(QMainWindow):
 
     def make_quant(self):
         outer = self.page("Build & Test", "Quant Lab · 기존 계산 엔진으로 가격 분포 분석")
+        from .research_style import prepare_page
+        self.quant_page = prepare_page(outer)
         outer.itemAt(1).widget().hide()
         from .workspace_guide import WorkspaceGuide
         self.quant_guide = WorkspaceGuide('monte_carlo')
@@ -944,6 +947,8 @@ class ResearchWindow(QMainWindow):
         outer.addWidget(self.quant_tabs)
         host = QWidget()
         layout = QVBoxLayout(host)
+        layout.setContentsMargins(0, 4, 0, 0)
+        layout.setSpacing(16)
         self.quant_tabs.addTab(host, 'Monte Carlo')
         from .strategy import StrategyPane
         self.strategy = StrategyPane()
@@ -1027,6 +1032,8 @@ class ResearchWindow(QMainWindow):
         from .portfolio import PortfolioPane
         from .signals import SignalsPane
         layout = self.page("Portfolio & Risk", "현재 세션 분석의 분포 위험을 확인하세요.")
+        from .research_style import prepare_page
+        self.risk_page = prepare_page(layout)
         layout.itemAt(1).widget().hide()
         self.portfolio = PortfolioPane()
         self.portfolio.requested.connect(self.run_portfolio)
@@ -1587,7 +1594,8 @@ class ResearchWindow(QMainWindow):
         self.watchlist.set_theme(p)
         self.markets_view.set_theme(bool(index))
         from .research_style import apply
-        apply(self.tools_page,p,bool(index))
+        for workspace in (self.tools_page, self.quant_page, self.risk_page):
+            apply(workspace,p,bool(index))
         self.indicator_guide.set_theme(p)
         for destination in self.market_destinations.values():
             if hasattr(destination,'set_theme'):destination.set_theme(p)
