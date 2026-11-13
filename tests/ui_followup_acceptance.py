@@ -93,6 +93,12 @@ class ExportTests(unittest.TestCase):
             self.assertEqual(data, report_dict(self.report))
             self.assertIn('Q-SCORE', (Path(folder) / 'report.csv').read_text(encoding='utf-8-sig'))
             self.assertTrue((Path(folder) / 'report.pdf').read_bytes().startswith(b'%PDF'))
+            import shutil, subprocess
+            if shutil.which('pdftotext'):
+                copied = subprocess.check_output(['pdftotext', str(Path(folder) / 'report.pdf'), '-']).decode('utf-8')
+                self.assertIn('005930', copied)
+                self.assertIn('-0.34%', copied)
+                self.assertIn('삼성전자', copied)
             self.assertEqual(data['provenance']['network'], 'none')
             self.assertEqual(data['q_score']['methodology'], 'Q-SCORE v0.2')
 

@@ -153,6 +153,9 @@ def write_report(path, report, chart, extension=None):
             document = QTextDocument()
             # Qt PDF ToUnicode loses tnum alternate digit mappings: keep base glyphs in searchable text.
             font = QFont("QG Interface", 10)
+            # Qt OTF shaping also drops +/- from PDF ToUnicode. Precomposed Hangul needs no shaping.
+            font.setStyleStrategy(QFont.StyleStrategy.PreferNoShaping)
+            font.setKerning(False)
             for feature in ("tnum", "liga", "kern"):
                 font.setFeature(QFont.Tag.fromString(feature), 0)
             document.setDefaultFont(font)

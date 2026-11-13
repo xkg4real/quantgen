@@ -377,7 +377,7 @@
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
     "docs/product/TERMINAL_TARGET_2026-10-30.md": "5c3e2eac999534371560def0e00d3ef45d0b7abcd960a6b1d7d7c3c9c3b05c29",
     "docs/product/TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md": "eeb6a1394c46fd67859dc5c8066d9adc125802efa24c29add93b5d8528404314",
-    "docs/product/UI_D11_D15_2026-11-13.md": "f61e3c4ad912d7168dabb8daab43c8f85d2af3ee0dafba8c4bdf626c75bd47e0",
+    "docs/product/UI_D11_D15_2026-11-13.md": "22f40283a87d4c6b363ea60f8b3c0f0e5aab4bc8f2e03a9259239fe76e40c0b9",
     "docs/product/UI_LOCALIZATION.md": "7a8bc3a69e4e3728e18e0bf62b0613f792079b0a5f3d7b03742dfd5f4596b512",
     "docs/product/UI_RENDERING_2026-10-31.md": "f006b261d10a28594dc3b31d05424ac144004ca4edca18646ca00b5c0f8a19f6",
     "docs/product/UI_SESSION_PROGRESS_2026-10-31.md": "6f8fd39bdfc77df266095c1e46170c1a679e3267d200a0fc3f6995b196dd0de4",
@@ -450,7 +450,7 @@
     "quantgen_desktop/stock_detail_side.py": "76a1f0b6ef08d9e398e56bd336bc9c3382448410d8c007d2fa586b23388f8176",
     "quantgen_desktop/stock_detail_style.py": "b0d0b3da04a686a8968d75cc76c986cbacd763f48abdd49a30c37d8624443e27",
     "quantgen_desktop/stock_qscore.py": "f1cd095e271e06ab23e460982a76d26ef484e9ef52ec319bb8fc4ddf628b4371",
-    "quantgen_desktop/stock_report.py": "d930ed407928ef7eaf92a5d1629e4d7e51cc8e153ea90c44754213feeaabc28f",
+    "quantgen_desktop/stock_report.py": "c2f3a97bfedc0c348f1edfd122778b980196d2262fc6f10320678dcb303f40b3",
     "quantgen_desktop/strategy.py": "0b44d9c87f8a174d5c87eff60ffe2a68671ac381644fa6243f26f06812ca5b66",
     "quantgen_desktop/strategy_view.py": "3d44b759bb806d92cc1a299fd61790c449be392a262c8b46c1a9bd46a1a0bff8",
     "quantgen_desktop/structuring.py": "5129a870305e9fefee5c92549879408f440cea19e15fba67ed3ee88b038a70fc",
@@ -648,7 +648,7 @@
     "tests/strategy_lab_display_acceptance.py": "aa4d059af693881f449deb38a29be8f4849280643b7adbf4a821c8e6a4781a32",
     "tests/swaption_conversion_acceptance.py": "62a4994aa046a463559f463cd87b6873235a3d80684df515be2fd74bb8ff338a",
     "tests/terminal_target_acceptance.py": "e4bd3e974ee8012a5c06c8f24313b869f4beac1d3268209057c1e3b44f7e4e30",
-    "tests/ui_followup_acceptance.py": "5b1d32790df6492373a7f01edbd1b919587f243b3781eef2d12c7d83299db281",
+    "tests/ui_followup_acceptance.py": "4975af64a2b2dde1c7373fe1d48382bc935bb1e81eb2e0aec28c20d5e08a0fcc",
     "tests/watchlist_live_acceptance.py": "28129afe3538e09bd26b85e393ae287c86954bacc74080bb757c7f71397ade0a",
     "tests/web_branding_acceptance.py": "4cf27700af4187bfce7f055584c09468e99fdc6682c2a5aaec9afb72703efde5",
     "tests/web_indicator_guide_acceptance.py": "2a32a2091e9184fca17c0fbdb50e14bc696ffb7b3a237e4153f3b949bc1b3d4f",
@@ -733,163 +733,163 @@
   "reviews": {
     "1": {
       "document_sha256": "445d48928658a50036ba6ccabe0882ff243a13dc33ab47919e5d771c664c6541",
-      "source_digest": "ea18933cc87cc541e7c516bfb22268eb14eeca92d967d1a13b9faf9521a14280",
+      "source_digest": "e1dc95807bd75501dd3288034cd7be4abb3694e397f809142bb5fab47badd83f",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.180408+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.679596+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "2": {
       "document_sha256": "b9ff6edf97d750bb30428682f5b2f9bfd848e54be6605ddd0bdd038eed2e1f32",
-      "source_digest": "ea18933cc87cc541e7c516bfb22268eb14eeca92d967d1a13b9faf9521a14280",
+      "source_digest": "e1dc95807bd75501dd3288034cd7be4abb3694e397f809142bb5fab47badd83f",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.182568+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.681926+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "3": {
       "document_sha256": "fce663606f32cbbf86bb7b95ce2d50e88a350567ce46fac42f81cdc4f1186760",
-      "source_digest": "ff92521f5e5bdf6c2125fac9a472ee4dd1968716f87c0776d99a5fede234862a",
+      "source_digest": "502bb7e222d86e57389b117224e70887f748dc0dab77466e451c3f37b15ea6d4",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.184064+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.683491+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "4": {
       "document_sha256": "239c1a76031e60125a783cad35011444c96e7a8979945d1de344639fddebe418",
-      "source_digest": "0a5d31b75c997bbeb1b3e23e1962e921d99fa603d11ea89a7fe40daa0feae687",
+      "source_digest": "250ec9bf4c993448347cbe0dabee0b7762816be70b7759b3edc7c0e1a618bf4f",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.185457+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.684853+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "5": {
       "document_sha256": "5c89e8c8f3bcd6162760d7a0ea2f1e6a2dd29d03aa704e7929a11f85d9cc56c5",
-      "source_digest": "52d4739c37902ae14ed087063410ceda2fb52fb8da8290e8562aa051f59f9172",
+      "source_digest": "412e7ead5c508c3b81b2341ba89739a56336229a02227e9a366fb5d78c0fd752",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.187056+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.686726+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "6": {
       "document_sha256": "aa1d08b268d0cc9ac8611947f4c1f09a13816cd37459863f72b102c362ac2247",
-      "source_digest": "4590cc0982d7e71584a7f3041e18d4e1aa8d732ab01fc4e8ed444da7e0d17295",
+      "source_digest": "a1efe227d67125add952836269db212c5f5d1025af81464e4ad331d2a8336dee",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.188303+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.689031+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "7": {
       "document_sha256": "c9ab56ef83f8cfcb1042962fea7e1e1df6b3ad247f6aa3215827994d0afdf5f1",
-      "source_digest": "ea18933cc87cc541e7c516bfb22268eb14eeca92d967d1a13b9faf9521a14280",
+      "source_digest": "e1dc95807bd75501dd3288034cd7be4abb3694e397f809142bb5fab47badd83f",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.189686+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.691157+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "8": {
       "document_sha256": "31dc784dc971b706e0a18ca3d5fc3c62477ea7688c56bf4ee2fee13a4b5e9221",
-      "source_digest": "4590cc0982d7e71584a7f3041e18d4e1aa8d732ab01fc4e8ed444da7e0d17295",
+      "source_digest": "a1efe227d67125add952836269db212c5f5d1025af81464e4ad331d2a8336dee",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.190863+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.692708+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "9": {
       "document_sha256": "2b1fcc7e41f8e773486780c8cd0bf64bdb096215bb294ee31c35311781557e30",
-      "source_digest": "5f63a6a69ea22d27e85e76b3878366b5a77e11927cece3985b2c8c73501c01bb",
+      "source_digest": "31a9521de8e1c53cfe595db198ededf8633dccdf9f444bfa242edeb7afa25093",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.192062+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.694175+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "10": {
       "document_sha256": "306e0fa9640b4ee342b277cedaa11e74728848c2fcc3a4f51079869e91d1ad9f",
-      "source_digest": "15c3fba228261795d6d3a6f9d1fc7199bc34ba0728d3aa6751306e2188754da4",
+      "source_digest": "a3d881fc0e787bdf147d2b3bd8f51fbab3f539e637109a1ded2ee0f32f592a1a",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.193542+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.695408+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "11": {
       "document_sha256": "f898da31bd00c210d86ee4f785fb1ca8aa1286dd5dfc8ad33e8ca309cf4d0eab",
-      "source_digest": "b7daa84f92c90aa9ddfb92ee696d06c43eb146110b74cc7bf376feb8c154d750",
+      "source_digest": "9d0d2040deaa1b00fd556d8b6411f384e39e34a2c77020b241354796f9c5be85",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.194704+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.696934+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "12": {
       "document_sha256": "891932e84ec49ef737058d444acdcae60b6c7be1bf566ba82a6599dc28b52e8a",
-      "source_digest": "1d94bd8f8c28a89e6d4210fa69641620634d27dadbf021e311c031b9c81812a0",
+      "source_digest": "afadba822a1233954e3298f82b3c9b85b5008f3febbacec073d020ef3f11826c",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.196099+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.698428+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "13": {
       "document_sha256": "d14cdeb256507805cc2d4813bf86ca67c8f7b4577aed8a58071fff01d8716db0",
-      "source_digest": "5f63a6a69ea22d27e85e76b3878366b5a77e11927cece3985b2c8c73501c01bb",
+      "source_digest": "31a9521de8e1c53cfe595db198ededf8633dccdf9f444bfa242edeb7afa25093",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.198138+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.699807+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "14": {
       "document_sha256": "293eea1d4653a944bc7ba21391cd7a158b0179b3d8da627cac3e7f3a7d5f3939",
-      "source_digest": "5f63a6a69ea22d27e85e76b3878366b5a77e11927cece3985b2c8c73501c01bb",
+      "source_digest": "31a9521de8e1c53cfe595db198ededf8633dccdf9f444bfa242edeb7afa25093",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.199372+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.701063+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "15": {
       "document_sha256": "3b60cb1dae2a099fdcb6c5aa90b1f9d5761b4e18cfb641c36b7860e49579e373",
-      "source_digest": "5f63a6a69ea22d27e85e76b3878366b5a77e11927cece3985b2c8c73501c01bb",
+      "source_digest": "31a9521de8e1c53cfe595db198ededf8633dccdf9f444bfa242edeb7afa25093",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.200628+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.702586+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "16": {
       "document_sha256": "9ba16fb5ad792212115d5eec4e977ee2e7adc281e5be52a78871632b953d5f2f",
-      "source_digest": "e6d1c91a2df9dd98fe3683299ebce1f717a81868901e204a36563eb70d656a26",
+      "source_digest": "b2d6537723f5ece211b8681c6f037cd7317fb81ede562d4199e845f5824ddbce",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.202356+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.703923+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "17": {
       "document_sha256": "52114c07cb2e0ddf191dec19dcc98738b29123db8ec0c03bd172e521824556b5",
-      "source_digest": "4590cc0982d7e71584a7f3041e18d4e1aa8d732ab01fc4e8ed444da7e0d17295",
+      "source_digest": "a1efe227d67125add952836269db212c5f5d1025af81464e4ad331d2a8336dee",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.203634+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.705482+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "18": {
       "document_sha256": "e141ae24e1a03ecea6c0742d325f933e3a689fbd6e1162336adea30bad14b794",
-      "source_digest": "ea18933cc87cc541e7c516bfb22268eb14eeca92d967d1a13b9faf9521a14280",
+      "source_digest": "e1dc95807bd75501dd3288034cd7be4abb3694e397f809142bb5fab47badd83f",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.205281+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.706672+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "19": {
       "document_sha256": "db369339867e0e8f50214c853ea581fdb44eec62cc5086f67fcce5395ce73a6f",
-      "source_digest": "e1c6b78fdae1f477a78ca1f0ccf1ac568fd398e53c36115b2b0241a96b5bcc19",
+      "source_digest": "bee1ece3a2ef9fe4a0b969f019331b35e75c7e76bf2ca37caa0f01d5b8f3e94a",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.206563+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.707927+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     },
     "20": {
       "document_sha256": "cbe27189377404847146292e19f838e81d3e01cee47208a6a24b9649c492b04d",
-      "source_digest": "ea18933cc87cc541e7c516bfb22268eb14eeca92d967d1a13b9faf9521a14280",
+      "source_digest": "e1dc95807bd75501dd3288034cd7be4abb3694e397f809142bb5fab47badd83f",
       "reviewed_by": "GPT UI followup",
-      "review_note": "Final review: frozen report filename/overwrite protection, searchable embedded PDF fonts, US daily score selection, D11-D15 queue; existing publication block retained",
-      "reviewed_at": "2026-11-13T05:18:10.207970+00:00",
-      "source_commit": "d46ca5e7844f8e779d9b5f65d5135d509a8aebbb"
+      "review_note": "PDF OTF extraction review: preserve searchable Korean, digits and negative signs without changing the app font; unchanged report network and publication scope",
+      "reviewed_at": "2026-11-13T05:21:27.709647+00:00",
+      "source_commit": "5572e786d2f760c894bb8f521624731e0cf459d0"
     }
   }
 }
