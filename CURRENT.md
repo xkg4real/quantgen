@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2
 next_ids: ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T21:03:56+09:00
+updated_at: 2026-11-13T21:05:26+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/pilot-readout-btc-ra-20261113
-work_commit: 661c6b878442e5c8e2b864766ade379e042825f1
+work_branch: gpt/order-safety-design-20261113
+work_commit: 795165cb45b6a37a6bf9bfc0ccd8cc6e6cb2acf0
 uncommitted_changes: no
-pr: 114
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -20,6 +20,11 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2633226e-9755-40fb-87a4-44d1fc290756
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## 작업 브랜치 확인 — 2026-11-13T21:05:26+09:00
+
+- 승인된 독립 문서 단위 M-12/design-draft/1을 위해 gpt/order-safety-design-20261113을 main 795165cb45b6a37a6bf9bfc0ccd8cc6e6cb2acf0에서 생성하고 원격 ref를 read-back했다. 이전 PR114와 별도 UI PR115의 작업은 보존한다. 주문 기능 구현은 이번 범위가 아니다.
+
 
 ## 독립 문서 단위 재개 — 2026-11-13T21:03:56+09:00
 
