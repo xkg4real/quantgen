@@ -6,11 +6,11 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout
 next_ids: ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-14T02:49:24+09:00
+updated_at: 2026-11-14T03:02:40+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: ci
 work_branch: gpt/r3-outage-20261114
-work_commit: 6bb6c1c9df5f185c2becd3922f9ca7f1369217c4
+work_commit: 197c0e1ccf927ba7237e72484786dd85abf4e5b0
 uncommitted_changes: no
 pr: 122
 usage_weekly_pct: unknown
@@ -20,6 +20,15 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2c285afe-264f-4ef3-8c2d-fef1d64f0e89
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## CI 회귀검사 수정 게시·재검증 대기 — 2026-11-14T03:02:40+09:00
+
+- execution 2c285afe-264f-4ef3-8c2d-fef1d64f0e89. PR121 새 head **ea3d59643be2cf3904b1ab107a29484fa6669ec4**, parent ed92dc9: 승인된 국가까지만 보이는 시장 메뉴·시장 안의 순위·짧은 한영 포트폴리오 안내를 기존 테스트에 반영했다. 변경은 UI 검사2개와 source-review.json뿐이다. 제품 UI/계산/정책 본문은 변경하지 않았다.
+- PR122 새 head **197c0e1ccf927ba7237e72484786dd85abf4e5b0**, parents 6bb6c1c와 ea3d596: 선행 수정의 실제 이력을 보존한 merge commit이다. Windows 임시 폴더의 RUNNER~1/runneradmin 차이는 부모 디렉터리 samefile+파일명으로 검사하고 파일·sidecar 미생성 조건은 유지했다. 첫 부모 대비 변경4파일을 원격에서 확인했다. 두 브랜치 head, 내용과 blob read-back 모두 일치한다.
+- **R3 합성154 PASS (1.124초); UI 수정3 PASS (27.706초) + 주변8 PASS (59.753초)**. UI는 동일 Qt6.12/QG Interface 글꼴, Linux offscreen, 합성 종목·가격 및 합성 교육 사이드바만 사용했다. 메뉴 실제 QWindow 클릭·단일 목적지·키보드·한영·추가 provider 조회없음·포트폴리오 전후를 확인했다. 앞선 UI 3개를 포함한 확대 시도는 격리 복사본의 ui.narrative_sections 누락으로 중단됐고, 해당 정확한 소스를 받은 뒤 나머지8개만 재검증했다. 실제 Windows 인수나 전체CI로 확대하지 않는다.
+- source manifest 749/752개를 CI 확인된 각 base에서 정확한 test-only overlay로 유지했다. 20정책 문서·registry·release-profile 동일, 영향받은12번 검토만 갱신, publication blocker32 유지. 전체 체크를 부분 checkout 스캔으로 대체하지 않는다.
+- 이전 Runtime 실패(121 UI3건, 122 Windows 경로1건)는 보존한다. **새 exact head 전체 Runtime/Compliance 확인 전 병합·새 완료ID·부모 취소선 없음.** 다음은 F 미진행·소유권·main 확인 후 PR121→122 순서. Step10 P2 후속승인 미응답과 WindowsE/미추적 SKILL 보존, 자동감시 취소 유지.
+
 
 ## 기존 직접 요청 계속 — CI 실패 판독·수정 — 2026-11-14T02:49:24+09:00
 
