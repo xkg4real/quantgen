@@ -1,3 +1,48 @@
+# GPT UI 통합 검증 체크포인트 — 2026-11-13 (이 절이 최신)
+
+- status: taken · owner: GPT UI · main 엔진 CURRENT.md 변경 없음.
+- **이전 두 작업을 PR112 하나로 통합했다.** 별도 후속 PR은 만들지 않았다.
+- work_branch: gpt/ui-d11-d15-20261113
+- work_commit: b658cde3b3280a2358b01f5e0f8d130f108b630a (원격 확인)
+- 동일 백업 branch: gpt/ui-guide-speed-20261113, 같은 b658cde.
+- 로컬 worktree: /workspace/quantgen-ui-20261113 및 /workspace/quantgen-ui-accessibility-20261113 (같은 HEAD).
+- PR: https://github.com/xkg4real/quantgen/pull/112 · 아직 main 미병합.
+
+## 새 요청 구현/검증 완료
+
+1. KIS 첫 이력 페이지를 전체 이력/현재가보다 먼저 표시. 같은 API 개수/최종 결과/조회 한도;
+   부분 화면은 조회 중, 최종 답변 전 live 시작/Q-SCORE 결과 전달 없음. 오래된 요청 응답 폐기.
+2. 가이드 입력 검색 제거, 역사 예제 지원 SMA/EMA/RSI/MACD/BB 5종 복수 선택 카드. 같은 샘플/기간,
+   차트 옆 요약/상세 펼치기/반례, 추가 용어는 선택 목록. Tab/Space/좁은 폭 확인.
+3. 분석 도구 10종/설계·검증 2종/분석 3종 목적·범위·3단계 한영 안내. 채권/MC 빈 결과 숨김.
+   첫 방문 제목부터, 재방문 읽던 위치 보존. 계산/입력/엔진 변경 없음.
+4. 본문 누락 원인 해결: 공통 QSS가 자식의 폰트를 Sans Serif→QG Symbols로 바꾸던 경로.
+   QWidget QSS에 QG Interface 명시. 기존 Pretendard OTF/N3 유지. 실제 styled QRawFont 한글/영문/숫자 검사.
+
+- 로컬 차트/라우터/가이드 90 OK; 안내/폰트/레이아웃 60 OK; 최종 점수/저장/스크롤/선표시20 OK
+  (겹치는 검사 있음, 합산 수치로 고유 테스트 수 주장하지 않음). syntax1 OK, compliance20 consistency PASS,
+  publication BLOCKED 유지. 한글밝게1440/영어어둡게1000 가이드·도구·설계·분석 가로 넘침 없음.
+- 이전 f74c63c Runtime43372599852 실패: Linux 403개중 SymbolCard.qscore 옛 참조1개오류.
+  Windows는 같은 옛 참조+PDF export 검사 ERROR, 마지막 상세화면 검사 중 exit1로 세부 traceback미출력.
+  옛 참조를 새 stock.side.qscore/result+qscore_badge/라이브값 검증으로 수정했고 로컬통과.
+  pdftotext -enc UTF-8 명시, CI PYTHONUTF8=1, 긴 검사 전에 live/export failfast 단계를 추가하여
+  Windows export 실패의 정확한 원인 확인 예정. 해결됐다고 단정하지 않는다.
+- b658cde의 Runtime/Compliance를 확인하고 실패를 수정할 것. required CI 통과 후만 merge.
+- 웹 큐 docs/product/ui_website_updates/PR-112.json 갱신, queued(대화간 발송 도구 없음).
+- 실제 계정 응답속도 개선율·Windows DPI·스크린리더·웹 배포는 미검증.
+
+## 다음
+
+1. b658cde GitHub commit workflow runs → Runtime Windows3.11/3.12/3.14+Ubuntu3.12, syntax, Compliance.
+2. early live/export 실패면 해당 job logs Traceback 확인 → 원인 수정 → 테스트/정책baseline 갱신 → push.
+3. 모두통과면 expected_head_sha 지정 PR112 merge, 실제 main fetch/조상확인.
+4. LEDGER에 완료 D13/D14/D15 및 추가3요청 ID 기록, 이 문서 최신 병합상태 갱신.
+5. 사용자에게 CMD: repo cd /d → GitHubDesktop app-* git.exe탐색으로 QG_GIT 설정 → switch main &&
+   pull --ff-only origin main && log -1 --oneline && .venv\Scripts\python.exe -X utf8 -m quantgen_desktop.
+   실행중앱 먼저종료. 병합 전 완료/즉시업데이트라고 주장하지 않는다.
+
+---
+
 # GPT UI 추가 요청 진행 — 2026-11-13 (최신)
 
 - status: taken · owner: GPT UI; 메인 엔진 CURRENT.md는 변경하지 않음.
