@@ -33,6 +33,7 @@ from PyQt6.QtWidgets import QApplication, QLabel, QLineEdit, QPushButton
 from core.market.directory import SymbolDirectory
 from core.market.models import Candle, ChartRequest, Instrument, MarketQuote, MarketSnapshot
 from core.research.stock_profile import build_profile
+from tests.qt_fixture_cleanup import dispose_market_fixture
 
 SAMSUNG, HYNIX, APPLE = (Instrument("domestic_stock", "005930"), Instrument("domestic_stock", "000660"),
                          Instrument("overseas_stock", "AAPL", "NAS"))
@@ -90,12 +91,12 @@ class MarketsWatchlistTests(unittest.TestCase):
                                      profile_loader=profile_loader)
         self.window.resize(1360, 940); self.window.show(); self.window.navigate("markets"); self.app.processEvents()
         self.view = self.window.markets_view
-        self.addCleanup(self.window.deleteLater); self.addCleanup(self.window.hide)
+        self.addCleanup(dispose_market_fixture, self.window)
         # The cards as Research Home shows them (owner 2026-11-11): the window's store, the card router.
         self.grid = WatchlistGrid(self.store, router_factory=lambda: self.router, name_fn=self.view.display_name,
                                   locale=LocaleContext("ko_KR"), auto_load=False)
         self.grid.resize(1200, 800); self.grid.show(); self.app.processEvents()
-        self.addCleanup(self.grid.deleteLater); self.addCleanup(self.grid.hide)
+        self.addCleanup(dispose_market_fixture, self.grid)
 
     def wait(self, predicate, seconds=5):
         end = time.monotonic() + seconds

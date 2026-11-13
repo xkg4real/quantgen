@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "c13d00bd4c4b2075feb52b2767e5afd4eedfec595196e5d8fe35bbdc45b88e68",
+    ".github/workflows/runtime-smoke.yml": "47fce2224e77e9ab08345a9726cab7ffb4cebb6fe87aa1c060e445d4d323ddc2",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -521,8 +521,8 @@
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_market_first_paint_acceptance.py": "b2fc5d138f12ea6e1b72c598aa96cca2551260b2432cb245727cbd070d99e5fa",
     "tests/desktop_market_layout_acceptance.py": "055ea42223fa7241f7b3ae1019e9e33df45820376c7e8d2b534337107e2efbbb",
-    "tests/desktop_market_tabs_acceptance.py": "2f1e8c1cbfbfe18e054099c1fc1fc3c0e94158141d2395d57421c829f73629ba",
-    "tests/desktop_markets_watchlist_acceptance.py": "39c54d208096f85635080c59c7b8db71fcbe29721cb081256dc70982b01a38d0",
+    "tests/desktop_market_tabs_acceptance.py": "c470560cb245be8130c00d8ac67dc34653e594ca0bd3d74e2abf6d2a42a63a4c",
+    "tests/desktop_markets_watchlist_acceptance.py": "1603ccaaf3c1f6d99ccddba8114786d7774386de6ecbfb38908e2cfda0e5d515",
     "tests/desktop_operation_fixes_acceptance.py": "e6c15c500e3c59d2fb25a8023cee574965fac873d1d3f963f88a7f8f332596f1",
     "tests/desktop_owner_ui_charts_acceptance.py": "071e406a16d7c0fe71c41ef463f85ace501d523cb87cc54676dad7455063b06e",
     "tests/desktop_owner_ui_ficc_acceptance.py": "f1e00489b0be49085595ad7b7f8b58285c0e86567d261c00ca9ec383b8439faa",
@@ -617,7 +617,7 @@
     "tests/market_chart_presentation_acceptance.py": "6fe863f83008534a669d4c14baa2f4e06d6ca1eb31e4bf30d21d5e89aa78dbeb",
     "tests/market_core_acceptance.py": "da7c6f4df956acccb02e469ff6e632a7dad264f43f1f68421b76ef8e7a5da89d",
     "tests/market_directory_acceptance.py": "9660a2d9042bb69c17d20d59fcc0dd5a844885fa9919affdf3d2f0b62f6f590e",
-    "tests/market_progressive_acceptance.py": "4e1ee0e143fb42afa640539c514c8f6235a8febf67ea99185b305da720007615",
+    "tests/market_progressive_acceptance.py": "e4ffd88f46decd572454931d76d29cc00777606dd091dd692ddbd9ec7add6510",
     "tests/market_rankings_acceptance.py": "65299e83089e188525dbe4b6eebe68a977b611693200d2e4fad886b72ccc7992",
     "tests/market_received_bars_acceptance.py": "d813ac382849703a0d06cdf23fb2ace46d2319187956150dc86b750b79890f92",
     "tests/market_routing_acceptance.py": "76cefd5084a08c8aec8d108323f2147b39b05ca20febc81b0c687d9a99614301",
@@ -632,7 +632,7 @@
     "tests/provider_parity_acceptance.py": "aa10b5423d401469b0717af04442a2c22b9464b527ad7be487ba2486eee3113f",
     "tests/provider_parity_btc_diagnose_acceptance.py": "635a80def3b5ca94f5bf0959d9bc9a1c47a5de4ba366749a54ff0a7871f83bf0",
     "tests/qscore_acceptance.py": "660f85eee09478115e50e2a4806b2565c0dda60be85cd62d15bc04443820c25c",
-    "tests/qt_fixture_cleanup.py": "56b1c3ee6e6def041b391d40d3c7d40faa8bab0b3856901f671522c6121fdf04",
+    "tests/qt_fixture_cleanup.py": "d68b576411c205da153523b077592f69fdb5aa4d2bbe5d67d42fed1bfeeaf267",
     "tests/quant_acceptance.py": "1b6d042dbd01d5bf78773b836a132b22409013ac61f8f46138e3bd4a5b7f6f08",
     "tests/quote_coverage_acceptance.py": "09d727791eb18d44955a0324058439c0d63777af94b5ca18f8a1ced7eb6cec86",
     "tests/rates_revaluation_params_acceptance.py": "aceaf96ac170d95eaf454da6f95e639e4705ad8965954de01e9de2d86d468ed3",
@@ -746,163 +746,163 @@
   "reviews": {
     "1": {
       "document_sha256": "18dc413362efd7488995e9e930286226046e1c272263157600aa593baafdd714",
-      "source_digest": "dd207ba22df4d54cea91efb6bd9ea57bdbf5bb431017df374e98f7fe315238e5",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.528790+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "d211781277e4f912f6306bc4ab2fe5d22d81aa7dd87aeea128069e8bbd0efcc8",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.848915+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "2": {
       "document_sha256": "8ddd0502d6c8767c9c7c7f8827706ca929946c6244c565558c77ffefc7c038ee",
-      "source_digest": "dd207ba22df4d54cea91efb6bd9ea57bdbf5bb431017df374e98f7fe315238e5",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.533196+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "d211781277e4f912f6306bc4ab2fe5d22d81aa7dd87aeea128069e8bbd0efcc8",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.850945+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "3": {
       "document_sha256": "122df861c40d2ce416603e3ac4b32cf892df92612a6bc66347eaeba9715e65b8",
-      "source_digest": "9f8291534c6e92b4062fbe346b42b23d0859e43a8c39352a08ed15fb155bdef2",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.534842+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "0281ffb200ad0c5b83955eb5e086937e6b1dfc33dd27dc46c840f0eda44f33f2",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.852360+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "4": {
       "document_sha256": "8f9b0a3908a2099cc18ee5848763cee629a75a01eeea86853bb6985519170344",
-      "source_digest": "5c4e1fbadc60176f70b0f0115a48be7450aa64a342b4d0e7049991089da8c4d0",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.537798+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "6c9726641c8a21d4538f2d18c7cc44094d9854359b60580eb154d8367ad58d60",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.853772+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "5": {
       "document_sha256": "060f9c93d00e4086e6763cb669dec1fde2d5f11f083087bed5ef8e4136684bed",
-      "source_digest": "ae2324bf9290cbb91478ef7ff96f4f79dc83ef3aadb7c8110b0bebdab929c086",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.539146+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "183f9646b9b298183394dffbb6369c9f60320e0104fa58b9dc155629927326ca",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.855099+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "6": {
       "document_sha256": "e8486a47510bcb774261d13798eeea001007fd6b28e6d4d9e2ac23fe64d895e1",
-      "source_digest": "62f1c9eb326b45dc13eb6519a42a2a2b52dd44c0a514057c907c3abd6d51b8d7",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.540455+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "b0a5a3fb4153fc95c57cad3c9264ee89fa6ce7a9c589827e62df9f5c9f848098",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.856402+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "7": {
       "document_sha256": "a7f592f442e1da195efc95d786c9112e70f36356e2fed747a1108318138e4ad2",
-      "source_digest": "dd207ba22df4d54cea91efb6bd9ea57bdbf5bb431017df374e98f7fe315238e5",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.542183+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "d211781277e4f912f6306bc4ab2fe5d22d81aa7dd87aeea128069e8bbd0efcc8",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.858231+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "8": {
       "document_sha256": "c53b0f56867226eae0c3eabb1503fa8f8c6c7ec639afc9033b39cae8ffe10f3a",
-      "source_digest": "62f1c9eb326b45dc13eb6519a42a2a2b52dd44c0a514057c907c3abd6d51b8d7",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.543595+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "b0a5a3fb4153fc95c57cad3c9264ee89fa6ce7a9c589827e62df9f5c9f848098",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.859718+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "9": {
       "document_sha256": "9b1af75b366f5aab5b2e630629f30f00d0057877170f4801aa9f14b2a70e3c96",
-      "source_digest": "0b55c536716ae3f44e702188fdf2bae94d3c76bc6a6190569dd0ef518de2d3c6",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.545110+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "f2e37dfa2b5725fe60ed9e90bde8bc4cf1b6fb010c461a2d587a8e9ee42dc98f",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.860968+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "10": {
       "document_sha256": "8cbb750332530a5c736f743e4e5c148e1fcfe2e18a457593b442d54d9ecada71",
-      "source_digest": "2195c8d3c94895edc6611aade4eef190af67cdfe9abeb9afcabf2a47b1081ac8",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.546689+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "383edcf3c3e973629d410ed61447235ffea4c23ddb973f8408ff80245b6c45bd",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.862141+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "11": {
       "document_sha256": "b290a8ee69ff5c9c6ff4535ed91a08cb26ad167afc504d6e17771bee1856ae44",
-      "source_digest": "46a4488869a11bcc8f88b742b406a61fd6a3d6925a55186e1e29322a34b00e42",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.548246+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "6ad0c6be7bae9f3b6686ea964b9e085eadc1b96e0c4d253742b6aa30e7fab2e7",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.864028+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "12": {
       "document_sha256": "5b29917ba7a0aa9da347fe1eb9594775ba02cd6d5ba649f4f90e03b958b7ef26",
-      "source_digest": "7e4ab9fd7dfd520acb86cc6dc0de2ea0faaaf3639f7c45603512c8f3cee77baf",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.550077+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "6da7a9b318a4ce5ca4d6141a32ff0c1f6c76c6bac52797c89f8a66990b6b2a86",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.865541+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "13": {
       "document_sha256": "e27cbbe6536609fe8299522ecd66032e48b7494d3ccb5c0656ea457f75e220c5",
-      "source_digest": "0b55c536716ae3f44e702188fdf2bae94d3c76bc6a6190569dd0ef518de2d3c6",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.551679+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "f2e37dfa2b5725fe60ed9e90bde8bc4cf1b6fb010c461a2d587a8e9ee42dc98f",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.866798+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "14": {
       "document_sha256": "0830fda21f72f77f30f0b52a74b52c425916ec5dd4688507008f3337ad627258",
-      "source_digest": "0b55c536716ae3f44e702188fdf2bae94d3c76bc6a6190569dd0ef518de2d3c6",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.553598+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "f2e37dfa2b5725fe60ed9e90bde8bc4cf1b6fb010c461a2d587a8e9ee42dc98f",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.868075+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "15": {
       "document_sha256": "09b2945ed78373174a9c3bfb24c79c70d1d06ef22a5fc0aa74ac3804fc25f7c2",
-      "source_digest": "0b55c536716ae3f44e702188fdf2bae94d3c76bc6a6190569dd0ef518de2d3c6",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.554912+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "f2e37dfa2b5725fe60ed9e90bde8bc4cf1b6fb010c461a2d587a8e9ee42dc98f",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.869722+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "16": {
       "document_sha256": "fa6d90124e3706e75b63d90a177382c3a009f799d38ad088bdc229f62caa0dba",
-      "source_digest": "ad5054ecf9c2a630043aa16761d2bee8b25a20a9ba3e77aa5118d5ef137805c8",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.556375+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "83a73620d6d64bfacf23c5c4017fa7d65769b583bb6f8a8da69d9ad3978b34ce",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.871135+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "17": {
       "document_sha256": "d15a9af3cf32276b2ce6696db902d09ac26a14e0b5b92ebbad384865c61b13d3",
-      "source_digest": "62f1c9eb326b45dc13eb6519a42a2a2b52dd44c0a514057c907c3abd6d51b8d7",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.558161+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "b0a5a3fb4153fc95c57cad3c9264ee89fa6ce7a9c589827e62df9f5c9f848098",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.872709+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "18": {
       "document_sha256": "9a43174723a1dc551db1aef590e8833b368877f543e21a833798f0e039f4099a",
-      "source_digest": "dd207ba22df4d54cea91efb6bd9ea57bdbf5bb431017df374e98f7fe315238e5",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.559868+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "d211781277e4f912f6306bc4ab2fe5d22d81aa7dd87aeea128069e8bbd0efcc8",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.873940+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "19": {
       "document_sha256": "1e01361156c01fc1920818f3472dae95a741f2f3481ee62462561ac8fe4d2f53",
-      "source_digest": "73c4ba18963eeeeafe0fd063f1ba9eddedffc485982b0f3308d20ef88b10613d",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.561412+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "debd2cdb82e09fc55459bdf067c6b4b76722a9e1d24c28f1a0e6664891c591df",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.875642+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     },
     "20": {
       "document_sha256": "e7265d03dabb582d79c63f1e69ca64c103f565f24e1c3ee0b19c4b4a85204ed9",
-      "source_digest": "dd207ba22df4d54cea91efb6bd9ea57bdbf5bb431017df374e98f7fe315238e5",
-      "reviewed_by": "GPT UI review",
-      "review_note": "PR115 follow-up: preserve stock chart viewport pin after nested destination reflow; owned measurement timer, before-fix reproduction and early Windows regression. No policy publication approval.",
-      "reviewed_at": "2026-11-13T10:33:52.563009+00:00",
-      "source_commit": "043b2cd3edbf38aef6da8b4ea7ad5ce2970b8158"
+      "source_digest": "d211781277e4f912f6306bc4ab2fe5d22d81aa7dd87aeea128069e8bbd0efcc8",
+      "reviewed_by": "GPT UI test lifecycle review",
+      "review_note": "PR115: dispose owned market fixtures and stop their workers before following preview tests; retain every existing test module and original deadlines; isolate market fixture chain early in CI. Product implementation remains 8f69c73.",
+      "reviewed_at": "2026-11-13T11:44:22.876937+00:00",
+      "source_commit": "8f69c734ab06823fce8aa79ad09872eb8dbc87d7"
     }
   }
 }
