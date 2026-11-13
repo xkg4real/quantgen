@@ -21,6 +21,14 @@
 - 다음은 Sydney의 해당 도메인 GetEmailIdentity 상태를 읽기 전용 확인합니다. 메일 발송·도메인 생성·SCP/IAM 변경·리전 이동·운영 배포는 하지 않습니다.
 - 로컬 상태/안내/작업 기록에 업데이트하며 웹 HTML은 변경하지 않습니다. 현재 Microsoft 미설정 검토본 및 공개 조건은 유지합니다.
 
+## R1 후속 — Sydney SES 도메인·DKIM 인증 확인 (2026-11-13)
+
+사용자 CloudShell의 `GetEmailIdentity --region ap-southeast-2 --email-identity quantgeneration.com` 결과는 **Verified=true / Verification=SUCCESS / DKIM=SUCCESS**였습니다. 따라서 Sydney의 해당 도메인 인증 및 DKIM 성공을 확인했습니다. 앞선 GetAccount의 production/sending=true와 함께 Sydney SES 기존 구성이 확인된 범위를 기록합니다.
+
+- 출처는 사용자 제공 출력입니다. 실제 메일 발송/배달·맞춤 MAIL FROM·Cognito 연결은 검증하지 않았습니다.
+- 서울 SES는 여전히 SCP 차단으로 상태 미확인입니다. Sydney의 결과를 서울에 적용하지 않습니다. 리소스 생성·설정 변경·메일 발송·웹 정책의 리전 변경은 하지 않습니다.
+- 다음은 프로젝트 리전 Sydney의 기존 Cognito 풀 목록 조회이며 새 풀/클라이언트를 만들지 않습니다. 개발 API는 후속 읽기 전용 확인 대상입니다.
+
 ## 현재 범위와 상태
 사용자는 **메일 전환·웹 정책 범위 유지**를 선택했고, 추가로 **기존 Cognito 풀·서울 SES 인증/production 상태·개발 API 존재의 읽기 전용 조회만** 요청했습니다. 신규 리소스 생성·설정 변경·메일 발송·앱 기능 구현·운영 배포는 하지 않았습니다. Microsoft 365도 아직 구매·설정 전입니다.
 
