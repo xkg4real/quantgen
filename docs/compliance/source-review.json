@@ -377,7 +377,7 @@
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
     "docs/product/TERMINAL_TARGET_2026-10-30.md": "5c3e2eac999534371560def0e00d3ef45d0b7abcd960a6b1d7d7c3c9c3b05c29",
     "docs/product/TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md": "eeb6a1394c46fd67859dc5c8066d9adc125802efa24c29add93b5d8528404314",
-    "docs/product/UI_D11_D15_2026-11-13.md": "0d6954f062a0dcc2c6b42a95ca4d3615bee54173f5bce8a862120e15a57851b1",
+    "docs/product/UI_D11_D15_2026-11-13.md": "227e4f629f772b9d43f9f902e92f11f1189e0b145d06adeae75ca627dba5760d",
     "docs/product/UI_LOCALIZATION.md": "7a8bc3a69e4e3728e18e0bf62b0613f792079b0a5f3d7b03742dfd5f4596b512",
     "docs/product/UI_RENDERING_2026-10-31.md": "f006b261d10a28594dc3b31d05424ac144004ca4edca18646ca00b5c0f8a19f6",
     "docs/product/UI_SESSION_PROGRESS_2026-10-31.md": "6f8fd39bdfc77df266095c1e46170c1a679e3267d200a0fc3f6995b196dd0de4",
@@ -737,163 +737,163 @@
   "reviews": {
     "1": {
       "document_sha256": "bfb0f2a777e39eb935057f6b54fb72bb1ee242dc49d6168946ee63156f294299",
-      "source_digest": "26da0b988cb1b5786a14b0de35a1ed12912815a905debd50f1c9c2aefa06c67d",
+      "source_digest": "019b5ab622f23554efab210c31750ab1ac13ae401af92c96afeea881312b633f",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.825106+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.562718+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "2": {
       "document_sha256": "927fd2e6fa3f911b2318caeb2c6b76e7a22a5acf511a7a5bf089bf8cfaa5eb5e",
-      "source_digest": "26da0b988cb1b5786a14b0de35a1ed12912815a905debd50f1c9c2aefa06c67d",
+      "source_digest": "019b5ab622f23554efab210c31750ab1ac13ae401af92c96afeea881312b633f",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.827296+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.564613+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "3": {
       "document_sha256": "b08dcb02f98a4b65afbcf42b626bc5135615ef365222e54904f286e059b87cd2",
-      "source_digest": "49de372f285b934d661712023ab2bdf9d862a39699ef1d07477e91bb07406654",
+      "source_digest": "c03dccaf56fda4a03d50df0059ca5ad919dd1d7ec1d068692d913c90a5551b98",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.829561+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.566096+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "4": {
       "document_sha256": "cd74c1dcd526ba9c91277ef8ddb75cc901c103234de2911c369752d4cd7f110e",
-      "source_digest": "f1f72c6e963adaaae1bb25435898d008fe2f4a260d68f6c69dbc3a42a629ff33",
+      "source_digest": "d19e76d5103da3f6e777da9f9396973aedf27036f4de862fc72f395ce95ebf62",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.830978+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.568100+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "5": {
       "document_sha256": "2b1d8abea35e59a3aaadde163aba0e4dd322ab3765912e3587203e47dc205b72",
-      "source_digest": "ab1dad9950f4a5b932a8f80a8f14b5b029056a87e712f472064cf733bc66e453",
+      "source_digest": "bfc5acf6c96f326dc689ab89068a50211d24300194f66b16d2e8197d742a0594",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.832650+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.569699+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "6": {
       "document_sha256": "b523d4ac0040a8c52355ee46e43d7a2dac6bdfc42f245d6801f02b6619ae20e0",
-      "source_digest": "e5c8e9fbccf6aed5cfc9da770dfc6bf88405e4eecdff77107998eb3640012b0d",
+      "source_digest": "bc046d8198c41bdbcd4d81f71e650d291dbcd0b9d22e6fff72b2d32139f869b6",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.833963+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.571013+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "7": {
       "document_sha256": "4bf4ebfcdadc1ab1b190229f5f356c0f6d8bf42cce76bde5e91847681c404d2b",
-      "source_digest": "26da0b988cb1b5786a14b0de35a1ed12912815a905debd50f1c9c2aefa06c67d",
+      "source_digest": "019b5ab622f23554efab210c31750ab1ac13ae401af92c96afeea881312b633f",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.835522+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.572629+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "8": {
       "document_sha256": "f869f1529ea234c34a2c0c87ed2cb2ee0ab215fa1ecd9f0c2c011a6b4813b159",
-      "source_digest": "e5c8e9fbccf6aed5cfc9da770dfc6bf88405e4eecdff77107998eb3640012b0d",
+      "source_digest": "bc046d8198c41bdbcd4d81f71e650d291dbcd0b9d22e6fff72b2d32139f869b6",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.837135+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.574098+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "9": {
       "document_sha256": "a685944f95d0ce2dadeaf582fc791a66483fcc89d2990a7e5b58d46b54e7bba1",
-      "source_digest": "8d78371faa07f1836bf08a81ab39a9ce3dfeccb6595d5c6a4665ee8ce3d2bb11",
+      "source_digest": "6080e3ee302bd730b4cef9d94363ef0bb5216c9d960725645f01254cb13d257c",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.839039+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.575869+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "10": {
       "document_sha256": "d4d119a650bc8a1810fe0fb3b7559368d93949c927385f980b23cfc55e73f07b",
-      "source_digest": "dc9bb93b3f37fe0a73f68702593870fd2e5ed48eb6d9e7c39b898d4e45ac87dd",
+      "source_digest": "9916fb9f66b501c3b56a98d2b4a4260a35e9147e47d5023ece197f68f028988e",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.840934+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.577454+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "11": {
       "document_sha256": "70071bd9e2db9ed7b6cc43b225d9250a562d031d16e29c8e4b8cbeeddbfca5a7",
-      "source_digest": "a2d588d90d9d76ffd11da9493489b085236307781439b897eddcff09521ff779",
+      "source_digest": "76f5d6e12fd7f9bede227163ec26610f528bf719bfea9108b8d12f08a7506900",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.842445+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.578952+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "12": {
       "document_sha256": "d55f42db2c4e7090622fecfe2593ca03034a49a01b3cdd997ba46731af0f1b93",
-      "source_digest": "caa124c0f95fbaceed7e1cca8d955dc96b616d142ec2a120e681f150a469f0df",
+      "source_digest": "f89ea949db7fbb06b8af81a5347f59e8aa7a3db3ad7256d705ddedd69f590d9e",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.844051+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.580383+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "13": {
       "document_sha256": "d69c960aa52d70181e7c8899ec9520dc218b416ac70b4209c5c761ac9d1eeb96",
-      "source_digest": "8d78371faa07f1836bf08a81ab39a9ce3dfeccb6595d5c6a4665ee8ce3d2bb11",
+      "source_digest": "6080e3ee302bd730b4cef9d94363ef0bb5216c9d960725645f01254cb13d257c",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.845636+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.581991+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "14": {
       "document_sha256": "5cdae46d33eea6d9b2ebbe7373775a7be2b6f30012a8b2a6126ea614fa08e62c",
-      "source_digest": "8d78371faa07f1836bf08a81ab39a9ce3dfeccb6595d5c6a4665ee8ce3d2bb11",
+      "source_digest": "6080e3ee302bd730b4cef9d94363ef0bb5216c9d960725645f01254cb13d257c",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.847085+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.583676+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "15": {
       "document_sha256": "f945de2c1499a7d563e3bcc81db95003bf44bbc6bf90e30c7de5bf993bb67ad1",
-      "source_digest": "8d78371faa07f1836bf08a81ab39a9ce3dfeccb6595d5c6a4665ee8ce3d2bb11",
+      "source_digest": "6080e3ee302bd730b4cef9d94363ef0bb5216c9d960725645f01254cb13d257c",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.848559+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.584917+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "16": {
       "document_sha256": "958fd2485a7aa29ec1954cef03182734225c97bb8ae82d95e7f295e957773ff2",
-      "source_digest": "0f39b6838c0c0b06eb332464649f2f31c1481cc359d814363d6d3d99b1c1bace",
+      "source_digest": "6d04a89b1449ba7d67e0a132cc7f0de672f7052df45a5f2c89f9909b94c67d73",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.850066+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.586225+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "17": {
       "document_sha256": "6236eef665087d5bc2b7cb0f337c9688945968bb037019b98db7b144ddfd773d",
-      "source_digest": "e5c8e9fbccf6aed5cfc9da770dfc6bf88405e4eecdff77107998eb3640012b0d",
+      "source_digest": "bc046d8198c41bdbcd4d81f71e650d291dbcd0b9d22e6fff72b2d32139f869b6",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.851518+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.587580+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "18": {
       "document_sha256": "75e98a89e4600b1acde57226ea739577b1419ac489ee1401bffe78e895206436",
-      "source_digest": "26da0b988cb1b5786a14b0de35a1ed12912815a905debd50f1c9c2aefa06c67d",
+      "source_digest": "019b5ab622f23554efab210c31750ab1ac13ae401af92c96afeea881312b633f",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.853125+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.589793+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "19": {
       "document_sha256": "442034dff0de1c425c642b1311b534a43f28117737aef090dfed545e9c483ed6",
-      "source_digest": "3221c20ac4c6a9e29a9206287f97ab295396fb8df158b65ad841311f0f250a49",
+      "source_digest": "36a2d85636d0b46b64855d3bbaac8cde5643a41f3f47b4a6a1b0ff8c824521e3",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.854481+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.591210+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     },
     "20": {
       "document_sha256": "0bd62dde94f8f1c3a8ecf90c630d198a9335f99a71b1da50ac756a932904e3ff",
-      "source_digest": "26da0b988cb1b5786a14b0de35a1ed12912815a905debd50f1c9c2aefa06c67d",
+      "source_digest": "019b5ab622f23554efab210c31750ab1ac13ae401af92c96afeea881312b633f",
       "reviewed_by": "GPT UI integration review",
-      "review_note": "Reviewed Qt fixture disposal, event-order timing and retained CI coverage; no production behavior changed.",
-      "reviewed_at": "2026-11-13T07:06:57.855751+00:00",
-      "source_commit": "4ab349f7a1a646fd4c03db2d418330c02a95d596"
+      "review_note": "Record PR112 merged main commit and successful six-platform-job CI; UI and policy semantics unchanged.",
+      "reviewed_at": "2026-11-13T08:08:19.594006+00:00",
+      "source_commit": "d01ec735bc2fc158fe44d56a0963f2c7226018ca"
     }
   }
 }
