@@ -6,11 +6,11 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout
 next_ids: ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T18:08:10+09:00
+updated_at: 2026-11-13T18:15:40+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: gpt/pilot-readout-btc-ra-20261113
-work_commit: a90c90b88d5b5202e8dfafaf893c09c997587572
+work_commit: 661c6b878442e5c8e2b864766ade379e042825f1
 uncommitted_changes: no
 pr: 114
 usage_weekly_pct: unknown
@@ -20,6 +20,13 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 0b664cd3-df59-47ce-80d7-a9b0e78d8cf8
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## 검증 갱신 — 2026-11-13T18:15:40+09:00
+
+- PR114 최신 head 661c6b878442e5c8e2b864766ade379e042825f1: RULINGS.md의 고정 도구 지문 규칙을 지키도록 결과 자료는 짧은 commit 참조와 판정 로그 링크로 표시. 전체 SHA/원문은 OWNER_RULINGS_LOG.md와 handoff 판독 보고서에 보존. 원격 파일 내용 read-back 일치.
+- 기존 test_every_statement_of_the_fixed_commit_and_sha256_agrees_with_the_tool_file 그대로 로컬 PASS. 첫 CI의 실패 원인만 수정했으며 검사/고정 도구/소스 baseline은 변경하지 않았다. 최신 head 전체 CI 완료 전 병합하지 않는다.
+- 로컬 provider 전체 검사 시 /tmp/.git 때문에 격리 임시 경로 사전조건 실패(129 중 122 실패); 공유 경로를 변경하지 않았고 이를 통과로 기록하지 않는다. 전체 검증은 최신 원격 CI로 수행한다.
+- sapientia REMAINING WORK에서 ⑥-1/readout와 BTC-라 승인만 취소선, Pilot 2/⑥·⑦ 부모는 미완료 유지. PR114 CI/병합 대기 표기까지 저장·read-back 완료; 실제 Pilot 2 미실행.
 
 ## 최신 진척 — 2026-11-13T18:08:10+09:00
 
