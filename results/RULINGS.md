@@ -259,12 +259,12 @@ registration, repricing or source-data replacement was performed by this documen
 ### Verified SPY and Pilot 1 evidence
 
 - The second SPY summary, `PP-20261112T073747Z-spy`, at provider-run commit
-  `77d2647857325d9a2809f6d8ba0c730097d6ffaf` is PASS. Its SHA256 is
-  `4ad6c537fa5649a2f5d0ba069fd88a0d8e1a4398ca23308defcc017b118b3c02`.
+  `77d2647` is PASS. Its SHA256 is recorded in full in the matching dated addendum of
+  `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` and in the linked readout report below.
   Independent fmp: 5,489 common days, zero days above tolerance; yahoo_now PASS. Auxiliary KIS coverage
   remains WITHHELD. The earlier SPY run remains in the historical record.
 - Pilot 1 `NB-20261112T153028389916Z-d76d2d73`, pushed to research commit
-  `a2ac79b04bf2e31055c7bc486cb9cffb3727f2c4`, is CARD_WRITTEN. All 24 setting/cost combinations pass hard
+  `a2ac79b`, is CARD_WRITTEN. All 24 setting/cost combinations pass hard
   parity; lowest correlation 0.9999996240319662, largest absolute Sharpe difference 0.0006384421130428697.
   Both engines say REJECT, as anticipated; that verdict is not a bridge failure. Trial counts are
   grid/family/market 12/12/12, U=24, n_trials=36; no new E1 registration was appended.
@@ -304,4 +304,4 @@ Formal optional GPT/Gemini spec disclosure/review remains NOT_PERFORMED.
 GPT's reading of the pushed run/card and provider summaries is a new data-access-history entry to carry to
 Step 10; no raw price/fill arrays are reproduced here and no new trial is registered.
 
-Full checklist and immutable readout evidence: [Pilot 1 readout](https://github.com/xkg4real/quantgen/blob/d6a814f8a95bc66eeec5a209fbd21227d0188deb/PILOT1_READOUT_2026-11-13_gpt.md).
+Full checklist and immutable readout evidence: [Pilot 1 readout](https://github.com/xkg4real/quantgen/blob/d6a814f/PILOT1_READOUT_2026-11-13_gpt.md).
