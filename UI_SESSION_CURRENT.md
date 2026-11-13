@@ -3,7 +3,9 @@
 - status: returned · owner: GPT UI. 메인 엔진 `CURRENT.md`는 변경하지 않음.
 - **PR112 main 병합 완료**: d01ec735bc2fc158fe44d56a0963f2c7226018ca. 검증한 head: c45adc8dca1682069d9c88956c844f5c33b7d827.
 - PR: https://github.com/xkg4real/quantgen/pull/112
-- 최종 상태 기록 PR: https://github.com/xkg4real/quantgen/pull/113
+- 최종 상태 기록 PR: https://github.com/xkg4real/quantgen/pull/113 · 병합 완료.
+- 최종 확인 main: **7e0567373ba50e6131fb24e1f6012c82d268cecb**. UI 소스 c45adc8과 기록48dfb9c 모두 조상 확인.
+- 기록 PR113의 Compliance43390952031 성공. 최종 밝게1440px/어둡게1000px 캡처에서 가이드·도구·설계·분석의 가로 넘침0, 첫 진입 스크롤0 확인.
 - Runtime43383685578의 Windows3.11/3.12/3.14, Ubuntu3.12, syntax3.10/3.11 **6/6 성공**.
 - Compliance43383685540 성공. 20종 일관성 PASS, 공개 정책 승인 BLOCKED 유지.
 - 아래 과거 체크포인트의 "미병합/진행 중"은 과거 상태이며 이 절이 대체함.
