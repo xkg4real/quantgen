@@ -1,14 +1,14 @@
 ---
-status: returned
-reason: milestone
+status: taken
+reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2
 next_ids: ⑥-2, ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-13T19:17:51+09:00
+updated_at: 2026-11-13T21:03:56+09:00
 stale_after_hours: 3
-waiting_on: owner
+waiting_on: none
 work_branch: gpt/pilot-readout-btc-ra-20261113
 work_commit: 661c6b878442e5c8e2b864766ade379e042825f1
 uncommitted_changes: no
@@ -17,9 +17,18 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
 session: 01a183c6-632a-70cc-a0e6-32e764f43087
-execution_id: 0b664cd3-df59-47ce-80d7-a9b0e78d8cf8
+execution_id: 2633226e-9755-40fb-87a4-44d1fc290756
 handoff_id: 2026-11-10/claude-resume-20261103/9d0e67883932520c9341701d538eff7c195bbd0e
 ---
+
+## 독립 문서 단위 재개 — 2026-11-13T21:03:56+09:00
+
+- execution_id: **2633226e-9755-40fb-87a4-44d1fc290756**. STATE의 이전 execution_id 0b664cd3-df59-47ce-80d7-a9b0e78d8cf8, task/handoff ID, branch/commit이 CURRENT 및 원격 작업 브랜치와 일치했고 RUN.lock의 OS 배타 잠금을 확보했다. 동일 최신 handoff ref a224eb4b43db5cfd3720ae267c76df4ef3a73779의 필수 6문서를 확인했으며 최신 CURRENT blob의 CAS로 재개한다.
+- 이번 범위는 STATE의 승인된 독립 문서 후속 작업과 아래 Claude 인계의 **미착수 주문 모듈 안전 설계 문서**이다. M-12/design-draft/1로 승인 D1~D14와 단계별 증거 조건을 정리한다. 기존 판정 원문을 바꾸지 않고, 출처에 없는 세부 정책은 미확정 설계안으로 분리한다. 다음 새 작업 브랜치는 gpt/order-safety-design-20261113, 기준 main 795165cb45b6a37a6bf9bfc0ccd8cc6e6cb2acf0 예정이며 생성 후 기록한다.
+- 주문 구현/가드 변경은 승인 P4대로 ⑦-2 뒤다. 이번 단위는 문서만으로 실제 주문, 계정, 키, 연구 브랜치, 동결 자료/판정, Windows 원장을 실행하거나 수정하지 않는다. 법률/라이선스/실제 API/모의 운영의 검증 완료를 뜻하지 않는다. GPT/Gemini 추가 심사는 NOT_PERFORMED 유지.
+- Pilot 2는 소유자 PC 결과가 필요하다. 연구 브랜치 최신 a2ac79b는 이전 Pilot 1 기록 그대로다. 소유자가 올린 출력에서는 외부 연구 클론 안에 별도 UI 클론이 있어 A5가 아직 깨끗하지 않다. 폴더 이동 안내만 제공했으며 실행/정리 성공이나 Pilot 2 시작은 확인하지 않았다.
+- 별도 UI_SESSION_CURRENT는 PR115 taken이며 이 세션 범위에서 제외한다. 기존 시간당 예약과 주기 반환 기한(2026-11-17 17:00 KST)을 유지한다.
+
 
 ## 반환 — BTC-라 판정/판독 후속 단위 완료 (2026-11-13T19:17:51+09:00)
 
