@@ -40,8 +40,8 @@ MARKET_SUBS = {"stocks": (("kr", "Korea", "국내"), ("us", "US", "미국")),
                "crypto": (("crypto", "Crypto", "크립토"),),
                "etf": (("etf_kr", "Korea", "국내"), ("etf_us", "US", "미국"))}
 PAGE_CATEGORY = {page: category for category, pages in MARKET_SUBS.items() for page, _en, _ko in pages}
-# 지수: the index cards of Research Home (`core.research.markets.SPECS`), opened there with the card selected.
-INDEX_CARDS = ("^KS11", "^GSPC", "VIXCLS")
+# Observed series offered on the dedicated Markets index page.
+INDEX_CARDS = ("^KS11", "^KQ11", "^GSPC", "^IXIC", "VIXCLS")
 # The other categories open the analysis tools that cover them, or a Home card: (category, ((leaf, English,
 # Korean), ...)); a tool leaf is ('tool', pane attribute, its sub-tool or ''), a card leaf ('home', symbol).
 TOOL_LEAVES = {
@@ -58,23 +58,9 @@ TOOL_LEAVES = {
                 (("tool", "macro", "daily"), "Daily commentary", "일일 시장 해설"),
                 (("tool", "macro", "weekly"), "Weekly rates & FX", "주간 금리·외환")),
 }
-# Where a tool leaf opens and what it shows, for its tooltip (the menu names no page on the row itself).
-_TOOL_TIPS = {"derivatives": ("Analysis tools › Derivatives", "분석 도구 › 파생상품"),
-              "fx": ("Analysis tools › FX", "분석 도구 › 외환"), "rates": ("Analysis tools › Rates", "분석 도구 › 금리"),
-              "bonds": ("Analysis tools › Bonds: price, yield and z-spread over the Treasury curve",
-                        "분석 도구 › 채권: 가격·수익률과 국채 곡선 대비 스프레드(z-spread)"),
-              "macro": ("Analysis tools › Macro sheet", "분석 도구 › 매크로 지표")}
-_HOME_TIP = ("Research Home › Major markets: the daily chart", "연구 홈 › 주요 시장: 일별 차트")
-
-
 @dataclass(frozen=True)
 class MenuNode:
-    """One row of the 시장 menu. A row with `children` opens a flyout when pointed at; `leaf` is what a click opens:
-    ('market', page, category), ('home', symbol) or ('tool', pane, sub-tool). A row with both (국내 under 주식, 크립토,
-    선물) opens its page on a click (category '': the page's own last ranking) and its flyout when pointed at. `mark`
-    names what the row stands for, so the row of what is shown can be marked; `tip` says where a leaf opens.
-    The flyouts carry no notes about rankings a page leaves out (UI-D11 review: they read as disabled items); the
-    page's footnote says why."""
+    """A market row: children expand below it; all leaf routes belong to Markets."""
     key: str
     text: str
     children: tuple = ()
@@ -101,22 +87,19 @@ def _ranking_nodes(page, language):
 
 
 def market_menu(language):
-    """The 시장 menu in `language`: one `MenuNode` per `MARKET_CATEGORIES` row, each with its flyout's rows.
-
-    주식 › 국내 / 미국 › the rankings that market has; 크립토 › its rankings; ETF › 국내 / 미국 › rankings (no market
-    cap); 지수 › Research Home's index cards; 선물 · 외환 · 국채 · 회사채 · 월드 이코노미 › the analysis tools (and Home
-    cards) that cover them. A row with one page of its own also opens it on a click (`MenuNode.leaf`). Pure apart
-    from reading the text tables; nothing is fetched."""
+    """Localized market categories with rankings, observed series and asset workspaces."""
     from .owner_ui_language.home import MARKETS as HOME_NAMES
+    names = {**HOME_NAMES, '^KQ11': ('KOSDAQ', '코스닥'), '^IXIC': ('NASDAQ Composite', '나스닥 종합')}
     language = "ko" if language == "ko" else "en"
     rows = []
     for key, english, korean in MARKET_CATEGORIES:
         text = _pick(language, english, korean)
         leaf = ()
         if key == "indices":
-            children = tuple(MenuNode(symbol, _pick(language, *HOME_NAMES[symbol]), leaf=("home", symbol),
-                                      mark=("home", symbol), tip=_pick(language, *_HOME_TIP))
+            children = tuple(MenuNode(symbol, _pick(language, *names[symbol]), leaf=("series", key, symbol),
+                                      mark=("series", key, symbol), tip=_pick(language, 'Markets › Indices', '시장 › 지수'))
                              for symbol in INDEX_CARDS)
+            leaf = ('series', key, '^KS11')
         elif key == "crypto":
             children, leaf = _ranking_nodes("crypto", language), ("market", "crypto", "")
         elif key in MARKET_SUBS:
@@ -124,10 +107,13 @@ def market_menu(language):
                                       leaf=("market", page, ""), mark=("page", page))
                              for page, sub_en, sub_ko in MARKET_SUBS[key])
         else:
-            children = tuple(
-                MenuNode(":".join(leaf), _pick(language, leaf_en, leaf_ko), leaf=leaf, mark=leaf,
-                         tip=_pick(language, *(_HOME_TIP if leaf[0] == "home" else _TOOL_TIPS[leaf[1]])))
-                for leaf, leaf_en, leaf_ko in TOOL_LEAVES[key])
+            items=[]
+            for target, leaf_en, leaf_ko in TOOL_LEAVES[key]:
+                target = (('series', key, target[1]) if target[0]=='home'
+                          else ('workspace', key, target[1], target[2]))
+                items.append(MenuNode(':'.join(target), _pick(language,leaf_en,leaf_ko), leaf=target,mark=target,
+                                      tip=_pick(language,'Markets › '+english,'시장 › '+korean)))
+            children=tuple(items)
             if len(children) == 1:  # 선물, 회사채: one tool, so a click opens it
                 leaf = children[0].leaf
         rows.append(MenuNode(key, text, children, leaf=leaf, mark=("category", key)))

@@ -19,6 +19,7 @@ from PyQt6.QtWidgets import QApplication, QComboBox, QLabel, QTabBar, QToolButto
 from core.market.models import Instrument
 from core.market.routing import ChartRouter, KISChartProvider
 from tests.desktop_market_chart_acceptance import FakeService, FakeStream, fixture
+from tests.qt_fixture_cleanup import dispose_market_fixture
 
 KO = ['채권', '금리', '구조화 상품', '외환', '파생상품', 'ETF', 'KRX', '가상자산', '매크로 지표', '매크로 v2']
 EN = ['Bonds', 'Rates', 'Structuring', 'FX', 'Derivatives', 'ETF', 'KRX', 'Crypto', 'Macro', 'Macro v2']
@@ -36,7 +37,7 @@ class MarketTabsTests(unittest.TestCase):
         self.window = ResearchWindow(auto_refresh=False, locale='ko_KR', market_loader=self.provider,
                                      connections_runner=self.provider)
         self.window.resize(1360, 940); self.window.show(); self.window.navigate('markets'); self.app.processEvents()
-        self.addCleanup(self.window.deleteLater); self.addCleanup(self.window.hide)
+        self.addCleanup(dispose_market_fixture, self.window)
 
     def visible_tab_bars(self, route):
         page = self.window.stack.widget(self.window.route_indices[route]).widget()
@@ -154,7 +155,7 @@ class SearchZoomTests(unittest.TestCase):
         self.window = ResearchWindow(auto_refresh=False, locale='ko_KR', market_loader=Mock(), connections_runner=Mock(),
                                      card_router_factory=CardRouter, profile_loader=profile_loader)
         self.window.resize(1360, 940); self.window.show(); self.window.navigate('markets')
-        self.addCleanup(self.window.deleteLater); self.addCleanup(self.window.hide)
+        self.addCleanup(dispose_market_fixture, self.window)
         self.service = FakeService(); self.streams = []
         chart = self.window.market_chart
         chart.service = self.service
@@ -301,7 +302,7 @@ class FallbackDisplayTests(unittest.TestCase):
         self.pane = MarketChartPane(service=self.kis, stream_factory=stream_factory, locale=LocaleContext('ko_KR'),
                                     router=router)
         self.pane.resize(1000, 900); self.pane.show(); self.app.processEvents()
-        self.addCleanup(self.pane.deleteLater); self.addCleanup(self.pane.stop)
+        self.addCleanup(dispose_market_fixture, self.pane)
 
     def wait(self, predicate):
         import time

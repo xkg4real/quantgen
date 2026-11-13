@@ -60,6 +60,11 @@ class CurrentPageStack(QWidget):
     def currentWidget(self):
         return self.widget(self._index)
 
+    def setCurrentWidget(self, page):
+        if page not in self._pages:
+            raise ValueError('Page is not in this stack')
+        self.setCurrentIndex(self._pages.index(page))
+
     def setCurrentIndex(self, index):
         if not 0 <= index < len(self._pages) or index == self._index:
             return

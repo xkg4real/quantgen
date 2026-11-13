@@ -211,8 +211,9 @@ class ResearchWindow(QMainWindow):
         self.setMinimumSize(1000, 700)
         root = QWidget()
         self.setCentralWidget(root)
-        # Owner ruling UI-D11 (2026-11-12): the 시장 rows open cascading flyouts drawn over the page.
-        self.rail_flyouts = rail_menu.RailFlyouts(root, self)
+        # Owner 2026-11-13: initially hidden market rows expand downward inside the rail.
+        from .market_menu import InlineMarketMenu
+        self.rail_flyouts = InlineMarketMenu(root, self)
         self.rail_flyouts.activated.connect(self.open_market_leaf)
         self.rail_flyouts.current = self.market_marks
         self._market_choice = None     # the 시장 row of the market page shown last on Markets
@@ -280,7 +281,6 @@ class ResearchWindow(QMainWindow):
                 nav_column.addWidget(self.make_market_submenu())
         nav_column.addStretch(1)
         self.rail_scroll.setWidget(nav_host)
-        self.rail_scroll.verticalScrollBar().valueChanged.connect(self.rail_flyouts.close_all)
         self.rail_scroll.viewport().installEventFilter(self)  # its height sets the 시장 rows' (`fit_market_rows`)
         rail.addWidget(self.rail_scroll, 1)
         rail.addSpacing(6)
@@ -319,7 +319,8 @@ class ResearchWindow(QMainWindow):
         self.market_strip.clicked.connect(
             lambda: self.rail_flyouts.root_clicked(self.market_strip,
                                                    keyboard=bool(self.market_strip.property("focusRing"))))
-        self.rail_flyouts.watch_root(self.market_strip, lambda: shell_rail.market_menu(self.ui_language))
+        self.rail_flyouts.configure(self.nav['markets'], self.market_submenu, self.market_strip)
+        self.nav['markets'].clicked.connect(lambda: self.rail_flyouts.open_root())
         strip.addWidget(self.market_strip, 0, Qt.AlignmentFlag.AlignHCenter)
         # The paper engine's emergency stop stays one click away while the engine runs.
         self.paper_halt_strip = shell_rail.icon_button("Stop paper engine", "Stop paper engine",
@@ -404,14 +405,7 @@ class ResearchWindow(QMainWindow):
         return shown
 
     def make_market_submenu(self):
-        """Owner 2026-11-11 (UI-D7 point 2): Markets opens indented sub-items in the rail. Owner ruling UI-D11
-        (2026-11-12): they are the big categories of a TradingView-style menu (지수 · 주식 · 크립토 · 선물 · 외환 · 국채 ·
-        회사채 · ETF · 월드 이코노미, `shell_rail.MARKET_CATEGORIES`), each a roomy row with a chevron that opens its
-        cascading flyout (`rail_menu.RailFlyouts`); a leaf opens the Markets page with that market and ranking, a
-        Research Home card or an analysis tool (`open_market_leaf`). Shown on every page (UI-D11 review: shown only
-        on Markets, the nine rows moved every rail item below them by about 320 px under the pointer). The rows carry
-        their text in the window's language (`retitle_market_sections`): the English "Crypto" means 가상자산
-        elsewhere in the app."""
+        """Nine market categories, revealed on hover/click with children below each row."""
         self.market_submenu = QWidget()
         self.market_submenu.setObjectName("marketSubmenu")
         self.market_submenu.setAccessibleName("Markets sections")
@@ -488,13 +482,15 @@ class ResearchWindow(QMainWindow):
         focus, so an open flyout closes."""
         if not self.rail_flyouts.is_open():
             return False
+        if button is None:
+            self.rail_flyouts._close_from(0)
+            self.rail_flyouts.keyboard=True
+            return False
         self.rail_flyouts.close_all()
         return True
 
     def open_market_leaf(self, leaf):
-        """A 시장 flyout's leaf: ('market', page, category) opens Markets on that page ranked by that category (the
-        page itself unchanged, R-D11-3); ('home', symbol) opens Research Home with that market card selected;
-        ('tool', pane, sub-tool) opens that analysis tool."""
+        """Open a ranking, observed series or independent asset workspace within Markets."""
         self.rail_flyouts.close_all()
         kind = leaf[0]
         if kind == "market":
@@ -503,20 +499,22 @@ class ResearchWindow(QMainWindow):
             view = self.markets_view
             if category and hasattr(view, "show_category"):
                 view.show_category(category)
-        elif kind == "home":
-            self.navigate("home")
-            self.home_view.select(leaf[1])
-            scroll = self.stack.widget(self.route_indices["home"])
-            QTimer.singleShot(0, lambda: scroll.verticalScrollBar().setValue(0))
-        elif kind == "tool":
-            _kind, name, sub = leaf
-            pane = getattr(self, name)
-            self.navigate("tools")
-            self.show_tool(pane)
-            if sub and hasattr(pane, "select_tool"):
-                pane.select_tool(sub)  # a destination chosen, not a change to rerun: no "Tool changed" prompt
-            scroll = self.stack.widget(self.route_indices["tools"])
-            QTimer.singleShot(0, lambda: scroll.verticalScrollBar().setValue(0))
+        elif kind in ('series', 'workspace'):
+            from .market_destinations import MarketSeriesPage, MarketToolPage
+            self.navigate('markets')
+            category=leaf[1]
+            cache_key=('series',) if kind=='series' else ('workspace',category,leaf[2])
+            page=self.market_destinations.get(cache_key)
+            if page is None:
+                page=(MarketSeriesPage(ctx=self.ctx,auto_load=self.auto_refresh,
+                      loader=getattr(self,'summary_loader',None)) if kind=='series'
+                      else MarketToolPage(self,leaf[2],category))
+                self.market_destinations[cache_key]=page
+                self.markets_content.addWidget(page)
+            self.market_asset_category=category
+            self.markets_content.setCurrentWidget(page)
+            if kind=='series':page.select(category,leaf[2]);page.set_theme(self.colors)
+            else:page.select(leaf[3])
         else:
             raise ValueError(f"Unknown 시장 menu leaf: {leaf!r}")
         self.sync_market_section()
@@ -538,6 +536,8 @@ class ResearchWindow(QMainWindow):
         if key not in PAGE_KEYS:
             raise ValueError(f"Unknown market page: {key!r}")
         self.navigate("markets")
+        self.markets_content.setCurrentWidget(self.markets_view)
+        self.market_asset_category=None
         view = self.markets_view
         if hasattr(view, "show_market"):
             view.show_market(key)
@@ -553,6 +553,8 @@ class ResearchWindow(QMainWindow):
         review, a 시장 row lit under another selected page was a second 'you are here')."""
         marks = set()
         if self._route() == "markets":
+            if getattr(self,'market_asset_category',None):
+                return frozenset({('category',self.market_asset_category)})
             view = self.markets_view
             current = getattr(view, "current_market", None)
             page = current() if callable(current) else None
@@ -573,7 +575,7 @@ class ResearchWindow(QMainWindow):
             if key is None and view is not None:
                 current = getattr(view, "current_market", None)
                 key = current() if callable(current) else None
-            category = shell_rail.PAGE_CATEGORY.get(key) if key else self._market_choice
+            category = getattr(self,'market_asset_category',None) or (shell_rail.PAGE_CATEGORY.get(key) if key else self._market_choice)
             self._market_choice = category
         self.market_section = category if category in self.market_sections else None
         for name, button in self.market_sections.items():
@@ -690,12 +692,16 @@ class ResearchWindow(QMainWindow):
         def open_watch(instrument):
             # A watchlist card opens that stock's screen on Markets (as open_stock_chart, any stock kind).
             self.navigate('markets')
+            self.markets_content.setCurrentWidget(self.markets_view)
+            self.market_asset_category=None
             self.markets_view.open_instrument(instrument)
             scroll = self.stack.widget(self.route_indices['markets'])
             QTimer.singleShot(0, lambda: scroll.verticalScrollBar().setValue(0))
 
         def add_watch():
             self.navigate('markets')
+            self.markets_content.setCurrentWidget(self.markets_view)
+            self.market_asset_category=None
             if hasattr(self.markets_view, 'show_category'):
                 self.markets_view.show_category('search')
             else:
@@ -805,7 +811,12 @@ class ResearchWindow(QMainWindow):
             summary_loader=getattr(self, "summary_loader", None) or production_series,
             locale=self.ctx, auto_load=self.auto_refresh)
         self.markets_view.setProperty("reading_help_keep_visible", True)
-        layout.addWidget(self.markets_view)
+        from .tools import CurrentPageStack
+        self.markets_content=CurrentPageStack()
+        self.markets_content.addWidget(self.markets_view)
+        self.market_destinations={}
+        self.market_asset_category=None
+        layout.addWidget(self.markets_content)
         layout.addStretch()
 
     def make_tools(self):
@@ -819,6 +830,7 @@ class ResearchWindow(QMainWindow):
         from .market_tools import DerivativesPane, ETFPane, CryptoPane, KRXPane
         from .tools import CurrentPageStack
         layout = self.page("Analysis tools", "채권·금리·외환·파생·ETF·KRX·가상자산·매크로 분석 도구")
+        self.tools_page=layout.parentWidget()
         layout.itemAt(1).widget().hide()  # contextual guidance below the picker replaces the category inventory
         self.tools_subtitle = layout.itemAt(1).widget()
         self.tools_subtitle.localized_text = {
@@ -905,6 +917,8 @@ class ResearchWindow(QMainWindow):
         """Kept for callers of the former Markets tabs: the chart opens Markets, a tool opens its page."""
         if pane is self.market_chart:
             self.navigate('markets')
+            self.markets_content.setCurrentWidget(self.markets_view)
+            self.market_asset_category=None
             if not self.markets_view.showing_stock():
                 self.markets_view.stock.adopt_chart()
                 self.markets_view.pages.setCurrentIndex(1)
@@ -1139,8 +1153,7 @@ class ResearchWindow(QMainWindow):
         layout.addStretch()
 
     def navigate(self, route):
-        """Show a page. The 시장 rows stay in the rail on every page (`make_market_submenu`); one is highlighted only
-        for the market Markets shows."""
+        """Show a page and close the market disclosure; keep each page's reading position."""
         if route != 'home' and hasattr(self, 'home_feed') and self.home_feed.active:
             self.home_feed.stop()
         self.rail_flyouts.close_all()
@@ -1152,6 +1165,9 @@ class ResearchWindow(QMainWindow):
             visited.add(route)
             self._visited_routes = visited
             scroll = self.stack.currentWidget()
+            focused=QApplication.focusWidget()
+            if focused is not None and scroll.isAncestorOf(focused):
+                scroll.setFocus(Qt.FocusReason.OtherFocusReason)
             # Qt may scroll to the first input as a page is first shown. Start
             # at its purpose/header; subsequent visits retain the reading place.
             self._first_visit_scroll = scroll
@@ -1215,6 +1231,7 @@ class ResearchWindow(QMainWindow):
                 self.watchlist.update_quote(symbol, **quote)
 
     def chart_history_loaded(self, snapshot):
+        self.indicator_guide.set_market_snapshot(snapshot,self.market_chart.supply)
         if snapshot.request.instrument.asset == 'domestic_stock':
             self.chart_scores.request_history(snapshot.request.instrument)
             score = self.all_q_scores().get(snapshot.request.instrument.code)
@@ -1291,6 +1308,9 @@ class ResearchWindow(QMainWindow):
 
     def open_live_chart(self):
         self.navigate('markets')
+        self.markets_content.setCurrentWidget(self.markets_view)
+        self.market_asset_category=None
+        self.sync_market_section()
         scroll = self.stack.widget(self.route_indices['markets'])
         if self.markets_view.showing_stock():
             def reveal():
@@ -1307,6 +1327,8 @@ class ResearchWindow(QMainWindow):
         """A Home row opens that stock's screen on Markets (it loads when automatic refresh is on)."""
         from core.market.models import Instrument
         self.navigate('markets')
+        self.markets_content.setCurrentWidget(self.markets_view)
+        self.market_asset_category=None
         self.markets_view.open_instrument(Instrument('domestic_stock', symbol))
         self.sync_market_section()
         scroll = self.stack.widget(self.route_indices['markets'])
@@ -1326,6 +1348,7 @@ class ResearchWindow(QMainWindow):
         self.watchlist.set_locale(self.ctx)
         self.market_chart.set_locale(self.ctx)
         self.markets_view.set_locale(self.ctx)
+        for destination in self.market_destinations.values():destination.set_locale(self.ctx)
         for completer in self.symbol_completers:
             completer.set_locale(self.ctx)
         self.locale_notice.setText(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'))
@@ -1563,6 +1586,11 @@ class ResearchWindow(QMainWindow):
         self.apply_rail_theme(p, bool(index))
         self.watchlist.set_theme(p)
         self.markets_view.set_theme(bool(index))
+        from .research_style import apply
+        apply(self.tools_page,p,bool(index))
+        self.indicator_guide.set_theme(p)
+        for destination in self.market_destinations.values():
+            if hasattr(destination,'set_theme'):destination.set_theme(p)
         for completer in getattr(self, 'symbol_completers', ()):
             completer.set_theme(p, bool(index))
         if self.language_store is not None:
@@ -1583,7 +1611,8 @@ class ResearchWindow(QMainWindow):
             return
         # The watchlist cards and the stock details poll on their own and do not block closing: stop()
         # cancels the cards still queued and drops late answers, so exit waits for one request at most.
-        if self.jobs.busy or self.paper_session.jobs.busy or self.commentary.jobs.busy or self.market_chart.jobs.busy:
+        if (self.jobs.busy or self.paper_session.jobs.busy or self.commentary.jobs.busy or self.market_chart.jobs.busy
+                or any(page.jobs.busy for page in self.market_destinations.values())):
             event.ignore()
             self.statusBar().showMessage(display(self, "진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다."))
             return
@@ -1600,19 +1629,17 @@ class ResearchWindow(QMainWindow):
         self.market_chart.stop()
         self.markets_view.stop()
         self.home_view.stop()
+        for destination in self.market_destinations.values():
+            if hasattr(destination,'stop'):destination.stop()
         self.quote_paint_timer.stop()
         event.accept()
 
 
 def main():
-    if sys.platform == "win32":
-        import ctypes
-        set_app_id = ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID
-        set_app_id.argtypes = [ctypes.c_wchar_p]
-        set_app_id.restype = ctypes.c_long
-        if set_app_id("QUANTGEN.Desktop") != 0:  # S_OK; otherwise Windows groups the window under python.exe
-            print("QUANTGEN: Windows did not accept the application ID; the taskbar may show the Python icon.",
-                  file=sys.stderr)
+    from .windows_branding import set_app_identity, bind_window_icons
+    if not set_app_identity():
+        print("QUANTGEN: Windows did not accept the application ID; the taskbar may show the Python icon.",
+              file=sys.stderr)
     app = QApplication(sys.argv)
     from . import use_fusion_style
     use_fusion_style()
@@ -1625,4 +1652,5 @@ def main():
                             locale=settings.value("ui/locale", None), language_store=settings,
                             theme_mode=settings.value("ui/theme", "light"))
     window.show()
+    window._native_icon_binding = bind_window_icons(window, application_root() / 'assets' / 'icon.ico')
     return app.exec()

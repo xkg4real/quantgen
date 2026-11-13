@@ -214,7 +214,7 @@ def chart_svg(snapshot: MarketSnapshot, *, indicators=("sma", "rsi", "macd"),
     for spec in overlays:
         palette = study_colors(spec.key, dark)
         if reason[spec.key]:
-            added_legend.append((f"{spec.short} — {availability_short(reason[spec.key], language)}", fg))
+            added_legend.append((f"{spec.label(language)} — {availability_short(reason[spec.key], language)}", fg))
         else:
             added_legend += [(line.name(language), palette[line.id]) for line in spec.lines]
     original_legend = any(key in indicators for key in ("sma", "ema", "bollinger"))
@@ -472,8 +472,8 @@ def chart_svg(snapshot: MarketSnapshot, *, indicators=("sma", "rsi", "macd"),
     for spec in volume_studies:
         palette = study_colors(spec.key, dark)
         if spec.key not in values:
-            text(label_x, 303 + below, f"{spec.short} —")
-            label_x += _text_width(f"{spec.short} —") + 14
+            text(label_x, 303 + below, f"{spec.label(language)} —")
+            label_x += _text_width(f"{spec.label(language)} —") + 14
             continue
         for line_spec in spec.lines:
             text(label_x, 303 + below, line_spec.name(language), color=palette[line_spec.id])

@@ -245,6 +245,11 @@ class Study:
     def name(self, language='ko'):
         return self.ko if language == 'ko' else self.en
 
+    def label(self, language='ko'):
+        if language=='ko' or self.short.isascii():return self.short
+        return {'disparity':'Disparity 20','psychology':'Psychological 10',
+                'investor_flow':'Investor flows','short_ratio':'Short-sale %'}.get(self.key,self.en)
+
     def line(self, line_id):
         for line in self.lines:
             if line.id == line_id:
