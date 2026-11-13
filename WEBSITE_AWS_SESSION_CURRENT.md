@@ -13,8 +13,24 @@
 - 앱 UI PR112는 별도 GPT UI 세션 작업(조회 당시 OPEN/head `c45adc8dca1682069d9c88956c844f5c33b7d827`). 이번 웹 작업에서 인수·병합하지 않았습니다.
 - [karpathy-guidelines](https://github.com/multica-ai/andrej-karpathy-skills/blob/main/skills/karpathy-guidelines/SKILL.md) blob `6a62d0441753157ca6ca50479e490c2948033adb`를 읽고 최소 변경·명시적 가정·검증 기준을 반영했습니다.
 
+## W2 완료 — Microsoft 전환 설정 가이드와 한영 후보 문구 준비
+
+공식 Microsoft/Cloudflare 자료를 대조해 `M365_SETUP_AND_PUBLICATION_GATES.md`와 `POLICY_M365_COPY_DRAFT.md`를 로컬에 작성했습니다. **문구 후보와 설정 절차의 준비 완료이며 최신 HTML 통합·브라우저 검증·실제 메일 연결·운영 적용은 미완료입니다.**
+
+- 한국 데이터 위치 약속은 Exchange 메일함 내용의 저장 상태(at rest)에 한정합니다. 실제 테넌트 위치와 계약 법인은 구매 이후 확인해야 합니다.
+- Recoverable Items 기본14일/설정 최대30일은 모든 사본의 영구 삭제 상한이 아닙니다. 실제 보존/hold 설정과 운영 삭제 절차를 확인해야 합니다.
+- ARC `compauth=pass reason=130`은 신뢰된 ARC가 DMARC 실패를 보완한 경우의 진단값이며 모든 정상메일의 필수 조건이 아닙니다.
+- Cloudflare MX 유지, 수동TXT 도메인 검증, onmicrosoft.com 실제 메일함 목적지, 기존 SPF/DKIM/DMARC 보존·병합, 송수신 시험과 실패 시 되돌릴 경로를 정리했습니다.
+- Gmail 목적지 삭제가 과거 메일 데이터 삭제를 뜻하지 않으므로 잔존 자료 처리를 확인한 뒤 실제 현재 경로를 정책에 반영해야 합니다.
+- 문서1·7·8·16·20의 KO/EN 후보를 준비했으며 실제 계약 주체/이전 국가/연락처는 확인되지 않은 값으로 채우지 않았습니다. 정책 공개 전 원문 문맥·번역 버전·기존 검사3종/모바일 표 확인이 필요합니다.
+- 인계의 법 위반/과태료 단정은 이번 검증의 법률 결론으로 재사용하지 않았습니다. 비회원 문의의 국외 이전 근거 등 기존 법률 검토는 미완료입니다.
+- Karpathy 검토: 가정·미확인 정보 명시, 메일 범위 최소 변경, 공식 근거와 완료 기준, 원문/운영 미완료 구분 확인. 로컬 문서 링크와 한영 문단쌍을 점검했습니다.
+
+사용자에게 최신 소스 ZIP과 Microsoft 한국 테넌트 구매를 안내했습니다. 추가 Track A 클릭 질문은 답변 대기 상태이며 새 개발 스택을 만들지 않았습니다.
+현재 산출물 폴더: `/workspace/work/quantgen-web-20261113`. 최종 전달 사본/묶음: `/workspace/outputs/quantgen-20261113`. 웹 HTML 및 정책 원문/후보 전체는 GitHub에 게시하지 않았습니다.
+
 ## 다음 작업과 의존성
-1. W2: 공식 Microsoft/Cloudflare 자료로 설정 가이드와 KO/EN 정책 변경 초안 검토.
+1. W2 준비 완료: 공식 Microsoft/Cloudflare 자료 기반 설정 가이드와 KO/EN 정책 후보. 실제 HTML 통합은 아직 미완료.
 2. W3–W6: 최신 ZIP 확보·해시 대조 → 정책 수정 → 기존 3개 검사/모바일 표/한영/테마 회귀 → 단일 HTML·SHA·변경내역·현 운영본 기준 업로드/복구 안내.
 3. W7: 웹 기록만 GitHub handoff에 누적하고 Notion 기존 REMAINING WORK에 완료/대기를 분리하여 갱신.
 4. W8: 실제 Microsoft 설정·메일 경로·미확정 공개 조건 해결 후 운영 적용. 현재 미착수.
