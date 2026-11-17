@@ -74,6 +74,48 @@ class CurrentPageStack(QWidget):
         self.currentChanged.emit(index)
 
 
+class ReflowRow(QWidget):
+    """A line of the canvas (a lead or status line with its actions) that stacks below `breakpoint`, actions on the
+    right: beside a page's right column the canvas can be narrow (1000 px windows), and nothing may be clipped."""
+
+    def __init__(self, main, actions=(), *, breakpoint=560, spacing=8, stacked=Qt.AlignmentFlag.AlignRight):
+        super().__init__()
+        from PyQt6.QtWidgets import QBoxLayout
+        self.breakpoint, self.stacked = breakpoint, stacked
+        self.box = QBoxLayout(QBoxLayout.Direction.LeftToRight, self)
+        self.box.setContentsMargins(0, 0, 0, 0)
+        self.box.setSpacing(spacing)
+        if isinstance(main, QWidget):
+            self.box.addWidget(main, 1)
+        else:
+            self.box.addLayout(main, 1)
+        self.actions = QWidget()
+        row = QHBoxLayout(self.actions)
+        row.setContentsMargins(0, 0, 0, 0)
+        row.setSpacing(spacing)
+        for widget in actions:
+            row.addWidget(widget, 0, Qt.AlignmentFlag.AlignTop)
+        self.box.addWidget(self.actions, 0, Qt.AlignmentFlag.AlignTop)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        from PyQt6.QtWidgets import QBoxLayout
+        wide = self.width() >= self.breakpoint
+        direction = QBoxLayout.Direction.LeftToRight if wide else QBoxLayout.Direction.TopToBottom
+        if self.box.direction() != direction:
+            self.box.setDirection(direction)
+            self.box.setAlignment(self.actions, Qt.AlignmentFlag.AlignTop if wide else self.stacked)
+
+
+def card_fill(*widgets):
+    """Plain container widgets inside a page-kit card show the card's white, not the window's page colour (the window
+    sheet paints every QWidget). Each gets a sheet of its own that matches only itself, so the widgets inside keep
+    their styles."""
+    for widget in widgets:
+        widget.setObjectName('qgCardFill')
+        widget.setStyleSheet('QWidget#qgCardFill { background: transparent; }')
+
+
 def dock_form(box, run_button, side, *, title=None, page=None):
     """Move a form panel (`app.panel` + `form_layout.bound_input_panel`) into a page's right column and its run
     button into the column's foot. Two-column fields fit the column (`CompactFieldGrid.docked`)."""
@@ -114,6 +156,7 @@ def dock_form(box, run_button, side, *, title=None, page=None):
 
 class ToolPane(QWidget):
     requested = pyqtSignal(object)
+    result_changed = pyqtSignal(bool)   # a result is shown (True) or cleared (False); the tools page's status badge
 
     def __init__(self, title, tools, sources, fields):
         super().__init__()
@@ -233,6 +276,87 @@ class ToolPane(QWidget):
         layout.setSpacing(16)
         return side
 
+    def dock_tool(self, side, *, title=None, empty=None):
+        """The analysis tools page (owner-approved draft 2026-11-17, draft_02_tools.png): `dock_into`, then the result
+        sits in one white card under a lead line (the chosen calculation, then the status) and the run's key figures,
+        with a quiet empty state before the first run. Display only; other pages that dock a pane (`dock_into`) keep
+        their own look."""
+        from PyQt6.QtCore import QTimer
+        from PyQt6.QtWidgets import QLabel
+        from .page_kit import Card, KeyFigures
+        from .chart_study import LocalLabel
+        self.dock_into(side, title=title)
+        layout = self.layout()
+        # Lead line: the calculation chosen on the right (its option text, in the window language), then the status.
+        self.lead = QLabel()
+        self.lead.setProperty('kit', 'lead')
+        self.lead.setProperty('qg_literal', True)      # mirrors the combo's own translated text
+        self.lead.setTextFormat(Qt.TextFormat.PlainText)
+        follow = lambda *args: self.lead.setText(self.tool.currentText())
+        self.tool.currentTextChanged.connect(follow)
+        self.tool.model().dataChanged.connect(follow)
+        follow()
+        # The status line and its exports stack when the canvas is narrow (1000 px windows) instead of clipping.
+        for position in range(layout.count()):
+            head = layout.itemAt(position).layout()
+            if head is not None and head.indexOf(self.status) >= 0:
+                layout.takeAt(position)
+                for widget in (self.status, self.export_json, self.export_zip):
+                    head.removeWidget(widget)
+                head.deleteLater()
+                line = QHBoxLayout()
+                line.setContentsMargins(0, 0, 0, 0)
+                line.setSpacing(10)
+                line.addWidget(self.lead, 0, Qt.AlignmentFlag.AlignTop)
+                line.addWidget(self.status, 1, Qt.AlignmentFlag.AlignTop)
+                self.status_row = ReflowRow(line, (self.export_json, self.export_zip))
+                layout.insertWidget(position, self.status_row)
+                # Key figures: the first rows of the run's 'Metrics' table as one quiet line, in the table's own
+                # (translated) words; rebuilt when the table's text changes, e.g. on a language switch.
+                self.figures = KeyFigures()
+                self.figures.set_items(())
+                self._figures_timer = QTimer(self)
+                self._figures_timer.setSingleShot(True)
+                self._figures_timer.timeout.connect(self._show_figures)
+                layout.insertWidget(position + 1, self.figures)
+                break
+        index = layout.indexOf(self.study)
+        layout.removeWidget(self.study)
+        self.result_card = Card(margins=(20, 18, 20, 18), spacing=12)
+        self.empty_note = LocalLabel(empty or {
+            'ko': '오른쪽에서 조건을 정하고 실행하면 결과와 차트, 출처가 여기에 나타나요.',
+            'en': 'Set the inputs on the right and run: the results, charts and their sources appear here.'}, 'muted')
+        self.empty_note.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.empty_note.setMinimumHeight(220)
+        self.result_card.body.addWidget(self.empty_note)
+        self.result_card.body.addWidget(self.study)
+        card_fill(self.study, self.result, self.result_reading)
+        layout.insertWidget(max(0, index), self.result_card)
+        self._result_shown(self.has_result)
+        return side
+
+    def _result_shown(self, shown):
+        """The docked empty state (`dock_tool`) gives way to the first result block and returns when it is cleared."""
+        note = getattr(self, 'empty_note', None)
+        if note is not None:
+            note.setVisible(not shown)
+
+    FIGURES = 6
+
+    def _show_figures(self):
+        """The docked key-figure line from the 'Metrics' table as shown (caption, value); hidden without one."""
+        figures = getattr(self, 'figures', None)
+        if figures is None:
+            return
+        table = self.tables.get('Metrics')
+        items = []
+        if table is not None:
+            for row in range(min(self.FIGURES, table.rowCount())):
+                caption, value = table.item(row, 0), table.item(row, 1)
+                if caption is not None and value is not None and caption.text() and value.text():
+                    items.append((caption.text(), value.text(), ''))
+        figures.set_items(items)
+
     def hide_source(self):
         """Markets panes choose providers automatically (owner UI-8): no 데이터 출처 selector.
 
@@ -295,6 +419,9 @@ class ToolPane(QWidget):
         self.export_zip.setEnabled(False)
         self.tables, self.charts = {}, {}
         self._details_fold = None
+        self._result_shown(False)
+        self._show_figures()
+        self.result_changed.emit(False)
         while self.result_reading_layout.count():
             item=self.result_reading_layout.takeAt(0)
             if item.widget():item.widget().hide();item.widget().deleteLater()
@@ -310,6 +437,7 @@ class ToolPane(QWidget):
         # synthetic/delayed notices and failures always remain in the main body.
         widget.setProperty('display_role', display_role)
         widget.setProperty('reading_help_keep_visible', display_role != 'provenance')
+        self._result_shown(True)
         if display_role == 'provenance':
             if self._details_fold is None:
                 from .reading_panel import DetailsFold
@@ -351,11 +479,16 @@ class ToolPane(QWidget):
             widget.setProperty('reading_help_keep_visible', False)
             heading.setProperty('reading_help_keep_visible', False)
         self.tables[name] = widget
+        timer = getattr(self, '_figures_timer', None)
+        if name == 'Metrics' and timer is not None:      # the docked key-figure line follows this table's text
+            widget.model().dataChanged.connect(lambda *args: timer.start(0))
+            timer.start(0)
 
     def line(self, name, x, series, x_label, y_label):
         from .app import label
         x, series = list(x), [(n,list(v)) for n,v in series]
         self.sections.append({'type':'line','name':name,'x':x,'series':series,'x_label':x_label,'y_label':y_label})
+        self._result_shown(True)
         self.result_layout.addWidget(label(name, 'heading'))
         chart = LineChart(x_label, y_label)
         chart.colors = self.window().colors
@@ -396,11 +529,14 @@ class ToolPane(QWidget):
         narrative_widget.retranslate()  # it was reparented through the fold before the fold joined the window
         self.result_reading.show()
         self.has_result = True
+        self._result_shown(True)
         self.status.setText('계산 완료 · 출처·관측일·가정을 확인하세요. 공식 검증 판정은 별도입니다.')
+        self.result_changed.emit(True)
 
     def bars(self,name,rows,limit=None):
         from .app import label
         self.sections.append({'type':'bars','name':name,'rows':rows,'limit':limit})
+        self._result_shown(True)
         self.result_layout.addWidget(label(name,'heading'))
         chart=SignedBars(rows,limit=limit)
         chart.colors=self.window().colors
