@@ -933,6 +933,79 @@ def test_chart_left_titles_use_the_palette_text_colour():
         plt.close(fig)
 
 
+def _blur(h, label: str) -> None:
+    """Leave a field the way Flet does: on_blur, when the field has one."""
+    f = h.tf[label]
+    if f.on_blur is not None:
+        f.on_blur(SimpleNamespace(control=f))
+
+
+def test_leaving_a_field_does_not_turn_a_typo_into_a_number():
+    for label in ("Notional", "CTD DV01 / contract", "Position DV01"):
+        for typo in ("4,5", "12,34", "1_000", "1 000"):
+            h = _page()
+            _pick(h, "Tool", "hedge")
+            _set(h, label, typo)
+            _blur(h, label)
+            assert h.tf[label].value == typo, (label, typo, h.tf[label].value)
+            _run(h)
+            assert f"{label}: {typo!r} is not a number." in _texts(h), (label, typo)
+    h = _page()
+    _set(h, "Notional", "2000000")
+    _blur(h, "Notional")
+    assert h.tf["Notional"].value == "2,000,000"         # a number is still regrouped
+    _run(h)
+    assert "notional 2,000,000" in next(t for t in _texts(h) if t.startswith("Computed for:"))
+
+
+def test_regrouping_on_blur_is_not_an_edit():
+    h = _page()
+    _set(h, "Notional", "2000000")
+    _run(h)
+    _blur(h, "Notional")
+    assert h.tf["Notional"].value == "2,000,000"
+    _pick(h, "Coupons / year", "2")                      # an input event with nothing edited
+    assert _STALE not in _texts(h), "regrouping the digits is not an edit"
+    _set(h, "Notional", "3,000,000")
+    assert _STALE in _texts(h), "a real edit is still marked"
+    _set(h, "Notional", "2000000")
+    assert _STALE not in _texts(h), "the same number typed without separators unmarks"
+    h = _page(queued=True)                               # the blur lands before the result paints
+    h.tf["Notional"].value = "2000000"
+    _run(h)
+    _blur(h, "Notional")
+    _step(h)
+    assert _STALE not in _texts(h)
+
+
+def test_korean_hedge_lines_state_the_side_and_rounding_of_the_tiles():
+    from quantgen_desktop.bonds_portfolio_narrative import hedge_text
+    for pos, cf in (("682.5", "1"), ("-682.5", "1"), ("-798.19", "0.8"), ("552.5", "1")):
+        h = _page()
+        h.tf["Position DV01"].value, h.tf["Conversion factor"].value = pos, cf
+        s = _calc(h, tool="hedge")
+        side = "sell" if "Contracts to sell" in s else "buy"
+        hedge = (float(pos), 65.0, float(cf), float(pos) * float(cf) / 65.0)
+        ko, en = hedge_text(hedge, "ko").splitlines(), hedge_text(hedge, "en").splitlines()
+        assert ko[0] == (f"선물 {'매도' if side == 'sell' else '매수'} {s[f'Contracts to {side}']}계약"
+                         f" · 반올림 {s['Rounded']}"), ko[0]
+        assert en[0] == (f"{side.capitalize()} futures {s[f'Contracts to {side}']} contracts"
+                         f" · rounded {s['Rounded']}"), en[0]
+        assert f"잔여 DV01 {s['Net DV01 after hedge']} / bp" in ko[2], ko[2]
+        assert f"rounding {s['Net DV01 after hedge']} per bp" in en[2], en[2]
+
+
+def test_key_rate_chart_is_given_a_korean_title():
+    import ui.bonds_page as page_module
+    seen = {}
+    real = page_module.fcharts.krd_chart
+    with _patched(page_module.fcharts, "krd_chart", lambda *a, **k: (seen.update(k), real(*a, **k))[1]):
+        _calc(_page())
+    z = seen["title"].split("z-spread ")[1].split(" held")[0]
+    assert seen["title"].startswith("Zero-curve key-rate DV01 (z-spread ")
+    assert z in seen["title_ko"] and any("가" <= ch <= "힣" for ch in seen["title_ko"]), seen
+
+
 def tests():
     return [(name, fn) for name, fn in sorted(globals().items())
             if name.startswith("test_") and callable(fn)]
