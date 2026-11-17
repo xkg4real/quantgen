@@ -702,11 +702,22 @@ class ResearchWindow(QMainWindow):
         return layout
 
     def make_home(self):
-        """Research Home (owner, 2026-11-11, UI-D7 point 4): no big table. Market cards that page with arrows
-        (TradingView style) and the selected market's large chart, the watchlist chart cards (moved here from
-        Markets), the research sections, then the full quotes table in a closed fold. See home_view."""
-        layout = self.page("Research Home", "관측된 시장과 내가 실행한 연구를 한눈에 확인하세요.")
-        from .home_view import HomeView, QuotesFold, SECTION_GAP, directory_name
+        """Research Home (owner, 2026-11-11, UI-D7 point 4: no big table; owner-approved draft 2026-11-17,
+        docs/product/ui_drafts_2026-11-17/draft_01_home.png): the stock detail's frame. Toolbar: title, today's date,
+        a '지연 · 일별 종가' badge, '전체 시세 표' (opens the quotes table below the chart) and 새로고침. Canvas: the
+        market tiles that page with arrows (TradingView style), the selected market's key figures and its large
+        chart. Right column, 내 목록: the watchlist rows, the latest research runs with the three counts and the
+        small fan card; 읽는 법: how to read the page and the data-use terms. '설계/검증에서 연구 시작' is pinned at the
+        bottom. Every attribute, signal and request is as before. See home_view."""
+        from .home_view import (HomeSide, HomeView, MiniFan, QuotesFold, RecentRuns, TodayText, directory_name,
+                                style_link)
+        from .page_kit import Button, Fold, Soft, Text, Workspace, rule
+        from .stock_detail_style import numbers
+        outer = self.page(None, None)
+        scroll = self.stack.widget(self.stack.count() - 1)
+        self.home_workspace = ws = Workspace(("Research Home", "연구 홈"))
+        outer.addWidget(ws)
+        ws.fit_to(scroll)
         from .markets_view import WatchlistStore
         from .watchlist import WatchlistPanel
         # The live-quote table stays the window's (live feed, Q-SCORE, details); it is no longer the main surface.
@@ -744,62 +755,181 @@ class ResearchWindow(QMainWindow):
         self.home_view = HomeView(
             store=self.watchlist_store, card_router_factory=self.card_router_factory or _production_card_router,
             name_fn=lambda instrument, language: directory_name(self.symbol_directory, instrument, language),
-            rows_source=lambda: self.watchlist.rows, locale=self.ctx, auto_load=self.auto_refresh)
+            rows_source=lambda: self.watchlist.rows, locale=self.ctx, auto_load=self.auto_refresh, docked=True)
         self.home_view.refresh_requested.connect(self.refresh_markets)
         self.home_view.stock_requested.connect(open_watch)
         self.home_view.add_requested.connect(add_watch)
         self.jobs.busy_changed.connect(self.home_view.set_busy)
-        layout.addWidget(self.home_view)
-        layout.addSpacing(SECTION_GAP)
+        hv = self.home_view
 
-        # Research: run counts, the latest Monte Carlo fan chart and the links.
-        head = QHBoxLayout()
-        head.setSpacing(8)
-        head.addWidget(label("My research", "heading", wrap=False), 0, Qt.AlignmentFlag.AlignVCenter)
-        head.addStretch(1)
-        rights_button = QPushButton(self.ctx.t('data_rights'))
-        rights_button.clicked.connect(self.open_data_rights)
-        head.addWidget(rights_button, 0, Qt.AlignmentFlag.AlignVCenter)
-        b = QPushButton("Quant Lab에서 연구 시작 →")
-        b.setProperty("primary", True)
-        b.clicked.connect(lambda: self.navigate("quant"))
-        head.addWidget(b, 0, Qt.AlignmentFlag.AlignVCenter)
-        layout.addLayout(head)
-        layout.addSpacing(8)
-        summary = QHBoxLayout()
-        summary.setSpacing(20)
-        self.count_labels = []
-        for title in ("완료한 분석", "진행 중", "확인할 실행"):
-            box, inner = panel(title)
-            inner.setContentsMargins(20, 18, 20, 18)
-            number = label("0", "number")
-            inner.addWidget(number)
-            summary.addWidget(box)
-            self.count_labels.append(number)
-        layout.addLayout(summary)
-        notice = label("이번 세션의 Monte Carlo · 투자 판정과 별개", "caption")
-        notice.setProperty("reading_help_keep_visible", True)
-        layout.addWidget(notice)
-        layout.addSpacing(16)
-        box, inner = panel("가능성을 하나의 숫자로 좁히지 마세요")
-        inner.setContentsMargins(28, 24, 28, 24)
-        inner.setSpacing(14)
-        self.home_chart = FanChart()
-        self.home_summary = label("분석을 실행하면 최신 결과와 데이터 근거가 연결됩니다.")
-        self.home_summary.setProperty("reading_help_keep_visible", True)
-        from .chart_study import ChartStudy
-        inner.addWidget(ChartStudy(self.home_chart,self.home_summary))
-        notice = label("P5–P95는 시뮬레이션 분포의 중앙 90% 구간입니다. 수익 보장이나 95% 신뢰구간이 아닙니다.", "caption")
-        notice.setProperty("reading_help_keep_visible", True)
-        inner.addWidget(notice)
-        layout.addWidget(box)
-        layout.addSpacing(SECTION_GAP)
-
-        # The full quotes table, folded (owner: "표에 종목 너무많이 때려박는거 자체의 구조적 문제").
+        # Toolbar: date, the data badge, then the quotes table and the page's refresh on the right.
+        self.home_date = ws.add_toolbar(TodayText())
+        self.home_badge = ws.add_badge(("Delayed · daily closes", "지연 · 일별 종가"))
+        # The full quotes table, folded (owner: "표에 종목 너무많이 때려박는거 자체의 구조적 문제"); its toggle is the
+        # toolbar's '전체 시세 표' and the table opens below the chart.
         self.quotes_fold = QuotesFold("All quotes table", self.watchlist,
                                       "Markets and Korean stocks, live connection and Q-SCORE")
-        layout.addWidget(self.quotes_fold)
-        layout.addStretch()
+        ws.add_toolbar(self.quotes_fold.dock_toggle(), right=True)
+        hv.refresh_button.setProperty("kit", "secondary")
+        hv.refresh_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        ws.add_toolbar(hv.refresh_button, right=True)
+        self.quotes_fold.toggle.toggled.connect(self.home_reveal_quotes)
+
+        # Canvas: tiles, key figures and the chart (HomeView), then the folded quotes table.
+        ws.canvas.addWidget(hv, 1)
+        ws.canvas.addWidget(self.quotes_fold)
+
+        # Right column, 내 목록: watchlist rows, recent research, the latest fan.
+        side = HomeSide()
+        mine = ws.side.add_page(("My list", "내 목록"))
+        mine.addWidget(side)
+        self.home_watch_fold = Fold(("Watchlist", "관심종목"))
+        self.home_watch_fold.head.layout().addWidget(style_link(hv.add_button), 0, Qt.AlignmentFlag.AlignVCenter)
+        self.home_watch_fold.body.setContentsMargins(0, 0, 0, 2)
+        self.home_watch_fold.body.addWidget(hv.grid)
+        side.column.addWidget(self.home_watch_fold)
+        self.watchlist_store.changed.connect(self.home_watch_count)
+        self.home_watch_count()
+        side.column.addWidget(rule())
+        self.home_research_fold = Fold(("Recent research", "최근 연구"), count="0")
+        library = Button(("Library ›", "연구 보관함 ›"), "")
+        library.setProperty("kit", None)
+        style_link(library, quiet=True)
+        library.clicked.connect(lambda: self.navigate('library'))
+        self.home_research_fold.head.layout().addWidget(library, 0, Qt.AlignmentFlag.AlignVCenter)
+        counts = QWidget()
+        line = QHBoxLayout(counts)
+        line.setContentsMargins(2, 0, 0, 0)
+        line.setSpacing(5)
+        self.count_labels = []
+        for pair in (("Completed", "완료한 분석"), ("In progress", "진행 중"), ("To review", "확인할 실행")):
+            key = Text(pair)
+            key.setProperty("homeRole", "countKey")
+            number = numbers(QLabel("0"))
+            number.setProperty("homeRole", "countValue")
+            number.setProperty("qg_literal", True)
+            line.addWidget(key)
+            line.addWidget(number)
+            line.addSpacing(10)
+            self.count_labels.append(number)
+        line.addStretch(1)
+        self.home_research_fold.body.addWidget(counts)
+        self.home_runs = RecentRuns(lambda: self.session.runs())
+        self.home_runs.changed.connect(self.home_runs_changed)
+        self.home_research_fold.body.addWidget(self.home_runs)
+        side.column.addWidget(self.home_research_fold)
+        fan = QFrame()
+        fan.setProperty("kit", "soft")
+        fan.setProperty("reading_help_keep_visible", True)
+        box = QVBoxLayout(fan)
+        box.setContentsMargins(14, 12, 14, 12)
+        box.setSpacing(7)
+        head = QHBoxLayout()
+        head.setSpacing(8)
+        head.addWidget(Text(("Do not narrow the possibilities to one number", "가능성을 하나의 숫자로 좁히지 마세요"),
+                            "softTitle", wrap=True), 1)
+        self.home_fan_note = numbers(Text("", "fine"))
+        head.addWidget(self.home_fan_note, 0, Qt.AlignmentFlag.AlignTop)
+        box.addLayout(head)
+        self.home_chart = MiniFan()
+        box.addWidget(self.home_chart)
+        box.addWidget(Text(("P5–P95 is the central 90% of the simulated distribution · not a return guarantee",
+                            "P5–P95는 시뮬레이션 분포의 중앙 90% 구간이에요 · 수익 보장 아님"), "fine", wrap=True))
+        self.home_summary = label("분석을 실행하면 최신 결과와 데이터 근거가 연결됩니다.")
+        self.home_summary.localized_text = {'ko': '분석을 실행하면 최신 결과와 데이터 근거가 여기에 연결돼요.',
+                                            'en': 'Run an analysis to connect its results and data evidence here.'}
+        self.home_summary.retranslate()
+        self.home_summary.setProperty("kit", "hint")
+        self.home_summary.setProperty("reading_help_keep_visible", True)
+        box.addWidget(self.home_summary)
+        side.column.addWidget(fan)
+
+        # Right column, 읽는 법: how to read the page, the data-use terms.
+        guide = ws.side.add_page(("How to read", "읽는 법"))
+        for title, body in (
+                (("Major markets", "주요 시장"),
+                 ("Each tile is its provider's latest daily observation (delayed). Prices change against the previous "
+                  "close; yields move in basis points (bp). A tile's line is drawn from closes already loaded.",
+                  "타일마다 공급자의 최근 일별 관측값이에요(지연). 가격은 전일 대비, 금리는 bp로 변해요. 타일의 선은 이미 불러온 "
+                  "종가로만 그려요.")),
+                (("The chart", "차트"),
+                 ("The line is the daily close; the dashed line is the range's first close, the line its change is read "
+                  "against. Point at the chart for a date and its close.",
+                  "선은 일별 종가, 점선은 기간 첫 종가예요. 기간 변동은 이 점선과 견줘 읽어요. 차트 위에 마우스를 올리면 날짜와 "
+                  "종가가 보여요.")),
+                (("Watchlist", "관심종목"),
+                 ("Open a stock on Markets and press ☆ to add it. Click a row to open its screen; Delete removes it.",
+                  "시장에서 종목을 열고 ☆를 누르면 추가돼요. 행을 누르면 그 종목 화면이 열리고, Delete 키로 뺄 수 있어요.")),
+                (("Monte Carlo", "몬테카를로"),
+                 ("This session's runs only. P5–P95 is the central 90% of the simulated distribution, not a return "
+                  "guarantee or a 95% confidence interval. Results stay NOT_RUN, separate from investment validation.",
+                  "이번 세션의 실행만 보여요. P5–P95는 시뮬레이션 분포의 중앙 90% 구간이에요. 수익 보장이나 95% 신뢰구간이 "
+                  "아니에요. 결과는 투자 판정과 별개로 NOT_RUN을 유지해요."))):
+            note = Soft(title, body)
+            note.setProperty("reading_help_keep_visible", True)
+            guide.addWidget(note)
+        rights = Button(("Market data usage review", "시장 데이터 이용 조건"), "secondary")
+        rights.clicked.connect(self.open_data_rights)
+        guide.addWidget(rights, 0, Qt.AlignmentFlag.AlignLeft)
+
+        # Pinned: the way into Build & Test, and the quiet no-guarantee line.
+        start = Button(("Start research in Build & Test", "설계/검증에서 연구 시작"), "primary")
+        start.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        start.clicked.connect(lambda: self.navigate("quant"))
+        self.home_start = start
+        ws.side.foot.addWidget(start)
+        caption = Text(("Monte Carlo results are separate from investment validation · no future guarantee · "
+                        "not investment advice",
+                        "몬테카를로 결과는 투자 판정과 별개예요 · 미래 보장 아님 · 투자 권유 아님"), "fine", wrap=True)
+        caption.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        caption.setProperty("reading_help_keep_visible", True)
+        ws.side.foot.addWidget(caption)
+        ws.finish()
+        self.home_library_link = library
+        self.home_focus_chain()
+        ws.set_language(self.ui_language)
+
+    def home_focus_chain(self):
+        """Tab order: the toolbar, the canvas (arrows, tiles, periods), the right column (watchlist rows included,
+        as they come and go), then the pinned action."""
+        hv = self.home_view
+        chain = [self.quotes_fold.toggle, hv.refresh_button, hv.previous_button, hv.next_button,
+                 *hv.cards.values(), *hv.range_buttons.values(), *self.home_workspace.side.segment.buttons,
+                 self.home_watch_fold.head, hv.add_button, *hv.grid.cards.values(), self.home_research_fold.head,
+                 self.home_library_link, self.home_start]
+        for first, second in zip(chain, chain[1:]):
+            QWidget.setTabOrder(first, second)
+
+    def home_watch_count(self):
+        """The 관심종목 fold's count ('6/20'), after every change to the shared watchlist."""
+        store = self.watchlist_store
+        self.home_watch_fold.set_count(f"{len(store.items())}/{store.limit}")
+        if hasattr(self, 'home_library_link'):
+            self.home_focus_chain()
+
+    def home_runs_changed(self, count, latest):
+        """The 최근 연구 fold's count and the fan card's note ('AAPL · 126거래일') from the latest completed run."""
+        self.home_research_fold.set_count(str(count))
+        if latest:
+            params = latest.get("parameters") or {}
+            days = params.get("horizon_days")
+            symbol = str(params.get("symbol") or "")
+            self.home_fan_note.set_pair((f"{symbol} · {days} sessions" if days else symbol,
+                                         f"{symbol} · {days}거래일" if days else symbol))
+        else:
+            self.home_fan_note.set_pair("")
+        self.home_fan_note.set_language(getattr(self, "ui_language", "ko"))
+
+    def home_reveal_quotes(self, expanded):
+        """'전체 시세 표' opens the table below the chart and scrolls the canvas to it."""
+        if not expanded:
+            return
+        canvas = self.home_workspace.canvas_scroll
+
+        def reveal():
+            if self.quotes_fold.expanded():
+                canvas.verticalScrollBar().setValue(max(0, self.quotes_fold.y() - 8))
+        QTimer.singleShot(30, reveal)
 
     def make_indicator_guide(self):
         from .indicator_guide import IndicatorGuide
