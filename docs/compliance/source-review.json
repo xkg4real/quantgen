@@ -2,7 +2,7 @@
   "schema_version": 1,
   "normalization": "UTF-8 text CRLF to LF; binary assets raw bytes",
   "scope": "named source/document consistency review; not legal or operational certification",
-  "source_state": "Document-CI-verified base ed92dc90b2b32fd6bd2a9254e7a568e45e3e553e with reviewed test-only overlays; production source and all policy documents unchanged; not a full local checkout scan; target-tree full CI required",
+  "source_state": "HEAD commit identifier plus observed working-tree fingerprints; not a clean-checkout attestation",
   "registry_sha256": "d1a62050d33e6c53ac9027db0eb8661317a4aec7fc7eb7b10488cf709b0b8f0f",
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
@@ -86,7 +86,7 @@
     "core/education/chart.py": "e42562c7fdcbfe5be6743561b1b60a0567ca6da916c292c641c3e84ae6d79771",
     "core/education/glossary.py": "2143548a945afe7528412b75dc628f2c9d02230b608277acba9e858a876aa618",
     "core/education/indicators.py": "748037f6e001d5ff8814c37a6fa36323f9be79e08bdcfaf36d52413a71ca9298",
-    "core/education/reading_cues.py": "764f7c69178e32dc710d053b144cc7695509c75238e29b971a4afb7ee69841a9",
+    "core/education/reading_cues.py": "21271f6b22df7e36111eb1390741b7b3c51368a6d80e2c5aecc212013fa949d2",
     "core/education/signal_context.py": "fe529f88b5c463fe0bde3a31612b8dd142b1a595b5a42986441bc4ff0bdce7d2",
     "core/education/study_guide.py": "7d99218aa73ef9dc82ec53f08ad3cec8d0c37a7ae531a91b4b7795d89c5bcce4",
     "core/engine/__init__.py": "df385736b31e385fea9202e4ec5651220bfb1bf783aeacff105540f85d21cf85",
@@ -759,19 +759,19 @@
   "reviews": {
     "1": {
       "document_sha256": "bb088f99ac7321f91ce644d074f87a00da13ab103268ccc145f7a6c802b258b9",
-      "source_digest": "88012589b9a31237efbef444b03d59730e97d6ebd1ba38b867477f80288e1a64",
-      "reviewed_by": "GPT R3 detached lifecycle change review",
-      "review_note": "Explicit caller-supplied metadata/store and bounded but unredacted errors; updated disclosure, no production adapter or account access. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:44:27+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "d7b7b5c3aa7a391e20c488c06a93a083450db683906da2b71f177a9cde3a8039",
+      "reviewed_by": "Claude main session review (11-17 D1)",
+      "review_note": "Korean wording only: core/education/reading_cues.py volume_ma tip, '진행 중인 봉' → '아직 진행 중인 기간', byte-identical to UI branch da0ea20. No behaviour, data, offer, trading or disclosure change.",
+      "reviewed_at": "2026-11-17T11:03:11.654369+00:00",
+      "source_commit": "ea3d59643be2cf3904b1ab107a29484fa6669ec4"
     },
     "2": {
       "document_sha256": "1c7eb9b60585b1fd4d1a23723051454e768b6ea6b31b9e58bd8122ac73cdd5e1",
-      "source_digest": "88012589b9a31237efbef444b03d59730e97d6ebd1ba38b867477f80288e1a64",
-      "reviewed_by": "GPT R3 detached lifecycle change review",
-      "review_note": "No new offered service, trading execution, sales or contract flow; detached scope and existing contractual gaps preserved. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:44:27+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "d7b7b5c3aa7a391e20c488c06a93a083450db683906da2b71f177a9cde3a8039",
+      "reviewed_by": "Claude main session review (11-17 D1)",
+      "review_note": "Korean wording only: core/education/reading_cues.py volume_ma tip, '진행 중인 봉' → '아직 진행 중인 기간', byte-identical to UI branch da0ea20. No behaviour, data, offer, trading or disclosure change.",
+      "reviewed_at": "2026-11-17T11:03:11.657480+00:00",
+      "source_commit": "ea3d59643be2cf3904b1ab107a29484fa6669ec4"
     },
     "3": {
       "document_sha256": "50fcceb8fb66b30a535ff6015a66ff5e5cee801b61433cc3aa99acd3673c4393",
@@ -799,27 +799,27 @@
     },
     "6": {
       "document_sha256": "5871443de50226c2680aa2c41059c06b4d1290f28f1c859d5ed979fd17a2918e",
-      "source_digest": "6492f70a1b17bb80dff7910367b0db47f240139c2b939df22b66013b40b92e83",
-      "reviewed_by": "GPT R3 detached lifecycle change review",
-      "review_note": "No consent form or external transmission added; supplied metadata and future adapter obligations stated. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:44:27+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "fa528643e0aefe362cfe559e0220ed8fab540e15bc4fe8c15dc834e0c4ebfad4",
+      "reviewed_by": "Claude main session review (11-17 D1)",
+      "review_note": "Korean wording only: core/education/reading_cues.py volume_ma tip, '진행 중인 봉' → '아직 진행 중인 기간', byte-identical to UI branch da0ea20. No behaviour, data, offer, trading or disclosure change.",
+      "reviewed_at": "2026-11-17T11:03:11.659694+00:00",
+      "source_commit": "ea3d59643be2cf3904b1ab107a29484fa6669ec4"
     },
     "7": {
       "document_sha256": "4cf48fd8716169b4ded0defa828fc426203197147cdfb656b40b444d6b3ef499",
-      "source_digest": "88012589b9a31237efbef444b03d59730e97d6ebd1ba38b867477f80288e1a64",
-      "reviewed_by": "GPT R3 detached lifecycle change review",
-      "review_note": "Reviewed supplied Q12 digests, memory-only early stages, first-error callback and missing minimization/redaction integration; updated document. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:44:27+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "d7b7b5c3aa7a391e20c488c06a93a083450db683906da2b71f177a9cde3a8039",
+      "reviewed_by": "Claude main session review (11-17 D1)",
+      "review_note": "Korean wording only: core/education/reading_cues.py volume_ma tip, '진행 중인 봉' → '아직 진행 중인 기간', byte-identical to UI branch da0ea20. No behaviour, data, offer, trading or disclosure change.",
+      "reviewed_at": "2026-11-17T11:03:11.661772+00:00",
+      "source_commit": "ea3d59643be2cf3904b1ab107a29484fa6669ec4"
     },
     "8": {
       "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
-      "source_digest": "6492f70a1b17bb80dff7910367b0db47f240139c2b939df22b66013b40b92e83",
-      "reviewed_by": "GPT R3 detached lifecycle change review",
-      "review_note": "No provider calls, recipient changes or external data collection; callback is caller-supplied with no implicit network sink. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:44:27+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "fa528643e0aefe362cfe559e0220ed8fab540e15bc4fe8c15dc834e0c4ebfad4",
+      "reviewed_by": "Claude main session review (11-17 D1)",
+      "review_note": "Korean wording only: core/education/reading_cues.py volume_ma tip, '진행 중인 봉' → '아직 진행 중인 기간', byte-identical to UI branch da0ea20. No behaviour, data, offer, trading or disclosure change.",
+      "reviewed_at": "2026-11-17T11:03:11.663982+00:00",
+      "source_commit": "ea3d59643be2cf3904b1ab107a29484fa6669ec4"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
@@ -847,11 +847,11 @@
     },
     "12": {
       "document_sha256": "4f677b15fac1ab1f8b8d52f005575b9e3fc9d8a579e77ef926412d85687faf8e",
-      "source_digest": "bbd5e123e4f0e2b518e074c1b563e0f0521001aa766014b251fcaf1b53952f8e",
-      "reviewed_by": "GPT CI fixture follow-up review",
-      "review_note": "127 synthetic tests describe only this bounded lifecycle child; no Windows-owner, Step10, whole-R3 or performance certification claimed. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI. Follow-up: reviewed test-only alignment with the approved country-only rail, in-page rankings and compact bilingual portfolio instructions; provider-call and empty-result checks retained. Production code, policy text and release blockers unchanged.",
-      "reviewed_at": "2026-11-14T02:59:35+09:00",
-      "source_commit": "ed92dc90b2b32fd6bd2a9254e7a568e45e3e553e"
+      "source_digest": "65ee3eadb70ee71ca6cf9576acac332a326c887eb8fb0efe91ccad6d6391ba8f",
+      "reviewed_by": "Claude main session review (11-17 D1)",
+      "review_note": "Korean wording only: core/education/reading_cues.py volume_ma tip, '진행 중인 봉' → '아직 진행 중인 기간', byte-identical to UI branch da0ea20. No behaviour, data, offer, trading or disclosure change.",
+      "reviewed_at": "2026-11-17T11:03:11.666336+00:00",
+      "source_commit": "ea3d59643be2cf3904b1ab107a29484fa6669ec4"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
@@ -887,35 +887,35 @@
     },
     "17": {
       "document_sha256": "dde1a8a05a26c612255f5858d272019e11cb7caf4542aa017b626ecea968713d",
-      "source_digest": "6492f70a1b17bb80dff7910367b0db47f240139c2b939df22b66013b40b92e83",
-      "reviewed_by": "GPT R3 detached lifecycle change review",
-      "review_note": "No age check, minor account, contact form or new collection path; future metadata handling still needs operator review. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:44:27+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "fa528643e0aefe362cfe559e0220ed8fab540e15bc4fe8c15dc834e0c4ebfad4",
+      "reviewed_by": "Claude main session review (11-17 D1)",
+      "review_note": "Korean wording only: core/education/reading_cues.py volume_ma tip, '진행 중인 봉' → '아직 진행 중인 기간', byte-identical to UI branch da0ea20. No behaviour, data, offer, trading or disclosure change.",
+      "reviewed_at": "2026-11-17T11:03:11.668476+00:00",
+      "source_commit": "ea3d59643be2cf3904b1ab107a29484fa6669ec4"
     },
     "18": {
       "document_sha256": "f41494e3a28b54cd191916f9ee985f795849e6bf67d69c8dffebd7d081d1187d",
-      "source_digest": "88012589b9a31237efbef444b03d59730e97d6ebd1ba38b867477f80288e1a64",
-      "reviewed_by": "GPT R3 detached lifecycle change review",
-      "review_note": "No email address collection, marketing, unsubscribe or mail sending added. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:44:27+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "d7b7b5c3aa7a391e20c488c06a93a083450db683906da2b71f177a9cde3a8039",
+      "reviewed_by": "Claude main session review (11-17 D1)",
+      "review_note": "Korean wording only: core/education/reading_cues.py volume_ma tip, '진행 중인 봉' → '아직 진행 중인 기간', byte-identical to UI branch da0ea20. No behaviour, data, offer, trading or disclosure change.",
+      "reviewed_at": "2026-11-17T11:03:11.670576+00:00",
+      "source_commit": "ea3d59643be2cf3904b1ab107a29484fa6669ec4"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "55916b97ac660013fdbc1b8c405f2817314a9e0056996b4b1f70034da1e7a45d",
-      "reviewed_by": "GPT R3 detached lifecycle change review",
-      "review_note": "Python standard library and existing project helpers only; no new packages/assets/data rights; licensing gaps unchanged. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:44:27+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "2a6c2b6002210bc8c77d08ac07b656d18b91719cd04bc5c5da249bff114a5003",
+      "reviewed_by": "Claude main session review (11-17 D1)",
+      "review_note": "Korean wording only: core/education/reading_cues.py volume_ma tip, '진행 중인 봉' → '아직 진행 중인 기간', byte-identical to UI branch da0ea20. No behaviour, data, offer, trading or disclosure change.",
+      "reviewed_at": "2026-11-17T11:03:11.672930+00:00",
+      "source_commit": "ea3d59643be2cf3904b1ab107a29484fa6669ec4"
     },
     "20": {
       "document_sha256": "0ca39ab6ced125eaff2f9b45f62655b132ceb6f86671b808c8057f3e4839dd82",
-      "source_digest": "88012589b9a31237efbef444b03d59730e97d6ebd1ba38b867477f80288e1a64",
-      "reviewed_by": "GPT R3 detached lifecycle change review",
-      "review_note": "No deletion, truncation, rotation, retention or durable outage disposal implemented; updated limits and no temporary-test cleanup equivalence. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:44:27+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "d7b7b5c3aa7a391e20c488c06a93a083450db683906da2b71f177a9cde3a8039",
+      "reviewed_by": "Claude main session review (11-17 D1)",
+      "review_note": "Korean wording only: core/education/reading_cues.py volume_ma tip, '진행 중인 봉' → '아직 진행 중인 기간', byte-identical to UI branch da0ea20. No behaviour, data, offer, trading or disclosure change.",
+      "reviewed_at": "2026-11-17T11:03:11.675214+00:00",
+      "source_commit": "ea3d59643be2cf3904b1ab107a29484fa6669ec4"
     }
   }
 }
