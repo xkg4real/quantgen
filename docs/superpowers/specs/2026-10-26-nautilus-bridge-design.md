@@ -3,6 +3,47 @@
 Date: 2026-10-26.
 
 Status:
+- **2026-11-17 Step 10 close-out (Claude, session_01H6RrzMUzF8vwK8xkX977mB, the main session, acting under the owner's
+  ruling P2 of 2026-11-11 and decision 10; the record says on what that rests).** The pilots and the Windows full run of
+  record are in; the close-out record is in `docs/superpowers/plans/2026-10-28-nautilus-execution-record.md`
+  ("Step 10 close-out (2026-11-17)"), which keeps its name (decision 15).
+  - Provider parity (10.5): SPY `PP-20261111T051909Z-spy` WITHHELD, the first run, kept as the run of record, and
+    `PP-20261112T073747Z-spy` PASS, the second run, counted by ruling SPY-가 and used by the pilot-1 gate; DGS3MO
+    `PP-20261111T075307Z-rf` PASS; BTC-USD `PP-20261111T075328Z-btc` FAIL. All four summaries are copied byte for byte
+    to `docs/nautilus_bridge/runs/PP-*/provider_parity_summary.json`; their sha256 values are in the record.
+  - The tool now (owner decision D4 of 2026-11-17: this paragraph and the record carry it; 10.5's Tool bullet is left
+    as written): `tools/provider_parity/parity_check.py` on `main` (`e01e152`) and on the run branch
+    `claude/provider-parity-runs-20261111`, cut from `main` (both fixed commits are ancestors of its head as read,
+    `77d2647`), not on `claude/provider-parity-5-2`. Its commit and sha256 are fixed on `main`'s side, in
+    `results/RULINGS.md` (ruling P1). First fixed version (ruling P1; the three runs of 2026-11-11): commit
+    `5202482e3c24de871b8483608b8a03beb07abe1e`, sha256
+    `f2fe72cdee6344076fd6dfec8943259f44bc52445c66cdaf482a19e269770184`. Second fixed version (ruling SPY-가; the second
+    SPY run; the file on `main` today): commit `1be43ec191ce73bc4fbc7357a4b3438aca0e4bb1`, sha256
+    `78dd1f508c713f9be138466bf69f5dd92d8bfdcc3afacfa37b21fc4bf28ca80c`. Each summary's `tool.sha256` is that of the
+    version named for it.
+  - Rulings carried from `results/RULINGS.md` (P-D9), verbatim: P1, 2026-11-11, all series: "1번으로 승인하겠노".
+    SPY-가 and BTC-나, 2026-11-11 (17:1x KST), `PP-20261111T051909Z-spy` and `PP-20261111T075328Z-btc`:
+    "SPY-가-승인, BTC-나-승인" and "그리고 BTC-나 에 따라 문제의 원인 파악 완료 후 자동으로 해결 및 pilot 2
+    진행해주세요". BTC-라, 2026-11-13, `PP-20261111T075328Z-btc`: "그러면 라 옵션으로 가겠습니다" (on `main`'s
+    `results/RULINGS.md`; the run branch's copy ends at BTC-나). The BTC-USD diagnostic gave case 5, cause not
+    identified; pilot 2 went ahead by BTC-라 with the disagreement noted in the record and in 10.4, and the comparison
+    stays FAIL. SPY: both summaries are copied; the gate used `PP-20261112T073747Z-spy` (decision 18).
+  - Owner decisions of 2026-11-11 on the pilots, the close-out and the merge, "전부승인합노." (every row of
+    `docs/product/DECISIONS_PILOT_CLOSE_MERGE_2026-11-11.md` as its 가). Differences from this spec they make: the record
+    keeps its file name (decision 15); Claude writes the README's two rows (decision 12); the owner's merge line carries
+    `--no-edit` (decision 9); the owner runs the full suite once more on the merged branch before he merges (decision 7).
+  - Owner decisions of 2026-11-17 (the owner's answer approves every recommendation except those he names, which do
+    not include these two): D3, "차이로 기록하고 파일럿 2를 그대로 인정": pilot 2 ran with the bridge interpreter at
+    Python 3.13.17 (`pyvenv.cfg` 3.13.14; the runbook pins 3.13.14) and stands as run, the difference recorded; D4,
+    "본문은 그대로, 지금 도구 위치·커밋·지문을 Status와 마감 기록에 적음".
+  - Pilot 1 `NB-20261112T153028389916Z-d76d2d73`: status `CARD_WRITTEN`, `parity.hard_pass` true, decision REJECT on
+    both engines, as 10.3 expected. Pilot 2 `NB-20261113T122642089406Z-e2ec073c`: status `CARD_WRITTEN`,
+    `parity.hard_pass` true, decision PASS on both engines, as 10.3 expected, reference drift none.
+  - Windows full run, commit `cdbbe61`: 844/964 passed, 0 failed, 120 not run; `nautilus` 57 PASS; the five `guard`
+    rows PASS.
+  - The closing commit changes only this spec (this bullet, the Step 10 rows of 10.4 and the Appendix B entry of
+    2026-11-17), the execution record, `README.md` (two cells) and `docs/nautilus_bridge/runs/PP-*/`.
+    `qa/acceptance_results.json` is byte-identical. `code_sha256` stays `f995600b36c75523…`.
 - **2026-11-04 owner addendum (⑤-2 provider parity; spec-only).** The owner's ruling P-D3, verbatim (Geon Koh,
   Claude Code chat, session_016uB1jgeiPdP8gPkAez3Wrx):
   "P-D3 = (가) 승인. 7A.4 검토 커밋 바로 뒤에 따로 넣음 [권고] | 메모: 7A 전체가 마무리 된 것 감안하여 최대한 빨리 (금방 넣기)"
@@ -1704,6 +1745,25 @@ This list goes verbatim into the execution record (map04 R23).
 | 2026-10-26 | round-4 referees | synthetic series; the four KRX ETF caches and `fred_DGS3MO.csv` (quant referee, re-scoring the stored `S_E1_trend_krx` grid, raw and 9-decimal); stored cards' JSON; no SPY row from 2004-12-01, no BTC price | G-08 rules on a stored card, P0a stand-ins, digests | none |
 | 2026-10-26 | round-5 referees (ops, security) | closure wheels installed offline into scratch venvs, throwaway git repositories, extracts of this spec; lines 27 and 29 of `docs/asset_expansion/study.log` (the owner's profile path); no price file, no price cache, no ledger | pip and git re-entry, both pins, the 8.5 controls | none |
 | Steps 3 to 7 | Claude | synthetic series only | rehearsals | temp only |
+| 2026-10-26 | Claude, two cloud full-suite baseline runs in the real clone through the wrapper (X-1, execution record) | `yf_SPY.csv`, `binance_BTCUSDT.csv` and `upbit_KRW-BTC.csv`, opened by three existing `macro` tests | test statuses and counts only; no price value in either log | none |
+| 2026-10-29, about 05:50 UTC | Claude sub-agent reviewing the Bonds patch: one recursive `grep --include='*.csv'` without the cache exclusion (self-report, research branch rulings log) | the four protected caches, opened by grep | nothing matched, printed or hashed | none |
+| 2026-10-29 to 2026-11-12 | Claude, cloud full runs after the X-1 entry (listed in the execution record, Step 10 close-out, section 9) | none of the protected caches: each run used a copy without them (for the runs of 2026-11-04 and 2026-11-05 inferred from the two known environment FAILs their ledger rows name) | test statuses and counts | none |
+| 2026-11-11 04:06:04 and 04:13:18 KST (2026-11-10T19:06:04Z and 19:13:18Z) | a Claude helper of the main session, the sub-agent "fix:rulings" of workflow run `wf_e00ee1e6-d37`, in a non-sparse scratch worktree on branch `claude/owner-rulings-20261111`: two walks of the protected folder by name, one git index query and one `find` (the main session's conversation records, not git, checked 2026-11-17; the handoff line is in handoff commit `52eb246`) | at 04:06:04, git's index entries under the folder (`git ls-files 'docs/asset_expansion/cache'` piped to `grep -c "\.py$"`); at 04:13:18, the folder's directory entries, walked by `find . -name "__pycache__" -newer docs/compliance/source-review.json -not -path "./docs/asset_expansion/*"` (`-not -path` filters the output and does not prune); no file opened | a count of `.py` names, whose only output was 0; the `find` printed nothing; no file name was printed | none |
+| 2026-11-11 | Claude, git commands (`status`, `add`, `commit`, `diff --check`) in two non-sparse scratch worktrees of the main clone (the merge rehearsal; the Step 10 working documents); in the helper's non-sparse worktree of the row above: no record (execution record, Step 10 close-out, section 9) | the protected folder's files, stat-ed by git, never opened by a command | nothing | none |
+| 2026-11-11 | Claude, the merge rehearsal's Bonds test modules behind an audit hook that refuses and counts any open or listing of the protected folder, a `.env` file or `~/.nextgen` | none: the hook counted 0 in every run | test statuses | none |
+| 2026-11-12, 00:3x KST | Claude, the lead of session_01H6RrzMUzF8vwK8xkX977mB: one `git ls-files` listing without the cache exclusion, in a sparse worktree without the folder (self-report, commit `c3101e5`) | ten file names of the protected folder from git's index; no content, size or hash; no file opened | nothing | none |
+| 2026-11-04 | owner, Step 7A.2 on Windows | the O11 A2 registration (reads no price); synthetic fixtures and timing; the full suite with the caches present | registration; suite statuses | E1: 12 rows (owner-reported, Appendix B, 7A.4 review) |
+| 2026-11-11 (SPY 05:19:09Z, DGS3MO 07:53:07Z, BTC-USD 07:53:28Z) and 2026-11-12 (SPY 07:37:47Z) | owner, provider parity tool (10.5): the first fixed version for the three runs of 2026-11-11, the second for the second SPY run | the three pinned files on the pilot windows; providers' series fetched on the same machine (`fmp`, `kis`, `yahoo_now`, and a new `fmp` fetch for the second SPY run; `treasury`, `fred_now`, and `h15`, whose fetch failed; `coinbase`, `bitstamp`, `binance`); the `kis` fetch reads, and may rewrite, the app's KIS access token `~/.nextgen/kis_token.json` and writes nothing else under `~/.nextgen` (10.5, Writes) | only the kinds the tool's `COMPUTES` table names (10.5, exception to 3.9); no observation dated on or after 2027-01-01 (10.5); four summaries of record | none |
+| 2026-11-12 or before (read at 16:53 KST); exact time: no record | owner, BTC-USD diagnostic `tools/provider_parity/btc_diagnose.py` (sha256 `1e44f3a7…`) by ruling BTC-나 | `yf_BTC-USD.csv` and the `coinbase` and `bitstamp` files of the first sitting, through the tool's readers; no `detail.json` | counts per calendar year, the 99th percentile and the maximum of the level difference, group counts; pasted into the chat | none |
+| 2026-11-11 to 2026-11-12 | Claude | the four `summary.json` (counts, dates, booleans, decade buckets) and the diagnostic's console output as pasted (counts) | read only; the reading rule written before the output: case 5, cause not identified | none |
+| 2026-11-12 15:30:28Z to 15:31:56Z | owner, pilot 1 of record `NB-20261112T153028389916Z-d76d2d73` | `yf_SPY.csv` 2004-12-01 to 2026-09-25 (5,489 sessions), `fred_DGS3MO.csv` | the 12 registered settings at 1x and 2x on both engines; parity; walk-forward; both scores (REJECT, REJECT) | E1: 0 appended, 12 already present (`n_raw` 12 to 12) |
+| 2026-11-13 | Claude, the main session (handoff ledger row ⑥-1, 00:35 KST), and GPT (readout at 16:58 KST) | Claude: the owner's console lines of pilot 1; GPT: the pushed `run.json` and card of pilot 1, the second SPY summary and the diagnostic's totals from the handoff document | readout only | none |
+| 2026-11-11 to 2026-11-13 | BTC-USD gate (10.5): the run of record `PP-20261111T075328Z-btc` is FAIL (`coinbase` 43 days above 0.02, allowed 20; `bitstamp` 47, allowed 21; both outside the late level band); the diagnostic is case 5, cause not identified; owner ruling BTC-라 of 2026-11-13 ("그러면 라 옵션으로 가겠습니다") lets pilot 2 go ahead with this disagreement noted | `yf_BTC-USD.csv` against two venues, as in the rows above | nothing beyond the rows above; the summary stays FAIL | none |
+| 2026-11-13 12:26:42Z to 12:27:32Z | owner, pilot 2 of record `NB-20261113T122642089406Z-e2ec073c` | `yf_BTC-USD.csv`, whole file (4,392 sessions) | the 5 registered settings at 10 and 20 bp on both engines; parity; reference comparison (G-08); both scores (PASS, PASS) | C3: 5 appended (`n_raw` 17 to 22) |
+| 2026-11-13 (GPT readout at 21:40 KST) | GPT | the pushed `run.json` and card of pilot 2, the reference card's JSON, the owner's console lines | readout only | none |
+| 2026-11-13 to 2026-11-14 (results commit `cdbbe61`, 01:13:32 KST) | owner, Step 10 Windows full suite, twice: a first run with one FAIL (not committed) and the run of record | the caches present on the owner's machine; X-1's `macro_m8_pipeline` dry run and `cry1` test ran there (PASS), `g_b5_02` NOT_RUN | suite statuses | none |
+| 2026-11-14 (01:21 KST) | GPT | the pushed `qa/acceptance_results.json`; the four `summary.json` of the run branch at `77d2647` and `README.md`, copied byte for byte into a private draft `step10-draft-20261114` (handoff `STEP10_CHANGE_REVIEW_2026-11-14_gpt.md:30-39`; handoff `CURRENT.md:146` at `212f68e`) | readout; git blob and sha256 of the four summaries and their tool fingerprint; the README two-cell draft | none |
+| 2026-11-17 (the main session's check of GPT's readouts, first recorded in handoff commit `0ae7045` at 18:31:08 KST, handoff `CURRENT.md:47-50` at `212f68e`; the time of the check itself: no record) and 2026-11-17 (this close-out) | Claude, session_01H6RrzMUzF8vwK8xkX977mB and its sub-agents, in scratch clones without the protected folder | the pushed `run.json` and cards of both pilots (statistics, parity, gate fields; no fill row printed), the four summaries, `qa/acceptance_results.json` | readout; sha256 of the four summaries | none |
 
 Claim labels in the house protocol's terms (`docs/superpowers/specs/2026-10-23-quantgen-split-and-paper-pipeline-design.md:442-452`):
 pilot 1 is *pre-specified on historical data*, on a series already used inside a four-sleeve book; pilot 2 is an
@@ -2201,3 +2261,72 @@ was opened.
   Grounds: `code_sha256` and both `owner_confirmed` stay valid across spec-only commits, the branch stays linear so
   the owner's pilot commits push without a merge, and Step 10's path rule still holds. Step 7A item 5 and Step 10's
   Done-when now say so.
+
+**2026-11-17: owner rulings of 2026-11-11 to 2026-11-17 carried at Step 10 (P1 to P4, SPY-가 and BTC-나, the decision
+table, BTC-라, D3 and D4) and the close-out change.** Claude, session_01H6RrzMUzF8vwK8xkX977mB, the main session (the
+execution record says under which ruling and on what that rests). Sources, cited below by short names: the owner's
+answers of 2026-11-11 (Claude Code chat) and 2026-11-13, recorded verbatim in
+`docs/nautilus_bridge/OWNER_RULINGS_LOG.md` on `main` at `e01e152` (`log`), and those on the provider parity tool and
+runs also in `results/RULINGS.md` on `main` at `e01e152` (`rulings`; P-D9); the main session's report to the owner of
+2026-11-17, `plans/2026-11-17/OWNER_REPORT_2026-11-17.md` on the `handoff` branch (`report`, added by handoff commit
+`8a66956`), and the owner's answer to it, verbatim in that branch's `CURRENT.md` at `212f68e`, lines 26 to 42 (cited as
+`CURRENT.md:<line>`). The execution record's section "Step 10 close-out (2026-11-17)" gives each ruling with its source
+and its cost if wrong (its section 7).
+
+- The rulings, verbatim:
+  - P1 (2026-11-11, about 06:3x KST, `log:686`): where the provider parity tool's commit and sha256 are fixed.
+    Claude's option 1 (`log:683`): "선택지 1 (권장): main 쪽에 고정." The answer (`log:688`, `rulings:26`):
+    "1번으로 승인하겠노"
+  - P2, P3 and P4 (2026-11-11, about 07:1x KST, `log:746`). The answer (`log:748`), which the log takes as approval of
+    every recommendation of the P, A, B, C and D groups (`log:750`):
+    "전부승인"
+    The recommendations, as Claude put them (`log:705-707`):
+    - P2, "연구 브랜치에 누가 커밋할지": "이 세션이 맡음. 범위는 마감 기록·스펙·README·실행 기록 폴더로 한정합니다. 한 세션이 맡아야 ⑤-2처럼 일이 빠지지 않습니다."
+    - P3, "병합 충돌을 누가 푸는지": "마감 확인 뒤 Claude가 main을 연구 브랜치에 합쳐 충돌을 풀고 전체 테스트를 돌립니다. 소유자는 충돌 없는 병합만 하시면 됩니다."
+    - P4, "병합 전 main에 넣지 않을 것(주문 모듈, R3 실험실 화면 연결, LA-07 하네스 변경)": "이 세 가지는 병합 뒤로 미룸. 화면을 건드리지 않는 R3 기록기 본체는 계속 진행합니다."
+  - SPY-가 and BTC-나 (2026-11-11, about 17:1x KST, `log:807`), on the first runs `PP-20261111T051909Z-spy` (WITHHELD) and
+    `PP-20261111T075328Z-btc` (FAIL). The answer, in two lines (`log:809-810`; `rulings:77-78`, `rulings:162-163`):
+    "SPY-가-승인, BTC-나-승인"
+    "그리고 BTC-나 에 따라 문제의 원인 파악 완료 후 자동으로 해결 및 pilot 2 진행해주세요"
+    The two options chosen, as Claude put them (`log:793`, `log:804`):
+    - SPY-가: "제가 도구의 fmp 수신을 기간을 나눠 받도록 고칩니다. 소유자는 fmp만 다시 받아 SPY 대조를 한 번 더 돌립니다. 첫 실행(보류)은 기록에 남깁니다."
+    - BTC-나: "Pilot 2 전에 원인을 먼저 봅니다. PC에 남은 상세 파일에서 가격이 아닌 통계만 읽어 보내 주시는 것을 허용하는 판정입니다. 읽을 것은 연도별 불일치 일수와 수준 차이의 상위 1% 값·최댓값입니다."
+  - The decision table `docs/product/DECISIONS_PILOT_CLOSE_MERGE_2026-11-11.md` on `main` at `e01e152` (decisions
+    1 to 27 and 13a; 2026-11-11, 23:3x KST, `log:949`). By the table's own rule an answer of "전부승인" sets every row
+    at its `가` (`log:940`). The answer (`log:951`):
+    "전부승인합노."
+    The log takes it as every row, 13a included, at its `가` (`log:953`). The rows that differ from this spec's text are
+    named in the Status bullet of 2026-11-17 (decisions 15, 12, 9 and 7).
+  - BTC-라 (2026-11-13, `log:1111`, `rulings:288`), on `PP-20261111T075328Z-btc`, after the BTC-USD diagnostic gave
+    case 5, cause not identified (`log:1107`, `rulings:284`). The answer (`log:1113`; `rulings:290`, which the run
+    branch's copy, ending at BTC-나, lacks):
+    "그러면 라 옵션으로 가겠습니다"
+    The rulings file reads it as (`rulings:292-293`): "record the mismatch and unresolved cause in the closing
+    execution record and spec 10.4 data-access history, and let Pilot 2 go ahead under spec 10.5's explicit
+    owner-ruling gate." The BTC-USD comparison stays FAIL (`rulings:294-295`).
+  - D3 and D4 (2026-11-17, about 19:57 KST, handoff `CURRENT.md:22` at `212f68e`). The answer's first line
+    (`CURRENT.md:26`):
+    "다음 결과들을 제외한 나머지는 권장대로 승인한다."
+    The exceptions it lists are D5, D9, D11, D13, D14 and D7 (`CURRENT.md:28-33`), and D6 it approves with
+    specifics (`CURRENT.md:37-39`). Neither list names D3 or D4, so both stand as recommended; the main session read
+    it the same way (`CURRENT.md:44`: "D1·D2·D3·D4·D8·D10·D12는 권장대로"). The two rows of the report's table D1
+    to D14 (`report:20-21`):
+    - D3, "파일럿 2의 Python 3.13.17": recommended "★A 차이로 기록하고 파일럿 2를 그대로 인정"; other "B 3.13.14로 파일럿 2 다시 실행 (한 번 더 앉으셔야 함)".
+    - D4, "스펙 10.5 '도구' 단락": recommended "★A 본문은 그대로, 지금 도구 위치·커밋·지문을 Status와 마감 기록에 적음"; other "B 단락 본문을 고침".
+- What the close-out commit changes (one commit on `cdbbe61`, within the four kinds of path P2 names):
+  - This spec: the Status bullet of 2026-11-17, new and first; 19 rows appended to 10.4 after the row "Steps 3 to 7",
+    among them the ⑤-2 rows the Status bullet of 2026-11-04 put off to Step 10; this entry, after the last line. No
+    earlier line changes: 10.5's Tool bullet stays as written (D4), and the ten rows 10.4 had stay as they were.
+  - The execution record `docs/superpowers/plans/2026-10-28-nautilus-execution-record.md`: the section "Step 10
+    close-out (2026-11-17)", appended after its last line. The file keeps its name (decision 15).
+  - `README.md`: two cells, from `qa/acceptance_results.json` at `cdbbe61` (decisions 12 and 14). The `nautilus` row's
+    last cell becomes `57 PASS` and the Total row's last cell
+    `844/964 passed, 0 failed, 120 not run (2026-11-14, Windows)`. Its CRLF line ends are kept.
+  - `docs/nautilus_bridge/runs/PP-20261111T051909Z-spy/`, `PP-20261112T073747Z-spy/`, `PP-20261111T075307Z-rf/` and
+    `PP-20261111T075328Z-btc/`: one new file each, `provider_parity_summary.json`, a byte copy of
+    `results/<run_id>/summary.json` on the run branch `claude/provider-parity-runs-20261111` at `77d2647`
+    (decision 18). Their sha256 values are in the execution record.
+- No other file changes. `qa/acceptance_results.json` is byte-identical, and no `code_sha256` input and neither
+  registration table changed since `563db54`. So `code_sha256` stays `f995600b36c75523…`, the tables' `table_sha256`
+  stay `d76d2d7301ffe92c…` (E1) and `e2ec073c309cbfc7…` (C3), and both `owner_confirmed` remain current. Nothing was
+  run on real data in the cloud, and no test was run for this commit.
