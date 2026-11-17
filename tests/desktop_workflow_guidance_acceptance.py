@@ -59,8 +59,13 @@ class WorkflowGuidanceTests(unittest.TestCase):
         w=self.window;w.navigate('tools');self.settle()
         self.assertEqual(w.stack.currentWidget().verticalScrollBar().value(),0)
         w.navigate('guide');self.settle()
-        scroll=w.stack.currentWidget().verticalScrollBar()
+        # Approved page draft (owner 2026-11-17, draft_03_guide): the guide page holds still and its canvas scrolls by
+        # itself, so the reading position kept across visits is the canvas's. Three lower panels make it taller.
+        self.assertEqual(w.stack.currentWidget().verticalScrollBar().maximum(),0)
+        scroll=w.guide_workspace.canvas_scroll.verticalScrollBar()
         self.assertEqual(scroll.value(),0)
+        for key in ('rsi','macd','stoch'):w.indicator_guide.choose(key)
+        self.settle()
         self.assertGreater(scroll.maximum(),100)
         scroll.setValue(100)
         w.navigate('tools');self.settle()

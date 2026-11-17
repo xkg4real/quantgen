@@ -300,7 +300,8 @@ class WindowTypographyTests(unittest.TestCase):
                 self.assertNotIn("PERSONAL RESEARCH", rail_text)
                 self.assertFalse([t for t in rail_text if "Flet" in t or "미리보기" in t or "개인 연구" in t])
         self.assertEqual(w.nav["guide"].text(), "Indicator guide")
-        self.assertEqual(w.guide_subtitle.parentWidget().layout().itemAt(0).widget().text(), "Technical indicator guide")
+        # Approved page draft (owner 2026-11-17, draft_03_guide): the guide's title sits in its toolbar row.
+        self.assertEqual(w.guide_workspace.title.text(), "Technical indicator guide")
         w.set_language("ko")
         self.drain()
         self.assertEqual(w.nav["guide"].text(), "기술지표 가이드")
