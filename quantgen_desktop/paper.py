@@ -152,7 +152,10 @@ class RulesPane(QWidget):
         layout.addWidget(label('Rules · 모의 실행 전용', 'heading'))
         self.status = label('규칙·가격·수량은 직접 입력합니다. 저장 → 확인 → 활성화 → 엔진 Arm을 구분합니다.', 'muted')
         layout.addWidget(self.status)
-        actions = QHBoxLayout()
+        # The buttons wrap onto a second line in a narrow canvas (System page, owner-approved draft 2026-11-17: the
+        # pane shares the page with the right column); one long row made the canvas scroll sideways.
+        from .category_picker import CategoryFlow
+        actions = CategoryFlow()
         for title, fn in [('규칙 읽기', self.open), ('새 규칙', self.new), ('선택 편집', self.edit_selected),
                           ('선택 활성/일시정지', self.change_status), ('선택 삭제', self.delete_selected),
                           ('선택 변경 이력', self.history)]:
