@@ -1,5 +1,8 @@
 # 11/16 업무 지시 정리 — 소유자 보고 (2026-11-17)
 
+> **2026-11-17 소유자 답 이후 우선순위 (메인 세션):** 이 문서는 소유자 답 전의 초안입니다. 소유자 답(handoff `CURRENT.md`, "소유자 답: 11-16 결정 D1~D14" 절)과 같은 폴더의 보고서 `D5_GITHUB_PRO_AND_PRIVATE.md`, `D7_ENV_STRUCTURE.md`(D7-A 거부·D7-G 권장, 소유자 확인 중), `D9_PYSIDE6_ESTIMATE.md`(나안), `D11_ACCOUNTS_AND_ADMIN_GUIDE.md`(정식 계정 지금), `D14_RAVENPACK_ALTERNATIVES.md`(엑셀 대안 9개, Bigdata.com 시험·DS-2 없음)와 `sessions/04_OS_EXPANSION.md`·`05_PAYMENTS_ACCOUNT_KEYS.md`·`06_DATA_SOURCE_DIDM.md`가 이 문서와 다르면 **그쪽이 우선**합니다. `*_NEW.md` 세 지시문은 위 세 파일로 대체되어 지웠습니다(이력은 커밋 `8a66956`). 병합 순서와 동결은 handoff 루트 `MERGE_QUEUE.md`.
+
+
 이번에는 읽기만 했습니다. 저장소·Notion·GitHub 설정은 바꾸지 않았습니다. 자세한 내용과 근거는 마스터 파일에 있습니다 (4절).
 
 ## 0. 지금 상황 (세 줄)

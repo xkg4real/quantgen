@@ -1,5 +1,8 @@
 # QUANTGEN 업무 설계도 (마스터 파일) — 2026-11-17 초안
 
+> **2026-11-17 소유자 답 이후 우선순위 (메인 세션):** 이 문서는 소유자 답 전의 초안입니다. 소유자 답(handoff `CURRENT.md`, "소유자 답: 11-16 결정 D1~D14" 절)과 같은 폴더의 보고서 `D5_GITHUB_PRO_AND_PRIVATE.md`, `D7_ENV_STRUCTURE.md`(D7-A 거부·D7-G 권장, 소유자 확인 중), `D9_PYSIDE6_ESTIMATE.md`(나안), `D11_ACCOUNTS_AND_ADMIN_GUIDE.md`(정식 계정 지금), `D14_RAVENPACK_ALTERNATIVES.md`(엑셀 대안 9개, Bigdata.com 시험·DS-2 없음)와 `sessions/04_OS_EXPANSION.md`·`05_PAYMENTS_ACCOUNT_KEYS.md`·`06_DATA_SOURCE_DIDM.md`가 이 문서와 다르면 **그쪽이 우선**합니다. `*_NEW.md` 세 지시문은 위 세 파일로 대체되어 지웠습니다(이력은 커밋 `8a66956`). 병합 순서와 동결은 handoff 루트 `MERGE_QUEUE.md`.
+
+
 > 소유자 요청 (Notion 34f5c916fe0c800b9b4af35c80ebe778, <11 16 업무 지시 필요한 부분>):
 > "업무 설계도 마스터파일 필요함 — 결제망 구축, OS확장, API키 관련 해야되는 일들을 통합 문서화 및 통합 다이어그램 생성 지시 / 다이어그램 만들때도 위 앱 플랫폼 확장 관련된 가이드라인을 제대로 반영하도록 할 것 / 위 다이어그램을 바탕으로 업무 지시, 이때 깃헙 merge 등과 관련된 부분에 주의할 것."
 
