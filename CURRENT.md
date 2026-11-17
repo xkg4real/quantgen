@@ -6,18 +6,33 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout
 next_ids: ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-17T19:57:00+09:00
+updated_at: 2026-11-17T20:13:08+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: main
-work_commit: e01e152
+work_branch: gpt/r3-recorder-20261114
+work_commit: de6178f
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/121
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
 session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 ---
+
+## 11-17 승인 일괄 진행 — 중간 기록 (2026-11-17T20:13:08+09:00)
+
+소유자 답(아래 절, 원문)에 따라 진행 중. 이 절이 아래 절보다 우선한다.
+
+| 항목 | 상태 | 근거 |
+|---|---|---|
+| D1 | PR121(`gpt/r3-recorder-20261114`)에 `de6178f` push. `core/education/reading_cues.py` 45행을 UI 브랜치 `da0ea20`과 바이트 동일하게 바꿈('봉' 제거). compliance 기준선은 이 파일을 인용하는 문서 1 2 6 7 8 12 17 18 19 20만 갱신 → `--check` consistency PASS. R-D9-2 테스트: 수정 전 FAIL(그 문장), 수정 후 OK(52초). `tests.indicator_signal_context_acceptance` 7 OK. PR121 전체 CI(Windows 3대 약 95분) 대기 중. UI 세션 동의 기록은 아직 없으나 문장이 같아 충돌 없음. | 커밋 `de6178f`, PR https://github.com/xkg4real/quantgen/pull/121 |
+| D1 다음 | PR121 CI 녹색 → 병합(merge commit) → PR122(`gpt/r3-outage-20261114`)에 main 병합 → CI → 병합. 두 PR 구독 중. | 결정 D1-A |
+| D5 | 분석 문서 소유자에게 전달: Pro는 필수 아님(필수는 카드 등록), 그래도 월 $16 넘게 쓰면 Pro가 쌈(지금 속도 월 $225 → Pro가 월 $2 이득). 비공개 전환은 이 세션에 도구가 없어 소유자가 직접: ①Secret scanning·Forks 확인 ②카드 ③Pro ④예산 $150 알림만 ⑤Change visibility. 근거는 github/docs 원문(raw.githubusercontent.com, 2026-11-17). | scratchpad `w1117/f2/D5_GITHUB_PRO_AND_PRIVATE.md` (소유자에게 파일로 보냄) |
+| D7·D9·D11·D14 + D6 세션 지시문 3개 | 분석 workflow 실행 중. D14는 소유자 엑셀(RavenPack 대 대안 9개 정보 분류표) 텍스트 사본을 주 자료로 씀. | scratchpad `w1117/f2/` |
+| ⑦-1 Step 10 마감 | 캐시 없는 sparse clone(`w1117/close`, `cdbbe61`)에서 마감 변경 작성 workflow 실행 중(초안 → 사실·절차 두 관점 검증 → 수정 → 최종 점검). 커밋·push는 결과를 직접 검토한 뒤 P2·결정 10에 따라. 범위: 실행 기록, spec Status·10.4(10.5 도구 단락 본문 유지=D4), README 두 행, PP 요약 사본 4개. | 준비 문서 Part 2, GPT `STEP10_CHANGE_REVIEW_2026-11-14_gpt.md` |
+| D6 | 지시문 완성 후 하부 세션 3개 생성 예정(OS 확장 / 결제·계정·API 키 / 데이터 소스·DIDM). UI/UX·웹사이트 세션은 건드리지 않음. | 소유자 답 D6 |
+
+다음 명령(이어받는 사람용): PR121 상태 `mcp__github__pull_request_read get_check_runs 121`; 녹색이면 merge commit으로 병합 후 PR122 브랜치에서 `git merge origin/main` → compliance `--check` → push.
 
 ## 소유자 답: 11-16 결정 D1~D14 (2026-11-17 19:57 KST 무렵, 원문)
 
