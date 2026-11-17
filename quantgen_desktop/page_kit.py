@@ -830,6 +830,7 @@ class Workspace(QWidget):
         bar = getattr(tabs, "tabBar", None)
         if callable(bar):
             tabs.tabBar().hide()
+            tabs.setFocusPolicy(Qt.FocusPolicy.NoFocus)   # its hidden bar would trap Tab; the toolbar switch replaces it
             tabs.setDocumentMode(True)
         sides = list(sides) if sides is not None else None
 
