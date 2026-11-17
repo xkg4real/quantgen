@@ -1091,7 +1091,9 @@ class ResearchWindow(QMainWindow):
         self.quant_figures.hide()
         layout.addWidget(self.quant_figures)
         chart_card = Card()
-        chart_card.body.addWidget(label("분포와 근거", "heading"))   # the result block's title (A3 contract)
+        result_heading = label("분포와 근거", "heading")   # the result block's title (A3 contract)
+        result_heading.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
+        chart_card.body.addWidget(result_heading, 0, Qt.AlignmentFlag.AlignTop)   # the accent bar stays at text height
         self.quant_chart = FanChart()
         self.quant_notes = label("아직 실행한 분석이 없습니다.", "muted")
         self.quant_notes.setProperty('reading_help_keep_visible', True)
