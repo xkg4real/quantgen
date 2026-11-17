@@ -337,11 +337,13 @@ class WindowTypographyTests(unittest.TestCase):
         expected = {"title": (30, 600), "heading": (18, 500), "caption": (14, 400), "number": (32, 600),
                     "brand": (17, 600), "": (15, 400)}
         seen = {}
-        if not any(widget.property("role") == "number" for widget in w.findChildren(QLabel)):
-            # Research Home's run counts were the window's only 'number' labels; the owner-approved draft
-            # (2026-11-17) shows them as a quiet key-figure line, so the role is checked on a probe label.
-            probe = label("0", "number")
-            probe.setParent(w.stack.currentWidget().widget())
+        for role in ("number", "title"):
+            if not any(widget.property("role") == role for widget in w.findChildren(QLabel)):
+                # Research Home's run counts were the window's only 'number' labels, and the rail pages' big
+                # 'title' labels became the page kit's toolbar titles: the owner-approved drafts (2026-11-17)
+                # show them as a quiet key-figure line and a toolbar title, so the role is checked on a probe.
+                probe = label("0", role)
+                probe.setParent(w.stack.currentWidget().widget())
         for widget in w.findChildren(QLabel):
             role = widget.property("role")
             if role in expected and role not in seen:
