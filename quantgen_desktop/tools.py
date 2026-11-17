@@ -143,6 +143,9 @@ def dock_form(box, run_button, side, *, title=None, page=None):
             grid.grid.setColumnStretch(column, 0)     # the old third column keeps no share of the width
         grid.columns = 0                              # lay the fields out again for the column's width
         grid.refresh()
+    for combo in box.findChildren(QComboBox):
+        if combo.minimumContentsLength() > 6:
+            combo.setMinimumContentsLength(6)         # top-row selectors too (매크로 v2's record set)
     layout.addWidget(box)
     if run_button is not None:
         parent_layout = run_button.parentWidget().layout() if run_button.parentWidget() is not None else None

@@ -200,6 +200,8 @@ class Fold(QWidget):
         self.toggle.setCheckable(True)
         self.toggle.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
         self.toggle.toggled.connect(self._toggled)
+        # A long title shortens with '…' in a narrow column (the right column of 설계/검증) instead of widening it.
+        self.toggle.setSizePolicy(QSizePolicy.Policy.Ignored, self.toggle.sizePolicy().verticalPolicy())
         layout.addWidget(self.toggle, 0, Qt.AlignmentFlag.AlignLeft)
         self.body = _Plain()
         body = QVBoxLayout(self.body)
@@ -215,10 +217,25 @@ class Fold(QWidget):
         self.toggle.setArrowType(Qt.ArrowType.DownArrow if expanded else Qt.ArrowType.RightArrow)
         self.body.setVisible(expanded)
 
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._reserve_text_space()
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        self._reserve_text_space()
+
     def _reserve_text_space(self):
         shown = pick(self.title, language_of(self))
-        if self.toggle.text() != shown:
-            self.toggle.setText(shown)
+        room = self.width() - 34            # the arrow and the button's padding
+        metrics = self.toggle.fontMetrics()
+        text = shown
+        if self.isVisible() and room > 60 and metrics.horizontalAdvance(shown) > room:
+            text = metrics.elidedText(shown, Qt.TextElideMode.ElideRight, room)
+        if self.toggle.text() != text:
+            self.toggle.setText(text)
+        self.toggle.setToolTip(shown if text != shown else "")
+        if self.toggle.accessibleName() != shown:
             self.toggle.setAccessibleName(shown)
 
 

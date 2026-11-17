@@ -204,7 +204,7 @@ class ToolbarFit(QObject):
                 widget = self.ws.toolbar_left.itemAt(index).widget()
                 if widget is not None and widget is not self.scope and not widget.isHidden():
                     base += widget.sizeHint().width() + gap
-            actions = self.actions.sizeHint().width() + gap
+            actions = 0 if self.actions.isHidden() else self.actions.sizeHint().width() + gap
             room = self.available()
             inside = base + actions <= room
             target = self.inside if inside else self.outside

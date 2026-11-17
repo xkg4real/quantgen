@@ -1483,6 +1483,8 @@ class ResearchWindow(QMainWindow):
             self.risk_scope_badge.set_pair(SCOPE_BADGES[index])
         if hasattr(self, 'risk_portfolio_actions'):
             self.risk_portfolio_actions.setVisible(index == 0)
+        if hasattr(self, 'risk_toolbar_fit'):
+            self.risk_toolbar_fit.schedule()       # the scope badge may fit again once the actions are hidden
 
     def make_library(self):
         """Research Library (owner-approved draft 2026-11-17, docs/product/ui_drafts_2026-11-17/draft_06_library.png).

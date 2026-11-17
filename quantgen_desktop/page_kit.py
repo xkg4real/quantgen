@@ -32,7 +32,7 @@ from .stock_detail_side import FoldHeader
 from .stock_detail_style import line_color, numbers, set_prop, sheet as detail_sheet
 
 PAGE_MARGINS = (30, 22, 28, 20)      # left, top, right, bottom (the drafts' .page padding)
-SIDE_WIDTHS = ((1320, 360), (1120, 340), (0, 320))   # (window width at least, column width)
+SIDE_WIDTHS = ((1320, 360), (1120, 340), (0, 316))   # (window width at least, column width)
 MIN_HEIGHT = 560
 
 
@@ -98,6 +98,17 @@ def kit_sheet(p, dark):
       QFrame#qgSide QScrollArea, QFrame#qgSide QScrollArea > QWidget > QWidget, QWidget#qgSidePage,
       QFrame#qgSide QStackedWidget, QFrame#dockedForm QWidget, QFrame[kit='card'] QWidget#qgCardBody,
       QFrame[kit='card'] > QWidget {{ background: transparent; border: 0; }}
+      QFrame#dockedForm QPushButton {{ padding: 7px 12px; border: 1px solid {line}; border-radius: 8px;
+          background: {p.surface}; color: {p.text}; font-weight: 500; }}
+      QFrame#dockedForm QPushButton:hover {{ background: {p.accent_soft}; }}
+      QFrame#dockedForm QPushButton:focus {{ border: 2px solid {p.accent}; }}
+      QFrame#dockedForm QPushButton:disabled {{ color: {mix(p.muted, p.bg, 0.4)}; }}
+      QFrame#dockedForm QPushButton[kit='secondary'] {{ padding: 8px 13px; border: 0; border-radius: 9px;
+          background: {p.surface_2}; font-size: 13px; }}
+      QFrame#dockedForm QPushButton[kit='secondary']:hover {{ background: {p.accent_soft}; }}
+      QFrame#dockedForm QPushButton[kit='secondary']:focus {{ border: 2px solid {p.accent}; }}
+      QFrame#dockedForm QFrame[sd='foldHead']:hover {{ background: {soft}; }}
+      QFrame#dockedForm QFrame[sd='foldHead'][focusRing='true'] {{ background: {p.accent_soft}; }}
       QWidget#qgSideFoot {{ background: transparent; border-top: 1px solid {line}; }}
       QWidget#qgWorkspace QLineEdit, QWidget#qgWorkspace QComboBox, QWidget#qgWorkspace QSpinBox,
       QWidget#qgWorkspace QDoubleSpinBox {{ border: 1px solid {line}; border-radius: 9px; background: {p.surface};

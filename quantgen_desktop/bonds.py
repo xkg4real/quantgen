@@ -47,7 +47,8 @@ def _local(texts, kit, *, wrap=False):
 _FREQUENCY = {1: ('annual coupons', '연 1회 이표'), 2: ('semi-annual coupons', '반기 이표'),
               4: ('quarterly coupons', '분기 이표')}
 _CURVES = {'SYNTHETIC': ('Synthetic curve', '합성 곡선'), 'FRED': ('FRED US Treasury curve', 'FRED 미국 국채 곡선')}
-_TOOLS = {'calc': ('Calculator & risk', '계산 및 위험'), 'scenarios': ('Scenarios', '시나리오'),
+_TOOLS = {'calc': ('Price & risk', '계산 및 위험'),   # chip text: three chips fit the 320 px column in English
+          'scenarios': ('Scenarios', '시나리오'),
           'hedge': ('Futures hedge', '선물 헤지')}
 
 

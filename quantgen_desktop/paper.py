@@ -327,7 +327,8 @@ class PaperPane(QWidget):
                              'simulated orders and the decision log here.');layout.addWidget(self.dashboard)
         self.venues=table(['Market','Trading state','Reason','Active rules']);self.venues.setMinimumHeight(150);layout.addWidget(self.venues)
         self.orders=table(['ID','Symbol','Side','Quantity','Kind','Trigger','Limit']);self.orders.setMinimumHeight(200);layout.addWidget(self.orders)
-        settle=QHBoxLayout();self.settle_row=settle;self.session_widgets=[self.venues,self.orders]
+        settle=CategoryFlow();self.settle_row=settle;   # wraps in the narrow docked card
+        self.session_widgets=[self.venues,self.orders]
         for title,fn in [('선택 모의 체결',lambda:self.settle(True)),('선택 모의 취소',lambda:self.settle(False))]:
             b=QPushButton(title);b.clicked.connect(lambda checked=False,f=fn:self.guard(f));settle.addWidget(b)
             self.session_widgets.append(b)

@@ -223,6 +223,7 @@ class CommentaryPane(QWidget):
         self.reload.setProperty('qg_literal', True)          # its short label follows set_language
         self.reload.setCursor(Qt.CursorShape.PointingHandCursor)
         fold.head.layout().addWidget(self.reload, 0, Qt.AlignmentFlag.AlignVCenter)
+        self.jobs.busy_changed.connect(lambda busy: self.reload.setEnabled(not busy))   # outside input_box now
         self.preview_button.setProperty('qg_literal', True)   # its short label follows set_language
         self.preview_button.setProperty('kit', 'secondary')
         self._row.setSpacing(8)
@@ -240,7 +241,7 @@ class CommentaryPane(QWidget):
         head.setSpacing(10)
         title = Text(('Payload', '전송 내용'), '')
         title.setProperty('lib', 'payloadHead')
-        self.summary_note = numbers(Text('', ''))
+        self.summary_note = numbers(Text('', '', wrap=True))   # fits the 320 px column in English
         self.summary_note.setProperty('lib', 'payloadNote')
         self.summary_note.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         head.addWidget(title)

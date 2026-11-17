@@ -677,6 +677,7 @@ class IndicatorGuide(QWidget):
     def _sync_toolbar(self):
         if not self.docked:return
         self.clear.setVisible(bool(self.keys) and self.workspace.current_mode()==0)
+        self.export.setVisible(self.workspace.current_mode()==0)   # its saved/failed line is in that mode's column
         self._fit_toolbar()
 
     def _fit_toolbar(self):
