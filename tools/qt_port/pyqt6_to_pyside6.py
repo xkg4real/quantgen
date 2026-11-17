@@ -241,6 +241,32 @@ def _names_in(node):
     return {n.id for n in ast.walk(node) if isinstance(n, ast.Name)}
 
 
+
+def _bound_method_shot(sig, i):
+    """True for `singleShot(<ms>, self.<attr>[.<attr>])`: two arguments, the second a bound method of self."""
+    if i + 1 >= len(sig) or sig[i + 1].string != "(":
+        return False
+    depth, args, current = 0, [], []
+    for tok in sig[i + 1:]:
+        if tok.string in "([{" and tok.type == tokenize.OP:
+            depth += 1
+            if depth == 1:
+                continue
+        elif tok.string in ")]}" and tok.type == tokenize.OP:
+            depth -= 1
+            if depth == 0:
+                args.append(current)
+                break
+        if depth == 1 and tok.string == ",":
+            args.append(current); current = []
+            continue
+        current.append(tok.string)
+    if len(args) != 2:
+        return False
+    second = args[1]
+    return (len(second) >= 3 and second[0] == "self" and all(x == "." for x in second[1::2])
+            and all(x.isidentifier() for x in second[2::2]))
+
 def lint(text: str, path: str) -> list[Finding]:
     out: list[Finding] = []
     add = lambda line, group, msg: out.append(Finding(path, line, group, msg))
@@ -262,6 +288,9 @@ def lint(text: str, path: str) -> list[Finding]:
             add(tok.start[0], "1-print", "QTextDocument.print is print_ in PySide6; accept both names")
         elif tok.string == "receivers" and prev == "." and nxt == "(":
             add(tok.start[0], "3-receivers", "QObject.receivers(bound signal) fails in PySide6; record the connection yourself")
+        elif tok.string == "singleShot" and prev == "." and _bound_method_shot(sig, i):
+            add(tok.start[0], "6-bound", "singleShot(ms, self.method): PyQt6 drops it when the object is deleted, "
+                "PySide6 still calls it (trial: segfault and memory blow-up); use a child QTimer(self)")
         elif tok.string == "singleShot" and prev == ".":
             add(tok.start[0], "6-deferred", "deferred call: check the target widget is still alive when it fires (review)")
         elif tok.string == "sip" and nxt == "." and i + 2 < len(sig) and sig[i + 2].string not in ("isdeleted", "delete"):

@@ -16,7 +16,7 @@ Methods (`--method`):
 Each method is measured on two kinds of font, because they behave differently:
   app     the application font (setFamilies list, what most widgets inherit)
   single  a font naming only the interface family (what a style sheet `font-family:` or QFont(name) gives)
-  other   a font naming a platform family without Hangul (DejaVu Sans; Segoe UI on Windows)
+  other   a font naming a platform family without Hangul (DejaVu Sans; Segoe UI on Windows; Helvetica on macOS)
 
 Usage (run each binding in its own virtual environment):
   python -m tools.qt_port.font_probe --binding PyQt6 --method fallback --out OUT
@@ -46,8 +46,8 @@ LINES = (
 )
 METHODS = ("fallback", "families", "substitutions", "both", "none")
 FONT_KINDS = ("app", "single", "other")
-# A platform family without Hangul, as a widget would get from a style sheet naming another font.
-OTHER = "Segoe UI" if sys.platform == "win32" else "DejaVu Sans"
+# A platform family without Hangul: Segoe UI (Windows), Helvetica (macOS; Hangul comes from Apple SD Gothic Neo), DejaVu Sans (Linux).
+OTHER = {"win32": "Segoe UI", "darwin": "Helvetica"}.get(sys.platform, "DejaVu Sans")
 DEFAULT_FONTS = Path(__file__).resolve().parents[2] / "assets" / "fonts"
 
 

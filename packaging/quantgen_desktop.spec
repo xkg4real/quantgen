@@ -31,7 +31,8 @@ if CHANNEL not in ("public", "beta", "dev"):
 
 names = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT).decode().split("\0")
 datas = [(str(ROOT / n), str(Path(n).parent)) for n in names
-         if n and allowed(n) and not n.endswith(".py") and n not in ("pyproject.toml",)]
+         if n and allowed(n) and not n.endswith(".py") and n not in ("pyproject.toml",)
+         and not n.startswith("qa/")]  # recorded QA status: in the wheel allowlist, not needed by the app
 # core/research/provenance.py code_evidence() hashes these sources from disk; ship them as files so a packaged
 # app records the same calculation_sha256 as a checkout instead of None.
 datas += [(str(ROOT / "core" / "quant" / n), "core/quant") for n in ("montecarlo.py", "garch.py", "history.py")]

@@ -150,6 +150,20 @@ class LintTests(unittest.TestCase):
         for line in (11, 13, 15):  # one type at a time, constant data, a kept delegate
             self.assertFalse([g for g in groups if g[1] == line], line)
 
+    def test_bound_method_single_shot_is_its_own_group(self):
+        text = src("""\
+            from @OLD@.QtCore import QTimer
+            class C:
+                def f(self):
+                    QTimer.singleShot(0, self.apply)
+                    QTimer.singleShot(5, self.view.refresh)
+                    QTimer.singleShot(0, lambda: self.apply())
+                    QTimer.singleShot(0, self.make(1))
+                    self.timer.start(0)
+            """)
+        found = {(f.line, f.group) for f in port.lint(text, "c.py")}
+        self.assertEqual(found, {(4, "6-bound"), (5, "6-bound"), (6, "6-deferred"), (7, "6-deferred")})
+
 
 class CommandTests(unittest.TestCase):
     def test_apply_refuses_a_git_checkout_and_is_idempotent_on_a_scratch_copy(self):
