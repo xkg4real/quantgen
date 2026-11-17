@@ -8,4 +8,5 @@ _info = types.ModuleType("core._build_info")
 _info.CHANNEL = "@CHANNEL@"
 _info.QT_BINDING = "@BINDING@"
 _info.SOURCE_COMMIT = "@COMMIT@"
+_info.CALCULATION_SHA256 = "@CALC_SHA256@"  # what packaging/selfcheck.py expects code_evidence() to record
 sys.modules["core._build_info"] = _info

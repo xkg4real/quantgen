@@ -39,11 +39,15 @@ try:
     commit = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, text=True).strip()
 except Exception:
     commit = "unknown"
+sys.path.insert(0, str(ROOT / "packaging"))
+from selfcheck import expected_calculation_sha256  # noqa: E402
+calc_sha256 = expected_calculation_sha256(ROOT / "core" / "quant")
 hook_dir = Path(workpath) / "qg_hooks"
 hook_dir.mkdir(parents=True, exist_ok=True)
 hook = hook_dir / "rthook_build_info.py"
 hook.write_text((ROOT / "packaging" / "rthook_build_info.py.in").read_text(encoding="utf-8")
-                .replace("@CHANNEL@", CHANNEL).replace("@BINDING@", BINDING).replace("@COMMIT@", commit),
+                .replace("@CHANNEL@", CHANNEL).replace("@BINDING@", BINDING).replace("@COMMIT@", commit)
+                .replace("@CALC_SHA256@", calc_sha256),
                 encoding="utf-8")
 
 # Every allowlisted module of the app packages, so lazily imported screens are bundled too.
@@ -52,7 +56,7 @@ hidden = sorted({n[:-3].replace("/", ".").removesuffix(".__init__") for n in nam
 
 a = Analysis(
     [str(ROOT / "packaging" / "launch_desktop.py")],
-    pathex=[str(ROOT)],
+    pathex=[str(ROOT), str(ROOT / "packaging")],
     datas=datas,
     hiddenimports=hidden,
     runtime_hooks=[str(hook)],
