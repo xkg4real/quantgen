@@ -217,12 +217,18 @@ class Badge(Text):
     def set_tone(self, tone):
         set_prop(self, "tone", tone or "")
 
+    def suppress(self, hidden):
+        """Keep the badge hidden whatever its text (a page tab it does not belong to); a language change or a new
+        text must not bring it back."""
+        self._suppressed = bool(hidden)
+        self.render()
+
     def render(self):
         value = pick(self.language, self.pair)
         value = ("● " + value) if value and not value.startswith("●") else value
         if self.text() != value:
             self.setText(value)
-        self.setVisible(bool(value))
+        self.setVisible(bool(value) and not getattr(self, "_suppressed", False))
 
 
 class Pill(Text):

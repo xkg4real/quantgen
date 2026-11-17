@@ -1194,9 +1194,7 @@ class ResearchWindow(QMainWindow):
         mc_side, strategy_side = ws.side, ws.add_side()
         ws.bind_tabs(self.quant_tabs, (("Monte Carlo", "몬테카를로"), ("Strategy Lab", "전략 실험실")),
                      sides=(mc_side, strategy_side),
-                     on_change=lambda i: (self.quant_guide.set_key(('monte_carlo', 'strategy')[i]),
-                                          getattr(self, 'quant_badge', None) is not None and
-                                          self.quant_badge.setVisible(i == 0 and bool(self.quant_badge.text()))))
+                     on_change=self.quant_tab_changed)
         self.quant_badge = ws.add_badge(("Simulation · not a guarantee", "시뮬레이션 · 미래 보장 아님"))
         self.symbol = QLineEdit("AAPL")
         self.symbol.setMaxLength(120)
@@ -1251,6 +1249,7 @@ class ResearchWindow(QMainWindow):
         settings.addWidget(reading)
         guide_page = mc_side.add_page(("How to read", "읽는 법"))
         guide_page.addWidget(self.quant_guide)
+        self.quant_guide_pages = [guide_page]
         self.analysis_status = label("데이터 출처·시드·모델 가정을 기록합니다.", "caption")
         self.analysis_status.setProperty("reading_help_keep_visible", True)
         mc_side.foot.addWidget(self.analysis_status)
@@ -1260,6 +1259,7 @@ class ResearchWindow(QMainWindow):
                                       ("A backtest of the chosen rule on past prices, with costs. Past results are not a "
                                        "promise of future ones.",
                                        "고른 규칙을 과거 가격에 비용과 함께 시험해요. 과거 성과가 미래를 약속하지 않아요.")))
+        self.quant_guide_pages.append(strategy_guide)   # the workflow guide follows the tab (purpose, scope, steps)
         ws.finish()
         # Canvas (Monte Carlo): lead line and key figures, the fan chart card, the metrics.
         self.quant_lead = Text("", "lead")
@@ -1272,7 +1272,7 @@ class ResearchWindow(QMainWindow):
         self.quant_figures = KeyFigures()
         self.quant_figures.hide()
         layout.addWidget(self.quant_figures)
-        chart_card = Card()
+        chart_card = Card(margins=(16, 16, 16, 16))   # 2×16 + the fan chart's 350 px fits a 1000 px English window
         result_heading = label("분포와 근거", "heading")   # the result block's title (A3 contract)
         result_heading.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
         chart_card.body.addWidget(result_heading, 0, Qt.AlignmentFlag.AlignTop)   # the accent bar stays at text height
@@ -1300,6 +1300,19 @@ class ResearchWindow(QMainWindow):
         layout.addWidget(chart_card, 1)
         self.quant_kit_language()
 
+    def quant_tab_changed(self, index):
+        """Monte Carlo | Strategy Lab: the workflow guide moves into the selected tab's 읽는 법 page with that tab's
+        steps, and the simulation badge belongs to Monte Carlo only."""
+        self.quant_guide.set_key(('monte_carlo', 'strategy')[index])
+        pages = getattr(self, 'quant_guide_pages', ())
+        if index < len(pages):
+            for page in pages:
+                page.removeWidget(self.quant_guide)
+            pages[index].insertWidget(0, self.quant_guide)
+            self.quant_guide.show()
+        if getattr(self, 'quant_badge', None) is not None:
+            self.quant_badge.suppress(index != 0)
+
     def quant_kit_language(self):
         self.kit_language()
 
@@ -1315,10 +1328,12 @@ class ResearchWindow(QMainWindow):
         then 시작 · 중앙값 · 하위 5% · 상위 5% · 손실 확률 · 95% VaR)."""
         r = value.result
         params = value.run.get("parameters", {})
-        model = self.model.itemText(max(0, self.model.findData(params.get("model", self.model.currentData()))))
+        from .risk_display import MC_MODEL_LABELS, ko
+        model_id = params.get("model", self.model.currentData())
+        model = MC_MODEL_LABELS.get(model_id, str(model_id))       # in each language, not the combo's current text
         self.quant_lead.set_pair(str(params.get("symbol", "")))
         self.quant_lead_note.set_pair((f"· {model} · {r.horizon_days} sessions · {r.n_paths:,} paths",
-                                       f"· {model} · {r.horizon_days}거래일 · 경로 {r.n_paths:,}개"))
+                                       f"· {ko(model)} · {r.horizon_days}거래일 · 경로 {r.n_paths:,}개"))
         self.quant_figures.set_items((
             (("Start", "시작"), f"{r.spot:,.2f}", ""),
             (("Median", "중앙값"), f"{r.median_terminal:,.2f}", ""),
@@ -2285,7 +2300,10 @@ class ResearchWindow(QMainWindow):
         self.watchlist.set_busy(busy)
         self.portfolio.run.setEnabled(not busy)
         self.bonds.run.setEnabled(not busy)
-        for name in self.tool_names:getattr(self,name).input_box.setEnabled(not busy)
+        for name in self.tool_names:
+            pane = getattr(self, name)
+            pane.input_box.setEnabled(not busy)
+            pane.run.setEnabled(not busy)   # a docked pane's run button sits in the right column's foot, outside its box
         if not busy:
             self.pending = None
             self.active_run = None

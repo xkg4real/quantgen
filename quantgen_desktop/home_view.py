@@ -36,7 +36,7 @@ from datetime import date, datetime, timedelta, timezone
 from PyQt6.QtCore import (QEasingCurve, QEvent, QPoint, QPointF, QPropertyAnimation, QRectF, QSize, Qt, QTimer,
                           pyqtSignal, pyqtSlot)
 from PyQt6.QtGui import QBrush, QColor, QFontMetricsF, QIcon, QLinearGradient, QPainter, QPainterPath, QPen
-from PyQt6.QtWidgets import (QButtonGroup, QFrame, QHBoxLayout, QLabel, QPushButton, QSizePolicy, QToolButton,
+from PyQt6.QtWidgets import (QButtonGroup, QFrame, QStyle, QHBoxLayout, QLabel, QPushButton, QSizePolicy, QToolButton,
                              QVBoxLayout, QWidget)
 
 from core.i18n import LocaleContext
@@ -612,8 +612,12 @@ class HistoryChart(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         wanted = self.height_for(event.size().width())
-        if self.minimumHeight() != wanted:
-            self.setMinimumHeight(wanted)  # owner 2026-11-11: never flatter than about half as tall as wide
+        # Owner 2026-11-11: never flatter than about half as tall as wide. Lower the floor only by more than a scroll
+        # bar's width: in the page's canvas a floor that follows every width would show the scroll bar, narrow the
+        # chart, lower the floor, hide the bar and widen it again, without end at some window heights.
+        slack = round(self.style().pixelMetric(QStyle.PixelMetric.PM_ScrollBarExtent) * CHART_ASPECT) + 2
+        if wanted > self.minimumHeight() or self.minimumHeight() - wanted > slack:
+            self.setMinimumHeight(wanted)
 
     def set_series(self, dates, values, *, decimals=2, range_key=DEFAULT_RANGE, message=""):
         self.dates, self.values = tuple(dates), tuple(float(v) for v in values)
@@ -1154,8 +1158,10 @@ class HomeView(QWidget):
         self.grid.set_theme(dark)
 
     def set_busy(self, busy):
-        """The window's quote refresh is running: one refresh at a time."""
-        self.refresh_button.setEnabled(not busy)
+        """The window's quote refresh is running: one refresh at a time. On the approved page the toolbar's
+        새로고침 is also the watchlist's only refresh, so it stays usable (the window ignores a quote refresh while
+        a job runs; the chart and the watchlist each guard their own load)."""
+        self.refresh_button.setEnabled(not busy or self.docked)
 
     # Selection and paging ----------------------------------------------------------------------
     def select(self, symbol, *, load=True):
