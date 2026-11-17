@@ -500,7 +500,7 @@ def test_hedge_798_x_08_over_65_side_rounding_and_residual():
     note = next(t for t in _texts(h) if t.startswith("contracts = position DV01"))
     assert "798.19 x 0.8000 / 65.00 = 9.82: sell 10" in note and "over-hedged" in note
     assert "not modelled" in note and "per contract face" in note
-    h.tf["Position DV01 (blank = calculator)"].value = "-798.19"     # a short book buys
+    h.tf["Position DV01"].value = "-798.19"     # a short book buys
     s = _calc(h, tool="hedge")
     assert "Contracts to sell" not in s and s["Contracts to buy"] == "9.82"
     assert s["Rounded"] == "10" and s["Net DV01 after hedge"] == "+14.31"
@@ -520,7 +520,7 @@ def test_rounding_is_half_away_from_zero_as_decided():
                  (0.49999999999999994, 0), (2.0 ** 52 + 1, 2 ** 52 + 1), (-0.0, 0)):
         assert bonds.round_contracts(n) == _ind_round(n) == k, (n, bonds.round_contracts(n))
     h = _page()
-    h.tf["Position DV01 (blank = calculator)"].value = "682.5"
+    h.tf["Position DV01"].value = "682.5"
     h.tf["Conversion factor"].value = "1"
     s = _calc(h, tool="hedge")
     assert s["Contracts to sell"] == "10.50" and s["Rounded"] == "11"
@@ -529,7 +529,7 @@ def test_rounding_is_half_away_from_zero_as_decided():
 
 def test_hedge_override_is_named_and_warned():
     h = _page()
-    h.tf["Position DV01 (blank = calculator)"].value = "798"
+    h.tf["Position DV01"].value = "798"
     s = _calc(h, tool="hedge", coupon="4.5", notional="2,000,000")
     assert s["Position DV01 (override)"] == "798.00"
     assert any(t.startswith("Position DV01 798.00 is your override") for t in _texts(h))
@@ -556,9 +556,11 @@ def test_synthetic_and_fred_are_labelled_apart_with_a_mocked_fetch():
         s = _calc(h)
         chip_ = _chip(h, "curve:")
         assert "SYNTHETIC" in chip_.value and _token_of(chip_) == "error"
-        banner = next(t for t in _texts(h) if t.startswith("Synthetic data"))
-        assert "FRED failed" in banner and banner.count("offline (bonds acceptance)") == 1
-        assert any("SYNTHETIC" in t and "not the market" in t for t in _texts(h))  # narrative
+        assert any(t.startswith("Synthetic data") for t in _texts(h))
+        reason = next(t for t in _texts(h) if t.startswith("FRED failed"))   # folded under the banner
+        assert reason.count("offline (bonds acceptance)") == 1
+        assert any("SYNTHETIC" in t and "not the market" in t for t in _texts(h))  # the curve line above
+        #   the Analysis panel (the merged page keeps this sentence out of the narrative)
         h = _page(source="fred")
         s = _calc(h)
         assert "Price" not in s and any(t.startswith("FRED served 0/11") for t in _texts(h))
@@ -580,7 +582,8 @@ def test_stale_carried_forward_and_bad_unit_curves_are_flagged():
         h = _page(source="auto")
         _calc(h)
         assert _token_of(_chip(h, "curve:")) == "error"
-        assert any(t.startswith("Synthetic data") and "outside" in t for t in _texts(h))
+        assert any(t.startswith("Synthetic data") for t in _texts(h))
+        assert any(t.startswith("FRED failed") and "outside" in t for t in _texts(h))   # folded under the banner
         h = _page(source="fred")
         s = _calc(h)
         assert "Price" not in s and any("outside" in t for t in _texts(h))
