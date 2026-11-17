@@ -1188,31 +1188,327 @@ class ResearchWindow(QMainWindow):
         layout.addStretch()
 
     def make_library(self):
-        layout = self.page("Research Library", "이번 앱 세션의 실행 근거 · 종료 전에 필요한 결과를 저장하세요.")
+        """Research Library (owner-approved draft 2026-11-17, docs/product/ui_drafts_2026-11-17/draft_06_library.png).
+        Toolbar: title, '이번 앱 세션의 실행 근거', the no-autosave badge and a search over the runs. Canvas: the session's
+        lead line and counts, the runs card (filter pills 전체 · 몬테카를로 · 포트폴리오 · 전략 and the run rows), then a
+        preview of the selected run. Right column: 실행 상세 (run information, the reproducibility checklist read from
+        the record, the AI 해설 fold) | 읽는 법, with the two exports pinned at the bottom. `run_table` keeps the
+        ResearchRun rows, their status roles and the selection the exports save; it is hidden behind the row list, which
+        drives it. Nothing is saved automatically and nothing is sent without the user's action."""
+        from .commentary import CommentaryPane
+        from .library_view import (KINDS, CheckList, ExportRow, InfoGrid, LibraryWorkspace, RunList, SearchField,
+                                   preview_chart)
+        from .page_kit import Button, Card, EmptyState, Fold, KeyFigures, Pill, PillTabs, Soft, Text, rule
+        outer = self.page(None, None)
+        scroll = self.stack.widget(self.stack.count() - 1)
+        self.library_workspace = ws = LibraryWorkspace(("Research Library", "연구 보관함"))
+        outer.addWidget(ws)
+        ws.fit_to(scroll)
+        self.library_saved = set()               # ResearchRun ids saved from this page in this session
+        self.library_started = datetime.now(timezone.utc)
+        self.library_selected = ""
+        self.library_chosen = False              # True once the user picked a row; until then the newest result shows
+        self.library_rows = []
+        self._library_syncing = False
+        # Toolbar
+        self.library_caption = ws.add_toolbar(Text(("Run evidence of this app session", "이번 앱 세션의 실행 근거"), "sub"))
+        self.library_badge = ws.add_badge(("No autosave · save before closing", "자동 저장 안 함 · 종료 전에 저장하세요"),
+                                          "warn")
+        ws.optional_toolbar.append(self.library_caption)
+        self.library_search = SearchField()
+        ws.add_toolbar(self.library_search, right=True)
+        ws.on_theme(self.library_search)
+        # Canvas: lead line, counts, the runs card, the preview card.
+        lead_row = QWidget()
+        lead = QHBoxLayout(lead_row)
+        lead.setContentsMargins(2, 0, 0, 0)
+        lead.setSpacing(8)
+        self.library_lead = Text("", "lead")
+        self.library_lead_note = Text("", "leadNote", wrap=True)
+        lead.addWidget(self.library_lead, 0, Qt.AlignmentFlag.AlignTop)
+        lead.addWidget(self.library_lead_note, 1)
+        ws.canvas.addWidget(lead_row)
+        self.library_counts = KeyFigures()
+        ws.canvas.addWidget(self.library_counts)
+        runs_card = Card(margins=(10, 10, 10, 8), spacing=4)
+        head = QHBoxLayout()
+        head.setContentsMargins(2, 0, 6, 0)
+        head.setSpacing(8)
+        self.library_filter = PillTabs([("All", "전체")] + [("", "") for _ in KINDS])
+        head.addWidget(self.library_filter, 1)
+        sort = Text(("Newest first", "최신순"), "")
+        sort.setProperty("lib", "sort")
+        head.addWidget(sort, 0, Qt.AlignmentFlag.AlignVCenter)
+        runs_card.body.addLayout(head)
+        self.library_list = RunList()
+        ws.follow(self.library_list)
+        ws.on_theme(self.library_list)
+        self.library_list.selected.connect(self.library_select)
+        self.library_filter.changed.connect(lambda index: (self.library_list.set_kind((("all",) + KINDS)[index]),
+                                                           self.library_empty_text()))
+        self.library_search.textChanged.connect(lambda text: (self.library_list.set_query(text), self.library_empty_text()))
+        runs_card.body.addWidget(self.library_list)
+        runs_card.body.addWidget(rule())
+        list_note = Text(("Only results calculated in this session · verdict NOT_RUN · frozen studies, past ledgers and "
+                          "secret settings are not inspected",
+                          "이번 세션에서 계산한 결과만 보여요 · 검증 NOT_RUN · 동결 연구·과거 원장·비밀 설정은 탐색하지 않아요"),
+                         "", wrap=True)
+        list_note.setProperty("lib", "foot")
+        list_note.setContentsMargins(6, 0, 6, 0)
+        list_note.setProperty("reading_help_keep_visible", True)
+        runs_card.body.addWidget(list_note)
+        ws.canvas.addWidget(runs_card)
+        # The ResearchRun table keeps its columns, status roles and selection for callers, tests and the two exports.
+        # Owner-approved draft 2026-11-17: the row list above shows the same runs in the approved look and selects here.
         self.run_table = table(["Symbol", "Model", "실행 상태", "검증 판정", "생성 시각 · UTC"])
         self.run_table._qg_status_columns = {2: 'execution', 3: 'official'}
         self.run_table.setProperty('localized_columns', [1])
         self.run_table.setMinimumHeight(280)
-        layout.addWidget(self.run_table)
-        buttons = QHBoxLayout()
-        self.save_json = QPushButton("선택한 ResearchRun JSON 저장")
-        self.save_bundle = QPushButton("선택한 보고서 + JSON ZIP 저장")
-        self.save_json.clicked.connect(lambda:self.export_selected(False))
-        self.save_bundle.clicked.connect(lambda:self.export_selected(True))
-        buttons.addWidget(self.save_json); buttons.addWidget(self.save_bundle)
-        layout.addLayout(buttons)
-        self.export_status = label("현재 저장 대상은 Monte Carlo 실행입니다. 자동 저장되지 않으며 경로는 직접 선택합니다.", "muted")
-        self.export_status.setProperty("reading_help_keep_visible", True)
-        layout.addWidget(self.export_status)
-        notice = label("재현성 PARTIAL · 데이터 빈티지/라이선스 미검증 · 비용 NOT_APPLIED · 검증 NOT_RUN\n동결 연구·과거 원장·비밀 설정을 탐색하지 않습니다.", "caption")
-        notice.setProperty("reading_help_keep_visible", True)
-        layout.addWidget(notice)
-        from .commentary import CommentaryPane
+        self.run_table.itemSelectionChanged.connect(self.library_table_selected)
+        self.run_table.hide()
+        ws.canvas.addWidget(self.run_table)
+        self.library_preview = Card(("", ""), ("", ""), margins=(18, 12, 16, 10), spacing=6)
+        self.library_preview.note.setWordWrap(True)     # a narrow canvas wraps the run's settings, never widens it
+        head = self.library_preview.head
+        head.takeAt(head.count() - 1)                   # the note, not a spacer, takes the head's spare width
+        head.setStretchFactor(self.library_preview.note, 1)
+        self.library_open = Button(("Go to Build & Test ›", "설계/검증으로 이동 ›"), "")
+        self.library_open.setProperty("lib", "link")
+        self.library_open.clicked.connect(self.library_open_source)
+        self.library_preview.add_head_widget(self.library_open)
+        self.library_preview_figures = KeyFigures()
+        self.library_preview.body.addWidget(self.library_preview_figures)
+        self.library_chart = preview_chart()
+        self.library_preview.body.addWidget(self.library_chart, 1)
+        self.library_preview_text = Text("", "hint", wrap=True)
+        self.library_preview.body.addWidget(self.library_preview_text)
+        self.library_preview_empty = EmptyState("")
+        self.library_preview_empty.setMinimumHeight(170)
+        self.library_preview.body.addWidget(self.library_preview_empty, 1)
+        self.library_preview_note = Text("", "fine", wrap=True)
+        self.library_preview_note.setProperty("reading_help_keep_visible", True)
+        self.library_preview.body.addWidget(self.library_preview_note)
+        self.library_preview.body.addStretch(0)       # without a chart the preview's lines sit at the top
+        ws.canvas.addWidget(self.library_preview, 1)
+        # Right column: 실행 상세 | 읽는 법, the exports pinned at the bottom.
+        details = ws.side.add_page(("Run details", "실행 상세"))
+        self.library_side_empty = Soft(("Run details", "실행 상세"),
+                                       ("Choose a run in the list: its information and reproducibility records show here.",
+                                        "목록에서 실행을 고르면 그 실행의 정보와 재현성 기록이 여기에 보여요."))
+        details.addWidget(self.library_side_empty)
+        self.library_info_fold = Fold(("Run information", "실행 정보"))
+        self.library_info_pill = Pill("", "ok")
+        self.library_info_fold.head.layout().addWidget(self.library_info_pill, 0, Qt.AlignmentFlag.AlignVCenter)
+        self.library_info = InfoGrid()
+        self.library_info_fold.body.addWidget(self.library_info)
+        self.library_rules = (rule(), rule())
+        self.library_repro_fold = Fold(("Reproducibility", "재현성"))
+        self.library_repro_pill = Pill("", "warn")
+        self.library_repro_fold.head.layout().addWidget(self.library_repro_pill, 0, Qt.AlignmentFlag.AlignVCenter)
+        self.library_repro_fold.head.digest.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
+        self.library_checks = CheckList()
+        self.library_repro_fold.body.addWidget(self.library_checks)
+        self.library_ai_fold = Fold(("AI commentary", "AI 해설"), count=("optional", "선택 기능"))
         options = {'runner': self.commentary_runner} if self.commentary_runner else {}
         self.commentary = CommentaryPane(self.commentary_sources, **options)
         self.commentary.setProperty("reading_help_keep_visible", True)
-        layout.addWidget(self.commentary)
-        layout.addStretch()
+        self.library_ai_fold.body.addWidget(self.commentary)
+        self.commentary.dock(self.library_ai_fold)
+        ws.follow(self.commentary)
+        for widget in (self.library_info_fold, self.library_rules[0], self.library_repro_fold, self.library_rules[1],
+                       self.library_ai_fold):
+            details.addWidget(widget)
+        for fold in (self.library_info_fold, self.library_repro_fold, self.library_ai_fold):
+            fold.body_host.setProperty("lib", "plain")
+        reading = ws.side.add_page(("How to read", "읽는 법"))
+        for title, text in (
+                (("What the list holds", "이 목록에 있는 것"),
+                 ("Only calculations run in this app session: one row per Monte Carlo run, and the latest portfolio and "
+                  "strategy result of their pages. The list empties when the app closes.",
+                  "이번 앱 세션에서 실행한 계산만 보여요. 몬테카를로는 실행마다 한 줄, 포트폴리오와 전략은 각 화면의 마지막 결과가 "
+                  "한 줄이에요. 앱을 닫으면 목록이 비워져요.")),
+                (("Status and verdict", "상태와 판정"),
+                 ("Completed means the calculation finished. Verdict NOT_RUN means no official validation ran; a result "
+                  "is neither an investment validation nor advice.",
+                  "완료는 계산이 끝났다는 뜻이에요. 검증 판정 NOT_RUN은 공식 검증을 하지 않았다는 뜻이고, 결과는 투자 검증이나 "
+                  "권유가 아니에요.")),
+                (("Reproducibility", "재현성"),
+                 ("Each run records its seed, a hash of the calculation code, a fingerprint of the prices and the runtime. "
+                  "Data vintage and licence are not verified, so reproducibility stays PARTIAL.",
+                  "실행마다 난수 시드, 계산 코드 해시, 가격 자료 지문, 실행 환경을 기록해요. 데이터 빈티지와 라이선스는 확인하지 "
+                  "않아 재현성은 PARTIAL로 남아요.")),
+                (("Saving", "저장"),
+                 ("Nothing is saved automatically. Save the selected run as ResearchRun JSON or as a report ZIP; you "
+                  "choose the path.",
+                  "자동으로 저장하지 않아요. 고른 실행을 ResearchRun JSON이나 보고서 ZIP으로 저장하세요. 경로는 직접 골라요."))):
+            reading.addWidget(Soft(title, text))
+        codes = Text(("Reproducibility PARTIAL · data vintage/licence unverified · costs NOT_APPLIED · verdict NOT_RUN",
+                      "재현성 PARTIAL · 데이터 빈티지/라이선스 미검증 · 비용 NOT_APPLIED · 검증 NOT_RUN"), "fine", wrap=True)
+        codes.setProperty("reading_help_keep_visible", True)
+        reading.addWidget(codes)
+        self.save_json = Button(("Save ResearchRun JSON", "ResearchRun JSON 저장"), "secondary")
+        self.save_bundle = Button(("Save report + JSON ZIP", "보고서 + JSON ZIP 저장"), "primary")
+        self.save_json.clicked.connect(lambda:self.export_selected(False))
+        self.save_bundle.clicked.connect(lambda:self.export_selected(True))
+        self.library_exports = ExportRow((self.save_json, self.save_bundle))
+        ws.side.foot.addWidget(self.library_exports)
+        ws.follow(self.library_exports)
+        self.library_export_hint = Text(("Save this result with the export on its own page.",
+                                         "이 결과는 해당 화면의 저장 버튼으로 저장해요."), "fine", wrap=True)
+        self.library_export_hint.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        self.library_export_hint.hide()
+        ws.side.foot.addWidget(self.library_export_hint)
+        self.export_status = label("선택한 실행만 저장해요 · 자동 저장되지 않으며 경로는 직접 골라요", "caption")
+        self.export_status.localized_text = {"ko": "선택한 실행만 저장해요 · 자동 저장되지 않으며 경로는 직접 골라요",
+                                             "en": "Only the selected run is saved · nothing is saved automatically and you "
+                                                   "choose the path"}
+        self.export_status.retranslate()
+        self.export_status.setProperty("kit", "fine")
+        self.export_status.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        self.export_status.setProperty("reading_help_keep_visible", True)
+        ws.side.foot.addWidget(self.export_status)
+        ws.finish()
+        self.setTabOrder(self.library_search, self.library_filter.buttons[0])
+        self.setTabOrder(self.library_filter.buttons[-1], self.library_list)
+        self.setTabOrder(self.library_list, self.library_open)
+        self.library_workspace.set_language(self.ui_language)
+
+    def library_refresh(self):
+        """Fill the Research Library from the session (display only; nothing is fetched): the lead line, the counts, the
+        filter counts, the rows, then the selected run, which the run table follows."""
+        from .library_view import KIND_NAMES, KINDS, counts, entries
+        rows = entries(self.session.runs(), saved=self.library_saved, portfolio=self.portfolio.exports.report,
+                       strategy=self.strategy.report)
+        self.library_rows = rows
+        self.library_list.set_entries(rows)
+        language = self.library_workspace.language
+        n = len(rows)
+        self.library_lead.set_pair((f"{n} run{'s' if n != 1 else ''} this session", f"이번 세션 실행 {n}건"))
+        started = self.library_started.strftime("%Y-%m-%d %H:%M")
+        self.library_lead_note.set_pair((f"· started {started} UTC · the list empties when the app closes",
+                                         f"· {started} UTC 시작 · 앱을 닫으면 목록이 비워져요"))
+        c = counts(rows, self.library_saved)
+        items = [(("Completed", "완료"), str(c["completed"]), ""), (("Running", "실행 중"), str(c["running"]), ""),
+                 (("Failed", "실패"), str(c["failed"]), "err" if c["failed"] else ""),
+                 (("Saved", "저장함"), str(c["saved"]), ""), (("Not saved", "저장 전"), str(c["unsaved"]), "")]
+        if c["reproducibility"]:
+            items.append((("Reproducibility", "재현성"), c["reproducibility"], ""))
+        if c["verdict"]:
+            items.append((("Verdict", "검증 판정"), c["verdict"], ""))
+        self.library_counts.set_items(items)
+        per = {kind: sum(row.kind == kind for row in rows) for kind in KINDS}
+        pairs = [(f"All  {n}", f"전체  {n}")] + [(f"{KIND_NAMES[k][0]}  {per[k]}", f"{KIND_NAMES[k][1]}  {per[k]}")
+                                                for k in KINDS]
+        for button, pair in zip(self.library_filter.buttons, pairs):
+            button.set_pair(pair)
+        self.library_filter.set_language(language)
+        self.library_empty_text()
+        keys = [row.key for row in rows]
+        if self.library_selected not in keys or not self.library_chosen:
+            self.library_selected = next((row.key for row in rows if row.status == "COMPLETED"), keys[0] if keys else "")
+        self.library_list.select(self.library_selected)
+        self._library_sync_table()
+        self.library_show()
+
+    def library_empty_text(self):
+        searching = bool(self.library_search.text().strip()) or self.library_filter.current() > 0
+        self.library_list.set_empty(("No run matches the filter.", "조건에 맞는 실행이 없어요.")
+                                    if searching and self.library_rows else
+                                    ("No calculation has run in this session yet.", "아직 이번 세션에 실행한 계산이 없어요."))
+
+    def library_select(self, key):
+        """A row chosen in the list: the run table follows (its selection is what the two exports save)."""
+        self.library_selected, self.library_chosen = key, True
+        self.library_list.select(key)
+        self._library_sync_table()
+        self.library_show()
+
+    def _library_sync_table(self):
+        self._library_syncing = True
+        try:
+            for row in range(self.run_table.rowCount()):
+                item = self.run_table.item(row, 0)
+                if item is not None and item.data(Qt.ItemDataRole.UserRole) == self.library_selected:
+                    self.run_table.selectRow(row)
+                    break
+            else:
+                self.run_table.clearSelection()
+                self.run_table.setCurrentItem(None)
+        finally:
+            self._library_syncing = False
+
+    def library_table_selected(self):
+        """A run selected in the run table (by a caller or a test): the list and the preview follow."""
+        if self._library_syncing:
+            return
+        row = self.run_table.currentRow()
+        item = self.run_table.item(row, 0) if row >= 0 else None
+        key = item.data(Qt.ItemDataRole.UserRole) if item is not None else None
+        if key and key != self.library_selected:
+            self.library_selected, self.library_chosen = key, True
+            self.library_list.select(key)
+            self.library_show()
+
+    def library_show(self):
+        """The selected row's preview card and its evidence in the right column, read from its record."""
+        from .library_view import preview_content, side_content
+        from .page_kit import pick
+        entry = self.library_list.entry(self.library_selected)
+        language = self.library_workspace.language
+        chosen = entry is not None
+        self.library_side_empty.setVisible(not chosen)
+        for widget in (self.library_info_fold, self.library_repro_fold, *self.library_rules):
+            widget.setVisible(chosen)
+        report_row = chosen and entry.kind != "monte_carlo"
+        for button in (self.save_json, self.save_bundle):
+            button.setEnabled(not report_row)
+        self.library_export_hint.setVisible(report_row)
+        content = preview_content(entry, bool(self.library_rows))
+        preview = self.library_preview
+        preview.title.set_pair(content["title"])
+        preview.note.set_pair(content["note"])
+        preview.note.setVisible(chosen)
+        self.library_open.set_pair(content["open"])
+        self.library_open.setVisible(chosen)
+        self.library_preview_empty.text.set_pair(content["empty"])
+        self.library_preview_empty.setVisible(not chosen)
+        self.library_preview_figures.set_items(content["figures"])
+        output = self.outputs.get(entry.record.get("run_id")) if content["chart"] else None
+        result = getattr(output, "result", None)
+        self.library_chart.set_result(result)
+        self.library_chart.setVisible(result is not None)
+        self.library_preview_text.set_pair(content["text"])
+        self.library_preview_text.setVisible(bool(content["text"][0]))
+        self.library_preview_note.set_pair(content["foot"])
+        self.library_preview_note.setVisible(bool(content["foot"][0]))
+        if chosen:
+            side = side_content(entry)
+            self.library_info_pill.set_pair(side["status"])
+            self.library_info_pill.set_tone(side["status_tone"])
+            from .stock_detail_style import set_prop
+            set_prop(self.library_info_pill, "pill", "live" if entry.status == "RUNNING" else "")
+            self.library_info.set_rows(side["info"], language)
+            self.library_checks.set_checks(side["checks"], language)
+            # In the head's digest, which shortens before it would push the pill out of a narrow column.
+            self.library_repro_fold.head.digest.set_choices([pick(language, pair) for pair in side["count"]])
+            self.library_repro_pill.set_pair(side["reproducibility"])
+            self.library_repro_pill.set_tone(side["reproducibility_tone"])
+        for widget in (preview, self.library_open, self.library_info_pill, self.library_repro_pill,
+                       self.library_repro_fold, self.library_preview_empty, self.library_preview_text,
+                       self.library_preview_note):
+            widget.set_language(language)
+
+    def library_open_source(self):
+        """'…으로 이동 ›': the page the selected result came from (navigation only; nothing is re-run)."""
+        entry = self.library_list.entry(self.library_selected)
+        if entry is None:
+            return
+        if entry.kind == "portfolio":
+            self.navigate("risk")
+            self.risk_tabs.setCurrentIndex(0)
+        else:
+            self.navigate("quant")
+            self.quant_tabs.setCurrentIndex(1 if entry.kind == "strategy" else 0)
 
     def commentary_sources(self):
         """Only explicit calculation results, never stores/settings/owner records."""
@@ -1653,6 +1949,7 @@ class ResearchWindow(QMainWindow):
             self.watchlist.update_score(symbol, score)
         table_rows(self.run_table, [[r["parameters"].get("symbol", "—"), r["parameters"].get("model", "—"),
             r["execution_status"], r["verdict"], self.ctx.timestamp(r["created_at"])] for r in runs], [r["run_id"] for r in runs])
+        self.library_refresh()   # the Research Library's rows, counts and preview (display only)
         complete = [r for r in runs if r["execution_status"] == "COMPLETED"]
         from .risk_display import MC_MODEL_LABELS, ko, source_name, status_ko
         table_rows(self.risk_table, [[r["parameters"]["symbol"],
@@ -1704,6 +2001,9 @@ class ResearchWindow(QMainWindow):
             self.export_status.setText(f"저장 실패: {type(exc).__name__} · 경로와 확장자를 확인하세요.")
             return
         self.export_status.setText("저장 완료 · " + Path(filename).name)
+        # The library counts this run as saved (its row and the 저장함 / 저장 전 counts); nothing else changes.
+        self.library_saved.add(run_id)
+        self.library_refresh()
 
     def change_theme(self, index):
         # Preserve the F1 geometry; use a legible foreground on dark surfaces.

@@ -9,7 +9,7 @@ import hashlib
 import json
 
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QWidget,QVBoxLayout,QHBoxLayout,QComboBox,QPushButton,QPlainTextEdit,QLineEdit,QCheckBox
+from PyQt6.QtWidgets import QWidget,QVBoxLayout,QHBoxLayout,QComboBox,QPushButton,QPlainTextEdit,QLineEdit,QCheckBox,QFrame
 from core.research.ai_connection import error_message
 from core.research.ai_output_check import AI_LABEL, NumberCheck, check_line
 from core.research.presentation import safe_detail
@@ -49,6 +49,25 @@ def commentary_payload(report):
     return payload
 
 
+CONSENT_WORDS=('Send the displayed calculation and question to the external AI service',
+               '표시한 계산 결과와 질문을 외부 AI 서비스로 전송')
+
+
+def _ConsentText(box):
+    """The consent check box's words as a wrapping label; a click on them toggles the box (docked pane only)."""
+    from .page_kit import Text
+
+    class ConsentText(Text):
+        def mouseReleaseEvent(self, event):
+            if event.button()==Qt.MouseButton.LeftButton and box.isEnabled() and self.rect().contains(event.position().toPoint()):
+                box.toggle();return
+            super().mouseReleaseEvent(event)
+    text=ConsentText(CONSENT_WORDS,'',wrap=True)
+    text.setProperty('lib','consent')
+    text.setCursor(Qt.CursorShape.PointingHandCursor)
+    return text
+
+
 class CommentaryPane(QWidget):
     def __init__(self,sources,runner=deep_analysis):
         super().__init__()
@@ -56,10 +75,12 @@ class CommentaryPane(QWidget):
         self.sources,self.runner=sources,runner
         self.payload,self.completed_payload=None,None
         layout=QVBoxLayout(self)
-        layout.addWidget(label('AI 해설 · 선택 기능','heading'))
-        self.status=label('계산 결과를 선택하고 전송 내용을 확인한 뒤 요청하세요. 기존 Anthropic API 연결을 사용합니다.','muted')
+        self.docked=False
+        self.heading=label('AI 해설 · 선택 기능','heading');layout.addWidget(self.heading)
+        self.prompt='계산 결과를 선택하고 전송 내용을 확인한 뒤 요청하세요. 기존 Anthropic API 연결을 사용합니다.'
+        self.status=label(self.prompt,'muted')
         layout.addWidget(self.status)
-        self.input_box=QWidget();controls=QVBoxLayout(self.input_box);row=QHBoxLayout()
+        self.input_box=QWidget();controls=QVBoxLayout(self.input_box);row=QHBoxLayout();self._controls,self._row=controls,row
         self.source=QComboBox();self.reload=QPushButton('완료 결과 목록 갱신');self.preview_button=QPushButton('전송 내용 미리보기')
         for w in (self.source,self.reload,self.preview_button):row.addWidget(w)
         controls.addLayout(row)
@@ -97,11 +118,13 @@ class CommentaryPane(QWidget):
     def invalidate(self,*_):
         self.payload=None;self.consent.setChecked(False);self._mark_ready();self.preview.clear()
         self.output.clear();self.check_note.setText('');self.report_actions.clear()
+        self._sync()
 
     def refresh_sources(self):
         self.invalidate();self.source.clear()
         for title,report in self.sources():self.source.addItem(title,deepcopy(report))
         if self.source.count()==0:self.status.setText('먼저 계산을 완료하세요. 실패·미실행 기록은 전송하지 않습니다.')
+        elif self.docked:self.status.setText(self.prompt)   # a stale 'complete a calculation first' would mislead
 
     def prepare(self):
         self.invalidate()
@@ -170,9 +193,126 @@ class CommentaryPane(QWidget):
             [{'type':'text','text':text},{'type':'text','text':'AI-generated commentary · '+safe_detail(result.engine)+' · official verdict unchanged'},
              {'type':'text','text':AI_LABEL['en']},{'type':'text','text':check_lines['en']}])
         self.status.setText('AI 해설 완료 · '+safe_detail(result.engine)+' · 공식 판정은 원래 기록을 유지합니다.')
+        self._sync()
 
     def failed(self,error, *, localized=None):
         self.output.clear();self.check_note.setText('');self.report_actions.clear();self.status.setText('AI FAILED · '+safe_detail(error))
         if localized:
             self.status.localized_text = {'ko': localized}
             self.status.retranslate()
+        self._sync()
+
+    # The Research Library's right column (owner-approved draft 2026-11-17, draft_06_library.png) -------------------
+    def dock(self, fold):
+        """Place the pane in the library's 'AI 해설' fold: the fold names it, the refresh action sits in the fold's head,
+        the picker reads '보낼 계산 결과' with a short preview button, and a prepared payload is summarised (what is sent,
+        its status marks, what is left out) above the full JSON. The preview, the reply and its exports show once they
+        hold something. Widgets, signals, consent and sending are unchanged."""
+        from .page_kit import Text
+        from .stock_detail_style import numbers
+        self.docked = True
+        self.heading.hide()
+        layout = self.layout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(8)
+        self._controls.setContentsMargins(0, 0, 0, 0)
+        self._controls.setSpacing(8)
+        self.input_box.setProperty('lib', 'plain')    # the column's surface, not the window's background
+        self._row.removeWidget(self.reload)
+        self.reload.setProperty('lib', 'link')
+        self.reload.setProperty('qg_literal', True)          # its short label follows set_language
+        self.reload.setCursor(Qt.CursorShape.PointingHandCursor)
+        fold.head.layout().addWidget(self.reload, 0, Qt.AlignmentFlag.AlignVCenter)
+        self.preview_button.setProperty('qg_literal', True)   # its short label follows set_language
+        self.preview_button.setProperty('kit', 'secondary')
+        self._row.setSpacing(8)
+        self._row.setStretch(0, 1)
+        self.source_caption = Text(('Result to send', '보낼 계산 결과'), 'fieldLabel')
+        self._controls.insertWidget(0, self.source_caption)
+        layout.removeWidget(self.status)
+        self.status.setProperty('kit', 'hint')
+        self.summary = QFrame()
+        self.summary.setProperty('lib', 'payload')
+        box = QVBoxLayout(self.summary)
+        box.setContentsMargins(12, 10, 12, 10)
+        box.setSpacing(5)
+        head = QHBoxLayout()
+        head.setSpacing(10)
+        title = Text(('Payload', '전송 내용'), '')
+        title.setProperty('lib', 'payloadHead')
+        self.summary_note = numbers(Text('', ''))
+        self.summary_note.setProperty('lib', 'payloadNote')
+        self.summary_note.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        head.addWidget(title)
+        head.addWidget(self.summary_note, 1)
+        box.addLayout(head)
+        self.summary_rows = []
+        for _ in range(2):
+            line = QHBoxLayout()
+            line.setSpacing(10)
+            key, value = Text('', ''), Text('', '', wrap=True)
+            key.setProperty('lib', 'payloadKey')
+            value.setProperty('lib', 'payloadValue')
+            value.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            line.addWidget(key, 0, Qt.AlignmentFlag.AlignTop)
+            line.addWidget(value, 1)
+            box.addLayout(line)
+            self.summary_rows.append((key, value))
+        self._controls.insertWidget(2, self.summary)
+        self._controls.insertWidget(3, self.status)
+        # The consent's words wrap beside its box: a check box cannot wrap, and its English line is wider than the
+        # column. Clicking the words ticks the box, as clicking a check box's own text does.
+        index = self._controls.indexOf(self.consent)
+        self._controls.removeWidget(self.consent)
+        self.consent.setText('')
+        self.consent.setProperty('qg_literal', True)
+        self.consent_text = _ConsentText(self.consent)
+        consent_row = QHBoxLayout()
+        consent_row.setContentsMargins(0, 0, 0, 0)
+        consent_row.setSpacing(8)
+        consent_row.addWidget(self.consent, 0, Qt.AlignmentFlag.AlignTop)
+        consent_row.addWidget(self.consent_text, 1)
+        self._controls.insertLayout(index, consent_row)
+        self.preview.setMinimumHeight(150)
+        self.output.setMinimumHeight(160)
+        self.preview.textChanged.connect(self._sync)
+        self.output.textChanged.connect(self._sync)
+        self.set_language(getattr(self.window(), 'ui_language', 'ko'))
+        self._sync()
+        return self
+
+    def set_language(self, language):
+        if not self.docked:
+            return
+        from .page_kit import pick
+        self.language = language
+        self.reload.setText(pick(language, ('Refresh list', '완료 결과 목록 갱신')))
+        self.reload.setAccessibleName(pick(language, ('Refresh completed results', '완료 결과 목록 갱신')))
+        self.preview_button.setText(pick(language, ('Preview', '미리보기')))
+        self.preview_button.setAccessibleName(pick(language, ('Preview the payload', '전송 내용 미리보기')))
+        self.consent.setAccessibleName(pick(language, CONSENT_WORDS))
+        for widget in (self.source_caption, self.summary_note, self.consent_text,
+                       *[w for pair in self.summary_rows for w in pair]):
+            widget.set_language(language)
+        self._sync()
+
+    def _sync(self, *_):
+        """Docked only: show the payload summary, the JSON preview, the reply and its exports once they exist."""
+        if not getattr(self, 'docked', False):
+            return
+        from .library_view import payload_summary
+        self.preview.setVisible(bool(self.preview.toPlainText()))
+        self.output.setVisible(bool(self.output.toPlainText()))
+        self.check_note.setVisible(bool(self.check_note.text()))
+        self.report_actions.setVisible(self.report_actions.report is not None)
+        self.summary.setVisible(self.payload is not None)
+        if self.payload is not None:
+            try:
+                head, rows = payload_summary(self.payload)
+            except (TypeError, ValueError):
+                self.summary.hide()
+                return
+            self.summary_note.set_pair(head)
+            for (key, value), (caption, text) in zip(self.summary_rows, rows):
+                key.set_pair(caption)
+                value.set_pair(text)

@@ -136,12 +136,20 @@ class ShellRailTests(unittest.TestCase):
     def test_ctrl_b_toggles_and_keeps_the_page_and_its_scroll_position(self):
         w = self.window()
         w.resize(1100, 720)
+        # Owner-approved draft 2026-11-17 (draft_06_library.png): the Research Library fills the window like the stock
+        # detail screen; the page itself no longer scrolls, its canvas does. The scroll position Ctrl+B must keep there
+        # is the canvas's, given a range by session records (RUNNING runs, nothing computed or fetched).
+        from core.research.runs import new_run
+        for index in range(14):
+            w.session.put(new_run({"symbol": f"T{index:02d}", "model": "gbm", "horizon_days": 21, "n_paths": 200}))
+        w.refresh_views()
         for route in ("library", "system"):
             w.navigate(route)
             self.settle()
             page = w.stack.currentWidget()
             self.assertIsInstance(page, QScrollArea)
-            bar = page.verticalScrollBar()
+            scroller = w.library_workspace.canvas_scroll if route == "library" else page
+            bar = scroller.verticalScrollBar()
             self.assertGreater(bar.maximum(), 200, route)
             bar.setValue(200)
             for collapsed in (True, False):
