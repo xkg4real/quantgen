@@ -62,13 +62,17 @@ runtime smoke workflow includes the recorder suite for Linux/Windows CI.
 Local tests alone are not owner-PC or production-path validation.
 
 Remaining work includes the Lab adapter and source/metadata collection,
-scientific payload semantic validation, durable outage files and UI notices,
+scientific payload semantic validation, production outage-file wiring and UI notices,
 sync-folder screening, ledger linkage, fingerprint/shadow computation, rotation,
 recovery and the R3 user interface. Callback errors are bounded to 500 characters
 but are **not** a secret/PII redaction system. Supplied source hashes are metadata,
 not proof that this module collected or authenticated the source. The integration
 must enforce those contracts before production use. It must also implement the
 disabled/no-op path and safe construction failure handling.
+
+Follow-up: the [detached outage writer](R3_DETACHED_OUTAGE_2026-11-14.md) supplies
+an explicit-path callback. Its availability does not complete production wiring,
+outage reporting, sync-folder screening or the UI notice.
 
 No real ledger, protected cache, provider API, frozen study or owner-PC resource
 was accessed by these tests. Windows E and Pilot evidence remain separate; this
