@@ -2,7 +2,7 @@
   "schema_version": 1,
   "normalization": "UTF-8 text CRLF to LF; binary assets raw bytes",
   "scope": "named source/document consistency review; not legal or operational certification",
-  "source_state": "Document-CI-verified base 6bb6c1c9df5f185c2becd3922f9ca7f1369217c4 with reviewed test-only overlays; production source and all policy documents unchanged; not a full local checkout scan; target-tree full CI required",
+  "source_state": "HEAD commit identifier plus observed working-tree fingerprints; not a clean-checkout attestation",
   "registry_sha256": "d1a62050d33e6c53ac9027db0eb8661317a4aec7fc7eb7b10488cf709b0b8f0f",
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
@@ -86,7 +86,7 @@
     "core/education/chart.py": "e42562c7fdcbfe5be6743561b1b60a0567ca6da916c292c641c3e84ae6d79771",
     "core/education/glossary.py": "2143548a945afe7528412b75dc628f2c9d02230b608277acba9e858a876aa618",
     "core/education/indicators.py": "748037f6e001d5ff8814c37a6fa36323f9be79e08bdcfaf36d52413a71ca9298",
-    "core/education/reading_cues.py": "764f7c69178e32dc710d053b144cc7695509c75238e29b971a4afb7ee69841a9",
+    "core/education/reading_cues.py": "21271f6b22df7e36111eb1390741b7b3c51368a6d80e2c5aecc212013fa949d2",
     "core/education/signal_context.py": "fe529f88b5c463fe0bde3a31612b8dd142b1a595b5a42986441bc4ff0bdce7d2",
     "core/education/study_guide.py": "7d99218aa73ef9dc82ec53f08ad3cec8d0c37a7ae531a91b4b7795d89c5bcce4",
     "core/engine/__init__.py": "df385736b31e385fea9202e4ec5651220bfb1bf783aeacff105540f85d21cf85",
@@ -762,19 +762,19 @@
   "reviews": {
     "1": {
       "document_sha256": "8fdcbaf3551af7c39081fab335d6bfbd0c44bc4f3d1afdb4054e6aa6e8599f1b",
-      "source_digest": "ea12fca4e6367f4337c2509b1406d2825785b13a66c8e5261e0cbd005f8b7f77",
-      "reviewed_by": "GPT R3 detached outage change review",
-      "review_note": "Explicit stamped outage metadata and process-only JSONL append/flush/fsync; bounded but unredacted errors, no production integration or account access. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:57:22+00:00",
-      "source_commit": "ed92dc90b2b32fd6bd2a9254e7a568e45e3e553e"
+      "source_digest": "025f660c0500fc9d73c54726375c07f06e4d92f6af596c028bd3992e4de5f2ca",
+      "reviewed_by": "Claude main session merge review (main 5888d05 into PR122)",
+      "review_note": "Merge of main 5888d05 into PR122. The only source this merge adds over PR122 is core/education/reading_cues.py (volume_ma Korean wording without '봉', owner decision D1, reviewed in de6178f). PR122's own GPT outage-change review (197c0e1, reviewed_by 'GPT R3 detached outage change review') stands unchanged in substance; no offer, trading, data or disclosure change from this merge.",
+      "reviewed_at": "2026-11-17T12:33:52.344065+00:00",
+      "source_commit": "197c0e1ccf927ba7237e72484786dd85abf4e5b0"
     },
     "2": {
       "document_sha256": "1c7eb9b60585b1fd4d1a23723051454e768b6ea6b31b9e58bd8122ac73cdd5e1",
-      "source_digest": "ea12fca4e6367f4337c2509b1406d2825785b13a66c8e5261e0cbd005f8b7f77",
-      "reviewed_by": "GPT R3 detached outage change review",
-      "review_note": "No new offered service, trading execution, sales or contract flow; detached scope and existing contractual gaps preserved. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:57:22+00:00",
-      "source_commit": "ed92dc90b2b32fd6bd2a9254e7a568e45e3e553e"
+      "source_digest": "025f660c0500fc9d73c54726375c07f06e4d92f6af596c028bd3992e4de5f2ca",
+      "reviewed_by": "Claude main session merge review (main 5888d05 into PR122)",
+      "review_note": "Merge of main 5888d05 into PR122. The only source this merge adds over PR122 is core/education/reading_cues.py (volume_ma Korean wording without '봉', owner decision D1, reviewed in de6178f). PR122's own GPT outage-change review (197c0e1, reviewed_by 'GPT R3 detached outage change review') stands unchanged in substance; no offer, trading, data or disclosure change from this merge.",
+      "reviewed_at": "2026-11-17T12:33:52.348803+00:00",
+      "source_commit": "197c0e1ccf927ba7237e72484786dd85abf4e5b0"
     },
     "3": {
       "document_sha256": "50fcceb8fb66b30a535ff6015a66ff5e5cee801b61433cc3aa99acd3673c4393",
@@ -802,27 +802,27 @@
     },
     "6": {
       "document_sha256": "5871443de50226c2680aa2c41059c06b4d1290f28f1c859d5ed979fd17a2918e",
-      "source_digest": "6b7d66193e3c1ed935da2f3bd19e996025fcfa1f2183fe4215c978f036a66c1e",
-      "reviewed_by": "GPT R3 detached outage change review",
-      "review_note": "No consent form or external transmission added; supplied metadata and future adapter obligations stated. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:57:22+00:00",
-      "source_commit": "ed92dc90b2b32fd6bd2a9254e7a568e45e3e553e"
+      "source_digest": "32621905fd35d20d3c386c2cdd8bf9a41640a655f9b7ca291ccf26a50fde2116",
+      "reviewed_by": "Claude main session merge review (main 5888d05 into PR122)",
+      "review_note": "Merge of main 5888d05 into PR122. The only source this merge adds over PR122 is core/education/reading_cues.py (volume_ma Korean wording without '봉', owner decision D1, reviewed in de6178f). PR122's own GPT outage-change review (197c0e1, reviewed_by 'GPT R3 detached outage change review') stands unchanged in substance; no offer, trading, data or disclosure change from this merge.",
+      "reviewed_at": "2026-11-17T12:33:52.351081+00:00",
+      "source_commit": "197c0e1ccf927ba7237e72484786dd85abf4e5b0"
     },
     "7": {
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
-      "source_digest": "ea12fca4e6367f4337c2509b1406d2825785b13a66c8e5261e0cbd005f8b7f77",
-      "reviewed_by": "GPT R3 detached outage change review",
-      "review_note": "Reviewed exact six outage fields, null identity/time retained when unavailable, first-error callback, no discovery or redaction; operational minimization remains open. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T17:02:00+00:00",
-      "source_commit": "250b9639291e485f7d07727b250628470cff8ac0"
+      "source_digest": "025f660c0500fc9d73c54726375c07f06e4d92f6af596c028bd3992e4de5f2ca",
+      "reviewed_by": "Claude main session merge review (main 5888d05 into PR122)",
+      "review_note": "Merge of main 5888d05 into PR122. The only source this merge adds over PR122 is core/education/reading_cues.py (volume_ma Korean wording without '봉', owner decision D1, reviewed in de6178f). PR122's own GPT outage-change review (197c0e1, reviewed_by 'GPT R3 detached outage change review') stands unchanged in substance; no offer, trading, data or disclosure change from this merge.",
+      "reviewed_at": "2026-11-17T12:33:52.353783+00:00",
+      "source_commit": "197c0e1ccf927ba7237e72484786dd85abf4e5b0"
     },
     "8": {
       "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
-      "source_digest": "6b7d66193e3c1ed935da2f3bd19e996025fcfa1f2183fe4215c978f036a66c1e",
-      "reviewed_by": "GPT R3 detached outage change review",
-      "review_note": "No provider calls, recipient changes or external data collection; callback is caller-supplied with no implicit network sink. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:57:22+00:00",
-      "source_commit": "ed92dc90b2b32fd6bd2a9254e7a568e45e3e553e"
+      "source_digest": "32621905fd35d20d3c386c2cdd8bf9a41640a655f9b7ca291ccf26a50fde2116",
+      "reviewed_by": "Claude main session merge review (main 5888d05 into PR122)",
+      "review_note": "Merge of main 5888d05 into PR122. The only source this merge adds over PR122 is core/education/reading_cues.py (volume_ma Korean wording without '봉', owner decision D1, reviewed in de6178f). PR122's own GPT outage-change review (197c0e1, reviewed_by 'GPT R3 detached outage change review') stands unchanged in substance; no offer, trading, data or disclosure change from this merge.",
+      "reviewed_at": "2026-11-17T12:33:52.355882+00:00",
+      "source_commit": "197c0e1ccf927ba7237e72484786dd85abf4e5b0"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
@@ -850,11 +850,11 @@
     },
     "12": {
       "document_sha256": "4f677b15fac1ab1f8b8d52f005575b9e3fc9d8a579e77ef926412d85687faf8e",
-      "source_digest": "225f27197604e3535e117d2ca37b7d1d2acc0ffdb4b9a7825a3b71ea26c75a03",
-      "reviewed_by": "GPT CI fixture follow-up review",
-      "review_note": "27 outage / 154 combined synthetic tests describe bounded outage and lifecycle children; no Windows-owner, Step10, whole-R3 or performance certification claimed. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI. Follow-up: reviewed test-only alignment with the approved country-only rail, in-page rankings and compact bilingual portfolio instructions; provider-call and empty-result checks retained. Production code, policy text and release blockers unchanged. The outage constructor check compares existing parent-directory identity plus the filename, allowing Windows short-path expansion while still requiring no file or sidecar creation.",
-      "reviewed_at": "2026-11-14T02:59:35+09:00",
-      "source_commit": "6bb6c1c9df5f185c2becd3922f9ca7f1369217c4"
+      "source_digest": "79bef8fce2de9a17a3cd4a5ec9c105620a0e81dd8e7f182df360eec7ebae8193",
+      "reviewed_by": "Claude main session merge review (main 5888d05 into PR122)",
+      "review_note": "Merge of main 5888d05 into PR122. The only source this merge adds over PR122 is core/education/reading_cues.py (volume_ma Korean wording without '봉', owner decision D1, reviewed in de6178f). PR122's own GPT outage-change review (197c0e1, reviewed_by 'GPT R3 detached outage change review') stands unchanged in substance; no offer, trading, data or disclosure change from this merge.",
+      "reviewed_at": "2026-11-17T12:33:52.360945+00:00",
+      "source_commit": "197c0e1ccf927ba7237e72484786dd85abf4e5b0"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
@@ -890,35 +890,35 @@
     },
     "17": {
       "document_sha256": "dde1a8a05a26c612255f5858d272019e11cb7caf4542aa017b626ecea968713d",
-      "source_digest": "6b7d66193e3c1ed935da2f3bd19e996025fcfa1f2183fe4215c978f036a66c1e",
-      "reviewed_by": "GPT R3 detached outage change review",
-      "review_note": "No age check, minor account, contact form or new collection path; future metadata handling still needs operator review. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:57:22+00:00",
-      "source_commit": "ed92dc90b2b32fd6bd2a9254e7a568e45e3e553e"
+      "source_digest": "32621905fd35d20d3c386c2cdd8bf9a41640a655f9b7ca291ccf26a50fde2116",
+      "reviewed_by": "Claude main session merge review (main 5888d05 into PR122)",
+      "review_note": "Merge of main 5888d05 into PR122. The only source this merge adds over PR122 is core/education/reading_cues.py (volume_ma Korean wording without '봉', owner decision D1, reviewed in de6178f). PR122's own GPT outage-change review (197c0e1, reviewed_by 'GPT R3 detached outage change review') stands unchanged in substance; no offer, trading, data or disclosure change from this merge.",
+      "reviewed_at": "2026-11-17T12:33:52.363370+00:00",
+      "source_commit": "197c0e1ccf927ba7237e72484786dd85abf4e5b0"
     },
     "18": {
       "document_sha256": "f41494e3a28b54cd191916f9ee985f795849e6bf67d69c8dffebd7d081d1187d",
-      "source_digest": "ea12fca4e6367f4337c2509b1406d2825785b13a66c8e5261e0cbd005f8b7f77",
-      "reviewed_by": "GPT R3 detached outage change review",
-      "review_note": "No email address collection, marketing, unsubscribe or mail sending added. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:57:22+00:00",
-      "source_commit": "ed92dc90b2b32fd6bd2a9254e7a568e45e3e553e"
+      "source_digest": "025f660c0500fc9d73c54726375c07f06e4d92f6af596c028bd3992e4de5f2ca",
+      "reviewed_by": "Claude main session merge review (main 5888d05 into PR122)",
+      "review_note": "Merge of main 5888d05 into PR122. The only source this merge adds over PR122 is core/education/reading_cues.py (volume_ma Korean wording without '봉', owner decision D1, reviewed in de6178f). PR122's own GPT outage-change review (197c0e1, reviewed_by 'GPT R3 detached outage change review') stands unchanged in substance; no offer, trading, data or disclosure change from this merge.",
+      "reviewed_at": "2026-11-17T12:33:52.365653+00:00",
+      "source_commit": "197c0e1ccf927ba7237e72484786dd85abf4e5b0"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "265eee721a0dee4bbd5cc23457aca7200c94c4fdce557177caacbc9466e9aaea",
-      "reviewed_by": "GPT R3 detached outage change review",
-      "review_note": "Python standard library and existing project helpers only; no new packages/assets/data rights; licensing gaps unchanged. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:57:22+00:00",
-      "source_commit": "ed92dc90b2b32fd6bd2a9254e7a568e45e3e553e"
+      "source_digest": "08fc8dbbe8f137b0ebb8e4e03c21847d25bcfd5653d2389ac77877263711d88b",
+      "reviewed_by": "Claude main session merge review (main 5888d05 into PR122)",
+      "review_note": "Merge of main 5888d05 into PR122. The only source this merge adds over PR122 is core/education/reading_cues.py (volume_ma Korean wording without '봉', owner decision D1, reviewed in de6178f). PR122's own GPT outage-change review (197c0e1, reviewed_by 'GPT R3 detached outage change review') stands unchanged in substance; no offer, trading, data or disclosure change from this merge.",
+      "reviewed_at": "2026-11-17T12:33:52.367949+00:00",
+      "source_commit": "197c0e1ccf927ba7237e72484786dd85abf4e5b0"
     },
     "20": {
       "document_sha256": "b226906886050078abf5ba14f9a0735c9e5ac02444ee1b0ebe11517333cf3d18",
-      "source_digest": "ea12fca4e6367f4337c2509b1406d2825785b13a66c8e5261e0cbd005f8b7f77",
-      "reviewed_by": "GPT R3 detached outage change review",
-      "review_note": "Outage append leaves incomplete/uncertain bytes unchanged; no repair, retry, retention, rotation or disposal; temporary-test cleanup is not production deletion. Base manifest passed full CI; exact change overlay awaits target-tree full consistency CI.",
-      "reviewed_at": "2026-11-13T16:57:22+00:00",
-      "source_commit": "ed92dc90b2b32fd6bd2a9254e7a568e45e3e553e"
+      "source_digest": "025f660c0500fc9d73c54726375c07f06e4d92f6af596c028bd3992e4de5f2ca",
+      "reviewed_by": "Claude main session merge review (main 5888d05 into PR122)",
+      "review_note": "Merge of main 5888d05 into PR122. The only source this merge adds over PR122 is core/education/reading_cues.py (volume_ma Korean wording without '봉', owner decision D1, reviewed in de6178f). PR122's own GPT outage-change review (197c0e1, reviewed_by 'GPT R3 detached outage change review') stands unchanged in substance; no offer, trading, data or disclosure change from this merge.",
+      "reviewed_at": "2026-11-17T12:33:52.370822+00:00",
+      "source_commit": "197c0e1ccf927ba7237e72484786dd85abf4e5b0"
     }
   }
 }
