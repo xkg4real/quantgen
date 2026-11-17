@@ -14,22 +14,31 @@
 | 3 | `if self.receivers(self.open_requested) > 0:` | 연결할 때 직접 표시: `self._open_connected = True` 를 두고 그 값을 봄 | `3-receivers` |
 | 4 | 콤보 항목 데이터에 str Enum을 넣고 `currentData()`를 그대로 Enum으로 씀 | 꺼낼 때 되돌림: `Side(combo.currentData())` (데이터가 `None`이면 그대로). PySide6는 str Enum을 평범한 str로 돌려줌 | `4-combo-data` (검토용, 모두 위험은 아님) |
 | 5 | 이벤트 필터 안에서 `watched in self.roots`, `self.table[watched]`, `self.handlers.get(watched)` | Qt 객체를 집합·딕셔너리 키로 쓰지 않음: `any(watched is r for r in self.roots)`, 또는 `id(watched)`를 키로 쓰고 객체는 값으로 보관 (PySide6의 `QPointingDevice` 등은 해시 불가) | `5-qobject-key` |
-| 6 | `QTimer.singleShot(0, self.apply)` 뒤 대상이 이미 지워졌을 수 있음 | 실행할 때 확인: 콜백 첫 줄에서 대상 위젯이 살아 있는지 (`is_alive(widget)` 같은 작은 도움 함수를 두 바인딩용으로 하나 둠) 또는 `QTimer`를 위젯의 자식으로 만들어 위젯과 함께 사라지게 | `6-deferred` (검토용) |
+| 6 | **`QTimer.singleShot(0, self.apply)`처럼 `self`의 메서드를 바로 넘김** (가장 먼저 고칠 것) | 객체의 자식 타이머를 씀: `__init__`에서 `self._apply_timer = QTimer(self); self._apply_timer.setSingleShot(True); self._apply_timer.timeout.connect(self.apply)`, 부를 때 `self._apply_timer.start(0)`. 타이머가 객체와 함께 지워지므로 객체가 사라진 뒤에는 불리지 않음. PyQt6는 객체가 지워지면 이 호출을 버리지만 PySide6는 그대로 부름 (실측: 세그폴트와 메모리 폭증의 원인). PySide6의 `singleShot(ms, self, self.apply)`는 PyQt6에 없어 지금은 못 씀. 람다(`lambda: ...`)로 넘기는 곳은 콜백 첫 줄에서 대상이 살아 있는지 확인 | `6-bound` (main 28곳, UI 29곳), `6-deferred` (검토용) |
 | 7 | 슬롯 안 예외를 "앱이 멈추니 테스트가 잡겠지"라고 기대 | PyQt6는 슬롯 안 예외에서 앱을 멈추지만 PySide6는 출력만 하고 계속 감. 테스트는 `sys.excepthook`/`sys.unraisablehook`을 바꿔 예외를 모아 실패로 만듦 (`tests/desktop_stock_detail_acceptance.py`의 수집 방식처럼) | — |
 | 8 | `QChar`, `QFontDatabase.addApplicationFallbackFontFamily` 등 대체 글꼴 4함수, `QRawFont.supportsCharacter("×")` (문자열) | `QChar` 쓰지 않음. 문자 검사는 `supportsCharacter(ord(ch))` (정수). 대체 글꼴은 `QFont.insertSubstitutions` (아래 "글꼴" 참고) | `8-font` |
 | 9 | `table.setItemDelegateForColumn(0, MyDelegate(table))`처럼 Qt에 넘긴 객체를 바로 버림 | `self.identity_delegate = MyDelegate(table)` 후 넘김. 헤더(`setHorizontalHeader`)·모델·필터 객체도 같음 | `9-delegate` |
 | 10 | 창이나 화면에서 떼어 낸 위젯(레이아웃 밖, `parent` 없음)을 창의 Python 속성으로만 들고 있음 | 떼어 낸 위젯은 부모를 주거나, 바꿀 때·창을 닫을 때 `deleteLater()`로 직접 지움. 앱 전체(`QApplication`)에 건 이벤트 필터는 창이 사라질 때 `removeEventFilter` | — (시범 실측, 아래) |
 | 11 | `sip.isdeleted(x)`, `from PyQt6 import sip` | 새 코드에서는 쓰지 말고, 꼭 필요하면 한 도움 함수에 모음 (변환 도구가 `shiboken6.isValid`로 바꿈) | `sip` |
+| 12 | `font.setWeight(600)`처럼 숫자를 그대로 넘김 | `font.setWeight(QFont.Weight(600))`. PySide6는 숫자를 받지 않고 TypeError를 냅니다. `paintEvent` 안에서 나면 그리기 도구(QPainter)가 닫히지 않아 앱이 죽습니다 (실측: UI `bonds.py:201`, 단계 6 세그폴트. 고친 뒤 20개 테스트 모두 통과, 2번 중 2번) | `10-int-enum` |
 
-## 시범에서 드러난 세그폴트와 그 수정 방향 (10번 항목의 근거)
+## 시범에서 드러난 세그폴트·메모리 폭증의 원인 (6번 항목의 근거, 2026-11-17 확정)
 
-- 재현: `tools/qt_port/repro/shell_window_segfault.sh` (변환한 임시 복사본에서만). main `5888d05`, PySide6 6.12.0, Linux 오프스크린에서 3번 중 2번 rc=139, CI 단계 2 그대로는 3번 중 3번. PyQt6는 0번.
-- C 스택 (gdb): `QTableView::timerEvent → updateEditorGeometries → QStyledItemDelegate::updateEditorGeometry → Shiboken::BindingManager::getOverride → 해제된 Python 래퍼 접근`. 크래시 대신 오류로 드러난 실행에서는 `Error calling Python override of QStyledItemDelegate::initStyleOption(): ReportActions.__init__.<locals>.<lambda>() ...`이 나옴 — 위임 객체 자리에 엉뚱한 Python 객체가 불림. **수명(소유권) 문제**입니다.
-- 창을 지운 뒤 남는 위젯 (`tools/qt_port/repro/window_survivors.py`): PyQt6는 창마다 숨은 최상위 위젯 6개로 고정, PySide6는 창마다 6개씩 쌓임 (지운 창의 `MarketChartPane`, `BondsPane`의 `QComboBox`, `QFrame`; 지운 `ResearchWindow`의 Python 객체가 아직 붙잡고 있음).
-- 메모리 폭증: 같은 날 PySide6 쪽 python이 10.8~12.9GB까지 커져 OOM으로 죽은 것이 4번 (PyQt6 0번). 이벤트 필터 오류가 100단계 넘게 겹친 출력이 함께 보여, 이벤트 필터 안에서 예외가 나면 그 처리 중 다시 이벤트가 생겨 필터가 서로를 부르는 연쇄로 봅니다 (가설). 5번 항목(필터 안 해시)을 고치고 필터 안 예외를 없애는 것이 우선입니다.
-- 확인한 것: `gc.disable()`이어도 재현됨(가비지 수집 시점 문제 아님). 테스트 정리 뒤 `gc.collect()`를 강제하면 3번 중 0번. `watchlist.py`의 `_IdentityDelegate`를 `self.`에 붙잡는 것만으로는 2번 중 2번 여전히 재현.
-- 수정 방향 (두 바인딩 모두): 9·10번 항목. 창을 닫을 때(`closeEvent`/정리 함수) 떼어 낸 차트 창·콤보·프레임을 `deleteLater()`하고, 창이 단 앱 전체 이벤트 필터를 떼고, 창 객체를 붙잡는 람다·바운드 메서드 연결을 끊음. 테스트 도움 함수 `tests/qt_fixture_cleanup.py`의 `delete_owned_widget` 뒤에 `gc.collect()`.
-- 원인 객체를 하나로 특정하지는 못했습니다 (가설). 9·10번을 고친 뒤 위 재현 스크립트로 다시 봅니다.
+- **원인 한 곳:** `quantgen_desktop/localization.py`의 `LanguageController.schedule()`이 `QTimer.singleShot(0, self.apply)`를 겁니다. 테스트가 창을 지운 뒤에도 PySide6에서는 이 예약된 호출이 그대로 실행되고, `apply()`가 이미 지워진 `ResearchWindow`를 건드려 오류가 납니다. PySide6는 이 오류를 저장해 두었다가 다음 Python 호출에서 다시 던지는데, 앱 전체 이벤트 필터(`ReadingHelp`, `InlineMarketMenu`)가 이벤트마다 그 오류 메시지 앞에 "Error calling Python override ..."를 덧붙여 다시 저장합니다. 메시지가 끝없이 길어지면서 메모리가 27초 만에 3GB를 넘었습니다.
+- **찾은 방법:** 단계 3의 두 테스트만 돌리고 py-spy로 스택을 떴습니다. 네이티브 스택은 `QTest::qWaitForWindowActive → sendThroughApplicationEventFilters → Shiboken::Errors::storePythonOverrideErrorOrPrint`였습니다. 이어서 이벤트 필터를 감싸 첫 예외를 기록하니, 출처가 `localization.py:130 apply → self.window.setLocale(...)`의 "already deleted"로 나왔습니다.
+- **고친 결과 (임시 복사본에만 6번 방식 적용, 화면 코드는 고치지 않음):**
+
+| 실행 (PySide6 6.12.0, Linux 오프스크린) | 고치기 전 | 고친 뒤 |
+|---|---|---|
+| UI 단계 3의 두 테스트, 최대 메모리 | 3GB를 넘어 강제 종료 | 0.52GB, 통과 |
+| UI 단계 3 전체 | OOM 또는 rc 139 | rc 0, 59초, 0.54GB |
+| UI 단계 5 전체 | OOM, 다시 돌려도 실패 1 + 오류 1 | 실패 1 (`receivers`, 3번 항목), `market_progressive` 오류는 사라짐, 0.74GB |
+| main 세그폴트 재현 스크립트, 3번 | rc 139 1번 + 실패 2번 | **3번 모두 통과** |
+| 같은 수정을 PyQt6에 적용한 UI 단계 3 | — | rc 0 (동작 같음) |
+
+- 재현: `tools/qt_port/repro/shell_window_segfault.sh` (변환한 임시 복사본에서만).
+- **별개의 누수는 남아 있음 (실측):** 6번을 고친 복사본에서도 `tools/qt_port/repro/window_survivors.py`의 결과는 같습니다. PySide6에서는 창을 지울 때마다 숨은 최상위 위젯이 6개씩 쌓입니다(창 0을 지운 뒤 6개, 창 1을 지운 뒤 12개). 남는 것은 `MarketChartPane`, `BondsPane.source` 콤보, 이름 없는 `QFrame`이고, 지운 창의 Python 객체가 아직 붙잡고 있습니다. 이 누수 때문에 테스트가 죽지는 않습니다. 다만 앱이 창을 다시 만들 때마다 메모리가 늘어나므로 10번 항목(떼어 낸 위젯은 부모를 주거나 `deleteLater()`)으로 고칩니다. gdb의 위임 객체 스택은 앞의 오류 연쇄 중에 생긴 것으로 보며(가설), 9번도 그대로 권장합니다.
+- 전체 시범을 다시 돌린 결과는 `docs/platform/PYSIDE6_TRIAL_2026-11-17.md`의 "재시범" 절에 있습니다.
 
 ## 글꼴 (8번 항목의 근거)
 

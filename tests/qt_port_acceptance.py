@@ -164,6 +164,17 @@ class LintTests(unittest.TestCase):
         found = {(f.line, f.group) for f in port.lint(text, "c.py")}
         self.assertEqual(found, {(4, "6-bound"), (5, "6-bound"), (6, "6-deferred"), (7, "6-deferred")})
 
+    def test_font_weight_number_is_reported(self):
+        text = src("""\
+            from @OLD@.QtGui import QFont
+            def paint(bold):
+                bold.setWeight(600)
+                bold.setWeight(QFont.Weight(600))
+                bold.setWeight(QFont.Weight.DemiBold)
+            """)
+        found = {(f.line, f.group) for f in port.lint(text, "p.py")}
+        self.assertEqual(found, {(3, "10-int-enum")})
+
 
 class CommandTests(unittest.TestCase):
     def test_apply_refuses_a_git_checkout_and_is_idempotent_on_a_scratch_copy(self):

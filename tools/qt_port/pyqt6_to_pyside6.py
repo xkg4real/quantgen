@@ -288,6 +288,10 @@ def lint(text: str, path: str) -> list[Finding]:
             add(tok.start[0], "1-print", "QTextDocument.print is print_ in PySide6; accept both names")
         elif tok.string == "receivers" and prev == "." and nxt == "(":
             add(tok.start[0], "3-receivers", "QObject.receivers(bound signal) fails in PySide6; record the connection yourself")
+        elif (tok.string == "setWeight" and prev == "." and nxt == "(" and i + 2 < len(sig)
+              and sig[i + 2].type == tokenize.NUMBER):
+            add(tok.start[0], "10-int-enum", "QFont.setWeight(<number>) raises TypeError in PySide6 (inside paintEvent it "
+                "leaves the painter open and the app crashes); write QFont.Weight(<number>)")
         elif tok.string == "singleShot" and prev == "." and _bound_method_shot(sig, i):
             add(tok.start[0], "6-bound", "singleShot(ms, self.method): PyQt6 drops it when the object is deleted, "
                 "PySide6 still calls it (trial: segfault and memory blow-up); use a child QTimer(self)")
