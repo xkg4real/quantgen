@@ -1331,3 +1331,17 @@ Claude(메인 세션 session_01H6RrzMUzF8vwK8xkX977mB)가 2026-11-17에 노션 "
 - **규칙과의 관계:** 명령이 그 폴더를 (제외 경로로 적은 것 말고는) 이름으로 부르거나 목록·열기·지문·검색·순회하지는
   않았습니다. 다만 판독 문서 0.3절 1번이 권하는 sparse 클론이 아닌 작업 폴더였습니다(`git sparse-checkout list`: "this
   worktree is not sparse").
+- **검토 단계의 한 번 (하위 작업자 자진 보고):** 고친 커밋 `fa2734c`를 만든 직후(2026-11-17 23:48 KST 무렵) 하위 작업자가
+  `git diff --quiet 5dfa22e fa2734c -- . ':!docs/nautilus_bridge/OWNER_RULINGS_LOG.md' ':!docs/nautilus_bridge/REMAINING_WORK_2026-11-17.md'`를
+  돌렸습니다. 경로 `.`가 그 폴더에 닿을 수 있는데 `':!docs/asset_expansion/cache'`를 붙이지 않아 규칙에 어긋났습니다.
+  두 커밋의 트리를 비교한 것이고(작업 폴더가 아님), 그 폴더의 트리는 두 커밋에서 같아 git이 건너뛰며, 아무것도 찍지
+  않았습니다(종료 코드 0). 파일을 열거나 이름을 출력하지 않았습니다(하위 작업자 보고, git 아님).
+- **같은 날 메인 세션의 다른 작업 폴더 둘:** 메인 세션은 PR #121·#122 작업에도 sparse가 아닌 작업 폴더를 썼습니다.
+  `wt_pr121`(2026-11-17 20:02:45 KST `git worktree add`, 브랜치 `gpt/r3-recorder-20261114`)과 `wt_pr122`(21:33:34 KST,
+  `gpt/r3-outage-20261114`)입니다. 만들 때 git이 보호 폴더의 파일을 디스크에 썼고, 그 안에서 `git checkout`,
+  `git stash`/`git stash pop`(wt_pr121), `git commit`, `git merge`(wt_pr122), 준법 검사 `--check`·`--refresh-baseline`,
+  테스트 실행(`tests.indicator_signal_context_acceptance`, `tests.desktop_stock_detail_acceptance -k no_bong`,
+  `tests.run_registry_outage_acceptance`, `tests.run_registry_recorder_acceptance`)을 했습니다. git의 작업 폴더 명령은 추적
+  파일을 stat하므로 그 폴더의 파일도 stat했을 수 있습니다. 어떤 명령도 그 폴더를 이름으로 부르거나 목록·열기·지문·검색·순회
+  하지 않았고, 테스트가 그 폴더를 읽는지는 확인하지 않았습니다(**미검증**; 돌린 테스트는 화면·기록기·준법 테스트). 앞으로
+  메인 세션의 main 작업 폴더도 판독 문서 2.2절의 sparse 클론 방식으로 만듭니다.
