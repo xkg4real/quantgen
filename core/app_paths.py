@@ -12,7 +12,8 @@ import sysconfig
 
 LEGACY_DATA_DIRNAME = ".nextgen"      # used by every build so far (config.py, kis_client.py, opendart_client.py)
 DATA_DIRNAME = "QUANTGEN"             # new installs; shown to the user in Explorer/Finder
-DATA_DIR_ENV = "QG_USER_DATA_DIR"     # explicit override (tests, portable runs)
+DATA_DIR_ENV = "QUANTGEN_DATA_DIR"    # explicit override (tests, portable runs); name from the Notion platform plan F2
+FLET_STORAGE_ENV = "FLET_APP_STORAGE_DATA"  # set by a packaged Flet (mobile) app: its private storage folder
 
 
 def is_frozen() -> bool:
@@ -46,11 +47,12 @@ def _platform_data_dir(home: Path, env, platform: str) -> Path:
 def user_data_dir(*, home=None, env=None, platform=None) -> Path:
     """Where per-user state lives (tokens, caches, trading state). The existing ~/.nextgen wins when it
     is there, so no user loses a token or cache; otherwise the platform's per-user application folder.
+    Order: QUANTGEN_DATA_DIR, FLET_APP_STORAGE_DATA (packaged Flet app), existing ~/.nextgen, platform folder.
     The arguments exist for tests; callers pass nothing."""
     env = os.environ if env is None else env
-    override = env.get(DATA_DIR_ENV)
-    if override:
-        return Path(override)
+    for name in (DATA_DIR_ENV, FLET_STORAGE_ENV):
+        if env.get(name):
+            return Path(env[name])
     home = Path.home() if home is None else Path(home)
     legacy = home / LEGACY_DATA_DIRNAME
     if legacy.is_dir():

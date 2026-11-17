@@ -34,8 +34,13 @@ class UserDataDirTests(unittest.TestCase):
                          self.home / ".local" / "share" / "quantgen")
 
     def test_override_and_nothing_is_created(self):
-        self.assertEqual(app_paths.user_data_dir(home=self.home, env={"QG_USER_DATA_DIR": str(self.home / "p")}),
+        (self.home / ".nextgen").mkdir()
+        self.assertEqual(app_paths.user_data_dir(home=self.home, env={"QUANTGEN_DATA_DIR": str(self.home / "p"),
+                                                                      "FLET_APP_STORAGE_DATA": str(self.home / "f")}),
                          self.home / "p")
+        self.assertEqual(app_paths.user_data_dir(home=self.home, env={"FLET_APP_STORAGE_DATA": str(self.home / "f")}),
+                         self.home / "f")
+        (self.home / ".nextgen").rmdir()
         app_paths.user_data_dir(home=self.home, env={}, platform="linux")
         self.assertEqual(list(self.home.iterdir()), [])
 

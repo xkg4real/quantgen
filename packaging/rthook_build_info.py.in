@@ -1,0 +1,11 @@
+# Generated into the build folder by packaging/quantgen_desktop.spec; runs before the app starts.
+# Gives core.app_identity.build_channel() the channel fixed at build time (D7-G rule 3: a public build
+# never reads .env). A file placed next to the app cannot change it.
+import sys
+import types
+
+_info = types.ModuleType("core._build_info")
+_info.CHANNEL = "@CHANNEL@"
+_info.QT_BINDING = "@BINDING@"
+_info.SOURCE_COMMIT = "@COMMIT@"
+sys.modules["core._build_info"] = _info
