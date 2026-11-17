@@ -6,11 +6,11 @@ task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
 next_ids: DS-1, DIDM-0, DIDM-1, DS-4a, DS-H
-updated_at: 2026-11-17T21:59:00+09:00
+updated_at: 2026-11-17T22:20:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/data-source-didm-20261117
-work_commit: 5888d05
+work_commit: fec6fb8
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -25,7 +25,7 @@ session: https://claude.ai/code/session_016uB1jiXnUcWg99JHtRek9T
 
 ## 0. 한 줄 요약
 
-하부 세션 시작 (2026-11-17 21:58 KST). 작업 브랜치는 main `5888d05`에서 만들었고 아직 커밋 없음. 지금 DS-1 대안 평가표 (`docs/didm/VENDOR_EVAL_2026-11.md`)를 씁니다.
+DS-1 평가표 초안 커밋 `fec6fb8` (소유자 확인 대기). 다음은 DIDM-0 사전등록·DIDM-1 점수 스키마.
 
 ## 1. 목표와 완료 조건
 
@@ -45,8 +45,8 @@ session: https://claude.ai/code/session_016uB1jiXnUcWg99JHtRek9T
 
 ## 4. 진행 상황
 
-- [ ] DS-1 대안 평가표 ← **진행 중**
-- [ ] DIDM-0 사전등록, DIDM-1 점수 스키마
+- [x] DS-1 대안 평가표 초안 — `docs/didm/VENDOR_EVAL_2026-11.md`, `tools/didm/check_vendor_eval.py`, `tests/didm_vendor_eval_acceptance.py`, 커밋 `fec6fb8`. 검사: `check_vendor_eval --excel` 엑셀 바뀐 칸 0·모순 0, `python -m unittest tests.didm_vendor_eval_acceptance` 9 OK. **소유자 확인 대기 (문서 8절), main 미병합 → LEDGER 아님**
+- [ ] DIDM-0·1 ← **진행 중**
 - [ ] DS-4a GDELT·ALFRED 커넥터 + 시점 저장소
 - [ ] DS-H (소유자 진단 출력 뒤)
 
@@ -57,3 +57,7 @@ session: https://claude.ai/code/session_016uB1jiXnUcWg99JHtRek9T
 ## 메인에게
 
 - 아직 없음. LEDGER 기록 요청은 병합 뒤 `--done` 문자열로 적습니다.
+
+## 네트워크
+
+이 세션에서 공급사 호스트가 모두 막힘 (2026-11-17 22:00 KST 프록시 거절): www.alphavantage.co, api.tiingo.com, cryptopanic.com, www.cmegroup.com, www.gdeltproject.org, data.gdeltproject.org, fred.stlouisfed.org, alfred.stlouisfed.org, docs.kalshi.com. 공개 자료는 검색 요약 기준. 키 없는 커넥터의 실제 호출 시험은 소유자 PC 또는 호스트 허용 뒤.
