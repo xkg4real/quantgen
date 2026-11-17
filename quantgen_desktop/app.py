@@ -924,12 +924,19 @@ class ResearchWindow(QMainWindow):
         """'전체 시세 표' opens the table below the chart and scrolls the canvas to it."""
         if not expanded:
             return
-        canvas = self.home_workspace.canvas_scroll
+        timer = getattr(self, '_home_reveal_timer', None)
+        if timer is None:          # owned by the window: it cannot fire after the window is deleted
+            timer = self._home_reveal_timer = QTimer(self)
+            timer.setSingleShot(True)
+            timer.timeout.connect(self._home_reveal_now)
+        timer.start(30)
 
-        def reveal():
+    def _home_reveal_now(self):
+        try:
             if self.quotes_fold.expanded():
-                canvas.verticalScrollBar().setValue(max(0, self.quotes_fold.y() - 8))
-        QTimer.singleShot(30, reveal)
+                self.home_workspace.canvas_scroll.verticalScrollBar().setValue(max(0, self.quotes_fold.y() - 8))
+        except RuntimeError:       # the window is being destroyed
+            pass
 
     def make_indicator_guide(self):
         """기술지표 가이드 (owner-approved draft 2026-11-17, docs/product/ui_drafts_2026-11-17/draft_03_guide.png): the
