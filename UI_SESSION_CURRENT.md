@@ -6,6 +6,37 @@
 
 ---
 
+# Claude UI 2026-11-17 (2) — 나머지 7개 화면 승인 시안 앱 적용 완료 (소유자 실행 확인 대기)
+
+- status: waiting_on owner · owner: Claude UI (세션 c958d211) · **이 요약이 아래 기록보다 우선합니다.**
+- work_branch: `claude/friendly-bardeen-r6xe8f` · work_commit: `7902381` (main `e01e152` 위, main 미병합) · PR 없음(소유자가 요청하면 생성). main은 그사이 `5888d05`까지 진행됨(PR #122 등) — 병합 전 main을 이 브랜치에 합치고 UI 테스트 재실행 필요.
+- 전체 설명·시안과 다른 점·두 PC 실행 명령: `docs/product/UI_PAGE_REDESIGN_2026-11-17.md`. 최종 캡처: `docs/product/ui_page_redesign_2026-11-17/` (8장).
+
+## 소유자 원문 (그대로)
+
+> 시안 7개 전부 승인, 앱에 적용 진행하세요
+> 끝나면 png로 보내주세요 실행cmd도 안내부탁 (skymi)
+> 끝나면 실행 cmd를 skymi랑 whydi 둘 다 제공해주세요
+
+## 끝낸 것 (LEDGER `⑬-2/page-redesign/<route>` 7행)
+
+- 공통 틀 `quantgen_desktop/page_kit.py`(도구줄·왼쪽 결과·오른쪽 설정 열 320/340/360px·고정 실행 버튼). 기존 탭·패널·계산·요청·저장·내보내기는 그대로 두고 배치만 옮김(`bind_tabs`, `dock_form`, `dock_into`).
+- quant · home · tools · guide · risk · library · system 7개 화면. 화면별 구현은 worktree 에이전트 6개 + 직접(quant), 병합 후 독립 검토 8명이 찾은 20건 모두 수정.
+- CI `runtime-smoke.yml`에 `desktop_library_acceptance`, `desktop_system_page_acceptance` 추가. compliance FACTS `page-redesign-2026-11-17`·12-claims, baseline 갱신(PASS/BLOCKED).
+
+## 소유자 확인 대기 (다음 일)
+
+1. 소유자 PC 실행 확인(skymi·whydi, 작업 브랜치). 피드백이 오면 `⑬-2/page-redesign/<route>/2`.
+2. 투자 용어 "캔들 차트 · 봉"(`core/education/glossary.py`) 금지어 '봉' 이름 변경 여부.
+3. main 병합 여부(PR 요청 시). 병합 전 main `5888d05` 이후 변경과 UI 테스트 재실행.
+
+## 검증
+
+- 검토 수정 후 UI 107개 모듈 1,117개 전체 실행: 1,115 통과, 보관함 2 실패(시험한 열 폭 316px) → 320px 복구 후 관련 8개 모듈 65개 OK. 1000/1100px 한/영 넘침 점검·Tab 이동 점검 통과.
+- 오프라인 픽스처·Linux offscreen만. 소유자 Windows·실시세·실계정 미확인.
+
+---
+
 # Claude UI 2026-11-17 — 시장 메인 화면·레일 범주만·지표 결론부·지표 목록 스크롤 (소유자 PNG 확인 대기)
 
 - status: waiting_on owner · owner: Claude UI (세션 c958d211) · 사용량: 새 주기(2026-11-17 17:00 KST) 시작 직후 작업.
