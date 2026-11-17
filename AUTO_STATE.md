@@ -1,19 +1,19 @@
 ---
 kind: auto_snapshot
 reason: periodic
-created_at: 2026-11-10T17:09:15+09:00
-source_branch: HEAD
-source_head: aa4b550
-upstream: none
-patch_base: aa4b550
+created_at: 2026-11-17T17:08:11+09:00
+source_branch: claude/friendly-bardeen-r6xe8f
+source_head: 7402a43
+upstream: origin/claude/friendly-bardeen-r6xe8f
+patch_base: 7402a43
 unpushed_commits: 0
 uncommitted_files: 0
 patch: none
 usage_pct: unknown
 usage_resets_at: unknown
-session: 244a07c1-ef5e-50fd-a9f1-360db0f46038
+session: c958d211-15cf-56b3-aa1e-f5e530ec719f
 snapshot_key: none
-current_md_updated_at: 2026-11-07T00:45:23+09:00
+current_md_updated_at: 2026-11-14T03:07:32+09:00
 current_md_status: returned
 ---
 
@@ -26,21 +26,21 @@ current_md_status: returned
 ## 최근 커밋
 
 ```
-aa4b550 Record the PR-73 website update for the bootstrap and ETF sleeve disclosures
-2710cd0 Record §10 N-M1-02/a, NEW-M6-04 and NEW-M6-05 in the queue, triage, FACTS and CI
-46f4950 Merge branch 'claude/s10-mc-bootstrap-20261104' into claude/s10-models-20261104
-2d61712 Correct the ETF sleeve disclosures after review (§10 NEW-M6-04, NEW-M6-05)
-857706d Fix the block bootstrap wording the reviewers found untrue (§10 N-M1-02/a)
-acc736c Say when an ETF sleeve Sharpe is undefined and which conventions the sleeves use (§10 NEW-M6-04, NEW-M6-05)
-302aced Correct the block bootstrap wording in README, primer source and a product note
-804f478 Disclose the Monte Carlo block bootstrap scheme (§10 N-M1-02/a)
-a32106b Merge pull request #72 from xkg4real/claude/s10-options-20261104
-d88277a Record the PR-72 website update for the option-board disclosures
-6048ba9 Merge main d5e73ae (Markets rework, Crypto) into the option-board branch
-d5e73ae Merge pull request #71 from xkg4real/claude/ui-markets-watchlist-20261104
-3c0fd24 Refresh the compliance baseline for all 20 documents after the test fix
-51f3921 Make the wider-preferred-width layout test hold on every platform font
-31086ac Regenerate the recorded status snapshot after the README change
+7402a43 Compliance: baseline refreshed for the UI-D11 rail categories and ETF lists
+840ae95 Rail: 시장 as big categories with hover flyouts (지수·주식·크립토·선물·외환·국채·회사채·ETF·월드 이코노미), ETF markets (UI-D11)
+36d23b8 Stock detail: the right column never moves sideways with 7-digit prices (owner screenshot, SK하이닉스 1,255,000)
+5916c36 Compliance: Ctrl+wheel zoom and drag pan on the stock chart (R-D12); baseline refreshed
+793a321 Stock detail view: Ctrl+wheel zoom review fixes
+c508a0d Stock detail view: Ctrl+wheel zooms, left-drag pans, no +/- keys or buttons (owner R-D12-1/2)
+0786200 Merge pull request #109 from xkg4real/claude/friendly-bardeen-r6xe8f
+27c3a10 Native app: the language pass skips texts it already rendered; Markets fits its page at once
+c5286ec Native app: a window built outside main() gets the bundled fonts too
+0235319 Watchlist: the Q-SCORE column fits its longest line
+3d214a0 Compliance: record the Fusion style choice; baseline refreshed
+a2e4daf Native app: Fusion style on every platform; two Windows-fragile test checks read layout, not fixed pixels
+8a5ed3a Merge main b9dea9c (PR #110) into the UI branch
+4e743e3 CI: give the installed job 120 minutes
+b9dea9c Merge pull request #110 from xkg4real/claude/owner-rulings-x1x5-20261112
 ```
 
 ## 푸시되지 않은 커밋
