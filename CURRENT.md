@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout
 next_ids: ⑦-1, ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-17T18:31:00+09:00
+updated_at: 2026-11-17T19:03:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: main
@@ -15,7 +15,7 @@ uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
-usage_resets_at: 2026-11-17T17:00:00+09:00
+usage_resets_at: 2026-11-24T17:00:00+09:00
 session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 ---
 
@@ -24,7 +24,7 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 - **소유자 지시(원문 요약 아님, 노션 원문 위치):** 노션 "QUANTGEN PROJECT"(34f5c916fe0c800b9b4af35c80ebe778)의 "<11 16 업무 지시 필요한 부분>"을 정독하고, 메인 세션이 할 일과 다른 세션 분담을 정해 모든 준비를 끝낸 뒤 보고, 승인 시 일괄 진행. 채팅 원문: "노션 <11 16 업무 지시 필요한 부분> 이거 정독하세요. 당신이 할수있는것은 당신이, 다른 업무는 어떤 세션이 분담하는것이 좋은지, 모든 준비를 끝내고 정리해서 저한테 보고합니다. 제가 승인하면 해당 작업 일괄진행합니다."
 - **GPT 반환 확인(git으로 다시 계산):** 연구 브랜치 `cdbbe61`. `a2ac79b`(파일럿 1 run 폴더 2파일), `8a3d171`(파일럿 2 run 폴더 2파일), `cdbbe61`(qa/acceptance_results.json 한 파일). Windows E: 964행, 844 PASS, 0 FAIL, 120 NOT_RUN, nautilus 57/57, guard 5/5, 563db54 대비 추가·삭제·상태 변경 0. 8a8c247→cdbbe61 변경 경로 5개뿐, 동결 하네스·tools/nautilus·등록표 변경 없음. 공급사 요약 4개 sha256이 GPT의 Step10 검토안과 일치. PR112~120 병합 확인(main `e01e152`). PR121(ea3d596)·PR122(197c0e1) 열림.
 - **새로 찾은 것:** (1) main의 전체 Runtime이 PR119(b8d5ac8, 실행 중 병합) 이후 한 번도 녹색이 아님. PR121·122의 installed 4개 모두 `tests/desktop_stock_detail_acceptance.py:1333`(R-D9-2 '봉' 금지)에서 실패: `core/education/reading_cues.py:45`(그리고 :19, :35에도 '봉'). R3 코드 탓 아님. (2) 파일럿 2의 Nautilus 자식이 Python 3.13.17로 실행(기준 3.13.14; venv는 3.13.14). GPT 판독에 없음. (3) 오늘(11-17) UI 세션이 `claude/friendly-bardeen-r6xe8f`(da0ea20)에서 별도 소유자 요청을 진행 중이며 reading_cues.py:45를 이미 고침.
-- **지금:** 11-16 지시의 준비(마스터 업무 설계도, 세션별 지시문, 결정표)를 만드는 중. 승인 전에는 저장소·연구 브랜치·노션을 바꾸지 않음. Step 10 마감(⑦-1)은 판정 P2·결정 10에 따라 이 세션이 함(결정 11의 후속 승인은 이 세션에는 필요 없음).
+- **준비 끝, 소유자 승인 대기:** handoff 브랜치 `plans/2026-11-17/`에 OWNER_REPORT(결정 D1~D14, 소유자 할 일 8, 세션 배치), MASTER_WORK_DESIGN(다이어그램, 세션 지도, 병합 규칙, 부록), sessions/00~07 지시문(커밋 `8a66956`). 소유자 답(원문)을 받으면 결정 기록에 적고 일괄 진행. 승인 전에는 저장소·연구 브랜치·노션을 바꾸지 않음. Step 10 마감(⑦-1)은 판정 P2·결정 10에 따라 이 세션이 함(결정 11의 후속 승인은 이 세션에는 필요 없음).
 - **이어받는 쪽:** 이 세션이 끊기면 스크래치의 초안은 사라집니다. 승인 전이면 이 절과 노션 원문으로 처음부터 준비하십시오.
 
 ## 부분 인계 — CI 검사 수정 완료·새 전체 CI 대기 — 2026-11-14T03:07:32+09:00
