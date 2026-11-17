@@ -141,7 +141,10 @@ class ShellRailTests(unittest.TestCase):
             self.settle()
             page = w.stack.currentWidget()
             self.assertIsInstance(page, QScrollArea)
-            bar = page.verticalScrollBar()
+            # System follows the owner-approved draft (2026-11-17, draft_07_system.png): the page fills the window
+            # and its canvas scrolls on its own, so the reading position to keep is the canvas's.
+            scroller = w.system_workspace.canvas_scroll if route == "system" else page
+            bar = scroller.verticalScrollBar()
             self.assertGreater(bar.maximum(), 200, route)
             bar.setValue(200)
             for collapsed in (True, False):

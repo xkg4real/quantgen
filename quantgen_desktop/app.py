@@ -1233,33 +1233,43 @@ class ResearchWindow(QMainWindow):
         return result
 
     def make_system(self):
-        layout = self.page("System", "기록된 근거와 이번 실행 결과를 구분합니다.")
+        """System (owner-approved draft 2026-11-17, docs/product/ui_drafts_2026-11-17/draft_07_system.png): the page
+        kit's frame. Toolbar: title, 연결 | 규칙 | 시장 데이터 이용 조건 (it drives `system_tabs`, kept for callers),
+        a read-only badge and when the settings were read. 연결: the lead line, the summary line and one list of the
+        providers config reports (setting names, never values; a row's 확인 runs the pane's access test), the pane's
+        result, then the recorded project status and the desktop migration note. 규칙 and 시장 데이터 이용 조건 keep
+        their panes. Right column, shared by the tabs: 설정 (언어·지역, 화면 and, on 연결, the docked connection form with
+        its run button pinned at the bottom) and 읽는 법. Every attribute, signal and request is as before."""
+        from .connections import (ConnectionsPane, ConnectionsView, ThemeFollower, ToolbarFit, dock_connection_form,
+                                  focus_order, locale_samples, plain_backgrounds)
+        from .data_rights import DataRightsPane
         from .localization import locale_picker
-        box,inner=panel(self.ctx.t('language'))
-        self.locale_picker=locale_picker(self.ctx)
-        self.locale_picker.setAccessibleName(self.ctx.t('language'))
-        self.locale_picker.currentIndexChanged.connect(self.change_language)
-        inner.addWidget(self.locale_picker)
-        self.locale_notice=label(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'),'caption')
-        self.locale_notice.setProperty("reading_help_keep_visible", True)
-        inner.addWidget(self.locale_notice)
-        layout.addWidget(box)
-        from .connections import ConnectionsPane
+        from .page_kit import Card, FieldGrid, Fold, Segmented, Soft, Workspace, field, rule
+        from .paper import RulesPane
+        outer = self.page(None, None)
+        stack = getattr(self, 'stack', None)   # a test host builds this page without the window around it
+        self.system_workspace = ws = Workspace(("System", "시스템"))
+        outer.addWidget(ws)
+        if stack is not None:
+            ws.fit_to(stack.widget(stack.count() - 1))
+        side = ws.side
+        # Canvas: one page per tab, in the existing tab container (its own bar hidden; the toolbar drives it).
+        self.system_tabs = CurrentPageTabs()
+        self.connections_view = view = ConnectionsView()
+        self.system_tabs.addTab(view, 'Connections')
         self.connections = ConnectionsPane()
         self.connections.setProperty("reading_help_keep_visible", True)
         self.connections.requested.connect(lambda q: self.run_tool('connections', q))
-        from .paper import RulesPane
+        view.attach(self.connections)
         self.rules = RulesPane(self.paper_session)
         self.rules.setProperty("reading_help_keep_visible", True)
-        self.system_tabs = QTabWidget()
-        self.system_tabs.addTab(self.connections, 'Connections')
         self.system_tabs.addTab(self.rules, 'Rules')
-        from .data_rights import DataRightsPane
         self.data_rights=DataRightsPane(self.ctx)
         self.data_rights.setProperty("reading_help_keep_visible", True)
         self.system_tabs.addTab(self.data_rights,self.ctx.t('data_rights'))
-        layout.addWidget(self.system_tabs)
-        box, inner = panel("프로젝트 상태")
+        ws.canvas.addWidget(self.system_tabs, 1)
+        box = Card(("Project status", "프로젝트 상태"))
+        box.setProperty('sys', 'record')
         box.setProperty("reading_help_keep_visible", True)
         box.setProperty("recorded_project_status", True)
         try:
@@ -1269,15 +1279,102 @@ class ResearchWindow(QMainWindow):
         for line in recorded_status_display(status):
             item = label(line.en, 'muted' if line.muted else '')
             item.localized_text = {'en': line.en, 'ko': line.ko}
-            inner.addWidget(item)
+            box.body.addWidget(item)
             item.retranslate()
-        layout.addWidget(box)
-        box, inner = panel("데스크톱 이전 상태")
+        view.column.addWidget(box)
+        box = Card(("Desktop migration status", "데스크톱 이전 상태"))
+        box.setProperty('sys', 'record')
         box.setProperty("reading_help_keep_visible", True)
-        inner.addWidget(label("PyQt6 네이티브: Home, Markets(관심종목 차트·종목 한 화면), 분석 도구(Bonds, Rates, FX, Structuring, Macro sheet, Macro v2, Derivatives, ETF, Crypto, KRX), 기술지표 가이드, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\n모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다."))
-        inner.addWidget(label("이번 데스크톱은 선택 실행하는 미리보기입니다. 전체 기능 이전 완료본이 아닙니다.", "muted"))
-        layout.addWidget(box)
-        layout.addStretch()
+        box.body.addWidget(label("PyQt6 네이티브: Home, Markets(관심종목 차트·종목 한 화면), 분석 도구(Bonds, Rates, FX, Structuring, Macro sheet, Macro v2, Derivatives, ETF, Crypto, KRX), 기술지표 가이드, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\n모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다."))
+        box.body.addWidget(label("이번 데스크톱은 선택 실행하는 미리보기입니다. 전체 기능 이전 완료본이 아닙니다.", "muted"))
+        view.column.addWidget(box)
+        view.column.addStretch(1)
+        # Right column, 설정: 언어·지역, 화면, then the connection form (연결 only).
+        settings = side.add_page(("Settings", "설정"))
+        settings.setSpacing(8)
+        reading = side.add_page(("How to read", "읽는 법"))
+        region = Fold(("Language · region", "언어·지역"))
+        self.locale_picker=locale_picker(self.ctx)
+        self.locale_picker.setAccessibleName(self.ctx.t('language'))
+        self.locale_picker.currentIndexChanged.connect(self.change_language)
+        region.body.addWidget(field(("Display language", "표시 언어"), self.locale_picker))
+        formats = FieldGrid()
+        sample_date, sample_number = locale_samples(self)
+        formats.add(("Dates", "날짜 표기"), sample_date)
+        formats.add(("Numbers", "숫자 표기"), sample_number)
+        region.body.addWidget(formats)
+        self.locale_notice=label(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'),'caption')
+        self.locale_notice.setProperty("reading_help_keep_visible", True)
+        self.locale_notice.setProperty('sys', 'note')
+        region.body.addWidget(self.locale_notice)
+        settings.addWidget(region)
+        settings.addWidget(rule())
+        screen = Fold(("Display", "화면"))
+        self.system_theme = Segmented((("Light", "밝게"), ("Dark", "어둡게")), full=True)
+        theme = getattr(self, 'theme', None)   # the rail's theme selector stays the one setting; this drives it
+        if theme is not None:
+            self.system_theme.set_current(theme.currentIndex())
+            self.system_theme.changed.connect(theme.setCurrentIndex)
+            theme.currentIndexChanged.connect(self.system_theme.set_current)
+        screen.body.addWidget(field(("Theme", "테마"), self.system_theme))
+        settings.addWidget(screen)
+        connection_rule = rule()
+        settings.addWidget(connection_rule)
+        checks = Fold(("Data connection check", "데이터 연결 확인"))
+        if hasattr(self.connections, 'input_box'):
+            # 도구 and 데이터 출처 in the fold, 선택한 연결 확인 pinned at the bottom with the pane's status under it.
+            dock_connection_form(self.connections, side, checks.body)
+        checks.body.addWidget(Soft(("What each check does", "검사 범위"), (
+            "Check configuration: only looks at whether each setting exists; nothing goes over the network.\n"
+            "Access test: sends light read-only calls to KRX · KIS · FRED/Yahoo · Upbit/Binance.\n"
+            "Key values are never shown or saved; the list shows setting names only.",
+            "설정 여부 확인: 설정이 있는지만 봐요. 네트워크에 묻지 않아요.\n"
+            "접속 검사: KRX · KIS · FRED/Yahoo · Upbit/Binance에 가벼운 읽기 전용 호출을 보내요.\n"
+            "키 값은 표시하거나 저장하지 않아요. 목록에는 설정 이름만 보여요.")))
+        settings.addWidget(checks)
+        # 읽는 법: one note per tab.
+        notes = (Soft(("Reading the list", "목록 읽는 법"), (
+                     "Configured: the settings a provider needs are present (keyless providers: the library is "
+                     "available). Not set: a setting is empty. Check needed: the last access test got no answer, or "
+                     "only part of one.\nAn access test result belongs to this session only; nothing is saved.",
+                     "설정됨: 공급처에 필요한 설정이 있어요(키가 필요 없는 공급처는 라이브러리를 쓸 수 있어요). "
+                     "미설정: 설정이 비어 있어요. 확인 필요: 마지막 접속 검사에서 응답이 없거나 일부만 왔어요.\n"
+                     "접속 검사 결과는 이번 세션에만 보여요. 저장하지 않아요.")),
+                 Soft(("Rules", "규칙"), (
+                     "Rules run in the paper engine only; no real order is sent. Save, confirm, activate and arm "
+                     "the engine are separate steps, and nothing runs until you arm it.",
+                     "규칙은 모의 실행 전용이에요. 실제 주문은 보내지 않아요. 저장 → 확인 → 활성화 → 엔진 Arm을 "
+                     "따로 거치고, Arm하기 전에는 아무것도 실행되지 않아요.")),
+                 Soft(("Market data terms", "시장 데이터 이용 조건"), (
+                     "Search a series, then choose a row to read its display terms below the list. Choosing a row "
+                     "never requests market data.",
+                     "시리즈를 찾아 행을 고르면 목록 아래에 표시 조건이 나와요. 행을 골라도 시장 데이터를 요청하지 "
+                     "않아요.")))
+        for note in notes:
+            reading.addWidget(note)
+        ws.finish()
+
+        def tab_changed(index):
+            connection_rule.setVisible(index == 0)
+            checks.setVisible(index == 0)
+            side.foot_host.setVisible(index == 0 and side.foot.count() > 0)
+            for number, note in enumerate(notes):
+                note.setVisible(number == index)
+        ws.bind_tabs(self.system_tabs, (("Connections", "연결"), ("Rules", "규칙"),
+                                        ("Market data terms", "시장 데이터 이용 조건")),
+                     sides=(side, side, side), on_change=tab_changed)
+        ws.add_badge(("Read-only · key values never shown", "읽기 전용 · 키 값 표시 안 함"))
+        ws.add_toolbar(view.stamp, right=True)
+        ws.follow(view)
+        ws.follow(ToolbarFit(ws, view.stamp))
+        focus_order(ws.toolbar_host, view, self.rules, self.data_rights, side.segment, region, screen, checks,
+                    side.foot_host)
+        plain_backgrounds(view)
+        plain_backgrounds(side)
+        ThemeFollower(ws, (view, side))
+        kit_language = getattr(self, 'kit_language', None)
+        if kit_language is not None:
+            kit_language()
 
     def navigate(self, route):
         """Show a page and close the market disclosure; keep each page's reading position."""
