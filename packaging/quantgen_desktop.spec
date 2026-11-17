@@ -51,6 +51,8 @@ hook.write_text((ROOT / "packaging" / "rthook_build_info.py.in").read_text(encod
                 .replace("@CALC_SHA256@", calc_sha256),
                 encoding="utf-8")
 
+LGPL_PURE_PYTHON = ("chardet",)  # found by tools/packaging/third_party_notices.py, 2026-11-17
+
 # Every allowlisted module of the app packages, so lazily imported screens are bundled too.
 hidden = sorted({n[:-3].replace("/", ".").removesuffix(".__init__") for n in names
                  if n.endswith(".py") and allowed(n) and n.split("/")[0] in ("core", "data", "ui", "quantgen_desktop")})
@@ -63,6 +65,9 @@ a = Analysis(
     runtime_hooks=[str(hook)],
     excludes=OTHER + ["tkinter", "tests", "qa", "_legacy"],
     noarchive=False,
+    # LGPL pure-Python packages stay plain .py files next to the app (not inside the PYZ archive), so a user
+    # can replace them like the Qt shared libraries (docs/platform/LICENSE_COMPLIANCE_PREP.md).
+    module_collection_mode={name: "py" for name in LGPL_PURE_PYTHON},
 )
 # Third-party notices for what is actually inside (tools/packaging/third_party_notices.py), at licenses/.
 from tools.packaging.third_party_notices import notices_text  # noqa: E402
