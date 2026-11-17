@@ -979,28 +979,43 @@ class ResearchWindow(QMainWindow):
         return self.market_chart if self.markets_view.showing_stock() else self.markets_view.rankings
 
     def make_quant(self):
-        outer = self.page("Build & Test", "Quant Lab · 기존 계산 엔진으로 가격 분포 분석")
+        """Build & Test (owner-approved draft 2026-11-17, docs/product/ui_drafts_2026-11-17/draft_04_quant.png): the
+        stock detail's frame. Toolbar: title, 몬테카를로 | 전략 실험실, a status badge. Canvas: the run's lead line, its key
+        figures, the fan chart with its reading, then the metrics table. Right column: the settings in two folds
+        (종목·기간, 모형 가정) and a reading note, with the run button pinned at the bottom; the 읽는 법 tab holds the
+        workflow guide. Strategy Lab keeps its pane; its form docks into its own right column (ToolPane.dock_into).
+        Every attribute, signal and calculation is as before."""
+        from .page_kit import Badge, Card, Fold, KeyFigures, Soft, Text, Workspace
+        outer = self.page(None, None)
         from .research_style import prepare_page
         self.quant_page = prepare_page(outer)
-        outer.itemAt(1).widget().hide()
+        self.quant_page.setMaximumWidth(16777215)
+        scroll = self.stack.widget(self.stack.count() - 1)
+        self.quant_workspace = ws = Workspace(("Build & Test", "설계/검증"))
+        outer.addWidget(ws)
+        ws.fit_to(scroll)
         from .workspace_guide import WorkspaceGuide
         self.quant_guide = WorkspaceGuide('monte_carlo')
-        outer.addWidget(self.quant_guide)
         # Only the selected page sets the scroll width. The inactive Strategy
         # form has platform-dependent font/combobox hints of its own.
         self.quant_tabs = CurrentPageTabs()
-        outer.addWidget(self.quant_tabs)
         host = QWidget()
         layout = QVBoxLayout(host)
-        layout.setContentsMargins(0, 4, 0, 0)
-        layout.setSpacing(16)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(12)
         self.quant_tabs.addTab(host, 'Monte Carlo')
         from .strategy import StrategyPane
         self.strategy = StrategyPane()
         self.strategy.requested.connect(lambda q: self.run_tool('strategy', q))
         self.quant_tabs.addTab(self.strategy, 'Strategy Lab')
-        self.quant_tabs.currentChanged.connect(lambda i:self.quant_guide.set_key(('monte_carlo','strategy')[i]))
-        box, inner = panel("분석 설정")
+        ws.canvas.addWidget(self.quant_tabs, 1)
+        mc_side, strategy_side = ws.side, ws.add_side()
+        ws.bind_tabs(self.quant_tabs, (("Monte Carlo", "몬테카를로"), ("Strategy Lab", "전략 실험실")),
+                     sides=(mc_side, strategy_side),
+                     on_change=lambda i: (self.quant_guide.set_key(('monte_carlo', 'strategy')[i]),
+                                          getattr(self, 'quant_badge', None) is not None and
+                                          self.quant_badge.setVisible(i == 0 and bool(self.quant_badge.text()))))
+        self.quant_badge = ws.add_badge(("Simulation · not a guarantee", "시뮬레이션 · 미래 보장 아님"))
         self.symbol = QLineEdit("AAPL")
         self.symbol.setMaxLength(120)
         # Owner issues 04/12: no data-source selector; the app fetches by itself ("best": keyless Yahoo
@@ -1020,22 +1035,21 @@ class ResearchWindow(QMainWindow):
         self.seed = QSpinBox(); self.seed.setRange(0, 2147483647); self.seed.setValue(7)
         self.erp = QDoubleSpinBox(); self.erp.setRange(-100, 100); self.erp.setDecimals(2); self.erp.setValue(4)
         self.target = QLineEdit(); self.target.setPlaceholderText("선택 입력")
-        fields = (("Symbol", self.symbol), ("Model", self.model),
-                  ("Drift", self.drift), ("Horizon · sessions", self.horizon), ("Paths", self.paths),
-                  ("Seed", self.seed), ("ERP · %", self.erp), ("Target price", self.target))
+        fields = (("Symbol", self.symbol), ("Horizon · sessions", self.horizon), ("Paths", self.paths),
+                  ("Seed", self.seed), ("Model", self.model), ("Drift", self.drift),
+                  ("ERP · %", self.erp), ("Target price", self.target))
         for name, widget in (*fields, ("Data source", self.source)):
             widget.setAccessibleName(name)
             if isinstance(widget, QComboBox):
-                # Match the shared tool header: native option/font widths must
-                # not make this three-column form wider than its scroll page.
-                # Full option labels stay in the popup and selected tooltip.
+                # Full option labels stay in the popup and selected tooltip; the column is narrow.
                 widget.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)
-                widget.setMinimumContentsLength(12)
+                widget.setMinimumContentsLength(8)
                 widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
                 widget.setToolTip(widget.currentText())
                 widget.currentTextChanged.connect(widget.setToolTip)
                 widget.model().dataChanged.connect(lambda *args, combo=widget: combo.setToolTip(combo.currentText()))
-        from .form_layout import CompactFieldGrid, bound_input_panel, add_compact_action
+        from .form_layout import CompactFieldGrid, bound_input_panel
+        box, inner = panel("분석 설정")
         bound_input_panel(box)
         self.quant_form = CompactFieldGrid([(label(name, "caption"), widget) for name, widget in fields])
         inner.addWidget(self.quant_form)
@@ -1044,34 +1058,94 @@ class ResearchWindow(QMainWindow):
         self.run_button = QPushButton("분포 분석 실행")
         self.run_button.setProperty("primary", True)
         self.run_button.clicked.connect(self.run_analysis)
-        add_compact_action(inner, self.run_button)
-        self.analysis_status = label("데이터 출처·시드·모델 가정을 기록합니다.", "muted")
+        inner.addWidget(self.run_button)
+        from .tools import dock_form
+        settings = mc_side.add_page(("Settings", "설정"))
+        dock_form(box, self.run_button, mc_side, page=settings)
+        reading = Soft(("Reading the result", "결과를 읽는 법"),
+                       ("Half of the paths stay inside the dark band and 90% inside the light one. A wider band means "
+                        "the assumed volatility is larger.",
+                        "진한 띠 안에 경로의 절반이, 옅은 띠 안에 90%가 들어와요. 띠가 넓을수록 가정한 변동성이 커요."))
+        settings.addWidget(reading)
+        guide_page = mc_side.add_page(("How to read", "읽는 법"))
+        guide_page.addWidget(self.quant_guide)
+        self.analysis_status = label("데이터 출처·시드·모델 가정을 기록합니다.", "caption")
         self.analysis_status.setProperty("reading_help_keep_visible", True)
-        inner.addWidget(self.analysis_status)
-        layout.addWidget(box)
-        box, inner = panel("분포와 근거")
+        mc_side.foot.addWidget(self.analysis_status)
+        self.strategy.dock_into(strategy_side, title=("Settings", "설정"))
+        strategy_guide = strategy_side.add_page(("How to read", "읽는 법"))
+        strategy_guide.addWidget(Soft(("Strategy Lab", "전략 실험실"),
+                                      ("A backtest of the chosen rule on past prices, with costs. Past results are not a "
+                                       "promise of future ones.",
+                                       "고른 규칙을 과거 가격에 비용과 함께 시험해요. 과거 성과가 미래를 약속하지 않아요.")))
+        ws.finish()
+        # Canvas (Monte Carlo): lead line and key figures, the fan chart card, the metrics.
+        self.quant_lead = Text("", "lead")
+        self.quant_lead_note = Text("", "leadNote")
+        self.quant_lead_row = QWidget()
+        lead = QHBoxLayout(self.quant_lead_row); lead.setContentsMargins(0, 0, 0, 0); lead.setSpacing(8)
+        lead.addWidget(self.quant_lead); lead.addWidget(self.quant_lead_note); lead.addStretch(1)
+        self.quant_lead_row.hide()
+        layout.addWidget(self.quant_lead_row)
+        self.quant_figures = KeyFigures()
+        self.quant_figures.hide()
+        layout.addWidget(self.quant_figures)
+        chart_card = Card(("Distribution and evidence", "분포와 근거"))
         self.quant_chart = FanChart()
+        self.quant_notes = label("아직 실행한 분석이 없습니다.", "muted")
+        self.quant_notes.setProperty('reading_help_keep_visible', True)
+        from .chart_study import ChartStudy, LocalLabel
+        self.quant_study = ChartStudy(self.quant_chart, self.quant_notes)
+        self.quant_empty = LocalLabel({'ko':'분석을 실행하면 가격 분포와 위험 지표가 여기에 나타나요.',
+                                      'en':'Run the analysis to see the price distribution and risk metrics here.'}, 'muted')
+        self.quant_empty.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.quant_empty.setMinimumHeight(280)
+        chart_card.body.addWidget(self.quant_empty)
+        chart_card.body.addWidget(self.quant_study)
         self.quant_metrics = table(["지표", "값"])
         self.quant_metrics.horizontalHeaderItem(0).setData(CAPTION_ROLE, 'Metric')
         self.quant_metrics.setProperty("localized_columns", [0])
         from .result_layout import fit_result_table
         fit_result_table(self.quant_metrics)
-        self.quant_notes = label("아직 실행한 분석이 없습니다.", "muted")
-        self.quant_notes.setProperty('reading_help_keep_visible', True)
-        from .chart_study import ChartStudy
-        self.quant_study = ChartStudy(self.quant_chart, self.quant_notes)
-        from .chart_study import LocalLabel
-        self.quant_empty = LocalLabel({'ko':'분석을 실행하면 가격 분포와 위험 지표가 여기에 나타나요.',
-                                      'en':'Run the analysis to see the price distribution and risk metrics here.'}, 'muted')
-        inner.addWidget(self.quant_empty)
-        inner.addWidget(self.quant_study)
-        inner.addWidget(self.quant_metrics)
+        chart_card.body.addWidget(self.quant_metrics)
         self.quant_study.hide();self.quant_metrics.hide()
         notice = label("계산 완료 ≠ 투자 검증. 이 화면은 NOT_RUN 판정을 유지하며 주문이나 전략 원장을 생성하지 않습니다.", "caption")
         notice.setProperty('reading_help_keep_visible', True)
-        inner.addWidget(notice)
-        layout.addWidget(box)
-        layout.addStretch()
+        chart_card.body.addWidget(notice)
+        layout.addWidget(chart_card, 1)
+        self.quant_kit_language()
+
+    def quant_kit_language(self):
+        self.kit_language()
+
+    def kit_language(self):
+        """The page kit's pieces (page_kit.Workspace) follow the window language; the rest of each page is translated by
+        the LanguageController as before."""
+        from .page_kit import Workspace
+        for workspace in self.findChildren(Workspace):
+            workspace.set_language(getattr(self, "ui_language", "ko"))
+
+    def quant_show_figures(self, value):
+        """The run's lead line and key figures over the fan chart (draft: 'AAPL · GARCH(1,1)-t · 126거래일 · 경로 5,000개',
+        then 시작 · 중앙값 · 하위 5% · 상위 5% · 손실 확률 · 95% VaR)."""
+        r = value.result
+        params = value.run.get("parameters", {})
+        model = self.model.itemText(max(0, self.model.findData(params.get("model", self.model.currentData()))))
+        self.quant_lead.set_pair(str(params.get("symbol", "")))
+        self.quant_lead_note.set_pair((f"· {model} · {r.horizon_days} sessions · {r.n_paths:,} paths",
+                                       f"· {model} · {r.horizon_days}거래일 · 경로 {r.n_paths:,}개"))
+        self.quant_figures.set_items((
+            (("Start", "시작"), f"{r.spot:,.2f}", ""),
+            (("Median", "중앙값"), f"{r.median_terminal:,.2f}", ""),
+            (("Lower 5%", "하위 5%"), f"{r.p05:,.2f}", "down"),
+            (("Upper 5%", "상위 5%"), f"{r.p95:,.2f}", "up"),
+            (("P(loss)", "손실 확률"), f"{r.prob_loss:.1%}", ""),
+            (("95% VaR", "95% VaR"), f"{r.var_pct:.1%}".replace("-", "−"), "")))
+        self.quant_figures.show()
+        self.quant_lead_row.show()
+        self.quant_badge.set_pair(("Run complete · NOT_RUN", "계산 완료 · 검증 NOT_RUN"))
+        self.quant_badge.set_tone("ok")
+        self.quant_kit_language()
 
     def make_risk(self):
         from .portfolio import PortfolioPane
@@ -1401,6 +1475,7 @@ class ResearchWindow(QMainWindow):
         self.market_chart.set_locale(self.ctx)
         self.markets_view.set_locale(self.ctx)
         for destination in self.market_destinations.values():destination.set_locale(self.ctx)
+        self.kit_language()
         for completer in self.symbol_completers:
             completer.set_locale(self.ctx)
         self.locale_notice.setText(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'))
@@ -1467,6 +1542,7 @@ class ResearchWindow(QMainWindow):
             self.outputs[value.run["run_id"]] = value
             self.quant_chart.set_result(value.result)
             self.quant_empty.hide();self.quant_study.show();self.quant_metrics.show()
+            self.quant_show_figures(value)
             r, h = value.result, value.history
             vol_info = volatility_disclosure(r)
             table_rows(self.quant_metrics, [("Spot", f"{r.spot:,.2f}"), ("P5 / P50 / P95", f"{r.p05:,.2f} / {r.median_terminal:,.2f} / {r.p95:,.2f}"),
@@ -1641,6 +1717,9 @@ class ResearchWindow(QMainWindow):
         from .research_style import apply
         for workspace in (self.tools_page, self.quant_page, self.risk_page):
             apply(workspace,p,bool(index))
+        from .page_kit import Workspace
+        for workspace in self.findChildren(Workspace):
+            workspace.set_theme(p, bool(index))
         self.indicator_guide.set_theme(p)
         for destination in self.market_destinations.values():
             if hasattr(destination,'set_theme'):destination.set_theme(p)

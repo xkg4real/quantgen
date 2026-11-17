@@ -74,6 +74,44 @@ class CurrentPageStack(QWidget):
         self.currentChanged.emit(index)
 
 
+def dock_form(box, run_button, side, *, title=None, page=None):
+    """Move a form panel (`app.panel` + `form_layout.bound_input_panel`) into a page's right column and its run
+    button into the column's foot. Two-column fields fit the column (`CompactFieldGrid.docked`)."""
+    from .form_layout import CompactFieldGrid
+    layout = page if page is not None else side.add_page(title)
+    height = getattr(box, '_compact_height', None)
+    if height is not None:          # the panel's own height rule measured it at the old, wider width
+        height.timer.stop()
+        box.removeEventFilter(height)
+        box.setMinimumHeight(0)
+    box.setObjectName('dockedForm')
+    box.setMaximumWidth(16777215)
+    box._compact_base = 0
+    box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
+    inner = box.layout()
+    inner.setContentsMargins(2, 0, 2, 0)
+    for grid in box.findChildren(CompactFieldGrid):
+        grid.docked = True
+        grid.max_columns = min(grid.max_columns, 2)
+        grid.setMaximumWidth(16777215)
+        for _caption, control in grid.fields:
+            if isinstance(control, QComboBox):
+                control.setMinimumContentsLength(6)   # full option text stays in the popup and the tooltip
+        for column in range(4):
+            grid.grid.setColumnStretch(column, 0)     # the old third column keeps no share of the width
+        grid.columns = 0                              # lay the fields out again for the column's width
+        grid.refresh()
+    layout.addWidget(box)
+    if run_button is not None:
+        parent_layout = run_button.parentWidget().layout() if run_button.parentWidget() is not None else None
+        if parent_layout is not None:
+            parent_layout.removeWidget(run_button)
+        run_button.setProperty('kit', 'primary')
+        run_button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        side.foot.addWidget(run_button)
+    return layout
+
+
 class ToolPane(QWidget):
     requested = pyqtSignal(object)
 
@@ -162,6 +200,38 @@ class ToolPane(QWidget):
             exports.addWidget(button)
         layout.addLayout(exports)
         self.tool.currentIndexChanged.connect(self.switch)
+
+    def dock_into(self, side, *, title=None):
+        """The approved page drafts (owner 2026-11-17): the form moves to the page's right column (`page_kit.
+        SideColumn`), the run button to its pinned foot; the pane keeps the status, the result and the exports, which
+        the page shows in its canvas. Widgets, signals and requests are unchanged."""
+        dock_form(self.input_box, self.run, side, title=title)
+        self.docked_side = side
+        # The exports become two small actions at the top right of the canvas, beside the status line.
+        layout = self.layout()
+        for index in range(layout.count()):
+            item = layout.itemAt(index)
+            if item.layout() is not None and item.layout().indexOf(self.export_json) >= 0:
+                exports = layout.takeAt(index).layout()
+                break
+        else:
+            exports = None
+        if exports is not None:
+            status_index = layout.indexOf(self.status)
+            layout.removeWidget(self.status)
+            head = QHBoxLayout()
+            head.setContentsMargins(0, 0, 0, 0)
+            head.setSpacing(8)
+            head.addWidget(self.status, 1)
+            for button in (self.export_json, self.export_zip):
+                exports.removeWidget(button)
+                button.setProperty('kit', 'secondary')
+                button.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Fixed)
+                head.addWidget(button, 0, Qt.AlignmentFlag.AlignTop)
+            layout.insertLayout(max(0, status_index), head)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(16)
+        return side
 
     def hide_source(self):
         """Markets panes choose providers automatically (owner UI-8): no 데이터 출처 selector.
