@@ -802,14 +802,27 @@ class ResearchWindow(QMainWindow):
         layout.addStretch()
 
     def make_indicator_guide(self):
+        """기술지표 가이드 (owner-approved draft 2026-11-17, docs/product/ui_drafts_2026-11-17/draft_03_guide.png): the
+        stock detail's frame. Toolbar: title, 기술지표 27 | 투자 용어, the education badge, 모두 해제 and 보고서 저장.
+        Canvas: the example's name line and price figures, the chart card (indicator tags with their values, the
+        chart with the reading date, the date slider, the signals that missed) and the provenance in small print.
+        Right column: 지표 | 해석 with the combined reading and the education note pinned at the foot. The guide
+        keeps its widgets, signals, calculations and export (IndicatorGuide.dock_into)."""
         from .indicator_guide import IndicatorGuide
-        layout = self.page("Technical indicator guide", '')
-        self.guide_subtitle = layout.itemAt(1).widget()
+        from .page_kit import Workspace
+        outer = self.page(None, None)
+        outer.setContentsMargins(0, 0, 0, 0)
+        scroll = self.stack.widget(self.stack.count() - 1)
         self.indicator_guide = IndicatorGuide(locale=self.ctx)
+        self.guide_workspace = ws = Workspace(("Technical indicator guide", "기술지표 가이드"))
+        self.indicator_guide.dock_into(ws)
+        outer.addWidget(self.indicator_guide)
+        ws.fit_to(scroll)
+        # The empty chart's hint ('오른쪽 지표 목록에서 고르면 …'); the language change sets its text.
+        self.guide_subtitle = self.indicator_guide.hint
         self.guide_subtitle.setText(self.indicator_guide.intro_text())
         self.indicator_guide.intro.hide()
-        layout.addWidget(self.indicator_guide)
-        layout.addStretch()
+        self.kit_language()
 
     def make_markets(self):
         """Markets: one page per market (owner ruling UI-D10, 2026-11-11; since UI-D11, 2026-11-12: 국내 주식, 미국 주식,

@@ -94,7 +94,9 @@ def plot_bounds(series,ctx,width):
     return 18,max(350,int(width))-100
 
 
-def chart_svg(series, keys=(), *, locale=None, colors=LIGHT, width=960, cursor=None):
+def chart_svg(series, keys=(), *, locale=None, colors=LIGHT, width=960, cursor=None, legend=True):
+    """legend=False leaves the legend rows out (the desktop guide page shows each study as a tag above the chart);
+    an observed market snapshot is drawn by the market renderer, which keeps its own header."""
     from core.market.presentation import chart_svg as market_chart_svg
     selected=selection(keys);ctx=locale or LocaleContext();dark=colors.bg!=LIGHT.bg
     snapshot=getattr(series,'snapshot',None)
@@ -105,7 +107,7 @@ def chart_svg(series, keys=(), *, locale=None, colors=LIGHT, width=960, cursor=N
     lower=[k for k in selected if I.study(k).panel!='price']
     missing=[k for k in selected if k not in values]
     lower=[k for k in lower if k in values]
-    columns=max(1,(width-24)//210);top=12+math.ceil((len(selected)+1)/columns)*24
+    columns=max(1,(width-24)//210);top=12+(math.ceil((len(selected)+1)/columns)*24 if legend else 0)
     height=top+285+len(lower)*135+len(missing)*42+38
     left,right=plot_bounds(series,ctx,width)
     out=[f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
@@ -117,7 +119,7 @@ def chart_svg(series, keys=(), *, locale=None, colors=LIGHT, width=960, cursor=N
     def line(x1,y1,x2,y2,color,stroke=1,dash=''):
         out.append(f'<line x1="{x1:.2f}" y1="{y1:.2f}" x2="{x2:.2f}" y2="{y2:.2f}" stroke="{color}" stroke-width="{stroke}" stroke-dasharray="{dash}"/>')
     legends=[(series.symbol,colors.text)]+[(I.study(k).label(ctx.language),next(iter(study_colors(k,dark).values()))) for k in selected]
-    for at,(name,color) in enumerate(legends):
+    for at,(name,color) in enumerate(legends if legend else ()):
         x,y=14+at%columns*210,20+at//columns*24
         line(x,y-4,x+12,y-4,color,2);text(x+18,y,name,color)
     x=lambda i:left+(right-left)*i/max(1,len(series.closes)-1)
