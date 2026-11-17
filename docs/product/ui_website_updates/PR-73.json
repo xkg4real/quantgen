@@ -1,0 +1,106 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-bootstrap-etf-sleeve-disclosures-pr-73",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "Owner ruling 2026-11-03: the website is handled in a separate session and this session does not modify it; this record does not establish receipt.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "claude/s10-models-20261104",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/73",
+    "implementation_commit": "2710cd0",
+    "remote_status": "OPEN",
+    "merge_commit": null,
+    "verified_head": null
+  },
+  "summary_ko": [
+    "몬테카를로 블록 부트스트랩을 '5거래일 고정 길이 블록의 원형 재표본(블록 길이가 무작위인 정상 부트스트랩이 아님)'으로 화면·해설·AI 페이로드·README·모형 설명서 원본에 밝힙니다. 변동성 군집은 시차 1-4에서 일부만 남고 시차 5부터 사라지며, 팬 차트는 현재 변동성 수준에서 출발하지 않습니다. 숫자는 같습니다.",
+    "ETF 전략의 일별 손익이 변하지 않을 때(현금만 보유 등) 샤프비율을 1e16이나 0.00 대신 'n/a'·'계산 불가'로 표시합니다. 정의되는 샤프비율은 같습니다.",
+    "ETF 전략 계산 관례를 밝힙니다: 처음 210개 일별 수익률(변동성 목표는 23개)의 현금 준비 구간, 연 3% 고정 현금 가정, 준비 구간 포함·현금 초과 수익이 아닌 샤프비율, 비용 없는 매일 재조정, 계열 카드 판정.",
+    "§10 수정 집계 29/67(남은 38). N-M1-02는 공개만 한 부분 수정이며 블록 길이 수학 수정은 소유자 결정 사항입니다."
+  ],
+  "website_impact": {
+    "classification": "shared_browser_change",
+    "browser_code_changed": true,
+    "shared_sources": [
+      "core/quant/insights.py",
+      "core/research/mc_disclosure.py",
+      "core/research/sleeve_disclosure.py",
+      "core/research/etf_workflow.py",
+      "core/ui_legacy_messages.py",
+      "ui/quant_lab_page.py",
+      "ui/etf_page.py",
+      "README.md"
+    ],
+    "requested_actions_ko": [
+      "소개사이트가 Quant Lab 몬테카를로 모형을 설명한다면 블록 부트스트랩을 '정상(stationary)'이 아닌 '5거래일 고정 블록의 원형 재표본'으로, 변동성 군집은 블록 안에서 일부만 남는다고 고칠지 검토하세요.",
+      "소개사이트가 ETF 전략 결과를 보여 준다면 계산 불가 샤프비율('n/a')과 준비 구간·3% 현금 가정·현금 초과 수익이 아닌 샤프비율 안내를 반영할지 검토하세요.",
+      "정책 FACTS의 2026-11-04 몬테카를로 부트스트랩·ETF 전략 절을 웹 Docs에 반영할지 검토하세요.",
+      "웹 HTML/소스는 GitHub에 올리지 않습니다."
+    ]
+  },
+  "verification": {
+    "tests": [
+      {
+        "suite": "mc bootstrap disclosure (new)",
+        "passed": 15
+      },
+      {
+        "suite": "etf sleeve disclosure (new)",
+        "passed": 17
+      },
+      {
+        "suite": "34 modules after merging both tracks (Monte Carlo, ETF, LETF, desktop, Markets, options, crypto, prose language, status, compliance, Flet runtime)",
+        "passed": 281
+      }
+    ],
+    "counts_note": "Suites can overlap; do not sum. Local Linux PyQt6 6.12.0 offscreen, Python 3.13, network blocked. One watchlist test timed out once under 34 parallel Qt processes on 4 CPUs and passed twice alone.",
+    "source_review": "20 documents PASS after named refresh; publication BLOCKED",
+    "ci": "PENDING",
+    "ci_runs": [],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "Not verified on the owner's Windows PC."
+  },
+  "website_application": {
+    "status": "not_applied",
+    "deployment_status": "not_deployed",
+    "url": "https://quantgeneration.com/"
+  },
+  "limits_ko": [
+    "블록 길이를 바꾸는 수학 수정(C1 후반부)은 하지 않았습니다. 모형 설명서 PDF는 다시 만들지 않았고, ResearchRun 내보내기에는 부트스트랩 설명 문장이 없습니다.",
+    "NEW-M6-05가 가리키는 한계는 등록부에서 하나로 확정되지 않아, 가능한 해석을 모두 덮는 공개 문구로 처리했습니다.",
+    "한국어 내보내기 HTML에서는 ETF 동적 안내 문구가 기존 공개 문구처럼 영어로 남습니다.",
+    "실제 공급자 자료, Windows 화면, 한국어 문구의 원어민 검토는 미검증입니다."
+  ],
+  "changed_files": [
+    ".github/workflows/runtime-smoke.yml",
+    "README.md",
+    "core/quant/insights.py",
+    "core/quant/montecarlo.py",
+    "core/research/etf_workflow.py",
+    "core/research/mc_disclosure.py",
+    "core/research/sleeve_disclosure.py",
+    "core/ui_legacy_messages.py",
+    "docs/build_models_primer.py",
+    "docs/compliance/FACTS.md",
+    "docs/compliance/source-review.json",
+    "docs/product/ETF_SLEEVE_DISCLOSURE_2026-11-04.md",
+    "docs/product/MC_BOOTSTRAP_DISCLOSURE_2026-11-04.md",
+    "docs/product/SECTION10_QUEUE_2026-10-30.json",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md",
+    "docs/product/ui_website_updates/PR-73.json",
+    "qa/research_status.json",
+    "quantgen_desktop/app.py",
+    "quantgen_desktop/market_narrative_language.py",
+    "quantgen_desktop/market_tools.py",
+    "quantgen_desktop/translations.py",
+    "tests/etf_sleeve_disclosure_acceptance.py",
+    "tests/mc_bootstrap_disclosure_acceptance.py",
+    "ui/etf_page.py",
+    "ui/quant_lab_page.py"
+  ]
+}

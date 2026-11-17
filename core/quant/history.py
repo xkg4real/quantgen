@@ -458,7 +458,7 @@ def _cached(provider: str, fetch, symbol: str, days: int) -> History:
     return h
 
 
-SOURCES = ("auto", "fmp", "kis", "yfinance", "crypto", "synthetic")
+SOURCES = ("auto", "best", "fmp", "kis", "yfinance", "crypto", "synthetic")
 
 
 def load_history(symbol: str, *, source: str = "auto", days: int = 504) -> History:
@@ -486,6 +486,8 @@ def load_history(symbol: str, *, source: str = "auto", days: int = 504) -> Histo
         return _cached("YFINANCE", yf_history, symbol, days)
     if source == "crypto":
         return _cached("CRYPTO", crypto_history, symbol, days)
+    if source == "best":
+        return _best_history(symbol, days)
     if source != "auto":
         raise HistoryError(f"Unknown source {source!r}. One of {SOURCES}.")
     if _looks_krx(symbol):
@@ -509,3 +511,49 @@ def load_history(symbol: str, *, source: str = "auto", days: int = 504) -> Histo
     h = synthetic_history(symbol, days=days)
     return History(h.symbol, h.source, h.dates, h.closes,
                    note="FMP_API_KEY is not configured; " + h.note)
+
+
+def _yahoo_candidates(symbol: str) -> tuple[str, ...]:
+    """Yahoo tickers that can stand in for a symbol whose keyed provider is absent."""
+    s = symbol.strip().upper()
+    if _looks_krx(s):
+        code = s.split(".")[0]
+        if s.endswith((".KS", ".KQ")):
+            return (s,)
+        return (f"{code}.KS", f"{code}.KQ")
+    if ":" in s:                                  # NAS:AAPL / NYS:IBM style KIS overseas codes
+        return (s.split(":", 1)[1],)
+    if s.isascii() and s.replace(".", "").replace("-", "").isalnum() and not _looks_kis_market(s):
+        return (s,)
+    return ()
+
+
+def _best_history(symbol: str, days: int) -> History:
+    """Screen routing without a source selector (owner UI review, 2026-11-10).
+
+    The same as `auto` while that reaches a real provider. Where `auto` would fall
+    back to a synthetic series only because a keyed provider (FMP or KIS) is not
+    configured, keyless Yahoo Finance is asked first, as the Markets chart router
+    already does (UI-8). A configured provider that fails still raises; a synthetic
+    series is returned only when Yahoo cannot answer either, and its note says so.
+    `auto` itself keeps its documented no-Yahoo invariant for scripts and tests.
+    """
+    h = load_history(symbol, source="auto", days=days)
+    if h.source != "SYNTHETIC":
+        return h
+    tried = []
+    for candidate in _yahoo_candidates(symbol):
+        try:
+            got = _cached("YFINANCE", yf_history, candidate, days)
+        except HistoryError as exc:
+            tried.append(f"{candidate}: {exc}")
+            continue
+        missing = h.note.split(";", 1)[0].strip()
+        note = "; ".join(x for x in (got.note, f"Yahoo used because {missing}" if missing else "") if x)
+        return History(got.symbol, got.source, got.dates, got.closes, note=note,
+                       adjustment=got.adjustment, status=got.status)
+    if tried:
+        return History(h.symbol, h.source, h.dates, h.closes,
+                       note=h.note + " Yahoo Finance also failed (" + " | ".join(tried)[:240] + ").")
+    return h
+

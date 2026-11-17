@@ -31,10 +31,11 @@ class RatesRequest:
 
     def validate(self):
         from core.ficc.common import FICCError, parse_forward_tenor, parse_tenor
+        from core.ficc.curves import CURVE_METHODS
         if self.tool not in {"curve", "swap", "option", "sim"} or self.source not in {"auto", "fred", "synthetic"}:
             raise ValueError("Unknown Rates tool/source")
         if self.tool == "curve":
-            if self.method not in {"bootstrap", "nelson_siegel", "svensson"}:
+            if self.method not in CURVE_METHODS:
                 raise ValueError("Unknown curve method")
             if type(self.lookback) is not int or self.lookback < 1:
                 raise ValueError("Lookback must be a positive integer")

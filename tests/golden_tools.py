@@ -3,7 +3,7 @@ brief spec_goldens_fixtures B.3; rulings section 6).
 
 `LEVEL1` / `LEVEL2` are the section 9.3 tolerance tables verbatim; `tol(kind, level)` reads them. A verdict derived
 from a statistic within tolerance of its threshold is asserted as a class, never as a point (`assert_class`,
-L5738). `golden(id)` reads `tests/fixtures/macro/goldens.csv` (one row per golden sub-value); a row whose status is
+L5737). `golden(id)` reads `tests/fixtures/macro/goldens.csv` (one row per golden sub-value); a row whose status is
 `pending` or `pre_patch_pending` raises `NotRun("PENDING: §9.4 item <n> ...")` when its value is asked for: no
 number is invented in its place (L5996). The loader never substitutes a local-cache value.
 """
@@ -78,7 +78,7 @@ def near_threshold(stat: float, threshold: float, kind: str, level: int = 1) -> 
 
 def assert_class(stat: float, threshold: float, kind: str, verdict: str, allowed, *, point: str | None = None,
                  level: int = 1, label: str = "") -> None:
-    """Verdict near a threshold is asserted as a class (L5738, L5499): `verdict in allowed`. Away from the threshold
+    """Verdict near a threshold is asserted as a class (L5737, L5499): `verdict in allowed`. Away from the threshold
     the point verdict `point` (when given) must hold as well."""
     allowed = set(allowed)
     if verdict not in allowed:

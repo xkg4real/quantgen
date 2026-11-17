@@ -150,7 +150,7 @@ KO_TO_EN = {
  '계산 완료 · 출처·관측일·가정을 확인하세요. 공식 검증 판정은 별도입니다.':'Calculation completed · check sources, dates and assumptions. Official validation is separate.',
  '입력 오류 · 숫자, 단위, 만기 및 선택한 도구의 조건을 확인하세요.':'Input error · check numbers, units, maturity and tool conditions.',
  'Macro · 시장 관측과 로컬 해설':'Macro · market observations and local commentary',
- '이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 Markets의 Macro v2 탭에서 확인합니다.':'This is the descriptive macro sheet. Use Markets → Macro v2 for the overlay, model cards and research register.',
+ '이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 분석 도구의 매크로 v2에서 확인합니다.':'This is the descriptive macro sheet. Use Analysis tools → Macro v2 for the overlay, model cards and research register.',
  '금리·스프레드의 변화는 bp, 다른 지표의 변화는 원 단위입니다. 분류는 설명용이며 검증 게이트나 포지션을 바꾸지 않습니다.':'Rate/spread changes use bp; other changes use original units. Classification is descriptive and changes neither gates nor positions.',
  '합성 데이터 포함: ':'Includes synthetic data: ',
  'Bonds · 가격·위험·시나리오·선물 헤지':'Bonds · price, risk, scenarios and futures hedge',
@@ -215,7 +215,7 @@ KO_TO_EN = {
  'Native desktop preview\nFlet browser is retained':'Native desktop preview\nFlet browser is retained',
  '억':'×100M',
  '미국 10년 금리':'US 10-year Treasury yield',
- 'PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\nMacro v2·모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다.':'Native PyQt6: Home, daily Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, Strategy Lab, Portfolio, Signals, Library/exports, Connections and System.\nMacro v2, paper trading, rules and optional AI commentary are connected. Physical Windows display/DPI/install checks remain pending.\nThe Flet browser remains available.',
+ 'PyQt6 네이티브: Home, Markets(관심종목 차트·종목 한 화면), 분석 도구(Bonds, Rates, FX, Structuring, Macro sheet, Macro v2, Derivatives, ETF, Crypto, KRX), 기술지표 가이드, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\n모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다.':'Native PyQt6: Home, Markets (watchlist charts and one screen per stock), Analysis tools (Bonds, Rates, FX, Structuring, Macro sheet, Macro v2, Derivatives, ETF, Crypto, KRX), Indicator guide, Monte Carlo, Strategy Lab, Portfolio, Signals, Library/exports, Connections and System.\nPaper trading, rules and optional AI commentary are connected. Physical Windows display/DPI/install checks remain pending.\nThe Flet browser remains available.',
 }
 
 EN_TO_KO = {english:korean for korean,english in KO_TO_EN.items()}
@@ -278,5 +278,59 @@ _SIGNAL_STATISTICS = {
 EN_TO_KO.update(_SIGNAL_STATISTICS)
 KO_TO_EN.update({value: key for key, value in _SIGNAL_STATISTICS.items()})
 
+# Monte Carlo block-bootstrap disclosure (§10 N-M1-02/a): one EN/KO pair, defined once.
+from core.research.mc_disclosure import BOOTSTRAP_TEXT, BOOTSTRAP_TEXT_KO
+EN_TO_KO[BOOTSTRAP_TEXT] = BOOTSTRAP_TEXT_KO
+KO_TO_EN[BOOTSTRAP_TEXT_KO] = BOOTSTRAP_TEXT
+from core.research.sleeve_disclosure import SHARPE_CONVENTIONS_POINTER, SHARPE_CONVENTIONS_POINTER_KO
+EN_TO_KO[SHARPE_CONVENTIONS_POINTER] = SHARPE_CONVENTIONS_POINTER_KO
+KO_TO_EN[SHARPE_CONVENTIONS_POINTER_KO] = SHARPE_CONVENTIONS_POINTER
+
+# Exact A1 captions only. Old Korean authored chrome remains a source alias;
+# no replacement is applied inside user, provider or recorded report text.
+_A1_TERMS = {
+    'Build & Test': '설계/검증', 'Portfolio & Risk': '분석', 'Portfolio · risk': '분석',
+    'Signals': '기술적 분석', 'Paper Trading': '모의투자',
+    'Signals · technical observations and costed backtests': '기술적 분석 · 기술적 관측과 비용 포함 백테스트',
+    'Paper Trading · no actual orders': '모의투자 · 실제 주문 없음',
+    'Metric': '항목', 'Field': '항목', 'Fields': '항목', 'Metrics': '주요 지표',
+    'Sharpe': '샤프 지수', 'Sharpe ratio': '샤프 지수',
+    'Convexity': '컨벡시티', 'Macaulay': '맥컬리 듀레이션', 'Macaulay duration': '맥컬리 듀레이션',
+    'Modified': '수정 듀레이션', 'Modified duration': '수정 듀레이션',
+    'Zero rate': '무이표 금리', 'Model zero': '모형 무이표 금리',
+    'Strike': '행사가격',
+    'Provider': '제공처', 'Monte Carlo': '몬테카를로',
+    'Daily market data with providers and observation dates': '제공처와 관측일을 함께 확인하는 일별 시장 데이터',
+    'Provider failures are not filled with synthetic prices.': '제공처 조회 실패를 합성 가격으로 채우지 않습니다.',
+    'Daily observations · provider caches may be used. Check dates; public redistribution rights are separate.':
+        '일별 관측값 · 제공처 캐시가 사용될 수 있습니다. 관측일을 확인하세요. 공개 재배포 권리는 별도입니다.',
+    'Horizon · sessions': '분석 기간(거래일)', 'Sessions': '거래일 수',
+    'Macro sheet': '매크로 지표', 'Macro v2': '매크로 v2', 'Macro': '매크로',
+}
+_A1_TERMS[SHARPE_CONVENTIONS_POINTER] = SHARPE_CONVENTIONS_POINTER_KO.replace('샤프비율이며', '샤프 지수이며', 1)
+_A1_KO_ALIASES = {}
+for _english, _korean in _A1_TERMS.items():
+    _previous = EN_TO_KO.get(_english)
+    # A shared Korean caption may already mean another authored English label
+    # (for example 지표 = Indicator as well as the former Metric caption).
+    # Keep that source meaning; callers with a canonical Metric still get 항목.
+    if (_previous and _previous != _korean
+            and KO_TO_EN.get(_previous, _english) == _english):
+        _A1_KO_ALIASES[_previous] = _korean
+    EN_TO_KO[_english] = _korean
+    KO_TO_EN.setdefault(_korean, _english)
+for _source, _name in {'vasicek':'Vasicek', 'cir':'CIR', 'hull_white':'Hull-White',
+                       'nelson_siegel':'Nelson-Siegel', 'svensson':'Svensson'}.items():
+    EN_TO_KO[_source] = KO_TO_EN[_source] = _name
+
+# Page-level Flet captions (owner UI review 2026-11-10): reviewed entries above win.
+from core.ui_page_messages import PAGE_EN_TO_KO as _PAGE_EN_TO_KO
+from core.ui_messages import LEGACY as _REVIEWED_KEYS
+for _english, _korean in _PAGE_EN_TO_KO.items():
+    if _english in _REVIEWED_KEYS:
+        continue  # a reviewed message key (e.g. 'price' -> 기준값) keeps its caption everywhere
+    EN_TO_KO.setdefault(_english, _korean)
+    KO_TO_EN.setdefault(_korean, _english)
+
 def static_text(text,language):
-    return KO_TO_EN.get(text,text) if language=='en' else EN_TO_KO.get(text,text)
+    return KO_TO_EN.get(text,text) if language=='en' else _A1_KO_ALIASES.get(text,EN_TO_KO.get(text,text))

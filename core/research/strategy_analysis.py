@@ -19,7 +19,9 @@ class StrategyRequest:
             return
         if self.tool != 'run' or self.family not in FAMILIES:
             raise ValueError('Unknown strategy tool/family')
-        if self.source not in {'auto', 'kis', 'fmp', 'yfinance', 'crypto', 'synthetic'}:
+        # 'best' is the screen default (no source selector, owner UI review 2026-11-10): load_history
+        # asks `auto` first and keyless Yahoo before a labelled synthetic fallback.
+        if self.source not in {'best', 'auto', 'kis', 'fmp', 'yfinance', 'crypto', 'synthetic'}:
             raise ValueError('Unknown history source')
         if not 1 <= len(self.symbols) <= 15 or len(set(self.symbols)) != len(self.symbols):
             raise ValueError('Choose distinct symbols')

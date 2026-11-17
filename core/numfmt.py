@@ -10,6 +10,8 @@ only produces the numeric portion).
 """
 from __future__ import annotations
 
+from decimal import Decimal, localcontext
+import math
 from typing import Optional
 
 # Decimal / grouping separators by locale prefix. Default is en (comma group,
@@ -93,6 +95,41 @@ def format_price(value: float, currency: str = "", locale: Optional[str] = None,
 
 _COMPACT = [(1_000_000_000_000, "T"), (1_000_000_000, "B"),
             (1_000_000, "M"), (1_000, "K")]
+
+
+def compact_large_number(value, locale: Optional[str] = None) -> str:
+    """Table magnitudes with up to two decimals and fixed K/M/B/T in every language.
+
+    Missing/non-finite values remain unknown. Rounding promotes a magnitude so
+    999,999 becomes 1M, rather than 1,000K. The full value belongs in a tooltip.
+    Existing chart-axis formatting below retains its requested fixed precision.
+    """
+    if isinstance(value, bool):
+        return "—"
+    try:
+        finite = float(value)
+    except (TypeError, ValueError, OverflowError):
+        return "—"
+    if not math.isfinite(finite):
+        return "—"
+    number = Decimal(str(finite))
+    suffixes = ("", "K", "M", "B", "T")
+    with localcontext() as context:
+        context.prec = max(28, number.adjusted() + 4)
+        magnitude = 0
+        while abs(number) >= 1000 and magnitude < len(suffixes) - 1:
+            number /= 1000
+            magnitude += 1
+        number = number.quantize(Decimal("0.01"))
+        if abs(number) >= 1000 and magnitude < len(suffixes) - 1:
+            number /= 1000
+            magnitude += 1
+        if not number:
+            number = Decimal(0)
+        whole, _, fraction = format(number, "f").partition(".")
+        group, decimal = _sep_for(str(locale or "en").replace("_", "-"))
+        fraction = fraction.rstrip("0")
+        return _group(whole, group) + (decimal + fraction if fraction else "") + suffixes[magnitude]
 
 
 def format_compact(value: float, locale: Optional[str] = None,

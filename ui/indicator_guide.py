@@ -8,6 +8,9 @@ from core.i18n import LocaleContext
 from core.education.indicators import INDICATORS, selection, historical_case, counterexamples, from_history
 from core.education.chart import chart_svg, cursor_text, reading_text, learning_bundle
 
+# Provider codes shown under a loaded history, as words (translated through the page catalogue).
+_PROVIDER={'SYNTHETIC':'Synthetic data','YFINANCE':'Yahoo Finance','CRYPTO':'Crypto venue'}
+
 
 class IndicatorGuide(ft.Column):
     def __init__(self,page,*,history=None,embedded=False):
@@ -117,7 +120,7 @@ class IndicatorGuide(ft.Column):
                 options=[ft.dropdown.Option(key,ctx.t('auto_sample' if key=='auto' else 'sample_'+key)) for key in ('auto','2020','2022','2019')],
                 on_select=self.choose_case))
         controls += [text(ctx.t('why_sample')+' · '+ctx.t('why_'+self.case_name),12,True),
-            text((ctx.t('historical_source') if not self.external else self.series.source)+'\n'+self.series.symbol+' · '+ctx.date(self.series.dates[0])+' → '+ctx.date(self.series.dates[-1]),11,True),
+            text((ctx.t('historical_source') if not self.external else ctx.text(_PROVIDER.get(self.series.source,self.series.source)))+'\n'+self.series.symbol+' · '+ctx.date(self.series.dates[0])+' → '+ctx.date(self.series.dates[-1]),11,True),
             ]
         chart_controls=[self.image,self.readout,self.slider,
             text(ctx.t('no_ohlcv_close' if self.external else 'no_ohlcv'),12,True)]

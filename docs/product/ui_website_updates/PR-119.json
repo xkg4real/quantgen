@@ -1,0 +1,51 @@
+{
+  "id": "PR-119",
+  "source_pr": "https://github.com/xkg4real/quantgen/pull/119",
+  "source_branch": "gpt/market-menu-click-20261114",
+  "source_commit": "b8d5ac889bc89372cac7cc8595c252fa6bc49705",
+  "merge_status": "merged",
+  "summary": "Working shallow Markets navigation; compact research surfaces; movable/resizable/Deleteable risk-reward drawings and concrete, concise explanations for 27 studies.",
+  "changed_files": [
+    "quantgen_desktop/market_menu.py",
+    "quantgen_desktop/shell_rail.py",
+    "quantgen_desktop/research_style.py",
+    "quantgen_desktop/workspace_guide.py",
+    "quantgen_desktop/risk_reward.py",
+    "quantgen_desktop/market_chart.py",
+    "quantgen_desktop/paper.py",
+    "quantgen_desktop/indicator_picker.py",
+    "quantgen_desktop/stock_detail.py",
+    "core/education/reading_cues.py",
+    "core/education/catalog.py"
+  ],
+  "verification": {
+    "local": "34 targeted tests passed; final 59 risk/guide/forms/paper regressions and 1 syntax check passed. Groups overlap; do not sum. Actual QWindow click failed before the menu fix and passes after. Light/dark 1440px and 1000px chart, 1360px research and guide-card captures inspected.",
+    "runtime_url": "https://github.com/xkg4real/quantgen/actions/runs/43454709190",
+    "runtime_status": "in_progress",
+    "compliance_url": "https://github.com/xkg4real/quantgen/actions/runs/43454709248",
+    "compliance_status": "success",
+    "limits": "No owner Windows DPI/screen reader, real-account measurement, browser preview or AWS deployment verified. Publication remains BLOCKED despite 20-document source consistency PASS.",
+    "remote": "Runtime43454709190: new menu QWindow click, risk/reward and research layout checks plus the initial native/market integration step passed on Windows Python 3.11/3.12/3.14 and Linux 3.12. Syntax 3.10/3.11 passed. Full Runtime remains in progress; not claimed complete."
+  },
+  "website_impact": {
+    "classification": "review_required",
+    "native_only": [
+      "Qt application event dispatch, spin-editor geometry, native QPainter and wrapping layouts."
+    ],
+    "browser_review": [
+      "Keep menu choices shallow; select rankings inside the destination page. Single destinations open directly. Do not redirect Markets to unrelated left-rail sections.",
+      "Align research form/readout widths and wrap actions on narrow screens without truncating explanatory text.",
+      "Where a web chart exists, support drawing movement, horizontal/price resizing and selected-only Delete without intercepting text edits. Retain price-only calculation limits and label initial levels as examples.",
+      "Reuse 27-study observation/cross-check/limitation copy and preserve full definitions behind expansion. Do not introduce performance promises or fabricated buy/sell timing."
+    ],
+    "requested_action": "웹사이트 작업공간(AWS): 실제 웹 소스에 적용 가능한 사항을 검토하고 구현·프리뷰·AWS 배포 상태를 구분해 보고하세요. 네이티브 Qt 코드를 HTML에 그대로 복사하지 마세요."
+  },
+  "delivery": {
+    "status": "queued",
+    "destination": "웹사이트 작업공간(AWS)",
+    "reason": "No supported cross-chat send tool; saved queue and shared handoff are not message delivery."
+  },
+  "website_application": "unverified",
+  "deployment": "unverified",
+  "merge_commit": "51d7ffb758d1393f1713cd4dafd32ed3673738c2"
+}

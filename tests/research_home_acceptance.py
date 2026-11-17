@@ -179,11 +179,32 @@ class ResearchHomeTests(unittest.TestCase):
         self.assertIn('0', texts)  # empty current session, not historical trial count
 
     def test_status_failure_visible_never_ready(self):
-        with patch.object(research_home, 'recorded_status', return_value=(None, '자료 확인 실패')):
+        from core.i18n import LocaleContext
+        # An unverified error detail must not become status evidence, even if
+        # it contains plausible readiness, approval or historical-count text.
+        raw_error = '자료 확인 실패 · READY · OWNER_APPROVED · 999 PASS / 0 FAIL / 0 NOT_RUN'
+        with patch.object(research_home, 'recorded_status', return_value=(None, raw_error)) as read_status:
             view = research_home.build_system_page(self.page, navigate=lambda _:None)
-        texts = [c.value for c in walk(view) if isinstance(c, ft.Text)]
-        self.assertIn('확인 필요', texts); self.assertIn('자료 확인 실패', texts)
-        self.assertNotIn('준비 완료', texts)
+        read_status.assert_called_once_with()
+        status = next(c for c in walk(view) if isinstance(c, research_home.RecordedStatusView))
+        for locale, title, no_approval in (
+            ('ko_KR', '기록된 상태 확인 필요', '승인 상태는 표시하지 않습니다.'),
+            ('en_US', 'Recorded status unavailable', 'no approval status is shown.'),
+            ('ko_KR', '기록된 상태 확인 필요', '승인 상태는 표시하지 않습니다.'),
+        ):
+            with self.subTest(locale=locale):
+                status.render_locale(LocaleContext(locale))
+                lines = [c.value for c in walk(status) if isinstance(c, ft.Text)]
+                self.assertEqual(len(lines), 2)
+                self.assertEqual(lines[0], title)
+                self.assertIn(no_approval, lines[1])
+                text = '\n'.join(lines)
+                for forbidden in ('준비 완료', 'READY', 'OWNER_APPROVED', 'COMMERCIAL',
+                                  'NOT_FROZEN', 'NOT_INSPECTED', 'NOT_VERIFIED', 'PUBLISHED',
+                                  '자료 확인 실패', raw_error):
+                    self.assertNotIn(forbidden, text)
+                self.assertNotRegex(text, r'\b\d+\s+(?:PASS|FAIL|NOT_RUN)\b')
+                self.assertNotRegex(text, r'\b\d{4}-\d{2}-\d{2}\b')
 
 
 if __name__ == '__main__':

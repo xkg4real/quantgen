@@ -173,7 +173,7 @@ paths under one of four models:
 | **GARCH(1,1)-t** (default) | Volatility clustering (ω, α, β fitted by L-BFGS-B maximum likelihood) with Student-t innovations; the tail is fitted as 1/ν on [0, 0.4], so the normal (1/ν = 0) is nested and the "LR t vs normal" statistic is never negative, with its 5 % line at the boundary-mixture value 2.706. The mean is the sample mean, fixed. Simulated innovations are bounded at ±`Z_BOUND` (a t draw beyond it is redrawn from the t restricted to the bound), because an unbounded t gives the price no finite mean; the bound was chosen by `docs/bounded_innovation_sweep.py`. Every fit carries its precision: 95 % Wald intervals for α, β and the persistence from the observed information (the half-life interval is the persistence one mapped through), a profile-likelihood interval for ν that reaches "normal" exactly when the LR tile is below 2.706, "SE undefined" with the reason when the information matrix fails, and a chip naming every interval that reaches a bound; the unconditional vol gets no interval because the delta method was measured to cover 42–100 % depending on persistence (`docs/B2_FIX_BULLETIN.md`) | The baseline: today's conditional vol, where it settles (unconditional), the half-life in sessions, and the tail — with every guardrail (not converged, near-integrated, ν at a bound) said out loud |
 | **GBM** | Lognormal returns at the sample drift and volatility | Smooth regimes; the benchmark GARCH is tested against (LR, ΔAIC) |
 | **Jump diffusion** (Merton) | Diffusion plus Poisson jumps, calibrated from the sample's >3σ days | Names with gap risk — earnings, headlines |
-| **Block bootstrap** | Nothing — resamples actual return blocks | When the empirical distribution (fat tails, clustering) is the point |
+| **Block bootstrap** | No distribution — resamples the demeaned daily returns in fixed, circular 5-session blocks (not a stationary bootstrap) | When the empirical fat tails are the point; volatility clustering is kept only partly, within 5-session blocks, and the fan does not start from today's vol level |
 
 Every run is seeded and reproducible. Results: percentile fan over history,
 terminal distribution, horizon VaR/CVaR, probability of loss, probability of
@@ -244,11 +244,14 @@ board endpoint stops at its top 100 strikes): futures basis and cost-of-carry
 fair value against KIS's theoretical price, the parity-implied forward,
 Black-76 inversion of every two-sided quote against KIS's implied vol, put-call
 parity residuals, butterfly and vertical arbitrage counts, a raw SVI smile with
-the Gatheral–Jacquier g(k) check, the Cboe model-free implied variance, the
+the Gatheral–Jacquier g(k) check, the Cboe model-free implied variance over the quoted strike strip (the
+omitted wings bias it low and the covered range is shown), the
 Breeden–Litzenberger risk-neutral density and the empirical pricing kernel
-against the Quant Lab's GARCH-t terminal density, the box-spread implied KRW
-rate, and a delta-hedging P&L simulation (GBM or GARCH-t) that reports the
-gamma-weighted break-even volatility. A board captured with the market closed
+against the Quant Lab's GARCH-t terminal density, an adjacent-strike box-spread
+rate shown as a quote-quality check (its sensitivity and bid/ask range, not a
+funding rate), and a delta-hedging P&L simulation (GBM or GARCH-t) that reports
+the gamma-weighted break-even volatility; under GBM the expected P&L is zero by
+construction, so its sign is not read as a result. A board captured with the market closed
 is last prints struck at different moments: the page says so in red, measures
 time to expiry from the last session, and marks every figure indicative.
 
@@ -875,6 +878,23 @@ See [supported markets, setup and current limits](docs/product/KIS_MARKET_CHARTS
 Actual KIS account connectivity and AWS deployment have not been verified by
 these offline fixture checks.
 
+Since 2026-11-04 the desktop Markets page shows the user's watchlist as chart
+cards (stored as asset/code/exchange only in the `markets/watchlist` setting,
+20 at most) and one screen per stock: the price chart plus key figures, 52-week
+range, returns, risk, signals, indicators, investor flows and short selling, and
+a list of what is not provided. The Markets search box and the stock fields of
+Build & Test, Portfolio, Signals, Strategy Lab, ETF and KRX search by code or
+name. English names exist only for the six Home stocks and the 126 bundled
+overseas stocks; futures, bonds and the paper-rule symbol take codes. The ten
+analysis tools moved to their own Analysis tools page. Provider and observation
+fields left the cards, the chart, the Home detail dialog and some tool tables;
+where they remain (tooltips only, macro/FX exports, several tool headers)
+differs by screen. Delayed, stale and failed states stay on screen; a Yahoo
+fallback is named on the chart and in the profile notes, while its card shows
+only "delayed". See
+[the Markets rework record](docs/product/MARKETS_WATCHLIST_2026-11-04.md).
+The Flet browser is unchanged.
+
 ## Setup
 
 1. Python 3.10+
@@ -894,7 +914,7 @@ Generated from explicit sources; **not a new test run or overall readiness verdi
 
 | Dimension | Recorded evidence |
 |---|---|
-| Code tests | 749/870 PASS; 0 FAIL; 121 NOT_RUN. Run time/commit not supplied by source. |
+| Code tests | 844/964 PASS; 0 FAIL; 120 NOT_RUN. Run time/commit not supplied by source. |
 | Calendars | 17 signed metadata rows, set 1.0.0; signed 2026-10-29T04:29:39Z. Payload verification is separate. |
 | Data readiness | NOT_VERIFIED; missing reference data remains a separate blocker. |
 | Formal gate | NOT_FROZEN per README; protected package NOT_INSPECTED. |

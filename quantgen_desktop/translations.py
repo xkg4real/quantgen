@@ -39,6 +39,8 @@ Equity · starts at 1|누적 가치 · 시작값 1
 Language|언어
 Research Home|연구 홈
 Markets|시장
+Analysis tools|분석 도구
+Indicator guide|기술지표 가이드
 Open live quotes and charts|실시간 시세·차트 열기
 Technical indicator guide|기술지표 가이드
 Build & Test|설계 및 검증
@@ -234,7 +236,7 @@ Records are read explicitly. Live execution requires existing signed-calendar an
 Read stored research cards|저장된 연구카드 읽기
 Run strategy validation|전략 검증 실행
 Real-data execution records a trial in the existing research ledger. Synthetic execution does not. Lab DSR currently uses this grid's trial count; cumulative ledger counts are separate work.|실데이터 실행은 기존 연구 원장에 시행을 기록합니다. 합성 실행은 기록하지 않습니다. 현재 Lab의 DSR 시행 수는 이번 그리드 수입니다. 누적 원장 기반 전환은 별도 작업입니다.
-This tab is a descriptive macro sheet. Find v2 Overlay, Model cards and Research register in Markets → Macro v2.|이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 Markets의 Macro v2 탭에서 확인합니다.
+This tab is a descriptive macro sheet. Find v2 Overlay, Model cards and Research register in Analysis tools → Macro v2.|이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 분석 도구의 매크로 v2에서 확인합니다.
 FX · spot, forwards, options and carry|FX · 현물·선물환·옵션·캐리
 Rates · yield curve and rate risk|Rates · 수익률 곡선과 금리 위험
 Macro · market observations and local commentary|Macro · 시장 관측과 로컬 해설
@@ -465,7 +467,7 @@ Original narrative (English)|원문 해설 (영어)
 '''
 
 _PAIRS += r'''
-PyQt6 native: Home, daily Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, Strategy Lab, portfolios, Signals, Library/export, Connections, System\nMacro v2, paper trading, rules and optional AI commentary are connected / Remaining checks: actual Windows display, DPI and installation\nBrowser: the existing Flet app is retained.|PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\nMacro v2·모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다.
+PyQt6 native: Home, Markets (watchlist charts and one screen per stock), Analysis tools (Bonds, Rates, FX, Structuring, Macro sheet, Macro v2, Derivatives, ETF, Crypto, KRX), Indicator guide, Monte Carlo, Strategy Lab, portfolios, Signals, Library/export, Connections, System\nPaper trading, rules and optional AI commentary are connected / Remaining checks: actual Windows display, DPI and installation\nBrowser: the existing Flet app is retained.|PyQt6 네이티브: Home, Markets(관심종목 차트·종목 한 화면), 분석 도구(Bonds, Rates, FX, Structuring, Macro sheet, Macro v2, Derivatives, ETF, Crypto, KRX), 기술지표 가이드, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\n모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다.
 Confirm rule|규칙 확인
 Delete rule|규칙 삭제
 Delete {name} and its change history?|{name} 및 변경 이력을 삭제할까요?
@@ -540,7 +542,8 @@ SYNTHETIC · scores below are synthetic demonstrations, not official research-ca
 Stored research records. Reading does not rerun cards or change verdicts.|저장된 연구 기록입니다. 조회는 카드를 재실행하거나 판정을 바꾸지 않습니다.
 NOT_LOADED · no stored research cards.|NOT_LOADED · 저장된 연구카드가 없습니다.
 Question · do not enter passwords or account information|궁금한 점 · 비밀번호나 계좌정보는 입력하지 마세요
-Only this payload and question will be sent. AI commentary does not change official gate verdicts.|이 내용과 질문만 전송합니다. AI 해설은 공식 gate 판정을 변경하지 않습니다.
+This payload and your question are sent with QUANTGEN's fixed writing instructions, which contain no account or personal data. AI commentary does not change official gate verdicts.|이 내용과 질문을 QUANTGEN의 고정 작성 지침과 함께 전송합니다. 지침에는 계좌나 개인 정보가 없습니다. AI 해설은 공식 gate 판정을 변경하지 않습니다.
+Check the send consent box before requesting. The displayed calculation results and your question are sent to the external AI service with QUANTGEN's fixed writing instructions.|전송 동의에 체크해야 요청할 수 있습니다. 표시한 계산 결과와 질문을 QUANTGEN의 고정 작성 지침과 함께 외부 AI 서비스로 전송합니다.
 Requesting AI commentary…|AI 해설 요청 중…
 Complete a calculation first. Failed/unrun records are not sent.|먼저 계산을 완료하세요. 실패·미실행 기록은 전송하지 않습니다.
 Keep the question within 4,000 characters.|질문을 4,000자 이내로 입력하세요.
@@ -587,21 +590,30 @@ _PAIRS += _DISPLAY_PROSE
 
 EN, KO = {}, {}
 TEMPLATES = []
+
+
+def _add_templates(en, ko):
+    """'{name}' fields make a pair a pattern in both directions."""
+    for source, target, language in ((en, ko, 'ko'), (ko, en, 'en')):
+        parts = []
+        for literal, key, spec, conversion in Formatter().parse(source):
+            parts.append(re.escape(literal))
+            if key is not None: parts.append(f'(?P<{key}>.+?)')
+        TEMPLATES.append((language, re.compile(''.join(parts), re.S), target))
+
+
 for line in (_PAIRS + _TERMS).strip().splitlines():
     if not line.strip(): continue
     en, ko = (s.replace('\\n', '\n') for s in line.split('|', 1))
     EN[ko], KO[en] = en, ko
     if '{' in en:
-        for source, target, language in ((en, ko, 'ko'), (ko, en, 'en')):
-            parts = []
-            for literal, key, spec, conversion in Formatter().parse(source):
-                parts.append(re.escape(literal))
-                if key is not None: parts.append(f'(?P<{key}>.+?)')
-            TEMPLATES.append((language, re.compile(''.join(parts), re.S), target))
+        _add_templates(en, ko)
 
 
 KO["Build && Test"] = KO["Build & Test"]
 KO["Portfolio && Risk"] = KO["Portfolio & Risk"]
+# The English nav label is shortened (owner 2026-11-04); the Korean label and the page title stay.
+KO["Indicator guide"] = KO["Technical indicator guide"]
 
 from .macro_narrative_language import PAIRS as _MACRO_PAIRS
 KO.update(_MACRO_PAIRS)
@@ -610,6 +622,120 @@ EN.update({ko: en for en, ko in _MACRO_PAIRS.items()})
 from core.ficc.forward_conventions import FIVE_YEAR_SIMPLE_LABEL, FIVE_YEAR_SIMPLE_LABEL_KO
 KO[FIVE_YEAR_SIMPLE_LABEL] = FIVE_YEAR_SIMPLE_LABEL_KO
 EN[FIVE_YEAR_SIMPLE_LABEL_KO] = FIVE_YEAR_SIMPLE_LABEL
+
+from core.research.mc_disclosure import BOOTSTRAP_TEXT, BOOTSTRAP_TEXT_KO
+KO[BOOTSTRAP_TEXT] = BOOTSTRAP_TEXT_KO
+EN[BOOTSTRAP_TEXT_KO] = BOOTSTRAP_TEXT
+
+# Owner-approved A1 display vocabulary. Keep the existing sources (including
+# older Korean UI text) as aliases; neither captions stored by widgets nor
+# report/engine identifiers are rewritten.
+_A1_DISPLAY_TERMS = {
+    'Build & Test': '설계/검증',
+    'Portfolio & Risk': '분석',
+    'Signals': '기술적 분석',
+    'Signals · technical observations and costed backtests': '기술적 분석 · 기술적 관측과 비용 포함 백테스트',
+    'Paper Trading': '모의투자',
+    'Paper Trading · no real orders': '모의투자 · 실제 주문 없음',
+    'Metric': '항목', 'Field': '항목', 'Fields': '항목', 'Metrics': '주요 지표',
+    'Key metrics': '핵심 지표', 'DV01 by maturity': '만기별 DV01',
+    'Yield and bond price': '수익률 변화와 채권 가격',
+    'Sharpe': '샤프 지수', 'Sharpe ratio': '샤프 지수', 'max_sharpe': '최대 샤프 지수',
+    'Convexity': '컨벡시티', 'Macaulay duration': '맥컬리 듀레이션', 'Macaulay': '맥컬리 듀레이션',
+    'Modified duration': '수정 듀레이션', 'Modified': '수정 듀레이션',
+    'Zero rate': '무이표 금리', 'Model zero': '모형 무이표 금리',
+    'Provider': '제공처', 'Provider: {provider}': '제공처: {provider}',
+    'Daily market data with providers and observation dates': '제공처와 관측일을 함께 확인하는 일별 시장 데이터',
+    'Quote/domestic rate % · blank = provider': '상대/국내 금리 % · 공란 = 제공처',
+    'Base/foreign rate % · blank = provider': '기준/외국 금리 % · 공란 = 제공처',
+    'Rate % · blank = provider': '금리 % · 공란 = 제공처',
+    'Live providers only · no fallback': '실제 제공처만 · 대체 데이터 없음',
+    'Existing provider routing': '기존 제공처 연결',
+    'Choose the market so quotes resolve to the right provider.': '호가를 올바른 제공처에서 읽도록 시장을 선택하세요.',
+    'UNAVAILABLE · Check the provider response. No substitute values are generated.': 'UNAVAILABLE · 제공처 응답을 확인하세요. 대체 값을 생성하지 않습니다.',
+    'EMPTY · The provider returned an empty result.': 'EMPTY · 제공처가 빈 결과를 반환했습니다.',
+    '{protection} of principal at {tenor}, DF {df} (zero {zero})':
+        '{tenor}에 원금의 {protection}, DF {df} (무이표 금리 {zero})',
+    'Monte Carlo': '몬테카를로',
+    "This session's Monte Carlo · separate from investment validation": '이번 세션의 몬테카를로 · 투자 판정과 별개',
+    'Saving currently covers Monte Carlo runs. Select the destination explicitly; there is no autosave.':
+        '현재 저장 대상은 몬테카를로 실행입니다. 자동 저장되지 않으며 경로는 직접 선택합니다.',
+    'Horizon · sessions': '분석 기간(거래일)',
+    'Horizon sessions · blank = expiry': '분석 기간(거래일) · 공란 = 만기',
+    'Sessions': '거래일 수', 'Paths / sessions': '경로 수 / 거래일 수',
+    '0 → {days} sessions · P5 / P25 / P50 / P75 / P95': '0 → {days}거래일 · P5 / P25 / P50 / P75 / P95',
+    'Macro sheet': '매크로 지표', 'Macro v2': '매크로 v2', 'Macro': '매크로',
+    'Macro indicators': '매크로 지표',
+    'Macro · Market observations and local commentary': '매크로 · 시장 관측과 해설',
+    'Macro · market observations and local commentary': '매크로 · 시장 관측과 해설',
+}
+
+from core.research.sleeve_disclosure import SHARPE_CONVENTIONS_POINTER, SHARPE_CONVENTIONS_POINTER_KO
+_A1_DISPLAY_TERMS[SHARPE_CONVENTIONS_POINTER] = SHARPE_CONVENTIONS_POINTER_KO.replace('샤프비율이며', '샤프 지수이며', 1)
+
+
+def _a1_pattern(source):
+    parts = []
+    for literal, key, spec, conversion in Formatter().parse(source):
+        parts.append(re.escape(literal))
+        if key is not None: parts.append(f'(?P<{key}>.+?)')
+    return re.compile(''.join(parts), re.S)
+
+
+_a1_templates = []
+for _source, _target in _A1_DISPLAY_TERMS.items():
+    _previous = KO.get(_source)
+    if _previous and _previous != _target:
+        KO[_previous] = _target
+        if '{' in _source:
+            _a1_templates.append(('ko', _a1_pattern(_previous), _target))
+    KO[_source], EN[_target] = _target, _source
+    if '{' in _source:
+        _a1_templates.extend((('ko', _a1_pattern(_source), _target),
+                              ('en', _a1_pattern(_target), _source)))
+TEMPLATES[:0] = _a1_templates
+
+# Some labels originated in Korean or came through the shared Flet catalogue.
+# Exact aliases do not replace words inside user/provider prose.
+for _previous, _source in {
+    '설계 및 검증': 'Build & Test', '설계·검증': 'Build & Test',
+    '포트폴리오 및 위험': 'Portfolio & Risk', '포트폴리오·위험': 'Portfolio & Risk',
+    '포트폴리오 · 위험': 'Portfolio & Risk', '신호': 'Signals', '기술적 관측': 'Signals',
+    '모의매매': 'Paper Trading', '모의 실행': 'Paper Trading',
+    '측정 항목': 'Metric', '필드': 'Field', '측정값': 'Metrics',
+    '공급자': 'Provider', '공급처': 'Provider',
+    '샤프비율': 'Sharpe ratio', '샤프 비율': 'Sharpe ratio',
+    '매콜리 듀레이션': 'Macaulay duration',
+    '거시 지표표': 'Macro sheet', '매크로 현황': 'Macro sheet', '거시경제 관측': 'Macro sheet',
+    '거시경제 v2': 'Macro v2', '거시경제': 'Macro',
+}.items():
+    KO[_previous], EN[_previous] = KO[_source], _source
+for _source, _target in {
+    'vasicek': 'Vasicek', 'cir': 'CIR', 'hull_white': 'Hull-White',
+    'nelson_siegel': 'Nelson-Siegel', 'svensson': 'Svensson',
+}.items():
+    KO[_source] = EN[_source] = KO[_target] = EN[_target] = _target
+# Yield-curve construction method names (core.ficc.curves.METHOD_NAMES); combo data stays the id.
+for _source, _target in {
+    'Bootstrap': '부트스트랩', 'Natural cubic spline': '자연 3차 스플라인',
+    'Monotone cubic (PCHIP)': '단조 3차 보간 (PCHIP)',
+    'Monotone convex (Hagan-West)': '단조 볼록 보간 (Hagan-West)',
+    'Smith-Wilson': 'Smith-Wilson', 'Diebold-Li': 'Diebold-Li (λ 고정)',
+    'Björk-Christensen': 'Björk-Christensen',
+}.items():
+    KO[_source], EN[_target] = _target, _source
+KO['Build && Test'] = KO['Build & Test']
+KO['Portfolio && Risk'] = KO['Portfolio & Risk']
+
+# Owner UI port (UI-D1/UI-D2, 2026-11-10): Claude's reviewed Korean display text for the owner's 14
+# screenshot issues, one module per screen area (quantgen_desktop/owner_ui_language/*.py). Later entries
+# win, so an area may correct an earlier display string; source text, combo data and exports stay as is.
+from .owner_ui_language import pairs as _owner_ui_pairs
+for _en, _ko in _owner_ui_pairs().items():
+    KO[_en], EN[_ko] = _ko, _en
+    if '{' in _en:
+        _add_templates(_en, _ko)
+
 
 def translate(text, language):
     """Translate only authored UI messages; unknown source text stays intact."""
@@ -624,6 +750,9 @@ def translate(text, language):
     if language == 'ko':
         schedule = cms_schedule_korean(text)
         if schedule != text: return schedule
+        from .source_notes import note_korean
+        note = note_korean(text)
+        if note != text: return note
     if '\n' in text:
         return '\n'.join(translate(line, language) for line in text.split('\n'))
     return text

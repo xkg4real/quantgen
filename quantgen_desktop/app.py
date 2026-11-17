@@ -5,17 +5,20 @@ available unchanged while their native equivalents are ported and verified.
 """
 from __future__ import annotations
 
+import logging
 import sys
+import threading
 from datetime import datetime, timezone
 from pathlib import Path
+from yaml import YAMLError
 
-from PyQt6.QtCore import Qt, QTimer, pyqtSlot, QByteArray, QSettings
-from PyQt6.QtGui import QFont, QFontDatabase, QIcon
+from PyQt6.QtCore import Qt, QEvent, QTimer, pyqtSlot, QByteArray, QSettings, QSize
+from PyQt6.QtGui import QFont, QFontDatabase, QFontMetrics, QIcon, QKeySequence, QShortcut
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFileDialog,
     QFrame, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QMainWindow,
     QMessageBox, QPushButton, QScrollArea, QSpinBox, QStackedWidget, QTableWidget,
-    QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView, QAbstractItemView, QTabWidget)
+    QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView, QAbstractItemView, QTabWidget, QButtonGroup, QSizePolicy)
 
 from core.app_paths import application_root
 from core.research.analysis import AnalysisRequest, execute_analysis
@@ -23,7 +26,7 @@ from core.research.export import bundle_bytes, save_desktop_export
 from core.research.watchlist import load_home_markets, default_home_rows
 from core.research.provenance import code_evidence, runtime_evidence
 from core.research.portfolio_analysis import execute_portfolio
-from core.research.mc_disclosure import volatility_disclosure
+from core.research.mc_disclosure import bootstrap_disclosure, volatility_disclosure
 from core.research.bond_analysis import execute_bond
 from core.research.rates_analysis import execute_rates
 from core.research.fx_analysis import execute_fx
@@ -36,6 +39,7 @@ from core.research.strategy_analysis import execute_strategy
 from core.research.runs import SessionResearch, new_run, failed, export_bytes
 from core.theme import LIGHT, DARK
 from core.i18n import LocaleContext
+from core.recorded_status_display import recorded_status_display
 from tools.status.snapshot import verify
 from .charts import FanChart, FrontierChart, LineChart, SignedBars
 from .jobs import Jobs
@@ -43,20 +47,45 @@ from .localization import UiLabel, LanguageController, CAPTION_ROLE
 from .translations import display
 from .chart_study import CurrentPageTabs
 from .macro_records import execute_macro_records
+from . import rail_menu, shell_rail, typography
+
+log = logging.getLogger(__name__)
 
 
-# Markets asset classes: (key, tab title, chart asset or None, tool panes in order).
-MARKET_CLASSES = (
-    ('domestic', 'Domestic securities', 'domestic_stock', (('etf', 'ETF'), ('krx', 'KRX'))),
-    ('overseas', 'Overseas securities', 'overseas_stock', ()),
-    ('domestic_derivatives', 'Domestic derivatives', 'domestic_future', (('derivatives', 'Derivatives'),)),
-    ('overseas_derivatives', 'Overseas derivatives', 'overseas_future', ()),
-    ('bonds', 'Bonds', 'bond', (('bonds', 'Bonds'),)),
-    ('rates', 'Rates & swaps', None, (('rates', 'Rates'), ('structuring', 'Structuring'))),
-    ('fx', 'FX', None, (('fx', 'FX'),)),
-    ('crypto', 'Crypto', None, (('crypto', 'Crypto'),)),
-    ('macro', 'Macro', None, (('macro', 'Macro sheet'), ('macro_records', 'Macro v2'))),
-)
+# Analysis tools (owner, 2026-11-04): reached from their own page through a visible grid,
+# not a scrolling tab strip on Markets. (attribute, button title) in display order.
+TOOL_PANES = (('bonds', 'Bonds'), ('rates', 'Rates'), ('structuring', 'Structuring'), ('fx', 'FX'),
+              ('derivatives', 'Derivatives'), ('etf', 'ETF'), ('krx', 'KRX'), ('crypto', 'Crypto'),
+              ('macro', 'Macro sheet'), ('macro_records', 'Macro v2'))
+
+
+def _production_card_router():
+    """Watchlist cards: their own KIS service, KIS first and Yahoo for stocks when KIS cannot answer."""
+    from core.market.routing import default_chart_router
+    from data.kis_workspace import MarketDataService
+    service = MarketDataService()
+    return default_chart_router(lambda: service)
+
+
+class _ProductionProfileLoader:
+    """One stock's profile from existing allowlisted KIS calls; daily bars fall back to Yahoo for stocks."""
+
+    def __init__(self):
+        self._service = None
+        self._lock = threading.Lock()
+
+    def __call__(self, instrument):
+        from core.market.routing import default_chart_router
+        from core.research.stock_profile import load_profile
+        from data.kis_workspace import MarketDataService
+        with self._lock:
+            if self._service is None:
+                self._service = MarketDataService()
+            service = self._service
+        domestic = instrument.asset == "domestic_stock" and service.ready
+        return load_profile(instrument, router=default_chart_router(lambda: service),
+                            quote_client=service.client if domestic else None,
+                            markets=service.markets if domestic else None)
 
 
 def app_icon():
@@ -83,28 +112,17 @@ def label(text, role="", *, wrap=True):
 
 
 def load_interface_fonts(app):
-    """Register bundled real weights; retain the platform font if unavailable."""
-    family = None
-    for filename in ("qg-interface.otf", "qg-interface-medium.otf", "qg-interface-semibold.otf"):
-        font_id = QFontDatabase.addApplicationFont(str(application_root() / "assets/fonts" / filename))
-        families = QFontDatabase.applicationFontFamilies(font_id)
-        if families and family is None:
-            family = families[0]
-    if family is not None:
-        font = QFont(family, 10)
-        font.setWeight(QFont.Weight.Normal)
-        # Keep changing prices aligned without giving Korean labels a monospace face.
-        font.setFeature(QFont.Tag.fromString("tnum"), 1)
-        app.setFont(font)
-    return family
+    """Register the complete hinted font bundle; preserve platform fallback on failure."""
+    from .font_policy import configure_interface_font
+    return configure_interface_font(app, application_root() / "assets/fonts", logger=log)
 
 
 def panel(title):
     box = QFrame()
     box.setObjectName("panel")
     layout = QVBoxLayout(box)
-    layout.setContentsMargins(22, 20, 22, 20)
-    layout.setSpacing(12)
+    layout.setContentsMargins(22, 20, 22, 22)  # owner 2026-11-11: roomier panels, lighter lines
+    layout.setSpacing(14)
     if title:
         layout.addWidget(label(title, "heading"))
     return box, layout
@@ -113,26 +131,28 @@ def panel(title):
 def table(headers):
     t = QTableWidget(0, len(headers))
     t.setHorizontalHeaderLabels(headers)
-    if len(headers) <= 7:
-        t.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-    else:
-        t.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
-        for column,header in enumerate(headers):t.setColumnWidth(column,max(100,min(220,12+len(header)*8)))
     t.verticalHeader().hide()
     t.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
     t.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
     t.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
     t.setAlternatingRowColors(True)
-    return t
+    from .table_layout import configure_compact_table
+    return configure_compact_table(t)
 
 
 def table_rows(t, rows, ids=None):
+    from .status_language import STATUS_ROLE, status_text
     t.setRowCount(len(rows))
     for i, row in enumerate(rows):
         for j, value in enumerate(row):
             item = QTableWidgetItem(str(value))
             if j in (t.property('localized_columns') or ()):
                 item.setData(CAPTION_ROLE, str(value))
+            context = getattr(t, '_qg_status_columns', {}).get(j)
+            if context:
+                item.setData(STATUS_ROLE, str(value))
+                item.setToolTip(str(value))
+                item.setText(status_text(t, value, context))
             if ids:
                 item.setData(Qt.ItemDataRole.UserRole, ids[i])
             t.setItem(i, j, item)
@@ -147,8 +167,12 @@ class ResearchWindow(QMainWindow):
                  derivatives_runner=execute_derivatives, etf_runner=execute_etf,
                  crypto_runner=execute_crypto, krx_runner=execute_krx,
                  connections_runner=execute_connections, strategy_runner=execute_strategy,
-                 macro_records_runner=execute_macro_records, paper_factory=None, commentary_runner=None, auto_refresh=True, language="en", language_store=None, locale=None, theme_mode="light"):
+                 macro_records_runner=execute_macro_records, paper_factory=None, commentary_runner=None, auto_refresh=True, language="en", language_store=None, locale=None, theme_mode="light",
+                 symbol_directory=None, watchlist_store=None, card_router_factory=None, profile_loader=None):
         super().__init__()
+        from . import use_fusion_style, use_interface_fonts
+        use_fusion_style()  # the look the style sheets and captures were made for, on Windows too
+        use_interface_fonts()  # main() loads them first; a window built elsewhere gets the same face
         self.ctx = LocaleContext(locale or ("ko_KR" if language == "ko" else "en_US"))
         self.auto_refresh = auto_refresh
         self.ui_language = self.ctx.language
@@ -166,6 +190,10 @@ class ResearchWindow(QMainWindow):
         self.strategy_runner = strategy_runner
         self.macro_records_runner = macro_records_runner
         self.commentary_runner = commentary_runner
+        self.symbol_directory = symbol_directory
+        self.watchlist_store = watchlist_store
+        self.card_router_factory = card_router_factory
+        self.profile_loader = profile_loader
         self.tool_names = ('rates','fx','structuring','signals','macro','derivatives','etf','crypto','krx','connections','strategy','macro_records')
         self.outputs = {}
         self.active_run = None
@@ -183,27 +211,62 @@ class ResearchWindow(QMainWindow):
         self.setMinimumSize(1000, 700)
         root = QWidget()
         self.setCentralWidget(root)
+        # Owner 2026-11-13: initially hidden market rows expand downward inside the rail.
+        from .market_menu import InlineMarketMenu
+        self.rail_flyouts = InlineMarketMenu(root, self)
+        self.rail_flyouts.activated.connect(self.open_market_leaf)
+        self.rail_flyouts.current = self.market_marks
+        self._market_choice = None     # the 시장 row of the market page shown last on Markets
         outer = QHBoxLayout(root)
         outer.setContentsMargins(0, 0, 0, 0)
         outer.setSpacing(0)
         sidebar = QFrame()
         sidebar.setObjectName("sidebar")
-        sidebar.setFixedWidth(222)
-        rail = QVBoxLayout(sidebar)
-        rail.setContentsMargins(18, 28, 18, 22)
-        rail.setSpacing(9)
+        self.sidebar = sidebar
+        self.sidebar_collapsed = False
+        # Owner 2026-11-04: a thinner rail, sized from its widest label (fit_sidebar).
+        sidebar.setFixedWidth(typography.SIDEBAR_WIDTH_RANGE[1])
+        shell = QVBoxLayout(sidebar)
+        shell.setContentsMargins(0, 0, 0, 0)
+        shell.setSpacing(0)
+        # Owner 2026-11-11 (UI-D7 point 3): the rail hides to a thin strip (toggle, Ctrl+B) and the
+        # choice is remembered. railPanel is the full rail, railStrip the hidden state.
+        self.rail_panel = QWidget()
+        self.rail_panel.setObjectName("railPanel")
+        rail = QVBoxLayout(self.rail_panel)
+        rail.setContentsMargins(*typography.RAIL_MARGINS)
+        rail.setSpacing(typography.RAIL_SPACING)
         brand = QHBoxLayout()
+        brand.setSpacing(typography.BRAND_SPACING)
         icon = QSvgWidget(str(application_root()/"assets/branding/f1-symbol.svg"))
         self.brand_symbol = icon
         self.brand_symbol_svg = (application_root()/"assets/branding/f1-symbol.svg").read_bytes()
-        icon.setFixedSize(38, 38)
+        icon.setFixedSize(typography.BRAND_SYMBOL_SIZE, typography.BRAND_SYMBOL_SIZE)
         brand.addWidget(icon)
-        brand.addWidget(label("QUANTGEN", "brand", wrap=False))
+        self.brand_label = label("QUANTGEN", "brand", wrap=False)
+        brand.addWidget(self.brand_label)
+        brand.addStretch(1)
+        self.sidebar_hide = shell_rail.icon_button("Hide menu", "Hide menu (Ctrl+B)", typography.RAIL_TOGGLE_SIZE)
+        self.sidebar_hide.clicked.connect(lambda: self.set_sidebar_collapsed(True))
+        brand.addWidget(self.sidebar_hide)
         rail.addLayout(brand)
-        rail.addSpacing(12)
+        rail.addSpacing(10)
+        # Nav and the Markets sub-menu scroll inside the rail when the window is short; the paper
+        # stop, theme and language stay pinned at the bottom.
+        self.rail_scroll = QScrollArea()
+        self.rail_scroll.setObjectName("railScroll")
+        self.rail_scroll.setWidgetResizable(True)
+        self.rail_scroll.setFrameShape(QFrame.Shape.NoFrame)
+        self.rail_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        nav_host = QWidget()
+        nav_host.setObjectName("railNav")
+        nav_column = QVBoxLayout(nav_host)
+        nav_column.setContentsMargins(0, 0, 0, 0)
+        nav_column.setSpacing(typography.RAIL_SPACING)
         self.stack = QStackedWidget()
         self.nav = {}
-        routes = (("home", "Research Home"), ("markets", "Markets"), ("guide", "Technical indicator guide"),
+        routes = (("home", "Research Home"), ("markets", "Markets"), ("tools", "Analysis tools"),
+                  ("guide", "Indicator guide"),
                   ("quant", "Build & Test"), ("risk", "Portfolio & Risk"),
                   ("library", "Research Library"), ("system", "System"))
         self.route_indices = {route:i for i,(route,_) in enumerate(routes)}
@@ -212,15 +275,19 @@ class ResearchWindow(QMainWindow):
             b.setCheckable(True)
             b.setProperty("nav", True)
             b.clicked.connect(lambda checked=False, r=route:self.navigate(r))
-            rail.addWidget(b)
+            nav_column.addWidget(b)
             self.nav[route] = b
-        rail.addStretch()
-        rail.addWidget(label("PERSONAL RESEARCH", "caption"))
-        rail.addWidget(label("Native desktop preview\nFlet browser is retained", "muted"))
+            if route == "markets":
+                nav_column.addWidget(self.make_market_submenu())
+        nav_column.addStretch(1)
+        self.rail_scroll.setWidget(nav_host)
+        self.rail_scroll.viewport().installEventFilter(self)  # its height sets the 시장 rows' (`fit_market_rows`)
+        rail.addWidget(self.rail_scroll, 1)
+        rail.addSpacing(6)
         self.paper_halt = QPushButton('모의 엔진 긴급 정지')
         self.paper_halt.setEnabled(False)
-        self.paper_halt.clicked.connect(lambda: self.paper_session.runtime.halt() if self.paper_session.runtime else None)
-        self.paper_session.changed.connect(lambda: self.paper_halt.setEnabled(self.paper_session.runtime is not None))
+        self.paper_halt.clicked.connect(self.halt_paper_engine)
+        self.paper_session.changed.connect(self.paper_engine_changed)
         rail.addWidget(self.paper_halt)
         self.theme = QComboBox()
         self.theme.addItems(["Light", "Dark"])
@@ -236,20 +303,62 @@ class ResearchWindow(QMainWindow):
         self.language.setCurrentIndex(self.language.findData(self.ui_language))
         self.language.currentIndexChanged.connect(lambda: self.set_language(self.language.currentData()))
         rail.addWidget(self.language)
+        shell.addWidget(self.rail_panel)
+        self.rail_strip = QWidget()
+        self.rail_strip.setObjectName("railStrip")
+        strip = QVBoxLayout(self.rail_strip)
+        _, top, _, bottom = typography.RAIL_MARGINS
+        # The show toggle sits where the hide toggle was: centred on the brand row's height.
+        strip.setContentsMargins(0, top + (typography.BRAND_SYMBOL_SIZE - typography.RAIL_TOGGLE_SIZE) // 2, 1, bottom)
+        strip.setSpacing(typography.RAIL_SPACING + 4)
+        self.sidebar_show = shell_rail.icon_button("Show menu", "Show menu (Ctrl+B)", typography.RAIL_TOGGLE_SIZE)
+        self.sidebar_show.clicked.connect(lambda: self.set_sidebar_collapsed(False))
+        strip.addWidget(self.sidebar_show, 0, Qt.AlignmentFlag.AlignHCenter)
+        # The 시장 menu stays one move away while the rail is hidden: this button opens the same flyouts.
+        self.market_strip = rail_menu.StripMenuButton("Markets", typography.RAIL_TOGGLE_SIZE)
+        self.market_strip.clicked.connect(
+            lambda: self.rail_flyouts.root_clicked(self.market_strip,
+                                                   keyboard=bool(self.market_strip.property("focusRing"))))
+        self.rail_flyouts.configure(self.nav['markets'], self.market_submenu, self.market_strip)
+        self.nav['markets'].clicked.connect(lambda: self.rail_flyouts.open_root())
+        strip.addWidget(self.market_strip, 0, Qt.AlignmentFlag.AlignHCenter)
+        # The paper engine's emergency stop stays one click away while the engine runs.
+        self.paper_halt_strip = shell_rail.icon_button("Stop paper engine", "Stop paper engine",
+                                                       typography.RAIL_TOGGLE_SIZE)
+        self.paper_halt_strip.clicked.connect(self.halt_paper_engine)
+        self.paper_halt_strip.hide()
+        strip.addWidget(self.paper_halt_strip, 0, Qt.AlignmentFlag.AlignHCenter)
+        strip.addStretch(1)
+        shell.addWidget(self.rail_strip)
+        self.rail_strip.hide()
+        self.rail_keys = shell_rail.RailKeys(self.rail_buttons, self, expand=self.expand_rail_button,
+                                             collapse=self.collapse_rail_flyout)
+        for button in self.rail_buttons():
+            self.rail_keys.watch(button)
+        self.sidebar_shortcut = QShortcut(QKeySequence("Ctrl+B"), self)
+        self.sidebar_shortcut.activated.connect(self.toggle_sidebar)
         outer.addWidget(sidebar)
         outer.addWidget(self.stack, 1)
         self.make_home()
         self.make_markets()
+        self.make_tools()
         self.make_indicator_guide()
         self.make_quant()
         self.make_risk()
         self.make_library()
         self.make_system()
+        self.attach_symbol_searches()
+        self.connect_market_sections(self.markets_view)
         self.setup_live_watchlist()
         self.change_theme(self.theme.currentIndex())
         self.navigate("home")
         self.localizer = LanguageController(self)
         self.refresh_views()
+        self.fit_sidebar()
+        if shell_rail.stored_flag(self.language_store):
+            self.set_sidebar_collapsed(True, remember=False)
+        from .reading_panel import install_reading_help
+        self.reading_help = install_reading_help(self)
         if auto_refresh:
             QTimer.singleShot(0, self.refresh_markets)
 
@@ -263,85 +372,477 @@ class ResearchWindow(QMainWindow):
         self.locale_picker.blockSignals(False)
         self.change_language(index)
 
+    def fit_sidebar(self):
+        """Size the rail from its widest nav label in the current language.
+
+        Measured at the checked nav font (14px / 600) plus the nav padding, the rail
+        margins and a little air, never below what the paper-halt button and the
+        theme/language selectors, the brand row (with its hide toggle) or the widest
+        Markets sub-item need, and clamped to SIDEBAR_WIDTH_RANGE. A hidden rail keeps
+        that width for later and shows the RAIL_COLLAPSED_WIDTH strip.
+        """
+        left, _, right, _ = typography.RAIL_MARGINS
+        frame = self.sidebar.frameWidth() + 1  # right-hand border
+        low, high = typography.SIDEBAR_WIDTH_RANGE
+        font = typography.scaled_font(next(iter(self.nav.values())).font(), 14, 600)
+        metrics = QFontMetrics(font)
+        widest = max(metrics.horizontalAdvance(button.text().replace("&&", "&")) for button in self.nav.values())
+        needed = widest + 2 * typography.NAV_PADDING[1] + typography.NAV_SLACK
+        for widget in (self.paper_halt, self.theme, self.language):
+            needed = max(needed, widget.sizeHint().width())
+        self.brand_label.ensurePolished()
+        needed = max(needed, typography.BRAND_SYMBOL_SIZE + 2 * typography.BRAND_SPACING
+                     + self.brand_label.sizeHint().width() + typography.RAIL_TOGGLE_SIZE)
+        sub_metrics = QFontMetrics(typography.scaled_font(font, 14, 600))
+        sub_widest = max(sub_metrics.horizontalAdvance(b.text()) for b in self.market_sections.values())
+        row_left, row_right = typography.MARKET_ROW_PADDING
+        needed = max(needed, sub_widest + typography.SUBNAV_INDENT + 2 + row_left + row_right + 6)
+        width = max(low, min(high, needed + left + right + frame))
+        self.sidebar_expanded_width = width
+        shown = typography.RAIL_COLLAPSED_WIDTH if self.sidebar_collapsed else width
+        if self.sidebar.width() != shown or self.sidebar.minimumWidth() != shown:
+            self.sidebar.setFixedWidth(shown)
+        return shown
+
+    def make_market_submenu(self):
+        """Nine market categories, revealed on hover/click with children below each row."""
+        self.market_submenu = QWidget()
+        self.market_submenu.setObjectName("marketSubmenu")
+        self.market_submenu.setAccessibleName("Markets sections")
+        column = QVBoxLayout(self.market_submenu)
+        column.setContentsMargins(typography.SUBNAV_INDENT, 0, 0, 2)
+        column.setSpacing(0)
+        self.market_sections = {}
+        self.market_section = None
+        for key, _title in shell_rail.market_sections():
+            row = rail_menu.MarketRailRow(key)
+            row.clicked.connect(lambda checked=False, k=key: self.open_market_category(k))
+            self.rail_flyouts.watch_root(row, lambda k=key: self._market_flyout(k))
+            column.addWidget(row)
+            self.market_sections[key] = row
+        self.retitle_market_sections()
+        return self.market_submenu
+
+    def retitle_market_sections(self):
+        """The 시장 rows (and the hidden rail's 시장 button) in the window language; an open flyout closes, so the
+        next one opens in the new language."""
+        self.rail_flyouts.close_all()
+        for key, button in self.market_sections.items():
+            title = shell_rail.market_section_text(key, self.ui_language)
+            button.setText(title)
+            button.setAccessibleName(title)
+            button.chevron = bool(self._market_node(key).children)
+
+    def eventFilter(self, watched, event):
+        if event.type() == QEvent.Type.Resize and watched is self.rail_scroll.viewport():
+            self.fit_market_rows()
+        return super().eventFilter(watched, event)
+
+    def fit_market_rows(self):
+        """The 시장 rows at MARKET_ROW_HEIGHT while the rail has the room; a shorter window tightens them, down to
+        MARKET_ROW_MIN_HEIGHT (close to the flyouts' rows, UI-D11 review), before the rail has to scroll."""
+        rows = list(self.market_sections.values())
+        full, low = typography.MARKET_ROW_HEIGHT, typography.MARKET_ROW_MIN_HEIGHT
+        content = self.rail_scroll.widget().layout().sizeHint().height()
+        others = content - sum(row.row_height for row in rows)
+        room = self.rail_scroll.viewport().height() - others
+        height = max(low, min(full, room // len(rows)))
+        for row in rows:
+            row.set_row_height(height)
+        return height
+
+    def _market_node(self, key):
+        """A 시장 row's `shell_rail.MenuNode`, in the window language."""
+        return next(node for node in shell_rail.market_menu(self.ui_language) if node.key == key)
+
+    def _market_flyout(self, key):
+        """The rows of a 시장 row's flyout, in the window language."""
+        return self._market_node(key).children
+
+    def open_market_category(self, key, *, keyboard=None):
+        """A 시장 row clicked (or Enter / Space on it): a row with one page of its own (크립토, 선물, 회사채) opens it,
+        the others open their flyout; from the keyboard, with focus in it (→ always opens the flyout)."""
+        row = self.market_sections[key]
+        leaf = self._market_node(key).leaf
+        if leaf:
+            self.rail_flyouts.close_all()
+            self.open_market_leaf(leaf)
+            return None
+        if keyboard is None:
+            keyboard = bool(row.property("focusRing"))
+        panel = self.rail_flyouts.root_clicked(row, keyboard=keyboard)
+        self.sync_market_section()  # a click must not toggle the row's highlight
+        return panel
+
+    def expand_rail_button(self, button):
+        """→ on a rail button with a flyout (a 시장 row, or the hidden rail's 시장 button)."""
+        self.rail_flyouts.root_clicked(button, keyboard=True)
+
+    def collapse_rail_flyout(self, button):
+        """← / Esc on a 시장 row closes its flyout (True: the key was used); None: another rail button took the
+        focus, so an open flyout closes."""
+        if not self.rail_flyouts.is_open():
+            return False
+        if button is None:
+            self.rail_flyouts._close_from(0)
+            self.rail_flyouts.keyboard=True
+            return False
+        self.rail_flyouts.close_all()
+        return True
+
+    def open_market_leaf(self, leaf):
+        """Open a ranking, observed series or independent asset workspace within Markets."""
+        self.rail_flyouts.close_all()
+        kind = leaf[0]
+        if kind == "market":
+            _kind, page, category = leaf
+            self.open_market_section(page)
+            view = self.markets_view
+            if category and hasattr(view, "show_category"):
+                view.show_category(category)
+        elif kind in ('series', 'workspace'):
+            from .market_destinations import MarketSeriesPage, MarketToolPage
+            self.navigate('markets')
+            category=leaf[1]
+            cache_key=('series',) if kind=='series' else ('workspace',category,leaf[2])
+            page=self.market_destinations.get(cache_key)
+            if page is None:
+                page=(MarketSeriesPage(ctx=self.ctx,auto_load=self.auto_refresh,
+                      loader=getattr(self,'summary_loader',None)) if kind=='series'
+                      else MarketToolPage(self,leaf[2],category))
+                self.market_destinations[cache_key]=page
+                self.markets_content.addWidget(page)
+            self.market_asset_category=category
+            self.markets_content.setCurrentWidget(page)
+            if kind=='series':page.select(category,leaf[2]);page.set_theme(self.colors)
+            else:page.select(leaf[3])
+        else:
+            raise ValueError(f"Unknown 시장 menu leaf: {leaf!r}")
+        self.sync_market_section()
+        return True
+
+    def rail_buttons(self):
+        """The rail's buttons in visual order (the arrow keys walk them)."""
+        buttons = [self.sidebar_hide]
+        for route, button in self.nav.items():
+            buttons.append(button)
+            if route == "markets":
+                buttons.extend(self.market_sections.values())
+        return buttons + [self.sidebar_show, self.market_strip, self.paper_halt_strip]
+
+    def open_market_section(self, key):
+        """Open Markets on one market's page (a `markets_view.MARKET_PAGES` key: kr, us, crypto, etf_kr, etf_us);
+        its 시장 row (주식, 크립토 or ETF) is highlighted."""
+        from core.market.screen import PAGE_KEYS
+        if key not in PAGE_KEYS:
+            raise ValueError(f"Unknown market page: {key!r}")
+        self.navigate("markets")
+        self.markets_content.setCurrentWidget(self.markets_view)
+        self.market_asset_category=None
+        view = self.markets_view
+        if hasattr(view, "show_market"):
+            view.show_market(key)
+        self.sync_market_section(key)
+
+    def _route(self):
+        index = self.stack.currentIndex()
+        return next((route for route, i in self.route_indices.items() if i == index), None)
+
+    def market_marks(self):
+        """The `shell_rail.MenuNode.mark`s of what Markets shows (the market page and its ranking): its 시장 row and
+        flyout rows are marked. Another page marks nothing: its own rail item says where the window is (UI-D11
+        review, a 시장 row lit under another selected page was a second 'you are here')."""
+        marks = set()
+        if self._route() == "markets":
+            if getattr(self,'market_asset_category',None):
+                return frozenset({('category',self.market_asset_category)})
+            view = self.markets_view
+            current = getattr(view, "current_market", None)
+            page = current() if callable(current) else None
+            if page:
+                marks |= {("page", page), ("category", shell_rail.PAGE_CATEGORY.get(page, ""))}
+                showing = getattr(view, "showing_stock", None)
+                category = getattr(view, "current_category", None)
+                if callable(category) and not (callable(showing) and showing()):
+                    marks.add(("market", page, category()))
+        return frozenset(marks)
+
+    def sync_market_section(self, key=None):
+        """Highlight the 시장 row of the market page Markets shows (`key`, a market page key, else the page's own
+        market, also while a stock's screen is open over it, else the last choice); on any other page none."""
+        category = None
+        if self._route() == "markets":
+            view = getattr(self, "markets_view", None)
+            if key is None and view is not None:
+                current = getattr(view, "current_market", None)
+                key = current() if callable(current) else None
+            category = getattr(self,'market_asset_category',None) or (shell_rail.PAGE_CATEGORY.get(key) if key else self._market_choice)
+            self._market_choice = category
+        self.market_section = category if category in self.market_sections else None
+        for name, button in self.market_sections.items():
+            button.setChecked(name == self.market_section)
+
+    def connect_market_sections(self, view):
+        """Follow the Markets page's own market changes when it announces them (an optional
+        `market_changed(str)` signal); otherwise the highlight follows the rail and navigate()."""
+        signal = getattr(view, "market_changed", None)
+        if signal is not None and hasattr(signal, "connect"):
+            signal.connect(lambda key: self.sync_market_section(key or None))
+
+    def set_sidebar_collapsed(self, collapsed, *, remember=True):
+        """Hide the rail to a thin strip, or show it again, keeping the page and its scroll position."""
+        collapsed = bool(collapsed)
+        self.rail_flyouts.close_all()
+        page = self.stack.currentWidget()
+        bar = page.verticalScrollBar() if isinstance(page, QScrollArea) else None
+        position = bar.value() if bar is not None else None
+        focus = QApplication.focusWidget()
+        keep_focus = focus is not None and (focus is self.sidebar or self.sidebar.isAncestorOf(focus))
+        ring = keep_focus and bool(focus.property("focusRing"))  # read before hiding clears it
+        self.sidebar_collapsed = collapsed
+        self.rail_panel.setVisible(not collapsed)
+        self.rail_strip.setVisible(collapsed)
+        self.fit_sidebar()
+        if remember and self.language_store is not None:
+            self.language_store.setValue(shell_rail.SETTINGS_KEY, collapsed)
+        if keep_focus:  # a keyboard user stays on the toggle, with its ring if it had one
+            reason = Qt.FocusReason.TabFocusReason if ring else Qt.FocusReason.OtherFocusReason
+            (self.sidebar_show if collapsed else self.sidebar_hide).setFocus(reason)
+        if bar is not None:
+            # The page reflows to its new width now and once more after queued layout requests.
+            self._page_position = (bar, position)
+            self.centralWidget().layout().activate()
+            self.restore_page_position(final=False)
+            QTimer.singleShot(0, self.restore_page_position)
+        return collapsed
+
+    def restore_page_position(self, final=True):
+        pending = getattr(self, "_page_position", None)
+        if not pending:
+            return
+        if final:
+            self._page_position = None
+        bar, position = pending
+        try:
+            bar.setValue(min(position, bar.maximum()))
+        except RuntimeError:  # the window closed before the deferred pass
+            pass
+
+    def toggle_sidebar(self):
+        return self.set_sidebar_collapsed(not self.sidebar_collapsed)
+
+    def halt_paper_engine(self):
+        if self.paper_session.runtime:
+            self.paper_session.runtime.halt()
+
+    def paper_engine_changed(self):
+        running = self.paper_session.runtime is not None
+        self.paper_halt.setEnabled(running)
+        self.paper_halt_strip.setVisible(running)
+
+    def apply_rail_theme(self, palette, dark):
+        """The rail's own sheet (typography.rail_stylesheet), its painted icons and the 시장 flyouts for a theme."""
+        self.sidebar.setStyleSheet(typography.rail_stylesheet(palette, dark))
+        size = QSize(18, 18)
+        for button, rail_open in ((self.sidebar_hide, True), (self.sidebar_show, False)):
+            button.setIcon(shell_rail.toggle_icon(palette.muted, rail_open=rail_open))
+            button.setIconSize(size)
+        self.market_strip.setIcon(shell_rail.markets_icon(palette.muted))
+        self.market_strip.setIconSize(size)
+        self.rail_flyouts.set_theme(palette, dark)  # also the rows' chevrons and the tint of an open row
+        self.paper_halt_strip.setIcon(shell_rail.stop_icon(typography.tone_colors(palette)["up"]))
+        self.paper_halt_strip.setIconSize(QSize(16, 16))
+
     def page(self, title, subtitle):
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setFrameShape(QFrame.Shape.NoFrame)
         content = QWidget()
         layout = QVBoxLayout(content)
-        layout.setContentsMargins(30, 28, 30, 28)
-        layout.setSpacing(20)
-        layout.addWidget(label(title, "title"))
-        layout.addWidget(label(subtitle, "muted"))
+        # Owner 2026-11-11: light section lines need roomy blocks ("한칸한칸 공간을 넓게").
+        layout.setContentsMargins(32, 28, 32, 36)
+        layout.setSpacing(24)
+        if title is not None:
+            layout.addWidget(label(title, "title"))
+            layout.addWidget(label(subtitle, "muted"))
         scroll.setWidget(content)
         self.stack.addWidget(scroll)
         return layout
 
     def make_home(self):
+        """Research Home (owner, 2026-11-11, UI-D7 point 4): no big table. Market cards that page with arrows
+        (TradingView style) and the selected market's large chart, the watchlist chart cards (moved here from
+        Markets), the research sections, then the full quotes table in a closed fold. See home_view."""
         layout = self.page("Research Home", "관측된 시장과 내가 실행한 연구를 한눈에 확인하세요.")
+        from .home_view import HomeView, QuotesFold, SECTION_GAP, directory_name
+        from .markets_view import WatchlistStore
         from .watchlist import WatchlistPanel
+        # The live-quote table stays the window's (live feed, Q-SCORE, details); it is no longer the main surface.
         self.watchlist = WatchlistPanel(locale=self.ctx)
+        self.watchlist.setProperty("reading_help_keep_visible", True)
         self.watchlist.refresh_requested.connect(self.refresh_markets)
         self.watchlist.chart_requested.connect(self.open_stock_chart)
         self.home_markets = self.watchlist.table
-        layout.addWidget(self.watchlist)
+        # Home and Markets share one watchlist store and one symbol directory, whichever page is built first.
+        if self.watchlist_store is None:
+            self.watchlist_store = WatchlistStore(self.language_store)
+        if self.symbol_directory is None:
+            from core.market.directory import default_directory
+            self.symbol_directory = default_directory()
+
+        def open_watch(instrument):
+            # A watchlist card opens that stock's screen on Markets (as open_stock_chart, any stock kind).
+            self.navigate('markets')
+            self.markets_content.setCurrentWidget(self.markets_view)
+            self.market_asset_category=None
+            self.markets_view.open_instrument(instrument)
+            scroll = self.stack.widget(self.route_indices['markets'])
+            QTimer.singleShot(0, lambda: scroll.verticalScrollBar().setValue(0))
+
+        def add_watch():
+            self.navigate('markets')
+            self.markets_content.setCurrentWidget(self.markets_view)
+            self.market_asset_category=None
+            if hasattr(self.markets_view, 'show_category'):
+                self.markets_view.show_category('search')
+            else:
+                self.markets_view.show_watchlist()
+                self.markets_view.search.setFocus(Qt.FocusReason.OtherFocusReason)
+
+        self.home_view = HomeView(
+            store=self.watchlist_store, card_router_factory=self.card_router_factory or _production_card_router,
+            name_fn=lambda instrument, language: directory_name(self.symbol_directory, instrument, language),
+            rows_source=lambda: self.watchlist.rows, locale=self.ctx, auto_load=self.auto_refresh)
+        self.home_view.refresh_requested.connect(self.refresh_markets)
+        self.home_view.stock_requested.connect(open_watch)
+        self.home_view.add_requested.connect(add_watch)
+        self.jobs.busy_changed.connect(self.home_view.set_busy)
+        layout.addWidget(self.home_view)
+        layout.addSpacing(SECTION_GAP)
+
+        # Research: run counts, the latest Monte Carlo fan chart and the links.
+        head = QHBoxLayout()
+        head.setSpacing(8)
+        head.addWidget(label("My research", "heading", wrap=False), 0, Qt.AlignmentFlag.AlignVCenter)
+        head.addStretch(1)
+        rights_button = QPushButton(self.ctx.t('data_rights'))
+        rights_button.clicked.connect(self.open_data_rights)
+        head.addWidget(rights_button, 0, Qt.AlignmentFlag.AlignVCenter)
+        b = QPushButton("Quant Lab에서 연구 시작 →")
+        b.setProperty("primary", True)
+        b.clicked.connect(lambda: self.navigate("quant"))
+        head.addWidget(b, 0, Qt.AlignmentFlag.AlignVCenter)
+        layout.addLayout(head)
+        layout.addSpacing(8)
         summary = QHBoxLayout()
+        summary.setSpacing(20)
         self.count_labels = []
         for title in ("완료한 분석", "진행 중", "확인할 실행"):
             box, inner = panel(title)
+            inner.setContentsMargins(20, 18, 20, 18)
             number = label("0", "number")
             inner.addWidget(number)
-            inner.addWidget(label("이번 세션의 Monte Carlo · 투자 판정과 별개", "caption"))
             summary.addWidget(box)
             self.count_labels.append(number)
         layout.addLayout(summary)
-        rights_button=QPushButton(self.ctx.t('data_rights'))
-        rights_button.clicked.connect(self.open_data_rights)
-        layout.addWidget(rights_button)
+        notice = label("이번 세션의 Monte Carlo · 투자 판정과 별개", "caption")
+        notice.setProperty("reading_help_keep_visible", True)
+        layout.addWidget(notice)
+        layout.addSpacing(16)
         box, inner = panel("가능성을 하나의 숫자로 좁히지 마세요")
+        inner.setContentsMargins(28, 24, 28, 24)
+        inner.setSpacing(14)
         self.home_chart = FanChart()
         self.home_summary = label("분석을 실행하면 최신 결과와 데이터 근거가 연결됩니다.")
+        self.home_summary.setProperty("reading_help_keep_visible", True)
         from .chart_study import ChartStudy
         inner.addWidget(ChartStudy(self.home_chart,self.home_summary))
-        b = QPushButton("Quant Lab에서 연구 시작 →")
-        b.clicked.connect(lambda:self.navigate("quant"))
-        inner.addWidget(b)
-        inner.addWidget(label("P5–P95는 시뮬레이션 분포의 중앙 90% 구간입니다. 수익 보장이나 95% 신뢰구간이 아닙니다.", "caption"))
+        notice = label("P5–P95는 시뮬레이션 분포의 중앙 90% 구간입니다. 수익 보장이나 95% 신뢰구간이 아닙니다.", "caption")
+        notice.setProperty("reading_help_keep_visible", True)
+        inner.addWidget(notice)
         layout.addWidget(box)
+        layout.addSpacing(SECTION_GAP)
+
+        # The full quotes table, folded (owner: "표에 종목 너무많이 때려박는거 자체의 구조적 문제").
+        self.quotes_fold = QuotesFold("All quotes table", self.watchlist,
+                                      "Markets and Korean stocks, live connection and Q-SCORE")
+        layout.addWidget(self.quotes_fold)
         layout.addStretch()
 
     def make_indicator_guide(self):
         from .indicator_guide import IndicatorGuide
-        layout = self.page("Technical indicator guide", self.ctx.t('search_intro'))
+        layout = self.page("Technical indicator guide", '')
         self.guide_subtitle = layout.itemAt(1).widget()
         self.indicator_guide = IndicatorGuide(locale=self.ctx)
+        self.guide_subtitle.setText(self.indicator_guide.intro_text())
         self.indicator_guide.intro.hide()
         layout.addWidget(self.indicator_guide)
         layout.addStretch()
 
     def make_markets(self):
+        """Markets: one page per market (owner ruling UI-D10, 2026-11-11; since UI-D11, 2026-11-12: 국내 주식, 미국 주식,
+        크립토, 국내 ETF, 미국 ETF, reached from the rail's 시장 flyouts), each a compact header with its own search, an
+        index strip, the ranking categories as criteria and the list; one screen per stock. No page title or
+        description paragraph: the market page's header names it. The watchlist chart cards moved to Research Home
+        (make_home)."""
+        from .market_chart import MarketChartPane
+        from .market_rankings import ProductionRankingLoader
+        from .market_summary import production_series
+        from .markets_view import DirectoryLoader, MarketsWorkspace, WatchlistStore
+        from core.market.directory import default_directory
+        layout = self.page(None, None)
+        layout.setContentsMargins(32, 24, 32, 36)
+        # Owner, 2026-11-04: no indicator board (UI-7) and no asset-class tab strip (UI-8) here.
+        self.market_chart = MarketChartPane(locale=self.ctx)
+        self.market_chart.setProperty("reading_help_keep_visible", True)
+        self.market_chart.setObjectName('marketChart')
+        if self.symbol_directory is None:
+            self.symbol_directory = default_directory()
+        self.directory_loader = DirectoryLoader(self.symbol_directory, enabled=self.auto_refresh)
+        if self.watchlist_store is None:
+            self.watchlist_store = WatchlistStore(self.language_store)
+        # Ranked quotes: an injected loader (tests: window.ranking_loader before make_markets, or
+        # markets_view.rankings.loader after) or KIS/Yahoo constructed on first use. The index strip reads Home's
+        # Yahoo daily path unless window.summary_loader (a core.ficc.data.load_series-like callable) is injected.
+        self.markets_view = MarketsWorkspace(
+            self.market_chart, store=self.watchlist_store, directory=self.symbol_directory,
+            directory_loader=self.directory_loader,
+            ranking_loader=getattr(self, "ranking_loader", None) or ProductionRankingLoader(),
+            profile_loader=self.profile_loader or _ProductionProfileLoader(),
+            summary_loader=getattr(self, "summary_loader", None) or production_series,
+            locale=self.ctx, auto_load=self.auto_refresh)
+        self.markets_view.setProperty("reading_help_keep_visible", True)
+        from .tools import CurrentPageStack
+        self.markets_content=CurrentPageStack()
+        self.markets_content.addWidget(self.markets_view)
+        self.market_destinations={}
+        self.market_asset_category=None
+        layout.addWidget(self.markets_content)
+        layout.addStretch()
+
+    def make_tools(self):
+        """Analysis tools on their own page: a visible button grid, no scrolling tabs (owner, 2026-11-04)."""
         from .bonds import BondsPane
         from .rates import RatesPane
         from .fx import FXPane
         from .structuring import StructuringPane
         from .macro import MacroPane
+        from .macro_records import MacroRecordsPane
         from .market_tools import DerivativesPane, ETFPane, CryptoPane, KRXPane
-        from .market_chart import MarketChartPane
-        layout = self.page("Markets", "공급자·관측 시각과 함께 확인하는 시세·차트와 시장 분석")
-        self.market_subtitle = layout.itemAt(1).widget()
-        self.market_subtitle.localized_text = {"ko": "공급자·관측 시각과 함께 확인하는 시세·차트와 시장 분석",
-            "en": "Market quotes, charts and analysis with provider and observation time"}
-        self.market_subtitle.retranslate()
-        # UI-7 (owner, 2026-11-03): four indicator charts instead of a table; no individual stocks.
-        from .market_board import MarketBoard
-        self.market_board = MarketBoard(locale=self.ctx, auto_load=self.auto_refresh)
-        layout.addWidget(self.market_board)
+        from .tools import CurrentPageStack
+        layout = self.page("Analysis tools", "채권·금리·외환·파생·ETF·KRX·가상자산·매크로 분석 도구")
+        self.tools_page=layout.parentWidget()
+        layout.itemAt(1).widget().hide()  # contextual guidance below the picker replaces the category inventory
+        self.tools_subtitle = layout.itemAt(1).widget()
+        self.tools_subtitle.localized_text = {
+            "ko": "채권·금리·외환·파생·ETF·KRX·가상자산·매크로 분석 도구입니다. 아래에서 하나를 고르세요.",
+            "en": "Bonds, rates, FX, derivatives, ETF, KRX, crypto and macro tools. Pick one below."}
+        self.tools_subtitle.retranslate()
         self.bonds=BondsPane();self.bonds.requested.connect(self.run_bond)
         self.rates=RatesPane(); self.rates.requested.connect(lambda q:self.run_tool('rates',q))
         self.fx=FXPane(); self.fx.requested.connect(lambda q:self.run_tool('fx',q))
         self.structuring=StructuringPane(); self.structuring.requested.connect(lambda q:self.run_tool('structuring',q))
         self.macro=MacroPane(); self.macro.requested.connect(lambda q:self.run_tool('macro',q))
-        from .macro_records import MacroRecordsPane
         self.macro_records = MacroRecordsPane()
         self.macro_records.requested.connect(lambda q:self.run_tool('macro_records',q))
         for name, pane_type in (('derivatives', DerivativesPane), ('etf', ETFPane), ('crypto', CryptoPane), ('krx', KRXPane)):
@@ -351,89 +852,117 @@ class ResearchWindow(QMainWindow):
         for pane in (self.rates,self.fx,self.structuring,self.macro,self.derivatives,self.etf,self.crypto,self.krx):
             pane.hide_source()
         self.macro_records.set_source_caption('Record set')
-        self.market_chart = MarketChartPane(locale=self.ctx)
-        self.market_chart.setObjectName('marketChart')
-        # UI-8 (owner, 2026-11-03): asset-class tabs instead of a separate KIS chart tab.
-        # One chart pane moves into the selected chartable class; its provider is chosen automatically.
-        self.market_tabs=CurrentPageTabs()
-        self.market_classes=[]
-        self._class_symbols={}
-        for key,title,asset,tools in MARKET_CLASSES:
-            panes=[(getattr(self,tool),name) for tool,name in tools]
-            slot=None
-            if asset:
-                slot=QWidget();slot.setObjectName('chartSlot')
-                slot_layout=QVBoxLayout(slot);slot_layout.setContentsMargins(0,0,0,0)
-                panes.insert(0,(slot,'Price chart'))
-            inner=None
-            if len(panes)==1:
-                page=panes[0][0]
-            else:
-                inner=page=CurrentPageTabs();inner.setObjectName('marketInnerTabs')
-                for pane,name in panes:inner.addTab(pane,name)
-                inner.currentChanged.connect(self.market_tabs.updateGeometry)
-            self.market_tabs.addTab(page,title)
-            self.market_classes.append({'key':key,'asset':asset,'page':page,'inner':inner,'slot':slot,
-                                        'panes':[pane for pane,_ in panes]})
-        self.market_tabs.setUsesScrollButtons(True)
-        self.market_tabs.currentChanged.connect(self._market_class_changed)
-        self._market_class_changed(self.market_tabs.currentIndex())
-        layout.addWidget(self.market_tabs)
+        picker = QWidget()
+        picker.setObjectName('toolPicker')
+        from .category_picker import CategoryFlow
+        categories = CategoryFlow(picker)
+        # Fixed caps the picker at its single-row sizeHint, even when translated
+        # buttons wrap. Let CategoryFlow's heightForWidth reserve every row.
+        picker.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        self.tool_group = QButtonGroup(self)
+        self.tool_group.setExclusive(True)
+        self.tool_host = CurrentPageStack()
+        self.tool_host.setObjectName('toolHost')
+        self.tool_buttons = {}
+        for index, (name, title) in enumerate(TOOL_PANES):
+            pane = getattr(self, name)
+            button = QPushButton(title)
+            button.setCheckable(True)
+            button.setProperty('tool', True)
+            button.setAccessibleName(title)
+            button.clicked.connect(lambda checked=False, p=pane: self.show_tool(p))
+            self.tool_group.addButton(button)
+            categories.addWidget(button)
+            self.tool_buttons[name] = button
+            self.tool_host.addWidget(pane)
+        self.tool_buttons[TOOL_PANES[0][0]].setChecked(True)
+        layout.addWidget(picker)
+        from .workspace_guide import WorkspaceGuide
+        self.tools_guide = WorkspaceGuide('bonds')
+        layout.addWidget(self.tools_guide)
+        layout.addWidget(self.tool_host)
         layout.addStretch()
 
-    def _market_class_changed(self,index):
-        entry=self.market_classes[index] if 0<=index<len(self.market_classes) else None
-        if entry is None or entry['slot'] is None:return
-        chart=self.market_chart
-        if chart.parent() is not entry['slot']:
-            entry['slot'].layout().addWidget(chart)
-        previous=chart.asset.currentData()
-        if previous!=entry['asset']:
-            # Each class remembers the last code typed there; the class example is the default.
-            self._class_symbols[previous]=chart.symbol.text()
-            chart.set_asset_class(entry['asset'])
-            if entry['asset'] in self._class_symbols:
-                chart.symbol.setText(self._class_symbols[entry['asset']])
-        chart.show()
+    def attach_symbol_searches(self):
+        """Code-or-name search on every symbol field that loads a chart or one instrument's data
+        (owner, 2026-11-04). Choosing a row writes the code, so each pane's own routing is unchanged."""
+        from .markets_view import STOCK_ASSETS, US_EXCHANGES, attach_symbol_search
+        directory, loader = self.symbol_directory, self.directory_loader
+        targets = [(self.symbol, {}), (self.portfolio.symbols, {"multi": True})]
+        for pane, field, options in ((self.signals, "symbol", {}), (self.strategy, "symbols", {"multi": True}),
+                                     (self.etf, "code", {"assets": ("domestic_stock",), "kinds": ("etf",)}),
+                                     (self.krx, "code", {"assets": ("domestic_stock",)})):
+            for controls in pane.fields.values():
+                if isinstance(controls.get(field), QLineEdit):
+                    targets.append((controls[field], options))
+        self.symbol_completers = [self.markets_view.completer]
+        for edit, options in targets:
+            # Writing a code drops the exchange, so only listings whose bare code loads the same security.
+            options = {"assets": STOCK_ASSETS, "exchanges": US_EXCHANGES, **options}
+            self.symbol_completers.append(attach_symbol_search(edit, directory, locale=self.ctx, loader=loader,
+                                                               **options))
 
-    def show_market_pane(self,pane):
-        """Select the asset class (and inner tab) that shows `pane`; the chart follows the class."""
-        order=list(enumerate(self.market_classes))
+    def show_tool(self, pane):
+        """Show one analysis tool on the tools page (does not navigate)."""
+        for index in range(self.tool_host.count()):
+            if self.tool_host.widget(index) is pane:
+                self.tool_host.setCurrentIndex(index)
+                for name, button in self.tool_buttons.items():
+                    button.setChecked(getattr(self, name) is pane)
+                    if getattr(self, name) is pane and hasattr(self, 'tools_guide'):
+                        self.tools_guide.set_key(name)
+                return pane
+        raise ValueError('Pane is not one of the analysis tools')
+
+    def show_market_pane(self, pane):
+        """Kept for callers of the former Markets tabs: the chart opens Markets, a tool opens its page."""
         if pane is self.market_chart:
-            # Keep the chart in the class the user is viewing when that class has one.
-            current=self.market_tabs.currentIndex()
-            order=[order[current]]+order if 0<=current<len(order) else order
-        for index,entry in order:
-            target=entry['slot'] if pane is self.market_chart else pane
-            if target is not None and target in entry['panes']:
-                self.market_tabs.setCurrentIndex(index)
-                self._market_class_changed(index)
-                if entry['inner'] is not None:entry['inner'].setCurrentWidget(target)
-                return entry
-        raise ValueError('Pane is not part of the Markets workspace')
+            self.navigate('markets')
+            self.markets_content.setCurrentWidget(self.markets_view)
+            self.market_asset_category=None
+            if not self.markets_view.showing_stock():
+                self.markets_view.stock.adopt_chart()
+                self.markets_view.pages.setCurrentIndex(1)
+            return pane
+        self.show_tool(pane)
+        self.navigate('tools')
+        return pane
 
     def current_market_pane(self):
-        entry=self.market_classes[self.market_tabs.currentIndex()]
-        page=entry['inner'].currentWidget() if entry['inner'] is not None else entry['page']
-        return self.market_chart if page is entry['slot'] else page
+        if self.stack.currentIndex() == self.route_indices['tools']:
+            return self.tool_host.currentWidget()
+        return self.market_chart if self.markets_view.showing_stock() else self.markets_view.rankings
 
     def make_quant(self):
         outer = self.page("Build & Test", "Quant Lab · 기존 계산 엔진으로 가격 분포 분석")
-        self.quant_tabs = QTabWidget()
+        from .research_style import prepare_page
+        self.quant_page = prepare_page(outer)
+        outer.itemAt(1).widget().hide()
+        from .workspace_guide import WorkspaceGuide
+        self.quant_guide = WorkspaceGuide('monte_carlo')
+        outer.addWidget(self.quant_guide)
+        # Only the selected page sets the scroll width. The inactive Strategy
+        # form has platform-dependent font/combobox hints of its own.
+        self.quant_tabs = CurrentPageTabs()
         outer.addWidget(self.quant_tabs)
         host = QWidget()
         layout = QVBoxLayout(host)
+        layout.setContentsMargins(0, 4, 0, 0)
+        layout.setSpacing(16)
         self.quant_tabs.addTab(host, 'Monte Carlo')
         from .strategy import StrategyPane
         self.strategy = StrategyPane()
         self.strategy.requested.connect(lambda q: self.run_tool('strategy', q))
         self.quant_tabs.addTab(self.strategy, 'Strategy Lab')
+        self.quant_tabs.currentChanged.connect(lambda i:self.quant_guide.set_key(('monte_carlo','strategy')[i]))
         box, inner = panel("분석 설정")
-        form = QGridLayout()
         self.symbol = QLineEdit("AAPL")
         self.symbol.setMaxLength(120)
+        # Owner issues 04/12: no data-source selector; the app fetches by itself ("best": keyless Yahoo
+        # before a labelled synthetic fallback). The combo stays, hidden, for tests and scripts.
         self.source = QComboBox()
-        for text, value in [("Auto · KIS / FMP", "auto"), ("FMP", "fmp"), ("KIS · KRX", "kis"), ("Synthetic demo", "synthetic")]:
+        for text, value in [("Auto", "best"), ("Auto · KIS / FMP", "auto"), ("FMP", "fmp"), ("KIS · KRX", "kis"),
+                            ("Synthetic demo", "synthetic")]:
             self.source.addItem(text, value)
         self.model = QComboBox()
         for text, value in [("GARCH(1,1)-t", "garch_t"), ("GBM", "gbm"), ("Jump diffusion", "jump"), ("Block bootstrap", "bootstrap")]:
@@ -446,34 +975,56 @@ class ResearchWindow(QMainWindow):
         self.seed = QSpinBox(); self.seed.setRange(0, 2147483647); self.seed.setValue(7)
         self.erp = QDoubleSpinBox(); self.erp.setRange(-100, 100); self.erp.setDecimals(2); self.erp.setValue(4)
         self.target = QLineEdit(); self.target.setPlaceholderText("선택 입력")
-        fields = (("Symbol", self.symbol), ("Data source", self.source), ("Model", self.model),
+        fields = (("Symbol", self.symbol), ("Model", self.model),
                   ("Drift", self.drift), ("Horizon · sessions", self.horizon), ("Paths", self.paths),
                   ("Seed", self.seed), ("ERP · %", self.erp), ("Target price", self.target))
-        for i, (name, widget) in enumerate(fields):
-            col, row = i%3, (i//3)*2
+        for name, widget in (*fields, ("Data source", self.source)):
             widget.setAccessibleName(name)
-            form.addWidget(label(name, "caption"), row, col)
-            form.addWidget(widget, row+1, col)
-        form.setHorizontalSpacing(16)
-        form.setVerticalSpacing(8)
-        inner.addLayout(form)
+            if isinstance(widget, QComboBox):
+                # Match the shared tool header: native option/font widths must
+                # not make this three-column form wider than its scroll page.
+                # Full option labels stay in the popup and selected tooltip.
+                widget.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)
+                widget.setMinimumContentsLength(12)
+                widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+                widget.setToolTip(widget.currentText())
+                widget.currentTextChanged.connect(widget.setToolTip)
+                widget.model().dataChanged.connect(lambda *args, combo=widget: combo.setToolTip(combo.currentText()))
+        from .form_layout import CompactFieldGrid, bound_input_panel, add_compact_action
+        bound_input_panel(box)
+        self.quant_form = CompactFieldGrid([(label(name, "caption"), widget) for name, widget in fields])
+        inner.addWidget(self.quant_form)
+        inner.addWidget(self.source)
+        self.source.hide()
         self.run_button = QPushButton("분포 분석 실행")
         self.run_button.setProperty("primary", True)
         self.run_button.clicked.connect(self.run_analysis)
-        inner.addWidget(self.run_button)
+        add_compact_action(inner, self.run_button)
         self.analysis_status = label("데이터 출처·시드·모델 가정을 기록합니다.", "muted")
+        self.analysis_status.setProperty("reading_help_keep_visible", True)
         inner.addWidget(self.analysis_status)
         layout.addWidget(box)
         box, inner = panel("분포와 근거")
         self.quant_chart = FanChart()
         self.quant_metrics = table(["지표", "값"])
+        self.quant_metrics.horizontalHeaderItem(0).setData(CAPTION_ROLE, 'Metric')
         self.quant_metrics.setProperty("localized_columns", [0])
-        self.quant_metrics.setMinimumHeight(280)
-        inner.addWidget(self.quant_metrics)
+        from .result_layout import fit_result_table
+        fit_result_table(self.quant_metrics)
         self.quant_notes = label("아직 실행한 분석이 없습니다.", "muted")
+        self.quant_notes.setProperty('reading_help_keep_visible', True)
         from .chart_study import ChartStudy
-        inner.insertWidget(0, ChartStudy(self.quant_chart,self.quant_notes))
-        inner.addWidget(label("계산 완료 ≠ 투자 검증. 이 화면은 NOT_RUN 판정을 유지하며 주문이나 전략 원장을 생성하지 않습니다.", "caption"))
+        self.quant_study = ChartStudy(self.quant_chart, self.quant_notes)
+        from .chart_study import LocalLabel
+        self.quant_empty = LocalLabel({'ko':'분석을 실행하면 가격 분포와 위험 지표가 여기에 나타나요.',
+                                      'en':'Run the analysis to see the price distribution and risk metrics here.'}, 'muted')
+        inner.addWidget(self.quant_empty)
+        inner.addWidget(self.quant_study)
+        inner.addWidget(self.quant_metrics)
+        self.quant_study.hide();self.quant_metrics.hide()
+        notice = label("계산 완료 ≠ 투자 검증. 이 화면은 NOT_RUN 판정을 유지하며 주문이나 전략 원장을 생성하지 않습니다.", "caption")
+        notice.setProperty('reading_help_keep_visible', True)
+        inner.addWidget(notice)
         layout.addWidget(box)
         layout.addStretch()
 
@@ -481,24 +1032,46 @@ class ResearchWindow(QMainWindow):
         from .portfolio import PortfolioPane
         from .signals import SignalsPane
         layout = self.page("Portfolio & Risk", "현재 세션 분석의 분포 위험을 확인하세요.")
+        from .research_style import prepare_page
+        self.risk_page = prepare_page(layout)
+        layout.itemAt(1).widget().hide()
         self.portfolio = PortfolioPane()
         self.portfolio.requested.connect(self.run_portfolio)
         self.signals=SignalsPane();self.signals.requested.connect(lambda q:self.run_tool('signals',q))
         self.risk_tabs=CurrentPageTabs();self.risk_tabs.addTab(self.portfolio,'Portfolio');self.risk_tabs.addTab(self.signals,'Signals')
+        # As tall as the selected page: spare height goes below the risk notes, not inside a short tab.
+        self.risk_tabs.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         from .paper import PaperPane
         self.paper = PaperPane(self.paper_session)
+        self.paper.setProperty("reading_help_keep_visible", True)
         self.risk_tabs.addTab(self.paper, 'Paper Trading')
+        from .workspace_guide import WorkspaceGuide
+        self.risk_guide = WorkspaceGuide('portfolio')
+        self.risk_tabs.currentChanged.connect(lambda i:self.risk_guide.set_key(('portfolio','signals','paper')[i]))
+        layout.addWidget(self.risk_guide)
         layout.addWidget(self.risk_tabs)
         layout.addWidget(label("개별 가격 시뮬레이션 위험", "heading"))
         self.risk_table = table(["Symbol", "Model", "P(loss)", "VaR 95", "CVaR", "Source"])
-        self.risk_table.setMinimumHeight(300)
+        self.risk_table.setProperty('localized_columns', [1])
+        self.risk_table._qg_status_columns = {5: 'official'}   # SYNTHETIC -> 합성 데이터(SYNTHETIC)
+        from .result_layout import fit_result_table
+        fit_result_table(self.risk_table)   # as tall as its rows; no empty body
         layout.addWidget(self.risk_table)
-        layout.addWidget(label("각 행은 개별 가격 시뮬레이션입니다. 포트폴리오 전체 위험이나 전략 백테스트가 아닙니다.", "muted"))
+        # Until a Monte Carlo run completes, say where the rows come from instead of an empty table.
+        self.risk_empty = label("No Monte Carlo run in this session yet. Run one under Build & Test → Monte Carlo; "
+                                "each completed run adds a row here.", "muted")
+        self.risk_empty.setProperty("reading_help_keep_visible", True)
+        layout.addWidget(self.risk_empty)
+        notice = label("각 행은 개별 가격 시뮬레이션입니다. 포트폴리오 전체 위험이나 전략 백테스트가 아닙니다.", "muted")
+        notice.setProperty("reading_help_keep_visible", True)
+        layout.addWidget(notice)
         layout.addStretch()
 
     def make_library(self):
         layout = self.page("Research Library", "이번 앱 세션의 실행 근거 · 종료 전에 필요한 결과를 저장하세요.")
         self.run_table = table(["Symbol", "Model", "실행 상태", "검증 판정", "생성 시각 · UTC"])
+        self.run_table._qg_status_columns = {2: 'execution', 3: 'official'}
+        self.run_table.setProperty('localized_columns', [1])
         self.run_table.setMinimumHeight(280)
         layout.addWidget(self.run_table)
         buttons = QHBoxLayout()
@@ -509,11 +1082,15 @@ class ResearchWindow(QMainWindow):
         buttons.addWidget(self.save_json); buttons.addWidget(self.save_bundle)
         layout.addLayout(buttons)
         self.export_status = label("현재 저장 대상은 Monte Carlo 실행입니다. 자동 저장되지 않으며 경로는 직접 선택합니다.", "muted")
+        self.export_status.setProperty("reading_help_keep_visible", True)
         layout.addWidget(self.export_status)
-        layout.addWidget(label("재현성 PARTIAL · 데이터 빈티지/라이선스 미검증 · 비용 NOT_APPLIED · 검증 NOT_RUN\n동결 연구·과거 원장·비밀 설정을 탐색하지 않습니다.", "caption"))
+        notice = label("재현성 PARTIAL · 데이터 빈티지/라이선스 미검증 · 비용 NOT_APPLIED · 검증 NOT_RUN\n동결 연구·과거 원장·비밀 설정을 탐색하지 않습니다.", "caption")
+        notice.setProperty("reading_help_keep_visible", True)
+        layout.addWidget(notice)
         from .commentary import CommentaryPane
         options = {'runner': self.commentary_runner} if self.commentary_runner else {}
         self.commentary = CommentaryPane(self.commentary_sources, **options)
+        self.commentary.setProperty("reading_help_keep_visible", True)
         layout.addWidget(self.commentary)
         layout.addStretch()
 
@@ -544,44 +1121,76 @@ class ResearchWindow(QMainWindow):
         self.locale_picker.currentIndexChanged.connect(self.change_language)
         inner.addWidget(self.locale_picker)
         self.locale_notice=label(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'),'caption')
+        self.locale_notice.setProperty("reading_help_keep_visible", True)
         inner.addWidget(self.locale_notice)
         layout.addWidget(box)
         from .connections import ConnectionsPane
         self.connections = ConnectionsPane()
+        self.connections.setProperty("reading_help_keep_visible", True)
         self.connections.requested.connect(lambda q: self.run_tool('connections', q))
         from .paper import RulesPane
         self.rules = RulesPane(self.paper_session)
+        self.rules.setProperty("reading_help_keep_visible", True)
         self.system_tabs = QTabWidget()
         self.system_tabs.addTab(self.connections, 'Connections')
         self.system_tabs.addTab(self.rules, 'Rules')
         from .data_rights import DataRightsPane
         self.data_rights=DataRightsPane(self.ctx)
+        self.data_rights.setProperty("reading_help_keep_visible", True)
         self.system_tabs.addTab(self.data_rights,self.ctx.t('data_rights'))
         layout.addWidget(self.system_tabs)
         box, inner = panel("프로젝트 상태")
+        box.setProperty("reading_help_keep_visible", True)
+        box.setProperty("recorded_project_status", True)
         try:
             status = verify(application_root())
-            counts = status["code_test"]["counts"]
-            calendar = status["data_readiness"]["calendar"]
-            text = (f"기록된 검사: {counts['PASS']} PASS / {counts['FAIL']} FAIL / {counts['NOT_RUN']} NOT_RUN\n"
-                    f"달력: {calendar['files']}개 서명 메타데이터 · 세트 {calendar['version']}\n"
-                    "위 수치는 이번에 실행한 검사 결과가 아닙니다. 파일별 서명 검증은 별도입니다.")
-        except (OSError, ValueError, KeyError, TypeError):
-            text = "기록된 상태를 검증할 수 없습니다. 출처 자료를 확인하세요."
-        inner.addWidget(label(text))
-        inner.addWidget(label("데이터 NOT_VERIFIED · 공식 게이트 NOT_FROZEN (문서 기록)\n동결 연구 NOT_INSPECTED · 공개 배포 NOT_APPROVED", "muted"))
+        except (OSError, ValueError, KeyError, TypeError, YAMLError):
+            status = None
+        for line in recorded_status_display(status):
+            item = label(line.en, 'muted' if line.muted else '')
+            item.localized_text = {'en': line.en, 'ko': line.ko}
+            inner.addWidget(item)
+            item.retranslate()
         layout.addWidget(box)
         box, inner = panel("데스크톱 이전 상태")
-        inner.addWidget(label("PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\nMacro v2·모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다."))
+        box.setProperty("reading_help_keep_visible", True)
+        inner.addWidget(label("PyQt6 네이티브: Home, Markets(관심종목 차트·종목 한 화면), 분석 도구(Bonds, Rates, FX, Structuring, Macro sheet, Macro v2, Derivatives, ETF, Crypto, KRX), 기술지표 가이드, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\n모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다."))
         inner.addWidget(label("이번 데스크톱은 선택 실행하는 미리보기입니다. 전체 기능 이전 완료본이 아닙니다.", "muted"))
         layout.addWidget(box)
         layout.addStretch()
 
     def navigate(self, route):
+        """Show a page and close the market disclosure; keep each page's reading position."""
         if route != 'home' and hasattr(self, 'home_feed') and self.home_feed.active:
             self.home_feed.stop()
+        self.rail_flyouts.close_all()
         self.stack.setCurrentIndex(self.route_indices[route])
         for name, button in self.nav.items(): button.setChecked(name == route)
+        self.sync_market_section()
+        visited = getattr(self, '_visited_routes', set())
+        if route not in visited:
+            visited.add(route)
+            self._visited_routes = visited
+            scroll = self.stack.currentWidget()
+            focused=QApplication.focusWidget()
+            if focused is not None and scroll.isAncestorOf(focused):
+                scroll.setFocus(Qt.FocusReason.OtherFocusReason)
+            # Qt may scroll to the first input as a page is first shown. Start
+            # at its purpose/header; subsequent visits retain the reading place.
+            self._first_visit_scroll = scroll
+            if not hasattr(self, '_navigation_scroll_timer'):
+                # An owned timer is cancelled when the window is destroyed.
+                # A free singleShot closure can outlive the underlying Qt stack.
+                self._navigation_scroll_timer = QTimer(self)
+                self._navigation_scroll_timer.setSingleShot(True)
+                self._navigation_scroll_timer.timeout.connect(self._show_first_page_top)
+            self._navigation_scroll_timer.start(0)
+
+    def _show_first_page_top(self):
+        scroll = self._first_visit_scroll
+        if self.stack.currentWidget() is scroll:
+            scroll.verticalScrollBar().setValue(0)
+        self._first_visit_scroll = None
 
     def setup_live_watchlist(self):
         from .watchlist_live import WatchlistLiveController
@@ -629,6 +1238,7 @@ class ResearchWindow(QMainWindow):
                 self.watchlist.update_quote(symbol, **quote)
 
     def chart_history_loaded(self, snapshot):
+        self.indicator_guide.set_market_snapshot(snapshot,self.market_chart.supply)
         if snapshot.request.instrument.asset == 'domestic_stock':
             self.chart_scores.request_history(snapshot.request.instrument)
             score = self.all_q_scores().get(snapshot.request.instrument.code)
@@ -705,25 +1315,31 @@ class ResearchWindow(QMainWindow):
 
     def open_live_chart(self):
         self.navigate('markets')
-        self.show_market_pane(self.market_chart)
-
-        def reveal():
-            scroll = self.stack.widget(self.route_indices['markets'])
-            if self.stack.currentWidget() is scroll and self.current_market_pane() is self.market_chart:
-                top = self.market_tabs.mapTo(scroll.widget(), self.market_tabs.rect().topLeft()).y()
-                scroll.verticalScrollBar().setValue(top)
-                self.market_chart.symbol.setFocus(Qt.FocusReason.OtherFocusReason)
-
-        # Tab selection can change the scroll page's geometry on the next event.
-        QTimer.singleShot(0, reveal)
+        self.markets_content.setCurrentWidget(self.markets_view)
+        self.market_asset_category=None
+        self.sync_market_section()
+        scroll = self.stack.widget(self.route_indices['markets'])
+        if self.markets_view.showing_stock():
+            def reveal():
+                if self.stack.currentWidget() is scroll:
+                    top = self.market_chart.mapTo(scroll.widget(), self.market_chart.rect().topLeft()).y()
+                    scroll.verticalScrollBar().setValue(max(0, top - 120))
+            QTimer.singleShot(0, reveal)
+        elif hasattr(self.markets_view, 'focus_search'):
+            self.markets_view.focus_search()  # a coin page gives way to a stock market's search (UI-D10 review)
+        else:
+            self.markets_view.search.setFocus(Qt.FocusReason.OtherFocusReason)
 
     def open_stock_chart(self, symbol):
-        # Selecting a row changes the chart inputs; loading remains explicit.
-        # Home rows are domestic stocks: select that class before setting the code.
-        self.market_tabs.setCurrentIndex(0)
-        self._market_class_changed(0)
-        self.market_chart.symbol.setText(symbol)
-        self.open_live_chart()
+        """A Home row opens that stock's screen on Markets (it loads when automatic refresh is on)."""
+        from core.market.models import Instrument
+        self.navigate('markets')
+        self.markets_content.setCurrentWidget(self.markets_view)
+        self.market_asset_category=None
+        self.markets_view.open_instrument(Instrument('domestic_stock', symbol))
+        self.sync_market_section()
+        scroll = self.stack.widget(self.route_indices['markets'])
+        QTimer.singleShot(0, lambda: scroll.verticalScrollBar().setValue(0))
 
     def change_language(self,index):
         value=self.locale_picker.itemData(index)
@@ -735,10 +1351,13 @@ class ResearchWindow(QMainWindow):
         self.language.blockSignals(False)
         self.data_rights.set_locale(self.ctx)
         self.indicator_guide.set_locale(self.ctx)
-        self.guide_subtitle.setText(self.ctx.t('search_intro'))
+        self.guide_subtitle.setText(self.indicator_guide.intro_text())
         self.watchlist.set_locale(self.ctx)
         self.market_chart.set_locale(self.ctx)
-        self.market_board.set_locale(self.ctx)
+        self.markets_view.set_locale(self.ctx)
+        for destination in self.market_destinations.values():destination.set_locale(self.ctx)
+        for completer in self.symbol_completers:
+            completer.set_locale(self.ctx)
         self.locale_notice.setText(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'))
         from .indicator_guide import IndicatorGuide
         for pane in self.findChildren(IndicatorGuide):
@@ -748,6 +1367,11 @@ class ResearchWindow(QMainWindow):
             self.language_store.setValue("ui/language", self.ui_language)
             self.language_store.setValue("ui/locale", str(self.ctx.locale))
         self.localizer.apply()
+        self.retitle_market_sections()
+        self.fit_sidebar()
+
+        if hasattr(self, 'reading_help'):
+            self.reading_help.set_locale(self.ctx)
 
     @pyqtSlot()
     def refresh_markets(self):
@@ -797,6 +1421,7 @@ class ResearchWindow(QMainWindow):
             self.session.put(value.run)
             self.outputs[value.run["run_id"]] = value
             self.quant_chart.set_result(value.result)
+            self.quant_empty.hide();self.quant_study.show();self.quant_metrics.show()
             r, h = value.result, value.history
             vol_info = volatility_disclosure(r)
             table_rows(self.quant_metrics, [("Spot", f"{r.spot:,.2f}"), ("P5 / P50 / P95", f"{r.p05:,.2f} / {r.median_terminal:,.2f} / {r.p95:,.2f}"),
@@ -805,26 +1430,39 @@ class ResearchWindow(QMainWindow):
                 ("Paths / horizon / seed", f"{r.n_paths:,} / {r.horizon_days} / {value.run['parameters']['seed']}"),
                 ("P(terminal ≥ target)", "—" if r.prob_target is None else f"{r.prob_target:.1%}")] +
                 ([("Horizon-average vol (ann.)", f"{r.garch_horizon_vol:.1%}")] if r.garch is not None else []))
-            notes = [f"{'합성 데이터 · ' if h.source=='SYNTHETIC' else ''}{h.source} · {h.first_date} → {h.last_date}",
-                     h.note, value.funding_note, r.drift_note, r.bound_note, r.jump_note]
-            notes.append(vol_info["description"])
+            # (group, line): the plain lines are the source text; the display groups them under short
+            # headings with a Korean reading per line (owner issues 11 and 14). Display only.
+            entries = [("data", f"{'합성 데이터 · ' if h.source=='SYNTHETIC' else ''}{h.source} · {h.first_date} → {h.last_date}"),
+                       ("data", h.note), ("assumptions", value.funding_note), ("assumptions", r.drift_note),
+                       ("assumptions", r.bound_note), ("assumptions", r.jump_note)]
+            resampling = bootstrap_disclosure(r.model)   # None for every model but bootstrap
+            if resampling is not None:
+                entries.append(("assumptions", resampling["description"]))
+            entries.append(("volatility", vol_info["description"]))
             if vol_info["horizon_basis"]:
-                notes.append("Horizon-average volatility: " + vol_info["horizon_basis"])
+                entries.append(("volatility", "Horizon-average volatility: " + vol_info["horizon_basis"]))
             if r.prob_target is not None:
-                notes.append(f"Target probability: final price >= {r.target:,.2f} after {r.horizon_days} sessions. Only the final session is used.")
+                entries.append(("volatility", f"Target probability: final price >= {r.target:,.2f} after {r.horizon_days} sessions. Only the final session is used."))
             if r.garch is not None:
                 fit = r.garch
-                notes.append(f"GARCH fit: alpha={fit.alpha:.4f}, beta={fit.beta:.4f}, nu={fit.nu:.3f}")
-                notes.append(f"converged={fit.converged} · persistence={fit.persistence:.4f} · half-life={fit.half_life:.2f} sessions")
+                entries.append(("garch", f"GARCH fit: alpha={fit.alpha:.4f}, beta={fit.beta:.4f}, nu={fit.nu:.3f}"))
+                entries.append(("garch", f"converged={fit.converged} · persistence={fit.persistence:.4f} · half-life={fit.half_life:.2f} sessions"))
                 for field in ("at_bound", "note", "se_note", "interval_at_bound"):
                     info = getattr(fit, field)
-                    if info: notes.append(f"{field}: {info}")
+                    if info: entries.append(("garch", f"{field}: {info}"))
                 for field in ("alpha", "beta", "persistence"):
                     interval = fit.interval(field)
-                    if interval: notes.append(f"{field} 95% Wald interval: {interval}")
-                if fit.eta_interval: notes.append(f"eta 95% profile interval: {fit.eta_interval}")
-            self.quant_notes.setText("\n".join(str(n) for n in notes if n))
+                    if interval: entries.append(("garch", f"{field} 95% Wald interval: {interval}"))
+                if fit.eta_interval: entries.append(("garch", f"eta 95% profile interval: {fit.eta_interval}"))
+            self.quant_notes.setText("\n".join(str(n) for _, n in entries if n))
+            from .risk_display import grouped_notes
+            self.quant_notes.localized_text = {language: grouped_notes(entries, language, result=r, history=h)
+                                               for language in ("en", "ko")}
+            self.quant_notes.retranslate()
             self.analysis_status.setText("COMPLETED · 검증 NOT_RUN · 재현성 PARTIAL")
+            # Owner issue 14: status codes stay visible with their Korean meaning beside them.
+            self.analysis_status.localized_text = {"ko": "완료 · 검증 미실행(NOT_RUN) · 재현성 부분(PARTIAL)"}
+            self.analysis_status.retranslate()
         self.refresh_views()
 
     @pyqtSlot(str)
@@ -894,15 +1532,32 @@ class ResearchWindow(QMainWindow):
         table_rows(self.run_table, [[r["parameters"].get("symbol", "—"), r["parameters"].get("model", "—"),
             r["execution_status"], r["verdict"], self.ctx.timestamp(r["created_at"])] for r in runs], [r["run_id"] for r in runs])
         complete = [r for r in runs if r["execution_status"] == "COMPLETED"]
-        table_rows(self.risk_table, [[r["parameters"]["symbol"], r["parameters"]["model"],
+        from .risk_display import MC_MODEL_LABELS, ko, source_name, status_ko
+        table_rows(self.risk_table, [[r["parameters"]["symbol"],
+            MC_MODEL_LABELS.get(r["parameters"]["model"], r["parameters"]["model"]),
             f"{r['metrics']['prob_loss']:.1%}", f"{r['metrics']['var_pct']:.1%}", f"{r['metrics']['cvar_pct']:.1%}",
             r["data"]["source"]] for r in complete])
+        self.risk_table.setVisible(bool(complete))
+        self.risk_empty.setVisible(not complete)
         if complete:
             r = complete[0]
             if r["run_id"] in self.outputs: self.home_chart.set_result(self.outputs[r["run_id"]].result)
             self.home_summary.setText(f"{r['parameters']['symbol']} · {r['parameters']['model']} · {r['data']['source']}\n"
                 f"P5 {r['metrics']['p05']:,.2f} / P50 {r['metrics']['p50']:,.2f} / P95 {r['metrics']['p95']:,.2f}\n"
                 f"관측 {r['data']['last_observation']} · 판정 {r['verdict']} · 재현성 {r['reproducibility']}")
+            # Owner issue 14: model and source as words, status codes with their Korean meaning.
+            model = MC_MODEL_LABELS.get(r['parameters']['model'], r['parameters']['model'])
+            band = f"P5 {r['metrics']['p05']:,.2f} / P50 {r['metrics']['p50']:,.2f} / P95 {r['metrics']['p95']:,.2f}"
+            source = r['data']['source']
+            self.home_summary.localized_text = {
+                'en': (f"{r['parameters']['symbol']} · {model} · {source}\n{band}\n"
+                       f"Observed {r['data']['last_observation']} · verdict {r['verdict']} · "
+                       f"reproducibility {r['reproducibility']}"),
+                'ko': (f"{r['parameters']['symbol']} · {ko(model)} · "
+                       f"{'합성 데이터' if source == 'SYNTHETIC' else source_name(source, 'ko')}\n{band}\n"
+                       f"관측 {r['data']['last_observation']} · 판정 {status_ko(r['verdict'])} · "
+                       f"재현성 {status_ko(r['reproducibility'])}")}
+            self.home_summary.retranslate()
         self.localizer.apply()
 
     def export_selected(self, bundle):
@@ -935,43 +1590,20 @@ class ResearchWindow(QMainWindow):
             symbol = symbol.replace(b'#194C40', b'#E5EEE8').replace(b'fill="#E5EEE8"', b'fill="#A9C6BD"')
         self.brand_symbol.load(QByteArray(symbol))
         p = self.colors = DARK if index else LIGHT
+        self.apply_rail_theme(p, bool(index))
         self.watchlist.set_theme(p)
-        self.market_board.set_theme(bool(index))
+        self.markets_view.set_theme(bool(index))
+        from .research_style import apply
+        for workspace in (self.tools_page, self.quant_page, self.risk_page):
+            apply(workspace,p,bool(index))
+        self.indicator_guide.set_theme(p)
+        for destination in self.market_destinations.values():
+            if hasattr(destination,'set_theme'):destination.set_theme(p)
+        for completer in getattr(self, 'symbol_completers', ()):
+            completer.set_theme(p, bool(index))
         if self.language_store is not None:
             self.language_store.setValue("ui/theme", "dark" if index else "light")
-        self.setStyleSheet(f"""
-          QWidget {{ background: {p.bg}; color: {p.text}; font-size: 13px; font-weight: 400; }}
-          QFrame#sidebar {{ background: {p.surface}; border-right: 1px solid {p.border}; }}
-          QFrame#panel {{ background: {p.surface}; border: 1px solid {p.border}; border-radius: 14px; }}
-          QFrame#panel QLabel {{ background: transparent; }}
-          QLabel {{ background: transparent; }}
-          QLabel[role='title'] {{ font-size: 28px; font-weight: 600; letter-spacing: -0.5px; }}
-          QLabel[role='heading'] {{ font-size: 17px; font-weight: 600; }}
-          QLabel[role='brand'] {{ font-size: 16px; font-weight: 600; letter-spacing: 0.15px; color: {p.accent}; }}
-          QLabel[role='number'] {{ font-size: 30px; font-weight: 500; letter-spacing: -0.4px; }}
-          QLabel[role='muted'], QLabel[role='caption'] {{ color: {p.muted}; }}
-          QLabel[role='caption'] {{ font-size: 12px; }}
-          QPushButton {{ padding: 10px 14px; border: 1px solid {p.border}; border-radius: 8px; background: {p.surface}; font-weight: 500; }}
-          QPushButton:hover {{ background: {p.accent_soft}; }}
-          QPushButton:focus, QLineEdit:focus, QComboBox:focus {{ border: 2px solid {p.accent}; }}
-          QPushButton[primary='true'], QPushButton:checked {{ background: {p.accent}; color: {p.on_accent}; }}
-          QPushButton[nav='true'] {{ text-align: left; border: 0; min-height: 24px; }}
-          QPushButton:disabled {{ color: {p.muted}; background: {p.surface_2}; }}
-          QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox {{ min-height: 28px; padding: 5px; border: 1px solid {p.border}; border-radius: 6px; background: {p.surface}; }}
-          QTableWidget {{ background: {p.surface}; alternate-background-color: {p.surface_2}; gridline-color: {p.border}; border: 0; selection-background-color: {p.accent_soft}; selection-color: {p.text}; }}
-          QHeaderView::section {{ padding: 8px; border: 0; background: {p.surface_2}; color: {p.muted}; font-size: 12px; font-weight: 500; }}
-          QScrollArea {{ border: 0; }}
-          QTabWidget::pane {{ border: 0; }}
-          QTabBar::tab {{ background: {p.surface_2}; color: {p.muted}; padding: 10px 18px; margin-right: 4px; border-top-left-radius: 7px; border-top-right-radius: 7px; font-weight: 500; }}
-          QTabBar::tab:selected {{ background: {p.accent}; color: {p.on_accent}; }}
-          QTabWidget#marketInnerTabs QTabBar::tab {{ background: transparent; color: {p.muted}; padding: 7px 14px; margin-right: 6px; border: 0; border-bottom: 2px solid transparent; border-radius: 0; }}
-          QTabWidget#marketInnerTabs QTabBar::tab:selected {{ background: transparent; color: {p.accent}; border-bottom: 2px solid {p.accent}; font-weight: 600; }}
-          QLineEdit#guideSearch {{ min-height: 34px; padding: 6px 12px; border-radius: 20px; font-size: 14px; }}
-          QListWidget#guideSuggestions {{ background: {p.surface}; border: 1px solid {p.border}; border-radius: 14px; padding: 4px; outline: 0; }}
-          QListWidget#guideSuggestions::item {{ border-radius: 9px; color: transparent; }}
-          QListWidget#guideSuggestions::item:selected, QListWidget#guideSuggestions::item:hover {{ background: {p.accent_soft}; }}
-          QPushButton[chip='true'] {{ padding: 6px 12px; border-radius: 15px; font-weight: 500; }}
-        """)
+        self.setStyleSheet(typography.window_stylesheet(p, bool(index)))
         for chart in [*self.findChildren(FanChart), *self.findChildren(FrontierChart), *self.findChildren(LineChart), *self.findChildren(SignedBars)]:
             chart.colors = p
             chart.update()
@@ -985,8 +1617,10 @@ class ResearchWindow(QMainWindow):
             event.ignore()
             self.statusBar().showMessage(display(self, "진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다."))
             return
-        # The indicator board polls on its own; it never holds the window open (its answer is dropped).
-        if self.jobs.busy or self.paper_session.jobs.busy or self.commentary.jobs.busy or self.market_chart.jobs.busy:
+        # The watchlist cards and the stock details poll on their own and do not block closing: stop()
+        # cancels the cards still queued and drops late answers, so exit waits for one request at most.
+        if (self.jobs.busy or self.paper_session.jobs.busy or self.commentary.jobs.busy or self.market_chart.jobs.busy
+                or any(page.jobs.busy for page in self.market_destinations.values())):
             event.ignore()
             self.statusBar().showMessage(display(self, "진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다."))
             return
@@ -1001,21 +1635,22 @@ class ResearchWindow(QMainWindow):
             self.statusBar().showMessage(display(self, '모의 엔진의 진행 중인 조회가 끝나면 다시 종료해 주세요.'))
             return
         self.market_chart.stop()
-        self.market_board.stop()
+        self.markets_view.stop()
+        self.home_view.stop()
+        for destination in self.market_destinations.values():
+            if hasattr(destination,'stop'):destination.stop()
         self.quote_paint_timer.stop()
         event.accept()
 
 
 def main():
-    if sys.platform == "win32":
-        import ctypes
-        set_app_id = ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID
-        set_app_id.argtypes = [ctypes.c_wchar_p]
-        set_app_id.restype = ctypes.c_long
-        if set_app_id("QUANTGEN.Desktop") != 0:  # S_OK; otherwise Windows groups the window under python.exe
-            print("QUANTGEN: Windows did not accept the application ID; the taskbar may show the Python icon.",
-                  file=sys.stderr)
+    from .windows_branding import set_app_identity, bind_window_icons
+    if not set_app_identity():
+        print("QUANTGEN: Windows did not accept the application ID; the taskbar may show the Python icon.",
+              file=sys.stderr)
     app = QApplication(sys.argv)
+    from . import use_fusion_style
+    use_fusion_style()
     app.setWindowIcon(app_icon())
     app.setApplicationName("QUANTGEN")
     app.setOrganizationName("QUANTGEN")
@@ -1025,4 +1660,5 @@ def main():
                             locale=settings.value("ui/locale", None), language_store=settings,
                             theme_mode=settings.value("ui/theme", "light"))
     window.show()
+    window._native_icon_binding = bind_window_icons(window, application_root() / 'assets' / 'icon.ico')
     return app.exec()

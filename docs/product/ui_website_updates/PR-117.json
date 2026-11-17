@@ -1,0 +1,46 @@
+{
+  "id": "PR-117",
+  "source_pr": "https://github.com/xkg4real/quantgen/pull/117",
+  "source_branch": "gpt/chart-risk-reward-20261113",
+  "source_commit": "395119531ea7b64f29ccf25954d47748d5314744",
+  "merge_status": "merged",
+  "summary": "Editable long/short chart risk/reward price scenarios and descriptive study condition guidance with explicit interpretation limits.",
+  "changed_files": [
+    "core/market/risk_reward.py",
+    "core/market/detail_svg.py",
+    "core/education/signal_context.py",
+    "core/education/catalog.py",
+    "quantgen_desktop/risk_reward.py",
+    "quantgen_desktop/market_chart.py",
+    "quantgen_desktop/stock_detail.py",
+    "quantgen_desktop/indicator_picker.py"
+  ],
+  "verification": {
+    "local": "47 risk/chart/layout checks passed before conditional guidance addition; 26 signal/risk/guide/catalog checks, 7 actual-view integration checks, and final 20 signal/risk/catalog/syntax checks passed (overlapping groups, do not sum). Light/dark 1440px and 1000px captures inspected.",
+    "runtime_url": "https://github.com/xkg4real/quantgen/actions/runs/43432023421",
+    "runtime_status": "in_progress",
+    "compliance_url": "https://github.com/xkg4real/quantgen/actions/runs/43432023436",
+    "compliance_status": "success",
+    "limits": "No owner Windows DPI/accessibility or real-account execution measurement. No cash P/L, forecast, recommendation, legal classification or regulatory exemption.",
+    "remote": "Head 3951195: new signal/risk-reward tests and early native logo/first-paint/chart-layout/market-fixture step passed on Windows Python 3.11/3.12/3.14 and Linux 3.12; syntax 3.10/3.11 passed. Full Runtime43432023421 remains in progress as recorded, not claimed complete."
+  },
+  "website_impact": {
+    "classification": "review_required",
+    "native_only": [
+      "QPainter gesture handling and the Qt docked panel."
+    ],
+    "browser_review": [
+      "If a browser chart exists, add equivalent user-authored entry/stop/target editing with coherent long/short validation, keyboard fields and price-scale mapping. Do not represent examples as suggested trade targets.",
+      "Reuse the approved factual signal explanations and missing-data/interpretation limits in actual web education surfaces. Do not claim a profitable setup, forecast probability or regulatory exemption."
+    ],
+    "requested_action": "웹사이트 작업공간(AWS): 실제 웹 소스와 지원 화면을 확인한 뒤 관련 UX를 적용하고 코드·프리뷰·배포 상태를 각각 기록하세요. Qt 코드를 HTML에 직접 복사하지 마세요."
+  },
+  "delivery": {
+    "status": "queued",
+    "destination": "웹사이트 작업공간(AWS)",
+    "reason": "No supported cross-chat send tool; a stored handoff is not a delivered message."
+  },
+  "website_application": "unverified",
+  "deployment": "unverified",
+  "merge_commit": "3db656c4fd3573b66c171bcc55e07eda384115bb"
+}

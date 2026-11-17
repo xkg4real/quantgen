@@ -10,6 +10,7 @@ from PyQt6.QtGui import QFont, QFontMetricsF, QPainter
 from PyQt6.QtWidgets import QApplication
 from core.theme import DARK, LIGHT
 from quantgen_desktop import charts
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 
 class ChartRenderingTests(unittest.TestCase):
@@ -40,7 +41,7 @@ class ChartRenderingTests(unittest.TestCase):
             pixmap = widget.grab()
         self.assertFalse(pixmap.isNull())
         widget.hide()
-        self.addCleanup(widget.deleteLater)
+        self.addCleanup(delete_owned_widget, widget)
         return records
 
     def assert_inside(self, widget, records):
@@ -73,8 +74,11 @@ class ChartRenderingTests(unittest.TestCase):
                         for i, name in enumerate(names)}))
         records = self.painted_text(chart)
         self.assert_inside(chart, records)
-        legends = [rect for text, rect in records if text in names]
+        # Display names, not raw objective ids (risk area request, 2026-11-10); longer, so a harder fit.
+        shown = set(charts.FrontierChart.OBJECTIVE_NAMES.values())
+        legends = [rect for text, rect in records if text in shown]
         self.assertEqual(len(legends), 4)
+        self.assertFalse(any(text in names for text, _ in records))
         for i, rect in enumerate(legends):
             for other in legends[i+1:]:
                 self.assertFalse(rect.intersects(other), (rect, other))

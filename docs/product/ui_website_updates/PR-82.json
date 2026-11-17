@@ -1,0 +1,94 @@
+{
+  "id": "PR-82",
+  "date": "2026-11-06",
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "gpt/font-clarity-20261106",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/82",
+    "implementation_commit": "4ce18cb4a3de811df3dc165b5e1c7e115e3db35a",
+    "source_tree": "48b0f9162c27604206c8a13f176513156f380f9e",
+    "remote_status": "MERGED",
+    "merge_commit": "5b7988c653a7fc621a4e170d1361516124f316b4"
+  },
+  "summary_ko": [
+    "Home와 시장 카드/검색/종목 제목에 자체 원형 회사 문자 마크를 추가했습니다. 공식 로고 파일이나 외부 네트워크 요청을 추가하지 않았습니다.",
+    "Home44px행, 종목코드 pill/한줄 이름, 숫자 정렬, 마지막 Q-SCORE/?와 전체이름 접근성/툴팁을 유지했습니다.",
+    "시총/거래량 K/M/B/T를 한영 공통 적용하고 원값은 상세/툴팁에 남겼습니다.",
+    "본문15px/캡션14px500으로 개선했습니다. 기존 글꼴 바이너리 유지, Windows 획 번짐 해소는 실측 전입니다."
+  ],
+  "delivery": {
+    "destination": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "receipt": null,
+    "reason": "No supported send-message-to-existing-chat tool; shared handoff saved."
+  },
+  "website_impact": {
+    "classification": "native_ui_and_shared_numeric_presentation",
+    "browser_code_changed": false,
+    "requested_actions_ko": [
+      "실제 사이트의 기업 표/설명문이 대응되는지 확인하고 문자 마크·코드·이름 위계,숫자 정렬,큰 단위를 검토하세요.",
+      "PyQt 코드를 브라우저에 그대로 복사하지 마세요. 자체 문자 마크를 기업 공식 로고라고 표시하지 마세요.",
+      "Docs13/14/19·FACTS 최신 설명을 웹 번역/버전에 대조하세요.",
+      "웹 HTML GitHub 게시와 AWS로그인재요청 금지 유지. 실제 소스·프리뷰·배포 상태를 별도로 기록하세요."
+    ]
+  },
+  "verification": {
+    "focused_ui_profile_passed": 86,
+    "layout_initial_passed": 31,
+    "layout_initial_failed": 1,
+    "layout_failure": "Obsolete fixed710px overflow probe also fails with previous typography; now sized above actual viewport.",
+    "responsive_rerun_passed": 5,
+    "policy_passed": 47,
+    "counts_note": "Do not sum overlapping suites.",
+    "source_review": "20 documents/599 sources PASS; publication BLOCKED",
+    "ci": "Final combined-head rerun IN_PROGRESS. UI code byte-identical to92c7280 that passed every Windows/Linux job; incoming detached store also independently passed Windows/Linux.",
+    "ci_runs": [
+      42204806984,
+      42204806985
+    ],
+    "visual": "Fixture only: panelKO/EN light/dark; fullwindow12combinations KO light/dark,1000/1360,scale1/1.25/1.5.",
+    "actual_provider_network": "NOT_RUN",
+    "windows_manual": "NOT_RUN",
+    "prior_ci_runs_success": [
+      42197290486,
+      42197290701
+    ],
+    "main_integration_tests_passed": 94,
+    "final_store_policy_passed": 63,
+    "verified_ui_ci_runs": [
+      42200892322,
+      42200892116
+    ],
+    "verified_store_ci_runs": [
+      42198946682,
+      42198946631
+    ]
+  },
+  "website_application": {
+    "status": "not_applied",
+    "deployment_status": "not_deployed",
+    "url": "https://quantgeneration.com/"
+  },
+  "review": "docs/product/COMPANY_MARKS_READABILITY_20261106.md",
+  "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/UI_SESSION_CURRENT.md",
+  "changed_files": [
+    "core/numfmt.py",
+    "core/research/stock_profile.py",
+    "docs/compliance/13-alternative-text.md",
+    "docs/compliance/14-contrast.md",
+    "docs/compliance/19-licenses.md",
+    "docs/compliance/FACTS.md",
+    "docs/compliance/source-review.json",
+    "docs/product/COMPANY_MARKS_READABILITY_20261106.md",
+    "quantgen_desktop/app.py",
+    "quantgen_desktop/company_identity.py",
+    "quantgen_desktop/markets_view.py",
+    "quantgen_desktop/typography.py",
+    "quantgen_desktop/watchlist.py",
+    "tests/desktop_markets_watchlist_acceptance.py",
+    "tests/desktop_responsive_tools_acceptance.py",
+    "tests/desktop_typography_acceptance.py",
+    "tests/desktop_watchlist_acceptance.py",
+    "tests/stock_profile_acceptance.py"
+  ]
+}

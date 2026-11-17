@@ -18,6 +18,8 @@ class ConnectionsPane(ToolPane):
     def show_result(self, output):
         self.clear_result()
         self.result_table('연결 상태', ['Provider', 'Status', '설정 이름 / 경로', '설명'], output.rows)
+        from .status_language import mark_status_column
+        mark_status_column(self.tables['연결 상태'], 1, 'connection')
         if output.request.tool == 'presence':
             self.finished('CONFIGURED는 설정의 존재만 뜻합니다. 실제 접속 성공은 별도 검사로 확인하세요.')
         else:

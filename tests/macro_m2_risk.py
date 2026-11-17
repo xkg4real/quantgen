@@ -2,13 +2,20 @@
 
 Spec tests: T-CAP-02 (stack-card clause M7), T-CAP-01 ("cannot emit 0" clause), T-VT-01, T-LABEL-01, T-HEDGE-01,
 T-CORR-01, T-ROLE-01 / T-ROLE-02 / T-MISS-02 (M2 clauses), T-LAG-02 (vt clause), I-02, G-KR-01..04 / 02b / 02c,
-G-KR-06, G-US-01 / 01b / 01c. Every golden that needs absent reference data raises NotRun("REFDATA: <file>").
+G-KR-06, G-US-01 / 01b / 01c. Every golden that needs absent reference data raises NotRun("REFDATA: <file>"). The
+T-VT-01 and T-LABEL-01 data bodies read F13 / F14 only through `require_fixture`, in the declared close layout
+(tests.macro_m1_calendars.read_close_layout), and replay them through `market_vol_target` on the owner-signed calendars
+(core.calendars.adapter.CalendarClocks over the shipped set, once the files they read load and cover the days they read;
+otherwise NotRun "OWNER: ...", computed from the files) (look-ahead audit LA-02, part 2); each is shown to PASS and to
+FAIL on invented closes on the calendars module's synthetic signed set.
 
-Hermetic: every PIT store and book registry lives in a tempfile directory; the calendars are the M1 StubClocks;
-every instant is pinned; no module global is patched.
+Hermetic: every PIT store and book registry lives in a tempfile directory; the other tests' calendars are the M1
+StubClocks; every instant is pinned; no module global is patched.
 """
 from __future__ import annotations
 
+import csv
+import io
 import json
 import math
 import tempfile
@@ -25,9 +32,11 @@ from core.ficc import lag_audit as L
 from core.ficc import pit as P
 from core.quant import risk_layer as R
 from core.rules import macro_rules as MR
-from tests.macro_m1_fixtures import _refdata
+from docs import macro_fixtures as MF
+from tests import golden_tools as G
+from tests.macro_m1_fixtures import FILE_OF, _refdata
 from tests.macro_m1_pit import CLK, REG, StubClocks, U, _raises
-from tests.notrun import NotRun
+from tests.notrun import NotRun, load_manifest, require_fixture
 
 UTC = timezone.utc
 OCT2 = date(2026, 10, 2)
@@ -286,13 +295,410 @@ def test_vt_01_warmup_stale_carry_degenerate_and_armed_mapping():
 test_vt_01_warmup_stale_carry_degenerate_and_armed_mapping.test_ids = ["T-VT-01"]
 
 
+# --------------------------------------------------------------------------- #
+# REFDATA replays on the vendor files F13 / F14 (look-ahead audit LA-02, part 2: T-VT-01, T-LABEL-01)
+# --------------------------------------------------------------------------- #
+# docs/macro_fixtures.py writes F13 (yahoo_KS11_1996-12_2026-10-02.csv) and F14 (yahoo_GSPC_1990_2026-10-01.csv) as the
+# reference file's own columns followed by the section 4.1 provenance columns. ACQUISITION.csv and the spec name no
+# reference column, so the layout read here is declared, an input contract the owner confirms when 9-2 builds the files.
+# It is F01's layout of part 1 (tests/macro_m1_calendars.py F01_COLUMNS), read by the one reader the part 2 bodies
+# share, tests.macro_m1_calendars.read_close_layout: the close is the column `close` (a blank or "." close is refused);
+# every row carries the series_id, value_status and available_at_source that docs/macro_fixtures.REFERENCE_FILES gives
+# its file (F13 KS11, F14 GSPC; vendor_close; calendar_bound); obs_date = session_date (ISO); obs_utc and
+# available_at_utc are UTC instants written YYYY-MM-DDTHH:MM:SSZ; one row per date, in date order. No other column is
+# read (open / high / low / volume, retrieved_at_utc), so every row is read as a close: a flat zero-volume stale carry
+# must not be in the file (spec L1324: it is flagged, never read as a zero return; data/backlog_registry.json DQ-11
+# lists ^KS11 rows).
+REPLAY_COLUMNS = ("close", "series_id", "obs_date", "session_date", "obs_utc", "available_at_utc",
+                  "available_at_source", "value_status")
+REPLAY_PROVENANCE = {fid: (series, status, source) for fid, _rel, series, status, source, *_rest in MF.REFERENCE_FILES
+                     if fid in ("F13", "F14")}
+# Both files are Yahoo's (ACQUISITION.csv: "Yahoo ^KS11 daily close", "Yahoo ^GSPC daily"). A vendor close sizes only in
+# a backtest whose header declares that vendor (section 4.1; pit.pit_value), so the replay is market_vol_target with
+# run_mode="backtest" and vendor="Yahoo" on the market's R-06 close series (risk_layer.VT_SERIES), each row retrieved
+# 11 minutes after its availability (_close_row), on the owner-signed calendars: core.calendars.adapter.CalendarClocks
+# over the shipped set, as the other part 2 bodies read them (the demonstrations: over the synthetic signed set of
+# tests/macro_m1_calendars.py).
+REPLAY_VENDOR = "Yahoo"
+# The signed files the replay reads on CalendarClocks and the days it reads them on, the contract of the computed OWNER
+# gate (`_replay_clocks`): once nothing waits, a coverage or signing error raised inside the replay is a FAIL. A KR
+# decision reads kr_sessions and holidays_KRX from 1 January of its year (the first trading day check,
+# core.calendars.clocks._is_first_trading_day); market_vol_target walks back the 21 sessions of its 20-return window
+# (R-06 L1563), and the input's staleness deadline lies a publication day past the close (contracts.read_input), so each
+# market's span runs to the end of October. The US span starts on 1 August, before the 21 NYSE sessions ending on
+# 1 Oct. Both read publication_schedules and source_skipped (the close series' publication schedule). The demonstration
+# traces the reads on the synthetic set (2026-01-01..2026-10-07 KR, 2026-09-02..2026-10-05 US) and pins them inside
+# these spans.
+REPLAY_CAL_NEEDS = (
+    ("KOSPI at the 2026-10-02 KRX close", ("kr_sessions", "holidays_KRX", "publication_schedules", "source_skipped"),
+     date(2026, 1, 1), date(2026, 10, 31)),
+    ("US at the 2026-10-01 NYSE close", ("holidays_NYSE", "publication_schedules", "source_skipped"),
+     date(2026, 8, 1), date(2026, 10, 31)),
+)
+# The decisions. KOSPI: the KRX close of 2 Oct 2026 (T-VT-01 L5673 "on 2 Oct"; goldens.csv G-POST-01 "... 2 Oct 2026"),
+# scheduled 06:30:00Z and decided at the close-print bound 06:30:30Z (spec L1289, L2096; DECISION above). US: the NYSE
+# close of 1 Oct 2026 (T-LABEL-01 L5643 "US on 2026-10-01"), 20:00:00Z in EDT, bound + 30 s (L1290).
+VT01_DAY, VT01_CLOSE_UTC = OCT2, U(2026, 10, 2, 6, 30)
+US_LABEL_DAY, US_CLOSE_UTC, US_DECISION = date(2026, 10, 1), U(2026, 10, 1, 20, 0), U(2026, 10, 1, 20, 0, 30)
+US_KNOWLEDGE = U(2026, 10, 1, 21, 0)      # after each row's retrieval (bound + 11 min); a later one reads the same rows
+# T-LABEL-01 (spec L5643; R-06 card L1565): KOSPI on 2026-10-02 "elevated" (relative) and "stressed" (absolute); US on
+# 2026-10-01 "normal" (relative). goldens.csv holds all three: the KOSPI relative label with its trailing-756 quartiles
+# and percentile (G-POST-01 label_relative_2oct, label_q1, label_q2, label_q3, label_percentile), and the KOSPI absolute
+# and US relative labels (G-B5-04 kospi_absolute_label "stressed", us_relative_label "normal"; spec L5804), which the
+# body reads from there. G-B5-04 also holds the US sigma, quartiles and percentile (us_sigma, us_q1..us_q3,
+# us_percentile), which the body prints and does not assert: those rows name F13;U1 as their inputs, U1 being French
+# Mkt-RF to 2026-08 spliced with ^GSPC for Sep-2026 (ACQUISITION.csv:33), while the replay reads F14 ^GSPC alone
+# (owner questions 11 and 12 of docs/product/LOOKAHEAD_LA02_PART2_2026-11-10.md).
+LABEL01_B504 = ("kospi_absolute_label", "us_relative_label")     # goldens.csv G-B5-04 sub_ids asserted (spec L5643, L5804)
+
+
+def _replay_rows(fid: str, text: str) -> list[dict]:
+    """F13 or F14 in the declared layout as {date, close, series_id, obs_utc, available_at_utc} rows, read by the one
+    reader of the declared close layout, tests.macro_m1_calendars.read_close_layout; AssertionError naming the file and
+    line on any departure from it (a blank or "." close and a repeated date included)."""
+    from tests.macro_m1_calendars import read_close_layout
+    return read_close_layout(fid, text)
+
+
+def _replay_waiting(live, needs=REPLAY_CAL_NEEDS) -> list[str]:
+    """Each refusal or coverage gap of the signed files `needs` names (REPLAY_CAL_NEEDS rows), computed from `live`;
+    empty when the replay can run."""
+    out = []
+    for what, files, lo, hi in needs:
+        for f in files:
+            why = live.refusal(f)
+            if why is not None:
+                out.append(f"{what}: {f}.yaml refused ({why})")
+            elif not (live.file(f).covers(lo) and live.file(f).covers(hi)):
+                cf = live.file(f)
+                out.append(f"{what}: {f}.yaml v{cf.version} covers {cf.covers_from}..{cf.covers_to}, needs {lo}..{hi}")
+    return out
+
+
+def _replay_clocks(needs, test: str, live=None):
+    """core.calendars.adapter.CalendarClocks over the owner-signed set `live` (default: the shipped set, CalendarSet(),
+    which the real bodies use) once every file `needs` names loads and covers its days; otherwise NotRun("OWNER: ...")
+    naming each refusal and coverage gap, computed from the files (`_replay_waiting`). The demonstrations pass `live`,
+    as part 1's tests.macro_m1_calendars._official_calendar takes it."""
+    from core.calendars.adapter import CalendarClocks
+    from core.calendars.store import CalendarSet
+    live = CalendarSet() if live is None else live
+    waiting = _replay_waiting(live, needs)
+    if waiting:
+        raise NotRun(f"OWNER: {test} on the signed calendars waits for " + "; ".join(waiting))
+    return CalendarClocks(REG, cal=live)
+
+
+def _replay_vt(fid: str, rows: list[dict], market: str, t: date, decision: datetime, knowledge: datetime, *, clk,
+               rules=None):
+    """The rows as `market`'s R-06 close series (vendor_close, source Yahoo) in a fresh PIT store, then
+    `market_vol_target` decided at the close of `t` in a backtest declaring Yahoo on the calendars `clk` (the signed
+    set's CalendarClocks), the call the synthetic T-VT-01 and T-LABEL-01 tests make; returns its result. A row dated
+    after `t` that is available at the decision is a look-ahead stamp: AssertionError."""
+    late = [r["date"] for r in rows if r["date"] > t and r["available_at_utc"] <= decision]
+    assert not late, (f"{FILE_OF[fid]}: a row of {late[0]} is available at the {t} decision (look-ahead; spec L539: a "
+                      "datum enters a decision only if available_at_utc <= decision_utc)")
+    series, status, source = REPLAY_PROVENANCE[fid]
+    store = _store(clk)
+    store.append([P.make_row(series_id=R.VT_SERIES[market], value=r["close"], obs_date=r["date"],
+                             session_date=r["date"], obs_utc=r["obs_utc"], obs_kind="close", value_status=status,
+                             available_at_utc=r["available_at_utc"], available_at_source=source,
+                             retrieved_at_utc=r["available_at_utc"] + timedelta(minutes=11), vintage=None,
+                             source=REPLAY_VENDOR, channel=None, provider_mode="explicit", synthetic=False)
+                  for r in rows])
+    return R.market_vol_target(store, REG, clk, market, decision, knowledge, rules=rules, run_mode="backtest",
+                               vendor=REPLAY_VENDOR)
+
+
+def _read_closes(rows: list[dict], t: date, decision: datetime) -> list[tuple[date, float]]:
+    """The (date, close) pairs the decision at the close of `t` may read: dated `t` or earlier and available by the
+    decision (spec L539), the rows `market_vol_target` takes its labels from."""
+    return [(r["date"], r["close"]) for r in rows if r["date"] <= t and r["available_at_utc"] <= decision]
+
+
+def _decided_close(rows: list[dict], t: date, close_utc: datetime, bound_utc: datetime, label: str) -> dict:
+    """The one row of session `t`, stamped as a close: obs_utc the scheduled close, available_at_utc the close-print
+    bound (L1289-1290; calendar_bound history, L1278). An intraday print is not a close: goldens.csv G-POST-01
+    kospi_close_2oct notes that the pre-patch 6,943.66 was one."""
+    on_day = [r for r in rows if r["date"] == t]
+    assert len(on_day) == 1, f"{label}: {len(on_day)} rows on {t}; the decision reads exactly one close"
+    row = on_day[0]
+    assert (row["obs_utc"], row["available_at_utc"]) == (close_utc, bound_utc), (
+        f"{label}: the {t} row is not the close: obs_utc {row['obs_utc']:%H:%M:%S}Z / available_at_utc "
+        f"{row['available_at_utc']:%H:%M:%S}Z != the scheduled close {close_utc:%H:%M:%S}Z / the close-print bound "
+        f"{bound_utc:%H:%M:%S}Z (spec L1289-1290)")
+    return row
+
+
+def _check_vt01(res, rows: list[dict]) -> dict:
+    """T-VT-01 on F13 (spec L5673; R-06 L1561-1563): the vt decided at the KRX close of 2 Oct 2026 reads that session's
+    close (`_decided_close`: 06:30:00Z / 06:30:30Z); `market_vol_target` returns status ok on 20 valid returns (window
+    20, L1563) with that row as close_t; then rv20 (SMA20 of simple returns, ddof 1, x sqrt(252)) and vt = min(1,
+    0.20 / rv20) at Level 1 against goldens.csv G-POST-01 rv20_2oct (0.2882, vol_level +/- 0.001) and vt_2oct (0.694,
+    weight +/- 0.02). Returns the two values."""
+    row = _decided_close(rows, VT01_DAY, VT01_CLOSE_UTC, DECISION, "T-VT-01")
+    assert isinstance(res, R.VTResult), f"T-VT-01: market_vol_target on {VT01_DAY} returned {res!r}, not a VTResult"
+    assert res.status == "ok" and res.n_valid_returns == 20, (
+        f"T-VT-01: status {res.status!r} on {res.n_valid_returns} valid returns; window 20 (spec L1563)")
+    assert (res.inputs[0]["obs_date"], res.inputs[0]["value"]) == (VT01_DAY.isoformat(), row["close"]), (
+        f"T-VT-01: close_t read {res.inputs[0]['obs_date']} {res.inputs[0]['value']}, not the {VT01_DAY} close")
+    got = {"rv20_2oct": res.sigma_ann, "vt_2oct": res.weight}
+    print(f"PRINTED T-VT-01 on {VT01_DAY}: rv20 {res.sigma_ann:.6f}, vt {res.weight:.6f} "
+          f"(window from {res.inputs[1]['obs_date']})")
+    G.assert_golden("G-POST-01", got)
+    return got
+
+
 def test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata():
+    """T-VT-01's data clause (L5673: sigma "reproduces rv20 28.82% and vt 0.694 on 2 Oct") and G-POST-01's rv20_2oct /
+    vt_2oct rows: NotRun naming F13 while it is absent; once listed, F13 is read in its declared layout; NotRun (OWNER)
+    while the signed files the KOSPI replay reads (REPLAY_CAL_NEEDS) are refused or do not cover its days, computed
+    from the files; then F13 is replayed through `market_vol_target` at the 2-Oct KRX close on CalendarClocks over the
+    signed set and checked by `_check_vt01` (look-ahead audit LA-02, part 2: the body used to raise NotRun after the
+    gate whatever the file held)."""
     _refdata(["F13"])
-    raise NotRun("REFDATA: F13 present but the KRX official-close replay of rv20 28.82% / vt 0.694 is pinned to the frozen "
-                 "fixture ingest (G-POST-01 rows); run after docs/macro_fixtures.py has frozen F13")
+    rows = _replay_rows("F13", require_fixture(FILE_OF["F13"]).read_text(encoding="utf-8"))
+    clk = _replay_clocks(REPLAY_CAL_NEEDS[:1], "T-VT-01")
+    res = _replay_vt("F13", rows, "KR", VT01_DAY, DECISION, KNOWLEDGE, clk=clk)
+    _check_vt01(res, rows)
 
 
 test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata.test_ids = ["T-VT-01", "G-POST-01"]
+
+
+def _alternating(level: float, n: int, start: int = 0) -> list[float]:
+    """n invented simple returns of one size, the sign alternating with the global index `start + i`: every 20-return
+    window inside them has mean 0, so its SMA20 sigma (ddof 1, x sqrt(252)) is `level`."""
+    a = level / math.sqrt(252 * 20 / 19)
+    return [a if (start + i) % 2 == 0 else -a for i in range(n)]
+
+
+def _demo_clocks():
+    """core.calendars.adapter.CalendarClocks over the synthetic signed set of tests/macro_m1_calendars.py (signed in a
+    temp dir by that module, not the owner's files): the calendars of the replay demonstrations."""
+    from core.calendars.adapter import CalendarClocks
+    from tests.macro_m1_calendars import fixture_set
+    return CalendarClocks(REG, cal=fixture_set())
+
+
+_DEMO_BOUNDS: dict[tuple[str, date], datetime] = {}       # close_print_bound_utc on the synthetic set, computed once
+
+
+def _demo_bound(market: str, d: date) -> datetime:
+    if (market, d) not in _DEMO_BOUNDS:
+        _DEMO_BOUNDS[market, d] = _demo_clocks().close_print_bound_utc(market, d)
+    return _DEMO_BOUNDS[market, d]
+
+
+def _invented_text(fid: str, days: list[date], returns: list[float], market: str, start: float = 2500.0) -> str:
+    """Invented closes (not Yahoo data) on `days` from `start` and `returns`, written in the declared layout of `fid`
+    and stamped as docs/macro_fixtures stamps a close on the synthetic signed set: obs_utc the scheduled close (the
+    close-print bound - 30 s), available_at_utc the close-print bound."""
+    assert len(days) == len(returns) + 1
+    closes = list(start * np.cumprod(np.concatenate([[1.0], 1.0 + np.asarray(returns, dtype=float)])))
+    return _replay_csv(fid, [(d, c, _demo_bound(market, d) - timedelta(seconds=30), _demo_bound(market, d))
+                             for d, c in zip(days, closes)])
+
+
+def _replay_csv(fid: str, rows) -> str:
+    """(date, close, obs_utc, available_at_utc) rows written in the declared layout of `fid`, in memory."""
+    series, status, source = REPLAY_PROVENANCE[fid]
+    buf = io.StringIO()
+    out = csv.writer(buf, lineterminator="\n")
+    out.writerow(("date",) + REPLAY_COLUMNS)
+    z = lambda t: t.astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")                     # noqa: E731
+    for d, close, obs, avail in rows:
+        out.writerow((d.isoformat(), repr(float(close)), series, d.isoformat(), d.isoformat(), z(obs), z(avail), source,
+                      status))
+    return buf.getvalue()
+
+
+def _edit_rows(fid: str, text: str, edit) -> str:
+    """`text` with its (date, close, obs_utc, available_at_utc) rows passed through `edit`, written back."""
+    rows = [(r["date"], r["close"], r["obs_utc"], r["available_at_utc"]) for r in _replay_rows(fid, text)]
+    return _replay_csv(fid, edit(rows))
+
+
+def _fails(fn, needle: str) -> str:
+    try:
+        fn()
+    except AssertionError as exc:
+        assert needle in str(exc), f"expected {needle!r} in: {exc}"
+        return str(exc)
+    raise AssertionError(f"expected an AssertionError naming {needle!r}")
+
+
+def _vt01_body(text: str, rules=None, clk=None) -> dict:
+    """The real T-VT-01 body after its gates, on `text` in place of F13 and the synthetic signed set (or `clk`) in
+    place of the shipped one."""
+    rows = _replay_rows("F13", text)
+    clk = _demo_clocks() if clk is None else clk
+    return _check_vt01(_replay_vt("F13", rows, "KR", VT01_DAY, DECISION, KNOWLEDGE, clk=clk, rules=rules), rows)
+
+
+def _replay_traced():
+    """CalendarClocks over a CalendarSet on the synthetic signed set's files that records each file it loads and each
+    date whose coverage it checks (nothing is patched), and that record {file id: dates}."""
+    from core.calendars.adapter import CalendarClocks
+    from core.calendars.store import CalendarSet
+    from tests.macro_m1_calendars import fixture_set
+    base, seen = fixture_set(), {}
+
+    class Traced(CalendarSet):
+        def file(self, file_id):
+            seen.setdefault(file_id, set())
+            return super().file(file_id)
+
+        def require_covered(self, file_id, d):
+            seen.setdefault(file_id, set()).add(d)
+            return super().require_covered(file_id, d)
+
+    return CalendarClocks(REG, cal=Traced(base.data_dir, config=base.config)), seen
+
+
+def _replay_reads_outside(seen: dict, needs) -> list[str]:
+    """The reads in `seen` that no REPLAY_CAL_NEEDS row of `needs` declares: a file no row names, or a date outside the
+    span of every row naming its file."""
+    out = []
+    for f, days in sorted(seen.items()):
+        spans = [(lo, hi) for _what, files, lo, hi in needs if f in files]
+        if not spans:
+            out.append(f"{f}.yaml is read but not declared")
+        out += [f"{f}.yaml read on {d}" for d in sorted(days) if spans and not any(lo <= d <= hi for lo, hi in spans)]
+    return out
+
+
+def _replay_gate_of(fn) -> tuple:
+    """(needs, test name, replay count) of a real replay body `fn`, read from its source (parsed, never run): its one
+    `clk = _replay_clocks(<needs>, <test>)` call with no `live` (so the shipped set), the two arguments evaluated in
+    this module, and the number of `_replay_vt` calls, each of which must take `clk=clk`. The real bodies stop at their
+    REFDATA gate while F13 / F14 are absent, so their gate wiring is pinned here."""
+    import ast
+    import inspect
+    import textwrap
+    tree = ast.parse(textwrap.dedent(inspect.getsource(fn)))
+    gates = [n for n in ast.walk(tree) if isinstance(n, ast.Call) and getattr(n.func, "id", None) == "_replay_clocks"]
+    assigned = [n for n in ast.walk(tree) if isinstance(n, ast.Assign) and n.value in gates
+                and [getattr(t, "id", None) for t in n.targets] == ["clk"]]
+    assert len(gates) == len(assigned) == 1 and len(gates[0].args) == 2 and not gates[0].keywords, (
+        f"{fn.__name__}: the OWNER gate is not one `clk = _replay_clocks(<needs>, <test>)` on the shipped set")
+    needs, test = (eval(compile(ast.Expression(a), "<gate>", "eval"), globals()) for a in gates[0].args)
+    replays = [n for n in ast.walk(tree) if isinstance(n, ast.Call) and getattr(n.func, "id", None) == "_replay_vt"]
+    assert replays and all([(k.arg, getattr(k.value, "id", None)) for k in n.keywords] == [("clk", "clk")]
+                           for n in replays), f"{fn.__name__}: a replay does not run on the gated clocks `clk`"
+    return needs, test, len(replays)
+
+
+def test_vt_01_body_passes_and_fails_on_invented_closes():
+    """LA-02 part 2: the T-VT-01 data body can PASS and can FAIL. Invented closes on the 60 KRX sessions ending 2 Oct
+    2026 of the synthetic signed set, written in F13's declared layout and replayed on CalendarClocks over that set,
+    whose last 20 returns give rv20 = 0.2882 (the goldens.csv value) pass, with vt = 0.20 / 0.2882. It fails, naming
+    the clause, when: rv20 is 0.2895 (vt still within its tolerance); the vt target is not 0.20 (rv20 within its
+    tolerance); the 2-Oct close is missing, is an intraday print, or is not stamped available at 06:30:30Z; a session
+    inside the window has no close (market_vol_target fails closed); a row dated after 2 Oct is available at the
+    decision; the file holds 15 closes (warm-up, not a sigma); and, at the layout, `close` is absent, a row is not KS11
+    / vendor_close / calendar_bound, rows are out of order, or a close is ".". The calendar files and days the replay
+    reads, traced, lie inside REPLAY_CAL_NEEDS. The OWNER gate names nothing on the synthetic set or on its 2026-27 KRX
+    cut, the refusal on the unsigned set, and a holidays_KRX file from 2026-06-01 as a gap (the replay on it raises
+    CalendarCoverageError: the first-session check reads from 1 January). The gate `_replay_clocks` raises NotRun
+    (OWNER) with that computed list on the unsigned and June-2026 sets and returns CalendarClocks over the synthetic
+    set, on which the replay passes; the real body, read from its source, gates on REPLAY_CAL_NEEDS' KOSPI row on the
+    shipped set and replays on the gated clocks. While F13 is absent, the real test's REFDATA reason names it; once it is
+    listed, a NOT_RUN reason is the list computed from the shipped files."""
+    from core.calendars.store import CalendarCoverageError
+    from tests.macro_m1_calendars import F01_COLUMNS, drafts_set, fixture_docs, fixture_set, krx_short_set
+    assert REPLAY_COLUMNS == F01_COLUMNS                       # one declared close layout (part 1 F01, G-POST-01 F13)
+    days = _sessions("KR", VT01_DAY, 60, clocks=_demo_clocks())
+    returns = _alternating(0.25, 39) + _alternating(0.2882, 20, start=39)
+    text = _invented_text("F13", days, returns, "KR")
+    got = _vt01_body(text)
+    assert abs(got["rv20_2oct"] - 0.2882) < 1e-9 and abs(got["vt_2oct"] - 0.20 / 0.2882) < 1e-9, got
+    off = _invented_text("F13", days, _alternating(0.25, 39) + _alternating(0.2895, 20, start=39), "KR")
+    msg = _fails(lambda: _vt01_body(off), "G-POST-01 deviations: rv20_2oct: got 0.289")
+    assert "vt_2oct" not in msg, msg
+    rules = json.loads(json.dumps({"vol_target": MR.load_store().get("vol_target")}))
+    rules["vol_target"]["KR"]["target_ann"] = 0.25
+    msg = _fails(lambda: _vt01_body(text, rules=rules), "G-POST-01 deviations: vt_2oct: got 0.86")
+    assert "rv20_2oct" not in msg, msg
+    oct2 = VT01_DAY
+    cases = (
+        (lambda rows: [r for r in rows if r[0] != oct2], "T-VT-01: 0 rows on 2026-10-02"),
+        (lambda rows: [(d, c * 0.99, U(2026, 10, 2, 1, 56), U(2026, 10, 2, 1, 56)) if d == oct2 else (d, c, o, a)
+                       for d, c, o, a in rows],
+         "T-VT-01: the 2026-10-02 row is not the close: obs_utc 01:56:00Z"),
+        (lambda rows: [(d, c, o, U(2026, 10, 2, 6, 31)) if d == oct2 else (d, c, o, a) for d, c, o, a in rows],
+         "available_at_utc 06:31:00Z != the scheduled close 06:30:00Z / the close-print bound 06:30:30Z"),
+        (lambda rows: [r for r in rows if r[0] != date(2026, 9, 15)],
+         "T-VT-01: market_vol_target on 2026-10-02 returned MissingInput(series_id='KOSPI_OFFICIAL_CLOSE', "
+         "reason='missing', role='acting_exposure', books=('specification',), detail='no usable close for KR session "
+         "2026-09-15 inside the 20-return window"),
+        (lambda rows: rows + [(date(2026, 10, 6), rows[-1][1], U(2026, 10, 2, 6, 30), U(2026, 10, 2, 6, 30, 30))],
+         "yahoo_KS11_1996-12_2026-10-02.csv: a row of 2026-10-06 is available at the 2026-10-02 decision (look-ahead"),
+        (lambda rows: rows[-15:], "T-VT-01: status 'insufficient_history' on 14 valid returns; window 20"),
+    )
+    for edit, needle in cases:
+        _fails(lambda: _vt01_body(_edit_rows("F13", text, edit)), needle)
+    _fails(lambda: _vt01_body(text.replace(",close,", ",Close,", 1)),
+           "yahoo_KS11_1996-12_2026-10-02.csv: declared columns ['close'] absent")
+    _fails(lambda: _vt01_body(text.replace(",vendor_close\n", ",official_close\n", 1)),
+           "yahoo_KS11_1996-12_2026-10-02.csv line 2: not a KS11 / vendor_close / calendar_bound row")
+    head, first, second, *rest = text.split("\n")
+    _fails(lambda: _vt01_body("\n".join([head, second, first, *rest])),
+           "yahoo_KS11_1996-12_2026-10-02.csv line 3: rows out of date order or repeated")
+    dot = _edit_rows("F13", text, lambda rows: rows).split("\n")
+    dot[5] = dot[5].replace(dot[5].split(",")[1], ".", 1)
+    _fails(lambda: _vt01_body("\n".join(dot)), "yahoo_KS11_1996-12_2026-10-02.csv line 6: close '.' is not a finite")
+    # the signed calendars: the replay reads only what REPLAY_CAL_NEEDS declares, and the OWNER gate computes the rest
+    traced, seen = _replay_traced()
+    assert _vt01_body(text, clk=traced) == got and not _replay_reads_outside(seen, REPLAY_CAL_NEEDS[:1]), seen
+    assert {"kr_sessions", "holidays_KRX"} <= set(seen), seen
+    assert _replay_waiting(fixture_set(), REPLAY_CAL_NEEDS) == _replay_waiting(krx_short_set(), REPLAY_CAL_NEEDS) == []
+    refused = _replay_waiting(drafts_set(), REPLAY_CAL_NEEDS[:1])
+    assert [w.split(" refused (")[0] for w in refused] == ["KOSPI at the 2026-10-02 KRX close: holidays_KRX.yaml"], refused
+    docs = fixture_docs()
+    docs["holidays_KRX"]["covers"]["from"] = "2026-06-01"
+    docs["holidays_KRX"]["rows"] = [r for r in docs["holidays_KRX"]["rows"] if r["date"] >= "2026-06-01"]
+    june = fixture_set("m2_krx_2026_06", docs)
+    assert _replay_waiting(june, REPLAY_CAL_NEEDS[:1]) == [
+        "KOSPI at the 2026-10-02 KRX close: holidays_KRX.yaml v1.0.0-fixture covers 2026-06-01..2027-12-31, needs "
+        "2026-01-01..2026-10-31"], _replay_waiting(june, REPLAY_CAL_NEEDS[:1])
+    from core.calendars.adapter import CalendarClocks
+    try:
+        _vt01_body(text, clk=CalendarClocks(REG, cal=june))
+    except CalendarCoverageError:
+        pass
+    else:
+        raise AssertionError("the replay ran on a holidays_KRX file from 2026-06-01")
+    # the OWNER gate itself, `_replay_clocks` (`live` given here; the real body passes none, so the shipped set): NotRun
+    # naming the computed list on the unsigned set and on the June-2026 holidays_KRX file; on the synthetic set the
+    # CalendarClocks over that set, on which the replay passes. The real body gates on the KOSPI row of
+    # REPLAY_CAL_NEEDS, on the shipped set, and replays on the clocks the gate returns (read from its source).
+    for cal_set in (drafts_set(), june):
+        waits = _raises(lambda: _replay_clocks(REPLAY_CAL_NEEDS[:1], "T-VT-01", live=cal_set), NotRun)
+        assert waits.reason == ("OWNER: T-VT-01 on the signed calendars waits for "
+                                + "; ".join(_replay_waiting(cal_set, REPLAY_CAL_NEEDS[:1]))), waits.reason
+    gated = _replay_clocks(REPLAY_CAL_NEEDS[:1], "T-VT-01", live=fixture_set())
+    assert isinstance(gated, CalendarClocks) and gated.cal is fixture_set(), gated
+    assert _vt01_body(text, clk=gated) == got
+    gate = _replay_gate_of(test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata)
+    assert gate == (REPLAY_CAL_NEEDS[:1], "T-VT-01", 1) and gate[0][0][0].startswith("KOSPI "), gate
+    from core.calendars.store import CalendarSet
+    shipped = CalendarSet()
+    if _replay_waiting(shipped, REPLAY_CAL_NEEDS[:1]):
+        _raises(lambda: _replay_clocks(REPLAY_CAL_NEEDS[:1], "T-VT-01"), NotRun)
+    else:
+        assert _replay_clocks(REPLAY_CAL_NEEDS[:1], "T-VT-01").cal.data_dir == shipped.data_dir
+    if FILE_OF["F13"] in load_manifest() and _replay_waiting(CalendarSet(), REPLAY_CAL_NEEDS[:1]):
+        reason = _raises(test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata, NotRun).reason
+        assert reason == ("OWNER: T-VT-01 on the signed calendars waits for "
+                          + "; ".join(_replay_waiting(CalendarSet(), REPLAY_CAL_NEEDS[:1]))), reason
+    if FILE_OF["F13"] not in load_manifest():
+        try:
+            test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata()
+        except NotRun as exc:
+            assert exc.reason.startswith("REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv ("), exc.reason
+        else:
+            raise AssertionError("test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata ran without F13")
 
 
 # --------------------------------------------------------------------------- #
@@ -339,13 +745,208 @@ def test_label_01_causal_boundary_and_null_safe():
 test_label_01_causal_boundary_and_null_safe.test_ids = ["T-LABEL-01"]
 
 
+def _label_stats(label: str, res, closes: list[tuple[date, float]], t: date) -> dict:
+    """The causal sigma series of the closes the decision read (`R.sigma_history`, filtered, never smoothed) and its
+    trailing-756 quartiles (numpy linear, as `R.label_of`) and percentile (the share of the trailing values at or below
+    sigma(t), t included). The labels `market_vol_target` reported must be the ones this series gives."""
+    assert isinstance(res, R.VTResult), f"T-LABEL-01: {label} market_vol_target on {t} returned {res!r}, not a VTResult"
+    hist = R.sigma_history(closes)
+    values = [s for _, s in hist]
+    assert hist and hist[-1][0] == t, (
+        f"T-LABEL-01: the last {label} sigma is dated {hist[-1][0] if hist else None}, not {t}")
+    assert len(values) >= R.REL_WINDOW, (
+        f"T-LABEL-01: {len(values)} {label} sigma values through {t}, fewer than the trailing {R.REL_WINDOW} (L1565)")
+    labels = (R.display_label_rel(values), R.display_label_abs(values, hist[0][0], t))
+    assert (res.display_label_rel, res.display_label_abs) == labels, (
+        f"T-LABEL-01: {label} labels {(res.display_label_rel, res.display_label_abs)} != {labels} of the closes read")
+    trailing = np.asarray(values[-R.REL_WINDOW:], dtype=float)
+    q1, q2, q3 = (float(q) for q in np.quantile(trailing, (0.25, 0.5, 0.75)))          # the quartiles of L1565
+    return {"sigma": values[-1], "q1": q1, "q2": q2, "q3": q3,
+            "percentile": 100.0 * float(np.mean(trailing <= values[-1])),
+            "rel": res.display_label_rel, "abs": res.display_label_abs, "first_sigma": hist[0][0]}
+
+
+def _check_label01(kr, kr_rows: list[dict], us, us_rows: list[dict]) -> dict:
+    """T-LABEL-01 on F13 / F14 (spec L5643; R-06 card L1565): each decision reads its session's close
+    (`_decided_close`: KRX 2 Oct 06:30:00Z / 06:30:30Z, NYSE 1 Oct 20:00:00Z / 20:00:30Z). From the closes it may read
+    (`_read_closes`, `_label_stats`): KOSPI on 2026-10-02 at Level 1 against goldens.csv G-POST-01, label_relative_2oct
+    "elevated", label_q1 0.157, label_q2 0.1855, label_q3 0.336 (vol_level +/- 0.001) and label_percentile 70
+    (percentile +/- 5); then the KOSPI absolute label and the US relative label on 2026-10-01 against goldens.csv
+    G-B5-04, kospi_absolute_label "stressed" and us_relative_label "normal" (L5643, L5804). The US sigma, quartiles and
+    percentile are printed beside the spec's print (L1565, L5804: 10.7%; 10.5 / 12.7 / 15.2%; 28th percentile; the same
+    values as G-B5-04 us_sigma, us_q1..us_q3 and us_percentile, whose inputs are F13;U1, not F14), not asserted.
+    Returns both markets' figures."""
+    _decided_close(kr_rows, VT01_DAY, VT01_CLOSE_UTC, DECISION, "T-LABEL-01 KOSPI")
+    _decided_close(us_rows, US_LABEL_DAY, US_CLOSE_UTC, US_DECISION, "T-LABEL-01 US")
+    k = _label_stats("KOSPI", kr, _read_closes(kr_rows, VT01_DAY, DECISION), VT01_DAY)
+    u = _label_stats("US", us, _read_closes(us_rows, US_LABEL_DAY, US_DECISION), US_LABEL_DAY)
+    for name, s in (("KOSPI on 2026-10-02", k), ("US on 2026-10-01", u)):
+        print(f"PRINTED T-LABEL-01 {name}: sigma {s['sigma']:.4f}, trailing-756 quartiles {s['q1']:.4f} / "
+              f"{s['q2']:.4f} / {s['q3']:.4f}, percentile {s['percentile']:.1f}; relative {s['rel']}, absolute "
+              f"{s['abs']} (sigma from {s['first_sigma']})")
+    print("PRINTED T-LABEL-01 spec print (L1565, L5804): KOSPI 28.8%, 15.7 / 18.6 / 33.6%, 70th, elevated, stressed; "
+          "US 10.7%, 10.5 / 12.7 / 15.2%, 28th, normal")
+    G.assert_golden("G-POST-01", {"label_relative_2oct": k["rel"], "label_q1": k["q1"], "label_q2": k["q2"],
+                                  "label_q3": k["q3"], "label_percentile": k["percentile"]})
+    b504 = G.golden("G-B5-04")
+    for sub, what, got in zip(LABEL01_B504, ("KOSPI absolute label on 2026-10-02", "US relative label on 2026-10-01"),
+                              (k["abs"], u["rel"])):
+        row = b504.row(sub)
+        assert got == row.want(), (f"T-LABEL-01: {what} {got!r} != {row.want()!r} (goldens.csv G-B5-04/{sub}; "
+                                   f"spec L5643, {row.source_line})")
+    return {"KOSPI": k, "US": u}
+
+
 def test_label_01_kospi_elevated_stressed_and_us_normal_refdata():
+    """T-LABEL-01's data clause (L5643) and G-POST-01's label rows: NotRun naming F13 / F14 while either is absent; once
+    both are listed, each is read in its declared layout; NotRun (OWNER) while the signed files the two replays read
+    (REPLAY_CAL_NEEDS) are refused or do not cover their days, computed from the files; then each is replayed through
+    `market_vol_target` on CalendarClocks over the signed set (KOSPI at the 2-Oct KRX close, US at the 1-Oct NYSE
+    close), and `_check_label01` checks the labels, quartiles and percentile (look-ahead audit LA-02, part 2: the body
+    used to raise NotRun after the gate whatever the files held)."""
     _refdata(["F13", "F14"])
-    raise NotRun("REFDATA: F13 / F14 present but the 2026-10-02 KOSPI (elevated / stressed; quartiles 15.7 / 18.55 / 33.6%) "
-                 "and 2026-10-01 US (normal) label replay runs on the frozen fixture ingest")
+    kr_rows = _replay_rows("F13", require_fixture(FILE_OF["F13"]).read_text(encoding="utf-8"))
+    us_rows = _replay_rows("F14", require_fixture(FILE_OF["F14"]).read_text(encoding="utf-8"))
+    clk = _replay_clocks(REPLAY_CAL_NEEDS, "T-LABEL-01")
+    kr = _replay_vt("F13", kr_rows, "KR", VT01_DAY, DECISION, KNOWLEDGE, clk=clk)
+    us = _replay_vt("F14", us_rows, "US", US_LABEL_DAY, US_DECISION, US_KNOWLEDGE, clk=clk)
+    _check_label01(kr, kr_rows, us, us_rows)
 
 
 test_label_01_kospi_elevated_stressed_and_us_normal_refdata.test_ids = ["T-LABEL-01", "G-POST-01"]
+
+
+# Invented sigma levels for the T-LABEL-01 demonstration (not KOSPI or S&P data): the trailing 756 KOSPI sigma values
+# are five blocks in time order, whose flat levels sit on the goldens.csv quartiles and whose lengths put the linear
+# quartile positions inside them and sigma(t) at the 70th percentile; the US series ends between its Q1 and Q2.
+LABEL01_KR_BLOCKS = ((0.157, 250), (0.1855, 266), (0.336, 180), (0.40, 40), (0.2882, 20))
+LABEL01_US_BLOCKS = ((0.09, 250), (0.15, 486), (0.107, 20))
+# The same quartiles with the 0.157 block cut to 205 values (0.1855 block 311): Q1's position (188.75 of 756) still lies
+# in it, but the 21 sigma values a wild close moves out of it would put Q1 in the next block.
+LABEL01_KR_BLOCKS_Q1_EDGE = ((0.157, 205), (0.1855, 311), (0.336, 180), (0.40, 40), (0.2882, 20))
+
+
+def _label01_kr_text(history: float = 0.12, blocks=LABEL01_KR_BLOCKS, daily: int = 820) -> str:
+    """Invented F13 text: 300 closes 10 sessions apart from 2012 (so the expanding history spans ten years) at sigma
+    level `history`, then `daily` consecutive KRX sessions of the synthetic signed set to 2 Oct 2026; the last 756
+    returns are `blocks`."""
+    clk = _demo_clocks()
+    days = _sessions("KR", VT01_DAY, daily, clocks=clk)
+    days = _sessions("KR", days[0] - timedelta(days=1), 3000, clocks=clk)[::-10][::-1] + days
+    n = sum(k for _, k in blocks)
+    returns = _alternating(history, len(days) - 1 - n)
+    for level, k in blocks:
+        returns += _alternating(level, k, start=len(returns))
+    return _invented_text("F13", days, returns, "KR")
+
+
+def _label01_us_text(blocks=LABEL01_US_BLOCKS, n: int = 800) -> str:
+    """Invented F14 text: `n` consecutive NYSE sessions of the synthetic signed set to 1 Oct 2026; the first block also
+    fills the start."""
+    days = _sessions("US", US_LABEL_DAY, n, clocks=_demo_clocks())
+    first, rest = blocks[0], blocks[1:]
+    returns = _alternating(first[0], n - 1 - sum(k for _, k in rest))
+    for level, k in rest:
+        returns += _alternating(level, k, start=len(returns))
+    return _invented_text("F14", days, returns, "US")
+
+
+def _label01_body(kr_text: str, us_text: str, clk=None) -> dict:
+    """The real T-LABEL-01 body after its gates, on `kr_text` / `us_text` in place of F13 / F14 and the synthetic signed
+    set (or `clk`) in place of the shipped one."""
+    kr_rows, us_rows = _replay_rows("F13", kr_text), _replay_rows("F14", us_text)
+    clk = _demo_clocks() if clk is None else clk
+    kr = _replay_vt("F13", kr_rows, "KR", VT01_DAY, DECISION, KNOWLEDGE, clk=clk)
+    us = _replay_vt("F14", us_rows, "US", US_LABEL_DAY, US_DECISION, US_KNOWLEDGE, clk=clk)
+    return _check_label01(kr, kr_rows, us, us_rows)
+
+
+def test_label_01_body_passes_and_fails_on_invented_closes():
+    """LA-02 part 2: the T-LABEL-01 data body can PASS and can FAIL. Invented closes in F13's and F14's declared
+    layouts, built so that the KOSPI trailing-756 quartiles are 0.157 / 0.1855 / 0.336, sigma(2 Oct) is 0.2882 at the
+    70th percentile and above the expanding history's Q3, and the US sigma(1 Oct) lies between its Q1 and Q2, pass. It
+    fails, naming the clause, when: q1, q2 or q3 is 0.002 off (that row alone); the percentile is 61 (that row alone);
+    sigma(2 Oct) is 0.35 (relative label stressed); the expanding history sits at 0.30 (absolute label normal, against
+    G-B5-04/kospi_absolute_label); the US sigma(1 Oct) is 0.16 (US label stressed, against G-B5-04/us_relative_label);
+    fewer than 756 KOSPI sigma values exist; the 1-Oct US row is an intraday print; or an F14 row dated 2 Oct is
+    available at the 1-Oct decision. A KOSPI row inside the trailing 756 but outside the 20-return vt window, stamped
+    available after the 06:30:30Z decision with a wild close, is read by neither market_vol_target nor the body: the
+    quartiles stay on the goldens on a block layout where that row, if read, would move Q1. The closes are invented on
+    the sessions of the calendars module's synthetic signed set and replayed on CalendarClocks over it; the calendar
+    files and days both replays read, traced, lie inside REPLAY_CAL_NEEDS, and the OWNER gate names the unsigned NYSE
+    file: `_replay_clocks` raises NotRun (OWNER) with that computed list there and returns CalendarClocks over the
+    synthetic set, on which both replays pass; the real body, read from its source, gates on both REPLAY_CAL_NEEDS rows
+    on the shipped set and runs both replays on the gated clocks. While F13 or F14 is absent, the real test's REFDATA
+    reason names it."""
+    assert [G.golden("G-B5-04").want(sub) for sub in LABEL01_B504] == ["stressed", "normal"]       # spec L5643
+    kr_text, us_text = _label01_kr_text(), _label01_us_text()
+    got = _label01_body(kr_text, us_text)
+    k, u = got["KOSPI"], got["US"]
+    assert (k["rel"], k["abs"], u["rel"]) == ("elevated", "stressed", "normal"), got
+    assert max(abs(k[q] - w) for q, w in (("q1", 0.157), ("q2", 0.1855), ("q3", 0.336), ("sigma", 0.2882))) < 1e-9, k
+    assert abs(k["percentile"] - 70.0) < 0.5 and k["first_sigma"] < date(2016, 10, 2), k
+    traced, seen = _replay_traced()
+    assert _label01_body(kr_text, us_text, clk=traced) == got and not _replay_reads_outside(seen, REPLAY_CAL_NEEDS), seen
+    assert {"kr_sessions", "holidays_KRX", "holidays_NYSE"} <= set(seen), seen
+    from tests.macro_m1_calendars import fixture_docs, fixture_set
+    docs = fixture_docs()
+    docs["holidays_NYSE"]["signed_off_by"] = None
+    nyse_draft = fixture_set("m2_nyse_draft", docs)
+    refused = _replay_waiting(nyse_draft, REPLAY_CAL_NEEDS)
+    assert [w.split(" refused (")[0] for w in refused] == ["US at the 2026-10-01 NYSE close: holidays_NYSE.yaml"], refused
+    # the OWNER gate itself: NotRun (OWNER) with that computed list on the unsigned NYSE file; on the synthetic set the
+    # CalendarClocks both replays pass on. The real body gates on both rows of REPLAY_CAL_NEEDS, on the shipped set, and
+    # runs both replays on the clocks the gate returns (read from its source).
+    waits = _raises(lambda: _replay_clocks(REPLAY_CAL_NEEDS, "T-LABEL-01", live=nyse_draft), NotRun)
+    assert waits.reason == "OWNER: T-LABEL-01 on the signed calendars waits for " + "; ".join(refused), waits.reason
+    gated = _replay_clocks(REPLAY_CAL_NEEDS, "T-LABEL-01", live=fixture_set())
+    assert gated.cal is fixture_set() and _label01_body(kr_text, us_text, clk=gated) == got, gated
+    gate = _replay_gate_of(test_label_01_kospi_elevated_stressed_and_us_normal_refdata)
+    assert gate == (REPLAY_CAL_NEEDS, "T-LABEL-01", 2) and len(gate[0]) == 2, gate
+    # a row 650 sessions back (inside the trailing 756, outside the vt window) available only at 07:00Z, its close x 1.5
+    edge = _label01_kr_text(blocks=LABEL01_KR_BLOCKS_Q1_EDGE)
+    late_day = _replay_rows("F13", edge)[-650]["date"]
+    late = _edit_rows("F13", edge, lambda rows: [(d, c * 1.5, o, U(2026, 10, 2, 7, 0)) if d == late_day else (d, c, o, a)
+                                                 for d, c, o, a in rows])
+    kl = _label01_body(late, us_text)["KOSPI"]
+    assert max(abs(kl[q] - w) for q, w in (("q1", 0.157), ("q2", 0.1855), ("q3", 0.336))) < 1e-9, (late_day, kl)
+    def swap(i: int, level: float) -> tuple:
+        return tuple((level, n) if j == i else (lv, n) for j, (lv, n) in enumerate(LABEL01_KR_BLOCKS))
+    cases = (
+        (_label01_kr_text(blocks=swap(0, 0.159)), us_text, "G-POST-01 deviations: label_q1: got 0.15"),
+        (_label01_kr_text(blocks=swap(1, 0.1875)), us_text, "G-POST-01 deviations: label_q2: got 0.18"),
+        (_label01_kr_text(blocks=swap(2, 0.338)), us_text, "G-POST-01 deviations: label_q3: got 0.33"),
+        (_label01_kr_text(blocks=((0.157, 200), (0.1855, 250), (0.336, 246), (0.40, 40), (0.2882, 20))), us_text,
+         "G-POST-01 deviations: label_percentile: got 6"),
+        (_label01_kr_text(blocks=swap(4, 0.35)), us_text, "G-POST-01 deviations: label_relative_2oct: got 'stressed'"),
+        (_label01_kr_text(history=0.30), us_text,
+         "T-LABEL-01: KOSPI absolute label on 2026-10-02 'normal' != 'stressed'"),
+        (kr_text, _label01_us_text(blocks=((0.09, 250), (0.15, 486), (0.16, 20))),
+         "T-LABEL-01: US relative label on 2026-10-01 'stressed' != 'normal'"),
+        (_replay_csv("F13", [(r["date"], r["close"], r["obs_utc"], r["available_at_utc"])
+                             for r in _replay_rows("F13", kr_text)[-700:]]), us_text,
+         "T-LABEL-01: 680 KOSPI sigma values through 2026-10-02, fewer than the trailing 756"),
+        (kr_text, _edit_rows("F14", us_text, lambda rows: [
+            (d, c, U(2026, 10, 1, 17, 0), U(2026, 10, 1, 17, 0)) if d == US_LABEL_DAY else (d, c, o, a)
+            for d, c, o, a in rows]), "T-LABEL-01 US: the 2026-10-01 row is not the close: obs_utc 17:00:00Z"),
+        (kr_text, _edit_rows("F14", us_text, lambda rows: rows + [
+            (date(2026, 10, 2), rows[-1][1], U(2026, 10, 1, 20, 0), US_DECISION)]),
+         "yahoo_GSPC_1990_2026-10-01.csv: a row of 2026-10-02 is available at the 2026-10-01 decision (look-ahead"),
+    )
+    for kr_case, us_case, needle in cases:
+        msg = _fails(lambda: _label01_body(kr_case, us_case), needle)
+        if needle.startswith(("G-POST-01 deviations: label_q", "G-POST-01 deviations: label_percentile")):
+            assert "; " not in msg, msg                        # that row alone deviates
+    listed = load_manifest()
+    absent = [fid for fid in ("F13", "F14") if FILE_OF[fid] not in listed]
+    if absent:
+        try:
+            test_label_01_kospi_elevated_stressed_and_us_normal_refdata()
+        except NotRun as exc:
+            assert exc.reason.startswith("REFDATA: "), exc.reason
+            assert all(f"{fid} {FILE_OF[fid]} (" in exc.reason for fid in absent), exc.reason
+        else:
+            raise AssertionError("test_label_01_kospi_elevated_stressed_and_us_normal_refdata ran with absent fixtures")
 
 
 # --------------------------------------------------------------------------- #

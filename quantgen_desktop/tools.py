@@ -60,6 +60,11 @@ class CurrentPageStack(QWidget):
     def currentWidget(self):
         return self.widget(self._index)
 
+    def setCurrentWidget(self, page):
+        if page not in self._pages:
+            raise ValueError('Page is not in this stack')
+        self.setCurrentIndex(self._pages.index(page))
+
     def setCurrentIndex(self, index):
         if not 0 <= index < len(self._pages) or index == self._index:
             return
@@ -75,16 +80,19 @@ class ToolPane(QWidget):
     def __init__(self, title, tools, sources, fields):
         super().__init__()
         from .app import label, panel
+        from .form_layout import CompactFieldGrid, bound_input_panel, add_compact_action
         self.has_result = False
         self.report = None
         self.sections = []
         self.tables = {}
         self.charts = {}
+        self._details_fold = None
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 12, 0, 0)
-        layout.setSpacing(18)
+        layout.setSpacing(26)  # owner 2026-11-11: roomy blocks with light lines
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.input_box, inner = panel(title)
+        bound_input_panel(self.input_box)
         # Preferred, not Maximum: a Maximum height is capped at the size hint, which Qt takes at the panel's
         # preferred width. Where captions wrap more at the real width (Windows fonts), that cap cut the
         # last form row (owner UI-6a). The pane's top alignment still keeps the panel from stretching.
@@ -113,8 +121,7 @@ class ToolPane(QWidget):
         inner.addLayout(top)
         self.forms, self.fields = CurrentPageStack(), {}
         for key, _ in tools:
-            host = QWidget()
-            form = QGridLayout(host)
+            pairs = []
             controls = {}
             for i, (name, text, default) in enumerate(fields[key]):
                 if isinstance(default, list):
@@ -123,24 +130,23 @@ class ToolPane(QWidget):
                 else: w = QLineEdit(str(default))
                 w.setAccessibleName(text)
                 controls[name] = w
-                row, col = (i//3)*2, i%3
-                form.addWidget(label(text, 'caption'), row, col)
-                form.addWidget(w, row+1, col)
-                form.setColumnStretch(col, 1)
+                pairs.append((label(text, 'caption'), w))
             self.fields[key] = controls
-            self.forms.addWidget(host)
+            self.forms.addWidget(CompactFieldGrid(pairs))
         inner.addWidget(self.forms)
         self.run = QPushButton('분석 실행')
         self.run.setProperty('primary', True)
         self.run.clicked.connect(self.submit)
-        inner.addWidget(self.run)
+        add_compact_action(inner, self.run)
         layout.addWidget(self.input_box)
-        self.status = label('도구와 출처를 선택한 후 실행하세요.', 'muted')
+        self.prompt = '도구와 출처를 선택한 후 실행하세요.'  # the status with nothing run yet
+        self.status = label(self.prompt, 'muted')
+        self.status.setProperty('reading_help_keep_visible', True)
         layout.addWidget(self.status)
         self.result = QWidget()
         self.result_layout = QVBoxLayout(self.result)
         self.result_layout.setContentsMargins(0, 0, 0, 0)
-        self.result_layout.setSpacing(16)
+        self.result_layout.setSpacing(22)
         self.result_reading=QWidget()
         self.result_reading_layout=QVBoxLayout(self.result_reading)
         self.result_reading_layout.setContentsMargins(0,0,0,0)
@@ -167,6 +173,10 @@ class ToolPane(QWidget):
         self.source.hide()
         self.source_label.hide()
         self._top_grid.setColumnStretch(1, 0)
+        # With no selector the prompt must not ask for a source (owner issues 04/12).
+        self.prompt = 'Choose a tool, then run.'
+        if self.status.source_text == '도구와 출처를 선택한 후 실행하세요.':
+            self.status.setText(self.prompt)
 
     def set_source_caption(self, text):
         self.source_label.setText(text)
@@ -176,6 +186,19 @@ class ToolPane(QWidget):
         self.forms.setCurrentIndex(index)
         self.clear_result()
         self.status.setText('도구가 변경됐습니다. 다시 실행하세요.')
+
+    def select_tool(self, key):
+        """Show one tool's form as a destination (the rail's 시장 menu, owner ruling UI-D11): with no result shown,
+        the status keeps the plain prompt rather than 'Tool changed. Run again.', which reads as a stale result on a
+        pane nobody ran (UI-D11 review). With a result shown, the switch says it is gone as a picker change does."""
+        index = self.tool.findData(key)
+        if index < 0:
+            raise ValueError(f"Unknown tool {key!r}")
+        had_result = self.has_result
+        self.tool.setCurrentIndex(index)
+        if not had_result:
+            self.status.setText(self.prompt)
+        return True
 
     def values(self):
         return {k:w.currentData() if isinstance(w, QComboBox) else w.text()
@@ -192,12 +215,16 @@ class ToolPane(QWidget):
         self.requested.emit(request)
 
     def clear_result(self):
+        reading_help = getattr(self.window(), '_reading_help', None)
+        if reading_help is not None:
+            reading_help.invalidate_source(self)
         self.has_result = False
         self.report = None
         self.sections = []
         self.export_json.setEnabled(False)
         self.export_zip.setEnabled(False)
         self.tables, self.charts = {}, {}
+        self._details_fold = None
         while self.result_reading_layout.count():
             item=self.result_reading_layout.takeAt(0)
             if item.widget():item.widget().hide();item.widget().deleteLater()
@@ -208,28 +235,51 @@ class ToolPane(QWidget):
                 item.widget().hide()
                 item.widget().deleteLater()
 
-    def text(self, text, role='muted', *, localized=None):
+    def _place_result_widget(self, widget, display_role=None):
+        # A role is display metadata only. Unclassified/mixed blocks, assumptions,
+        # synthetic/delayed notices and failures always remain in the main body.
+        widget.setProperty('display_role', display_role)
+        widget.setProperty('reading_help_keep_visible', display_role != 'provenance')
+        if display_role == 'provenance':
+            if self._details_fold is None:
+                from .reading_panel import DetailsFold
+                self._details_fold = DetailsFold(getattr(self.window(), 'ctx', None))
+                self.result_layout.addWidget(self._details_fold)
+            self._details_fold.add_widget(widget)
+        else:
+            self.result_layout.addWidget(widget)
+
+    def text(self, text, role='muted', *, localized=None, name=None, display_role=None):
+        """`name` labels the export section; a private name (e.g. holdings) keeps it out of AI commentary."""
         from .app import label
         from core.research.presentation import safe_detail
         text = safe_detail(text, limit=None)
-        self.sections.append({'type':'text','text':text})
+        self.sections.append({'type':'text','text':text, **({'name': name} if name else {})})
         widget = label(text, role)
         if localized:
             widget.localized_text = {key: safe_detail(value, limit=None) for key, value in localized.items()}
-        self.result_layout.addWidget(widget)
+        self._place_result_widget(widget, display_role)
         widget.retranslate()
         return widget
 
-    def result_table(self, name, headers, rows):
+    def result_table(self, name, headers, rows, *, localized_columns=None, display_role=None):
         from .app import label, table, table_rows
         self.sections.append({'type':'table','name':name,'headers':headers,'rows':rows})
-        self.result_layout.addWidget(label(name, 'heading'))
+        heading = label(name, 'heading')
+        self._place_result_widget(heading, display_role)
         widget = table(headers)
-        if headers and headers[0] == 'Metric':
+        if localized_columns is not None:
+            widget.setProperty('localized_columns', list(localized_columns))
+        elif headers and headers[0] == 'Metric':
             widget.setProperty('localized_columns', [0])
         table_rows(widget, rows)
         widget.setMinimumHeight(min(400, max(120, 45+len(rows)*32)))
-        self.result_layout.addWidget(widget)
+        # Ordinary result tables may be covered by the narrow help panel; their
+        # values remain unchanged. Important notice/assumption tables opt out.
+        self._place_result_widget(widget, display_role)
+        if display_role is None:
+            widget.setProperty('reading_help_keep_visible', False)
+            heading.setProperty('reading_help_keep_visible', False)
         self.tables[name] = widget
 
     def line(self, name, x, series, x_label, y_label):
@@ -242,15 +292,38 @@ class ToolPane(QWidget):
         chart.set_series(x, series)
         self.result_layout.addWidget(chart)
         self.charts[name] = chart
+        self._add_chart_reading(name, chart)
 
-    def finished(self, narrative, *, localized=None):
+    def _add_chart_reading(self, name, chart):
+        """'How to read this chart' under a chart with an authored guide (owner issue 02); display only."""
+        from .chart_study import chart_reading
+        chart.reading = chart_reading(name)
+        if chart.reading is not None:
+            self.result_layout.addWidget(chart.reading)
+
+    def finished(self, narrative, *, localized=None, sections=None):
+        """Show the narrative as headed bullets (owner issue 11), the full paragraph folded below.
+
+        `localized` gives reviewed per-language texts ({'ko': ...}); `sections` optionally gives ready
+        headed bullets per language ({'ko': [(heading, [line, ...]), ...]}). Export text is unchanged."""
         from .app import label
+        from .narrative_view import FullTextFold, NarrativeView
         notice = ('Analysis narrative · display language; original retained in export' if localized else
                   'Analysis narrative · original source language retained')
         self.result_reading_layout.addWidget(label(notice, 'caption'))
         narrative_widget=self.text(narrative, localized=localized)
         self.result_layout.removeWidget(narrative_widget)
-        self.result_reading_layout.addWidget(narrative_widget)
+        variants = {'en': narrative_widget.source_text}
+        if localized:
+            variants.update({k: v for k, v in narrative_widget.localized_text.items() if v})
+        if sections:
+            variants.update(sections)
+        self.narrative_view = NarrativeView(variants)
+        self.result_reading_layout.addWidget(self.narrative_view)
+        # The folded paragraph is secondary: closed by default, so it does not ask to stay visible.
+        narrative_widget.setProperty('reading_help_keep_visible', False)
+        self.result_reading_layout.addWidget(FullTextFold(narrative_widget))
+        narrative_widget.retranslate()  # it was reparented through the fold before the fold joined the window
         self.result_reading.show()
         self.has_result = True
         self.status.setText('계산 완료 · 출처·관측일·가정을 확인하세요. 공식 검증 판정은 별도입니다.')
@@ -263,6 +336,7 @@ class ToolPane(QWidget):
         chart.colors=self.window().colors
         self.result_layout.addWidget(chart)
         self.charts[name]=chart
+        self._add_chart_reading(name, chart)
 
     def bind_output(self, name, output):
         if not self.has_result: return

@@ -10,7 +10,7 @@
     "observation_models": 14,
     "initial_reproductions": 5,
     "additional_reproduced_ids": 14,
-    "implemented_canonical_groups": 21
+    "implemented_canonical_groups": 31
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -36,10 +36,11 @@
       "source_model": "9. M1-09 블록 부트스트랩 경로 모형",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
-      "mapping_needs_disambiguation": true,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "next": "N-M1-02 is ARCHITECTURE_REVIEW C1 (register: 'C1(=N-M1-02)'). N-M1-02/a discloses the scheme on every Monte Carlo surface: circular fixed 5-session blocks of demeaned daily log returns (not a stationary bootstrap), clustering kept only in part at lags 1-4 ((5-k)/5 over a long horizon) and lost from lag 5, no current-vol start; engine docstring, README and primer source corrected. Numbers unchanged. C1(b), the maths fix (block length from the r² ACF or stationary lengths, which changes every bootstrap number and the convexity correction), is left to the owner; the primer PDF is not rebuilt.",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "PARTIAL_IMPLEMENTED",
+      "evidence": "docs/product/MC_BOOTSTRAP_DISCLOSURE_2026-11-04.md; tests/mc_bootstrap_disclosure_acceptance.py"
     },
     {
       "id": "N-M1-03",
@@ -470,10 +471,11 @@
       "source_model": "92. M4-15 박스 스프레드 조달금리",
       "queue": 3,
       "type": "Model assumption or convention",
-      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "next": "Adjacent-strike box priced only from four two-sided legs (else NOT_RUN with the missing legs named); shown with its bp-per-0.01-point sensitivity and its rate at the quoted bids/asks, and relabelled a quote-quality check, not a funding rate. Widening the box (a model change) is left to the owner. Actual KIS boards NOT_RUN.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/OPTION_DISCLOSURE_2026-11-04.md; tests/option_disclosure_acceptance.py"
     },
     {
       "id": "M4-N5",
@@ -505,10 +507,11 @@
       "source_model": "93. M4-16 델타 헤지 손익 시뮬레이션(감마 항등식, GBM·GARCH-t 엔진)",
       "queue": 3,
       "type": "Model assumption or convention",
-      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "next": "GBM engine runs at sigma_true = sigma_h: expected mean P&L is 0 by construction, recorded by snapshot from the arguments it passed; the Flet tile no longer colours the sign, narratives say 'simulated mean' and disclose it, payload and native export carry the status. GARCH-t unchanged. Simulation numbers byte-identical.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/OPTION_DISCLOSURE_2026-11-04.md; tests/option_disclosure_acceptance.py"
     },
     {
       "id": "M4-N8",
@@ -528,10 +531,11 @@
       "source_model": "90. M4-13 모형무관 내재변동성(MFIV, Cboe 스트립)",
       "queue": 3,
       "type": "Model assumption or convention",
-      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "next": "MFIV strike range (forward moneyness and approximate ATM-vol standard deviations) stated in Native/Flet/narratives/payload/export with the downward truncation bias; mfiv() and existing values unchanged. Register's +/-10% comparison uses a 91-strike board; the KIS +/-10% filter gives -0.07/-1.80/-1.31 vp.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/OPTION_DISCLOSURE_2026-11-04.md; tests/option_disclosure_acceptance.py"
     },
     {
       "id": "M4-N10",
@@ -609,10 +613,11 @@
       "source_model": "144. M6-13 ETF 슬리브 표본 내 요약(추세 전환, 변동성 목표, 매수 보유)",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
-      "mapping_needs_disambiguation": true,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "next": "Mapped by register summary line 137 (659898b) to the M6-13 [결함]: a sleeve whose daily P&L does not vary (cash only, or a flat price) showed a Sharpe of about 1e16 or 0.00. Now the Sharpe is unavailable (n/a, 계산 불가, payload null with sharpe_status) under an explicit rule: sd(ddof=1) <= 1e-10 * max(1, max|P&L|) counts as no variation; non-finite P&L is NOT_DEFINED_NON_FINITE. Every defined Sharpe and every other number is unchanged. P01-11 (validate._col_sharpe) and the vol_products sibling stay open.",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/ETF_SLEEVE_DISCLOSURE_2026-11-04.md; tests/etf_sleeve_disclosure_acceptance.py"
     },
     {
       "id": "NEW-M6-05",
@@ -620,10 +625,11 @@
       "source_model": "144. M6-13 ETF 슬리브 표본 내 요약(추세 전환, 변동성 목표, 매수 보유)",
       "queue": 3,
       "type": "Model assumption or convention",
-      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "next": "Mapping stays ambiguous (probable: the 210-session cash warm-up inside a full-window Sharpe plus the undisclosed fixed 3% cash; alternatives: K-e daily constant-weight rebalancing, or the family-card verdict). The disclosure covers every reading: warm-up rows, fixed 3% cash assumption, Sharpe over the whole window and not in excess of cash, buy-and-hold with no warm-up, cash or cost, the K-e rebalancing assumption, and the verdicts as family cards. Disclosure only; numbers unchanged. Any redefinition of the displayed Sharpe is a model change for the owner.",
       "mapping_needs_disambiguation": true,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/ETF_SLEEVE_DISCLOSURE_2026-11-04.md; tests/etf_sleeve_disclosure_acceptance.py"
     },
     {
       "id": "NEW-M6-06",
@@ -700,10 +706,11 @@
       "source_model": "149. M6-19 AI 심층 분석(Claude 서술, 모델 아님)",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "next": "Branch implementation covers all four candidate limitations for both IDs: end_turn-only reply display, strict JSON/full arrays/nonfinite markers with 180000-byte UTF-8 refusal, advisory values-only number matching, and not-verified/nondeterministic label. Review fixes dates, bp-to-percent, ranges/scientific skips, bilingual transfer disclosures and native redaction/check provenance. Exact ID pairing remains unresolved. Owner confirmed PR75 defaults on 2026-11-06; exact-head CI and merge/ledger recording complete the workflow; no semantic verification, actual API, or owner Windows acceptance claimed.",
       "mapping_needs_disambiguation": true,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md; tests/ai_output_check_acceptance.py; tests/ai_connection_acceptance.py; tests/ai_payload_acceptance.py; tests/desktop_commentary_acceptance.py; inherited commits 7c31417, 401fe33, 54b52eb plus review correction"
     },
     {
       "id": "NEW-M6-13",
@@ -722,10 +729,11 @@
       "source_model": "142. M6-11 크립토 공급사 파생 표시값(perp premium, Upbit 보유 평가)",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "next": "Two IDs over four unlabelled M6-11 limitations (zero-valued unpriced holdings in a complete-looking total, batch ticker failure erasing all holdings, missing mark/index giving 0%/-100%, cost basis without unit); all four corrected, so the exact pairing stays ambiguous but both IDs are covered. Actual Upbit/Binance replies NOT_RUN.",
       "mapping_needs_disambiguation": true,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md; tests/crypto_missing_values_acceptance.py"
     },
     {
       "id": "NEW-M6-15",
@@ -733,10 +741,11 @@
       "source_model": "132. M6-01 김치 프리미엄 수준과 1년 z",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
-      "mapping_needs_disambiguation": true,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "next": "Resolved by elimination: the only M6-01 limitation without its own ID, in two parts: (a) the 1y z of a 91-365 observation history uses a 90-364 observation window; (b) uncomputed z shown as +0.00, and a flat-window z shown as +0.00 or, from float rounding, about +1.00. (a) last_z_window gives the real window; the Flet stat (Premium z (N obs)), English/Korean narratives and payload z_window name it when shorter than a year. (b) z/last_z are NaN when undefined and shown as unavailable in Native/Flet/narratives; payload z null. Not changed: the z_1y series keeps its 90-364 windows for the first 275 values; they are not displayed and only feed the M6-02 (NEW-M6-01) regression. Valid-data results unchanged (40 synthetic histories). Actual provider data NOT_RUN.",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md; tests/crypto_missing_values_acceptance.py"
     },
     {
       "id": "NEW-M6-16",
@@ -778,10 +787,11 @@
       "source_model": "149. M6-19 AI 심층 분석(Claude 서술, 모델 아님)",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "next": "Branch implementation covers all four candidate limitations for both IDs: end_turn-only reply display, strict JSON/full arrays/nonfinite markers with 180000-byte UTF-8 refusal, advisory values-only number matching, and not-verified/nondeterministic label. Review fixes dates, bp-to-percent, ranges/scientific skips, bilingual transfer disclosures and native redaction/check provenance. Exact ID pairing remains unresolved. Owner confirmed PR75 defaults on 2026-11-06; exact-head CI and merge/ledger recording complete the workflow; no semantic verification, actual API, or owner Windows acceptance claimed.",
       "mapping_needs_disambiguation": true,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md; tests/ai_output_check_acceptance.py; tests/ai_connection_acceptance.py; tests/ai_payload_acceptance.py; tests/desktop_commentary_acceptance.py; inherited commits 7c31417, 401fe33, 54b52eb plus review correction"
     },
     {
       "id": "NEW-M6-20",
@@ -811,10 +821,11 @@
       "source_model": "142. M6-11 크립토 공급사 파생 표시값(perp premium, Upbit 보유 평가)",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "next": "Same as NEW-M6-14: all four unlabelled M6-11 limitations corrected; exact pairing stays ambiguous. Actual Upbit/Binance replies NOT_RUN.",
       "mapping_needs_disambiguation": true,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md; tests/crypto_missing_values_acceptance.py"
     },
     {
       "id": "NEW-M6-23",

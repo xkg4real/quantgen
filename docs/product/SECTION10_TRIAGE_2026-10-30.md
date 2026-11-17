@@ -227,3 +227,93 @@ See `RATES_REVALUATION_PARAMS_2026-11-02.md` for the bounded evidence and limita
 Latest source implementation count: **21/67**, **46** remaining. Partial
 NEW-M6-02, the 14 observation models and 15 ambiguous mappings remain open.
 Actual Windows, provider, research and release acceptance are separate.
+
+### 2026-11-04 Crypto missing values (Claude rework)
+
+The owner chose not to recover GPT's private Crypto work; Claude redid it from main
+`c1a4e97`. NEW-M6-15 maps by elimination to the M6-01 limitation with two parts: the
+uncomputed 1-year z shown as +0.00, and the "1y" z of a history shorter than a year,
+which uses a 90–364-observation window. z is now NaN when undefined (short history or a
+flat window) and every screen, narrative and payload says it is unavailable; when the
+window is shorter than a year the Flet stat, the narratives and the payload name it.
+The z series keeps its short windows at the start of a sample: they are not displayed
+and only feed the M6-02 regression (NEW-M6-01). NEW-M6-14 and NEW-M6-22 share the four
+unlabelled M6-11 limitations (zero-valued unpriced holdings in a complete-looking total,
+a batch ticker failure erasing all holdings, a missing mark/index read as 0% or −100%,
+the cost basis without a unit). All four are corrected, so both IDs are covered while
+their exact pairing stays ambiguous. Valid-data kimchi results are unchanged on 40
+synthetic histories. A missing Upbit close no longer reads as a −100 % premium (the
+day is left out); the register gives that case to D12-03 (audit, PT-18), not to a §10 ID,
+so it is only the Upbit daily part of D12-03 and the rest of D12-03 stays open. See
+`CRYPTO_MISSING_VALUES_2026-11-04.md`.
+
+Source implementation count after this section: **24/67**, **43** remaining. Partial
+NEW-M6-02, the 14 observation models and the remaining ambiguous mappings stay open.
+Actual Windows, provider, research and release acceptance are separate.
+
+### 2026-11-04 Option board disclosures (Claude rework)
+
+The owner chose not to recover GPT's private options work. Claude redid it from main
+`c1a4e97`. An analyst reproduced each item and a separate reviewer challenged it.
+
+- **M4-N7:** under GBM the hedge mean is 0 by construction. Its sign is no longer
+  coloured or called earnings.
+- **M4-N9:** the MFIV strike range and its downward truncation bias are stated.
+- **M4-N4:** the adjacent-strike box is priced only from four two-sided legs. It is
+  shown with its sensitivity and its bid/ask range as a quote-quality check, not a
+  funding rate.
+
+Valid-input numbers are byte-identical on GBM and GARCH-t synthetic boards. See
+`OPTION_DISCLOSURE_2026-11-04.md`.
+
+These three groups follow the Crypto section above (24 → 27/67). Source
+implementation count after this section: **27/67**, **40** remaining. Partial NEW-M6-02, the 14 observation
+models and the remaining ambiguous mappings stay open. Actual Windows, provider, research
+and release acceptance are separate.
+
+### 2026-11-04 Bootstrap and ETF sleeve disclosures (Claude rework)
+
+The owner chose not to recover GPT's private models/ETF work. Claude redid it from main
+`a32106b`. An analyst reproduced each item, a separate reviewer challenged it, and three
+more reviewers checked each implementation.
+
+- **N-M1-02 (partial, N-M1-02/a):** the register maps it to ARCHITECTURE_REVIEW C1. The
+  Monte Carlo bootstrap is now described as what it is on every surface: circular, fixed
+  5-session blocks of demeaned daily log returns, clustering kept only in part at lags
+  1-4 and lost from lag 5, no start from the current volatility. Numbers are unchanged.
+  C1's maths fix (block length or stationary lengths) is left to the owner.
+- **NEW-M6-04:** a sleeve whose daily P&L does not vary (cash only, or some flat prices)
+  showed a Sharpe of about 1e16 or 0.00. It is now unavailable under an explicit rule
+  (sd at or below 1e-10 × max(1, max|P&L|), an absolute 1e-10 for daily returns). Every defined Sharpe is unchanged.
+- **NEW-M6-05:** the mapping stays ambiguous, so the disclosure covers every reading: the
+  210-session cash warm-up inside a full-window Sharpe, the fixed 3% cash assumption, the
+  Sharpe not in excess of cash, buy-and-hold without warm-up, cash or cost, the K-e daily
+  rebalancing assumption and the family-card verdicts.
+
+See `MC_BOOTSTRAP_DISCLOSURE_2026-11-04.md` and `ETF_SLEEVE_DISCLOSURE_2026-11-04.md`.
+
+NEW-M6-04 and NEW-M6-05 follow the options section above (27 → 29/67). N-M1-02 is partial
+and not counted, like NEW-M6-02. Source implementation count at this preceding stage: **29/67**, **38**
+remaining. Partial NEW-M6-02 and N-M1-02, the 14 observation models and the remaining
+ambiguous mappings stay open. Actual Windows, provider, research and release acceptance
+are separate.
+
+
+## AI commentary — branch implementation, 2026-11-06
+
+NEW-M6-12 and NEW-M6-19 are still ambiguous related IDs in model-register
+entry 149. This branch covers the four candidate limitations for both IDs:
+only end_turn replies can be displayed/saved, payloads use strict JSON/full arrays
+and nonfinite markers, number matching is advisory, and the reply is explicitly
+not verified and may vary between requests. Review corrections cover dates,
+bp-to-percent, ranges, scientific notation exclusions, bilingual disclosure, UTF-8
+refusal and privacy-redacted reply check withholding. See
+`AI_COMMENTARY_GUARDS_2026-11-04.md` for exact evidence and limits.
+
+Branch source implementation is **31/67**, with **36** canonical groups remaining
+without full implementation. This is not a merged-completion count: the two AI
+IDs remain open pending exact-head CI, main merge and LEDGER entries. The owner
+confirmed PR #75 defaults on 2026-11-06. Prior verified merged count is 29/67. Approximate matching does
+not verify sign, metric identity, reasoning, verdicts or derived results. Windows
+user-PC/API/provider/pilot/legal/licensing acceptance is not supplied by these tests.
+N-M1-02/b remains deferred and protected research/order paths are unchanged.

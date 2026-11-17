@@ -17,7 +17,18 @@ import flet as ft
 from core.numfmt import format_compact, format_number, format_price
 from core.theme import RADII, active
 from data.krx import KRXGateway
-from ui.components import chip, empty_state, key_value, notice, section
+from ui.components import colour_for, empty_state, key_value, notice, section
+from ui.ficc_widgets import action, form_row, ko_notice, lchip, ltext
+from ui.localization import table_header, literal_text
+
+# Header context only: DART Account is an accounting item, never a brokerage account.
+_HEADERS_KO = {
+    'Date': '일자', 'Open': '시가', 'High': '고가', 'Low': '저가', 'Volume': '거래량',
+    'Report': '보고서명', 'Filer': '제출인', 'Receipt': '접수번호',
+    'Statement': '재무제표 구분', 'Account': '계정과목', 'This term': '당기', 'Prev term': '전기',
+    'Code': '종목코드', 'Name': '종목명', 'Market': '시장 구분', 'Chg %': '등락률',
+    'Mkt cap': '시가총액', 'Index': '지수명', 'Level': '지수', 'Change': '전일 대비',
+}
 
 _LOOKUPS = [
     ("quote", "Quote"),
@@ -28,13 +39,21 @@ _LOOKUPS = [
     ("indices", "Index levels"),
 ]
 
+# An empty answer names the dataset, the providers the gateway asks for it (data.krx.gateway) and
+# which of their keys is missing; the provider's own message stays one click away, verbatim.
+_DATASET = {"quote": ("현재가", "Quote"), "daily": ("일별 시세", "Daily prices"),
+            "filings": ("공시", "Filings"), "financials": ("재무제표", "Financials"),
+            "snapshot": ("전 종목 스냅샷", "Market snapshot"), "indices": ("지수 시세", "Index levels")}
+_ASKS = {"quote": ("KIS", "KRX"), "daily": ("KIS",), "filings": ("OpenDART",), "financials": ("OpenDART",),
+         "snapshot": ("KRX",), "indices": ("KIS", "KRX")}
+
 
 def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
                    on_open_settings: Optional[Callable] = None) -> ft.Control:
     pal = active()
     ticker = ft.TextField(label="KRX code", hint_text="005930", width=180,
                           border_radius=RADII["md"])
-    lookup = ft.Dropdown(label="Data", width=230, value="quote",
+    lookup = ft.Dropdown(label="Data", width=240, value="quote",
                          options=[ft.dropdown.Option(k, v) for k, v in _LOOKUPS])
     busy = ft.ProgressRing(visible=False, width=20, height=20)
     result_host = ft.Column(spacing=10, scroll=ft.ScrollMode.AUTO, expand=True)
@@ -43,12 +62,41 @@ def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
     ready_names = [s["provider"] for s in statuses if s.get("ready")]
 
     def provider_bar() -> ft.Control:
+        # `ready` only means the key (and the HTTP library) is present; no request has been made,
+        # so the chip says "key set", never "connected".
         chips = []
         for s in statuses:
-            chips.append(chip(f"{s['provider']}: " + ("ready" if s.get("ready") else "not set"),
-                              "success" if s.get("ready") else "muted",
-                              tooltip=s.get("reason") or s.get("detail") or ""))
-        return ft.Row(chips, spacing=6, wrap=True)
+            ready = bool(s.get("ready"))
+            chips.append(lchip(f"{s['provider']}: " + ("키 설정됨" if ready else "미설정"),
+                               f"{s['provider']}: " + ("Key set" if ready else "Not set"),
+                               "success" if ready else "muted",
+                               tooltip=s.get("reason") or s.get("detail") or ""))
+        return ft.Row(chips, spacing=8, wrap=True)
+
+    def failure(kind: str, detail: str) -> ft.Control:
+        """Korean and English headline (dataset, providers asked, missing keys) with the provider's
+        message folded underneath, keyboard-reachable and selectable."""
+        what_ko, what_en = _DATASET.get(kind, (kind, kind))
+        asked = ", ".join(_ASKS.get(kind, ()))
+        missing = ", ".join(p for p in _ASKS.get(kind, ()) if p not in ready_names)
+        box = ko_notice(notice(f"{what_en}: no provider ({asked}) returned data"
+                               + (f" — {missing} key not set." if missing else "."),
+                               "error", icon=ft.Icons.CLOUD_OFF_OUTLINED),
+                        f"{what_ko}: 제공처({asked})가 응답하지 않았습니다"
+                        + (f" — {missing} 키 미설정." if missing else "."))
+        more = ft.ExpansionTile(
+            title=ltext("제공처 메시지 (원문)", "Provider message", size=12, color=colour_for("muted")),
+            controls=[ft.Container(literal_text(str(detail or "—"), size=12, color=colour_for("muted"),
+                                                selectable=True),
+                                   padding=ft.Padding(16, 0, 16, 12))],
+            tile_padding=ft.Padding(16, 0, 16, 0), dense=True)
+        return ft.Column([box, more], spacing=4)
+
+    def source_row(source: str, as_of) -> ft.Row:
+        row = key_value("Source", "")
+        row.controls[1] = ltext(f"{source} · 기준 {as_of}", f"{source} · as of {as_of}", size=12,
+                                color=pal.text, expand=True, selectable=True)
+        return row
 
     def show_empty() -> None:
         if ready_names:
@@ -68,11 +116,11 @@ def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
                 if on_open_settings else None)]
 
     def render_rows(rows: list[dict], columns: list[tuple[str, str]], source: str) -> None:
-        head = ft.Row([ft.Text(f"Source: {source}", size=11, color=pal.muted),
-                       ft.Text(f"{len(rows)} rows", size=11, color=pal.muted)], spacing=14)
+        head = ft.Row([ltext(f"출처: {source}", f"Source: {source}", size=12, color=pal.muted),
+                       ltext(f"{len(rows)}행", f"{len(rows)} rows", size=12, color=pal.muted)], spacing=16)
         table = ft.DataTable(
-            columns=[ft.DataColumn(ft.Text(label, size=11)) for _, label in columns],
-            rows=[ft.DataRow(cells=[ft.DataCell(ft.Text(_cell(r.get(k)), size=11))
+            columns=[ft.DataColumn(table_header(label, ko=_HEADERS_KO.get(label), size=11)) for _, label in columns],
+            rows=[ft.DataRow(cells=[ft.DataCell(literal_text(_cell(r.get(k)), size=11))
                                     for k, _ in columns]) for r in rows[:300]],
             column_spacing=18, heading_row_height=34, data_row_max_height=34,
         )
@@ -113,12 +161,11 @@ def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
                                           if q.volume else "—"),
                                 key_value("Market cap", format_compact(q.market_cap, locale, 1)
                                           if q.market_cap else "—"),
-                                key_value("Source", f"{answer.source} · as of {q.as_of}"),
+                                source_row(answer.source, q.as_of),
                             ], spacing=6),
                         ]
                     else:
-                        result_host.controls = [notice(answer.reason, "error",
-                                                       icon=ft.Icons.CLOUD_OFF_OUTLINED)]
+                        result_host.controls = [failure(kind, answer.reason)]
                 elif kind == "daily":
                     answer = gateway.daily(code)
                     if answer.ok and answer.data:
@@ -127,8 +174,7 @@ def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
                                      ("low", "Low"), ("close", "Close"), ("volume", "Volume")],
                                     answer.source)
                     else:
-                        result_host.controls = [notice(answer.reason, "error",
-                                                       icon=ft.Icons.CLOUD_OFF_OUTLINED)]
+                        result_host.controls = [failure(kind, answer.reason)]
                 elif kind == "filings":
                     answer = gateway.filings(code)
                     if answer.ok and answer.data:
@@ -137,8 +183,7 @@ def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
                                      ("filer", "Filer"), ("receipt_no", "Receipt")],
                                     answer.source)
                     else:
-                        result_host.controls = [notice(answer.reason, "error",
-                                                       icon=ft.Icons.CLOUD_OFF_OUTLINED)]
+                        result_host.controls = [failure(kind, answer.reason)]
                 elif kind == "financials":
                     answer = gateway.financials(code)
                     if answer.ok and answer.data:
@@ -147,8 +192,7 @@ def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
                                      ("this_term", "This term"), ("prev_term", "Prev term")],
                                     answer.source)
                     else:
-                        result_host.controls = [notice(answer.reason, "error",
-                                                       icon=ft.Icons.CLOUD_OFF_OUTLINED)]
+                        result_host.controls = [failure(kind, answer.reason)]
                 elif kind == "snapshot":
                     answer = gateway.market_snapshot()
                     if answer.ok and answer.data:
@@ -158,8 +202,7 @@ def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
                                      ("volume", "Volume"), ("market_cap", "Mkt cap")],
                                     answer.source)
                     else:
-                        result_host.controls = [notice(answer.reason, "error",
-                                                       icon=ft.Icons.CLOUD_OFF_OUTLINED)]
+                        result_host.controls = [failure(kind, answer.reason)]
                 else:
                     answer = gateway.indices()
                     if answer.ok and answer.data:
@@ -168,11 +211,9 @@ def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
                                      ("change", "Change"), ("change_pct", "Chg %")],
                                     answer.source)
                     else:
-                        result_host.controls = [notice(answer.reason, "error",
-                                                       icon=ft.Icons.CLOUD_OFF_OUTLINED)]
+                        result_host.controls = [failure(kind, answer.reason)]
             except Exception as exc:
-                result_host.controls = [notice(f"{type(exc).__name__}: {exc}", "error",
-                                               icon=ft.Icons.ERROR_OUTLINE)]
+                result_host.controls = [failure(kind, f"{type(exc).__name__}: {exc}")]
             busy.visible = False
             page.update()
 
@@ -186,10 +227,8 @@ def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
         provider_bar(),
         notice("No order or account-mutation path exists in this build.",
                "muted", icon=ft.Icons.INFO_OUTLINE),
-        ft.Row([ticker, lookup,
-                ft.Button("Run", icon=ft.Icons.PLAY_ARROW_ROUNDED, on_click=run), busy],
-               spacing=10, wrap=True),
+        form_row([ticker, lookup, action(ft.Button("Run", icon=ft.Icons.PLAY_ARROW_ROUNDED, on_click=run), busy)]),
         ft.Container(result_host, padding=14, bgcolor=pal.surface,
                      border=ft.Border.all(1, pal.border), border_radius=RADII["lg"],
                      expand=True),
-    ], spacing=14, expand=True)
+    ], spacing=16, expand=True)

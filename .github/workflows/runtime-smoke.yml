@@ -1,9 +1,12 @@
 name: Runtime packaging smoke
+env:
+  PYTHONUTF8: '1'
+  PYTHONFAULTHANDLER: '1'
 on:
   push:
     branches: ['gpt/product-workflow-20261029', 'gpt/ui-apply-main-20261029']
   pull_request:
-    paths: ['pyproject.toml', 'requirements.txt', 'assets/**', 'tests/web_branding_acceptance.py', 'main.py', 'core/app_paths.py', 'core/ficc/bonds.py', 'core/ficc/equity_deriv.py', 'core/ficc/forward_conventions.py', 'core/ficc/ratesim.py', 'tests/rates_revaluation_params_acceptance.py', 'core/quant/backtest.py', 'core/ficc/letf_assumptions.py', 'tests/letf_assumptions_acceptance.py', 'tests/letf_io_guard_acceptance.py', 'tests/letf_ai_payload_acceptance.py', 'tests/signals_trade_count_acceptance.py', 'tests/forward_convention_acceptance.py', 'tests/fx_basis_disclosure_acceptance.py', 'tests/cms_coupon_disclosure_acceptance.py', 'core/ficc/structured.py', 'core/ficc/insights.py', 'tests/bond_funding_acceptance.py', 'core/crypto/analytics.py', 'tests/crypto_hac_acceptance.py', 'tests/ai_payload_acceptance.py', 'core/quant/insights.py', 'core/quant/optimize.py', 'tests/portfolio_scope_acceptance.py', 'core/quant/montecarlo.py', 'tests/terminal_target_acceptance.py', 'tests/mc_volatility_acceptance.py', 'tests/strategy_exposure_acceptance.py', 'tests/ar1_decay_acceptance.py', 'core/crypto/funding_diagnostic.py', 'tests/funding_inference_acceptance.py', 'tests/letf_disclosure_acceptance.py', 'tests/letf_index_acceptance.py', 'tests/quote_coverage_acceptance.py', 'data/kis_markets.py', 'core/ficc/fx_styles.py', 'core/ficc/fx.py', 'core/ficc/sabr_diagnostics.py', 'tests/sabr_diagnostics_acceptance.py', 'core/ficc/swaps.py', 'tests/ficc_boundary_acceptance.py', 'tests/swaption_conversion_acceptance.py', 'core/research/**', 'core/education/**', 'core/i18n.py', 'core/ui*messages.py', 'tests/indicator_guide_acceptance.py', 'tests/glossary_search_acceptance.py', 'tests/web_indicator_guide_acceptance.py', 'ui/**', 'quantgen_desktop/**', 'tests/desktop*', 'tools/status/**', 'tools/packaging/**', 'tests/*research*', 'tests/data_readiness_acceptance.py', 'tests/packaging_policy_acceptance.py', 'tests/runtime_syntax_acceptance.py', 'tests/flet_runtime_acceptance.py', '.github/workflows/runtime-smoke.yml', 'core/market/**', 'data/kis_workspace.py', 'data/kis_stream.py', 'tests/market_core_acceptance.py', 'tests/market_routing_acceptance.py', 'tests/market_symbols_acceptance.py', 'tests/market_board_core_acceptance.py', 'tests/market_received_bars_acceptance.py', 'tests/market_chart_presentation_acceptance.py', 'tests/kis_workspace_acceptance.py', 'tests/kis_stream_acceptance.py', 'tests/web_market_chart_acceptance.py', 'qa/research_status.json', 'tests/status_snapshot_acceptance.py']
+    paths: ['pyproject.toml', 'requirements.txt', 'assets/**', 'tests/web_branding_acceptance.py', 'main.py', 'core/app_paths.py', 'core/ficc/bonds.py', 'core/ficc/equity_deriv.py', 'core/ficc/forward_conventions.py', 'core/ficc/ratesim.py', 'tests/rates_revaluation_params_acceptance.py', 'core/quant/backtest.py', 'core/quant/run_registry_codec.py', 'tests/run_registry_codec_acceptance.py', 'core/quant/run_registry_store.py', 'tests/run_registry_store_acceptance.py', 'core/quant/run_registry_keys.py', 'tests/run_registry_keys_acceptance.py', 'tests/fixtures/run_registry_keys/**', 'core/quant/run_registry_data_hash.py', 'tests/run_registry_data_hash_acceptance.py', 'core/quant/run_registry_source_hash.py', 'tests/run_registry_source_hash_acceptance.py', 'core/quant/run_registry_series_hash.py', 'tests/run_registry_series_hash_acceptance.py', 'core/quant/run_registry_series_format.py', 'tests/run_registry_series_format_acceptance.py', 'core/quant/run_registry_series_files.py', 'tests/run_registry_series_files_acceptance.py', 'core/quant/run_registry_outage.py', 'tests/run_registry_outage_acceptance.py', 'core/quant/run_registry_recorder.py', 'tests/run_registry_recorder_acceptance.py', 'core/quant/run_registry_fold.py', 'tests/run_registry_fold_acceptance.py', 'core/ficc/letf_assumptions.py', 'tests/letf_assumptions_acceptance.py', 'tests/letf_io_guard_acceptance.py', 'tests/letf_ai_payload_acceptance.py', 'tests/signals_trade_count_acceptance.py', 'tests/forward_convention_acceptance.py', 'tests/fx_basis_disclosure_acceptance.py', 'tests/cms_coupon_disclosure_acceptance.py', 'core/ficc/structured.py', 'core/ficc/insights.py', 'tests/bond_funding_acceptance.py', 'core/crypto/analytics.py', 'core/crypto/values.py', 'data/crypto/crypto_client.py', 'tests/crypto_hac_acceptance.py', 'tests/crypto_missing_values_acceptance.py', 'tests/option_disclosure_acceptance.py', 'tests/mc_bootstrap_disclosure_acceptance.py', 'tests/etf_sleeve_disclosure_acceptance.py', 'tests/ai_payload_acceptance.py', 'tests/ai_output_check_acceptance.py', 'core/quant/insights.py', 'core/quant/optimize.py', 'tests/portfolio_scope_acceptance.py', 'core/quant/montecarlo.py', 'tests/terminal_target_acceptance.py', 'tests/mc_volatility_acceptance.py', 'tests/strategy_exposure_acceptance.py', 'tests/ar1_decay_acceptance.py', 'core/crypto/funding_diagnostic.py', 'tests/funding_inference_acceptance.py', 'tests/letf_disclosure_acceptance.py', 'tests/letf_index_acceptance.py', 'tests/quote_coverage_acceptance.py', 'data/kis_markets.py', 'core/ficc/fx_styles.py', 'core/ficc/fx.py', 'core/ficc/sabr_diagnostics.py', 'tests/sabr_diagnostics_acceptance.py', 'core/ficc/swaps.py', 'tests/ficc_boundary_acceptance.py', 'tests/swaption_conversion_acceptance.py', 'core/research/**', 'core/education/**', 'core/i18n.py', 'core/ui*messages.py', 'tests/indicator_guide_acceptance.py', 'tests/glossary_search_acceptance.py', 'tests/web_indicator_guide_acceptance.py', 'ui/**', 'quantgen_desktop/**', 'tests/desktop*', 'tests/desktop_a3_layout_acceptance.py', 'tests/qt_fixture_cleanup.py', 'tests/desktop_a3_reading_acceptance.py', 'docs/product/A3_READING_LAYOUT_2026-11-06.md', 'tools/status/**', 'tools/packaging/**', 'tests/*research*', 'tests/data_readiness_acceptance.py', 'tests/packaging_policy_acceptance.py', 'tests/runtime_syntax_acceptance.py', 'tests/flet_runtime_acceptance.py', '.github/workflows/runtime-smoke.yml', 'core/market/**', 'data/kis_workspace.py', 'data/kis_stream.py', 'tests/market_core_acceptance.py', 'tests/market_routing_acceptance.py', 'tests/market_symbols_acceptance.py', 'tests/market_directory_acceptance.py', 'tests/stock_profile_acceptance.py', 'tests/market_board_core_acceptance.py', 'tests/market_received_bars_acceptance.py', 'tests/market_chart_presentation_acceptance.py', 'tests/kis_workspace_acceptance.py', 'tests/kis_stream_acceptance.py', 'tests/web_market_chart_acceptance.py', 'qa/research_status.json', 'tests/status_snapshot_acceptance.py', 'tests/instrument_identity_acceptance.py', 'core/recorded_status_display.py', 'tests/status_display_acceptance.py', 'tests/flet_a1_headers_acceptance.py', 'core/adoption/**', 'tests/adoption_strategy_rules_acceptance.py', 'core/ficc/curves.py', 'core/quant/history.py', 'core/research/rates_analysis.py', 'core/research/strategy_display.py', 'core/research/strategy_workflow.py', 'core/ui_page_messages/**', 'core/ui_legacy_messages.py', 'quantgen_desktop/rates.py', 'tests/history_best_source_acceptance.py', 'tests/curve_methods_acceptance.py', 'tests/strategy_lab_display_acceptance.py', 'tests/chart_reading_acceptance.py', 'tests/ficc_pages_display_acceptance.py', 'tests/build_pages_display_acceptance.py', 'tests/flet_korean_narratives_acceptance.py', 'tools/provider_parity/**', 'tests/provider_parity_acceptance.py', 'docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md', 'results/RULINGS.md', 'tools/provider_parity/btc_diagnose.py', 'tests/provider_parity_btc_diagnose_acceptance.py', 'docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md']
 permissions:
   contents: read
 jobs:
@@ -51,7 +54,7 @@ jobs:
           - os: windows-latest
             python: '3.14'
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 20
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
         with:
@@ -87,18 +90,41 @@ jobs:
       - name: Verify bounded source fixtures
         shell: bash
         run: |
-          python -m unittest tests.packaging_policy_acceptance tests.status_snapshot_acceptance tests.research_home_acceptance tests.research_contract_acceptance tests.data_readiness_acceptance tests.web_branding_acceptance tests.bond_funding_acceptance tests.crypto_hac_acceptance tests.ai_payload_acceptance tests.ai_connection_acceptance tests.ficc_boundary_acceptance tests.swaption_conversion_acceptance tests.sabr_diagnostics_acceptance tests.portfolio_scope_acceptance tests.terminal_target_acceptance tests.mc_volatility_acceptance tests.strategy_exposure_acceptance tests.ar1_decay_acceptance tests.funding_inference_acceptance tests.letf_assumptions_acceptance tests.letf_io_guard_acceptance tests.letf_ai_payload_acceptance tests.letf_disclosure_acceptance tests.letf_index_acceptance tests.quote_coverage_acceptance -v
+          python -m unittest tests.run_registry_outage_acceptance tests.run_registry_recorder_acceptance tests.run_registry_fold_acceptance tests.run_registry_series_files_acceptance tests.run_registry_series_format_acceptance tests.run_registry_series_hash_acceptance tests.run_registry_source_hash_acceptance tests.run_registry_data_hash_acceptance tests.run_registry_keys_acceptance tests.run_registry_store_acceptance tests.run_registry_codec_acceptance tests.instrument_identity_acceptance tests.packaging_policy_acceptance tests.status_snapshot_acceptance tests.research_home_acceptance tests.research_contract_acceptance tests.data_readiness_acceptance tests.web_branding_acceptance tests.bond_funding_acceptance tests.crypto_hac_acceptance tests.ai_payload_acceptance tests.ai_output_check_acceptance tests.ai_connection_acceptance tests.ficc_boundary_acceptance tests.swaption_conversion_acceptance tests.sabr_diagnostics_acceptance tests.portfolio_scope_acceptance tests.terminal_target_acceptance tests.mc_volatility_acceptance tests.strategy_exposure_acceptance tests.ar1_decay_acceptance tests.funding_inference_acceptance tests.letf_assumptions_acceptance tests.letf_io_guard_acceptance tests.letf_ai_payload_acceptance tests.letf_disclosure_acceptance tests.letf_index_acceptance tests.quote_coverage_acceptance tests.adoption_strategy_rules_acceptance tests.provider_parity_acceptance tests.provider_parity_btc_diagnose_acceptance -v
           python -m unittest tests.flet_runtime_acceptance -v
           python -m tools.status.snapshot --check
       - name: Install Linux Qt shared libraries for offscreen verification
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libegl1 libopengl0
+      - name: Install pinned native Qt runtime
+        run: python -m pip install "PyQt6==6.12.0"
+      - name: Verify live score and frozen report integration before long UI suites
+        env:
+          QT_QPA_PLATFORM: offscreen
+        shell: bash
+        run: |
+          python -m unittest tests.indicator_signal_context_acceptance tests.desktop_risk_reward_acceptance -f -v
+          python -m unittest tests.desktop_home_markets_shell_acceptance.ShellRailTests.test_window_mouse_click_on_hovered_country_opens_that_market tests.desktop_home_markets_shell_acceptance.ShellRailTests.test_single_destination_mouse_click_needs_no_submenu tests.desktop_home_markets_shell_acceptance.ShellRailTests.test_outside_window_click_dismisses_without_navigating tests.desktop_workspace_readability_acceptance -f -v
+          python -m unittest tests.desktop_windows_branding_acceptance tests.desktop_market_first_paint_acceptance tests.desktop_home_live_acceptance tests.ui_followup_acceptance tests.market_progressive_acceptance tests.desktop_stock_detail_acceptance.StockDetailTests.test_the_right_column_never_moves_sideways_with_seven_digit_prices tests.desktop_market_layout_acceptance.NativeMarketLayoutTests.test_chart_stays_pinned_when_its_market_container_reflows tests.desktop_market_layout_acceptance.NativeMarketLayoutTests.test_dynamic_indicator_panels_never_overlap_readouts_after_theme_and_width_changes -f -v
+          # Dispose prior market windows before checking queued worker previews.
+          python -m unittest tests.desktop_markets_watchlist_acceptance tests.desktop_market_tabs_acceptance tests.market_received_bars_acceptance tests.market_chart_presentation_acceptance tests.kis_workspace_acceptance tests.market_progressive_acceptance -f -v
+      - name: Verify A3 native result layout and local reading help
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m unittest tests.desktop_a3_layout_acceptance tests.desktop_a3_reading_acceptance -v
+      - name: Verify native chart text layout
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m unittest tests.desktop_workflow_guidance_acceptance tests.desktop_chart_rendering_acceptance tests.desktop_responsive_tools_acceptance tests.desktop_operation_fixes_acceptance tests.desktop_typography_acceptance tests.desktop_compact_ui_acceptance -v
+      - name: Verify approved A1 terminology and source preservation
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m unittest tests.desktop_a1_terms_acceptance tests.desktop_a1_status_acceptance tests.flet_a1_headers_acceptance -v
       - name: Verify native desktop with offline fixtures
         env:
           QT_QPA_PLATFORM: offscreen
         shell: bash
         run: |
-          python -m pip install "PyQt6==6.12.0"
           python -m unittest tests.desktop_acceptance tests.desktop_market_acceptance tests.desktop_strategy_acceptance tests.desktop_macro_acceptance tests.desktop_paper_acceptance tests.desktop_commentary_acceptance tests.desktop_portfolio_scope_acceptance tests.desktop_strategy_exposure_acceptance tests.desktop_ar1_decay_acceptance tests.desktop_funding_inference_acceptance tests.desktop_letf_assumptions_acceptance tests.desktop_letf_ai_acceptance tests.desktop_letf_disclosure_acceptance tests.desktop_letf_index_acceptance tests.desktop_quote_coverage_acceptance tests.desktop_swaption_conversion_acceptance tests.desktop_sabr_diagnostics_acceptance tests.desktop_language_acceptance tests.desktop_fx_language_acceptance tests.desktop_carry_language_acceptance tests.desktop_rates_language_acceptance tests.desktop_bonds_portfolio_language_acceptance tests.desktop_market_diagnostics_language_acceptance -v
           cd "$RUNNER_TEMP"
           python "$GITHUB_WORKSPACE/tools/packaging/smoke_desktop.py"
@@ -109,19 +135,31 @@ jobs:
       - name: Verify financial result interpretation across native and Flet outputs
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m unittest tests.fx_basis_disclosure_acceptance tests.cms_coupon_disclosure_acceptance tests.signals_trade_count_acceptance tests.forward_convention_acceptance tests.rates_revaluation_params_acceptance -v
+        run: python -m unittest tests.fx_basis_disclosure_acceptance tests.cms_coupon_disclosure_acceptance tests.signals_trade_count_acceptance tests.forward_convention_acceptance tests.rates_revaluation_params_acceptance tests.crypto_missing_values_acceptance tests.option_disclosure_acceptance tests.mc_bootstrap_disclosure_acceptance tests.etf_sleeve_disclosure_acceptance -v
+      - name: Verify owner UI review screens, curve methods and automatic data routing
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m unittest tests.history_best_source_acceptance tests.curve_methods_acceptance tests.strategy_lab_display_acceptance tests.chart_reading_acceptance tests.ficc_pages_display_acceptance tests.build_pages_display_acceptance tests.flet_korean_narratives_acceptance -v
+      - name: Verify the owner's 14 UI issues on the native app (UI-D1..D4)
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m unittest tests.desktop_owner_ui_integration_acceptance tests.desktop_owner_ui_strategy_acceptance tests.desktop_owner_ui_ficc_acceptance tests.desktop_owner_ui_market_acceptance tests.desktop_owner_ui_risk_acceptance tests.desktop_owner_ui_charts_acceptance tests.desktop_home_markets_shell_acceptance tests.desktop_home_markets_home_acceptance tests.desktop_home_markets_markets_acceptance tests.market_rankings_acceptance -v
       - name: Verify shared KIS charts and realtime lifecycle with offline fixtures
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m unittest tests.home_watchlist_acceptance tests.qscore_acceptance tests.watchlist_live_acceptance tests.desktop_watchlist_acceptance tests.desktop_qscore_acceptance tests.desktop_home_live_acceptance tests.desktop_market_layout_acceptance tests.market_core_acceptance tests.market_routing_acceptance tests.market_symbols_acceptance tests.market_board_core_acceptance tests.desktop_market_board_acceptance tests.desktop_market_tabs_acceptance tests.market_received_bars_acceptance tests.market_chart_presentation_acceptance tests.kis_workspace_acceptance tests.kis_stream_acceptance tests.desktop_market_chart_acceptance tests.web_market_chart_acceptance -v
-      - name: Verify native chart text layout
+        shell: bash
+        run: |
+          python -m unittest tests.home_watchlist_acceptance tests.qscore_acceptance tests.watchlist_live_acceptance tests.desktop_watchlist_acceptance tests.desktop_qscore_acceptance tests.desktop_home_live_acceptance tests.desktop_market_layout_acceptance tests.market_core_acceptance tests.market_routing_acceptance tests.market_symbols_acceptance tests.market_board_core_acceptance tests.market_directory_acceptance tests.stock_profile_acceptance tests.kis_stream_acceptance tests.desktop_market_chart_acceptance tests.web_market_chart_acceptance tests.ui_followup_acceptance tests.stock_detail_core_acceptance -f -v
+          python -m unittest tests.desktop_stock_detail_acceptance -f -v
+          python -m unittest tests.indicator_engine_acceptance -f -v
+      - name: Verify recorded owner decision and readiness display
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m unittest tests.desktop_chart_rendering_acceptance tests.desktop_responsive_tools_acceptance tests.desktop_operation_fixes_acceptance -v
+        run: python -m unittest tests.status_display_acceptance tests.status_snapshot_acceptance -v
       - name: Verify indicator education and locale contracts
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m unittest tests.indicator_guide_acceptance tests.glossary_search_acceptance tests.web_indicator_guide_acceptance tests.desktop_indicator_guide_acceptance tests.chart_c_theme_acceptance -v
+        run: python -m unittest tests.indicator_catalog_acceptance tests.indicator_guide_acceptance tests.glossary_search_acceptance tests.web_indicator_guide_acceptance tests.desktop_indicator_guide_acceptance tests.chart_c_theme_acceptance -v
       - name: Retain the verified installable wheel
         uses: actions/upload-artifact@v4
         with:

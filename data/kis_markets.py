@@ -45,7 +45,8 @@ except Exception:                                    # pragma: no cover
     _requests = None
 
 MASTER_URL = "https://new.real.download.dws.co.kr/common/master/"
-_MASTERS = ("fo_idx_code_mts", "fo_com_code", "bond_code", "ffcode", "frgn_code", "idxcode")
+_MASTERS = ("fo_idx_code_mts", "fo_com_code", "bond_code", "ffcode", "frgn_code", "idxcode",
+            "kospi_code", "kosdaq_code")      # stock masters: core/market/directory.py name search
 
 # Market division codes (FID_COND_MRKT_DIV_CODE) confirmed by the probe.
 MKT_STOCK, MKT_INDEX, MKT_BOND = "J", "U", "B"

@@ -1,4 +1,4 @@
-"""Transparent, experimental Q-SCORE for the domestic-stock watchlist.
+"""Transparent, experimental Q-SCORE for Korean and US stocks.
 
 This is a new display composite, not an approved trading strategy, a valuation,
 or an estimate of future profit. It reuses QUANTGEN's existing technical-signal
@@ -16,6 +16,7 @@ from datetime import date, datetime, timedelta, timezone
 import math
 from numbers import Real
 from typing import Mapping
+from zoneinfo import ZoneInfo
 
 import numpy as np
 
@@ -25,7 +26,7 @@ from core.quant.risk import analyze_history
 from core.quant.signals import compute_signals
 
 
-METHODOLOGY = "Q-SCORE v0.1"
+METHODOLOGY = "Q-SCORE v0.2"
 MIN_SESSIONS = 200
 MAX_SESSIONS = 252
 MAX_HISTORY_AGE_DAYS = 7
@@ -50,7 +51,7 @@ def q_score_help(locale="ko") -> str:
             "살아 있는 시장에 맞춰 갱신됩니다. 실시간 목록에 연결하면 새 체결을 오늘의 "
             "잠정 가격에 반영해 점수를 다시 계산합니다. 별이 많을수록 현재 가격 흐름과 "
             "과거 위험을 함께 평가한 점수가 높다는 뜻입니다. 연결 상태와 점수 기준 시각도 확인하세요.\n\n"
-            "Q-SCORE v0.1은 실험적 연구 지표이며 예측력은 검증되지 않았습니다. "
+            "Q-SCORE v0.2은 실험적 연구 지표이며 예측력은 검증되지 않았습니다. "
             "기업가치 평가나 매수·매도 추천, 수익 보장이 아니며, QUANTGEN의 모든 모델을 "
             "실행한 결과는 아닙니다. 다른 분석과 함께 종목을 살펴보는 출발점으로 활용하세요."
         )
@@ -66,7 +67,7 @@ def q_score_help(locale="ko") -> str:
         "today's provisional price and recalculate the score. More stars mean a higher combined "
         "assessment of current price behavior and historical risk. Check the connection status "
         "and score timestamp too.\n\n"
-        "Q-SCORE v0.1 is an experimental research indicator with unvalidated predictive power. "
+        "Q-SCORE v0.2 is an experimental research indicator with unvalidated predictive power. "
         "It is not a fundamental valuation, a buy/sell recommendation or a guarantee of returns, "
         "and does not run every QUANTGEN model. Use it as a starting point alongside other analysis."
     )
@@ -79,15 +80,15 @@ def _instant(value) -> datetime:
     return parsed.astimezone(timezone.utc)
 
 
-def _day(value) -> date:
+def _day(value, session_zone=_KST) -> date:
     if isinstance(value, datetime):
-        return _instant(value).astimezone(_KST).date()
+        return _instant(value).astimezone(session_zone).date()
     if isinstance(value, date):
         return value
     text = str(value)
     if len(text) == 10:
         return date.fromisoformat(text)
-    return _instant(text).astimezone(_KST).date()
+    return _instant(text).astimezone(session_zone).date()
 
 
 def _positive(value) -> float:
@@ -116,7 +117,7 @@ def _result(status, reason, *, now, symbol="", source="", **fields):
 
 def compute_q_score(history, latest_price=None, as_of=None, *, source=None,
                     adjusted=None, interval="1d", symbol="", now=None,
-                    previous_as_of=None) -> dict:
+                    previous_as_of=None, asset="domestic_stock") -> dict:
     """Compute a bounded, JSON-safe score or an explicit non-score state.
 
     ``history`` may be a History, a daily adjusted MarketSnapshot, or a sequence
@@ -136,8 +137,14 @@ def compute_q_score(history, latest_price=None, as_of=None, *, source=None,
         # A broken clock cannot be used to claim current market data.
         return _result("unavailable", "invalid_clock", now=datetime.now(timezone.utc))
 
+    session_zone = _KST
+    if isinstance(history, MarketSnapshot):
+        asset = history.request.instrument.asset
+    if asset == "overseas_stock":
+        session_zone = ZoneInfo("America/New_York")
+
     def refuse(reason, *, status="unavailable", **fields):
-        return _result(status, reason, now=clock, symbol=symbol, source=source or "", **fields)
+        return _result(status, reason, now=clock, symbol=symbol, source=source or "", asset=asset, session_timezone=str(session_zone), **fields)
 
     try:
         if isinstance(history, MarketSnapshot):
@@ -145,10 +152,11 @@ def compute_q_score(history, latest_price=None, as_of=None, *, source=None,
             source = history.source
             adjusted = history.request.adjusted
             interval = history.request.interval
-            if history.request.instrument.asset != "domestic_stock":
+            if asset not in ("domestic_stock", "overseas_stock") or (
+                    asset == "overseas_stock" and history.request.instrument.exchange not in ("NAS", "NYS", "AMS")):
                 return refuse("unsupported_instrument")
             rows = history.candles
-            dates = [_day(row.timestamp) for row in rows]
+            dates = [_day(row.timestamp, session_zone) for row in rows]
             values = [_positive(row.close) for row in rows]
         elif isinstance(history, History):
             symbol = history.symbol
@@ -156,15 +164,17 @@ def compute_q_score(history, latest_price=None, as_of=None, *, source=None,
             adjusted = history.adjustment in ("split", "total")
             if len(history.dates) != len(history.closes):
                 return refuse("invalid_history")
-            dates = [_day(d) for d in history.dates]
+            dates = [_day(d, session_zone) for d in history.dates]
             values = [_positive(p) for p in history.closes]
         else:
             rows = tuple(history) if history is not None else ()
-            dates = [_day(_field(row, "timestamp")) for row in rows]
+            dates = [_day(_field(row, "timestamp"), session_zone) for row in rows]
             values = [_positive(_field(row, "close")) for row in rows]
     except (AttributeError, KeyError, TypeError, ValueError, OverflowError):
         return refuse("invalid_history")
 
+    if asset not in ("domestic_stock", "overseas_stock"):
+        return refuse("unsupported_instrument")
     if interval != "1d":
         return refuse("daily_history_required")
     if str(source or "").upper() not in _SOURCES:
@@ -175,7 +185,7 @@ def compute_q_score(history, latest_price=None, as_of=None, *, source=None,
         return refuse("insufficient_history", status="insufficient_data", sessions=len(values))
     if any(b <= a or (b - a).days > 14 for a, b in zip(dates, dates[1:])):
         return refuse("invalid_history_dates")
-    today = clock.astimezone(_KST).date()
+    today = clock.astimezone(session_zone).date()
     if dates[-1] > today:
         return refuse("future_history")
     if (today - dates[-1]).days > MAX_HISTORY_AGE_DAYS:
@@ -195,7 +205,7 @@ def compute_q_score(history, latest_price=None, as_of=None, *, source=None,
             return refuse("future_quote")
         if age > MAX_QUOTE_AGE_SECONDS:
             return refuse("stale_quote")
-        tick_day = tick_time.astimezone(_KST).date()
+        tick_day = tick_time.astimezone(session_zone).date()
         if (previous is not None and tick_time < previous) or tick_day < dates[-1]:
             return refuse("out_of_order_quote")
         # Conservative guard against mixing a split-adjusted scale with a raw
@@ -243,5 +253,5 @@ def compute_q_score(history, latest_price=None, as_of=None, *, source=None,
         live=tick_time is not None, sessions=len(series), components=components,
         price_basis="provisional_daily" if tick_time else "adjusted_daily",
         history_start=dates[0].isoformat(), history_end=dates[-1].isoformat(),
-        last_price=values[-1],
+        last_price=values[-1], asset=asset, session_timezone=str(session_zone),
     )

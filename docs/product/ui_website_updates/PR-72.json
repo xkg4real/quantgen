@@ -1,0 +1,87 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-option-disclosures-pr-72",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "Owner ruling 2026-11-03: the website is handled in a separate session and this session does not modify it; this record does not establish receipt.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "claude/s10-options-20261104",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/72",
+    "implementation_commit": "a4b7c3c",
+    "remote_status": "OPEN",
+    "merge_commit": null,
+    "verified_head": null
+  },
+  "summary_ko": [
+    "옵션판의 델타 헤지 손익: GBM 엔진은 기대 평균이 정의상 0이므로 부호를 색칠하거나 '번다'고 말하지 않고 '모의 평균 손익'으로 표시합니다. GARCH-t 결과는 그대로입니다.",
+    "모형 없는 내재변동성(MFIV): 호가가 있는 행사가 범위(선도 대비 %)와, 그 밖의 날개를 빼서 생기는 하향 편향을 화면·해설·AI 페이로드·내보내기에 밝힙니다. MFIV 값은 같습니다.",
+    "인접 행사가 박스 금리: 네 다리가 모두 양방향 호가일 때만 계산하고, 0.01포인트당 민감도와 매수·매도호가 기준 범위를 함께 보이며 '조달금리 추정치가 아닌 호가 품질 점검'으로 표시합니다.",
+    "§10 수정 집계 27/67(남은 40)."
+  ],
+  "website_impact": {
+    "classification": "shared_browser_change",
+    "browser_code_changed": true,
+    "shared_sources": [
+      "core/research/derivatives_workflow.py",
+      "core/research/option_disclosure.py",
+      "ui/derivatives_page.py"
+    ],
+    "requested_actions_ko": [
+      "소개사이트가 옵션판(파생상품) 화면을 보여 준다면 헤지 손익 타일의 중립 색·'모의 평균' 문구, MFIV 행사가 범위 타일, 박스 금리 '호가 점검' 표시를 반영할지 검토하세요.",
+      "정책 FACTS의 2026-11-04 옵션판 절을 웹 Docs에 반영할지 검토하세요.",
+      "웹 HTML/소스는 GitHub에 올리지 않습니다."
+    ]
+  },
+  "verification": {
+    "tests": [
+      {
+        "suite": "option disclosure (new)",
+        "passed": 11
+      },
+      {
+        "suite": "after merging main d5e73ae: option, crypto, desktop, Markets, typography, prose language, status, compliance, Flet runtime (23 modules)",
+        "passed": 204
+      }
+    ],
+    "counts_note": "Suites can overlap; do not sum. Local Linux PyQt6 6.12.0 offscreen, Python 3.13, network and docs/asset_expansion/cache blocked.",
+    "source_review": "20 documents PASS after named refresh; publication BLOCKED",
+    "ci": "PENDING",
+    "ci_runs": [],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "Not verified on the owner's Windows PC."
+  },
+  "website_application": {
+    "status": "not_applied",
+    "deployment_status": "not_deployed",
+    "url": "https://quantgeneration.com/"
+  },
+  "limits_ko": [
+    "실제 KIS 옵션판(양방향 호가 비율, 행사가 필터)으로는 미검증입니다.",
+    "core/ficc/equity_deriv.py는 바꾸지 않았습니다. 등록부(KNOWN_ERRORS_REGISTER)의 ±10% 비교 수치는 이 PR에서 고치지 않았습니다.",
+    "실제 Windows 화면은 미검증입니다."
+  ],
+  "changed_files": [
+    ".github/workflows/runtime-smoke.yml",
+    "README.md",
+    "core/research/derivatives_workflow.py",
+    "core/research/option_disclosure.py",
+    "docs/compliance/14-contrast.md",
+    "docs/compliance/FACTS.md",
+    "docs/compliance/source-review.json",
+    "docs/product/OPTION_DISCLOSURE_2026-11-04.md",
+    "docs/product/SECTION10_QUEUE_2026-10-30.json",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md",
+    "docs/product/ui_website_updates/PR-72.json",
+    "qa/research_status.json",
+    "quantgen_desktop/display_prose_catalog.py",
+    "quantgen_desktop/market_narrative_language.py",
+    "quantgen_desktop/market_tools.py",
+    "tests/option_disclosure_acceptance.py",
+    "ui/derivatives_page.py"
+  ]
+}

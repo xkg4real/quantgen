@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import QWidget,QVBoxLayout,QGridLayout,QLineEdit,QComboBox,
 from core.research.bond_analysis import BondRequest
 from .charts import LineChart
 from .bonds_portfolio_narrative import bond_notes, hedge_text, display_variants
+from .model_narrative_language import localize_columns
 
 
 def group_digits(text):
@@ -23,9 +24,11 @@ class BondsPane(QWidget):
     def __init__(self):
         super().__init__()
         from .app import label,panel,table
+        from .form_layout import CompactFieldGrid,bound_input_panel,add_compact_action
         layout=QVBoxLayout(self);layout.setContentsMargins(0,12,0,0);layout.setSpacing(18)
-        box,inner=panel('Bonds · 가격·위험·시나리오·선물 헤지')
-        form=QGridLayout();self.fields={}
+        box,inner=panel('Bonds · price, risk, scenarios and futures hedge')
+        bound_input_panel(box,columns=4)
+        pairs=[];self.fields={}
         fields=[('Coupon %','4.50'),('Maturity · years','10'),('Notional','1000000'),
                 ('Price · per 100',''),('Yield %','4.50'),('Position DV01 · optional',''),
                 ('CTD DV01 / contract','65'),('Conversion factor','0.8')]
@@ -33,7 +36,7 @@ class BondsPane(QWidget):
             # Owner UI-4: amounts read with thousands separators (1,000,000); parsing strips them.
             w=QLineEdit(group_digits(value));w.setAccessibleName(name);self.fields[name]=w
             w.editingFinished.connect(lambda w=w:w.setText(group_digits(w.text())))
-            form.addWidget(label(name,'caption'),2*(i//4),i%4);form.addWidget(w,2*(i//4)+1,i%4)
+            pairs.append((label(name,'caption'),w))
         self.frequency=QComboBox()
         for text,value in [('Annual',1),('Semi-annual',2),('Quarterly',4)]:self.frequency.addItem(text,value)
         self.frequency.setCurrentIndex(1)
@@ -42,21 +45,39 @@ class BondsPane(QWidget):
         self.tool=QComboBox()
         for text,value in [('Calculator & risk','calc'),('Scenarios','scenarios'),('Futures hedge','hedge')]:self.tool.addItem(text,value)
         for i,(name,w) in enumerate((('Coupons / year',self.frequency),('Tool',self.tool))):
-            w.setAccessibleName(name);form.addWidget(label(name,'caption'),4,i);form.addWidget(w,5,i)
+            w.setAccessibleName(name);pairs.append((label(name,'caption'),w))
         # Owner UI-8: the curve provider is automatic (FRED, labelled synthetic fallback); no selector.
         self.source.setAccessibleName('Curve source');self.source.hide()
-        inner.addLayout(form)
-        inner.addWidget(label('가격과 수익률 중 하나만 입력하세요. Price를 입력할 때는 Yield를 비웁니다.','caption'))
-        self.run=QPushButton('채권 분석 실행');self.run.setProperty('primary',True);self.run.clicked.connect(self.submit);inner.addWidget(self.run)
-        self.status=label('곡선 출처와 관측일을 함께 표시합니다.','muted');inner.addWidget(self.status);layout.addWidget(box)
-        self.metrics=table(['Metric','Value']);self.metrics.setMinimumHeight(360);layout.addWidget(self.metrics)
+        self.form=CompactFieldGrid(pairs,max_columns=4)
+        inner.addWidget(self.form)
+        inner.addWidget(label('Enter either price or yield, not both. Clear yield when entering price.','caption'))
+        self.run=QPushButton('채권 분석 실행');self.run.setProperty('primary',True);self.run.clicked.connect(self.submit);add_compact_action(inner,self.run)
+        self.status=label('곡선 출처와 관측일을 함께 표시합니다.','muted');self.status.setProperty('reading_help_keep_visible',True);inner.addWidget(self.status);layout.addWidget(box)
+        from .chart_study import LocalLabel
+        self.empty=LocalLabel({'ko':'채권 조건을 입력하고 실행하면 가격·위험·시나리오가 여기에 나타나요.',
+                               'en':'Enter bond terms and run the analysis to see value, risk and scenarios here.'},'muted')
+        layout.addWidget(self.empty)
+        self.result_host=QWidget();layout.addWidget(self.result_host)
+        layout=QVBoxLayout(self.result_host);layout.setContentsMargins(0,0,0,0);layout.setSpacing(18)
+        self.result_host.hide()
+        from .result_layout import PairedResultPanels, fit_result_table
+        self.metrics=fit_result_table(table(['Metric','Value']));self.metrics.setProperty('localized_columns', [0])
+        metrics_box,metrics_layout=panel('Key metrics')
+        metrics_layout.addWidget(self.metrics);metrics_layout.addStretch()
+        self.krd=fit_result_table(table(['Key tenor · years','DV01 · currency / bp']))
+        krd_box,krd_layout=panel('DV01 by maturity')
+        krd_layout.addWidget(self.krd);krd_layout.addStretch()
+        self.result_panels=PairedResultPanels(metrics_box,krd_box)
+        layout.addWidget(self.result_panels)
         self.chart=LineChart('Yield (%)','Price per 100')
-        self.krd=table(['Key tenor · years','DV01 · currency / bp']);self.krd.setMinimumHeight(260);layout.addWidget(self.krd)
-        self.scenarios=table(['Scenario','Shock · bp','New price','P&L','P&L %']);self.scenarios.setMinimumHeight(310);layout.addWidget(self.scenarios);self.scenarios.hide()
-        self.hedge=label('');layout.addWidget(self.hedge)
         self.notes=label('','muted')
+        self.notes.setProperty('reading_help_keep_visible',True)
         from .chart_study import ChartStudy
-        layout.insertWidget(2,ChartStudy(self.chart,self.notes))
+        self.study=ChartStudy(self.chart,self.notes)
+        chart_box,chart_layout=panel('Yield and bond price')
+        chart_layout.addWidget(self.study);layout.addWidget(chart_box)
+        self.scenarios=table(['Scenario','Shock · bp','New price','P&L','P&L %']);self.scenarios.setMinimumHeight(310);layout.addWidget(self.scenarios);self.scenarios.hide()
+        self.hedge=label('');self.hedge.setProperty('reading_help_keep_visible',True);layout.addWidget(self.hedge)
         from .report_actions import ReportActions
         self.exports = ReportActions(self.status)
         layout.addWidget(self.exports)
@@ -74,15 +95,18 @@ class BondsPane(QWidget):
             q.validate()
         except (ValueError,TypeError):
             self.clear_result()
-            self.status.setText('입력 오류 · 유한한 수치와 유효한 만기·금액을 입력하고 Price/Yield 중 하나만 남기세요.');return
+            self.status.setText('Input error · Enter finite values and valid maturity/amount; keep either price or yield.');return
         self.requested.emit(q)
 
     def show_result(self,o):
         from .app import table_rows
+        self.empty.hide();self.result_host.show()
         a=o.analytics;cr=a.carry_roll
+        # Values are language-neutral (the unit 'y' as in tenors, DV01's unit in its caption), so a
+        # Korean window shows no English unit words (owner issues 03/14); captions translate.
         table_rows(self.metrics,[('Price',f'{a.price:.3f}'),('Yield',f'{a.ytm:.3%}'),
-            ('Macaulay duration',f'{a.macaulay:.3f} years'),('Modified duration',f'{a.modified:.3f}'),
-            ('Convexity',f'{a.convexity:.3f}'),('DV01',f'{a.dv01:,.2f} currency / bp'),
+            ('Macaulay duration',f'{a.macaulay:.3f}y'),('Modified duration',f'{a.modified:.3f}'),
+            ('Convexity',f'{a.convexity:.3f}'),('DV01 · currency per bp',f'{a.dv01:,.2f}'),
             ('z-spread',f'{a.z_spread*10000:.2f} bp'),('Curve price',f'{a.curve_price:.3f}'),
             (f'Carry · {cr.horizon:g} years',f'{cr.carry:+.3f}'),('Roll-down',f'{cr.rolldown:+.3f}'),
             ('Carry + roll',f'{cr.total:+.3f}'),
@@ -90,6 +114,7 @@ class BondsPane(QWidget):
         self.chart.set_series(o.yield_axis,[('Price',o.price_curve),('Duration tangent',o.duration_tangent)])
         table_rows(self.krd,[[f'{k:g}',f'{v:,.2f}'] for k,v in sorted(a.krd.items())])
         table_rows(self.scenarios,[[r.name,str(r.shock_bp),f'{r.new_price:.3f}',f'{r.pnl:+,.2f}',f'{r.pnl_pct:+.2%}'] for r in o.scenarios])
+        localize_columns(self.scenarios,(0,))  # scenario names ('+25bp parallel', 'bear steepener')
         self.scenarios.setVisible(bool(o.scenarios))
         self.hedge.setText('')
         if o.hedge:
@@ -114,6 +139,7 @@ class BondsPane(QWidget):
 
     def clear_result(self):
         self.exports.clear()
+        self.result_host.hide();self.empty.show()
         for widget in (self.metrics, self.krd, self.scenarios):
             widget.setRowCount(0)
         self.chart.set_series([], [])

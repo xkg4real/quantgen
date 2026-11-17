@@ -6,6 +6,9 @@ recomputed; unknown/user/provider text is left intact.
 from .translations import translate
 
 SIGNAL_STANCES = frozenset(('strong bullish', 'bullish', 'neutral', 'bearish', 'strong bearish'))
+# Whole-note Greek keys of `core.ficc.structured.ProductReport.greeks`; the 2s10s name keeps the
+# key's digits (2, 10, 01) so the number tokens match the English narrative.
+GREEK_KO = {'delta': '델타', 'gamma': '감마', 'vega': '베가', 'dv01': 'DV01', 'dv01_2s10s': '2년·10년 스프레드 DV01'}
 
 
 def localize_columns(table, columns):
@@ -26,6 +29,29 @@ def localize_cell(table, row, column):
     table.setProperty('localized_columns', sorted(set(table.property('localized_columns') or ()) | {column}))
     item = table.item(row, column)
     if item is not None: item.setData(CAPTION_ROLE, item.text())
+
+
+def show_as(table, *, cells=(), headers=()):
+    """Display-only wording for chosen cells and headers (owner issues 07/14: no raw keys on screen).
+
+    `cells` holds (row, column, english) and `headers` (column, english): that English caption is shown
+    instead of the table's own text and translated like any caption when the window language changes.
+    The rows given to `result_table` (export sections, report, AI payload) keep their own text."""
+    from .localization import CAPTION_ROLE
+    from .translations import display
+    columns = set(table.property('localized_columns') or ())
+    for row, column, english in cells:
+        item = table.item(row, column)
+        if item is not None:
+            item.setData(CAPTION_ROLE, english)
+            item.setText(display(table, english))
+            columns.add(column)
+    table.setProperty('localized_columns', sorted(columns))
+    for column, english in headers:
+        item = table.horizontalHeaderItem(column)
+        if item is not None:
+            item.setData(CAPTION_ROLE, english)
+            item.setText(display(table, english))
 
 
 def signals_korean(s, b):
@@ -77,7 +103,7 @@ def signals_korean(s, b):
 
 def structured_korean(p):
     from core.ficc.common import BP, tenor_label
-    from core.ficc.insights import _money, _pct
+    from core.ficc.insights import _greek, _money, _pct
     tr = lambda value: translate(value, 'ko')
     cms = str(getattr(p, 'underlying', '')).startswith('CMS')
     ux = (lambda x: f'{x / BP:+.0f}bp') if cms else (lambda x: f'{x:g}')
@@ -97,8 +123,11 @@ def structured_korean(p):
             if cms else f'연간 쿠폰은 {_pct(p.coupon)}입니다.')
     g = dict(getattr(p, 'greeks', {}) or {})
     if g:
-        lines.append('상품 전체 위험: ' + ', '.join(
-            f'{k} {_money(v, signed=True)}' if k == 'dv01' else f'{k} {v:+.4g}' for k, v in g.items()) + '.')
+        # Greek names and their currency in Korean. The figures use the English narrative's own
+        # formatter (core.ficc.insights._greek) so both languages carry the same number tokens.
+        lines.append(f'상품 전체 위험 (단위 {p.currency}): ' + ', '.join(
+            f'{GREEK_KO.get(k, k)} {_money(v, signed=True)}' if k == 'dv01' else f'{GREEK_KO.get(k, k)} {_greek(v)}'
+            for k, v in g.items()) + '.')
     if getattr(p, 'payoff_grid', ()):
         lo, hi = p.payoff_grid[0], p.payoff_grid[-1]
         lines.append(f'만기 지급액은 기초자산 {ux(lo[0])}에서 100당 {lo[1]:.2f}, '

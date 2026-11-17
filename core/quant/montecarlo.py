@@ -11,9 +11,14 @@ Four models, all calibrated from the supplied history's daily log returns:
     return sample at 3σ: the outlier frequency sets the jump intensity, the
     outliers themselves set the jump size distribution. With no outliers in
     the sample it degrades to GBM, which is the honest answer.
-  * **BOOTSTRAP** — stationary block bootstrap of the actual return sample.
-    No distributional assumption: fat tails and volatility clustering survive
-    exactly as far as they exist in the data.
+  * **BOOTSTRAP** — circular block bootstrap of the demeaned return sample in
+    fixed blocks of 5 sessions, wrapping at the sample end (not the stationary
+    bootstrap, whose block lengths are random). No distributional assumption:
+    each day's shock is one of the sample's demeaned returns, so its fat tails
+    survive. Volatility clustering is kept only within a block: over a
+    horizon well beyond 5 sessions lag k keeps about (5-k)/5 of the sample's
+    (more over a shorter one), none from lag 5, and the fan does not start
+    from the current vol level.
 
 DRIFT — every model draws zero-mean shocks; `drift` chooses what is added:
 

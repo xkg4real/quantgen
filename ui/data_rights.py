@@ -4,6 +4,9 @@ from core.i18n import LocaleContext
 from core.research.display_rights import display_rights,policy_detail
 from core.theme import active
 
+# Record frequency codes as words (translated through the page catalogue); 'daily' has its own message key.
+_FREQUENCY={'weekly':'Weekly','monthly':'Monthly','month_end':'Month-end','event':'Event-driven'}
+
 
 class DataRightsPanel(ft.Column):
     def __init__(self,page):
@@ -27,7 +30,8 @@ class DataRightsPanel(ft.Column):
                 details=[ft.Column([ft.Text(title,size=12,color=pal.muted),ft.Text(value,size=13,selectable=True)],spacing=4)
                          for title,value in policy_detail(self.record,row,ctx)]
                 items.append(ft.ExpansionTile(title=ft.Text(label,size=13),
-                    subtitle=ft.Text(ctx.t('daily') if row['frequency']=='daily' else row['frequency'],size=11),
+                    subtitle=ft.Text(ctx.t('daily') if row['frequency']=='daily'
+                                     else ctx.text(_FREQUENCY.get(row['frequency'],row['frequency'])),size=11),
                     controls=[ft.Container(ft.Column(details,spacing=12),padding=16)]))
         self.entries.controls=items
 

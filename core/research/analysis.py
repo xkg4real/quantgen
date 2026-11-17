@@ -24,7 +24,9 @@ class AnalysisRequest:
     def parameters(self):
         if not self.symbol.strip() or len(self.symbol.strip()) > 120:
             raise ValueError("Enter a symbol of 1–120 characters")
-        if self.source_requested not in {"auto", "fmp", "kis", "synthetic"}:
+        # "best" (owner UI review, 2026-11-10): the screens hide the source selector and ask
+        # core.quant.history.load_history for its own routing (keyless Yahoo before a synthetic fallback).
+        if self.source_requested not in {"auto", "best", "fmp", "kis", "synthetic"}:
             raise ValueError("Unknown data source")
         if self.model not in {"garch_t", "gbm", "jump", "bootstrap"}:
             raise ValueError("Unknown model")

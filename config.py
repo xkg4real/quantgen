@@ -108,6 +108,9 @@ KIS_QUOTATION_ALLOWLIST = frozenset({
     "/uapi/domestic-futureoption/v1/quotations/display-board-callput",
     "/uapi/domestic-futureoption/v1/quotations/inquire-asking-price",
     "/uapi/overseas-price/v1/quotations/price",
+    # Overseas price-detail (HHDFS76200200): US market cap 'tomv' and listed shares 'shar' for the Markets
+    # ranked list. Read-only quotation path, added with the owner's approval 2026-11-11 ("승인.").
+    "/uapi/overseas-price/v1/quotations/price-detail",
     "/uapi/overseas-price/v1/quotations/dailyprice",
     "/uapi/overseas-price/v1/quotations/inquire-time-itemchartprice",
     "/uapi/overseas-price/v1/quotations/inquire-daily-chartprice",

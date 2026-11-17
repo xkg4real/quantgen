@@ -74,7 +74,7 @@ class NativeLanguageTests(unittest.TestCase):
         canonical = copy.deepcopy(w.fx.report)
         self.drain()
         metrics = w.fx.tables['Metrics']
-        self.assertEqual(metrics.horizontalHeaderItem(0).text(), '측정 항목')
+        self.assertEqual(metrics.horizontalHeaderItem(0).text(), '항목')
         captions = [metrics.item(r, 0).text() for r in range(metrics.rowCount())]
         self.assertIn('행사가격', captions)
         values = [metrics.item(r, 1).text() for r in range(metrics.rowCount())]

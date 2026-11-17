@@ -14,6 +14,7 @@ from quantgen_desktop.localization import UiLabel
 from PyQt6.QtCore import QEvent,QPoint,QSize
 from PyQt6.QtWidgets import QApplication,QWidget,QScrollArea,QComboBox
 from PyQt6.QtTest import QTest
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 
 class ResponsiveToolTests(unittest.TestCase):
@@ -30,13 +31,13 @@ class ResponsiveToolTests(unittest.TestCase):
     def window(self):
         w=ResearchWindow(auto_refresh=False,language='en');w.resize(1440,1000);w.show()
         def cleanup():
-            w.hide();w.deleteLater();self.app.sendPostedEvents(None,QEvent.Type.DeferredDelete)
+            delete_owned_widget(w)
         self.addCleanup(cleanup)
         return w
 
     def overflow_context(self, window, pane, width, language):
         scroll=window.stack.currentWidget()
-        tabs=window.market_tabs if pane is window.macro else window.risk_tabs
+        tabs=window.tool_host if pane is window.macro else window.risk_tabs
         def geometry(widget):
             hint=widget.minimumSizeHint()
             return f'{widget.width()}x{widget.height()} min={widget.minimumWidth()} hint={hint.width()}x{hint.height()}'
@@ -44,15 +45,16 @@ class ResponsiveToolTests(unittest.TestCase):
                 f'viewport={geometry(scroll.viewport())} content={geometry(scroll.widget())} '
                 f'pane={geometry(pane)} input_box={geometry(pane.input_box)} '
                 f'study={geometry(pane.study)} tabs={geometry(tabs)} '
-                f'tabbar={geometry(tabs.tabBar())} tool={geometry(pane.tool)} source={geometry(pane.source)}')
+                f'tabbar={geometry(tabs.tabBar()) if hasattr(tabs, "tabBar") else "-"} '
+                f'tool={geometry(pane.tool)} source={geometry(pane.source)}')
 
     def test_inactive_oversize_page_does_not_set_selected_page_minimum(self):
         tabs=CurrentPageTabs();small=QWidget();large=QWidget();large.setMinimumSize(8000,9000)
+        self.addCleanup(delete_owned_widget,tabs)
         tabs.addTab(small,'Small');tabs.addTab(large,'Large');tabs.setCurrentWidget(small)
         self.assertLess(tabs.minimumSizeHint().width(),1000);self.assertLess(tabs.minimumSizeHint().height(),1000)
         tabs.setCurrentWidget(large);self.assertGreaterEqual(tabs.minimumSizeHint().width(),8000)
         tabs.setCurrentWidget(small);self.assertLess(tabs.minimumSizeHint().width(),1000)
-        tabs.deleteLater()
 
     def test_height_for_width_uses_selected_page_and_keeps_explicit_minimum(self):
         class WrappingPage(QWidget):
@@ -63,6 +65,7 @@ class ResponsiveToolTests(unittest.TestCase):
             def hasHeightForWidth(self): return True
             def heightForWidth(self,width): return self.content_height
         tabs=CurrentPageTabs(); small=WrappingPage(50); large=WrappingPage(9000)
+        self.addCleanup(delete_owned_widget,tabs)
         tabs.addTab(small,'Small'); tabs.addTab(large,'Large')
         tabs.setCurrentWidget(small)
         self.assertTrue(tabs.hasHeightForWidth())
@@ -74,7 +77,6 @@ class ResponsiveToolTests(unittest.TestCase):
         self.assertGreaterEqual(tabs.heightForWidth(700),9000)
         tabs.setCurrentWidget(small)
         self.assertLess(tabs.heightForWidth(700),600)
-        tabs.deleteLater()
 
     def test_signals_render_locale_narrow_wide_keeps_narrative_inside_viewport(self):
         w=self.window();pane=w.signals;out=signals_fixture(SignalsRequest(source='synthetic'))
@@ -88,10 +90,22 @@ class ResponsiveToolTests(unittest.TestCase):
                     scroll=w.stack.currentWidget();self.assertIsInstance(scroll,QScrollArea)
                     self.assertEqual(scroll.horizontalScrollBar().maximum(),0,
                                      self.overflow_context(w,pane,width,language))
+                    # Owner issue 11: headed bullets are shown; the full paragraph is folded below them.
+                    view=pane.narrative_view
+                    x=view.mapTo(scroll.viewport(),QPoint(0,0)).x()
+                    self.assertGreaterEqual(x,0);self.assertLessEqual(x+view.width(),scroll.viewport().width())
+                    from quantgen_desktop.narrative_view import NarrativeLine
+                    lines=[l for l in view.findChildren(NarrativeLine) if l.isVisible() and l.property('narrative_line')]
+                    self.assertTrue(lines)
+                    for line in lines:
+                        self.assertGreaterEqual(line.height()+2,line.heightForWidth(line.width()))
                     narrative=next(x for x in pane.findChildren(UiLabel) if x.source_text==out.narrative)
+                    fold=narrative.parentWidget();fold.toggle.setChecked(True);self.settle()
+                    self.assertEqual(scroll.horizontalScrollBar().maximum(),0)
                     x=narrative.mapTo(scroll.viewport(),QPoint(0,0)).x()
                     self.assertGreaterEqual(x,0);self.assertLessEqual(x+narrative.width(),scroll.viewport().width())
                     self.assertGreaterEqual(narrative.height()+2,narrative.heightForWidth(narrative.width()))
+                    fold.toggle.setChecked(False);self.settle()
                     self.assertEqual(pane.report,before)
 
     def test_platform_wide_header_options_fit_without_losing_selection_or_text(self):
@@ -112,6 +126,11 @@ class ResponsiveToolTests(unittest.TestCase):
             pane.tool.setCurrentIndex(pane.tool.findData('weekly'))
             pane.source.setCurrentIndex(pane.source.findData('fred'))
             w.navigate('markets');w.show_market_pane(pane);w.resize(1000,1000)
+            self.settle()
+            # The thinner rail leaves more room than the original 710px probe
+            # assumed. Force a genuinely oversized native hint on every font/DPI.
+            pane.tool.setProperty('platform_intrinsic_width',
+                                  max(251+459, w.stack.currentWidget().viewport().width()+100))
             choices=[[combo.itemData(i) for i in range(combo.count())] for combo in (pane.tool,pane.source)]
             policies=[combo.sizeAdjustPolicy() for combo in (pane.tool,pane.source)]
             request=pane.make_request()
@@ -120,7 +139,9 @@ class ResponsiveToolTests(unittest.TestCase):
                 combo.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToContents)
                 combo.updateGeometry()
             self.settle()
-            self.assertGreater(w.stack.currentWidget().horizontalScrollBar().maximum(),0)
+            # The bounded panel can now contain even a bad native hint. Verify
+            # that the injected hint is oversized, then exercise the real policy.
+            self.assertGreater(pane.tool.minimumSizeHint().width(),w.stack.currentWidget().viewport().width())
             for combo,policy in zip((pane.tool,pane.source),policies):
                 combo.setSizeAdjustPolicy(policy)
                 combo.updateGeometry()

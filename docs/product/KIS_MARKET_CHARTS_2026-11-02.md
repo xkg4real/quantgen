@@ -126,3 +126,15 @@ visible-bar inputs are gone (240 bars are loaded, 120 shown, and the mouse wheel
 `+`/`-` zooms between 20 bars and all loaded bars). Source and times are two short
 lines; the longer provider notes moved to the “데이터 설명” panel.
 
+
+## 2026-11-04 follow-up (Markets rework)
+
+The asset-class tabs are gone. The chart now sits in one stock's screen on Markets,
+opened from a watchlist card, a code-or-name search result or the Home detail
+dialog; futures and bonds open by code through the search bar's kind selector. With
+automatic refresh on, opening an instrument loads the chart and starts the supported
+trade stream as the Load button does. The two source/time lines are replaced by a
+delay notice shown only when the data is not domestic real-time; provider and fetch
+and market times are in the price tooltip. The Yahoo Finance fallback notice, status
+line and stale/failed states are unchanged. See
+[the Markets rework record](MARKETS_WATCHLIST_2026-11-04.md).

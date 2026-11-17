@@ -1,0 +1,71 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-a1-terminology-pr-76",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "No supported cross-chat sending tool is available; this file is not delivery evidence.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "gpt/ui-a1-20261106",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/76",
+    "implementation_commit": "44c13da33f9aaff611ecfaa14abd5ca8a8d2f24f",
+    "remote_status": "OPEN",
+    "merge_commit": null,
+    "verified_head": null,
+    "owner_design_confirmed_on": "2026-11-06"
+  },
+  "summary_ko": [
+    "승인 용어와 한영 전환을 Native/Flet 지정 화면에 적용합니다.",
+    "작성된 표 머리글·상태를 공급사/사용자 값과 명시적으로 구분합니다.",
+    "공식 판정 코드와 연결 설정/응답 의미, 일간 관측의 한계 및 원문 보고서를 보존합니다."
+  ],
+  "website_impact": {
+    "classification": "shared_browser_change",
+    "browser_code_changed": true,
+    "shared_sources": [
+      "core/ui_messages.py",
+      "core/ui_legacy_messages.py",
+      "core/education/glossary.py",
+      "ui/localization.py",
+      "ui/bonds_page.py",
+      "ui/structuring_page.py",
+      "ui/krx_page.py",
+      "ui/macro_page.py",
+      "ui/rates_page.py",
+      "ui/fx_page.py"
+    ],
+    "requested_actions_ko": [
+      "실제 Flet/웹 머리글과 소개 문구에 승인 용어가 필요한지 대조하세요.",
+      "사용자·공급사 값과 원문 보고서는 번역 치환하지 말고 문맥별 작성된 머리글만 적용하세요.",
+      "실제 HTML 반영·배포는 소유자 별도 작업이며 이 PR은 배포하지 않습니다."
+    ]
+  },
+  "verification": {
+    "tests": [
+      {
+        "suite": "20 integrated guarded synthetic modules",
+        "passed": 167
+      }
+    ],
+    "counts_note": "Linux offscreen Qt; fake HTTP and isolated temporary state; network/dotenv/protected cache/actual ledger denied.",
+    "source_review": "20 policies consistency PASS; publication BLOCKED",
+    "ci": "PENDING_FINAL_HEAD",
+    "ci_runs": [],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "NOT_RUN"
+  },
+  "website_application": {
+    "status": "not_verified",
+    "deployment_status": "not_verified",
+    "url": "https://quantgeneration.com/"
+  },
+  "limits_ko": [
+    "A1 승인 범위만 구현했으며 전체 Flet 번역이나 A3 완료를 주장하지 않습니다.",
+    "Windows 실제 PC/API/법률/라이선스/공급사/파일럿/동결연구 증거는 미확보입니다.",
+    "추가 GPT/Gemini spec 공개·심사는 선택적 NOT_PERFORMED입니다."
+  ]
+}

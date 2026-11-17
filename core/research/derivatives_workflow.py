@@ -6,9 +6,10 @@ from typing import Optional
 import numpy as np
 import config
 from core.ficc import equity_deriv as ED
-from core.ficc.common import BP, FICCError
+from core.ficc.common import FICCError
 from core.ficc.swaps import black76
 from .quote_coverage import quote_coverage, quote_coverage_text, static_payload
+from .option_disclosure import box_check, box_text, hedge_scope, hedge_text, mfiv_strip, mfiv_text
 
 def synthetic_board(F: float = 1126.0, T: float = 20 / 365, r: float = 0.032, seed: int = 3):
     """A smile-shaped board with two-sided quotes, for the demo and the tests."""
@@ -85,14 +86,8 @@ def snapshot(*, source: str = "kis", expiry: str = "", rate_pct: Optional[float]
     except FICCError as exc:
         mv = {"vol": float("nan"), "n_strikes": 0, "error": str(exc)}
     rnd = ED.rnd_from_svi(fit, F, rate)
-    box = None
-    try:
-        below = max(q.strike for q in quotes if q.strike <= F)
-        above = min(q.strike for q in quotes if q.strike > F)
-        # a box from closed-market last prints is four stale prices: not a rate
-        box = ED.box_rate(quotes, T, k1=below, k2=above) if out.get("live_quotes", True) else None
-    except (FICCError, ValueError):
-        box = None
+    # a box from closed-market last prints, one-sided quotes or a missing leg is not a rate (§10 M4-N4)
+    box, box_chk = box_check(quotes, T, F, live=out.get("live_quotes", True))
     fq = out["futures"]
     basis = ED.basis_report(fq["price"], fq["underlying_level"], rate, max(fq.get("days_left") or 1, 1) / 365.0,
                             exchange_theo=fq.get("theo"))
@@ -105,10 +100,13 @@ def snapshot(*, source: str = "kis", expiry: str = "", rate_pct: Optional[float]
         from core.quant.garch import fit_garch
         r = np.diff(np.log(out["index_close"]))
         garch_fit = fit_garch(r, dist="t", profile=False)
-    sim = ED.hedge_pnl_simulation(spot=spot, strike=round(F / 2.5) * 2.5, horizon_days=hz, sigma_hedge=sigma_h,
-                                  rate=rate, engine=engine, garch_fit=garch_fit, n_paths=n_paths, seed=7)
+    # One set of arguments feeds the simulation and its disclosure, so the label cannot drift from the run.
+    sim_args = dict(sigma_hedge=sigma_h, engine=engine, sigma_true=None, drift_daily=None, cost_bps=0.0)
+    sim = ED.hedge_pnl_simulation(spot=spot, strike=round(F / 2.5) * 2.5, horizon_days=hz, rate=rate,
+                                  garch_fit=garch_fit, n_paths=n_paths, seed=7, **sim_args)
     out.update(F=F, k0=k0, points=pts, reconcile=rec, parity=par, arbitrage=arb, svi=fit, atm=atm, mfiv=mv, rnd=rnd,
-               box=box, basis=basis, sigma_h=sigma_h, hedge=sim, garch=garch_fit, n_quotes=len(quotes))
+               box=box, basis=basis, sigma_h=sigma_h, hedge=sim, garch=garch_fit, n_quotes=len(quotes),
+               box_check=box_chk, hedge_scope=hedge_scope(**sim_args))
     out['quote_coverage'] = quote_coverage(arb, par)
     return out
 
@@ -129,17 +127,19 @@ def narrative(s: dict) -> str:
         f"{' (within the 0.5-point gate)' if s['reconcile']['ok'] else ' (outside the 0.5-point gate: check the convention)'}. "
         f"SVI fits the smile with RMSE {fit.rmse_volpts:.2f} vol points, skew ρ {fit.rho:+.2f}"
         f"{', arbitrage-free' if fit.arbitrage_free else ', with a butterfly-arbitrage region'}.",
-        (f"Model-free implied vol {mv['vol']:.1%} over {mv['n_strikes']} strikes (VKOSPI-style strip)."
-         if mv.get("n_strikes") else f"Model-free variance not computed: {mv.get('error', '')}"),
+        (f"Model-free implied vol {mv['vol']:.1%} over {mv['n_strikes']} strikes (VKOSPI-style strip). "
+         + mfiv_text(mfiv_strip(s)) if mv.get("n_strikes") else f"Model-free variance not computed: {mv.get('error', '')}"),
         quote_coverage_text(s['quote_coverage']),
-        (f"The ATM box implies a KRW funding rate of {s['box']['rate']:.2%} against {s['rate']:.2%} "
-         f"({(s['box']['rate'] - s['rate']) / BP:+.0f} bp)." if s["box"] else "No ATM box could be priced from the mids."),
+        box_text(s),
         f"Hedge simulation ({sim.engine}, {sim.n_paths:,} paths, {sim.horizon} sessions): selling the ATM option at σ_h = "
-        f"{sim.sigma_hedge:.1%} and delta-hedging daily earns {sim.mean_pnl_bp:+.0f} bp of notional on average "
+        f"{sim.sigma_hedge:.1%} and delta-hedging daily has a simulated mean P&L of {sim.mean_pnl_bp:+.0f} bp of notional "
         f"(SE {sim.se_bp:.0f} bp), CVaR95 {sim.cvar95_bp:+.0f} bp; the hedge breaks even at a realised vol of "
         f"{sim.breakeven_vol:.1%}. The identity ½Σe^{{r(T−t)}}ΓS²(σ_h² − r²/Δ)Δ explains the P&L with slope "
         f"{sim.identity_slope:.2f} and R² {sim.identity_r2:.2f}.",
     ]
+    hedge_note = hedge_text(s)
+    if hedge_note:
+        txt.append(hedge_note)
     if s.get("garch") is not None:
         g = s["garch"]
         txt.append(f"GARCH-t on the index: ν {g.nu:.1f}, persistence {g.persistence:.3f}, conditional vol "
@@ -158,8 +158,9 @@ def payload(s: dict) -> dict:
                     "min_g": fit.min_g, "arbitrage_free": fit.arbitrage_free},
             "static_arbitrage": static_payload(s['arbitrage'], s['quote_coverage']),
             "parity_check": s['quote_coverage']['parity'], "box_rate": s["box"]["rate"] if s["box"] else None,
+            "box_check": s.get("box_check"), "mfiv_strip": mfiv_strip(s),
             "rnd": {"integral": s["rnd"]["integral"], "mean": s["rnd"]["mean"]},
             "hedge": {"engine": sim.engine, "sigma_hedge": sim.sigma_hedge, "mean_pnl_bp": sim.mean_pnl_bp, "se_bp": sim.se_bp,
                       "cvar95_bp": sim.cvar95_bp, "breakeven_vol": sim.breakeven_vol, "identity_slope": sim.identity_slope,
-                      "identity_r2": sim.identity_r2},
+                      "identity_r2": sim.identity_r2, **(s.get("hedge_scope") or {})},
             "smile": [{"strike": p.strike, "iv": p.iv, "iv_exchange": p.iv_exchange, "kind": p.kind} for p in s["points"]]}

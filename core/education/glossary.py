@@ -236,7 +236,7 @@ TERMS = (
          'Compares the rate risk of bonds and portfolios and matches the rate risk of assets and liabilities.',
          'It is a first-order approximation for small rate changes. For large moves, consider convexity as well.'))),
     Term('convexity', 'rates', ('convexity', '컨벡시티', '볼록성'), _t(
-        ('볼록성 · 컨벡시티', '금리에 따른 가격 곡선의 휘어진 정도',
+        ('컨벡시티(볼록성)', '금리에 따른 가격 곡선의 휘어진 정도',
          '가격-금리 곡선이 휘어진 정도로, 금리가 변할 때 듀레이션 자체가 얼마나 바뀌는지를 나타냅니다. 일반 채권은 볼록성이 양수라 '
          '금리가 크게 움직일 때 듀레이션만으로 계산한 것보다 가격이 덜 내리고 더 오릅니다.',
          '큰 금리 변화에서 듀레이션만으로 계산한 가격 변화를 보정합니다.',

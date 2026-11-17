@@ -277,7 +277,7 @@ class NativeDesktopTests(unittest.TestCase):
 
     def test_navigation_native_widgets_no_browser_and_dark_theme(self):
         w=self.window
-        self.assertEqual(w.stack.count(),7)
+        self.assertEqual(w.stack.count(),8)
         self.assertIn('guide', w.route_indices)
         self.assertEqual(w.stack.currentIndex(),0)
         for route in w.route_indices:

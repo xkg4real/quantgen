@@ -250,7 +250,11 @@ def test_descriptive_read_caption_volatility_labels_and_no_regime_state():
     assert DESCRIPTIVE_CAPTION == "Descriptive read — not a regime model (P19)"
     row = read_row(Regime("bull steepener", "risk-off", "strong", "rising", "falling", "summary"))
     found = texts([row])
-    assert found[0] == DESCRIPTIVE_CAPTION and "risk: risk-off" in found
+    # Owner UI review 2026-11-10: the "risk: risk-off" chips became a labelled summary (label, value, plain
+    # meaning). The caption still comes first, each term sits under its label, and the core's full summary
+    # sentence stays on the page (in an expandable).
+    assert found[0] == DESCRIPTIVE_CAPTION
+    assert found[found.index("Risk appetite") + 1] == "risk-off" and "summary" in found
     view = texts(blocks(state()))
     j = view.index(P.VOL_LABEL_CAPTION)
     assert view[j + 1:j + 3] == ["relative: elevated", "absolute: stressed"]

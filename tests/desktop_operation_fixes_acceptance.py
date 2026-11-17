@@ -14,7 +14,8 @@ with patch.object(dotenv, 'load_dotenv', return_value=False):
     from quantgen_desktop.wheel_guard import guard
 from PyQt6.QtCore import QPoint, QPointF, Qt
 from PyQt6.QtGui import QWheelEvent
-from PyQt6.QtWidgets import QAbstractSpinBox, QApplication, QComboBox, QScrollArea, QSpinBox, QWidget
+from PyQt6.QtWidgets import QAbstractSpinBox, QApplication, QComboBox, QLabel, QScrollArea, QSpinBox, QWidget
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 
 def wheel(app, widget, delta=-120, horizontal=False):
@@ -77,21 +78,37 @@ class OperationFixTests(unittest.TestCase):
         self.window = ResearchWindow(auto_refresh=False, locale='ko_KR', market_loader=self.provider,
                                      connections_runner=self.provider)
         self.window.resize(1000, 700); self.window.show(); self.window.navigate('markets'); self.app.processEvents()
-        self.addCleanup(self.window.deleteLater); self.addCleanup(self.window.hide)
+        self.addCleanup(delete_owned_widget, self.window)
 
     def test_unfocused_selectors_ignore_the_wheel_and_the_page_scrolls(self):
         w = self.window
-        w.show_market_pane(w.rates); self.app.processEvents()
+        # Markets: a ranked list (owner 2026-11-11; the watchlist cards of 2026-11-04 moved to Home) makes the
+        # page taller than the window. Fixture quotes, set directly: nothing loads with automatic refresh off.
+        from core.market import rankings as R
+        stamp = '2026-11-11T05:00:00+00:00'
+        w.markets_view.rankings.batches['kr'] = R.Batch('kr', tuple(
+            R.QuoteRecord(m, 1000.0 + i, 1.0, 0.1, 1e5, 1e9 - i, None, 'KIS', 'kis', stamp)
+            for i, m in enumerate(R.DOMESTIC)), 'kis', stamp)
+        w.markets_view.rankings.render()
+        w.navigate('markets'); settle(self.app)
         scroll = w.stack.currentWidget().verticalScrollBar()
-        tool, tabs = w.rates.tool, w.market_tabs
-        before = (tool.currentIndex(), tabs.currentIndex(), w.theme.currentIndex())
+        self.assertGreater(scroll.maximum(), 0)
+        kind = w.markets_view.rankings.sector_box  # UI-D10: the page's selector (no kind selector any more)
+        before = (kind.currentIndex(), w.theme.currentIndex())
         scroll.setValue(0)
-        wheel(self.app, tool); wheel(self.app, tabs.tabBar()); wheel(self.app, w.theme)
-        self.assertEqual((tool.currentIndex(), tabs.currentIndex(), w.theme.currentIndex()), before)
+        wheel(self.app, kind); wheel(self.app, w.theme)
+        self.assertEqual((kind.currentIndex(), w.theme.currentIndex()), before)
         self.assertGreater(scroll.value(), 0)  # the wheel moved the page instead
+        # The analysis tools are buttons on their own page (no tab bar to scroll); a tool's selector
+        # and the tool buttons ignore the wheel too.
+        w.show_market_pane(w.rates); settle(self.app)
+        tool = w.rates.tool
+        start = tool.currentIndex()
+        wheel(self.app, tool); wheel(self.app, w.tool_buttons['bonds'])
+        self.assertEqual((tool.currentIndex(), w.current_market_pane()), (start, w.rates))
         tool.setFocus(); self.app.processEvents()
         wheel(self.app, tool)
-        self.assertNotEqual(tool.currentIndex(), before[0])  # a focused selector still responds
+        self.assertNotEqual(tool.currentIndex(), start)  # a focused selector still responds
 
     def test_real_wheel_cannot_focus_a_selector(self):
         """Qt focuses a control on a real wheel event when its policy includes WheelFocus.
@@ -119,7 +136,7 @@ class OperationFixTests(unittest.TestCase):
         combo = QComboBox(content); combo.addItems(['a', 'b', 'c'])
         spin = QSpinBox(content); spin.setRange(0, 10); spin.move(0, 40)
         outer.setWidget(page); outer.show(); self.app.processEvents()
-        self.addCleanup(outer.deleteLater)
+        self.addCleanup(delete_owned_widget, outer)
         for control in (combo, spin):
             guard(control)
         inner_bar, outer_bar = inner.verticalScrollBar(), outer.verticalScrollBar()
@@ -194,7 +211,9 @@ class OperationFixTests(unittest.TestCase):
     def test_form_panel_is_not_capped_at_a_wider_preferred_width(self):
         """Windows CI: the ETF panel's size hint, taken at a wider preferred width, was 383 px while its
         wrapped content needed 411 px at the real width, and a Maximum height policy cut it to 383.
-        A child that prefers a wide layout recreates that on any platform."""
+        A child that prefers a wide layout, plus a long wrapping line, recreates that on any platform:
+        the panel's own captions alone may not wrap at the real width with a platform's fonts
+        (Ubuntu CI, 2026-11-04: 388 == 388 once the left menu was narrowed)."""
         from PyQt6.QtCore import QSize
 
         class WideHint(QWidget):
@@ -203,9 +222,12 @@ class OperationFixTests(unittest.TestCase):
         w = self.window
         w.resize(1000, 900); w.show_market_pane(w.etf); settle(self.app)
         grid = w.etf.forms.currentWidget().layout()
-        grid.addWidget(WideHint(), grid.rowCount(), 0, 1, 3); settle(self.app)
+        grid.addWidget(WideHint(), grid.rowCount(), 0, 1, 3)
+        wrapping = QLabel("wrap " * 120); wrapping.setWordWrap(True)  # ASCII: every platform font has it
+        grid.addWidget(wrapping, grid.rowCount(), 0, 1, 3); settle(self.app)
         box = w.etf.input_box
-        self.assertLess(box.sizeHint().height(), box.heightForWidth(box.width()))  # the Windows condition holds
+        self.assertGreater(1600, box.width())  # oversized preferred width is now bounded
+        self.assertGreaterEqual(wrapping.height(), wrapping.heightForWidth(wrapping.width()))
         self.assertGreaterEqual(box.height(), box.heightForWidth(box.width()), layout_report(w.etf))
 
     def test_window_and_app_icons_carry_taskbar_sizes(self):

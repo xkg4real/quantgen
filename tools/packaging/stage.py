@@ -34,7 +34,7 @@ def allowed(name: str) -> bool:
         return True
     if name.startswith(DATA_PREFIXES) and p.suffix in (".yaml", ".json"):
         return True
-    if name.startswith("assets/") and p.suffix in (".png", ".ico", ".svg", ".otf", ".txt"):
+    if name.startswith("assets/") and p.suffix in (".png", ".ico", ".svg", ".otf", ".ttf", ".txt"):
         return True
     return False
 
