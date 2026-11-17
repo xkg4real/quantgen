@@ -866,7 +866,12 @@ class ResearchWindow(QMainWindow):
         layout.addStretch()
 
     def make_tools(self):
-        """Analysis tools on their own page: a visible button grid, no scrolling tabs (owner, 2026-11-04)."""
+        """Analysis tools (owner-approved draft 2026-11-17, docs/product/ui_drafts_2026-11-17/draft_02_tools.png): the
+        stock detail's frame. Toolbar: the title, the ten tools as pill tabs (`tool_buttons`, which drive `tool_host`)
+        and a status badge. Canvas: the selected tool's result (Bonds: the lead line, key figures, the price–yield chart
+        card, the scenario and hedge cards, every metric; the other tools: the status line with their exports, then the
+        result in one card). Right column, one per tool: 설정 (the docked form, its run button pinned at the bottom) and
+        읽는 법 (`tools_guide`, which follows the selected tool). Every pane, signal, request and export is as before."""
         from .bonds import BondsPane
         from .rates import RatesPane
         from .fx import FXPane
@@ -875,14 +880,19 @@ class ResearchWindow(QMainWindow):
         from .macro_records import MacroRecordsPane
         from .market_tools import DerivativesPane, ETFPane, CryptoPane, KRXPane
         from .tools import CurrentPageStack
-        layout = self.page("Analysis tools", "채권·금리·외환·파생·ETF·KRX·가상자산·매크로 분석 도구")
-        self.tools_page=layout.parentWidget()
-        layout.itemAt(1).widget().hide()  # contextual guidance below the picker replaces the category inventory
-        self.tools_subtitle = layout.itemAt(1).widget()
-        self.tools_subtitle.localized_text = {
-            "ko": "채권·금리·외환·파생·ETF·KRX·가상자산·매크로 분석 도구입니다. 아래에서 하나를 고르세요.",
-            "en": "Bonds, rates, FX, derivatives, ETF, KRX, crypto and macro tools. Pick one below."}
-        self.tools_subtitle.retranslate()
+        from .page_kit import Text, Workspace
+        titles = {'bonds': ('Bonds', '채권'), 'rates': ('Rates', '금리'), 'structuring': ('Structuring', '구조화 상품'),
+                  'fx': ('FX', '외환'), 'derivatives': ('Derivatives', '파생상품'), 'etf': ('ETF', 'ETF'),
+                  'krx': ('KRX', 'KRX'), 'crypto': ('Crypto', '가상자산'), 'macro': ('Macro', '매크로 지표'),
+                  'macro_records': ('Macro v2', '매크로 v2')}
+        outer = self.page(None, None)
+        from .research_style import prepare_page
+        self.tools_page = prepare_page(outer)
+        self.tools_page.setMaximumWidth(16777215)
+        scroll = self.stack.widget(self.stack.count() - 1)
+        self.tools_workspace = ws = Workspace(("Analysis tools", "분석 도구"))
+        outer.addWidget(ws)
+        ws.fit_to(scroll)
         self.bonds=BondsPane();self.bonds.requested.connect(self.run_bond)
         self.rates=RatesPane(); self.rates.requested.connect(lambda q:self.run_tool('rates',q))
         self.fx=FXPane(); self.fx.requested.connect(lambda q:self.run_tool('fx',q))
@@ -897,36 +907,65 @@ class ResearchWindow(QMainWindow):
         for pane in (self.rates,self.fx,self.structuring,self.macro,self.derivatives,self.etf,self.crypto,self.krx):
             pane.hide_source()
         self.macro_records.set_source_caption('Record set')
-        picker = QWidget()
-        picker.setObjectName('toolPicker')
-        from .category_picker import CategoryFlow
-        categories = CategoryFlow(picker)
-        # Fixed caps the picker at its single-row sizeHint, even when translated
-        # buttons wrap. Let CategoryFlow's heightForWidth reserve every row.
-        picker.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-        self.tool_group = QButtonGroup(self)
-        self.tool_group.setExclusive(True)
         self.tool_host = CurrentPageStack()
         self.tool_host.setObjectName('toolHost')
-        self.tool_buttons = {}
-        for index, (name, title) in enumerate(TOOL_PANES):
-            pane = getattr(self, name)
-            button = QPushButton(title)
-            button.setCheckable(True)
-            button.setProperty('tool', True)
-            button.setAccessibleName(title)
-            button.clicked.connect(lambda checked=False, p=pane: self.show_tool(p))
-            self.tool_group.addButton(button)
-            categories.addWidget(button)
-            self.tool_buttons[name] = button
-            self.tool_host.addWidget(pane)
-        self.tool_buttons[TOOL_PANES[0][0]].setChecked(True)
-        layout.addWidget(picker)
         from .workspace_guide import WorkspaceGuide
         self.tools_guide = WorkspaceGuide('bonds')
-        layout.addWidget(self.tools_guide)
-        layout.addWidget(self.tool_host)
-        layout.addStretch()
+        sides, self.tools_guide_pages = [], []
+        for index, (name, _title) in enumerate(TOOL_PANES):
+            pane = getattr(self, name)
+            self.tool_host.addWidget(pane)
+            side = ws.side if index == 0 else ws.add_side()
+            pane.result_changed.connect(self.tools_show_badge)
+            if pane is self.bonds:
+                pane.dock_into(side, title=("Settings", "설정"))
+                ws.follow(pane)          # its key figures carry units in the window language
+            else:
+                pane.dock_tool(side, title=("Settings", "설정"))
+            self.tools_guide_pages.append(side.add_page(("How to read", "읽는 법")))
+            side.foot.addWidget(Text(("Research calculation · not investment advice", "연구용 계산 · 투자 권유 아님"),
+                                     "fine"))
+            sides.append(side)
+        self.tools_guide_pages[0].addWidget(self.tools_guide)
+        ws.finish()
+        ws.canvas.addWidget(self.tool_host)
+        ws.canvas.addStretch(1)
+        # The pill tabs drive the existing stack (kept for show_tool, current_market_pane and tests).
+        self.tool_switch = ws.bind_tabs(self.tool_host, [titles[name] for name, _ in TOOL_PANES], sides=sides,
+                                        kind="pills", on_change=self.tools_follow)
+        self.tool_group = self.tool_switch.group
+        self.tool_buttons = {}
+        for (name, _title), button in zip(TOOL_PANES, self.tool_switch.buttons):
+            button.setProperty('tool', True)
+            self.tool_buttons[name] = button
+        from .page_kit import Badge
+        self.tools_badge = ws.add_toolbar(Badge(), right=True)
+        self.tools_follow(self.tool_host.currentIndex())
+        self.kit_language()
+
+    def tools_follow(self, index):
+        """The selected tool's right column opens on the same tab (설정 or 읽는 법) as the one it replaces, the workflow
+        guide moves into it, and the badge says whether this tool has a result."""
+        if not hasattr(self, 'tools_badge') or not 0 <= index < len(TOOL_PANES):
+            return
+        side = self.tools_workspace.side
+        previous = getattr(self, '_tools_side', None)
+        if previous is not None and previous is not side:
+            side.show_page(previous.pages.currentIndex())
+        self._tools_side = side
+        self.tools_guide.set_key(TOOL_PANES[index][0])
+        self.tools_guide_pages[index].insertWidget(0, self.tools_guide)
+        self.tools_show_badge()
+
+    def tools_show_badge(self, *args):
+        """'● 계산 완료' once the selected tool has a result, '● 실행 전' before."""
+        badge = getattr(self, 'tools_badge', None)
+        if badge is None:
+            return
+        if getattr(self.tool_host.currentWidget(), 'has_result', False):
+            badge.set_pair(("Run complete", "계산 완료")); badge.set_tone("ok")
+        else:
+            badge.set_pair(("Not run yet", "실행 전")); badge.set_tone("")
 
     def attach_symbol_searches(self):
         """Code-or-name search on every symbol field that loads a chart or one instrument's data

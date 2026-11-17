@@ -128,6 +128,12 @@ def kit_sheet(p, dark):
       QPushButton[kit='chip']:hover {{ background: {p.accent_soft}; color: {p.accent}; }}
       QPushButton[kit='chip']:checked {{ background: {p.accent_soft}; color: {p.accent}; font-weight: 600; }}
       QPushButton[kit='chip']:focus {{ border: 2px solid {p.accent}; }}
+      QFrame#dockedForm QPushButton[kit='chip'] {{ padding: 6px 4px; border: 1px solid {line}; border-radius: 9px;
+          background: {p.surface}; color: {p.muted}; font-size: 13px; font-weight: 500; }}
+      QFrame#dockedForm QPushButton[kit='chip']:hover {{ color: {p.text}; }}
+      QFrame#dockedForm QPushButton[kit='chip']:checked {{ border-color: {p.accent_soft}; background: {p.accent_soft};
+          color: {p.accent}; font-weight: 600; }}
+      QFrame#dockedForm QPushButton[kit='chip']:focus {{ border: 2px solid {p.accent}; }}
       QWidget#qgWorkspace QTableWidget {{ background: transparent; border: 0; gridline-color: transparent;
           alternate-background-color: transparent; selection-background-color: {p.accent_soft};
           selection-color: {p.text}; font-size: 13px; }}
