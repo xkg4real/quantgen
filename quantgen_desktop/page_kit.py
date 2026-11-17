@@ -738,7 +738,8 @@ class Workspace(QWidget):
             scroll.setObjectName("qgCanvasScroll")
             scroll.setWidgetResizable(True)
             scroll.setFrameShape(QFrame.Shape.NoFrame)
-            scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            # Content narrower than its own minimum is never squashed (A3): it scrolls inside the canvas, not the page.
+            scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
             canvas_host.setObjectName("qgCanvasPage")
             scroll.setWidget(canvas_host)
             self.canvas_stack.addWidget(scroll)

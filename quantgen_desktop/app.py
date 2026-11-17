@@ -1035,9 +1035,9 @@ class ResearchWindow(QMainWindow):
         self.seed = QSpinBox(); self.seed.setRange(0, 2147483647); self.seed.setValue(7)
         self.erp = QDoubleSpinBox(); self.erp.setRange(-100, 100); self.erp.setDecimals(2); self.erp.setValue(4)
         self.target = QLineEdit(); self.target.setPlaceholderText("선택 입력")
-        fields = (("Symbol", self.symbol), ("Horizon · sessions", self.horizon), ("Paths", self.paths),
-                  ("Seed", self.seed), ("Model", self.model), ("Drift", self.drift),
-                  ("ERP · %", self.erp), ("Target price", self.target))
+        fields = (("Symbol", self.symbol), ("Model", self.model),
+                  ("Drift", self.drift), ("Horizon · sessions", self.horizon), ("Paths", self.paths),
+                  ("Seed", self.seed), ("ERP · %", self.erp), ("Target price", self.target))
         for name, widget in (*fields, ("Data source", self.source)):
             widget.setAccessibleName(name)
             if isinstance(widget, QComboBox):
@@ -1090,7 +1090,8 @@ class ResearchWindow(QMainWindow):
         self.quant_figures = KeyFigures()
         self.quant_figures.hide()
         layout.addWidget(self.quant_figures)
-        chart_card = Card(("Distribution and evidence", "분포와 근거"))
+        chart_card = Card()
+        chart_card.body.addWidget(label("분포와 근거", "heading"))   # the result block's title (A3 contract)
         self.quant_chart = FanChart()
         self.quant_notes = label("아직 실행한 분석이 없습니다.", "muted")
         self.quant_notes.setProperty('reading_help_keep_visible', True)
