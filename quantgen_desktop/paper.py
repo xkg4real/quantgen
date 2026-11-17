@@ -164,6 +164,7 @@ class RulesPane(QWidget):
         self.rules = table(['Name', 'Symbol', 'Status', 'Revision', 'Triggers']); self.rules.setMinimumHeight(170)
         layout.addWidget(self.rules)
         self.form = QWidget(); form = QFormLayout(self.form); self.fields = {}; self.errors = {}
+        form.setRowWrapPolicy(QFormLayout.RowWrapPolicy.WrapLongRows)   # a long label goes above its field in a narrow canvas
         specs = [('name','이름',None),('symbol','종목',None),('market','시장 코드',None),
                  ('side','방향',Side),('size_mode','수량 방식',SizeMode),('size_value','수량/금액',None),
                  ('order_kind','주문 종류',OrderKind),('limit_price','지정가',None),

@@ -32,7 +32,7 @@ from .stock_detail_side import FoldHeader
 from .stock_detail_style import line_color, numbers, set_prop, sheet as detail_sheet
 
 PAGE_MARGINS = (30, 22, 28, 20)      # left, top, right, bottom (the drafts' .page padding)
-SIDE_WIDTHS = ((1320, 360), (1120, 340), (0, 316))   # (window width at least, column width)
+SIDE_WIDTHS = ((1320, 360), (1120, 340), (0, 320))   # (window width at least, column width)
 MIN_HEIGHT = 560
 
 
