@@ -6,11 +6,11 @@ task: os-expansion
 cycle: 2026-11-17
 done_ids: none
 next_ids: OS-P0-a, OS-P0-e, OS-P0-f, OS-P0-c, OS-P0-b, OS-P0-d, OS-F1
-updated_at: 2026-11-17T22:05:00+09:00
+updated_at: 2026-11-17T23:30:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/os-prep-20261117
-work_commit: 600fcb0
+work_commit: e65fd43
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -60,9 +60,11 @@ OS-P0-a(변환 도구·위험 패턴 검사) 코드를 `claude/os-prep-20261117`
 ## 4. 진행 상황
 
 - [x] OS-P0-a 코드 — `tools/qt_port/pyqt6_to_pyside6.py`, `tools/qt_port/__init__.py`, `tests/qt_port_acceptance.py`, 커밋 `600fcb0` (push됨, 병합 전)
-- [ ] OS-P0-e 정식 시범 ← **실행 중** (스크래치, 결과 문서 `docs/platform/PYSIDE6_TRIAL_2026-11-17.md`·`PYSIDE6_UI_CHECKLIST.md` 작성 예정)
-- [ ] OS-P0-f 글꼴 대안·세그폴트 재현
-- [ ] OS-P0-c, OS-P0-b, OS-P0-d, OS-F1 (지시문 8절 순서)
+- [ ] OS-P0-e 정식 시범 ← **실행 중** (main 쌍 단계 10/17, UI 쌍 시작). 결과 문서 `docs/platform/PYSIDE6_TRIAL_2026-11-17.md` 작성 예정, 점검표 초안은 스크래치에 있음
+- [x] OS-P0-f 도구 — `tools/qt_port/font_probe.py`, `docs/platform/font_probe/`, `tools/qt_port/repro/` 커밋 `032c439` (Windows 확인은 소유자 선택)
+- [x] OS-P0-c — `core/app_paths.py`(is_frozen, user_data_dir: QUANTGEN_DATA_DIR → FLET_APP_STORAGE_DATA → ~/.nextgen → OS 폴더), `core/app_identity.py`, 시험 2개, 커밋 `0bca784`, `260f08d`. D7-G 값은 승인 기록 전이라 넣지 않음
+- [x] OS-P0-b — `packaging/quantgen_desktop.spec`(QG_QT_BINDING), `packaging/launch_desktop.py`, `.github/workflows/platform-build.yml`(수동·v* 태그만), `stage.py --profile mobile`, `mobile/`, 커밋 `4f009aa`, `e65fd43`. 로컬 Linux PySide6 빌드 성공(596MB), 실행 유지 확인
+- [ ] OS-P0-d — 저장소판 초안 작성 중(스크래치), Notion 수정은 소유자 승인 뒤
 
 **마지막으로 통과한 검증 (작업 브랜치 `600fcb0`):**
 
