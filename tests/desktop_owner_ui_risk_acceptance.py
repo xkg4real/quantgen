@@ -129,10 +129,19 @@ class OwnerUiRiskTests(unittest.TestCase):
     def test_portfolio_before_a_run_says_what_to_do_instead_of_empty_tables(self):
         w = self.window("ko"); w.navigate("risk"); self.settle()
         p = w.portfolio
-        self.assertTrue(p.empty.isVisible())
-        self.assertIn("[포트폴리오 분석 실행]", p.empty.text())
-        self.assertFalse(p.comparison.isVisible())
-        self.assertFalse(p.result.isVisible())
+        # The approved compact hint explains inputs, action and the result to read;
+        # it no longer repeats the bracketed button caption in the prose.
+        for language, words in (("ko", ("종목", "목적함수", "분석", "네 가지", "위험")),
+                                ("en", ("assets", "objective", "run the analysis", "four allocations", "risks"))):
+            with self.subTest(language=language):
+                w.set_language(language); self.settle()
+                self.assertTrue(p.empty.isVisible())
+                for word in words:
+                    self.assertIn(word, p.empty.text())
+                self.assertTrue(p.run.isVisible())
+                self.assertTrue(p.run.isEnabled())
+                self.assertFalse(p.comparison.isVisible())
+                self.assertFalse(p.result.isVisible())
 
     def test_portfolio_korean_reads_verdict_first_with_display_names_and_fitted_tables(self):
         w = self.window("ko"); self.run_portfolio(w)

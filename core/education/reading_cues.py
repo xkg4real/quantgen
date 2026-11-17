@@ -42,7 +42,7 @@ CHECKS = {
                   'Zero is the lower band and one the upper. Moving bands also change the value, so inspect price and bands together.'),
     'bandwidth': ('축소 뒤 확대되는지를 보세요. 폭은 움직임의 크기만 보여주므로 방향은 가격으로 확인하세요.',
                   'Watch for expansion after contraction. Width describes size, so read direction from price.'),
-    'volume_ma': ('현재 거래량을 평균과 비교하세요. 진행 중인 봉의 거래량은 아직 완성되지 않았어요.',
+    'volume_ma': ('현재 거래량을 평균과 비교하세요. 아직 진행 중인 기간의 거래량은 완성되지 않았어요.',
                   'Compare volume with its average. Volume in the current unfinished bar is incomplete.'),
     'obv': ('가격과 OBV가 같은 방향의 고저점을 만드는지 보세요. 절대 수치는 시작 시점에 따라 달라요.',
             'Compare the direction of price and OBV highs/lows. Absolute OBV depends on the starting point.'),
