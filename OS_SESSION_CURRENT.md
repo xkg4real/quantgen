@@ -6,11 +6,11 @@ task: os-expansion
 cycle: 2026-11-17
 done_ids: none
 next_ids: OS-P0-a, OS-P0-e, OS-P0-f, OS-P0-c, OS-P0-b, OS-P0-d, OS-F1, OS-F2
-updated_at: 2026-11-18T00:20:00+09:00
+updated_at: 2026-11-18T02:45:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/os-prep-20261117
-work_commit: 6e92dbf
+work_commit: 5816125
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -25,7 +25,7 @@ session: https://claude.ai/code/session_016uB1jgXiwx42FSUU5ANwM7
 
 ## 0. 한 줄 요약
 
-지시문 7절의 첫 작업 3개(OS-P0-a, OS-P0-e, OS-P0-f)와 8절의 OS-P0-c·OS-P0-b·OS-P0-d(저장소판 초안)를 작업 브랜치 `claude/os-prep-20261117` `6e92dbf`에 push했습니다. 모두 **main 병합 전**이라 LEDGER에는 없습니다(병합은 F21 뒤 대기열 차례). 지금은 소유자 확인을 기다립니다: UI 세션 전달, 글꼴 Windows 확인(선택), Notion 개정(승인 뒤).
+지시문 7·8절 작업 6개를 작업 브랜치 `claude/os-prep-20261117`에 push했습니다(최신 `5816125`, **main 병합 전**이라 LEDGER에 없음). 2026-11-18 소유자 요청 "5번 항목(미검증)들에 대해서 지금 당장 검증해서 실현/구현/계획/설계 가능한 부분들은 바로 진행해주세요"에 따라 미검증 항목을 이어서 했습니다. **PySide6 세그폴트와 메모리 폭증의 원인 두 곳을 확정했습니다**: `localization.py`의 `QTimer.singleShot(0, self.apply)`와 UI 브랜치 `bonds.py`의 `setWeight(600)`. 이 둘만 임시 복사본에서 고치자 세그폴트·OOM·실행 못 한 테스트가 모두 0이 되었습니다. 패키지 앱 자체 점검(`--selfcheck`)과 라이선스 고지도 구현해 두 바인딩 빌드에서 10/10 통과했습니다. 지금은 소유자 확인을 기다립니다.
 
 ## 1. 목표와 완료 조건
 
@@ -71,10 +71,28 @@ session: https://claude.ai/code/session_016uB1jgXiwx42FSUU5ANwM7
 - [x] OS-P0-f 글꼴 대안·세그폴트 — `tools/qt_port/font_probe.py`, `docs/platform/font_probe/`, `tools/qt_port/repro/` — `032c439` (Windows 확인은 소유자가 원할 때)
 - [x] OS-P0-c — `core/app_paths.py`, `core/app_identity.py`, `tests/app_paths_acceptance.py`, `tests/app_identity_acceptance.py` — `0bca784`, `260f08d`
 - [x] OS-P0-b — `packaging/quantgen_desktop.spec`, `packaging/launch_desktop.py`, `packaging/rthook_build_info.py.in`, `.github/workflows/platform-build.yml`, `tools/packaging/stage.py --profile mobile`, `mobile/` — `4f009aa`, `e65fd43`
+- [x] (11-18 추가) OS-P0-b 계속: `packaging/selfcheck.py`(`QUANTGEN --selfcheck report.json`), 고지 생성기 `tools/packaging/third_party_notices.py` + `packaging/licenses/`(LGPL-3.0·GPL-3.0 FSF 원문), spec에 고지·계산 해시 기대값·`qa/` 제외·chardet `.py` 유지, 워크플로에 selfcheck와 Windows·macOS 글꼴 확인 잡(수동 실행만), `tests/third_party_notices_acceptance.py` — `d2befff`, `8097ca5`, `42be9b8`, `c12643b`
+- [x] (11-18 추가) OS-P0-e/f 계속: 원인 확정(점검표 6·12·13번), lint `6-bound`·`10-int-enum`, 재시범(`PYSIDE6_TRIAL` 7절, 그래프 `docs/platform/trial_fix/`), `docs/platform/LICENSE_COMPLIANCE_PREP.md` — `bd38f93`, `5816125`
 - [ ] OS-P0-d — 저장소판 초안 `docs/platform/PLATFORM_EXPANSION_2026-11-17.md` (`6e92dbf`) ← **소유자 확인 대기**; Notion 수정은 승인 뒤
 - [ ] OS-F1 (F21 뒤, MERGE_QUEUE가 자리 줌), OS-F2 (KEY-2 뒤)
 
-**마지막으로 통과한 검증 (`6e92dbf`):**
+**11-18 추가 검증 (`5816125`):**
+
+```
+python -m unittest tests.qt_port_acceptance tests.app_paths_acceptance tests.app_identity_acceptance tests.third_party_notices_acceptance tests.packaging_policy_acceptance -> OK
+로컬 Linux PyInstaller 6.22.3, PyQt6 빌드·PySide6 빌드(변환+글꼴 임시 shim) 둘 다: QUANTGEN --selfcheck -> 10/10 통과
+  (frozen, build_info, Qt 바인딩 하나, assets·글꼴 파일, code_evidence 해시 = 빌드 때 값 655dc375…, user_data_dir 계산만(만들지 않음), 보호 파일 없음,
+   고지 파일·LGPL 원문·Qt Core 별도 파일, 오프스크린 글꼴 6개 등록, quantgen_desktop.app import)
+첫 selfcheck에서 qa/acceptance_results.json·qa/research_status.json이 번들에 들어간 것을 잡음 -> 데스크톱 spec에서만 제외 (stage.py는 그대로)
+PySide6 6.12.0 Windows·macOS 휠 정적 확인: insertSubstitutions·print_·supportsCharacter(int) 있음, QChar·대체 글꼴 API 없음, Qt 라이브러리 별도 파일, macOS 최소 14(PyQt6 6.12.1도 14)
+메모리 폭증 원인: py-spy 네이티브 스택 QTest::qWaitForWindowActive -> sendThroughApplicationEventFilters -> Shiboken storePythonOverrideErrorOrPrint, 첫 예외 localization.py:130 (지워진 ResearchWindow)
+고친 복사본: UI 단계 3 두 테스트 3GB+ -> 0.52GB 통과; main 세그폴트 재현 3/3 통과(고치기 전 rc139 1, 실패 2); UI 단계 6 setWeight 고친 뒤 20/20 두 번
+전체 재시범(PySide6): 새 실패 13/9, 세그폴트 0/0, 실행 못 한 테스트 0/0, 지워진 객체 29/29, OOM 0 (PYSIDE6_TRIAL 7절)
+window_survivors.py: 고친 뒤에도 창마다 숨은 최상위 위젯 6개 누수는 그대로 (점검표 10번, 별개 문제)
+Android: 이 컨테이너 네트워크가 pypi.flet.dev·dl.google.com 거부(403) -> 빌드 못 함 (LICENSE_COMPLIANCE_PREP 6절)
+```
+
+**처음 검증 (`6e92dbf`):**
 
 ```
 python -m unittest tests.qt_port_acceptance tests.app_paths_acceptance tests.app_identity_acceptance tests.packaging_policy_acceptance  -> OK
@@ -102,14 +120,15 @@ python -m tools.compliance.check --check -> consistency FAIL (새 파일; PR 직
 
 ## 7. 주간 지표 (D9 진척)
 
-| 지표 | D9 시작값 | 2026-11-17 (main `5888d05` / UI `bec272b`) |
-|---|---|---|
-| 바인딩 때문에 새로 실패한 테스트 | 15 | **14 / 10** (UI는 단계 9 두 바인딩 모두 시간 초과로 비교 못 함) |
-| 세그폴트 (rc 139 단계) | 1 | **2 / 3** |
-| "이미 지워진 C++ 객체" 줄 | 223 | **223 / 188** |
-| 위험 패턴 (`--lint`) | — | **83 / 86** (검토용 4·6묶음 포함; 확정 위험 1·2·3·5·8·9묶음 20곳) |
-| 새 발견: PySide6 메모리 폭증 OOM | — | **4회** (10.8~12.9GB), PyQt6 0회 |
-| F21 뒤 남은 예상 시간 | 약 30시간 | UI가 점검표대로 고치면 약 12~20시간, 안 고치면 약 30~35시간 (추정, `PYSIDE6_TRIAL` 4절) |
+| 지표 | D9 시작값 | 11-17 시범 (main `5888d05` / UI `bec272b`) | 11-18 원인 2곳 고친 복사본 재시범 |
+|---|---|---|---|
+| 바인딩 때문에 새로 실패한 테스트 | 15 | 14 / 10 | **13 / 9** (원인 모름 0) |
+| 세그폴트 (rc 139 단계) | 1 | 2 / 3 | **0 / 0** |
+| 중간에 죽어 실행 못 한 테스트 | — | 104 / 102 | **0 / 0** |
+| "이미 지워진 C++ 객체" 줄 | 223 | 223 / 188 | **29 / 29** |
+| 메모리 폭증 OOM | — | 4회 | **0회** |
+| 위험 패턴 (`--lint`, main `7c33955` / UI) | — | 83 / 86 | 83 / 87 (`6-bound` 28/29, `10-int-enum` 0/1 새로 나눔) |
+| F21 뒤 남은 예상 시간 | 약 30시간 | 12~20 / 30~35시간 | **UI가 미리 고치면 약 8~14시간, 안 고치면 약 18~25시간** (추정) |
 
 ## 메인에게
 
@@ -120,16 +139,18 @@ python -m tools.compliance.check --check -> consistency FAIL (새 파일; PR 직
   - `--done "OS-P0-b | 바인딩 중립 spec, platform-build.yml, mobile stage | packaging/*, .github/workflows/platform-build.yml, tools/packaging/stage.py, mobile/* | 4f009aa,e65fd43 | 로컬 PySide6 빌드 성공, mobile import OK"`
   - `--done "OS-P0-e | PySide6 정식 시범·점검표 | docs/platform/PYSIDE6_TRIAL_2026-11-17.md, docs/platform/PYSIDE6_UI_CHECKLIST.md | 6e92dbf | 새 실패 14/10, 세그폴트 2/3, 지워진 객체 223/188"`
   - `--done "OS-P0-f | 글꼴 대안 판정·세그폴트 재현 | tools/qt_port/font_probe.py, tools/qt_port/repro/*, docs/platform/font_probe/* | 032c439 | insertSubstitutions = 현재와 동일(Linux), 세그폴트 PySide6만 재현"`
+- 확인 요청 (11-18): `tools/packaging/stage.py`의 `FILES`가 `qa/acceptance_results.json`·`qa/research_status.json`을 휠에 넣습니다. 앱 코드는 이 파일을 읽지 않고 이름만 문구에 나옵니다. 데스크톱 빌드에서는 spec으로 뺐습니다. 휠에도 계속 둘지 메인이 정해 주세요(stage.py는 이 세션이 고치지 않음).
+- 위 `--done` 초안의 OS-P0-b·e·f 커밋 칸에 11-18 커밋(`d2befff`, `8097ca5`, `42be9b8`, `c12643b`, `bd38f93`, `5816125`)을 더합니다.
 - 알림: 메인 문서 `MASTER_WORK_DESIGN` 등에 있는 "역방향 의존 없음"(Notion 원문 M2)은 틀립니다: `ui/` 12개 파일 → `quantgen_desktop` 문구 모듈, `quantgen_desktop` 5개 파일 → `ui.*` (함수 안 import).
 
 ## UI 세션에 전할 것
 
 (소유자가 그대로 붙여 주세요. 소유자가 전달했는지: **아직 기록 없음**)
 
-> OS_EXPANSION 세션이 PySide6 전환 준비 결과를 올렸습니다. 브랜치 `claude/os-prep-20261117`의 `docs/platform/PYSIDE6_UI_CHECKLIST.md`(점검표)와 `docs/platform/PYSIDE6_TRIAL_2026-11-17.md`(시범 결과)를 읽어 주세요.
-> 지금 UI 브랜치에서 **PyQt6에서도 그대로 도는 방식으로** 이 순서로 고쳐 주세요: ① 5번 이벤트 필터 안 Qt 객체 집합·딕셔너리 키(`market_menu.py` 등 11곳, 메모리 폭증·Ctrl+휠 실패와 연결) ② 9·10번 위임 객체 참조 유지와 창에서 떼어 낸 위젯 정리(세그폴트) ③ 3번 `receivers` ④ 4번 `paper.py` 콤보 Enum ⑤ 1·2·8번 한 줄 수정.
-> 위치는 `python tools/qt_port/pyqt6_to_pyside6.py --lint --ref origin/claude/friendly-bardeen-r6xe8f`로 봅니다 (OS 브랜치에서 실행, 체크아웃 불필요).
-> 새로 쓰는 화면은 점검표 "새 화면 코드에서 지킬 것" 표대로 써 주세요. OS 세션은 `quantgen_desktop/**`를 고치지 않습니다.
+> OS_EXPANSION 세션이 PySide6 전환 준비 결과를 올렸습니다. 브랜치 `claude/os-prep-20261117`의 `docs/platform/PYSIDE6_UI_CHECKLIST.md`(점검표)와 `docs/platform/PYSIDE6_TRIAL_2026-11-17.md` 7절(재시범)을 읽어 주세요.
+> 세그폴트와 메모리 폭증의 원인은 두 곳입니다. 먼저 고쳐 주세요(둘 다 PyQt6에서도 동작이 같음): ① `localization.py:80`의 `QTimer.singleShot(0, self.apply)`를 자식 `QTimer(self)`로 바꾸기(점검표 6번), ② `bonds.py:201`의 `setWeight(600)`를 `setWeight(QFont.Weight(600))`로 바꾸기(12번, `QFont` import 필요).
+> 그다음 순서: 나머지 `6-bound` 27~28곳 → 3번 `receivers`(`stock_detail.py:1470`) → 5번 이벤트 필터 해시 → 4번 `paper.py` 콤보 Enum → 1·2·8·13번 한 줄 수정 → 10번 창에서 떼어 낸 위젯 정리(누수).
+> 위치는 OS 브랜치에서 `python tools/qt_port/pyqt6_to_pyside6.py --lint --ref origin/claude/friendly-bardeen-r6xe8f`로 봅니다(체크아웃 불필요). OS 세션은 `quantgen_desktop/**`를 고치지 않습니다.
 
 ## 소유자 Windows 글꼴 확인 (선택, OS-P0-f)
 
