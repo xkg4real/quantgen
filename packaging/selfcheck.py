@@ -10,6 +10,7 @@ import hashlib
 import importlib
 import json
 import os
+import re
 from pathlib import Path
 import sys
 import traceback
@@ -85,6 +86,19 @@ def run(report_path: str) -> int:
                 bad.append(str(p.relative_to(root)))
         return not bad, sorted(bad)[:20]
     _check(results, "no_protected_files", bundle_names)
+
+    def notices_and_qt_libraries():
+        root = Path(getattr(sys, "_MEIPASS", "."))
+        notices = root / "licenses" / "THIRD_PARTY_NOTICES.txt"
+        text = notices.read_text(encoding="utf-8") if notices.is_file() else ""
+        lgpl_needed = binding == "PySide6"
+        has_lgpl = "GNU LESSER GENERAL PUBLIC LICENSE" in text
+        # LGPL relinking: the Qt core library must be a separate file a user can replace, not inside the archive.
+        qt_core = sorted(str(p.relative_to(root)) for p in root.rglob("*")
+                         if p.is_file() and re.fullmatch(r"(lib)?Qt6?Core(\.dll|\.so(\.\d+)*)?", p.name))
+        ok = bool(text) and (has_lgpl or not lgpl_needed) and bool(qt_core)
+        return ok, {"notices_bytes": len(text.encode()), "lgpl_text": has_lgpl, "qt_core_files": qt_core[:4]}
+    _check(results, "licence_notices_and_separate_qt", notices_and_qt_libraries)
 
     app = None
 

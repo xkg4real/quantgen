@@ -63,6 +63,15 @@ a = Analysis(
     excludes=OTHER + ["tkinter", "tests", "qa", "_legacy"],
     noarchive=False,
 )
+# Third-party notices for what is actually inside (tools/packaging/third_party_notices.py), at licenses/.
+from tools.packaging.third_party_notices import notices_text  # noqa: E402
+collected = {name.split(".")[0] for name, *_ in a.pure} | {Path(dest).parts[0] for dest, *_ in a.binaries}
+notice_text, notice_dists = notices_text(sorted(collected))
+notice_file = hook_dir / "THIRD_PARTY_NOTICES.txt"
+notice_file.write_text(notice_text, encoding="utf-8")
+a.datas += [("licenses/THIRD_PARTY_NOTICES.txt", str(notice_file), "DATA")]
+print(f"QUANTGEN: third-party notices for {len(notice_dists)} distributions")
+
 pyz = PYZ(a.pure)
 icon = ROOT / "assets" / ("icon.ico" if sys.platform == "win32" else "icon.png")
 exe = EXE(
