@@ -309,10 +309,10 @@ class PaperPane(QWidget):
         super().__init__()
         from .app import label,table
         self.session=session;layout=QVBoxLayout(self)
-        layout.addWidget(label('Paper Trading · 실제 주문 없음','heading'))
+        self.heading=label('Paper Trading · 실제 주문 없음','heading');layout.addWidget(self.heading)
         self.status=label('명시적으로 세션을 열기 전에는 규칙/모의 기록을 읽지 않습니다.','muted');layout.addWidget(self.status)
         from .category_picker import CategoryFlow
-        actions=CategoryFlow();self.buttons={}
+        actions=CategoryFlow();self.buttons={};self.actions=actions
         for key,title,fn in [('open','모의 세션 읽기',session.open),('arm','Arm',self.arm),('disarm','Disarm',lambda:session.runtime.disarm()),
             ('halt','긴급 정지',lambda:session.runtime.halt()),('ack','HALT 확인',lambda:session.runtime.acknowledge()),
             ('tick','한 번 평가',session.tick),('reset','모의 기록 초기화',self.reset)]:
@@ -324,7 +324,7 @@ class PaperPane(QWidget):
                              'simulated orders and the decision log here.');layout.addWidget(self.dashboard)
         self.venues=table(['Market','Trading state','Reason','Active rules']);self.venues.setMinimumHeight(150);layout.addWidget(self.venues)
         self.orders=table(['ID','Symbol','Side','Quantity','Kind','Trigger','Limit']);self.orders.setMinimumHeight(200);layout.addWidget(self.orders)
-        settle=QHBoxLayout();self.session_widgets=[self.venues,self.orders]
+        settle=QHBoxLayout();self.settle_row=settle;self.session_widgets=[self.venues,self.orders]
         for title,fn in [('선택 모의 체결',lambda:self.settle(True)),('선택 모의 취소',lambda:self.settle(False))]:
             b=QPushButton(title);b.clicked.connect(lambda checked=False,f=fn:self.guard(f));settle.addWidget(b)
             self.session_widgets.append(b)
@@ -333,6 +333,82 @@ class PaperPane(QWidget):
         self.session_widgets.append(self.decisions)
         layout.addStretch()   # with the tables hidden, keep the controls together at the top
         session.changed.connect(self.refresh);session.notified.connect(self.status.setText);self.refresh()
+
+    def dock_into(self, side, *, title=None):
+        """The approved page drafts (owner 2026-11-17): the engine controls move into the page's right column (the
+        emergency stop first, on its own row) and 모의 세션 읽기 into its pinned foot; the heading, status, dashboard and
+        the tables stay in the canvas, each table in a card. Buttons, their guards, `refresh` and the session's safety
+        rules (explicit open, HALT acknowledgement, confirmation dialogs, the rail's emergency stop) are unchanged."""
+        from PyQt6.QtWidgets import QFrame, QGridLayout, QSizePolicy
+        from .page_kit import Card, Fold, Text
+        holder = QFrame(); holder.setObjectName('dockedForm')      # the column's transparent form surface
+        stack = QVBoxLayout(holder); stack.setContentsMargins(2, 0, 2, 0); stack.setSpacing(8)
+        page = side.add_page(title)
+        page.addWidget(holder)
+        engine = Fold(("Engine", "엔진"))
+        host = QWidget(); grid = QGridLayout(host); grid.setContentsMargins(0, 0, 0, 0)
+        grid.setHorizontalSpacing(6); grid.setVerticalSpacing(6)
+        for key, row, column, span in (('halt', 0, 0, 2), ('arm', 1, 0, 1), ('disarm', 1, 1, 1),
+                                       ('tick', 2, 0, 1), ('ack', 2, 1, 1)):
+            button = self.buttons[key]
+            self.actions.removeWidget(button)
+            button.setProperty('kit', 'secondary')
+            button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+            grid.addWidget(button, row, column, 1, span)
+        engine.body.addWidget(host)
+        engine.body.addWidget(Text(("There is no real order path. Arm starts evaluating the active rules; a triggered "
+                                    "rule creates a simulated order only. Emergency stop halts the engine at once.",
+                                    "실제 주문 경로가 없어요. 엔진 활성화는 활성 규칙 평가를 시작하고, 조건이 맞은 규칙은 "
+                                    "모의 주문만 만들어요. 긴급 정지는 엔진을 바로 멈춰요."), 'hint', wrap=True))
+        stack.addWidget(engine)
+        records = Fold(("Records", "기록"))
+        reset = self.buttons['reset']
+        self.actions.removeWidget(reset)
+        reset.setProperty('kit', 'secondary')
+        records.body.addWidget(reset, 0, Qt.AlignmentFlag.AlignLeft)
+        records.body.addWidget(Text(("Clears simulated orders and decisions; your rules stay.",
+                                     "모의 주문과 판단 기록만 지우고 규칙은 그대로 둬요."), 'hint', wrap=True))
+        stack.addWidget(records)
+        opener = self.buttons['open']
+        self.actions.removeWidget(opener)
+        opener.setProperty('kit', 'primary')
+        opener.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        side.foot.addWidget(opener)
+        fine = Text(("Paper only · no real orders", "모의 실행 전용 · 실제 주문 없음"), 'fine', wrap=True)
+        fine.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        side.foot.addWidget(fine)
+        layout = self.layout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(12)
+        for index in reversed(range(layout.count())):
+            item = layout.itemAt(index)
+            if item.layout() is self.actions:
+                layout.takeAt(index)
+            elif item.layout() is self.settle_row:
+                layout.takeAt(index)
+        index = layout.indexOf(self.dashboard)          # the session summary (or what to press) in its own card
+        layout.removeWidget(self.dashboard)
+        self.dashboard_card = Card(("Session", "세션"), margins=(16, 14, 16, 14), spacing=8)
+        self.dashboard_card.body.addWidget(self.dashboard)
+        self.dashboard_card.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
+        layout.insertWidget(index, self.dashboard_card)
+        for widget, pair in ((self.venues, ("Venues", "거래소 상태")), (self.orders, ("Simulated orders", "모의 주문")),
+                             (self.decisions, ("Decision log", "판단 기록"))):
+            index = layout.indexOf(widget)
+            layout.removeWidget(widget)
+            card = Card(pair, margins=(16, 14, 16, 14), spacing=8)
+            card.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
+            card.body.addWidget(widget)
+            if widget is self.orders:
+                card.body.addLayout(self.settle_row)
+            layout.insertWidget(index, card)
+            self.session_widgets.append(card)
+        self.docked_side = side
+        chain = [self.buttons[key] for key in ('halt', 'arm', 'disarm', 'tick', 'ack', 'reset', 'open')]
+        for first, second in zip(chain, chain[1:]):   # keyboard order as read in the column
+            QWidget.setTabOrder(first, second)
+        self.refresh()
+        return page
 
     def guard(self,fn):
         try:

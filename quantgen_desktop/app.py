@@ -1333,43 +1333,141 @@ class ResearchWindow(QMainWindow):
         self.quant_kit_language()
 
     def make_risk(self):
+        """Portfolio & Risk (owner-approved draft 2026-11-17, docs/product/ui_drafts_2026-11-17/draft_05_risk.png): the
+        stock detail's frame, as Build & Test. Toolbar: title, 포트폴리오 | 기술적 분석 | 모의투자 driving risk_tabs (kept
+        for callers and tests), the tab's scope badge, then the portfolio run's status badge and its exports (결과 저장 ·
+        보고서 ZIP). 포트폴리오: the canvas reads the result (PortfolioPane: lead line, key figures, frontier, weights and
+        comparison cards, the reading); the right column holds the settings in two folds and the per-symbol Monte Carlo
+        rows (risk_table / risk_empty) in a third, the run button pinned with the scope line; 읽는 법 holds the workspace
+        guide, which follows the tab. 기술적 분석: SignalsPane docked (ToolPane.dock_into). 모의투자: PaperPane, its engine
+        controls in the right column (PaperPane.dock_into); the rail's emergency stop stays. Every attribute, signal,
+        request, calculation and export is as before."""
+        from .page_kit import Badge, Button, Card, EmptyState, Fold, Soft, Workspace, rule
         from .portfolio import PortfolioPane
         from .signals import SignalsPane
-        layout = self.page("Portfolio & Risk", "현재 세션 분석의 분포 위험을 확인하세요.")
+        from .paper import PaperPane
         from .research_style import prepare_page
-        self.risk_page = prepare_page(layout)
-        layout.itemAt(1).widget().hide()
+        from .workspace_guide import WorkspaceGuide
+        from .risk_page import READINGS, EnabledMirror, ResultEmptyState, ToolbarFit, run_rows_table
+        outer = self.page(None, None)
+        self.risk_page = prepare_page(outer)
+        self.risk_page.setMaximumWidth(16777215)
+        scroll = self.stack.widget(self.stack.count() - 1)
+        self.risk_workspace = ws = Workspace(("Portfolio & Risk", "분석"))
+        outer.addWidget(ws)
+        ws.fit_to(scroll)
         self.portfolio = PortfolioPane()
         self.portfolio.requested.connect(self.run_portfolio)
         self.signals=SignalsPane();self.signals.requested.connect(lambda q:self.run_tool('signals',q))
-        self.risk_tabs=CurrentPageTabs();self.risk_tabs.addTab(self.portfolio,'Portfolio');self.risk_tabs.addTab(self.signals,'Signals')
-        # As tall as the selected page: spare height goes below the risk notes, not inside a short tab.
-        self.risk_tabs.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        from .paper import PaperPane
         self.paper = PaperPane(self.paper_session)
         self.paper.setProperty("reading_help_keep_visible", True)
+        self.risk_tabs=CurrentPageTabs();self.risk_tabs.addTab(self.portfolio,'Portfolio');self.risk_tabs.addTab(self.signals,'Signals')
         self.risk_tabs.addTab(self.paper, 'Paper Trading')
-        from .workspace_guide import WorkspaceGuide
+        # As tall as the selected page: the canvas scrolls by itself when a result is longer than the window.
+        self.risk_tabs.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        ws.canvas.addWidget(self.risk_tabs, 1)
+        portfolio_side, signals_side, paper_side = ws.side, ws.add_side(), ws.add_side()
         self.risk_guide = WorkspaceGuide('portfolio')
-        self.risk_tabs.currentChanged.connect(lambda i:self.risk_guide.set_key(('portfolio','signals','paper')[i]))
-        layout.addWidget(self.risk_guide)
-        layout.addWidget(self.risk_tabs)
-        layout.addWidget(label("개별 가격 시뮬레이션 위험", "heading"))
-        self.risk_table = table(["Symbol", "Model", "P(loss)", "VaR 95", "CVaR", "Source"])
+        # 포트폴리오, right column: 자산 구성 · 목적함수·제약 (PortfolioPane) and the Monte Carlo rows; 읽는 법.
+        settings = portfolio_side.add_page(("Settings", "설정"))
+        self.portfolio.dock_into(portfolio_side, page=settings)
+        settings.addWidget(rule())
+        self.risk_fold = Fold(("Individual price simulation risk", "개별 가격 시뮬레이션 위험"))
+        self.risk_table = run_rows_table(["Symbol", "Model", "P(loss)", "VaR 95", "CVaR", "Source"])
         self.risk_table.setProperty('localized_columns', [1])
         self.risk_table._qg_status_columns = {5: 'official'}   # SYNTHETIC -> 합성 데이터(SYNTHETIC)
-        from .result_layout import fit_result_table
-        fit_result_table(self.risk_table)   # as tall as its rows; no empty body
-        layout.addWidget(self.risk_table)
+        self.risk_fold.body.addWidget(self.risk_table)
         # Until a Monte Carlo run completes, say where the rows come from instead of an empty table.
         self.risk_empty = label("No Monte Carlo run in this session yet. Run one under Build & Test → Monte Carlo; "
-                                "each completed run adds a row here.", "muted")
+                                "each completed run adds a row here.", "caption")
+        self.risk_empty.localized_text = {
+            "ko": "이번 세션에 실행한 몬테카를로 분석이 아직 없어요. 설계/검증 → 몬테카를로에서 분석을 실행하면 완료된 "
+                  "실행마다 여기에 한 줄씩 추가돼요.",
+            "en": self.risk_empty.source_text}
+        self.risk_empty.retranslate()
         self.risk_empty.setProperty("reading_help_keep_visible", True)
-        layout.addWidget(self.risk_empty)
-        notice = label("각 행은 개별 가격 시뮬레이션입니다. 포트폴리오 전체 위험이나 전략 백테스트가 아닙니다.", "muted")
+        self.risk_fold.body.addWidget(self.risk_empty)
+        notice = label("각 행은 개별 가격 시뮬레이션입니다. 포트폴리오 전체 위험이나 전략 백테스트가 아닙니다.", "caption")
+        notice.localized_text = {"ko": "설계/검증에서 실행한 개별 가격 시뮬레이션이에요. 포트폴리오 전체 위험이나 "
+                                       "전략 백테스트가 아니에요.",
+                                 "en": "Individual price simulations run under Build & Test; not portfolio-wide risk "
+                                       "or a strategy backtest."}
+        notice.retranslate()
         notice.setProperty("reading_help_keep_visible", True)
-        layout.addWidget(notice)
-        layout.addStretch()
+        self.risk_fold.body.addWidget(notice)
+        holder = QFrame(); holder.setObjectName("dockedForm")      # the column's transparent form surface
+        box = QVBoxLayout(holder); box.setContentsMargins(2, 0, 2, 0); box.addWidget(self.risk_fold)
+        settings.addWidget(holder)
+        model = self.risk_table.model()
+        for signal in (model.rowsInserted, model.rowsRemoved, model.modelReset):
+            signal.connect(self.risk_count_runs)
+        self.risk_guide_pages = [portfolio_side.add_page(("How to read", "읽는 법"))]
+        # 기술적 분석: the form in the right column, the run button pinned; the result and its exports in the canvas.
+        self.signals.dock_into(signals_side, title=("Settings", "설정"))
+        self.signals_empty = Card()
+        self.signals_empty.setMinimumHeight(320)
+        self.signals_empty.body.addWidget(EmptyState(
+            ("Press [Run analysis] to see the composite score, each indicator's score and a costed backtest here.",
+             "[분석 실행]을 누르면 종합 점수, 지표별 점수, 비용을 뺀 백테스트가 여기에 나타나요.")))
+        self.signals.layout().insertWidget(1, self.signals_empty)
+        ResultEmptyState(self.signals, self.signals_empty)
+        self.risk_guide_pages.append(signals_side.add_page(("How to read", "읽는 법")))
+        # 모의투자: engine controls in the right column, 모의 세션 읽기 pinned; the tables in the canvas.
+        self.paper.dock_into(paper_side, title=("Controls", "제어"))
+        self.risk_guide_pages.append(paper_side.add_page(("How to read", "읽는 법")))
+        self.risk_guide_pages[0].addWidget(self.risk_guide)
+        for page, (title, text) in zip(self.risk_guide_pages, READINGS):
+            page.addWidget(Soft(title, text))
+        ws.finish()
+        ws.bind_tabs(self.risk_tabs, (("Portfolio", "포트폴리오"), ("Technical analysis", "기술적 분석"),
+                                      ("Paper trading", "모의투자")),
+                     sides=(portfolio_side, signals_side, paper_side), on_change=self.risk_tab_changed)
+        scope = QWidget()                      # the tab's scope badge; steps aside when the toolbar is narrow
+        scope_row = QHBoxLayout(scope); scope_row.setContentsMargins(0, 0, 0, 0)
+        self.risk_scope_badge = Badge()
+        scope_row.addWidget(self.risk_scope_badge, 0, Qt.AlignmentFlag.AlignVCenter)
+        ws.add_toolbar(scope)
+        # The portfolio run's status and its exports (the pane's own buttons stay, hidden, for the same report).
+        actions = QWidget()
+        row = QHBoxLayout(actions); row.setContentsMargins(0, 0, 0, 0); row.setSpacing(8)
+        row.addWidget(self.portfolio.badge, 0, Qt.AlignmentFlag.AlignVCenter)
+        self.risk_save = Button(("Save result", "결과 저장"), "ghost")
+        self.risk_zip = Button(("Report ZIP", "보고서 ZIP"), "secondary")
+        exports = self.portfolio.exports
+        for button, source, bundle in ((self.risk_save, exports.json_button, False), (self.risk_zip, exports.zip_button, True)):
+            button.clicked.connect(lambda checked=False, b=bundle: self.portfolio.exports.save(b))
+            EnabledMirror(source, button)
+            row.addWidget(button, 0, Qt.AlignmentFlag.AlignVCenter)
+        exports.hide()
+        self.risk_portfolio_actions = ws.add_toolbar(actions, right=True)
+        self.risk_toolbar_fit = ToolbarFit(ws, scope, actions, ws.toolbar_right, self.portfolio.lead_actions)
+        self.risk_tab_changed(self.risk_tabs.currentIndex())
+        self.kit_language()
+
+    def risk_count_runs(self, *args):
+        """'개별 가격 시뮬레이션 위험 2건': the fold's count follows the rows refresh_views writes."""
+        try:
+            rows = self.risk_table.rowCount()
+            self.risk_fold.set_count((f"{rows}", f"{rows}건") if rows else "")
+        except RuntimeError:   # the window is being destroyed
+            pass
+
+    def risk_tab_changed(self, index):
+        """The guide follows the tab (its key and its place in that tab's 읽는 법); the toolbar shows the tab's scope
+        badge, and the portfolio's status and exports only on 포트폴리오."""
+        from .risk_page import SCOPE_BADGES, TAB_KEYS
+        if not 0 <= index < len(TAB_KEYS):
+            return
+        self.risk_guide.set_key(TAB_KEYS[index])
+        pages = getattr(self, 'risk_guide_pages', ())
+        if index < len(pages) and pages[index].indexOf(self.risk_guide) < 0:
+            for page in pages:
+                page.removeWidget(self.risk_guide)
+            pages[index].insertWidget(0, self.risk_guide)
+        if hasattr(self, 'risk_scope_badge'):
+            self.risk_scope_badge.set_pair(SCOPE_BADGES[index])
+        if hasattr(self, 'risk_portfolio_actions'):
+            self.risk_portfolio_actions.setVisible(index == 0)
 
     def make_library(self):
         layout = self.page("Research Library", "이번 앱 세션의 실행 근거 · 종료 전에 필요한 결과를 저장하세요.")
@@ -1778,6 +1876,7 @@ class ResearchWindow(QMainWindow):
             self.statusBar().showMessage(f"시장 조회 실패: {code}")
         elif self.pending == "portfolio":
             self.portfolio.status.setText(f"FAILED · {code} · 입력/데이터를 확인하세요.")
+            self.portfolio.set_state("failed")
         elif self.pending == "bonds":
             self.bonds.status.setText(f"FAILED · {code} · Price/Yield와 곡선 출처를 확인하세요.")
         elif self.pending in self.tool_names:
@@ -1804,6 +1903,7 @@ class ResearchWindow(QMainWindow):
         self.portfolio.clear_result()
         self.pending = "portfolio"
         self.portfolio.status.setText("최적화 중… 화면을 이동해도 계속됩니다.")
+        self.portfolio.set_state("running")
         self.jobs.start(lambda:self.portfolio_runner(request))
 
     @pyqtSlot(object)
