@@ -21,6 +21,7 @@
 | 10 | 창이나 화면에서 떼어 낸 위젯(레이아웃 밖, `parent` 없음)을 창의 Python 속성으로만 들고 있음 | 떼어 낸 위젯은 부모를 주거나, 바꿀 때·창을 닫을 때 `deleteLater()`로 직접 지움. 앱 전체(`QApplication`)에 건 이벤트 필터는 창이 사라질 때 `removeEventFilter` | — (시범 실측, 아래) |
 | 11 | `sip.isdeleted(x)`, `from PyQt6 import sip` | 새 코드에서는 쓰지 말고, 꼭 필요하면 한 도움 함수에 모음 (변환 도구가 `shiboken6.isValid`로 바꿈) | `sip` |
 | 12 | `font.setWeight(600)`처럼 숫자를 그대로 넘김 | `font.setWeight(QFont.Weight(600))`. PySide6는 숫자를 받지 않고 TypeError를 냅니다. `paintEvent` 안에서 나면 그리기 도구(QPainter)가 닫히지 않아 앱이 죽습니다 (실측: UI `bonds.py:201`, 단계 6 세그폴트. 고친 뒤 20개 테스트 모두 통과, 2번 중 2번) | `10-int-enum` |
+| 13 | 사용자 글자를 Qt 항목 데이터(`addItem(text, data)`, `setData`)에 넣은 뒤 꺼내 검사 | 검사는 Qt에 넣기 **전에** 합니다. 데이터에는 키만 넣고 원본은 Python 딕셔너리에 둡니다. PySide6는 짝 없는 서로게이트(`'\ud800'`)를 조용히 지웁니다. 딕셔너리째 넣어도 QVariantMap으로 바뀌며 지워집니다 (실측, PyQt6는 그대로 둠) | — (`4-combo-data`와 함께 검토) |
 
 ## 시범에서 드러난 세그폴트·메모리 폭증의 원인 (6번 항목의 근거, 2026-11-17 확정)
 
