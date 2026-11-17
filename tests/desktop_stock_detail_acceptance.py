@@ -1387,10 +1387,17 @@ class StockDetailTests(unittest.TestCase):
             self.assertFalse([t for t in shown if t.strip() in old_heads], key)
             self.assertTrue(card.headline.text(), key)
             self.assertTrue(card.gauge.isVisible(), key)
-            self.assertEqual([c.text() for c in card.cues.chips if c.text()], list(short_guide(key, "ko").cues))
-            lines = sum(round(w.height() / w.fontMetrics().lineSpacing()) for w in (card.headline, card.one_liner,
-                                                                                   card.caution) if w.isVisible())
-            self.assertLessEqual(lines, 4, key)
+            # Owner 2026-11-17 ("모든 기술지표 해석에, '결론부'가 필요합니다 ... 개념설명을 간소화해도 좋습니다"): the
+            # conclusion replaces the cue chips; the concept is the one short line, the regime line the limit.
+            from core.education.outlook import outlook
+            self.assertFalse(card.cues.isVisibleTo(card), key)
+            self.assertTrue(card.conclusion.isVisibleTo(card), key)
+            self.assertEqual([w.text() for w in card.conclusion.sides["up"][2]], ["· " + t for t in outlook(key).up])
+            self.assertEqual(card.caution.text(), outlook(key).regime)
+            lines = sum(round(w.height() / w.fontMetrics().lineSpacing()) for w in (card.headline, card.one_liner)
+                        if w.isVisible())
+            self.assertLessEqual(lines, 3, key)
+            self.assertLessEqual(round(card.caution.height() / card.caution.fontMetrics().lineSpacing()), 2, key)
             self.assertFalse(card.details.isVisible())
         # Picker rows keep the whole name in a 320px column; the place moves to line 2 instead.
         self.window.resize(1000, 700); self.settle(); self.settle()
@@ -1455,7 +1462,8 @@ class StockDetailTests(unittest.TestCase):
         card = picker.rows()["rsi"].guide
         if 30 < round(rsi, 1) < 70:
             self.assertEqual(card.pill.text(), "30~70 사이")
-        self.assertEqual(card.caution.text(), CAUTION_LOW["rsi"][0] if rsi < 50 else short_guide("rsi", "ko").caution)
+        from core.education.outlook import outlook
+        self.assertEqual(card.caution.text(), outlook("rsi").regime)   # owner 2026-11-17: the regime line is the limit
         view.explain("adx"); self.settle(2)
         card = picker.rows()["adx"].guide
         self.assertEqual(card.gauge.kind, "level")

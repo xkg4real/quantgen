@@ -18,6 +18,7 @@ from core.i18n import LocaleContext
 from core.theme import LIGHT
 from . import indicators as I
 from . import study_guide as G
+from . import outlook as O
 from core.market.presentation import study_colors
 
 ORDER = ('sma','ema','rsi','macd','bb') + tuple(s.key for s in I.STUDIES if s.key not in I.BY_KEY)
@@ -188,7 +189,13 @@ def reading_text(series,keys,index,locale=None):
         missing=missing_reason(series,key,ctx.language)
         reading=missing or G.short_reading(key,bars,index,language=ctx.language,values=values.get(key),supply=getattr(series,'supply',None))
         note='' if missing else reading_tip(key,ctx.language)
-        parts.append(I.study(key).name(ctx.language)+' · '+reading+('\n'+note if note else ''))
+        # Owner 2026-11-17: every reading ends with its conclusion (core.education.outlook).
+        current=None
+        if not missing and key in O.OUTLOOK:
+            try:current=O.now(key,values.get(key),bars,index,ctx.language)
+            except Exception:current=None
+        verdict=(('지금은 ' if ctx.language=='ko' else 'Now: ')+current.label+' · '+current.reason) if current else ''
+        parts.append(I.study(key).name(ctx.language)+' · '+reading+('\n'+verdict if verdict else '')+('\n'+note if note else ''))
     difference=alignment_note(selected,bars,index,language=ctx.language,values=values)
     if difference:parts.append(difference)
     return '\n\n'.join(parts)
@@ -210,6 +217,9 @@ def learning_bundle(series,keys,meta,*,case_name,locale=None,cursor=None):
         body.append('<section><h2>'+escape(item.name)+'</h2>')
         for title,value in ((ctx.t('meaning'),item.what),(ctx.t('look'),item.how),(ctx.t('limit'),item.caution)):
             body.append('<h3>'+escape(title)+'</h3><p>'+escape(value)+'</p>')
+        if key in O.OUTLOOK:
+            body.append('<h3>'+escape('결론' if ctx.language=='ko' else 'Conclusion')+'</h3><p>'
+                        +escape(O.text_block(key,ctx.language)).replace('\n','<br>')+'</p>')
         body.append('<p>'+escape(missing_reason(series,key,ctx.language))+'</p></section>')
     if cursor is not None:
         body.append('<p>'+escape(cursor_text(series,selected,cursor,ctx))+'</p>')

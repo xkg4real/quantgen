@@ -1,0 +1,77 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="qg.css"><script src="qg.js"></script></head>
+<body>
+<main class="page">
+  <div class="toolbar">
+    <div class="title">설계/검증</div>
+    <div class="seg" style="margin-left:14px"><span class="on">몬테카를로</span><span>전략 실험실</span></div>
+    <span class="badge" style="margin-left:6px"><span class="dot"></span>시뮬레이션 · 미래 보장 아님</span>
+    <div class="spacer"></div>
+    <span class="btn ghost">결과 저장</span><span class="btn">보고서 ZIP</span>
+  </div>
+  <div class="body">
+    <section class="canvas">
+      <div class="figs">
+        <span><b style="font-size:15px">AAPL</b> <span class="muted">· GARCH(1,1)-t · 126거래일 · 경로 5,000개</span></span>
+      </div>
+      <div class="figs">
+        <span><span class="k">시작</span><span class="v num">$227.48</span></span>
+        <span><span class="k">중앙값</span><span class="v num">$236.10</span></span>
+        <span><span class="k">하위 5%</span><span class="v num down">$188.92</span></span>
+        <span><span class="k">상위 5%</span><span class="v num up">$291.37</span></span>
+        <span><span class="k">손실 확률</span><span class="v num">38.6%</span></span>
+        <span><span class="k">95% VaR</span><span class="v num">−17.0%</span></span>
+      </div>
+      <div class="card" style="flex:1; padding:12px 0 0 14px; display:flex; flex-direction:column">
+        <div style="flex:1; min-height:0"><svg id="fan" data-fit="0" data-padx="14"></svg></div>
+        <div class="toolbar" style="padding:2px 14px 10px 0; min-height:30px">
+          <div class="pills"><span>1개월</span><span>3개월</span><span class="on">6개월</span><span>1년</span></div>
+          <div class="spacer"></div>
+          <span class="small muted">■ 5–95% 범위 &nbsp; ■ 25–75% 범위 &nbsp; — 중앙값</span>
+        </div>
+      </div>
+    </section>
+    <aside class="side">
+      <div class="seg full"><span class="on">설정</span><span>읽는 법</span></div>
+      <div class="scroll">
+        <div class="fold-head"><i class="chev"></i>종목·기간</div>
+        <div class="fields">
+          <div class="field"><label>종목 코드</label><div class="in">AAPL</div></div>
+          <div class="field"><label>분석 기간(거래일)</label><div class="in num">126</div></div>
+          <div class="field"><label>시뮬레이션 경로 수</label><div class="in num">5,000</div></div>
+          <div class="field"><label>난수 시드</label><div class="in num">7</div></div>
+        </div>
+        <div class="hr"></div>
+        <div class="fold-head"><i class="chev"></i>모형 가정</div>
+        <div class="fields">
+          <div class="field wide"><label>모델</label><div class="in select">GARCH(1,1)-t · 변동성 군집</div></div>
+          <div class="field wide"><label>추세 가정</label><div class="in select">위험 프리미엄 · rf + ERP</div></div>
+          <div class="field"><label>주식위험프리미엄</label><div class="in num">4.00 %</div></div>
+          <div class="field"><label>목표 가격</label><div class="in ph">선택 입력</div></div>
+        </div>
+        <div class="guide" style="margin-top:2px">
+          <div class="small" style="font-weight:600">결과를 읽는 법</div>
+          <div class="hint">진한 띠 안에 경로의 절반이, 옅은 띠 안에 90%가 들어와요. 띠가 넓을수록 가정한 변동성이 커요.</div>
+        </div>
+      </div>
+      <div class="foot">
+        <button class="btn primary block">분석 실행</button>
+        <div class="tiny faint" style="text-align:center">데이터 출처·시드·모델 가정을 결과와 함께 기록해요 · NOT_RUN 판정 유지</div>
+      </div>
+    </aside>
+  </div>
+</main>
+<script>
+rail("quant");
+const fan = document.getElementById("fan");
+const H0 = 60, n = 127; const hist0 = walk(H0, 196, .022, 11, .0026); const hist = hist0.map(v => v * 227.48 / hist0[H0 - 1]);
+const med = [], p5 = [], p95 = [], p25 = [], p75 = [], past = [];
+for (let i = 0; i < H0 + n - 1; i++) { if (i < H0) { past.push(hist[i]); med.push(null); p5.push(null); p95.push(null); p25.push(null); p75.push(null); continue; }
+  past.push(null); const t = (i - H0 + 1) / (n - 1), s = Math.sqrt(t);
+  med.push(227.48 * (1 + .038 * t)); p5.push(227.48 * (1 + .038 * t - .17 * s)); p95.push(227.48 * (1 + .038 * t + .28 * s));
+  p25.push(227.48 * (1 + .038 * t - .07 * s)); p75.push(227.48 * (1 + .038 * t + .1 * s)); }
+med[H0 - 1] = p5[H0 - 1] = p95[H0 - 1] = p25[H0 - 1] = p75[H0 - 1] = 227.48;
+lineChart(fan, [{ values: med, color: "#194C40", width: 2 }, { values: past, color: "#202823", width: 1.6 }],
+  { bands: [{ upper: p95, lower: p5, fill: "#E5EEE8" }, { upper: p75, lower: p25, fill: "#C9DCD2" }], digits: 0, prefix: "$", ticks: 5,
+    vlines: [[H0 - 1, "#9AA29C"]], xlabels: [[0, "3개월 전"], [H0 - 1, "오늘"], [H0 + 20, "1개월"], [H0 + 62, "3개월"], [H0 + 125, "6개월"]], last: true });
+</script>
+</body></html>

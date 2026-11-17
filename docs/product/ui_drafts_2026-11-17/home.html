@@ -1,0 +1,194 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="qg.css"><script src="qg.js"></script>
+<style>
+/* Home: the market tiles (paged four at a time, the owner's arrow paging) */
+.sec { display: flex; align-items: center; gap: 8px; min-height: 28px; }
+.sec .h { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; }
+.sec .cap { font-size: 12px; color: var(--muted); margin-left: 4px; }
+.arrow { width: 28px; height: 28px; border-radius: 8px; background: var(--surface2); display: grid; place-items: center; }
+.arrow i { width: 7px; height: 7px; border-left: 1.6px solid var(--text); border-bottom: 1.6px solid var(--text); transform: rotate(45deg); margin-left: 3px; }
+.arrow.next i { transform: rotate(-135deg); margin-left: -3px; }
+.arrow.off { background: transparent; } .arrow.off i { border-color: var(--faint); }
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0; overflow: hidden; }
+.tile.sel { background: var(--accent-soft); border-color: #BFD4C9; }
+.tile .nm { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; font-size: 13px; font-weight: 500; white-space: nowrap; }
+.tile .nm .tk { font-size: 11px; color: var(--faint); font-weight: 500; letter-spacing: 0.2px; }
+.tile .bd { display: flex; align-items: center; gap: 6px; min-width: 0; }
+
+.tile .val { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; white-space: nowrap; }
+.tile .val small { font-size: 12px; color: var(--muted); font-weight: 500; margin-left: 2px; }
+.tile .chg { font-size: 12px; font-weight: 600; padding: 2px 7px; border-radius: 7px; margin-left: auto; white-space: nowrap; }
+.tile .chg.up { background: var(--up-tint); } .tile .chg.down { background: var(--down-tint); }
+.tile.sel .chg.up { background: #FBE9E9; }
+.tile .sp { height: 30px; margin-top: 2px; }
+/* selected market heading + chart */
+.mk { display: flex; align-items: baseline; gap: 8px; }
+.mk b { font-size: 15px; font-weight: 600; }
+.legend { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { display: inline-block; width: 14px; height: 0; border-top: 2px solid var(--up); }
+.legend i.base { border-top: 1px dashed var(--muted); }
+/* side: watchlist + recent research rows */
+.fold-head .act { margin-left: auto; font-size: 12px; font-weight: 500; color: var(--accent); }
+.fold-head .act.m { color: var(--muted); font-weight: 400; }
+.side .scroll { gap: 12px; }
+.wrow { display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: 10px; }
+.wrow .who { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.wrow .who b { font-size: 13px; font-weight: 500; }
+.wrow .who span { font-size: 11px; color: var(--muted); }
+.wrow .ws { width: 52px; height: 22px; flex: none; }
+.wrow .px { width: 76px; flex: none; text-align: right; display: flex; flex-direction: column; gap: 2px; }
+.wrow .px b { font-size: 13px; font-weight: 500; }
+.wrow .px span { font-size: 12px; font-weight: 500; }
+.wrow.hover { background: var(--soft); }
+.avatar.tx { font-size: 11px; letter-spacing: -0.3px; }
+.run { display: flex; align-items: center; gap: 10px; padding: 9px 8px; }
+.run + .run { border-top: 1px solid var(--line); }
+.run .ic { width: 30px; height: 30px; border-radius: 9px; background: var(--surface2); color: var(--accent); display: grid; place-items: center; font-size: 11px; font-weight: 600; flex: none; letter-spacing: -0.2px; }
+.run .who { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.run .who b { font-size: 13px; font-weight: 500; }
+.run .who span { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.chip.run-live { background: var(--flat-tint); color: var(--warning); }
+.chip.nr { background: var(--surface2); color: var(--muted); letter-spacing: 0.2px; }
+.counts { display: flex; gap: 8px; }
+.counts div { flex: 1; background: var(--soft); border-radius: 10px; padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; }
+.counts .k { font-size: 11px; color: var(--muted); }
+.counts .v { font-size: 17px; font-weight: 600; }
+</style></head>
+<body>
+<main class="page">
+  <div class="toolbar">
+    <div class="title">연구 홈</div>
+    <span class="sub num" style="margin-left:8px">2026-11-17 (화)</span>
+    <span class="badge" style="margin-left:6px"><span class="dot"></span>지연 · 일별 종가</span>
+    <div class="spacer"></div>
+    <span class="btn ghost">전체 시세 표</span>
+    <span class="btn" style="display:inline-flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M11.6 5.2A5 5 0 1 0 12 8" fill="none" stroke="#202823" stroke-width="1.5" stroke-linecap="round"/><path d="M12 2v3.4H8.6" fill="none" stroke="#202823" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>새로고침</span>
+  </div>
+  <div class="body">
+    <section class="canvas">
+      <div class="sec">
+        <span class="h">주요 시장</span><span class="cap">일별 관측 · 타일을 누르면 아래 차트가 바뀌어요</span>
+        <div class="spacer" style="flex:1"></div>
+        <span class="small muted num" style="margin-right:4px">6개 중 1–4</span>
+        <span class="arrow off"><i></i></span><span class="arrow next"><i></i></span>
+      </div>
+      <div class="tiles" id="tiles"></div>
+      <div style="display:flex; flex-direction:column; gap:7px; margin-top:4px">
+        <div class="mk"><b>코스피 종합지수</b><span class="muted">· KOSPI · 일별 종가 · 6개월</span></div>
+        <div class="figs" id="figs"></div>
+      </div>
+      <div class="card" style="flex:1; padding:12px 0 0 14px; display:flex; flex-direction:column; min-height:0">
+        <div style="flex:1; min-height:0"><svg id="chart" data-fit="0" data-padx="14"></svg></div>
+        <div class="toolbar" style="padding:2px 14px 10px 0; min-height:30px">
+          <div class="pills"><span>1개월</span><span>3개월</span><span class="on">6개월</span><span>1년</span></div>
+          <div class="spacer"></div>
+          <span class="small muted"><span class="legend"><i></i>일별 종가</span> &nbsp;&nbsp; <span class="legend"><i class="base"></i>기간 첫 종가</span></span>
+        </div>
+      </div>
+    </section>
+    <aside class="side">
+      <div class="seg full"><span class="on">내 목록</span><span>읽는 법</span></div>
+      <div class="scroll">
+        <div class="fold-head"><i class="chev"></i>관심종목 <span class="count num">6/20</span><span class="act">+ 종목 추가</span></div>
+        <div class="rows" id="watch" style="margin-top:-6px"></div>
+        <div class="hr"></div>
+        <div class="fold-head"><i class="chev"></i>최근 연구 <span class="count num">3</span><span class="act m">연구 보관함 ›</span></div>
+        <div class="figs" style="margin-top:-6px; padding-left:2px">
+          <span><span class="k">완료한 분석</span><span class="v num">4</span></span>
+          <span><span class="k">진행 중</span><span class="v num">1</span></span>
+          <span><span class="k">확인할 실행</span><span class="v num">1</span></span>
+        </div>
+        <div class="rows" style="margin-top:-8px">
+          <div class="run"><div class="ic">VaR</div><div class="who"><b>코스피 위험 분석</b><span class="num">분석 · VaR·CVaR 95% · 오늘 09:12</span></div><span class="chip run-live">진행 중</span></div>
+          <div class="run"><div class="ic">MC</div><div class="who"><b>AAPL 몬테카를로</b><span class="num">GARCH(1,1)-t · 경로 5,000개 · 11-16</span></div><span class="chip ok">완료</span></div>
+          <div class="run"><div class="ic">BT</div><div class="who"><b>삼성전자 이동평균 교차</b><span class="num">전략 실험실 · 2018–2026 · 11-15</span></div><span class="chip nr">NOT_RUN</span></div>
+        </div>
+        <div class="guide" style="padding:12px 14px; gap:7px">
+          <div style="display:flex; align-items:baseline; gap:8px"><span class="small" style="font-weight:600">가능성을 하나의 숫자로 좁히지 마세요</span><span class="tiny muted num" style="margin-left:auto">AAPL · 126거래일</span></div>
+          <div style="height:38px"><svg id="fanmini" data-fit="0"></svg></div>
+          <div class="tiny muted">P5–P95는 시뮬레이션 분포의 중앙 90% 구간이에요 · 수익 보장 아님</div>
+        </div>
+      </div>
+      <div class="foot">
+        <button class="btn primary block">설계/검증에서 연구 시작</button>
+        <div class="tiny faint" style="text-align:center">몬테카를로 결과는 투자 판정과 별개예요 · 미래 보장 아님 · 투자 권유 아님</div>
+      </div>
+    </aside>
+  </div>
+</main>
+<script>
+rail("home");
+const UP = "#C8343D", DOWN = "#2F6DB5";
+// Fit a walk so that it ends at `last` and its final step is `chg` (a fraction).
+function shaped(n, seed, vol, drift, last, chg) { const w = walk(n, 100, vol, seed, drift); const k = (last / (1 + chg)) / w[n - 2];
+  const s = w.map(v => v * k); s[n - 1] = last; return s; }
+// KOSPI: 6 months of daily closes (~125 trading days) ending 2,551.37, +0.84% on the day.
+const N = 125; const kospi = shaped(N, 137, .022, .0005, 2551.37, .0084);
+const markets = [
+  { nm: "S&P 500", tk: "SPX", v: "5,912.40", u: "", chg: "+0.42%", up: true, s: shaped(24, 5, .012, .0008, 5912.4, .0042) },
+  { nm: "코스피 종합지수", tk: "KOSPI", v: "2,551.37", u: "", chg: "+0.84%", up: true, s: kospi.slice(-24), sel: true },
+  { nm: "달러/원 환율", tk: "USDKRW", v: "1,389.60", u: "원", chg: "−0.21%", up: false, s: shaped(24, 9, .006, -.0003, 1389.6, -.0021) },
+  { nm: "미국 10년 국채 금리", tk: "US10Y", v: "4.31", u: "%", chg: "+3.0 bp", up: true, s: shaped(24, 15, .016, .001, 4.31, .007) },
+];
+const tiles = document.getElementById("tiles");
+markets.forEach((m, i) => { const d = document.createElement("div"); d.className = "tile" + (m.sel ? " sel" : "");
+  d.innerHTML = `<div class="nm"><span>${m.nm}</span><span class="tk">${m.tk}</span></div>
+    <div class="bd"><span class="val num">${m.v}${m.u ? `<small>${m.u}</small>` : ""}</span><span class="chg num ${m.up ? "up" : "down"}">${m.chg}</span></div>
+    <div class="sp"><svg id="sp${i}" data-fit="0"></svg></div>`; tiles.append(d); });
+markets.forEach((m, i) => spark(document.getElementById("sp" + i), m.s, m.up ? UP : DOWN));
+
+// Key figures of the selected range, from the series itself.
+const first = kospi[0], last = kospi[N - 1], prev = kospi[N - 2]; const hi = Math.max(...kospi), lo = Math.min(...kospi);
+const hiI = kospi.indexOf(hi), loI = kospi.indexOf(lo);
+const pct = v => (v >= 0 ? "+" : "−") + fmt(Math.abs(v) * 100, 2) + "%";
+const sgn = v => (v >= 0 ? "+" : "−") + fmt(Math.abs(v), 2);
+document.getElementById("figs").innerHTML = `
+  <span><span class="k">종가</span><span class="v num">${fmt(last, 2)}</span></span>
+  <span><span class="k">전일 대비</span><span class="v num up">${sgn(last - prev)} (${pct(last / prev - 1)})</span></span>
+  <span><span class="k">6개월 변동</span><span class="v num ${last >= first ? "up" : "down"}">${pct(last / first - 1)}</span></span>
+  <span><span class="k">기간 고가</span><span class="v num">${fmt(hi, 2)}</span></span>
+  <span><span class="k">기간 저가</span><span class="v num">${fmt(lo, 2)}</span></span>`;
+
+// The large chart: the closes, a light area, the range's first close as the base line, the last-close tag.
+const svg = document.getElementById("chart");
+const months = [[8, "6월"], [29, "7월"], [52, "8월"], [73, "9월"], [91, "10월"], [113, "11월"]];
+const c = lineChart(svg, [{ values: kospi, color: UP, width: 2 }], { digits: 0, ticks: 5, lo: 2150, hi: 2650, xlabels: months, last: true, hlines: [[first, "#9AA29C", "4 4"]] });
+svg.querySelectorAll("text").forEach(t => { if (+t.getAttribute("x") > c.W - 64 && !t.getAttribute("font-weight") && Math.abs(+t.getAttribute("y") - 4 - c.y(last)) < 18) t.remove(); });
+const H = c.H - 22; const pts = kospi.map((v, i) => `${c.x(i).toFixed(1)},${c.y(v).toFixed(1)}`);
+const area = svgEl("polygon", { points: `${c.x(0)},${H} ${pts.join(" ")} ${c.x(N - 1)},${H}`, fill: UP, opacity: .06 });
+svg.insertBefore(area, svg.querySelector("path"));
+svg.append(svgEl("line", { x1: 0, x2: c.W - 64, y1: H, y2: H, stroke: "#E2E3DB" }));
+svg.append(svgEl("circle", { cx: c.x(N - 1), cy: c.y(last), r: 4.5, fill: UP, stroke: "#FFFEFB", "stroke-width": 2 }));
+// Hover readout (as HistoryChart._draw_hover): a dashed cross line, a dot and a small box at the top left.
+const hv = 97; svg.append(svgEl("line", { x1: c.x(hv), x2: c.x(hv), y1: 8, y2: H, stroke: "#9AA29C", "stroke-dasharray": "3 3" }));
+svg.append(svgEl("circle", { cx: c.x(hv), cy: c.y(kospi[hv]), r: 4, fill: UP, stroke: "#FFFEFB", "stroke-width": 2 }));
+const box = svgEl("g", {}); box.append(svgEl("rect", { x: 8, y: 8, width: 150, height: 28, rx: 8, fill: "#FFFEFB", stroke: "#ECEDE5" }));
+const bt = svgEl("text", { x: 20, y: 27, "font-size": 13, fill: "#202823", "font-weight": 500 }); bt.textContent = `2026-10-13 · ${fmt(kospi[hv], 2)}`; bt.setAttribute("style", "font-variant-numeric: tabular-nums");
+box.append(bt); svg.append(box); const bw = bt.getBBox().width; box.firstChild.setAttribute("width", Math.max(bw + 26, 172));
+
+// The latest Monte Carlo result as a mini fan (the AAPL run above: start $227.48, median $236.10, P5 $188.92, P95 $291.37).
+(() => { const f = document.getElementById("fanmini"); fit(f); const W = +f.getAttribute("width"), H = +f.getAttribute("height");
+  const lo = 184, hi = 296, Y = v => H - 1 - (v - lo) / (hi - lo) * (H - 2), h0 = W * .3, X = t => h0 + t * (W - h0);
+  const past = walk(30, 200, .045, 11, .005); const k = 227.48 / past[29]; const pp = past.map((v, i) => `${(i / 29 * h0).toFixed(1)},${Y(v * k).toFixed(1)}`);
+  const band = (a, b) => { const up = [], dn = []; for (let i = 0; i <= 20; i++) { const t = i / 20, sq = Math.sqrt(t), m = 227.48 * (1 + .038 * t);
+    up.push(`${X(t).toFixed(1)},${Y(m + 227.48 * b * sq).toFixed(1)}`); dn.unshift(`${X(t).toFixed(1)},${Y(m - 227.48 * a * sq).toFixed(1)}`); } return up.concat(dn).join(" "); };
+  f.append(svgEl("polygon", { points: band(.17, .28), fill: "#D9E6DF" })); f.append(svgEl("polygon", { points: band(.07, .1), fill: "#B9D0C4" }));
+  f.append(svgEl("line", { x1: X(0), x2: X(1), y1: Y(227.48), y2: Y(236.1), stroke: "#194C40", "stroke-width": 1.6 }));
+  f.append(svgEl("polyline", { points: pp.join(" "), fill: "none", stroke: "#202823", "stroke-width": 1.3 }));
+  f.append(svgEl("line", { x1: h0, x2: h0, y1: 0, y2: H, stroke: "#9AA29C", "stroke-dasharray": "2 3" })); })();
+// Watchlist rows.
+const watch = [
+  { av: "S", cls: "dark", nm: "삼성전자", code: "005930 · KRX", px: "76,375", chg: "−0.34%", up: false, seed: 31 },
+  { av: "SK", cls: "tx", nm: "SK하이닉스", code: "000660 · KRX", px: "182,400", chg: "+1.67%", up: true, seed: 32 },
+  { av: "H", cls: "", nm: "현대차", code: "005380 · KRX", px: "214,500", chg: "−0.69%", up: false, seed: 33 },
+  { av: "N", cls: "", nm: "NAVER", code: "035420 · KRX", px: "196,800", chg: "+0.41%", up: true, seed: 34 },
+  { av: "애플", cls: "tx", nm: "애플", code: "AAPL · NAS", px: "$227.48", chg: "+0.52%", up: true, seed: 35 },
+  { av: "NV", cls: "tx", nm: "엔비디아", code: "NVDA · NAS", px: "$146.20", chg: "+2.13%", up: true, seed: 36 },
+];
+const wl = document.getElementById("watch");
+watch.forEach((w, i) => { const d = document.createElement("div"); d.className = "wrow" + (i === 1 ? " hover" : "");
+  d.innerHTML = `<div class="avatar ${w.cls}">${w.av}</div><div class="who"><b>${w.nm}</b><span class="num">${w.code}</span></div>
+    <div class="ws"><svg id="ws${i}" data-fit="0"></svg></div><div class="px"><b class="num">${w.px}</b><span class="num ${w.up ? "up" : "down"}">${w.chg}</span></div>`; wl.append(d); });
+watch.forEach((w, i) => spark(document.getElementById("ws" + i), shaped(22, w.seed, .025, w.up ? .003 : -.003, 100, w.up ? .01 : -.01), w.up ? UP : DOWN));
+</script>
+</body></html>

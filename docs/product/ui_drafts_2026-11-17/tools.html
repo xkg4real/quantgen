@@ -1,0 +1,153 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="qg.css"><script src="qg.js"></script>
+<style>
+  .toolbar .pills span { padding: 6px 10px; }
+  .lead { display: flex; align-items: baseline; gap: 8px; }
+  .chart-head { display: flex; align-items: baseline; gap: 10px; padding: 0 18px 0 4px; }
+  .chart-head .read { margin-left: auto; font-size: 12px; color: var(--muted); }
+  .chart-head .read b { font-weight: 600; }
+  .legend { display: flex; gap: 14px; align-items: center; font-size: 12px; color: var(--muted); }
+  .legend i { display: inline-block; vertical-align: middle; margin-right: 5px; }
+  .legend .ln { width: 16px; height: 2px; background: var(--accent); }
+  .legend .dash { width: 16px; height: 0; border-top: 1.6px dashed var(--faint); }
+  .legend .sq { width: 10px; height: 10px; border-radius: 2px; background: var(--accent-soft); border: 1px solid #C9DCD2; }
+  .legend .pt { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .lower { display: flex; gap: 12px; height: 262px; flex: none; }
+  .lower .card { padding: 14px 16px 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  table.t.compact th { padding: 6px 10px; }
+  table.t.compact td { padding: 7px 10px; }
+  table.t.compact tr:last-child td { border-bottom: 0; }
+  .hedge-big { display: flex; align-items: baseline; gap: 8px; }
+  .hedge-big .n { font-size: 26px; font-weight: 600; letter-spacing: -0.5px; }
+  .krd { display: grid; grid-template-columns: 34px 1fr 52px; gap: 7px 10px; align-items: center; font-size: 12px; }
+  .krd .bar { height: 6px; }
+  .tool-chips { display: flex; gap: 6px; }
+  .tool-chips span { flex: 1; text-align: center; padding: 6px 0; border-radius: 9px; font-size: 13px; font-weight: 500;
+                     border: 1px solid var(--border); color: var(--muted); background: var(--surface); }
+  .tool-chips span.on { border-color: transparent; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .src { display: flex; align-items: flex-start; gap: 10px; padding: 11px 12px; border-radius: 12px; background: var(--soft); }
+  .src .k { font-size: 12px; font-weight: 600; margin-bottom: 3px; }
+</style></head>
+<body>
+<main class="page">
+  <div class="toolbar">
+    <div class="title">분석 도구</div>
+    <div class="pills" style="margin-left:12px; flex-wrap:nowrap"><span class="on">채권</span><span>금리</span><span>구조화 상품</span><span>외환</span><span>파생상품</span><span>ETF</span><span>KRX</span><span>가상자산</span><span>매크로 지표</span><span>매크로 v2</span></div>
+    <div class="spacer"></div>
+    <span class="badge ok"><span class="dot"></span>계산 완료</span>
+    <span class="btn ghost">결과 저장</span><span class="btn">보고서 ZIP</span>
+  </div>
+  <div class="body">
+    <section class="canvas">
+      <div class="lead">
+        <b style="font-size:15px">4.50% 10년 채권</b><span class="small muted">· 반기 이표 · 명목금액 1,000,000 · 수익률 4.30% 기준 · FRED 미국 국채 곡선 2026-11-13</span>
+      </div>
+      <div class="figs">
+        <span><span class="k">가격</span><span class="v num">101.612</span></span>
+        <span><span class="k">수익률</span><span class="v num">4.300%</span></span>
+        <span><span class="k">맥컬리 듀레이션</span><span class="v num">8.18년</span></span>
+        <span><span class="k">수정 듀레이션</span><span class="v num">8.007</span></span>
+        <span><span class="k">컨벡시티</span><span class="v num">76.57</span></span>
+        <span><span class="k">DV01</span><span class="v num">813.59</span><span class="faint small"> /bp</span></span>
+        <span><span class="k">z-스프레드</span><span class="v num">−6.4bp</span></span>
+      </div>
+      <div class="card" style="flex:1; min-height:0; padding:12px 0 0 14px; display:flex; flex-direction:column">
+        <div class="chart-head">
+          <span class="card-title">가격·수익률 곡선</span>
+          <span class="read">금리 1%p 상승 <b class="down num">−7.64%</b> · 1%p 하락 <b class="up num">+8.40%</b> · 같은 폭이면 이익이 손실보다 커요</span>
+        </div>
+        <div style="flex:1; min-height:0; margin-top:6px"><svg id="py" data-fit="0" data-padx="14"></svg></div>
+        <div class="toolbar" style="padding:2px 18px 10px 4px; min-height:30px">
+          <span class="small muted">가로 수익률(%) · 세로 액면 100당 가격</span>
+          <div class="spacer"></div>
+          <div class="legend"><span><i class="ln"></i>가격 곡선</span><span><i class="dash"></i>듀레이션 접선</span><span><i class="sq"></i>컨벡시티 효과</span><span><i class="pt"></i>현재</span></div>
+        </div>
+      </div>
+      <div class="lower">
+        <div class="card" style="flex:1.35">
+          <div class="card-title">금리 시나리오 <span class="small muted" style="font-weight:400">평행 이동 · 전체 재평가</span><span class="more">곡선 형태 5개 더 보기</span></div>
+          <table class="t compact num">
+            <thead><tr><th>충격</th><th class="r">새 가격</th><th class="r">손익</th><th class="r">손익 %</th><th class="r">듀레이션 근사</th></tr></thead>
+            <tbody>
+              <tr><td>−100bp</td><td class="r">110.150</td><td class="r up">+85,387</td><td class="r up">+8.40%</td><td class="r muted">+81,359</td></tr>
+              <tr><td>−50bp</td><td class="r">105.779</td><td class="r up">+41,669</td><td class="r up">+4.10%</td><td class="r muted">+40,679</td></tr>
+              <tr><td>−25bp</td><td class="r">103.670</td><td class="r up">+20,585</td><td class="r up">+2.03%</td><td class="r muted">+20,340</td></tr>
+              <tr><td>+25bp</td><td class="r">99.602</td><td class="r down">−20,099</td><td class="r down">−1.98%</td><td class="r muted">−20,340</td></tr>
+              <tr><td>+50bp</td><td class="r">97.639</td><td class="r down">−39,723</td><td class="r down">−3.91%</td><td class="r muted">−40,679</td></tr>
+              <tr><td>+100bp</td><td class="r">93.852</td><td class="r down">−77,599</td><td class="r down">−7.64%</td><td class="r muted">−81,359</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card" style="flex:1">
+          <div class="card-title">선물 헤지 <span class="more">실제 주문 없음</span></div>
+          <div class="hedge-big"><span class="n num">10계약</span><span class="muted">매도</span><span class="small faint num" style="margin-left:auto">계산값 10.01</span></div>
+          <div class="hint num">포지션 DV01 813.59 × 전환계수 0.80 ÷ CTD DV01 65.00<br>반올림 후 남는 DV01 <b style="color:var(--text); font-weight:500">+1.09</b> /bp</div>
+          <div class="hr" style="margin:2px 0"></div>
+          <div class="small" style="font-weight:500">만기별 DV01 <span class="muted" style="font-weight:400">· 10년 구간에 85%</span></div>
+          <div class="krd num">
+            <span class="muted">10년</span><div class="bar"><i style="width:100%"></i></div><span style="text-align:right">706.83</span>
+            <span class="muted">7년</span><div class="bar"><i style="width:8.2%"></i></div><span style="text-align:right">57.70</span>
+            <span class="muted">5년</span><div class="bar"><i style="width:5.1%"></i></div><span style="text-align:right">36.40</span>
+            <span class="muted">3년</span><div class="bar"><i style="width:2.5%"></i></div><span style="text-align:right">17.58</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <aside class="side">
+      <div class="seg full"><span class="on">설정</span><span>읽는 법</span></div>
+      <div class="scroll">
+        <div class="fold-head"><i class="chev"></i>채권 조건</div>
+        <div class="fields">
+          <div class="field"><label>표면금리 %</label><div class="in num">4.50</div></div>
+          <div class="field"><label>만기 · 년</label><div class="in num">10</div></div>
+          <div class="field"><label>명목금액</label><div class="in num">1,000,000</div></div>
+          <div class="field"><label>연간 이자 지급 횟수</label><div class="in select">반기</div></div>
+          <div class="field"><label>수익률 %</label><div class="in num">4.30</div></div>
+          <div class="field"><label>가격 · 액면 100당</label><div class="in ph">비워 둠</div></div>
+        </div>
+        <div class="hint">가격과 수익률 중 하나만 입력해요.<br>가격을 넣을 때는 수익률 칸을 비워 두세요.</div>
+        <div class="hr"></div>
+        <div class="fold-head"><i class="chev"></i>위험·헤지</div>
+        <div class="field"><label>도구</label>
+          <div class="tool-chips"><span class="on">계산 및 위험</span><span class="on">시나리오</span><span class="on">선물 헤지</span></div></div>
+        <div class="fields">
+          <div class="field wide"><label>포지션 DV01 · 선택 입력</label><div class="in ph">비우면 채권 DV01 813.59를 써요</div></div>
+          <div class="field"><label>계약당 최저가인도채권 DV01</label><div class="in num">65</div></div>
+          <div class="field"><label>전환계수</label><div class="in num">0.8</div></div>
+        </div>
+        <div class="src">
+          <div><div class="k">곡선 출처</div>
+          <div class="hint">FRED 미국 국채 수익률 · 2026-11-13 관측. 연결이 안 되면 합성 곡선으로 바꾸고 그렇다고 표시해요.</div></div>
+        </div>
+      </div>
+      <div class="foot">
+        <button class="btn primary block">채권 분석 실행</button>
+        <div class="tiny faint" style="text-align:center">곡선 출처와 관측일을 결과와 함께 기록해요 · 투자 권유 아님</div>
+      </div>
+    </aside>
+  </div>
+</main>
+<script>
+rail("tools");
+// 4.50% 10y semi-annual bond, priced off its own yield (same sampling as core: ytm ± 3%p, 121 points)
+function price(y) { const c = 2.25, n = 20, r = y / 2; let p = 0; for (let k = 1; k <= n; k++) p += c / Math.pow(1 + r, k); return p + 100 / Math.pow(1 + r, n); }
+const Y0 = 0.043, P0 = price(Y0), MD = 8.00682, N = 121;
+const ys = Array.from({ length: N }, (_, i) => Y0 - 0.03 + i * 0.0005);
+const curve = ys.map(price), tangent = ys.map(y => P0 * (1 - MD * (y - Y0)));
+const py = document.getElementById("py");
+const xl = [[14, "2.0%"], [34, "3.0%"], [54, "4.0%"], [74, "5.0%"], [94, "6.0%"], [114, "7.0%"]];
+const g = lineChart(py, [{ values: tangent, color: "#9AA29C", width: 1.4, dash: "5 4" }, { values: curve, color: "#194C40", width: 2.2 }],
+  { bands: [{ upper: curve, lower: tangent, fill: "#DDE9E1" }], digits: 0, ticks: 6, lo: 75, hi: 135, padR: 56, xlabels: xl, vlines: [[60, "#9AA29C"]] });
+// scenario markers on the curve (±50 / ±100bp)
+[[40, "−100bp", "+8.40%", "#C8343D"], [50, "−50bp", "+4.10%", "#C8343D"], [70, "+50bp", "−3.91%", "#2F6DB5"], [80, "+100bp", "−7.64%", "#2F6DB5"]].forEach(([i, t, pct, col]) => {
+  const cx = g.x(i), cy = g.y(curve[i]);
+  py.append(svgEl("circle", { cx, cy, r: 4, fill: "#FFFEFB", stroke: col, "stroke-width": 1.8 }));
+  const left = t.startsWith("−"); const e = svgEl("text", { x: left ? cx - 9 : cx + 9, y: left ? cy + 18 : cy - 9, "font-size": 11, fill: "#646E68", "text-anchor": left ? "end" : "start" }); e.textContent = t + " "; const b = svgEl("tspan", { fill: col, "font-weight": 600 }); b.textContent = pct; e.append(b); py.append(e); });
+// current point
+const cx = g.x(60), cy = g.y(P0);
+py.append(svgEl("line", { x1: 0, x2: g.W - 56, y1: cy, y2: cy, stroke: "#194C40", "stroke-dasharray": "2 3", opacity: .5 }));
+py.append(svgEl("circle", { cx, cy, r: 6.5, fill: "#194C40", stroke: "#FFFEFB", "stroke-width": 2.5 }));
+py.append(svgEl("rect", { x: g.W - 56 + 4, y: cy - 10, width: 50, height: 20, rx: 4, fill: "#194C40" }));
+const tag = svgEl("text", { x: g.W - 56 + 9, y: cy + 4, "font-size": 11.5, fill: "#fff", "font-weight": 600 }); tag.textContent = P0.toFixed(2); py.append(tag);
+const lab = svgEl("text", { x: cx - 14, y: cy + 24, "font-size": 12, fill: "#202823", "font-weight": 600, "text-anchor": "end" }); lab.textContent = "현재 4.300% · 101.612"; py.append(lab);
+</script>
+</body></html>

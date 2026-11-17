@@ -320,7 +320,9 @@ class ResearchWindow(QMainWindow):
             lambda: self.rail_flyouts.root_clicked(self.market_strip,
                                                    keyboard=bool(self.market_strip.property("focusRing"))))
         self.rail_flyouts.configure(self.nav['markets'], self.market_submenu, self.market_strip)
-        self.nav['markets'].clicked.connect(lambda: self.rail_flyouts.open_root())
+        # Owner 2026-11-17: 시장 itself opens the 시장 main screen (`market_hub.MarketHub`), then shows the categories
+        # (navigating closes the disclosure, so the screen opens first).
+        self.nav['markets'].clicked.connect(lambda: (self.open_market_hub(), self.rail_flyouts.open_root()))
         strip.addWidget(self.market_strip, 0, Qt.AlignmentFlag.AlignHCenter)
         # The paper engine's emergency stop stays one click away while the engine runs.
         self.paper_halt_strip = shell_rail.icon_button("Stop paper engine", "Stop paper engine",
@@ -405,7 +407,8 @@ class ResearchWindow(QMainWindow):
         return shown
 
     def make_market_submenu(self):
-        """Nine market categories, revealed on hover/click with children below each row."""
+        """Nine market categories, revealed on hover/click below 시장. Owner 2026-11-17: only the categories; their
+        destinations (코스피, 국내 주식, ...) are on each category's main screen, not in the rail."""
         self.market_submenu = QWidget()
         self.market_submenu.setObjectName("marketSubmenu")
         self.market_submenu.setAccessibleName("Markets sections")
@@ -431,7 +434,7 @@ class ResearchWindow(QMainWindow):
             title = shell_rail.market_section_text(key, self.ui_language)
             button.setText(title)
             button.setAccessibleName(title)
-            button.chevron = bool(self._market_node(key).children)
+            button.chevron = False   # owner 2026-11-17: no sub-rows in the rail
 
     def eventFilter(self, watched, event):
         if event.type() == QEvent.Type.Resize and watched is self.rail_scroll.viewport():
@@ -456,23 +459,43 @@ class ResearchWindow(QMainWindow):
         return next(node for node in shell_rail.market_menu(self.ui_language) if node.key == key)
 
     def _market_flyout(self, key):
-        """The rows of a 시장 row's flyout, in the window language."""
-        return self._market_node(key).children
+        """The rows under a 시장 row in the rail: none since the owner's 2026-11-17 request ("이 범주까지만 살려두고,
+        그다음 하위범주 ... 좌측 바로가기 ui 삭제"); a category's destinations are on its main screen."""
+        return ()
 
     def open_market_category(self, key, *, keyboard=None):
         """A 시장 row clicked (or Enter / Space on it): a row with one page of its own (크립토, 선물, 회사채) opens it,
-        the others open their flyout; from the keyboard, with focus in it (→ always opens the flyout)."""
-        row = self.market_sections[key]
-        leaf = self._market_node(key).leaf
-        if leaf:
+        the others open their category's main screen (owner 2026-11-17: "정작 '주식' 바로가기는 눌리지 않습니다")."""
+        node = self._market_node(key)
+        if not node.children and node.leaf:
             self.rail_flyouts.close_all()
-            self.open_market_leaf(leaf)
+            self.open_market_leaf(node.leaf)
             return None
-        if keyboard is None:
-            keyboard = bool(row.property("focusRing"))
-        panel = self.rail_flyouts.root_clicked(row, keyboard=keyboard)
-        self.sync_market_section()  # a click must not toggle the row's highlight
-        return panel
+        self.rail_flyouts.close_all()   # as a leaf does: the choice is made, the rail's list folds away
+        self.open_market_hub(key)
+        return None
+
+    def _open_hub_stock(self, instrument):
+        """A name in a 시장 screen's preview list: its stock screen, over that market's page."""
+        from core.market import rankings as R
+        member = R.member_for(instrument)
+        page = member.group if member is not None else None
+        self.open_market_section(page if page in ("kr", "us", "etf_kr", "etf_us") else
+                                 ("kr" if instrument.asset == "domestic_stock" else "us"))
+        self.markets_view.open_instrument(instrument)
+
+    def open_market_hub(self, category=None):
+        """The 시장 main screen (category None) or one category's main screen, inside Markets."""
+        self.navigate("markets")
+        hub = self.market_hub
+        if category is None:
+            hub.show_root()
+        else:
+            hub.show_category(category)
+        self.markets_content.setCurrentWidget(hub)
+        self.market_asset_category = category
+        self.sync_market_section()
+        return hub
 
     def expand_rail_button(self, button):
         """→ on a rail button with a flyout (a 시장 row, or the hidden rail's 시장 button)."""
@@ -554,6 +577,9 @@ class ResearchWindow(QMainWindow):
         review, a 시장 row lit under another selected page was a second 'you are here')."""
         marks = set()
         if self._route() == "markets":
+            hub = getattr(self, "market_hub", None)
+            if hub is not None and self.markets_content.currentWidget() is hub:
+                return frozenset({('category', hub.category)}) if hub.category else frozenset()
             if getattr(self,'market_asset_category',None):
                 return frozenset({('category',self.market_asset_category)})
             view = self.markets_view
@@ -571,6 +597,12 @@ class ResearchWindow(QMainWindow):
         """Highlight the 시장 row of the market page Markets shows (`key`, a market page key, else the page's own
         market, also while a stock's screen is open over it, else the last choice); on any other page none."""
         category = None
+        hub = getattr(self, "market_hub", None)
+        if self._route() == "markets" and hub is not None and self.markets_content.currentWidget() is hub:
+            self.market_section = hub.category if hub.category in self.market_sections else None
+            for name, button in self.market_sections.items():
+                button.setChecked(name == self.market_section)
+            return
         if self._route() == "markets":
             view = getattr(self, "markets_view", None)
             if key is None and view is not None:
@@ -816,6 +848,19 @@ class ResearchWindow(QMainWindow):
         self.markets_content=CurrentPageStack()
         self.markets_content.addWidget(self.markets_view)
         self.market_destinations={}
+        # Owner 2026-11-17: the 시장 main screen and the categories' main screens (opened from the rail's 시장 and
+        # category rows). Kept with the other destinations, so language, theme and closing reach it.
+        from .market_hub import MarketHub
+        self.market_hub = MarketHub(ctx=self.ctx, summary_loader=getattr(self, "summary_loader", None) or production_series,
+                                    auto_load=self.auto_refresh)
+        self.market_hub.setProperty("reading_help_keep_visible", True)
+        self.market_hub.open_leaf.connect(self.open_market_leaf)
+        self.market_hub.attach_board(self.markets_view.rankings)
+        self.market_hub.open_stock.connect(self._open_hub_stock)
+        self.market_hub.open_category.connect(self.open_market_hub)
+        self.market_hub.back.connect(lambda: self.open_market_hub())
+        self.markets_content.addWidget(self.market_hub)
+        self.market_destinations[('hub',)] = self.market_hub
         self.market_asset_category=None
         layout.addWidget(self.markets_content)
         layout.addStretch()

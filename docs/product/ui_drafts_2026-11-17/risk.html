@@ -1,0 +1,224 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="qg.css"><script src="qg.js"></script><script src="_risk_data.js"></script>
+<style>
+  :root { --a1: #194C40; --a2: #4E8571; --a3: #93BCA9; --a4: #C7A867; }
+  .page, .side { word-break: keep-all; }
+  .lead { display: flex; align-items: baseline; gap: 8px; }
+  .chart-head { display: flex; align-items: baseline; gap: 10px; padding: 0 18px 0 4px; }
+  .chart-head .read { margin-left: auto; font-size: 12px; color: var(--muted); }
+  .chart-head .read b { font-weight: 600; color: var(--text); }
+  .legend { display: flex; gap: 14px; align-items: center; font-size: 12px; color: var(--muted); }
+  .legend i { display: inline-block; vertical-align: middle; margin-right: 5px; }
+  .legend .ln { width: 16px; height: 2px; background: var(--accent); }
+  .legend .dash { width: 16px; height: 0; border-top: 1.6px dashed var(--faint); }
+  .legend .cl { width: 6px; height: 6px; border-radius: 50%; background: #D3D8CE; }
+  .legend .sqr { width: 8px; height: 8px; border: 1.4px solid var(--muted); border-radius: 2px; }
+  .lower { display: flex; gap: 12px; height: 252px; flex: none; }
+  .lower .card { padding: 14px 16px 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .lower .card-title .pills { margin-left: auto; }
+  .lower .card-title .pills span { padding: 3px 9px; font-size: 12px; }
+  table.t.compact th { padding: 6px 8px; }
+  table.t.compact td { padding: 8px 8px; }
+  table.t.compact tr:last-child td { border-bottom: 0; }
+  .sw { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 8px; vertical-align: 1px; }
+  .tk { font-weight: 600; }
+  .barcell { display: flex; align-items: center; gap: 10px; }
+  .barcell .bar { flex: 1; height: 6px; }
+  .barcell .n { width: 48px; text-align: right; }
+  .bar > i.risk { background: var(--a4); }
+  .concl { position: absolute; right: 84px; bottom: 62px; width: 312px; gap: 6px; font-size: 12px; line-height: 1.5; color: var(--text); }
+  .concl > b { font-size: 13px; font-weight: 600; }
+  .concl span b { font-weight: 600; }
+  .note { font-size: 12px; color: var(--muted); line-height: 1.45; margin-top: auto; }
+  .note b { color: var(--text); font-weight: 600; }
+  .mk { display: inline-block; width: 10px; height: 10px; border-radius: 50%; border: 1.6px solid var(--text); background: var(--surface); margin-right: 8px; vertical-align: -1px; }
+  .mk.sel { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .stack { display: flex; height: 6px; border-radius: 3px; overflow: hidden; gap: 1px; width: 68px; }
+  .cmp td:first-child { white-space: nowrap; }
+  .stack i { display: block; height: 100%; }
+  .chips-in { border: 1px solid var(--border); border-radius: 9px; background: var(--surface); padding: 7px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tchip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 6px 4px 10px; border-radius: 8px; background: var(--surface2); font-size: 13px; font-weight: 500; }
+  .tchip .x { width: 16px; height: 16px; border-radius: 50%; display: grid; place-items: center; color: var(--muted); font-size: 12px; line-height: 1; }
+  .chips-in .add { padding: 4px 6px; color: var(--faint); font-size: 13px; }
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .opts span { text-align: center; padding: 7px 0; border-radius: 9px; font-size: 13px; font-weight: 500; border: 1px solid var(--border); color: var(--muted); background: var(--surface); }
+  .opts span.on { border-color: transparent; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .runs .row { padding: 8px 2px; gap: 10px; border-bottom: 1px solid var(--line); border-radius: 0; }
+  .runs .row:last-child { border-bottom: 0; }
+  .runs .avatar { width: 28px; height: 28px; font-size: 10px; }
+  .runs .main { flex: 1; min-width: 0; }
+  .runs .main b { font-size: 13px; font-weight: 600; display: block; margin-bottom: 2px; }
+  .runs .main div { font-size: 12px; color: var(--muted); }
+  .runs .side-n { text-align: right; font-size: 12px; }
+  .runs .side-n b { font-size: 13px; font-weight: 500; display: block; margin-bottom: 2px; }
+  .unit { color: var(--faint); font-size: 12px; }
+</style></head>
+<body>
+<main class="page">
+  <div class="toolbar">
+    <div class="title">분석</div>
+    <div class="seg" style="margin-left:14px"><span class="on">포트폴리오</span><span>기술적 분석</span><span>모의투자</span></div>
+    <span class="badge" style="margin-left:6px"><span class="dot"></span>과거 표본 최적화 · 미래 보장 아님</span>
+    <div class="spacer"></div>
+    <span class="badge ok"><span class="dot"></span>계산 완료</span>
+    <span class="btn ghost">결과 저장</span><span class="btn">보고서 ZIP</span>
+  </div>
+  <div class="body">
+    <section class="canvas">
+      <div class="lead">
+        <b style="font-size:15px">최대 샤프 지수 포트폴리오</b><span class="small muted">· AAPL 35% · NVDA 34% · MSFT 21% · TLT 11% · Yahoo 총수익 2021-11-16 → 2026-11-13 · 공통 1,255거래일</span>
+      </div>
+      <div class="figs">
+        <span><span class="k">기대수익률</span><span class="v num up">+22.1%</span></span>
+        <span><span class="k">변동성</span><span class="v num">27.2%</span></span>
+        <span><span class="k">샤프 지수</span><span class="v num">0.703</span></span>
+        <span><span class="k">최대 낙폭</span><span class="v num down">−31.8%</span></span>
+        <span><span class="k">무위험 금리</span><span class="v num">3.00%</span></span>
+        <span><span class="k">종목당 상한</span><span class="v num">100%</span></span>
+        <span><span class="k">최적화 수렴</span><span class="v">예</span></span>
+      </div>
+      <div class="card" style="flex:1; min-height:0; padding:12px 0 0 14px; display:flex; flex-direction:column">
+        <div class="chart-head">
+          <span class="card-title">효율적 프런티어</span>
+          <span class="read">점선이 곡선에 닿는 점이 최대 샤프 지수예요</span>
+        </div>
+        <div style="flex:1; min-height:0; margin-top:6px; position:relative"><svg id="ef" data-fit="0" data-padx="14"></svg>
+          <div class="verdict flat concl">
+            <b>결론 · 최적화 이득이 작아요</b>
+            <span>최대 샤프 <b class="num">0.703</b>, 동일 비중 <b class="num">0.697</b>로 차이가 <b class="num">0.006</b>뿐이에요. 과거 수익률로 고른 비중은 표본이 바뀌면 크게 흔들려서, 이럴 땐 동일 비중이 좋은 비교 기준이에요.</span>
+            <span class="muted">기대수익률은 표본 기간에 가장 민감한 추정치예요.</span>
+          </div>
+        </div>
+        <div class="toolbar" style="padding:2px 18px 10px 4px; min-height:30px">
+          <span class="small muted">가로 연 변동성 · 세로 연 기대수익률 (과거 추정)</span>
+          <div class="spacer"></div>
+          <div class="legend"><span><i class="ln"></i>효율적 프런티어</span><span><i class="dash"></i>자본시장선 · 무위험 3.00%</span><span><i class="cl"></i>무작위 조합 500개</span><span><i class="sqr"></i>개별 종목</span></div>
+        </div>
+      </div>
+      <div class="lower">
+        <div class="card" style="flex:1">
+          <div class="card-title">비중과 위험 기여<div class="pills"><span class="on">비중·위험</span><span>상관관계</span></div></div>
+          <table class="t compact num">
+            <thead><tr><th style="width:84px">종목</th><th>비중</th><th>위험 기여</th></tr></thead>
+            <tbody>
+              <tr><td><i class="sw" style="background:var(--a1)"></i><span class="tk">AAPL</span></td>
+                <td><div class="barcell"><div class="bar"><i style="width:34.6%"></i></div><span class="n">34.6%</span></div></td>
+                <td><div class="barcell"><div class="bar"><i style="width:28.2%"></i></div><span class="n">28.2%</span></div></td></tr>
+              <tr><td><i class="sw" style="background:var(--a2)"></i><span class="tk">NVDA</span></td>
+                <td><div class="barcell"><div class="bar"><i style="width:33.7%;background:var(--a2)"></i></div><span class="n">33.7%</span></div></td>
+                <td><div class="barcell"><div class="bar"><i style="width:56.8%;background:var(--a2)"></i></div><span class="n" style="font-weight:600">56.8%</span></div></td></tr>
+              <tr><td><i class="sw" style="background:var(--a3)"></i><span class="tk">MSFT</span></td>
+                <td><div class="barcell"><div class="bar"><i style="width:21.2%;background:var(--a3)"></i></div><span class="n">21.2%</span></div></td>
+                <td><div class="barcell"><div class="bar"><i style="width:15.7%;background:var(--a3)"></i></div><span class="n">15.7%</span></div></td></tr>
+              <tr><td><i class="sw" style="background:var(--a4)"></i><span class="tk">TLT</span></td>
+                <td><div class="barcell"><div class="bar"><i style="width:10.6%;background:var(--a4)"></i></div><span class="n">10.6%</span></div></td>
+                <td><div class="barcell"><div class="bar"></div><span class="n down">−0.7%</span></div></td></tr>
+            </tbody>
+          </table>
+          <div class="note"><b>NVDA</b>는 비중 34%로 위험의 57%를 차지해요. TLT는 주식과 반대로 움직여 위험을 조금 덜어요.</div>
+        </div>
+        <div class="card" style="flex:1.12">
+          <div class="card-title">네 가지 목적함수 비교<span class="more">매수 전용 · 전액 투자</span></div>
+          <table class="t compact num cmp">
+            <thead><tr><th>목적함수</th><th class="r">수익률</th><th class="r">변동성</th><th class="r">샤프</th><th class="r" style="width:84px">종목 구성</th></tr></thead>
+            <tbody>
+              <tr class="sel"><td style="font-weight:600"><i class="mk sel"></i>최대 샤프 지수</td><td class="r up">+22.1%</td><td class="r">27.2%</td><td class="r" style="font-weight:600">0.703</td>
+                <td class="r"><div class="stack" style="margin-left:auto"><i style="width:34.6%;background:var(--a1)"></i><i style="width:33.7%;background:var(--a2)"></i><i style="width:21.2%;background:var(--a3)"></i><i style="width:10.6%;background:var(--a4)"></i></div></td></tr>
+              <tr><td><i class="mk"></i>동일 비중</td><td class="r up">+18.2%</td><td class="r">21.8%</td><td class="r">0.697</td>
+                <td class="r"><div class="stack" style="margin-left:auto"><i style="width:25%;background:var(--a1)"></i><i style="width:25%;background:var(--a2)"></i><i style="width:25%;background:var(--a3)"></i><i style="width:25%;background:var(--a4)"></i></div></td></tr>
+              <tr><td><i class="mk"></i>리스크 패리티</td><td class="r up">+11.3%</td><td class="r">14.1%</td><td class="r">0.587</td>
+                <td class="r"><div class="stack" style="margin-left:auto"><i style="width:18.3%;background:var(--a1)"></i><i style="width:10.4%;background:var(--a2)"></i><i style="width:19.1%;background:var(--a3)"></i><i style="width:52.3%;background:var(--a4)"></i></div></td></tr>
+              <tr><td><i class="mk"></i>최소 변동성</td><td class="r up">+7.0%</td><td class="r">12.2%</td><td class="r">0.327</td>
+                <td class="r"><div class="stack" style="margin-left:auto"><i style="width:14.2%;background:var(--a1)"></i><i style="width:18.2%;background:var(--a3)"></i><i style="width:67.6%;background:var(--a4)"></i></div></td></tr>
+            </tbody>
+          </table>
+          <div class="note">네 가지 모두 수렴했어요 · 입력 상한 1.00은 선택한 목적에만 적용해요</div>
+        </div>
+      </div>
+    </section>
+    <aside class="side">
+      <div class="seg full"><span class="on">설정</span><span>읽는 법</span></div>
+      <div class="scroll">
+        <div class="fold-head"><i class="chev"></i>자산 구성<span class="count">4개</span></div>
+        <div class="field">
+          <label>종목 코드</label>
+          <div class="chips-in">
+            <span class="tchip">AAPL<span class="x">×</span></span><span class="tchip">MSFT<span class="x">×</span></span>
+            <span class="tchip">NVDA<span class="x">×</span></span><span class="tchip">TLT<span class="x">×</span></span>
+            <span class="add">종목 추가</span>
+          </div>
+        </div>
+        <div class="hint">서로 다른 2–15개 종목을 넣어요. 모두 거래된 날만 맞춰 비교해요.</div>
+        <div class="hr"></div>
+        <div class="fold-head"><i class="chev"></i>목적함수·제약</div>
+        <div class="field">
+          <label>목적함수</label>
+          <div class="opts"><span class="on">최대 샤프 지수</span><span>최소 변동성</span><span>리스크 패리티</span><span>동일 비중</span></div>
+        </div>
+        <div class="fields">
+          <div class="field"><label>종목당 최대 비중</label><div class="in num">1.00<span class="unit">100%</span></div></div>
+          <div class="field"><label>무위험 금리</label><div class="in num">3.00 %</div></div>
+        </div>
+        <div class="hint">상한은 선택한 목적에만 적용돼요. 나머지 목적과 프런티어는 100%로 계산해요.</div>
+        <div class="hr"></div>
+        <div class="fold-head"><i class="chev"></i>개별 가격 시뮬레이션 위험<span class="count">2건</span></div>
+        <div class="rows runs">
+          <div class="row"><div class="main"><b>AAPL</b><div>GARCH(1,1)-t · 126거래일 · 5,000경로</div></div>
+            <div class="side-n num"><b class="down">−17.0%</b><span class="muted">95% VaR</span></div></div>
+          <div class="row"><div class="main"><b>NVDA</b><div>GBM · 63거래일 · 5,000경로</div></div>
+            <div class="side-n num"><b class="down">−21.3%</b><span class="muted">95% VaR</span></div></div>
+        </div>
+        <div class="hint" style="margin-top:-6px">설계/검증에서 실행한 개별 가격 시뮬레이션이에요. 포트폴리오 전체 위험이나 백테스트가 아니에요.</div>
+      </div>
+      <div class="foot">
+        <button class="btn primary block">포트폴리오 분석 실행</button>
+        <div class="tiny faint" style="text-align:center">과거 수익률 기반 · 미래 보장 아님 · 투자 권유 아님 · NOT_RUN 판정 유지</div>
+      </div>
+    </aside>
+  </div>
+</main>
+<script>
+rail("risk");
+function frontierChart(svg) {
+  fit(svg);
+  const W = +svg.getAttribute("width"), H = +svg.getAttribute("height"), padR = 52, padB = 22, padT = 10, padL = 4;
+  const x0 = .04, x1 = .54, y0 = -.03, y1 = .39;
+  const x = v => padL + (v - x0) / (x1 - x0) * (W - padR - padL), y = v => padT + (y1 - v) / (y1 - y0) * (H - padT - padB);
+  const add = (t, a, txt) => { const e = svgEl(t, a); if (txt !== undefined) e.textContent = txt; svg.append(e); return e; };
+  [0, .1, .2, .3].forEach(v => { add("line", { x1: 0, x2: W - padR, y1: y(v), y2: y(v), stroke: "#ECEDE5", "stroke-dasharray": "3 4" });
+    add("text", { x: W - padR + 10, y: y(v) + 4, "font-size": 11, fill: "#646E68" }, (v * 100).toFixed(0) + "%"); });
+  [.1, .2, .3, .4, .5].forEach(v => { add("line", { x1: x(v), x2: x(v), y1: padT, y2: H - padB, stroke: "#F1F2EB" });
+    add("text", { x: x(v), y: H - 5, "font-size": 11, fill: "#646E68", "text-anchor": "middle" }, (v * 100).toFixed(0) + "%"); });
+  // random portfolios
+  RD.cloud.forEach(([v, r]) => add("circle", { cx: x(v), cy: y(r), r: 2.2, fill: "#CFD5CA" }));
+  // capital market line from rf through the max-Sharpe point
+  const s = RD.max_sharpe.sharpe, rf = .03; const xa = .045, xb = .45;
+  add("line", { x1: x(xa), y1: y(rf + s * (xa - 0)), x2: x(xb), y2: y(rf + s * xb), stroke: "#9AA29C", "stroke-dasharray": "5 4", "stroke-width": 1.3 });
+  // inefficient branch (below min-vol) and the efficient frontier
+  const lo = RD.lower.slice().reverse();
+  add("path", { d: lo.map((p, i) => `${i ? "L" : "M"}${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`).join(""), fill: "none", stroke: "#9AA29C", "stroke-width": 1.4, "stroke-dasharray": "2 3" });
+  add("path", { d: RD.frontier.map((p, i) => `${i ? "L" : "M"}${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`).join(""), fill: "none", stroke: "#194C40", "stroke-width": 2.2 });
+  // single assets
+  const off = { AAPL: [9, 4, "start"], MSFT: [9, 12, "start"], NVDA: [0, -10, "middle"], TLT: [9, 4, "start"] };
+  RD.assets.forEach(([n, v, r]) => { add("rect", { x: x(v) - 4, y: y(r) - 4, width: 8, height: 8, rx: 2, fill: "#FFFEFB", stroke: "#646E68", "stroke-width": 1.4 });
+    const [dx, dy, anc] = off[n]; add("text", { x: x(v) + dx, y: y(r) + dy, "font-size": 11, fill: "#646E68", "font-weight": 500, "text-anchor": anc, stroke: "#FFFEFB", "stroke-width": 3, "paint-order": "stroke" }, n); });
+  // the four objectives: a dot on the curve and a callout in the empty space above it (dx, dy = pill's right end)
+  const tag = (k, name, dx, dy, sel, right) => { const p = RD[k], px = x(p.vol), py = y(p.ret);
+    const label = `${name} · ${p.sharpe.toFixed(3)}`; const probe = add("text", { "font-size": 12, "font-weight": sel ? 600 : 500 }, label);
+    const w = Math.ceil(probe.getBBox().width) + 20, h = 24; probe.remove();
+    let rx = right ? px + dx : px + dx - w; rx = Math.max(6, Math.min(rx, W - padR - w - 6)); const ry = py + dy - h / 2;
+    add("line", { x1: right ? rx : rx + w, y1: ry + h / 2, x2: px, y2: py, stroke: sel ? "#194C40" : "#9AA29C", "stroke-width": 1.2 });
+    add("rect", { x: rx + .5, y: ry + .5, width: w, height: h, rx: 7, fill: sel ? "#194C40" : "#FFFEFB", stroke: sel ? "none" : "#E2E3DB" });
+    add("text", { x: rx + 10.5, y: ry + 16.5, "font-size": 12, fill: sel ? "#fff" : "#202823", "font-weight": sel ? 600 : 500 }, label);
+    if (sel) add("circle", { cx: px, cy: py, r: 11, fill: "#E5EEE8" });
+    add("circle", { cx: px, cy: py, r: sel ? 5.5 : 5, fill: sel ? "#194C40" : "#FFFEFB", stroke: sel ? "#FFFEFB" : "#202823", "stroke-width": sel ? 1.6 : 1.7 }); };
+  tag("min_vol", "최소 변동성", 30, 22, false, true);
+  tag("risk_parity", "리스크 패리티", -30, -26);
+  tag("equal_weight", "동일 비중", -34, -30);
+  tag("max_sharpe", "최대 샤프 지수", -30, -34, true);
+  // axis captions
+  add("text", { x: 8, y: padT + 12, "font-size": 11, fill: "#9AA29C" }, "↑ 연 기대수익률");
+  add("text", { x: W - padR - 6, y: H - padB - 8, "font-size": 11, fill: "#9AA29C", "text-anchor": "end" }, "연 변동성 →");
+}
+frontierChart(document.getElementById("ef"));
+</script>
+</body></html>
