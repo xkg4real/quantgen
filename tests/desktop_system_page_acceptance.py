@@ -13,7 +13,6 @@ import dotenv
 with patch.object(dotenv, 'load_dotenv', return_value=False):
     from quantgen_desktop.app import ResearchWindow
 import config
-from PyQt6.QtCore import QCoreApplication, QEvent
 from PyQt6.QtTest import QTest
 from PyQt6.QtWidgets import QAbstractButton, QApplication, QLabel
 from core.research.connections import ConnectionOutput, ConnectionRequest, execute_connections
@@ -73,9 +72,6 @@ class SystemPageTests(unittest.TestCase):
     def settle(self):
         for _ in range(6):
             self.app.processEvents()
-            # Deliver deferred deletes as the running app's event loop does (processEvents alone does not outside
-            # app.exec()): key figures replaced on a language switch are hidden children until then.
-            QCoreApplication.sendPostedEvents(None, QEvent.Type.DeferredDelete.value)
 
     def wait_idle(self):
         for _ in range(1000):
