@@ -1,0 +1,219 @@
+--- a/tests/macro_m1_calendars.py
++++ b/tests/macro_m1_calendars.py
+@@ -127,7 +127,8 @@
+ 
+ def _doc(file_id, covers, calendar, rows, version="1.0.0-fixture") -> dict:
+     return {"file_id": file_id, "version": version, "covers": {"from": covers[0], "to": covers[1]},
+-            "coverage_calendar": calendar, "signed_off_by": SIGNER, "signed_utc": SIGNED_UTC, "md5": None, "rows": rows}
++            "coverage_calendar": calendar, "signed_off_by": SIGNER, "signed_utc": SIGNED_UTC, "md5": None, "rows": rows,
++            "sign_off_statement": "fixture: not an owner statement"}
+ 
+ 
+ def _sign(doc: dict) -> dict:
+@@ -141,7 +142,8 @@
+         _sign(doc)
+         (root / f"{name}.yaml").write_text(yaml.safe_dump(doc, sort_keys=False, allow_unicode=True), encoding="utf-8")
+         rows.append({"file": f"{name}.yaml", "version": doc["version"], "md5": doc["md5"],
+-                     "signed_off_by": None if unsigned_manifest else doc["signed_off_by"], "test_ids": ["T-CAL-01"]})
++                     "signed_off_by": None if unsigned_manifest else doc["signed_off_by"], "signed_utc": doc["signed_utc"],
++                     "test_ids": ["T-CAL-01"]})
+     manifest = {"version": manifest_version, "signed_off_by": SIGNER, "signed_utc": SIGNED_UTC, "rows": rows}
+     (root / "MANIFEST.yaml").write_text(yaml.safe_dump(manifest, sort_keys=False), encoding="utf-8")
+ 
+@@ -354,15 +356,29 @@
+ test_close02_effective_dated_clocks.test_ids = ["T-CLOSE-02"]
+ 
+ 
+-def test_close02_on_the_real_signed_files_is_owner_input():
+-    """The same assertions on the shipped files need the owner's signature; the drafts are unsigned."""
+-    refused = store.describe()
+-    assert refused and all(r["status"] == "REFUSED" for r in refused)
+-    raise NotRun("OWNER: core/calendars/data/*.yaml are unsigned drafts; T-CLOSE-02 on the real KRX/NYSE files waits for "
+-                 "the owner's sign-off (Saturday closes, pre-2016 CSAT window, CSAT dates, random-end extensions)")
++def test_close02_on_the_real_signed_files():
++    """Replaces the unconditional NotRun: the T-CLOSE-02 values on the signed KRX/NYSE files."""
++    live = CalendarSet()
++    if any(live.refusal(f) for f in ("kr_sessions", "holidays_KRX", "holidays_NYSE")):
++        raise NotRun("OWNER: kr_sessions / holidays_KRX / holidays_NYSE unsigned; T-CLOSE-02 on the real files waits")
++    U = lambda *a: datetime(*a, tzinfo=timezone.utc)  # noqa: E731
++    assert clocks.decision_time_utc("KR", date(2026, 10, 2), cal=live) == U(2026, 10, 2, 6, 30)
++    assert clocks.close_print_bound_utc("KR", date(2026, 10, 2), cal=live) == U(2026, 10, 2, 6, 30, 30)
++    assert clocks.decision_time_utc("KR", date(2026, 11, 19), cal=live) == U(2026, 11, 19, 7, 30)     # CSAT
++    assert clocks.decision_time_utc("KR", date(2027, 11, 18), cal=live) == U(2027, 11, 18, 7, 30)     # CSAT 2027
++    for d in (date(2026, 10, 5), date(2026, 6, 3), date(2026, 7, 17), date(2027, 5, 3), date(2027, 7, 19)):
++        try:
++            clocks.decision_time_utc("KR", d, cal=live)
++            raise AssertionError(f"KR {d} answered as a session")
++        except NotASession:
++            pass
++    assert clocks.decision_time_utc("US", date(2026, 11, 27), cal=live) == U(2026, 11, 27, 18, 0)
++    assert clocks.close_print_bound_utc("US", date(2026, 10, 1), cal=live) == U(2026, 10, 1, 20, 0, 30)
++    if live.refusal("holidays_SIFMA") is None:
++        assert publication.sifma_status(date(2026, 4, 3), cal=live) == "early_close"
+ 
+ 
+-test_close02_on_the_real_signed_files_is_owner_input.test_ids = ["T-CLOSE-02"]
++test_close02_on_the_real_signed_files.test_ids = ["T-CLOSE-02"]
+ 
+ 
+ def test_print01_intraday_print_is_never_a_close():
+@@ -518,36 +534,47 @@
+     return _CACHE[key][1]
+ 
+ 
+-def test_cal01_shipped_drafts_are_refused_and_acting_inputs_fail_closed():
+-    """The shipped drafts carry signed_off_by: null -> refused; every KR and US clock raises CalendarUnsigned, which the
+-    data layer maps to MissingInput('missing') with fail_closed (brief F-5); no book can ARM."""
+-    live = store.default()
+-    assert live.data_dir == store.DATA_DIR
+-    for fid in live.file_ids():
+-        assert live.refusal(fid), fid
+-        raw = store.read_yaml(live.data_dir / f"{fid}.yaml")
+-        assert raw.get("signed_off_by") is None and raw.get("md5") is None, fid       # never signed by the build
+-        assert raw.get("unverified") and raw.get("owner_must_sign"), fid
+-    for market in ("KR", "US", "JP", "CN", "HK", "TW"):
+-        _raises(lambda: clocks.decision_time_utc(market, date(2026, 10, 2), cal=live), CalendarUnsigned)
+-        _raises(lambda: clocks.is_session(market, date(2026, 10, 2), cal=live), CalendarUnsigned)
+-        assert store.arm_precondition(date(2026, 10, 2), market, cal=live) is False
+-    _raises(lambda: regime.regime_tags("KR", date(2026, 10, 2), cal=live), CalendarUnsigned)
+-    _raises(lambda: publication.publication_instant({"schedule_id": "H15"}, date(2026, 10, 2), cal=live), CalendarUnsigned)
+-    assert store.status("KR", date(2026, 10, 2), cal=live)["signed"] is False
+-    assert live.version == "unsigned"
++def test_cal01_shipped_files_signed_or_refused():
++    """Replaces test_cal01_shipped_drafts_are_refused_and_acting_inputs_fail_closed: a draft (signed_off_by null) is
++    refused and still lists its open items; a signed file loads, matches its MANIFEST row, and carries no draft status."""
++    live = CalendarSet()                               # fresh: never the cached default
+     manifest = store.read_yaml(store.DATA_DIR / "MANIFEST.yaml")
+-    assert all(r["md5"] is None and r["signed_off_by"] is None for r in manifest["rows"])
+     assert {r["file"] for r in manifest["rows"]} == {f"{f}.yaml" for f in live.file_ids()}
++    drafts = []
++    for fid in live.file_ids():
++        raw = _raw(fid)
++        if raw.get("signed_off_by") is None:
++            drafts.append(fid)
++            assert live.refusal(fid), fid
++            assert raw.get("md5") is None and raw.get("unverified") and raw.get("owner_must_sign"), fid
++        else:
++            assert live.refusal(fid) is None, (fid, live.refusal(fid))
++            f = live.file(fid)
++            row = live.manifest["rows"][f"{fid}.yaml"]
++            assert row["md5"] == f.md5 and row["signed_off_by"] == f.signed_off_by and row["version"] == f.version
++            assert "UNSIGNED" not in str(raw.get("status", "")), f"{fid}: signed file still says UNSIGNED DRAFT"
++            assert "FIXTURE" not in f.signed_off_by.upper(), f"{fid}: fixture signer in a shipped file"
++    for market, fids in store.MARKET_FILES.items():
++        if any(f in drafts for f in fids):            # an unsigned file of the market: every clock fails closed
++            try:
++                clocks.decision_time_utc(market, date(2026, 10, 2), cal=live)
++                raise AssertionError(f"{market}: clock answered with an unsigned file")
++            except store.CalendarUnsigned:
++                pass
++            assert store.arm_precondition(date(2026, 10, 2), market, cal=live) is False
++    if any(f in drafts for f in store.COVERAGE_FILES["KR"]):
++        assert store.status("KR", date(2026, 10, 2), cal=live)["signed"] is False
++    if not manifest.get("signed_off_by"):
++        assert live.version == "unsigned"
+     # the rules-store paths of section 7 resolve to these files
+     from core.rules.macro_rules import load_store
+     s = load_store()
+     assert s.get("calendars.regime_tags_file") == "core/calendars/data/kr_regime_tags.yaml"
+     assert s.get("data_contracts.source_exceptions") == "core/calendars/data/source_skipped.yaml"
+-    assert (store.DATA_DIR.parents[2] / s.get("calendars.regime_tags_file")).is_file()
++    assert (Path(store.__file__).resolve().parents[2] / s.get("calendars.regime_tags_file")).is_file()
+ 
+ 
+-test_cal01_shipped_drafts_are_refused_and_acting_inputs_fail_closed.test_ids = ["T-CAL-01"]
++test_cal01_shipped_files_signed_or_refused.test_ids = ["T-CAL-01"]
+ 
+ 
+ def test_cal01_calendar_change_governance_event():
+@@ -576,6 +603,31 @@
+ test_cal01_calendar_change_governance_event.test_ids = ["T-CAL-01"]
+ 
+ 
++def test_cal01_same_day_schedule_needs_its_signed_calendar():
++    """A same_day schedule (VIX 16:15 ET, ECOS 15:30 KST) reads its publisher's calendar: unsigned or absent -> refused."""
++    docs = {k: v for k, v in fixture_docs().items() if k != "holidays_CBOE"}
++    cal = fixture_set("no_cboe", docs)
++    exc = _raises(lambda: publication.publication_instant({"schedule_id": "VIXCLS_CBOE"}, date(2026, 10, 2), cal=cal),
++                  CalendarUnsigned)
++    assert "holidays_CBOE" in str(exc)
++
++
++test_cal01_same_day_schedule_needs_its_signed_calendar.test_ids = ["T-CAL-01"]
++
++
++def test_cal01_unquoted_time_refused_at_load():
++    """`close_local: 12:00` (PyYAML 1.1: the int 720) is refused at load, never at first use."""
++    docs = {k: v for k, v in fixture_docs().items() if k in ("holidays_HKEX", "market_closes")}
++    docs["holidays_HKEX"]["rows"].append(_hol(date(2026, 12, 24), "early_close", "12:00"))
++    cal = fixture_set("unquoted_time", docs)
++    p = cal.data_dir / "holidays_HKEX.yaml"
++    p.write_text(p.read_text(encoding="utf-8").replace("close_local: '12:00'", "close_local: 12:00"), encoding="utf-8")
++    assert "unquoted time" in str(_raises(lambda: CalendarSet(cal.data_dir).file("holidays_HKEX"), CalendarUnsigned))
++
++
++test_cal01_unquoted_time_refused_at_load.test_ids = ["T-CAL-01"]
++
++
+ def test_cal02_coverage_warn_page_halt():
+     """A file ending N sessions after the decision date: N=61 no alert, 60 warn, 20 page, 0 page; outside -> OPS HALT
+     calendar_coverage through the injected runtime hook, never a NotASession."""
+@@ -618,14 +670,56 @@
+ test_cal02_coverage_warn_page_halt.test_ids = ["T-CAL-02"]
+ 
+ 
++DEADLINE_FILES = ("holidays_KRX", "holidays_NYSE", "holidays_FED", "holidays_SIFMA")
++DEADLINE_UTC = "2026-10-31T15:00:00Z"            # 2026-11-01 00:00 KST: "signed off before 2026-11-01" (spec L2101)
++# Closures the 4.13.2 cross-check misses or the draft got wrong (audit 2026-10-27). Raw YAML: runs signed or not.
++MUST_CLOSE = {"holidays_KRX": ("2026-06-03", "2026-07-17", "2027-05-03", "2027-07-19"),
++              "holidays_FED": ("2027-12-31",)}
++MUST_EARLY = {"holidays_SIFMA": {"2026-04-03": "12:00", "2026-07-02": "14:00"}}
++MUST_CSAT = ("2026-11-19", "2027-11-18")
++
++
++def _raw(fid):
++    return store.read_yaml(store.DATA_DIR / f"{fid}.yaml")
++
++
+ def test_cal02_2027_files_signed_before_2026_11_01():
+-    raise NotRun("OWNER: the 2027 KRX, NYSE, Fed and SIFMA files must be signed before 2026-11-01 (spec L2101); "
+-                 "core/calendars/data/holidays_{KRX,NYSE,FED,SIFMA}.yaml are unsigned drafts")
++    """Deadline clause on the real files (spec L2101): signed before 2026-11-01 KST, covering 2027-12-31, >= 60
++    sessions after 2026-11-01, and the KR/US markets ARM-able on that date."""
++    live = CalendarSet()
++    unsigned = [f for f in DEADLINE_FILES + ("kr_sessions",) if live.refusal(f)]
++    if unsigned:
++        raise NotRun(f"OWNER: {unsigned} unsigned; the 2027 KRX, NYSE, Fed and SIFMA files must be signed before "
++                     "2026-11-01 (spec L2101)")
++    for fid in DEADLINE_FILES:
++        f = live.file(fid)
++        assert f.signed_utc < DEADLINE_UTC, f"{fid}: signed {f.signed_utc}, deadline {DEADLINE_UTC}"
++        assert f.covers_to >= date(2027, 12, 31), f"{fid}: covers only to {f.covers_to}"
++        assert store.sessions_left(live, f, date(2026, 11, 1)) >= 60, fid
++    for market in ("KR", "US"):
++        assert store.arm_precondition(date(2026, 11, 2), market, cal=live), market
+ 
+ 
+ test_cal02_2027_files_signed_before_2026_11_01.test_ids = ["T-CAL-02"]
+ 
+ 
++def test_cal02_known_2026_2027_rows_present():
++    """Regression for the audit findings: every listed closure, early close and CSAT day is in the shipped file."""
++    for fid, dates in MUST_CLOSE.items():
++        closed = {r["date"] for r in _raw(fid)["rows"] if r.get("kind") == "closed"}
++        missing = [d for d in dates if d not in closed]
++        assert not missing, f"{fid}: closures missing {missing}"
++    for fid, want in MUST_EARLY.items():
++        rows = {r["date"]: r for r in _raw(fid)["rows"]}
++        for d, t in want.items():
++            assert d in rows and rows[d].get("kind") == "early_close" and rows[d].get("close_local") == t, (fid, d, rows.get(d))
++    csat = {r["date"] for r in _raw("kr_sessions")["rows"] if r.get("kind") == "csat_day"}
++    assert set(MUST_CSAT) <= csat, f"kr_sessions: CSAT days missing {sorted(set(MUST_CSAT) - csat)}"
++
++
++test_cal02_known_2026_2027_rows_present.test_ids = ["T-CAL-02"]
++
++
+ # --------------------------------------------------------------------------- #
+ # T-REGIME-01
+ # --------------------------------------------------------------------------- #

@@ -1,0 +1,17 @@
+# 오케스트레이터 독립 재실행 (2026-10-27, 보고서 작성 뒤)
+# 방법: git archive HEAD로 깨끗한 사본 두 벌(head, fresh)을 만들고, fresh에만 proposed_patch/bonds_screen.diff를 git apply.
+#       새 테스트 모듈은 head 사본에도 복사해 HEAD 코드에 대고 돌림. 네트워크는 죽은 프록시(127.0.0.1:9)로 막음.
+#       NEXTGEN_FICC_CACHE는 사본별 임시 폴더. tests/run_all.py는 실행하지 않음(qa/acceptance_results.json 불변).
+# 저장소: git -C <repo> apply --check proposed_patch/bonds_screen.diff -> 통과(쓰기 없음)
+
+[fresh = HEAD + 패치]
+tests.bonds_screen_acceptance: PASS 33 FAIL 0 NOT_RUN 0
+tests.ficc_acceptance: PASS 57 FAIL 0 NOT_RUN 0
+selfcheck core.ficc.bonds PASS
+selfcheck ui.bonds_page PASS
+
+[head = 현재 코드]
+tests.bonds_screen_acceptance: PASS 4 FAIL 29 NOT_RUN 0   (새 테스트가 현재 결함을 잡음)
+tests.ficc_acceptance: PASS 57 FAIL 0 NOT_RUN 0
+selfcheck core.ficc.bonds PASS
+selfcheck ui.bonds_page PASS

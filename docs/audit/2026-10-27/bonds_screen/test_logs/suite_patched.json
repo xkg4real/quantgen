@@ -1,0 +1,79 @@
+[
+ {
+  "item": "selfcheck core.ficc.bonds",
+  "status": "PASS",
+  "rc": 0,
+  "seconds": 0.48,
+  "summary": "ok"
+ },
+ {
+  "item": "selfcheck ui.bonds_page",
+  "status": "PASS",
+  "rc": 0,
+  "seconds": 3.74,
+  "summary": "ok"
+ },
+ {
+  "item": "selfcheck core.ficc.curves",
+  "status": "PASS",
+  "rc": 0,
+  "seconds": 1.08,
+  "summary": "ok"
+ },
+ {
+  "item": "selfcheck core.ficc.insights",
+  "status": "PASS",
+  "rc": 0,
+  "seconds": 1.63,
+  "summary": "ok"
+ },
+ {
+  "item": "selfcheck core.ficc.data",
+  "status": "PASS",
+  "rc": 0,
+  "seconds": 1.51,
+  "summary": "ok"
+ },
+ {
+  "item": "tests.ficc_acceptance",
+  "status": "PASS",
+  "rc": 0,
+  "seconds": 5.73,
+  "summary": "57/57 passed"
+ },
+ {
+  "item": "tests.flet_api_guard",
+  "status": "PASS",
+  "rc": 0,
+  "seconds": 1.19,
+  "summary": "4/4 passed"
+ },
+ {
+  "item": "tests.bonds_screen_acceptance",
+  "status": "PASS",
+  "rc": 0,
+  "seconds": 11.2,
+  "summary": "33/33 passed"
+ },
+ {
+  "item": "tests.quant_acceptance",
+  "status": "PASS",
+  "rc": 0,
+  "seconds": 47.31,
+  "summary": "53/53 passed"
+ },
+ {
+  "item": "tests.macro_m1_pit",
+  "status": "PASS",
+  "rc": 0,
+  "seconds": 5.48,
+  "summary": "24/24 passed"
+ },
+ {
+  "item": "tests.macro_m1_integration",
+  "status": "PASS",
+  "rc": 0,
+  "seconds": 3.49,
+  "summary": "7/7 passed"
+ }
+]

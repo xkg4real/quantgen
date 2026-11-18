@@ -1,0 +1,77 @@
+# QUANTGEN audit artifact: full-suite run summary (cloud Linux container, NOT the owner's Windows machine)
+# Source: the two existing cloud runs of 2026-10-26; the full suite was NOT re-run for this artifact.
+# Exit codes were not printed by the runs; they are derived from tests/run_all.py:142
+#   `return 0 if results and failed == 0 else 1` (run through a wrapper that did sys.exit(R.main(...)) with
+#   R.OUT redirected to the scratchpad, so qa/acceptance_results.json was not rewritten).
+# Code under test: no change in core/ data/ ui/ tests/ tools/ grokteam/ paper_live/ config.py main.py
+#   requirements.txt pyproject.toml between the run commits (716bf77, b7f991a) and HEAD 4665e6e (git diff --stat empty).
+
+[run1] 2026-10-26 ~13:41-13:51 UTC; before the environment fixes (statsmodels absent, cache mtimes = checkout time, no tag studies-of-record-2026-10-23)
+command  : python3 -B <wrapper> <out.json>   (wrapper = import tests.run_all as R; R.OUT = argv[1]; sys.exit(R.main(argv[2:])))
+log      : run_all_cloud_run1.log
+summary  : 738/870 passed, 8 failed, 124 not run; /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/baseline_results.json
+wall time: 9m55.415s / 14m50.121s / 0m30.236s (real / user / sys)
+exit code: 1 (derived)
+per suite (PASS / FAIL / NOT_RUN):
+  safety       10 /  0 /    0
+  engine       92 /  0 /    0
+  ui            4 /  0 /    0
+  quant        53 /  0 /    0
+  ficc         57 /  0 /    0
+  expansion    17 /  3 /    0
+  macro       420 /  1 /  121
+  paper        21 /  0 /    0
+  grokteam     17 /  0 /    0
+  guard         2 /  3 /    0
+  papers       45 /  1 /    3
+FAIL rows:
+  expansion/selfcheck_strategies: AssertionError: (nan, nan, nan, nan, nan, nan, nan, nan, nan, nan)
+  expansion/selfcheck_curve_models: AssertionError: (37, 96.01798328497678, nan)
+  expansion/selfcheck_crypto_analytics: AssertionError: 
+  macro/macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache: AssertionError: 
+  guard/test_a_tag_is_annotated_and_peels_to_the_baseline: AssertionError: git cat-file -t studies-of-record-2026-10-23: fatal: Not a valid object name studies-of-record-2026-10-23
+  guard/test_b_tagged_pins_match_prereg_and_frozen_rule: AssertionError: git show studies-of-record-2026-10-23:grokteam/out/PREREG_book.json: fatal: invalid object name 'studies-of-record-2026-10-23'.
+  guard/test_d_library_versions_match_the_pins_while_a_readout_is_pending: AssertionError: git show studies-of-record-2026-10-23:grokteam/out/PREREG_book.json: fatal: invalid object name 'studies-of-record-2026-10-23'.
+  papers/test_debate_run_kills_process_tree: FileNotFoundError: [Errno 2] No such file or directory: 'taskkill'
+
+[run2] 2026-10-26 ~20:25-20:34 UTC; after the environment fixes in environment_fixes_cloud.txt
+command  : python3 -B <wrapper> <out.json>   (wrapper = import tests.run_all as R; R.OUT = argv[1]; sys.exit(R.main(argv[2:])))
+log      : run_all_cloud_run2.log
+summary  : 745/870 passed, 1 failed, 124 not run; /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/baseline2_results.json
+wall time: 8m56.210s / 13m6.926s / 0m24.973s (real / user / sys)
+exit code: 1 (derived)
+per suite (PASS / FAIL / NOT_RUN):
+  safety       10 /  0 /    0
+  engine       92 /  0 /    0
+  ui            4 /  0 /    0
+  quant        53 /  0 /    0
+  ficc         57 /  0 /    0
+  expansion    20 /  0 /    0
+  macro       421 /  0 /  121
+  paper        21 /  0 /    0
+  grokteam     17 /  0 /    0
+  guard         5 /  0 /    0
+  papers       45 /  1 /    3
+FAIL rows:
+  papers/test_debate_run_kills_process_tree: FileNotFoundError: [Errno 2] No such file or directory: 'taskkill'
+
+[owner record] qa/acceptance_results.json as committed (ac86705 'QA: full run on merged master'), produced on the owner's machine:
+summary  : 749/870 passed, 0 failed, 121 not run; exit code 0 (derived)
+per suite (PASS / FAIL / NOT_RUN):
+  safety       10 /  0 /    0
+  engine       92 /  0 /    0
+  ui            4 /  0 /    0
+  quant        53 /  0 /    0
+  ficc         57 /  0 /    0
+  expansion    20 /  0 /    0
+  macro       421 /  0 /  121
+  paper        21 /  0 /    0
+  grokteam     17 /  0 /    0
+  guard         5 /  0 /    0
+  papers       49 /  0 /    0
+
+Differences cloud run2 vs owner record (same 870 test names):
+  papers/test_compile_template_en, _ko, test_compile_undefined_number_key_is_a_failure: PASS (owner) -> NOT_RUN (cloud: no tectonic)
+  papers/test_debate_run_kills_process_tree: PASS (owner, Windows) -> FAIL (cloud: tools/debate.py:75 calls taskkill)
+
+NOT_RUN is not PASS: tests/run_all.py:117-118 records it separately and :142 ignores it for the exit code.

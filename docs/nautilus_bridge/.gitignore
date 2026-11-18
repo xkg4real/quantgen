@@ -1,0 +1,4 @@
+runs/.locks/
+# O11 A2 owner receipt (hostname, ledger hash): private, never committed (O11_A2_REGISTRATION.md).
+# Narrow on purpose: pilot run folders under runs/ are committed at Steps 8 and 9.
+runs/A2-E1-*
