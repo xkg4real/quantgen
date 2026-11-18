@@ -1,6 +1,6 @@
 # MERGE_QUEUE — main 병합 순서와 동결 (메인 세션이 관리)
 
-updated_at: 2026-11-18T14:17:49+09:00
+updated_at: 2026-11-18T14:18:34+09:00
 coordinator: 메인 세션 (QUANTGEN/MAIN, https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB)
 freeze: none — F 동결은 P3(연구 브랜치 병합)이 시작될 때 켜지고 F21까지 유지. 동결 중에는 main에 아무것도 병합하지 않음.
 
@@ -17,7 +17,8 @@ freeze: none — F 동결은 P3(연구 브랜치 병합)이 시작될 때 켜지
 ## F21 뒤 (순서는 메인이 다시 정함)
 
 - GH-1: CI 줄이기 / Windows 검사를 소유자 PC로 + 비공개 전환 — 소유자 선택 대기 (D5 후속).
-- OS: PySide6 전환 PR — F21 바로 뒤 첫 자리 (D9 나안). 준비 작업은 지금 브랜치에서.
+- OS 작은 PR(도구·`app_identity`·패키징 초안, 공유 파일 `core/app_paths.py`·`runtime-smoke.yml` 경로·`platform-build.yml`) — **F21 뒤 첫 자리**, 그다음 OS: PySide6 전환 PR (D9 나안). P3 전에는 받지 않음: P3 병합 후보(`local/p3-candidate` 끝 `f0c8872`)가 main `7c33955` 기준이라 main이 바뀌면 병합과 전체 검사를 다시 해야 함. `qa/` 두 파일을 휠에 넣을지는 지금 그대로 두고 그 PR에서 근거와 함께 제안.
+- P3 상태 (2026-11-18): 병합·전체 검사 끝, push 보류 — 코드 지문 판정(P3-가/나/다) 소유자 답 대기.
 - KEY-2 → KEY-3 → KEY-4 → KEY-5 — **D7-G 소유자 승인됨 (2026-11-18 14:15 KST, OS 세션에서, 원문: "그러면 D7-G의 방식대로 진행하겠습니다")**. 브랜치 작업은 지금 시작 가능, main 병합은 F21 뒤 이 순서.
 - DS·DIDM PR — 각 세션 차례가 오면.
 
