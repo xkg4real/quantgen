@@ -10,7 +10,7 @@ updated_at: 2026-11-18T02:45:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/os-prep-20261117
-work_commit: 5816125
+work_commit: 451db93
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
