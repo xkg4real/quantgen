@@ -6,7 +6,7 @@ task: os-expansion
 cycle: 2026-11-17
 done_ids: none
 next_ids: OS-P0-a, OS-P0-e, OS-P0-f, OS-P0-c, OS-P0-b, OS-P0-d, OS-F1, OS-F2
-updated_at: 2026-11-18T10:30:00+09:00
+updated_at: 2026-11-18T10:45:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/os-prep-20261117
@@ -58,7 +58,7 @@ session: https://claude.ai/code/session_016uB1jgXiwx42FSUU5ANwM7
 | 시범 PySide6 쪽에만 글꼴 shim(스크래치) | D9와 같은 조건이어야 비교 가능 | shim 없음 — 거의 모든 테스트가 import에서 실패 |
 | OOM으로 죽은 UI 단계 3·5는 상한 8GB로 단독 재실행한 값을 씀(원 로그 보관) | 동시 실행 탓인지 가리려고; 재실행에서도 단계 3은 세그폴트 | 첫 값 그대로 |
 | `user_data_dir()` 재정의 이름은 Notion 계획 F2의 `QUANTGEN_DATA_DIR`, 그다음 `FLET_APP_STORAGE_DATA` | 기존 계획과 일치, 모바일 저장소 | 처음 쓴 `QG_USER_DATA_DIR` |
-| `DATA_API_BASE`·`GATEWAY_PROFILE` 넣지 않음 | D7-G 승인이 handoff에 아직 기록되지 않음 | — |
+| `DATA_API_BASE`·`GATEWAY_PROFILE` 아직 넣지 않음 | 소유자가 이 세션에서 D7-G를 승인함 (2026-11-18, 원문: "그러면 D7-G의 방식대로 진행하겠습니다"). 지시문 표 D7 행에 따라 **메인이 MASTER 또는 공지에 승인을 적은 뒤** `core/app_identity.py`에 두 값 자리(`DATA_API_BASE` 빈 값, `GATEWAY_PROFILE` `personal`)를 더함 | 소유자 답, 지시문 04 D7 행 |
 | 게시자·조직명 기본값 "QUANTGEN" (회사 접미사 없음) | 법인 전, 상법 제20조 지적(D11 2.1, 법률 자문 아님); 지금 QSettings 이름과 같아 설정 유지 | — |
 | spec은 `git ls-files` + `stage.allowed()`로만 자료를 고름, 계산 해시 원본 3개를 자료 파일로 넣음 | 보호 폴더가 들어갈 수 없게; 패키지 앱의 `code_evidence()` 해시가 None이 되지 않게 | PyInstaller `collect_submodules` (홀드아웃 경로도 모을 수 있음) |
 | `platform-build.yml`은 수동·`v*` 태그만, PR 안 엶 | 비공개 뒤 유료, 대기열 규칙 | push·PR 트리거 |
@@ -139,6 +139,7 @@ python -m tools.compliance.check --check -> consistency FAIL (새 파일; PR 직
   - `--done "OS-P0-b | 바인딩 중립 spec, platform-build.yml, mobile stage | packaging/*, .github/workflows/platform-build.yml, tools/packaging/stage.py, mobile/* | 4f009aa,e65fd43 | 로컬 PySide6 빌드 성공, mobile import OK"`
   - `--done "OS-P0-e | PySide6 정식 시범·점검표 | docs/platform/PYSIDE6_TRIAL_2026-11-17.md, docs/platform/PYSIDE6_UI_CHECKLIST.md | 6e92dbf | 새 실패 14/10, 세그폴트 2/3, 지워진 객체 223/188"`
   - `--done "OS-P0-f | 글꼴 대안 판정·세그폴트 재현 | tools/qt_port/font_probe.py, tools/qt_port/repro/*, docs/platform/font_probe/* | 032c439 | insertSubstitutions = 현재와 동일(Linux), 세그폴트 PySide6만 재현"`
+- **D7-G 소유자 승인 (2026-11-18, 이 세션에서 받음, 원문: "그러면 D7-G의 방식대로 진행하겠습니다")**: MASTER 또는 메인 공지에 기록해 주세요. 기록되면 결제·계정 세션의 KEY-2~5와 이 세션의 `app_identity` 값 자리가 시작됩니다. 소유자에게 D7-G 설명(공급원은 `personal` 길로 지금처럼 동작, 법인 뒤 `routes.json`과 서버 주소만)을 이 세션이 드렸습니다.
 - 확인 요청 (11-18): `tools/packaging/stage.py`의 `FILES`가 `qa/acceptance_results.json`·`qa/research_status.json`을 휠에 넣습니다. 앱 코드는 이 파일을 읽지 않고 이름만 문구에 나옵니다. 데스크톱 빌드에서는 spec으로 뺐습니다. 휠에도 계속 둘지 메인이 정해 주세요(stage.py는 이 세션이 고치지 않음).
 - 위 `--done` 초안의 OS-P0-b·e·f 커밋 칸에 11-18 커밋(`d2befff`, `8097ca5`, `42be9b8`, `c12643b`, `bd38f93`, `5816125`)을 더합니다.
 - 알림: 메인 문서 `MASTER_WORK_DESIGN` 등에 있는 "역방향 의존 없음"(Notion 원문 M2)은 틀립니다: `ui/` 12개 파일 → `quantgen_desktop` 문구 모듈, `quantgen_desktop` 5개 파일 → `ui.*` (함수 안 import).
