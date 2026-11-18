@@ -359,6 +359,7 @@
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md": "0b26452ceb5e1eaed963b60f1a9f5b7bf8276552602fce776ea9b54625885144",
     "docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md": "9604ff31a94d2e182bebfb71ec65cd83ca2f96cb8942deae39d3a337b288d4dd",
+    "docs/product/PYSIDE6_UI_VERIFICATION_2026-11-19.md": "0193a01eaaf90406864b11e06027d3e3f675b3804964d1ed907fb1ab3b54d50e",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
@@ -770,163 +771,163 @@
   "reviews": {
     "1": {
       "document_sha256": "546a396893b50ef5d8e95c18be4103f5a2302253d397429859957bd1540724cf",
-      "source_digest": "bcc2694ca7cdd0e0741fd79f02fddc5da6c85177d15f963b52b7bc20f1edfd1a",
+      "source_digest": "74fa453a46acae54b7fcb74776e160c7ec08afacb3dfcc31b7c5410498e33776",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.560158+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.712490+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "2": {
       "document_sha256": "1c7eb9b60585b1fd4d1a23723051454e768b6ea6b31b9e58bd8122ac73cdd5e1",
-      "source_digest": "bcc2694ca7cdd0e0741fd79f02fddc5da6c85177d15f963b52b7bc20f1edfd1a",
+      "source_digest": "74fa453a46acae54b7fcb74776e160c7ec08afacb3dfcc31b7c5410498e33776",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.563271+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.714896+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "3": {
       "document_sha256": "50fcceb8fb66b30a535ff6015a66ff5e5cee801b61433cc3aa99acd3673c4393",
-      "source_digest": "dccc2ff1f708025eedf68bd3a6d0f49b83b7eae1d93676c4cb295f5f3fbe6887",
+      "source_digest": "ba39800c34ea868f1491252889cc07306e31e43da0c69576cdd0dfa5f80ba823",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.566391+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.720835+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "4": {
       "document_sha256": "4a2528a8c62c60983069941ff506c41c6b251ff1f402ef6cf7723e9901bb7a91",
-      "source_digest": "00e7275cf3cc1f6b6d3271f74520fc4b2a7c3e7bde6c636e0cbe670ad09f357a",
+      "source_digest": "5ddf4ca6a279b969209ba7083fce4b125530a955e55fd668ee37f07589d3ae08",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.569217+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.722675+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "5": {
       "document_sha256": "54164c56f4c3999b8ed65115e411151dca9dd6a46fea7bc57d0a750774d7b555",
-      "source_digest": "7c6f4b6522c69d35b800307814ee6103444d49d011f50a9797c3e874aa2b8332",
+      "source_digest": "d9d6690990a458afae176dc779620923bdc5116cd051295ba518e3bb70203500",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.571698+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.724376+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "6": {
       "document_sha256": "5871443de50226c2680aa2c41059c06b4d1290f28f1c859d5ed979fd17a2918e",
-      "source_digest": "aef2bdef32ec408131322fa9eb464fac70409f85d24f3862e0f4ad3985c58703",
+      "source_digest": "6ce9a219cab565a72c767a4454a8e566363a2c4946a5611cc4d6ea802a8d251e",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.574228+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.726246+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "7": {
       "document_sha256": "437529f84b2cf492d8e04e5e0190c1cd1f15ea06a17ca4da24bbacc070d77ba1",
-      "source_digest": "bcc2694ca7cdd0e0741fd79f02fddc5da6c85177d15f963b52b7bc20f1edfd1a",
+      "source_digest": "74fa453a46acae54b7fcb74776e160c7ec08afacb3dfcc31b7c5410498e33776",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.576350+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.727988+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "8": {
       "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
-      "source_digest": "aef2bdef32ec408131322fa9eb464fac70409f85d24f3862e0f4ad3985c58703",
+      "source_digest": "6ce9a219cab565a72c767a4454a8e566363a2c4946a5611cc4d6ea802a8d251e",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.579261+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.729600+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "c5a857c4a7f9b0e0e0407e3a60996531a58a0fde598a8a83ba190d2e79d83c18",
+      "source_digest": "dccb8db174c85d7ab2ac74e4c639a80d12090cbc1a301fbd9ea9f52f0fcc824c",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.581595+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.731291+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "10": {
       "document_sha256": "ce304488b177e5fa81046782034d9a3c23a411ca3cef859d46b7df13ba0c5f5f",
-      "source_digest": "633ca4f5848458c8dda026204b3cef34475d9a13fc1517e7457678e2f6458ffd",
+      "source_digest": "fc8ae4b7caf49f6f9c145e393e7b35bd24f488f8d6e2fbacd7d9122335eb60f7",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.583614+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.733018+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "11": {
       "document_sha256": "11a071fe459f3d6f622ec4ee4480200c3e7ed131153e00bd6823e552e43a7004",
-      "source_digest": "854087f5163bc04bcd81139f534d89433d76bd70a30b899461c49719b214bdfe",
+      "source_digest": "a992574baa3c934f0a42ccfff0fbc97c7dce42d6d05d2d71839003adfa10497d",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.586199+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.734585+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "12": {
       "document_sha256": "18af1551af29075d92583d7bc84a780f3719662115a7b26e4aeb9efd760d1afc",
-      "source_digest": "c4acf1d50307395a3f6bcab3b9fd1878cbdc4b5e061c2187056e1cf7bb1f5976",
+      "source_digest": "8354d13d3c20e8ed25929c4ae166edface7c6ecb056ae3c67ea8fac5a3ae0781",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.588882+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.736108+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "c5a857c4a7f9b0e0e0407e3a60996531a58a0fde598a8a83ba190d2e79d83c18",
+      "source_digest": "dccb8db174c85d7ab2ac74e4c639a80d12090cbc1a301fbd9ea9f52f0fcc824c",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.591224+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.737603+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "c5a857c4a7f9b0e0e0407e3a60996531a58a0fde598a8a83ba190d2e79d83c18",
+      "source_digest": "dccb8db174c85d7ab2ac74e4c639a80d12090cbc1a301fbd9ea9f52f0fcc824c",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.593032+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.739297+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "15": {
       "document_sha256": "99b8253de2d54323b48c1dc8edb663bb6105930c24bb15e8f70800aec2a49cf1",
-      "source_digest": "c5a857c4a7f9b0e0e0407e3a60996531a58a0fde598a8a83ba190d2e79d83c18",
+      "source_digest": "dccb8db174c85d7ab2ac74e4c639a80d12090cbc1a301fbd9ea9f52f0fcc824c",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.595840+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.741005+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "16": {
       "document_sha256": "ff89cdb2a5ee70c3f830162c8e3c8a287291c89fddd7c850ac5b6048d9217f98",
-      "source_digest": "e739b70f7e9c1f076b55f825db60bc5fb8cb3ba06c6b3b7b24fea7393b184f8b",
+      "source_digest": "633874eb5236169ba349721c70c41ec081ec137b054cff9ec94f0b78972a1510",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.598093+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.742617+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "17": {
       "document_sha256": "dde1a8a05a26c612255f5858d272019e11cb7caf4542aa017b626ecea968713d",
-      "source_digest": "aef2bdef32ec408131322fa9eb464fac70409f85d24f3862e0f4ad3985c58703",
+      "source_digest": "6ce9a219cab565a72c767a4454a8e566363a2c4946a5611cc4d6ea802a8d251e",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.599829+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.744328+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "18": {
       "document_sha256": "f41494e3a28b54cd191916f9ee985f795849e6bf67d69c8dffebd7d081d1187d",
-      "source_digest": "bcc2694ca7cdd0e0741fd79f02fddc5da6c85177d15f963b52b7bc20f1edfd1a",
+      "source_digest": "74fa453a46acae54b7fcb74776e160c7ec08afacb3dfcc31b7c5410498e33776",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.602548+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.746168+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "3be8d679e36a06d3d1bff0cf54fceeeb66a1cda9ffc982a69ed68df23935abc9",
+      "source_digest": "b8bc57879c6ae10844c41a979d131f41b5079a202ab48894cdadb6c83385493c",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.604845+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.747751+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     },
     "20": {
       "document_sha256": "0bb26298409489acde50b160abaa10068a84cc0e5b756041665f5277435b19eb",
-      "source_digest": "bcc2694ca7cdd0e0741fd79f02fddc5da6c85177d15f963b52b7bc20f1edfd1a",
+      "source_digest": "74fa453a46acae54b7fcb74776e160c7ec08afacb3dfcc31b7c5410498e33776",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T16:21:23.606627+00:00",
-      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
+      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T23:03:10.749472+00:00",
+      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
     }
   }
 }
