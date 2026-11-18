@@ -154,8 +154,8 @@ python -m tools.compliance.check --check -> consistency FAIL (새 파일; PR 직
 (소유자가 그대로 붙여 주세요. 소유자가 전달했는지: **아직 기록 없음**)
 
 > OS_EXPANSION 세션이 PySide6 전환 준비 결과를 올렸습니다. 브랜치 `claude/os-prep-20261117`의 `docs/platform/PYSIDE6_UI_CHECKLIST.md`(점검표)와 `docs/platform/PYSIDE6_TRIAL_2026-11-17.md` 7절(재시범)을 읽어 주세요.
-> 세그폴트와 메모리 폭증의 원인은 두 곳입니다. 먼저 고쳐 주세요(둘 다 PyQt6에서도 동작이 같음): ① `localization.py:80`의 `QTimer.singleShot(0, self.apply)`를 자식 `QTimer(self)`로 바꾸기(점검표 6번), ② `bonds.py:201`의 `setWeight(600)`를 `setWeight(QFont.Weight(600))`로 바꾸기(12번, `QFont` import 필요).
-> 그다음 순서: 나머지 `6-bound` 27~28곳 → 3번 `receivers`(`stock_detail.py:1470`) → 5번 이벤트 필터 해시 → 4번 `paper.py` 콤보 Enum → 1·2·8·13번 한 줄 수정 → 10번 창에서 떼어 낸 위젯 정리(누수).
+> 세그폴트와 메모리 폭증의 원인은 두 곳입니다. 먼저 고쳐 주세요(둘 다 PyQt6에서도 동작이 같음): ① `localization.py:80`의 `QTimer.singleShot(0, self.apply)`를 자식 `QTimer(self)`로 바꾸기(점검표 6번), ② `bonds.py:202`의 `setWeight(600)`를 `setWeight(QFont.Weight(600))`로 바꾸기(12번, `QFont` import 필요).
+> 그다음 순서: 나머지 `6-bound` 31곳(UI `7902381` 기준) → 3번 `receivers`(`stock_detail.py:1470`) → 5번 이벤트 필터 해시 → 4번 `paper.py` 콤보 Enum → 1·2·8·13번 한 줄 수정 → 10번 창에서 떼어 낸 위젯 정리(누수).
 > 위치는 OS 브랜치에서 `python tools/qt_port/pyqt6_to_pyside6.py --lint --ref origin/claude/friendly-bardeen-r6xe8f`로 봅니다(체크아웃 불필요). OS 세션은 `quantgen_desktop/**`를 고치지 않습니다.
 
 ## 소유자 Windows 글꼴 확인 (선택, OS-P0-f)
