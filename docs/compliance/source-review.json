@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "6deae01f70e9ba9cbc5e1c38966e303da4f14f01ba02e024f306858e5e8c091b",
+    ".github/workflows/runtime-smoke.yml": "6bcde06c967ea24f46bf879e559a72a54023533d5200d02437073a0f4710c15a",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -49,7 +49,7 @@
     "assets/ui/chevron-right-light.svg": "4c41b70e2765dcdf5f746175193840e1b1d89df35fffdb333767dff0530e6ad7",
     "assets/ui/chevron-up-dark.svg": "4c01aef7a61e68d8e0341b821661e525ccbdbd7dee81b70c053816c60237d3e3",
     "assets/ui/chevron-up-light.svg": "2265a4fb6c322734ffd4e35292fe0ba4c5e00fd6441368df6b1a32fd5f91dde8",
-    "config.py": "9c2af5ad4ac12ee3b442fb1d16b17bd9c95ab972e543eeb24308aafc0c80e77f",
+    "config.py": "3dfa7e22a9904c41c114b1152b52bd85777206931f3a04bf049e82197cbf1863",
     "core/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "core/adoption/__init__.py": "592263c22647b24151038499489911ec409ac81177e99ed3c33f3a359947953a",
     "core/adoption/strategy_rules.py": "aab90e61f8a793022e823cb9d4311d85fc5120343e9bb47105b828753f9bebc3",
@@ -80,6 +80,8 @@
     "core/calendars/publication.py": "f275ee921eed3a2c4c31547925b943e5a032162800f3bb70365621ff26f38dcf",
     "core/calendars/regime.py": "fcac664c8f3b2d51ff45c67ef27252b1961b38c944dd785f8162d9ffa579d17b",
     "core/calendars/store.py": "4932ad9cbb4a1914f6b75da84e96a74730444cf2f43c756a7c7dd95efb403041",
+    "core/credentials/__init__.py": "9a8d82baef257c640c8bf13d102609f76f38b4d185eeb7907b65d5bc4d14d073",
+    "core/credentials/names.py": "a29688fb2f396bcca90a0c135a1d88e593b18b446d42213769ab2c7a4f98f094",
     "core/crypto/__init__.py": "239a350b379471bb83ac90f3dc25149814f5f58790604236697daf160f5fcd81",
     "core/crypto/analytics.py": "7d7c846f0a363135592b88699190ac8c7251e159756ffb21bbebc128129dfdbf",
     "core/crypto/funding_diagnostic.py": "19e0763b30e0f838d522c4ceedffd8ad7139b69f7257924532593b9bb02a9270",
@@ -298,7 +300,7 @@
     "data/kis_workspace.py": "31ad0c45e37f71030a7f26f1f0eb21b0979f4cabb9093f5095e658990310c204",
     "data/krx/__init__.py": "85eab43f9556eb3a7a207099993842304821caba218b68a3aaaf00d004622dc9",
     "data/krx/gateway.py": "6aec229a790be1cbafbc7bef6b3206ccd585148c6899665fe82102931b0d00e7",
-    "data/krx/kis_client.py": "9f957cadff94bb9c3edf5b92d955e21892c50abaff5d167bde7f3871e7fc456e",
+    "data/krx/kis_client.py": "2ddf2977d98c06c189ea0c8f14baf15c962124602f70c9f027afd19eb69fcc49",
     "data/krx/krx_market_client.py": "092fcd34a4000731a9eaba27f27ddd1f396137e27e96e6627b767a688635ab87",
     "data/krx/opendart_client.py": "d038d525d9b66d8633ffe3cc0c43d4da72a5cf9cee3ebf6a9496e68ca08afbff",
     "data/macro/rules_v2.0.0.json": "c74edcd93d05a55eddea860e2fd6ee8e31bcaf00dfd7fbc2b0e41766f766822e",
@@ -405,7 +407,7 @@
     "mobile/pyproject.toml": "2cad54b7e32873320de1d05e1e81cb91ce88f64cd97afc1ec955399fc5922db7",
     "packaging/launch_desktop.py": "7724b54d172f00d87c80abab2ff5214deb5ebcf9105878e24ca7519c166ce4b8",
     "packaging/selfcheck.py": "30dffaa03bf0f29342d3a1aca2945ab17c588c3a4304c59a0880f05b6a523ef1",
-    "pyproject.toml": "7c46a0addc7d5220351b73c8ad54d672dbbd6de80ebf1a053a42293a717c52d5",
+    "pyproject.toml": "ae328503d802c3725e5869313e95f24be5a4bf73b176456a1d0913c1938e7f19",
     "quantgen_desktop/__init__.py": "1ec1396b13e4b6caae0b8dfcf6201af71ad9756428c5cbcaab9706083691e060",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
     "quantgen_desktop/app.py": "92ee40a3bb986e95997cf611edfa0381ed98bb6022a59f4844b84244106aacd9",
@@ -492,7 +494,7 @@
     "quantgen_desktop/workspace_guide.py": "4aa8c51fb47ea4d7d647a081276dbe0c624ec9fde01ac17b69c23372dfc5e833",
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
     "requirements-nautilus.txt": "7a720e247bf1a5708aa19e79c1291b6baef87c837719c669ebe5f24e4a4a7e0e",
-    "requirements.txt": "efe528fea6e00d9edb734ada7e11c75ece2e7b8996d2697fca643e15eefc000e",
+    "requirements.txt": "51bba6d2dedc96e30c4176d44043536f241802ccfb19d81aad3084ee68bc48a3",
     "test_npu.py": "fae9f28fa1772b834ede1f22315b93f66feefc586e5afd061e188f091d48b4d4",
     "tests/__init__.py": "db1fcd9d60745c7af2cbaf67c78afaabeb6d3daa51bcab04b786fcd3432658e3",
     "tests/acceptance.py": "52145dced05c3eb193c6eab1905096a478b1940490bba608a44024e24ea7d7fc",
@@ -511,6 +513,7 @@
     "tests/cms_coupon_disclosure_acceptance.py": "1c1fcf30d38c23885e7c236f1ed39302972df972c93c9a20184b3b7ebf3d4010",
     "tests/compliance_acceptance.py": "515c4e52c4643cc4a4679bcacf401af6829b2472a69ae9ca23ded61752c40156",
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
+    "tests/credentials_acceptance.py": "156615f8ae2aaf6439be16299721da62e78b617615e2e7aa14ad4b16eced88a8",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
     "tests/crypto_missing_values_acceptance.py": "be07db163184acb8c0a67dd9c0562045e9f486506539ed9eadb2d06bec2ca038",
     "tests/curve_methods_acceptance.py": "66007a9bee8a7abedce57738f0fff5bd1ae9b2bd1d400b240d032e9a9691bd9b",
@@ -800,163 +803,163 @@
   "reviews": {
     "1": {
       "document_sha256": "8fdcbaf3551af7c39081fab335d6bfbd0c44bc4f3d1afdb4054e6aa6e8599f1b",
-      "source_digest": "0577e244c40f1ae23fcc47667b12e2e589d1d218eaf5ca1ed6de1fa6a900dcd0",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.685423+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "7616f4cbe15ef3108163a82489b84336aafc96da0d94a927ca95f46ade984329",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.100802+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "2": {
       "document_sha256": "1c7eb9b60585b1fd4d1a23723051454e768b6ea6b31b9e58bd8122ac73cdd5e1",
-      "source_digest": "0577e244c40f1ae23fcc47667b12e2e589d1d218eaf5ca1ed6de1fa6a900dcd0",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.690862+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "7616f4cbe15ef3108163a82489b84336aafc96da0d94a927ca95f46ade984329",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.103629+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "3": {
       "document_sha256": "50fcceb8fb66b30a535ff6015a66ff5e5cee801b61433cc3aa99acd3673c4393",
-      "source_digest": "72caf6c62e9188d7ec0d1218f6b803357fe478d2c343a3ded3bcf474738792d3",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.693098+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "41ea0fabdc4672a4da8aedc96f81bdfc460b00c747793273495c24f8cbed5b2e",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.105678+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "4": {
       "document_sha256": "4a2528a8c62c60983069941ff506c41c6b251ff1f402ef6cf7723e9901bb7a91",
-      "source_digest": "d4ef87ca2c0d2d681619866dd62d01197a21b6723e0cd3c1c5a04f56473eed67",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.697310+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "a4bf359dd79b9222256617ca775f675c3faa03c49f8abf68e4b790e3cf4ccd68",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.108389+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "5": {
       "document_sha256": "54164c56f4c3999b8ed65115e411151dca9dd6a46fea7bc57d0a750774d7b555",
-      "source_digest": "6bc5194f6413347ce7ae45257eb2aab18ae86920166fe5cd9b0ce5fd53599742",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.699214+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "a90aaf8c929ce242c63849ed1da2aae50b6089575d5a53e6dc75cf88adb0927c",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.111826+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "6": {
       "document_sha256": "5871443de50226c2680aa2c41059c06b4d1290f28f1c859d5ed979fd17a2918e",
-      "source_digest": "6ab246d3fd444c49a45d52002e6074dde8e7488e82df530a06668f5de3ee8448",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.701226+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "1859de56ffeb436b9f4cf9a073db707bd3f68860e8c7d2864fc26e28f1c5b58c",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.114215+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "7": {
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
-      "source_digest": "0577e244c40f1ae23fcc47667b12e2e589d1d218eaf5ca1ed6de1fa6a900dcd0",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.703269+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "7616f4cbe15ef3108163a82489b84336aafc96da0d94a927ca95f46ade984329",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.116370+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "8": {
       "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
-      "source_digest": "6ab246d3fd444c49a45d52002e6074dde8e7488e82df530a06668f5de3ee8448",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.705299+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "1859de56ffeb436b9f4cf9a073db707bd3f68860e8c7d2864fc26e28f1c5b58c",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.118213+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "7b66f6de0895b01b58a9e52fd9b1cdc52d693faec6cab6aee38393fec6350bd6",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.707312+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "b970493bc836900d8151cc075e38e7094bf912d84a0f6aa606a8ed0ce2251c44",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.120045+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "10": {
       "document_sha256": "ce304488b177e5fa81046782034d9a3c23a411ca3cef859d46b7df13ba0c5f5f",
-      "source_digest": "2eb986a9ce3b5f6a41d226cc777258af8fd9f5a88566cdf44b4321229acfb10e",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.709229+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "c7820c9fdf1c9b30bc725a74d349efdf73f4c7fe2e30812f112cf79374967048",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.122638+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "11": {
       "document_sha256": "11a071fe459f3d6f622ec4ee4480200c3e7ed131153e00bd6823e552e43a7004",
-      "source_digest": "17c1eace460ef2cf901d6f2da30c644dbcc6cb64b776a490b03ca7512c400957",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.711077+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "20506ee1824ace90c5643813b3b065b1355464cfb57fbe10c285b03108520b1e",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.124903+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "29fdb36022527fa4fa7bdc1d7e9fa4fe6ebdb38d2963a7b2551a9136e1838c0b",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.713134+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "790487ad69f411c93731dbb344a6ed4f52da04ec1ecd115021efb953322fa455",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.127389+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "7b66f6de0895b01b58a9e52fd9b1cdc52d693faec6cab6aee38393fec6350bd6",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.716582+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "b970493bc836900d8151cc075e38e7094bf912d84a0f6aa606a8ed0ce2251c44",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.129210+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "7b66f6de0895b01b58a9e52fd9b1cdc52d693faec6cab6aee38393fec6350bd6",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.718578+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "b970493bc836900d8151cc075e38e7094bf912d84a0f6aa606a8ed0ce2251c44",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.131365+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "15": {
       "document_sha256": "99b8253de2d54323b48c1dc8edb663bb6105930c24bb15e8f70800aec2a49cf1",
-      "source_digest": "7b66f6de0895b01b58a9e52fd9b1cdc52d693faec6cab6aee38393fec6350bd6",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.720607+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "b970493bc836900d8151cc075e38e7094bf912d84a0f6aa606a8ed0ce2251c44",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.133221+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "16": {
       "document_sha256": "ff89cdb2a5ee70c3f830162c8e3c8a287291c89fddd7c850ac5b6048d9217f98",
-      "source_digest": "cd862b81055850dae5fce308a40e8f8660485d51a9d09f7844f141b7a368abf3",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.722633+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "64a6e89d085f5b0a0028a2eff83be3478f4fcd9ac309562b6139a265950fcef2",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.135358+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "17": {
       "document_sha256": "dde1a8a05a26c612255f5858d272019e11cb7caf4542aa017b626ecea968713d",
-      "source_digest": "6ab246d3fd444c49a45d52002e6074dde8e7488e82df530a06668f5de3ee8448",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.724439+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "1859de56ffeb436b9f4cf9a073db707bd3f68860e8c7d2864fc26e28f1c5b58c",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.138348+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "18": {
       "document_sha256": "f41494e3a28b54cd191916f9ee985f795849e6bf67d69c8dffebd7d081d1187d",
-      "source_digest": "0577e244c40f1ae23fcc47667b12e2e589d1d218eaf5ca1ed6de1fa6a900dcd0",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.726270+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "7616f4cbe15ef3108163a82489b84336aafc96da0d94a927ca95f46ade984329",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.140923+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "c853c9f4679fdaee4c41a4aa0a2c61c3ce71e582902b0b2a5a3a04368ef856b6",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.728421+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "e17bca3906abd940e0f404f7db0811a5424483df57c05cf4c3a52ffc96c8cefe",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.144322+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     },
     "20": {
       "document_sha256": "b226906886050078abf5ba14f9a0735c9e5ac02444ee1b0ebe11517333cf3d18",
-      "source_digest": "0577e244c40f1ae23fcc47667b12e2e589d1d218eaf5ca1ed6de1fa6a900dcd0",
-      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
-      "reviewed_at": "2026-11-18T18:12:45.730400+00:00",
-      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
+      "source_digest": "7616f4cbe15ef3108163a82489b84336aafc96da0d94a927ca95f46ade984329",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
+      "reviewed_at": "2026-11-18T20:13:55.146462+00:00",
+      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
     }
   }
 }
