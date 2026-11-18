@@ -4,7 +4,7 @@
 - 기준: `origin/main` `5888d05` (2026-11-17 21:33 KST). `git grep`으로만 셌습니다 (`docs/asset_expansion/cache` 제외).
 - **이 문서에는 이름만 있고 값은 0개입니다.** `.env`, `~/.nextgen`은 열지 않았습니다. `.env.example`은 줄 앞의 이름만 뽑았습니다.
 - 바탕: handoff `plans/2026-11-17/D7_ENV_STRUCTURE.md` 1장·5장.
-- D7-G (공급원 게이트웨이)는 **소유자 승인 전**입니다. 그래서 "D7-G 길" 열은 설계 값이고, 코드 작업(KEY-2 이후)은 하지 않았습니다. 승인 전 KEY-2 설계는 5절 메모입니다.
+- D7-G (공급원 게이트웨이)는 소유자가 2026-11-18에 승인했습니다 (5절). "D7-G 길" 열의 `commercial` 값은 아직 설계 값입니다. KEY-2 코드는 PR #128 (5절).
 
 ## 0. 요약
 
@@ -98,7 +98,7 @@ Notion "QUANTGEN 상업화 실행 분석서" (`40e5c916fe0c815ba983dd4c4cc7992c`
 
 2026-11-17에 D7-G 승인 전 메모로 썼습니다. 소유자가 2026-11-18 14:15 KST에 D7-G를 승인했습니다 (원문 "그러면 D7-G의 방식대로 진행하겠습니다", handoff `MERGE_QUEUE.md`·`MASTER_WORK_DESIGN_2026-11-17.md` 맨 앞, 커밋 `762150c`). 이 설계대로 같은 브랜치에 구현했습니다 (`core/credentials/**`, `config.py`, `data/krx/kis_client.py`, `tests/credentials_acceptance.py`). 병합은 F21 뒤 대기열 (KEY-2 → KEY-3 → KEY-4 → KEY-5).
 
-구현에서 정한 것: `config.py`는 `dotenv.load_dotenv()` 호출을 그대로 둡니다 (시험 20여 개가 이 호출을 막아 `.env`를 차단하기 때문). 대신 그 호출이 더한 이름을 기록해 `.env` 값이 키 보관함보다 뒤에 오게 합니다. 개발판 판정은 `core/app_identity.may_read_dotenv()` (OS 세션 브랜치에 있음, main에는 아직 없음)를 쓰고, 그 파일이 없으면 지금처럼 `.env`를 읽습니다.
+구현에서 정한 것 (PR #128): `config.py`는 3줄만 바꿉니다 (Nautilus 브리지 코드 지문의 입력이라서). `.env` 로딩은 `core.credentials.load_dotenv_for_development()`가 하고, 이 함수는 `core.app_identity.may_read_dotenv()` (OS 세션, PR #127로 main에 들어감)가 허용할 때만 `dotenv.load_dotenv`를 부릅니다. 시험 20여 개가 그 `dotenv.load_dotenv`를 막아 `.env`를 차단하는 방식은 그대로 통합니다. 그 호출이 더한 이름을 기록해 `.env` 값이 키 보관함보다 뒤에 옵니다. 설정 16개는 `core.credentials.read_setting()`이 환경변수에서 읽습니다. 키 보관함은 운영체제 기본 저장소 (Windows, macOS, SecretService, kwallet, libsecret)만 받고, `keyrings.alt` 같은 평문 백엔드는 거절합니다.
 
 | 부품 | 내용 |
 |---|---|
@@ -106,7 +106,7 @@ Notion "QUANTGEN 상업화 실행 분석서" (`40e5c916fe0c815ba983dd4c4cc7992c`
 | `status(name)` | 값 대신 `{"name", "present", "source": "env"|"keyring"|"dotenv"|None}`만 돌려줌. 값은 어떤 반환·예외·로그에도 넣지 않음 |
 | `core/credentials/names.py` | 1절의 비밀 10개와 종류 (사용자 증권사 키 / 사용자 데이터 키 / 사용자 AI 키 / 계정 / 개발 전용). 이름 목록에 없는 이름은 `set` 거절 |
 | `config._clean` | 비밀 10개만 `core.credentials.get`으로. 설정 16개는 지금 그대로 `os.getenv` |
-| KIS 토큰 캐시 | `~/.nextgen/kis_token.json` 평문 → keyring (`kis_token` 항목). keyring 백엔드가 없으면 지금 파일 방식 유지. 키를 넣거나 지웠을 때 클라이언트를 다시 만들 수 있게 알림(콜백) 자리: `KISClient`는 만들 때 한 번만 `ready`를 정함 (`data/krx/kis_client.py:174`) |
+| KIS 토큰 캐시 | 키 보관함 `QUANTGEN`/`kis_token`을 먼저 읽고, 없거나 만료·깨졌으면 `~/.nextgen/kis_token.json`. 새 토큰은 키 보관함에 쓰고, 쓰기가 거절되면 키 보관함의 낡은 값을 지운 뒤 파일에 씀 (0600, 새로 만드는 폴더는 0700). **파일은 지우지 않음**: TRADEGEN이 같은 KIS 키로 같은 파일을 씀 (research_notes "QUANTGEN TRADEGEN split map"). 영향: QUANTGEN이 키 보관함에 새 토큰을 받으면 TRADEGEN 파일은 갱신되지 않아 TRADEGEN이 따로 토큰을 받을 수 있음 (하루 발급이 최대 2배). 앱에서 KIS 키를 바꾸면 키 보관함 토큰을 지우고 그 실행 동안 파일 토큰을 쓰지 않음. `KISClient.reload_credentials()`로 `ready`를 다시 읽음 (`kis_client.py:174`의 함정) |
 | `quantgen_cloud` 자리 | **만들지 않음** (D7-G에서는 게이트웨이 `remote.py`가 그 역할) |
 | 의존성 | `keyring`을 `requirements.txt`, `pyproject.toml`에 버전 범위 고정 (공유 파일, 대기열 경유) |
 | 시험 `tests/credentials_acceptance.py` | 메모리 keyring 백엔드만. `.env`·`~/.nextgen`을 읽지 않음 (`HOME`·`USERPROFILE`을 임시 폴더로). 값이 로그·예외 메시지·`status()`·`repr`에 나오지 않는지 확인. 찾는 순서 3단계, 공개판에서 `.env`를 읽지 않음, 이름 목록 밖 거절, keyring 없음 → 파일 대체 |

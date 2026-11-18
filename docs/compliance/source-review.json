@@ -80,7 +80,7 @@
     "core/calendars/publication.py": "f275ee921eed3a2c4c31547925b943e5a032162800f3bb70365621ff26f38dcf",
     "core/calendars/regime.py": "fcac664c8f3b2d51ff45c67ef27252b1961b38c944dd785f8162d9ffa579d17b",
     "core/calendars/store.py": "4932ad9cbb4a1914f6b75da84e96a74730444cf2f43c756a7c7dd95efb403041",
-    "core/credentials/__init__.py": "9a8d82baef257c640c8bf13d102609f76f38b4d185eeb7907b65d5bc4d14d073",
+    "core/credentials/__init__.py": "61dc9c1b41e7fe58dd78adc9c252e9dcbc49c06a471aee39d284838f872017c1",
     "core/credentials/names.py": "a29688fb2f396bcca90a0c135a1d88e593b18b446d42213769ab2c7a4f98f094",
     "core/crypto/__init__.py": "239a350b379471bb83ac90f3dc25149814f5f58790604236697daf160f5fcd81",
     "core/crypto/analytics.py": "7d7c846f0a363135592b88699190ac8c7251e159756ffb21bbebc128129dfdbf",
@@ -300,17 +300,17 @@
     "data/kis_workspace.py": "31ad0c45e37f71030a7f26f1f0eb21b0979f4cabb9093f5095e658990310c204",
     "data/krx/__init__.py": "85eab43f9556eb3a7a207099993842304821caba218b68a3aaaf00d004622dc9",
     "data/krx/gateway.py": "6aec229a790be1cbafbc7bef6b3206ccd585148c6899665fe82102931b0d00e7",
-    "data/krx/kis_client.py": "2ddf2977d98c06c189ea0c8f14baf15c962124602f70c9f027afd19eb69fcc49",
+    "data/krx/kis_client.py": "6e3ad47fa0784e59f74a6d8b018c9b40f37473c3c9d0354916a11f93994d4dd9",
     "data/krx/krx_market_client.py": "092fcd34a4000731a9eaba27f27ddd1f396137e27e96e6627b767a688635ab87",
     "data/krx/opendart_client.py": "d038d525d9b66d8633ffe3cc0c43d4da72a5cf9cee3ebf6a9496e68ca08afbff",
     "data/macro/rules_v2.0.0.json": "c74edcd93d05a55eddea860e2fd6ee8e31bcaf00dfd7fbc2b0e41766f766822e",
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "d529d38e3bb9aa6f91fafb46171073b07775e524974885a627d7f0a4af33c8cd",
+    "docs/compliance/FACTS.md": "f13978d480bb2cd3dbc1ab5c9a1893992762953d8e9a60a81f2d0abfc511e908",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
-    "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
+    "docs/compliance/RELEASE_GAPS.md": "c21dfe80b0c9313c25ab7d58b4f91d5e6ea32b0e3af05627a050c4989b03e56a",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/A1_TERMINOLOGY_2026-11-06.md": "c52f3a6e72b2cd0cd04263597a77570545c9b037e50a0c34586c7d4e552b93ff",
     "docs/product/A3_READING_LAYOUT_2026-11-06.md": "b0f6595caae843d4a912fc332adc78882f65f9eb579cd7f97f2d33519821cc64",
@@ -513,7 +513,7 @@
     "tests/cms_coupon_disclosure_acceptance.py": "1c1fcf30d38c23885e7c236f1ed39302972df972c93c9a20184b3b7ebf3d4010",
     "tests/compliance_acceptance.py": "515c4e52c4643cc4a4679bcacf401af6829b2472a69ae9ca23ded61752c40156",
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
-    "tests/credentials_acceptance.py": "156615f8ae2aaf6439be16299721da62e78b617615e2e7aa14ad4b16eced88a8",
+    "tests/credentials_acceptance.py": "775f992521446050cab1671eddecaf37e84b6c0decee17fd229287d9debf4507",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
     "tests/crypto_missing_values_acceptance.py": "be07db163184acb8c0a67dd9c0562045e9f486506539ed9eadb2d06bec2ca038",
     "tests/curve_methods_acceptance.py": "66007a9bee8a7abedce57738f0fff5bd1ae9b2bd1d400b240d032e9a9691bd9b",
@@ -802,164 +802,164 @@
   },
   "reviews": {
     "1": {
-      "document_sha256": "8fdcbaf3551af7c39081fab335d6bfbd0c44bc4f3d1afdb4054e6aa6e8599f1b",
-      "source_digest": "7616f4cbe15ef3108163a82489b84336aafc96da0d94a927ca95f46ade984329",
+      "document_sha256": "86cbd9963182c8342a1358e0411c87b2b5c7193b35e815ad128899037a2f1bad",
+      "source_digest": "121506656ff503f8c13dc54de93430eeaf4428f4bc50cc69c23e716f662c6302",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.100802+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.388400+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "2": {
       "document_sha256": "1c7eb9b60585b1fd4d1a23723051454e768b6ea6b31b9e58bd8122ac73cdd5e1",
-      "source_digest": "7616f4cbe15ef3108163a82489b84336aafc96da0d94a927ca95f46ade984329",
+      "source_digest": "121506656ff503f8c13dc54de93430eeaf4428f4bc50cc69c23e716f662c6302",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.103629+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.390890+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "3": {
       "document_sha256": "50fcceb8fb66b30a535ff6015a66ff5e5cee801b61433cc3aa99acd3673c4393",
-      "source_digest": "41ea0fabdc4672a4da8aedc96f81bdfc460b00c747793273495c24f8cbed5b2e",
+      "source_digest": "93e507262427e31cde7e7172577332eba311f0cb25359dc8e20f0b07114b60e9",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.105678+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.392925+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "4": {
       "document_sha256": "4a2528a8c62c60983069941ff506c41c6b251ff1f402ef6cf7723e9901bb7a91",
-      "source_digest": "a4bf359dd79b9222256617ca775f675c3faa03c49f8abf68e4b790e3cf4ccd68",
+      "source_digest": "b84a27a83771c935da5ca685b7b9f3bb9bc6c2a7c1d804303e181751aa0f21db",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.108389+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.394795+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "5": {
       "document_sha256": "54164c56f4c3999b8ed65115e411151dca9dd6a46fea7bc57d0a750774d7b555",
-      "source_digest": "a90aaf8c929ce242c63849ed1da2aae50b6089575d5a53e6dc75cf88adb0927c",
+      "source_digest": "fdd1fafb4de6452de29a21ed3162735605b4699df7dfcd030e2777af9dbe15a2",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.111826+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.396405+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "6": {
       "document_sha256": "5871443de50226c2680aa2c41059c06b4d1290f28f1c859d5ed979fd17a2918e",
-      "source_digest": "1859de56ffeb436b9f4cf9a073db707bd3f68860e8c7d2864fc26e28f1c5b58c",
+      "source_digest": "2b0225e1c614eac039d8219732beabb7149cd87fd151ca0cf5b7d912db98169d",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.114215+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.397997+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "7": {
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
-      "source_digest": "7616f4cbe15ef3108163a82489b84336aafc96da0d94a927ca95f46ade984329",
+      "source_digest": "121506656ff503f8c13dc54de93430eeaf4428f4bc50cc69c23e716f662c6302",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.116370+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.399872+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "8": {
-      "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
-      "source_digest": "1859de56ffeb436b9f4cf9a073db707bd3f68860e8c7d2864fc26e28f1c5b58c",
+      "document_sha256": "513805eb3874ec4bbd096e827ec05af4fe92ec96f8a29d32c5a503ac2ce1423f",
+      "source_digest": "2b0225e1c614eac039d8219732beabb7149cd87fd151ca0cf5b7d912db98169d",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.118213+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.401611+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "b970493bc836900d8151cc075e38e7094bf912d84a0f6aa606a8ed0ce2251c44",
+      "source_digest": "be9c105c1b29b0e2827c147abf506b59593d32543133fb624bdf34df3b45d994",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.120045+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.403404+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "10": {
       "document_sha256": "ce304488b177e5fa81046782034d9a3c23a411ca3cef859d46b7df13ba0c5f5f",
-      "source_digest": "c7820c9fdf1c9b30bc725a74d349efdf73f4c7fe2e30812f112cf79374967048",
+      "source_digest": "66841010f40cd4850da64039b78bc3e206b7f767cb79438e7ec016cd8ed19bb2",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.122638+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.405096+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "11": {
       "document_sha256": "11a071fe459f3d6f622ec4ee4480200c3e7ed131153e00bd6823e552e43a7004",
-      "source_digest": "20506ee1824ace90c5643813b3b065b1355464cfb57fbe10c285b03108520b1e",
+      "source_digest": "ddf89e85441e76d01e3dee223307eda04f71c5a060df8f92ed28725b3775a18f",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.124903+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.406872+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "790487ad69f411c93731dbb344a6ed4f52da04ec1ecd115021efb953322fa455",
+      "source_digest": "11402b502b4611db1b64abe2961252c684de2d159ac5e41761b2ef953ea6f2ed",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.127389+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.408519+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "b970493bc836900d8151cc075e38e7094bf912d84a0f6aa606a8ed0ce2251c44",
+      "source_digest": "be9c105c1b29b0e2827c147abf506b59593d32543133fb624bdf34df3b45d994",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.129210+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.410431+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "b970493bc836900d8151cc075e38e7094bf912d84a0f6aa606a8ed0ce2251c44",
+      "source_digest": "be9c105c1b29b0e2827c147abf506b59593d32543133fb624bdf34df3b45d994",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.131365+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.412133+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "15": {
       "document_sha256": "99b8253de2d54323b48c1dc8edb663bb6105930c24bb15e8f70800aec2a49cf1",
-      "source_digest": "b970493bc836900d8151cc075e38e7094bf912d84a0f6aa606a8ed0ce2251c44",
+      "source_digest": "be9c105c1b29b0e2827c147abf506b59593d32543133fb624bdf34df3b45d994",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.133221+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.413726+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "16": {
       "document_sha256": "ff89cdb2a5ee70c3f830162c8e3c8a287291c89fddd7c850ac5b6048d9217f98",
-      "source_digest": "64a6e89d085f5b0a0028a2eff83be3478f4fcd9ac309562b6139a265950fcef2",
+      "source_digest": "12381a5be1bee01c859b68053bd8773145c1fa38ef078030608d60d9fc37b40e",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.135358+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.415363+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "17": {
       "document_sha256": "dde1a8a05a26c612255f5858d272019e11cb7caf4542aa017b626ecea968713d",
-      "source_digest": "1859de56ffeb436b9f4cf9a073db707bd3f68860e8c7d2864fc26e28f1c5b58c",
+      "source_digest": "2b0225e1c614eac039d8219732beabb7149cd87fd151ca0cf5b7d912db98169d",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.138348+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.417106+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "18": {
       "document_sha256": "f41494e3a28b54cd191916f9ee985f795849e6bf67d69c8dffebd7d081d1187d",
-      "source_digest": "7616f4cbe15ef3108163a82489b84336aafc96da0d94a927ca95f46ade984329",
+      "source_digest": "121506656ff503f8c13dc54de93430eeaf4428f4bc50cc69c23e716f662c6302",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.140923+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.418757+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "e17bca3906abd940e0f404f7db0811a5424483df57c05cf4c3a52ffc96c8cefe",
+      "source_digest": "7868822826fb723367b8bb1e4dd32693ec9410b7fd426f2b62e5ca1fa7f8c2f0",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.144322+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.420443+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     },
     "20": {
-      "document_sha256": "b226906886050078abf5ba14f9a0735c9e5ac02444ee1b0ebe11517333cf3d18",
-      "source_digest": "7616f4cbe15ef3108163a82489b84336aafc96da0d94a927ca95f46ade984329",
+      "document_sha256": "b92f060df60ce60a9b3a36b8f042504ef450b217356d3a49956cd66d12a3e10a",
+      "source_digest": "121506656ff503f8c13dc54de93430eeaf4428f4bc50cc69c23e716f662c6302",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-2 credential store (D7-G): new core/credentials and tests/credentials_acceptance; config.py reads the ten secret names via env, OS keyring, then .env in development builds only; KIS token moves to the keyring with a file fallback; keyring dependency added; no new data collection or network endpoint",
-      "reviewed_at": "2026-11-18T20:13:55.146462+00:00",
-      "source_commit": "029be272d9b92578682777a7098b850f4a5b2953"
+      "review_note": "KEY-2 review fixes: documents updated first (01 rows 24-25, 08 KIS row and keyring>=25.6,<26, 20 deletion rows with keyring del commands, FACTS 44, RELEASE_GAPS 10); KIS token keyring first, shared ~/.nextgen file kept for TRADEGEN, 0600 fallback, OS keyring backends only",
+      "reviewed_at": "2026-11-18T23:51:40.422014+00:00",
+      "source_commit": "606f33f16438c97941f93df9ebe97aa59acff55d"
     }
   }
 }

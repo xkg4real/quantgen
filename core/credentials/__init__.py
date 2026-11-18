@@ -43,10 +43,14 @@ class CredentialError(RuntimeError):
 
 
 class UnknownCredential(CredentialError, KeyError):
-    """The name is not in ``core.credentials.names``."""
+    """The name is not in ``core.credentials.names``. The argument is never kept: a caller that swaps name and
+    value (``set(value, name)``) must not put the value into a message, ``repr`` or traceback."""
 
-    def __str__(self) -> str:                      # KeyError would quote the argument; keep it plain
-        return f"unknown credential name: {self.args[0] if self.args else ''}"
+    def __init__(self, *_ignored: object) -> None:
+        super().__init__("unknown credential name")
+
+    def __str__(self) -> str:
+        return "unknown credential name"
 
 
 class CredentialStoreUnavailable(CredentialError):
@@ -139,24 +143,36 @@ def _check_token(name: str) -> None:
 
 
 # -- keyring backend -----------------------------------------------------------------------------------------
+# Only the operating system's own stores. Third-party backends such as keyrings.alt's PlaintextKeyring (a
+# base64 file, priority 0.5) are refused even if installed.
+_OS_BACKEND_MODULES = ("keyring.backends.Windows", "keyring.backends.macOS", "keyring.backends.SecretService",
+                       "keyring.backends.kwallet", "keyring.backends.libsecret")
+
+
+def _os_backend(backend: object) -> bool:
+    module = type(backend).__module__ or ""
+    if not any(module == m or module.startswith(m + ".") for m in _OS_BACKEND_MODULES):
+        return False
+    try:
+        return float(getattr(backend, "priority", 0)) >= 1
+    except Exception:
+        return False
+
+
 def _resolve_backend() -> object:
     try:
         import keyring
-        from keyring.backends import fail
     except Exception:
         return None
     try:
         backend = keyring.get_keyring()
     except Exception:
         return None
-    if isinstance(backend, fail.Keyring):
+    candidates = list(getattr(backend, "backends", None) or [backend])    # a ChainerBackend wraps several
+    accepted = [b for b in candidates if _os_backend(b)]
+    if not accepted:
         return None
-    try:
-        if float(getattr(backend, "priority", 1)) <= 0:
-            return None
-    except Exception:
-        pass
-    return backend
+    return max(accepted, key=lambda b: float(getattr(b, "priority", 0)))
 
 
 def _get_backend() -> object:

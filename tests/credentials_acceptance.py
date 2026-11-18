@@ -65,12 +65,22 @@ def _clear_secret_env():
 
 
 class Base(unittest.TestCase):
+    """Every test pins the KIS token path to a temporary file, so a key-change listener can never touch the real
+    ~/.nextgen/kis_token.json even when kis_client was imported earlier with the real HOME (review item 2)."""
+
     def setUp(self):
         self.backend = MemoryBackend()
         credentials.set_backend(self.backend)
         credentials.record_dotenv(set())
+        self.token_dir = Path(tempfile.mkdtemp(prefix="qg-kis-token-"))
+        self.path = self.token_dir / ".nextgen" / "kis_token.json"
+        self._token_patch = patch.object(kis_client, "_TOKEN_PATH", self.path)
+        self._token_patch.start()
+        kis_client._FILE_TOKEN_IGNORED = False
 
     def tearDown(self):
+        self._token_patch.stop()
+        kis_client._FILE_TOKEN_IGNORED = False
         credentials.set_backend(None)
         credentials.record_dotenv(set())
 
@@ -154,6 +164,13 @@ class WriteTest(Base):
             with self.assertRaises(credentials.UnknownCredential) as ctx:
                 call()
             self.assertNotIn(FAKE, str(ctx.exception))
+
+    def test_swapped_arguments_do_not_leak_value(self):
+        """Review item 7: set(value, name) must not put the value in the message, repr or args."""
+        with self.assertRaises(credentials.UnknownCredential) as ctx:
+            credentials.set(FAKE, "KIS_APP_KEY")
+        for text in (str(ctx.exception), repr(ctx.exception), repr(ctx.exception.args)):
+            self.assertNotIn(FAKE, text)
 
     def test_empty_value_refused(self):
         with self.assertRaises(credentials.CredentialError):
@@ -254,48 +271,96 @@ class ConfigTest(Base):
 
 
 class KisTokenTest(Base):
-    def setUp(self):
-        super().setUp()
-        self.tmp = Path(tempfile.mkdtemp(prefix="qg-kis-token-"))
-        self.path = self.tmp / ".nextgen" / "kis_token.json"
-        self._patch = patch.object(kis_client, "_TOKEN_PATH", self.path)
-        self._patch.start()
-
-    def tearDown(self):
-        self._patch.stop()
-        super().tearDown()
-
     def _client(self):
         return kis_client.KISClient(base_url="https://example.invalid")
 
-    def test_token_goes_to_keyring_and_old_file_is_removed(self):
-        self.path.parent.mkdir(parents=True)
-        self.path.write_text("{}", encoding="utf-8")
+    def _file_token(self, token, expires_in=3600):
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self.path.write_text(json.dumps({"access_token": token, "expires_at": time.time() + expires_in}),
+                             encoding="utf-8")
+
+    def test_token_goes_to_keyring_and_shared_file_is_kept(self):
+        """Review item 4: the file is shared with TRADEGEN and is never deleted."""
+        self._file_token("tok-tradegen")
         client = self._client()
         client._store_token("tok-abc", 3600)
-        self.assertFalse(self.path.exists())
+        self.assertTrue(self.path.exists())
+        self.assertEqual(json.loads(self.path.read_text(encoding="utf-8"))["access_token"], "tok-tradegen")
         stored = json.loads(self.backend.store[(credentials.SERVICE, "kis_token")])
         self.assertEqual(stored["access_token"], "tok-abc")
         self.assertEqual(client._cached_token(), "tok-abc")
+
+    def test_existing_file_token_reused_on_first_run(self):
+        self._file_token("tok-file")
+        self.assertEqual(self._client()._cached_token(), "tok-file")
 
     def test_file_fallback_without_keyring(self):
         credentials.set_backend(None)
         client = self._client()
         client._store_token("tok-file", 3600)
-        self.assertTrue(self.path.exists())
         self.assertEqual(client._cached_token(), "tok-file")
+
+    @unittest.skipUnless(os.name == "posix", "POSIX file modes")
+    def test_fallback_file_is_owner_only(self):
+        """Review item 5: 0600 file, 0700 directory when created; an old 0644 file is tightened on read."""
+        credentials.set_backend(None)
+        self._client()._store_token("tok-file", 3600)
+        self.assertEqual(self.path.stat().st_mode & 0o777, 0o600)
+        self.assertEqual(self.path.parent.stat().st_mode & 0o777, 0o700)
+        os.chmod(self.path, 0o644)
+        self._client()._cached_token()
+        self.assertEqual(self.path.stat().st_mode & 0o777, 0o600)
+
+    def test_expired_keyring_copy_does_not_hide_valid_file(self):
+        """Review item 3."""
+        self.backend.set_password(credentials.SERVICE, "kis_token",
+                                  json.dumps({"access_token": "old", "expires_at": time.time() - 10}))
+        self._file_token("tok-file")
+        self.assertEqual(self._client()._cached_token(), "tok-file")
+        self.backend.set_password(credentials.SERVICE, "kis_token", "{not json")
+        self.assertEqual(self._client()._cached_token(), "tok-file")
+
+    def test_keyring_refusing_writes_falls_back_to_file(self):
+        """Review item 3: a keyring that reads but refuses writes keeps no stale copy; the file takes the token."""
+        class ReadOnly(MemoryBackend):
+            def set_password(self, service, user, password):
+                raise RuntimeError("CredWrite refused")
+
+        backend = ReadOnly()
+        backend.store[(credentials.SERVICE, "kis_token")] = json.dumps({"access_token": "old",
+                                                                       "expires_at": time.time() - 10})
+        credentials.set_backend(backend)
+        client = self._client()
+        client._store_token("tok-new", 3600)
+        self.assertNotIn((credentials.SERVICE, "kis_token"), backend.store)
+        self.assertEqual(client._cached_token(), "tok-new")
 
     def test_expired_token_not_used(self):
         self.backend.set_password(credentials.SERVICE, "kis_token",
                                   json.dumps({"access_token": "old", "expires_at": time.time() - 10}))
         self.assertIsNone(self._client()._cached_token())
 
-    def test_key_change_drops_token(self):
+    def test_key_change_drops_keyring_token_and_ignores_shared_file(self):
         client = self._client()
         client._store_token("tok-abc", 3600)
+        self._file_token("tok-old-key")
         credentials.set("KIS_APP_KEY", FAKE)
         self.assertNotIn((credentials.SERVICE, "kis_token"), self.backend.store)
-        self.assertIsNone(client._cached_token())
+        self.assertTrue(self.path.exists())                                 # shared file kept
+        self.assertIsNone(client._cached_token())                           # but not trusted for the new key
+
+    def test_real_home_token_file_survives_key_change(self):
+        """Review item 2: with no pinned path the listener still never deletes the file under HOME."""
+        home = Path(tempfile.mkdtemp(prefix="qg-fake-home-"))
+        sentinel = home / ".nextgen" / "kis_token.json"
+        sentinel.parent.mkdir(parents=True)
+        sentinel.write_text("sentinel", encoding="utf-8")
+        with patch.object(kis_client, "_TOKEN_PATH", None), \
+                patch.dict(os.environ, {"HOME": str(home), "USERPROFILE": str(home)}):
+            self.assertEqual(kis_client._token_path(), sentinel)
+            credentials.set("KIS_APP_KEY", FAKE)
+            credentials.delete("KIS_APP_KEY")
+        self.assertEqual(sentinel.read_text(encoding="utf-8"), "sentinel")
 
     def test_reload_credentials_updates_ready(self):
         with _clear_secret_env():
@@ -305,6 +370,28 @@ class KisTokenTest(Base):
             credentials.set("KIS_APP_SECRET", FAKE2)
             self.assertFalse(client.ready)                                  # fixed at construction ...
             self.assertEqual(client.reload_credentials(), kis_client.requests is not None)   # ... until reloaded
+
+
+class BackendChoiceTest(unittest.TestCase):
+    """Review item 6: only the operating system's own stores are accepted."""
+
+    @staticmethod
+    def _fake(module, priority):
+        cls = type("Fake", (), {"priority": priority})
+        cls.__module__ = module
+        return cls()
+
+    def test_os_backends_accepted(self):
+        for module in ("keyring.backends.Windows", "keyring.backends.macOS", "keyring.backends.SecretService",
+                       "keyring.backends.kwallet", "keyring.backends.libsecret"):
+            self.assertTrue(credentials._os_backend(self._fake(module, 5)), module)
+
+    def test_plaintext_and_low_priority_refused(self):
+        self.assertFalse(credentials._os_backend(self._fake("keyrings.alt.file", 0.5)))
+        self.assertFalse(credentials._os_backend(self._fake("keyrings.alt.file", 5)))
+        self.assertFalse(credentials._os_backend(self._fake("keyring.backends.SecretService", 0.5)))
+        self.assertFalse(credentials._os_backend(self._fake("keyring.backends.fail", 0)))
+        self.assertFalse(credentials._os_backend(self._fake("tests.whatever", 9)))
 
 
 class KeyringPackageTest(unittest.TestCase):
@@ -319,6 +406,7 @@ class KeyringPackageTest(unittest.TestCase):
 
         class Memory(KeyringBackend):
             priority = 1
+            # poses as an OS store so this test exercises keyring.get_keyring(); BackendChoiceTest covers refusal
 
             def __init__(self):
                 super().__init__()
@@ -333,6 +421,7 @@ class KeyringPackageTest(unittest.TestCase):
             def delete_password(self, service, username):
                 del self.data[(service, username)]
 
+        Memory.__module__ = "keyring.backends.Windows"
         import keyring
         self._previous = keyring.get_keyring()
         self.memory = Memory()
@@ -351,6 +440,26 @@ class KeyringPackageTest(unittest.TestCase):
             self.assertEqual(self.memory.data[("QUANTGEN", "FMP_API_KEY")], FAKE)
             self.assertEqual(credentials.get("FMP_API_KEY"), FAKE)
             credentials.delete("FMP_API_KEY")
+
+    def test_non_os_backend_refused(self):
+        import keyring
+        from keyring.backend import KeyringBackend
+
+        class Plain(KeyringBackend):
+            priority = 5
+
+            def get_password(self, service, username):
+                return None
+
+            def set_password(self, service, username, password):
+                pass
+
+            def delete_password(self, service, username):
+                pass
+
+        keyring.set_keyring(Plain())
+        credentials.reset_backend()
+        self.assertFalse(credentials.keyring_available())
 
     def test_fail_backend_means_no_store(self):
         import keyring
