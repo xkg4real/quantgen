@@ -1,0 +1,5 @@
+/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/head/core/ficc/bonds.py:105: RuntimeWarning: overflow encountered in exp
+  return float(np.sum(cf * curve.df(t) * np.exp(-spread * t)))
+/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/head/core/ficc/bonds.py:105: RuntimeWarning: invalid value encountered in multiply
+  return float(np.sum(cf * curve.df(t) * np.exp(-spread * t)))
+wrote /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/logs2/ba_head.json

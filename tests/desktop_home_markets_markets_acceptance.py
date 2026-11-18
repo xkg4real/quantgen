@@ -880,28 +880,20 @@ class MarketPageTests(WindowBase):
                           "ETFs", "World economy"])
         self.assertEqual([t for t in self.page_text() if re.search("[가-힣]", t)], [])
         fly = self.window.rail_flyouts
-        # Owner 2026-11-13: the rail stops at country; rankings stay on the page.
-        country = fly.open_root(self.window.market_sections["stocks"])
-        self.assertIsNotNone(country)
-        self.assertEqual([r.text() for r in country.rows], ["Korea", "US"])
-        self.assertEqual([r.node.leaf for r in country.rows],
-                         [("market", "kr", ""), ("market", "us", "")])
-        self.assertTrue(all(not r.node.children for r in country.rows))
-        self.assertEqual(len(fly.panels), 1)
-        self.assertEqual([b.text() for b in self.board.category_buttons.values() if b.isVisible()],
+        # Owner 2026-11-17: no rows under a category; its main screen lists the destinations and the rankings.
+        self.assertIsNone(fly.open_root(self.window.market_sections["stocks"]))
+        hub = self.window.market_hub
+        hub.show_category("stocks")
+        self.assertEqual([c.title.text() for c in hub.cards], ["Korea", "US"])
+        self.assertEqual([b.text() for b in hub.cards[0].chips.findChildren(QPushButton)],
                          ["Trading value", "Volume", "Top gainers", "Top losers", "Market cap", "Q-SCORE highest first"])
         self.window.set_language("ko"); self.app.processEvents()
         self.assertFalse(fly.is_open())
         self.assertEqual([b.text() for b in self.window.market_sections.values()],
                          ["지수", "주식", "크립토", "선물", "외환", "국채", "회사채", "ETF", "월드 이코노미"])
-        country = fly.open_root(self.window.market_sections["stocks"])
-        self.assertIsNotNone(country)
-        self.assertEqual([r.text() for r in country.rows], ["국내", "미국"])
-        self.assertEqual([bool(r.property("current")) for r in country.rows], [True, False])
-        self.assertEqual([b.text() for b in self.board.category_buttons.values() if b.isVisible()],
+        self.assertIsNone(fly.open_root(self.window.market_sections["stocks"]))
+        self.assertEqual([b.text() for b in hub.cards[0].chips.findChildren(QPushButton)],
                          ["거래대금", "거래량", "급상승", "급하락", "시가총액", "Q-SCORE 높은 순"])
-        self.assertEqual([b.isChecked() for b in self.board.category_buttons.values()],
-                         [True, False, False, False, False, False])
         fly.close_all()
         self.assertEqual((self.loader.calls, self.series.call_count), (["kr"], series_calls))
 
@@ -1087,22 +1079,15 @@ class EtfAndCryptoNameTests(WindowBase):
             self.view.search.setText("zzz"); self.app.processEvents()  # the empty states
             seen += texts(self.window)
             self.view.search.setText("")
-        fly = self.window.rail_flyouts
+        # Owner 2026-11-17: the rail keeps only the categories; their main screens hold the destinations.
+        self.window.open_market_hub(); self.app.processEvents()
+        seen += texts(self.window.market_hub)
         for key, row in self.window.market_sections.items():
             seen.append(row.text())
-            panel = fly.open_root(row)
-            if key in ("crypto", "futures", "corp"):
-                # These approved direct destinations deliberately have no submenu.
-                self.assertIsNone(panel)
-                self.assertEqual(fly.panels, [])
-                self.assertFalse(row.chevron)
-                fly.close_all()
-                continue
-            self.assertIsNotNone(panel, key)
-            seen += texts(panel)
-            for sub in [r for r in panel.rows if r.node.children]:
-                seen += texts(fly.open_child(sub))
-            fly.close_all()
+            node = self.window._market_node(key)
+            if node.children:
+                self.window.open_market_hub(key); self.app.processEvents()
+                seen += texts(self.window.market_hub)
         self.assertIn("크립토", seen)
         self.assertIn("가상자산", " ".join(seen))
         self.assertEqual([t for t in seen if "코인" in scrub(t)], [])

@@ -191,8 +191,9 @@ class FletA1HeadersTests(unittest.TestCase):
         select(root, "Curve source", "synthetic")
         click(root, "Run")
         self.assertEqual(len(payloads), 1)
-        self.roundtrip(root, ["Scenario", "Shock", "New price", "P&L", "P&L %"],
-                       ["시나리오", "금리 충격", "새 가격", "손익", "손익률 %"], payloads=payloads)
+        self.roundtrip(root, ["Scenario", "Shock (bp, cc zero rates)", "New price", "P&L", "P&L % of MV"],
+                       ["시나리오", "금리 충격 (bp, 연속복리 무이표 금리)", "새 가격", "손익",
+                        "손익률 % (시장가치 대비)"], payloads=payloads)
         self.assertIn("scenarios", payloads[0])
 
     def test_rates_curve_dynamic_lookback_preserves_numbers_and_payload(self):

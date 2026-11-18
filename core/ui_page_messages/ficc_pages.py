@@ -150,6 +150,10 @@ EN_TO_KO: dict[str, str] = {
     "connection the page runs on a labeled synthetic curve.":
         "가격과 수익률 중 하나만 입력하세요(다른 하나는 비워 둡니다). 금리 곡선은 앱이 FRED에서 키 없이 "
         "자동으로 가져오며, 연결되지 않으면 '합성' 표시가 붙은 곡선으로 계산합니다.",
+    "Quote it by price or by yield: fill exactly one of Price (per 100) and Yield %; the blank one is computed. "
+    "The curve comes from FRED without a key; without a connection the page runs on a labeled synthetic curve.":
+        "가격 (액면 100당)과 수익률 % 가운데 정확히 하나만 입력하세요. 비워 둔 값은 계산됩니다. 금리 곡선은 앱이 "
+        "FRED에서 키 없이 자동으로 가져오며, 연결되지 않으면 '합성' 표시가 붙은 곡선으로 계산합니다.",
     "z-spread": "z-스프레드",
     "Currency per bp, positive for a long": "금리 1bp당 통화 금액, 매수 포지션은 양수",
     "Roll-down": "롤다운",

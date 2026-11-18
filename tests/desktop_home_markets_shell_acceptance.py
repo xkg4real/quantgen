@@ -1,4 +1,10 @@
-"""Owner 2026-11-13: hidden, downward Markets menu; every destination stays in Markets. Offline."""
+"""Owner 2026-11-13: hidden, downward Markets menu; every destination stays in Markets. Offline.
+
+Owner 2026-11-17, verbatim: "지수, 주식, 크립토 하고 쭉쭉 잇는데, 이 범주까지만 살려두고, 그다음 하위범주 ex) 지수 기준 코스피,
+코스닥, s&p... 이부분 그냥 좌측 바로가기 ui 삭제합니다" and "정작 '주식' 바로가기는 눌리지 않습니다": the rail keeps the nine
+categories with no rows under them; a category with several destinations opens its main screen (`market_hub.MarketHub`),
+one with a single destination opens it. The tests that walked the country rows (국내/미국) now walk the categories and
+the category screens; the real-click test (QWindow hit testing) is kept for the category rows."""
 import os
 import tempfile
 import unittest
@@ -192,21 +198,30 @@ class ShellRailTests(unittest.TestCase):
         self.park_pointer(w);QTest.qWait(CLOSE_DELAY_MS+150)
         self.assertTrue(w.market_submenu.isHidden())
 
-    def test_window_mouse_click_on_hovered_country_opens_that_market(self):
+    def test_window_mouse_click_on_hovered_category_opens_its_main_screen(self):
         # Send through QWindow hit testing, as an OS click does. QPushButton.click()
         # skips the application filter and cannot reproduce a disappearing menu.
         w = self.window()
-        for index, market in enumerate(('kr', 'us')):
+        for category in ('indices', 'stocks', 'fx', 'govt', 'etf', 'economy'):
             w.navigate('home')
             self.hover(w.nav['markets'])
-            self.hover(w.market_sections['stocks'])
-            row = w.rail_flyouts.panels[0].rows[index]
+            row = w.market_sections[category]
+            w.rail_scroll.ensureWidgetVisible(row, 0, 8)
             self.hover(row)
-            position = row.mapTo(w, row.rect().center())
-            QTest.mouseClick(w.windowHandle(), Qt.MouseButton.LeftButton, pos=position)
+            self.assertEqual(w.rail_flyouts.panels, [])     # no rows under a category any more
+            QTest.mouseClick(w.windowHandle(), Qt.MouseButton.LeftButton, pos=row.mapTo(w, row.rect().center()))
             self.settle()
             self.assertEqual(w._route(), 'markets')
-            self.assertEqual(w.markets_view.current_market(), market)
+            self.assertIs(w.markets_content.currentWidget(), w.market_hub)
+            self.assertEqual(w.market_hub.current_category(), category)
+            self.assertEqual([k for k, b in w.market_sections.items() if b.isChecked()], [category])
+        # The stocks screen's 국내 card opens the Korean stock list.
+        w.open_market_hub('stocks'); self.settle()
+        card = w.market_hub.cards[0]
+        QTest.mouseClick(w.windowHandle(), Qt.MouseButton.LeftButton, pos=card.mapTo(w, QPoint(24, 24)))
+        self.settle()
+        self.assertIs(w.markets_content.currentWidget(), w.markets_view)
+        self.assertEqual(w.markets_view.current_market(), 'kr')
 
     def test_single_destination_mouse_click_needs_no_submenu(self):
         w = self.window()
@@ -229,24 +244,19 @@ class ShellRailTests(unittest.TestCase):
             else:
                 self.assertEqual(w.market_asset_category, category)
 
-    def test_country_menu_stops_before_rankings_and_never_covers_the_page(self):
+    def test_categories_have_no_rows_under_them_and_never_cover_the_page(self):
         w=self.window();w.resize(1440,1000)
-        self.hover(w.nav['markets']);self.hover(w.market_sections['stocks'])
+        self.hover(w.nav['markets'])
         menu=w.rail_flyouts
-        self.assertEqual([r.text() for r in menu.panels[0].rows],['Korea','US'])
-        self.hover(menu.panels[0].rows[0])
-        self.assertEqual(len(menu.panels), 1)
-        self.assertEqual(menu.panels[0].rows[0].node.leaf,('market','kr',''))
-        self.assertFalse(menu.panels[0].rows[0].chevron)
-        for panel in menu.panels:
-            top=panel.mapTo(w.sidebar,QPoint(0,0))
-            bottom=panel.anchor.mapTo(w.sidebar,QPoint(0,panel.anchor.height())).y()
-            self.assertGreaterEqual(top.y(),bottom)
-            self.assertLessEqual(top.x()+panel.width(),w.sidebar.width())
-            self.assertTrue(w.sidebar.isAncestorOf(panel))
-        self.hover(menu.panels[0].rows[1])
-        self.assertEqual(len(menu.panels), 1)
-        self.assertEqual(menu.panels[0].rows[1].node.leaf,('market','us',''))
+        for key in CATEGORY_KEYS:
+            row=w.market_sections[key]
+            w.rail_scroll.ensureWidgetVisible(row,0,8)
+            self.hover(row)
+            self.assertEqual(menu.panels,[],key)
+            self.assertFalse(row.chevron,key)
+            self.assertTrue(w.sidebar.isAncestorOf(row))
+            self.assertLessEqual(row.mapTo(w.sidebar,QPoint(0,0)).x()+row.width(),w.sidebar.width())
+        self.assertEqual(w._route(),'home')   # hovering never navigates
 
     def test_outside_window_click_dismisses_without_navigating(self):
         w = self.window()
@@ -300,23 +310,21 @@ class ShellRailTests(unittest.TestCase):
     def test_keyboard_opens_walks_selects_and_dismisses(self):
         w=self.window();button=w.nav['markets'];button.setFocus(Qt.FocusReason.TabFocusReason)
         QTest.keyClick(button,Qt.Key.Key_Return);self.settle()
+        self.assertIs(w.markets_content.currentWidget(),w.market_hub)      # 시장 itself: the 시장 main screen
+        self.assertIsNone(w.market_hub.current_category())
         QTest.keyClick(button,Qt.Key.Key_Down)
         self.assertTrue(w.market_sections['indices'].hasFocus())
         QTest.keyClick(w.market_sections['indices'],Qt.Key.Key_Right);self.settle()
-        menu=w.rail_flyouts;first=menu.panels[0].rows[0]
-        self.assertTrue(first.hasFocus())
-        QTest.keyClick(first,Qt.Key.Key_Down)
-        second=menu.panels[0].rows[1];self.assertTrue(second.hasFocus())
-        QTest.keyClick(second,Qt.Key.Key_Return);self.settle()
-        self.assertEqual(w.markets_content.currentWidget().symbol,'^KQ11')
-        self.assertTrue(w.market_submenu.isHidden())
-        menu.root_clicked(w.market_sections['stocks'],keyboard=True);self.settle()
-        # Closing during the hover delay must not later dereference a deleted row.
-        QTest.mouseMove(menu.panels[0].rows[0])
-        QTest.keyClick(menu.panels[0].rows[0],Qt.Key.Key_Escape);self.settle()
-        QTest.qWait(OPEN_DELAY_MS+50)
+        menu=w.rail_flyouts
+        self.assertEqual(menu.panels,[])                                  # nothing opens under a category
+        QTest.keyClick(w.market_sections['indices'],Qt.Key.Key_Down)
         self.assertTrue(w.market_sections['stocks'].hasFocus())
-        QTest.keyClick(w.market_sections['stocks'],Qt.Key.Key_Escape)
+        QTest.keyClick(w.market_sections['stocks'],Qt.Key.Key_Return);self.settle()
+        self.assertEqual(w.market_hub.current_category(),'stocks')
+        self.assertTrue(w.market_submenu.isHidden())
+        menu.root_clicked(w.market_sections['crypto'],keyboard=True);self.settle()
+        QTest.qWait(OPEN_DELAY_MS+50)
+        QTest.keyClick(w.market_sections['crypto'],Qt.Key.Key_Escape)
         self.assertTrue(w.market_submenu.isHidden())
 
     def test_collapsed_rail_language_and_no_global_translation_pass(self):
@@ -328,8 +336,11 @@ class ShellRailTests(unittest.TestCase):
             self.assertTrue(w.market_submenu.isHidden())
             self.assertEqual(tuple(b.text() for b in w.market_sections.values()),names)
             w.rail_flyouts.root_clicked(w.market_sections['etf'],keyboard=True);self.settle()
-            self.assertEqual([r.text() for r in w.rail_flyouts.panels[0].rows],
+            self.assertEqual(w.rail_flyouts.panels,[])
+            w.open_market_hub('etf');self.settle()
+            self.assertEqual([c.title.text() for c in w.market_hub.cards],
                              ['국내','미국'] if language=='ko' else ['Korea','US'])
+            w.rail_flyouts.open_root();self.settle()
         passes=[];w.localizer.apply=lambda:passes.append(1)
         w.rail_flyouts.close_all();self.settle()
         w.rail_flyouts.root_clicked(w.market_sections['stocks']);self.settle()
@@ -339,8 +350,8 @@ class ShellRailTests(unittest.TestCase):
         w=self.window();w.resize(1000,700)
         for theme,palette in ((0,LIGHT),(1,DARK)):
             w.change_theme(theme);menu=w.rail_flyouts
-            menu.root_clicked(w.market_sections['etf'],keyboard=True);self.settle()
-            last=menu.panels[0].rows[-1];last.setFocus(Qt.FocusReason.TabFocusReason)
+            menu.open_root(keyboard=True);self.settle()
+            last=w.market_sections['economy'];last.setFocus(Qt.FocusReason.TabFocusReason)
             w.rail_scroll.ensureWidgetVisible(last,0,8);self.settle()
             top=last.mapTo(w.rail_scroll.viewport(),QPoint(0,0)).y()
             self.assertGreaterEqual(top,0)

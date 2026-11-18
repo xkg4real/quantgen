@@ -1,0 +1,194 @@
+diff -u a/holidays_FED.yaml b/holidays_FED.yaml
+--- a/core/calendars/data/holidays_FED.yaml
++++ b/core/calendars/data/holidays_FED.yaml
+@@ -1251,3 +1251,12 @@
+   kind: closed
+   name: Christmas Day
+   unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++- effective_from: '2027-12-31'
++  effective_to: '2027-12-31'
++  source_url: null
++  retrieved_at_utc: '2026-10-27T00:00:00Z'
++  signed_off_by: null
++  date: '2027-12-31'
++  kind: closed
++  name: New Year's Day (observed; 2028-01-01 is a Saturday)
++  unverified: 'UNVERIFIED: the file''s own Saturday -> Friday rule (cf. 2021-12-31); Reserve Banks open, Board closed; owner confirms against federalreserve.gov'
+diff -u a/holidays_KRX.yaml b/holidays_KRX.yaml
+--- a/core/calendars/data/holidays_KRX.yaml
++++ b/core/calendars/data/holidays_KRX.yaml
+@@ -13,7 +13,9 @@
+   / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
+   MANIFEST.yaml row with a new test id
+ unverified:
+-- 'every date: cross-checked against exchange_calendars XKRX only'
++- 'every date: cross-checked against exchange_calendars XKRX only; XKRX 4.13.2 lacks 2026-06-03, 2026-07-17, 2027-05-03 and
++  2027-07-19 (added from the KRX 2026-05-20 notice and the 2027 월력요항)'
++- 2027 rows follow the public-holiday regulation until the KRX 2027 휴장일 notice (December 2026); re-verify then
+ - no CSAT day carried here (see kr_sessions)
+ - 2027 must be signed before 2026-11-01 (spec L2101)
+ owner_must_sign:
+@@ -100,6 +102,24 @@
+   name: KRX holiday (name from the KRX notice at sign-off)
+   unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+     the owner replaces source_url with the exchange notice at sign-off'
++- effective_from: '2026-06-03'
++  effective_to: '2026-06-03'
++  source_url: null
++  retrieved_at_utc: '2026-10-27T00:00:00Z'
++  signed_off_by: null
++  date: '2026-06-03'
++  kind: closed
++  name: 제9회 전국동시지방선거 (공휴일)
++  unverified: 'UNVERIFIED: absent from exchange_calendars 4.13.2 XKRX; KRX 휴장 공지 2026-05-20 (press: mt.co.kr, hankyung.com, imbc, ajunews); the owner replaces source_url with the exchange notice at sign-off'
++- effective_from: '2026-07-17'
++  effective_to: '2026-07-17'
++  source_url: null
++  retrieved_at_utc: '2026-10-27T00:00:00Z'
++  signed_off_by: null
++  date: '2026-07-17'
++  kind: closed
++  name: 제헌절 (공휴일 재지정, 공휴일법 개정 2026-01-29 의결)
++  unverified: 'UNVERIFIED: absent from exchange_calendars 4.13.2 XKRX; KRX 휴장 공지 2026-05-20 (press: mt.co.kr, hankyung.com, imbc, ajunews); the owner replaces source_url with the exchange notice at sign-off'
+ - effective_from: '2026-08-17'
+   effective_to: '2026-08-17'
+   source_url: null
+@@ -210,6 +230,15 @@
+   name: KRX holiday (name from the KRX notice at sign-off)
+   unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+     the owner replaces source_url with the exchange notice at sign-off'
++- effective_from: '2027-05-03'
++  effective_to: '2027-05-03'
++  source_url: null
++  retrieved_at_utc: '2026-10-27T00:00:00Z'
++  signed_off_by: null
++  date: '2027-05-03'
++  kind: closed
++  name: 노동절(5/1 토) 대체공휴일
++  unverified: 'UNVERIFIED: absent from exchange_calendars 4.13.2 XKRX; 우주항공청 2027년 월력요항 2026-06-29; KRX 2027 notice pending; the owner replaces source_url with the exchange notice at sign-off'
+ - effective_from: '2027-05-05'
+   effective_to: '2027-05-05'
+   source_url: null
+@@ -230,6 +259,15 @@
+   name: KRX holiday (name from the KRX notice at sign-off)
+   unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+     the owner replaces source_url with the exchange notice at sign-off'
++- effective_from: '2027-07-19'
++  effective_to: '2027-07-19'
++  source_url: null
++  retrieved_at_utc: '2026-10-27T00:00:00Z'
++  signed_off_by: null
++  date: '2027-07-19'
++  kind: closed
++  name: 제헌절(7/17 토) 대체공휴일
++  unverified: 'UNVERIFIED: absent from exchange_calendars 4.13.2 XKRX; 우주항공청 2027년 월력요항 2026-06-29; KRX 2027 notice pending; the owner replaces source_url with the exchange notice at sign-off'
+ - effective_from: '2027-08-16'
+   effective_to: '2027-08-16'
+   source_url: null
+diff -u a/holidays_SIFMA.yaml b/holidays_SIFMA.yaml
+--- a/core/calendars/data/holidays_SIFMA.yaml
++++ b/core/calendars/data/holidays_SIFMA.yaml
+@@ -158,8 +158,9 @@
+   retrieved_at_utc: '2026-10-06T00:00:00Z'
+   signed_off_by: null
+   date: '2026-04-03'
+-  kind: closed
+-  name: Good Friday (bond market closed)
++  kind: early_close
++  close_local: '12:00'
++  name: Good Friday (employment report day; SIFMA 12:00 ET early close, not a full close)
+   unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+ - effective_from: '2026-05-25'
+   effective_to: '2026-05-25'
+@@ -431,3 +432,73 @@
+   close_local: '14:00'
+   name: SIFMA early close recommendation
+   unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++- effective_from: '2026-04-02'
++  effective_to: '2026-04-02'
++  source_url: null
++  retrieved_at_utc: '2026-10-27T00:00:00Z'
++  signed_off_by: null
++  date: '2026-04-02'
++  kind: early_close
++  close_local: '14:00'
++  name: day before Good Friday
++  unverified: 'UNVERIFIED: usual pattern, secondary calendars; owner confirms against sifma.org/resources/guides-playbooks/holiday-schedule'
++- effective_from: '2026-05-22'
++  effective_to: '2026-05-22'
++  source_url: null
++  retrieved_at_utc: '2026-10-27T00:00:00Z'
++  signed_off_by: null
++  date: '2026-05-22'
++  kind: early_close
++  close_local: '14:00'
++  name: day before Memorial Day
++  unverified: 'UNVERIFIED: usual pattern; TradingHours lists it; owner confirms against sifma.org/resources/guides-playbooks/holiday-schedule'
++- effective_from: '2026-07-02'
++  effective_to: '2026-07-02'
++  source_url: null
++  retrieved_at_utc: '2026-10-27T00:00:00Z'
++  signed_off_by: null
++  date: '2026-07-02'
++  kind: early_close
++  close_local: '14:00'
++  name: day before Independence Day (observed)
++  unverified: 'UNVERIFIED: SIFMA release 2026-06-18; owner confirms against sifma.org/resources/guides-playbooks/holiday-schedule'
++- effective_from: '2027-03-25'
++  effective_to: '2027-03-25'
++  source_url: null
++  retrieved_at_utc: '2026-10-27T00:00:00Z'
++  signed_off_by: null
++  date: '2027-03-25'
++  kind: early_close
++  close_local: '14:00'
++  name: day before Good Friday
++  unverified: 'UNVERIFIED: usual pattern; MarketBeat lists it; owner confirms against sifma.org/resources/guides-playbooks/holiday-schedule'
++- effective_from: '2027-05-28'
++  effective_to: '2027-05-28'
++  source_url: null
++  retrieved_at_utc: '2026-10-27T00:00:00Z'
++  signed_off_by: null
++  date: '2027-05-28'
++  kind: early_close
++  close_local: '14:00'
++  name: day before Memorial Day
++  unverified: 'UNVERIFIED: usual pattern; owner confirms against sifma.org/resources/guides-playbooks/holiday-schedule'
++- effective_from: '2027-07-02'
++  effective_to: '2027-07-02'
++  source_url: null
++  retrieved_at_utc: '2026-10-27T00:00:00Z'
++  signed_off_by: null
++  date: '2027-07-02'
++  kind: early_close
++  close_local: '14:00'
++  name: day before Independence Day (observed)
++  unverified: 'UNVERIFIED: usual pattern; owner confirms against sifma.org/resources/guides-playbooks/holiday-schedule'
++- effective_from: '2027-12-23'
++  effective_to: '2027-12-23'
++  source_url: null
++  retrieved_at_utc: '2026-10-27T00:00:00Z'
++  signed_off_by: null
++  date: '2027-12-23'
++  kind: early_close
++  close_local: '14:00'
++  name: day before Christmas Day (observed)
++  unverified: 'UNVERIFIED: usual pattern (2021 precedent); owner confirms against sifma.org/resources/guides-playbooks/holiday-schedule'
+diff -u a/kr_sessions.yaml b/kr_sessions.yaml
+--- a/core/calendars/data/kr_sessions.yaml
++++ b/core/calendars/data/kr_sessions.yaml
+@@ -178,6 +178,14 @@
+   kind: csat_day
+   date: '2026-11-19'
+   unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
++- effective_from: '2027-11-18'
++  effective_to: '2027-11-18'
++  source_url: null
++  retrieved_at_utc: '2026-10-27T00:00:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2027-11-18'
++  unverified: 'UNVERIFIED: 2028학년도 수능, announced by the Ministry of Education on 2025-06-01; the KRX CSAT-day notice confirms the session window'
+ - effective_from: '1995-01-01'
+   effective_to: '1998-12-06'
+   source_url: null

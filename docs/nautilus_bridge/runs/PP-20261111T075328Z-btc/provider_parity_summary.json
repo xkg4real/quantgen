@@ -1,0 +1,211 @@
+{
+ "created_utc": "20261111T075328Z",
+ "integrity": [
+  {
+   "id": "integrity_a",
+   "kind": "hard",
+   "missing_a": [],
+   "n_dropped_blank": 0,
+   "n_dropped_nonpositive": 0,
+   "n_missing_days_a": 0,
+   "n_rows": 4392,
+   "no_implausible_jump": true,
+   "outcome": "PASS",
+   "truncated": false
+  }
+ ],
+ "n_a_outside_evidence_spans": 4392,
+ "outcome": "FAIL",
+ "pairs": [
+  {
+   "checks": [
+    {
+     "coverage_ok": true,
+     "first_date": "2015-07-20",
+     "id": "coverage",
+     "kind": "hard",
+     "last_date": "2026-09-25",
+     "n_a": 4392,
+     "n_a_outside_b_span": 306,
+     "n_b": 4086,
+     "n_common": 4086,
+     "outcome": "PASS"
+    },
+    {
+     "id": "calendar",
+     "kind": "hard",
+     "n_only_a": 0,
+     "n_only_b": 0,
+     "only_a": [],
+     "only_b": [],
+     "outcome": "PASS",
+     "truncated": false
+    },
+    {
+     "id": "day_boundary",
+     "kind": "hard",
+     "lag": 0,
+     "lag0_strictly_fewest": true,
+     "outcome": "PASS"
+    },
+    {
+     "early": {
+      "max_bucket": "<=1e-01",
+      "n_days": 531,
+      "p50_bucket": "<=1e-02",
+      "p99_bucket": "<=1e-01",
+      "within_band": true
+     },
+     "id": "levels_and_returns",
+     "kind": "hard",
+     "late": {
+      "max_bucket": "<=1e-01",
+      "n_days": 3555,
+      "p50_bucket": "<=1e-03",
+      "p99_bucket": "<=1e-01",
+      "within_band": false
+     },
+     "n_allowed": 20,
+     "n_big_return_diff_days": 43,
+     "outcome": "FAIL"
+    }
+   ],
+   "convention": "none",
+   "file_sha256": "a29408ecd098553d3763c55ee1c3d05e4f50eb9f58381ab5271a49855254a0b4",
+   "has_fetch_record": true,
+   "outcome": "FAIL",
+   "provider": "coinbase",
+   "role": "independent"
+  },
+  {
+   "checks": [
+    {
+     "coverage_ok": false,
+     "first_date": "2017-08-17",
+     "id": "coverage",
+     "kind": "warn",
+     "last_date": "2026-09-25",
+     "n_a": 4392,
+     "n_a_outside_b_span": 1065,
+     "n_b": 3327,
+     "n_common": 3327,
+     "outcome": "WITHHELD"
+    }
+   ],
+   "convention": "none",
+   "file_sha256": "10dc8f9f0019cfd2b2e520a3b49a95f5df7971e83d4b6a5edccc6c5afe11775e",
+   "has_fetch_record": true,
+   "outcome": "WITHHELD",
+   "provider": "binance",
+   "role": "diagnostic"
+  },
+  {
+   "checks": [
+    {
+     "coverage_ok": true,
+     "first_date": "2014-09-17",
+     "id": "coverage",
+     "kind": "hard",
+     "last_date": "2026-09-25",
+     "n_a": 4392,
+     "n_a_outside_b_span": 0,
+     "n_b": 4392,
+     "n_common": 4392,
+     "outcome": "PASS"
+    },
+    {
+     "id": "calendar",
+     "kind": "hard",
+     "n_only_a": 0,
+     "n_only_b": 0,
+     "only_a": [],
+     "only_b": [],
+     "outcome": "PASS",
+     "truncated": false
+    },
+    {
+     "id": "day_boundary",
+     "kind": "hard",
+     "lag": 0,
+     "lag0_strictly_fewest": true,
+     "outcome": "PASS"
+    },
+    {
+     "early": {
+      "max_bucket": "<=1e-01",
+      "n_days": 837,
+      "p50_bucket": "<=1e-02",
+      "p99_bucket": "<=1e-01",
+      "within_band": true
+     },
+     "id": "levels_and_returns",
+     "kind": "hard",
+     "late": {
+      "max_bucket": "<=1e-01",
+      "n_days": 3555,
+      "p50_bucket": "<=1e-03",
+      "p99_bucket": "<=1e-01",
+      "within_band": false
+     },
+     "n_allowed": 21,
+     "n_big_return_diff_days": 47,
+     "outcome": "FAIL"
+    }
+   ],
+   "convention": "none",
+   "file_sha256": "3c67c4a0eb13b583660a5da5c7b18754a4a8c49a216789f1286bfe2fb5645467",
+   "has_fetch_record": true,
+   "outcome": "FAIL",
+   "provider": "bitstamp",
+   "role": "independent"
+  }
+ ],
+ "pinned": {
+  "file": "yf_BTC-USD.csv",
+  "md5": "bc76f530ff24ab445367fe826150bc10",
+  "md5_ok": true
+ },
+ "providers": {
+  "binance": {
+   "convention": "none",
+   "required": true,
+   "role": "diagnostic"
+  },
+  "bitstamp": {
+   "convention": "none",
+   "required": false,
+   "role": "independent"
+  },
+  "coinbase": {
+   "convention": "none",
+   "required": true,
+   "role": "independent"
+  }
+ },
+ "run_id": "PP-20261111T075328Z-btc",
+ "schema": "provider-parity-summary/1",
+ "series": "btc",
+ "thresholds": {
+  "coverage_min": 0.95,
+  "early_level_max": 0.1,
+  "early_level_p99_max": 0.03,
+  "edge_uncovered_max": 471,
+  "jump_log_abs_max": 0.7,
+  "late_from": "2017-01-01",
+  "level_max": 0.05,
+  "level_p50_max": 0.003,
+  "level_p99_max": 0.015,
+  "missing_days_warn_max": 5,
+  "ret_diff_big": 0.02,
+  "ret_diff_share_max": 0.005
+ },
+ "tool": {
+  "name": "parity_check.py",
+  "sha256": "f2fe72cdee6344076fd6dfec8943259f44bc52445c66cdaf482a19e269770184"
+ },
+ "window": {
+  "end": "2026-09-25",
+  "start": "2014-09-17"
+ },
+ "withheld_reasons": []
+}
