@@ -370,9 +370,8 @@ class Flow:
 
     def clear(self):
         for item in self.items:
-            # Hidden and deleted later, but still a child of the host: if the window goes first (a test without an
-            # event loop never delivers the deferred delete) the item goes with it instead of surviving parentless.
             item.hide()
+            item.setParent(None)
             item.deleteLater()
         self.items = []
         self.host.updateGeometry()
