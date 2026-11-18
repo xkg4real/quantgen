@@ -1,8 +1,10 @@
 # 15. 키보드·포커스 접근성 기준 및 사용자 여정 검증 양식
 
-문서 ID: QG-C15 · 버전: 1.13 · 검토일: 2026-11-06 · 상태: review-required
+문서 ID: QG-C15 · 버전: 1.14 · 검토일: 2026-11-19 · 상태: review-required
 
 ## 적용 범위와 현재 상태
+
+2026-11-19 D11 Q1~Q3 반영: 문의 contact@quantgeneration.com(수신 시험 전).
 
 Flet 브라우저의 워크스페이스·모바일 메뉴·대화상자와 Qt 데스크톱의 탐색·입력·탭·표·파일 저장·AI·모의 실행 화면에 적용한다. 마우스 없이 주요 기능에 도달하고 실행·취소할 수 있어야 한다.
 
@@ -145,7 +147,7 @@ MC 작은 결과표와 Bonds 두 결과 패널의 모든 행·가로 스크롤·
 사용자 안내 양식:
 
 > 키보드 조작: {{accessibility.verified_keyboard_instructions}}  
-> 접근성 문의: {{operator.support_email}}
+> 접근성 문의: contact@quantgeneration.com
 
 검증되지 않은 `Escape로 항상 취소`, `모든 기능을 키보드로 사용 가능` 등의 표현은 게시하지 않는다.
 

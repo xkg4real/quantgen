@@ -1,13 +1,15 @@
 # 20. 개인정보 삭제 요청 및 안전한 처리 절차·양식
 
 - 문서 ID: QG-C20
-- 버전: 1.12
-- 기준일: 2026-11-14
+- 버전: 1.13
+- 기준일: 2026-11-19
 - 상태: review-required
-- 관리 주체: (주)넥스트제너레이션
-- 문의: {{operator.support_email}}
+- 관리 주체: QUANTGEN(운영자 고건)
+- 문의: contact@quantgeneration.com
 
 ## 적용 범위와 현재 상태
+
+2026-11-19 D11 Q1~Q3 반영: 운영자 개인 표기 QUANTGEN(운영자 고건), 문의 contact@quantgeneration.com(수신 시험 전). 회원 계정 서비스는 아직 없음(AWS 사용자 풀 미생성, 웹 계정 화면 미구현, 가입 화면 꺼짐); 계정 처리 항목은 서비스 구축 뒤 별도 PR.
 
 ### 2026-11-14 R3 독립 기록기 하위 구현
 
@@ -158,14 +160,14 @@ KIS 종목 마스터의 원본 줄(`_MASTER_CACHE`)과 검색 색인, 관심종�
 
 ### F20-03 결과 통지문
 
-> (주)넥스트제너레이션 개인정보 요청 처리 결과  
+> QUANTGEN(운영자 고건) 개인정보 요청 처리 결과  
 > 접수 ID: {{deletion.case_id}} / 요청일: {{deletion.requested_at_timezone}}  
 > 상태: {{deletion.result_status}}  
 > 처리한 자료·범위·처리일: {{deletion.completed_scope_date}}  
 > 보존 자료·법적 근거·접근 제한·보존 종료일: {{deletion.retained_scope_basis_expiry}}  
 > 외부 제공자·백업·사용자 소유 사본의 남은 처리: {{deletion.remaining_actions_deadline}}  
 > 추가 확인이 필요한 최소 사항: {{deletion.required_followup}}  
-> 문의·이의 제기: {{operator.support_email}}
+> 문의·이의 제기: contact@quantgeneration.com
 
 상태는 `접수`, `본인확인 대기`, `진행`, `부분 완료`, `보존 예외`, `완료` 등 실제 단계로 표시한다. 진행·부분 완료 상태를 ‘모든 정보 영구 삭제 완료’로 표현하지 않는다.
 

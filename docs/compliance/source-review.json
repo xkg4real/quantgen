@@ -4,7 +4,7 @@
   "scope": "named source/document consistency review; not legal or operational certification",
   "source_state": "HEAD commit identifier plus observed working-tree fingerprints; not a clean-checkout attestation",
   "registry_sha256": "d1a62050d33e6c53ac9027db0eb8661317a4aec7fc7eb7b10488cf709b0b8f0f",
-  "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
+  "profile_sha256": "47ed54c991bb6a1212b852b47cdd2859379414c64b28fe1eee0efcf250fb8610",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
@@ -303,10 +303,10 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "1fbb5e667482f7d2ef3ac7997448b5bac68b4c67a3867936661fed1080d3908b",
+    "docs/compliance/FACTS.md": "72ac28a1bf7116a6e55fb986b9f1676b7faed910c61fd03d4fce65d6cb75be63",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
-    "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
-    "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
+    "docs/compliance/README.md": "27aef4dabf513cbb83d4430d8b1db97c4acc85a25b0ddd0c9498338e6db58ec3",
+    "docs/compliance/RELEASE_GAPS.md": "b6eb7a9379c935344c68eb016c93d3f09935960073f85c45e80cab6e727d949f",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/A1_TERMINOLOGY_2026-11-06.md": "c52f3a6e72b2cd0cd04263597a77570545c9b037e50a0c34586c7d4e552b93ff",
     "docs/product/A3_READING_LAYOUT_2026-11-06.md": "b0f6595caae843d4a912fc332adc78882f65f9eb579cd7f97f2d33519821cc64",
@@ -781,164 +781,164 @@
   },
   "reviews": {
     "1": {
-      "document_sha256": "8fdcbaf3551af7c39081fab335d6bfbd0c44bc4f3d1afdb4054e6aa6e8599f1b",
-      "source_digest": "60e25240efa672c363085404cc98a83ee97e22e9cc384caccb47e14297c1c1e4",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.324942+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "document_sha256": "b002b535316872d3cbbfec5b6c7e2c5ff974685161caa326ca74f8bdc191ef66",
+      "source_digest": "f6335486a7824260920cb7db80dbffac678d65ecaea87d74ff027e7df0442bb4",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.132256+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "2": {
-      "document_sha256": "1c7eb9b60585b1fd4d1a23723051454e768b6ea6b31b9e58bd8122ac73cdd5e1",
-      "source_digest": "60e25240efa672c363085404cc98a83ee97e22e9cc384caccb47e14297c1c1e4",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.327401+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "document_sha256": "87a75eeec58a1094a0469e3ace9a6e57703b6ea40fd24f0109398113d343e57a",
+      "source_digest": "f6335486a7824260920cb7db80dbffac678d65ecaea87d74ff027e7df0442bb4",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.135157+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "3": {
-      "document_sha256": "50fcceb8fb66b30a535ff6015a66ff5e5cee801b61433cc3aa99acd3673c4393",
-      "source_digest": "995339b9b446d3e385c84648f8d7c9855c89e42c5ec9ca1b14ead330efc15bef",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.330100+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "document_sha256": "47ffac58a0a67502bc6a235b925f30135013860ed21da52315f074fb306f3b5d",
+      "source_digest": "48181497479ea3c3ef15ee5d57c1b00926bfe713bb99efe280e1a169e4fa9b26",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.137606+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "4": {
-      "document_sha256": "4a2528a8c62c60983069941ff506c41c6b251ff1f402ef6cf7723e9901bb7a91",
-      "source_digest": "f76cace8d9c98aab3c1f6922e6cacb5a7bca0077be58681cb5f2934228984ad0",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.332109+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "document_sha256": "0a223badbec15c6f94a1b12f21d8dd01bfaff18bc0c029821f9e78b30158b069",
+      "source_digest": "4eb46b162481eaaa9fb7592af1e92055f3ee831b2fbf9d75f4b710cf699e5f93",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.139757+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "5": {
-      "document_sha256": "54164c56f4c3999b8ed65115e411151dca9dd6a46fea7bc57d0a750774d7b555",
-      "source_digest": "a89ddbe54427531f8e0ac35817144a2f816f7cfc6bcf5728cc223fe2fc168b3c",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.334448+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
+      "source_digest": "68850fdb88459d3eaaf70aa3cbb6300ae6ac98fa16fd754f2a9aa5cdd2b017a3",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.141605+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "6": {
-      "document_sha256": "5871443de50226c2680aa2c41059c06b4d1290f28f1c859d5ed979fd17a2918e",
-      "source_digest": "5f50f89b5c868697ef1c37455b7f24af2834f27b8f7f88ce9345c0edd3f9a30a",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.336386+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
+      "source_digest": "35aab711fcb1a545236976b854b6d7c18299f541d8ef196bf167b31b5a84de97",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.143330+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "7": {
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
-      "source_digest": "60e25240efa672c363085404cc98a83ee97e22e9cc384caccb47e14297c1c1e4",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.338414+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "source_digest": "f6335486a7824260920cb7db80dbffac678d65ecaea87d74ff027e7df0442bb4",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.145045+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "8": {
-      "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
-      "source_digest": "5f50f89b5c868697ef1c37455b7f24af2834f27b8f7f88ce9345c0edd3f9a30a",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.340791+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "document_sha256": "c933f7e56dc23ce1b9bf2ae47cb8e45e0334da3629ed6fde8193475aa1d90ded",
+      "source_digest": "35aab711fcb1a545236976b854b6d7c18299f541d8ef196bf167b31b5a84de97",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.146766+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "0af54f87ee46781dd7f47b9af6313728132060ca34566535716242f0d663a036",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.342982+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "source_digest": "b1b9de0d7301e2d65dc4f9d7d935eecced51e10ae5131b20c5f9d565caced93e",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.148479+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "10": {
-      "document_sha256": "ce304488b177e5fa81046782034d9a3c23a411ca3cef859d46b7df13ba0c5f5f",
-      "source_digest": "0d49209cbc007adca7f8e4d781f8fcf428d357040fc3416c5f8d284201eff39e",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.344910+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "document_sha256": "1a5290b7030eadfc1477b97f40c8b04b7c903c31e85bdb276d77b0ab62be9759",
+      "source_digest": "a5a9f3f6a0e67e28f4e856da836aa5be063ab40b559c05328b2474cffbfb2be7",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.150167+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "11": {
-      "document_sha256": "11a071fe459f3d6f622ec4ee4480200c3e7ed131153e00bd6823e552e43a7004",
-      "source_digest": "fde39a786766badd80f3a308f64bb99647e1d4fe998a71fa520aac9dfa54a9e1",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.347826+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "document_sha256": "ce1d45fad73820fc818d84f86b3ab49ab7803390a2670e06aa10d4f1447bd97d",
+      "source_digest": "9c31f7f5cad79ff722a118a290104231a20e9342f5d94e60eecb126c3ceb6ea1",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.151857+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "691ce96c07f4499e27d526beca06b681d3580f4c505488f1d1daf5418385ba51",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.349510+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "source_digest": "326cb2ebe54efab7c45ccbb909bede20d92c97e64697ccdf6172ef54eb636b49",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.154475+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "0af54f87ee46781dd7f47b9af6313728132060ca34566535716242f0d663a036",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.351314+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "source_digest": "b1b9de0d7301e2d65dc4f9d7d935eecced51e10ae5131b20c5f9d565caced93e",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.156360+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "0af54f87ee46781dd7f47b9af6313728132060ca34566535716242f0d663a036",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.353611+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "source_digest": "b1b9de0d7301e2d65dc4f9d7d935eecced51e10ae5131b20c5f9d565caced93e",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.158091+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "15": {
-      "document_sha256": "99b8253de2d54323b48c1dc8edb663bb6105930c24bb15e8f70800aec2a49cf1",
-      "source_digest": "0af54f87ee46781dd7f47b9af6313728132060ca34566535716242f0d663a036",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.355504+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "document_sha256": "c11d59b7e7a5578c2b6574682ac3ecdbde324fb4ca1aa5e99e97f71fdf53f10a",
+      "source_digest": "b1b9de0d7301e2d65dc4f9d7d935eecced51e10ae5131b20c5f9d565caced93e",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.159772+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "16": {
-      "document_sha256": "ff89cdb2a5ee70c3f830162c8e3c8a287291c89fddd7c850ac5b6048d9217f98",
-      "source_digest": "1ca6ff3af949e5be86c9676c0c59585e47003cc61e227c6ba2387c5caac15136",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.357134+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "document_sha256": "fd9db4d1b82ed9c8953553efbe55e37f13b53b38ef5ec2aa1df704a542c31e20",
+      "source_digest": "a361d6038b0f817ab058cc4eeef68dc54edc072afe5382f41a4c3ed4531690c6",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.161414+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "17": {
-      "document_sha256": "dde1a8a05a26c612255f5858d272019e11cb7caf4542aa017b626ecea968713d",
-      "source_digest": "5f50f89b5c868697ef1c37455b7f24af2834f27b8f7f88ce9345c0edd3f9a30a",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.359292+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "document_sha256": "4bf4b7e2b367d1f053f803279ad624243d493bb342333b4cc9e05cf5a43538fb",
+      "source_digest": "35aab711fcb1a545236976b854b6d7c18299f541d8ef196bf167b31b5a84de97",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.163039+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "18": {
-      "document_sha256": "f41494e3a28b54cd191916f9ee985f795849e6bf67d69c8dffebd7d081d1187d",
-      "source_digest": "60e25240efa672c363085404cc98a83ee97e22e9cc384caccb47e14297c1c1e4",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.361469+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "document_sha256": "2b7c3520f9b3239bbaffd9cb371494fd2a4e3f51ea6b9ad611159c258eb32b31",
+      "source_digest": "f6335486a7824260920cb7db80dbffac678d65ecaea87d74ff027e7df0442bb4",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.164771+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "fc2c89518224b62fcb72bf9c4336ea9de5f87c215bb79a796259eea934a3dd81",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.363466+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "source_digest": "7530fbf2c2f5d1014921cb52127936f5b651cf1a8d5a6a8776ca0c6d9ffc14b0",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.166396+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     },
     "20": {
-      "document_sha256": "b226906886050078abf5ba14f9a0735c9e5ac02444ee1b0ebe11517333cf3d18",
-      "source_digest": "60e25240efa672c363085404cc98a83ee97e22e9cc384caccb47e14297c1c1e4",
-      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:47:15.365290+00:00",
-      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
+      "document_sha256": "dbe8fa99cbb2cfc643a9c49bd5fdac8400919d7fc73f70d444181e7121ea7c57",
+      "source_digest": "f6335486a7824260920cb7db80dbffac678d65ecaea87d74ff027e7df0442bb4",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
+      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; account-service values left for a later PR; publication stays blocked.",
+      "reviewed_at": "2026-11-18T18:54:42.167902+00:00",
+      "source_commit": "56fe32ae9bad62ad1cdca69ec05b158ff6de0ec4"
     }
   }
 }
