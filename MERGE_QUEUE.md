@@ -1,8 +1,8 @@
 # MERGE_QUEUE — main 병합 순서와 동결 (메인 세션이 관리)
 
-updated_at: 2026-11-18T14:28:12+09:00
+updated_at: 2026-11-18T19:10:45+09:00
 coordinator: 메인 세션 (QUANTGEN/MAIN, https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB)
-freeze: none — F 동결은 P3(연구 브랜치 병합)이 시작될 때 켜지고 F21까지 유지. 동결 중에는 main에 아무것도 병합하지 않음.
+freeze: **ON** — 2026-11-18T19:10:45+09:00부터 F21까지 main에 아무것도 병합하지 않음. P3 완료: 연구 브랜치 `d895873ad03b8461a5916f579ef1299d1712a1ca`(병합 `888f121` + 소유자 확인 문장 커밋). 소유자가 F1~F22를 진행 중.
 
 ## 지금 순서
 
