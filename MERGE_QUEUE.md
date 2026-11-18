@@ -1,6 +1,6 @@
 # MERGE_QUEUE — main 병합 순서와 동결 (메인 세션이 관리)
 
-updated_at: 2026-11-19T01:40:00+09:00
+updated_at: 2026-11-19T03:14:00+09:00
 coordinator: 메인 세션 (QUANTGEN/MAIN, https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB)
 freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보고("F22까지 성공적으로 마무리했습니다."), main `6e077dc`(소유자 `--no-ff` 병합, 부모 `8e026ab`·`13f4dea`), 그 push의 Compliance success, PR #4 merged. (동결 기간: 2026-11-18T19:10:45+09:00 ~ 위 시각)
 
@@ -18,8 +18,8 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 
 | # | 항목 | 브랜치·PR | 상태 |
 |---|---|---|---|
-| 1 | ⑦-2/a 병합 뒤 main 정리 (README 시험 표·bonds 행, `qa/research_status.json`, 준법 기준선, 확인 문장 사본, D11 답 원문) | 메인 `claude/post-merge-7-2a-20261119` | **지금** (검토 중 → PR → CI → 병합) |
-| 2 | OS 작은 PR (도구·`app_identity`·패키징 초안, 화면 코드·`config.py`·`data/` 변경 없음) | OS `claude/os-prep-20261117` @ `1f6a72e` | 준비 끝. 1이 병합되면 메인이 "병합: OS"라고 적음 → 최신 main merge·기준선 갱신 뒤 PR |
+| 1 | ~~⑦-2/a 병합 뒤 main 정리~~ | PR #126 | **병합 완료 main `56fe32a`** (2026-11-19 03:08 KST, CI 전부 녹색) |
+| 2 | OS 작은 PR (도구·`app_identity`·패키징 초안, 화면 코드·`config.py`·`data/` 변경 없음) | OS `claude/os-prep-20261117` | **병합: OS** (2026-11-19 03:14 KST) — main `56fe32a`를 merge하고 기준선을 다시 갱신한 뒤 PR을 여세요. CI 녹색이면 메인이 병합 |
 | 3 | KEY-2 (`config.py` 3줄 → 코드 지문 `ec72fab3…` → `10c27010…`) | PAYMENTS `claude/payments-keys-20261117` @ `31b724f` | 준비 끝. 2 병합 뒤 "병합: PAYMENTS_ACCOUNT_KEYS" → PR 본문에 지문 변경·owner_confirmed 재작성 필요 |
 | 4 | 정책 문서 PR (D11 Q1~Q3) | 메인이 만듦 | 3 뒤 (값: `687bf65` `ACCOUNT_SETUP.md` 4부) |
 | 5 | UI 7쪽 + PySide6 준비 | UI `claude/friendly-bardeen-r6xe8f` | 소유자 실행 확인 뒤 (UI 세션 브랜치는 아무도 고치지 않음) |
