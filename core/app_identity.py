@@ -1,13 +1,11 @@
 """Who the app says it is, in one place (OS-P0-c; owner decisions D7, D9, D11 of 2026-11-17).
 
 Before and after incorporation only these values change, not the app's structure: names, the bundle ID,
-the update feed, the account (Cognito) IDs and the licence key. Empty strings mean "not decided yet";
+the update feed, the account (Cognito) IDs, the licence key and the data gateway's profile and server. Empty strings mean "not decided yet";
 code that needs a value checks for it and treats the feature as not configured.
 
 Not here on purpose:
 - Secrets. A Cognito app client for a desktop app has no secret; the licence key is a PUBLIC key.
-- The gateway values DATA_API_BASE and GATEWAY_PROFILE: added only after the owner's D7-G approval is
-  recorded (handoff plans/2026-11-17/MASTER_WORK_DESIGN_2026-11-17.md or a main-session notice).
 - "(주)" or any company suffix: there is no company yet (D11 report section 2.1 points to Commercial Act
   article 20 on using a company-like name; not legal advice).
 Callers are wired later: QSettings names and windows_branding.py by the UI session, paths in OS-F2.
@@ -32,6 +30,14 @@ COGNITO_DESKTOP_CLIENT_ID = ""  # public client (no secret)
 
 LICENSE_PUBLIC_KEY_PEM = ""     # public key that verifies licence files; the private key never ships
 
+# Data gateway (D7-G, owner approval 2026-11-18, recorded in handoff MASTER_WORK_DESIGN_2026-11-17.md,
+# commit 762150c; design: plans/2026-11-17/D7_ENV_STRUCTURE.md chapter 5). Read by core/gateway (KEY-3).
+# "personal": every source runs on this PC as today (user keys, keyless sources). "commercial": routes set
+# by contract after incorporation, some through the company data server at DATA_API_BASE.
+GATEWAY_PROFILES = ("personal", "commercial")
+GATEWAY_PROFILE = "personal"
+DATA_API_BASE = ""              # company data server; empty until it exists, so the company route stays off
+
 
 def build_channel() -> str:
     """'dev' for a source checkout or wheel; a packaged build writes core/_build_info.py with
@@ -54,6 +60,11 @@ def may_read_dotenv() -> bool:
 
 def is_configured(*values: str) -> bool:
     return all(isinstance(v, str) and v.strip() for v in values)
+
+
+def company_data_server_configured() -> bool:
+    """True only when the commercial profile is chosen and the company data server address is set."""
+    return GATEWAY_PROFILE == "commercial" and is_configured(DATA_API_BASE)
 
 
 def accounts_configured() -> bool:

@@ -33,10 +33,15 @@ class IdentityTests(unittest.TestCase):
         self.assertFalse(app_identity.BUNDLE_ID_CONFIRMED)
         self.assertRegex(app_identity.BUNDLE_ID, r"^[a-z0-9]+(\.[a-z0-9]+){2,}$")
 
-    def test_no_secret_or_gateway_value_before_its_decision(self):
+    def test_no_secret_in_the_identity_file(self):
         self.assertIsNone(re.search(r"(?i)(secret|password|token|PRIVATE KEY)\s*=", SOURCE))
-        for name in ("DATA_API_BASE", "GATEWAY_PROFILE"):  # only after the owner's D7-G approval is recorded
-            self.assertFalse(hasattr(app_identity, name), name)
+
+    def test_gateway_starts_personal_with_the_company_server_off(self):
+        # D7-G (owner approval 2026-11-18): today every source runs on this PC; the company route stays off.
+        self.assertEqual(app_identity.GATEWAY_PROFILE, "personal")
+        self.assertIn(app_identity.GATEWAY_PROFILE, app_identity.GATEWAY_PROFILES)
+        self.assertEqual(app_identity.DATA_API_BASE, "")
+        self.assertFalse(app_identity.company_data_server_configured())
 
     def test_source_checkout_is_a_dev_build_and_a_public_build_never_reads_dotenv(self):
         self.assertEqual(app_identity.build_channel(), "dev")
