@@ -20,11 +20,11 @@
 |---|---|---|
 | 4절 "Qt `quantgen_desktop/` 49개 파일, 약 11,700줄" | main 83개 .py, **29,927줄**; UI 브랜치 85개, 33,973줄. 2주에 약 6.5배 | `git ls-tree` + 줄 수 (2026-11-17) |
 | 7.2 M2 "반대 방향의 의존은 없습니다. `ui/`와 `main.py`는 `quantgen_desktop`을 import하지 않으므로" | **틀림.** `ui/` 12개 파일이 `quantgen_desktop`의 문구 모듈을 import합니다 (`ui/bonds_page.py` 등). 반대로 `quantgen_desktop/macro_records.py`·`narrative_view.py`·`portfolio.py`·`risk_display.py`·`market_narrative_language.py`가 함수 안에서 `ui.*`를 import합니다. 모바일 묶음은 그래서 "Qt 없는 문구 모듈만" 골라 넣습니다 (`stage.py --profile mobile`, 11개 + `owner_ui_language/` 하위 패키지) | `git grep` (main `5888d05`) |
-| 7.1 F1 "의미가 다른 2곳을 고칩니다" | 시범 결과 11묶음. 새 실패·세그폴트·"이미 지워진 객체" 수는 `docs/platform/PYSIDE6_TRIAL_2026-11-17.md`. 점검표 `docs/platform/PYSIDE6_UI_CHECKLIST.md` | D9 보고서, 이 세션 시범 |
+| 7.1 F1 "의미가 다른 2곳을 고칩니다" | 시범 결과 11묶음. 세그폴트·메모리 폭증의 원인은 두 곳(`localization.py`의 `singleShot(0, self.apply)`, UI `bonds.py`의 `setWeight(600)`)으로 확정, 고친 복사본 재시범에서 세그폴트·OOM 0 (`PYSIDE6_TRIAL` 7절). 새 실패·세그폴트·"이미 지워진 객체" 수는 `docs/platform/PYSIDE6_TRIAL_2026-11-17.md`. 점검표 `docs/platform/PYSIDE6_UI_CHECKLIST.md` | D9 보고서, 이 세션 시범 |
 | 작업 ID `F1`, `M2`, `A1`… | **`OS-` 접두어** (`OS-F1`, `OS-M2`, `OS-A1`). 다른 문서의 F(소유자 F1~F22 실행), D1~D14(11-17 결정)와 겹치지 않게 | 지시문 8절 |
 | F1의 시점 | **D9 판정: F 뒤 전환 예상 약 30시간(> 24시간) → 지금 진행, "나안".** 준비(도구·시범·두 바인딩에서 도는 수정)는 지금, main 전환 병합은 F21 바로 뒤 첫 자리, 그날 `quantgen_desktop/**`는 UI 세션 독점 | handoff `plans/2026-11-17/D9_PYSIDE6_ESTIMATE.md`, `MERGE_QUEUE.md` |
 | F2 `user_data_dir()` | 원문 우선순위 그대로 구현 (`QUANTGEN_DATA_DIR` → `FLET_APP_STORAGE_DATA` → 기존 `~/.nextgen` → OS 기본). 호출하는 5곳의 전환(`config.py`·`kis_client.py`·`opendart_client.py`)은 **OS-F2**, 결제·계정 세션의 KEY-2 뒤 | 작업 브랜치 `core/app_paths.py` |
-| M2 "계산 코드 해시가 `None`" (원문 결정 D9) | spec이 해시 대상 원본 3개를 자료 파일로 넣음 → 패키지 앱에도 같은 파일이 있음 (실행 중 값 확인은 **미검증**) | `packaging/quantgen_desktop.spec` |
+| M2 "계산 코드 해시가 `None`" (원문 결정 D9) | spec이 해시 대상 원본 3개를 자료 파일로 넣음. 패키지 앱 안에서 `QUANTGEN --selfcheck`로 확인: PyQt6·PySide6 빌드 모두 해시가 빌드 때 값과 같음 (2026-11-18, Linux) | `packaging/quantgen_desktop.spec` |
 | A1 "축소 의존성의 출발점" | `mobile/pyproject.toml`: flet, pyyaml, Babel, requests, numpy, pandas로 시작 (scipy·statsmodels·matplotlib 등은 첫 시험에서 뺌). 어느 기능이 비는지가 A1의 측정 항목 | 작업 브랜치 `mobile/` |
 | 모바일과 UI-D1의 관계 (원문에 없음) | UI-D1(2026-11-11): **새 화면 작업의 기준은 PyQt(데스크톱)**, Flet은 유지하되 기준이 아님. 모바일 Flet은 그 예외가 아니라 **축소판 동반 앱**(시세 읽기·연구 결과 보기)으로 범위를 좁혀 둡니다. 새 기능은 데스크톱에 먼저 | handoff `UI_SESSION_CURRENT.md` 소유자 결정 블록 |
 | 7.3 A7 개발자 인증 | 2026-09-30 4개국 시작, 2027년 이후 전 세계 (원문 그대로, 한국 적용 시점 **미검증**). Play 조직 계정 필요는 **(추론)** | 원문 출처 |
