@@ -565,7 +565,7 @@ class BondsPane(QWidget):
         self.risk_fold.body.addWidget(tool_host)
         self.risk_fold.body.addWidget(position)
         self.risk_fold.body.addWidget(futures)
-        inner.removeWidget(old); old.hide(); old.setParent(None); old.deleteLater()   # empty now
+        inner.removeWidget(old); old.hide(); old.deleteLater()   # empty now; keeps its parent until deleted
         self.curve_note = Soft(('Where the curve comes from', '곡선 출처'),
                                ('FRED US Treasury yields, fetched automatically. When FRED cannot be reached the app '
                                 'uses a synthetic curve and says so with the result.',
