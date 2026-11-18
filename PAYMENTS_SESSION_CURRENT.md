@@ -6,11 +6,11 @@ task: payments-account-keys
 cycle: 2026-11-17
 done_ids: none
 next_ids: PAY-A1, PAY-A2, KEY-1, KEY-2, KEY-3/design, KEY-3, PAY-0, PAY-2
-updated_at: 2026-11-18T15:40:00+09:00
+updated_at: 2026-11-18T16:30:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/payments-keys-20261117
-work_commit: 46d6be8
+work_commit: 687bf65
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -24,6 +24,15 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-18 16:30 갱신 — 소유자 답 Q1~Q3 (원문):**
+> Q1 답변 : 예, 다만 제가 법인 설립 설립이 완료되었다고 여기에 말하는 순간 바로 해당 법인 명으로 수정 가능하도록 해주세요
+> Q2 답변 : 일단 contact@quantgeneration.com으로 하겠습니다. 현재 웹사이트의 구조도 이렇게 되어있습니다.
+> Q3 답변 : 예
+> 위 항목 중에서 시험, 전달, AWS, 공개 전 4단계를 수행하기 위해서 해야되는 일들을 구체화하여 .md 파일로 만들어 여기서 다운로드하고 볼 수 있도록 해주세요
+
+반영: `ACCOUNT_SETUP.md`·`ADMIN_GUIDE.md` v0.2 (빈칸 0개, 운영자 표기는 `ACCOUNT_SETUP.md` 0.1절 한 곳 + 법인 전환 절차), 새 `docs/commercial/accounts/OWNER_STEPS.md` (AWS 25단계 값·확인 칸, 웹사이트 전달 메시지, 시험 3-A/3-B, 공개 전 8개와 118 질문). 커밋 `687bf65`. 소유자에게 .md로 전달함. 이제 소유자의 AWS 실행 결과(풀 ID·클라이언트 ID·다른 문구)를 기다리고, 이 세션은 KEY-3 설계로 갑니다. **소유자가 "법인 설립 완료: <이름>"이라고 하면** 0.1절 절차 1번부터 즉시.
+
 
 **2026-11-18 갱신:** 소유자가 D7-G를 승인했습니다 (원문 "그러면 D7-G의 방식대로 진행하겠습니다", 2026-11-18 14:15 KST; handoff `MERGE_QUEUE.md` 21행, 커밋 `762150c`에서 확인). 그래서 KEY-2 자격 증명 저장소를 브랜치에 구현했습니다 (`178c51e`, main `7c33955`을 merge한 뒤). main 병합은 F21 뒤 대기열 차례에만 하고, PR은 아직 열지 않았습니다. Q1~Q3 답은 아직 없습니다. 다음 일: KEY-3 설계 문서 → KEY-3 코드.
 
@@ -109,6 +118,8 @@ ENV_NAMES.md: 26개 이름 모두 표 행에 있음=True, NAME=값 꼴 0건
 
 ## 소유자 답 대기
 
+(2026-11-18: Q1~Q3 답 받음 → 아래 표의 Q1~Q3는 끝남. D7-G도 승인됨. 남은 것: AWS 실행 결과, 시험 부록 C, 웹사이트 전달 날짜, 공개 전 8개)
+
 | # | 질문 | 권장 |
 |---|---|---|
 | Q1 | 공개 문서 운영자를 "(주)넥스트제너레이션" → 소유자 개인 성명 + 서비스명 QUANTGEN으로 바꿀까요? | 예 |
@@ -119,6 +130,8 @@ ENV_NAMES.md: 26개 이름 모두 표 행에 있음=True, NAME=값 꼴 0건
 | 네트워크 (선택) | 세션 네트워크에 `docs.aws.amazon.com` 허용 시 미검증 문구 재확인 | — |
 
 ## 메인에게
+
+- **2026-11-18 정책 값 확정 (Q1~Q3):** 운영자 = 개인 (소유자 성명, `release-profile.json` `operator.representative`와 같은 사람, "(주)" 없음), 개인정보 보호책임자 = 같은 사람, `operator.privacy_contact`·`operator.support_email`·`{{privacy.contact_email}}`·`{{operator.support_email}}` = `contact@quantgeneration.com`, `{{age.minimum_age}}` = 14 (유료 19). 전체 값: 브랜치 `ACCOUNT_SETUP.md` 4부 (`687bf65`). 소유자가 법인 설립을 알리면 같은 칸을 법인명으로 바꾸는 PR을 다시 요청함 (0.1절).
 
 - **2026-11-18 KEY-2 (브랜치 `178c51e`, 미병합):** 정책 문서에 넣을 새 의존성: `keyring>=25.6,<26`. 이 세션에서 설치한 25.7.0의 METADATA는 `License-Expression: MIT`이고, 의존성 `jaraco.classes`, `jaraco.functools`, `jaraco.context`, Windows `pywin32-ctypes`, Linux `SecretStorage`·`jeepney`, 3.12 미만 `importlib_metadata`. 19-licenses·08-third-parties 행은 메인 몫 (LICENSE 원문은 대조하지 않음, 미검증). 처리방침 쪽 사실: API 키와 KIS 토큰은 사용자 PC의 OS 자격 증명 저장소 (Windows 자격 증명 관리자)에 저장되고, 키 보관함이 없을 때만 KIS 토큰이 `~/.nextgen/kis_token.json`에 남음.
 - 주의 (KEY-5 전에 정할 것): 앱 화면에서 키를 keyring에 저장한 PC (소유자 PC)에서 테스트를 돌리면, 환경을 비우는 테스트가 keyring의 실제 키를 "있음"으로 볼 수 있음. 지금은 keyring에 저장하는 화면이 없어 해당 없음. KEY-5 전에 시험 묶음이 `credentials.set_backend(None)`을 쓰도록 하는 방안을 제안 예정.
