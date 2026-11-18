@@ -914,7 +914,7 @@ Generated from explicit sources; **not a new test run or overall readiness verdi
 
 | Dimension | Recorded evidence |
 |---|---|
-| Code tests | 844/964 PASS; 0 FAIL; 120 NOT_RUN. Run time/commit not supplied by source. |
+| Code tests | 884/1004 PASS; 0 FAIL; 120 NOT_RUN. Run time/commit not supplied by source. |
 | Calendars | 17 signed metadata rows, set 1.0.0; signed 2026-10-29T04:29:39Z. Payload verification is separate. |
 | Data readiness | NOT_VERIFIED; missing reference data remains a separate blocker. |
 | Formal gate | NOT_FROZEN per README; protected package NOT_INSPECTED. |
@@ -925,7 +925,7 @@ Machine-readable evidence: [qa/research_status.json](qa/research_status.json).
 Check: `python -m tools.status.snapshot --check`. Historical dated tables below remain historical.
 <!-- research-status:end -->
 
-The detailed tables below record the historical 2026-10-23 run; they are not the latest QA aggregate.
+The detailed tables below record the 2026-11-18 Windows run of the merged tree (`qa/acceptance_results.json` at `13f4dea`).
 
 ```bash
 python tests/run_all.py                  # every suite; writes qa/acceptance_results.json
@@ -948,14 +948,15 @@ exit code; the exit code is 0 only when nothing failed. The summary line reads
 | ui | `tests/flet_api_guard.py` | Every `page.<method>()`, every checked Flet control keyword and attribute, and every `pal.<token>` in `ui/*.py` exists in Flet 0.85.2 and the palette | 4 PASS |
 | quant | `tests/quant_acceptance.py` | Monte Carlo, optimizer, signal and backtest invariants; GARCH parameter recovery, unit-variance t shocks, guardrail flags, likelihood ordering against GBM and normal-GARCH, forecast convergence, the drift modes, the bounded-innovation and martingale checks, the LR null size, interval coverage, every chart renders | 53 PASS |
 | ficc | `tests/ficc_acceptance.py` | Bootstrap round-trips, monotone discount factors, Nelson-Siegel fits, PCA, duration and KRD, carry and roll, scenario convexity, swap and swaption parity, Black ↔ Bachelier, caps and floors, Garman-Kohlhagen, SABR, CIP, the carry backtest, CIR and Hull-White, structured products, narratives (the weekly rates and FX note free of position language on every branch, the report prompts free of trade ideas), every chart renders | 57 PASS |
+| bonds | `tests/bonds_screen_acceptance.py` | The Bonds screen against textbook formulas written independently in the test file, never the function under test: the five rows of request table 2.1, par/premium/discount and the 95/105 price and yield inversions, duration, convexity and DV01, price/yield exclusivity and input validation (zero, negative, NaN/inf, comma), scenario P&L from repricing with zero-rate shocks, the DV01 hedge (side, rounding, residual), synthetic and FRED labels with stale, carried-forward and bad-unit curves, stale-result marking and newest-Run-wins; hermetic (synthetic source or a stubbed FRED fetch) | 37 PASS |
 | expansion | `tests/expansion_acceptance.py` | Fake KIS and crypto transports for every new asset domain, the gate's own checks (a planted edge passes, noise is rejected, the deflated Sharpe orders them, the distribution loop calibrates), the t+1 causality of every strategy family, the five-year rule counted in whole years, the table cost floor and the Strategy Lab's withheld verdict below it, the module self-checks and the Crypto page self-check | 20 PASS |
-| macro | `tests/macro_acceptance.py` over `tests/macro_*.py` | The v2 build, below | 421 PASS / 121 NOT_RUN |
+| macro | `tests/macro_acceptance.py` over `tests/macro_*.py` | The v2 build, below | 462 PASS / 120 NOT_RUN |
 | paper | `tests/paper_live_acceptance.py` | The paper_live harness after the 2026-10-18/19 fixes, offline: costs from QUANTGEN's table and KRX ETF tick floor, LSE refused rather than proxied, the per-account cost gate in `Engine._open`, the 5-minute C3 account retired, no resume from another config's state, frozen price snapshots (exact round trip, sha refusal), post-session prices by window dates, session hours from `core.markets` across clock changes and holidays, only complete pulls frozen, the same-day replay's archived code, the power line, one ledger trial per configuration, the pre-registered gate and fidelity tests, the Strategy Lab ledger, concurrent ledger appends, the refused late freeze and the report outcomes block | 21 PASS |
 | grokteam | `grokteam/selfcheck.py` | The GROKTEAM BOOK desk (Kalshi KXBTCD paper benchmark of the Grok trading-team guide), offline: the Kalshi fee and payoff with the fee inside the stake, SIZE (half Kelly, 6% cap, $50 floor), the GARCH-t digital, no look-ahead in hourly bars or quotes, the 30-minute quote lookback, the stationarity warning not skipping, each account's entry rule, the cluster t and the one-sided skill p, the verdict precedence, the forward window blinded until its one look (VOID and unsettled events withhold it), Python patch updates not voiding the freeze, the sha-checked cache and the new ledger family | 17 PASS |
 | guard | `tests/frozen_guard.py` | The frozen-study guard, by git and hashlib only (no `paper_live` or `grokteam` import): the tag `studies-of-record-2026-10-23` peels to `eacd57d`, the tagged tree's pinned files match PREREG and its H2 files match `frozen_rule`, no `FORWARD_LOOK.json` on the main line before 2027-02-01 01:00 UTC, and the numpy/scipy/pandas pins while a readout is pending (with a check of the pending rule itself) | 5 PASS |
-| papers | `tools/paper/selfcheck.py` | The research-paper pipeline, offline: the Tectonic log gate and both templates compiled from the cache (Korean fonts by path, build record), digit-safe `\qnum` numbers, the EN/KO consistency check (paragraph ids, per-section numbers and citations, bare digits in results and in input-ed tables), scope approval hashes, Crossref/arXiv reference records, the claims gate, study-run refusals and manifests, the referee runner (quota, timeout, malformed reports) and bundle, release states and the index, the two workflow scripts and the skill | 43 PASS |
+| papers | `tools/paper/selfcheck.py` | The research-paper pipeline, offline: the Tectonic log gate and both templates compiled from the cache (Korean fonts by path, build record), digit-safe `\qnum` numbers, the EN/KO consistency check (paragraph ids, per-section numbers and citations, bare digits in results and in input-ed tables), scope approval hashes, Crossref/arXiv reference records, the claims gate, study-run refusals and manifests, the referee runner (quota, timeout, malformed reports) and bundle, release states and the index, the two workflow scripts and the skill | 49 PASS |
 | nautilus | `tests/nautilus_acceptance.py` | The NautilusTrader bridge (spec 2026-10-26), research only, on synthetic data: layer 1 runs in this interpreter, where `nautilus_trader` must not be installed; layer 2 runs the sandbox through the hash-pinned venv that `QUANTGEN_NAUTILUS_PYTHON` names, NOT_RUN while that key is blank and FAIL when the venv is off its pins; every test runs inside a guard that keeps the ledgers and `docs/nautilus_bridge/` byte-identical | 57 PASS |
-| **Total** | `tests/run_all.py` | | 844/964 passed, 0 failed, 120 not run (2026-11-14, Windows) |
+| **Total** | `tests/run_all.py` | | 884/1004 passed, 0 failed, 120 not run (2026-11-18, Windows) |
 
 The macro group (new in v2) discovers every `tests/macro_*.py` module,
 wraps each test in a hermetic guard, and brackets the run with T-HERM-01 (every
@@ -967,15 +968,15 @@ md5-listed in `tests/fixtures/macro/MANIFEST.csv`.
 
 | Modules | Covers | Checks (PASS / NOT_RUN) |
 |---|---|---|
-| `macro_m0_*` (harness, instruments, integration, rules, schemas) | Rules store, DO-NOT-BUILD predicates, schemas and validator, instrument books and tick floors, read-only scans | 38 / 2 |
-| `macro_m1_*` (books, calendars, fixtures, integration, pit) | Point-in-time store, contracts and staleness, effective-dated calendars, lag audit | 68 / 14 |
-| `macro_m2_*` (costed, risk) | `min()` composition and bounds, hedge state, concentration, ladder, costed paths | 24 / 21 |
-| `macro_m3_estimators` | The seven estimators, QLIKE / DM / MCS, the B5 and estimator gates | 12 / 8 |
+| `macro_m0_*` (harness, instruments, integration, rules, schemas) | Rules store, DO-NOT-BUILD predicates, schemas and validator, instrument books and tick floors, read-only scans | 40 / 2 |
+| `macro_m1_*` (books, calendars, fixtures, integration, pit) | Point-in-time store, contracts and staleness, effective-dated calendars, lag audit | 101 / 13 |
+| `macro_m2_*` (costed, risk) | `min()` composition and bounds, hedge state, concentration, ladder, costed paths | 26 / 21 |
+| `macro_m3_estimators` | The seven estimators, QLIKE / DM / MCS, the B5 and estimator gates | 13 / 8 |
 | `macro_m4_*` (integration, sleeves) | Family tags, sleeve vol scale, the D&M gate, base and inverse-vol weights | 19 / 7 |
 | `macro_m5_*` (books, fills_events, integration) | Per-book runtime, HALT and re-arm, look-through caps, the fill model, events and annotations | 25 / 13 |
 | `macro_m6_context` | Context log isolation, break trigger | 14 / 2 |
-| `macro_m7_*` (cardp, cards, integration, ledger, stats) | Gate statistics, family ledger, CARD-P evaluation, card headers, verdict chain, the gate package | 61 / 35 |
-| `macro_m8_*` (forward, integration, pipeline) | `macro_daily`, alerts, replay, app start, forward records and demotion, FORWARD-SIM and refusal books | 40 / 7 |
+| `macro_m7_*` (cardp, cards, integration, ledger, stats) | Gate statistics, family ledger, CARD-P evaluation, card headers, verdict chain, the gate package | 62 / 35 |
+| `macro_m8_*` (forward, integration, pipeline) | `macro_daily`, alerts, replay, app start, forward records and demotion, FORWARD-SIM and refusal books | 42 / 7 |
 | `macro_m9_*` (lab, scenarios) | Quant Lab self-grading, scenario library, SEP band | 17 / 8 |
 | `macro_tf_*` (data, gov, integration, screens) | Tech-fund data and manifest, DNB-TF predicates, screens and books, governance, CRY-1 | 59 / 4 |
 | `macro_ui_*` | The v2 tokens and shared components, the Macro page views, the README claims (disclaimers, research identity, GrokBot labelling), the effective rules store | 42 / 0 |

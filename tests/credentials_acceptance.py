@@ -360,6 +360,21 @@ class KeyringPackageTest(unittest.TestCase):
         self.assertFalse(credentials.keyring_available())
 
 
+class AppIdentityTest(unittest.TestCase):
+    """D7-G rule 3 goes through core/app_identity.py (OS session, merged with PR #127)."""
+
+    def test_store_asks_app_identity(self):
+        from core import app_identity
+        with patch.object(app_identity, "may_read_dotenv", return_value=False):
+            self.assertFalse(credentials.may_read_dotenv())
+        with patch.object(app_identity, "may_read_dotenv", return_value=True):
+            self.assertTrue(credentials.may_read_dotenv())
+
+    def test_source_checkout_is_a_development_build(self):
+        from core import app_identity
+        self.assertEqual(credentials.may_read_dotenv(), app_identity.may_read_dotenv())
+
+
 class IsolationTest(unittest.TestCase):
     def test_home_is_temporary(self):
         self.assertEqual(Path.home().resolve(), Path(_HOME).resolve())

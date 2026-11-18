@@ -1078,3 +1078,24 @@ Windows CI에서 창 핸들과 아이콘을 시험하며, 사용자 PC의 Explor
 - 다른 7개 화면(연구 홈·분석 도구·기술지표 가이드·설계/검증·분석·연구 보관함·시스템)의 새 디자인은 소유자 승인을 받기 위한
   시안 이미지이며 앱에 적용되지 않았습니다. 시안 속 수치·공급자 상태·모델 이름은 예시입니다.
 - 01–20의 미확정 사업자·개인정보·권리·요금·환불·접근성 조건과 공개 보류를 유지합니다.
+
+## 플랫폼 확장 준비(OS-P0-a~f) — 2026-11-19 소스 검토 (OS_EXPANSION 세션)
+
+- 새 도구 `tools/qt_port/`(PyQt6→PySide6 변환·점검, 글꼴 비교, 재현 스크립트, 전환일 편집)는 개발자가 저장소에서만
+  실행합니다. 앱이 import하지 않고 앱 번들·휠에 들어가지 않습니다. 네트워크 전송이 없습니다.
+- `core/app_paths.py`의 `user_data_dir()`과 `is_frozen()`은 경로를 계산만 합니다. 폴더를 만들거나 열거나 나열하지
+  않습니다. 기존 `~/.nextgen`이 있으면 그 폴더를 그대로 씁니다. 아직 아무 호출처도 바꾸지 않았습니다(OS-F2, KEY-2 뒤).
+- `core/app_identity.py`는 이름·번들 ID 제안·빈 값(업데이트 주소, 계정 ID, 라이선스 공개키)과 D7-G 게이트웨이 값
+  `GATEWAY_PROFILE = "personal"`, `DATA_API_BASE = ""`(회사 서버 길 꺼짐)만 둡니다. 비밀값은 없고 "(주)" 표기도
+  없습니다. 공급원 호출 방식은 바뀌지 않았습니다.
+- 패키지 앱(`packaging/`): PyInstaller onedir. 데이터 파일은 휠과 같은 허용 목록(`tools/packaging/stage.py`)으로만 넣어
+  `.env`·연구 원장·캐시가 들어가지 않습니다. `QUANTGEN --selfcheck <파일>`은 사용자가 지정한 파일에만 점검 결과를
+  쓰고 네트워크·창을 열지 않습니다. 빌드에 `licenses/THIRD_PARTY_NOTICES.txt`(설치된 패키지의 라이선스 원문)와
+  LGPL-3.0·GPL-3.0 원문을 넣고, Qt 라이브러리와 LGPL 순수 파이썬 패키지(chardet)는 교체 가능한 별도 파일로 둡니다.
+  이것이 LGPL 의무를 충족하는지는 변호사 확인이 필요합니다(법률 자문이 아닙니다,
+  `docs/platform/LICENSE_COMPLIANCE_PREP.md`).
+- `.github/workflows/platform-build.yml`은 수동 실행과 `v*` 태그에서만 돌고, 서명·배포·업로드를 하지 않습니다
+  (macOS는 ad-hoc 서명만). `runtime-smoke.yml`에는 새 시험 모듈과 경로만 더했습니다.
+- `mobile/pyproject.toml`과 `stage.py --profile mobile`은 Android 시험용 묶음 초안입니다. 아직 빌드·배포한 적이 없습니다.
+- 화면·계산·요청·전송·저장 동작은 바뀌지 않았습니다. 01–20의 미확정 사업자·개인정보·권리·요금·환불·접근성 조건과
+  공개 보류(publication BLOCKED)를 유지합니다.

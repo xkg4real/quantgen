@@ -8,8 +8,9 @@
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
-    ".github/workflows/runtime-smoke.yml": "60ebbf9a7bf59bb4378982998b6c32951f7c93fdacc29dbc102adbf7a2f9f5a2",
-    "README.md": "2d590f79d6b6e5cf9f00c1313a9b52cf51477ed0b69ad720528c39f8a3c2632b",
+    ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
+    ".github/workflows/runtime-smoke.yml": "6deae01f70e9ba9cbc5e1c38966e303da4f14f01ba02e024f306858e5e8c091b",
+    "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
     "assets/branding/f1-wordmark.svg": "145715bc8df17cb3c99b734d4c7cb2b8e9bf1878e87c401f518f46b944ba41aa",
@@ -52,7 +53,8 @@
     "core/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "core/adoption/__init__.py": "592263c22647b24151038499489911ec409ac81177e99ed3c33f3a359947953a",
     "core/adoption/strategy_rules.py": "aab90e61f8a793022e823cb9d4311d85fc5120343e9bb47105b828753f9bebc3",
-    "core/app_paths.py": "87cd28f423db0975e62402f09d29366d81aa1ac02b71cfb11f757c42a0f0d4cd",
+    "core/app_identity.py": "ab7e4de6f51c58cb6662043a7357b1d62d91db9af3bb4441efd590e062103333",
+    "core/app_paths.py": "81967a06a295c66c4c358f4096eb11338baba611e1e7ed5b59e794a915ef5420",
     "core/calendars/__init__.py": "51bbdbd4d2326fb2ebfb2875db644b35fd874952769a7b0f07d051af3c76f8f2",
     "core/calendars/adapter.py": "fe925a34aeab1dca873aaac530a4aa5f2ba3be7b26f15ddc09f9c115324c7574",
     "core/calendars/clocks.py": "c5347934ec87ce6df4902ff5e0611895c0c46941995a13c4731f7b4b1d3fdfe8",
@@ -303,7 +305,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "1fbb5e667482f7d2ef3ac7997448b5bac68b4c67a3867936661fed1080d3908b",
+    "docs/compliance/FACTS.md": "d529d38e3bb9aa6f91fafb46171073b07775e524974885a627d7f0a4af33c8cd",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -400,6 +402,9 @@
     "docs/product/ui_drafts_2026-11-17/README.md": "b2166e175e5d7ced820feeb9714a18640a4e08a0ced92c5ea88b9c45c29d2c92",
     "main.py": "2f95c001a369306d5737aa456d918a4b8a62147e1b1421d6b80933ba888f7553",
     "mindmap/QUANTGEN Macro Neural Link.html": "4dbf731539d418aa67553bd5fd393dfc55550fac737ef89ca4c18c813f7c76c5",
+    "mobile/pyproject.toml": "2cad54b7e32873320de1d05e1e81cb91ce88f64cd97afc1ec955399fc5922db7",
+    "packaging/launch_desktop.py": "7724b54d172f00d87c80abab2ff5214deb5ebcf9105878e24ca7519c166ce4b8",
+    "packaging/selfcheck.py": "30dffaa03bf0f29342d3a1aca2945ab17c588c3a4304c59a0880f05b6a523ef1",
     "pyproject.toml": "7c46a0addc7d5220351b73c8ad54d672dbbd6de80ebf1a053a42293a717c52d5",
     "quantgen_desktop/__init__.py": "1ec1396b13e4b6caae0b8dfcf6201af71ad9756428c5cbcaab9706083691e060",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
@@ -495,6 +500,8 @@
     "tests/ai_connection_acceptance.py": "b074a2f0c8d708c68a28a19ff187b9e3ab1095c10c83c1a47cb6ede9d338f79f",
     "tests/ai_output_check_acceptance.py": "01c54460c470062df057d398b08233cae41c420115ee24693f19ab3711a02972",
     "tests/ai_payload_acceptance.py": "a4efa39af3a06c6859607306729a9190c4f44da320556a4567388f7ab107e138",
+    "tests/app_identity_acceptance.py": "a204e6555d8170396616f9db2d893205fb484ab06c51dff81cfb23319f73cbf6",
+    "tests/app_paths_acceptance.py": "a1e5a1b51c55215c7f122c460fc64f0c1e2e6f3233c80d906d4bef56213c2d9d",
     "tests/ar1_decay_acceptance.py": "8283f51b60967f30950af4ec7ecfda48f52c9bb605b2dc8231fc26b3549b63ab",
     "tests/bond_funding_acceptance.py": "88f2c6d019e47f4d6d1628ad775108cfd01bc2cf832d0f3c52c575591732004c",
     "tests/bonds_screen_acceptance.py": "41f64b4069f2489635a99e848ec5a8ebb5c96bce04db9cc6faabb091cae17fd7",
@@ -507,7 +514,7 @@
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
     "tests/crypto_missing_values_acceptance.py": "be07db163184acb8c0a67dd9c0562045e9f486506539ed9eadb2d06bec2ca038",
     "tests/curve_methods_acceptance.py": "66007a9bee8a7abedce57738f0fff5bd1ae9b2bd1d400b240d032e9a9691bd9b",
-    "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
+    "tests/data_readiness_acceptance.py": "6e2ff2bc89ed2134f0a4717b97349cb09ef77a226158a01ae73224dc6fed254b",
     "tests/desktop_a1_status_acceptance.py": "8993fa2d3914aa8285fb4b8dcfc81168ad62a42b7e8cace87f455865b8d70a7e",
     "tests/desktop_a1_terms_acceptance.py": "2e8613a5e6c25766a138e483c449bfbe8e4098ed48e05d3513a5ca6b46fa781d",
     "tests/desktop_a3_layout_acceptance.py": "0e0e607ee46b086f57296231da24a99aa44cbba573c2e34207709f6717d89a13",
@@ -660,6 +667,8 @@
     "tests/provider_parity_btc_diagnose_acceptance.py": "635a80def3b5ca94f5bf0959d9bc9a1c47a5de4ba366749a54ff0a7871f83bf0",
     "tests/qscore_acceptance.py": "660f85eee09478115e50e2a4806b2565c0dda60be85cd62d15bc04443820c25c",
     "tests/qt_fixture_cleanup.py": "d68b576411c205da153523b077592f69fdb5aa4d2bbe5d67d42fed1bfeeaf267",
+    "tests/qt_port_acceptance.py": "b988b07e9378b0e053a881e2f8c6bd717f2f560e8e22a7e97cfd9c46f8fd56f2",
+    "tests/qt_switch_day_acceptance.py": "90ee5d4f39f2f85b96307528f673f30a3b7aedd7036d7079ec575073197fdacc",
     "tests/quant_acceptance.py": "1b6d042dbd01d5bf78773b836a132b22409013ac61f8f46138e3bd4a5b7f6f08",
     "tests/quote_coverage_acceptance.py": "09d727791eb18d44955a0324058439c0d63777af94b5ca18f8a1ced7eb6cec86",
     "tests/rates_revaluation_params_acceptance.py": "aceaf96ac170d95eaf454da6f95e639e4705ad8965954de01e9de2d86d468ed3",
@@ -690,6 +699,7 @@
     "tests/strategy_lab_display_acceptance.py": "aa4d059af693881f449deb38a29be8f4849280643b7adbf4a821c8e6a4781a32",
     "tests/swaption_conversion_acceptance.py": "62a4994aa046a463559f463cd87b6873235a3d80684df515be2fd74bb8ff338a",
     "tests/terminal_target_acceptance.py": "e4bd3e974ee8012a5c06c8f24313b869f4beac1d3268209057c1e3b44f7e4e30",
+    "tests/third_party_notices_acceptance.py": "7fc64738281bdb09551fa44ad61959ff8fa7a7b3b142279ba07ef8576679765b",
     "tests/ui_followup_acceptance.py": "0411f38fd1aaf76071845676d29e4544d90b137d04de7865a471c37b07782fc3",
     "tests/watchlist_live_acceptance.py": "28129afe3538e09bd26b85e393ae287c86954bacc74080bb757c7f71397ade0a",
     "tests/web_branding_acceptance.py": "4cf27700af4187bfce7f055584c09468e99fdc6682c2a5aaec9afb72703efde5",
@@ -714,7 +724,8 @@
     "tools/nautilus/sandbox.py": "fdbc0e51aa3e1abff737d96292c636ada8b82f59b8ffe4131c6471d202475b4e",
     "tools/packaging/smoke_desktop.py": "da8434fb8e0d05320af2f9ee2dec890383d452fb79b0fff85a476de6e3e8574b",
     "tools/packaging/smoke_installed.py": "de7d99f1a1afc95c8544947509610b257c36ddaac69a64063280ffc2373e4408",
-    "tools/packaging/stage.py": "9e7cd598b655cdc776448268793cabbda5a49baa181c01591b2398d272ea05d3",
+    "tools/packaging/stage.py": "ed6f089a7820d55dc176fc33574ff78bdf43212f56f7e46d3741025fc9d0aa30",
+    "tools/packaging/third_party_notices.py": "656098e51c6ef2241df96ec36b43e9636025f7f0efbf36e13afaeb3481c65a8f",
     "tools/paper/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/paper/approval.py": "42829586c3e9daff69ad75520a63e139c0ed0f41de705e60fe02c965769bc138",
     "tools/paper/build.py": "40147758b52de269a123d377d0bb38943d4d03b88f45e2b8c85889316cc4313d",
@@ -731,6 +742,13 @@
     "tools/provider_parity/__init__.py": "e4660d4a5f42e868621d4b27be7f4b3efd78bba4b584c64fab21e145f817ade3",
     "tools/provider_parity/btc_diagnose.py": "1e44f3a791dd8c13a667bf46cda2933c7bb0810ac6f7bcaae884a16cc71bc6ea",
     "tools/provider_parity/parity_check.py": "78dd1f508c713f9be138466bf69f5dd92d8bfdcc3afacfa37b21fc4bf28ca80c",
+    "tools/qt_port/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tools/qt_port/font_probe.py": "eb710deef6afc9d761c8d2031cfb3c256c0037fc4e5a3140b111fd36849b949d",
+    "tools/qt_port/pyqt6_to_pyside6.py": "d866cfd585d95da789ece22f4771616cc0a10a8c514964588d2adbd0973becb2",
+    "tools/qt_port/repro/delegate_lifetime.py": "76a291cf69451b17c7b4043803e10cc0198c7f32a2982219c4c96711c270af1a",
+    "tools/qt_port/repro/shell_window_segfault.sh": "a75baa17ee2f4e2b308adacf77f94145b27112aded7308bc52995b68a52f1480",
+    "tools/qt_port/repro/window_survivors.py": "e1b8d8f61a02be2317dea5a1ad9d27ce265a2858ee20b5718b36015b2d65646e",
+    "tools/qt_port/switch_day.py": "f8724482d5c6d2364bb243da64b2228f6fcaf032fabc6098dc011df595585adc",
     "tools/sign_calendars.py": "2908e084ea1ea41d8439d7cf7aec7095de901d78782876356c6fe62dce5a6d7f",
     "tools/status/__init__.py": "029709c7d3b9b69d44f7b2d8e4d8459e9d6a0f31b5cc5769c60f1de927025099",
     "tools/status/data_readiness.py": "d8cfea410cbedee6c55cfa7d283e9dd313d74e9cb8770e3aadf656d2498c4115",
@@ -782,163 +800,163 @@
   "reviews": {
     "1": {
       "document_sha256": "8fdcbaf3551af7c39081fab335d6bfbd0c44bc4f3d1afdb4054e6aa6e8599f1b",
-      "source_digest": "8a26ae0abbdf6012b212c73a198d14e7210e5b15dde45e88a850fd3351bbe505",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.357317+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "0577e244c40f1ae23fcc47667b12e2e589d1d218eaf5ca1ed6de1fa6a900dcd0",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.685423+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "2": {
       "document_sha256": "1c7eb9b60585b1fd4d1a23723051454e768b6ea6b31b9e58bd8122ac73cdd5e1",
-      "source_digest": "8a26ae0abbdf6012b212c73a198d14e7210e5b15dde45e88a850fd3351bbe505",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.359588+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "0577e244c40f1ae23fcc47667b12e2e589d1d218eaf5ca1ed6de1fa6a900dcd0",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.690862+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "3": {
       "document_sha256": "50fcceb8fb66b30a535ff6015a66ff5e5cee801b61433cc3aa99acd3673c4393",
-      "source_digest": "aced355a9b246c0c5350a1beb815093e1d0fdaaf8f5355d201b22b974718a460",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.361586+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "72caf6c62e9188d7ec0d1218f6b803357fe478d2c343a3ded3bcf474738792d3",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.693098+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "4": {
       "document_sha256": "4a2528a8c62c60983069941ff506c41c6b251ff1f402ef6cf7723e9901bb7a91",
-      "source_digest": "2082069e2ad4077cd78cd157cf946d589f0d4a1851b23a41e5d7c3e3fcece5fb",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.363454+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "d4ef87ca2c0d2d681619866dd62d01197a21b6723e0cd3c1c5a04f56473eed67",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.697310+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "5": {
       "document_sha256": "54164c56f4c3999b8ed65115e411151dca9dd6a46fea7bc57d0a750774d7b555",
-      "source_digest": "616670d7d09941a89db2ee82a792f098a752c2c37c370e662150614028cbdfd3",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.365122+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "6bc5194f6413347ce7ae45257eb2aab18ae86920166fe5cd9b0ce5fd53599742",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.699214+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "6": {
       "document_sha256": "5871443de50226c2680aa2c41059c06b4d1290f28f1c859d5ed979fd17a2918e",
-      "source_digest": "f4ff1be727a83d512fc0aabb452316203e19a137c05278657baab9cb00891d35",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.366802+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "6ab246d3fd444c49a45d52002e6074dde8e7488e82df530a06668f5de3ee8448",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.701226+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "7": {
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
-      "source_digest": "8a26ae0abbdf6012b212c73a198d14e7210e5b15dde45e88a850fd3351bbe505",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.368522+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "0577e244c40f1ae23fcc47667b12e2e589d1d218eaf5ca1ed6de1fa6a900dcd0",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.703269+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "8": {
       "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
-      "source_digest": "f4ff1be727a83d512fc0aabb452316203e19a137c05278657baab9cb00891d35",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.370281+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "6ab246d3fd444c49a45d52002e6074dde8e7488e82df530a06668f5de3ee8448",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.705299+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "703b72eadb3c0a533a2a72e66e1d881eb45ab92b057913da27ee79962cb7b78f",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.372431+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "7b66f6de0895b01b58a9e52fd9b1cdc52d693faec6cab6aee38393fec6350bd6",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.707312+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "10": {
       "document_sha256": "ce304488b177e5fa81046782034d9a3c23a411ca3cef859d46b7df13ba0c5f5f",
-      "source_digest": "41926bbe29dd1610a9687739ce453f74be84f4649b279fb0761ea7ca3a07741b",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.374021+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "2eb986a9ce3b5f6a41d226cc777258af8fd9f5a88566cdf44b4321229acfb10e",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.709229+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "11": {
       "document_sha256": "11a071fe459f3d6f622ec4ee4480200c3e7ed131153e00bd6823e552e43a7004",
-      "source_digest": "9b0e731936140c5a654a38ad3b18b255da8e596b68460abffcecf976ef51c9c8",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.375626+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "17c1eace460ef2cf901d6f2da30c644dbcc6cb64b776a490b03ca7512c400957",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.711077+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "8f46a70788933532816d9b016cb57c7bd91f44a0c4a58dbb278608a0a564c321",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.377629+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "29fdb36022527fa4fa7bdc1d7e9fa4fe6ebdb38d2963a7b2551a9136e1838c0b",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.713134+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "703b72eadb3c0a533a2a72e66e1d881eb45ab92b057913da27ee79962cb7b78f",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.379279+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "7b66f6de0895b01b58a9e52fd9b1cdc52d693faec6cab6aee38393fec6350bd6",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.716582+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "703b72eadb3c0a533a2a72e66e1d881eb45ab92b057913da27ee79962cb7b78f",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.380714+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "7b66f6de0895b01b58a9e52fd9b1cdc52d693faec6cab6aee38393fec6350bd6",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.718578+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "15": {
       "document_sha256": "99b8253de2d54323b48c1dc8edb663bb6105930c24bb15e8f70800aec2a49cf1",
-      "source_digest": "703b72eadb3c0a533a2a72e66e1d881eb45ab92b057913da27ee79962cb7b78f",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.382043+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "7b66f6de0895b01b58a9e52fd9b1cdc52d693faec6cab6aee38393fec6350bd6",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.720607+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "16": {
       "document_sha256": "ff89cdb2a5ee70c3f830162c8e3c8a287291c89fddd7c850ac5b6048d9217f98",
-      "source_digest": "23b6a0480a5139a26e0a7500503bb6df550bf217d66bbb4e43823baf6a07836c",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.383384+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "cd862b81055850dae5fce308a40e8f8660485d51a9d09f7844f141b7a368abf3",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.722633+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "17": {
       "document_sha256": "dde1a8a05a26c612255f5858d272019e11cb7caf4542aa017b626ecea968713d",
-      "source_digest": "f4ff1be727a83d512fc0aabb452316203e19a137c05278657baab9cb00891d35",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.384973+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "6ab246d3fd444c49a45d52002e6074dde8e7488e82df530a06668f5de3ee8448",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.724439+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "18": {
       "document_sha256": "f41494e3a28b54cd191916f9ee985f795849e6bf67d69c8dffebd7d081d1187d",
-      "source_digest": "8a26ae0abbdf6012b212c73a198d14e7210e5b15dde45e88a850fd3351bbe505",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.386676+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "0577e244c40f1ae23fcc47667b12e2e589d1d218eaf5ca1ed6de1fa6a900dcd0",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.726270+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "b33325c4d7cd375c032b96bb3a6e87a23998e6c6c9119548232ee73e374ae029",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.388161+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "c853c9f4679fdaee4c41a4aa0a2c61c3ce71e582902b0b2a5a3a04368ef856b6",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.728421+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "20": {
       "document_sha256": "b226906886050078abf5ba14f9a0735c9e5ac02444ee1b0ebe11517333cf3d18",
-      "source_digest": "8a26ae0abbdf6012b212c73a198d14e7210e5b15dde45e88a850fd3351bbe505",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.389776+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "0577e244c40f1ae23fcc47667b12e2e589d1d218eaf5ca1ed6de1fa6a900dcd0",
+      "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.730400+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     }
   }
 }
