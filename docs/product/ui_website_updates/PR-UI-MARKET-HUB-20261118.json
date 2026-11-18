@@ -3,7 +3,7 @@
   "source_pr": "",
   "source_branch": "claude/ui-market-hub-merge-20261118",
   "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8",
-  "summary": "Owner-approved (2026-11-18, item 2) UI commit da0ea20 from claude/friendly-bardeen-r6xe8f merged with main 7c33955: Markets main screen and category main screens (market hub), the rail keeps only the nine market categories, indicator conclusions for 27 indicators (rising/falling readings, current reading, evidence level and sources) in the detail card, indicator guide and report, a steady indicator list while live updates arrive, and PNG/HTML drafts of the other seven pages as documents only. The later seven-page application commits on the UI branch (up to 7902381) are not included.",
+  "summary": "Owner-approved (2026-11-18, item 2) UI commit da0ea20 from claude/friendly-bardeen-r6xe8f merged with main 7c33955: Markets main screen and category main screens (market hub), the rail keeps only the nine market categories, indicator conclusions for 27 indicators (rising/falling readings, current reading, evidence level and sources) in the detail card, indicator guide and report, a steady indicator list while live updates arrive, and PNG/HTML drafts of the other seven pages as documents only. No commit after da0ea20 on the UI branch is included (at review time da0ea20..bbd253b, 28 commits: the seven-page application up to 7902381 and the PySide6 readiness commits a7e390d and bbd253b); those commits are not part of the owner's approval and need a new one.",
   "changed_files": [
     ".github/workflows/runtime-smoke.yml",
     "core/education/catalog.py",
@@ -53,7 +53,7 @@
     "tests/indicator_outlook_acceptance.py"
   ],
   "verification": {
-    "local_ui": "Linux offscreen, Python 3.13.17, PyQt6 6.12.0, merge commit on the source branch: desktop_market_hub 9, indicator_outlook 9, desktop_indicator_scroll 3, desktop_home_markets_shell 15, desktop_home_markets_markets 47, indicator_signal_context 7, run_registry_recorder 47, run_registry_outage 27 (164 tests OK, no skips); desktop_stock_detail 34 tests OK. Compliance --check: consistency PASS, publication BLOCKED.",
+    "local_ui": "Linux offscreen, Python 3.13.17, PyQt6 6.12.0, merge commit on the source branch: desktop_market_hub 9, indicator_outlook 9, desktop_indicator_scroll 3, desktop_home_markets_shell 15, desktop_home_markets_markets 47, indicator_signal_context 7, run_registry_recorder 47, run_registry_outage 27 (164 tests OK, no skips); desktop_stock_detail 34 tests OK. Compliance --check: consistency PASS, publication BLOCKED. After review, a test-only follow-up blocks Home's index history loader (core.ficc.data.load_series) in desktop_market_hub, whose automatic-loading test had made a live Yahoo request for ^KS11; desktop_market_hub re-run: 9 tests OK, no live request; compliance document 12 refreshed, --check consistency PASS.",
     "regression_test": "Rail tests now expect no submenu under a Markets category and a category main screen instead (owner 2026-11-17 rule replacing the 2026-11-13 country submenu); new market hub, indicator outlook and indicator scroll tests are added to runtime-smoke.yml.",
     "limitations": "Offline fixtures only; owner Windows screens, live quote latency, installed-wheel smoke and screen readers not checked. Indicator conclusions need a legal review of the investment-advice boundary before publication; publication stays BLOCKED.",
     "remote": "no PR opened yet; hosted CI not run"

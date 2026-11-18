@@ -11,7 +11,8 @@ it directly from the rail and from its card; card chips (destinations, rankings)
 screens preview each market's top lists from the market page's own loader and share that cache with it, never loading
 with automatic loading off until 불러오기; a preview name opens its stock screen; Back; the rail highlight; language and
 theme switches re-render without fetching; closing stops the jobs.
-Offline: HTTP and Yahoo fail the test; the ranking loader is a fake; the index strip's series loader fails the test.
+Offline: HTTP and Yahoo fail the test; the ranking loader is a fake; the index strip's series loader fails the test;
+Home's index history loader (core.ficc.data.load_series) is blocked, and with automatic loading off it is never called.
 """
 import os
 import time
@@ -45,6 +46,10 @@ class MarketHubTests(unittest.TestCase):
         series = patch("quantgen_desktop.market_summary.production_series",
                        side_effect=AssertionError("Index series forbidden"))
         series.start(); self.addCleanup(series.stop)
+        # Home's own index chart loads through core.ficc.data.load_series (yfinance), outside the patches
+        # above; keep it offline. load_market_history turns the error into a failure state.
+        home = patch("core.ficc.data.load_series", side_effect=AssertionError("Home series forbidden"))
+        self.home_series = home.start(); self.addCleanup(home.stop)
 
     def window(self, *, auto=False):
         provider = Mock(side_effect=AssertionError("Provider forbidden"))
@@ -203,6 +208,7 @@ class MarketHubTests(unittest.TestCase):
         self.assertEqual(len(opened), 1)
         self.assertEqual(opened[0].asset, "domestic_stock")
         self.assertEqual(w.markets_view.current_market(), "kr")
+        self.assertFalse(self.home_series.called)               # automatic loading off: Home loads nothing either
 
     def test_previews_load_by_themselves_with_automatic_loading_on(self):
         w = self.window(auto=True)

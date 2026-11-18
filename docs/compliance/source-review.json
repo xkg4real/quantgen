@@ -536,7 +536,7 @@
     "tests/desktop_market_chart_acceptance.py": "f6cc71f30269e34e3fb137134e49268e9a30d7d46a623b1c020c2516b8e2bfef",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_market_first_paint_acceptance.py": "b2fc5d138f12ea6e1b72c598aa96cca2551260b2432cb245727cbd070d99e5fa",
-    "tests/desktop_market_hub_acceptance.py": "5132e631c8668794a04f82be1644124a788f15facc0c6cc70b6515bd2e992d78",
+    "tests/desktop_market_hub_acceptance.py": "4c065a656b41008ce6e9a57008044deede8c826ef01333d8a3f62a44b889b14f",
     "tests/desktop_market_layout_acceptance.py": "055ea42223fa7241f7b3ae1019e9e33df45820376c7e8d2b534337107e2efbbb",
     "tests/desktop_market_tabs_acceptance.py": "c470560cb245be8130c00d8ac67dc34653e594ca0bd3d74e2abf6d2a42a63a4c",
     "tests/desktop_markets_watchlist_acceptance.py": "1603ccaaf3c1f6d99ccddba8114786d7774386de6ecbfb38908e2cfda0e5d515",
@@ -857,11 +857,11 @@
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "1cc0c8cf82bf1b853386e791caec55a039d08a5074422031edcbd0a1849153bd",
-      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
-      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
-      "reviewed_at": "2026-11-18T05:24:53.853390+00:00",
-      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
+      "source_digest": "f930df31a72c084127bcb4c505a722054d226128b03494702edfc4f0e0490d20",
+      "reviewed_by": "Claude main session review follow-up (UI market hub merge branch, test-only)",
+      "review_note": "Test-only change after review: tests/desktop_market_hub_acceptance.py now blocks Home's index history loader (core.ficc.data.load_series) so the auto-loading market hub test makes no live Yahoo request, as its docstring and the PR record say; 12-claims.md and FACTS.md are unchanged, no product, provider, host, transfer, order or claim change, and publication stays BLOCKED.",
+      "reviewed_at": "2026-11-18T06:32:09.731419+00:00",
+      "source_commit": "fc204011d489a4e05db4afecf1451dbf560be9c4"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
