@@ -999,6 +999,7 @@ class ResearchWindow(QMainWindow):
             # Until a stock screen adopts it the shared chart has no parent; parked here it is deleted with the
             # window instead of outliving it (PySide6 checklist item 10).
             self.market_chart.setParent(self.markets_view)
+            self.market_chart.hide()   # in no layout: explicitly hidden until StockDetailView.adopt_chart shows it
         from .tools import CurrentPageStack
         self.markets_content=CurrentPageStack()
         self.markets_content.addWidget(self.markets_view)
