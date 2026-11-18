@@ -300,7 +300,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "e57b577d3c5153ce4498c0d1d0742e83ff3e88467ef1eed17e43638efbbb38b0",
+    "docs/compliance/FACTS.md": "40f784a30f275182be77c5a355592605bed196a2c783759b46a08f217f711a44",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -408,7 +408,7 @@
     "quantgen_desktop/choice_cards.py": "962d0c83300634e9d7827282906d8c856c0f028ac1618bada2a3ef48b2959de4",
     "quantgen_desktop/commentary.py": "37622d653f98917ce52d1d1646d36685fa9fe9de1440143dd9d6fecaf0d08399",
     "quantgen_desktop/company_identity.py": "5267d47f4aeff0395a483dc084eef7934bf4625bafbc86aa8ce6a5e2a7578891",
-    "quantgen_desktop/connections.py": "600f73b1ac0f648c529d6a3bb47684df79bfa7b02c78d2904b0e287eaabb5808",
+    "quantgen_desktop/connections.py": "b27136ed41a4e22862e031de8e08a2cd0117c9b1ef73d12b66b1b26132adbbe9",
     "quantgen_desktop/data_rights.py": "c251c7b622c62ed7b796caa04dec0408b34038ab46ccb2fd89b1d152d9b0d4e3",
     "quantgen_desktop/display_prose_catalog.py": "85cd9be4469c96b83a71aa0ac3c0dad0b04cbbf35649da8beb7cef12c9eb7708",
     "quantgen_desktop/font_policy.py": "bfb3b98d70e70fb849ea86cd3088dff5bd7f26647dab55af87d39633549142c2",
@@ -449,7 +449,7 @@
     "quantgen_desktop/owner_ui_language/strategy.py": "a6a0d517185ef4a143baefaf6fffadf7902d3dc85b1655aa27da5b1183fc0b15",
     "quantgen_desktop/page_kit.py": "2af99df7f813b65795d7d4f15d2989f870ac60df24d6634d9de0538b85e2a96e",
     "quantgen_desktop/paper.py": "072c4b12f26cfd8401c3dba65fc4e62eeddc82dd31ca4c42af2081a67782a89d",
-    "quantgen_desktop/portfolio.py": "71fa247dfc7b6172f4ed4b5149d98c18a27ebaab27de174fb7cfde6d13ce01d4",
+    "quantgen_desktop/portfolio.py": "55d0bcf3a9887e154a342ed477bf2ca1914a4d747a713927f14c79b6ab7683c2",
     "quantgen_desktop/qscore.py": "a495a5412195c98eddc5c3cca4ae0a7665e284a9803aceaa82e9dd46b881842f",
     "quantgen_desktop/qt_compat.py": "80eaadf8c7a328c259c9873ccf6479463c3afe5f794126a4ed640742cba27bb4",
     "quantgen_desktop/rail_menu.py": "6297a0ad05dd2a32a25ce455dc3b59de9becd2a47c36eb812c5ea6070c9f6cc2",
@@ -462,13 +462,13 @@
     "quantgen_desktop/research_style.py": "6643e678b1fa8193fe39fc081ea19721b66b19ebd56a0e7705d526a4a3e59bb0",
     "quantgen_desktop/result_layout.py": "078bc46d781853cd871d691160fa030be9c5f46b50f207c229085343f37e84c6",
     "quantgen_desktop/risk_display.py": "3b923adebc9629da78b8ef278c22044119f40d10387a954cd1e9c839721a2c87",
-    "quantgen_desktop/risk_page.py": "633e289473bd8f6471b90ff2614fd1ca6628efc3fb4b0ae5d6c3d3a9b6b7b337",
+    "quantgen_desktop/risk_page.py": "17a87f00b40245325b33f4e506040c9039c8da1b9052c07c9b49cd155d0ff9bd",
     "quantgen_desktop/risk_reward.py": "dc394242cc1f6c4feda8e7bce20552c0fb0194aa387939be39ad2052c928d646",
     "quantgen_desktop/shell_rail.py": "bec9949723bf9170b3093ba4d751f28bf1d01b48d5502e49b41cb906fc0bb2a3",
     "quantgen_desktop/signals.py": "6e82099c4857046487d3878761083d89819ea28705dd817bc2391f1ed713678e",
     "quantgen_desktop/source_notes.py": "05820a66919f8840aeacf81dfcf96bacd8fa75ecd355f64a1090c2d9ec59a14e",
     "quantgen_desktop/status_language.py": "e23a11eb835b155bfc88685ea0f521e664b8b7fc080ce3f600042b1002427386",
-    "quantgen_desktop/stock_detail.py": "a627bc32f3f27dc0a7fb366cd2ef9904b8c35ad95b73fcfb33151c3bb2e2d12c",
+    "quantgen_desktop/stock_detail.py": "c754d93b7a070691e6ba43d771ddb5c6ce653f2a783f1f45657ed0bfa14bd449",
     "quantgen_desktop/stock_detail_side.py": "242d3ea7b86334855009f9a125aa3a3a734453c55f9bd17c023fe7a113a2eb98",
     "quantgen_desktop/stock_detail_style.py": "e94d68f0727d2afb3604bec68872479dc122e24941ec5b2098986eb26a9f27e9",
     "quantgen_desktop/stock_qscore.py": "f1cd095e271e06ab23e460982a76d26ef484e9ef52ec319bb8fc4ddf628b4371",
@@ -480,7 +480,7 @@
     "quantgen_desktop/tools.py": "efe9a6f75982a46daa96960db2004962303cf5af2ca87697abc4d24458c0938c",
     "quantgen_desktop/translations.py": "2b94a001ff0d925a570ce1efff3d73f8a08e1de212343f23973e6ba753e6f943",
     "quantgen_desktop/typography.py": "2964765c17d5cafdf6dfe8e7158204b104525d699cb3e13c52e92449bdafe348",
-    "quantgen_desktop/watchlist.py": "5e28734d3c7c28b349d7a7f5b3da7efe740d09adcf99bad61dcde701a7d6000b",
+    "quantgen_desktop/watchlist.py": "00fe7d042de9987824c22fbc23fb77f6af166261b223fb70e54822232bf1c2fc",
     "quantgen_desktop/watchlist_live.py": "6d7b9dca2f18adf8a7b01a09ca395a6b776835f82d863669d00f90d426994597",
     "quantgen_desktop/wheel_guard.py": "44bfee9b20b358b794cfebdd71f0760b28b99bcd39a45cc36fa450a8d2ce68f6",
     "quantgen_desktop/windows_branding.py": "f6de000c8f8fff07b1db63028dc59cf16a40602a36bb216d7a6b41162a5b1c41",
@@ -770,163 +770,163 @@
   "reviews": {
     "1": {
       "document_sha256": "546a396893b50ef5d8e95c18be4103f5a2302253d397429859957bd1540724cf",
-      "source_digest": "aa519ae46c43ed0c26b670e2b297e9a741eaa81fa585b2537644a4d41d49da55",
+      "source_digest": "bcc2694ca7cdd0e0741fd79f02fddc5da6c85177d15f963b52b7bc20f1edfd1a",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.751270+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.560158+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "2": {
       "document_sha256": "1c7eb9b60585b1fd4d1a23723051454e768b6ea6b31b9e58bd8122ac73cdd5e1",
-      "source_digest": "aa519ae46c43ed0c26b670e2b297e9a741eaa81fa585b2537644a4d41d49da55",
+      "source_digest": "bcc2694ca7cdd0e0741fd79f02fddc5da6c85177d15f963b52b7bc20f1edfd1a",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.753086+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.563271+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "3": {
       "document_sha256": "50fcceb8fb66b30a535ff6015a66ff5e5cee801b61433cc3aa99acd3673c4393",
-      "source_digest": "08fda16d9db3c516957e5e16404cbfc8bc68f62610ad00b406de7e5bc2d0bc05",
+      "source_digest": "dccc2ff1f708025eedf68bd3a6d0f49b83b7eae1d93676c4cb295f5f3fbe6887",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.754645+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.566391+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "4": {
       "document_sha256": "4a2528a8c62c60983069941ff506c41c6b251ff1f402ef6cf7723e9901bb7a91",
-      "source_digest": "45d712eb5e542e5aa364b1edab9c17712da6f900f154f188750409bf16158a16",
+      "source_digest": "00e7275cf3cc1f6b6d3271f74520fc4b2a7c3e7bde6c636e0cbe670ad09f357a",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.755985+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.569217+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "5": {
       "document_sha256": "54164c56f4c3999b8ed65115e411151dca9dd6a46fea7bc57d0a750774d7b555",
-      "source_digest": "14bbdacc4b54385b4a8d9cae0ee6ff40858f3fedc2a9ef90483914c99582b6f8",
+      "source_digest": "7c6f4b6522c69d35b800307814ee6103444d49d011f50a9797c3e874aa2b8332",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.757267+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.571698+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "6": {
       "document_sha256": "5871443de50226c2680aa2c41059c06b4d1290f28f1c859d5ed979fd17a2918e",
-      "source_digest": "3dff518087045c613467eb7bdd622f1902eeb5db9dccfcd8390c98517b9841a9",
+      "source_digest": "aef2bdef32ec408131322fa9eb464fac70409f85d24f3862e0f4ad3985c58703",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.758520+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.574228+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "7": {
       "document_sha256": "437529f84b2cf492d8e04e5e0190c1cd1f15ea06a17ca4da24bbacc070d77ba1",
-      "source_digest": "aa519ae46c43ed0c26b670e2b297e9a741eaa81fa585b2537644a4d41d49da55",
+      "source_digest": "bcc2694ca7cdd0e0741fd79f02fddc5da6c85177d15f963b52b7bc20f1edfd1a",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.759715+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.576350+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "8": {
       "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
-      "source_digest": "3dff518087045c613467eb7bdd622f1902eeb5db9dccfcd8390c98517b9841a9",
+      "source_digest": "aef2bdef32ec408131322fa9eb464fac70409f85d24f3862e0f4ad3985c58703",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.760845+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.579261+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "683a3ab6cb70cccf797f5eeecf1caf79dd4e26d65df089965467d7df33c22aa2",
+      "source_digest": "c5a857c4a7f9b0e0e0407e3a60996531a58a0fde598a8a83ba190d2e79d83c18",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.762013+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.581595+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "10": {
       "document_sha256": "ce304488b177e5fa81046782034d9a3c23a411ca3cef859d46b7df13ba0c5f5f",
-      "source_digest": "4cf98b841da378db2538eedc008a7ceb5b795937c53429120572c9f46e499b9a",
+      "source_digest": "633ca4f5848458c8dda026204b3cef34475d9a13fc1517e7457678e2f6458ffd",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.763205+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.583614+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "11": {
       "document_sha256": "11a071fe459f3d6f622ec4ee4480200c3e7ed131153e00bd6823e552e43a7004",
-      "source_digest": "6542f146904b09affbe25109b08de4ba7a9562c531610302aed7a567f9b11df2",
+      "source_digest": "854087f5163bc04bcd81139f534d89433d76bd70a30b899461c49719b214bdfe",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.764447+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.586199+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "12": {
       "document_sha256": "18af1551af29075d92583d7bc84a780f3719662115a7b26e4aeb9efd760d1afc",
-      "source_digest": "4d0f732b8adf4cd78080e21dc92f543e7a8f902a589b0bfbc956cb2b8f1884cc",
+      "source_digest": "c4acf1d50307395a3f6bcab3b9fd1878cbdc4b5e061c2187056e1cf7bb1f5976",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.765677+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.588882+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "683a3ab6cb70cccf797f5eeecf1caf79dd4e26d65df089965467d7df33c22aa2",
+      "source_digest": "c5a857c4a7f9b0e0e0407e3a60996531a58a0fde598a8a83ba190d2e79d83c18",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.766863+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.591224+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "683a3ab6cb70cccf797f5eeecf1caf79dd4e26d65df089965467d7df33c22aa2",
+      "source_digest": "c5a857c4a7f9b0e0e0407e3a60996531a58a0fde598a8a83ba190d2e79d83c18",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.768004+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.593032+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "15": {
       "document_sha256": "99b8253de2d54323b48c1dc8edb663bb6105930c24bb15e8f70800aec2a49cf1",
-      "source_digest": "683a3ab6cb70cccf797f5eeecf1caf79dd4e26d65df089965467d7df33c22aa2",
+      "source_digest": "c5a857c4a7f9b0e0e0407e3a60996531a58a0fde598a8a83ba190d2e79d83c18",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.769192+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.595840+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "16": {
       "document_sha256": "ff89cdb2a5ee70c3f830162c8e3c8a287291c89fddd7c850ac5b6048d9217f98",
-      "source_digest": "df9d454f060dfdc67a5af46959eff0caf68c53647c1cdaf4cabe2f35df201599",
+      "source_digest": "e739b70f7e9c1f076b55f825db60bc5fb8cb3ba06c6b3b7b24fea7393b184f8b",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.770381+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.598093+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "17": {
       "document_sha256": "dde1a8a05a26c612255f5858d272019e11cb7caf4542aa017b626ecea968713d",
-      "source_digest": "3dff518087045c613467eb7bdd622f1902eeb5db9dccfcd8390c98517b9841a9",
+      "source_digest": "aef2bdef32ec408131322fa9eb464fac70409f85d24f3862e0f4ad3985c58703",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.771554+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.599829+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "18": {
       "document_sha256": "f41494e3a28b54cd191916f9ee985f795849e6bf67d69c8dffebd7d081d1187d",
-      "source_digest": "aa519ae46c43ed0c26b670e2b297e9a741eaa81fa585b2537644a4d41d49da55",
+      "source_digest": "bcc2694ca7cdd0e0741fd79f02fddc5da6c85177d15f963b52b7bc20f1edfd1a",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.772740+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.602548+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "25218ec434779196dbca8575078db4426425697aa44f5ab631258fc89c20d420",
+      "source_digest": "3be8d679e36a06d3d1bff0cf54fceeeb66a1cda9ffc982a69ed68df23935abc9",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.773927+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.604845+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     },
     "20": {
       "document_sha256": "0bb26298409489acde50b160abaa10068a84cc0e5b756041665f5277435b19eb",
-      "source_digest": "aa519ae46c43ed0c26b670e2b297e9a741eaa81fa585b2537644a4d41d49da55",
+      "source_digest": "bcc2694ca7cdd0e0741fd79f02fddc5da6c85177d15f963b52b7bc20f1edfd1a",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-18 PySide6-readiness changes (deferred calls, event filters, widget lifetime, combo data) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T06:46:33.775050+00:00",
-      "source_commit": "bbd253b7eb6eac3abd4e3c327d35d241592a15bc"
+      "review_note": "Reviewed the 2026-11-18 PySide6-readiness items 9 and 14 (delegates kept, System focus order from each part's widgets) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-18T16:21:23.606627+00:00",
+      "source_commit": "2908e76356e4d310aae59f80b1371beed20c5b2c"
     }
   }
 }
