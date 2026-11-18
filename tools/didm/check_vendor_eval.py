@@ -2,14 +2,16 @@
 
 The owner's Excel (``ravenpack_alt.xlsx``) has two O/X/? rows over 19 information
 types (columns F..X): "RAVENPACK 등" and "대안책". The evaluation document must
-copy both rows unchanged and its per-alternative matrix must agree with them:
+copy both rows unchanged. A third column holds the owner's confirmed value
+("=" = same as the Excel; owner answers of 2026-11-18 changed N, O, W). The
+per-alternative matrix must agree with the confirmed value:
 
 * Excel O  -> at least one alternative is O
 * Excel X  -> no alternative is O or ?
 * Excel ?  -> no alternative is O, at least one is ?
 
 Every per-alternative cell is ``<O|X|?>·<source code>`` and every ``?`` names one
-handling method. Network-free; run with no arguments to check only the document,
+handling method (including "처리 안 함 (소유자 답 2)", the owner's answer of 2026-11-18). Network-free; run with no arguments to check only the document,
 or with ``--excel <path to OWNER_EXCEL_RAVENPACK_ALTERNATIVES.txt>`` to also
 compare against the Excel text copy (kept on the handoff branch, not in main).
 """
@@ -25,7 +27,8 @@ ALTERNATIVES = [
     "CME", "FRED", "Polymarket", "Trad. Econ", "GDELT",
     "Alpha Vantage", "Tiingo", "Cryptopanic", "자체 NLP",
 ]
-METHODS = ("무료 키 1회 호출로 확인", "공급사 문의", "공급사 무응답")
+METHODS = ("무료 키 1회 호출로 확인", "공급사 문의", "공급사 무응답", "처리 안 함 (소유자 답 2)")
+CONFIRMED_VALUES = ("=", "O", "X", "?")
 # Excel values as published in OWNER_EXCEL_RAVENPACK_ALTERNATIVES.txt (2026-11-17).
 EXCEL_RAVENPACK = "O O O O O O O O O O O X X X X X X ? ?".split()
 EXCEL_ALTERNATIVES = "O O O O O O O O X ? X O O O O O O X O".split()
@@ -59,11 +62,11 @@ def parse_matrix(doc: str) -> list[dict]:
         cells = [c.strip() for c in line.strip().strip("|").split("|")]
         if not cells or cells[0] not in COLUMNS:
             continue
-        if len(cells) != 5 + len(ALTERNATIVES):
+        if len(cells) != 6 + len(ALTERNATIVES):
             raise ValueError(f"column {cells[0]}: {len(cells)} cells")
         rows.append({
-            "col": cells[0], "rp": cells[2], "alt": cells[3],
-            "cells": dict(zip(ALTERNATIVES, cells[4:13])), "handling": cells[13],
+            "col": cells[0], "rp": cells[2], "alt": cells[3], "confirmed": cells[4],
+            "cells": dict(zip(ALTERNATIVES, cells[5:14])), "handling": cells[14],
         })
     return rows
 
@@ -86,6 +89,10 @@ def check(doc: str, excel_text: str | None = None) -> list[str]:
             problems.append(f"{col}: RAVENPACK 등 changed {rp} -> {row['rp']}")
         if row["alt"] != alt:
             problems.append(f"{col}: 대안책 changed {alt} -> {row['alt']}")
+        if row["confirmed"] not in CONFIRMED_VALUES:
+            problems.append(f"{col}: bad confirmed value {row['confirmed']!r}")
+            continue
+        effective = alt if row["confirmed"] == "=" else row["confirmed"]
         values = []
         for name, cell in row["cells"].items():
             m = CELL.match(cell)
@@ -100,12 +107,12 @@ def check(doc: str, excel_text: str | None = None) -> list[str]:
                 problems.append(f"{col}: handling {part!r} names no allowed method")
         if row["rp"] == "?" and "RAVENPACK 등: " not in row["handling"]:
             problems.append(f"{col}: RAVENPACK 등 '?' without handling")
-        if alt == "O" and "O" not in values:
-            problems.append(f"{col}: Excel O but no alternative is O")
-        if alt == "X" and ("O" in values or "?" in values):
-            problems.append(f"{col}: Excel X but an alternative is O or ?")
-        if alt == "?" and ("O" in values or "?" not in values):
-            problems.append(f"{col}: Excel ? needs no O and at least one ?")
+        if effective == "O" and "O" not in values:
+            problems.append(f"{col}: confirmed O but no alternative is O")
+        if effective == "X" and ("O" in values or "?" in values):
+            problems.append(f"{col}: confirmed X but an alternative is O or ?")
+        if effective == "?" and ("O" in values or "?" not in values):
+            problems.append(f"{col}: confirmed ? needs no O and at least one ?")
     return problems
 
 
@@ -122,6 +129,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"columns {len(rows)}, alternative cells {cells}, '?' cells {unknown}, "
           f"excel compared: {'yes' if excel else 'no (built-in copy)'}")
     print(f"excel cells changed: {sum(1 for p in problems if 'changed' in p)}")
+    overridden = [r["col"] for r in rows if r["confirmed"] != "="]
+    print(f"owner-confirmed columns differing from the Excel: {', '.join(overridden) or 'none'}")
     for p in problems:
         print("PROBLEM", p)
     print("OK" if not problems else f"FAIL ({len(problems)})")

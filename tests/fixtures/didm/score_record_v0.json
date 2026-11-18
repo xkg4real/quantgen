@@ -7,7 +7,7 @@
   "received_at": "2026-11-05T19:15:00Z",
   "relevance_0_100": 90.0,
   "ess_like_0_100": 20.0,
-  "novelty_24h_0_100": 100.0,
+  "novelty_0_100": 100.0,
   "origin_cluster_id": "cl-20261105-0001",
   "event_type": "monetary_policy",
   "direction_probs": [0.1, 0.7, 0.2],

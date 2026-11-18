@@ -18,9 +18,9 @@
 | `received_at` | ISO 8601 + 시간대 | **필수.** 우리가 받은 시각. 검증 기준 |
 | `relevance_0_100` | 0~100 | 대상이 기사 주제일 확률 ×100. 신호 문턱은 사전등록 (75) |
 | `ess_like_0_100` | 0~100, 50 중립 | **= 50 + 50·(P(+1) − P(−1))**. 다르면 거부 |
-| `novelty_24h_0_100` | 0~100 | 24시간 묶음의 첫 기사 100, k번째 100·δ^(k−1) (`novelty_24h()`) |
+| `novelty_0_100` | 0~100 | 100 × P̂(새 사건 \| 설명변수), 사전등록 4.1절 신규성 모형 (`core/didm/novelty.py`). 0.75 이상 = 새 사건. 옛 묶음 할인 (`cluster_decay()`)은 설명변수 하나 |
 | `origin_cluster_id` | 식별자 | 같은 원문 재게재 묶음 (DIDM 5.3) |
-| `event_type` | 고정 열거형 12 + `none` | 사전등록 2절. 모르는 값은 거부 |
+| `event_type` | 고정 열거형 14 + `none` (소유자 답 P1) | 사전등록 2절. 모르는 값은 거부 |
 | `direction_probs` | [P(+1), P(−1), P(0)] | 각 0~1, 합 1 (오차 1e−6) |
 | `uncertainty_entropy` | 실수 (nats) | **= direction_probs의 엔트로피**. 다르면 거부 |
 | `p_credibility` | 0~1 | DIDM 5.3 신뢰 상태 π |
@@ -47,7 +47,7 @@ DIDM 10.2의 나머지 필드 (`f_vector`, `causal_path`, `layer_attribution`, `
 | `received_at` | 자체 계산 (수신 시각). Tiingo `crawlDate`는 보조 | 해당 없음 (공급사 시각만) | Stage 3 뒤 |
 | `relevance_0_100` | Alpha Vantage `relevance_score` (0~1, 있으면, O열 ? → DS-4b 확인) ×100 보조 + 자체 계산 | `RELEVANCE` (0~100) | Stage 3 뒤 |
 | `ess_like_0_100` | 자체 계산 (FinBERT/LLM 확률). 보조: Alpha Vantage 감성 (−1~1 → 50 + 50·x), GDELT 논조 (50 + tone/2), Cryptopanic 투표 (G·X열) | `EVENT_SENTIMENT_SCORE` (ESS, 0~100, 50 중립) | Stage 3 뒤 |
-| `novelty_24h_0_100` | 자체 계산 (N열: 대안 없음) | `EVENT_SIMILARITY_DAYS`, `EVENT_SIMILARITY_KEY` (옛 판 ENS) | Stage 3 뒤 |
+| `novelty_0_100` | 자체 계산 (N열: 엑셀은 대안 없음 X, 소유자 확정 O = 자체 NLP 직접 구현; 사전등록 4.1절 모형) | `EVENT_SIMILARITY_DAYS`, `EVENT_SIMILARITY_KEY` (옛 판 ENS) | Stage 3 뒤 |
 | `origin_cluster_id` | 자체 계산 (근접 중복 묶음) | `EVENT_SIMILARITY_KEY` | Stage 3 뒤 |
 | `event_type` | 자체 계산 (I열 자체 NLP). 보조: GDELT CAMEO 사건 코드, Alpha Vantage `topics` | `TOPIC`, `GROUP`, `TYPE`, `CATEGORY` (이름만; 분류표 복사 안 함) | Stage 3 뒤 |
 | `direction_probs` | 자체 계산 | 해당 없음 | Stage 3 뒤 |
@@ -86,4 +86,4 @@ Loughran–McDonald 사전, FinBERT, Alpha Vantage 감성 (과거 값이 당시 
 python -m unittest tests.didm_schema_acceptance
 ```
 
-2026-11-17: 23개 통과 (네트워크 없음). 거부 확인: 범위 밖 점수 (관련성 100.5·−1, 신규성 101, 신뢰 1.2), `received_at` 없음·null·시간대 없음, 모르는 `event_type`·`market_confirmation`·필드, ESS·엔트로피 불일치, 확률 합 ≠ 1, 잘못된 해시, 숫자 대신 불리언.
+2026-11-18: 23개 통과 (네트워크 없음; 14개 유형 확인 포함). 신규성 모형은 `tests/didm_novelty_acceptance.py` 6개. 거부 확인: 범위 밖 점수 (관련성 100.5·−1, 신규성 101, 신뢰 1.2), `received_at` 없음·null·시간대 없음, 모르는 `event_type`·`market_confirmation`·필드, ESS·엔트로피 불일치, 확률 합 ≠ 1, 잘못된 해시, 숫자 대신 불리언.

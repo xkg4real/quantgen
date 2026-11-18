@@ -44,7 +44,7 @@ class ScoreRecordRejects(unittest.TestCase):
 
     def test_score_out_of_range(self):
         for field, value in (("relevance_0_100", 100.5), ("relevance_0_100", -1),
-                             ("novelty_24h_0_100", 101), ("p_credibility", 1.2)):
+                             ("novelty_0_100", 101), ("p_credibility", 1.2)):
             raw = good()
             raw[field] = value
             self.assertRejects(raw, field)
@@ -119,16 +119,16 @@ class Helpers(unittest.TestCase):
             s.ess_like(0.7, 0.7)
 
     def test_novelty(self):
-        self.assertEqual(s.novelty_24h(1, 0.5), 100.0)
-        self.assertEqual(s.novelty_24h(3, 0.5), 25.0)
+        self.assertEqual(s.cluster_decay(1, 0.5), 100.0)
+        self.assertEqual(s.cluster_decay(3, 0.5), 25.0)
         with self.assertRaises(s.SchemaError):
-            s.novelty_24h(0, 0.5)
+            s.cluster_decay(0, 0.5)
         with self.assertRaises(s.SchemaError):
-            s.novelty_24h(1, 1.0)
+            s.cluster_decay(1, 1.0)
 
     def test_enum_size_v0(self):
-        # DIDM 5.1: K <= 12 typed events in V0, plus "none".
-        self.assertEqual(len([e for e in s.EventType if e is not s.EventType.NONE]), 12)
+        # Owner decision P1 (2026-11-18): the 14-type starting list, plus "none".
+        self.assertEqual(len([e for e in s.EventType if e is not s.EventType.NONE]), 14)
 
 
 class GoldLabelFormat(unittest.TestCase):

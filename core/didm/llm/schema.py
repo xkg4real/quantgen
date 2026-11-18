@@ -25,22 +25,26 @@ class SchemaError(ValueError):
 
 
 class EventType(str, Enum):
-    """Fixed event-type enum, V0 proposal (K = 12, DIDM 5.1 "K <= 12 in V0").
+    """Fixed event-type enum, V0 (K = 14 + none; owner decision P1, 2026-11-18).
 
-    docs/didm/PREREG_V0.md section 2 lists the 14-type starting list and the two
-    merges that give 12. Changing this enum is a new schema version.
+    The 14 types refine the earlier 12-type proposal (two merged pairs split back:
+    trade/tariffs vs supply chain, M&A vs management), so every 12-type label maps
+    onto the 14. DIDM 5.1 says K <= 12 in V0; the owner chose 14 (PREREG_V0 2).
+    Changing this enum is a new schema version.
     """
     MONETARY_POLICY = "monetary_policy"          # 통화정책
     INFLATION = "inflation"                      # 물가
     EMPLOYMENT = "employment"                    # 고용
     GROWTH = "growth"                            # 성장
     FISCAL = "fiscal"                            # 재정
-    TRADE_SUPPLY_CHAIN = "trade_supply_chain"    # 무역·관세 + 공급망
+    TRADE_TARIFFS = "trade_tariffs"              # 무역·관세
     GEOPOLITICS = "geopolitics"                  # 전쟁·지정학
     ELECTION_POLICY = "election_policy"          # 선거·정책
     EARNINGS = "earnings"                        # 실적
-    CORPORATE_CONTROL = "corporate_control"      # 인수합병 + 경영진
+    MERGERS_ACQUISITIONS = "mergers_acquisitions"  # 인수합병
+    MANAGEMENT = "management"                    # 경영진
     REGULATION_LITIGATION = "regulation_litigation"  # 규제·소송
+    SUPPLY_CHAIN = "supply_chain"                # 공급망
     CRYPTO_REGULATION_HACK = "crypto_regulation_hack"  # 암호화폐 규제·해킹
     NONE = "none"                                # 해당 없음 (신호로 쓰지 않음)
 
@@ -71,8 +75,12 @@ def ess_like(p_positive: float, p_negative: float) -> float:
     return 50.0 + 50.0 * (p_positive - p_negative)
 
 
-def novelty_24h(rank_in_cluster: int, delta: float) -> float:
-    """Novelty 0..100: first article of a 24h cluster = 100, k-th = 100 * delta**(k-1)."""
+def cluster_decay(rank_in_cluster: int, delta: float) -> float:
+    """Rank-in-cluster decay 0..100 (first = 100, k-th = 100 * delta**(k-1)).
+
+    Since owner decision P2 (2026-11-18) this is one *feature* of the novelty model
+    (core/didm/novelty.py), not the novelty score itself.
+    """
     if isinstance(rank_in_cluster, bool) or not isinstance(rank_in_cluster, int) or rank_in_cluster < 1:
         raise SchemaError("rank_in_cluster must be an integer >= 1")
     if not (0.0 < delta < 1.0):
@@ -102,7 +110,7 @@ class ScoreRecord:
     received_at: datetime
     relevance_0_100: float
     ess_like_0_100: float
-    novelty_24h_0_100: float
+    novelty_0_100: float          # 100 * P(new event | features), novelty model (PREREG_V0 4.1)
     origin_cluster_id: str
     event_type: EventType
     direction_probs: tuple[float, float, float]  # (P(+1), P(-1), P(0))
@@ -185,7 +193,7 @@ def validate_record(raw: Mapping[str, Any]) -> ScoreRecord:
         received_at=received_at,
         relevance_0_100=_score(raw["relevance_0_100"], "relevance_0_100"),
         ess_like_0_100=ess,
-        novelty_24h_0_100=_score(raw["novelty_24h_0_100"], "novelty_24h_0_100"),
+        novelty_0_100=_score(raw["novelty_0_100"], "novelty_0_100"),
         origin_cluster_id=_ident(raw["origin_cluster_id"], "origin_cluster_id"),
         event_type=_enum(EventType, raw["event_type"], "event_type"),
         direction_probs=direction,  # type: ignore[arg-type]

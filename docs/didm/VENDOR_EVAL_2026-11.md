@@ -13,7 +13,8 @@
 | 엑셀 구조 | 시트 1개. O/X/? 줄은 **두 줄**뿐: "RAVENPACK 등" (기관용 또는 Bigdata.com 중 하나라도 제공하면 O)과 "대안책" (9개 대안 중 하나라도 제공하면 O). 대안별 O/X/?는 엑셀에 없고, 칸 메모 (F4~X4)와 대안별 설명 (D열)에 근거가 있습니다. |
 | 이 문서가 한 일 | ① 두 줄 19칸을 그대로 옮김 (1절) ② 엑셀 메모·설명만으로 **대안 9개 × 19칸**을 풀어 적음 (2절, 칸마다 근거 기호) ③ 공개 자료·메인 분석과 다른 값을 옆에 (3절) ④ 소스별 약관 질문 (4절) ⑤ 키 이름 (5절) ⑥ 참고 열 (6절) |
 | 대조 결과 | `python -m tools.didm.check_vendor_eval --excel <엑셀 사본>`: 엑셀 값이 바뀐 칸 **0개**, 2절 표가 엑셀 두 줄과 모순 0건 (7절). 2026-11-18 업로드된 엑셀 원본도 3·4행 38칸과 칸 메모 38개가 글 사본과 같음 (openpyxl, `-I`로 읽음). |
-| "?" 칸 | 대안 쪽 15칸 + RavenPack 쪽 2칸. 처리: 무료 키 1회 호출로 확인 6칸 (DS-4b), 공급사 문의 11칸. |
+| "?" 칸 | 대안 쪽 14칸 + RavenPack 쪽 2칸. 소유자 답 2 (2026-11-18): **별도 처리 안 함.** Alpha Vantage 관련성 칸은 X로 확정. |
+| 소유자 확정 열 | 엑셀 값과 다른 소유자 확정 3칸: 신규성 N = O, 영향 분석 W = O (자체 NLP가 직접 구현), 자산별 관련성 O = X. 엑셀 열 자체는 그대로 |
 | 공개 자료 확인 | 이 세션 네트워크에서 `www.alphavantage.co`, `api.tiingo.com`, `cryptopanic.com`, `www.cmegroup.com`, `www.gdeltproject.org`, `fred.stlouisfed.org`, `docs.kalshi.com`, `data.gdeltproject.org`가 모두 막혀 (2026-11-17 22:00 KST, 프록시 거절), **검색 요약 기준**입니다. 원문 직접 확인은 미검증. |
 
 ## 0.1 소유자 답 (2026-11-18, 원문 그대로)
@@ -63,33 +64,35 @@
 근거 기호:
 - `F4`~`X4`: 엑셀 대안책 행의 그 열 칸 메모 (1절). 메모에 이름이 있으면 O, 메모가 "없음"이라 하거나 이름이 없으면 X, 메모가 "확인 못함"이라 하면 ?.
 - `행CME`, `행FRED`, `행Poly`, `행TE`, `행Tiingo`, `행CP`, `행NLP`: 엑셀 "대안" 블록의 그 소스 설명 (D열). 예: 행FRED "뉴스·컨센서스 전망치·사건 해석은 못함", 행TE "유료", 행CME "종가판 월 $25", 행Tiingo "감성 점수는 반환 필드에 없음 … 재배포는 엔터프라이즈 없이 못함", 행CP "실시간 제공", 행NLP "비용은 LLM 호출료".
-- `N4규칙`: 엑셀은 자체 NLP가 직접 계산할 수 있는 것을 "제공"으로 세지 않습니다 (N4 "제공하는 소스 없음. 자체 NLP로 직접 구현", W4 같음). 그래서 자체 NLP는 메모에 이름이 있는 칸 (I4, L4)만 O이고, 나머지 직접 계산 항목은 X로 두고 DIDM-1 (`docs/didm/SCORE_SCHEMA_V0.md`)에서 만듭니다.
+- `D1`: 소유자 답 1 (2026-11-18) "직접 구현이 필연적이므로, 표기를 X 대신 O로 해주세요". 자체 NLP가 직접 계산하는 칸 (감성 G, 엔티티 H, 거시 사건 탐지 K, 신규성 N, 영향 분석 W, 암호화폐 감성 X)을 O로 둡니다. 수집 F와 실시간 J는 자체 NLP가 하는 일이 아니라 (입력은 다른 공급원) X·`행NLP` 그대로입니다.
+- `D2`: 소유자 답 2 (2026-11-18) "대안책의 자산별관련성점수의 경우 X로 확정". Alpha Vantage 관련성 칸과 자체 NLP 관련성 칸을 X로 둡니다 (DIDM 안의 `relevance_0_100`은 계속 계산하지만, 이 표에서는 "대안이 주는 점수"로 세지 않음).
+- "대안책 (소유자 확정)" 열: `=`는 엑셀과 같음. 다른 칸 (N, O, W)은 소유자 답이고, 2절 대안 칸은 이 확정 값과 모순이 없어야 합니다 (7절 검사).
 
 <!-- matrix:begin -->
-| 열 | 정보 유형 | RAVENPACK 등 (엑셀) | 대안책 (엑셀) | CME | FRED | Polymarket | Trad. Econ | GDELT | Alpha Vantage | Tiingo | Cryptopanic | 자체 NLP | "?" 처리 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| F | 뉴스 기사 수집 | O | O | X·행CME | X·행FRED | X·행Poly | X·행TE | O·F4 | O·F4 | O·F4 | O·F4 | X·N4규칙 | — |
-| G | 뉴스 감성 점수 | O | O | X·행CME | X·행FRED | X·행Poly | X·행TE | O·G4 | O·G4 | X·G4 | O·G4 | X·N4규칙 | — |
-| H | 엔티티·티커 태깅 | O | O | X·행CME | X·행FRED | X·행Poly | X·행TE | O·H4 | O·H4 | O·H4 | ?·H4 | X·N4규칙 | Cryptopanic: 무료 키 1회 호출로 확인 |
-| I | 사건·토픽 분류 | O | O | X·행CME | X·행FRED | X·행Poly | X·행TE | O·I4 | O·I4 | ?·I4 | ?·I4 | O·I4 | Tiingo: 무료 키 1회 호출로 확인; Cryptopanic: 무료 키 1회 호출로 확인 |
-| J | 분 단위 이내 실시간 갱신 | O | O | O·J4 | X·J4 | O·J4 | ?·J4 | O·J4 | ?·J4 | O·J4 | O·행CP | X·N4규칙 | Trad. Econ: 공급사 문의; Alpha Vantage: 무료 키 1회 호출로 확인 |
-| K | 미국 거시 이벤트 감시 | O | O | O·K4 | O·K4 | O·K4 | O·K4 | X·K4 | X·K4 | X·K4 | X·K4 | X·N4규칙 | — |
-| L | Python에서 API 호출 | O | O | O·L4 | O·L4 | O·L4 | O·L4 | O·L4 | O·L4 | O·L4 | O·L4 | O·L4 | — |
-| M | 무료 플랜 | O | O | X·행CME | O·M4 | O·M4 | X·행TE | O·M4 | O·M4 | O·M4 | O·M4 | X·행NLP | — |
-| N | 신규성 점수 | O | X | X·N4 | X·N4 | X·N4 | X·N4 | X·N4 | X·N4 | X·N4 | X·N4 | X·N4 | — |
-| O | 자산별 관련성 점수 | O | ? | X·O4 | X·O4 | X·O4 | X·O4 | X·O4 | ?·O4 | X·행Tiingo | X·O4 | X·N4규칙 | Alpha Vantage: 무료 키 1회 호출로 확인 |
-| P | 2000년부터의 뉴스 점수 이력 | O | X | X·P4 | X·P4 | X·P4 | X·P4 | X·P4 | X·P4 | X·P4 | X·P4 | X·P4 | — |
-| Q | 시장 내재 금리 확률 (FOMC) | X | O | O·Q4 | X·Q4 | X·Q4 | X·Q4 | X·Q4 | X·Q4 | X·Q4 | X·Q4 | X·Q4 | — |
-| R | 공식 경제 통계 시계열 | X | O | X·R4 | O·R4 | X·R4 | ?·R4 | X·R4 | O·R4 | X·R4 | X·R4 | X·R4 | Trad. Econ: 공급사 문의 |
-| S | 발표 시점별 수정 이력 | X | O | X·S4 | O·S4 | X·S4 | ?·S4 | X·S4 | ?·S4 | X·S4 | X·S4 | X·S4 | Trad. Econ: 공급사 문의; Alpha Vantage: 무료 키 1회 호출로 확인 |
-| T | 발표치·컨센서스 수치 | X | O | X·T4 | X·행FRED | X·T4 | O·T4 | X·T4 | X·T4 | X·T4 | X·T4 | X·T4 | — |
-| U | 예정 사건 결과 확률 | X | O | X·U4 | X·U4 | O·U4 | X·U4 | X·U4 | X·U4 | X·U4 | X·U4 | X·U4 | — |
-| V | 원문 저장·학습 허용 | X | O | ?·V4 | ?·V4 | ?·V4 | ?·V4 | O·V4 | ?·V4 | X·행Tiingo | ?·V4 | X·행NLP | CME: 공급사 문의; FRED: 공급사 문의; Polymarket: 공급사 문의; Trad. Econ: 공급사 문의; Alpha Vantage: 공급사 문의; Cryptopanic: 공급사 문의 |
-| W | 자산 영향 분석 (Impact Analytics) | ? | X | X·W4 | X·W4 | X·W4 | X·W4 | X·W4 | X·W4 | X·W4 | X·W4 | X·W4 | RAVENPACK 등: 공급사 문의 (DS-3, Stage 3 뒤) |
-| X | 암호화폐 뉴스 감성 | ? | O | X·X4 | X·X4 | X·X4 | X·X4 | X·X4 | O·X4 | X·X4 | O·X4 | X·N4규칙 | RAVENPACK 등: 공급사 문의 (DS-3, Stage 3 뒤) |
+| 열 | 정보 유형 | RAVENPACK 등 (엑셀) | 대안책 (엑셀) | 대안책 (소유자 확정) | CME | FRED | Polymarket | Trad. Econ | GDELT | Alpha Vantage | Tiingo | Cryptopanic | 자체 NLP | "?" 처리 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| F | 뉴스 기사 수집 | O | O | = | X·행CME | X·행FRED | X·행Poly | X·행TE | O·F4 | O·F4 | O·F4 | O·F4 | X·행NLP | — |
+| G | 뉴스 감성 점수 | O | O | = | X·행CME | X·행FRED | X·행Poly | X·행TE | O·G4 | O·G4 | X·G4 | O·G4 | O·D1 | — |
+| H | 엔티티·티커 태깅 | O | O | = | X·행CME | X·행FRED | X·행Poly | X·행TE | O·H4 | O·H4 | O·H4 | ?·H4 | O·D1 | Cryptopanic: 처리 안 함 (소유자 답 2) |
+| I | 사건·토픽 분류 | O | O | = | X·행CME | X·행FRED | X·행Poly | X·행TE | O·I4 | O·I4 | ?·I4 | ?·I4 | O·I4 | Tiingo: 처리 안 함 (소유자 답 2); Cryptopanic: 처리 안 함 (소유자 답 2) |
+| J | 분 단위 이내 실시간 갱신 | O | O | = | O·J4 | X·J4 | O·J4 | ?·J4 | O·J4 | ?·J4 | O·J4 | O·행CP | X·행NLP | Trad. Econ: 처리 안 함 (소유자 답 2); Alpha Vantage: 처리 안 함 (소유자 답 2) |
+| K | 미국 거시 이벤트 감시 | O | O | = | O·K4 | O·K4 | O·K4 | O·K4 | X·K4 | X·K4 | X·K4 | X·K4 | O·D1 | — |
+| L | Python에서 API 호출 | O | O | = | O·L4 | O·L4 | O·L4 | O·L4 | O·L4 | O·L4 | O·L4 | O·L4 | O·L4 | — |
+| M | 무료 플랜 | O | O | = | X·행CME | O·M4 | O·M4 | X·행TE | O·M4 | O·M4 | O·M4 | O·M4 | X·행NLP | — |
+| N | 신규성 점수 | O | X | O | X·N4 | X·N4 | X·N4 | X·N4 | X·N4 | X·N4 | X·N4 | X·N4 | O·D1 | — |
+| O | 자산별 관련성 점수 | O | ? | X | X·O4 | X·O4 | X·O4 | X·O4 | X·O4 | X·D2 | X·행Tiingo | X·O4 | X·D2 | — |
+| P | 2000년부터의 뉴스 점수 이력 | O | X | = | X·P4 | X·P4 | X·P4 | X·P4 | X·P4 | X·P4 | X·P4 | X·P4 | X·P4 | — |
+| Q | 시장 내재 금리 확률 (FOMC) | X | O | = | O·Q4 | X·Q4 | X·Q4 | X·Q4 | X·Q4 | X·Q4 | X·Q4 | X·Q4 | X·Q4 | — |
+| R | 공식 경제 통계 시계열 | X | O | = | X·R4 | O·R4 | X·R4 | ?·R4 | X·R4 | O·R4 | X·R4 | X·R4 | X·R4 | Trad. Econ: 처리 안 함 (소유자 답 2) |
+| S | 발표 시점별 수정 이력 | X | O | = | X·S4 | O·S4 | X·S4 | ?·S4 | X·S4 | ?·S4 | X·S4 | X·S4 | X·S4 | Trad. Econ: 처리 안 함 (소유자 답 2); Alpha Vantage: 처리 안 함 (소유자 답 2) |
+| T | 발표치·컨센서스 수치 | X | O | = | X·T4 | X·행FRED | X·T4 | O·T4 | X·T4 | X·T4 | X·T4 | X·T4 | X·T4 | — |
+| U | 예정 사건 결과 확률 | X | O | = | X·U4 | X·U4 | O·U4 | X·U4 | X·U4 | X·U4 | X·U4 | X·U4 | X·U4 | — |
+| V | 원문 저장·학습 허용 | X | O | = | ?·V4 | ?·V4 | ?·V4 | ?·V4 | O·V4 | ?·V4 | X·행Tiingo | ?·V4 | X·행NLP | CME: 처리 안 함 (소유자 답 2); FRED: 처리 안 함 (소유자 답 2); Polymarket: 처리 안 함 (소유자 답 2); Trad. Econ: 처리 안 함 (소유자 답 2); Alpha Vantage: 처리 안 함 (소유자 답 2); Cryptopanic: 처리 안 함 (소유자 답 2) |
+| W | 자산 영향 분석 (Impact Analytics) | ? | X | O | X·W4 | X·W4 | X·W4 | X·W4 | X·W4 | X·W4 | X·W4 | X·W4 | O·D1 | RAVENPACK 등: 처리 안 함 (소유자 답 2) |
+| X | 암호화폐 뉴스 감성 | ? | O | = | X·X4 | X·X4 | X·X4 | X·X4 | X·X4 | O·X4 | X·X4 | O·X4 | O·D1 | RAVENPACK 등: 처리 안 함 (소유자 답 2) |
 <!-- matrix:end -->
 
-"?" 17칸의 처리 요약:
+"?" 16칸 (대안 14 + RavenPack 2)의 처리 — 소유자 답 2 (2026-11-18) "?에 대해서 별도 처리할 필요는 없으나": **처리 안 함.** 아래 표는 답 전의 계획으로, 기록으로만 남깁니다.
 
 | 처리 | 칸 | 언제 |
 |---|---|---|
@@ -206,21 +209,26 @@
 python -m tools.didm.check_vendor_eval --excel <handoff의 plans/2026-11-17/OWNER_EXCEL_RAVENPACK_ALTERNATIVES.txt>
 ```
 
-2026-11-17 실행 결과 (작업 브랜치 `claude/data-source-didm-20261117`):
+2026-11-18 실행 결과 (작업 브랜치 `claude/data-source-didm-20261117`):
 
 ```
-columns 19, alternative cells 171, '?' cells 15, excel compared: yes
+columns 19, alternative cells 171, '?' cells 14, excel compared: yes
 excel cells changed: 0
+owner-confirmed columns differing from the Excel: N, O, W
 OK
 ```
 
-- 엑셀 두 줄 38칸이 1·2절과 같고 (바뀐 칸 0), 2절 171칸 (대안 쪽 ? 15칸)이 모두 `O|X|?·근거` 꼴이며, ? 칸마다 처리 방법이 하나 있고, 엑셀 값과 모순 0건입니다.
+- 엑셀 두 줄 38칸이 1·2절과 같고 (바뀐 칸 0), 2절 171칸 (대안 쪽 ? 14칸)이 모두 `O|X|?·근거` 꼴이며, ? 칸마다 처리 방법이 하나 있고, 소유자 확정 값 (확정이 없으면 엑셀 값)과 모순 0건입니다.
 - 같은 검사가 `tests/didm_vendor_eval_acceptance.py`에 있습니다 (네트워크 없음; 엑셀 값은 스크립트 안의 사본으로 비교).
 
 ## 8. 소유자 확인 (완료 조건 4)
 
-1. 2절처럼 엑셀 메모를 대안별로 나눈 방식 (특히 자체 NLP를 "제공"으로 세지 않는 `N4규칙`, 3절 끝의 Q/U/K 칸)이 뜻하신 것과 맞습니까?
-2. "?" 칸 처리 (무료 키 1회 호출 6칸, 공급사 문의 11칸)를 이대로 진행해도 됩니까? 문의 발송과 무료 키 가입은 소유자가 합니다.
+소유자 답 (2026-11-18, 원문 그대로):
+
+> 1. 네 맞습니다. 다만 직접 구현이 필연적이므로, 표기를 X 대신 O로 해주세요
+> 2. ?에 대해서 별도 처리할 필요는 없으나, 대안책의 자산별관련성점수의 경우 X로 확정입니다.
+
+반영: 2절 `D1`·`D2` 칸, "대안책 (소유자 확정)" 열 (N = O, O = X, W = O), "?" 처리 안 함. 엑셀 열은 그대로 (7절 검사: 바뀐 칸 0). **완료 조건 4 충족 (소유자 확인).**
 3. ~~지시문 질문 1~4~~ → 2026-11-18 답함 (0.1절).
 
 ## 9. 출처
