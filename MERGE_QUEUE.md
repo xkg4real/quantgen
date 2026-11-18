@@ -1,6 +1,6 @@
 # MERGE_QUEUE — main 병합 순서와 동결 (메인 세션이 관리)
 
-updated_at: 2026-11-19T01:32:00+09:00
+updated_at: 2026-11-19T01:40:00+09:00
 coordinator: 메인 세션 (QUANTGEN/MAIN, https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB)
 freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보고("F22까지 성공적으로 마무리했습니다."), main `6e077dc`(소유자 `--no-ff` 병합, 부모 `8e026ab`·`13f4dea`), 그 push의 Compliance success, PR #4 merged. (동결 기간: 2026-11-18T19:10:45+09:00 ~ 위 시각)
 
@@ -14,17 +14,20 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 | 4 | P3: main → 연구 브랜치 병합, 소유자 F1~F22 | PR #4 | ⑦-1 뒤. **여기서 freeze 시작** | 소유자 F21 |
 | 5 | 결정 기록 PR (11-17 소유자 답, 자진 보고) | 메인이 만듦 | **다음** (P3 앞) | 메인 |
 
-## F21 뒤 — 지금 순서 (2026-11-19 메인이 정함)
+## F21 뒤 — 지금 순서 (2026-11-19 01:40 KST 메인이 정함; 준비된 것부터)
 
 | # | 항목 | 브랜치·PR | 상태 |
 |---|---|---|---|
-| 1 | ⑦-2/a 병합 뒤 main 정리 (README 시험 표·bonds 행, `qa/research_status.json`, 준법 기준선, 확인 문장 복사, 자진 보고) | 메인이 만듦 | **지금 진행** |
-| 2 | 정책 문서 PR (D11 Q1~Q3) | 메인이 만듦 | ⑦-2/a 다음 |
-| 3 | OS 작은 PR | OS 세션 | 메인이 "병합: OS"라고 적으면 PR 열기 |
-| 4 | OS PySide6 전환 PR | OS 세션 | 3 다음 |
-| 5 | UI 7쪽 + PySide6 준비 (`claude/friendly-bardeen-r6xe8f`) | UI 세션 | 소유자 실행 확인 뒤 |
-| 6 | KEY-2 → KEY-3 → KEY-4 → KEY-5 | PAYMENTS 세션 | PR 본문에 코드 지문 이동 적기 |
-| 7 | DS·DIDM | DS 세션 | 차례가 오면 |
+| 1 | ⑦-2/a 병합 뒤 main 정리 (README 시험 표·bonds 행, `qa/research_status.json`, 준법 기준선, 확인 문장 사본, D11 답 원문) | 메인 `claude/post-merge-7-2a-20261119` | **지금** (검토 중 → PR → CI → 병합) |
+| 2 | OS 작은 PR (도구·`app_identity`·패키징 초안, 화면 코드·`config.py`·`data/` 변경 없음) | OS `claude/os-prep-20261117` @ `1f6a72e` | 준비 끝. 1이 병합되면 메인이 "병합: OS"라고 적음 → 최신 main merge·기준선 갱신 뒤 PR |
+| 3 | KEY-2 (`config.py` 3줄 → 코드 지문 `ec72fab3…` → `10c27010…`) | PAYMENTS `claude/payments-keys-20261117` @ `31b724f` | 준비 끝. 2 병합 뒤 "병합: PAYMENTS_ACCOUNT_KEYS" → PR 본문에 지문 변경·owner_confirmed 재작성 필요 |
+| 4 | 정책 문서 PR (D11 Q1~Q3) | 메인이 만듦 | 3 뒤 (값: `687bf65` `ACCOUNT_SETUP.md` 4부) |
+| 5 | UI 7쪽 + PySide6 준비 | UI `claude/friendly-bardeen-r6xe8f` | 소유자 실행 확인 뒤 (UI 세션 브랜치는 아무도 고치지 않음) |
+| 6 | PySide6 전환 (`pyqt6_to_pyside6 --apply` + `switch_day.py --apply`, 화면 문구 3곳은 UI 세션) | OS | 5 뒤 (OS 세션 제안 순서: UI PR → 전환) |
+| 7 | KEY-3 → KEY-4 → KEY-5 | PAYMENTS | 차례대로 |
+| 8 | DS·DIDM | DS | 차례가 오면 |
+
+한 번에 PR 하나만 main 병합 대기에 둡니다(모두 `docs/compliance/source-review.json`을 바꾸므로 앞 PR이 병합된 뒤 최신 main을 합치고 기준선을 다시 갱신).
 
 아래 목록은 위 순서의 근거입니다.
 
