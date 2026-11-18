@@ -4,7 +4,10 @@
     python -m tools.didm.collect_daily --data-dir <folder> --alfred CPIAUCSL PAYEMS
     python -I -m tools.didm.collect_daily --data-dir <folder> --alfred-file CPIAUCSL=<downloaded .xlsx>
     python -m tools.didm.collect_daily --data-dir <folder> --no-gdelt --edgar 320193 --opendart 20261117 20261118 \
-        --ecos 722Y001,M,202401,202612,0101000 --kalshi KXFED
+        --ecos "722Y001,M,202401,202610,0101000" --kalshi KXFED
+
+In PowerShell, quote every comma-separated value (--ecos "..."): unquoted, PowerShell
+reads it as an array and turns 0101000 into 101000 (owner run 2026-11-18).
 
 Keys / settings by name only: FRED_API_KEY, OPENDART_API_KEY (existing), ECOS_API_KEY,
 SEC_EDGAR_USER_AGENT (generic contact). Kalshi and GDELT need none.
@@ -137,7 +140,7 @@ def collect_gdelt_day(store: PointInTimeStore, day: str, with_gkg: bool) -> None
 def probe_ecos(spec: str) -> None:
     """Try a few request variants for one series; print masked paths and counts. Stores nothing."""
     from data.didm import ecos
-    stat, cycle, start, end, *items = spec.split(",")
+    stat, cycle, start, end, items = ecos_spec(spec)
     variants = [
         ("as collected", dict(rows=1000), items),
         ("rows 100", dict(rows=100), items),
@@ -198,9 +201,23 @@ def collect_opendart(store: PointInTimeStore, bgn: str, end: str) -> None:
     print(f"OpenDART {bgn}-{end}: pages {len(pages)}, filings {len(rows)}, new {store.append_many(rows)}")
 
 
+def ecos_spec(spec: str) -> tuple[str, str, str, str, list[str]]:
+    """Split STAT,CYCLE,START,END[,ITEM...]; refuse item codes that lost a leading zero.
+
+    ECOS item codes used here are 7 digits, so a 6-digit numeric code is almost
+    certainly PowerShell's number conversion of an unquoted argument.
+    """
+    stat, cycle, start, end, *items = [p.strip() for p in spec.split(",")]
+    for item in items:
+        if item.isdigit() and len(item) < 7:
+            raise SystemExit(f"ECOS item code {item!r} looks like it lost a leading zero; "
+                             f'put the whole --ecos value in quotes, e.g. --ecos "{stat},{cycle},{start},{end},0{item}"')
+    return stat, cycle, start, end, items
+
+
 def collect_ecos(store: PointInTimeStore, spec: str) -> None:
     from data.didm import ecos
-    stat, cycle, start, end, *items = spec.split(",")
+    stat, cycle, start, end, items = ecos_spec(spec)
     payload = ecos.fetch_series(stat, cycle, start, end, *items)
     rows = ecos_ingest.rows(payload, _now())
     result = payload.get("RESULT") or {}

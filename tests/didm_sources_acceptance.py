@@ -162,6 +162,14 @@ class KeyCheck(unittest.TestCase):
         self.assertNotIn("secret-value", repr(status))
 
 
+class EcosSpec(unittest.TestCase):
+    def test_leading_zero_loss_refused(self):
+        from tools.didm.collect_daily import ecos_spec
+        self.assertEqual(ecos_spec("722Y001,M,202401,202610,0101000")[4], ["0101000"])
+        with self.assertRaises(SystemExit):
+            ecos_spec("722Y001,M,202401,202610,101000")
+
+
 class IntoStore(unittest.TestCase):
     def test_all_sources_as_of(self):
         rows = (filings.edgar_rows(SUBMISSIONS, RECEIVED) + filings.opendart_rows(DART, RECEIVED)
