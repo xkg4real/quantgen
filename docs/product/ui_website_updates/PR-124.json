@@ -1,6 +1,6 @@
 {
-  "id": "PR-pending",
-  "source_pr": "",
+  "id": "PR-124",
+  "source_pr": "https://github.com/xkg4real/quantgen/pull/124",
   "source_branch": "claude/ui-market-hub-merge-20261118",
   "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8",
   "summary": "Owner-approved (2026-11-18, item 2) UI commit da0ea20 from claude/friendly-bardeen-r6xe8f merged with main 7c33955: Markets main screen and category main screens (market hub), the rail keeps only the nine market categories, indicator conclusions for 27 indicators (rising/falling readings, current reading, evidence level and sources) in the detail card, indicator guide and report, a steady indicator list while live updates arrive, and PNG/HTML drafts of the other seven pages as documents only. No commit after da0ea20 on the UI branch is included (at review time da0ea20..bbd253b, 28 commits: the seven-page application up to 7902381 and the PySide6 readiness commits a7e390d and bbd253b); those commits are not part of the owner's approval and need a new one.",
@@ -70,5 +70,5 @@
   "website_application": "unverified",
   "deployment": "unverified",
   "merge_commit": "",
-  "merge_status": "not_opened"
+  "merge_status": "opened"
 }
