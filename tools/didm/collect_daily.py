@@ -21,9 +21,13 @@ Collected data is never written inside the repository.
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Mapping
+
+import config  # noqa: F401 - loads the project .env into the environment, like the app
 
 from core.didm.ingest import alfred as alfred_ingest
 from core.didm.ingest import ecos as ecos_ingest
@@ -34,6 +38,13 @@ from core.didm.llm.schema import ess_like
 from core.didm.store import PointInTimeStore
 
 REPO = Path(__file__).resolve().parents[2]
+KEY_NAMES = ("FRED_API_KEY", "OPENDART_API_KEY", "ECOS_API_KEY", "SEC_EDGAR_USER_AGENT")
+
+
+def key_status(env: Mapping[str, str] | None = None) -> dict[str, bool]:
+    """Which settings are present (names and True/False only; values are never returned)."""
+    env = os.environ if env is None else env
+    return {name: bool(str(env.get(name, "")).strip()) for name in KEY_NAMES}
 FINBERT_MODEL = "ProsusAI/finbert"
 
 
@@ -139,7 +150,9 @@ def collect_kalshi(store: PointInTimeStore, series: str) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="DIDM daily collector (owner PC)")
-    ap.add_argument("--data-dir", required=True)
+    ap.add_argument("--check-keys", action="store_true",
+                    help="print which key names are set (True/False only) and exit")
+    ap.add_argument("--data-dir")
     ap.add_argument("--no-gdelt", action="store_true")
     ap.add_argument("--finbert", action="store_true")
     ap.add_argument("--alfred", nargs="*", default=[])
@@ -149,6 +162,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--ecos", action="append", default=[], metavar="STAT,CYCLE,START,END[,ITEM...]")
     ap.add_argument("--kalshi", nargs="*", default=[], metavar="SERIES")
     args = ap.parse_args(argv)
+    if args.check_keys:
+        for name, present in key_status().items():
+            print(f"{name}: {present}")
+        return 0
+    if not args.data_dir:
+        ap.error("--data-dir is required")
     with PointInTimeStore(_data_dir(args.data_dir) / "didm_store.sqlite") as store:
         rows: list[dict] = []
         if not args.no_gdelt:

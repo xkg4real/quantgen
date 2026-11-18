@@ -122,6 +122,17 @@ class Kalshi(unittest.TestCase):
             kalshi.candlestick_rows("X", CANDLES, datetime(2026, 11, 18))
 
 
+class KeyCheck(unittest.TestCase):
+    def test_names_and_booleans_only(self):
+        from tools.didm.collect_daily import KEY_NAMES, key_status
+        env = {"ECOS_API_KEY": "secret-value", "FRED_API_KEY": "  ", "SEC_EDGAR_USER_AGENT": "Org x@y"}
+        status = key_status(env)
+        self.assertEqual(set(status), set(KEY_NAMES))
+        self.assertEqual(status, {"FRED_API_KEY": False, "OPENDART_API_KEY": False,
+                                  "ECOS_API_KEY": True, "SEC_EDGAR_USER_AGENT": True})
+        self.assertNotIn("secret-value", repr(status))
+
+
 class IntoStore(unittest.TestCase):
     def test_all_sources_as_of(self):
         rows = (filings.edgar_rows(SUBMISSIONS, RECEIVED) + filings.opendart_rows(DART, RECEIVED)
