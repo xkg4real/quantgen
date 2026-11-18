@@ -22,6 +22,7 @@
 | 11 | `sip.isdeleted(x)`, `from PyQt6 import sip` | 새 코드에서는 쓰지 말고, 꼭 필요하면 한 도움 함수에 모음 (변환 도구가 `shiboken6.isValid`로 바꿈) | `sip` |
 | 12 | `font.setWeight(600)`처럼 숫자를 그대로 넘김 | `font.setWeight(QFont.Weight(600))`. PySide6는 숫자를 받지 않고 TypeError를 냅니다. `paintEvent` 안에서 나면 그리기 도구(QPainter)가 닫히지 않아 앱이 죽습니다 (실측: UI `bonds.py:201`, 단계 6 세그폴트. 고친 뒤 20개 테스트 모두 통과, 2번 중 2번) | `10-int-enum` |
 | 13 | 사용자 글자를 Qt 항목 데이터(`addItem(text, data)`, `setData`)에 넣은 뒤 꺼내 검사 | 검사는 Qt에 넣기 **전에** 합니다. 데이터에는 키만 넣고 원본은 Python 딕셔너리에 둡니다. PySide6는 짝 없는 서로게이트(`'\ud800'`)를 조용히 지웁니다. 딕셔너리째 넣어도 QVariantMap으로 바뀌며 지워집니다 (실측, PyQt6는 그대로 둠) | — (`4-combo-data`와 함께 검토) |
+| 14 | `nextInFocusChain()`로 창 전체의 포커스 사슬을 따라 돌기 (예: 시스템 화면 `connections.py`의 `focus_order`, 최대 20,000단계) | 그 부분 안의 위젯만 `part.findChildren(QWidget)`로 모아 `setTabOrder`. PySide6에서는 사슬을 도는 동안 창 안 모든 위젯의 Python 래퍼가 만들어지고, 이후 테마·언어 전환 중 크기 조정 이벤트에서 앱이 죽었습니다 (실측 2026-11-18, UI `75336f3`: 시스템 화면 커밋 `a00c856`부터 단계 2·4·6·7·9·13·14 세그폴트. `findChildren`으로 바꾼 복사본은 CI 18단계가 모두 PyQt6와 같고, 바인딩 때문에 새로 실패한 테스트 0개. 시스템 화면 시험 5개는 두 바인딩 모두 통과) | `14-focus-walk` |
 
 ## 시범에서 드러난 세그폴트·메모리 폭증의 원인 (6번 항목의 근거, 2026-11-17 확정)
 

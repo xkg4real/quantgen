@@ -175,6 +175,14 @@ class LintTests(unittest.TestCase):
         found = {(f.line, f.group) for f in port.lint(text, "p.py")}
         self.assertEqual(found, {(3, "10-int-enum")})
 
+    def test_focus_chain_walk_is_reported(self):
+        text = src("""\
+            def order(part):
+                w = part.nextInFocusChain()
+                part.setFocus()
+            """)
+        self.assertEqual({(f.line, f.group) for f in port.lint(text, "f.py")}, {(2, "14-focus-walk")})
+
 
 class CommandTests(unittest.TestCase):
     def test_apply_refuses_a_git_checkout_and_is_idempotent_on_a_scratch_copy(self):
