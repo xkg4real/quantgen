@@ -6,11 +6,11 @@ task: payments-account-keys
 cycle: 2026-11-17
 done_ids: none
 next_ids: PAY-A1, PAY-A2, KEY-1, KEY-2, KEY-3/design, KEY-3, PAY-0, PAY-2
-updated_at: 2026-11-18T16:30:00+09:00
+updated_at: 2026-11-19T00:45:00+09:00
 stale_after_hours: 3
-waiting_on: owner
+waiting_on: review
 work_branch: claude/payments-keys-20261117
-work_commit: 687bf65
+work_commit: 31b724f
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -24,6 +24,9 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-19 00:45 갱신:** 소유자가 이 세션에 "F22까지 마무리했습니다"라고 알림. main `6e077dc`(연구 브랜치 병합)을 작업 브랜치에 merge함 (`31b724f`, 충돌 없음, 브랜치만의 파일 12개). `tests.credentials_acceptance` 29 OK (keyring 있음/없음). Nautilus code_sha256: main `ec72fab3…` → KEY-2 브랜치 `10c27010…` (config.py 3줄 변경 때문; PR 본문에 적을 것). `MERGE_QUEUE.md`는 아직 `freeze: ON`이고 KEY-2 차례가 적혀 있지 않아 PR은 열지 않음. 메인이 동결 해제와 순서를 적으면: 최신 main merge → 준수 기준선 갱신 → PR.
+
 
 **2026-11-18 16:30 갱신 — 소유자 답 Q1~Q3 (원문):**
 > Q1 답변 : 예, 다만 제가 법인 설립 설립이 완료되었다고 여기에 말하는 순간 바로 해당 법인 명으로 수정 가능하도록 해주세요
