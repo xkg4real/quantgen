@@ -23,6 +23,8 @@ CALCULATION_SOURCES = ("montecarlo.py", "garch.py", "history.py")
 # path for the first group; only as the bundle's own top folder for the second (libraries ship their own tests).
 FORBIDDEN_ANYWHERE = (".env", ".nextgen", "asset_expansion")
 FORBIDDEN_TOP = ("_legacy", "tests", "qa", "docs", "papers")
+# The two recorded-status files the System screen verifies (tools/packaging/stage.py FILES).
+ALLOWED_PROTECTED = ("qa/research_status.json", "qa/acceptance_results.json")
 
 
 def _check(results, name, fn):
@@ -82,6 +84,9 @@ def run(report_path: str) -> int:
         bad = []
         for p in root.rglob("*"):
             parts = p.relative_to(root).parts
+            name = "/".join(parts)
+            if name in ALLOWED_PROTECTED or (parts == ("qa",) and p.is_dir()):
+                continue
             if parts[0] in FORBIDDEN_TOP or any(x in FORBIDDEN_ANYWHERE for x in parts):
                 bad.append(str(p.relative_to(root)))
         return not bad, sorted(bad)[:20]
@@ -99,6 +104,14 @@ def run(report_path: str) -> int:
         ok = bool(text) and (has_lgpl or not lgpl_needed) and bool(qt_core)
         return ok, {"notices_bytes": len(text.encode()), "lgpl_text": has_lgpl, "qt_core_files": qt_core[:4]}
     _check(results, "licence_notices_and_separate_qt", notices_and_qt_libraries)
+
+    def recorded_status():
+        # The System screen's "project status": the same call as quantgen_desktop/app.py.
+        from core.app_paths import application_root
+        from tools.status.snapshot import verify
+        status = verify(application_root())
+        return isinstance(status, dict), sorted(status)[:6]
+    _check(results, "recorded_project_status", recorded_status)
 
     app = None
 

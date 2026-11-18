@@ -31,8 +31,9 @@ if CHANNEL not in ("public", "beta", "dev"):
 
 names = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT).decode().split("\0")
 datas = [(str(ROOT / n), str(Path(n).parent)) for n in names
-         if n and allowed(n) and not n.endswith(".py") and n not in ("pyproject.toml",)
-         and not n.startswith("qa/")]  # recorded QA status: in the wheel allowlist, not needed by the app
+         if n and allowed(n) and not n.endswith(".py") and n not in ("pyproject.toml",)]
+# qa/research_status.json and qa/acceptance_results.json are in on purpose: the System screen's project
+# status (quantgen_desktop/app.py -> tools.status.snapshot.verify(application_root())) reads them.
 # core/research/provenance.py code_evidence() hashes these sources from disk; ship them as files so a packaged
 # app records the same calculation_sha256 as a checkout instead of None.
 datas += [(str(ROOT / "core" / "quant" / n), "core/quant") for n in ("montecarlo.py", "garch.py", "history.py")]
