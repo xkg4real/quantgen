@@ -7,9 +7,10 @@ The app never needs a `.env` file. Each secret name (``core.credentials.names.SE
    macOS Keychain, Secret Service on Linux), service ``"QUANTGEN"``, user name = the variable name;
 3. ``.env``, in a development build only (``core.app_identity.may_read_dotenv()``; a public build never reads it).
 
-``config.py`` still calls ``dotenv.load_dotenv()`` (tests patch that call to keep a developer's ``.env`` out) and
-tells this module which names that call added (``record_dotenv``), so a value that came from ``.env`` ranks
-below the keyring instead of above it.
+``config.py`` calls ``load_dotenv_for_development()`` once and reads every setting through ``read_setting``; the
+``.env`` logic lives here so ``config.py`` (a Nautilus bridge code-fingerprint input) changes by three lines only.
+``dotenv.load_dotenv`` is still the call that reads ``.env`` (tests patch it to keep a developer's file out); the
+names it adds are recorded so a value that came from ``.env`` ranks below the keyring instead of above it.
 
 Values never leave through this module except as the return value of ``get``. ``status``, exceptions, ``repr``
 and log lines carry names, kinds and sources only.
@@ -32,6 +33,7 @@ __all__ = [
     "get", "set", "delete", "status", "status_all", "clean_value",
     "get_token", "set_token", "delete_token",
     "keyring_available", "set_backend", "reset_backend", "record_dotenv",
+    "load_dotenv_for_development", "read_setting",
     "subscribe", "unsubscribe", "may_read_dotenv",
 ]
 
@@ -86,6 +88,44 @@ def record_dotenv(loaded: "set[str] | frozenset[str]") -> None:
     """Called by config.py with the environment names ``load_dotenv()`` added. Only secret names matter."""
     global _dotenv_names
     _dotenv_names = frozenset(n for n in loaded if names.is_secret(n))
+
+
+def load_dotenv_for_development() -> None:
+    """Load ``.env`` into the environment in a development build only, and record which secret names it added.
+    A public build never reads ``.env`` (D7-G rule 3). Same search as before: ``.env`` in the repository root or
+    a parent folder (``dotenv.find_dotenv`` from config.py's folder)."""
+    if not may_read_dotenv():
+        return
+    try:
+        import dotenv
+    except Exception:
+        return
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    path = None
+    folder = root
+    while True:
+        candidate = os.path.join(folder, ".env")
+        if os.path.isfile(candidate):
+            path = candidate
+            break
+        parent = os.path.dirname(folder)
+        if parent == folder:
+            break
+        folder = parent
+    before = frozenset(os.environ)
+    try:
+        dotenv.load_dotenv(path)
+    except Exception:
+        return
+    record_dotenv(frozenset(os.environ) - before)
+
+
+def read_setting(name: str) -> str:
+    """What ``config._clean`` returns: a secret name through the store (``get``), any other setting from the
+    environment, with blank, quoted and ``<placeholder>`` values cleaned the same way."""
+    if names.is_secret(name):
+        return get(name)
+    return clean_value(os.environ.get(name))
 
 
 def _check_secret(name: str) -> None:

@@ -1,8 +1,7 @@
 """Local configuration for QUANTGEN.
 
-Every credential comes from the credential store (core/credentials: process
-environment, then the OS keyring, then `.env` in a development build only), and
-only its presence is ever reported:
+Every credential is read from `.env` or the process environment, and only its
+presence is ever reported:
 
   * FMP — read-only US end-of-day prices and quotes for every venue outside
     Korea.
@@ -25,25 +24,12 @@ from pathlib import Path
 
 from core import credentials as _credentials
 
-# KEY-2 (D7-G): `.env` is a development fallback only. A public build never reads it; in a development build
-# the names it adds rank below the OS credential store (core/credentials). Tests patch `dotenv.load_dotenv`.
-if _credentials.may_read_dotenv():
-    try:
-        from dotenv import load_dotenv
-        _before_dotenv = set(os.environ)
-        load_dotenv()
-        _credentials.record_dotenv(set(os.environ) - _before_dotenv)
-    except Exception:
-        pass
+_credentials.load_dotenv_for_development()     # KEY-2 (D7-G): core/credentials decides
 
 
 def _clean(name: str) -> str:
-    """Read a setting, rejecting blanks and unedited <placeholder> values. The ten secret names
-    (core/credentials/names.py) come from the credential store: environment, then OS keyring, then `.env`."""
-    from core.credentials import names as _names
-    if _names.is_secret(name):
-        return _credentials.get(name)
-    return _credentials.clean_value(os.getenv(name))
+    """Read an env var, rejecting blanks and unedited <placeholder> values."""
+    return _credentials.read_setting(name)
 
 
 def _present(name: str) -> bool:
