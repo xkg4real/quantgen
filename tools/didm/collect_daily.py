@@ -3,6 +3,11 @@
     python -m tools.didm.collect_daily --data-dir <folder outside the repository> [--finbert]
     python -m tools.didm.collect_daily --data-dir <folder> --alfred CPIAUCSL PAYEMS
     python -I -m tools.didm.collect_daily --data-dir <folder> --alfred-file CPIAUCSL=<downloaded .xlsx>
+    python -m tools.didm.collect_daily --data-dir <folder> --no-gdelt --edgar 320193 --opendart 20261117 20261118 \
+        --ecos 722Y001,M,202401,202612,0101000 --kalshi KXFED
+
+Keys / settings by name only: FRED_API_KEY, OPENDART_API_KEY (existing), ECOS_API_KEY,
+SEC_EDGAR_USER_AGENT (generic contact). Kalshi and GDELT need none.
 
 Steps: GDELT 2.0 newest 15-minute events + GKG files -> point-in-time store
 (<data-dir>/didm_store.sqlite). Optional: FinBERT baseline polarity on GKG page
@@ -21,7 +26,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from core.didm.ingest import alfred as alfred_ingest
+from core.didm.ingest import ecos as ecos_ingest
+from core.didm.ingest import filings as filings_ingest
 from core.didm.ingest import gdelt as gdelt_ingest
+from core.didm.ingest import kalshi as kalshi_ingest
 from core.didm.llm.schema import ess_like
 from core.didm.store import PointInTimeStore
 
@@ -93,6 +101,42 @@ def collect_alfred_file(store: PointInTimeStore, spec: str) -> None:
     print(f"ALFRED file {sid}: vintage rows {len(rows)}, new {store.append_many(rows)}")
 
 
+def _run(label: str, fn) -> None:
+    try:
+        fn()
+    except Exception as exc:  # noqa: BLE001 - one source failing must not stop the others
+        print(f"{label} failed: {type(exc).__name__}")
+
+
+def collect_edgar(store: PointInTimeStore, ciks: list[str]) -> None:
+    from data.didm import edgar
+    for cik in ciks:
+        rows = filings_ingest.edgar_rows(edgar.fetch_submissions(int(cik)), _now())
+        print(f"EDGAR CIK {int(cik)}: filings {len(rows)}, new {store.append_many(rows)}")
+
+
+def collect_opendart(store: PointInTimeStore, bgn: str, end: str) -> None:
+    from data.didm import opendart
+    pages = opendart.fetch_listing(bgn, end)
+    received = _now()
+    rows = [r for p in pages for r in filings_ingest.opendart_rows(p, received)]
+    print(f"OpenDART {bgn}-{end}: pages {len(pages)}, filings {len(rows)}, new {store.append_many(rows)}")
+
+
+def collect_ecos(store: PointInTimeStore, spec: str) -> None:
+    from data.didm import ecos
+    stat, cycle, start, end, *items = spec.split(",")
+    rows = ecos_ingest.rows(ecos.fetch_series(stat, cycle, start, end, *items), _now())
+    print(f"ECOS {stat}: observations {len(rows)}, new {store.append_many(rows)}")
+
+
+def collect_kalshi(store: PointInTimeStore, series: str) -> None:
+    from data.didm import kalshi
+    rows = kalshi_ingest.market_snapshot_rows(kalshi.fetch_markets(series), _now())
+    liquid = sum(1 for r in rows if r["payload"]["liquid"])
+    print(f"Kalshi {series}: markets {len(rows)} (liquid {liquid}), new {store.append_many(rows)}")
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="DIDM daily collector (owner PC)")
     ap.add_argument("--data-dir", required=True)
@@ -100,6 +144,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--finbert", action="store_true")
     ap.add_argument("--alfred", nargs="*", default=[])
     ap.add_argument("--alfred-file", action="append", default=[], metavar="SERIES=PATH")
+    ap.add_argument("--edgar", nargs="*", default=[], metavar="CIK")
+    ap.add_argument("--opendart", nargs=2, metavar=("BGN_YYYYMMDD", "END_YYYYMMDD"))
+    ap.add_argument("--ecos", action="append", default=[], metavar="STAT,CYCLE,START,END[,ITEM...]")
+    ap.add_argument("--kalshi", nargs="*", default=[], metavar="SERIES")
     args = ap.parse_args(argv)
     with PointInTimeStore(_data_dir(args.data_dir) / "didm_store.sqlite") as store:
         rows: list[dict] = []
@@ -114,6 +162,14 @@ def main(argv: list[str] | None = None) -> int:
             collect_alfred_api(store, args.alfred)
         for spec in args.alfred_file:
             collect_alfred_file(store, spec)
+        if args.edgar:
+            _run("EDGAR", lambda: collect_edgar(store, args.edgar))
+        if args.opendart:
+            _run("OpenDART", lambda: collect_opendart(store, *args.opendart))
+        for spec in args.ecos:
+            _run("ECOS", lambda spec=spec: collect_ecos(store, spec))
+        for series in args.kalshi:
+            _run("Kalshi", lambda series=series: collect_kalshi(store, series))
     print(gdelt_ingest.ATTRIBUTION)
     return 0
 
