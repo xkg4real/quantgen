@@ -6,6 +6,18 @@
 
 ---
 
+# Claude UI 2026-11-18 — PySide6 전환 대비 UI 코드 정리 완료 (OS 세션 점검표)
+
+- status: waiting_on owner · owner: Claude UI (세션 c958d211) · **이 요약이 아래 기록보다 우선합니다.**
+- work_branch: `claude/friendly-bardeen-r6xe8f` · work_commit: `75336f3` (코드 `bbd253b`). LEDGER `⑬-2/pyside6-prep/1`.
+- 근거: OS 브랜치 `claude/os-prep-20261117`의 `docs/platform/PYSIDE6_UI_CHECKLIST.md`, `PYSIDE6_TRIAL_2026-11-17.md` 7절. 위치 확인: `python tools/qt_port/pyqt6_to_pyside6.py --lint --ref origin/claude/friendly-bardeen-r6xe8f` (OS 브랜치에서).
+- 소유자 지시(요약): ① localization.py:80 singleShot → 자식 소유 ② bonds.py setWeight(QFont.Weight(600)) → 6-bound 31곳 → 3 receivers → 5 이벤트 필터 해시 → 4 paper 콤보 Enum → 1·2·8·13 → 10 누수.
+- 결과: 지시한 묶음 모두 lint 0(8-font 2건은 PyQt6 전용 분기 안이라 남음). 남은 lint 48 = 4-combo-data 25·6-deferred 11(검토용), 9-delegate 10(지시 없음 — 소유자에게 진행 여부 질문함).
+- 공용 도움 함수 `quantgen_desktop/qt_compat.py`: `call_later(owner, ms, fn)`(0ms는 owner 자식 릴레이에 posted event, 그 외는 owner 자식 단발 타이머), `is_one_of`, `lookup`, `index_of`. 새 화면 코드도 이것을 씁니다.
+- 검증: UI 107개 모듈 1,117개 OK(PyQt6 6.12, Linux offscreen). 독립 검토 3건 확인·수정(공유 차트 겹침[높음], 언어 패스가 그리기 뒤로 밀림, 0ms 호출 순서). PySide6로는 실행하지 않음(설치 안 됨) — OS 세션의 재시범으로 확인 필요.
+
+---
+
 # Claude UI 2026-11-17 (2) — 나머지 7개 화면 승인 시안 앱 적용 완료 (소유자 실행 확인 대기)
 
 - status: waiting_on owner · owner: Claude UI (세션 c958d211) · **이 요약이 아래 기록보다 우선합니다.**
