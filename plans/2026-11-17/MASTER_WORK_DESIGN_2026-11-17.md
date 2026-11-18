@@ -1,5 +1,8 @@
 # QUANTGEN 업무 설계도 (마스터 파일) — 2026-11-17 초안
 
+> **2026-11-18 소유자 결정 (메인 세션 기록):** (1) **D7-G 승인** — 원문 "그러면 D7-G의 방식대로 진행하겠습니다" (2026-11-18 14:15 KST, OS_EXPANSION 세션에 소유자가 직접 씀; 메인이 그 세션 대화 기록에서 원문 확인). D7-A는 쓰지 않고 `D7_ENV_STRUCTURE.md` 5장의 게이트웨이 안으로 갑니다: KEY-2(자격 증명 저장소, `quantgen_cloud` 자리 없음)·KEY-3(게이트웨이 핵심)·KEY-4(core 호출 이전)는 결제·계정·키 세션, KEY-5(화면)는 UI 세션(소유자를 거쳐 요청), `app_identity`의 `DATA_API_BASE`·`GATEWAY_PROFILE` 자리는 OS 세션. 브랜치 작업은 지금, main 병합은 F21 뒤 `MERGE_QUEUE.md` 순서. (2) **OS-P0-d 플랫폼 계획 개정 초안 승인** — 원문 "개정 초안 승인합니다." (2026-11-18 11:25 KST, 같은 세션). 둘 다 다음 main 결정 기록 PR에 원문으로 옮깁니다.
+
+
 > **2026-11-17 소유자 답 이후 우선순위 (메인 세션):** 이 문서는 소유자 답 전의 초안입니다. 소유자 답(handoff `CURRENT.md`, "소유자 답: 11-16 결정 D1~D14" 절)과 같은 폴더의 보고서 `D5_GITHUB_PRO_AND_PRIVATE.md`, `D7_ENV_STRUCTURE.md`(D7-A 거부·D7-G 권장, 소유자 확인 중), `D9_PYSIDE6_ESTIMATE.md`(나안), `D11_ACCOUNTS_AND_ADMIN_GUIDE.md`(정식 계정 지금), `D14_RAVENPACK_ALTERNATIVES.md`(엑셀 대안 9개, Bigdata.com 시험·DS-2 없음)와 `sessions/04_OS_EXPANSION.md`·`05_PAYMENTS_ACCOUNT_KEYS.md`·`06_DATA_SOURCE_DIDM.md`가 이 문서와 다르면 **그쪽이 우선**합니다. `*_NEW.md` 세 지시문은 위 세 파일로 대체되어 지웠습니다(이력은 커밋 `8a66956`). 병합 순서와 동결은 handoff 루트 `MERGE_QUEUE.md`.
 
 
