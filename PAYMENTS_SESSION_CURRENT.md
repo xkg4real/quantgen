@@ -6,11 +6,11 @@ task: payments-account-keys
 cycle: 2026-11-17
 done_ids: none
 next_ids: PAY-A1, PAY-A2, KEY-1, KEY-2, KEY-3/design, KEY-3, PAY-0, PAY-2
-updated_at: 2026-11-18T15:10:00+09:00
+updated_at: 2026-11-18T15:40:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/payments-keys-20261117
-work_commit: 178c51e
+work_commit: 46d6be8
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -99,7 +99,7 @@ ENV_NAMES.md: 26개 이름 모두 표 행에 있음=True, NAME=값 꼴 0건
 3. KEY-3/design `docs/commercial/GATEWAY_DESIGN.md` (지시문 8절). 완료 기준: 소유자 확인.
 4. PAY-0 (`docs/commercial/inquiries/`), PAY-2 결제 설계. 완료 기준: 소유자 확인.
 5. KEY-3/design → KEY-3 코드 (지시문 8절, D7 5장). 완료 기준: 가짜 서버 시험 ("personal ↔ 가짜 서버 경유 commercial 같은 답"), 경계 시험의 예외 수 기록.
-5a. KEY-2 병합 (F21 뒤, 대기열 차례): 최신 main merge → `python -m tools.compliance.check --refresh-baseline --reviewed-by "<이름>" --review-note "<12자 이상>"` → `--check` → PR (파일 추가가 있으니 20개 문서 재검토를 PR 설명에 씀) → 모든 작업 녹색 → 메인이 병합.
+5a. KEY-2 병합 (F21 뒤, 대기열 차례). **PR 본문에 꼭 적을 것 (메인 요청 2026-11-18):** "config.py 변경 → Nautilus 브리지 code_sha256 바뀜 (`config.py`는 연구 브랜치 `tools/nautilus/runner.py` `code_paths`의 입력) → 다음 기록 실행 전 소유자가 owner_confirmed 두 줄을 새로 씀". config.py 변경은 3줄로 줄였음 (`.env` 로딩·설정 읽기를 `core/credentials`의 `load_dotenv_for_development`·`read_setting`으로 옮김). 순서: 최신 main merge → `python -m tools.compliance.check --refresh-baseline --reviewed-by "<이름>" --review-note "<12자 이상>"` → `--check` → PR (파일 추가가 있으니 20개 문서 재검토를 PR 설명에 씀) → 모든 작업 녹색 → 메인이 병합.
 6. 세 문서는 소유자 확인 뒤 메인에 LEDGER 기록 요청 (main에 넣는 PR은 대기열 차례가 올 때만; 문서 PR은 Compliance만 돎).
 
 ## 7. 주의사항
