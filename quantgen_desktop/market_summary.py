@@ -34,6 +34,8 @@ from .jobs import Jobs
 SUMMARY = {"kr": (("^KS11", "pt"), ("^KQ11", "pt")), "us": (("^GSPC", "pt"), ("^IXIC", "pt")),
            "crypto": (("BTC-USD", "USD"), ("ETH-USD", "USD"))}
 SUMMARY.update(etf_kr=SUMMARY["kr"], etf_us=SUMMARY["us"])
+# The 시장 main screen (owner 2026-11-17, `market_hub.MarketHub`): the five headline series of the pages above.
+SUMMARY["hub"] = (*SUMMARY["kr"], *SUMMARY["us"], SUMMARY["crypto"][0])
 SPARK_POINTS = 22            # about a month of trading days
 RETRY_SECONDS = 300
 TILE_SPARK = (64, 22)
@@ -158,6 +160,7 @@ class MarketSummary(QWidget):
         self._loading = None         # page while its job runs
         self._epoch, self._stopped, self._pending, self._cancel = 0, False, False, None
         self.compact = False
+        self.max_tiles = None        # the 시장 main screen shows only the tiles that fit (market_hub)
         self.jobs = Jobs(self)
         self.jobs.succeeded.connect(self._loaded)
         self.jobs.failed.connect(self._failed)
@@ -292,7 +295,7 @@ class MarketSummary(QWidget):
 
     def wide_width(self):
         """The strip's width with sparklines (what `set_compact(False)` needs)."""
-        shown = [tile for symbol, tile in self.tiles.items() if symbol in {s for s, *_ in SUMMARY[self.page]}]
+        shown = [self.tiles[symbol] for symbol in self.shown_symbols()]
         extra = TILE_SPARK[0] + 10  # a hidden sparkline and its spacing
         width = sum(tile.sizeHint().width() + (extra if tile.ok and not tile.spark.isVisibleTo(tile) else 0)
                     for tile in shown)
@@ -300,6 +303,10 @@ class MarketSummary(QWidget):
         if self.state.isVisibleTo(self):
             width += self.state.sizeHint().width()
         return width
+
+    def shown_symbols(self):
+        symbols = [symbol for symbol, *_ in SUMMARY[self.page]]
+        return symbols[:self.max_tiles] if self.max_tiles else symbols
 
     def set_theme(self, dark):
         self.dark = bool(dark)
@@ -317,7 +324,7 @@ class MarketSummary(QWidget):
     def render(self):
         from .translations import translate
         lang = "ko" if self.ctx.language == "ko" else "en"
-        shown = {symbol for symbol, *_ in SUMMARY[self.page]}
+        shown = set(self.shown_symbols())
         for symbol, tile in self.tiles.items():
             if symbol in shown:
                 tile.show_history(self.histories.get(symbol), language=lang, dark=self.dark,

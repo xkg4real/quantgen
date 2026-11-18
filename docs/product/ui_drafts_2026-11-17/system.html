@@ -1,0 +1,203 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="qg.css"><script src="qg.js"></script>
+<style>
+  .page, .side { word-break: keep-all; }
+  /* connection list: one grid per row so every column lines up */
+  .conn { flex: 1; min-height: 0; padding: 6px 18px 12px; display: flex; flex-direction: column; }
+  .cg { display: grid; grid-template-columns: 34px minmax(0, 1fr) 146px 92px 112px 46px; column-gap: 12px; align-items: center; }
+  .chead { padding: 9px 8px 9px; border-bottom: 1px solid var(--line); font-size: 12px; color: var(--muted); font-weight: 500; }
+  .grp { display: flex; align-items: baseline; gap: 8px; padding: 12px 8px 4px; font-size: 12px; color: var(--muted); font-weight: 500; }
+  .grp .n { color: var(--faint); font-weight: 400; }
+  .grp .r { margin-left: auto; font-weight: 400; color: var(--faint); font-size: 11px; }
+  .crow { padding: 7px 8px; flex: 1; max-height: 54px; }
+  .crow + .crow { border-top: 1px solid var(--line); }
+  .avatar.sq { width: 34px; height: 30px; border-radius: 9px; font-size: 11px; letter-spacing: -0.2px; }
+  .nm { font-size: 14px; font-weight: 500; letter-spacing: -0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nm .lb { color: var(--muted); font-weight: 400; font-size: 12px; margin-left: 4px; }
+  .ds { font-size: 12px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .vars { font-size: 11px; color: var(--muted); line-height: 1.5; letter-spacing: 0; font-variant-numeric: tabular-nums; }
+  .vars.none { color: var(--faint); font-size: 12px; letter-spacing: -0.2px; }
+  .st .badge { padding: 3px 9px; }
+  .badge.off { color: var(--muted); background: var(--surface2); }
+  .badge.off .dot { background: transparent; box-shadow: inset 0 0 0 1.4px currentColor; }
+  .chk { font-size: 12px; line-height: 1.4; }
+  .chk .t { color: var(--faint); font-size: 11px; letter-spacing: 0; font-variant-numeric: tabular-nums; }
+  .chk.ok { color: var(--success); } .chk.bad { color: var(--error); } .chk.plain { color: var(--muted); }
+  .act { justify-self: end; }
+  .act .btn { padding: 5px 10px; font-size: 12px; border-radius: 8px; background: var(--surface2); color: var(--text); }
+  .act .dash { color: var(--faint); font-size: 12px; padding-right: 10px; }
+  .cfoot { margin-top: 8px; padding: 10px 8px 0; border-top: 1px solid var(--line); font-size: 11px; color: var(--faint); line-height: 1.5; }
+  /* summary strip under the title line */
+  .meter { display: flex; height: 6px; width: 132px; border-radius: 3px; overflow: hidden; gap: 2px; align-self: center; }
+  .meter i { display: block; height: 100%; }
+  /* side column */
+  .in.ro { background: var(--surface2); border-color: transparent; color: var(--muted); }
+  .seg.full.sm span { padding: 6px 10px; }
+  .scope { display: flex; flex-direction: column; gap: 6px; }
+  .scope div { display: flex; flex-direction: column; gap: 2px; font-size: 12px; line-height: 1.45; }
+  .scope div b { font-weight: 500; color: var(--text); }
+  .scope div span { color: var(--muted); }
+  .safe { display: flex; gap: 8px; align-items: flex-start; }
+  .lock { width: 12px; height: 13px; flex: none; margin-top: 2px; }
+</style></head>
+<body>
+<main class="page">
+  <div class="toolbar">
+    <div class="title">시스템</div>
+    <div class="seg" style="margin-left:14px"><span class="on">연결</span><span>규칙</span><span>시장 데이터 이용 조건</span></div>
+    <span class="badge" style="margin-left:6px"><span class="dot"></span>읽기 전용 · 키 값 표시 안 함</span>
+    <div class="spacer"></div>
+    <span class="small faint num" style="margin-right:4px">설정 읽음 11-17 09:12</span>
+    <span class="btn ghost">설정 다시 읽기</span>
+  </div>
+  <div class="body">
+    <section class="canvas">
+      <div class="figs">
+        <span><b style="font-size:15px">데이터 연결</b> <span class="muted">· 공급처 11곳 · 기록된 근거와 이번 실행 결과를 구분해요</span></span>
+      </div>
+      <div class="figs">
+        <span class="meter"><i style="flex:7;background:var(--success)"></i><i style="flex:1;background:#C9A64B"></i><i style="flex:3;background:#D9DCD3"></i></span>
+        <span><span class="k">설정됨</span><span class="v num">7</span></span>
+        <span><span class="k">확인 필요</span><span class="v num" style="color:var(--warning)">1</span></span>
+        <span><span class="k">미설정</span><span class="v num">3</span></span>
+        <span><span class="k">접속 응답</span><span class="v num">4 / 5</span></span>
+        <span><span class="k">마지막 접속 검사</span><span class="v num">11-17 09:15</span></span>
+      </div>
+      <div class="card conn">
+        <div class="cg chead"><span></span><span>공급처 · 쓰는 곳</span><span>설정 이름</span><span>설정 여부</span><span>접속 검사</span><span></span></div>
+
+        <div class="grp">국내 시장 <span class="n">3</span><span class="r">KIS · KRX 접속 검사</span></div>
+        <div class="cg crow">
+          <span class="avatar sq">KIS</span>
+          <div><div class="nm">KIS <span class="lb">한국투자증권</span></div><div class="ds">국내 시세·일별 가격·KOSPI/KOSDAQ 지수</div></div>
+          <div class="vars">KIS_APP_KEY<br>KIS_APP_SECRET</div>
+          <div class="st"><span class="badge ok"><span class="dot"></span>설정됨</span></div>
+          <div class="chk ok">응답 확인<br><span class="t">11-17 09:14</span></div>
+          <div class="act"><span class="btn">확인</span></div>
+        </div>
+        <div class="cg crow">
+          <span class="avatar sq">DART</span>
+          <div><div class="nm">OpenDART <span class="lb">금융감독원</span></div><div class="ds">공시·보고된 재무제표</div></div>
+          <div class="vars">OPENDART_API_KEY</div>
+          <div class="st"><span class="badge ok"><span class="dot"></span>설정됨</span></div>
+          <div class="chk plain">설정만 확인<br><span class="t">11-17 09:12</span></div>
+          <div class="act"><span class="dash">—</span></div>
+        </div>
+        <div class="cg crow">
+          <span class="avatar sq">KRX</span>
+          <div><div class="nm">KRX <span class="lb">Data marketplace</span></div><div class="ds">시장 전체 세션 스냅샷 · 무료 Open API 키 필요</div></div>
+          <div class="vars">KRX_API_KEY</div>
+          <div class="st"><span class="badge off"><span class="dot"></span>미설정</span></div>
+          <div class="chk plain">키 없어 검사 안 함<br><span class="t">11-17 09:15</span></div>
+          <div class="act"><span class="btn">확인</span></div>
+        </div>
+
+        <div class="grp">해외·매크로 <span class="n">3</span><span class="r">FRED / Yahoo 접속 검사</span></div>
+        <div class="cg crow">
+          <span class="avatar sq">FMP</span>
+          <div><div class="nm">Financial Modeling Prep</div><div class="ds">배당 조정 미국 종가</div></div>
+          <div class="vars">FMP_API_KEY</div>
+          <div class="st"><span class="badge ok"><span class="dot"></span>설정됨</span></div>
+          <div class="chk plain">설정만 확인<br><span class="t">11-17 09:12</span></div>
+          <div class="act"><span class="dash">—</span></div>
+        </div>
+        <div class="cg crow">
+          <span class="avatar sq">FRED</span>
+          <div><div class="nm">FRED <span class="lb">St. Louis Fed</span></div><div class="ds">미 국채 곡선·SOFR·신용 스프레드·매크로</div></div>
+          <div class="vars none">키 필요 없음</div>
+          <div class="st"><span class="badge ok"><span class="dot"></span>설정됨</span></div>
+          <div class="chk ok">응답 확인<br><span class="t">11-17 09:14</span></div>
+          <div class="act"><span class="btn">확인</span></div>
+        </div>
+        <div class="cg crow">
+          <span class="avatar sq">YF</span>
+          <div><div class="nm">Yahoo Finance <span class="lb">yfinance</span></div><div class="ds">환율·선물·지수 수준</div></div>
+          <div class="vars none">키 필요 없음</div>
+          <div class="st"><span class="badge ok"><span class="dot"></span>설정됨</span></div>
+          <div class="chk ok">응답 확인<br><span class="t">11-17 09:14</span></div>
+          <div class="act"><span class="btn">확인</span></div>
+        </div>
+
+        <div class="grp">가상자산 <span class="n">3</span><span class="r">Upbit / Binance 공개 데이터 접속 검사</span></div>
+        <div class="cg crow">
+          <span class="avatar sq">UB</span>
+          <div><div class="nm">Upbit <span class="lb">공개 데이터</span></div><div class="ds">KRW-BTC 일별 가격 · 2017-09-25부터</div></div>
+          <div class="vars none">키 필요 없음</div>
+          <div class="st"><span class="badge ok"><span class="dot"></span>설정됨</span></div>
+          <div class="chk ok">응답 확인<br><span class="t">11-17 09:15</span></div>
+          <div class="act"><span class="btn">확인</span></div>
+        </div>
+        <div class="cg crow">
+          <span class="avatar sq">BN</span>
+          <div><div class="nm">Binance <span class="lb">공개 데이터</span></div><div class="ds">현물·선물 일별 가격, 펀딩비 · 국내 접속 제한 가능</div></div>
+          <div class="vars none">키 필요 없음</div>
+          <div class="st"><span class="badge warn"><span class="dot"></span>확인 필요</span></div>
+          <div class="chk bad">응답 없음 · 시간 초과<br><span class="t">11-17 09:15</span></div>
+          <div class="act"><span class="btn">확인</span></div>
+        </div>
+        <div class="cg crow">
+          <span class="avatar sq">UB</span>
+          <div><div class="nm">Upbit 계정 <span class="lb">자산조회 전용</span></div><div class="ds">잔고 조회만 · 주문 경로 없음</div></div>
+          <div class="vars">UPBIT_ACCESS_KEY<br>UPBIT_SECRET_KEY</div>
+          <div class="st"><span class="badge off"><span class="dot"></span>미설정</span></div>
+          <div class="chk plain">설정만 확인<br><span class="t">11-17 09:12</span></div>
+          <div class="act"><span class="dash">—</span></div>
+        </div>
+
+        <div class="grp">분석 보조 <span class="n">2</span><span class="r">선택 연결 · 없어도 분석은 실행돼요</span></div>
+        <div class="cg crow">
+          <span class="avatar sq">AI</span>
+          <div><div class="nm">Claude API <span class="lb">심화 해설</span></div><div class="ds">퀀트 결과 AI 해설 · claude-sonnet-5</div></div>
+          <div class="vars">ANTHROPIC_API_KEY</div>
+          <div class="st"><span class="badge ok"><span class="dot"></span>설정됨</span></div>
+          <div class="chk plain">설정만 확인<br><span class="t">11-17 09:12</span></div>
+          <div class="act"><span class="dash">—</span></div>
+        </div>
+        <div class="cg crow">
+          <span class="avatar sq">GS</span>
+          <div><div class="nm">GS Marquee <span class="lb">gs_quant 세션</span></div><div class="ds">상품 가격 계산 · 오프라인 분석은 키 없이 가능</div></div>
+          <div class="vars">GS_CLIENT_ID<br>GS_CLIENT_SECRET</div>
+          <div class="st"><span class="badge off"><span class="dot"></span>미설정</span></div>
+          <div class="chk plain">설정만 확인<br><span class="t">11-17 09:12</span></div>
+          <div class="act"><span class="dash">—</span></div>
+        </div>
+
+        <div class="cfoot">설정됨은 설정의 존재만 뜻해요. 실제 접속은 접속 검사로 따로 확인해요 · 접속 검사는 읽기 전용이며 계좌 조회·주문·연결 설정 변경을 하지 않아요.</div>
+      </div>
+    </section>
+
+    <aside class="side">
+      <div class="seg full"><span class="on">설정</span><span>읽는 법</span></div>
+      <div class="scroll">
+        <div class="fold-head"><i class="chev"></i>언어·지역</div>
+        <div class="fields">
+          <div class="field wide"><label>표시 언어</label><div class="in select">한국어 · 대한민국</div></div>
+          <div class="field"><label>날짜 표기</label><div class="in ro num">2026-11-17</div></div>
+          <div class="field"><label>숫자 표기</label><div class="in ro num">76,000.50</div></div>
+        </div>
+        <div class="hint" style="margin-top:-4px">검수 기준 언어: 한국어·영어 · 다른 언어는 번역팩 추가 가능</div>
+        <div class="hr"></div>
+        <div class="fold-head"><i class="chev"></i>화면</div>
+        <div class="field"><label>테마</label><div class="seg full sm"><span class="on">밝게</span><span>어둡게</span></div></div>
+        <div class="hr"></div>
+        <div class="fold-head"><i class="chev"></i>데이터 연결 확인</div>
+        <div class="fields">
+          <div class="field wide"><label>도구</label><div class="in select">설정 여부 확인 · 네트워크 조회 없음</div></div>
+          <div class="field wide"><label>데이터 출처</label><div class="in select">기존 연결 사용</div></div>
+        </div>
+        <div class="guide">
+          <div class="small" style="font-weight:600">검사 범위</div>
+          <div class="scope">
+            <div><b>설정 여부 확인</b><span>설정 이름만 읽어요. 네트워크에 묻지 않아요.</span></div>
+            <div><b>접속 검사</b><span>KRX · KIS · FRED/Yahoo · Upbit/Binance에 읽기 전용 호출을 한 번씩 보내요.</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="foot">
+        <button class="btn primary block">선택한 연결 확인</button>
+        <div class="tiny faint" style="text-align:center">설정 여부와 실제 응답을 구분해요 · 키 값은 표시하거나 저장하지 않아요</div>
+      </div>
+    </aside>
+  </div>
+</main>
+<script>rail("system");</script>
+</body></html>

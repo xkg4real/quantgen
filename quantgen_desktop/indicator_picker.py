@@ -19,14 +19,15 @@ from __future__ import annotations
 from html import escape
 import math
 
-from PyQt6.QtCore import QPointF, QRectF, QSize, Qt, pyqtSignal
+from PyQt6.QtCore import QPoint, QPointF, QRectF, QSize, Qt, pyqtSignal
 from PyQt6.QtGui import QColor, QFont, QPainter, QPainterPath, QPen
 from PyQt6.QtWidgets import (QAbstractButton, QFrame, QHBoxLayout, QLabel, QLineEdit, QPushButton, QSizePolicy,
                              QVBoxLayout, QWidget)
 
 from core.i18n import LocaleContext
 from .stock_detail_side import FoldHeader
-from .stock_detail_style import ClampLabel, ElidedLabel, icon, label, numbers, polite, set_prop, text
+from .stock_detail_style import (ClampLabel, ElidedLabel, icon, label, numbers, polite, put_text, put_visible,
+                                 set_prop, text)
 
 STARTER = ("sma", "volume_ma", "rsi")
 # Pill tones by one-word state (core.market.detail_model.study_state): red rise / blue fall (Korean convention).
@@ -83,6 +84,13 @@ class NameLine(QWidget):
         self.place_wanted = True
         self.place_moved = None     # called when the place chip or the value leaves or returns to the line
         self.value_moved = False    # the value went to line 2 (a long name in a narrow column)
+        # The widest value (full, bare) this row has shown on this chart. Live prices change a value's length
+        # ('9.98' -> '10.02'); measuring only the new text moved the place chip to line 2 and back, so rows grew and
+        # shrank under the reader while the list scrolled (owner 2026-11-17 "지표부분 스크롤 내릴때 불안정").
+        self.widest = (0, 0)
+
+    def reset_widths(self):
+        self.widest = (0, 0)
 
     def fit(self):
         width = self.width()
@@ -93,6 +101,9 @@ class NameLine(QWidget):
         full, bare = (metrics.horizontalAdvance(choices[0]) + 2, metrics.horizontalAdvance(choices[-1]) + 2)
         if not choices[0]:
             full = bare = 0
+        else:
+            full, bare = max(full, self.widest[0]), max(bare, self.widest[1])
+            self.widest = (full, bare)
         spacing = self.row.spacing()
         name = self.name.fontMetrics().horizontalAdvance(self.name.text()) + 8   # + the label's own slack
         chip = self.place.sizeHint().width() + spacing
@@ -105,8 +116,10 @@ class NameLine(QWidget):
         if self.value.width() != value or self.value.minimumWidth() != value:
             self.value.setFixedWidth(value)
         moved = (self.place.isHidden() == place) or (self.value.isHidden() == value_on and bool(full))
-        self.place.setVisible(place)
-        self.value.setVisible(value_on)
+        if self.place.isHidden() == place:
+            self.place.setVisible(place)
+        if self.value.isHidden() == value_on:
+            self.value.setVisible(value_on)
         self.value_moved = bool(full) and not value_on
         if moved and callable(self.place_moved):
             self.place_moved(not place)
@@ -325,6 +338,70 @@ class ChipRow(QWidget):
             self.setMaximumHeight(height)
 
 
+class ConclusionBlock(QWidget):
+    """결론 (owner 2026-11-17): the conditions read as an upward and a downward flow, which side the chart is on now,
+    and how strong the evidence is (`core.education.outlook`)."""
+
+    def __init__(self):
+        super().__init__()
+        column = QVBoxLayout(self)
+        column.setContentsMargins(0, 2, 0, 0)
+        column.setSpacing(6)
+        self.title = label("conclusionTitle")
+        column.addWidget(self.title)
+        self.sides = {}
+        for side in ("up", "down"):
+            frame = QFrame()
+            frame.setProperty("sd", "verdict")
+            frame.setProperty("tone", side)
+            box = QVBoxLayout(frame)
+            box.setContentsMargins(11, 8, 11, 9)
+            box.setSpacing(3)
+            head = label("verdictHead")
+            head.setProperty("tone", side)
+            box.addWidget(head)
+            items = []
+            for _ in range(2):
+                item = label("verdictItem", wrap=True)
+                box.addWidget(item)
+                items.append(item)
+            column.addWidget(frame)
+            self.sides[side] = (frame, head, items)
+        now = QHBoxLayout()
+        now.setContentsMargins(2, 3, 0, 0)
+        now.setSpacing(8)
+        self.now_label = label("verdictHead")
+        now.addWidget(self.now_label, 0, Qt.AlignmentFlag.AlignVCenter)
+        self.now_pill = label("pill")
+        now.addWidget(self.now_pill, 0, Qt.AlignmentFlag.AlignVCenter)
+        now.addStretch(1)
+        column.addLayout(now)
+        self.now_text = label("nowText", wrap=True)
+        self.now_text.setContentsMargins(2, 0, 0, 0)
+        column.addWidget(self.now_text)
+        self.grade = label("gradeNote", wrap=True)
+        column.addWidget(self.grade)
+
+    def show_conclusion(self, language, conclusion, current):
+        put_text(self.title, text(language, "guide_conclusion"))
+        for side, items in (("up", conclusion.up), ("down", conclusion.down)):
+            _frame, head, labels = self.sides[side]
+            put_text(head, text(language, f"guide_{side}"))
+            for widget, value in zip(labels, (*items, "", "")):
+                put_text(widget, "· " + value if value else "")
+                put_visible(widget, bool(value))
+        put_text(self.now_label, text(language, "guide_now"))
+        shown = current is not None
+        put_visible(self.now_label, shown)
+        put_visible(self.now_pill, shown)
+        put_visible(self.now_text, shown)
+        if shown:
+            put_text(self.now_pill, current.label)
+            set_prop(self.now_pill, "tone", {"up": "up", "down": "down"}.get(current.side, "flat"))
+            put_text(self.now_text, current.reason)
+        put_text(self.grade, f"{conclusion.grade_text} · {conclusion.grade_reason}")
+
+
 class GuideCard(QFrame):
     """One study's guide as a card. compact=True (the right column's reading rows) keeps the reading, the pill,
     the gauge and '자세히' only."""
@@ -357,6 +434,11 @@ class GuideCard(QFrame):
             layout.addWidget(self.headline)
         self.gauge = Gauge()
         layout.addWidget(self.gauge)
+        self.conclusion = None
+        if not compact:
+            self.conclusion = ConclusionBlock()
+            self.conclusion.hide()
+            layout.addWidget(self.conclusion)
         self.context_note = label("guideCaution", wrap=True)
         self.context_note.setObjectName("indicatorContextNote")
         self.context_note.setProperty("qg_literal", True)
@@ -406,38 +488,54 @@ class GuideCard(QFrame):
         self.more.setChecked(bool(on))
 
     def show_guide(self, *, language, name, reading, state="", tone="", gauge=None, gauge_labels=("", ""),
-                   short=None, long_texts=(), colors=None, context=""):
+                   short=None, long_texts=(), colors=None, context="", conclusion=None, current=None):
         """reading: the short sentence now ('' hides it); state: the pill's word; gauge: study_guide.gauge_value
         output or None; short: study_guide.ShortGuide (full card); long_texts: what sits behind 자세히, in order."""
+        # Each widget is set once, to its final state, and only when that changes: the card is filled again on
+        # every live refresh, and showing then hiding parts re-laid the list out under a scrolling reader.
         self.language = language
-        self.headline.setText(reading)
-        self.headline.setVisible(bool(reading))
-        self.context_note.setText(context)
-        self.context_note.setVisible(bool(context))
-        self.pill.setText(state)
+        put_text(self.headline, reading)
+        put_visible(self.headline, bool(reading))
+        put_text(self.context_note, context)
+        # With a conclusion the cross-check moves behind 자세히 (set once, never shown then hidden).
+        put_visible(self.context_note, bool(context) and (conclusion is None or self.compact))
+        put_text(self.pill, state)
         set_prop(self.pill, "tone", tone or "flat")
-        self.pill.setVisible(bool(state))
+        put_visible(self.pill, bool(state))
         if gauge is not None:
             kind, position, marks = gauge
             self.gauge.set_value(kind, position, marks, gauge_labels, colors)
-        self.gauge.setVisible(gauge is not None)
-        if not self.compact and short is not None:
-            self.one_liner.setText(short.one_liner)
+        put_visible(self.gauge, gauge is not None)
+        if self.conclusion is not None:
+            put_visible(self.conclusion, conclusion is not None)
+        if not self.compact and conclusion is not None:
+            # Owner 2026-11-17: the conclusion leads; the concept is one short line and the limit one line. The cue
+            # chips and the cross-check move behind 자세히 (long_texts).
+            self.conclusion.show_conclusion(language, conclusion, current)
+            concept = short.one_liner if short is not None else conclusion.concept   # the picker row's own line
+            put_text(self.one_liner, concept)
+            put_visible(self.one_liner, bool(concept))
+            put_visible(self.cues, False)
+            put_text(self.caution, conclusion.regime)
+            put_visible(self.caution, True)
+        elif not self.compact and short is not None:
+            put_text(self.one_liner, short.one_liner)
             self.cues.set_cues(short.cues)
-            self.caution.setText(short.caution)
+            put_text(self.caution, short.caution)
+            # Current values + one specific cross-check are the default. Definitions
+            # and event detail remain available without repeating the same warning.
             for widget, shown in ((self.one_liner, short.one_liner), (self.cues, short.cues), (self.caution, short.caution)):
-                widget.setVisible(bool(shown))
-        # Current values + one specific cross-check are the default. Definitions
-        # and event detail remain available without repeating the same warning.
-        if context:
-            self.one_liner.hide(); self.cues.hide(); self.caution.hide()
+                put_visible(widget, bool(shown) and not context)
+        elif context:
+            for widget in (self.one_liner, self.cues, self.caution):
+                put_visible(widget, False)
         self.long_texts = tuple(part for part in long_texts if part)
         displayed = self.long_texts[:3] + (("\n\n".join(self.long_texts[3:]),) if len(self.long_texts) > 3 else ())
         for part, value in zip(self.detail_labels, (*displayed, "", "", "", "")):
-            part.setText(paragraph(value) if value else "")
-            part.setVisible(bool(value))
-        self.more.setVisible(bool(self.long_texts))
-        self.more.setText(text(language, "guide_less" if self.more.isChecked() else "guide_more"))
+            put_text(part, paragraph(value) if value else "")
+            put_visible(part, bool(value))
+        put_visible(self.more, bool(self.long_texts))
+        put_text(self.more, text(language, "guide_less" if self.more.isChecked() else "guide_more"))
         self.more.setAccessibleName(text(language, "guide_more_name", name=name))
 
 
@@ -520,7 +618,7 @@ class PickerRow(QFrame):
         its number and the pill): the row keeps only its name and place, so nothing is read twice (owner R-D9-3).
         A hidden panel's line stays: the card does not say it."""
         open_ = self.info.isChecked()
-        self.desc.setVisible(not open_ or self.hidden_panel)
+        put_visible(self.desc, not open_ or self.hidden_panel)
         self.first.fit()
 
     def open_guide(self, on=True):
@@ -565,7 +663,7 @@ class PickerRow(QFrame):
             lead.append(self.value._choices[0])
         if self.place.isHidden() and self.place.text():
             lead.append(self.place.text())
-        self.desc.setText(" · ".join([*lead, self._desc]) if lead else self._desc)
+        put_text(self.desc, " · ".join([*lead, self._desc]) if lead else self._desc)
 
     def show_state(self, *, language, dark, color, value, reason, place, state="", hidden="", short=None):
         """reason: the engine's availability code; hidden: the panel-limit line when the study is on but its
@@ -574,11 +672,13 @@ class PickerRow(QFrame):
         self.reason = reason
         self.hidden_panel = bool(hidden)
         self.bar.set_color(color)
-        self.name.setText(self.spec.name(language))
-        self.place.setText(place)
+        put_text(self.name, self.spec.name(language))
+        put_text(self.place, place)
         why = polite(availability_text(reason, language), language) if reason else hidden
         self._desc = why or (short.one_liner if short is not None else "")
-        self.desc.setToolTip(why or (short.one_liner if short is not None else ""))
+        tip = why or (short.one_liner if short is not None else "")
+        if self.desc.toolTip() != tip:
+            self.desc.setToolTip(tip)
         set_prop(self.desc, "reason", "true" if (reason or hidden) else "false")
         set_prop(self.name, "dim", "true" if reason else "false")
         shown = f"{value} · {state}" if value and value != "—" and state else value
@@ -592,7 +692,9 @@ class PickerRow(QFrame):
         self.switch.setEnabled(not reason or self.switch.isChecked())
         self.switch.colors = (color, "#C9CCC2" if not dark else "#4A5C52", "#FFFFFF")
         self.switch.update()
-        self.info.setIcon(icon("info", "#A7B8AC" if dark else "#646E68", 16))
+        if getattr(self, "_icon_dark", None) is not dark:
+            self._icon_dark = dark
+            self.info.setIcon(icon("info", "#A7B8AC" if dark else "#646E68", 16))
         name = self.spec.name(language)
         self.info.setToolTip(text(language, "picker_info", name=name))
         self.info.setAccessibleName(text(language, "picker_info", name=name))
@@ -769,6 +871,13 @@ class IndicatorPicker(QWidget):
         self.render()
 
     def set_context(self, bars, *, asset, interval, supply=None, panel_limit=None, hidden_panels=()):
+        chart = (asset, interval, len(bars) if bars is not None else 0,
+                 float(bars.close[0]) if bars is not None and len(bars) else None)
+        if chart[:2] != getattr(self, "_chart", (None, None))[:2] or (
+                bars is not None and chart[3] != getattr(self, "_chart", (None,) * 4)[3]):
+            for row in self.rows().values():
+                row.first.reset_widths()   # another stock, interval or history: values are measured afresh
+        self._chart = chart
         self.context = (bars, asset, interval, supply)
         self.panel_limit = panel_limit
         self.hidden_panels = tuple(hidden_panels or ())
@@ -830,6 +939,67 @@ class IndicatorPicker(QWidget):
         return "", ""
 
     def render(self):
+        """Fill every row (and open guide card) from the chart; the row the reader is looking at stays where it is
+        on screen even if rows above it change height (scroll anchoring, owner 2026-11-17)."""
+        anchor = self._scroll_anchor()
+        self._render()
+        if anchor is not None:
+            self._restore_anchor(anchor)
+
+    def _scroll_area(self):
+        from PyQt6.QtWidgets import QAbstractScrollArea
+        parent = self.parentWidget()
+        while parent is not None and not isinstance(parent, QAbstractScrollArea):
+            parent = parent.parentWidget()
+        return parent
+
+    def _scroll_anchor(self):
+        """(scroll area, row, its y in the viewport) for the first row at or below the viewport's top, or None."""
+        scroll = self._scroll_area()
+        if scroll is None or not self.isVisible() or scroll.verticalScrollBar().value() <= 0:
+            return None
+        viewport = scroll.viewport()
+        for group in self.groups.values():
+            if not group.isVisible():
+                continue
+            for row in group.rows.values():
+                if row.isVisible():
+                    y = row.mapTo(viewport, QPoint(0, 0)).y()
+                    if y + row.height() > 0:
+                        return scroll, row, y
+        return None
+
+    def _restore_anchor(self, anchor, *, again=True, value=None):
+        from PyQt6.QtCore import QCoreApplication, QEvent, QTimer
+        scroll, row, y = anchor
+        try:
+            if value is not None and scroll.verticalScrollBar().value() != value:
+                return      # the reader scrolled in between: their position wins
+            # Lay the list out now (the posted layout requests), give the scrolled page the height its layout needs
+            # (QScrollArea would do so on a later pass), then move the bar by what the row moved.
+            QCoreApplication.sendPostedEvents(None, QEvent.Type.LayoutRequest)
+            content = scroll.widget()
+            layout = content.layout() if content is not None else None
+            if layout is not None:
+                layout.activate()
+                width = content.width()
+                need = layout.totalHeightForWidth(width) if layout.hasHeightForWidth() else layout.totalSizeHint().height()
+                need = max(need, scroll.viewport().height())
+                if getattr(scroll, "widgetResizable", lambda: False)() and content.height() != need:
+                    content.resize(width, need)
+                    QCoreApplication.sendPostedEvents(None, QEvent.Type.LayoutRequest)
+            moved = row.mapTo(scroll.viewport(), QPoint(0, 0)).y() - y
+        except RuntimeError:
+            return
+        bar = scroll.verticalScrollBar()
+        if moved:
+            bar.setValue(bar.value() + moved)
+        if again:
+            # Anything Qt lays out on its next pass is corrected once more, against the same place.
+            kept = bar.value()
+            QTimer.singleShot(0, lambda: self._restore_anchor(anchor, again=False, value=kept))
+
+    def _render(self):
         from core.education import indicators as engine
         from core.education.study_guide import category_name, disclaimer, format_value, short_guide
         from core.market.detail_model import study_state
@@ -901,11 +1071,29 @@ class IndicatorPicker(QWidget):
         event_note = "" if reason else signal_note(key, bars, index, language=lang, values=values)
         if event_note:
             long_texts = (*long_texts, event_note)
+        from core.education import outlook as conclusions
+        conclusion = conclusions.outlook(key, lang) if key in conclusions.OUTLOOK else None
+        current = None
+        if conclusion is not None and not reason and bars is not None and len(bars):
+            try:
+                if values is None:
+                    from core.education import indicators as engine
+                    values = engine.compute_study(key, bars, supply=supply)
+                current = conclusions.now(key, values, bars, index, lang)
+            except Exception:
+                current = None
+        if conclusion is not None:
+            extra = [] if reason else [reading_tip(key, lang)]
+            if conclusion.sources:
+                extra.append(text(lang, "guide_sources") + " · " + ", ".join(conclusion.sources))
+            extra.append(text(lang, "guide_textbook"))
+            long_texts = (*long_texts, *extra)
         card.show_guide(language=lang, name=study(key).name(lang), reading=reading,
                         state=state_word(key, code, lang), tone=state_tone(code), gauge=gauge,
                         gauge_labels=self.gauge_labels(key, gauge, lang), short=short, long_texts=long_texts,
                         colors=self.gauge_colors,
-                        context="" if reason else reading_tip(key, lang))
+                        context="" if reason else reading_tip(key, lang),
+                        conclusion=conclusion, current=current)
 
 
 _GAUGE_NAMES = ("gauge_name_sma", "gauge_name_ema", "gauge_name_vwap", "gauge_name_psar", "gauge_name_macd",
