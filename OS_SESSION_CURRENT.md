@@ -6,11 +6,11 @@ task: os-expansion
 cycle: 2026-11-17
 done_ids: none
 next_ids: OS-P0-a, OS-P0-e, OS-P0-f, OS-P0-c, OS-P0-b, OS-P0-d, OS-F1, OS-F2
-updated_at: 2026-11-18T10:45:00+09:00
+updated_at: 2026-11-18T14:30:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/os-prep-20261117
-work_commit: 451db93
+work_commit: e59e3ba
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -58,7 +58,7 @@ session: https://claude.ai/code/session_016uB1jgXiwx42FSUU5ANwM7
 | 시범 PySide6 쪽에만 글꼴 shim(스크래치) | D9와 같은 조건이어야 비교 가능 | shim 없음 — 거의 모든 테스트가 import에서 실패 |
 | OOM으로 죽은 UI 단계 3·5는 상한 8GB로 단독 재실행한 값을 씀(원 로그 보관) | 동시 실행 탓인지 가리려고; 재실행에서도 단계 3은 세그폴트 | 첫 값 그대로 |
 | `user_data_dir()` 재정의 이름은 Notion 계획 F2의 `QUANTGEN_DATA_DIR`, 그다음 `FLET_APP_STORAGE_DATA` | 기존 계획과 일치, 모바일 저장소 | 처음 쓴 `QG_USER_DATA_DIR` |
-| `DATA_API_BASE`·`GATEWAY_PROFILE` 아직 넣지 않음 | 소유자가 이 세션에서 D7-G를 승인함 (2026-11-18, 원문: "그러면 D7-G의 방식대로 진행하겠습니다"). 지시문 표 D7 행에 따라 **메인이 MASTER 또는 공지에 승인을 적은 뒤** `core/app_identity.py`에 두 값 자리(`DATA_API_BASE` 빈 값, `GATEWAY_PROFILE` `personal`)를 더함 | 소유자 답, 지시문 04 D7 행 |
+| `DATA_API_BASE`(빈 값)·`GATEWAY_PROFILE`(`personal`) 추가함 (`core/app_identity.py`, 시험 포함) | 소유자 D7-G 승인 (2026-11-18, 원문: "그러면 D7-G의 방식대로 진행하겠습니다"), 메인이 handoff `MASTER_WORK_DESIGN_2026-11-17.md`·`MERGE_QUEUE.md`에 기록 (`762150c`) | 소유자 답, 메인 기록 |
 | 게시자·조직명 기본값 "QUANTGEN" (회사 접미사 없음) | 법인 전, 상법 제20조 지적(D11 2.1, 법률 자문 아님); 지금 QSettings 이름과 같아 설정 유지 | — |
 | spec은 `git ls-files` + `stage.allowed()`로만 자료를 고름, 계산 해시 원본 3개를 자료 파일로 넣음 | 보호 폴더가 들어갈 수 없게; 패키지 앱의 `code_evidence()` 해시가 None이 되지 않게 | PyInstaller `collect_submodules` (홀드아웃 경로도 모을 수 있음) |
 | `platform-build.yml`은 수동·`v*` 태그만, PR 안 엶 | 비공개 뒤 유료, 대기열 규칙 | push·PR 트리거 |
