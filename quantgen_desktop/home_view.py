@@ -38,6 +38,7 @@ from PyQt6.QtCore import (QEasingCurve, QEvent, QPoint, QPointF, QPropertyAnimat
 from PyQt6.QtGui import QBrush, QColor, QFontMetricsF, QIcon, QLinearGradient, QPainter, QPainterPath, QPen
 from PyQt6.QtWidgets import (QButtonGroup, QFrame, QStyle, QHBoxLayout, QLabel, QPushButton, QSizePolicy, QToolButton,
                              QVBoxLayout, QWidget)
+from .qt_compat import call_later
 
 from core.i18n import LocaleContext
 from core.research.markets import SPECS, MarketDataUnavailable, provider_failure_reason
@@ -396,6 +397,7 @@ class MarketCard(QFrame):
         head.setSpacing(6)
         # The painted mark stays for callers; the approved tile shows the name and ticker only.
         self.mark = CompanyMark(info.symbol, info.ticker, size=30)
+        self.mark.setParent(self)   # kept, hidden, as a child: a parentless widget would outlive the window
         self.mark.hide()
         self.name = ElidedLabel()            # text() is the whole name; it paints elided only when it must
         self.name.setProperty("homeRole", "cardName")
@@ -995,6 +997,7 @@ class HomeView(QWidget):
         names = QHBoxLayout()
         names.setSpacing(8)
         self.chart_mark = CompanyMark(HOME_MARKETS[0].symbol, size=40)
+        self.chart_mark.setParent(self)      # a hidden child, not a parentless widget the window keeps alive
         self.chart_mark.hide()               # the approved name line carries no mark
         self.chart_name = _plain("chartName")
         self.chart_ticker = ElidedLabel()
@@ -1274,7 +1277,7 @@ class HomeView(QWidget):
     def showEvent(self, event):
         super().showEvent(event)
         if self.auto_load:
-            QTimer.singleShot(0, self.ensure_history)
+            call_later(self, 0, self.ensure_history)
 
     def hideEvent(self, event):
         super().hideEvent(event)
@@ -1753,7 +1756,7 @@ class WatchlistRows(WatchlistGrid):
         self._arrange(order)
         self.render()
         if self.isVisible() and self.auto_load and any(card.attempted_at is None for card in order):
-            QTimer.singleShot(0, self.refresh)
+            call_later(self, 0, self.refresh)
 
     def _arrange(self, order=None):
         order = order if order is not None else list(self.cards.values())

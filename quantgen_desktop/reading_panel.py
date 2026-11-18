@@ -16,6 +16,7 @@ from PyQt6.QtWidgets import (
     QListWidgetItem, QMenu, QPushButton, QScrollArea, QTableWidget,
     QToolButton, QToolTip, QVBoxLayout, QWidget,
 )
+from .qt_compat import call_later
 
 from core.education import glossary
 from core.i18n import LocaleContext
@@ -410,7 +411,7 @@ class ReadingHelp(QObject):
     def _schedule_quote_check(self, *args):
         if self._shown and not self._quote_check_pending:
             self._quote_check_pending = True
-            QTimer.singleShot(0, self._check_quote)
+            call_later(self, 0, self._check_quote)
 
     def _check_quote(self):
         self._quote_check_pending = False
@@ -447,12 +448,12 @@ class ReadingHelp(QObject):
                 and event.type() in (QEvent.Type.UpdateRequest, QEvent.Type.LayoutRequest,
                                      QEvent.Type.Paint)):
             self._schedule_quote_check()
-        if watched in (self.window, self.window.stack) and event.type() == QEvent.Type.Resize and self._shown:
-            QTimer.singleShot(0, self._reposition)
+        if (watched is self.window or watched is self.window.stack) and event.type() == QEvent.Type.Resize and self._shown:
+            call_later(self, 0, self._reposition)
         if (self._shown and isinstance(watched, QWidget)
                 and watched.property('reading_help_keep_visible')
                 and event.type() in (QEvent.Type.Resize, QEvent.Type.Move, QEvent.Type.Show)):
-            QTimer.singleShot(0, self._reposition)
+            call_later(self, 0, self._reposition)
         if event.type() == QEvent.Type.ContextMenu and isinstance(watched, QWidget):
             if not self.window.isAncestorOf(watched) or self.panel.isAncestorOf(watched):
                 return False

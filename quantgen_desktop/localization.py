@@ -58,6 +58,12 @@ class LanguageController(QObject):
         self.window = window
         self.pending = self.applying = False
         self._quiet = {}  # id(widget) -> open quiet windows (`quiet`)
+        # The pass runs from a timer this controller owns, so it can never run after the window (its parent) is
+        # deleted. A bound-method QTimer.singleShot is dropped by PyQt6 once the object is gone but still called by
+        # PySide6, where it touched the deleted window (PySide6 trial 2026-11-17: segfault and memory blow-up).
+        self._apply_timer = QTimer(self)
+        self._apply_timer.setSingleShot(True)
+        self._apply_timer.timeout.connect(self.apply)
         self.apply()
 
     def quiet(self, widget, ms=60):
@@ -77,7 +83,7 @@ class LanguageController(QObject):
     def schedule(self, *args):
         if not self.applying and not self.pending:
             self.pending = True
-            QTimer.singleShot(0, self.apply)
+            self._apply_timer.start(0)
 
     def eventFilter(self, watched, event):
         if event.type() in (QEvent.Type.LayoutRequest, QEvent.Type.ChildAdded,

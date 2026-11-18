@@ -72,6 +72,7 @@ from PyQt6.QtCore import QEvent, QLocale, QPoint, QPointF, QRect, QRectF, QSize,
 from PyQt6.QtGui import QColor, QDoubleValidator, QPainter, QPainterPath, QPen
 from PyQt6.QtWidgets import (QBoxLayout, QButtonGroup, QComboBox, QFrame, QGridLayout, QHBoxLayout, QLabel, QLayout,
                              QLineEdit, QPushButton, QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
+from .qt_compat import call_later
 
 from core.i18n import LocaleContext
 from core.market import rankings as R
@@ -1366,7 +1367,7 @@ class RankingBoard(QFrame):
         if changed:
             self.page_changed.emit(page)
         if self.group() != group_before and self.isVisible() and self.auto_load:
-            QTimer.singleShot(0, self.refresh)
+            call_later(self, 0, self.refresh)
         return True
 
     def set_market(self, key):
@@ -1673,8 +1674,8 @@ class RankingBoard(QFrame):
         self._fit()
         if self.auto_load:
             self.tick.start()
-            QTimer.singleShot(0, self.refresh)
-        QTimer.singleShot(0, self._place_sticky)
+            call_later(self, 0, self.refresh)
+        call_later(self, 0, self._place_sticky)
 
     def hideEvent(self, event):
         self.tick.stop()
@@ -2170,7 +2171,7 @@ class RankingBoard(QFrame):
         self._sync_summary()
         self._render_status()
         self._fit()
-        QTimer.singleShot(0, self._place_sticky)
+        call_later(self, 0, self._place_sticky)
 
     def _render_headers(self, rows, plan):
         lang, group = self._lang(), self.group()

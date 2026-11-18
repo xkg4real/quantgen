@@ -24,6 +24,7 @@ from PyQt6.QtGui import QColor, QFontMetrics
 from PyQt6.QtWidgets import (QAbstractItemView, QComboBox, QFrame, QGridLayout, QHBoxLayout, QHeaderView,
                              QScrollArea, QSizePolicy, QStyle, QTableWidget, QTableWidgetItem, QToolButton,
                              QVBoxLayout, QWidget)
+from .qt_compat import call_later
 
 from core.research import strategy_display as D
 from core.research.strategy_exposure import exposure_lines
@@ -791,7 +792,7 @@ class CardsView(ToneScope):
     def pick_row(self, row: int, column: int = 0):
         """A clicked row opens that card below and scrolls its details into view."""
         self.picker.setCurrentIndex(row)
-        QTimer.singleShot(0, self._scroll_to_details)
+        call_later(self, 0, self._scroll_to_details)
 
     def _scroll_to_details(self):
         area = self.parentWidget()

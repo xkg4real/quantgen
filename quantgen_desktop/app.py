@@ -19,6 +19,7 @@ from PyQt6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFileDialo
     QFrame, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QMainWindow,
     QMessageBox, QPushButton, QScrollArea, QSpinBox, QStackedWidget, QTableWidget,
     QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView, QAbstractItemView, QTabWidget, QButtonGroup, QSizePolicy)
+from .qt_compat import call_later
 
 from core.app_paths import application_root
 from core.research.analysis import AnalysisRequest, execute_analysis
@@ -362,7 +363,7 @@ class ResearchWindow(QMainWindow):
         from .reading_panel import install_reading_help
         self.reading_help = install_reading_help(self)
         if auto_refresh:
-            QTimer.singleShot(0, self.refresh_markets)
+            call_later(self, 0, self.refresh_markets)
 
     def set_language(self, language):
         if language not in ("en", "ko"):
@@ -645,7 +646,7 @@ class ResearchWindow(QMainWindow):
             self._page_position = (bar, position)
             self.centralWidget().layout().activate()
             self.restore_page_position(final=False)
-            QTimer.singleShot(0, self.restore_page_position)
+            call_later(self, 0, self.restore_page_position)
         return collapsed
 
     def restore_page_position(self, final=True):
@@ -994,6 +995,10 @@ class ResearchWindow(QMainWindow):
             summary_loader=getattr(self, "summary_loader", None) or production_series,
             locale=self.ctx, auto_load=self.auto_refresh)
         self.markets_view.setProperty("reading_help_keep_visible", True)
+        if self.market_chart.parent() is None:
+            # Until a stock screen adopts it the shared chart has no parent; parked here it is deleted with the
+            # window instead of outliving it (PySide6 checklist item 10).
+            self.market_chart.setParent(self.markets_view)
         from .tools import CurrentPageStack
         self.markets_content=CurrentPageStack()
         self.markets_content.addWidget(self.markets_view)

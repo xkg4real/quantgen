@@ -122,14 +122,21 @@ class CommentaryPane(QWidget):
 
     def refresh_sources(self):
         self.invalidate();self.source.clear()
-        for title,report in self.sources():self.source.addItem(title,deepcopy(report))
+        # The reports stay in Python; the picker holds only their index. A report passed through Qt item data
+        # (PySide6: QVariantMap) can lose broken characters such as lone surrogates before the payload check
+        # sees them (PySide6 checklist item 13); PyQt6 keeps them, and now both bindings check the original.
+        self._source_reports=[]
+        for title,report in self.sources():
+            self._source_reports.append(deepcopy(report));self.source.addItem(title,len(self._source_reports)-1)
         if self.source.count()==0:self.status.setText('먼저 계산을 완료하세요. 실패·미실행 기록은 전송하지 않습니다.')
         elif self.docked:self.status.setText(self.prompt)   # a stale 'complete a calculation first' would mislead
 
     def prepare(self):
         self.invalidate()
         try:
-            report=self.source.currentData()
+            index=self.source.currentData()
+            reports=getattr(self,'_source_reports',[])
+            report=reports[index] if isinstance(index,int) and 0<=index<len(reports) else None
             if report is None:raise ValueError('Choose a completed result')
             self.payload=commentary_payload(report)
         except _PayloadError as exc:

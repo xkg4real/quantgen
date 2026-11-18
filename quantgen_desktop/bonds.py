@@ -8,7 +8,7 @@ source note, the run button pinned at the bottom). Requests, calculations and ex
 import math
 
 from PyQt6.QtCore import QPointF, QRectF, QSize, Qt, pyqtSignal
-from PyQt6.QtGui import QColor, QFontMetricsF, QPainter, QPainterPath, QPen
+from PyQt6.QtGui import QColor, QFont, QFontMetricsF, QPainter, QPainterPath, QPen
 from PyQt6.QtWidgets import (QBoxLayout, QButtonGroup, QComboBox, QHBoxLayout, QLineEdit, QPushButton, QSizePolicy,
                              QVBoxLayout, QWidget)
 from core.research.bond_analysis import BondRequest
@@ -199,7 +199,7 @@ class PriceYieldChart(LineChart):
             p.restore()
             words = ('현재 ' if self._korean() else 'Now ') + f'{x0:.3f}% · {y0:,.3f}'
             bold = p.font()
-            bold.setWeight(600)
+            bold.setWeight(QFont.Weight(600))   # an enum, not a number: PySide6 raises on a plain int (in paintEvent)
             p.setFont(bold)
             width = QFontMetricsF(bold).horizontalAdvance(words)
             p.setPen(QColor(c.text))
@@ -401,7 +401,7 @@ class BondsPane(QWidget):
         self.frequency=QComboBox()
         for text,value in [('Annual',1),('Semi-annual',2),('Quarterly',4)]:self.frequency.addItem(text,value)
         self.frequency.setCurrentIndex(1)
-        self.source=QComboBox()
+        self.source=QComboBox(self)   # hidden, in no layout: a child so it goes with the pane
         for v in ('auto','fred','synthetic'):self.source.addItem(v,v)
         self.tool=QComboBox()
         for text,value in [('Calculator & risk','calc'),('Scenarios','scenarios'),('Futures hedge','hedge')]:self.tool.addItem(text,value)

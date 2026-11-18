@@ -5,6 +5,7 @@ from PyQt6.QtCore import QEvent, QObject, QRectF, QSize, Qt
 from PyQt6.QtGui import QColor, QFont, QFontMetricsF, QPainter
 from PyQt6.QtWidgets import (QAbstractItemView, QFrame, QHeaderView, QStyle, QStyledItemDelegate, QStyleOptionViewItem,
                              QTableWidget)
+from .qt_compat import call_later
 
 from core.theme import LIGHT
 
@@ -158,7 +159,7 @@ class ResultEmptyState(QObject):
     def eventFilter(self, watched, event):
         if event.type() in (QEvent.Type.ChildAdded, QEvent.Type.ChildRemoved, QEvent.Type.LayoutRequest):
             from PyQt6.QtCore import QTimer
-            QTimer.singleShot(0, self.sync)
+            call_later(self, 0, self.sync)
         return False
 
 
@@ -182,7 +183,7 @@ class ToolbarFit(QObject):
         if not self.pending:
             self.pending = True
             from PyQt6.QtCore import QTimer
-            QTimer.singleShot(0, self.fit)
+            call_later(self, 0, self.fit)
 
     def eventFilter(self, watched, event):
         if event.type() in (QEvent.Type.Resize, QEvent.Type.LayoutRequest, QEvent.Type.Show):

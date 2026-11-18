@@ -22,6 +22,7 @@ from dataclasses import dataclass
 from PyQt6.QtCore import QEvent, QObject, QPointF, QRectF, Qt
 from PyQt6.QtGui import QColor, QIcon, QPainter, QPainterPath, QPen, QPixmap
 from PyQt6.QtWidgets import QPushButton, QScrollArea
+from .qt_compat import index_of, is_one_of
 
 SETTINGS_KEY = "ui/sidebar_collapsed"
 
@@ -297,9 +298,9 @@ class RailKeys(QObject):
         if self.collapse is not None:
             self.collapse(None)  # another rail button: an open flyout closes
         shown = [b for b in self.buttons() if b.isVisible() and b.isEnabled()]
-        if watched not in shown:
+        if not is_one_of(watched, shown):
             return False
-        index = shown.index(watched)
+        index = index_of(shown, watched)
         target = {Qt.Key.Key_Up: index - 1, Qt.Key.Key_Down: index + 1,
                   Qt.Key.Key_Home: 0, Qt.Key.Key_End: len(shown) - 1}[key]
         shown[max(0, min(len(shown) - 1, target))].setFocus(Qt.FocusReason.TabFocusReason)

@@ -110,8 +110,8 @@ class BundledFontCoverageTests(unittest.TestCase):
 
     def test_indicator_chip_remove_uses_a_bundled_multiplication_sign(self):
         times, heavy_x = chr(0x00D7), chr(0x2715)  # multiplication sign; heavy multiplication X
-        self.assertTrue(all(face.supportsCharacter(times) for face in self.faces.values()))
-        self.assertFalse(any(face.supportsCharacter(heavy_x) for face in self.faces.values()))
+        self.assertTrue(all(face.supportsCharacter(ord(times)) for face in self.faces.values()))   # a code point:
+        self.assertFalse(any(face.supportsCharacter(ord(heavy_x)) for face in self.faces.values()))  # PySide6 takes no str
         source = (ROOT / "quantgen_desktop/indicator_guide.py").read_text(encoding="utf-8")
         self.assertTrue("QPushButton('" + times + "')" in source, "the chip remove button must use U+00D7")
         self.assertFalse(heavy_x in source, "U+2715 has no glyph in the bundled font")

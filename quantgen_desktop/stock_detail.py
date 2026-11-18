@@ -37,6 +37,7 @@ from PyQt6.QtCore import QEvent, QObject, QPoint, QSize, QTimer, Qt, pyqtSignal,
 from PyQt6.QtGui import QPalette
 from PyQt6.QtWidgets import (QCheckBox, QComboBox, QFrame, QHBoxLayout, QLineEdit, QMenu, QPushButton, QScrollArea,
                              QSizePolicy, QStyledItemDelegate, QVBoxLayout, QWidget)
+from .qt_compat import call_later, is_one_of
 
 from core.i18n import LocaleContext
 from core.market.models import Instrument
@@ -314,7 +315,7 @@ class PageLock(QObject):
         self._layout_timer.start(0)
 
     def eventFilter(self, watched, event):
-        if watched in self._layout_hosts and event.type() in (
+        if is_one_of(watched, self._layout_hosts) and event.type() in (
                 QEvent.Type.Move, QEvent.Type.Resize, QEvent.Type.LayoutRequest):
             self._layout_timer.start(0)
         if self.scroll is not None and watched is self.scroll.viewport():
@@ -322,7 +323,7 @@ class PageLock(QObject):
                 event.accept()
                 return True
             if event.type() == QEvent.Type.Resize:
-                QTimer.singleShot(0, self.refit)
+                call_later(self, 0, self.refit)
         return False
 
     def release(self):
@@ -557,6 +558,7 @@ class ChartKeys(QObject):
 
     def __init__(self, view):
         super().__init__(view)
+        view.destroyed.connect(self._release)   # the application-wide filter leaves with the view
         self.view = view
         self.installed = False
 
@@ -567,6 +569,9 @@ class ChartKeys(QObject):
             return
         (app.installEventFilter if on else app.removeEventFilter)(self)
         self.installed = on
+
+    def _release(self, *_):
+        self.install(False)
 
     def eventFilter(self, watched, event):
         if event.type() != QEvent.Type.KeyPress or event.key() not in self.KEYS:
@@ -1464,10 +1469,17 @@ class StockDetailView(QWidget):
             self.load_profile()
         # Focus leaves the search box or row the stock was opened from now, and again after the page settles.
         self.focus_chart()
-        QTimer.singleShot(0, self.focus_chart)
+        call_later(self, 0, self.focus_chart)
+
+    def route_opens_to(self, slot):
+        """Stocks opened from this screen (its watchlist) go to `slot` (the Markets page) instead of opening here.
+        The connection is recorded on the view: QObject.receivers() on a bound signal fails in PySide6 (PySide6
+        checklist item 3)."""
+        self.open_requested.connect(slot)
+        self._open_connected = True
 
     def _open(self, instrument):
-        if self.receivers(self.open_requested) > 0:
+        if getattr(self, '_open_connected', False):
             self.open_requested.emit(instrument)
         else:
             self.show_instrument(instrument)
@@ -1536,7 +1548,7 @@ class StockDetailView(QWidget):
     def _jobs_busy(self, busy):
         # Jobs emits succeeded/failed before it clears its job, so a refused load is retried here.
         if not busy and self._reload and self._job_epoch != self._epoch:
-            QTimer.singleShot(0, self.load_profile)
+            call_later(self, 0, self.load_profile)
         self._render_qscore()
 
     @pyqtSlot(object)
@@ -1886,8 +1898,8 @@ class StockDetailView(QWidget):
         """The rail changed the page's width: the page above the view reflows over the next layout passes, so the
         page lock measures the view's place again once they are done."""
         self.lock.refit()
-        QTimer.singleShot(0, self.lock.refit)
-        QTimer.singleShot(60, self.lock.refit)
+        call_later(self.lock, 0, self.lock.refit)
+        call_later(self.lock, 60, self.lock.refit)
 
     def _restore_rail(self, *, leaving=False):
         window = self.window()
@@ -1958,7 +1970,7 @@ class StockDetailView(QWidget):
         window = self.window()
         if window is not self and window.width() != self._window_width:
             self._window_width = window.width()
-            QTimer.singleShot(0, self._sync_rail)
+            call_later(self, 0, self._sync_rail)
 
     # Toolbar compaction (spec 2.3), applied one step at a time until the stock's name has its room:
     # 1 the star drops its words, 2 back keeps only its arrow, 3 the search narrows to 140, 4 stop/reconnect and
@@ -2303,7 +2315,7 @@ class StockDetailView(QWidget):
             self.set_side_shown(True)
         self.side.set_page(0)
         self._scroll_to_qscore()
-        QTimer.singleShot(0, self._scroll_to_qscore)   # again once a column shown just now has its layout
+        call_later(self, 0, self._scroll_to_qscore)   # again once a column shown just now has its layout
 
     def _scroll_to_qscore(self):
         card, page = self.side.qscore, self.side.stock_page
@@ -2749,8 +2761,8 @@ class StockDetailView(QWidget):
         self._hook_rail()
         self.keys.install(True)
         self.lock.engage()
-        QTimer.singleShot(0, self.lock.engage)
-        QTimer.singleShot(0, self._sync_rail)
+        call_later(self.lock, 0, self.lock.engage)
+        call_later(self, 0, self._sync_rail)
 
     def hideEvent(self, event):
         if event.spontaneous():

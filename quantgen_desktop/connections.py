@@ -13,6 +13,7 @@ from PyQt6.QtCore import QEvent, QObject, Qt, QTimer, pyqtSignal
 from PyQt6.QtGui import QColor, QPainter
 from PyQt6.QtWidgets import (QAbstractScrollArea, QBoxLayout, QFrame, QHBoxLayout, QLabel, QSizePolicy,
                              QVBoxLayout, QWidget)
+from .qt_compat import call_later
 
 from core.research.connections import ConnectionRequest
 from core.research.presentation import safe_detail
@@ -902,7 +903,7 @@ class ToolbarFit(QObject):
             self.widget.setVisible(show)
 
     def set_language(self, language):
-        QTimer.singleShot(0, self.fit)   # after the toolbar's texts took the new language
+        call_later(self, 0, self.fit)   # after the toolbar's texts took the new language
 
 
 def focus_order(*parts):

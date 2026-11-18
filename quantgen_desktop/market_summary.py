@@ -24,6 +24,7 @@ import threading
 
 from PyQt6.QtCore import QTimer, Qt, pyqtSignal, pyqtSlot
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel, QSizePolicy, QVBoxLayout, QWidget
+from .qt_compat import call_later
 
 from core.i18n import LocaleContext
 from core.market import rankings as R
@@ -255,7 +256,7 @@ class MarketSummary(QWidget):
         super().showEvent(event)
         if self.auto_load:
             self.timer.start()
-            QTimer.singleShot(0, self.refresh)
+            call_later(self, 0, self.refresh)
 
     def hideEvent(self, event):
         self.timer.stop()
@@ -277,7 +278,7 @@ class MarketSummary(QWidget):
         self.page = page
         self.render()
         if self.auto_load and self.isVisible():
-            QTimer.singleShot(0, self.refresh)
+            call_later(self, 0, self.refresh)
 
     def set_locale(self, ctx):
         self.ctx = ctx

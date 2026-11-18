@@ -124,7 +124,18 @@ def combo(enum, value=None):
     c = QComboBox(); c.addItem('선택', None)
     for member in enum: c.addItem(member.value, member)
     c.setCurrentIndex(c.findData(value))
+    c.enum_type = enum
     return c
+
+
+def combo_value(c):
+    """The selected Enum member, or None for '선택'. PySide6 hands a str Enum stored as item data back as a plain
+    str (PySide6 checklist item 4), so it is turned back into the member here; PyQt6 already returns the member."""
+    data = c.currentData()
+    enum = getattr(c, 'enum_type', None)
+    if enum is None or data is None or isinstance(data, enum):
+        return data
+    return enum(data)
 
 
 def decimal(text):
@@ -248,10 +259,10 @@ class RulesPane(QWidget):
         if self.conditions.currentRow()>=0:self.conditions.removeRow(self.conditions.currentRow());self.preview()
 
     def collect(self):
-        v={k:w.currentData() if isinstance(w,QComboBox) else w.text().strip() for k,w in self.fields.items()}
+        v={k:combo_value(w) if isinstance(w,QComboBox) else w.text().strip() for k,w in self.fields.items()}
         conditions=[]
         for i in range(self.conditions.rowCount()):
-            comp=self.conditions.cellWidget(i,0).currentData();level=decimal(self.conditions.cellWidget(i,1).text())
+            comp=combo_value(self.conditions.cellWidget(i,0));level=decimal(self.conditions.cellWidget(i,1).text())
             if comp is None or level is None:raise ValueError('Every condition needs a comparator and price')
             conditions.append(PriceCondition(comp,level))
         cc,cl=v['cancel_comparator'],decimal(v['cancel_level'])
