@@ -4,15 +4,15 @@ reason: milestone
 from: claude
 task: os-expansion
 cycle: 2026-11-17
-done_ids: none
-next_ids: OS-P0-a, OS-P0-e, OS-P0-f, OS-P0-c, OS-P0-b, OS-P0-d, OS-F1, OS-F2
-updated_at: 2026-11-19T03:50:00+09:00
+done_ids: OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f
+next_ids: OS-F1, OS-F2
+updated_at: 2026-11-19T05:20:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/os-prep-20261117
 work_commit: 090dcae
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/127
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
@@ -25,7 +25,7 @@ session: https://claude.ai/code/session_016uB1jgXiwx42FSUU5ANwM7
 
 ## 0. 한 줄 요약
 
-지시문 7·8절 작업 6개를 작업 브랜치 `claude/os-prep-20261117`에 push했습니다(최신 `5816125`, **main 병합 전**이라 LEDGER에 없음). 2026-11-18 소유자 요청 "5번 항목(미검증)들에 대해서 지금 당장 검증해서 실현/구현/계획/설계 가능한 부분들은 바로 진행해주세요"에 따라 미검증 항목을 이어서 했습니다. **PySide6 세그폴트와 메모리 폭증의 원인 두 곳을 확정했습니다**: `localization.py`의 `QTimer.singleShot(0, self.apply)`와 UI 브랜치 `bonds.py`의 `setWeight(600)`. 이 둘만 임시 복사본에서 고치자 세그폴트·OOM·실행 못 한 테스트가 모두 0이 되었습니다. 패키지 앱 자체 점검(`--selfcheck`)과 라이선스 고지도 구현해 두 바인딩 빌드에서 10/10 통과했습니다. 지금은 소유자 확인을 기다립니다.
+OS-P0-a~f는 **PR #127로 main에 병합됐습니다**(main `c28b1d7`, CI 8개 녹색, 메인이 LEDGER 기록, handoff `e7e4468`). UI 브랜치 `5025c6f` 재시범에서 PySide6가 PyQt6와 CI 18단계 모두 같은 결과를 냈습니다. 남은 일은 둘입니다. OS-F1(PySide6 전환)은 UI 7쪽이 main에 들어간 뒤 메인이 자리를 줍니다. OS-F2(데이터 폴더 전환)는 KEY-2 뒤입니다. 지금은 대기 중이고, 소유자가 UI 화면을 PC에서 확인하는 것이 다음 관문입니다.
 
 ## 1. 목표와 완료 조건
 
