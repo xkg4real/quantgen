@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/runtime-smoke.yml": "60ebbf9a7bf59bb4378982998b6c32951f7c93fdacc29dbc102adbf7a2f9f5a2",
-    "README.md": "2d590f79d6b6e5cf9f00c1313a9b52cf51477ed0b69ad720528c39f8a3c2632b",
+    "README.md": "530a02fb6cdb2be658c2d47eac62ead3c15b82a195a7cde2c31baf0d63960573",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
     "assets/branding/f1-wordmark.svg": "145715bc8df17cb3c99b734d4c7cb2b8e9bf1878e87c401f518f46b944ba41aa",
@@ -782,163 +782,163 @@
   "reviews": {
     "1": {
       "document_sha256": "8fdcbaf3551af7c39081fab335d6bfbd0c44bc4f3d1afdb4054e6aa6e8599f1b",
-      "source_digest": "8a26ae0abbdf6012b212c73a198d14e7210e5b15dde45e88a850fd3351bbe505",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.357317+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "ab1585920d184799933ed696a795303ac4a47e8199501124431faa60c0e62c91",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.859055+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "2": {
       "document_sha256": "1c7eb9b60585b1fd4d1a23723051454e768b6ea6b31b9e58bd8122ac73cdd5e1",
-      "source_digest": "8a26ae0abbdf6012b212c73a198d14e7210e5b15dde45e88a850fd3351bbe505",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.359588+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "ab1585920d184799933ed696a795303ac4a47e8199501124431faa60c0e62c91",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.861699+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "3": {
       "document_sha256": "50fcceb8fb66b30a535ff6015a66ff5e5cee801b61433cc3aa99acd3673c4393",
-      "source_digest": "aced355a9b246c0c5350a1beb815093e1d0fdaaf8f5355d201b22b974718a460",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.361586+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "500f2e1f0127873163eb24e6b79aa3e9139f79850335d5592f299671065f565f",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.863660+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "4": {
       "document_sha256": "4a2528a8c62c60983069941ff506c41c6b251ff1f402ef6cf7723e9901bb7a91",
-      "source_digest": "2082069e2ad4077cd78cd157cf946d589f0d4a1851b23a41e5d7c3e3fcece5fb",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.363454+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "6609278a6a71abf95f94df45dd9d1a56edf1b846f3c63c0cab42bde3154b9593",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.865708+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "5": {
       "document_sha256": "54164c56f4c3999b8ed65115e411151dca9dd6a46fea7bc57d0a750774d7b555",
-      "source_digest": "616670d7d09941a89db2ee82a792f098a752c2c37c370e662150614028cbdfd3",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.365122+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "35b4994ab7ae519589b819461060fcc64592d4f2fed628ea2cec340340113b22",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.868096+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "6": {
       "document_sha256": "5871443de50226c2680aa2c41059c06b4d1290f28f1c859d5ed979fd17a2918e",
-      "source_digest": "f4ff1be727a83d512fc0aabb452316203e19a137c05278657baab9cb00891d35",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.366802+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "161fb48cf6fa74ac114215d669e61ac706ea021e26cc22d476556068b896865b",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.869975+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "7": {
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
-      "source_digest": "8a26ae0abbdf6012b212c73a198d14e7210e5b15dde45e88a850fd3351bbe505",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.368522+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "ab1585920d184799933ed696a795303ac4a47e8199501124431faa60c0e62c91",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.871789+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "8": {
       "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
-      "source_digest": "f4ff1be727a83d512fc0aabb452316203e19a137c05278657baab9cb00891d35",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.370281+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "161fb48cf6fa74ac114215d669e61ac706ea021e26cc22d476556068b896865b",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.873975+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "703b72eadb3c0a533a2a72e66e1d881eb45ab92b057913da27ee79962cb7b78f",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.372431+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "3a45f64161f1482a0cea80b2e32c5f37994c22cefff6458cd6dd2d3ca1335bfb",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.877084+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "10": {
       "document_sha256": "ce304488b177e5fa81046782034d9a3c23a411ca3cef859d46b7df13ba0c5f5f",
-      "source_digest": "41926bbe29dd1610a9687739ce453f74be84f4649b279fb0761ea7ca3a07741b",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.374021+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "791384504cfd30b9c3820276167c9350e00370ba20d6520571a04cfa57ba87f7",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.879439+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "11": {
       "document_sha256": "11a071fe459f3d6f622ec4ee4480200c3e7ed131153e00bd6823e552e43a7004",
-      "source_digest": "9b0e731936140c5a654a38ad3b18b255da8e596b68460abffcecf976ef51c9c8",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.375626+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "fab6851f47a0cad524bcc2faeef5b2303f6840cc19255e9af4ba9d08c64e93f3",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.881240+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "8f46a70788933532816d9b016cb57c7bd91f44a0c4a58dbb278608a0a564c321",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.377629+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "ebde61252128099e117b69cfc3143529124ea1cdb2aa923512a64d0e78768146",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.883549+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "703b72eadb3c0a533a2a72e66e1d881eb45ab92b057913da27ee79962cb7b78f",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.379279+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "3a45f64161f1482a0cea80b2e32c5f37994c22cefff6458cd6dd2d3ca1335bfb",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.885183+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "703b72eadb3c0a533a2a72e66e1d881eb45ab92b057913da27ee79962cb7b78f",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.380714+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "3a45f64161f1482a0cea80b2e32c5f37994c22cefff6458cd6dd2d3ca1335bfb",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.886929+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "15": {
       "document_sha256": "99b8253de2d54323b48c1dc8edb663bb6105930c24bb15e8f70800aec2a49cf1",
-      "source_digest": "703b72eadb3c0a533a2a72e66e1d881eb45ab92b057913da27ee79962cb7b78f",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.382043+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "3a45f64161f1482a0cea80b2e32c5f37994c22cefff6458cd6dd2d3ca1335bfb",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.888650+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "16": {
       "document_sha256": "ff89cdb2a5ee70c3f830162c8e3c8a287291c89fddd7c850ac5b6048d9217f98",
-      "source_digest": "23b6a0480a5139a26e0a7500503bb6df550bf217d66bbb4e43823baf6a07836c",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.383384+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "1d21eb8c911af8c9ed3bcfbdfb7057a2b8befaaaa8c19ee1205e3ad03bdf1efd",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.890874+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "17": {
       "document_sha256": "dde1a8a05a26c612255f5858d272019e11cb7caf4542aa017b626ecea968713d",
-      "source_digest": "f4ff1be727a83d512fc0aabb452316203e19a137c05278657baab9cb00891d35",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.384973+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "161fb48cf6fa74ac114215d669e61ac706ea021e26cc22d476556068b896865b",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.892611+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "18": {
       "document_sha256": "f41494e3a28b54cd191916f9ee985f795849e6bf67d69c8dffebd7d081d1187d",
-      "source_digest": "8a26ae0abbdf6012b212c73a198d14e7210e5b15dde45e88a850fd3351bbe505",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.386676+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "ab1585920d184799933ed696a795303ac4a47e8199501124431faa60c0e62c91",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.894243+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "b33325c4d7cd375c032b96bb3a6e87a23998e6c6c9119548232ee73e374ae029",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.388161+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "88a034e8ba177af6c1898fc358147e0cf461b1b665768764597f764adc606da3",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.896570+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     },
     "20": {
       "document_sha256": "b226906886050078abf5ba14f9a0735c9e5ac02444ee1b0ebe11517333cf3d18",
-      "source_digest": "8a26ae0abbdf6012b212c73a198d14e7210e5b15dde45e88a850fd3351bbe505",
-      "reviewed_by": "Claude P3 second merge review (main 8e026ab into the P3 candidate)",
-      "review_note": "P3 second merge of main 8e026ab (PR #124, the owner-approved UI market hub da0ea20; PR #125, the 2026-11-18 decision record) into the P3 candidate f0c8872, in which the 19 sources that differ from the first P3 baseline are main's blobs byte for byte (the market hub screen, the indicator conclusions of core/education/outlook.py, the steady indicator list, FACTS.md's 2026-11-17 market hub section, 12-claims.md's UI conclusion check, runtime-smoke.yml and their tests, as main's own baseline reviewed them), every other source keeps its first-P3-review fingerprint, no new external host, provider, transfer, order, dependency, pricing, consent, cookie, account, children, marketing, retention or deletion surface is added, no document text differs from main's or the research branch's, and every document stays review-required with publication BLOCKED; source/document consistency review only, not legal or operational certification.",
-      "reviewed_at": "2026-11-18T08:29:15.389776+00:00",
-      "source_commit": "f0c88720aa978977fa4b4914dbbc21392d91dff5"
+      "source_digest": "ab1585920d184799933ed696a795303ac4a47e8199501124431faa60c0e62c91",
+      "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
+      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:29:35.898303+00:00",
+      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
     }
   }
 }
