@@ -1080,3 +1080,15 @@ Windows CI에서 창 핸들과 아이콘을 시험하며, 사용자 PC의 Explor
   다시 쓰며, "함께 읽으면" 줄은 각 지표의 현재 쪽을 세어 말할 뿐 확률·목표가·매매 지시를 만들지 않습니다.
 - 화면 캡처는 오프라인 합성 픽스처로 만든 것이며 실제 시세·실계정·소유자 Windows 환경 확인이 아닙니다. 01–20의 미확정
   사업자·개인정보·권리·요금·환불·접근성 조건과 공개 보류(publication BLOCKED)를 유지합니다.
+
+<a id="pyside6-readiness-2026-11-18"></a>
+### 2026-11-18 PySide6 전환 대비 화면 코드 정리 검토
+
+- OS_EXPANSION 세션의 점검표(`docs/platform/PYSIDE6_UI_CHECKLIST.md`, `claude/os-prep-20261117`)에 따라 네이티브 앱
+  (`quantgen_desktop/`)의 지연 호출·이벤트 필터·위젯 수명·콤보 데이터 처리를 PyQt6와 PySide6에서 같게 동작하도록
+  고쳤습니다(`quantgen_desktop/qt_compat.py` 등). 바인딩은 여전히 PyQt6이며 화면·계산·요청·저장·전송·주문 경로와
+  문구는 바뀌지 않았습니다. 새 공급자·새 호스트·새 전송은 없습니다.
+- AI 해설에 보낼 계산 결과는 Qt 항목 데이터가 아니라 앱 안의 Python 목록에 그대로 두고 기존 전송 전 검사를 거칩니다.
+  동의·미리보기·전송 절차는 그대로입니다.
+- 오프라인 Linux offscreen UI 테스트 107개 모듈로 확인했으며 PySide6 실행·Windows·macOS 확인은 하지 않았습니다.
+  01–20의 미확정 조건과 공개 보류(publication BLOCKED)를 유지합니다.
