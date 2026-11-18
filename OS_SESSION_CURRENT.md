@@ -6,7 +6,7 @@ task: os-expansion
 cycle: 2026-11-17
 done_ids: none
 next_ids: OS-P0-a, OS-P0-e, OS-P0-f, OS-P0-c, OS-P0-b, OS-P0-d, OS-F1, OS-F2
-updated_at: 2026-11-18T02:45:00+09:00
+updated_at: 2026-11-18T10:30:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/os-prep-20261117
@@ -73,7 +73,7 @@ session: https://claude.ai/code/session_016uB1jgXiwx42FSUU5ANwM7
 - [x] OS-P0-b — `packaging/quantgen_desktop.spec`, `packaging/launch_desktop.py`, `packaging/rthook_build_info.py.in`, `.github/workflows/platform-build.yml`, `tools/packaging/stage.py --profile mobile`, `mobile/` — `4f009aa`, `e65fd43`
 - [x] (11-18 추가) OS-P0-b 계속: `packaging/selfcheck.py`(`QUANTGEN --selfcheck report.json`), 고지 생성기 `tools/packaging/third_party_notices.py` + `packaging/licenses/`(LGPL-3.0·GPL-3.0 FSF 원문), spec에 고지·계산 해시 기대값·`qa/` 제외·chardet `.py` 유지, 워크플로에 selfcheck와 Windows·macOS 글꼴 확인 잡(수동 실행만), `tests/third_party_notices_acceptance.py` — `d2befff`, `8097ca5`, `42be9b8`, `c12643b`
 - [x] (11-18 추가) OS-P0-e/f 계속: 원인 확정(점검표 6·12·13번), lint `6-bound`·`10-int-enum`, 재시범(`PYSIDE6_TRIAL` 7절, 그래프 `docs/platform/trial_fix/`), `docs/platform/LICENSE_COMPLIANCE_PREP.md` — `bd38f93`, `5816125`
-- [ ] OS-P0-d — 저장소판 초안 `docs/platform/PLATFORM_EXPANSION_2026-11-17.md` (`6e92dbf`) ← **소유자 확인 대기**; Notion 수정은 승인 뒤
+- [x] OS-P0-d — 소유자 승인 (2026-11-18, 원문: "개정 초안 승인합니다."). 저장소판 `docs/platform/PLATFORM_EXPANSION_2026-11-17.md` (`451db93`)을 Notion `6f75e02e0296483086927a73d45df697`에 반영함: 맨 앞 "개정 2판" 요약 + 4절 2행·7.1 F1 2단계·7.2 M2 의존 문장·8절 D9 행을 고침 (나머지 원문은 그대로)
 - [ ] OS-F1 (F21 뒤, MERGE_QUEUE가 자리 줌), OS-F2 (KEY-2 뒤)
 
 **11-18 추가 검증 (`5816125`):**
