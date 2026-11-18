@@ -1,0 +1,265 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="qg.css"><script src="qg.js"></script>
+<style>
+  .lead { display: flex; align-items: baseline; gap: 8px; }
+  /* run list: watchlist-style rows on a grid */
+  .list { padding: 10px 10px 8px; display: flex; flex-direction: column; flex: none; }
+  .list-head { display: flex; align-items: center; gap: 8px; padding: 0 6px 8px 4px; }
+  .list-head .pills span .n { color: var(--faint); font-weight: 400; margin-left: 4px; }
+  .list-head .pills span.on .n { color: var(--accent); opacity: .7; }
+  .sort { font-size: 12px; color: var(--muted); display: inline-flex; align-items: center; gap: 4px; }
+  .grid { display: grid; grid-template-columns: 1.3fr 1.55fr .95fr .8fr 1fr .78fr; column-gap: 14px; align-items: center; }
+  .thead { padding: 7px 10px 7px 10px; font-size: 12px; color: var(--muted); border-bottom: 1px solid var(--line); margin: 0 2px 4px; }
+  .thead .r, .run .r { text-align: right; }
+  .run { padding: 6px 10px; border-radius: 10px; min-height: 46px; }
+  .run + .run { margin-top: 1px; }
+  .run.sel { background: var(--accent-soft); box-shadow: inset 3px 0 0 var(--accent); }
+  .who { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .two { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .two .a { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .two .a.sym { font-weight: 600; font-size: 14px; letter-spacing: -0.1px; }
+  .two .b { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .avatar svg { display: block; }
+  .pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; padding: 3px 9px; border-radius: 11px;
+          color: var(--muted); background: var(--surface2); white-space: nowrap; }
+  .pill.ok { color: var(--success); background: #E1EDE5; }
+  .pill.err { color: var(--error); background: var(--up-tint); }
+  .pill.live { color: var(--accent); background: var(--surface2); }
+  .pill .code { font-size: 11px; letter-spacing: .2px; color: var(--faint); font-weight: 500; }
+  .run.sel .pill.ok { background: #D3E5DA; }
+  .run.sel .pill:not(.ok) { background: #DCE8E0; }
+  .prog { width: 64px; height: 4px; border-radius: 2px; background: var(--surface2); position: relative; margin: 5px 0 1px auto; }
+  .prog i { position: absolute; left: 0; top: 0; bottom: 0; width: 62%; border-radius: 2px; background: var(--accent); }
+  .saved { display: inline-flex; align-items: center; gap: 3px; color: var(--success); }
+  .list-foot { display: flex; align-items: center; gap: 8px; padding: 9px 8px 0 6px; margin-top: 4px; border-top: 1px solid var(--line); }
+  /* preview card */
+  .preview { flex: 1; min-height: 0; padding: 12px 0 0 14px; display: flex; flex-direction: column; }
+  .chart-head { display: flex; align-items: baseline; gap: 10px; padding: 0 18px 0 4px; }
+  .chart-head .more { margin-left: auto; font-size: 12px; color: var(--accent); font-weight: 500; }
+  .legend { display: flex; gap: 14px; align-items: center; font-size: 12px; color: var(--muted); }
+  .legend i { display: inline-block; vertical-align: middle; margin-right: 5px; }
+  .legend .ln { width: 16px; height: 2px; background: var(--accent); }
+  .legend .sq { width: 10px; height: 10px; border-radius: 2px; background: #E5EEE8; }
+  .legend .sq2 { width: 10px; height: 10px; border-radius: 2px; background: #C9DCD2; }
+  /* side column */
+  .kv { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; padding: 0 4px 0 6px; }
+  .kv .k { font-size: 12px; color: var(--muted); margin-bottom: 3px; }
+  .kv .v { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kv .wide { grid-column: span 2; }
+  .mono { font-variant-numeric: tabular-nums; letter-spacing: .1px; }
+  .checks { display: flex; flex-direction: column; padding: 0 4px 0 6px; }
+  .ck { display: grid; grid-template-columns: 14px 1fr auto; align-items: center; column-gap: 8px; padding: 5px 0; font-size: 13px; }
+  .ck + .ck { border-top: 1px solid var(--line); }
+  .ck .d { width: 7px; height: 7px; border-radius: 50%; justify-self: center; }
+  .ck .d.ok { background: var(--success); } .ck .d.warn { background: #C99A2E; } .ck .d.none { background: #C4C9C3; }
+  .ck .val { font-size: 12px; color: var(--muted); text-align: right; white-space: nowrap; }
+  .ck .val.warn { color: var(--warning); }
+  .ck .sub { color: var(--faint); font-size: 11px; margin-left: 5px; }
+  .fold-head .pill { margin-left: auto; }
+  .ai-row { display: flex; gap: 8px; }
+  .relink { margin-left: auto; font-size: 12px; color: var(--accent); font-weight: 500; }
+  .payload { background: var(--soft); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 5px; margin: 0 2px; }
+  .payload .ph { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 1px; }
+  .payload .pl { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; color: var(--muted); }
+  .payload .pl span:last-child { color: var(--text); white-space: nowrap; }
+  .ai-row .in { flex: 1; }
+  .side .field .in { min-height: 34px; }
+  .exports { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .exports .btn { padding: 10px 8px; font-size: 13px; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+  .side .foot { gap: 9px; }
+  .side .scroll { gap: 14px; }
+  .grid > :nth-child(4) { padding-left: 6px; }
+</style></head>
+<body>
+<main class="page">
+  <div class="toolbar">
+    <div class="title">연구 보관함</div>
+    <span class="sub" style="margin-left:6px">이번 앱 세션의 실행 근거</span>
+    <span class="badge warn" style="margin-left:8px"><span class="dot"></span>자동 저장 안 함 · 종료 전에 저장하세요</span>
+    <div class="spacer"></div>
+    <div class="search" style="display:flex; align-items:center; gap:8px; width:240px">
+      <svg width="13" height="13" viewBox="0 0 14 14"><circle cx="6" cy="6" r="4.6" fill="none" stroke="#9AA29C" stroke-width="1.5"/><path d="M9.5 9.5l3 3" stroke="#9AA29C" stroke-width="1.5" stroke-linecap="round"/></svg>
+      종목·모델 검색
+    </div>
+  </div>
+  <div class="body">
+    <section class="canvas">
+      <div class="lead">
+        <b style="font-size:15px">이번 세션 실행 7건</b><span class="small muted">· 2026-11-17 06:12 UTC 시작 · 앱을 닫으면 목록이 비워져요</span>
+      </div>
+      <div class="figs">
+        <span><span class="k">완료</span><span class="v num">5</span></span>
+        <span><span class="k">실행 중</span><span class="v num">1</span></span>
+        <span><span class="k">실패</span><span class="v num" style="color:var(--error)">1</span></span>
+        <span><span class="k">저장함</span><span class="v num">1</span></span>
+        <span><span class="k">저장 전</span><span class="v num">4</span></span>
+        <span><span class="k">재현성</span><span class="v">PARTIAL</span></span>
+        <span><span class="k">검증 판정</span><span class="v">NOT_RUN</span></span>
+      </div>
+
+      <div class="card list">
+        <div class="list-head">
+          <div class="pills"><span class="on">전체<span class="n num">7</span></span><span>몬테카를로<span class="n num">5</span></span><span>포트폴리오<span class="n num">1</span></span><span>전략<span class="n num">1</span></span></div>
+          <div class="spacer" style="flex:1"></div>
+          <span class="sort">최신순 <svg width="9" height="6" viewBox="0 0 9 6"><path d="M1 1l3.5 3.5L8 1" fill="none" stroke="#646E68" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+        </div>
+        <div class="grid thead">
+          <span>종목 코드</span><span>모델 · 도구</span><span class="r">핵심 수치</span><span>실행 상태</span><span>검증 판정</span><span class="r">생성 시각 · UTC</span>
+        </div>
+
+        <div class="grid run">
+          <div class="who"><div class="avatar dark">T</div><div class="two"><span class="a sym">TSLA</span><span class="b">Tesla · 나스닥</span></div></div>
+          <div class="two"><span class="a">GARCH(1,1)-t</span><span class="b">몬테카를로 · 252거래일 · 10,000경로</span></div>
+          <div class="two r"><span class="a num" style="color:var(--muted)">62%</span><div class="prog"><i></i></div></div>
+          <div><span class="pill live"><span class="dot"></span>실행 중</span></div>
+          <div><span class="pill">미실행 <span class="code">NOT_RUN</span></span></div>
+          <div class="two r"><span class="a num">08:44:12</span><span class="b num">11-17</span></div>
+        </div>
+
+        <div class="grid run sel">
+          <div class="who"><div class="avatar">A</div><div class="two"><span class="a sym">AAPL</span><span class="b">Apple · 나스닥</span></div></div>
+          <div class="two"><span class="a">GARCH(1,1)-t</span><span class="b">몬테카를로 · 126거래일 · 5,000경로</span></div>
+          <div class="two r"><span class="a num down">−17.0%</span><span class="b">95% VaR</span></div>
+          <div><span class="pill ok"><span class="dot"></span>완료</span></div>
+          <div><span class="pill">미실행 <span class="code">NOT_RUN</span></span></div>
+          <div class="two r"><span class="a num">08:41:07</span><span class="b num">11-17</span></div>
+        </div>
+
+        <div class="grid run">
+          <div class="who"><div class="avatar">삼</div><div class="two"><span class="a sym num">005930</span><span class="b">삼성전자 · 코스피</span></div></div>
+          <div class="two"><span class="a">블록 부트스트랩</span><span class="b">몬테카를로 · 63거래일 · 5,000경로</span></div>
+          <div class="two r"><span class="a num down">−12.4%</span><span class="b">95% VaR</span></div>
+          <div><span class="pill ok"><span class="dot"></span>완료</span></div>
+          <div><span class="pill">미실행 <span class="code">NOT_RUN</span></span></div>
+          <div class="two r"><span class="a num">08:26:53</span><span class="b num">11-17</span></div>
+        </div>
+
+        <div class="grid run">
+          <div class="who"><div class="avatar"><svg width="14" height="14" viewBox="0 0 14 14"><rect x="1" y="1" width="5" height="5" rx="1.2" fill="#194C40"/><rect x="8" y="1" width="5" height="5" rx="1.2" fill="#6E9A88"/><rect x="1" y="8" width="5" height="5" rx="1.2" fill="#6E9A88"/><rect x="8" y="8" width="5" height="5" rx="1.2" fill="#B9CFC3"/></svg></div><div class="two"><span class="a sym">포트폴리오</span><span class="b">AAPL 외 3종목</span></div></div>
+          <div class="two"><span class="a">최대 샤프 지수</span><span class="b">포트폴리오 · 1,255거래일 · Yahoo</span></div>
+          <div class="two r"><span class="a num">0.703</span><span class="b">샤프 지수</span></div>
+          <div><span class="pill ok"><span class="dot"></span>완료</span></div>
+          <div><span class="pill">미실행 <span class="code">NOT_RUN</span></span></div>
+          <div class="two r"><span class="a num">08:12:30</span><span class="b"><span class="saved"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l2.6 2.6L9 1" fill="none" stroke="#16745F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>저장함</span></span></div>
+        </div>
+
+        <div class="grid run">
+          <div class="who"><div class="avatar dark">N</div><div class="two"><span class="a sym">NVDA</span><span class="b">NVIDIA · 나스닥</span></div></div>
+          <div class="two"><span class="a">GBM</span><span class="b">몬테카를로 · 63거래일 · 5,000경로</span></div>
+          <div class="two r"><span class="a num down">−21.3%</span><span class="b">95% VaR</span></div>
+          <div><span class="pill ok"><span class="dot"></span>완료</span></div>
+          <div><span class="pill">미실행 <span class="code">NOT_RUN</span></span></div>
+          <div class="two r"><span class="a num">07:58:16</span><span class="b num">11-17</span></div>
+        </div>
+
+        <div class="grid run">
+          <div class="who"><div class="avatar"><svg width="16" height="12" viewBox="0 0 16 12"><path d="M1 10l4-4 3 2 6-6" fill="none" stroke="#194C40" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="two"><span class="a sym">SPY</span><span class="b">SPDR S&amp;P 500 ETF</span></div></div>
+          <div class="two"><span class="a">이동평균 교차 20/60</span><span class="b">전략 실험실 · 2016–2026 일간</span></div>
+          <div class="two r"><span class="a num up">+9.8%</span><span class="b">연 수익률</span></div>
+          <div><span class="pill ok"><span class="dot"></span>완료</span></div>
+          <div><span class="pill">미실행 <span class="code">NOT_RUN</span></span></div>
+          <div class="two r"><span class="a num">07:40:02</span><span class="b num">11-17</span></div>
+        </div>
+
+        <div class="grid run">
+          <div class="who"><div class="avatar">SK</div><div class="two"><span class="a sym num">000660</span><span class="b">SK하이닉스 · 코스피</span></div></div>
+          <div class="two"><span class="a">점프 확산</span><span class="b">몬테카를로 · 126거래일 · 5,000경로</span></div>
+          <div class="two r"><span class="a num faint">—</span><span class="b">가격 이력 없음</span></div>
+          <div><span class="pill err"><span class="dot"></span>실패</span></div>
+          <div><span class="pill">미실행 <span class="code">NOT_RUN</span></span></div>
+          <div class="two r"><span class="a num">07:21:45</span><span class="b num">11-17</span></div>
+        </div>
+
+        <div class="list-foot">
+          <span class="tiny faint">이번 세션에서 계산한 결과만 보여요 · 동결 연구·과거 원장·비밀 설정은 탐색하지 않아요</span>
+        </div>
+      </div>
+
+      <div class="card preview">
+        <div class="chart-head">
+          <span class="card-title">AAPL 결과 미리보기</span>
+          <span class="small muted">GARCH(1,1)-t · 126거래일 · 경로 5,000개 · 시드 7</span>
+          <span class="more">설계/검증에서 열기 ›</span>
+        </div>
+        <div class="figs" style="padding:8px 18px 0 4px">
+          <span><span class="k">시작</span><span class="v num">$227.48</span></span>
+          <span><span class="k">중앙값</span><span class="v num">$236.10</span></span>
+          <span><span class="k">하위 5%</span><span class="v num down">$188.92</span></span>
+          <span><span class="k">상위 5%</span><span class="v num up">$291.37</span></span>
+          <span><span class="k">손실 확률</span><span class="v num">38.6%</span></span>
+          <span><span class="k">95% VaR</span><span class="v num">−17.0%</span></span>
+        </div>
+        <div style="flex:1; min-height:0; margin-top:4px"><svg id="fan" data-fit="0" data-padx="14"></svg></div>
+        <div class="toolbar" style="padding:0 18px 9px 4px; min-height:26px">
+          <span class="tiny faint">시뮬레이션 · 미래 보장 아님 · 투자 권유 아님</span>
+          <div class="spacer"></div>
+          <div class="legend"><span><i class="sq"></i>5–95% 범위</span><span><i class="sq2"></i>25–75% 범위</span><span><i class="ln"></i>중앙값</span></div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side">
+      <div class="seg full"><span class="on">실행 상세</span><span>읽는 법</span></div>
+      <div class="scroll">
+        <div class="fold-head"><i class="chev"></i>실행 정보<span class="pill ok"><span class="dot"></span>완료</span></div>
+        <div class="kv">
+          <div><div class="k">종목 코드</div><div class="v">AAPL · Apple</div></div>
+          <div><div class="k">모델</div><div class="v">GARCH(1,1)-t</div></div>
+          <div><div class="k">기간 · 경로</div><div class="v num">126거래일 · 5,000개</div></div>
+          <div><div class="k">데이터</div><div class="v">Yahoo · 11-14 종가</div></div>
+          <div class="wide"><div class="k">생성 시각 · UTC</div><div class="v num">2026-11-17 08:41:07 <span class="faint" style="font-weight:400">· 실행 ID 7c41e2a9</span></div></div>
+        </div>
+        <div class="hr"></div>
+        <div class="fold-head"><i class="chev"></i>재현성<span class="count">기록 4 · 미검증 2</span><span class="pill" style="color:var(--warning); background:var(--flat-tint)">부분 <span class="code">PARTIAL</span></span></div>
+        <div class="checks">
+          <div class="ck"><i class="d ok"></i><span>난수 시드</span><span class="val num">7</span></div>
+          <div class="ck"><i class="d ok"></i><span>계산 코드 해시</span><span class="val mono">sha256 3f9a…c21e</span></div>
+          <div class="ck"><i class="d ok"></i><span>데이터 지문</span><span class="val mono">sha256 a71c…09be</span></div>
+          <div class="ck"><i class="d ok"></i><span>실행 환경</span><span class="val">Python 3.12 · NumPy 2.1</span></div>
+          <div class="ck"><i class="d warn"></i><span>데이터 빈티지 · 라이선스</span><span class="val warn">미검증 NOT_VERIFIED</span></div>
+          <div class="ck"><i class="d none"></i><span>거래 비용<span class="sub">가격 분포라 해당 없음</span></span><span class="val">미적용 NOT_APPLIED</span></div>
+          <div class="ck"><i class="d none"></i><span>검증 판정</span><span class="val">미실행 NOT_RUN</span></div>
+        </div>
+        <div class="hr"></div>
+        <div class="fold-head"><i class="chev"></i>AI 해설<span class="count">선택 기능</span><span class="relink">완료 결과 목록 갱신</span></div>
+        <div class="field" style="padding:0 2px">
+          <label>보낼 계산 결과</label>
+          <div class="ai-row">
+            <div class="in select">몬테카를로 · AAPL · 08:41</div>
+            <span class="btn" style="padding:8px 12px; white-space:nowrap">미리보기</span>
+          </div>
+        </div>
+        <div class="payload">
+          <div class="ph"><span>전송 내용</span><span class="faint num" style="font-weight:400">매개변수 6 · 섹션 2 · JSON 2.1 KB</span></div>
+          <div class="pl"><span>상태 표시</span><span>NOT_RUN · PARTIAL · NOT_VERIFIED</span></div>
+          <div class="pl"><span>빼는 것</span><span>계좌 · 원장 · 비밀 설정 · 파일 경로</span></div>
+        </div>
+        <div class="hint" style="padding:0 2px; margin-top:-4px">먼저 계산을 완료하세요. 실패·미실행 기록은 전송하지 않아요.</div>
+      </div>
+      <div class="foot">
+        <div class="exports">
+          <span class="btn">ResearchRun JSON 저장</span>
+          <span class="btn primary">보고서 + JSON ZIP 저장</span>
+        </div>
+        <div class="tiny faint" style="text-align:center">선택한 실행만 저장해요 · 자동 저장되지 않으며 경로는 직접 골라요</div>
+      </div>
+    </aside>
+  </div>
+</main>
+<script>
+rail("library");
+const fan = document.getElementById("fan");
+const H0 = 60, n = 127; const hist0 = walk(H0, 196, .022, 11, .0026); const hist = hist0.map(v => v * 227.48 / hist0[H0 - 1]);
+const med = [], p5 = [], p95 = [], p25 = [], p75 = [], past = [];
+for (let i = 0; i < H0 + n - 1; i++) { if (i < H0) { past.push(hist[i]); med.push(null); p5.push(null); p95.push(null); p25.push(null); p75.push(null); continue; }
+  past.push(null); const t = (i - H0 + 1) / (n - 1), s = Math.sqrt(t);
+  med.push(227.48 * (1 + .038 * t)); p5.push(227.48 * (1 + .038 * t - .17 * s)); p95.push(227.48 * (1 + .038 * t + .28 * s));
+  p25.push(227.48 * (1 + .038 * t - .07 * s)); p75.push(227.48 * (1 + .038 * t + .1 * s)); }
+med[H0 - 1] = p5[H0 - 1] = p95[H0 - 1] = p25[H0 - 1] = p75[H0 - 1] = 227.48;
+lineChart(fan, [{ values: med, color: "#194C40", width: 2 }, { values: past, color: "#202823", width: 1.6 }],
+  { bands: [{ upper: p95, lower: p5, fill: "#E5EEE8" }, { upper: p75, lower: p25, fill: "#C9DCD2" }], digits: 0, prefix: "$", ticks: 4, lo: 180, hi: 320,
+    vlines: [[H0 - 1, "#9AA29C"]], xlabels: [[7, "3개월 전"], [H0 - 1, "오늘"], [H0 + 20, "1개월"], [H0 + 62, "3개월"], [H0 + 122, "6개월"]], last: true });
+// As the app's price axis does: skip an axis label the last-price tag would cover.
+{ const tag = [...fan.querySelectorAll("rect")].pop(); const ty = +tag.getAttribute("y") + 10;
+  fan.querySelectorAll("text").forEach(t => { if (t.textContent.startsWith("$") && t.getAttribute("font-weight") !== "600" && Math.abs(+t.getAttribute("y") - 4 - ty) < 18) t.remove(); }); }
+</script>
+</body></html>

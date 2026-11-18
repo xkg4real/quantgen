@@ -64,7 +64,10 @@ class ElidedLabel(QLabel):
         super().setText(value)
 
     def set_choices(self, choices):
-        self._choices = tuple(choice for choice in choices if choice)
+        choices = tuple(choice for choice in choices if choice)
+        if choices == self._choices and self.text() == (choices[0] if choices else ""):
+            return
+        self._choices = choices
         super().setText(self._choices[0] if self._choices else "")
         self.update()
 
@@ -101,6 +104,8 @@ class ClampLabel(QLabel):
         self.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
 
     def setText(self, value):
+        if value == self.text():
+            return
         super().setText(value)
         self.updateGeometry()
 
@@ -255,6 +260,18 @@ def repolish(widget):
     widget.style().unpolish(widget)
     widget.style().polish(widget)
     widget.update()
+
+
+def put_text(widget, value):
+    """setText only when the text changes (a refresh that rewrites the same text still re-lays its row out)."""
+    if widget.text() != value:
+        widget.setText(value)
+
+
+def put_visible(widget, on):
+    """setVisible only when the state changes (show-then-hide in one refresh moved the rows below)."""
+    if widget.isHidden() == bool(on):
+        widget.setVisible(bool(on))
 
 
 def set_prop(widget, name, value):
@@ -501,6 +518,16 @@ def sheet(p, dark):
       QLabel[sd='pill'][tone='up'] {{ color: {t['up']}; background: {t['up_tint']}; border-color: {t['up_tint']}; }}
       QLabel[sd='pill'][tone='down'] {{ color: {t['down']}; background: {t['down_tint']}; border-color: {t['down_tint']}; }}
       QLabel[sd='limitNote'] {{ font-size: 12px; color: {p.warning}; background: {t['flat_tint']}; border-radius: 9px; }}
+      QFrame[sd='verdict'] {{ border: 0; border-radius: 10px; background: {t['flat_tint']}; }}
+      QFrame[sd='verdict'][tone='up'] {{ background: {t['up_tint']}; }}
+      QFrame[sd='verdict'][tone='down'] {{ background: {t['down_tint']}; }}
+      QLabel[sd='verdictHead'] {{ font-size: 12px; font-weight: 600; color: {p.text}; }}
+      QLabel[sd='verdictHead'][tone='up'] {{ color: {t['up']}; }}
+      QLabel[sd='verdictHead'][tone='down'] {{ color: {t['down']}; }}
+      QLabel[sd='verdictItem'] {{ font-size: 13px; color: {p.text}; }}
+      QLabel[sd='conclusionTitle'] {{ font-size: 12px; font-weight: 600; color: {p.muted}; }}
+      QLabel[sd='nowText'] {{ font-size: 13px; color: {p.text}; }}
+      QLabel[sd='gradeNote'] {{ font-size: 12px; color: {p.muted}; }}
       QPushButton[sd='qbadge'] {{ padding: 3px 10px; min-height: 18px; border: 0; border-radius: 11px;
                                   background: {p.surface_2}; color: {p.muted}; font-size: 12px; font-weight: 600;
                                   letter-spacing: 0px; }}

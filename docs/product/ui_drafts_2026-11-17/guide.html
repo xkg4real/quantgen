@@ -1,0 +1,230 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="qg.css"><script src="qg.js"></script><script src="guide_data.js"></script>
+<style>
+/* page-specific: 기술지표 가이드 */
+body { word-break: keep-all; }
+.casebox { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 9px;
+           background: var(--surface); padding: 5px 10px 5px 11px; font-size: 12px; }
+.casebox .k { color: var(--muted); } .casebox .v { font-weight: 500; }
+.casebox:after { content: "⌄"; color: var(--muted); margin-top: -4px; }
+.chartcard { flex: 1; min-height: 0; padding: 10px 0 0 14px; display: flex; flex-direction: column; }
+.legend { display: flex; align-items: center; gap: 14px; height: 24px; font-size: 12px; padding-right: 14px; }
+.legend .tag { display: inline-flex; align-items: center; gap: 7px; font-weight: 600; font-size: 12px; padding: 3px 9px 3px 8px;
+               border-radius: 8px; background: var(--surface2); }
+.legend .tag i { width: 3px; height: 12px; border-radius: 2px; display: inline-block; }
+.legend .tag .x { color: var(--faint); font-weight: 400; margin-left: 2px; }
+.legend .k { color: var(--muted); margin-right: 5px; } .legend .v { font-weight: 500; }
+.legend .note { margin-left: auto; color: var(--faint); font-size: 11px; }
+.pane { min-height: 0; position: relative; }
+.scrub { display: flex; align-items: center; gap: 10px; height: 26px; padding-right: 14px; }
+.scrub .track { position: relative; height: 4px; border-radius: 2px; background: var(--surface2); }
+.scrub .track b { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 2px; background: var(--accent); opacity: .35; }
+.scrub .track i { position: absolute; top: -6px; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); border: 3px solid var(--accent); transform: translateX(-50%); }
+.scrub .keys { font-size: 11px; color: var(--faint); white-space: nowrap; }
+.failrow { display: flex; align-items: center; gap: 8px; border-top: 1px solid var(--line); margin-right: 14px; padding: 9px 0 10px; }
+.failrow .h { font-size: 12px; font-weight: 600; margin-right: 2px; }
+.fail { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; padding: 4px 10px 4px 5px; border-radius: 11px; background: var(--surface2); }
+.fail .n { width: 17px; height: 17px; border-radius: 50%; border: 1.5px solid var(--text); display: grid; place-items: center; font-size: 11px; font-weight: 600; }
+.failrow .note { margin-left: auto; font-size: 11px; color: var(--faint); }
+/* right column */
+.seg span .cnt { font-size: 11px; color: var(--faint); margin-left: 5px; font-weight: 500; padding: 0; }
+.readhead { display: flex; align-items: baseline; gap: 6px; font-size: 12px; color: var(--muted); padding: 0 2px; }
+.readhead b { color: var(--text); font-weight: 600; font-size: 13px; }
+.g { gap: 5px; padding: 12px 14px 10px; }
+.ghead { display: flex; align-items: center; gap: 7px; }
+.ghead .nm { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; }
+.ghead .pr { font-size: 12px; color: var(--faint); }
+.pill { display: inline-flex; font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 10px; color: var(--muted); background: var(--surface); }
+.pill.up { color: var(--up); background: var(--up-tint); } .pill.down { color: var(--down); background: var(--down-tint); }
+.ghead .pill { margin-left: auto; }
+.g .read { font-size: 14px; font-weight: 500; line-height: 1.45; }
+.g svg.gauge2 { display: block; }
+.concl { display: flex; flex-direction: column; gap: 5px; }
+.concl .lab { font-size: 12px; font-weight: 600; color: var(--muted); display: flex; align-items: center; gap: 8px; margin-top: 2px; }
+.concl .lab:after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.concl .verdict { padding: 8px 11px 9px; gap: 2px; }
+.concl .verdict b { font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.concl .verdict.up b { color: var(--up); } .concl .verdict.down b { color: var(--down); }
+.concl .verdict span { font-size: 12px; line-height: 1.45; color: var(--text); }
+.tri { width: 0; height: 0; border-left: 4.5px solid transparent; border-right: 4.5px solid transparent; display: inline-block; }
+.tri.up { border-bottom: 7px solid var(--up); } .tri.down { border-top: 7px solid var(--down); }
+.now { display: flex; gap: 8px; align-items: flex-start; padding: 4px 2px 0; }
+.now .k { font-size: 12px; font-weight: 600; white-space: nowrap; padding-top: 2px; }
+.now .t { font-size: 12px; line-height: 1.45; }
+.now .t .pill { margin-right: 4px; padding: 1px 8px; }
+.notes { display: flex; flex-direction: column; gap: 1px; border-top: 1px solid var(--line); padding-top: 5px; margin-top: 1px; }
+.notes div { font-size: 12px; color: var(--muted); line-height: 1.45; }
+.notes .k { color: var(--faint); margin-right: 5px; }
+.side .foot { gap: 5px; padding-top: 10px; }
+.side .scroll { gap: 8px; }
+.together { font-size: 13px; line-height: 1.5; }
+.together b { font-weight: 600; margin-right: 4px; }
+</style></head>
+<body>
+<main class="page">
+  <div class="toolbar">
+    <div class="title">기술지표 가이드</div>
+    <div class="seg" style="margin-left:14px"><span class="on">기술지표 27</span><span>투자 용어</span></div>
+    <span class="badge" style="margin-left:6px"><span class="dot"></span>교육용 과거 사례 · 투자 권유 아님</span>
+    <div class="spacer"></div>
+    <span class="btn ghost">모두 해제</span><span class="btn">보고서 저장</span>
+  </div>
+  <div class="body">
+    <section class="canvas">
+      <div class="figs" style="align-items:center">
+        <span><b style="font-size:15px">삼성전자</b> <span class="muted">· 005930 · 일 단위 · 2026. 6. 15. → 11. 17.</span></span>
+        <span class="casebox"><span class="k">사례</span><span class="v">최근 조회한 시장 차트 · 005930</span></span>
+      </div>
+      <div class="figs">
+        <span><span class="v num" style="font-weight:600">11. 12.(목)</span></span>
+        <span><span class="k">시가</span><span class="v num">74,100</span></span>
+        <span><span class="k">고가</span><span class="v num">75,500</span></span>
+        <span><span class="k">저가</span><span class="v num">73,400</span></span>
+        <span><span class="k">종가</span><span class="v num">75,300</span></span>
+        <span class="v num up">+1,000 (+1.35%)</span>
+        <span><span class="k">거래량</span><span class="v num">1,973만주</span></span>
+      </div>
+      <div class="card chartcard">
+        <div class="legend">
+          <span class="tag"><i style="background:#157367"></i>BB 20·2<span class="x">×</span></span>
+          <span><span class="k">상단</span><span class="v num">85,067</span></span>
+          <span><span class="k">중심</span><span class="v num">78,510</span></span>
+          <span><span class="k">하단</span><span class="v num">71,953</span></span>
+          <span><span class="k">밴드 폭</span><span class="v num">16.7%</span></span>
+        </div>
+        <div class="pane" style="flex:1"><svg id="price" data-fit="0" data-padx="14"></svg></div>
+        <div class="legend" style="margin-top:4px">
+          <span class="tag"><i style="background:#81529E"></i>RSI 14<span class="x">×</span></span>
+          <span><span class="v num">37.3</span></span>
+          <span class="muted">기준선 30 · 70</span>
+        </div>
+        <div class="pane" style="height:148px; flex:none"><svg id="rsi" data-fit="0" data-padx="14"></svg></div>
+        <div class="scrub"><div class="track" id="track"><b></b><i></i></div><span class="keys">← → 하루씩</span></div>
+        <div class="failrow">
+          <span class="h">하단 밖 마감 5번 중 4번은 5거래일 뒤 더 낮았어요</span>
+          <span class="fail"><span class="n">1</span><span class="num">10. 29. → 11. 5.</span> <span class="num down">−2.9%</span></span>
+          <span class="fail"><span class="n">2</span><span class="num">11. 3. → 11. 10.</span> <span class="num down">−3.3%</span></span>
+          <span class="note">사후 관찰 · 승률 아님</span>
+        </div>
+      </div>
+    </section>
+    <aside class="side">
+      <div class="seg full"><span>지표<span class="cnt">2</span></span><span class="on">해석</span></div>
+      <div class="scroll">
+        <div class="guide g">
+          <div class="ghead"><span class="nm">볼린저 밴드</span><span class="pr">20·2</span><span class="pill">밴드 안 · 아래쪽</span></div>
+          <div class="read">종가 <span class="num">75,300</span>원, 하단 밴드에서 <span class="num">26%</span> 높이예요.</div>
+          <svg class="gauge2" id="g1" height="32"></svg>
+          <div class="concl">
+            <div class="lab">결론</div>
+            <div class="verdict up"><b><i class="tri up"></i>상승 흐름 쪽으로 읽는 경우</b><span>하단 밖에서 안으로 돌아오고, 중심선이 평평하거나 오를 때</span></div>
+            <div class="verdict down"><b><i class="tri down"></i>하락 흐름 쪽으로 읽는 경우</b><span>하단 밴드를 따라 계속 내려가며 밴드 폭이 넓어질 때</span></div>
+            <div class="now"><span class="k">지금은</span><span class="t"><span class="pill">아직 중립</span>11월 10일 밴드 안으로 돌아왔지만 중심선 <span class="num">78,510</span>원이 아직 내려가요.</span></div>
+          </div>
+          <div class="notes">
+            <div><span class="k">개념</span>20일 평균 ± 표준편차 2배로 그린 가격 띠예요.</div>
+            <div><span class="k">한계</span>차트의 ①·②처럼 하단 밖에서 더 내려가기도 해요.</div>
+          </div>
+        </div>
+        <div class="guide g">
+          <div class="ghead"><span class="nm">RSI</span><span class="pr">14</span><span class="pill">30~70 사이</span></div>
+          <div class="read">RSI <span class="num">37.3</span>, 11월 9일 <span class="num">27.0</span>에서 올라왔어요.</div>
+          <svg class="gauge2" id="g2" height="32"></svg>
+          <div class="concl">
+            <div class="lab">결론</div>
+            <div class="verdict up"><b><i class="tri up"></i>상승 흐름 쪽으로 읽는 경우</b><span>30 아래에서 돌아오거나, 가격과 달리 RSI 저점이 높아질 때</span></div>
+            <div class="verdict down"><b><i class="tri down"></i>하락 흐름 쪽으로 읽는 경우</b><span>70 위에서 내려오거나, 반등이 50~60에서 막혀 꺾일 때</span></div>
+            <div class="now"><span class="k">지금은</span><span class="t"><span class="pill up">상승 쪽에 가까움</span>30 위로 돌아왔지만 아직 50&nbsp;아래라 반등에 그칠 수 있어요.</span></div>
+          </div>
+          <div class="notes">
+            <div><span class="k">개념</span>최근 14일 오른 폭과 내린 폭을 0~100으로 비교해요.</div>
+            <div><span class="k">한계</span>강한 하락 추세에선 30 아래에 오래 머물기도 해요.</div>
+          </div>
+        </div>
+      </div>
+      <div class="foot">
+        <div class="together"><b>함께 읽으면</b>반등 신호는 있지만 추세 전환은 아직이에요</div>
+        <div class="tiny faint">교육용 해석 · 투자 권유 아님 · 미래 보장 아님</div>
+      </div>
+    </aside>
+  </div>
+</main>
+<script>
+rail("guide");
+const { bars: B, bb: BB, rsi: RSI, start: S, cursor: CUR } = GUIDE;
+const N = B.length - S, PADR = 64;
+const shown = B.slice(S), bbS = BB.slice(S), rsiS = RSI.slice(S), cj = CUR - S;
+const MONTHS = shown.map((b, j) => (j === 0 || b.d.slice(5, 7) !== shown[j - 1].d.slice(5, 7)) ? [j, (+b.d.slice(5, 7)) + "월"] : null).filter(Boolean);
+const BBC = "#157367", RSIC = "#81529E";
+function geom(svg) { fit(svg); const W = +svg.getAttribute("width"), H = +svg.getAttribute("height"); const w = (W - PADR) / N; return { W, H, w, X: j => j * w + w / 2 }; }
+function txt(svg, x, y, s, a = {}) { const t = svgEl("text", Object.assign({ x, y, "font-size": 11, fill: "#646E68" }, a)); t.textContent = s; svg.append(t); return t; }
+function poly(vals, X, Y) { return vals.map((v, j) => v == null ? null : `${X(j).toFixed(1)},${Y(v).toFixed(1)}`).filter(Boolean).join(" "); }
+
+// price pane: candles + Bollinger Bands
+(function () {
+  const svg = document.getElementById("price"); const { W, H, w, X } = geom(svg); const padT = 6, padB = 6;
+  let lo = Math.min(...shown.map(b => b.l), ...bbS.map(b => b.lo)), hi = Math.max(...shown.map(b => b.h), ...bbS.map(b => b.up));
+  const m = (hi - lo) * .04; lo -= m; hi += m; const Y = v => padT + (hi - v) / (hi - lo) * (H - padT - padB);
+  for (let v = Math.ceil(lo / 4000) * 4000; v <= hi; v += 4000) { svg.append(svgEl("line", { x1: 0, x2: W - PADR, y1: Y(v), y2: Y(v), stroke: "#ECEDE5", "stroke-dasharray": "3 4" })); txt(svg, W - PADR + 10, Y(v) + 4, fmt(v)); }
+  const up = bbS.map(b => b.up), lw = bbS.map(b => b.lo), md = bbS.map(b => b.mid);
+  svg.append(svgEl("polygon", { points: poly(up, X, Y) + " " + poly(lw, X, Y).split(" ").reverse().join(" "), fill: BBC, "fill-opacity": .07 }));
+  svg.append(svgEl("polyline", { points: poly(md, X, Y), fill: "none", stroke: BBC, "stroke-width": 1, "stroke-dasharray": "4 3", opacity: .65 }));
+  [up, lw].forEach(s => svg.append(svgEl("polyline", { points: poly(s, X, Y), fill: "none", stroke: BBC, "stroke-width": 1.3 })));
+  shown.forEach((b, j) => { const col = b.c >= b.o ? "#C8343D" : "#2F6DB5", cx = X(j);
+    svg.append(svgEl("line", { x1: cx, x2: cx, y1: Y(b.h), y2: Y(b.l), stroke: col, "stroke-width": 1 }));
+    svg.append(svgEl("rect", { x: cx - w * .33, y: Y(Math.max(b.o, b.c)), width: w * .66, height: Math.max(1, Math.abs(Y(b.o) - Y(b.c))), fill: col })); });
+  // reading date
+  svg.append(svgEl("line", { x1: X(cj), x2: X(cj), y1: 0, y2: H, stroke: "#646E68", "stroke-dasharray": "3 3" }));
+  // failed-signal markers (closes outside the lower band that kept falling)
+  [["2026-10-29", "1"], ["2026-11-03", "2"]].forEach(([d, n]) => { const j = shown.findIndex(b => b.d === d), b = shown[j], cy = Y(b.l) + 14;
+    svg.append(svgEl("circle", { cx: X(j), cy, r: 8, fill: "#FFFEFB", stroke: "#202823", "stroke-width": 1.4 }));
+    txt(svg, X(j), cy + 3.6, n, { "text-anchor": "middle", "font-size": 10, "font-weight": 600, fill: "#202823" }); });
+  // last price tag (11. 17. close, down from the day before)
+  const last = shown[N - 1].c, yy = Y(last);
+  svg.append(svgEl("line", { x1: 0, x2: W - PADR, y1: yy, y2: yy, stroke: "#2F6DB5", "stroke-dasharray": "2 3", opacity: .55 }));
+  svg.append(svgEl("rect", { x: W - PADR + 4, y: yy - 10, width: PADR - 6, height: 20, rx: 4, fill: "#2F6DB5" }));
+  txt(svg, W - PADR + 10, yy + 4, fmt(last), { fill: "#fff", "font-size": 11.5, "font-weight": 600 });
+})();
+
+// RSI pane
+(function () {
+  const svg = document.getElementById("rsi"); const { W, H, w, X } = geom(svg); const padT = 6, padB = 24;
+  const lo = 15, hi = 85; const Y = v => padT + (hi - v) / (hi - lo) * (H - padT - padB);
+  svg.append(svgEl("rect", { x: 0, y: Y(70), width: W - PADR, height: Y(30) - Y(70), fill: RSIC, "fill-opacity": .05 }));
+  const lastV = rsiS[N - 1];
+  [[70, "4 4"], [30, "4 4"], [50, "2 4"]].forEach(([v, d]) => { svg.append(svgEl("line", { x1: 0, x2: W - PADR, y1: Y(v), y2: Y(v), stroke: v === 50 ? "#D9DBD2" : "#B7A3C4", "stroke-dasharray": d }));
+    if (Math.abs(Y(v) - Y(lastV)) > 15) txt(svg, W - PADR + 10, Y(v) + 4, String(v)); });
+  svg.append(svgEl("polyline", { points: poly(rsiS, X, Y), fill: "none", stroke: RSIC, "stroke-width": 1.6 }));
+  svg.append(svgEl("line", { x1: X(cj), x2: X(cj), y1: 0, y2: H - padB + 2, stroke: "#646E68", "stroke-dasharray": "3 3" }));
+  svg.append(svgEl("circle", { cx: X(cj), cy: Y(rsiS[cj]), r: 3.6, fill: "#FFFEFB", stroke: RSIC, "stroke-width": 2 }));
+  // month labels, then the reading date's tag over the axis
+  const tagW = 74, tx = X(cj);
+  MONTHS.forEach(([j, t]) => { if (Math.abs(X(j) - tx) < tagW / 2 + 14) return; txt(svg, Math.max(X(j), 10), H - 6, t, { "text-anchor": "middle" }); });
+  svg.append(svgEl("rect", { x: tx - tagW / 2, y: H - 21, width: tagW, height: 19, rx: 5, fill: "#202823" }));
+  txt(svg, tx, H - 7.5, "11. 12.(목)", { "text-anchor": "middle", fill: "#fff", "font-size": 11, "font-weight": 600 });
+  // last value tag
+  const lv = rsiS[N - 1];
+  svg.append(svgEl("rect", { x: W - PADR + 4, y: Y(lv) - 10, width: PADR - 30, height: 20, rx: 4, fill: RSIC }));
+  txt(svg, W - PADR + 9, Y(lv) + 4, lv.toFixed(1), { fill: "#fff", "font-size": 11.5, "font-weight": 600 });
+  // slider under the plot, same width as the plot
+  const track = document.getElementById("track"); track.style.width = (W - PADR) + "px";
+  track.querySelector("b").style.width = X(cj) + "px"; track.querySelector("i").style.left = X(cj) + "px";
+})();
+
+// gauges drawn as the app's Gauge widget (indicator_picker.Gauge)
+function gauge(svg, kind, pos, labels, marks) {
+  const W = svg.parentElement.clientWidth - 28; svg.setAttribute("width", W); const pad = 8, left = pad, span = W - 2 * pad, y = 9, h = 8; const x = f => left + Math.max(0, Math.min(1, f)) * span;
+  svg.append(svgEl("rect", { x: left, y, width: span, height: h, rx: 4, fill: "#ECEDE6" }));
+  let under = [], tone = "#194C40";
+  if (kind === "band") { svg.append(svgEl("rect", { x: x(.25), y: y - 1, width: x(.75) - x(.25), height: h + 2, rx: 3, fill: "#194C40", "fill-opacity": .22 }));
+    under = [[x(.25), labels[0]], [x(.75), labels[1]]]; tone = pos > .75 ? "#C8343D" : pos < .25 ? "#2F6DB5" : "#194C40"; }
+  else { const [a, b] = marks; const id = "clip" + svg.id; const cp = svgEl("clipPath", { id }); cp.append(svgEl("rect", { x: left, y, width: span, height: h, rx: 4 })); svg.append(cp);
+    svg.append(svgEl("rect", { x: left, y, width: x(a) - left, height: h, fill: "#2F6DB5", "fill-opacity": .28, "clip-path": `url(#${id})` }));
+    svg.append(svgEl("rect", { x: x(b), y, width: left + span - x(b), height: h, fill: "#C8343D", "fill-opacity": .24, "clip-path": `url(#${id})` }));
+    under = [[x(a), labels[0]], [x(b), labels[1]]]; tone = pos <= a ? "#2F6DB5" : pos >= b ? "#C8343D" : "#194C40"; }
+  svg.append(svgEl("circle", { cx: x(pos), cy: y + h / 2, r: 6.5, fill: "#FFFFFF", stroke: tone, "stroke-width": 2.5 }));
+  under.forEach(([lx, t]) => txt(svg, lx, 29, t, { "text-anchor": "middle" }));
+}
+gauge(document.getElementById("g1"), "band", .25 + .5 * .2552, ["하단 71,953", "상단 85,067"]);
+gauge(document.getElementById("g2"), "scale", .3726, ["30", "70"], [.3, .7]);
+</script>
+</body></html>
