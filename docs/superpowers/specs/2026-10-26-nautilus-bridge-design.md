@@ -3,6 +3,8 @@
 Date: 2026-10-26.
 
 Status:
+- **2026-11-18 owner confirmation sentence, decision 8 (Geon Koh; verbatim; Claude Code chat, session_01H6RrzMUzF8vwK8xkX977mB).**
+  "2026-11-04 서명 문장은 main을 합친 연구 브랜치 커밋 888f1216c0d9f966998177519b0ea29b949ff76d에 적용하고, 그 뒤에 이 문장을 스펙에 적기만 한 커밋과 전체 검사 결과 파일만 더한 커밋에도 적용합니다. <Geon Koh> <2026-11-18>"
 - **2026-11-17 Step 10 close-out (Claude, session_01H6RrzMUzF8vwK8xkX977mB, the main session, acting under the owner's
   ruling P2 of 2026-11-11 and decision 10; the record says on what that rests).** The pilots and the Windows full run of
   record are in; the close-out record is in `docs/superpowers/plans/2026-10-28-nautilus-execution-record.md`
