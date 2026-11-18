@@ -6,11 +6,11 @@ task: payments-account-keys
 cycle: 2026-11-17
 done_ids: none
 next_ids: PAY-A1, PAY-A2, KEY-1, KEY-2, KEY-3/design, KEY-3, PAY-0, PAY-2
-updated_at: 2026-11-19T00:45:00+09:00
+updated_at: 2026-11-19T01:40:00+09:00
 stale_after_hours: 3
 waiting_on: review
 work_branch: claude/payments-keys-20261117
-work_commit: 31b724f
+work_commit: 7626723
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -24,6 +24,9 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-19 01:40 갱신:** freeze OFF (`MERGE_QUEUE.md` `82fac0c`). KEY-2는 대기열 3번 (1 메인 ⑦-2/a → 2 OS 작은 PR → 3 KEY-2). 메인이 "병합: PAYMENTS_ACCOUNT_KEYS"라고 적으면: 최신 main merge (그때 OS PR의 `core/app_identity.py`가 들어와 있으므로 `may_read_dotenv` 연결을 시험으로 확인) → 기준선 갱신 → `--check` → PR (본문: 코드 지문 ec72fab3 → 10c27010 예상, owner_confirmed 재작성 필요). 그 사이 브랜치에 소유자 안내서 6절 (owner_confirmed 절차) 추가 `7626723`.
+
 
 **2026-11-19 00:45 갱신:** 소유자가 이 세션에 "F22까지 마무리했습니다"라고 알림. main `6e077dc`(연구 브랜치 병합)을 작업 브랜치에 merge함 (`31b724f`, 충돌 없음, 브랜치만의 파일 12개). `tests.credentials_acceptance` 29 OK (keyring 있음/없음). Nautilus code_sha256: main `ec72fab3…` → KEY-2 브랜치 `10c27010…` (config.py 3줄 변경 때문; PR 본문에 적을 것). `MERGE_QUEUE.md`는 아직 `freeze: ON`이고 KEY-2 차례가 적혀 있지 않아 PR은 열지 않음. 메인이 동결 해제와 순서를 적으면: 최신 main merge → 준수 기준선 갱신 → PR.
 
