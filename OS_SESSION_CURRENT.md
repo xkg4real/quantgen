@@ -6,7 +6,7 @@ task: os-expansion
 cycle: 2026-11-17
 done_ids: none
 next_ids: OS-P0-a, OS-P0-e, OS-P0-f, OS-P0-c, OS-P0-b, OS-P0-d, OS-F1, OS-F2
-updated_at: 2026-11-18T14:30:00+09:00
+updated_at: 2026-11-18T14:35:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/os-prep-20261117
@@ -140,6 +140,11 @@ python -m tools.compliance.check --check -> consistency FAIL (새 파일; PR 직
   - `--done "OS-P0-e | PySide6 정식 시범·점검표 | docs/platform/PYSIDE6_TRIAL_2026-11-17.md, docs/platform/PYSIDE6_UI_CHECKLIST.md | 6e92dbf | 새 실패 14/10, 세그폴트 2/3, 지워진 객체 223/188"`
   - `--done "OS-P0-f | 글꼴 대안 판정·세그폴트 재현 | tools/qt_port/font_probe.py, tools/qt_port/repro/*, docs/platform/font_probe/* | 032c439 | insertSubstitutions = 현재와 동일(Linux), 세그폴트 PySide6만 재현"`
 - **D7-G 소유자 승인 (2026-11-18, 이 세션에서 받음, 원문: "그러면 D7-G의 방식대로 진행하겠습니다")**: MASTER 또는 메인 공지에 기록해 주세요. 기록되면 결제·계정 세션의 KEY-2~5와 이 세션의 `app_identity` 값 자리가 시작됩니다. 소유자에게 D7-G 설명(공급원은 `personal` 길로 지금처럼 동작, 법인 뒤 `routes.json`과 서버 주소만)을 이 세션이 드렸습니다.
+- **메인 답 (2026-11-18 05:18Z):**
+  1. 작은 PR 자리는 `MERGE_QUEUE.md`에서 F21 뒤 첫 자리이고, 그다음이 PySide6 전환 PR입니다. P3 전에는 받지 않습니다(P3 후보가 main `7c33955` 기준).
+  2. `qa/` 두 파일은 지금 그대로 둡니다. 그 작은 PR에서 근거와 함께 제안합니다. 준비해 둔 근거: 앱 코드(core·data·ui·quantgen_desktop·main.py·config.py)는 두 파일을 읽지 않고 문구에 이름만 나옴. `tests/packaging_policy_acceptance.py:18`은 `qa/research_status.json`이 허용 목록에 **있기를** 요구함. `pyproject.toml:55` data-files가 두 파일을 `share/quantgen/qa`로 넣음. 그래서 제안은 세 곳(stage.FILES, 테스트 18행, pyproject 55행)을 함께 고치는 형태가 됩니다.
+  3. LEDGER는 main 병합 뒤 11-18 커밋을 더해 메인이 기록합니다.
+  4. M2 "역방향 의존 없음" 정정은 다음 MASTER 개정 때 반영됩니다.
 - 확인 요청 (11-18): `tools/packaging/stage.py`의 `FILES`가 `qa/acceptance_results.json`·`qa/research_status.json`을 휠에 넣습니다. 앱 코드는 이 파일을 읽지 않고 이름만 문구에 나옵니다. 데스크톱 빌드에서는 spec으로 뺐습니다. 휠에도 계속 둘지 메인이 정해 주세요(stage.py는 이 세션이 고치지 않음).
 - 위 `--done` 초안의 OS-P0-b·e·f 커밋 칸에 11-18 커밋(`d2befff`, `8097ca5`, `42be9b8`, `c12643b`, `bd38f93`, `5816125`)을 더합니다.
 - 알림: 메인 문서 `MASTER_WORK_DESIGN` 등에 있는 "역방향 의존 없음"(Notion 원문 M2)은 틀립니다: `ui/` 12개 파일 → `quantgen_desktop` 문구 모듈, `quantgen_desktop` 5개 파일 → `ui.*` (함수 안 import).
