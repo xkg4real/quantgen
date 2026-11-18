@@ -1,0 +1,39 @@
+--- a/ui/crypto_page.py	2026-10-27 16:05:08.066611745 +0000
++++ b/ui/crypto_page.py	2026-10-27 16:05:08.080751205 +0000
+@@ -44,17 +44,23 @@
+ 
+ def _live(days: int) -> dict:
+     from core.ficc.data import load_series
+-    from data.crypto.crypto_client import BinancePublic, UpbitPublic
++    from data.crypto.crypto_client import BinancePublic, CryptoError, UpbitPublic
+     up = UpbitPublic().daily("KRW-BTC", days=days)
+     bn = BinancePublic()
+     btc = bn.daily("BTCUSDT", days=days)
+-    fund = bn.funding("BTCUSDT", days=min(days, 1500)).daily()
++    # fapi.binance.com has no second host (spot does); a blocked derivatives host must not take down the spot,
++    # kimchi and trend analysis, so the three USD-M legs fail together and are reported, never zero-filled.
++    try:
++        fund = bn.funding("BTCUSDT", days=min(days, 1500)).daily()
++        prem, oi, deriv_error = bn.premium_index("BTCUSDT"), bn.open_interest_hist("BTCUSDT"), ""
++    except CryptoError as exc:
++        fund, prem, oi, deriv_error = {}, None, [], f"Binance USD-M futures unavailable ({exc})"
+     fx = load_series("DEXKOUS", source="auto", days=days + 100)
+     return {"dates": btc.dates, "upbit": dict(zip(up.dates, up.close)), "binance": dict(zip(btc.dates, btc.close)),
+             "usdkrw": dict(zip(fx.dates, fx.values)), "usdkrw_source": fx.source, "funding_daily": fund,
+             "eth": dict(zip(*(lambda c: (c.dates, c.close))(bn.daily("ETHUSDT", days=days)))),
+-            "volume": np.asarray(btc.quote_volume), "premium_index": bn.premium_index("BTCUSDT"),
+-            "oi": bn.open_interest_hist("BTCUSDT"), "source": "LIVE"}
++            "volume": np.asarray(btc.quote_volume), "premium_index": prem,
++            "oi": oi, "deriv_error": deriv_error, "source": "LIVE"}
+ 
+ 
+ def analyze(*, days: int = 730, source: str = "live") -> dict:
+@@ -75,7 +81,7 @@
+                     "half_life": fit.half_life, "cond_vol_365": fit.cond_vol_last / math.sqrt(252) * math.sqrt(CRYPTO_DAYS),
+                     "uncond_vol_365": fit.uncond_vol / math.sqrt(252) * math.sqrt(CRYPTO_DAYS) if math.isfinite(fit.uncond_vol) else float("nan"),
+                     "converged": fit.converged, "at_bound": list(fit.at_bound), "n": int(r.size)}
+-    out["premium_index"] = d["premium_index"]; out["oi"] = d["oi"]
++    out["premium_index"] = d["premium_index"]; out["oi"] = d["oi"]; out["deriv_error"] = d.get("deriv_error", "")
+     out["btc_dates"] = sorted(d["binance"]); out["btc"] = btc
+     out["balances"] = None
+     if config.upbit_ready() and source == "live":

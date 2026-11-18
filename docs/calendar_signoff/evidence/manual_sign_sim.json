@@ -1,0 +1,53 @@
+{
+ "signed_utc": "2026-10-28T08:22:28Z",
+ "holidays_KRX": {
+  "rows_signed_by_regex": 33,
+  "step3_reason": "holidays_KRX.yaml: md5 None != content md5 dd325f6d3cfe02f9375ac6a1164ad11a; an edit under an old signature is an unsigned change",
+  "step4_reason": "holidays_KRX.yaml: MANIFEST.yaml row (version '0.1.0-draft', md5 None) does not match the file ('1.0.0', dd325f6d3cfe02f9375ac6a1164ad11a)"
+ },
+ "holidays_NYSE": {
+  "rows_signed_by_regex": 37,
+  "step3_reason": "holidays_NYSE.yaml: md5 None != content md5 2f67d855614cf3183677e3c6fb0728e8; an edit under an old signature is an unsigned change",
+  "step4_reason": "holidays_NYSE.yaml: MANIFEST.yaml row (version '0.1.0-draft', md5 None) does not match the file ('1.0.0', 2f67d855614cf3183677e3c6fb0728e8)"
+ },
+ "holidays_FED": {
+  "rows_signed_by_regex": 138,
+  "step3_reason": "holidays_FED.yaml: md5 None != content md5 0e95f95e74f7d780d638d0707ae55581; an edit under an old signature is an unsigned change",
+  "step4_reason": "holidays_FED.yaml: MANIFEST.yaml row (version '0.1.0-draft', md5 None) does not match the file ('1.0.0', 0e95f95e74f7d780d638d0707ae55581)"
+ },
+ "holidays_SIFMA": {
+  "rows_signed_by_regex": 50,
+  "step3_reason": "holidays_SIFMA.yaml: md5 None != content md5 0ee5704ef6710197d3b15431435f2935; an edit under an old signature is an unsigned change",
+  "step4_reason": "holidays_SIFMA.yaml: MANIFEST.yaml row (version '0.1.0-draft', md5 None) does not match the file ('1.0.0', 0ee5704ef6710197d3b15431435f2935)"
+ },
+ "kr_sessions": {
+  "rows_signed_by_regex": 23,
+  "step3_reason": "kr_sessions.yaml: md5 None != content md5 206107a41180c096cd66c9e2b44b7589; an edit under an old signature is an unsigned change",
+  "step4_reason": "kr_sessions.yaml: MANIFEST.yaml row (version '0.1.0-draft', md5 None) does not match the file ('1.0.0', 206107a41180c096cd66c9e2b44b7589)"
+ },
+ "step6": {
+  "holidays_CBOE": "REFUSED",
+  "holidays_CME": "REFUSED",
+  "holidays_ECOS": "REFUSED",
+  "holidays_FED": "signed",
+  "holidays_HKEX": "REFUSED",
+  "holidays_JPX": "REFUSED",
+  "holidays_KRX": "signed",
+  "holidays_NYSE": "signed",
+  "holidays_SIFMA": "signed",
+  "holidays_SSE": "REFUSED",
+  "holidays_TWSE": "REFUSED",
+  "kr_regime_tags": "REFUSED",
+  "kr_sessions": "signed",
+  "market_closes": "REFUSED",
+  "publication_schedules": "REFUSED",
+  "source_skipped": "REFUSED"
+ },
+ "md5": {
+  "holidays_FED": "0e95f95e74f7d780d638d0707ae55581",
+  "holidays_KRX": "dd325f6d3cfe02f9375ac6a1164ad11a",
+  "holidays_NYSE": "2f67d855614cf3183677e3c6fb0728e8",
+  "holidays_SIFMA": "0ee5704ef6710197d3b15431435f2935",
+  "kr_sessions": "206107a41180c096cd66c9e2b44b7589"
+ }
+}

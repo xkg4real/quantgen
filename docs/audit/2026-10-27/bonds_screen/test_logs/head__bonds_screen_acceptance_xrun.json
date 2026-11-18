@@ -1,0 +1,200 @@
+[
+ {
+  "test": "test_a_quote_too_far_from_the_curve_names_the_field",
+  "status": "FAIL",
+  "detail": "AssertionError: []",
+  "seconds": 0.368
+ },
+ {
+  "test": "test_a_run_uses_the_inputs_of_its_click",
+  "status": "FAIL",
+  "detail": "AssertionError: {'Bonds': 'Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.', 'Price': '95.000', 'Yield': '6.178%', 'Macaulay': '7.76y', 'Modified': '7.52', 'Convexity': '69.9', 'DV01': '715', 'z-spread': '-155.4bp', 'Carry (",
+  "seconds": 0.282
+ },
+ {
+  "test": "test_carry_roll_for_a_bond_maturing_inside_the_horizon",
+  "status": "FAIL",
+  "detail": "AssertionError: (0.08333333333333333, -2.2952168901404564, -0.0035502234737895266)",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_chart_left_titles_use_the_palette_text_colour",
+  "status": "FAIL",
+  "detail": "AssertionError: black",
+  "seconds": 0.008
+ },
+ {
+  "test": "test_clearing_one_of_price_and_yield_clears_the_pair_error",
+  "status": "FAIL",
+  "detail": "AssertionError: ",
+  "seconds": 0.013
+ },
+ {
+  "test": "test_curve_lagging_in_a_shared_cache_is_refetched",
+  "status": "FAIL",
+  "detail": "AssertionError: CurveSnapshot(date='2026-10-27', source='FRED', tenors=(0.08333333333333333, 0.25, 0.5, 1.0, 2.0, 3.0, 5.0, 7.0, 10.0, 20.0, 30.0), par_yields=(0.043, 0.0425, 0.042, 0.04, 0.0372, 0.0375, 0.038, 0.039, 0.0397, 0.045, 0.0437), note='')",
+  "seconds": 0.003
+ },
+ {
+  "test": "test_duration_convexity_dv01_by_finite_differences",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_echo_keeps_the_typed_digits_and_names_the_served_curve",
+  "status": "FAIL",
+  "detail": "StopIteration: ",
+  "seconds": 0.214
+ },
+ {
+  "test": "test_edit_after_run_marks_the_result_and_revert_unmarks",
+  "status": "FAIL",
+  "detail": "StopIteration: ",
+  "seconds": 0.216
+ },
+ {
+  "test": "test_every_input_has_a_change_handler",
+  "status": "FAIL",
+  "detail": "AssertionError: Coupon % has no on_change handler",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_failed_fred_reasons_keep_the_cause_once",
+  "status": "FAIL",
+  "detail": "AssertionError: FRED served 0/11 tenors (DGS1MO: RemoteDataError: Unable to read URL: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS1MO\nException:\nHTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Max retries exceeded with url: /graph/fredgraph.csv?id=DGS1MO (Caused by ProxyError('Unable to connect",
+  "seconds": 4.838
+ },
+ {
+  "test": "test_fred_fetch_is_bounded_and_a_hung_batch_is_not_retried_per_id",
+  "status": "FAIL",
+  "detail": "AssertionError: DataReader takes no timeout",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_hedge_798_x_08_over_65_side_rounding_and_residual",
+  "status": "FAIL",
+  "detail": "KeyError: 'Position DV01 (calculator)'",
+  "seconds": 0.014
+ },
+ {
+  "test": "test_hedge_override_is_named_and_warned",
+  "status": "FAIL",
+  "detail": "KeyError: 'Position DV01 (override)'",
+  "seconds": 0.013
+ },
+ {
+  "test": "test_lagging_refetch_is_tried_once_per_cache_entry",
+  "status": "FAIL",
+  "detail": "AssertionError: []",
+  "seconds": 0.003
+ },
+ {
+  "test": "test_late_failure_does_not_replace_a_newer_result",
+  "status": "FAIL",
+  "detail": "AssertionError: ['Bonds', 'Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.', 'FRED served 0/11 tenors (DGS1MO: FICCError: offline (late); DGS3MO: FICCError: offline (late); DGS6MO: FICCError: offline (late); DGS1: FICCError:",
+  "seconds": 0.232
+ },
+ {
+  "test": "test_missing_tenor_note_describes_the_interpolation",
+  "status": "FAIL",
+  "detail": "AssertionError: Missing tenors: DGS20.",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_named_shocks_bite_at_their_own_tenors_on_a_partial_curve",
+  "status": "FAIL",
+  "detail": "AssertionError: ('bear steepener', 7.0, 8.928571428571429)",
+  "seconds": 0.009
+ },
+ {
+  "test": "test_narrative_for_a_bond_maturing_inside_the_horizon",
+  "status": "FAIL",
+  "detail": "AssertionError: The 5.50% 1m bond (coupon paid 2x a year) prices at 102.370 per 100 for a yield of 4.500%: Macaulay duration 0.08y, modified 0.08, convexity 0.0. On 1,000,000 notional the DV01 is 8 per bp; a +100bp parallel move costs roughly 834 before convexity. Key-rate risk is concentrated at 3m (9 per bp, 100%",
+  "seconds": 0.002
+ },
+ {
+  "test": "test_narrative_separates_yield_dv01_from_zero_curve_scenarios",
+  "status": "FAIL",
+  "detail": "AssertionError: ",
+  "seconds": 0.004
+ },
+ {
+  "test": "test_newest_run_wins_when_runs_finish_out_of_order",
+  "status": "FAIL",
+  "detail": "AssertionError: ",
+  "seconds": 0.213
+ },
+ {
+  "test": "test_par_premium_discount_and_ytm_inversion",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.266
+ },
+ {
+  "test": "test_price_yield_exclusive_with_field_errors",
+  "status": "FAIL",
+  "detail": "AssertionError: ",
+  "seconds": 0.018
+ },
+ {
+  "test": "test_request_table_21_rows_match_independent_formulas",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.238
+ },
+ {
+  "test": "test_required_fields_have_no_silent_default",
+  "status": "FAIL",
+  "detail": "AssertionError: ('Coupon %', [])",
+  "seconds": 0.247
+ },
+ {
+  "test": "test_rounding_is_half_away_from_zero_as_decided",
+  "status": "FAIL",
+  "detail": "AttributeError: module 'core.ficc.bonds' has no attribute 'round_contracts'",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_scenario_notice_reports_this_curves_yield_move",
+  "status": "FAIL",
+  "detail": "StopIteration: ",
+  "seconds": 0.147
+ },
+ {
+  "test": "test_scenario_pnl_is_reprice_times_notional_with_zero_rate_shocks",
+  "status": "FAIL",
+  "detail": "AssertionError: ",
+  "seconds": 0.147
+ },
+ {
+  "test": "test_slow_batch_with_an_http_error_is_still_retried_per_id",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.251
+ },
+ {
+  "test": "test_stale_carried_forward_and_bad_unit_curves_are_flagged",
+  "status": "FAIL",
+  "detail": "StopIteration: ",
+  "seconds": 0.212
+ },
+ {
+  "test": "test_synthetic_and_fred_are_labelled_apart_with_a_mocked_fetch",
+  "status": "FAIL",
+  "detail": "AssertionError: ",
+  "seconds": 0.225
+ },
+ {
+  "test": "test_tiny_maturity_prices_instead_of_index_error",
+  "status": "FAIL",
+  "detail": "IndexError: index -1 is out of bounds for axis 0 with size 0",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_zero_negative_nan_inf_and_comma_inputs",
+  "status": "FAIL",
+  "detail": "AssertionError: -0.000%",
+  "seconds": 0.447
+ }
+]

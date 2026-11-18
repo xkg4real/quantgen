@@ -1,0 +1,24 @@
+{
+ "bars_fed": 12,
+ "bars_seen": 4,
+ "exit_code": 10,
+ "fills": [
+  {
+   "commission": "500.00",
+   "date": "2001-01-05",
+   "price": "100.00",
+   "qty": "1000",
+   "side": "BUY"
+  }
+ ],
+ "final_cash": "904501.00",
+ "final_qty": "1000",
+ "fixture": "N1",
+ "force_stop": true,
+ "invalid_reasons": [
+  "C-01: forced stop",
+  "C-02: bars seen fewer than bars fed"
+ ],
+ "schema": "nautilus-bridge-golden/1",
+ "status": "invalid"
+}

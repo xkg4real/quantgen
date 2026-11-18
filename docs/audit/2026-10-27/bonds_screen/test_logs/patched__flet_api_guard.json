@@ -1,0 +1,26 @@
+[
+ {
+  "test": "test_control_attribute_assignments_exist",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.2
+ },
+ {
+  "test": "test_control_keywords_exist",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.201
+ },
+ {
+  "test": "test_page_methods_exist",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.154
+ },
+ {
+  "test": "test_theme_tokens_referenced_by_ui_exist",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.16
+ }
+]
