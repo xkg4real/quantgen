@@ -6,11 +6,11 @@ task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
 next_ids: DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e, DS-H, DS-4b
-updated_at: 2026-11-18T11:25:00+09:00
+updated_at: 2026-11-18T12:10:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/data-source-didm-20261117
-work_commit: 7bf99b3
+work_commit: 1739376
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -25,7 +25,7 @@ session: https://claude.ai/code/session_016uB1jiXnUcWg99JHtRek9T
 
 ## 0. 한 줄 요약
 
-첫 작업 3개 + 소유자 답 (2026-11-18) 반영 + DS-4d (EDGAR·OpenDART·ECOS)·DS-4e (Kalshi) 커넥터를 작업 브랜치 `claude/data-source-didm-20261117` (`7bf99b3`)에 커밋·push. main 미병합, PR 없음. **소유자 답 대기**: 평가표 확인 2문항 (VENDOR_EVAL 8절), 사전등록 P1~P5, 홈 지표 진단 출력.
+DS-1 평가표 소유자 확인 완료, DIDM-0 사전등록 V0 **소유자 승인** (2026-11-18), 신규성 모형 (`core/didm/novelty.py`) 추가, DS-4a·4d·4e 커넥터까지 작업 브랜치 `claude/data-source-didm-20261117` (`1739376`). main 미병합, PR 없음 (대기열 차례 전). **남은 소유자 입력**: 홈 지표 진단 출력, PC 실행 출력 (키·연락처 설정 뒤).
 
 ## 1. 목표와 완료 조건
 
@@ -46,6 +46,23 @@ session: https://claude.ai/code/session_016uB1jiXnUcWg99JHtRek9T
 > 4. 네 Kalshi로 진행하겠습니다.
 
 "위 두 파일" = 소유자 엑셀 (원본 업로드, 글 사본과 같음 확인)과 MTFE 문서 (handoff `plans/2026-11-18/OWNER_MTFE_RAVENPACK_REVIEW_2026-11-11.md`). 같은 메시지의 작업 지시: "/karpathy-guidelines /trading-skills-navigator 등의 스킬들을 조합해 업무를 진행해주세요. 이때, Claude.md 파일에 있는 가이드라인을 먼저 읽고 나서 작업을 진행해주세요." (karpathy-guidelines는 이 세션의 스킬 목록에 없음; trading-skills-navigator는 추천 스크립트가 빠진 채 동기화되어 수동으로 고름.)
+
+## 1.2 소유자 답 (2026-11-18 둘째, 원문 그대로)
+
+평가표 8절:
+> 1. 네 맞습니다. 다만 직접 구현이 필연적이므로, 표기를 X 대신 O로 해주세요
+> 2. ?에 대해서 별도 처리할 필요는 없으나, 대안책의 자산별관련성점수의 경우 X로 확정입니다.
+
+사전등록 8절:
+> 1. 원래 출발안 14개가 기존 12개의 범주를 포함하면서 확장한 것이라면 (즉 12개에는 있으나 14개에는 분류가 달라 없는 경우가 아닌 경우) 14개로 시작
+> 2. 시간만을 더미변수로 간주하고 점수로 매기기보다, 가능한 모든 요소(변수화)를 고려한 데이터과학/계량경제학적 모형(다중회귀든 time series든 상관 없음)을 세우고(이때의 y변수는 신규성이 되는 것도 하나 세울 것), 이때 기존 cutoff(0.75)에서 test를 했을 때 기대되는 accuracy가 0.9 이상이 되도록 하여 신규성을 평가할 것.
+> 3. 승인
+> 4. 승인, 단 여기서 말하는 LLM이 어떤 LLM인지가 중요. 위 문서에서 말하는 자체 개발 LLM을 의미하는거가 맞다면 승인.
+> 5. 위 내용을 반영한 상태에서 승인
+
+"위 문서" = 소유자 "QUANTGEN 장기 비전 첫걸음 초안" (2026-11-17), 사본 handoff `plans/2026-11-18/OWNER_LONG_TERM_VISION_FIRST_STEP_2026-11-17.md`.
+
+반영 (커밋 `1739376`): 평가표에 "대안책 (소유자 확정)" 열 (N=O, O=X, W=O; 엑셀 열은 그대로, 검사 바뀐 칸 0), 자체 NLP 직접 구현 칸 G·H·K·N·W·X = O (D1), 관련성 X (D2), "?" 처리 안 함. 사전등록: 14개 유형 (12개의 모든 범주가 14개에 대응 확인), 신규성 = 모형 P̂(새 사건) (시간순 70/30 검정, 컷오프 0.75, 목표 정확도 ≥ 0.90, 관련성 모형 동일 틀), LLM 기준일 규칙에 자체 개발 LLM 정의 추가, **V0 승인 기록**.
 
 ## 2. 근거
 
@@ -77,6 +94,7 @@ session: https://claude.ai/code/session_016uB1jiXnUcWg99JHtRek9T
 - [x] DS-4a GDELT·ALFRED 커넥터 + 시점 저장소 — `core/didm/store/__init__.py`, `core/didm/ingest/{gdelt,alfred}.py`, `data/didm/{gdelt,alfred,polymarket}.py`, `tools/didm/collect_daily.py`, `tests/didm_{store,ingest}_acceptance.py`, `docs/compliance/08-third-parties.md` 행 초안, 커밋 `73f2868`. 완료 조건 1·2·3·5 충족, 4는 브랜치에 초안 (PR은 대기열 차례에). **실제 GDELT·ALFRED 호출은 미실행** (이 세션 네트워크 막힘 → 소유자 PC).
 - [x] 소유자 답 1~4 반영 — `VENDOR_EVAL` 0.1·3·5·6·8절, `PREREG_V0` 1·4·8절. 커밋 `7bf99b3`.
 - [x] DS-4d EDGAR·OpenDART·ECOS 커넥터 (KIND는 공개 API 없음 → 연결 안 함, OpenDART로 대신) + DS-4e Kalshi 커넥터 — `core/didm/ingest/{filings,ecos,kalshi}.py`, `data/didm/{edgar,opendart,ecos,kalshi}.py`, `tests/didm_sources_acceptance.py`, `collect_daily.py` 옵션, 08 행·CI 줄. 커밋 `7bf99b3`. **실제 호출 미실행** (키·UA 없음, Kalshi 호스트 막힘 → 사유 코드 확인).
+- [x] 소유자 답 (평가표 8절, 사전등록 P1~P5) 반영 + 신규성 모형 — `core/didm/novelty.py`, `tests/didm_novelty_acceptance.py` (시뮬레이션: 정보 있는 자료 검정 정확도 1.00 / 무작위 표지 0.466 불통과), 스키마 14개 유형·`novelty_0_100`. 커밋 `1739376`.
 - [ ] DS-H 홈 지표 데이터 계층 ← **소유자 진단 출력 대기** (아직 손대지 않음)
 - [ ] DS-4b Alpha Vantage·Tiingo·Cryptopanic 무료 키 1회 확인 ← 소유자 무료 키 가입 대기
 
@@ -86,7 +104,7 @@ session: https://claude.ai/code/session_016uB1jiXnUcWg99JHtRek9T
 python -m tools.didm.check_vendor_eval --excel <handoff 엑셀 사본>
 -> columns 19, alternative cells 171, '?' cells 15, excel compared: yes / excel cells changed: 0 / OK
 python -m unittest tests.didm_store_acceptance tests.didm_ingest_acceptance tests.didm_sources_acceptance tests.didm_schema_acceptance tests.didm_vendor_eval_acceptance
--> 2026-11-18 7bf99b3: OK (네트워크 없음; sources 15 추가)
+-> 2026-11-18 1739376: OK (네트워크 없음; + tests.didm_novelty_acceptance 6)
 python -m unittest tests.provider_parity_acceptance tests.provider_parity_btc_diagnose_acceptance (워크플로 파일을 읽는 기존 시험) -> OK
 git diff origin/main -- core ':!core/didm' -> 0줄 (core/didm 밖 core 변경 없음)
 python -m tools.didm.collect_daily --data-dir <스크래치> --finbert --alfred CPIAUCSL
@@ -123,8 +141,10 @@ python -m tools.compliance.check --check -> consistency FAIL, documents need rev
 ## 8. 소유자에게 물어야 할 것 (답 대기)
 
 - ~~지시문 질문 1~4~~ → 2026-11-18 답함 (1.1절).
-- 평가표 (`VENDOR_EVAL` 8절): 메모를 대안별로 나눈 방식 (`N4규칙`, Q/U/K 칸) 동의? "?" 처리 (무료 키 6칸, 공급사 문의 11칸) 진행?
-- 사전등록 (`PREREG_V0` 8절): P1 사건 유형 12 vs 14, P2 τ 0.80·δ 0.5·관련성 75, P3 시장 반응 판정, P4 LLM 여유 3개월, P5 V0 전체 승인.
+- ~~평가표 8절~~ → 2026-11-18 답함 (1.2절).
+- ~~사전등록 P1~P5~~ → 2026-11-18 승인 (1.2절).
+- 신규성 모형의 보조 조건 (검정 정확도가 "전부 새 사건" 다수 범주 정확도를 넘을 것)을 정식 조건으로 할지 — 사전등록 4.1절 "제안".
+- 자체 개발 LLM의 현재 상태 (기반 모델·학습 자료 마지막 날짜) — `MODEL_CUTOFFS.md`에 필요 (장기 비전 초안 7절과 같은 질문).
 - 홈 지표 진단 출력 (마스터 부록 H4의 진단 명령 결과).
 - (선택) 무료 키 가입: `FRED_API_KEY`, `ALPHAVANTAGE_API_KEY`, `TIINGO_API_KEY`, `CRYPTOPANIC_API_KEY` — 값은 PC에만.
 
