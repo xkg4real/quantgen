@@ -6,11 +6,11 @@ task: os-expansion
 cycle: 2026-11-17
 done_ids: none
 next_ids: OS-P0-a, OS-P0-e, OS-P0-f, OS-P0-c, OS-P0-b, OS-P0-d, OS-F1, OS-F2
-updated_at: 2026-11-18T14:35:00+09:00
+updated_at: 2026-11-18T16:10:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/os-prep-20261117
-work_commit: e59e3ba
+work_commit: 219b815
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -74,6 +74,9 @@ session: https://claude.ai/code/session_016uB1jgXiwx42FSUU5ANwM7
 - [x] (11-18 추가) OS-P0-b 계속: `packaging/selfcheck.py`(`QUANTGEN --selfcheck report.json`), 고지 생성기 `tools/packaging/third_party_notices.py` + `packaging/licenses/`(LGPL-3.0·GPL-3.0 FSF 원문), spec에 고지·계산 해시 기대값·`qa/` 제외·chardet `.py` 유지, 워크플로에 selfcheck와 Windows·macOS 글꼴 확인 잡(수동 실행만), `tests/third_party_notices_acceptance.py` — `d2befff`, `8097ca5`, `42be9b8`, `c12643b`
 - [x] (11-18 추가) OS-P0-e/f 계속: 원인 확정(점검표 6·12·13번), lint `6-bound`·`10-int-enum`, 재시범(`PYSIDE6_TRIAL` 7절, 그래프 `docs/platform/trial_fix/`), `docs/platform/LICENSE_COMPLIANCE_PREP.md` — `bd38f93`, `5816125`
 - [x] OS-P0-d — 소유자 승인 (2026-11-18, 원문: "개정 초안 승인합니다."). 저장소판 `docs/platform/PLATFORM_EXPANSION_2026-11-17.md` (`451db93`)을 Notion `6f75e02e0296483086927a73d45df697`에 반영함: 맨 앞 "개정 2판" 요약 + 4절 2행·7.1 F1 2단계·7.2 M2 의존 문장·8절 D9 행을 고침 (나머지 원문은 그대로)
+- [x] (11-18 오후) 첫 PR 준비: 최신 main `7c33955` merge(충돌 없음), `runtime-smoke.yml` 경로 목록과 'Verify bounded source fixtures'에 시험 5개 모듈 추가 — `6f2feb9`, 이후 커밋들
+- [x] (11-18 오후) **정정:** `qa/` 두 파일은 앱이 읽습니다. `quantgen_desktop/app.py` 시스템 화면의 "프로젝트 상태"가 `tools.status.snapshot.verify(application_root())`로 읽음. 그래서 데스크톱 번들에서 빼던 `42be9b8`을 되돌리고, selfcheck에 `recorded_project_status` 검사를 추가함. 두 바인딩 빌드 모두 11/11 통과 — `39a1642`. 메인에게 "휠에서 빼자" 제안은 철회함.
+- [x] (11-18 오후) OS-F1 준비: `tools/qt_port/switch_day.py`(`--check`/`--apply`)가 .py 밖 7곳을 고침(pyproject desktop 고정, runtime-smoke 설치 줄, `.cmd` 14행, spec 기본값, platform-build 기본값 2곳, README). 시험 `tests/qt_switch_day_acceptance.py`. 스크래치 복사본에서 변환 도구와 함께 실행했더니, 남은 "PyQt6"는 설명 문장과 화면 문구 3곳(`app.py`·`translations.py`·`core/ui_legacy_messages.py`의 "PyQt6 네이티브: …", UI 세션 몫, 도구가 note로 알림)뿐임 — `219b815`
 - [ ] OS-F1 (F21 뒤, MERGE_QUEUE가 자리 줌), OS-F2 (KEY-2 뒤)
 
 **11-18 추가 검증 (`5816125`):**
@@ -91,6 +94,8 @@ PySide6 6.12.0 Windows·macOS 휠 정적 확인: insertSubstitutions·print_·su
 window_survivors.py: 고친 뒤에도 창마다 숨은 최상위 위젯 6개 누수는 그대로 (점검표 10번, 별개 문제)
 Android: 이 컨테이너 네트워크가 pypi.flet.dev·dl.google.com 거부(403) -> 빌드 못 함 (LICENSE_COMPLIANCE_PREP 6절)
 ```
+
+**11-18 오후 검증 (`219b815`):** 시험 6개 모듈 OK; 두 바인딩 빌드 selfcheck 11/11 (프로젝트 상태 포함); `switch_day.py --check` 7곳 모두 "to do", 스크래치에서 `--apply` 뒤 `--check` rc 0; 화면 코드 변경 0; compliance `--check` FAIL(새 파일, PR 직전 기준선 갱신 예정)
 
 **처음 검증 (`6e92dbf`):**
 
@@ -115,8 +120,8 @@ python -m tools.compliance.check --check -> consistency FAIL (새 파일; PR 직
 1. 소유자: 아래 "UI 세션에 전할 것"을 UI 세션에 붙임 → 붙였는지 이 파일에 기록.
 2. OS-P0-d — 소유자가 `docs/platform/PLATFORM_EXPANSION_2026-11-17.md`를 확인하면 Notion `6f75e02e0296483086927a73d45df697` 개정 2판 반영 (승인 뒤에만). 완료 기준: 소유자 확인.
 3. UI 세션이 점검표 수정을 push하면: `python tools/qt_port/pyqt6_to_pyside6.py --lint --ref origin/claude/friendly-bardeen-r6xe8f` 와 `PYSIDE6_TRIAL` 6절 시범을 다시 돌려 주간 지표 갱신.
-4. 첫 PR(대기열 차례에만): 최신 main merge → `runtime-smoke.yml` 경로 목록에 `tools/qt_port/**`·`tests/qt_port_acceptance.py`·`tests/app_identity_acceptance.py`·`tests/app_paths_acceptance.py`, 'Verify bounded source fixtures'에 세 테스트 모듈 추가 → 맨 마지막에 `python -m tools.compliance.check --refresh-baseline ...` → `--check`.
-5. OS-F1 (F21 뒤): UI 세션이 최신 main에서 `--apply` 실행, 이 세션은 화면 밖 수정(`pyproject.toml` desktop extra, `runtime-smoke.yml` Qt 설치 줄, `Start-QUANTGEN-Desktop.cmd` 14행, `tools/packaging/smoke_desktop.py`, README) 브랜치와 리뷰. 완료 기준: 지시문 8절 OS-F1 행.
+4. 첫 PR(`MERGE_QUEUE.md`상 F21 뒤 첫 자리): runtime-smoke 추가는 끝남. 남은 것: 그때의 최신 main merge → 맨 마지막에 `python -m tools.compliance.check --refresh-baseline ...` → `--check` → PR(템플릿 확인). `qa/` 제거 제안은 하지 않음(정정 참고).
+5. OS-F1 (F21 뒤): UI 세션이 최신 main에서 `pyqt6_to_pyside6.py --apply` 실행, 이 세션은 `python tools/qt_port/switch_day.py --apply`(.py 밖 7곳)와 리뷰. 화면 문구 3곳은 UI 세션. 완료 기준: 지시문 8절 OS-F1 행.
 
 ## 7. 주간 지표 (D9 진척)
 
@@ -151,7 +156,7 @@ python -m tools.compliance.check --check -> consistency FAIL (새 파일; PR 직
 
 ## UI 세션에 전할 것
 
-(소유자가 그대로 붙여 주세요. 소유자가 전달했는지: **아직 기록 없음**)
+(소유자가 그대로 붙여 주세요. 소유자가 전달했는지: **전달함 — 2026-11-18, 소유자 원문 "네 보냈습니다"**)
 
 > OS_EXPANSION 세션이 PySide6 전환 준비 결과를 올렸습니다. 브랜치 `claude/os-prep-20261117`의 `docs/platform/PYSIDE6_UI_CHECKLIST.md`(점검표)와 `docs/platform/PYSIDE6_TRIAL_2026-11-17.md` 7절(재시범)을 읽어 주세요.
 > 세그폴트와 메모리 폭증의 원인은 두 곳입니다. 먼저 고쳐 주세요(둘 다 PyQt6에서도 동작이 같음): ① `localization.py:80`의 `QTimer.singleShot(0, self.apply)`를 자식 `QTimer(self)`로 바꾸기(점검표 6번), ② `bonds.py:202`의 `setWeight(600)`를 `setWeight(QFont.Weight(600))`로 바꾸기(12번, `QFont` import 필요).
