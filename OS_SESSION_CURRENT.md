@@ -6,11 +6,11 @@ task: os-expansion
 cycle: 2026-11-17
 done_ids: none
 next_ids: OS-P0-a, OS-P0-e, OS-P0-f, OS-P0-c, OS-P0-b, OS-P0-d, OS-F1, OS-F2
-updated_at: 2026-11-18T16:10:00+09:00
+updated_at: 2026-11-18T22:30:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/os-prep-20261117
-work_commit: 219b815
+work_commit: d0bc363
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -77,6 +77,7 @@ session: https://claude.ai/code/session_016uB1jgXiwx42FSUU5ANwM7
 - [x] (11-18 오후) 첫 PR 준비: 최신 main `7c33955` merge(충돌 없음), `runtime-smoke.yml` 경로 목록과 'Verify bounded source fixtures'에 시험 5개 모듈 추가 — `6f2feb9`, 이후 커밋들
 - [x] (11-18 오후) **정정:** `qa/` 두 파일은 앱이 읽습니다. `quantgen_desktop/app.py` 시스템 화면의 "프로젝트 상태"가 `tools.status.snapshot.verify(application_root())`로 읽음. 그래서 데스크톱 번들에서 빼던 `42be9b8`을 되돌리고, selfcheck에 `recorded_project_status` 검사를 추가함. 두 바인딩 빌드 모두 11/11 통과 — `39a1642`. 메인에게 "휠에서 빼자" 제안은 철회함.
 - [x] (11-18 오후) OS-F1 준비: `tools/qt_port/switch_day.py`(`--check`/`--apply`)가 .py 밖 7곳을 고침(pyproject desktop 고정, runtime-smoke 설치 줄, `.cmd` 14행, spec 기본값, platform-build 기본값 2곳, README). 시험 `tests/qt_switch_day_acceptance.py`. 스크래치 복사본에서 변환 도구와 함께 실행했더니, 남은 "PyQt6"는 설명 문장과 화면 문구 3곳(`app.py`·`translations.py`·`core/ui_legacy_messages.py`의 "PyQt6 네이티브: …", UI 세션 몫, 도구가 note로 알림)뿐임 — `219b815`
+- [x] (11-18 밤) UI 세션 수정(`75336f3`) 재시범: lint 97→50. 그대로 돌리면 PySide6 세그폴트 7단계가 다시 남. 이분 탐색 결과 원인은 시스템 화면 커밋 `a00c856`의 `connections.py` `focus_order`(`nextInFocusChain()`으로 창 전체를 돌음). 그 한 곳을 `findChildren`으로 바꾼 복사본은 CI 18단계가 PyQt6와 모두 같고, 새 실패·세그폴트·지워진 객체 줄이 모두 0. 점검표 14번, lint `14-focus-walk` 추가, `PYSIDE6_TRIAL` 8절 — `d0bc363`
 - [ ] OS-F1 (F21 뒤, MERGE_QUEUE가 자리 줌), OS-F2 (KEY-2 뒤)
 
 **11-18 추가 검증 (`5816125`):**
@@ -158,6 +159,12 @@ python -m tools.compliance.check --check -> consistency FAIL (새 파일; PR 직
 
 (소유자가 그대로 붙여 주세요. 소유자가 전달했는지: **전달함 — 2026-11-18, 소유자 원문 "네 보냈습니다"**)
 
+> (2차, 11-18 밤) OS_EXPANSION 재시범 결과(`75336f3`): 수정이 효과가 있었습니다. lint 97→50, `6-bound`·`receivers`·`setWeight`·이벤트 필터 해시가 모두 0입니다.
+> 남은 세그폴트는 하나입니다. 7개 화면 디자인 중 시스템 화면의 `connections.py` `focus_order`가 `nextInFocusChain()`으로 창 전체 포커스 사슬을 도는 부분이 PySide6에서 앱을 죽입니다(점검표 14번). 사슬을 도는 대신 `part.findChildren(QWidget)`로 그 부분의 위젯만 모으면, CI 18단계가 PyQt6와 모두 같아지고 바인딩 때문에 새로 실패한 테스트가 0개가 됩니다(시스템 화면 시험 5개 포함, 두 바인딩 모두 통과).
+> 점검표 9번(delegate 참조 10곳)도 고쳐 주세요. 이번 실행에서는 원인이 아니었지만, PySide6는 `setItemDelegate*`로 넘긴 객체를 붙잡지 않아 위험이 남습니다.
+> 별도(바인딩 무관): 창을 지운 뒤 숨은 최상위 위젯이 창마다 21개씩 남습니다(`QWidget` 16, `sysPlain` 4, `CompactFieldGrid` 1, 두 바인딩 같음). 확인은 OS 브랜치의 `tools/qt_port/repro/window_survivors.py`로 합니다. 자세한 내용은 `docs/platform/PYSIDE6_TRIAL_2026-11-17.md` 8절에 있습니다.
+
+(1차 전달 내용, 11-18 오후, 처리 완료)
 > OS_EXPANSION 세션이 PySide6 전환 준비 결과를 올렸습니다. 브랜치 `claude/os-prep-20261117`의 `docs/platform/PYSIDE6_UI_CHECKLIST.md`(점검표)와 `docs/platform/PYSIDE6_TRIAL_2026-11-17.md` 7절(재시범)을 읽어 주세요.
 > 세그폴트와 메모리 폭증의 원인은 두 곳입니다. 먼저 고쳐 주세요(둘 다 PyQt6에서도 동작이 같음): ① `localization.py:80`의 `QTimer.singleShot(0, self.apply)`를 자식 `QTimer(self)`로 바꾸기(점검표 6번), ② `bonds.py:202`의 `setWeight(600)`를 `setWeight(QFont.Weight(600))`로 바꾸기(12번, `QFont` import 필요).
 > 그다음 순서: 나머지 `6-bound` 31곳(UI `7902381` 기준) → 3번 `receivers`(`stock_detail.py:1470`) → 5번 이벤트 필터 해시 → 4번 `paper.py` 콤보 Enum → 1·2·8·13번 한 줄 수정 → 10번 창에서 떼어 낸 위젯 정리(누수).
