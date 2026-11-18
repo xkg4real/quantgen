@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/runtime-smoke.yml": "60ebbf9a7bf59bb4378982998b6c32951f7c93fdacc29dbc102adbf7a2f9f5a2",
-    "README.md": "530a02fb6cdb2be658c2d47eac62ead3c15b82a195a7cde2c31baf0d63960573",
+    "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
     "assets/branding/f1-wordmark.svg": "145715bc8df17cb3c99b734d4c7cb2b8e9bf1878e87c401f518f46b944ba41aa",
@@ -507,7 +507,7 @@
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
     "tests/crypto_missing_values_acceptance.py": "be07db163184acb8c0a67dd9c0562045e9f486506539ed9eadb2d06bec2ca038",
     "tests/curve_methods_acceptance.py": "66007a9bee8a7abedce57738f0fff5bd1ae9b2bd1d400b240d032e9a9691bd9b",
-    "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
+    "tests/data_readiness_acceptance.py": "6e2ff2bc89ed2134f0a4717b97349cb09ef77a226158a01ae73224dc6fed254b",
     "tests/desktop_a1_status_acceptance.py": "8993fa2d3914aa8285fb4b8dcfc81168ad62a42b7e8cace87f455865b8d70a7e",
     "tests/desktop_a1_terms_acceptance.py": "2e8613a5e6c25766a138e483c449bfbe8e4098ed48e05d3513a5ca6b46fa781d",
     "tests/desktop_a3_layout_acceptance.py": "0e0e607ee46b086f57296231da24a99aa44cbba573c2e34207709f6717d89a13",
@@ -782,163 +782,163 @@
   "reviews": {
     "1": {
       "document_sha256": "8fdcbaf3551af7c39081fab335d6bfbd0c44bc4f3d1afdb4054e6aa6e8599f1b",
-      "source_digest": "ab1585920d184799933ed696a795303ac4a47e8199501124431faa60c0e62c91",
+      "source_digest": "60e25240efa672c363085404cc98a83ee97e22e9cc384caccb47e14297c1c1e4",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.859055+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.324942+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "2": {
       "document_sha256": "1c7eb9b60585b1fd4d1a23723051454e768b6ea6b31b9e58bd8122ac73cdd5e1",
-      "source_digest": "ab1585920d184799933ed696a795303ac4a47e8199501124431faa60c0e62c91",
+      "source_digest": "60e25240efa672c363085404cc98a83ee97e22e9cc384caccb47e14297c1c1e4",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.861699+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.327401+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "3": {
       "document_sha256": "50fcceb8fb66b30a535ff6015a66ff5e5cee801b61433cc3aa99acd3673c4393",
-      "source_digest": "500f2e1f0127873163eb24e6b79aa3e9139f79850335d5592f299671065f565f",
+      "source_digest": "995339b9b446d3e385c84648f8d7c9855c89e42c5ec9ca1b14ead330efc15bef",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.863660+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.330100+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "4": {
       "document_sha256": "4a2528a8c62c60983069941ff506c41c6b251ff1f402ef6cf7723e9901bb7a91",
-      "source_digest": "6609278a6a71abf95f94df45dd9d1a56edf1b846f3c63c0cab42bde3154b9593",
+      "source_digest": "f76cace8d9c98aab3c1f6922e6cacb5a7bca0077be58681cb5f2934228984ad0",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.865708+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.332109+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "5": {
       "document_sha256": "54164c56f4c3999b8ed65115e411151dca9dd6a46fea7bc57d0a750774d7b555",
-      "source_digest": "35b4994ab7ae519589b819461060fcc64592d4f2fed628ea2cec340340113b22",
+      "source_digest": "a89ddbe54427531f8e0ac35817144a2f816f7cfc6bcf5728cc223fe2fc168b3c",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.868096+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.334448+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "6": {
       "document_sha256": "5871443de50226c2680aa2c41059c06b4d1290f28f1c859d5ed979fd17a2918e",
-      "source_digest": "161fb48cf6fa74ac114215d669e61ac706ea021e26cc22d476556068b896865b",
+      "source_digest": "5f50f89b5c868697ef1c37455b7f24af2834f27b8f7f88ce9345c0edd3f9a30a",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.869975+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.336386+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "7": {
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
-      "source_digest": "ab1585920d184799933ed696a795303ac4a47e8199501124431faa60c0e62c91",
+      "source_digest": "60e25240efa672c363085404cc98a83ee97e22e9cc384caccb47e14297c1c1e4",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.871789+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.338414+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "8": {
       "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
-      "source_digest": "161fb48cf6fa74ac114215d669e61ac706ea021e26cc22d476556068b896865b",
+      "source_digest": "5f50f89b5c868697ef1c37455b7f24af2834f27b8f7f88ce9345c0edd3f9a30a",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.873975+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.340791+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "3a45f64161f1482a0cea80b2e32c5f37994c22cefff6458cd6dd2d3ca1335bfb",
+      "source_digest": "0af54f87ee46781dd7f47b9af6313728132060ca34566535716242f0d663a036",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.877084+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.342982+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "10": {
       "document_sha256": "ce304488b177e5fa81046782034d9a3c23a411ca3cef859d46b7df13ba0c5f5f",
-      "source_digest": "791384504cfd30b9c3820276167c9350e00370ba20d6520571a04cfa57ba87f7",
+      "source_digest": "0d49209cbc007adca7f8e4d781f8fcf428d357040fc3416c5f8d284201eff39e",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.879439+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.344910+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "11": {
       "document_sha256": "11a071fe459f3d6f622ec4ee4480200c3e7ed131153e00bd6823e552e43a7004",
-      "source_digest": "fab6851f47a0cad524bcc2faeef5b2303f6840cc19255e9af4ba9d08c64e93f3",
+      "source_digest": "fde39a786766badd80f3a308f64bb99647e1d4fe998a71fa520aac9dfa54a9e1",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.881240+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.347826+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "ebde61252128099e117b69cfc3143529124ea1cdb2aa923512a64d0e78768146",
+      "source_digest": "691ce96c07f4499e27d526beca06b681d3580f4c505488f1d1daf5418385ba51",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.883549+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.349510+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "3a45f64161f1482a0cea80b2e32c5f37994c22cefff6458cd6dd2d3ca1335bfb",
+      "source_digest": "0af54f87ee46781dd7f47b9af6313728132060ca34566535716242f0d663a036",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.885183+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.351314+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "3a45f64161f1482a0cea80b2e32c5f37994c22cefff6458cd6dd2d3ca1335bfb",
+      "source_digest": "0af54f87ee46781dd7f47b9af6313728132060ca34566535716242f0d663a036",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.886929+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.353611+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "15": {
       "document_sha256": "99b8253de2d54323b48c1dc8edb663bb6105930c24bb15e8f70800aec2a49cf1",
-      "source_digest": "3a45f64161f1482a0cea80b2e32c5f37994c22cefff6458cd6dd2d3ca1335bfb",
+      "source_digest": "0af54f87ee46781dd7f47b9af6313728132060ca34566535716242f0d663a036",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.888650+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.355504+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "16": {
       "document_sha256": "ff89cdb2a5ee70c3f830162c8e3c8a287291c89fddd7c850ac5b6048d9217f98",
-      "source_digest": "1d21eb8c911af8c9ed3bcfbdfb7057a2b8befaaaa8c19ee1205e3ad03bdf1efd",
+      "source_digest": "1ca6ff3af949e5be86c9676c0c59585e47003cc61e227c6ba2387c5caac15136",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.890874+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.357134+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "17": {
       "document_sha256": "dde1a8a05a26c612255f5858d272019e11cb7caf4542aa017b626ecea968713d",
-      "source_digest": "161fb48cf6fa74ac114215d669e61ac706ea021e26cc22d476556068b896865b",
+      "source_digest": "5f50f89b5c868697ef1c37455b7f24af2834f27b8f7f88ce9345c0edd3f9a30a",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.892611+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.359292+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "18": {
       "document_sha256": "f41494e3a28b54cd191916f9ee985f795849e6bf67d69c8dffebd7d081d1187d",
-      "source_digest": "ab1585920d184799933ed696a795303ac4a47e8199501124431faa60c0e62c91",
+      "source_digest": "60e25240efa672c363085404cc98a83ee97e22e9cc384caccb47e14297c1c1e4",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.894243+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.361469+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "88a034e8ba177af6c1898fc358147e0cf461b1b665768764597f764adc606da3",
+      "source_digest": "fc2c89518224b62fcb72bf9c4336ea9de5f87c215bb79a796259eea934a3dd81",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.896570+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.363466+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     },
     "20": {
       "document_sha256": "b226906886050078abf5ba14f9a0735c9e5ac02444ee1b0ebe11517333cf3d18",
-      "source_digest": "ab1585920d184799933ed696a795303ac4a47e8199501124431faa60c0e62c91",
+      "source_digest": "60e25240efa672c363085404cc98a83ee97e22e9cc384caccb47e14297c1c1e4",
       "reviewed_by": "Claude post-merge review (main 6e077dc, README test table)",
-      "review_note": "README.md changes only its test table (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, and a new bonds row) and the generated status block; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-18T16:29:35.898303+00:00",
-      "source_commit": "6e077dcd2d99d670e5bc1a1208bfda48b8976210"
+      "review_note": "README.md changes only its test section (counts from the owner's 2026-11-18 Windows run of the merged tree, 884/1004, a new bonds row, the note above the tables) and the generated status block; tests/data_readiness_acceptance.py counts NOT_RUN rows from the results file; no compliance document cites test counts or test coverage, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-18T16:47:15.365290+00:00",
+      "source_commit": "a760da4b267dbc8dbbc821ca5a164cb400a65095"
     }
   }
 }
