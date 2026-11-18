@@ -44,6 +44,15 @@ REPO = Path(__file__).resolve().parents[2]
 KEY_NAMES = ("FRED_API_KEY", "OPENDART_API_KEY", "ECOS_API_KEY", "SEC_EDGAR_USER_AGENT")
 
 
+def load_env_file(path: str) -> None:
+    """Load KEY=VALUE lines from another .env into this process only (no override, no output)."""
+    from dotenv import load_dotenv
+    env = Path(path).expanduser()
+    if not env.is_file():
+        raise SystemExit(f"--env-file: no file at {env}")
+    load_dotenv(env, override=False)
+
+
 def key_status(env: Mapping[str, str] | None = None) -> dict[str, bool]:
     """Which settings are present (names and True/False only; values are never returned)."""
     env = os.environ if env is None else env
@@ -255,6 +264,9 @@ def collect_kalshi(store: PointInTimeStore, series: str) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="DIDM daily collector (owner PC)")
+    ap.add_argument("--env-file", metavar="PATH",
+                    help="also read keys from this .env (e.g. the app folder's), never printed; "
+                         "values already set in the environment win")
     ap.add_argument("--check-keys", action="store_true",
                     help="print which key names are set (True/False only) and exit")
     ap.add_argument("--data-dir")
@@ -272,6 +284,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--ecos-items", nargs="*", default=[], metavar="STAT_CODE",
                     help="list an ECOS table's item codes and cycles (no data stored)")
     args = ap.parse_args(argv)
+    if args.env_file:
+        load_env_file(args.env_file)
     if args.check_keys:
         for name, present in key_status().items():
             print(f"{name}: {present}")

@@ -162,6 +162,26 @@ class KeyCheck(unittest.TestCase):
         self.assertNotIn("secret-value", repr(status))
 
 
+class EnvFile(unittest.TestCase):
+    def test_env_file_loads_without_override(self):
+        import os
+        from unittest import mock
+        from tools.didm.collect_daily import key_status, load_env_file
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.dict(os.environ, {"ECOS_API_KEY": "kept"}, clear=False):
+            os.environ.pop("OPENDART_API_KEY", None)
+            env = Path(tmp) / ".env"
+            env.write_text("OPENDART_API_KEY=from-file\nECOS_API_KEY=ignored\n", encoding="utf-8")
+            load_env_file(str(env))
+            self.assertTrue(key_status()["OPENDART_API_KEY"])
+            self.assertEqual(os.environ["ECOS_API_KEY"], "kept")
+            os.environ.pop("OPENDART_API_KEY", None)
+
+    def test_missing_env_file(self):
+        from tools.didm.collect_daily import load_env_file
+        with self.assertRaises(SystemExit):
+            load_env_file("/nonexistent/.env")
+
+
 class EcosSpec(unittest.TestCase):
     def test_leading_zero_loss_refused(self):
         from tools.didm.collect_daily import ecos_spec
