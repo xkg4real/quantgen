@@ -29,8 +29,24 @@ def _get(path: str, params: dict | None = None) -> dict:
     return resp.json()
 
 
-def fetch_markets(series_ticker: str, status: str = "open", limit: int = 200) -> dict:
-    return _get("/markets", {"series_ticker": _check(series_ticker), "status": status, "limit": int(limit)})
+def fetch_markets(series_ticker: str, status: str = "open", limit: int = 200,
+                  cursor: str | None = None) -> dict:
+    params = {"series_ticker": _check(series_ticker), "status": status, "limit": int(limit)}
+    if cursor:
+        params["cursor"] = cursor
+    return _get("/markets", params)
+
+
+def fetch_all_markets(series_ticker: str, status: str = "open", max_pages: int = 20) -> dict:
+    """Follow the response cursor; returns {"markets": [...], "pages": n, "complete": bool}."""
+    markets, cursor = [], None
+    for page in range(1, max_pages + 1):
+        payload = fetch_markets(series_ticker, status, cursor=cursor)
+        markets += payload.get("markets") or []
+        cursor = payload.get("cursor")
+        if not cursor:
+            return {"markets": markets, "pages": page, "complete": True}
+    return {"markets": markets, "pages": max_pages, "complete": False}
 
 
 def fetch_candlesticks(series_ticker: str, ticker: str, start_ts: int, end_ts: int,

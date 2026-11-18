@@ -1,12 +1,16 @@
 """Kalshi prediction-market probabilities for DIDM (owner answer Q4, 2026-11-18:
 Kalshi instead of Polymarket). No network here.
 
-Field names follow Kalshi's public trade-api v2 market and candlestick objects as
-described in the official quick start and third-party guides (2026-11-17 search
-summary; the docs host was blocked from this session) -- **unverified until the
-first owner-PC call**. The parser fails loudly on a missing field instead of guessing.
+Field names: the current API returns prices as dollar strings with four decimals
+(``yes_bid_dollars`` "0.5600") and contract counts as fixed-point strings
+(``volume_fp`` "10.00"); older integer fields (``yes_bid`` in cents, ``volume``) are
+legacy (Kalshi Get Market reference and SDK models, 2026-11-18 search summary).
+The first owner-PC run (2026-11-18) read only the legacy names, so every market got
+no price and volume 0; those 200 rows stay in the append-only store without
+``parser`` and are superseded by rows carrying ``parser = PARSER``.
+Both forms are read; a missing volume is recorded as missing (None), never as 0.
 
-Prices are in cents (0-100) = implied probability x 100. Thin markets are noisy:
+Prices are kept in cents (0-100) = implied probability x 100. Thin markets are noisy:
 each row carries volume and open interest, and ``liquid`` is set against a
 pre-registered minimum (PREREG_V0, default 1,000 contracts of volume).
 """
@@ -16,6 +20,7 @@ from datetime import datetime, timezone
 from typing import Any, Mapping
 
 SOURCE_ID = "kalshi"
+PARSER = "kalshi-v0.2"
 MIN_VOLUME = 1_000
 
 
@@ -48,6 +53,33 @@ def _cents(value: Any, name: str) -> float | None:
     return float(value)
 
 
+def _price(obj: Mapping[str, Any], name: str) -> float | None:
+    """Cents 0..100 from '<name>_dollars' (string dollars) or legacy '<name>' (int cents)."""
+    dollars = obj.get(f"{name}_dollars")
+    if dollars not in (None, ""):
+        try:
+            return _cents(round(float(dollars) * 100, 6), f"{name}_dollars")
+        except (TypeError, ValueError):
+            raise KalshiError(f"{name}_dollars: bad value {dollars!r}") from None
+    return _cents(obj.get(name), name)
+
+
+def _count(obj: Mapping[str, Any], name: str) -> float | None:
+    """Contracts from '<name>_fp' (fixed-point string) or legacy '<name>' (int); None if absent."""
+    for key in (f"{name}_fp", name):
+        raw = obj.get(key)
+        if raw in (None, ""):
+            continue
+        try:
+            value = float(raw)
+        except (TypeError, ValueError):
+            raise KalshiError(f"{key}: bad value {raw!r}") from None
+        if value < 0:
+            raise KalshiError(f"{key}: negative")
+        return value
+    return None
+
+
 def market_snapshot_rows(payload: Mapping[str, Any], received_at: datetime) -> list[dict]:
     """GET /markets response -> one snapshot row per market (probability as of receipt)."""
     _aware(received_at)
@@ -59,11 +91,11 @@ def market_snapshot_rows(payload: Mapping[str, Any], received_at: datetime) -> l
         ticker = m.get("ticker")
         if not ticker:
             raise KalshiError("market without ticker")
-        bid, ask = _cents(m.get("yes_bid"), "yes_bid"), _cents(m.get("yes_ask"), "yes_ask")
-        last = _cents(m.get("last_price"), "last_price")
+        bid, ask = _price(m, "yes_bid"), _price(m, "yes_ask")
+        last = _price(m, "last_price")
         mid = (bid + ask) / 2 if bid is not None and ask is not None and ask >= bid else None
         prob = mid if mid is not None else last
-        volume = int(m.get("volume") or 0)
+        volume = _count(m, "volume")
         out.append({
             "source_id": SOURCE_ID,
             "item_id": f"{ticker}@{received_at.astimezone(timezone.utc):%Y%m%dT%H%M%SZ}",
@@ -76,8 +108,10 @@ def market_snapshot_rows(payload: Mapping[str, Any], received_at: datetime) -> l
                 "status": m.get("status"), "close_time": m.get("close_time"),
                 "yes_bid": bid, "yes_ask": ask, "last_price": last,
                 "p_yes": prob / 100 if prob is not None else None,
-                "volume": volume, "open_interest": int(m.get("open_interest") or 0),
-                "liquid": volume >= MIN_VOLUME,
+                "volume": volume, "volume_24h": _count(m, "volume_24h"),
+                "open_interest": _count(m, "open_interest"),
+                "liquid": volume is not None and volume >= MIN_VOLUME,
+                "parser": PARSER,
             },
         })
     return out
@@ -97,8 +131,8 @@ def candlestick_rows(ticker: str, payload: Mapping[str, Any], received_at: datet
     for c in candles:
         end = _ts(c.get("end_period_ts"), "end_period_ts")
         price = c.get("price") or {}
-        close = _cents(price.get("close"), "price.close")
-        volume = int(c.get("volume") or 0)
+        close = _price(price, "close")
+        volume = _count(c, "volume")
         out.append({
             "source_id": SOURCE_ID,
             "item_id": f"{ticker}:{int(end.timestamp())}",
@@ -109,8 +143,9 @@ def candlestick_rows(ticker: str, payload: Mapping[str, Any], received_at: datet
             "payload": {
                 "ticker": ticker, "close": close,
                 "p_yes": close / 100 if close is not None else None,
-                "volume": volume, "open_interest": int(c.get("open_interest") or 0),
-                "liquid": volume >= MIN_VOLUME,
+                "volume": volume, "open_interest": _count(c, "open_interest"),
+                "liquid": volume is not None and volume >= MIN_VOLUME,
+                "parser": PARSER,
             },
         })
     return out

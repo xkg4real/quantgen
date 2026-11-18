@@ -37,3 +37,16 @@ def fetch_series(stat_code: str, cycle: str, start: str, end: str, *item_codes: 
     if resp.status_code != 200:
         raise RuntimeError(f"ECOS {stat_code}: HTTP {resp.status_code}")
     return resp.json()
+
+
+def fetch_item_list(stat_code: str) -> dict:
+    """StatisticItemList: item codes, names, cycles and available periods of one table."""
+    key = os.environ.get(KEY_NAME, "").strip()
+    if not key:
+        raise MissingKey(f"{KEY_NAME} is not set")
+    url = "/".join(["https://ecos.bok.or.kr/api/StatisticItemList", quote(key, safe=""),
+                    "json", "kr", "1", "200", quote(stat_code, safe="")])
+    resp = session.get(url, timeout=TIMEOUT_SECONDS)
+    if resp.status_code != 200:
+        raise RuntimeError(f"ECOS item list {stat_code}: HTTP {resp.status_code}")
+    return resp.json()

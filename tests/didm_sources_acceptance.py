@@ -107,6 +107,35 @@ class Kalshi(unittest.TestCase):
         self.assertFalse(rows[1]["payload"]["liquid"])
         self.assertTrue(rows[0]["item_id"].endswith("@20261118T010000Z"))
 
+    def test_current_dollar_and_fp_fields(self):
+        payload = {"markets": [{"ticker": "KXFED-26DEC-H0", "yes_bid_dollars": "0.6100",
+                                "yes_ask_dollars": "0.6300", "last_price_dollars": "0.6200",
+                                "volume_fp": "52000.00", "volume_24h_fp": "1200.00",
+                                "open_interest_fp": "9000.00"}]}
+        r = kalshi.market_snapshot_rows(payload, RECEIVED)[0]["payload"]
+        self.assertAlmostEqual(r["p_yes"], 0.62)
+        self.assertEqual(r["volume"], 52000.0)
+        self.assertTrue(r["liquid"])
+        self.assertEqual(r["parser"], kalshi.PARSER)
+
+    def test_missing_volume_is_missing_not_zero(self):
+        r = kalshi.market_snapshot_rows({"markets": [{"ticker": "X", "last_price_dollars": "0.1000"}]},
+                                        RECEIVED)[0]["payload"]
+        self.assertIsNone(r["volume"])
+        self.assertFalse(r["liquid"])
+        self.assertAlmostEqual(r["p_yes"], 0.10)
+
+    def test_bad_dollar_string(self):
+        with self.assertRaises(kalshi.KalshiError):
+            kalshi.market_snapshot_rows({"markets": [{"ticker": "X", "yes_bid_dollars": "abc"}]}, RECEIVED)
+
+    def test_candles_current_fields(self):
+        payload = {"candlesticks": [{"end_period_ts": 1763337600, "price": {"close_dollars": "0.5800"},
+                                     "volume_fp": "3000.00", "open_interest_fp": "8000.00"}]}
+        r = kalshi.candlestick_rows("T", payload, RECEIVED)[0]["payload"]
+        self.assertEqual(r["p_yes"], 0.58)
+        self.assertEqual(r["volume"], 3000.0)
+
     def test_candles(self):
         rows = kalshi.candlestick_rows("KXFED-26DEC-T4.25", CANDLES, RECEIVED)
         self.assertEqual(rows[0]["published_at"], datetime.fromtimestamp(1763337600, tz=timezone.utc))

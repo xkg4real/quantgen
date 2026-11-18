@@ -60,10 +60,29 @@ def _data_dir(path: str) -> Path:
     return d
 
 
+def _http_reason(exc: Exception) -> str:
+    resp = getattr(exc, "response", None)
+    code = getattr(resp, "status_code", None)
+    return f"{type(exc).__name__}" + (f" HTTP {code}" if code is not None else "")
+
+
 def collect_gdelt(store: PointInTimeStore) -> tuple[int, list[dict]]:
     from data.didm import gdelt as gdelt_http
-    rows, refs = gdelt_ingest.ingest_latest(
-        gdelt_http.fetch_text, gdelt_http.fetch_bytes, gdelt_http.LASTUPDATE_URL, _now())
+    stage = ["lastupdate"]
+
+    def text(url):
+        stage[0] = "lastupdate"
+        return gdelt_http.fetch_text(url)
+
+    def blob(url):
+        stage[0] = url.rsplit("/", 1)[-1]  # public file name, e.g. 20261118011500.gkg.csv.zip
+        return gdelt_http.fetch_bytes(url)
+
+    try:
+        rows, refs = gdelt_ingest.ingest_latest(text, blob, gdelt_http.LASTUPDATE_URL, _now())
+    except Exception as exc:  # noqa: BLE001
+        print(f"GDELT failed at {stage[0]}: {_http_reason(exc)}")
+        return 0, []
     added = store.append_many(rows)
     print(f"GDELT files {len(refs)} ({', '.join(r.stamp + ':' + r.kind for r in refs)}), "
           f"rows {len(rows)}, new {added}")
@@ -116,7 +135,7 @@ def _run(label: str, fn) -> None:
     try:
         fn()
     except Exception as exc:  # noqa: BLE001 - one source failing must not stop the others
-        print(f"{label} failed: {type(exc).__name__}")
+        print(f"{label} failed: {_http_reason(exc)}")
 
 
 def collect_edgar(store: PointInTimeStore, ciks: list[str]) -> None:
@@ -137,15 +156,39 @@ def collect_opendart(store: PointInTimeStore, bgn: str, end: str) -> None:
 def collect_ecos(store: PointInTimeStore, spec: str) -> None:
     from data.didm import ecos
     stat, cycle, start, end, *items = spec.split(",")
-    rows = ecos_ingest.rows(ecos.fetch_series(stat, cycle, start, end, *items), _now())
-    print(f"ECOS {stat}: observations {len(rows)}, new {store.append_many(rows)}")
+    payload = ecos.fetch_series(stat, cycle, start, end, *items)
+    rows = ecos_ingest.rows(payload, _now())
+    result = payload.get("RESULT") or {}
+    note = f" (ECOS {result.get('CODE')}: {result.get('MESSAGE')})" if result else ""
+    print(f"ECOS {stat} {cycle} {start}-{end}: observations {len(rows)}, new {store.append_many(rows)}{note}")
+
+
+def show_ecos_items(stat: str) -> None:
+    """Public table metadata only: item code, name, cycle, first and last period."""
+    from data.didm import ecos
+    payload = ecos.fetch_item_list(stat)
+    body = payload.get("StatisticItemList") or {}
+    rows = body.get("row") or []
+    if not rows:
+        result = payload.get("RESULT") or {}
+        print(f"ECOS items {stat}: none (ECOS {result.get('CODE')}: {result.get('MESSAGE')})")
+    for r in rows[:40]:
+        print(f"ECOS items {stat}: {r.get('ITEM_CODE')} {r.get('ITEM_NAME')} cycle {r.get('CYCLE')} "
+              f"{r.get('START_TIME')}-{r.get('END_TIME')}")
 
 
 def collect_kalshi(store: PointInTimeStore, series: str) -> None:
     from data.didm import kalshi
-    rows = kalshi_ingest.market_snapshot_rows(kalshi.fetch_markets(series), _now())
+    got = kalshi.fetch_all_markets(series)
+    rows = kalshi_ingest.market_snapshot_rows(got, _now())
     liquid = sum(1 for r in rows if r["payload"]["liquid"])
-    print(f"Kalshi {series}: markets {len(rows)} (liquid {liquid}), new {store.append_many(rows)}")
+    priced = sum(1 for r in rows if r["payload"]["p_yes"] is not None)
+    no_volume = sum(1 for r in rows if r["payload"]["volume"] is None)
+    first = sorted((got.get("markets") or [{}])[0].keys())
+    print(f"Kalshi {series}: pages {got['pages']} (complete {got['complete']}), markets {len(rows)}, "
+          f"priced {priced}, volume missing {no_volume}, liquid {liquid}, new {store.append_many(rows)}")
+    if rows and (priced == 0 or no_volume == len(rows)):
+        print(f"Kalshi field names (first market): {', '.join(first)}")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -161,6 +204,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--opendart", nargs=2, metavar=("BGN_YYYYMMDD", "END_YYYYMMDD"))
     ap.add_argument("--ecos", action="append", default=[], metavar="STAT,CYCLE,START,END[,ITEM...]")
     ap.add_argument("--kalshi", nargs="*", default=[], metavar="SERIES")
+    ap.add_argument("--ecos-items", nargs="*", default=[], metavar="STAT_CODE",
+                    help="list an ECOS table's item codes and cycles (no data stored)")
     args = ap.parse_args(argv)
     if args.check_keys:
         for name, present in key_status().items():
@@ -171,10 +216,7 @@ def main(argv: list[str] | None = None) -> int:
     with PointInTimeStore(_data_dir(args.data_dir) / "didm_store.sqlite") as store:
         rows: list[dict] = []
         if not args.no_gdelt:
-            try:
-                _, rows = collect_gdelt(store)
-            except Exception as exc:  # noqa: BLE001 - report a reason code, keep going
-                print(f"GDELT failed: {type(exc).__name__}")
+            _, rows = collect_gdelt(store)
         if args.finbert:
             print(f"FinBERT baseline: {finbert_baseline(store, rows)}")
         if args.alfred:
@@ -187,6 +229,8 @@ def main(argv: list[str] | None = None) -> int:
             _run("OpenDART", lambda: collect_opendart(store, *args.opendart))
         for spec in args.ecos:
             _run("ECOS", lambda spec=spec: collect_ecos(store, spec))
+        for stat in args.ecos_items:
+            _run("ECOS items", lambda stat=stat: show_ecos_items(stat))
         for series in args.kalshi:
             _run("Kalshi", lambda series=series: collect_kalshi(store, series))
     print(gdelt_ingest.ATTRIBUTION)
