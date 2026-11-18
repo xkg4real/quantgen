@@ -6,11 +6,11 @@ task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
 next_ids: DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e, DS-H, DS-4b
-updated_at: 2026-11-18T13:50:00+09:00
+updated_at: 2026-11-18T14:20:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/data-source-didm-20261117
-work_commit: 5fadc20
+work_commit: a790ce8
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -98,6 +98,7 @@ DS-1 평가표 소유자 확인 완료, DIDM-0 사전등록 V0 **소유자 승�
 - [x] 소유자 PC 1차 실행 (2026-11-18): `setx`로 `ECOS_API_KEY`·`FRED_API_KEY`는 빈 값, `SEC_EDGAR_USER_AGENT`는 일반 연락처로 저장, 같은 창의 확인에서 네 이름 모두 False (setx는 새 창부터 보임; OPENDART는 `.env`에 있음). 수정: `collect_daily`가 `config`를 import해 `.env`를 읽고 `--check-keys` (이름·True/False만) 추가. 커밋 `d6b1edd`. **소유자 재확인 대기.**
 - [x] 소유자 PC 첫 수집 (2026-11-18, worktree `Desktop\QUANTGEN_didm`; 원래 폴더의 `qa/acceptance_results.json` 미커밋 변경은 건드리지 않음): ALFRED CPIAUCSL 3,364행, EDGAR 147건 성공. Kalshi 200개 저장됐으나 현재 필드 (`*_dollars`, `*_fp`)를 못 읽어 가격 없음·liquid 0 → 파서 `kalshi-v0.2`·쪽 따라가기로 고침. GDELT `HTTPError` → 단계·상태 코드 출력 추가. ECOS 722Y001 0건 → 결과 코드 출력·`--ecos-items` 추가. OpenDART 키 없음 (worktree에 `.env` 없음). 커밋 `23bb47c`, `VENDOR_EVAL` 3.1. **소유자 재실행 대기.**
 - [x] 소유자 PC 둘째 실행 (2026-11-18): Kalshi 해결 (236개, 가격 236, 유동 80). ECOS 통계표 확정 `722Y001/0101000` = 기준금리 (`060Y001` 데이터 없음), 그러나 월 시계열 INFO-200 → `--ecos-probe` 추가. GDELT 최신 export 404 (게시 전) → 직전 두 칸 대체 + `--gdelt-day` (하루 96칸; 기존은 15분 한 칸만) 추가. 커밋 `5fadc20`, `VENDOR_EVAL` 3.1. **셋째 실행 대기.**
+- [x] 소유자 PC 셋째 실행 (2026-11-18): GDELT 최신 칸 3,090행, 하루치 20261117 96파일·127,432행 (해결). ECOS 0건 원인 = PowerShell이 따옴표 없는 `0101000`을 `101000`으로 바꿈 (항목 코드 없이 306행 받음) → 6자리 숫자 항목 코드 거부·따옴표 안내. 커밋 `a790ce8`. 남은 확인: ECOS 따옴표 재실행, OpenDART (worktree에 키 없음).
 - [ ] DS-H 홈 지표 데이터 계층 ← **소유자 진단 출력 대기** (아직 손대지 않음)
 - [ ] DS-4b Alpha Vantage·Tiingo·Cryptopanic 무료 키 1회 확인 ← 소유자 무료 키 가입 대기
 
