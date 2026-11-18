@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "10823e6f3fa09c28fe53024d71e006c065f1ee6bf8b1ca771f83a68e44d8e801",
+    ".github/workflows/runtime-smoke.yml": "6deae01f70e9ba9cbc5e1c38966e303da4f14f01ba02e024f306858e5e8c091b",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -800,163 +800,163 @@
   "reviews": {
     "1": {
       "document_sha256": "8fdcbaf3551af7c39081fab335d6bfbd0c44bc4f3d1afdb4054e6aa6e8599f1b",
-      "source_digest": "6becff30854054e17a1ec4b37778e1f47aefb7f8db48485567eb112a45e1a893",
+      "source_digest": "0577e244c40f1ae23fcc47667b12e2e589d1d218eaf5ca1ed6de1fa6a900dcd0",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.234978+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.685423+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "2": {
       "document_sha256": "1c7eb9b60585b1fd4d1a23723051454e768b6ea6b31b9e58bd8122ac73cdd5e1",
-      "source_digest": "6becff30854054e17a1ec4b37778e1f47aefb7f8db48485567eb112a45e1a893",
+      "source_digest": "0577e244c40f1ae23fcc47667b12e2e589d1d218eaf5ca1ed6de1fa6a900dcd0",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.239458+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.690862+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "3": {
       "document_sha256": "50fcceb8fb66b30a535ff6015a66ff5e5cee801b61433cc3aa99acd3673c4393",
-      "source_digest": "6f67d37b87443daa07d1aa423b4753971c851f6655b46ac3c75a090436d8ac7a",
+      "source_digest": "72caf6c62e9188d7ec0d1218f6b803357fe478d2c343a3ded3bcf474738792d3",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.241617+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.693098+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "4": {
       "document_sha256": "4a2528a8c62c60983069941ff506c41c6b251ff1f402ef6cf7723e9901bb7a91",
-      "source_digest": "9dae33fb908cd75f810b428bbd2a5d3c61594e3d2902f0b970b80b16fea36778",
+      "source_digest": "d4ef87ca2c0d2d681619866dd62d01197a21b6723e0cd3c1c5a04f56473eed67",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.243730+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.697310+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "5": {
       "document_sha256": "54164c56f4c3999b8ed65115e411151dca9dd6a46fea7bc57d0a750774d7b555",
-      "source_digest": "6c35882615c63232cdccc308f5f1597da4dcef5a100dc8914a6498a15a808743",
+      "source_digest": "6bc5194f6413347ce7ae45257eb2aab18ae86920166fe5cd9b0ce5fd53599742",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.246021+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.699214+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "6": {
       "document_sha256": "5871443de50226c2680aa2c41059c06b4d1290f28f1c859d5ed979fd17a2918e",
-      "source_digest": "8f2cfd9ed14d8d5bfd284c6e4e4ab1e4440f86201cb2782f7c251c18c0bb3427",
+      "source_digest": "6ab246d3fd444c49a45d52002e6074dde8e7488e82df530a06668f5de3ee8448",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.248182+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.701226+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "7": {
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
-      "source_digest": "6becff30854054e17a1ec4b37778e1f47aefb7f8db48485567eb112a45e1a893",
+      "source_digest": "0577e244c40f1ae23fcc47667b12e2e589d1d218eaf5ca1ed6de1fa6a900dcd0",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.250113+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.703269+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "8": {
       "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
-      "source_digest": "8f2cfd9ed14d8d5bfd284c6e4e4ab1e4440f86201cb2782f7c251c18c0bb3427",
+      "source_digest": "6ab246d3fd444c49a45d52002e6074dde8e7488e82df530a06668f5de3ee8448",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.252073+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.705299+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "632e887c52fbcd8419b6037b1060c6ea7b34d835ffd9294518a412933055f871",
+      "source_digest": "7b66f6de0895b01b58a9e52fd9b1cdc52d693faec6cab6aee38393fec6350bd6",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.253949+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.707312+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "10": {
       "document_sha256": "ce304488b177e5fa81046782034d9a3c23a411ca3cef859d46b7df13ba0c5f5f",
-      "source_digest": "10c7e3dc78e748152c74801684c2f6352a2d833366c9121ce304d7b187e3011d",
+      "source_digest": "2eb986a9ce3b5f6a41d226cc777258af8fd9f5a88566cdf44b4321229acfb10e",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.256127+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.709229+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "11": {
       "document_sha256": "11a071fe459f3d6f622ec4ee4480200c3e7ed131153e00bd6823e552e43a7004",
-      "source_digest": "bb6fc43b3c348cdaebafb35b96b68b84ec1c0ee5678c173c227fb5e2959e101b",
+      "source_digest": "17c1eace460ef2cf901d6f2da30c644dbcc6cb64b776a490b03ca7512c400957",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.257969+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.711077+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "d4f6eeb3dd0a3387b3e2ccc2767eb8be039cba3c0add2acb7607bce838f08770",
+      "source_digest": "29fdb36022527fa4fa7bdc1d7e9fa4fe6ebdb38d2963a7b2551a9136e1838c0b",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.259706+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.713134+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "632e887c52fbcd8419b6037b1060c6ea7b34d835ffd9294518a412933055f871",
+      "source_digest": "7b66f6de0895b01b58a9e52fd9b1cdc52d693faec6cab6aee38393fec6350bd6",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.261529+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.716582+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "632e887c52fbcd8419b6037b1060c6ea7b34d835ffd9294518a412933055f871",
+      "source_digest": "7b66f6de0895b01b58a9e52fd9b1cdc52d693faec6cab6aee38393fec6350bd6",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.265158+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.718578+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "15": {
       "document_sha256": "99b8253de2d54323b48c1dc8edb663bb6105930c24bb15e8f70800aec2a49cf1",
-      "source_digest": "632e887c52fbcd8419b6037b1060c6ea7b34d835ffd9294518a412933055f871",
+      "source_digest": "7b66f6de0895b01b58a9e52fd9b1cdc52d693faec6cab6aee38393fec6350bd6",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.266942+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.720607+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "16": {
       "document_sha256": "ff89cdb2a5ee70c3f830162c8e3c8a287291c89fddd7c850ac5b6048d9217f98",
-      "source_digest": "dfd72f40fd519801ddf34787765376a1a8ae63f14058d34a3402370bb284673b",
+      "source_digest": "cd862b81055850dae5fce308a40e8f8660485d51a9d09f7844f141b7a368abf3",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.269056+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.722633+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "17": {
       "document_sha256": "dde1a8a05a26c612255f5858d272019e11cb7caf4542aa017b626ecea968713d",
-      "source_digest": "8f2cfd9ed14d8d5bfd284c6e4e4ab1e4440f86201cb2782f7c251c18c0bb3427",
+      "source_digest": "6ab246d3fd444c49a45d52002e6074dde8e7488e82df530a06668f5de3ee8448",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.270968+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.724439+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "18": {
       "document_sha256": "f41494e3a28b54cd191916f9ee985f795849e6bf67d69c8dffebd7d081d1187d",
-      "source_digest": "6becff30854054e17a1ec4b37778e1f47aefb7f8db48485567eb112a45e1a893",
+      "source_digest": "0577e244c40f1ae23fcc47667b12e2e589d1d218eaf5ca1ed6de1fa6a900dcd0",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.274158+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.726270+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "f3dca499e7ba9a2af13a8b586c36473b345824124a41e7b13fd09ae375b368e2",
+      "source_digest": "c853c9f4679fdaee4c41a4aa0a2c61c3ce71e582902b0b2a5a3a04368ef856b6",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.276545+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.728421+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     },
     "20": {
       "document_sha256": "b226906886050078abf5ba14f9a0735c9e5ac02444ee1b0ebe11517333cf3d18",
-      "source_digest": "6becff30854054e17a1ec4b37778e1f47aefb7f8db48485567eb112a45e1a893",
+      "source_digest": "0577e244c40f1ae23fcc47667b12e2e589d1d218eaf5ca1ed6de1fa6a900dcd0",
       "reviewed_by": "OS_EXPANSION 세션 (Claude, Anthropic AI 에이전트)",
-      "review_note": "main 56fe32a(⑦-2/a) merge 뒤 재갱신. 이 브랜치의 변경 소스 21개(tools/qt_port, packaging, core/app_paths.py, core/app_identity.py, mobile, workflow 2개, 시험 5개)를 다시 대조함: 앱 화면·계산·전송·저장 동작 변화 없음, 새 경로 함수는 계산만, 빌드는 허용 목록만, selfcheck는 지정 파일에만 씀. FACTS.md 2026-11-19 절에 기록. 01-20 문서의 사업자·개인정보·권리 항목은 그대로이며 공개 보류 유지. LGPL 충족 여부는 변호사 검토 대상.",
-      "reviewed_at": "2026-11-18T18:10:42.278599+00:00",
-      "source_commit": "6f928b1a3e34781a90bcdebccb7ec997b960e611"
+      "review_note": "runtime-smoke.yml의 Verify bounded source fixtures 줄에서 새 시험 모듈 5개를 -v 앞으로 옮김(이전 위치는 unittest 인자 오류). 동작·전송·저장 변화 없음. 이 브랜치의 다른 변경 소스 대조 내용은 FACTS.md 2026-11-19 절 그대로이며 공개 보류 유지.",
+      "reviewed_at": "2026-11-18T18:12:45.730400+00:00",
+      "source_commit": "5aa728cf51ee5ed1e82db2ec875f51a7cd1e5025"
     }
   }
 }
