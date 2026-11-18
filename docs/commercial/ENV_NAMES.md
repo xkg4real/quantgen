@@ -94,9 +94,11 @@ Notion "QUANTGEN 상업화 실행 분석서" (`40e5c916fe0c815ba983dd4c4cc7992c`
 | `CME_FEDWATCH_API_SECRET` | 비밀 | 데이터소스 세션 (연구용) | 미정 |
 | `TRADINGECONOMICS_API_KEY` | 비밀 | 데이터소스 세션 (연구용) | 미정 |
 
-## 5. KEY-2 자격증명 저장소 설계 메모 (D7-G 승인 전, 코드 없음)
+## 5. KEY-2 자격증명 저장소 설계
 
-D7-G 승인 기록 (handoff `plans/2026-11-17/MASTER_WORK_DESIGN_2026-11-17.md` 또는 메인 공지)이 생기면 이 메모대로 브랜치에서 시작합니다. 병합은 F21 뒤 대기열 (KEY-2 → KEY-3 → KEY-4 → KEY-5).
+2026-11-17에 D7-G 승인 전 메모로 썼습니다. 소유자가 2026-11-18 14:15 KST에 D7-G를 승인했습니다 (원문 "그러면 D7-G의 방식대로 진행하겠습니다", handoff `MERGE_QUEUE.md`·`MASTER_WORK_DESIGN_2026-11-17.md` 맨 앞, 커밋 `762150c`). 이 설계대로 같은 브랜치에 구현했습니다 (`core/credentials/**`, `config.py`, `data/krx/kis_client.py`, `tests/credentials_acceptance.py`). 병합은 F21 뒤 대기열 (KEY-2 → KEY-3 → KEY-4 → KEY-5).
+
+구현에서 정한 것: `config.py`는 `dotenv.load_dotenv()` 호출을 그대로 둡니다 (시험 20여 개가 이 호출을 막아 `.env`를 차단하기 때문). 대신 그 호출이 더한 이름을 기록해 `.env` 값이 키 보관함보다 뒤에 오게 합니다. 개발판 판정은 `core/app_identity.may_read_dotenv()` (OS 세션 브랜치에 있음, main에는 아직 없음)를 쓰고, 그 파일이 없으면 지금처럼 `.env`를 읽습니다.
 
 | 부품 | 내용 |
 |---|---|

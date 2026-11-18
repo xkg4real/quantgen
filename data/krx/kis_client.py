@@ -18,10 +18,11 @@ number), and an explicit decision. That is deliberate.
 TOKENS
 ------
 KIS issues a bearer token valid for ~24h and rate-limits issuance hard, so the
-token is cached on disk under `~/.nextgen/kis_token.json` with its expiry. A
-cold start reuses a still-valid token rather than minting a new one; that is the
-difference between the client working and being throttled out for the day. The
-cache file holds a token, never the appkey/appsecret.
+token is cached with its expiry: in the OS credential store (core.credentials,
+item "kis_token"; KEY-2), or under `~/.nextgen/kis_token.json` when the machine
+has no usable keyring. A cold start reuses a still-valid token rather than
+minting a new one; that is the difference between the client working and being
+throttled out for the day. The cache holds a token, never the appkey/appsecret.
 """
 from __future__ import annotations
 
@@ -35,6 +36,7 @@ from pathlib import Path
 from typing import Any, Optional
 
 import config
+from core import credentials as _credentials
 
 try:
     import requests as _once                         # one attempt: the engine's quote path
@@ -52,7 +54,23 @@ class KISUnavailable(KISError):
 
 
 _TOKEN_PATH = Path.home() / ".nextgen" / "kis_token.json"
+_TOKEN_ITEM = "kis_token"                         # core.credentials token name (KEY-2)
 _TOKEN_LOCK = threading.Lock()
+
+
+def _forget_token_on_key_change(name: str) -> None:
+    """A token belongs to the app key that minted it; drop it when the KIS key changes (KEY-2)."""
+    if name not in ("KIS_APP_KEY", "KIS_APP_SECRET"):
+        return
+    with _TOKEN_LOCK:
+        _credentials.delete_token(_TOKEN_ITEM)
+        try:
+            _TOKEN_PATH.unlink()
+        except Exception:
+            pass
+
+
+_credentials.subscribe(_forget_token_on_key_change)
 
 # Read-only guard (M1, TASK-M1-02; spec P0, T-RO-02). The allowlist is frozen in config.py
 # (`config.KIS_QUOTATION_ALLOWLIST`); `_get` checks the path against it before credentials are read or a request
@@ -173,10 +191,24 @@ class KISClient:
         self.timeout_s = timeout_s or config.HTTP_TIMEOUT_SECONDS
         self.ready = bool(config.kis_ready() and requests is not None)
 
+    def reload_credentials(self) -> bool:
+        """Re-read whether KIS keys are set (KEY-2). `ready` is otherwise fixed at construction, so a key
+        entered in the app after the client was built would go unnoticed until a restart."""
+        self.ready = bool(config.kis_ready() and requests is not None)
+        return self.ready
+
     # -- token ---------------------------------------------------------------
+    # KEY-2: the token lives in the OS credential store (core.credentials, item "kis_token"). The plaintext
+    # file `~/.nextgen/kis_token.json` is only the fallback for a machine without a usable keyring.
     def _cached_token(self) -> Optional[str]:
+        raw = _credentials.get_token(_TOKEN_ITEM)
+        if not raw:
+            try:
+                raw = _TOKEN_PATH.read_text(encoding="utf-8")
+            except Exception:
+                return None
         try:
-            data = json.loads(_TOKEN_PATH.read_text(encoding="utf-8"))
+            data = json.loads(raw)
         except Exception:
             return None
         token = data.get("access_token")
@@ -186,13 +218,17 @@ class KISClient:
         return None
 
     def _store_token(self, token: str, expires_in: float) -> None:
+        text = json.dumps({"access_token": token,
+                           "expires_at": time.time() + float(expires_in)})
+        if _credentials.set_token(_TOKEN_ITEM, text):
+            try:
+                _TOKEN_PATH.unlink()                 # the keyring holds it now; drop the old plaintext copy
+            except Exception:
+                pass
+            return
         try:
             _TOKEN_PATH.parent.mkdir(parents=True, exist_ok=True)
-            _TOKEN_PATH.write_text(
-                json.dumps({"access_token": token,
-                            "expires_at": time.time() + float(expires_in)}),
-                encoding="utf-8",
-            )
+            _TOKEN_PATH.write_text(text, encoding="utf-8")
         except Exception:
             pass          # a non-persistable token still works for this session
 
