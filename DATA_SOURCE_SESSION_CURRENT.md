@@ -6,11 +6,11 @@ task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
 next_ids: DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e, DS-H, DS-4b
-updated_at: 2026-11-18T12:10:00+09:00
+updated_at: 2026-11-18T12:40:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/data-source-didm-20261117
-work_commit: 1739376
+work_commit: d6b1edd
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -95,6 +95,7 @@ DS-1 평가표 소유자 확인 완료, DIDM-0 사전등록 V0 **소유자 승�
 - [x] 소유자 답 1~4 반영 — `VENDOR_EVAL` 0.1·3·5·6·8절, `PREREG_V0` 1·4·8절. 커밋 `7bf99b3`.
 - [x] DS-4d EDGAR·OpenDART·ECOS 커넥터 (KIND는 공개 API 없음 → 연결 안 함, OpenDART로 대신) + DS-4e Kalshi 커넥터 — `core/didm/ingest/{filings,ecos,kalshi}.py`, `data/didm/{edgar,opendart,ecos,kalshi}.py`, `tests/didm_sources_acceptance.py`, `collect_daily.py` 옵션, 08 행·CI 줄. 커밋 `7bf99b3`. **실제 호출 미실행** (키·UA 없음, Kalshi 호스트 막힘 → 사유 코드 확인).
 - [x] 소유자 답 (평가표 8절, 사전등록 P1~P5) 반영 + 신규성 모형 — `core/didm/novelty.py`, `tests/didm_novelty_acceptance.py` (시뮬레이션: 정보 있는 자료 검정 정확도 1.00 / 무작위 표지 0.466 불통과), 스키마 14개 유형·`novelty_0_100`. 커밋 `1739376`.
+- [x] 소유자 PC 1차 실행 (2026-11-18): `setx`로 `ECOS_API_KEY`·`FRED_API_KEY`는 빈 값, `SEC_EDGAR_USER_AGENT`는 일반 연락처로 저장, 같은 창의 확인에서 네 이름 모두 False (setx는 새 창부터 보임; OPENDART는 `.env`에 있음). 수정: `collect_daily`가 `config`를 import해 `.env`를 읽고 `--check-keys` (이름·True/False만) 추가. 커밋 `d6b1edd`. **소유자 재확인 대기.**
 - [ ] DS-H 홈 지표 데이터 계층 ← **소유자 진단 출력 대기** (아직 손대지 않음)
 - [ ] DS-4b Alpha Vantage·Tiingo·Cryptopanic 무료 키 1회 확인 ← 소유자 무료 키 가입 대기
 
