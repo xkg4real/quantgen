@@ -6,7 +6,7 @@ task: os-expansion
 cycle: 2026-11-17
 done_ids: none
 next_ids: OS-P0-a, OS-P0-e, OS-P0-f, OS-P0-c, OS-P0-b, OS-P0-d, OS-F1, OS-F2
-updated_at: 2026-11-18T22:30:00+09:00
+updated_at: 2026-11-18T22:45:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/os-prep-20261117
@@ -158,6 +158,8 @@ python -m tools.compliance.check --check -> consistency FAIL (새 파일; PR 직
 ## UI 세션에 전할 것
 
 (소유자가 그대로 붙여 주세요. 소유자가 전달했는지: **전달함 — 2026-11-18, 소유자 원문 "네 보냈습니다"**)
+
+(2차 전달함 — 2026-11-18, 소유자 원문 "네 보냈습니다")
 
 > (2차, 11-18 밤) OS_EXPANSION 재시범 결과(`75336f3`): 수정이 효과가 있었습니다. lint 97→50, `6-bound`·`receivers`·`setWeight`·이벤트 필터 해시가 모두 0입니다.
 > 남은 세그폴트는 하나입니다. 7개 화면 디자인 중 시스템 화면의 `connections.py` `focus_order`가 `nextInFocusChain()`으로 창 전체 포커스 사슬을 도는 부분이 PySide6에서 앱을 죽입니다(점검표 14번). 사슬을 도는 대신 `part.findChildren(QWidget)`로 그 부분의 위젯만 모으면, CI 18단계가 PyQt6와 모두 같아지고 바인딩 때문에 새로 실패한 테스트가 0개가 됩니다(시스템 화면 시험 5개 포함, 두 바인딩 모두 통과).
