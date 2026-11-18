@@ -1,6 +1,6 @@
 # MERGE_QUEUE — main 병합 순서와 동결 (메인 세션이 관리)
 
-updated_at: 2026-11-19T05:14:00+09:00
+updated_at: 2026-11-19T08:50:00+09:00
 coordinator: 메인 세션 (QUANTGEN/MAIN, https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB)
 freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보고("F22까지 성공적으로 마무리했습니다."), main `6e077dc`(소유자 `--no-ff` 병합, 부모 `8e026ab`·`13f4dea`), 그 push의 Compliance success, PR #4 merged. (동결 기간: 2026-11-18T19:10:45+09:00 ~ 위 시각)
 
@@ -20,7 +20,7 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 |---|---|---|---|
 | 1 | ~~⑦-2/a 병합 뒤 main 정리~~ | PR #126 | **병합 완료 main `56fe32a`** (2026-11-19 03:08 KST, CI 전부 녹색) |
 | 2 | ~~OS 작은 PR~~ | PR #127 | **병합 완료 main `c28b1d7`** (2026-11-19 05:09 KST, CI 전부 녹색) |
-| 3 | KEY-2 (`config.py` 3줄 → 코드 지문 `ec72fab3…` → `10c27010…`) | PAYMENTS `claude/payments-keys-20261117` | **병합: PAYMENTS_ACCOUNT_KEYS** (2026-11-19 05:14 KST) — main `c28b1d7`를 merge하고 기준선을 다시 갱신한 뒤 PR. 본문에 지문 변경·owner_confirmed 재작성 필요 |
+| 3 | KEY-2 (`config.py` 3줄 → 코드 지문 `ec72fab3…` → `10c27010…`) | PAYMENTS PR #128 @ `606f33f` | CI 전부 녹색. **병합 보류** (2026-11-19 08:50 KST): 메인 검토 8건(준법 문서 미갱신, 테스트가 실제 ~/.nextgen 토큰 파일 삭제, 오래된 keyring 토큰, TRADEGEN 공유 파일 삭제, 파일 권한, keyrings.alt, 예외 문구, ENV_NAMES) → PAYMENTS가 고친 뒤 재검토 |
 | 4 | 정책 문서 PR-1 (D11 Q1~Q3만: 운영자 표기·메일·나이) | 메인 `claude/policy-d11-q1q3-20261119` @ `7377c17` | 브랜치 준비 끝. KEY-2 뒤 + 소유자 질문 5개 답 뒤 PR. 계정 서비스 설명은 PR-2(AWS 풀·웹 계정 화면 뒤) |
 | 5 | UI 7쪽 + PySide6 준비 | UI `claude/friendly-bardeen-r6xe8f` | 소유자 실행 확인 뒤 (UI 세션 브랜치는 아무도 고치지 않음) |
 | 6 | PySide6 전환 (`pyqt6_to_pyside6 --apply` + `switch_day.py --apply`, 화면 문구 3곳은 UI 세션) | OS | 5 뒤 (OS 세션 제안 순서: UI PR → 전환) |
