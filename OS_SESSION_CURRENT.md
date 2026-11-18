@@ -6,11 +6,11 @@ task: os-expansion
 cycle: 2026-11-17
 done_ids: none
 next_ids: OS-P0-a, OS-P0-e, OS-P0-f, OS-P0-c, OS-P0-b, OS-P0-d, OS-F1, OS-F2
-updated_at: 2026-11-18T22:45:00+09:00
+updated_at: 2026-11-19T02:10:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/os-prep-20261117
-work_commit: d0bc363
+work_commit: 1f6a72e
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -78,6 +78,8 @@ session: https://claude.ai/code/session_016uB1jgXiwx42FSUU5ANwM7
 - [x] (11-18 오후) **정정:** `qa/` 두 파일은 앱이 읽습니다. `quantgen_desktop/app.py` 시스템 화면의 "프로젝트 상태"가 `tools.status.snapshot.verify(application_root())`로 읽음. 그래서 데스크톱 번들에서 빼던 `42be9b8`을 되돌리고, selfcheck에 `recorded_project_status` 검사를 추가함. 두 바인딩 빌드 모두 11/11 통과 — `39a1642`. 메인에게 "휠에서 빼자" 제안은 철회함.
 - [x] (11-18 오후) OS-F1 준비: `tools/qt_port/switch_day.py`(`--check`/`--apply`)가 .py 밖 7곳을 고침(pyproject desktop 고정, runtime-smoke 설치 줄, `.cmd` 14행, spec 기본값, platform-build 기본값 2곳, README). 시험 `tests/qt_switch_day_acceptance.py`. 스크래치 복사본에서 변환 도구와 함께 실행했더니, 남은 "PyQt6"는 설명 문장과 화면 문구 3곳(`app.py`·`translations.py`·`core/ui_legacy_messages.py`의 "PyQt6 네이티브: …", UI 세션 몫, 도구가 note로 알림)뿐임 — `219b815`
 - [x] (11-18 밤) UI 세션 수정(`75336f3`) 재시범: lint 97→50. 그대로 돌리면 PySide6 세그폴트 7단계가 다시 남. 이분 탐색 결과 원인은 시스템 화면 커밋 `a00c856`의 `connections.py` `focus_order`(`nextInFocusChain()`으로 창 전체를 돌음). 그 한 곳을 `findChildren`으로 바꾼 복사본은 CI 18단계가 PyQt6와 모두 같고, 새 실패·세그폴트·지워진 객체 줄이 모두 0. 점검표 14번, lint `14-focus-walk` 추가, `PYSIDE6_TRIAL` 8절 — `d0bc363`
+- [x] (11-19) 소유자 "F22까지 완료했습니다. 남은 일을 진행해주세요". main `6e077dc` merge(충돌 없음), compliance 기준선 갱신(consistency PASS, publication BLOCKED, FACTS.md 기록), PR 준비 완료 — `1f6a72e`. MERGE_QUEUE가 아직 freeze ON이라 PR은 열지 않고 메인에 자리 요청함
+- [ ] (11-19 진행 중) UI `5025c6f`(점검표 9·14 반영, lint 38 = 검토용만) 두 바인딩 재시범
 - [ ] OS-F1 (F21 뒤, MERGE_QUEUE가 자리 줌), OS-F2 (KEY-2 뒤)
 
 **11-18 추가 검증 (`5816125`):**
