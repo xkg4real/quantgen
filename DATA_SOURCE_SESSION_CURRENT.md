@@ -5,12 +5,12 @@ from: claude
 task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
-next_ids: DS-1, DIDM-0, DIDM-1, DS-4a, DS-H, DS-4b
-updated_at: 2026-11-17T22:12:00+09:00
+next_ids: DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e, DS-H, DS-4b
+updated_at: 2026-11-18T11:25:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/data-source-didm-20261117
-work_commit: 73f2868
+work_commit: 7bf99b3
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -25,7 +25,7 @@ session: https://claude.ai/code/session_016uB1jiXnUcWg99JHtRek9T
 
 ## 0. 한 줄 요약
 
-첫 작업 3개 (DS-1 평가표, DIDM-0 사전등록·DIDM-1 스키마, DS-4a GDELT·ALFRED 커넥터 + 시점 저장소)를 작업 브랜치 `claude/data-source-didm-20261117` (`73f2868`)에 커밋·push했습니다. main 미병합, PR 없음. **소유자 답 대기**: 평가표 확인 2문항, 사전등록 P1~P5, 지시문 질문 1~4, 홈 지표 진단 출력.
+첫 작업 3개 + 소유자 답 (2026-11-18) 반영 + DS-4d (EDGAR·OpenDART·ECOS)·DS-4e (Kalshi) 커넥터를 작업 브랜치 `claude/data-source-didm-20261117` (`7bf99b3`)에 커밋·push. main 미병합, PR 없음. **소유자 답 대기**: 평가표 확인 2문항 (VENDOR_EVAL 8절), 사전등록 P1~P5, 홈 지표 진단 출력.
 
 ## 1. 목표와 완료 조건
 
@@ -37,6 +37,15 @@ session: https://claude.ai/code/session_016uB1jiXnUcWg99JHtRek9T
   > 메인화면 아직도 리서치 홈에서 지표가 안뜨는데, 이거 고칠 것. 주요 지표 6개를 그래프와 함께 구현하도록(앱 키자마자 실시간) 해야함.
 - **완료 조건:** 지시문 `plans/2026-11-17/sessions/06_DATA_SOURCE_DIDM.md` 7절 (작업 1~3), 8절 표.
 - **범위 밖:** 앱 화면 (UI 세션), 웹사이트, 키 저장소·게이트웨이 코어 (결제·계정 세션), 유료 호출·가입, Polymarket 실행, main 병합 (메인).
+
+## 1.1 소유자 답 (2026-11-18, 원문 그대로)
+
+> 1. 아뇨, 위 두 파일에서 나온 RavenPack 외 대안책으로 사용 가능한 데이터 공급원 9개를 의미하는 겁니다.
+> 2. 네 가능합니다
+> 3. 네 진행하세요. 진행하고 나서 만약 QUANTGEN 앱 내부 아키텍처 혹은 단순한 코드/파일을 바꿔야하는 부분이 있다면 저한테 알려주세요.
+> 4. 네 Kalshi로 진행하겠습니다.
+
+"위 두 파일" = 소유자 엑셀 (원본 업로드, 글 사본과 같음 확인)과 MTFE 문서 (handoff `plans/2026-11-18/OWNER_MTFE_RAVENPACK_REVIEW_2026-11-11.md`). 같은 메시지의 작업 지시: "/karpathy-guidelines /trading-skills-navigator 등의 스킬들을 조합해 업무를 진행해주세요. 이때, Claude.md 파일에 있는 가이드라인을 먼저 읽고 나서 작업을 진행해주세요." (karpathy-guidelines는 이 세션의 스킬 목록에 없음; trading-skills-navigator는 추천 스크립트가 빠진 채 동기화되어 수동으로 고름.)
 
 ## 2. 근거
 
@@ -66,6 +75,8 @@ session: https://claude.ai/code/session_016uB1jiXnUcWg99JHtRek9T
 - [x] DS-1 대안 평가표 초안 — `docs/didm/VENDOR_EVAL_2026-11.md`, `tools/didm/check_vendor_eval.py`, `tests/didm_vendor_eval_acceptance.py`, 커밋 `fec6fb8`. 완료 조건 1~3 충족, **4 (소유자 확인) 대기**.
 - [x] DIDM-0 사전등록 초안 + DIDM-1 점수 스키마 — `docs/didm/PREREG_V0.md`, `docs/didm/SCORE_SCHEMA_V0.md`, `core/didm/llm/schema.py`, `tests/didm_schema_acceptance.py`, `tests/fixtures/didm/*.json`, `runtime-smoke.yml` (경로 + 시험 줄), 커밋 `731b321`. 완료 조건 1·2·3·5 (브랜치) 충족, **4 (사전등록 승인) 대기**.
 - [x] DS-4a GDELT·ALFRED 커넥터 + 시점 저장소 — `core/didm/store/__init__.py`, `core/didm/ingest/{gdelt,alfred}.py`, `data/didm/{gdelt,alfred,polymarket}.py`, `tools/didm/collect_daily.py`, `tests/didm_{store,ingest}_acceptance.py`, `docs/compliance/08-third-parties.md` 행 초안, 커밋 `73f2868`. 완료 조건 1·2·3·5 충족, 4는 브랜치에 초안 (PR은 대기열 차례에). **실제 GDELT·ALFRED 호출은 미실행** (이 세션 네트워크 막힘 → 소유자 PC).
+- [x] 소유자 답 1~4 반영 — `VENDOR_EVAL` 0.1·3·5·6·8절, `PREREG_V0` 1·4·8절. 커밋 `7bf99b3`.
+- [x] DS-4d EDGAR·OpenDART·ECOS 커넥터 (KIND는 공개 API 없음 → 연결 안 함, OpenDART로 대신) + DS-4e Kalshi 커넥터 — `core/didm/ingest/{filings,ecos,kalshi}.py`, `data/didm/{edgar,opendart,ecos,kalshi}.py`, `tests/didm_sources_acceptance.py`, `collect_daily.py` 옵션, 08 행·CI 줄. 커밋 `7bf99b3`. **실제 호출 미실행** (키·UA 없음, Kalshi 호스트 막힘 → 사유 코드 확인).
 - [ ] DS-H 홈 지표 데이터 계층 ← **소유자 진단 출력 대기** (아직 손대지 않음)
 - [ ] DS-4b Alpha Vantage·Tiingo·Cryptopanic 무료 키 1회 확인 ← 소유자 무료 키 가입 대기
 
@@ -74,8 +85,8 @@ session: https://claude.ai/code/session_016uB1jiXnUcWg99JHtRek9T
 ```
 python -m tools.didm.check_vendor_eval --excel <handoff 엑셀 사본>
 -> columns 19, alternative cells 171, '?' cells 15, excel compared: yes / excel cells changed: 0 / OK
-python -m unittest tests.didm_store_acceptance tests.didm_ingest_acceptance tests.didm_schema_acceptance tests.didm_vendor_eval_acceptance
--> Ran 52 tests, OK (네트워크 없음)
+python -m unittest tests.didm_store_acceptance tests.didm_ingest_acceptance tests.didm_sources_acceptance tests.didm_schema_acceptance tests.didm_vendor_eval_acceptance
+-> 2026-11-18 7bf99b3: OK (네트워크 없음; sources 15 추가)
 python -m unittest tests.provider_parity_acceptance tests.provider_parity_btc_diagnose_acceptance (워크플로 파일을 읽는 기존 시험) -> OK
 git diff origin/main -- core ':!core/didm' -> 0줄 (core/didm 밖 core 변경 없음)
 python -m tools.didm.collect_daily --data-dir <스크래치> --finbert --alfred CPIAUCSL
@@ -111,17 +122,25 @@ python -m tools.compliance.check --check -> consistency FAIL, documents need rev
 
 ## 8. 소유자에게 물어야 할 것 (답 대기)
 
-- 지시문 질문 1~4 (메인이 여쭘): ① "3단계" = DIDM Stage 3? ② 최소안 월 $4~11로 시작, CME는 Stage 2, AV·Tiingo 유료는 3단계 뒤? ③ EDGAR·OpenDART/KIND·ECOS 추가? ④ Polymarket 보류 + Kalshi 검토?
+- ~~지시문 질문 1~4~~ → 2026-11-18 답함 (1.1절).
 - 평가표 (`VENDOR_EVAL` 8절): 메모를 대안별로 나눈 방식 (`N4규칙`, Q/U/K 칸) 동의? "?" 처리 (무료 키 6칸, 공급사 문의 11칸) 진행?
 - 사전등록 (`PREREG_V0` 8절): P1 사건 유형 12 vs 14, P2 τ 0.80·δ 0.5·관련성 75, P3 시장 반응 판정, P4 LLM 여유 3개월, P5 V0 전체 승인.
 - 홈 지표 진단 출력 (마스터 부록 H4의 진단 명령 결과).
 - (선택) 무료 키 가입: `FRED_API_KEY`, `ALPHAVANTAGE_API_KEY`, `TIINGO_API_KEY`, `CRYPTOPANIC_API_KEY` — 값은 PC에만.
 
+## 앱 구조·파일 영향 (소유자 답 3의 요청, 2026-11-18)
+
+- 앱 화면·`core/` (DIDM 밖)·`config.py`: **바꾼 것 없음.** 새 공급원은 모두 연구 도구 경로 (`tools/didm`, `data/didm`, `core/didm`)에만 있고 앱이 부르지 않음 (D7-G 규칙).
+- 공유 파일 (PR 때 대기열로): `runtime-smoke.yml` 경로·시험 줄, `08-third-parties.md` 행 (브랜치에 있음), `source-review.json` 기준선 갱신 (PR 직전), `.env.example`에 이름 추가 제안 `FRED_API_KEY`, `ECOS_API_KEY`, `SEC_EDGAR_USER_AGENT` (아직 안 고침).
+- `requirements.txt`: 바꿀 것 없음 (표준 라이브러리 + 기존 requests). FinBERT용 `transformers`·`torch`는 소유자 PC 선택 설치.
+- 결합 한 곳: `data/didm/opendart.py`가 `OpenDARTClient._get` (밑줄 함수)을 씀. 결제·계정 세션 KEY-2가 OpenDART 키 처리를 바꾸면 같이 확인해야 함.
+- 나중에 앱이 DIDM 결과를 보이려면: 공급원마다 `routes.json` 한 행 + `display_rights.json` + 법률 의견 (구조 변경, 소유자에게 먼저 알림).
+
 ## 메인에게
 
 - 대기열 요청: DS·DIDM 첫 코드 PR 자리 (F21 뒤). 묶음 = 작업 브랜치 전체 (`docs/didm/**`, `core/didm/**`, `data/didm/**`, `tools/didm/**`, `tests/didm_*`, `tests/fixtures/didm/**`, 공유 파일 `runtime-smoke.yml` 경로·시험 줄, `docs/compliance/08-third-parties.md` 행). 이 PR은 `source-review.json`도 바꿉니다 (한 번에 하나 규칙).
 - LEDGER: 아직 요청 없음 (병합된 ID 없음). 병합 뒤 `--done` 문자열을 여기에 적습니다.
-- 지시문 질문 1~4의 답이 오면 이 파일에 원문을 옮겨 주세요.
+- 질문 1~4 답은 소유자가 이 세션에 직접 줌 (1.1절). "3단계" = DIDM Stage 3이 아니라 대안 9개라는 답은 `D14_RAVENPACK_ALTERNATIVES.md` 1절 해석과 다르니 메인 문서도 고쳐 주세요.
 
 ## UI 세션에 전할 것
 
@@ -129,7 +148,7 @@ python -m tools.compliance.check --check -> consistency FAIL, documents need rev
 
 ## 결제·계정 세션에 전할 것
 
-- 새 키 이름 (값 없음, 제안): `FRED_API_KEY` (DS-4a ALFRED, 연구 도구 전용), DS-4b용 `ALPHAVANTAGE_API_KEY`, `TIINGO_API_KEY`, `CRYPTOPANIC_API_KEY`; Stage 2 뒤 `CME_FEDWATCH_API_ID`, `CME_FEDWATCH_API_SECRET`; Stage 3 뒤 `TRADINGECONOMICS_API_KEY`.
+- 새 키 이름 (값 없음, 제안): `FRED_API_KEY` (DS-4a ALFRED, 연구 도구 전용), `ECOS_API_KEY`, `SEC_EDGAR_USER_AGENT` (연락처 문자열; DS-4d), OpenDART는 기존 `OPENDART_API_KEY` (`data/didm/opendart.py`가 `OpenDARTClient._get` 사용), DS-4b용 `ALPHAVANTAGE_API_KEY`, `TIINGO_API_KEY`, `CRYPTOPANIC_API_KEY`; Stage 2 뒤 `CME_FEDWATCH_API_ID`, `CME_FEDWATCH_API_SECRET`; Stage 3 뒤 `TRADINGECONOMICS_API_KEY`.
 - `routes.json` 행: 지금 없음. DIDM 수집은 `tools/didm/` 연구 도구라 게이트웨이 대상 아님 (D7 5.5). 앱이 DIDM 결과를 쓰게 되면 그때 공급원마다 한 행 요청.
 
 ## 9. 이어받는 에이전트에게 주는 지시문
