@@ -6,13 +6,13 @@ task: payments-account-keys
 cycle: 2026-11-17
 done_ids: none
 next_ids: PAY-A1, PAY-A2, KEY-1, KEY-2, KEY-3/design, KEY-3, PAY-0, PAY-2
-updated_at: 2026-11-19T01:40:00+09:00
+updated_at: 2026-11-19T05:40:00+09:00
 stale_after_hours: 3
-waiting_on: review
+waiting_on: ci
 work_branch: claude/payments-keys-20261117
-work_commit: 7626723
+work_commit: 606f33f
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/128
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
@@ -24,6 +24,9 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-19 05:40 갱신:** 메인이 "병합: PAYMENTS_ACCOUNT_KEYS" (MERGE_QUEUE, 05:14 KST). main `c28b1d7` merge (runtime-smoke.yml 충돌 2곳: main 줄 유지 + 내 경로 4개·시험 모듈 1개 추가) → `029be27`; app_identity 연결 시험 2개 추가 (총 31 OK); 회귀 실패 집합 main 코드와 동일; 준수 기준선 갱신 `606f33f` (consistency PASS, 20 문서, 793 소스) → **PR #128**. 본문에 코드 지문 ec72fab3 → 10c27010과 owner_confirmed 재작성 필요를 적음. 병합은 메인 (CI 전부 녹색, Windows 최대 약 2시간). 병합 뒤: LEDGER 요청 `KEY-2 | ...`, 소유자에게 owner_confirmed 안내 (OWNER_STEPS 6절), UI·OS 세션에 "KEY-2 병합" 알림 (소유자 경유).
+
 
 **2026-11-19 01:40 갱신:** freeze OFF (`MERGE_QUEUE.md` `82fac0c`). KEY-2는 대기열 3번 (1 메인 ⑦-2/a → 2 OS 작은 PR → 3 KEY-2). 메인이 "병합: PAYMENTS_ACCOUNT_KEYS"라고 적으면: 최신 main merge (그때 OS PR의 `core/app_identity.py`가 들어와 있으므로 `may_read_dotenv` 연결을 시험으로 확인) → 기준선 갱신 → `--check` → PR (본문: 코드 지문 ec72fab3 → 10c27010 예상, owner_confirmed 재작성 필요). 그 사이 브랜치에 소유자 안내서 6절 (owner_confirmed 절차) 추가 `7626723`.
 
