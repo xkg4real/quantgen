@@ -1,6 +1,6 @@
 # MERGE_QUEUE — main 병합 순서와 동결 (메인 세션이 관리)
 
-updated_at: 2026-11-18T19:10:45+09:00
+updated_at: 2026-11-19T00:25:17+09:00
 coordinator: 메인 세션 (QUANTGEN/MAIN, https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB)
 freeze: **ON** — 2026-11-18T19:10:45+09:00부터 F21까지 main에 아무것도 병합하지 않음. P3 완료: 연구 브랜치 `d895873ad03b8461a5916f579ef1299d1712a1ca`(병합 `888f121` + 소유자 확인 문장 커밋). 소유자가 F1~F22를 진행 중.
 
@@ -19,6 +19,7 @@ freeze: **ON** — 2026-11-18T19:10:45+09:00부터 F21까지 main에 아무것�
 - GH-1: CI 줄이기 / Windows 검사를 소유자 PC로 + 비공개 전환 — 소유자 선택 대기 (D5 후속).
 - OS 작은 PR(도구·`app_identity`·패키징 초안, 공유 파일 `core/app_paths.py`·`runtime-smoke.yml` 경로·`platform-build.yml`) — **F21 뒤 첫 자리**, 그다음 OS: PySide6 전환 PR (D9 나안). P3 전에는 받지 않음: P3 병합 후보(`local/p3-candidate` 끝 `f0c8872`)가 main `7c33955` 기준이라 main이 바뀌면 병합과 전체 검사를 다시 해야 함. `qa/` 두 파일을 휠에 넣을지는 지금 그대로 두고 그 PR에서 근거와 함께 제안.
 - P3 상태 (2026-11-18): 병합·전체 검사 끝, push 보류 — 코드 지문 판정(P3-가/나/다) 소유자 답 대기.
+- 정책 문서 PR (메인, D11 소유자 답 Q1~Q3 반영) — F21 뒤 앞쪽. 소유자 원문(2026-11-19 00:19 KST, PAYMENTS 세션; 메인이 그 세션 대화 기록에서 확인): "Q1 답변 : 예, 다만 제가 법인 설립 설립이 완료되었다고 여기에 말하는 순간 바로 해당 법인 명으로 수정 가능하도록 해주세요 / Q2 답변 : 일단 contact@quantgeneration.com으로 하겠습니다. 현재 웹사이트의 구조도 이렇게 되어있습니다. / Q3 답변 : 예". 값: 브랜치 `claude/payments-keys-20261117` @ `687bf65` `docs/commercial/accounts/ACCOUNT_SETUP.md` 4부 (운영자 개인·"(주)" 없음, 책임자 같은 사람, 메일 contact@quantgeneration.com, 최소 연령 14/유료 19). 대상 문서 01·02·04·06·07·08·16·17·18·20, release-profile.json.
 - KEY-2 → KEY-3 → KEY-4 → KEY-5 — **D7-G 소유자 승인됨 (2026-11-18 14:15 KST, OS 세션에서, 원문: "그러면 D7-G의 방식대로 진행하겠습니다")**. 브랜치 작업은 지금 시작 가능, main 병합은 F21 뒤 이 순서.
 - DS·DIDM PR — 각 세션 차례가 오면.
 
