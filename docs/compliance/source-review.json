@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "24e9ac927d080c3bf162ebebbc3677be7764681b4874a77b5f5915f0de8d993d",
+    ".github/workflows/runtime-smoke.yml": "60ebbf9a7bf59bb4378982998b6c32951f7c93fdacc29dbc102adbf7a2f9f5a2",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -176,11 +176,13 @@
     "core/quant/run_registry_data_hash.py": "f78a28ea0709f3d10a593aa82f77b8ef601b171f17e3ff89e54bcf237c360699",
     "core/quant/run_registry_fold.py": "cb3b6aec8acea30a9cded039b1288c97b793dc5edb5e077b614b58a8f9fd24c2",
     "core/quant/run_registry_keys.py": "04fc64aab8dbcecbeb7850072715553d594d547afca05676ce05a372680a3069",
+    "core/quant/run_registry_outage.py": "afc7e57bf4c7f24cba30fdc77b8b877b2271399551d4eeffcbacdaf79a0cc175",
+    "core/quant/run_registry_recorder.py": "d37db8e1745c4abda3520971e0295432d25deafcc6aedbc6340f485a4301d249",
     "core/quant/run_registry_series_files.py": "734a6ed470bdf3631becec5f0a686128210309f03168c9b1a9e6a7d3e4c4a146",
     "core/quant/run_registry_series_format.py": "241155355a459b06f9aeb33996b41ab57327b059049256d7acf92aa8c26280dc",
     "core/quant/run_registry_series_hash.py": "96c257121ac564329148804418499f997d4127bbc6d72074a6b4b3c411fa6043",
     "core/quant/run_registry_source_hash.py": "f38239e969a0127f8db00cbaf47fa9e1721c1642c525dff0ef5f7aa463e3bef6",
-    "core/quant/run_registry_store.py": "77522bd80cb158bfac8b400435ede567c35514779ee37006be1007e8094a5eae",
+    "core/quant/run_registry_store.py": "5beb37fbdbeb1ee39bf79b08d438d204c20fa3723548f24cd344c70aa6710258",
     "core/quant/scenarios.py": "e65dda28f6cb9a3cd29cab547ae1093f556aa0e467f2c86b9d3c616090fbd205",
     "core/quant/signals.py": "d033d0f146e45ac59db6e1125a2b2256cc96c9c1744093e954adf45e2ccec64a",
     "core/quant/sleeves.py": "39bcdf9a73400ebe9634e75ae8278a3616cb41d90156749b369c1ae9042ef2ac",
@@ -300,7 +302,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "aa9d88ea084b54614f0409197a756fb4dbc5b48ad0b57e6f0c04741ed029bf20",
+    "docs/compliance/FACTS.md": "1fbb5e667482f7d2ef3ac7997448b5bac68b4c67a3867936661fed1080d3908b",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -363,6 +365,8 @@
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
     "docs/product/R3_DETACHED_KEYS_2026-11-06.md": "9008ba197899d9cc797c017381a3094d21fa995b70db9c3deba62c92bb656bc4",
+    "docs/product/R3_DETACHED_OUTAGE_2026-11-14.md": "d8e965e5dff1605d238f450017609ad14cde7e70cc892c1e3bbefacca6e8d63f",
+    "docs/product/R3_DETACHED_RECORDER_2026-11-14.md": "534e1d98c6fdbb9ac00dccf17ead67ca50cba13ff48337c3be4305c0da4ee36a",
     "docs/product/R3_DETACHED_RUN_FOLD_2026-11-10.md": "f524a2a1afc51ec04809fdc50dc45c220e4a7ec38898cfcebef4c17157066cf9",
     "docs/product/R3_DETACHED_SERIES_FILES_2026-11-10.md": "51f38281e1859acf2df37b78e25747a46c5e6ef604aa87596ffac5c09da797c4",
     "docs/product/R3_DETACHED_SERIES_FORMAT_2026-11-06.md": "04634e2e49b8b9c7e7cb4ada8d4d9669f8bf2fb2f54ea76b77f40f3ed0f11d71",
@@ -541,7 +545,7 @@
     "tests/desktop_owner_ui_ficc_acceptance.py": "f1e00489b0be49085595ad7b7f8b58285c0e86567d261c00ca9ec383b8439faa",
     "tests/desktop_owner_ui_integration_acceptance.py": "8adf9b8e656cc60f4ba5d54fc60ef51ecca531962a59c4e58472bf583d458573",
     "tests/desktop_owner_ui_market_acceptance.py": "6d4c94f71f347c5d3042462e4697751f0b1550d1c0712e4857ef1d6a68d7274e",
-    "tests/desktop_owner_ui_risk_acceptance.py": "b1e171ccf27c90b5c35cc8f68ce6e5f9c25f1c53720f86fb06b9286d89db31da",
+    "tests/desktop_owner_ui_risk_acceptance.py": "663b70521999dff49d0281ece22fcbbc55526daa4864905d794f41fa059369e6",
     "tests/desktop_owner_ui_strategy_acceptance.py": "d5319c7d4e659e7b1b370c313350d982d23859b76d579202a5877f04fd1195e0",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
@@ -662,6 +666,8 @@
     "tests/run_registry_data_hash_acceptance.py": "b4907328da604bbcf6e9e4acb99c54b16fe4cc40190e47661e75255d4b5fa8ad",
     "tests/run_registry_fold_acceptance.py": "7627a1ed0ba20bf04feecab8f607a59730ed3e4877626f8b5543bcc8f8f53e3a",
     "tests/run_registry_keys_acceptance.py": "5c05abc6f512e80d38ce09af191296ff6019d17d05a892ed60e5316e19035708",
+    "tests/run_registry_outage_acceptance.py": "37b4b7f8ec2b2329a1b338e4a929df6cb32035717126caf979a5561888573ba7",
+    "tests/run_registry_recorder_acceptance.py": "05a608897f87771ff1c396620b4b824392e638a0fa11ac7e8e65933eb1e12a78",
     "tests/run_registry_series_files_acceptance.py": "4936d5f20319b1f1cc0e91856caa605bec18eb5f96c1ddd2be6a2331b21598fe",
     "tests/run_registry_series_format_acceptance.py": "2f93b3bed613189eef720367ac1dfcde1a8820bab4f2dac3ef87df98dac77b73",
     "tests/run_registry_series_hash_acceptance.py": "f38a05fca045b00b3bf401a2ba3d0f2a71a6cc589acf5e790655c1e4fc76a156",
@@ -762,164 +768,164 @@
   },
   "reviews": {
     "1": {
-      "document_sha256": "546a396893b50ef5d8e95c18be4103f5a2302253d397429859957bd1540724cf",
-      "source_digest": "6fc53f9953edffbaf730dd429d0cbc29622f35da85be1ef8d4b656157052303e",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.928679+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "document_sha256": "8fdcbaf3551af7c39081fab335d6bfbd0c44bc4f3d1afdb4054e6aa6e8599f1b",
+      "source_digest": "00ed264924dffffb7d2adee25caa976733187639bbaa2c654ae5df6757aeef17",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.831238+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "2": {
       "document_sha256": "1c7eb9b60585b1fd4d1a23723051454e768b6ea6b31b9e58bd8122ac73cdd5e1",
-      "source_digest": "6fc53f9953edffbaf730dd429d0cbc29622f35da85be1ef8d4b656157052303e",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.930648+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "00ed264924dffffb7d2adee25caa976733187639bbaa2c654ae5df6757aeef17",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.833790+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "3": {
       "document_sha256": "50fcceb8fb66b30a535ff6015a66ff5e5cee801b61433cc3aa99acd3673c4393",
-      "source_digest": "c7052af594997e52f3420a7a5b44d16103ef5225599bb142d2a67c801c8f8d4c",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.932072+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "19ca3178c863d9f2f7c40838f2d3d414c1381a672f92447b5b5bd9fbd63e88f0",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.835799+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "4": {
       "document_sha256": "4a2528a8c62c60983069941ff506c41c6b251ff1f402ef6cf7723e9901bb7a91",
-      "source_digest": "9f9428fbf6f444fe227244c3b8cb9bd321c18a5cfbcd3af5bbf14ae5bebdb0c5",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.933329+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "356388b126fd4bceed18d4256fef3ba1a51f2724f113c193c927a70580982fa6",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.837871+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "5": {
       "document_sha256": "54164c56f4c3999b8ed65115e411151dca9dd6a46fea7bc57d0a750774d7b555",
-      "source_digest": "be85c95c73ff18ff1cb14dea6e4a2b06879ec7697b2e58394386ff71602811e5",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.934570+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "22009386e3a7f8d93146825ee34de3579126508ee8c9bf6337266776ff8b977a",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.839693+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "6": {
       "document_sha256": "5871443de50226c2680aa2c41059c06b4d1290f28f1c859d5ed979fd17a2918e",
-      "source_digest": "847cf2a0b45b35c42e80651a26fa5654291e09d73594904d891eca3b08b83322",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.935813+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "82f68c3b7e7f3cb29e1bb088e3c0c782db0921bc6ea07d424c9b4739d54d4933",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.841804+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "7": {
-      "document_sha256": "437529f84b2cf492d8e04e5e0190c1cd1f15ea06a17ca4da24bbacc070d77ba1",
-      "source_digest": "6fc53f9953edffbaf730dd429d0cbc29622f35da85be1ef8d4b656157052303e",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.937835+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
+      "source_digest": "00ed264924dffffb7d2adee25caa976733187639bbaa2c654ae5df6757aeef17",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.843755+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "8": {
       "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
-      "source_digest": "847cf2a0b45b35c42e80651a26fa5654291e09d73594904d891eca3b08b83322",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.939054+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "82f68c3b7e7f3cb29e1bb088e3c0c782db0921bc6ea07d424c9b4739d54d4933",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.845657+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "50dcf6f8f1466d5a6efe0177d869a0fa7bf100433c3cec444740add57a1114ee",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.940243+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "2f77b056a08311086c7cdf460cb13de1f11aaf98e6e923ab85a084a25558b5f6",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.847386+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "10": {
       "document_sha256": "ce304488b177e5fa81046782034d9a3c23a411ca3cef859d46b7df13ba0c5f5f",
-      "source_digest": "ce2fdde8e5df41b823c7e66910203b7d2995fec3cc4773979f961052447cbf2e",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.941421+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "d11f212b9f8cdd8195f704d07c2a55a5b0bddcb58fc49c3319a6ed031019b989",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.849279+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "11": {
       "document_sha256": "11a071fe459f3d6f622ec4ee4480200c3e7ed131153e00bd6823e552e43a7004",
-      "source_digest": "d4ea68107f12310365f5649ff0371760ac7852ef2caa1518f026dd604ac37bde",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.943165+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "1bf04633475bb59c0e3a8c85f71111de87f8adf68a56e429a6bcfbd185f8c791",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.851535+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "a51b23bd06d480019896c1736174c42f905ef9731764264d450746fbdc4dc3d5",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.944918+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "1cc0c8cf82bf1b853386e791caec55a039d08a5074422031edcbd0a1849153bd",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.853390+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "50dcf6f8f1466d5a6efe0177d869a0fa7bf100433c3cec444740add57a1114ee",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.946130+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "2f77b056a08311086c7cdf460cb13de1f11aaf98e6e923ab85a084a25558b5f6",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.855029+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "50dcf6f8f1466d5a6efe0177d869a0fa7bf100433c3cec444740add57a1114ee",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.947897+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "2f77b056a08311086c7cdf460cb13de1f11aaf98e6e923ab85a084a25558b5f6",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.857016+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "15": {
       "document_sha256": "99b8253de2d54323b48c1dc8edb663bb6105930c24bb15e8f70800aec2a49cf1",
-      "source_digest": "50dcf6f8f1466d5a6efe0177d869a0fa7bf100433c3cec444740add57a1114ee",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.949576+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "2f77b056a08311086c7cdf460cb13de1f11aaf98e6e923ab85a084a25558b5f6",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.858954+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "16": {
       "document_sha256": "ff89cdb2a5ee70c3f830162c8e3c8a287291c89fddd7c850ac5b6048d9217f98",
-      "source_digest": "b94c52813e49ce4ef7aacb250e3470eb58360acfc18b6c7b295a9e5adc0d6921",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.950824+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "b850455d4b33cc39d25525996d01c6cb483aab954d42daa8da910efdd6b2a023",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.860994+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "17": {
       "document_sha256": "dde1a8a05a26c612255f5858d272019e11cb7caf4542aa017b626ecea968713d",
-      "source_digest": "847cf2a0b45b35c42e80651a26fa5654291e09d73594904d891eca3b08b83322",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.951995+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "82f68c3b7e7f3cb29e1bb088e3c0c782db0921bc6ea07d424c9b4739d54d4933",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.862690+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "18": {
       "document_sha256": "f41494e3a28b54cd191916f9ee985f795849e6bf67d69c8dffebd7d081d1187d",
-      "source_digest": "6fc53f9953edffbaf730dd429d0cbc29622f35da85be1ef8d4b656157052303e",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.953239+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "00ed264924dffffb7d2adee25caa976733187639bbaa2c654ae5df6757aeef17",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.864617+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "6bad13ffc903ee968c162bd4004f96a6d9a15d0484d774e87c512b07740884cd",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.954929+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "source_digest": "15803a163d642f7a03aabcd87016f9c8de05fd3b58cb2fe8750414e2160067c3",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.866100+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     },
     "20": {
-      "document_sha256": "0bb26298409489acde50b160abaa10068a84cc0e5b756041665f5277435b19eb",
-      "source_digest": "6fc53f9953edffbaf730dd429d0cbc29622f35da85be1ef8d4b656157052303e",
-      "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-17 market hub, rail categories, indicator scroll fix and indicator conclusions against FACTS and 12-claims; no new hosts, orders or transmissions; advice-boundary legal review recorded; publication blockers unchanged.",
-      "reviewed_at": "2026-11-17T09:18:15.956188+00:00",
-      "source_commit": "e01e1526be28b8a6374583ce3802510e07819598"
+      "document_sha256": "b226906886050078abf5ba14f9a0735c9e5ac02444ee1b0ebe11517333cf3d18",
+      "source_digest": "00ed264924dffffb7d2adee25caa976733187639bbaa2c654ae5df6757aeef17",
+      "reviewed_by": "Claude main session merge review (UI market hub da0ea20 into main 7c33955)",
+      "review_note": "Merge of the owner-approved UI market hub commit da0ea20 into main 7c33955 that keeps both sides' records unchanged (FACTS.md now carries the 2026-11-14 R3 recorder and outage sections and the 2026-11-17 market hub, indicator conclusion and indicator list section; 01/07/20 keep main's recorder limits and 12-claims keeps the UI conclusion check), adds no provider, host, transfer, order, retention, deletion or dependency surface beyond what each side already recorded, and keeps every document review-required with publication BLOCKED.",
+      "reviewed_at": "2026-11-18T05:24:53.867557+00:00",
+      "source_commit": "da0ea20817827e325a74dcef1bd239fddea820b8"
     }
   }
 }

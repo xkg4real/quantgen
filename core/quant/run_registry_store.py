@@ -163,8 +163,12 @@ class SingleSegmentStore:
         self._key = os.path.normcase(str(self.path))
 
     @contextmanager
-    def _locked(self, *, create):
-        deadline = time.monotonic() + self.lock_timeout
+    def _locked(self, *, create, lock_timeout=None):
+        budget = self.lock_timeout if lock_timeout is None else lock_timeout
+        if (type(budget) not in (int, float) or not math.isfinite(budget)
+                or not 0 <= budget <= self.lock_timeout):
+            raise StoreError("Per-call lock budget must be finite and within the store budget")
+        deadline = time.monotonic() + budget
         local = _process_lock(self._key, deadline)
         if not local.acquire(timeout=_remaining(deadline)):
             raise LockTimeout("Process path lock timeout")
@@ -240,9 +244,12 @@ class SingleSegmentStore:
                 return ()
             return self._read_verified()[1]
 
-    def append(self, event):
+    def append(self, event, *, lock_timeout=None):
         """Append one detached machine envelope and return its exact stored bytes.
 
+        An optional per-call ``lock_timeout`` may reduce the store's lock budget
+        without mutating it; this lets a caller share a budget across retries.
+        It does not bound filesystem operations or event encoding.
         A write/flush/fsync/close or later unlock error has an uncertain outcome;
         it is surfaced without retry, truncation or an implicit repair.
         """
@@ -255,7 +262,7 @@ class SingleSegmentStore:
         del prepared["row_md5"], prepared["prev_row_md5"]
         attempted = False
         try:
-            with self._locked(create=True):
+            with self._locked(create=True, lock_timeout=lock_timeout):
                 data, events, snapshot = self._read_verified()
                 if prepared["event"] in ("STARTED", "FINISHED") and any(
                         item["event"] == prepared["event"] and
