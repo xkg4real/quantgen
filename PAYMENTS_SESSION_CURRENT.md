@@ -5,12 +5,12 @@ from: claude
 task: payments-account-keys
 cycle: 2026-11-17
 done_ids: none
-next_ids: PAY-A1, PAY-A2, KEY-1, KEY-3/design, PAY-0, PAY-2
-updated_at: 2026-11-17T23:10:00+09:00
+next_ids: PAY-A1, PAY-A2, KEY-1, KEY-2, KEY-3/design, KEY-3, PAY-0, PAY-2
+updated_at: 2026-11-18T15:10:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/payments-keys-20261117
-work_commit: fed3820
+work_commit: 178c51e
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -24,6 +24,10 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-18 갱신:** 소유자가 D7-G를 승인했습니다 (원문 "그러면 D7-G의 방식대로 진행하겠습니다", 2026-11-18 14:15 KST; handoff `MERGE_QUEUE.md` 21행, 커밋 `762150c`에서 확인). 그래서 KEY-2 자격 증명 저장소를 브랜치에 구현했습니다 (`178c51e`, main `7c33955`을 merge한 뒤). main 병합은 F21 뒤 대기열 차례에만 하고, PR은 아직 열지 않았습니다. Q1~Q3 답은 아직 없습니다. 다음 일: KEY-3 설계 문서 → KEY-3 코드.
+
+(11-17 요약)
 
 첫 작업 3개의 문서 초안을 브랜치에 push했습니다 (`fed3820`, main `5888d05` 위 3커밋, PR 없음). PAY-A1 관리자 안내서, PAY-A2 계정 설정 묶음, KEY-1 이름 목록입니다. 이제 소유자 답을 기다립니다: 결정 3개 (운영자 표기, 개인정보 메일함, 만 14세), D7-G 승인, 관리자 안내서 4~6절 시험 결과. 세 문서는 소유자 확인 전이라 아직 done이 아닙니다.
 
@@ -64,12 +68,21 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 - [x] PAY-A1 `docs/commercial/accounts/ADMIN_GUIDE.md` v0.1 — 커밋 `8e8a17f`. 0절 (들어가는 길, 상태 이름표, 문구 확인표 17행) + 1~15절 기능 (언제 / 누를 순서 / 회원에게 생기는 일 / 주의 / 확인 상태) + 16 점검표 + 17 사고 대응 + 부록 A~D. 법률 문장 12곳 모두 "법률 자문이 아닙니다" + 조문 + URL 또는 "URL 미확보" + 날짜. **소유자 시험 대기 (부록 C)**.
 - [x] PAY-A2 `docs/commercial/accounts/ACCOUNT_SETUP.md` v0.1 — 커밋 `bbb7c8c`. 1부 설정표 (값마다 변경 가능 여부·확인 상태), 2부 25단계, 3부 웹사이트 블록 (D11 4장과 3667바이트 일치), 4부 정책 값 (main 실제 자리표시 이름에 맞춤). **소유자 결정 3개 대기**.
 - [x] KEY-1 `docs/commercial/ENV_NAMES.md` v0.1 — 커밋 `fed3820`. 26개 이름 모두 행, 값 0개, 저장소 전체 49개 (47과 2개 차이 설명), 연구용 7개 따로, 5절 KEY-2 설계 메모. **소유자 확인 대기**.
-- [ ] KEY-3/design `docs/commercial/GATEWAY_DESIGN.md` — 아직 시작 안 함.
+- [x] KEY-2 자격 증명 저장소 (브랜치, 미병합) — 커밋 `178c51e`. 새 파일 `core/credentials/__init__.py`·`names.py`, `tests/credentials_acceptance.py`. 바꾼 파일 `config.py` (`.env` 로딩은 개발판에서만, 비밀 10개만 저장소 경유), `data/krx/kis_client.py` (토큰을 keyring에 두고 파일은 대체 수단, 키가 바뀌면 토큰 삭제, `reload_credentials()`), `requirements.txt`·`pyproject.toml` (`keyring>=25.6,<26`), `runtime-smoke.yml` (경로 4개, 시험 모듈 1개). `quantgen_cloud` 자리 없음.
+- [ ] KEY-3/design `docs/commercial/GATEWAY_DESIGN.md` ← **다음**.
+- [ ] KEY-3 코드 `core/gateway/**`, `tests/gateway_*`.
 - [ ] PAY-0 문의 7건 초안, PAY-2 결제 설계 — 아직 시작 안 함.
 
 **마지막으로 통과한 검증:**
 
 ```
+KEY-2 (2026-11-18, 커밋 178c51e):
+HOME=<임시> python3 -m unittest tests.credentials_acceptance            -> 29 OK (skipped=2, keyring 없음)
+HOME=<임시> PYTHONPATH=<keyring 25.7.0> python3 -m unittest tests.credentials_acceptance -> 29 OK
+회귀: runtime-smoke.yml 93행 모듈 + kis_stream + kis_workspace 를 바꾸기 전/후 같은 환경에서 실행 -> 실패 집합 동일
+  (이 컨테이너에 scipy·flet이 없어 생기는 실패만 있음. 두 환경: 기본 / keyring+scipy 추가)
+python -m tools.compliance.check --check -> consistency FAIL (새 소스 파일 때문에 20개 문서 재검토 필요; 기준선 갱신은 PR 때 최신 main merge 뒤 맨 마지막에 함)
+
 python3 -I <scratch>/tools/check_account_setup.py <D11 문서> docs/commercial/accounts/ACCOUNT_SETUP.md
 속성 표 6개 = ACC-1 6개 일치=True; ACC-5 (mkt_opt, mkt_at) 표 안에 포함=True; 3부 블록 = D11 4장 원문 3667바이트 일치=True
 ENV_NAMES.md: 26개 이름 모두 표 행에 있음=True, NAME=값 꼴 0건
@@ -85,7 +98,8 @@ ENV_NAMES.md: 26개 이름 모두 표 행에 있음=True, NAME=값 꼴 0건
 2. 소유자 부록 C 결과 → 다른 곳 고쳐 v0.2. 완료 기준: C1~C8 "그대로 됨/다름" 기록.
 3. KEY-3/design `docs/commercial/GATEWAY_DESIGN.md` (지시문 8절). 완료 기준: 소유자 확인.
 4. PAY-0 (`docs/commercial/inquiries/`), PAY-2 결제 설계. 완료 기준: 소유자 확인.
-5. D7-G 승인 기록이 handoff에 생기면 KEY-2 (지시문 7절 작업 3, `ENV_NAMES.md` 5절). 그 전에는 시작하지 않음.
+5. KEY-3/design → KEY-3 코드 (지시문 8절, D7 5장). 완료 기준: 가짜 서버 시험 ("personal ↔ 가짜 서버 경유 commercial 같은 답"), 경계 시험의 예외 수 기록.
+5a. KEY-2 병합 (F21 뒤, 대기열 차례): 최신 main merge → `python -m tools.compliance.check --refresh-baseline --reviewed-by "<이름>" --review-note "<12자 이상>"` → `--check` → PR (파일 추가가 있으니 20개 문서 재검토를 PR 설명에 씀) → 모든 작업 녹색 → 메인이 병합.
 6. 세 문서는 소유자 확인 뒤 메인에 LEDGER 기록 요청 (main에 넣는 PR은 대기열 차례가 올 때만; 문서 PR은 Compliance만 돎).
 
 ## 7. 주의사항
@@ -105,6 +119,9 @@ ENV_NAMES.md: 26개 이름 모두 표 행에 있음=True, NAME=값 꼴 0건
 | 네트워크 (선택) | 세션 네트워크에 `docs.aws.amazon.com` 허용 시 미검증 문구 재확인 | — |
 
 ## 메인에게
+
+- **2026-11-18 KEY-2 (브랜치 `178c51e`, 미병합):** 정책 문서에 넣을 새 의존성: `keyring>=25.6,<26`. 이 세션에서 설치한 25.7.0의 METADATA는 `License-Expression: MIT`이고, 의존성 `jaraco.classes`, `jaraco.functools`, `jaraco.context`, Windows `pywin32-ctypes`, Linux `SecretStorage`·`jeepney`, 3.12 미만 `importlib_metadata`. 19-licenses·08-third-parties 행은 메인 몫 (LICENSE 원문은 대조하지 않음, 미검증). 처리방침 쪽 사실: API 키와 KIS 토큰은 사용자 PC의 OS 자격 증명 저장소 (Windows 자격 증명 관리자)에 저장되고, 키 보관함이 없을 때만 KIS 토큰이 `~/.nextgen/kis_token.json`에 남음.
+- 주의 (KEY-5 전에 정할 것): 앱 화면에서 키를 keyring에 저장한 PC (소유자 PC)에서 테스트를 돌리면, 환경을 비우는 테스트가 keyring의 실제 키를 "있음"으로 볼 수 있음. 지금은 keyring에 저장하는 화면이 없어 해당 없음. KEY-5 전에 시험 묶음이 `credentials.set_backend(None)`을 쓰도록 하는 방안을 제안 예정.
 
 - 정책 문서 PR에 넣을 값: 브랜치 `claude/payments-keys-20261117`의 `docs/commercial/accounts/ACCOUNT_SETUP.md` 4부 (4.1~4.5). Q1~Q3 답 전에는 자리표시. 대상 문서 `01`, `02`, `04`, `06`, `07`, `08`, `16`, `17`, `18`, `20`, `release-profile.json`.
 - 대기열 요청: 지금은 없음 (문서만, PR 안 엶). KEY-2는 D7-G 승인 뒤 F21 뒤 자리.
