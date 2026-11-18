@@ -6,6 +6,16 @@
 
 ---
 
+# Claude UI 2026-11-19 — PySide6 직접 검증 (소유자 지시)
+
+- status: waiting_on owner · **이 요약이 아래 기록보다 우선합니다.** work_branch `claude/friendly-bardeen-r6xe8f` · work_commit `847b25c` (`quantgen_desktop/`·`tests/`는 `5025c6f`와 같음). LEDGER `⑬-2/pyside6-verify/1`.
+- 보고서: `docs/product/PYSIDE6_UI_VERIFICATION_2026-11-19.md` (방법·결과·재현법·배제한 가설).
+- 결과: PySide6 6.12로 107개 모듈 1,117개가 PyQt6와 같음(실패 0, 이미 지워진 객체 0). **남은 문제:** `tests.desktop_market_tabs_acceptance`에서 PySide6만 드물게 SIGABRT(창 삭제 중 `malloc_consolidate`, 66회 중 2회, `5025c6f`에서도 재현). 원인 미상 → "전환 준비 완료" 확정 보류. PyQt6 앱에는 영향 없음.
+- 되돌림: 숨은 위젯 21개 수정(`336f8b1`, `01a6e96`)은 `desktop_language_acceptance`(두 바인딩) 회귀로 되돌림(`1660d3a`, `2cd8477`). 21개는 지연 삭제 대기분이며 실제 이벤트 루프에서는 지워짐.
+- 다음(소유자 결정): 비정상 종료 원인 조사를 이 세션에서 계속할지, OS 세션에 넘길지.
+
+---
+
 # Claude UI 2026-11-18 — PySide6 전환 대비 UI 코드 정리 완료 (OS 세션 점검표)
 
 - status: waiting_on owner · owner: Claude UI (세션 c958d211) · **이 요약이 아래 기록보다 우선합니다.**
