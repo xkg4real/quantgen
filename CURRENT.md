@@ -4,15 +4,15 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-17
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3
-next_ids: ⑦-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-19T00:25:17+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2
+next_ids: ⑦-2/a, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-19T01:30:00+09:00
 stale_after_hours: 3
-waiting_on: owner
-work_branch: claude/amazing-gauss-tdiguu
-work_commit: d895873
+waiting_on: none
+work_branch: main
+work_commit: 6e077dc
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/4
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
@@ -25,6 +25,7 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 
 | 항목 | 상태 | 근거 |
 |---|---|---|
+| ⑦-2 F 완료 | **완료** (2026-11-19T01:30:00+09:00): 소유자 보고 원문 "F22까지 성공적으로 마무리했습니다." Claude가 GitHub에서 확인: 연구 브랜치 `13f4dea`(부모 `d895873`, `qa/acceptance_results.json`만 바뀜, 1004행 PASS 884·NOT_RUN 120·FAIL 0, nautilus 57 PASS, guard 5 PASS); main `6e077dc` = `--no-ff` 병합(부모 `8e026ab`·`13f4dea`, 2026-11-18T16:20:38Z, 작성자 "unknown"); 그 push의 Compliance 실행 44346282628 success; PR #4 merged 표시. F7 `$LASTEXITCODE` 1(F6 0 failed, F8 일치) — 원인 미검증, 소유자에게 F6·F7 재실행 여부 물음. 원장 ⑦-2 기록. MERGE_QUEUE freeze OFF. 다음: ⑦-2/a main PR(확인 문장 main 판정 기록에 복사, README 시험 표 전체·bonds 행, `qa/research_status.json` 재생성, 준법 기준선, 자진 보고) — 캐시 없는 sparse 클론에서. 그 뒤 F21 뒤 대기열(정책 문서 PR → OS 작은 PR → PySide6 → UI 7쪽 → KEY-2~5 → DS·DIDM). 소유자에게: P-D7 detail.json, GitHub 비공개 시점, owner_confirmed 두 줄 다음 기록 실행 전 새로 쓰기. |
 | D1 | PR121(`gpt/r3-recorder-20261114`)에 `de6178f` push. `core/education/reading_cues.py` 45행을 UI 브랜치 `da0ea20`과 바이트 동일하게 바꿈('봉' 제거). compliance 기준선은 이 파일을 인용하는 문서 1 2 6 7 8 12 17 18 19 20만 갱신 → `--check` consistency PASS. R-D9-2 테스트: 수정 전 FAIL(그 문장), 수정 후 OK(52초). `tests.indicator_signal_context_acceptance` 7 OK. PR121 전체 CI(Windows 3대 약 95분) 대기 중. UI 세션 동의 기록은 아직 없으나 문장이 같아 충돌 없음. | 커밋 `de6178f`, PR https://github.com/xkg4real/quantgen/pull/121 |
 | D1 다음 | **완료**: PR121 병합 `5888d05`, PR122 병합 `f058145` (2026-11-17T23:14:09+09:00; 전체 Runtime CI 녹색 on `994e9f9`). main CI 빨간불 해소. 다음: 11-17 결정 기록 PR(소유자 답 원문 + 결정 16 자진 보고) → P3(⑦-2). D2: PNG 승인이 PR122 병합 전에 없었으므로 UI PR은 원칙상 F21 뒤(소유자가 P3 전에 승인하면 P3 앞도 가능하다고 보고함). | PR #122 |
 | 결정 기록 PR | **병합 완료** PR #123 → main `7c33955` (2026-11-17T23:53:00+09:00). 다음: P3(⑦-2) — main을 연구 브랜치에 병합·충돌 해결·캐시 없는 전체 테스트를 sparse 클론에서 먼저 하고, push는 소유자 보고 뒤(UI PNG 승인이 그 전에 오면 UI PR을 먼저). | PR #123 |
