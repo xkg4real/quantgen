@@ -6,11 +6,11 @@ task: payments-account-keys
 cycle: 2026-11-17
 done_ids: none
 next_ids: PAY-A1, PAY-A2, KEY-1, KEY-2, KEY-3/design, KEY-3, PAY-0, PAY-2
-updated_at: 2026-11-19T05:40:00+09:00
+updated_at: 2026-11-19T09:30:00+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: claude/payments-keys-20261117
-work_commit: 606f33f
+work_commit: 6916f8d
 uncommitted_changes: no
 pr: https://github.com/xkg4real/quantgen/pull/128
 usage_weekly_pct: unknown
@@ -24,6 +24,9 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-19 09:30 갱신:** 메인의 병합 전 검토(PR #128, CI 녹색이지만 보류)의 8건을 반영해 `6916f8d` push. 핵심: (2) 시험이 CI 순서에서 실제 `~/.nextgen/kis_token.json`을 지우던 문제를 재현하고 고침, (4) 그 파일은 TRADEGEN과 공유라 이제 지우지 않음, (1) 준법 문서 01·08·20·FACTS·RELEASE_GAPS를 먼저 고치고 기준선 갱신 (PASS). credentials 시험 40 OK. 코드 지문 10c27010 그대로. 메인 재검토와 CI를 기다림.
+
 
 **2026-11-19 05:40 갱신:** 메인이 "병합: PAYMENTS_ACCOUNT_KEYS" (MERGE_QUEUE, 05:14 KST). main `c28b1d7` merge (runtime-smoke.yml 충돌 2곳: main 줄 유지 + 내 경로 4개·시험 모듈 1개 추가) → `029be27`; app_identity 연결 시험 2개 추가 (총 31 OK); 회귀 실패 집합 main 코드와 동일; 준수 기준선 갱신 `606f33f` (consistency PASS, 20 문서, 793 소스) → **PR #128**. 본문에 코드 지문 ec72fab3 → 10c27010과 owner_confirmed 재작성 필요를 적음. 병합은 메인 (CI 전부 녹색, Windows 최대 약 2시간). 병합 뒤: LEDGER 요청 `KEY-2 | ...`, 소유자에게 owner_confirmed 안내 (OWNER_STEPS 6절), UI·OS 세션에 "KEY-2 병합" 알림 (소유자 경유).
 
