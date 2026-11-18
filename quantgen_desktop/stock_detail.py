@@ -1290,8 +1290,8 @@ class StockDetailView(QWidget):
         self.interval_combo.setObjectName("sdInterval")
         self.interval_combo.setProperty("qg_literal", True)
         self.interval_combo.view().setMinimumWidth(160)   # the popup lists the names at full width
-        self.interval_combo.setItemDelegate(IntervalDelegate(self.interval_combo,
-                                                             lambda key: text(_lang(self.ctx), key)))
+        self.interval_delegate = IntervalDelegate(self.interval_combo, lambda key: text(_lang(self.ctx), key))
+        self.interval_combo.setItemDelegate(self.interval_delegate)   # kept here: PySide6 checklist item 9
         self.interval_combo.activated.connect(self._interval_chosen)
         self.chart.interval.currentIndexChanged.connect(self._sync_interval)
         row.addWidget(self.interval_combo)

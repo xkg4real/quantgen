@@ -88,7 +88,8 @@ def run_rows_table(headers):
     for column in range(1, len(headers)):
         t.setColumnHidden(column, True)
     t.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
-    t.setItemDelegateForColumn(0, RunRowsDelegate(t))
+    t.rows_delegate = RunRowsDelegate(t)   # kept with the table: Qt does not own a delegate (PySide6 checklist 9)
+    t.setItemDelegateForColumn(0, t.rows_delegate)
     t.setAccessibleName("Individual price simulation risk")
     fit_result_table(t)
     return t

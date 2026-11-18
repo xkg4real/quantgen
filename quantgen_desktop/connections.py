@@ -13,7 +13,7 @@ from PyQt6.QtCore import QEvent, QObject, Qt, QTimer, pyqtSignal
 from PyQt6.QtGui import QColor, QPainter
 from PyQt6.QtWidgets import (QAbstractScrollArea, QBoxLayout, QFrame, QHBoxLayout, QLabel, QSizePolicy,
                              QVBoxLayout, QWidget)
-from .qt_compat import call_later
+from .qt_compat import call_later, is_one_of
 
 from core.research.connections import ConnectionRequest
 from core.research.presentation import safe_detail
@@ -917,14 +917,12 @@ def focus_order(*parts):
         if part.focusPolicy() & Qt.FocusPolicy.TabFocus and not part.findChildren(QWidget):
             chain.append(part)
             continue
-        inside = []
-        widget, start, steps = part.nextInFocusChain(), part, 0
-        while widget is not None and widget is not start and steps < 20000:
-            if (part.isAncestorOf(widget) and widget.focusPolicy() & Qt.FocusPolicy.TabFocus
-                    and not isinstance(widget, QAbstractScrollArea)):
-                inside.append(widget)
-            widget, steps = widget.nextInFocusChain(), steps + 1
-        chain += [widget for widget in inside if widget not in chain]
+        # The part's own descendants, depth first (the System page gets the same order as the old walk of the
+        # window's focus chain). Walking the whole chain made PySide6 wrap every widget of the window, and a later
+        # theme or language change then crashed it (PySide6 checklist item 14).
+        inside = [widget for widget in part.findChildren(QWidget)
+                  if widget.focusPolicy() & Qt.FocusPolicy.TabFocus and not isinstance(widget, QAbstractScrollArea)]
+        chain += [widget for widget in inside if not is_one_of(widget, chain)]
     for first, second in zip(chain, chain[1:]):
         QWidget.setTabOrder(first, second)
     return chain

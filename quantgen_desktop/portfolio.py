@@ -517,9 +517,10 @@ class PortfolioPane(QWidget):
         self.weights_view.changed.connect(self._show_weights_view)
         self.weights_card.add_head_widget(self.weights_view)
         self.weights = card_table(["Symbol", "Weight", "Risk contribution"])
-        self.weights.setItemDelegateForColumn(0, SymbolDelegate(self.weights))
-        for column in (1, 2):
-            self.weights.setItemDelegateForColumn(column, BarDelegate(self.weights))
+        # Delegates are kept on the pane: Qt does not own a delegate it is given (PySide6 checklist item 9).
+        self.weights_delegates = (SymbolDelegate(self.weights), BarDelegate(self.weights), BarDelegate(self.weights))
+        for column, delegate in enumerate(self.weights_delegates):
+            self.weights.setItemDelegateForColumn(column, delegate)
         header = self.weights.horizontalHeader()
         header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
         for column in (1, 2):
@@ -545,12 +546,12 @@ class PortfolioPane(QWidget):
             self.comparison.horizontalHeaderItem(column).setTextAlignment(
                 Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.comparison.setProperty("localized_columns", [0, 4, 5])
-        self.comparison.setItemDelegateForColumn(0, ObjectiveDelegate(self))
-        self.comparison.setItemDelegateForColumn(1, FigureDelegate(self, toned=True))
-        self.comparison.setItemDelegateForColumn(2, FigureDelegate(self))
-        self.comparison.setItemDelegateForColumn(3, FigureDelegate(self, strong=True))
+        self.comparison_delegates = {0: ObjectiveDelegate(self), 1: FigureDelegate(self, toned=True),
+                                     2: FigureDelegate(self), 3: FigureDelegate(self, strong=True),
+                                     6: CompositionDelegate(self.comparison)}
+        for column, delegate in self.comparison_delegates.items():
+            self.comparison.setItemDelegateForColumn(column, delegate)
         self.comparison.installEventFilter(self)
-        self.comparison.setItemDelegateForColumn(6, CompositionDelegate(self.comparison))
         self.comparison._pane_selected = None
         # Headers change with the window language (the language controller): refit the figure columns.
         self.comparison.model().headerDataChanged.connect(lambda *args: self._fit_figure_columns())
