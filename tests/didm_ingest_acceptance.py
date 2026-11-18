@@ -109,6 +109,30 @@ class Gdelt(unittest.TestCase):
         self.assertIn("https://www.gdeltproject.org/", gdelt.ATTRIBUTION)
 
 
+class GdeltStamps(unittest.TestCase):
+    def test_day_has_96_stamps(self):
+        from datetime import date
+        st = gdelt.stamps_for_day(date(2026, 11, 18))
+        self.assertEqual(len(st), 96)
+        self.assertEqual((st[0], st[-1]), ("20261118000000", "20261118234500"))
+        self.assertEqual(gdelt.previous_stamp("20261118000000"), "20261117234500")
+
+    def test_ingest_stamps_skips_unpublished(self):
+        good = zipped("x.export.CSV", events_line() + "\n")
+        def fetch(url):
+            return good if "20261118000000" in url else None
+        rows, fetched, missing = gdelt.ingest_stamps(fetch, ["20261118000000", "20261118001500"], RECEIVED)
+        self.assertEqual(fetched, ["20261118000000.export.CSV.zip"])
+        self.assertEqual(missing, ["20261118001500.export.CSV.zip"])
+        self.assertFalse(rows[0]["payload"]["md5_verified"])
+
+    def test_crc_error_rejected(self):
+        blob = bytearray(zipped("x.export.CSV", events_line() * 50 + "\n"))
+        blob[40] ^= 0xFF
+        with self.assertRaises(Exception):
+            gdelt.ingest_stamps(lambda u: bytes(blob), ["20261118000000"], RECEIVED)
+
+
 class Alfred(unittest.TestCase):
     API = {"observations": [
         {"realtime_start": "2026-10-15", "realtime_end": "2026-11-12", "date": "2026-09-01", "value": "100.0"},

@@ -23,7 +23,7 @@ import io
 import re
 import zipfile
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from typing import Callable
 
 SOURCE_EVENTS = "gdelt-events2"
@@ -189,3 +189,61 @@ def ingest_latest(fetch_text: Callable[[str], str], fetch_bytes: Callable[[str],
         text = unzip_checked(fetch_bytes(ref.url), ref)
         rows += parse_events(text, received_at) if ref.kind == "events" else parse_gkg(text, received_at)
     return rows, refs
+
+
+BASE_URL = "http://data.gdeltproject.org/gdeltv2/"
+FILE_SUFFIX = {"events": "export.CSV.zip", "gkg": "gkg.csv.zip"}
+
+
+def stamps_for_day(day: date) -> list[str]:
+    """The 96 fifteen-minute file stamps of one UTC day."""
+    start = datetime(day.year, day.month, day.day, tzinfo=timezone.utc)
+    return [(start + timedelta(minutes=15 * i)).strftime("%Y%m%d%H%M%S") for i in range(96)]
+
+
+def previous_stamp(stamp: str) -> str:
+    return (gdelt_time(stamp) - timedelta(minutes=15)).strftime("%Y%m%d%H%M%S")
+
+
+def file_url(stamp: str, kind: str) -> str:
+    gdelt_time(stamp)
+    return f"{BASE_URL}{stamp}.{FILE_SUFFIX[kind]}"
+
+
+def unzip_crc_checked(blob: bytes, url: str) -> str:
+    """For files not listed in lastupdate (no published MD5): check the zip's own CRCs."""
+    with zipfile.ZipFile(io.BytesIO(blob)) as zf:
+        bad = zf.testzip()
+        if bad is not None:
+            raise GdeltError(f"{url}: CRC error in {bad}")
+        names = zf.namelist()
+        if len(names) != 1:
+            raise GdeltError(f"{url}: expected one member, got {len(names)}")
+        return zf.read(names[0]).decode("utf-8", errors="replace")
+
+
+def ingest_stamps(fetch_optional: Callable[[str], bytes | None], stamps: list[str], received_at: datetime,
+                  kinds: tuple[str, ...] = ("events",)) -> tuple[list[dict], list[str], list[str]]:
+    """Fetch given 15-minute stamps; ``fetch_optional`` returns None for a file not (yet) published.
+
+    Returns (rows, fetched file names, missing file names). Integrity = zip CRC
+    (``md5_verified`` False in each row, since only lastupdate publishes MD5s).
+    """
+    if received_at.tzinfo is None:
+        raise GdeltError("received_at must be timezone-aware")
+    rows, fetched, missing = [], [], []
+    for stamp in stamps:
+        for kind in kinds:
+            url = file_url(stamp, kind)
+            blob = fetch_optional(url)
+            name = url.rsplit("/", 1)[-1]
+            if blob is None:
+                missing.append(name)
+                continue
+            text = unzip_crc_checked(blob, url)
+            got = parse_events(text, received_at) if kind == "events" else parse_gkg(text, received_at)
+            for r in got:
+                r["payload"]["md5_verified"] = False
+            rows += got
+            fetched.append(name)
+    return rows, fetched, missing

@@ -23,8 +23,16 @@ def has_key() -> bool:
     return bool(os.environ.get(KEY_NAME, "").strip())
 
 
+def masked_path(stat_code: str, cycle: str, start: str, end: str, *item_codes: str,
+                rows: int = 1000, trailing_slash: bool = False) -> str:
+    """The request path with the key replaced by ****, safe to print."""
+    path = "/".join(["StatisticSearch", "****", "json", "kr", "1", str(int(rows)), stat_code, cycle,
+                     start, end, *item_codes])
+    return path + ("/" if trailing_slash else "")
+
+
 def fetch_series(stat_code: str, cycle: str, start: str, end: str, *item_codes: str,
-                 rows: int = 10000) -> dict:
+                 rows: int = 1000, trailing_slash: bool = False) -> dict:
     key = os.environ.get(KEY_NAME, "").strip()
     if not key:
         raise MissingKey(f"{KEY_NAME} is not set")
@@ -33,7 +41,8 @@ def fetch_series(stat_code: str, cycle: str, start: str, end: str, *item_codes: 
     parts = [BASE, quote(key, safe=""), "json", "kr", "1", str(int(rows)),
              quote(stat_code, safe=""), cycle, quote(start, safe=""), quote(end, safe="")]
     parts += [quote(c, safe="") for c in item_codes]
-    resp = session.get("/".join(parts), timeout=TIMEOUT_SECONDS)
+    url = "/".join(parts) + ("/" if trailing_slash else "")
+    resp = session.get(url, timeout=TIMEOUT_SECONDS)
     if resp.status_code != 200:
         raise RuntimeError(f"ECOS {stat_code}: HTTP {resp.status_code}")
     return resp.json()

@@ -82,6 +82,17 @@ def collect_gdelt(store: PointInTimeStore) -> tuple[int, list[dict]]:
         rows, refs = gdelt_ingest.ingest_latest(text, blob, gdelt_http.LASTUPDATE_URL, _now())
     except Exception as exc:  # noqa: BLE001
         print(f"GDELT failed at {stage[0]}: {_http_reason(exc)}")
+        code = getattr(getattr(exc, "response", None), "status_code", None)
+        if code == 404 and stage[0][:14].isdigit():
+            # The newest file in lastupdate is not published yet: take the two slots before it.
+            first = gdelt_ingest.previous_stamp(stage[0][:14])
+            stamps = [gdelt_ingest.previous_stamp(first), first]
+            rows, fetched, missing = gdelt_ingest.ingest_stamps(
+                gdelt_http.fetch_bytes_optional, stamps, _now(), kinds=("events", "gkg"))
+            added = store.append_many(rows)
+            print(f"GDELT fallback {stamps[0]}..{stamps[-1]}: files {len(fetched)}, missing {len(missing)}, "
+                  f"rows {len(rows)}, new {added} (zip CRC checked, md5 not published for these)")
+            return added, rows
         return 0, []
     added = store.append_many(rows)
     print(f"GDELT files {len(refs)} ({', '.join(r.stamp + ':' + r.kind for r in refs)}), "
@@ -110,6 +121,40 @@ def finbert_baseline(store: PointInTimeStore, rows: list[dict]) -> str:
                      "p_neutral": scores.get("neutral", 0.0), "ess_like_0_100": ess_like(p_pos, p_neg),
                      "input": "gkg_page_title"})
     return f"scored {n}"
+
+
+def collect_gdelt_day(store: PointInTimeStore, day: str, with_gkg: bool) -> None:
+    from datetime import date as _date
+    from data.didm import gdelt as gdelt_http
+    d = _date(int(day[:4]), int(day[4:6]), int(day[6:8]))
+    kinds = ("events", "gkg") if with_gkg else ("events",)
+    rows, fetched, missing = gdelt_ingest.ingest_stamps(
+        gdelt_http.fetch_bytes_optional, gdelt_ingest.stamps_for_day(d), _now(), kinds=kinds)
+    print(f"GDELT day {day} UTC ({'+'.join(kinds)}): files {len(fetched)}, missing {len(missing)}, "
+          f"rows {len(rows)}, new {store.append_many(rows)}")
+
+
+def probe_ecos(spec: str) -> None:
+    """Try a few request variants for one series; print masked paths and counts. Stores nothing."""
+    from data.didm import ecos
+    stat, cycle, start, end, *items = spec.split(",")
+    variants = [
+        ("as collected", dict(rows=1000), items),
+        ("rows 100", dict(rows=100), items),
+        ("no item code", dict(rows=1000), []),
+        ("trailing slash", dict(rows=1000, trailing_slash=True), items),
+    ]
+    for label, kw, its in variants:
+        try:
+            payload = ecos.fetch_series(stat, cycle, start, end, *its, **kw)
+        except Exception as exc:  # noqa: BLE001
+            print(f"ECOS probe [{label}] {ecos.masked_path(stat, cycle, start, end, *its, **kw)}: {_http_reason(exc)}")
+            continue
+        body = payload.get("StatisticSearch") or {}
+        result = payload.get("RESULT") or {}
+        print(f"ECOS probe [{label}] {ecos.masked_path(stat, cycle, start, end, *its, **kw)}: "
+              f"rows {len(body.get('row') or [])}, total {body.get('list_total_count')}, "
+              f"result {result.get('CODE')} {result.get('MESSAGE') or ''}".rstrip())
 
 
 def collect_alfred_api(store: PointInTimeStore, series: list[str]) -> None:
@@ -204,6 +249,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--opendart", nargs=2, metavar=("BGN_YYYYMMDD", "END_YYYYMMDD"))
     ap.add_argument("--ecos", action="append", default=[], metavar="STAT,CYCLE,START,END[,ITEM...]")
     ap.add_argument("--kalshi", nargs="*", default=[], metavar="SERIES")
+    ap.add_argument("--gdelt-day", metavar="YYYYMMDD", help="fetch all 96 fifteen-minute files of a UTC day")
+    ap.add_argument("--gdelt-gkg", action="store_true", help="with --gdelt-day, also GKG files (large)")
+    ap.add_argument("--ecos-probe", action="append", default=[], metavar="STAT,CYCLE,START,END[,ITEM]")
     ap.add_argument("--ecos-items", nargs="*", default=[], metavar="STAT_CODE",
                     help="list an ECOS table's item codes and cycles (no data stored)")
     args = ap.parse_args(argv)
@@ -229,6 +277,10 @@ def main(argv: list[str] | None = None) -> int:
             _run("OpenDART", lambda: collect_opendart(store, *args.opendart))
         for spec in args.ecos:
             _run("ECOS", lambda spec=spec: collect_ecos(store, spec))
+        if args.gdelt_day:
+            _run("GDELT day", lambda: collect_gdelt_day(store, args.gdelt_day, args.gdelt_gkg))
+        for spec in args.ecos_probe:
+            _run("ECOS probe", lambda spec=spec: probe_ecos(spec))
         for stat in args.ecos_items:
             _run("ECOS items", lambda stat=stat: show_ecos_items(stat))
         for series in args.kalshi:

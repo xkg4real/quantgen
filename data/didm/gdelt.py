@@ -29,3 +29,13 @@ def fetch_bytes(url: str) -> bytes:
     resp = session.get(url, timeout=TIMEOUT_SECONDS)
     resp.raise_for_status()
     return resp.content
+
+
+def fetch_bytes_optional(url: str) -> bytes | None:
+    """Like fetch_bytes, but a 404 (file not published yet, or a gap) returns None."""
+    _check(url)
+    resp = session.get(url, timeout=TIMEOUT_SECONDS)
+    if resp.status_code == 404:
+        return None
+    resp.raise_for_status()
+    return resp.content
