@@ -1,9 +1,9 @@
 # QUANTGEN 회원 계정 설정 묶음
 
-- 판: v0.1 초안 (2026-11-17). 작성: PAYMENTS_ACCOUNT_KEYS 세션. ID `PAY-A2`.
+- 판: v0.2 (2026-11-18, 소유자 답 Q1~Q3 반영). v0.1 2026-11-17. 작성: PAYMENTS_ACCOUNT_KEYS 세션. ID `PAY-A2`.
 - 바탕: handoff `plans/2026-11-17/D11_ACCOUNTS_AND_ADMIN_GUIDE.md` 2·3·4장. 관리 방법은 `docs/commercial/accounts/ADMIN_GUIDE.md`.
 - 네 부분: **1부** 운영 풀 설정표 · **2부** 소유자 AWS 순서 (25단계) · **3부** 웹사이트 세션 요청 (복사용) · **4부** 메인 정책 문서 PR에 넣을 값.
-- `{{…}}` 는 소유자 결정 3개(0절)의 답을 받기 전 자리표시입니다. 답을 받으면 채웁니다.
+- 소유자 결정 3개(0절)는 2026-11-18에 답을 받아 채웠습니다. 운영자 이름은 0.1절 한 곳에서만 정합니다.
 - 확인 상태 표시: **확인** (AWS 문서·법령 해설, 검색 요약 2026-11-17) / **부분 확인** / **미검증** / **제안** (이 세션이 고른 값). AWS 문서 사이트(`docs.aws.amazon.com`)는 이 세션 네트워크에서 막혀 있어 직접 열지 못했습니다.
 - 법률 내용은 **법률 자문이 아닙니다**. 근거는 문장 뒤 〔 〕.
 
@@ -13,9 +13,9 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 
 | # | 누가 | 무엇 | 끝난 기준 |
 |---|---|---|---|
-| 1 | 소유자 | 아래 결정 3개 답 | 이 문서의 `{{…}}` 가 채워짐 |
+| 1 | 소유자 | 아래 결정 3개 답 | **끝남 (2026-11-18)** |
 | 2 | 메인 세션 | 정책 문서 PR (4부 값) | PR 병합 |
-| 3 | 소유자 | AWS 2부 순서 | 풀 ID·클라이언트 ID를 웹사이트 세션에 전달 |
+| 3 | 소유자 | AWS 2부 순서 (실행 안내: `OWNER_STEPS.md`) | 풀 ID·클라이언트 ID를 웹사이트 세션에 전달 |
 | 4 | 웹사이트 세션 | 3부 요청 구현, 플래그 꺼짐 (`AUTH_UI_ENABLED=false`) | CI 녹색, 플래그 꺼짐 |
 | 5 | 소유자 | 관리자 안내서 부록 A 공개 전 체크 8개 | 전부 통과 |
 | 6 | 소유자 | 법률 확인 1회 (118 또는 변호사) | 메모 한 줄 |
@@ -25,9 +25,32 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 
 | # | 질문 | 권장 답 | 자리표시 |
 |---|---|---|---|
-| Q1 운영자 표기 | 공개 문서의 운영자를 "(주)넥스트제너레이션"에서 **소유자 개인 성명 + 서비스명 QUANTGEN**으로 바꿀까요? 〔법률 자문이 아닙니다. 근거: 상법 제20조·제28조 (회사 아닌 자의 상호에 회사 표시 금지, 200만 원 이하 과태료) · https://korea.legal/wiki/상법-제20조/ · https://korea.legal/wiki/상법-제28조/ · 2026-11-17 메인 D11 확인〕 | 예 (개인 성명) | `{{operator_name}}` |
-| Q2 개인정보 메일함 | 열람·삭제 요청을 실제로 받을 주소를 무엇으로 할까요? (예: `privacy@quantgeneration.com` → 소유자 메일함 전달. Microsoft 365 없음, 전달 방식은 웹사이트 세션 메일 작업과 맞춤) | `privacy@quantgeneration.com` (수신 시험 뒤 확정) | `{{privacy_mailbox}}` |
-| Q3 최소 연령 | 무료 회원 최소 연령을 **만 14세 이상 (본인 진술 체크)**, 유료는 나중에 만 19세로 할까요? 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 제22조의2 (만 14세 미만은 법정대리인 동의, 원문 미확인), 민법 제5조 (미성년자 계약 취소) · 해설 URL 미확보 → https://www.law.go.kr 확인 필요 · 2026-11-17 메인 D11 2.4절〕 | 예 (14 / 19) | `{{min_age}}` = 14 |
+| Q1 운영자 표기 | 공개 문서의 운영자를 "(주)넥스트제너레이션"에서 **소유자 개인 성명 + 서비스명 QUANTGEN**으로 바꿀까요? 〔법률 자문이 아닙니다. 근거: 상법 제20조·제28조 (회사 아닌 자의 상호에 회사 표시 금지, 200만 원 이하 과태료) · https://korea.legal/wiki/상법-제20조/ · https://korea.legal/wiki/상법-제28조/ · 2026-11-17 메인 D11 확인〕 | **답 (2026-11-18): 예.** "다만 제가 법인 설립 설립이 완료되었다고 여기에 말하는 순간 바로 해당 법인 명으로 수정 가능하도록 해주세요" → 0.1절 | 0.1절 **운영자 표기** |
+| Q2 개인정보 메일함 | 열람·삭제 요청을 실제로 받을 주소를 무엇으로 할까요? (예: `privacy@quantgeneration.com` → 소유자 메일함 전달. Microsoft 365 없음, 전달 방식은 웹사이트 세션 메일 작업과 맞춤) | **답 (2026-11-18): `contact@quantgeneration.com`** ("현재 웹사이트의 구조도 이렇게 되어있습니다"). 개인정보 요청과 일반 문의를 한 주소로 받음 | `contact@quantgeneration.com` |
+| Q3 최소 연령 | 무료 회원 최소 연령을 **만 14세 이상 (본인 진술 체크)**, 유료는 나중에 만 19세로 할까요? 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 제22조의2 (만 14세 미만은 법정대리인 동의, 원문 미확인), 민법 제5조 (미성년자 계약 취소) · 해설 URL 미확보 → https://www.law.go.kr 확인 필요 · 2026-11-17 메인 D11 2.4절〕 | **답 (2026-11-18): 예** (무료 만 14세, 유료 만 19세) | 14 |
+
+### 0.1 운영자 표기 (한 곳에서 정함)
+
+이 문서와 관리자 안내서의 "**운영자 표기**"는 아래 값 하나를 뜻합니다.
+
+| 시기 | 운영자 표기 | 상호의 회사 표시 |
+|---|---|---|
+| **지금 (개인 운영)** | 소유자 개인 성명 + 서비스명 QUANTGEN. 성명은 main `docs/compliance/release-profile.json`의 `operator.representative`와 같은 사람 (이 문서에는 이름을 다시 적지 않음) | 쓰지 않음 ("(주)" 없음) |
+| **법인 설립 뒤** | 소유자가 알려 주는 법인 등기상 이름 | 등기된 이름 그대로 |
+
+**법인 전환 절차 (소유자가 "법인 설립 완료: <법인명>"이라고 말하면)**
+
+| # | 누가 | 할 일 | 걸리는 시간 |
+|---|---|---|---|
+| 1 | 이 세션 | 위 표의 "지금" 행을 법인명으로 바꾸고, `ACCOUNT_SETUP.md`·`ADMIN_GUIDE.md`를 새 판으로 push. 메인에게 바꿀 값 목록 전달 (아래 2번의 칸) | 같은 날 |
+| 2 | 메인 세션 | 정책 문서 PR: `release-profile.json` `operator.legal_name`, `01`·`02`·`16`의 운영자·책임자·계약 주체, 사업자등록번호·통신판매업 신고번호 (받은 뒤) | PR 1개 |
+| 3 | 웹사이트 세션 | 정책 원문 다시 생성 (직접 문구를 만들지 않음) | 메인 PR 병합 뒤 |
+| 4 | 소유자 | **회원이 이미 있으면**: 회원 정보를 법인으로 넘기기 **전에** 회원에게 알림 (관리자 안내서 부록 B). 알림 없이 이름만 바꾸면 안 됨 | 알림 뒤 (홈페이지 게시라면 30일 이상) |
+| 5 | 소유자 | AWS 계정 명의·결제 주체를 법인으로 (별도 절차). 사용자 풀은 그대로 | AWS 안내대로 |
+
+- 1~3은 문서 값만 바꾸면 되어 바로 할 수 있습니다. 앱이나 AWS 구조는 바꾸지 않습니다.
+- 4는 법 절차라 "바로"가 안 될 수 있습니다. 공개 전(회원 0명)에 법인이 생기면 4는 필요 없습니다. 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 제27조, 시행령 제29조 · https://itwiki.kr/w/개인정보_보호법_제27조 · 2026-11-17 메인 D11 확인〕
+- 법인 등기 전에는 "(주)" 등 회사 표시를 쓰지 않습니다. 〔법률 자문이 아닙니다. 근거: 상법 제20조·제28조 · https://korea.legal/wiki/상법-제20조/ · 2026-11-17 메인 D11 확인〕
 
 ---
 
@@ -47,7 +70,7 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 | P6 | 스스로 가입 | 켬 (**Enable self-registration**) | 예 | 확인 (토글 경로 확인) |
 | P7 | 가입 확인 | Cognito가 이메일 코드로 확인 (자동 확인 켬) | 예 | 부분 확인 (문구 미검증) |
 | P8 | 계정 복구 | 이메일만 (SMS 안 씀) | 예 | 미검증 (메뉴 문구) |
-| P9 | 메일 발송 | **Amazon SES 사용**. FROM `no-reply@quantgeneration.com`, FROM 이름 `QUANTGEN`, Reply-to `{{support_mailbox}}` (실제 받는 메일함). 기본 Cognito 메일은 하루 한도가 낮아 운영에 맞지 않음 | 예 | 확인 (한도 숫자 50통은 미검증) |
+| P9 | 메일 발송 | **Amazon SES 사용**. FROM `no-reply@quantgeneration.com`, FROM 이름 `QUANTGEN`, Reply-to `contact@quantgeneration.com` (실제 받는 메일함). 기본 Cognito 메일은 하루 한도가 낮아 운영에 맞지 않음 | 예 | 확인 (한도 숫자 50통은 미검증) |
 | P10 | 비밀번호 정책 | 최소 **10자**, 숫자·소문자·대문자, 임시 비밀번호 7일 | 예 | 제안 (최소 6자 허용·임시 7일 기본은 확인) |
 | P11 | 비밀번호 재사용 금지 | 최근 5개 | 예 | 미검증 (Essentials에서 되는지) |
 | P12 | MFA | **Optional MFA**, 방법 **Authenticator apps** + **Email message**. SMS 끔 | 예 | 확인 (이메일 MFA는 Essentials + 자체 SES) |
@@ -71,7 +94,7 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 <!-- custom-attrs:end -->
 
 - 이 속성들은 서버 검색이 안 됩니다 (**확인**). 이메일·이름 같은 개인정보를 넣지 않습니다 (CloudTrail이 가리지 않음, **확인**).
-- `custom:age14`의 이름은 Q3 답이 14가 아니면 바뀌어야 합니다. 이름은 나중에 못 바꾸므로 **Q3 답을 받은 뒤** 2부 9단계를 합니다.
+- Q3 답이 "예"(만 14세)라 `custom:age14` 이름 그대로 씁니다. 이름은 나중에 못 바꿉니다.
 
 ### 1.3 앱 클라이언트
 
@@ -116,7 +139,7 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 
 이 세션은 AWS를 바꾸지 않습니다. 소유자가 순서대로 누릅니다. *(미검증)* 은 화면 문구를 확인하지 못한 곳입니다. 화면이 다르면 해당 단계 번호와 실제 문구를 알려 주세요.
 
-**시작 전**: Q1~Q3 답, 그리고 Reply-to로 쓸 메일함(`{{support_mailbox}}`)이 실제로 받는지 확인.
+**시작 전**: Reply-to로 쓸 메일함 `contact@quantgeneration.com`이 실제로 받는지 확인 (다른 주소에서 한 통 보내 보기).
 
 **A. 사용자 풀**
 1. AWS 콘솔 로그인 (MFA) → 오른쪽 위 리전을 **Asia Pacific (Sydney) ap-southeast-2** 로.
@@ -131,7 +154,7 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 
 **B. 메일 (SES)**
 10. 풀 → **Authentication methods** → Email 구역 → **Edit** *(Authentication methods 메뉴는 확인, Email 구역 위치·Edit 미검증)*.
-11. **Send email with Amazon SES** *(미검증)* → SES 리전 시드니 → FROM `no-reply@quantgeneration.com` → FROM 이름 `QUANTGEN` → Reply-to `{{support_mailbox}}` → **Save changes**.
+11. **Send email with Amazon SES** *(미검증)* → SES 리전 시드니 → FROM `no-reply@quantgeneration.com` → FROM 이름 `QUANTGEN` → Reply-to `contact@quantgeneration.com` → **Save changes**.
 12. **Message templates** (**확인**) → **Verification message** → 제목 "[QUANTGEN] 이메일 인증 코드 / Email verification code", 본문 한국어·영어 + `{####}`. 광고 문구 없음.
 
 **C. 로그인 보안**
@@ -164,7 +187,7 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 - 이 세션은 웹사이트 저장소(`xkg4real/website`)를 고치지 않습니다. 아래 블록을 소유자가 웹사이트 세션에 붙여 넣습니다.
 - 이 요청이 마스터 설계의 WEB-3 (출시 알림)·WEB-4 (로그인 UI)를 대신합니다. 공개 전까지 플래그 `AUTH_UI_ENABLED=false`.
 - 블록은 D11 4장과 글자까지 같습니다 (이 세션의 대조 스크립트로 확인, 4.6절).
-- 블록 안의 "만 14세"는 Q3 답이 다르면 웹사이트 세션에 고친 값을 따로 전합니다.
+- 블록 안의 "만 14세"는 Q3 답(예)과 같습니다. 개인정보 문의 메일은 `contact@quantgeneration.com` (ACC-8).
 
 <!-- website-block:start -->
 ```text
@@ -199,15 +222,15 @@ D11 변경: 소유자가 "정식 계정 생성까지 진행"을 지시했습니�
 
 | 대상 | 칸 | 값 |
 |---|---|---|
-| `release-profile.json` | `operator.legal_name` | `{{operator_name}}` (개인. "(주)" 없음) 〔법률 자문이 아닙니다. 근거: 상법 제20조·제28조 · https://korea.legal/wiki/상법-제20조/ · 2026-11-17 메인 D11 확인〕 |
-| `release-profile.json` | `operator.privacy_contact` | `{{privacy_mailbox}}` |
-| `release-profile.json` | `operator.support_email` | `{{support_mailbox}}` |
+| `release-profile.json` | `operator.legal_name` | `**운영자 표기** (0.1절)` (개인. "(주)" 없음) 〔법률 자문이 아닙니다. 근거: 상법 제20조·제28조 · https://korea.legal/wiki/상법-제20조/ · 2026-11-17 메인 D11 확인〕 |
+| `release-profile.json` | `operator.privacy_contact` | `contact@quantgeneration.com` |
+| `release-profile.json` | `operator.support_email` | `contact@quantgeneration.com` |
 | `release-profile.json` | `operator.address` | 무료 회원만이면 처리방침에 공개하지 않는 안 (미검증). 유료 판매 때 사업자 정보로 다시 정함 |
-| `01` | `{{privacy.owner}}`, `{{privacy.officer_or_department}}` | `{{operator_name}}` (개인정보 보호책임자 = 운영자 본인) 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 시행령 제32조 (사업주·대표자 지정 가능, 해설 기준) · 해설 URL 미확보 · 2026-11-17 메인 D11 2.1절〕 |
-| `01` | `{{privacy.contact_email}}` | `{{privacy_mailbox}}` (실제 수신 시험 뒤) |
+| `01` | `{{privacy.owner}}`, `{{privacy.officer_or_department}}` | `**운영자 표기** (0.1절)` (개인정보 보호책임자 = 운영자 본인) 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 시행령 제32조 (사업주·대표자 지정 가능, 해설 기준) · 해설 URL 미확보 · 2026-11-17 메인 D11 2.1절〕 |
+| `01` | `{{privacy.contact_email}}` | `contact@quantgeneration.com` (실제 수신 시험 뒤) |
 | `01` | `{{privacy.contact_phone}}` | 비움 또는 "이메일로 문의" (전화번호 필수 여부 미검증) |
-| `01`, `02` | `{{operator.support_email}}` | `{{support_mailbox}}` |
-| `16` | 상호·대표자 | `{{operator_name}}`. 사업자등록번호·통신판매업 신고번호는 "해당 없음 (무료 서비스, 사업자 미등록)" — 유료 판매 전까지 |
+| `01`, `02` | `{{operator.support_email}}` | `contact@quantgeneration.com` |
+| `16` | 상호·대표자 | `**운영자 표기** (0.1절)`. 사업자등록번호·통신판매업 신고번호는 "해당 없음 (무료 서비스, 사업자 미등록)" — 유료 판매 전까지 |
 | `01` | 책임자 지정 신고 | 해당 없음 (대규모 처리자만) 〔법률 자문이 아닙니다. 근거: 2026-09-11 시행 개정 보도 · https://www.lawtimes.co.kr/news/articleViewAmp.html?idxno=226414 · 2026-11-17 메인 D11 확인, 시행령 원문 미확인〕 |
 
 ### 4.2 처리방침 칸 (`01-privacy-policy.md`)
@@ -215,7 +238,7 @@ D11 변경: 소유자가 "정식 계정 생성까지 진행"을 지시했습니�
 | 칸 | 값 |
 |---|---|
 | `{{service.covered_urls_and_apps}}` | `https://quantgeneration.com` 회원 계정, (나중에) QUANTGEN 데스크톱 앱 로그인 |
-| `{{privacy.service_fields}}` | 필수: 이메일 주소, 비밀번호 (운영자도 볼 수 없는 형태로 AWS가 보관), 계정 고유번호, 가입·수정 시각, 계정 상태, 약관·처리방침 버전과 동의 시각, 만 `{{min_age}}`세 이상 본인 진술. 선택: 2단계 인증 설정 여부 |
+| `{{privacy.service_fields}}` | 필수: 이메일 주소, 비밀번호 (운영자도 볼 수 없는 형태로 AWS가 보관), 계정 고유번호, 가입·수정 시각, 계정 상태, 약관·처리방침 버전과 동의 시각, 만 14세 이상 본인 진술. 선택: 2단계 인증 설정 여부 |
 | `{{privacy.service_collection_and_location}}` | 회원이 웹 가입 화면에 직접 입력. 호주 시드니의 AWS (Amazon Cognito)에 보관 |
 | `{{privacy.service_basis}}` | 계약 체결·이행에 필요 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 제15조 제1항 제4호 (원문 미확인) · 해설 URL 미확보 · 2026-11-17 메인 D11 2.2절〕 |
 | `{{privacy.service_retention}}` | 회원 탈퇴(계정 삭제) 즉시 삭제. 이메일 인증을 마치지 않은 계정은 7일 뒤 삭제 |
@@ -224,7 +247,7 @@ D11 변경: 소유자가 "정식 계정 생성까지 진행"을 지시했습니�
 | `{{privacy.security_log_basis}}` | 안전성 확보 의무 〔법률 자문이 아닙니다. 근거: 개인정보의 안전성 확보조치 기준 제8조 · https://itwiki.kr/w/개인정보의_안전성_확보조치_기준_제8조 · 2026-11-17 메인 D11 확인〕 |
 | `{{privacy.security_log_retention}}` | 1년 (400일 뒤 자동 삭제) |
 | 처리위탁 (`{{privacy.recipient_*}}` 또는 위탁 표) | 수탁자: Amazon Web Services (계약 법인명은 청구서 판매자 표기로 확인, **미검증**). 업무: 회원 계정 보관·인증 (Cognito), 인증 메일 발송 (SES), 웹 호스팅 (Amplify), 보안 기록 보관 (CloudTrail·S3) |
-| `{{privacy.rights_request_url}}` | 웹 계정 페이지 주소 (웹사이트 세션이 정함) + `{{privacy_mailbox}}` |
+| `{{privacy.rights_request_url}}` | 웹 계정 페이지 주소 (웹사이트 세션이 정함) + `contact@quantgeneration.com` |
 | `{{privacy.implemented_safeguards}}` | 실제로 한 것만: 관리자 콘솔 2단계 인증, 관리자 작업 기록 1년 보관, 비밀번호는 운영자가 볼 수 없음, 전송 구간 HTTPS, 최소 수집 |
 | `04` 쿠키·저장장치 | 로그인 유지용 토큰을 브라우저 저장소(메모리 또는 sessionStorage)에 둠. 실제 위치는 웹사이트 세션이 확정 |
 
@@ -250,10 +273,10 @@ D11 변경: 소유자가 "정식 계정 생성까지 진행"을 지시했습니�
 | `06-form-consent.md` | 가입 화면 동의 항목 (아래 표). 계약에 필요한 정보는 "동의"가 아니라 "안내", 선택 항목만 체크, 선택은 기본 해제. "[필수] 개인정보 수집·이용 동의" 체크를 따로 둘지는 법률 확인 대상 (**미검증**) |
 | `07-data-minimization.md` | 받는 것: 이메일, 비밀번호, 자동 항목, 동의 기록 6개, MFA 등록 정보. **받지 않는 것**: 이름, 생년월일, 전화번호, 주소, 주민등록번호, 증권 계좌·증권사 API 키 (웹에서 받지 않음; 키는 데스크톱 앱 OS 키 보관함에만), 닉네임 (나중에) |
 | `08-third-parties.md` | AWS (Cognito, SES, Amplify, CloudTrail, S3), 리전 시드니. 웹 인증 화면에는 분석·추적 스크립트 없음 (ACC-7) |
-| `17-children.md` | `{{age.minimum_age}}` = `{{min_age}}` (본인 진술 체크, 실제 나이 확인 아님). 유료 계정 만 19세. 만 14세 미만으로 밝혀지면 정지 → 확인 → 삭제 (F17-03) |
+| `17-children.md` | `{{age.minimum_age}}` = 14 (본인 진술 체크, 실제 나이 확인 아님). 유료 계정 만 19세. 만 14세 미만으로 밝혀지면 정지 → 확인 → 삭제 (F17-03) |
 | `18-marketing-email.md` | 선택 동의 기본 해제, 제목 앞 "(광고)", 쉬운 무료 수신 거부 (계정 페이지), 동의일부터 2년마다 수신 동의 사실 안내. 인증·재설정·정책 안내 메일에는 홍보 문구를 섞지 않음 〔법률 자문이 아닙니다. 근거: 정보통신망법 제50조 · https://www.itwiki.kr/w/정보통신망법_제50조 · 2026-11-17 메인 D11 확인. 야간 전송 별도 동의의 이메일 적용 여부 미검증〕 |
 | `20-deletion.md` | "계정 삭제 엔드포인트 없음" → 웹 계정 페이지 **회원 탈퇴** (Cognito `DeleteUser`, 즉시 삭제), 관리자 대리 삭제 (관리자 안내서 5절), 인증 안 한 계정 7일 뒤 삭제, 보안 기록의 계정 고유번호는 1년 보관 후 자동 삭제. 권리 요청 10일 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 시행령 제41·43·44조 (원문 미확인, 해설 URL 미확보) · 2026-11-17 메인 D11 2.8절〕 |
-| `02-terms-of-service.md` | `{{service.age_and_minor_contract_policy}}` = 무료 만 `{{min_age}}`세 이상 본인 진술, 유료 만 19세 이상. `{{operator.contract_owner}}` = `{{operator_name}}` |
+| `02-terms-of-service.md` | `{{service.age_and_minor_contract_policy}}` = 무료 만 14세 이상 본인 진술, 유료 만 19세 이상. `{{operator.contract_owner}}` = `**운영자 표기** (0.1절)` |
 
 가입 화면 동의 항목 (06번, D11 2.3절 그대로):
 
