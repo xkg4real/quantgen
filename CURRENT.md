@@ -1,23 +1,41 @@
 ---
-status: checkpoint
-reason: manual
+status: handoff
+reason: usage_limit_weekly
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a
-next_ids: KEY-5, OS-F1, OS-F2, PAY-0, PAY-2, DS-1, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-20T05:40:00+09:00
+next_ids: OS-F2, KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-20T05:55:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: main
 work_commit: f065ec9
 uncommitted_changes: no
 pr: none
-usage_weekly_pct: unknown
+usage_weekly_pct: 98
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
 session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 ---
+
+## 인계 2026-11-20 05:55 KST — 주간 사용량 98% (Claude 재개 2026-11-24 17:00 KST)
+
+근거: handoff `AUTO_STATE.md` (05:37:55, usage_pct 98.0, key seven_day@2026-11-24T08:00:00.000Z), OS 세션 보고(05:3x). 메인·하부 세션 모두 같은 계정이라 함께 멈춤. 상시 지침: handoff `SESSION_PIPELINE.md`(0절 소유자 원문), 전체 체크리스트 `WORKBOARD.md`, 병합 순서 `MERGE_QUEUE.md`.
+
+**지금 상태 (git으로 확인한 것)**
+- main `f065ec9` = PR #134 KEY-4/a 병합(05:36, CI 7 녹색, 원장 KEY-4/a). 그 앞 `fa78df1` PR #135(원장 SESSION-PIPELINE), `8445187` PR #133(원장 KEY-4).
+- MERGE_QUEUE 4e OS-F2 **병합: OS** 적힘. OS 브랜치 `claude/os-f2-data-dir-20261120` @ `e44c48e` (f065ec9 합침, 충돌 없음; config.py CRLF·core/engine 4파일 백업 zip과 같음 확인). 3~6단계 남음.
+- 4h KEY-5/a `claude/payments-key5a-20261120` @ `dc936d4`: 메인 검토 결과 `plans/2026-11-20/KEY5A_REVIEW.md` (handoff c1371f4). 주요 2건 M1(feed가 지운 키·막힌 FMP를 계속 씀), M2(_refresh_krx fail-open·잠금 없음). 검토 workflow wf_56720449-739는 사용량 때문에 반박 검증 중 멈춤 — 주요 2건은 관점 3~4개가 따로 찾음, 작은 것은 일부 미검증.
+- PAY-0/PAY-2 `claude/payments-pay0-20261120` @ `e869064` (문서만, 소유자 답 OA-32·OA-39 대기). 4f DS-H `f80b3b0`, 4g DS·DIDM `c206b10` 준비됨(PR 전).
+
+**다음 할 일 (순서대로, 한 번에 하나)**
+1. 4e OS-F2: 브랜치 @ e44c48e에서 handoff `OS_SESSION_CURRENT.md` 6절 1~5단계. 완료 조건: 임시 HOME 회귀가 main과 같은 실패 목록, code_sha256 새 값(예상 bcaf33d9…)을 PR 본문에, `python -B -m tools.compliance.check --refresh-baseline` 마지막 → `--check` consistency PASS, PR(base main) 열림. 병합은 CI 녹색 + 독립 검토 뒤 merge commit(Vercel 상태 무시). GPT가 병합 버튼을 눌러도 되는지는 소유자 확인, 아니면 PR을 열어 둔 채 Claude 재개 때 병합.
+2. 4e 병합 뒤 원장 `--done "OS-F2 | ..."`, MERGE_QUEUE 4f에 "병합: DATA_SOURCE_DIDM".
+3. 4h KEY-5/a: KEY5A_REVIEW.md M1·M2를 먼저(각각 고치기 전 코드에서 실패하는 시험부터), 그다음 S1~S6. PR은 4h 차례에만.
+4. 소유자 수동 항목은 WORKBOARD 3절(OA-03..06, 09, 10, 38, 43, 45, 46 등). OA-43(11월 AWS 비용 EC2-Other $39.47 원인)은 소유자의 Cost Explorer Usage type 표를 기다림.
+
+**하지 말 것**: docs/asset_expansion/cache/ 열기·나열(모든 git pathspec에 `:!docs/asset_expansion/cache`), .env 열기, tests/run_all.py·macro_m8_pipeline·macro_m9_lab·macro_m9_scenarios 실행, qa/acceptance_results.json 재생성, owner_confirmed·host_fingerprint 쓰기, ~/.nextgen 열기, 태그 push, UI/UX·웹사이트 세션 브랜치 수정(소유자 경유만), Notion은 REMAINING WORK 페이지만, 비밀값·계정번호·풀/클라이언트 ID를 저장소에 쓰기.
 
 ## 11-17 승인 일괄 진행 — 중간 기록 (2026-11-17T20:13:08+09:00)
 
