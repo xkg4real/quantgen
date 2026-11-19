@@ -27,9 +27,11 @@ throttled out for the day. The cache holds a token, never the appkey/appsecret.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import os
+import tempfile
 import threading
 import time
 from dataclasses import dataclass
@@ -83,14 +85,28 @@ def _forget_token_on_key_change(name: str) -> None:
 _credentials.subscribe(_forget_token_on_key_change)
 
 
-def _valid_token(raw: Optional[str]) -> Optional[str]:
+def _key_id(app_key: str, base_url: str) -> str:
+    """Which key minted a token: the first 16 hex of a SHA-256 over the app key and server address (KEY-2/b).
+    The key itself is never stored; 64 bits of a hash of a long random key reveal nothing usable."""
+    if not app_key:
+        return ""
+    raw = b"QUANTGEN-KIS-TOKEN\0" + app_key.encode("utf-8") + b"\0" + base_url.encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()[:16]
+
+
+def _valid_token(raw: Optional[str], key_id: str = "") -> Optional[str]:
+    """The token if it is unexpired and, when it records a key_id, was minted with the current key. A token
+    without key_id (older QUANTGEN, or TRADEGEN) is accepted as before."""
     if not raw:
         return None
     try:
         data = json.loads(raw)
         token = data.get("access_token")
         expires = float(data.get("expires_at", 0))
+        stored_id = data.get("key_id")
     except Exception:
+        return None
+    if stored_id and key_id and stored_id != key_id:
         return None
     if token and time.time() < expires - 120:
         return str(token)
@@ -99,27 +115,34 @@ def _valid_token(raw: Optional[str]) -> Optional[str]:
 
 def _read_token_file() -> Optional[str]:
     path = _token_path()
+    if os.name == "posix":
+        try:
+            if not path.is_symlink() and path.exists():
+                os.chmod(path, 0o600)                # older versions wrote it world-readable; never through a link
+        except OSError:
+            pass                                     # another owner or a filesystem without modes: still read it
     try:
-        if os.name == "posix" and path.exists():
-            os.chmod(path, 0o600)                    # older versions wrote it world-readable
         return path.read_text(encoding="utf-8")
     except Exception:
         return None
 
 
 def _write_token_file(text: str) -> None:
-    """Owner-only file (0600) in a directory created owner-only (0700); an existing ~/.nextgen keeps its mode."""
+    """Owner-only file (0600) in a directory created owner-only (0700); an existing ~/.nextgen keeps its mode.
+    The temporary file has a random name (mkstemp: O_EXCL, 0600), then replaces the target atomically."""
     path = _token_path()
     path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
-    tmp = path.with_name(path.name + ".tmp")
-    fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    fd, tmp = tempfile.mkstemp(prefix=".kis_token.", suffix=".tmp", dir=str(path.parent))
     try:
-        os.write(fd, text.encode("utf-8"))
-    finally:
-        os.close(fd)
-    os.replace(tmp, path)
-    if os.name == "posix":
-        os.chmod(path, 0o600)
+        with os.fdopen(fd, "wb") as handle:
+            handle.write(text.encode("utf-8"))
+        os.replace(tmp, path)
+    except BaseException:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
 
 # Read-only guard (M1, TASK-M1-02; spec P0, T-RO-02). The allowlist is frozen in config.py
 # (`config.KIS_QUOTATION_ALLOWLIST`); `_get` checks the path against it before credentials are read or a request
@@ -249,16 +272,26 @@ class KISClient:
     # -- token ---------------------------------------------------------------
     # KEY-2: the OS credential store (core.credentials, item "kis_token") first, then the shared file
     # `~/.nextgen/kis_token.json`. An expired or unreadable keyring copy never hides a valid file token.
+    def _key_id(self) -> str:
+        try:
+            return _key_id(config.kis_credentials()[0], self.base_url)
+        except Exception:
+            return ""
+
     def _cached_token(self) -> Optional[str]:
-        token = _valid_token(_credentials.get_token(_TOKEN_ITEM))
+        key_id = self._key_id()
+        token = _valid_token(_credentials.get_token(_TOKEN_ITEM), key_id)
         if token or _FILE_TOKEN_IGNORED:
             return token
-        return _valid_token(_read_token_file())
+        return _valid_token(_read_token_file(), key_id)
 
     def _store_token(self, token: str, expires_in: float) -> None:
         global _FILE_TOKEN_IGNORED
-        text = json.dumps({"access_token": token,
-                           "expires_at": time.time() + float(expires_in)})
+        record = {"access_token": token, "expires_at": time.time() + float(expires_in)}
+        key_id = self._key_id()
+        if key_id:
+            record["key_id"] = key_id
+        text = json.dumps(record)
         if _credentials.set_token(_TOKEN_ITEM, text):
             return
         _credentials.delete_token(_TOKEN_ITEM)       # a keyring that reads but refuses writes keeps no stale copy

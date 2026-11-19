@@ -9,6 +9,7 @@ from __future__ import annotations
 import importlib
 import json
 import os
+import shutil
 import tempfile
 import time
 import unittest
@@ -73,6 +74,7 @@ class Base(unittest.TestCase):
         credentials.set_backend(self.backend)
         credentials.record_dotenv(set())
         self.token_dir = Path(tempfile.mkdtemp(prefix="qg-kis-token-"))
+        self.addCleanup(shutil.rmtree, self.token_dir, True)
         self.path = self.token_dir / ".nextgen" / "kis_token.json"
         self._token_patch = patch.object(kis_client, "_TOKEN_PATH", self.path)
         self._token_patch.start()
@@ -352,6 +354,7 @@ class KisTokenTest(Base):
     def test_real_home_token_file_survives_key_change(self):
         """Review item 2: with no pinned path the listener still never deletes the file under HOME."""
         home = Path(tempfile.mkdtemp(prefix="qg-fake-home-"))
+        self.addCleanup(shutil.rmtree, home, True)
         sentinel = home / ".nextgen" / "kis_token.json"
         sentinel.parent.mkdir(parents=True)
         sentinel.write_text("sentinel", encoding="utf-8")
@@ -361,6 +364,56 @@ class KisTokenTest(Base):
             credentials.set("KIS_APP_KEY", FAKE)
             credentials.delete("KIS_APP_KEY")
         self.assertEqual(sentinel.read_text(encoding="utf-8"), "sentinel")
+
+    def test_chmod_failure_still_reads_token(self):
+        """KEY-2/b item 1: a file whose mode cannot be changed is still read."""
+        self._file_token("tok-file")
+        with patch.object(kis_client.os, "chmod", side_effect=PermissionError("not owner")):
+            self.assertEqual(self._client()._cached_token(), "tok-file")
+
+    @unittest.skipUnless(os.name == "posix", "POSIX symlinks and modes")
+    def test_symlinked_file_mode_left_alone(self):
+        """KEY-2/b item 3: the mode fix never follows a link to someone else's file."""
+        target = self.token_dir / "shared.json"
+        target.write_text(json.dumps({"access_token": "tok-link", "expires_at": time.time() + 3600}),
+                          encoding="utf-8")
+        os.chmod(target, 0o644)
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        os.symlink(target, self.path)
+        self.assertEqual(self._client()._cached_token(), "tok-link")
+        self.assertEqual(target.stat().st_mode & 0o777, 0o644)
+
+    def test_write_leaves_no_temporary_file(self):
+        """KEY-2/b item 3: random temporary name, replaced atomically, nothing left behind."""
+        credentials.set_backend(None)
+        self._client()._store_token("tok-file", 3600)
+        self.assertEqual(sorted(p.name for p in self.path.parent.iterdir()), ["kis_token.json"])
+
+    def test_token_records_key_id_not_key(self):
+        credentials.set_backend(None)
+        with _clear_secret_env(), patch.dict(os.environ, {"KIS_APP_KEY": FAKE, "KIS_APP_SECRET": FAKE2}):
+            self._client()._store_token("tok-a", 3600)
+        text = self.path.read_text(encoding="utf-8")
+        self.assertNotIn(FAKE, text)
+        self.assertNotIn(FAKE2, text)
+        self.assertEqual(len(json.loads(text)["key_id"]), 16)
+
+    def test_old_key_token_ignored_after_restart(self):
+        """KEY-2/b item 2: the key-change flag lives only in one process; key_id covers a restart."""
+        credentials.set_backend(None)
+        with _clear_secret_env(), patch.dict(os.environ, {"KIS_APP_KEY": FAKE, "KIS_APP_SECRET": FAKE2}):
+            self._client()._store_token("tok-old-key", 3600)
+        kis_client._FILE_TOKEN_IGNORED = False                             # as after a restart
+        with _clear_secret_env(), patch.dict(os.environ, {"KIS_APP_KEY": "fake-new-key-0000", "KIS_APP_SECRET": FAKE2}):
+            self.assertIsNone(self._client()._cached_token())
+        with _clear_secret_env(), patch.dict(os.environ, {"KIS_APP_KEY": FAKE, "KIS_APP_SECRET": FAKE2}):
+            self.assertEqual(self._client()._cached_token(), "tok-old-key")
+
+    def test_token_without_key_id_still_accepted(self):
+        """Files written by TRADEGEN or older QUANTGEN have no key_id."""
+        self._file_token("tok-tradegen")
+        with _clear_secret_env(), patch.dict(os.environ, {"KIS_APP_KEY": FAKE, "KIS_APP_SECRET": FAKE2}):
+            self.assertEqual(self._client()._cached_token(), "tok-tradegen")
 
     def test_reload_credentials_updates_ready(self):
         with _clear_secret_env():
@@ -385,6 +438,14 @@ class BackendChoiceTest(unittest.TestCase):
         for module in ("keyring.backends.Windows", "keyring.backends.macOS", "keyring.backends.SecretService",
                        "keyring.backends.kwallet", "keyring.backends.libsecret"):
             self.assertTrue(credentials._os_backend(self._fake(module, 5)), module)
+
+    def test_chainer_picks_os_store(self):
+        """KEY-2/b item 6: a ChainerBackend holding a plaintext store and an OS store yields the OS store."""
+        plain = self._fake("keyrings.alt.file", 0.5)
+        os_store = self._fake("keyring.backends.SecretService", 5)
+        chainer = type("Chainer", (), {"backends": [plain, os_store], "priority": 10})()
+        self.assertIs(credentials._choose(chainer), os_store)
+        self.assertIsNone(credentials._choose(type("Chainer", (), {"backends": [plain]})()))
 
     def test_plaintext_and_low_priority_refused(self):
         self.assertFalse(credentials._os_backend(self._fake("keyrings.alt.file", 0.5)))
@@ -491,6 +552,7 @@ class IsolationTest(unittest.TestCase):
 
 def tearDownModule():
     credentials.set_backend(credentials._UNSET)
+    shutil.rmtree(_HOME, ignore_errors=True)
     for name, value in _SAVED_HOME.items():
         if value is None:
             os.environ.pop(name, None)

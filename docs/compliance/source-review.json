@@ -80,7 +80,7 @@
     "core/calendars/publication.py": "f275ee921eed3a2c4c31547925b943e5a032162800f3bb70365621ff26f38dcf",
     "core/calendars/regime.py": "fcac664c8f3b2d51ff45c67ef27252b1961b38c944dd785f8162d9ffa579d17b",
     "core/calendars/store.py": "4932ad9cbb4a1914f6b75da84e96a74730444cf2f43c756a7c7dd95efb403041",
-    "core/credentials/__init__.py": "61dc9c1b41e7fe58dd78adc9c252e9dcbc49c06a471aee39d284838f872017c1",
+    "core/credentials/__init__.py": "37997b7b42faed90eac195079f5b3044f55e23157c11377b6fcfdf2782929b9f",
     "core/credentials/names.py": "a29688fb2f396bcca90a0c135a1d88e593b18b446d42213769ab2c7a4f98f094",
     "core/crypto/__init__.py": "239a350b379471bb83ac90f3dc25149814f5f58790604236697daf160f5fcd81",
     "core/crypto/analytics.py": "7d7c846f0a363135592b88699190ac8c7251e159756ffb21bbebc128129dfdbf",
@@ -300,14 +300,14 @@
     "data/kis_workspace.py": "31ad0c45e37f71030a7f26f1f0eb21b0979f4cabb9093f5095e658990310c204",
     "data/krx/__init__.py": "85eab43f9556eb3a7a207099993842304821caba218b68a3aaaf00d004622dc9",
     "data/krx/gateway.py": "6aec229a790be1cbafbc7bef6b3206ccd585148c6899665fe82102931b0d00e7",
-    "data/krx/kis_client.py": "6e3ad47fa0784e59f74a6d8b018c9b40f37473c3c9d0354916a11f93994d4dd9",
+    "data/krx/kis_client.py": "b7ab7ea476a6f2cb448c71c73c12961e843557e675f3244a190fafd8abfac6f8",
     "data/krx/krx_market_client.py": "092fcd34a4000731a9eaba27f27ddd1f396137e27e96e6627b767a688635ab87",
     "data/krx/opendart_client.py": "d038d525d9b66d8633ffe3cc0c43d4da72a5cf9cee3ebf6a9496e68ca08afbff",
     "data/macro/rules_v2.0.0.json": "c74edcd93d05a55eddea860e2fd6ee8e31bcaf00dfd7fbc2b0e41766f766822e",
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "768a3feeb201cb636b4d2f3ff9a2cf21fef17082ee7d2dfcbd65394ed85ba5a7",
+    "docs/compliance/FACTS.md": "b19b3bff76ad8d99a95fb5576d54e7d6b8d0f8c0969d8ea3b10645935ea44aed",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "27aef4dabf513cbb83d4430d8b1db97c4acc85a25b0ddd0c9498338e6db58ec3",
     "docs/compliance/RELEASE_GAPS.md": "1f5f123f0ecf2420c1b781da592ed83c19e53d82c51dd4bb6895af42e3e7ca3e",
@@ -513,7 +513,7 @@
     "tests/cms_coupon_disclosure_acceptance.py": "1c1fcf30d38c23885e7c236f1ed39302972df972c93c9a20184b3b7ebf3d4010",
     "tests/compliance_acceptance.py": "515c4e52c4643cc4a4679bcacf401af6829b2472a69ae9ca23ded61752c40156",
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
-    "tests/credentials_acceptance.py": "775f992521446050cab1671eddecaf37e84b6c0decee17fd229287d9debf4507",
+    "tests/credentials_acceptance.py": "fcddc20d83b3c44cd9815a6ad8068e8be622e9f029a8b7830d82e923f3f14959",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
     "tests/crypto_missing_values_acceptance.py": "be07db163184acb8c0a67dd9c0562045e9f486506539ed9eadb2d06bec2ca038",
     "tests/curve_methods_acceptance.py": "66007a9bee8a7abedce57738f0fff5bd1ae9b2bd1d400b240d032e9a9691bd9b",
@@ -803,163 +803,163 @@
   "reviews": {
     "1": {
       "document_sha256": "773c7e9685d300f2a1d9ede67d8a02769c0d49de4b001e74d4c481d76678b433",
-      "source_digest": "df9b87eb72de0dd41bd4cd484bb41a91db10a9dff392d9a9d626b6a9f0cc1164",
+      "source_digest": "623141af62b96abd762162768d5a96aacf6a6c2701f34dfae3c228f57a918894",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.208187+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.586956+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "2": {
       "document_sha256": "87a75eeec58a1094a0469e3ace9a6e57703b6ea40fd24f0109398113d343e57a",
-      "source_digest": "df9b87eb72de0dd41bd4cd484bb41a91db10a9dff392d9a9d626b6a9f0cc1164",
+      "source_digest": "623141af62b96abd762162768d5a96aacf6a6c2701f34dfae3c228f57a918894",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.210017+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.590953+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "3": {
       "document_sha256": "47ffac58a0a67502bc6a235b925f30135013860ed21da52315f074fb306f3b5d",
-      "source_digest": "3fd3ef454b3424c43f984e22a1817543adc2ee772ced7dedda77f79fed384a1f",
+      "source_digest": "fc4888cc744e311ee9cfa3ed53e26a40360c05d945e46350d27503a36d8a9213",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.211729+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.593173+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "4": {
       "document_sha256": "0a223badbec15c6f94a1b12f21d8dd01bfaff18bc0c029821f9e78b30158b069",
-      "source_digest": "01ec2ae3ff81c96fc62dff5df28bc895a866c5d65cdb7af5dcddd6d529c7198f",
+      "source_digest": "cb21d80cba1bae69017716079543506db08464be1a11ccf5944a09d60b8f5efd",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.213286+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.595123+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "2f16909371ee6515f5dd0424d21fb16fe1f21b6a9f45adf2bec05ae5382c6a1f",
+      "source_digest": "12d6fe195e91ad0a70ed39a3284f0b10697dca07dd45a487981da66fc5a42b42",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.214753+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.601091+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "05d575236e6009f1b190c5f82785fb77215cc2319023fd57a5a1e0527a533139",
+      "source_digest": "784911c7a716aa2ec1203803fe6a83a54a4875fb3f16968232d9bff60933e934",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.216338+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.603111+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "7": {
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
-      "source_digest": "df9b87eb72de0dd41bd4cd484bb41a91db10a9dff392d9a9d626b6a9f0cc1164",
+      "source_digest": "623141af62b96abd762162768d5a96aacf6a6c2701f34dfae3c228f57a918894",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.217796+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.604872+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "8": {
       "document_sha256": "3a13d39cce253786cef8de604ec46b82a92d18baa236fc3d0313f024d13b49f9",
-      "source_digest": "05d575236e6009f1b190c5f82785fb77215cc2319023fd57a5a1e0527a533139",
+      "source_digest": "784911c7a716aa2ec1203803fe6a83a54a4875fb3f16968232d9bff60933e934",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.219186+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.606716+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "b75736e79dff1a0c9ffb507116235ddb718fb51705078bb1f5a2a9b25843eec0",
+      "source_digest": "0ddb03cab18f390dcfd0b7e355035cc5bd8678244a5810e649a4d84c6c3066d1",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.220630+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.612710+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "10": {
       "document_sha256": "1a5290b7030eadfc1477b97f40c8b04b7c903c31e85bdb276d77b0ab62be9759",
-      "source_digest": "a4a644b6a54071f218fdcdb36aa38544817ee25d26775e29e51463b90f7be1fd",
+      "source_digest": "9e7192b4640deed9cee35e72eadc3f221f90216741e70b60d1fad51067f2a49e",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.222058+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.618321+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "11": {
       "document_sha256": "ce1d45fad73820fc818d84f86b3ab49ab7803390a2670e06aa10d4f1447bd97d",
-      "source_digest": "dabc09b4b9598f17ba8f4154140c149a4d62bc1654d691437603ee7001e6bc84",
+      "source_digest": "fd3ea63af049ef32aca2fb7c6a11aecd92ed71612b457dd122f41d25c1bd5ffe",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.223429+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.620332+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "8910f7340f8e4522a51b6aba480330f1606185e3065815b58e7ac721f2160e4c",
+      "source_digest": "aba178b5fa65f08e31984e9a4046743f3b2f5e96e1bfc62c6efc7867336b404b",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.224866+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.622330+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "b75736e79dff1a0c9ffb507116235ddb718fb51705078bb1f5a2a9b25843eec0",
+      "source_digest": "0ddb03cab18f390dcfd0b7e355035cc5bd8678244a5810e649a4d84c6c3066d1",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.226307+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.624569+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "b75736e79dff1a0c9ffb507116235ddb718fb51705078bb1f5a2a9b25843eec0",
+      "source_digest": "0ddb03cab18f390dcfd0b7e355035cc5bd8678244a5810e649a4d84c6c3066d1",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.227821+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.626652+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "15": {
       "document_sha256": "c11d59b7e7a5578c2b6574682ac3ecdbde324fb4ca1aa5e99e97f71fdf53f10a",
-      "source_digest": "b75736e79dff1a0c9ffb507116235ddb718fb51705078bb1f5a2a9b25843eec0",
+      "source_digest": "0ddb03cab18f390dcfd0b7e355035cc5bd8678244a5810e649a4d84c6c3066d1",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.229189+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.628891+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "16": {
       "document_sha256": "fd9db4d1b82ed9c8953553efbe55e37f13b53b38ef5ec2aa1df704a542c31e20",
-      "source_digest": "58a8d8e77f11423456b03eef25b076df29c21eb10eaac4ca087bdbb1dbe34679",
+      "source_digest": "fcb4852a1b6fa9bf10981d4210786e5d60bf64456cbc44800d748b1edb7afdbf",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.230520+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.631139+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "17": {
       "document_sha256": "4bf4b7e2b367d1f053f803279ad624243d493bb342333b4cc9e05cf5a43538fb",
-      "source_digest": "05d575236e6009f1b190c5f82785fb77215cc2319023fd57a5a1e0527a533139",
+      "source_digest": "784911c7a716aa2ec1203803fe6a83a54a4875fb3f16968232d9bff60933e934",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.231956+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.632966+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "18": {
       "document_sha256": "2b7c3520f9b3239bbaffd9cb371494fd2a4e3f51ea6b9ad611159c258eb32b31",
-      "source_digest": "df9b87eb72de0dd41bd4cd484bb41a91db10a9dff392d9a9d626b6a9f0cc1164",
+      "source_digest": "623141af62b96abd762162768d5a96aacf6a6c2701f34dfae3c228f57a918894",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.233353+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.636910+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "f529aabf56ca5957dac90a89b3c8b02d942dbdd4b93202b87565dc0164fdf254",
+      "source_digest": "acd6ce6a9397e6067909e153ea519ac27141cf4aff597b84206267c2158636d4",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.234752+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.639989+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     },
     "20": {
-      "document_sha256": "1855b16a2b0fb0e51bd563ff09f69015a06d5e5d2d124d22c596efa8e5897dcd",
-      "source_digest": "df9b87eb72de0dd41bd4cd484bb41a91db10a9dff392d9a9d626b6a9f0cc1164",
+      "document_sha256": "ee577dc10c3023c45893b9da0a1e83c307218b9aa5f3d13dfb2b1c57ca23aa12",
+      "source_digest": "623141af62b96abd762162768d5a96aacf6a6c2701f34dfae3c228f57a918894",
       "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Owner D11 answers Q1-Q3 applied: personal operator display QUANTGEN(운영자 고건) replacing the company name, mailbox contact@quantgeneration.com, minimum age 14 free and 19 paid; merged with main 3249af7 (KEY-2 keyring storage text kept); account-service values left for a later PR; publication stays blocked.",
-      "reviewed_at": "2026-11-19T01:43:10.236130+00:00",
-      "source_commit": "7377c17c19473bbca408aa3935cfcd0d4281b067"
+      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:43:08.642258+00:00",
+      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
     }
   }
 }
