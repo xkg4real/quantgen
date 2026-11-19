@@ -12,7 +12,7 @@
 - 보고서: `docs/product/PYSIDE6_UI_VERIFICATION_2026-11-19.md` (방법·결과·재현법·배제한 가설).
 - 결과: PySide6 6.12로 107개 모듈 1,117개가 PyQt6와 같음(실패 0, 이미 지워진 객체 0). **남은 문제:** `tests.desktop_market_tabs_acceptance`에서 PySide6만 드물게 SIGABRT(창 삭제 중 `malloc_consolidate`, 66회 중 2회, `5025c6f`에서도 재현). 원인 미상 → "전환 준비 완료" 확정 보류. PyQt6 앱에는 영향 없음.
 - 되돌림: 숨은 위젯 21개 수정(`336f8b1`, `01a6e96`)은 `desktop_language_acceptance`(두 바인딩) 회귀로 되돌림(`1660d3a`, `2cd8477`). 21개는 지연 삭제 대기분이며 실제 이벤트 루프에서는 지워짐.
-- 다음(소유자 결정): 비정상 종료 원인 조사를 이 세션에서 계속할지, OS 세션에 넘길지.
+- 2026-11-19 소유자 결정 "그러면 OS세션에 인계할 프롬프트와 파일을 전달/작성해주세요": 비정상 종료 원인 조사를 OS 세션(session_016uB1jgXiwx42FSUU5ANwM7)에 넘김. 메시지 전달 완료. 인계 파일: `docs/product/pyside6_abort_2026-11-19/` (README 프롬프트·setup_copy.sh·repeat_module.sh·gdb_until_abort.sh·gdb_backtrace.txt), 작업 브랜치 `23a6371`. OS 세션이 원인과 고침을 넘겨주면 UI 세션이 quantgen_desktop/에 반영.
 
 ---
 
