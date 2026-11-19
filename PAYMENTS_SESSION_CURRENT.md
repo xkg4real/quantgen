@@ -6,7 +6,7 @@ task: payments-account-keys
 cycle: 2026-11-17
 done_ids: none
 next_ids: PAY-A1, PAY-A2, KEY-1, KEY-2, KEY-3/design, KEY-3, PAY-0, PAY-2
-updated_at: 2026-11-19T09:30:00+09:00
+updated_at: 2026-11-19T10:10:00+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: claude/payments-keys-20261117
@@ -24,6 +24,9 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-19 10:10 갱신:** 메인 재검증: 6916f8d에서 8건 중 7건 확인, CI 진행 중이라 PR #128에는 push 금지 → 녹색이면 메인이 병합. 후속 KEY-2/b (메인 지적 6건)를 미리 만들어 **PR 없는 별도 브랜치** `claude/payments-keys-key2b-20261119` @ `cc1cfa3`에 둠 (credentials 시험 47 OK, 회귀 실패 집합 main과 같음). 단, 5번 중 `tools/provider_parity/parity_check.py` 주석은 고치지 않음: 그 파일 sha256(`78dd1f50…`)이 `results/RULINGS.md` 92행에 고정돼 있고 `tests.provider_parity_acceptance`가 확인함. **PR #128 병합 뒤 할 일:** 작업 브랜치에 최신 main merge → `cc1cfa3` merge → 기준선 갱신 (맨 마지막) → `--check` → 메인이 "병합: PAYMENTS_ACCOUNT_KEYS"(KEY-2/b) 적으면 PR. 그리고 LEDGER 문자열을 메인에 전달.
+
 
 **2026-11-19 09:30 갱신:** 메인의 병합 전 검토(PR #128, CI 녹색이지만 보류)의 8건을 반영해 `6916f8d` push. 핵심: (2) 시험이 CI 순서에서 실제 `~/.nextgen/kis_token.json`을 지우던 문제를 재현하고 고침, (4) 그 파일은 TRADEGEN과 공유라 이제 지우지 않음, (1) 준법 문서 01·08·20·FACTS·RELEASE_GAPS를 먼저 고치고 기준선 갱신 (PASS). credentials 시험 40 OK. 코드 지문 10c27010 그대로. 메인 재검토와 CI를 기다림.
 
