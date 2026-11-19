@@ -6,7 +6,7 @@ task: payments-account-keys
 cycle: 2026-11-17
 done_ids: KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a
 next_ids: KEY-3/design, KEY-3, KEY-4, PAY-0, PAY-2
-updated_at: 2026-11-19T18:40:00+09:00
+updated_at: 2026-11-19T18:55:00+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: claude/payments-key3-prep-20261119
@@ -24,6 +24,18 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-19 18:55 갱신:** 메인 재검증 `7f80fc0`: 1·2·4·6·7·9·10·11·12 고쳐짐, 3·5·8 일부. 게이트웨이를 아직 아무 코드도 안 부르므로 CI 녹색이면 그대로 병합 (push 금지). **KEY-4 완료 조건 (연결 전에 고칠 것, 메인 2026-11-19 원문 요약):**
+1. [중간] 경계 `FICC_LOADERS`에 `_yf_fetch`·`_fred_fetch`·`_provider_rows` 없음, `from core.ficc.data import *` 미검출. `core/quant/history.py` `yf_history`의 `from core.ficc.data import _yf_fetch, _period_for`가 목록에 없음 → KNOWN에 넣고, `FiccData.EXPOSED`에 종목별 Yahoo 조회를 두거나 설계 6절에 경로 기록. **설계 6절의 "목록을 비우면 yahoo: off가 효과"는 지금 사실이 아님 → 고칠 것.**
+2. [낮음] 상대 import (`from .data import ...`, `from ..ficc.data import ...`)를 절대 이름으로 풀어 세기.
+3. [낮음] SyntaxError·UnicodeDecodeError 파일을 건너뛰지 말고 실패로.
+4. [낮음] config 키 함수를 값으로 쓰는 경우 (`fmp_key = config.fmp_key`, `getattr(config, ...)`) 세기 → `core/market/market_cap.py` 추가.
+5. [낮음] 별칭 `import_module`, 키워드 인자, 패키지 import 뒤 속성 경로 (`import data; data.kis_markets...`, `from core import ficc; ficc.data...`), `from data import *`.
+6. [중간] `_on_key_change`가 보유 클라이언트를 한 번만 갱신 → 키 두 개를 차례로 넣으면 낡음. 보유 클라이언트를 약한 참조 목록으로 두고 매번 갱신.
+7. [낮음] `dispatch()`가 dict 아닌 요청에서 try 전 AttributeError; remote가 ok=true인데 깨진 결과, bool 아닌 ok, `http_transport` 예외를 `RemoteFailed`로 감싸기.
+8. [nit] 반환형 시험이 이름만 봄 (`list[dict]` 원소); `config.*_provider_status` 경유 준비 확인 미추적; GATEWAY_DESIGN 127·132·191·288행 주장 정정; ENV_NAMES 5절 names.py 행 (연구 9개)·4절 "main에는 아직 없습니다".
+9. [정보] main에 브랜치 보호·필수 검사 없음 (메인이 병합 전 CI를 봄).
+
 
 **2026-11-19 18:40 갱신:** 메인의 PR #132 병합 전 검토 12건 반영 → `7f80fc0` push (PR #132 같은 PR). 핵심: 경계 시험을 ast로 바꾸고 Compliance 워크플로(모든 PR)에도 넣음, 목록은 `tests/fixtures/gateway/known_direct_calls.json` (내용 고정, 48파일 121건: core·main 83, 화면 38), FRED·Yahoo·GS를 경계 범위에 넣음 (선택), `routes.json` 패키징 (stage DATA_FILES, package-data, smoke_installed; 로컬 휠에서 확인). 시험 79 OK, 기준선 PASS (803), 코드 지문 10c27010 그대로. 메인 재확인과 CI 대기.
 
