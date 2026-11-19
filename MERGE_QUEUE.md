@@ -27,7 +27,7 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 | 4a | ~~CI 겹친 실행 자동 취소 + GH-1 기록~~ | PR #131 | **병합 완료 main `ab24dec`** (2026-11-19 16:58 KST) |
 | 4b | ~~KEY-3 (게이트웨이)~~ | PR #132 | **병합 완료 main `9f76b07`** (2026-11-19 19:07 KST) |
 | 4c | ~~KEY-4~~ | PR #133 | **병합 완료 main `8445187`** (2026-11-20 03:27 KST, CI 10개 녹색, 메인 검토 4회) |
-| 4d | 메인 문서 PR: CLAUDE.md(SESSION_PIPELINE·WORKBOARD 포인터, "법인 설립 완료" → handoff INCORPORATION_CHECKLIST.md), OWNER_RULINGS_LOG(11-19 계정 결정 3건: 비밀번호 특수문자, HTML 인증 메일, 이메일 MFA 유지) | 메인 | **다음** (메인이 만듦, 11-20) — docs만이라 4d'와 함께 열 수 있음(파일 안 겹침, 둘 중 source-review.json을 바꾸는 쪽이 나중에 최신 main 합침) |
+| 4d | 메인 문서 PR: CLAUDE.md(Session pipeline 절, "법인 설립 완료" → INCORPORATION_CHECKLIST.md), OWNER_RULINGS_LOG(2026-11-20 절: 세션 연결 지시, 계정 결정 3건 원문 대조, OA-42·OA-44, 메인이 정한 것 2건) | 메인 **PR #135** @ `3a0371b` (`claude/amazing-gauss-tdiguu`) | 열림 (11-20 03:4x). docs만, 기준선 변화 없음 → PR #134와 겹치지 않음. CI 녹색이면 병합 |
 | 4d' | KEY-4/a 계정 문서 고침 (F1–F9, OA-42·OA-44 반영, 자체 시험 1줄) | PAYMENTS **PR #134** @ `e37c9a9` | 열림 (11-20 03:3x). 메인 문서 재확인 중 + CI → 병합 |
 | 5 | UI 7쪽 + PySide6 준비 | UI `claude/friendly-bardeen-r6xe8f` | 소유자 실행 확인 뒤 (UI 세션 브랜치는 아무도 고치지 않음) |
 | 6 | PySide6 전환 (`pyqt6_to_pyside6 --apply` + `switch_day.py --apply`, 화면 문구 3곳은 UI 세션) | OS | 5 뒤 (OS 세션 제안 순서: UI PR → 전환) |
