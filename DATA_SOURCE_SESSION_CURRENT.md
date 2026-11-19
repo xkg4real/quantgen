@@ -6,11 +6,11 @@ task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
 next_ids: DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e, DS-4b, DS-H
-updated_at: 2026-11-20T01:57:22+09:00
+updated_at: 2026-11-20T02:03:18+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/data-source-didm-20261117
-work_commit: eb4f3a5
+work_commit: 4abe761
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -104,6 +104,7 @@ DS-1 평가표 소유자 확인 완료, DIDM-0 사전등록 V0 **소유자 승�
 - [x] 메인 지시 (2026-11-20 00:50 KST, SESSION_PIPELINE) 3): main `9f76b07` (KEY-3) merge commit `f60e314` (runtime-smoke 충돌 = main 줄 + DIDM 경로·시험만 다시 더함). DIDM 시험 95 + `RealStoreRoundTrip` 3 = 98 OK. `tests.credentials_acceptance`·`gateway_*` 3개·`provider_parity` 208 OK (skip 3) — main `9f76b07`에서도 같은 결과 (실패 집합 둘 다 비어 있음). `data/didm/keys.py`가 KEY-3 저장소 경로와 맞음: 연구용 9개 이름 모두 `kind=research`, 저장 → 키링에서 읽기, 환경변수 우선. 커밋 `eb4f3a5`. **PR 직전 상태** (최신 main 합침; 남은 것 = 준수 기준선 갱신 → `--check` → PR, MERGE_QUEUE 8행 "병합: DATA_SOURCE_DIDM" 뒤). `compliance --check` 지금 FAIL (새 파일, 문서 20개 재검토 대상) = 예상.
 - [ ] DS-H 홈 지표 데이터 계층 — **KEY-4 (PR #133, `core/research/markets.py`) 병합 뒤 main에서 시작** (메인 지시)
 - [x] OA-07 OpenDART 소유자 PC 확인 (2026-11-19): 9쪽, 819건. 공식·무료 공급원 6곳 모두 확인 끝. 남은 확인 = 무료 키 3곳 (OA-08).
+- [-] DS-4b CryptoPanic 보류 (2026-11-20, 소유자 지적 확인): 무료 API 없음 (공식 요금: Growth $50/주·$199/월, Enterprise $899/월~; 무료 Developer 2026-04-01 종료 보도). 단계별 비용 결정에 따라 뺌, 코드는 남김. 암호화폐 감성 X열은 Alpha Vantage로 채움. OA-08은 무료 키 2개 (Alpha Vantage, Tiingo). 커밋 `4abe761`.
 - [-] DS-3 — 계획에 없음 (메인 11-20: 소유자 11-18 답 1 "3단계" = RavenPack 대안 9개, Bigdata.com 시험 없음 → RavenPack 견적·Bigdata.com 비교 없음). OA-38 소유자 확인 대기, 원하시면 다시 엶
 <!-- old DS-H line kept below for history -->
 - [ ] DS-H 홈 지표 데이터 계층 ← **소유자 진단 출력 대기** (아직 손대지 않음)
