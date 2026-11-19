@@ -6,11 +6,11 @@ task: payments-account-keys
 cycle: 2026-11-17
 done_ids: KEY-2, KEY-2/b
 next_ids: PAY-A1, PAY-A2, KEY-1, KEY-3/design, KEY-3, PAY-0, PAY-2
-updated_at: 2026-11-19T12:40:00+09:00
+updated_at: 2026-11-19T15:30:00+09:00
 stale_after_hours: 3
-waiting_on: owner
+waiting_on: none
 work_branch: claude/payments-key3-prep-20261119
-work_commit: 1734cda
+work_commit: 8a2886b
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -24,6 +24,17 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-19 15:30 갱신 — 소유자 답 (원문):**
+> 1. owner confirmed 완료
+> 2. Key-3 승인
+> 3. 더해주세요
+
+- 1: GitHub 확인 결과 main 두 표는 여전히 `code f995600b36c75523`이고 `owner/nautilus-confirm-*` 브랜치·PR 없음 (15:2x KST). 메인 지침은 "지금 하지 않음, 다음 기록 실행 직전"이라 소유자에게 그대로 알림. 메인에 전달함.
+- 2: `GATEWAY_DESIGN.md` v0.1 소유자 승인 → 문서에 기록. KEY-3/design은 그 문서가 main에 들어가면 (KEY-3 PR) LEDGER 요청.
+- 3: `core/credentials/names.py`에 `RESEARCH` 9개 (DIDM 연구용: FRED, ECOS, SEC_EDGAR_USER_AGENT, Alpha Vantage, Tiingo, Cryptopanic, CME FedWatch 2개, Trading Economics), 종류 `research`. 시험 52 OK. 브랜치 `claude/payments-key3-prep-20261119` @ `8a2886b`. 데이터소스 세션이 연결 코드를 `core.credentials.get`으로 바꾸는 일은 그쪽 몫 (소유자 경유 전달).
+- 다음: KEY-3 코드 (`core/gateway/**`, 시험 3개) 같은 브랜치.
+
 
 **2026-11-19 12:40 갱신:** PR #129 병합 (main `ca5da08`, 메인이 LEDGER에 KEY-2/b 기록 `4adc965`). KEY-3 준비 브랜치 `claude/payments-key3-prep-20261119`에 main merge (`a5c0841`) 뒤 설계 문서 `docs/commercial/GATEWAY_DESIGN.md` v0.1 (`1734cda`): 부품, routes.json 스키마·검증, 규칙 6개와 시험, 공급원 id·길, 회사 서버 약속(꺼짐), 직접 호출 30개 파일 69곳 (D7은 72; 경계 시험이 기준). 30개 파일 중 Nautilus 지문 입력은 없음. **소유자 설계 확인 대기** (코드는 승인된 D7-G 범위라 병행 가능). 다음: KEY-3 코드 `core/gateway/**`, `tests/gateway_*` (같은 브랜치), 그 PR에 0c3d0d5의 5건 포함.
 
@@ -168,6 +179,10 @@ ENV_NAMES.md: 26개 이름 모두 표 행에 있음=True, NAME=값 꼴 0건
 
 - `ACCOUNT_SETUP.md` 3부 블록 (ACC-1~ACC-10, D11 4장과 같음). 소유자에게 전달함 2026-11-17 (채팅 보고). 소유자가 웹사이트 세션에 붙인 날짜: 미기록.
 - 풀 ID·클라이언트 ID는 소유자가 AWS 2부 17단계 뒤 전달 (비밀값 아님).
+
+## 데이터소스 세션에 전할 것 (소유자 경유)
+
+- 2026-11-19: KEY-3 PR이 main에 들어가면 `core/credentials`가 DIDM 키 이름 9개를 받습니다 (`names.RESEARCH`). `data/didm/*.py`가 `os.environ.get(KEY_NAME)` 대신 `core.credentials.get(KEY_NAME)`을 쓰면 키를 OS 키 보관함에 둘 수 있습니다 (찾는 순서: 환경변수 → 키 보관함 → `.env` 개발판).
 
 ## UI 세션에 전할 것
 
