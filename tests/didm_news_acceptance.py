@@ -110,5 +110,46 @@ class KeyLookup(unittest.TestCase):
             self.assertNotIn("secret-123", repr(keys.key_status("FRED_API_KEY")))
 
 
+class RealStoreRoundTrip(unittest.TestCase):
+    """Against core.credentials itself (KEY-2/KEY-3 on main), with its in-memory test backend."""
+
+    class _Mem:
+        def __init__(self):
+            self.d = {}
+
+        def get_password(self, service, user):
+            return self.d.get((service, user))
+
+        def set_password(self, service, user, password):
+            self.d[(service, user)] = password
+
+        def delete_password(self, service, user):
+            self.d.pop((service, user))
+
+    def setUp(self):
+        self.mem = self._Mem()
+        keys.credentials.set_backend(self.mem)
+        self.addCleanup(keys.credentials.reset_backend)
+
+    def test_every_research_name_is_in_the_store(self):
+        for name in keys.RESEARCH_KEYS:
+            self.assertTrue(keys.in_store(name), name)
+            self.assertEqual(keys.credentials.names.kind(name), "research")
+
+    def test_save_then_read_from_keyring(self):
+        with mock.patch.dict(os.environ, {}, clear=True):
+            keys.save_key("ECOS_API_KEY", "  stored-value ")
+            self.assertEqual(keys.get_key("ECOS_API_KEY"), "stored-value")
+            st = keys.key_status("ECOS_API_KEY")
+            self.assertEqual((st["present"], st["source"], st["in_store"]), (True, "keyring", True))
+            self.assertNotIn("stored-value", repr(st))
+
+    def test_environment_wins_over_keyring(self):
+        self.mem.set_password(keys.credentials.SERVICE, "TIINGO_API_KEY", "from-keyring")
+        with mock.patch.dict(os.environ, {"TIINGO_API_KEY": "from-env"}, clear=True):
+            self.assertEqual(keys.get_key("TIINGO_API_KEY"), "from-env")
+            self.assertEqual(keys.key_status("TIINGO_API_KEY")["source"], "env")
+
+
 if __name__ == "__main__":
     unittest.main()

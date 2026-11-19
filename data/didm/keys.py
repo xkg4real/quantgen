@@ -2,8 +2,8 @@
 credential store, KEY-3 PR of the payments/keys session).
 
 ``get_key(name)`` asks ``core.credentials.get`` (environment -> OS keyring -> .env in a development build).
-Until the research names reach main, the store rejects them as unknown; then this falls back to the process
-environment with the same cleaning rule, so nothing breaks before or after that merge.
+Since KEY-3 (main 9f76b07, 2026-11-19) the store knows all nine research names. A name it does not know falls
+back to the process environment with the same cleaning rule (kept for names added here before the store).
 
 Values are only ever returned by ``get_key``. ``key_status`` gives names, presence and source only.
 """

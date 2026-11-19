@@ -3,8 +3,8 @@
     python -m tools.didm.keys status
     python -m tools.didm.keys set ECOS_API_KEY        # prompts without echo, saves to Windows Credential Manager
 
-`set` works once the research names are in the credential store (KEY-3 PR of the payments/keys session).
-Before that it says so; keep using setx or .env until then.
+`set` saves to the OS credential store (research names are in it since KEY-3, main 9f76b07). The environment
+(setx) still wins over the store when both are set; remove the setx value if you move a key to the store.
 """
 from __future__ import annotations
 
