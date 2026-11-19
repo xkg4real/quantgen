@@ -6,11 +6,11 @@ task: os-expansion
 cycle: 2026-11-17
 done_ids: OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f
 next_ids: OS-F1, OS-F2
-updated_at: 2026-11-20T04:00:00+09:00
+updated_at: 2026-11-20T06:30:00+09:00
 stale_after_hours: 3
-waiting_on: owner
-work_branch: claude/os-pyside6-abort-20261119
-work_commit: 1bf2508
+waiting_on: none
+work_branch: claude/os-f2-data-dir-20261120
+work_commit: 9858894
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -25,7 +25,11 @@ session: https://claude.ai/code/session_016uB1jgXiwx42FSUU5ANwM7
 
 ## 0. 한 줄 요약
 
-OS-P0-a~f는 **PR #127로 main에 병합됐습니다**(main `c28b1d7`, CI 8개 녹색, 메인이 LEDGER 기록, handoff `e7e4468`). UI 브랜치 `5025c6f` 재시범에서 PySide6가 PyQt6와 CI 18단계 모두 같은 결과를 냈습니다. 남은 일은 둘입니다. OS-F1(PySide6 전환)은 UI 7쪽이 main에 들어간 뒤 메인이 자리를 줍니다. OS-F2(데이터 폴더 전환)는 KEY-2 뒤입니다. 지금은 대기 중이고, 소유자가 UI 화면을 PC에서 확인하는 것이 다음 관문입니다.
+(2026-11-20 메인 지시, SESSION_PIPELINE·WORKBOARD 2.3) 두 일을 진행 중입니다.
+- **B: OS-F2** — `claude/os-f2-data-dir-20261120` @ `9858894` (main `9f76b07`에서 분기, push됨, PR 없음). config.py·kis_client·opendart_client의 ~/.nextgen 경로를 `core.app_paths.user_data_dir()`로 바꿈. `data_location()`(목록 없이 설명), `migrate_legacy_data(confirmed=True)`(동의 있어야만 이동, 합치지 않음). 시험 86개 통과, 관련 33파일 회귀 실패 83개가 main과 같음. Nautilus code_sha256 `10c27010…` → `c11a137a…`(config.py). PR은 MERGE_QUEUE에 "병합: OS"가 적힌 뒤, 준법 기준선은 PR 직전에만 갱신. 메인에 순서 위험(플랫폼 폴더 뒤 ~/.nextgen 생성 시 전환) 질문을 보냄.
+- **A: UI 414eceb 재시험** — PySide6 160×2회 abort 0 끝남. PyQt6 18단계 묶음 실행 중(5025c6f 결과와 비교). 끝나면 `claude/os-pyside6-abort-20261119`의 TRIAL 10-2에 기록.
+
+이전: OS-P0-a~f는 PR #127로 main 병합(`c28b1d7`). PySide6 간헐 종료 원인(QThreadPool 작업 스레드의 `QThread.currentThread()` 래퍼 보관)은 `claude/os-pyside6-abort-20261119` @ `1bf2508`에 기록, UI가 수정 적용.
 
 ## 1. 목표와 완료 조건
 
@@ -121,15 +125,13 @@ python -m tools.compliance.check --check -> consistency FAIL (새 파일; PR 직
 
 ## 5. 중단 지점
 
-커밋 안 된 변경 없음. 시범 로그·venv는 이 세션 스크래치에만 있음(다른 세션은 볼 수 없음; 필요하면 `PYSIDE6_TRIAL` 6절대로 다시 만듦).
+커밋 안 된 변경 없음. A의 PyQt6 실행 로그는 이 세션 스크래치에만 있음.
 
 ## 6. 다음 할 일 (순서대로)
 
-1. 소유자: 아래 "UI 세션에 전할 것"을 UI 세션에 붙임 → 붙였는지 이 파일에 기록.
-2. OS-P0-d — 소유자가 `docs/platform/PLATFORM_EXPANSION_2026-11-17.md`를 확인하면 Notion `6f75e02e0296483086927a73d45df697` 개정 2판 반영 (승인 뒤에만). 완료 기준: 소유자 확인.
-3. UI 세션이 점검표 수정을 push하면: `python tools/qt_port/pyqt6_to_pyside6.py --lint --ref origin/claude/friendly-bardeen-r6xe8f` 와 `PYSIDE6_TRIAL` 6절 시범을 다시 돌려 주간 지표 갱신.
-4. 첫 PR(`MERGE_QUEUE.md`상 F21 뒤 첫 자리): runtime-smoke 추가는 끝남. 남은 것: 그때의 최신 main merge → 맨 마지막에 `python -m tools.compliance.check --refresh-baseline ...` → `--check` → PR(템플릿 확인). `qa/` 제거 제안은 하지 않음(정정 참고).
-5. OS-F1 (F21 뒤): UI 세션이 최신 main에서 `pyqt6_to_pyside6.py --apply` 실행, 이 세션은 `python tools/qt_port/switch_day.py --apply`(.py 밖 7곳)와 리뷰. 화면 문구 3곳은 UI 세션. 완료 기준: 지시문 8절 OS-F1 행.
+1. A: PyQt6 18단계가 끝나면 단계별 rc를 5025c6f(9·13 시간초과, 12·18 rc=1, 나머지 0)와 비교 → TRIAL 10-2에 기록, push, 메인에 보고. 완료 기준: abort 0, PyQt6 결과 동일.
+2. B: MERGE_QUEUE에 "병합: OS"가 적히면 최신 main merge → `python -m tools.compliance.check --refresh-baseline` → `--check` → PR(본문에 code_sha256 변경, 템플릿 확인). abort 기록 브랜치를 묶을지는 메인이 정함.
+3. OS-F1 (MERGE_QUEUE 6번, UI 7쪽 PR 뒤): UI 세션이 `pyqt6_to_pyside6.py --apply`, 이 세션은 `python tools/qt_port/switch_day.py --apply`와 리뷰.
 
 ## 7. 주간 지표 (D9 진척)
 
