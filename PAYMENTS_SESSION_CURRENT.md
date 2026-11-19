@@ -4,15 +4,15 @@ reason: milestone
 from: claude
 task: payments-account-keys
 cycle: 2026-11-17
-done_ids: KEY-2
-next_ids: PAY-A1, PAY-A2, KEY-1, KEY-2/b, KEY-3/design, KEY-3, PAY-0, PAY-2
-updated_at: 2026-11-19T11:50:00+09:00
+done_ids: KEY-2, KEY-2/b
+next_ids: PAY-A1, PAY-A2, KEY-1, KEY-3/design, KEY-3, PAY-0, PAY-2
+updated_at: 2026-11-19T12:40:00+09:00
 stale_after_hours: 3
-waiting_on: ci
-work_branch: claude/payments-keys-20261117
-work_commit: ad124d1
+waiting_on: owner
+work_branch: claude/payments-key3-prep-20261119
+work_commit: 1734cda
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/129
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
@@ -24,6 +24,9 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-19 12:40 갱신:** PR #129 병합 (main `ca5da08`, 메인이 LEDGER에 KEY-2/b 기록 `4adc965`). KEY-3 준비 브랜치 `claude/payments-key3-prep-20261119`에 main merge (`a5c0841`) 뒤 설계 문서 `docs/commercial/GATEWAY_DESIGN.md` v0.1 (`1734cda`): 부품, routes.json 스키마·검증, 규칙 6개와 시험, 공급원 id·길, 회사 서버 약속(꺼짐), 직접 호출 30개 파일 69곳 (D7은 72; 경계 시험이 기준). 30개 파일 중 Nautilus 지문 입력은 없음. **소유자 설계 확인 대기** (코드는 승인된 D7-G 범위라 병행 가능). 다음: KEY-3 코드 `core/gateway/**`, `tests/gateway_*` (같은 브랜치), 그 PR에 0c3d0d5의 5건 포함.
+
 
 **2026-11-19 11:50 갱신:** 메인이 PR #129 (`ad124d1`)를 검증함: 1·2·3·4·6 확인, CI 녹색이면 병합 (push 금지). KEY-3 PR에 넣을 5건을 미리 고쳐 **PR 없는 브랜치** `claude/payments-key3-prep-20261119` @ `0c3d0d5`에 둠: 링크인 토큰 파일은 대상만 바꿈, POSIX O_NOFOLLOW + fchmod로 읽기, key_id는 발급에 쓴 키로, 심어 둔 `.tmp` 링크 시험, ENV_NAMES 19·109행과 20-deletion key_id 범위. credentials 50 OK; 새 시험은 main의 옛 kis_client에서 실패함 (8개). kis_stream 6 오류는 main 코드에서도 같은 환경 오류. **다음:** #129 병합 뒤 KEY-3 설계 문서 → KEY-3 코드 (이 prep 커밋을 포함).
 
