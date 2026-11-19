@@ -142,8 +142,8 @@ class ThenProvider:
 
 def _ficc_fetch(source):
     def fetch(series_id):
-        from core.ficc.data import load_series
-        series = load_series(series_id, source=source, days=HISTORY_DAYS)
+        from core import gateway
+        series = gateway.ficc().load_series(series_id, source=source, days=HISTORY_DAYS)
         if str(series.source).upper() != source.upper():
             raise LookupError("provider fallback is not this provider's answer")
         pairs = [(d, float(v)) for d, v in zip(series.dates, series.values)
@@ -164,8 +164,8 @@ class KISBoardFetch:
             if self._factory is not None:
                 self._markets = self._factory()
             else:
-                from data.kis_markets import KISMarkets
-                self._markets = KISMarkets()
+                from core import gateway
+                self._markets = gateway.provider("data.kis_markets").KISMarkets()
         return self._markets
 
     def ready(self):

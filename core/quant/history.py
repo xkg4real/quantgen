@@ -36,8 +36,10 @@ from datetime import date, datetime, timedelta, timezone
 
 import numpy as np
 
+from core import gateway
+
 try:
-    from data.net import session as _requests        # shared session: retry + backoff
+    _requests = gateway.provider("data.net").session  # shared session: retry + backoff
 except Exception:                                    # pragma: no cover
     _requests = None
 
@@ -123,10 +125,10 @@ def convention_warning(hists) -> str:
 def fmp_history(symbol: str, *, days: int = 504) -> History:
     if _requests is None:
         raise HistoryError("The requests package is not installed.")
-    key = config.fmp_key()
+    key = gateway.local_key("fmp")
     if not key:
         raise HistoryError("FMP_API_KEY is not configured.")
-    from data.fmp.quote_client import _redact
+    _redact = gateway.provider("data.fmp.quote_client")._redact
     start = (date.today() - timedelta(days=int(days * 1.6) + 10)).isoformat()
     url = f"{config.FMP_BASE_URL}/historical-price-eod/dividend-adjusted"
     try:
@@ -193,10 +195,9 @@ def kis_history(code: str, *, days: int = 504) -> History:
     """KIS serves about 100 sessions per call, so the window is paged backwards:
     each call ends the day before the earliest session already held, until
     `days` sessions are in hand or the exchange has nothing older to give."""
-    if not config.kis_ready():
+    if not gateway.keys_ready("kis_quote"):
         raise HistoryError("KIS credentials are not configured.")
-    from data.krx.kis_client import KISClient
-    client = KISClient()
+    client = gateway.provider("data.krx.kis_client").KISClient()
     start = (date.today() - timedelta(days=int(days * 1.6) + 10)).strftime("%Y%m%d")
     rows_by_date: dict[str, float] = {}
     end: str | None = None
@@ -267,9 +268,9 @@ def yf_history(symbol: str, *, days: int = 504) -> History:
     """Any Yahoo ticker: ETFs (SPY), indices (^VIX), continuous futures (ZN=F),
     FX (KRW=X), crypto (BTC-USD), KRX (005930.KS). Adjusted closes, through the
     FICC data module's single Yahoo touchpoint (patched to raise in tests)."""
-    from core.ficc.data import _yf_fetch, _period_for
+    ficc = gateway.ficc()                            # per-symbol Yahoo through the gateway (KEY-4)
     try:
-        rows = _yf_fetch([symbol], _period_for(days)).get(symbol) or []
+        rows = ficc._yf_fetch([symbol], ficc._period_for(days)).get(symbol) or []
     except Exception as exc:
         raise HistoryError(f"Yahoo Finance failed for {symbol!r}: {exc}") from exc
     dates, closes = _clean_rows([(d, c) for d, c in rows])
@@ -283,7 +284,8 @@ def yf_history(symbol: str, *, days: int = 504) -> History:
 
 def crypto_history(symbol: str, *, days: int = 504) -> History:
     """`KRW-BTC` (Upbit, KRW) or `BTCUSDT` (Binance spot, USDT), keyless."""
-    from data.crypto.crypto_client import BinancePublic, CryptoError, UpbitPublic
+    cc = gateway.provider("data.crypto.crypto_client")
+    BinancePublic, CryptoError, UpbitPublic = cc.BinancePublic, cc.CryptoError, cc.UpbitPublic
     s = symbol.upper()
     try:
         if s.startswith("KRW-") or s.startswith("BTC-") or s.startswith("USDT-"):
@@ -297,10 +299,11 @@ def kis_market_history(symbol: str, *, days: int = 504) -> History:
     """The non-stock KIS domains by symbol shape: `NAS:AAPL` overseas stock,
     `A01612` / `A65612` / `101W12` a KRX futures contract, `KR103501GE31` a bond
     ISIN, `Y0101` a KRW benchmark yield (percent), `FX@KRW` the 원/달러 fixing."""
-    if not config.kis_ready():
+    if not gateway.keys_ready("kis_quote"):
         raise HistoryError("KIS credentials are not configured.")
-    from data.kis_markets import CHART_FX, CHART_YIELD, KISMarkets, OVERSEAS_EXCHANGES
-    km = KISMarkets()
+    kis_markets = gateway.provider("data.kis_markets")
+    CHART_FX, CHART_YIELD, OVERSEAS_EXCHANGES = kis_markets.CHART_FX, kis_markets.CHART_YIELD, kis_markets.OVERSEAS_EXCHANGES
+    km = kis_markets.KISMarkets()
     s = symbol.strip().upper()
     try:
         if ":" in s and s.split(":", 1)[0] in OVERSEAS_EXCHANGES:
@@ -338,8 +341,7 @@ def _looks_crypto(symbol: str) -> bool:
 def _looks_kis_market(symbol: str) -> bool:
     s = symbol.strip().upper()
     if ":" in s:
-        from data.kis_markets import OVERSEAS_EXCHANGES
-        return s.split(":", 1)[0] in OVERSEAS_EXCHANGES
+        return s.split(":", 1)[0] in gateway.provider("data.kis_markets").OVERSEAS_EXCHANGES
     if s.startswith("KR") and len(s) == 12 and s.isalnum():
         return True
     if s.startswith("Y0") and len(s) == 5:
@@ -352,8 +354,8 @@ def _looks_kis_market(symbol: str) -> bool:
 # --------------------------------------------------------------------------- #
 # Disk cache — a rerun must not spend provider quota on unchanged bars
 # --------------------------------------------------------------------------- #
-# Looked up through `config` at call time: tests swap these functions out.
-_READY = {"FMP": lambda: bool(config.fmp_key()), "KIS": lambda: config.kis_ready()}
+# Looked up through `config` at call time (by the gateway): tests swap these functions out.
+_READY = {"FMP": lambda: bool(gateway.local_key("fmp")), "KIS": lambda: gateway.keys_ready("kis_quote")}
 _CACHE_MIN_ROWS = 30
 
 
@@ -491,7 +493,7 @@ def load_history(symbol: str, *, source: str = "auto", days: int = 504) -> Histo
     if source != "auto":
         raise HistoryError(f"Unknown source {source!r}. One of {SOURCES}.")
     if _looks_krx(symbol):
-        if config.kis_ready():
+        if gateway.keys_ready("kis_quote"):
             return _cached("KIS", kis_history, symbol.split(".")[0], days)
         h = synthetic_history(symbol, days=days)
         return History(h.symbol, h.source, h.dates, h.closes,
@@ -501,12 +503,12 @@ def load_history(symbol: str, *, source: str = "auto", days: int = 504) -> Histo
     if _looks_yahoo(symbol):
         return _cached("YFINANCE", yf_history, symbol, days)
     if _looks_kis_market(symbol):
-        if config.kis_ready():
+        if gateway.keys_ready("kis_quote"):
             return _cached("KIS", kis_market_history, symbol, days)
         h = synthetic_history(symbol, days=days)
         return History(h.symbol, h.source, h.dates, h.closes,
                        note="KIS credentials are not configured; " + h.note)
-    if config.fmp_ready():
+    if gateway.keys_ready("fmp"):
         return _cached("FMP", fmp_history, symbol, days)
     h = synthetic_history(symbol, days=days)
     return History(h.symbol, h.source, h.dates, h.closes,

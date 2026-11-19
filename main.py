@@ -51,7 +51,8 @@ from ui.localization import translate_controls, LocalizedRoot
 from core.engine.feed import QuoteFeed
 from core.engine.runtime import EngineRuntime
 from core.rules.store import RuleStore
-from data.krx import KRXGateway
+from core import gateway as _data_gateway
+KRXGateway = _data_gateway.provider("data.krx").KRXGateway   # KEY-4: providers through core/gateway
 from ui.bonds_page import build_bonds_page
 from ui.crypto_page import build_crypto_page
 from ui.derivatives_page import build_derivatives_page

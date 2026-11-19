@@ -133,8 +133,8 @@ class KRXOutput:
 def execute_krx(request, *, gateway=None):
     request.validate()
     if gateway is None:
-        from data.krx import KRXGateway
-        gateway = KRXGateway()
+        from core import gateway as data_gateway
+        gateway = data_gateway.provider('data.krx').KRXGateway()
     if request.tool == 'snapshot':
         answer = gateway.market_snapshot()
     elif request.tool == 'indices':

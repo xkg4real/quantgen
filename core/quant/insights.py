@@ -27,6 +27,7 @@ except Exception:                                    # pragma: no cover
     _requests = None
 
 import config
+from core import gateway
 from core.research.ai_connection import (OUTPUT_TOKEN_LIMIT, error_message, reply_result,
                                          response_error, transport_error)
 from core.research.ai_output_check import NumberCheck, number_check
@@ -39,7 +40,7 @@ from core.quant.optimize import OptimizedPortfolio
 from core.quant.risk import RiskReport
 from core.quant.signals import SignalReport
 
-_API_URL = "https://api.anthropic.com/v1/messages"
+_API_URL = gateway.endpoint("anthropic")
 _API_VERSION = "2023-06-01"
 
 
@@ -56,7 +57,7 @@ class Analysis:
 
 def ai_ready() -> bool:
     """Configuration presence only; does not verify API authentication."""
-    return bool(config.anthropic_key()) and _requests is not None
+    return bool(gateway.local_key("anthropic")) and _requests is not None
 
 
 # --------------------------------------------------------------------------- #
@@ -318,7 +319,7 @@ def deep_analysis(kind: str, payload: dict, *, question: str = "") -> Analysis:
     def failure(code, engine="none", status=None):
         return Analysis("", engine, error_message(code, http_status=status), code, status)
 
-    key = config.anthropic_key()
+    key = gateway.local_key("anthropic")
     if not key:
         return failure("NOT_CONFIGURED")
     if _requests is None:

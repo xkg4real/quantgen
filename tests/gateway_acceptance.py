@@ -185,6 +185,44 @@ class KeyChangeTest(Base):
         self.assertEqual(calls, ["reloaded"])
         self.assertIsNot(gw.client("fmp"), old)
 
+    def test_every_held_client_is_told_on_every_change(self):
+        """KEY-4 item 6: two keys set one after the other; a caller holding the first client still sees both
+        changes, and so does a caller holding the second one."""
+        seen = []
+
+        class Holder:
+            def __init__(self):
+                self.n = len(seen)
+                seen.append([])
+
+            def reload_credentials(self):
+                seen[self.n].append("reloaded")
+
+        gw.LOCAL.override("kis_quote", Holder)
+        first = gw.client("kis_quote")
+        with _no_keys():
+            credentials.set("KIS_APP_KEY", FAKE)
+            second = gw.client("kis_quote")
+            credentials.set("KIS_APP_SECRET", FAKE + "2")
+        self.assertIsNot(first, second)
+        self.assertEqual(seen, [["reloaded", "reloaded"], ["reloaded"]])
+        del first, second
+        import gc
+        gc.collect()
+        self.assertEqual(gw.LOCAL.held("kis_quote"), [])            # dropped holders are not kept alive
+
+    def test_a_failing_reload_does_not_break_saving_a_key(self):
+        class Broken:
+            def reload_credentials(self):
+                raise RuntimeError("cannot")
+
+        gw.LOCAL.override("fmp", Broken)
+        held = gw.client("fmp")
+        with _no_keys():
+            credentials.set("FMP_API_KEY", FAKE)
+            self.assertEqual(gw.ready("fmp"), "ready")
+        self.assertIsNotNone(held)
+
 
 class ProfileTest(Base):
     def test_commercial_draft_turns_yahoo_and_fmp_off(self):
@@ -217,8 +255,96 @@ class LocalTest(Base):
     def test_ficc_exposes_only_listed_loaders(self):
         ficc = local.FiccData()
         self.assertTrue(callable(ficc.load_series))
-        with self.assertRaises(AttributeError):
-            ficc.synthetic_series
+        self.assertTrue(callable(ficc.synthetic_series))             # a pure helper (KEY-4 CONSTANTS)
+        for hidden in ("_fetch", "_cache_put", "_route", "_yf"):
+            with self.assertRaises(AttributeError):
+                getattr(ficc, hidden)
+
+
+class CoreAccessTest(Base):
+    """KEY-4: the ways core/ reaches providers through the gateway, and what an "off" route does to them."""
+
+    def _rows(self, provider, ids, days, **kwargs):
+        self.asked.append((provider, tuple(ids)))
+        return {i: [(f"2026-01-{n + 1:02d}", 1.0 + n) for n in range(28)] for i in ids}, {}
+
+    def setUp(self):
+        super().setUp()
+        self.asked = []
+        from core.ficc import data
+        self.data = data
+
+    def test_yahoo_off_stops_yahoo_tickers_only(self):
+        """Review item 1: with the commercial draft (yahoo off, fred keyless) a Yahoo ticker is refused before
+        any provider is asked, a FRED id still loads, and a synthetic request needs neither."""
+        gw._profile_override = "commercial"
+        with patch.object(self.data, "_provider_rows", self._rows):
+            with self.assertRaises(gw.GatewayOff):
+                gw.ficc().load_series("^GSPC", days=28)
+            with self.assertRaises(gw.GatewayOff):
+                gw.ficc().load_many(["DGS10", "KRW=X"], days=28)
+            with self.assertRaises(gw.GatewayOff):
+                gw.ficc().load_fx_spot("USDKRW", days=28)
+            with self.assertRaises(gw.GatewayOff):
+                gw.ficc()._yf_fetch(["SPY"], "1y")
+            with self.assertRaises(gw.GatewayOff):
+                gw.ficc().yfinance
+            self.assertEqual(self.asked, [])
+            self.assertEqual(gw.ficc().load_series("DGS10", days=28).source, "FRED")
+            self.assertEqual(gw.ficc().load_series("^GSPC", source="synthetic", days=60).source, "SYNTHETIC")
+        self.assertEqual(self.asked, [("FRED", ("DGS10",))])
+
+    def test_personal_profile_serves_both(self):
+        with patch.object(self.data, "_provider_rows", self._rows):
+            self.assertEqual(gw.ficc().load_series("^GSPC", days=28).source, "YFINANCE")
+            self.assertEqual(gw.ficc().load_series("DGS10", days=28).source, "FRED")
+
+    def test_ficc_calls_see_a_patch_of_the_provider_module(self):
+        """Looked up at call time, as the inside-function imports it replaces were."""
+        with patch.object(self.data, "load_short_rate", return_value="patched"):
+            self.assertEqual(gw.ficc().load_short_rate("USD"), "patched")
+
+    def test_provider_modules_and_off_routes(self):
+        import data.kis_markets as km
+        self.assertIs(gw.provider("data.kis_markets"), km)
+        with self.assertRaises(KeyError):
+            gw.provider("os")
+        gw._profile_override = "commercial"                          # fmp and gs_marquee off in the draft
+        with self.assertRaises(gw.GatewayOff):
+            gw.provider("data.fmp.quote_client")
+        with self.assertRaises(gw.GatewayOff):
+            gw.provider("gs_quant.session")
+        with _no_keys():
+            credentials.set("FMP_API_KEY", FAKE)
+            self.assertFalse(gw.keys_ready("fmp"))
+            self.assertEqual(gw.local_key("fmp"), "")
+            gw._profile_override = "personal"
+            self.assertTrue(gw.keys_ready("fmp"))
+            self.assertEqual(gw.local_key("fmp"), FAKE)
+
+    def test_fixed_local_sources_never_read_routes(self):
+        """KIS and the Upbit account are local_key in every valid profile (rule 1): reaching them opens no file,
+        so the in-memory KIS master download stays file-free."""
+        gw.reload()
+        with patch("builtins.open", side_effect=AssertionError("no file")), \
+                patch("pathlib.Path.read_text", side_effect=AssertionError("no file")):
+            self.assertEqual(gw.provider("data.kis_markets").__name__, "data.kis_markets")
+            with _no_keys():
+                self.assertFalse(gw.keys_ready("kis_quote"))
+                self.assertFalse(gw.keys_ready("upbit_account"))
+
+    def test_config_functions_are_read_at_call_time(self):
+        import config
+        with patch.object(config, "anthropic_key", return_value="patched-fixture"):
+            self.assertEqual(gw.local_key("anthropic"), "patched-fixture")
+            with gw.suspend_key("anthropic"):
+                self.assertEqual(gw.local_key("anthropic"), "")
+                self.assertEqual(config.anthropic_key(), "")
+            self.assertEqual(gw.local_key("anthropic"), "patched-fixture")
+        self.assertEqual([f.__name__ for f in gw.status_loaders()],
+                         ["quant_provider_status", "krx_provider_status", "ficc_provider_status",
+                          "crypto_provider_status"])
+        self.assertEqual(gw.endpoint("anthropic"), "https://api.anthropic.com/v1/messages")
 
 
 if __name__ == "__main__":

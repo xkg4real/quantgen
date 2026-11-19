@@ -35,7 +35,10 @@ def http_transport(base_url: str, token_getter: Callable[[], str], timeout_s: fl
                              timeout=timeout_s)
         if resp.status_code != 200:
             return {"ok": False, "error": f"http_{resp.status_code}"}
-        return resp.json()
+        try:
+            return resp.json()
+        except ValueError:
+            return {"ok": False, "error": "bad_answer"}
     return send
 
 
@@ -54,12 +57,19 @@ class RemoteRoute:
             raise RemoteRefused(f"{source_id}.{fn} is not forwardable")
         request = {"source": source_id, "fn": fn, "args": codec.encode(list(args)),
                    "kwargs": codec.encode(kwargs), "client_version": self._version}
-        answer = self._send(request)
-        if not isinstance(answer, dict):
+        try:
+            answer = self._send(request)
+        except Exception as exc:                     # network or transport failure: the name only, no message
+            raise RemoteFailed(f"transport_{type(exc).__name__}") from None
+        if not isinstance(answer, dict) or not isinstance(answer.get("ok"), bool):
             raise RemoteFailed("bad_answer")
-        if not answer.get("ok"):
-            raise RemoteFailed(str(answer.get("error", "no_answer")))
-        return codec.decode(answer.get("result"))
+        if not answer["ok"]:
+            error = answer.get("error", "no_answer")
+            raise RemoteFailed(error if isinstance(error, str) and error.isidentifier() else "bad_answer")
+        try:
+            return codec.decode(answer.get("result"))
+        except Exception:
+            raise RemoteFailed("bad_answer") from None
 
     def proxy(self, source_id: str) -> "RemoteProxy":
         return RemoteProxy(self, source_id)

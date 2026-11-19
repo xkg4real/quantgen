@@ -93,8 +93,8 @@ class QuoteFeed:
             with self._lock:
                 if not self._fmp_resolved:
                     try:
-                        from data.fmp import FMPQuoteClient
-                        self._fmp = FMPQuoteClient()
+                        from core import gateway
+                        self._fmp = gateway.provider("data.fmp").FMPQuoteClient()
                     except Exception:
                         self._fmp = None
                     self._fmp_resolved = True

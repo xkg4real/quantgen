@@ -28,10 +28,11 @@ def _synthetic() -> dict:
             "oi": [], "source": "SYNTHETIC"}
 
 def _live(days: int) -> dict:
-    from core.ficc.data import load_series
-    from data.crypto.crypto_client import BinancePublic, UpbitPublic
-    up = UpbitPublic().daily("KRW-BTC", days=days)
-    bn = BinancePublic()
+    from core import gateway
+    cc = gateway.provider("data.crypto.crypto_client")
+    load_series = gateway.ficc().load_series
+    up = cc.UpbitPublic().daily("KRW-BTC", days=days)
+    bn = cc.BinancePublic()
     btc = bn.daily("BTCUSDT", days=days)
     fund = bn.funding("BTCUSDT", days=min(days, 1500)).daily()
     fx = load_series("DEXKOUS", source="auto", days=days + 100)
@@ -62,12 +63,13 @@ def analyze(*, days: int = 730, source: str = "live", card_loader=None, include_
     out["premium_index"] = d["premium_index"]; out["oi"] = d["oi"]
     out["btc_dates"] = sorted(d["binance"]); out["btc"] = btc
     out["balances"] = None
-    if include_balances and config.upbit_ready() and source == "live":
+    from core import gateway
+    if include_balances and gateway.keys_ready("upbit_account") and source == "live":
         try:
-            from data.crypto.crypto_client import UpbitAccount, UpbitPublic
-            bal = UpbitAccount().balances()
+            cc = gateway.provider("data.crypto.crypto_client")
+            bal = cc.UpbitAccount().balances()
             coins = [f"KRW-{b['currency']}" for b in bal if b["currency"] != "KRW"]
-            out["balances"] = value_holdings(bal, krw_prices(UpbitPublic(), coins))
+            out["balances"] = value_holdings(bal, krw_prices(cc.UpbitPublic(), coins))
         except Exception as exc:
             out["balances_error"] = f"{type(exc).__name__}: {exc}"
     from core.quant.validate import load_cards
@@ -88,7 +90,8 @@ def krw_prices(public, markets) -> dict:
     rate limit or server error is not "no price": it is raised and shown as a failed
     read, without retrying each coin.
     """
-    from data.crypto.crypto_client import CryptoError
+    from core import gateway
+    CryptoError = gateway.provider("data.crypto.crypto_client").CryptoError
     rejected = (400, 404)
     if not markets:
         return {}

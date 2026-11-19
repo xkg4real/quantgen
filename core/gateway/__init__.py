@@ -8,11 +8,23 @@ The app calls only:
 - ``stream(source)``: the streaming client of a source (KIS realtime today);
 - ``answer(source, data, ...)``: wraps a result with source, route, delay and display right (D7-G rule 4).
 
+How core/ reaches the existing local clients (KEY-4; GATEWAY_DESIGN.md section 7):
+- ``provider(module)``: a provider module (``data.kis_markets``, ``data.fmp.quote_client``, ``gs_quant.session``...)
+  for code that builds the client itself; refused with GatewayOff when its source is off. Looked up at call time,
+  so whatever the provider module holds then (a test's patch included) is what the caller gets, as before;
+- ``ficc()``: the FRED/Yahoo loaders of core/ficc/data.py, each call checked against the ``fred`` and ``yahoo``
+  routes of the providers it would use;
+- ``keys_ready(source)``, ``local_key(source, part)``: the same config.py functions as before (``config.kis_ready``,
+  ``config.fmp_key``...), looked up at call time; ``suspend_key`` and ``status_loaders`` likewise;
+- ``endpoint(source)``: a provider URL core needs (the Anthropic messages URL).
+
 Which route serves a source comes from ``routes.json`` and the active profile (``core.app_identity.GATEWAY_PROFILE``;
 ``personal`` today). The company route stays closed until ``core.app_identity.company_data_server_configured()``.
 """
 from __future__ import annotations
 
+import contextlib
+import importlib
 import json
 import threading
 from dataclasses import dataclass, field
@@ -25,7 +37,8 @@ from core.gateway.routes import PROFILES, RouteError, load_routes
 from core.gateway.sources import SOURCES
 
 __all__ = ["client", "ready", "status", "stream", "answer", "route_of", "profile", "reload", "GatewayAnswer",
-           "GatewayOff", "RouteError", "SOURCES"]
+           "GatewayOff", "RouteError", "SOURCES", "provider", "ficc", "keys_ready", "local_key", "suspend_key",
+           "status_loaders", "endpoint", "PROVIDER_MODULES"]
 
 
 class GatewayOff(RuntimeError):
@@ -194,10 +207,15 @@ def _on_key_change(name: str) -> None:
     """D7-G rule 6: a key set or deleted in the app rebuilds the clients that use it."""
     for sid, src in SOURCES.items():
         if name in src.keys:
-            old = LOCAL._clients.get(sid)
+            held = LOCAL.held(sid)
             LOCAL.reload(sid)                        # the next client() builds a fresh one
-            if old is not None and hasattr(old, "reload_credentials"):
-                old.reload_credentials()             # a caller still holding the old client sees the change too
+            for old in held:                         # every caller still holding an earlier client sees it too,
+                reload_credentials = getattr(old, "reload_credentials", None)   # on every change, not just once
+                if callable(reload_credentials):
+                    try:
+                        reload_credentials()
+                    except Exception:
+                        pass                         # a client that cannot reload must not break saving a key
 
 
 def _subscribe() -> None:
@@ -206,3 +224,108 @@ def _subscribe() -> None:
 
 
 _subscribe()
+
+
+# -- KEY-4: the ways core/ reaches the existing local clients ----------------------------------------------------
+# Provider module -> the source whose route decides whether core may use it. None: an offline library or shared
+# plumbing that reaches no provider by itself (gs_quant's timeseries maths, the shared HTTP session).
+PROVIDER_MODULES: dict[str, Optional[str]] = {
+    "data.krx": "kis_quote",                     # KRXGateway: KIS first, then the KRX Open API and FMP
+    "data.krx.kis_client": "kis_quote",
+    "data.kis_markets": "kis_quote",
+    "data.kis_workspace": "kis_quote",
+    "data.krx.krx_market_client": "krx_open_api",
+    "data.fmp": "fmp",
+    "data.fmp.quote_client": "fmp",
+    "data.crypto.crypto_client": "crypto_public",
+    "data.net": None,
+    "gs_quant": None,
+    "gs_quant.timeseries": None,
+    "gs_quant.session": "gs_marquee",
+    "gs_quant.instrument": "gs_marquee",
+}
+
+# Source -> the config.py function behind each part. Looked up on the config module at call time.
+_CONFIG_FUNCTIONS: dict[str, dict[str, str]] = {
+    "kis_quote": {"ready": "kis_ready"},
+    "upbit_account": {"ready": "upbit_ready"},
+    "fmp": {"ready": "fmp_ready", "key": "fmp_key"},
+    "anthropic": {"ready": "ai_ready", "key": "anthropic_key"},
+    "gs_marquee": {"id": "gs_client_id", "secret": "gs_client_secret"},
+}
+_STATUS_LOADERS = ("quant_provider_status", "krx_provider_status", "ficc_provider_status", "crypto_provider_status")
+
+
+def _config():
+    import config
+    return config
+
+
+def _off(source: str) -> bool:
+    """True when the source is off. A fixed-local source (D7-G rule 1: KIS, Upbit account) is ``local_key`` in
+    every valid profile, so it never needs routes.json read: code that must open no file while it runs (the KIS
+    master download, for one) stays that way."""
+    if SOURCES[source].fixed_local:
+        return False
+    return route_of(source) == "off"
+
+
+def _refuse_if_off(source: str) -> None:
+    if _off(source):
+        raise GatewayOff(f"{source} is off in profile {profile()}")
+
+
+def provider(module: str) -> Any:
+    """The provider module ``module`` (a key of PROVIDER_MODULES). GatewayOff when its source is off; ImportError
+    as before when the package is not installed."""
+    if module not in PROVIDER_MODULES:
+        raise KeyError(f"not a provider module: {module}")
+    source = PROVIDER_MODULES[module]
+    if source is not None:
+        _refuse_if_off(source)
+    return importlib.import_module(module)
+
+
+def ficc() -> Any:
+    """The FRED/Yahoo loaders (core/ficc/data.py through local.FiccData); each call is checked against the routes
+    of the providers it would use, so ``yahoo: off`` stops a Yahoo ticker and leaves a FRED id alone."""
+    return LOCAL.client("fred")
+
+
+def keys_ready(source: str) -> bool:
+    """``config.kis_ready()`` and the like, for a source with a "ready" function; False when the source is off."""
+    if _off(source):
+        return False
+    return bool(getattr(_config(), _CONFIG_FUNCTIONS[source]["ready"])())
+
+
+def local_key(source: str, part: str = "key") -> str:
+    """The user's own key for a source on the local route (``config.fmp_key()`` and the like); "" when off.
+    Only for code on this PC that sends the key to the provider itself, as before."""
+    if _off(source):
+        return ""
+    return getattr(_config(), _CONFIG_FUNCTIONS[source][part])()
+
+
+@contextlib.contextmanager
+def suspend_key(source: str, part: str = "key"):
+    """Make the key read as absent while the block runs (self-checks that must not reach the network). Same swap
+    of the config function as the code it replaces, restored on exit."""
+    cfg = _config()
+    name = _CONFIG_FUNCTIONS[source][part]
+    saved = getattr(cfg, name)
+    setattr(cfg, name, lambda: "")
+    try:
+        yield
+    finally:
+        setattr(cfg, name, saved)
+
+
+def status_loaders() -> tuple:
+    """The presence-only provider status functions of config.py (quant, KRX, FICC, crypto), in that order."""
+    cfg = _config()
+    return tuple(getattr(cfg, name) for name in _STATUS_LOADERS)
+
+
+def endpoint(source: str) -> str:
+    return _local.ENDPOINTS[source]

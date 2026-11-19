@@ -80,8 +80,8 @@ def provider_failure_reason(exc):
 
 def load_markets(*, loader=None, today=None):
     if loader is None:
-        from core.ficc.data import load_series
-        loader = load_series
+        from core import gateway
+        loader = gateway.ficc().load_series
     today = today or datetime.now(timezone.utc).date()
     rows = []
     for label, symbol, provider, unit, route in SPECS:
