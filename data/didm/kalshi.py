@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import re
 
+from data.didm.keys import SourceError
 from data.net import session
 
 BASE = "https://external-api.kalshi.com/trade-api/v2"
@@ -25,7 +26,7 @@ def _check(ticker: str) -> str:
 def _get(path: str, params: dict | None = None) -> dict:
     resp = session.get(f"{BASE}{path}", params=params or {}, timeout=TIMEOUT_SECONDS)
     if resp.status_code != 200:
-        raise RuntimeError(f"Kalshi {path.split('?')[0]}: HTTP {resp.status_code}")
+        raise SourceError(f"Kalshi {path.split('?')[0]}: HTTP {resp.status_code}")
     return resp.json()
 
 

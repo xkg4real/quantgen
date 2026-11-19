@@ -25,6 +25,19 @@ class MissingKey(RuntimeError):
     pass
 
 
+class SourceError(RuntimeError):
+    """A provider refused or answered oddly. The message is safe to print: HTTP status and the provider's
+    own short error text with every key value masked (``safe_detail``)."""
+
+
+def safe_detail(text: object, *secrets: str, limit: int = 160) -> str:
+    out = " ".join(str(text or "").split())[:limit]
+    for secret in secrets:
+        if secret:
+            out = out.replace(secret, "****")
+    return out
+
+
 def in_store(name: str) -> bool:
     """True once the credential store knows this name (research names: after the KEY-3 PR)."""
     return credentials.names.is_secret(name)

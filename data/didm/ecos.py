@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from urllib.parse import quote
 
-from data.didm.keys import MissingKey, get_key, require
+from data.didm.keys import MissingKey, SourceError, get_key, require
 from data.net import session
 
 KEY_NAME = "ECOS_API_KEY"
@@ -38,7 +38,7 @@ def fetch_series(stat_code: str, cycle: str, start: str, end: str, *item_codes: 
     url = "/".join(parts) + ("/" if trailing_slash else "")
     resp = session.get(url, timeout=TIMEOUT_SECONDS)
     if resp.status_code != 200:
-        raise RuntimeError(f"ECOS {stat_code}: HTTP {resp.status_code}")
+        raise SourceError(f"ECOS {stat_code}: HTTP {resp.status_code}")
     return resp.json()
 
 
@@ -49,5 +49,5 @@ def fetch_item_list(stat_code: str) -> dict:
                     "json", "kr", "1", "200", quote(stat_code, safe="")])
     resp = session.get(url, timeout=TIMEOUT_SECONDS)
     if resp.status_code != 200:
-        raise RuntimeError(f"ECOS item list {stat_code}: HTTP {resp.status_code}")
+        raise SourceError(f"ECOS item list {stat_code}: HTTP {resp.status_code}")
     return resp.json()

@@ -110,6 +110,43 @@ class KeyLookup(unittest.TestCase):
             self.assertNotIn("secret-123", repr(keys.key_status("FRED_API_KEY")))
 
 
+class SafeErrors(unittest.TestCase):
+    def test_safe_detail_masks_key(self):
+        msg = keys.safe_detail("Invalid key KEY123 for   this call", "KEY123")
+        self.assertEqual(msg, "Invalid key **** for this call")
+
+    def test_reason_shows_didm_messages_only(self):
+        from tools.didm.collect_daily import _http_reason
+        self.assertEqual(_http_reason(keys.SourceError("Tiingo news: HTTP 403 (no news on this plan)")),
+                         "SourceError: Tiingo news: HTTP 403 (no news on this plan)")
+        self.assertEqual(_http_reason(news.NewsError("Alpha Vantage reply without feed (Information)")),
+                         "NewsError: Alpha Vantage reply without feed (Information)")
+        leaky = RuntimeError("GET https://x.example/?apikey=SECRET failed")
+        self.assertEqual(_http_reason(leaky), "RuntimeError")
+
+    def test_alphavantage_information_reply(self):
+        from data.didm import alphavantage
+        resp = mock.Mock(status_code=200)
+        resp.json.return_value = {"Information": "Key AVKEY9 hit the daily limit of 25 requests."}
+        with mock.patch.object(alphavantage, "require", return_value="AVKEY9"), \
+                mock.patch.object(alphavantage.session, "get", return_value=resp):
+            with self.assertRaises(keys.SourceError) as cm:
+                alphavantage.fetch_news(["AAPL"])
+        self.assertIn("daily limit", str(cm.exception))
+        self.assertNotIn("AVKEY9", str(cm.exception))
+
+    def test_tiingo_403_detail(self):
+        from data.didm import tiingo
+        resp = mock.Mock(status_code=403)
+        resp.json.return_value = {"detail": "You do not have permission to access the News API"}
+        with mock.patch.object(tiingo, "require", return_value="TKEY"), \
+                mock.patch.object(tiingo.session, "get", return_value=resp):
+            with self.assertRaises(keys.SourceError) as cm:
+                tiingo.fetch_news(["nvda"])
+        self.assertIn("HTTP 403", str(cm.exception))
+        self.assertIn("News API", str(cm.exception))
+
+
 class RealStoreRoundTrip(unittest.TestCase):
     """Against core.credentials itself (KEY-2/KEY-3 on main), with its in-memory test backend."""
 

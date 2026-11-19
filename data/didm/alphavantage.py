@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import re
 
-from data.didm.keys import require
+from data.didm.keys import SourceError, require, safe_detail
 from data.net import session
 
 KEY_NAME = "ALPHAVANTAGE_API_KEY"
@@ -16,7 +16,8 @@ _TICKER = re.compile(r"^[A-Z0-9:._\-]{1,20}$")
 
 
 def fetch_news(tickers: list[str] | None = None, topics: list[str] | None = None, limit: int = 50) -> dict:
-    params = {"function": "NEWS_SENTIMENT", "limit": int(limit), "apikey": require(KEY_NAME)}
+    key = require(KEY_NAME)
+    params = {"function": "NEWS_SENTIMENT", "limit": int(limit), "apikey": key}
     if tickers:
         if not all(_TICKER.match(t) for t in tickers):
             raise ValueError("bad ticker")
@@ -25,5 +26,10 @@ def fetch_news(tickers: list[str] | None = None, topics: list[str] | None = None
         params["topics"] = ",".join(topics)
     resp = session.get(URL, params=params, timeout=TIMEOUT_SECONDS)
     if resp.status_code != 200:
-        raise RuntimeError(f"Alpha Vantage NEWS_SENTIMENT: HTTP {resp.status_code}")
-    return resp.json()
+        raise SourceError(f"Alpha Vantage NEWS_SENTIMENT: HTTP {resp.status_code}")
+    payload = resp.json()
+    if "feed" not in payload:
+        for field in ("Information", "Note", "Error Message"):
+            if field in payload:
+                raise SourceError(f"Alpha Vantage NEWS_SENTIMENT {field}: {safe_detail(payload[field], key)}")
+    return payload

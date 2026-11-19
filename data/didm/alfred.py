@@ -6,7 +6,7 @@ key, so it is never logged or put into an exception message.
 """
 from __future__ import annotations
 
-from data.didm.keys import MissingKey, get_key, require
+from data.didm.keys import MissingKey, SourceError, get_key, require
 from data.net import session
 
 KEY_NAME = "FRED_API_KEY"
@@ -31,5 +31,5 @@ def fetch_vintages(series_id: str) -> dict:
     resp = session.get(OBSERVATIONS_URL, params=params, timeout=TIMEOUT_SECONDS)
     if resp.status_code != 200:
         # Do not include resp.url: it carries the key.
-        raise RuntimeError(f"ALFRED {series_id}: HTTP {resp.status_code}")
+        raise SourceError(f"ALFRED {series_id}: HTTP {resp.status_code}")
     return resp.json()

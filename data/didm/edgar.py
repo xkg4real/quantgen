@@ -10,7 +10,7 @@ from __future__ import annotations
 import threading
 import time
 
-from data.didm.keys import MissingKey, get_key, require
+from data.didm.keys import MissingKey, SourceError, get_key, require
 from data.net import session
 
 UA_NAME = "SEC_EDGAR_USER_AGENT"
@@ -38,5 +38,5 @@ def fetch_submissions(cik: int) -> dict:
     resp = session.get(SUBMISSIONS_URL.format(cik=int(cik)), timeout=TIMEOUT_SECONDS,
                        headers={"User-Agent": ua, "Accept-Encoding": "gzip, deflate"})
     if resp.status_code != 200:
-        raise RuntimeError(f"EDGAR CIK {int(cik)}: HTTP {resp.status_code}")
+        raise SourceError(f"EDGAR CIK {int(cik)}: HTTP {resp.status_code}")
     return resp.json()

@@ -76,10 +76,18 @@ def _data_dir(path: str) -> Path:
     return d
 
 
+_SAFE_MODULES = ("core.didm.", "data.didm.")
+
+
 def _http_reason(exc: Exception) -> str:
+    """Exception name, HTTP status, and the message only for DIDM's own exceptions (written to hold no
+    key or key-bearing URL). Library exceptions (requests etc.) can carry URLs with keys: name only."""
+    name = type(exc).__name__
+    if type(exc).__module__.startswith(_SAFE_MODULES) and str(exc):
+        return f"{name}: {exc}"
     resp = getattr(exc, "response", None)
     code = getattr(resp, "status_code", None)
-    return f"{type(exc).__name__}" + (f" HTTP {code}" if code is not None else "")
+    return name + (f" HTTP {code}" if code is not None else "")
 
 
 def collect_gdelt(store: PointInTimeStore) -> tuple[int, list[dict]]:

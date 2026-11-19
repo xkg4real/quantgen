@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import re
 
-from data.didm.keys import require
+from data.didm.keys import SourceError, require
 from data.net import session
 
 KEY_NAME = "CRYPTOPANIC_API_KEY"
@@ -36,4 +36,4 @@ def fetch_posts(currencies: list[str] | None = None) -> tuple[dict, str]:
         last = resp.status_code
         if resp.status_code not in (404, 410):
             break
-    raise RuntimeError(f"CryptoPanic posts: HTTP {last}")
+    raise SourceError(f"CryptoPanic posts: HTTP {last}")

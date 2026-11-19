@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import re
 
-from data.didm.keys import require
+from data.didm.keys import SourceError, require, safe_detail
 from data.net import session
 
 KEY_NAME = "TIINGO_API_KEY"
@@ -24,8 +24,13 @@ def fetch_news(tickers: list[str] | None = None, start_date: str | None = None, 
         params["tickers"] = ",".join(t.lower() for t in tickers)
     if start_date:
         params["startDate"] = start_date
+    key = require(KEY_NAME)
     resp = session.get(URL, params=params, timeout=TIMEOUT_SECONDS,
-                       headers={"Authorization": f"Token {require(KEY_NAME)}", "Content-Type": "application/json"})
+                       headers={"Authorization": f"Token {key}", "Content-Type": "application/json"})
     if resp.status_code != 200:
-        raise RuntimeError(f"Tiingo news: HTTP {resp.status_code}")
+        try:
+            detail = resp.json().get("detail", "")
+        except Exception:  # noqa: BLE001 - not JSON
+            detail = ""
+        raise SourceError(f"Tiingo news: HTTP {resp.status_code}" + (f" ({safe_detail(detail, key)})" if detail else ""))
     return resp.json()
