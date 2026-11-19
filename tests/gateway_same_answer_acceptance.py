@@ -95,15 +95,20 @@ LONG_LIST = 24
 
 
 def _summary(items: list):
-    """A long list as its length, first and last 8 items and two checks over all of it, so the fixture stays small
-    while any changed, added or dropped item still changes the answer: the sum and sum of squares of every number in
-    it (compared within the float tolerance) and a sha256 of everything else, numbers replaced by a placeholder
-    (compared exactly: strings, keys, structure)."""
+    """A long list (over 24 items) as its length, its first and last 8 items (exact) and checks over all of it, so
+    the fixture stays small while a changed, added, dropped or moved item still changes the answer:
+
+    - floats, in the order they appear: sum, sum of squares, position-weighted sum ``sum((i+1)*x_i)`` and sum of
+      squared steps ``sum((x_{i+1}-x_i)**2)``, each compared within the float tolerance. The weighted sum moves when
+      values change place; the squared steps move when two neighbours are swapped (by 2*(b-a)*(q-p) for p,a,b,q),
+      which the weighted sum of a long, level series alone could hide inside the tolerance;
+    - everything else exactly, as a sha256: strings, keys, structure and integers (review 3 DOC3-5: an integer is
+      never float noise, so +500 in the middle of a list of integers changes the hash), floats replaced by "#"."""
     numbers: list[float] = []
 
     def shape(value):
-        if isinstance(value, (int, float)) and not isinstance(value, bool):
-            numbers.append(float(value))
+        if isinstance(value, float):
+            numbers.append(value)
             return "#"
         if isinstance(value, list):
             return [shape(v) for v in value]
@@ -112,8 +117,11 @@ def _summary(items: list):
         return value
 
     text = json.dumps(shape(items), sort_keys=True, ensure_ascii=False)
+    finite = [v for v in numbers if math.isfinite(v)]           # "nan"/"inf" are strings by now, kept in the sha
     return {"__n__": len(items), "head": items[:8], "tail": items[-8:],
-            "sum": float(sum(numbers)), "sumsq": float(sum(v * v for v in numbers)),
+            "sum": float(sum(finite)), "sumsq": float(sum(v * v for v in finite)),
+            "wsum": float(sum((i + 1) * v for i, v in enumerate(finite))),
+            "dsq": float(sum((b - a) ** 2 for a, b in zip(finite, finite[1:]))),
             "shape_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest()}
 
 
@@ -557,14 +565,24 @@ def _provider_reasons(source):
     return {"got": got, "reasons": reasons, "skip": source._fmp_skip[1]}
 
 
+KIMCHI_FITTED = ("adf_p", "half_life_days", "decay", "pred_slope", "pred_t")
+
+
 def _crypto(out):
-    """The parts of the crypto analysis that come from the providers. The statistics computed from them (kimchi
-    premium ADF test, GARCH fit, weekday table) are left out: they depend on the numpy/statsmodels build (an ADF
-    p-value on these smooth fake series differs by 0.17 between builds), and this test proves the gateway hands the
-    same inputs to the same functions, not that a library reproduces its numbers. The inputs themselves are kept
-    (prices, balances, premium index, open interest, dates) and every provider call is recorded exactly."""
+    """The parts of the crypto analysis that come from the providers, and the kimchi premium computed from them by
+    plain arithmetic. Only the fitted statistics are left out (kimchi ADF p-value, half-life, AR(1) decay, the
+    Newey-West prediction slope and t; the GARCH fit; the weekday table): they depend on the numpy/statsmodels build
+    (an ADF p-value on these smooth fake series differs by 0.17 between builds), and this test proves the gateway
+    hands the same inputs to the same functions, not that a library reproduces its numbers. Kept: prices, balances,
+    premium index, open interest, dates, and from the kimchi premium its dates, premium_pct, z_1y, btc_usd, last
+    and mean/max values (review 3 SA3-2: these carry the Upbit KRW closes and the USD/KRW series, so a scaled
+    exchange rate or Upbit price changes the answer); every provider call is recorded exactly."""
     keep = ("source", "usdkrw_source", "balances", "balances_error", "premium_index", "oi", "btc_dates", "btc")
-    return {k: out.get(k) for k in keep}
+    answer = {k: out.get(k) for k in keep}
+    kimchi = out.get("kimchi")
+    answer["kimchi"] = None if kimchi is None else {
+        f.name: getattr(kimchi, f.name) for f in dataclasses.fields(kimchi) if f.name not in KIMCHI_FITTED}
+    return answer
 
 
 def _etf(out):
@@ -581,7 +599,10 @@ REL_TOL, ABS_TOL = 1e-6, 1e-9
 
 def same(now, then, path="") -> list[str]:
     """Every difference between ``now`` and ``then`` (empty list when they match). Structure, keys, strings,
-    integers, booleans and lengths are compared exactly; floats within rel 1e-6 / abs 1e-9.
+    integers, booleans and lengths are compared exactly; floats within rel 1e-6 / abs 1e-9. A list over 24 items
+    was written by ``_summary``: its first and last 8 items are compared as above, the rest through the summary
+    (integers, strings and structure exactly by the sha256; floats by sum, sum of squares, position-weighted sum and
+    sum of squared steps within the same tolerance).
 
     Why a float tolerance is enough to catch a gateway change: the results of iterative fits (Nelson-Siegel, GARCH
     conditional volatility) move by up to ~1e-8 relative between numpy/BLAS builds and operating systems, while the
@@ -621,6 +642,21 @@ class SameAnswerTest(unittest.TestCase):
         self.assertNotEqual(same({"a": [1.0]}, {"a": [1.0, 2.0]}), [])
         self.assertNotEqual(same({"a": 1}, {"b": 1}), [])
         self.assertEqual(len(same({"a": 1.0, "b": 2.0}, {"a": 1.5, "b": 2.5})), 2)       # every difference reported
+
+    def test_long_list_summary_sees_order_and_integers(self):
+        """Review 3 SA3-1/DOC3-5: in the middle of a long list (not in the 8 exact items at either end) two swapped
+        neighbours, a reversed stretch and +500 on one integer each change the summarised answer."""
+        level = [100.0 + 0.01 * math.sin(i) for i in range(500)]       # a level series: the hardest case for sums
+        swapped = list(level)
+        swapped[250], swapped[251] = swapped[251], swapped[250]
+        reversed_middle = level[:8] + level[8:-8][::-1] + level[-8:]
+        for changed in (swapped, reversed_middle):
+            self.assertNotEqual(same(canon(changed), canon(level)), [])
+        integers = list(range(100))
+        bumped = list(integers)
+        bumped[50] += 500
+        self.assertNotEqual(same(canon(bumped), canon(integers)), [])
+        self.assertEqual(same(canon([v * (1 + 1e-12) for v in level]), canon(level)), [])   # float noise passes
 
     def test_no_fake_key_in_the_recorded_answers(self):
         self.assertNotIn(FAKE_KEY, GOLDEN.read_text(encoding="utf-8"))

@@ -1,6 +1,6 @@
 # 공급원 게이트웨이 설계 (KEY-3)
 
-- 판: v0.3.1 (2026-11-19, PR #133 메인 검토 반영: 6절 동결 예외·허용 목록·상한, 7a절 막힘(off·company)·묶음 로더·여러 공급원 모듈·예외 5곳·규칙 6 범위, 7절 하네스와 지문). v0.3 (2026-11-19, KEY-4: 6절 판 3, 7a절 새로, 3절 규칙 4·6과 9절 정정 — 메인 세션 KEY-3 검토 잔여 1·8번). v0.2 2026-11-19 (PR #132 검토: 경계 시험 ast화). v0.1 2026-11-19. 작성: PAYMENTS_ACCOUNT_KEYS 세션. ID `KEY-3/design`.
+- 판: v0.3.2 (2026-11-20, PR #133 3차 검토 반영: 6절 화면 44곳·QuoteFeed 규칙·풀지 못한 `level`, 7a절 import 때 정하는 5곳을 코드 docstring과 같게, 같은 답 시험의 긴 목록 비교 방식과 김치 프리미엄 범위, 7절 KEY-5 행). v0.3.1 (2026-11-19, PR #133 메인 검토 반영: 6절 동결 예외·허용 목록·상한, 7a절 막힘(off·company)·묶음 로더·여러 공급원 모듈·예외 5곳·규칙 6 범위, 7절 하네스와 지문). v0.3 (2026-11-19, KEY-4: 6절 판 3, 7a절 새로, 3절 규칙 4·6과 9절 정정 — 메인 세션 KEY-3 검토 잔여 1·8번). v0.2 2026-11-19 (PR #132 검토: 경계 시험 ast화). v0.1 2026-11-19. 작성: PAYMENTS_ACCOUNT_KEYS 세션. ID `KEY-3/design`.
 - **소유자 승인: 2026-11-19, 원문 "Key-3 승인"** (이 세션 채팅).
 - 근거: 소유자 D7-G 승인 (2026-11-18 14:15 KST, 원문 "그러면 D7-G의 방식대로 진행하겠습니다", handoff `MERGE_QUEUE.md`, 커밋 `762150c`), 설계 원안 handoff `plans/2026-11-17/D7_ENV_STRUCTURE.md` 5장.
 - 기준: main `ca5da08` (KEY-2 `3249af7`, KEY-2/b `ca5da08` 병합 뒤). 줄 번호는 이 커밋 기준이며 코드가 바뀌면 달라집니다.
@@ -197,14 +197,15 @@ flowchart LR
 - FRED·Yahoo 클라이언트 `core.ficc.data`: **허용 목록 방식.** 모듈 자체, 그리고 `local.FiccData.CONSTANTS`(`G10_KRW`, `Series`, `CurvePanel`, `CurveSnapshot`, `_period_for`, `synthetic_*`)에 없는 모든 이름 (`load_*`, `_yf_fetch`, `_fred_fetch`, `_provider_rows`, `_fetch`, `_treasury_from_fred`, 손잡이 `_yf`·`_pdr`·`_requests` 등)을 import로든 속성으로든 쓰면 셉니다. 시험은 그 튜플을 `ast`로 읽어 게이트웨이와 한 목록을 쓰고, 그 8개를 고정해 둡니다 (`test_ficc_allowlist_is_pinned`; `CONSTANTS`와 `EXPOSED`는 겹치지 않음).
 - 동결된 엔진 피드를 FMP 클라이언트 없이 만드는 꼴 (`QuoteFeed()`/`QuoteFeed(g)`, `fmp_client=` 없음): 피드가 스스로 FMP에 닿으므로 셈 (`call:core.engine.feed.QuoteFeed(no fmp_client)`). `main.py`는 게이트웨이 하위 클래스를 쓰고, `quantgen_desktop/paper.py`가 화면 목록에 올라 있음 (KEY-5).
 - 패키지를 import한 뒤 속성으로 닿는 꼴 (`import data` → `data.kis_markets.KISMarkets()`, `from core import ficc` → `ficc.data.load_series(...)`).
-- `importlib.import_module`·`__import__` (별칭 `from importlib import import_module as im`, 키워드 `name=`, 상대 이름 + `package=` (글자, 또는 `__package__`·`__name__`을 검사하는 파일의 이름으로 풀어서), `fromlist` 항목, 공급사를 품은 부모 패키지 (`import_module('data')`, `__import__('core.ficc')` 뒤 속성·`getattr`) `importlib.__import__`, `package=__spec__.parent`, `__import__`의 `level`, `getattr(<import한 패키지>, "글자")` 포함; 글자로 적힌 이름만. 끝내 풀지 못한 상대 이름은 공급원으로 보고 셈 (안전한 쪽으로 실패)).
+- `importlib.import_module`·`__import__` (별칭 `from importlib import import_module as im`, 키워드 `name=`, 상대 이름 + `package=` (글자, 또는 `__package__`·`__name__`을 검사하는 파일의 이름으로 풀어서), `fromlist` 항목, 공급사를 품은 부모 패키지 (`import_module('data')`, `__import__('core.ficc')` 뒤 속성·`getattr`) `importlib.__import__`, `package=__spec__.parent`, `__import__`의 `level`, `getattr(<import한 패키지>, "글자")` 포함; 글자로 적힌 이름만. 끝내 풀지 못한 상대 이름과 정수 글자가 아닌 `level` (변수 등)은 공급원으로 보고 셈 (안전한 쪽으로 실패)).
+- 동결된 `core/engine/feed.py`의 `QuoteFeed`를 FMP 클라이언트 없이 만들기 (`QuoteFeed(g)`, `QuoteFeed(g, None)`, `fmp_client=None`): 그 feed가 FMP에 스스로 닿습니다. 그 클래스를 이어받으면서 자기 `fmp`를 정의하지 않는 하위 클래스도 셉니다 (`main.py`의 하위 클래스는 `fmp`를 게이트웨이로 만듦).
 - `config`의 키 함수: 호출 (`config.kis_ready()`), 값으로 쓰기 (`f = config.fmp_key`, `getattr(config, "anthropic_key")`), 별칭 (`import config as QC`), `from config import kis_ready`. 키 존재를 알려 주는 `config.*_provider_status` (quant·krx·ficc·crypto)도 셉니다.
 - Anthropic API 주소 문자열 (`https://api.anthropic.com...`). 안내 문구 속 호스트 이름은 세지 않음.
 - 읽거나 구문 분석하지 못한 파일 (SyntaxError, UnicodeDecodeError)은 건너뛰지 않고 **실패**로 봅니다 (`test_unparsable_file_fails`). 파일은 바이트로 `ast`에 주므로 PEP 263 인코딩 선언 (예: utf-7)도 Python이 실행하는 그대로 읽습니다 (`test_coding_cookie_is_honoured`).
 
 **허용된 곳 (세지 않음):** `core/gateway/`, 그리고 게이트웨이가 감싸는 FRED·Yahoo 클라이언트 `core/ficc/data.py` 자체.
 
-**검토 3번 (경계 범위) 선택: 넣음.** FRED·Yahoo 로더 (`core.ficc.data`)와 `gs_quant` 직접 사용을 경계에 넣었습니다. **KEY-4 뒤 사실:** `core/`의 FRED·Yahoo 호출은 모두 `gateway.ficc()`를 지나고, 호출마다 그 요청이 닿을 공급원 (`_route`로 Yahoo 티커/FRED id를 가림)의 길을 봅니다. 그래서 `commercial`의 `yahoo: off`는 core 경로에서 Yahoo 티커만 막고 FRED id는 그대로 둡니다: `source="auto"`의 FRED+Yahoo 묶음은 Yahoo id만 SYNTHETIC(사유 포함)으로 돌려주고 FRED id는 계속 읽으며, Yahoo를 콕 집은 요청과 Yahoo 전용 호출은 `GatewayOff` (`CoreAccessTest.test_yahoo_off_stops_yahoo_tickers_only`). `history.py` 디스크 캐시도 막힌 공급원의 옛 파일을 내주지 않습니다. **화면 43곳 (KEY-5 전)은 아직 `core.ficc.data` 등을 직접 부르므로 그 경로는 막히지 않습니다** (지금 `commercial`은 켜지지 않으므로 실제 영향 없음).
+**검토 3번 (경계 범위) 선택: 넣음.** FRED·Yahoo 로더 (`core.ficc.data`)와 `gs_quant` 직접 사용을 경계에 넣었습니다. **KEY-4 뒤 사실:** `core/`의 FRED·Yahoo 호출은 모두 `gateway.ficc()`를 지나고, 호출마다 그 요청이 닿을 공급원 (`_route`로 Yahoo 티커/FRED id를 가림)의 길을 봅니다. 그래서 `commercial`의 `yahoo: off`는 core 경로에서 Yahoo 티커만 막고 FRED id는 그대로 둡니다: `source="auto"`의 FRED+Yahoo 묶음은 Yahoo id만 SYNTHETIC(사유 포함)으로 돌려주고 FRED id는 계속 읽으며, Yahoo를 콕 집은 요청과 Yahoo 전용 호출은 `GatewayOff` (`CoreAccessTest.test_yahoo_off_stops_yahoo_tickers_only`). `history.py` 디스크 캐시도 막힌 공급원의 옛 파일을 내주지 않습니다. **화면 44곳 (KEY-5 전)은 아직 `core.ficc.data` 등을 직접 부르므로 그 경로는 막히지 않습니다** (지금 `commercial`은 켜지지 않으므로 실제 영향 없음).
 
 **어디서 도나:** Runtime (경로 필터)과 **Compliance (경로 필터 없음, 모든 PR)** 두 곳. 표준 라이브러리만 씀.
 
@@ -257,12 +258,12 @@ core는 공급사 클라이언트를 직접 import하지 않고 아래 입구만
 | `endpoint("anthropic")` | Anthropic 메시지 주소 | — |
 
 - **고정 로컬 공급원 3개 (`kis_quote`, `kis_account`, `upbit_account`)는 `routes.json`을 읽지 않습니다.** 규칙 1로 어떤 프로필에서도 `local_key`이므로 `route_of()`가 표 없이 `local_key`를 돌려줍니다. 그래서 KIS 종목 마스터처럼 "실행 중 파일을 열지 않는" 코드가 그대로이고 (`market_directory_acceptance`), `routes.json`이 깨져도 KIS·Upbit 잔고는 동작하며 `status()`도 그렇게 보여 줍니다 (나머지는 `off`).
-- **"부를 때 조회"의 예외 5곳 (모듈을 읽을 때 한 번 정함):** `main.py`의 `KRXGateway`, `core/quant/gsq.py`의 `gs_quant`, `core/quant/history.py`의 `_requests` (`data.net` 공유 세션), `core/quant/risk.py`의 `_gts`, `core/quant/insights.py`의 `_API_URL`. 모두 고정 로컬이거나 공급원 없는 것이라 길 판단과 무관하며, 바뀌기 전에도 모듈 맨 위 import였습니다.
+- **"부를 때 조회"의 예외 5곳 (모듈을 읽을 때 한 번 정함, `core/gateway/__init__.py` docstring과 같음):** `main.py` `QuoteFeed`의 기반 클래스 (동결 feed의 `QuoteFeed`; `main.py`는 `krx_gateway` 함수와 이 기반 클래스를 이름에 묶을 뿐, 그때 공급원이나 길을 아무것도 풀지 않음 — KRX 게이트웨이와 FMP 클라이언트는 `main()`·`fmp` 안에서 부를 때 만듦), `core/quant/gsq.py`의 `gs_quant`, `core/quant/history.py`의 `_requests` (`data.net` 공유 세션), `core/quant/risk.py`의 `_gts`, `core/quant/insights.py`의 `_API_URL`. 모두 고정 로컬이거나 공급원 없는 것이라 길 판단과 무관하며, 바뀌기 전에도 모듈 맨 위 import였습니다.
 - **규칙 6 (키 바뀜 알림)** 은 `client(source)`로 받은 클라이언트에만 갑니다. `provider()`로 클래스를 받아 직접 만든 클라이언트 (예: `KISMarkets()`)는 지금까지처럼 만들 때 키를 읽습니다.
 - **`keys_ready`가 `False`일 때** 화면은 "키 없음"으로 보일 수 있습니다 (막힘과 구별 안 됨). 구별해 보여 주는 일은 KEY-5 (`status()`의 `state`·`route`를 그대로 그림)에 넘깁니다.
 - **규칙 4 (결과 꼬리표):** core 결과는 지금까지의 형 (`History`, `Series`, `CurvePanel` 등) 그대로입니다 ("앱 동작 동일"). 출처·길·지연·표시권은 `status()` 행과 `answer()`로 화면에 가며, 화면이 그 값을 그리는 일은 KEY-5입니다.
 - **`krx_gateway()`:** KRX 화면의 `KRXGateway`를 그때 만듭니다. KIS는 고정 로컬이라 늘 실제 클라이언트이고, KRX Open API·OpenDART가 막히면 그 하위 클라이언트를 `OffClient`(준비 안 됨, 상태 행에 사유, 행 목록은 빈 목록, 그 밖의 호출은 `GatewayOff`)로 바꿔 공급사에 닿지 않습니다. `main.py`는 이것을 `main()` 안에서 부르므로, routes.json이 깨졌거나 공급원이 꺼져도 앱은 시작합니다 (PR #133 2차 검토 A1, `tests/gateway_main_acceptance.py`).
-- **앱 동작 동일 근거:** `tests/gateway_same_answer_acceptance.py`. 바뀐 core 호출 51가지 요청 (load_history의 모든 auto 분기와 키 유무, crypto 잔고·가격, market_cap FMP·요금제 오류, 파생·ETF의 KIS 분기, 채권·금리·구조화·환율 기본 로더, gsq와 가짜 gs_quant 등)을 공급사 모듈 자리에 고정 가짜를 넣고 main `9f76b07` (KEY-4 전)에서 돌린 답과 **가짜가 받은 인자** (실제 시그니처에 묶어 기록)를 `tests/fixtures/gateway/same_answers_main.json`에 적었고, 브랜치에서 같은 요청이 같은 답·같은 인자를 내는지 봅니다. 오늘 날짜에 따라 바뀌는 값은 적지 않습니다. 비교는 구조·키·문자열·정수·길이는 정확히, 소수는 상대 1e-6·절대 1e-9 안 (반복 적합 결과는 numpy/BLAS 빌드·OS마다 끝자리가 1e-8 정도 움직임; 게이트웨이 변경은 정확 비교되는 호출 인자·입력열이 잡음). crypto 분석의 김치 프리미엄 ADF·GARCH·요일표 통계는 statsmodels 빌드에 따라 크게 달라 빼고, 그 입력값과 공급원 호출만 비교합니다.
+- **앱 동작 동일 근거:** `tests/gateway_same_answer_acceptance.py`. 바뀐 core 호출 51가지 요청 (load_history의 모든 auto 분기와 키 유무, crypto 잔고·가격, market_cap FMP·요금제 오류, 파생·ETF의 KIS 분기, 채권·금리·구조화·환율 기본 로더, gsq와 가짜 gs_quant 등)을 공급사 모듈 자리에 고정 가짜를 넣고 main `9f76b07` (KEY-4 전)에서 돌린 답과 **가짜가 받은 인자** (실제 시그니처에 묶어 기록)를 `tests/fixtures/gateway/same_answers_main.json`에 적었고, 브랜치에서 같은 요청이 같은 답·같은 인자를 내는지 봅니다. 오늘 날짜에 따라 바뀌는 값은 적지 않습니다. 비교는 구조·키·문자열·정수·길이는 정확히, 소수는 상대 1e-6·절대 1e-9 안 (반복 적합 결과는 numpy/BLAS 빌드·OS마다 끝자리가 1e-8 정도 움직임; 게이트웨이 변경은 정확 비교되는 호출 인자·입력열이 잡음). **24개 넘는 목록** (fixture를 작게 두려고 줄임): 앞뒤 8개씩은 위와 같이, 가운데는 정수·문자열·구조를 sha256으로 정확히, 소수는 합·제곱합·위치가중합 `sum((i+1)*x_i)`·이웃 차 제곱합 `sum((x_{i+1}-x_i)**2)`을 같은 허용오차로 비교합니다 (3차 검토 SA3-1·DOC3-5: 가운데 값 둘 바꾸기·가운데 뒤집기·정수 +500을 잡음). crypto 분석은 적합 통계만 뺍니다 (김치 프리미엄의 ADF p값·반감기·AR(1) 감쇠·예측 기울기와 t, GARCH, 요일표: statsmodels 빌드에 따라 크게 달라짐). 김치 프리미엄의 날짜·`premium_pct`·`z_1y`·`btc_usd`·마지막·평균·최대값은 산술 결과라 그대로 비교하므로, Upbit 원화 종가와 USD/KRW가 바뀌면 답이 달라집니다 (3차 검토 SA3-2).
 
 ---
 
@@ -272,7 +273,7 @@ core는 공급사 클라이언트를 직접 import하지 않고 아래 입구만
 |---|---|---|---|---|
 | KEY-3 | 새 `core/gateway/**`, `tests/gateway_*` + KEY-2/b 검토 후속 5건 (`data/krx/kis_client.py`, `tests/credentials_acceptance.py`, 문서; 브랜치 `claude/payments-key3-prep-20261119`) | 이 세션 | `runtime-smoke.yml` 경로·시험 줄 | 3~4일 |
 | KEY-4 | `core/` 26개 파일 90곳 + `main.py` 1곳, 동결 예외 1곳 (`core/engine/feed.py`, 6절) — **PR #133** | 이 세션 (+ 데이터소스: `markets.py`) | `runtime-smoke.yml` 경로·시험 줄 | 2~3일 |
-| KEY-5 | 화면 21개 파일 43곳 + 키·연결 화면 (6절 판 3) | **UI 세션** (소유자를 거쳐 요청) | 없음 | 1~1.5일 |
+| KEY-5 | 화면 22개 파일 44곳 (`quantgen_desktop/paper.py` 포함) + 키·연결 화면 (6절 판 3). 앞선 게이트웨이 일 KEY-5/a (G1~G3, 3차 검토 C) | **UI 세션** (소유자를 거쳐 요청) | 없음 | 1~1.5일 |
 
 - **Nautilus 코드 지문:** 지문 입력 27개 파일 (`config.py`, `tools/nautilus/**`, `HARNESS_SOURCES` 11개 등) 중 6절의 49개 파일 (판 3)과 겹치는 것은 없습니다 (`core.quant.gate_package.HARNESS_SOURCES`로 확인). 그래서 KEY-3·KEY-4는 `config.py`를 건드리지 않는 한 지문을 바꾸지 않습니다. 바꾸게 되면 PR 본문에 적습니다. **다만** 하네스는 `core.quant.history`를 거쳐 `core/gateway`를 import하는데, `core/gateway/**`는 지문 입력 밖입니다. 게이트웨이가 바뀌어도 지문은 그대로이므로, 게이트웨이를 바꾸는 PR은 하네스가 쓰는 `history.py` 경로 (`_READY`, `_requests`, KIS·FMP·Yahoo 조회)의 같은 답 시험을 함께 돌립니다.
 - **준법:** 새 소스 파일이 생기므로 20개 문서 재검토 대상입니다. PR마다 최신 main merge 뒤 맨 마지막에 기준선 갱신.

@@ -266,6 +266,15 @@ class LocalTest(Base):
         is handed out without any route check."""
         self.assertEqual(set(local.FiccData.CONSTANTS) & set(local.FiccData.EXPOSED), set())
 
+    def test_ficc_constants_at_run_time_are_the_pinned_eight(self):
+        """Review 3 F4: the boundary test reads CONSTANTS from local.py's source (the first assignment); a second
+        assignment in the class body (CONSTANTS += ("_provider_rows",)) would hand out a fetcher unchecked while
+        that reading stays the same. The value the app runs with is pinned here."""
+        self.assertEqual(set(local.FiccData.CONSTANTS),
+                         {"G10_KRW", "Series", "CurvePanel", "CurveSnapshot", "_period_for", "synthetic_series",
+                          "synthetic_curve_panel", "synthetic_fx"})
+        self.assertEqual(len(local.FiccData.CONSTANTS), 8)
+
     def test_ficc_exposes_only_listed_loaders(self):
         ficc = local.FiccData()
         self.assertTrue(callable(ficc.load_series))

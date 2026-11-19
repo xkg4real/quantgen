@@ -7,8 +7,14 @@ the KRX Open API and OpenDART only through core/gateway.
   OffClient that answers like an unconfigured client and never reaches the provider.
 - main.QuoteFeed is the gateway subclass of the S4-frozen core/engine/feed.py QuoteFeed, and main() hands one to the
   engine.
+- Review 3 A1: every requests call is recorded (method, url) and refused. With dummy KRX_API_KEY / OPENDART_API_KEY set,
+  quote, market_snapshot, indices, filings and financials are called on the gateway main() built: a blocked KRX Open API
+  leaves no request to the KRX hosts (config.KRX_BASE_URL, KRX_OTP_URL, KRX_DOWNLOAD_URL), a blocked OpenDART none to
+  config.OPENDART_BASE_URL, and on the personal route both hosts are asked (so the watch itself is shown to work; the
+  provider clients turn a refused request into an empty answer, which is why the answers alone cannot tell).
 
-Offline: no network (requests is refused), no key, no `.env`.
+Offline: no network (requests is refused and recorded), no real key (dummy values only), no `.env`, no ~/.nextgen
+(the OpenDART corp-code cache is pointed into a temporary folder).
 """
 from __future__ import annotations
 
@@ -19,10 +25,12 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from urllib.parse import urlsplit
 
 import dotenv
 
 with patch.object(dotenv, "load_dotenv", return_value=False):
+    import config
     import core.gateway as gw
     import core.skills.macro_daily as macro_daily
     import main
@@ -31,12 +39,23 @@ with patch.object(dotenv, "load_dotenv", return_value=False):
     from core.gateway import remote, routes
     from core.rules.store import RuleStore
     from data.fmp.quote_client import FMPQuoteClient
-    from data.krx import kis_client
+    from data.krx import kis_client, opendart_client
     from tests.research_home_acceptance import Page
 
 
 def _no_keys():
     return patch.dict(os.environ, {n: "" for n in list(names.SECRETS) + list(names.RESEARCH)})
+
+
+DUMMY_KEYS = {"KRX_API_KEY": "dummy-krx-test-value", "OPENDART_API_KEY": "dummy-dart-test-value"}
+
+
+def _host(url) -> str:
+    return (urlsplit(str(url)).hostname or "").lower()
+
+
+KRX_HOSTS = {_host(config.KRX_BASE_URL), _host(config.KRX_OTP_URL), _host(config.KRX_DOWNLOAD_URL)}
+DART_HOSTS = {_host(config.OPENDART_BASE_URL)}
 
 
 class Base(unittest.TestCase):
@@ -55,12 +74,19 @@ class Base(unittest.TestCase):
             table["profiles"]["personal"][sid] = order
         gw._routes = routes.check_routes(table)
 
-    def _start(self):
+    def _start(self, probe=None):
         """import main again and run main(page) with the engine and the stores kept offline; the gateway and the
-        quote feed are main's own (not patched)."""
+        quote feed are main's own (not patched). Every requests call is recorded in built["asked"] as (method, url)
+        and refused; `probe(module, built)` runs inside the same patches (dummy keys set)."""
         with patch.object(dotenv, "load_dotenv", return_value=False):
             module = importlib.reload(main)
-        built = {}
+        built = {"asked": []}
+
+        def network(*a, **k):
+            method = k.get("method", a[0] if a else "")
+            url = k.get("url", a[1] if len(a) > 1 else "")
+            built["asked"].append((str(method).upper(), str(url)))
+            raise AssertionError("network")
 
         def engine(store, feed, *a, **k):
             built["feed"] = feed
@@ -72,20 +98,41 @@ class Base(unittest.TestCase):
             built["krx"] = real_krx()
             return built["krx"]
 
-        with tempfile.TemporaryDirectory() as folder, _no_keys(), \
+        with tempfile.TemporaryDirectory() as folder, _no_keys(), patch.dict(os.environ, DUMMY_KEYS), \
+                patch.object(opendart_client, "_CACHE_PATH", Path(folder) / "dart_corp_codes.json"), \
                 patch.object(module, "RuleStore", return_value=RuleStore(Path(folder) / "rules.json")), \
                 patch.object(module, "EngineRuntime", side_effect=engine), \
                 patch.object(module, "KRXGateway", side_effect=krx), \
                 patch.object(macro_daily, "on_app_start"), \
                 patch("ui.strategy_lab_page.load_cards", return_value=[]), \
-                patch("requests.sessions.Session.request", side_effect=AssertionError("network")):
+                patch("requests.sessions.Session.request", side_effect=network):
             module.main(Page())
+            built["started"] = len(built["asked"])
+            if probe is not None:
+                probe(module, built)
         return module, built
 
 
 class StartsWhateverRoutesSay(Base):
     def _check(self, krx_off: bool, dart_off: bool):
-        module, built = self._start()
+        def probe(module, built):
+            gateway = built["krx"]
+            gateway.quote("005930")
+            gateway.market_snapshot("ALL")
+            gateway.indices()
+            gateway.filings("005930")
+            gateway.financials("005930")
+
+        module, built = self._start(probe)
+        hosts = {_host(url) for _method, url in built["asked"]}
+        if krx_off:
+            self.assertFalse(hosts & KRX_HOSTS, built["asked"])               # A1: no request to a blocked KRX
+        else:
+            self.assertTrue(hosts & KRX_HOSTS, built["asked"])                # the watch works (positive control)
+        if dart_off:
+            self.assertFalse(hosts & DART_HOSTS, built["asked"])
+        else:
+            self.assertTrue(hosts & DART_HOSTS, built["asked"])
         krx = built["krx"]
         self.assertIsInstance(krx.kis, kis_client.KISClient)                 # KIS: always the real client
         self.assertEqual(isinstance(krx.krx, gw.OffClient), krx_off)

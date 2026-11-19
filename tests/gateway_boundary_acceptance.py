@@ -10,7 +10,9 @@ file, each direct way to a provider:
   as _period_for do not count);
 - a package imported and then followed by attributes (`import data; data.kis_markets.KISMarkets()`);
 - `importlib.import_module(...)` or `__import__(...)` with a literal name, also aliased, by keyword, or relative
-  with `package=`;
+  with `package=`; a relative name or `__import__` level it cannot resolve (a variable) counts (fails closed);
+- the S4-frozen core/engine/feed.py QuoteFeed built without an FMP client (`QuoteFeed(g)`, `QuoteFeed(g, None)`,
+  `fmp_client=None`), or subclassed without its own `fmp` (main.py's subclass builds the client through the gateway);
 - a config key function or provider status function (`config.kis_ready()`, `config.krx_provider_status()`),
   called or used as a value (`f = config.fmp_key`, `getattr(config, "fmp_key")`), also through an alias
   (`import config as QC`) or a direct import (`from config import kis_ready`);
@@ -159,6 +161,32 @@ def _literal(node: ast.AST) -> str:
     return node.value if isinstance(node, ast.Constant) and isinstance(node.value, str) else ""
 
 
+def _int_literal(node: ast.AST):
+    """The int a literal level is, or None for anything else (a name, an expression)."""
+    if isinstance(node, ast.Constant) and isinstance(node.value, int) and not isinstance(node.value, bool):
+        return node.value
+    return None
+
+
+def _no_fmp_client(node: ast.Call) -> bool:
+    """QuoteFeed(g), QuoteFeed(g, None), QuoteFeed(g, fmp_client=None): the frozen feed then builds its own client."""
+    def is_none(value):
+        return isinstance(value, ast.Constant) and value.value is None
+    given = [kw.value for kw in node.keywords if kw.arg == "fmp_client"] + node.args[1:2]
+    return not given or all(is_none(v) for v in given)
+
+
+def _defines_fmp(cls: ast.ClassDef) -> bool:
+    for item in cls.body:
+        if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)) and item.name == "fmp":
+            return True
+        targets = item.targets if isinstance(item, ast.Assign) else [item.target] if isinstance(
+            item, (ast.AnnAssign, ast.AugAssign)) else []
+        if any(isinstance(t, ast.Name) and t.id == "fmp" for t in targets):
+            return True
+    return False
+
+
 def _dynamic_name(node: ast.Call, module: str, is_package: bool) -> list[str]:
     """The absolute module names an ``import_module``/``__import__`` call reaches: the literal name (positional or
     ``name=``), resolved against ``package=`` (a literal, or ``__package__``/``__name__`` of the scanned file), plus
@@ -184,14 +212,16 @@ def _dynamic_name(node: ast.Call, module: str, is_package: bool) -> list[str]:
             package = package_value(kw.value)
         elif kw.arg == "fromlist" and isinstance(kw.value, (ast.List, ast.Tuple)):
             fromlist = [_literal(e) for e in kw.value.elts]
-        elif kw.arg == "level" and isinstance(kw.value, ast.Constant) and isinstance(kw.value.value, int):
-            level = kw.value.value
+        elif kw.arg == "level":
+            level = _int_literal(kw.value)
     if len(node.args) > 1 and not package and not is_import:
         package = package_value(node.args[1])
     if len(node.args) > 3 and isinstance(node.args[3], (ast.List, ast.Tuple)):   # __import__(n, g, l, fromlist)
         fromlist = [_literal(e) for e in node.args[3].elts]
-    if len(node.args) > 4 and isinstance(node.args[4], ast.Constant) and isinstance(node.args[4].value, int):
-        level = node.args[4].value                                              # __import__(n, g, l, f, level)
+    if len(node.args) > 4:
+        level = _int_literal(node.args[4])                                      # __import__(n, g, l, f, level)
+    if level is None:                                                           # review 3 F3: a level that is not an
+        return ["." + (name or "?")]                                            # int literal: unresolved, fails closed
     if level > 0:                                                               # __import__ relative: as "." * level
         name, package = "." * level + name, package_of_file
     if name.startswith(".") and not package:
@@ -256,6 +286,11 @@ def findings(source: "str | bytes", module: str = "", is_package: bool = False) 
         for child in ast.iter_child_nodes(node):
             parents[id(child)] = node
     for node in ast.walk(tree):
+        if isinstance(node, ast.ClassDef) and not _defines_fmp(node):
+            for base in node.bases:                       # review 3 F1: the frozen feed subclassed without fmp
+                chain = _dotted(base)
+                if chain and ".".join([bound.get(chain[0], chain[0])] + chain[1:]) == FROZEN_FEED:
+                    found.append(f"subclass:{FROZEN_FEED}(no fmp)")
         if isinstance(node, ast.Call):
             func = node.func
             parts = _dotted(func)
@@ -269,8 +304,7 @@ def findings(source: "str | bytes", module: str = "", is_package: bool = False) 
                         break
             if parts and len(parts) == 2 and parts[0] in config_names and parts[1] in KEY_FUNCTIONS:
                 found.append(f"call:config.{parts[1]}")
-            if target == FROZEN_FEED and len(node.args) < 2 and not any(kw.arg == "fmp_client"
-                                                                        for kw in node.keywords):
+            if target == FROZEN_FEED and _no_fmp_client(node):
                 found.append(f"call:{FROZEN_FEED}(no fmp_client)")       # its own FMP path, outside the gateway
             if parts and len(parts) == 1 and parts[0] == "getattr" and len(node.args) >= 2:
                 obj = node.args[0]
@@ -463,9 +497,30 @@ class BoundaryTest(unittest.TestCase):
             with self.subTest(source=source):
                 self.assertEqual(findings(source, "core.ficc.insights"), sorted(expected))
         for source in ("from core.engine.feed import QuoteFeed\nQuoteFeed(g, fmp_client=c)\n",
-                       "from core.engine.feed import QuoteFeed as F\nclass Q(F):\n    pass\n"):
+                       "from core.engine.feed import QuoteFeed\nQuoteFeed(g, c)\n",
+                       "from core.engine.feed import QuoteFeed as F\nclass Q(F):\n    @property\n"
+                       "    def fmp(self):\n        return None\n"):
             with self.subTest(source=source):
                 self.assertEqual(findings(source, "main"), [])
+
+    def test_detector_catches_the_third_review_forms(self):
+        """PR #133 third review: F1 (the frozen feed without an FMP client, given as None or subclassed without its
+        own fmp) and F3 (an __import__ level that is not an int literal fails closed)."""
+        no_client = ["call:core.engine.feed.QuoteFeed(no fmp_client)"]
+        cases = {
+            "from core.engine.feed import QuoteFeed\nQuoteFeed(g, None)\n": no_client,
+            "from core.engine.feed import QuoteFeed\nQuoteFeed(g, fmp_client=None)\n": no_client,
+            "from core.engine import feed\nfeed.QuoteFeed(g)\n": no_client,
+            "from core.engine.feed import QuoteFeed as F\nclass Q(F):\n    pass\n":
+                ["subclass:core.engine.feed.QuoteFeed(no fmp)"],
+            "from core.engine import feed\nclass Q(feed.QuoteFeed):\n    x = 1\n":
+                ["subclass:core.engine.feed.QuoteFeed(no fmp)"],
+            "n = 1\n__import__('data', globals(), locals(), ['krx'], n)\n": ["dynamic:.data"],
+            "__import__('data', level=lvl)\n": ["dynamic:.data"],
+        }
+        for source, expected in cases.items():
+            with self.subTest(source=source):
+                self.assertEqual(findings(source, "core.ficc.insights"), sorted(expected))
 
     def test_ficc_allowlist_is_pinned(self):
         """C2: the names of core.ficc.data the boundary lets through are exactly these pure values and helpers; adding

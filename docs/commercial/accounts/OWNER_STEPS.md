@@ -1,6 +1,6 @@
 # 소유자 실행 순서: AWS → 전달 → 시험 → 공개 전
 
-- 판: v1.6 (2026-11-19, 소유자 결정: 이메일 MFA 유지, 15번 복구 방법). v1.5 (2026-11-19, 메인 PR #133 2차 검토 B3·C5: 계정 둘 구분 — MFA는 액세스 포털/관리 계정 경로, 결제 접근은 Budgets가 거부될 때만 Golden Hour Code 루트, 5-2a는 두 계정 모두; 1-3 잘못 만든 풀 지우기와 삭제 보호 끄기; 풀 ID 리전 확인을 7·17번으로). v1.4 (2026-11-19, 소유자 결정: 13번 비밀번호에 특수문자 반영, 12번 HTML 인증 메일·영어 먼저·Message templates 위치). v1.3.2 (2026-11-19, 소유자 진행 중 확인: 1-0 둘째 항목으로 프로젝트 계정 Golden Hour Code 확인, 1번에 풀 ID 리전 확인 — v1.5에서 7·17번으로 옮김). v1.3.1 (2026-11-19, 메인 PR #133 검토 B10: 1-0의 따로 만드는 예산 줄을 지우고 24a·24b로 모음, 결제 화면 접근 켜기 추가, IAM Identity Center 로그인 확인 반영, 5-2a 법인 이메일·연락처로 명확히, 1-0 소요 15~20분). v1.3 (2026-11-19, 소유자 질문 반영: 1-0 MFA 찾는 길과 로그인 계정, 5절 AWS 계정 이메일). v1.2 (2026-11-19, 6절을 메인 세션 확인대로 고침: 지금 하지 않음, 보통 앱 Python, 브랜치+PR). v1.1 6절 추가, v1 2026-11-18. 작성: PAYMENTS_ACCOUNT_KEYS 세션. 소유자 요청 (원문): "위 항목 중에서 시험, 전달, AWS, 공개 전 4단계를 수행하기 위해서 해야되는 일들을 구체화하여 .md 파일로 만들어 여기서 다운로드하고 볼 수 있도록 해주세요"
+- 판: v1.7 (2026-11-20, 소유자 진행 결과와 PR #133 3차 검토: 1단계 1~23c·25 끝남 (24는 기존 예산 사용), 23a·23b를 CloudShell 명령으로 (새 풀은 가입 전이라 콘솔 지표 목록에 없음), 21번 Quick trail create, 24번 기존 예산 규칙과 크레딧 메모, 1-2에 기록한 값, 1-3을 일반 "풀 지우기" 두 경우로 (B2), 15번·2단계·3단계에 이메일 MFA 회원 비밀번호 분실 처리 (A4·A5, 소유자 결정 2026-11-20 "권장으로 가겠습니다")). v1.6 (2026-11-19, 소유자 결정: 이메일 MFA 유지, 15번 복구 방법). v1.5 (2026-11-19, 메인 PR #133 2차 검토 B3·C5: 계정 둘 구분 — MFA는 액세스 포털/관리 계정 경로, 결제 접근은 Budgets가 거부될 때만 Golden Hour Code 루트, 5-2a는 두 계정 모두; 1-3 잘못 만든 풀 지우기와 삭제 보호 끄기; 풀 ID 리전 확인을 7·17번으로). v1.4 (2026-11-19, 소유자 결정: 13번 비밀번호에 특수문자 반영, 12번 HTML 인증 메일·영어 먼저·Message templates 위치). v1.3.2 (2026-11-19, 소유자 진행 중 확인: 1-0 둘째 항목으로 프로젝트 계정 Golden Hour Code 확인, 1번에 풀 ID 리전 확인 — v1.5에서 7·17번으로 옮김). v1.3.1 (2026-11-19, 메인 PR #133 검토 B10: 1-0의 따로 만드는 예산 줄을 지우고 24a·24b로 모음, 결제 화면 접근 켜기 추가, IAM Identity Center 로그인 확인 반영, 5-2a 법인 이메일·연락처로 명확히, 1-0 소요 15~20분). v1.3 (2026-11-19, 소유자 질문 반영: 1-0 MFA 찾는 길과 로그인 계정, 5절 AWS 계정 이메일). v1.2 (2026-11-19, 6절을 메인 세션 확인대로 고침: 지금 하지 않음, 보통 앱 Python, 브랜치+PR). v1.1 6절 추가, v1 2026-11-18. 작성: PAYMENTS_ACCOUNT_KEYS 세션. 소유자 요청 (원문): "위 항목 중에서 시험, 전달, AWS, 공개 전 4단계를 수행하기 위해서 해야되는 일들을 구체화하여 .md 파일로 만들어 여기서 다운로드하고 볼 수 있도록 해주세요"
 - 반영한 소유자 답 (2026-11-18): Q1 운영자 = 개인 (법인 설립을 알려 주시면 바로 법인명으로 바꿈), Q2 메일 = `contact@quantgeneration.com`, Q3 최소 연령 = 무료 만 14세 / 유료 만 19세.
 - 함께 보는 문서 (브랜치 `claude/payments-keys-20261117`): `docs/commercial/accounts/ACCOUNT_SETUP.md` (설정값, 25단계, 웹사이트 요청 블록), `docs/commercial/accounts/ADMIN_GUIDE.md` (관리자 안내서).
 - *(미검증)* 은 AWS 화면 문구를 확인하지 못한 곳입니다. 화면이 다르면 "단계 번호 + 실제 문구"를 알려 주세요. 문서를 고쳐 드립니다.
@@ -42,6 +42,8 @@
 
 `ACCOUNT_SETUP.md` 2부와 같은 순서입니다. 넣을 값을 그대로 옮겼습니다.
 
+**진행 상태 (2026-11-20):** 소유자가 1~23c와 25를 마침 (Golden Hour Code 계정, 시드니). 24는 이미 있던 예산으로 대신함 (24번 칸). 기록한 값은 1-2절.
+
 **A. 사용자 풀 (약 20분)**
 
 | # | 할 일 | 넣을 값 | 확인 |
@@ -52,7 +54,7 @@
 | 4 | 로그인 아이디 | **Email** 만 체크 (Username·Phone 체크 안 함) | [ ] |
 | 5 | 자가 가입 켬, 필수 속성 | 필수 속성 **email** 만 (name·phone 등 추가하지 않음) | [ ] |
 | 6 | Return URL | 비워 둠. 필수라고 나오면 `https://quantgeneration.com` → 저에게 알려 주세요 | [ ] |
-| 7 | 만들기 → 풀 이름 | Overview의 **User pool ID**가 `ap-southeast-2_`로 시작하는지 먼저 확인 (`us-east-1_` 등이면 리전이 틀린 것: 시드니에 다시 만들고 틀린 풀은 1-3절대로 지움; 리전은 옮길 수 없음). 그다음 **Rename** → `quantgen-prod` | [ ] |
+| 7 | 만들기 → 풀 이름 | Overview의 **User pool ID**가 `ap-southeast-2_`로 시작하는지 먼저 확인 (`us-east-1_` 등이면 리전이 틀린 것: 시드니에 다시 만들고 틀린 풀은 1-3절 **경우 2**대로 지움; 리전은 옮길 수 없음). 그다음 **Rename** → `quantgen-prod` | [ ] |
 | 8 | 풀 → **Sign-up** → **Required attributes** | email만 있는지 확인 | [ ] |
 | 9 | **Sign-up** → **Custom attributes** → **Add custom attributes** *(미검증)* | 6개, 모두 **String**, 최대 길이 64: `terms_ver`, `privacy_ver`, `age14`, `consent_at`, `mkt_opt`, `mkt_at` (화면이 앞에 `custom:`을 붙여 주면 뒷부분만 입력). **철자를 한 글자도 틀리지 않게** (나중에 못 바꿈) | [ ] |
 
@@ -98,7 +100,7 @@ QUANTGEN · Contact / 문의: contact@quantgeneration.com
 |---|---|---|---|
 | 13 | **Authentication methods** → **Password policy** → **Edit** *(미검증)* | Custom, 최소 **10자**, 숫자·소문자·대문자·**특수문자** 요구 (소유자 결정 2026-11-19: 특수문자 반영), 임시 비밀번호 **7일**, 재사용 금지 **5** (칸이 없으면 건너뜀) | [ ] |
 | 14 | **Sign-in** → **Multi-factor authentication** → **Edit** | MFA enforcement **Optional MFA**, 방법 **Authenticator apps** + **Email message** (SMS는 끔) → 저장 | [ ] |
-| 15 | **Sign-in** → **User account recovery** → **Edit** | **Enable self-service account recovery** 체크, 전달 방법 **Email if available, otherwise SMS** (14번에서 Email message MFA를 켜서 "Email only"는 회색으로 막힘; 전화번호를 받지 않으므로 실제로는 이메일). 소유자 결정 2026-11-19: 이메일 MFA 유지 → 이메일 MFA 회원의 비밀번호 분실은 관리자 임시 비밀번호 (`ADMIN_GUIDE.md` 6절) | [ ] |
+| 15 | **Sign-in** → **User account recovery** → **Edit** | **Enable self-service account recovery** 체크, 전달 방법 **Email if available, otherwise SMS** (14번에서 Email message MFA를 켜서 "Email only"는 회색으로 막힘; 전화번호를 받지 않으므로 실제로는 이메일). 소유자 결정 2026-11-19: 이메일 MFA 유지 → 이메일 MFA 회원의 비밀번호 분실은 관리자 임시 비밀번호 (`ADMIN_GUIDE.md` 6.1절). 발급 전 **두 번째 확인** (회원만 아는 정보 또는 최근 로그인 IP·지역; 실패하면 발급 안 함), 강제 변경 뒤 인증 앱 권장 — 소유자 결정 2026-11-20 (OWNER_RULINGS_LOG 기록 예정) | [ ] |
 
 **D. 앱 클라이언트 (약 10분)**
 
@@ -119,19 +121,44 @@ QUANTGEN · Contact / 문의: contact@quantgeneration.com
 | # | 할 일 | 넣을 값 | 확인 |
 |---|---|---|---|
 | 20 | 풀 설정(Settings) 화면 → **Deletion protection** | **Active** 인지 확인, 아니면 **Activate** | [ ] |
-| 21 | 검색 `CloudTrail` → **Trails** → **Create trail** *(미검증)* | 이름 `qg-audit`, **새 S3 버킷** (이름은 콘솔이 주는 대로), 로그 파일 KMS 암호화 **끔**, 관리 이벤트 **Read + Write** → 만들기 | [ ] |
-| 22 | 검색 `S3` → 21번 버킷 → **Management** → **Lifecycle rules** → **Create lifecycle rule** *(미검증)* | 규칙 이름 `expire-400d`, 버킷 전체, **현재 버전 400일 뒤 만료** | [ ] |
+| 21 | 검색 `CloudTrail` → **Trails** → **Create trail** *(미검증)* | 이름 `qg-audit`, **새 S3 버킷** (이름은 콘솔이 주는 대로), 로그 파일 KMS 암호화 **끔**, 관리 이벤트 **Read + Write** → 만들기. **Quick trail create** 화면이 나와도 그대로 됨 (2026-11-20 소유자 화면: 이름, 버킷 자동 생성 `aws-cloudtrail-logs-<계정 번호>-…`, 여러 리전 trail, 관리 이벤트 기록; KMS 칸 없음) | [x] |
+| 22 | 검색 `S3` → 21번 버킷 → **Management** → **Lifecycle rules** → **Create lifecycle rule** *(미검증)* | 규칙 이름 `expire-400d`, 버킷 전체, **현재 버전 400일 뒤 만료** | [x] |
 
 **G. 경보와 예산 (약 15분)**
 
 | # | 할 일 | 넣을 값 | 확인 |
 |---|---|---|---|
-| 23a | `CloudWatch` → **Alarms** → **Create alarm** *(미검증)* | 지표 `AWS/Cognito` → 풀 `quantgen-prod` → `SignUpSuccesses`, 통계 Sum, 기간 1시간, 조건 > 50 → 알림: 새 SNS 주제 `qg-alerts`, 메일 `contact@quantgeneration.com` → 경보 이름 `qg-signup-spike` | [ ] |
-| 23b | 같은 방식 | `SignUpThrottles`, Sum, 5분, ≥ 1 → 같은 주제 `qg-alerts` → 이름 `qg-signup-throttle` | [ ] |
-| 23c | **메일함 확인** | AWS가 보낸 "AWS Notification - Subscription Confirmation" 메일의 **Confirm subscription** 을 누름. **이걸 안 누르면 경보 메일이 오지 않습니다** | [ ] |
-| 24a | `Billing and Cost Management` → **Budgets** → **Create budget** → **Use a template (simplified)** → **Zero spend budget** | 받는 메일 `contact@quantgeneration.com` → 만들기 | [ ] |
-| 24b | 다시 **Create budget** → **Monthly cost budget** | 금액 $20, 같은 메일 | [ ] |
-| 25 | 메모장에 한 줄씩 | "2026-11-xx quantgen-prod 생성, 그룹 qg-admins, trail qg-audit, 경보 2개, 예산 2개" (관리자 안내서 16.2절 변경 기록) | [ ] |
+| 23a·23b | 콘솔 아래 왼쪽 **CloudShell** (Golden Hour Code 계정, 시드니) → 아래 명령 상자를 통째로 붙여 넣기 | SNS 주제 `qg-alerts` + 메일 구독 `contact@quantgeneration.com`, 경보 `qg-signup-spike` (`SignUpSuccesses`, Sum, 1시간, > 50), `qg-signup-throttle` (`SignUpThrottles`, Sum, 5분, ≥ 1). 마지막 표에 두 경보가 `INSUFFICIENT_DATA` 또는 `OK`로 보이면 됨 | [x] |
+| 23c | **메일함 확인** | AWS가 보낸 "AWS Notification - Subscription Confirmation" 메일의 **Confirm subscription** 을 누름. **이걸 안 누르면 경보 메일이 오지 않습니다** | [x] |
+| 24 | `Billing and Cost Management` → **Budgets** 목록부터 봄 | **예산이 이미 있으면 그것을 씀** (2026-11-20 Golden Hour Code에는 `My Monthly Cost Budget` $100이 있어 24a·24b를 만들지 않음): 그 예산의 알림 받는 메일만 확인 (2026-09-30 뒤 새로 넣은 주소는 확인 메일을 눌러야 알림이 옴 — 화면 안내). 없을 때만: **Create budget** → **Use a template (simplified)** → **Monthly cost budget**, 받는 메일 `contact@quantgeneration.com`. **월 금액은 이번 달 이미 쓴 금액보다 크게** (작으면 만들자마자 울림). Zero spend budget은 건너뜀 | [x] |
+| 25 | 메모장에 한 줄씩 | "2026-11-20 quantgen-prod 생성, 그룹 qg-admins, 삭제 보호 Active, trail qg-audit (400일 만료), 경보 2개 → SNS qg-alerts (구독 확인), 예산: 기존 월 예산 사용" (관리자 안내서 16.2절 변경 기록) | [x] |
+
+23a·23b 명령 (2026-11-20 소유자가 실행함). **왜 콘솔이 아니라 명령인가:** 가입이 한 번도 없는 새 풀은 CloudWatch에 Cognito 지표가 아직 없어서, 경보 만들기의 **Select metric** 목록에 운영 풀이 나오지 않습니다 (2026-11-20 소유자 화면: `quantgen-dev`만 보임; 지표가 활동 뒤에 생긴다는 것은 화면으로 확인, AWS 문서 문장은 못 찾음). 명령으로는 아직 데이터가 없는 지표에도 경보를 걸 수 있습니다. 지표 이름과 구분값 (`UserPool` + `UserPoolClient`)은 AWS 문서 "User pool metrics in CloudWatch"로 확인. 웹 가입 화면은 `quantgen-web` 클라이언트로 가입하므로 그 클라이언트 값으로 겁니다 (관리자가 만든 계정은 클라이언트 이름 "Admin"으로 따로 집계됨).
+
+```bash
+R=ap-southeast-2
+POOL=ap-southeast-2_pQEsrAvvb          # 운영 풀 quantgen-prod (1-2절)
+CLIENT=77qi9vi90i118rck1ppisbca7r      # quantgen-web (1-2절)
+TOPIC=$(aws sns create-topic --region $R --name qg-alerts --query TopicArn --output text)
+aws sns subscribe --region $R --topic-arn "$TOPIC" --protocol email --notification-endpoint contact@quantgeneration.com
+aws cloudwatch put-metric-alarm --region $R --alarm-name qg-signup-spike \
+  --namespace AWS/Cognito --metric-name SignUpSuccesses \
+  --dimensions Name=UserPool,Value=$POOL Name=UserPoolClient,Value=$CLIENT \
+  --statistic Sum --period 3600 --evaluation-periods 1 \
+  --threshold 50 --comparison-operator GreaterThanThreshold \
+  --treat-missing-data notBreaching --alarm-actions "$TOPIC"
+aws cloudwatch put-metric-alarm --region $R --alarm-name qg-signup-throttle \
+  --namespace AWS/Cognito --metric-name SignUpThrottles \
+  --dimensions Name=UserPool,Value=$POOL Name=UserPoolClient,Value=$CLIENT \
+  --statistic Sum --period 300 --evaluation-periods 1 \
+  --threshold 1 --comparison-operator GreaterThanOrEqualToThreshold \
+  --treat-missing-data notBreaching --alarm-actions "$TOPIC"
+aws cloudwatch describe-alarms --region $R --alarm-names qg-signup-spike qg-signup-throttle \
+  --query 'MetricAlarms[].[AlarmName,MetricName,StateValue]' --output table
+```
+
+- `--treat-missing-data notBreaching`: 가입이 없는 시간을 "문제 없음"으로 봅니다 (없으면 회원이 없는 동안 경보가 계속 애매한 상태로 남음).
+- **비용 메모 (2026-11-20, 24번 확인 중):** Cost Explorer에서 **Charge type → Credit 제외**로 보니, 크레딧 적용 전 사용액이 10월 $13.73, 11월 $48.71이었고 대부분 **EC2-Instances·EC2-Other·VPC**였습니다 (Cognito·CloudTrail·SES·CloudShell은 $0.00). 지금은 크레딧이 내고 있습니다. 예산은 크레딧 적용 전 사용액을 세고, Cost Explorer 기본 화면은 크레딧을 뺀 값을 보여 주는 것으로 보입니다 *(추론, 미검증: 두 화면 숫자 $48.71 일치로 뒷받침)*. 이 EC2 자원은 이 문서의 작업이 만든 것이 아닙니다. **소유자가 무엇인지 (EC2 Global View: 리전·이름·유형·만든 날짜) 확인하기 전에는 끄거나 지우지 않습니다** (웹사이트 세션 등 다른 작업의 것일 수 있음; Terminate는 되돌릴 수 없음).
 
 ### 1-2. 적어 둘 것 → 저에게 보내 주실 것
 
@@ -140,20 +167,28 @@ QUANTGEN · Contact / 문의: contact@quantgeneration.com
 | User pool ID | 예 (비밀값 아님) | 웹사이트 요청 (2단계), 데스크톱 로그인 (나중) |
 | `quantgen-web` Client ID | 예 (비밀값 아님) | 같음 |
 | CloudTrail S3 버킷 이름 | 예 | 관리자 안내서 13절 |
+
+**기록한 값 (2026-11-20, 소유자 화면에서 확인; 비밀값 아님):** 운영 풀 `quantgen-prod` = `ap-southeast-2_pQEsrAvvb` (Golden Hour Code, 시드니; 같은 계정의 `quantgen-dev` `ap-southeast-2_fV38AjJFg`는 개발용이라 그대로 둠), `quantgen-web` Client ID = `77qi9vi90i118rck1ppisbca7r`, CloudTrail 버킷 `aws-cloudtrail-logs-<Golden Hour Code 계정 번호>-0bcc59a3`, SES 신원 `no-reply@quantgeneration.com` Verified (도메인 인증으로 바로 됨, Cloudflare 설정 불필요), custom 속성 6개 있음.
 | 화면 문구가 달랐던 단계 번호와 실제 문구 | 예 | 문서 수정 |
 | AWS 로그인 비밀번호·액세스 키 | **아니요, 절대** | — |
 
 ---
 
-### 1-3. 잘못 만든 풀 지우기 (2026-11-19 생김)
+### 1-3. 잘못 만든 풀 지우기
 
-2026-11-19 관리 계정(…3710)에 시험 삼아 만든 풀 두 개(버지니아 `User pool - hoa9ag`, 시드니 `ap-southeast-2_hvH4JqdOu`)는 쓰지 않습니다. **이 두 풀의 ID는 웹사이트 세션에 보내지 않습니다.** 운영 풀(Golden Hour Code 계정)이 다 된 뒤에 지웁니다.
+지울 풀은 두 경우뿐입니다. **2단계에서 웹사이트 세션에 보낸 풀 (운영 풀 `quantgen-prod`, `ap-southeast-2_pQEsrAvvb`)과 개발 풀 `quantgen-dev`는 절대 지우지 않습니다.**
 
-1. 오른쪽 위 계정이 **관리 계정**(Golden Hour Code가 아님)이고, 지울 풀의 ID가 위 두 개 중 하나인지 확인합니다. 운영 풀을 지우지 않게 이 확인을 꼭 합니다.
-2. 리전을 그 풀의 리전(버지니아 또는 시드니)으로 맞춥니다.
+| 경우 | 어느 계정 | 어떤 풀 (리전 + 이름으로 식별) |
+|---|---|---|
+| 1. 관리 계정의 시험 풀 (2026-11-19 생김) | **관리 계정** (…3710, Golden Hour Code가 아님) | 버지니아 (us-east-1)의 `User pool - hoa9ag`, 시드니의 `ap-southeast-2_hvH4JqdOu`. 이 두 ID는 웹사이트 세션에 보내지 않습니다 |
+| 2. Golden Hour Code의 잘못된 리전 풀 (7번에서 `ap-southeast-2_`가 아니었던 풀) | **Golden Hour Code** | 시드니가 **아닌** 리전에 있는 풀 (그 리전의 User pools 목록에서 이름·ID 확인) |
+
+순서 (두 경우 같음; 운영 풀이 다 된 뒤에):
+1. 오른쪽 위 계정이 위 표의 계정인지, 지울 풀의 **리전과 이름·ID**가 위 표와 맞는지 확인합니다. 운영 풀·개발 풀을 지우지 않게 이 확인을 꼭 합니다.
+2. 리전을 그 풀의 리전으로 맞춥니다.
 3. 풀 → **Settings** 화면의 **Deletion protection** 구역 → **Deactivate** (콘솔로 만든 풀은 삭제 보호가 기본으로 켜져 있음, `ACCOUNT_SETUP.md` P15) *(구역·버튼 이름 부분 확인)*.
 4. 풀 오른쪽 위 **Delete user pool** → 확인 글자 입력 → **Delete**.
-5. 두 풀 모두 같은 순서로. 메모장의 변경 기록에 "날짜 | 관리 계정 시험 풀 2개 삭제 | 회원 0명" 한 줄.
+5. 메모장의 변경 기록에 "날짜 | <계정> <리전> <풀 이름> 삭제 | 회원 0명" 한 줄.
 
 ## 2단계. 전달 (웹사이트 세션에 붙여 넣기)
 
@@ -166,8 +201,14 @@ QUANTGEN · Contact / 문의: contact@quantgeneration.com
 [소유자 → 웹사이트 세션] 정식 회원 계정 (D11) 추가 정보 (2026-11-xx)
 
 - 운영 사용자 풀: 시드니 ap-southeast-2
-  - User pool ID: <1단계 17번의 User pool ID>
-  - Web client ID (quantgen-web, 비밀값 없는 SPA): <1단계 17번의 Client ID>
+  - User pool ID: ap-southeast-2_pQEsrAvvb (1단계 17번, 2026-11-20 기록)
+  - Web client ID (quantgen-web, 비밀값 없는 SPA): 77qi9vi90i118rck1ppisbca7r
+- 이메일 MFA 회원의 비밀번호 분실 (소유자 결정 2026-11-19·2026-11-20): Cognito가 그 회원의 비밀번호 찾기를 거절하므로
+  관리자가 두 번째 확인 뒤 임시 비밀번호를 줍니다. 그래서
+  - ACC-3: 로그인 응답이 NEW_PASSWORD_REQUIRED면 새 비밀번호 화면 (ACC-1과 같은 규칙: 10자, 숫자·소문자·대문자·특수문자) →
+    RespondToAuthChallenge. 이 화면에 "이메일 MFA 대신 인증 앱(OTP)으로 바꾸기를 권합니다" 한 줄 + 계정 페이지 링크.
+  - ACC-4: 비밀번호 찾기가 그 이유로 거절되면 "이 계정은 스스로 비밀번호를 찾을 수 없습니다. 가입한 이메일로
+    contact@quantgeneration.com에 문의해 주세요" 표시 (다른 오류 문구는 계정 존재를 드러내지 않게 그대로).
 - 소유자 결정 (2026-11-18): 운영자는 개인 (회사 표시 "(주)" 쓰지 않음, 문구는 메인 세션 정책 PR 병합 뒤 원문 재생성),
   문의·개인정보 메일 contact@quantgeneration.com (ACC-8), 최소 연령 무료 만 14세 (ACC-1 그대로) / 유료 만 19세 (나중).
 - 공개 전까지 AUTH_UI_ENABLED=false 유지.
@@ -203,7 +244,11 @@ QUANTGEN · Contact / 문의: contact@quantgeneration.com
 | T12 | 속성 편집 화면 (8절, 0.3표 2·3번) | 회원 상세 → **User attributes** 편집 버튼 → 화면만 보고 **아무것도 바꾸지 않고 취소** | 편집 버튼 문구, "Mark email address as verified" 비슷한 체크의 실제 문구 | |
 | T13 | 삭제 (5절, 부록 C6) | **Actions** → **Disable user access** → **Disable** → **Actions** → **Delete user** → 확인 창 (이름 입력을 요구하는지 보기) | 목록에서 사라짐 | |
 | T14 | 관리자 기록 (부록 A 6번) | 10~15분 뒤 `CloudTrail` → **Event history** → 필터 Event source = `cognito-idp.amazonaws.com` | `AdminDisableUser`, `AdminEnableUser`, `AdminResetUserPassword`, `AdminDeleteUser` 가 보임. `SignUp`, `ConfirmSignUp`, `ConfirmForgotPassword` (회원 쪽 요청)도 보이는지와 IP가 남는지 **적어 주세요** (미검증 항목) | |
-| T15 | 정리 | CloudShell에서 `history -c` | — | |
+| T16 | 이메일 MFA 회원 준비 (6.1절) | 두 번째 시험 별칭 (`내아이디+qgtest2@…`)으로 명령 ①·② → 명령 ④ (그 회원에게 이메일 MFA 켜기) | 오류 없음 | |
+| T17 | 이메일 MFA 회원의 비밀번호 찾기 | 명령 ⑤ | **거절됨** (오류 이름을 적어 주세요; 미검증). 웹은 이때 contact@ 문의 안내 (ACC-4, W10) | |
+| T18 | 두 번째 확인 실패 → 발급 안 함 (6.1절 1번 (나)) | 명령을 실행하지 않음. 거절 답장 문구와 변경 기록 한 줄 (`날짜 | 거절 | 처리한 사람 | 회원 sub | (가) 맞음 (나) 맞지 않음`)만 메모장에 써 봄 | 발급 없음, 기록 한 줄 | |
+| T19 | 두 번째 확인 통과 → 임시 비밀번호 (6.1절 1~3번) | (가) 시험 메일 주소에서 contact@로 요청 메일 → (나) 콘솔 회원 상세의 만든 시각과 요청 메일의 "가입한 날" 대조 → 명령 ⑥ (작은따옴표 없는 임시 비밀번호) → `history -c` | 상태 **Force change password**. 로그인·강제 변경은 3-B의 W9 | |
+| T15 | 정리 (T16~T19 뒤 마지막) | 두 번째 시험 계정은 W9·W10 뒤 T13처럼 지움. CloudShell에서 `history -c` | — | |
 
 CloudShell 명령 (`< >` 만 바꿈, 비밀번호는 작은따옴표 안에):
 
@@ -223,6 +268,20 @@ aws cognito-idp confirm-sign-up --region ap-southeast-2 \
 aws cognito-idp confirm-forgot-password --region ap-southeast-2 \
   --client-id <Client ID> --username <시험 이메일> \
   --confirmation-code <코드> --password '<새 시험용 비밀번호>'
+
+# ④ 그 회원에게 이메일 MFA 켜기 (T16)
+aws cognito-idp admin-set-user-mfa-preference --region ap-southeast-2 \
+  --user-pool-id <풀 ID> --username <시험 이메일 2> \
+  --email-mfa-settings Enabled=true,PreferredMfa=true
+
+# ⑤ 이메일 MFA 회원의 비밀번호 찾기 (T17, 거절이 기대 결과)
+aws cognito-idp forgot-password --region ap-southeast-2 \
+  --client-id <Client ID> --username <시험 이메일 2>
+
+# ⑥ 임시 비밀번호 (T19, 관리자 안내서 6.1절 3번; 작은따옴표를 넣지 않은 비밀번호)
+aws cognito-idp admin-set-user-password --region ap-southeast-2 \
+  --user-pool-id <풀 ID> --username <시험 이메일 2> \
+  --password '<임시 비밀번호>' --no-permanent
 
 # 끝나면
 history -c
@@ -246,6 +305,8 @@ history -c
 | W6 | 웹 계정 페이지: 이메일 변경 → 새 주소 코드 | 바뀜. 코드 넣기 전에는 옛 주소로 로그인됨 | |
 | W7 | 웹 계정 페이지: 내 정보 내려받기 | JSON 파일. 비밀번호 없음 | |
 | W8 | 웹 계정 페이지: 회원 탈퇴 | 콘솔 Users에서 사라짐 | |
+| W9 | T19의 시험 계정 2로 웹 로그인 (임시 비밀번호) → 이메일 MFA 코드 | **새 비밀번호 화면** (규칙 표시, "인증 앱으로 바꾸기를 권합니다" 한 줄) → 새 비밀번호로 들어감 (ACC-3). 7일 지난 임시 비밀번호는 안 됨 | |
+| W10 | 시험 계정 2로 웹 "비밀번호 찾기" | 거절 + "contact@quantgeneration.com으로 문의" 안내 (ACC-4) | |
 
 결과는 관리자 안내서 **부록 C** 표 (C1~C8)와 위 표에 "그대로 됨/다름: 실제 문구"로 적어 저에게 보내 주세요.
 
@@ -261,7 +322,7 @@ history -c
 | 2 | 국외 이전·처리위탁 | 처리방침에서 "호주" 또는 "시드니", "Amazon Web Services" 검색 | 국외 이전 표 (받는 자, 국가, 시기·방법, 항목, 목적, 보유, 거부 방법)와 위탁 표가 채워져 있음 | |
 | 3 | 메일 수신 | 다른 주소 (예: 휴대폰 메일)에서 `contact@quantgeneration.com` 으로 "수신 시험" 메일 | 받음. 받은 시각 메모 | |
 | 4 | 회원 쪽 전체 흐름 | 3-B의 W1, W4~W8을 **운영 풀**에서 본인 실제 이메일로 한 번 더 (가입 → 코드 → 로그인 → MFA → 이메일 변경 → 비밀번호 찾기 → 내려받기 → 탈퇴) | 모두 성공 | |
-| 5 | 관리자 기능 | 3단계 T5~T13 + W2~W3 결과 | 모두 "그대로 됨" (다른 곳은 문서 수정 뒤 다시) | |
+| 5 | 관리자 기능 | 3단계 T5~T13, T16~T19 + W2~W3, W9~W10 결과 | 모두 "그대로 됨" (다른 곳은 문서 수정 뒤 다시) | |
 | 6 | 관리자 기록 | 3단계 T14 | 관리자 작업이 Event history에 보임 | |
 | 7 | 경보·예산 메일 | CloudShell: `aws cloudwatch set-alarm-state --region ap-southeast-2 --alarm-name qg-signup-spike --state-value ALARM --state-reason "test"` → 몇 분 안에 `contact@` 로 경보 메일. 예산은 메일 주소 등록만 확인 (일부러 울릴 수 없음) | 경보 메일 받음 (경보는 다음 평가 때 저절로 OK로 돌아옴) | |
 | 8 | 법률 확인 | 아래 "118 상담에서 물을 것" | 답을 한 줄씩 메모 | |
