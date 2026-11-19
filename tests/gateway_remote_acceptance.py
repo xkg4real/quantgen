@@ -106,6 +106,35 @@ class FakeServerTest(unittest.TestCase):
             gw.client("fmp").quote("AAPL")
         self.assertEqual(str(ctx.exception), "RuntimeError")
 
+    def test_bad_requests_and_answers(self):
+        """Review items 9 and 10: malformed input never raises past dispatch or remote."""
+        self.assertEqual(dispatch({"source": "fmp", "fn": "quote", "args": {"__kind__": "nope"}}, self.server_local),
+                         {"ok": False, "error": "bad_request"})
+        self.assertEqual(dispatch({"source": "fmp", "fn": "quote", "args": "AAPL"}, self.server_local),
+                         {"ok": False, "error": "bad_request"})
+        for answer in (None, "text", ["list"]):
+            route = remote.RemoteRoute(lambda req, a=answer: a)
+            with self.assertRaises(remote.RemoteFailed) as ctx:
+                route.call("fmp", "quote", "AAPL")
+            self.assertEqual(str(ctx.exception), "bad_answer")
+
+    def test_every_forwardable_function_returns_an_encodable_type(self):
+        """Review item 11: each allowlisted function is annotated with a type the codec carries."""
+        import importlib
+        import re
+        carried = {"dict", "list", "str", "int", "float", "bool", "None", "Optional", "Quote", "FMPQuote", "Answer",
+                   "Candle", "MarketSnapshot"}
+        for sid, src in SOURCES.items():
+            if not src.functions:
+                continue
+            module, _, attr = src.factory.partition(":")
+            cls = getattr(importlib.import_module(module), attr)
+            for fn in src.functions:
+                ann = getattr(cls, fn).__annotations__.get("return")
+                self.assertIsNotNone(ann, f"{sid}.{fn} has no return annotation")
+                names = set(re.findall(r"[A-Za-z_]+", ann if isinstance(ann, str) else repr(ann)))
+                self.assertLessEqual(names, carried, f"{sid}.{fn} returns {ann}")
+
     def test_codec_round_trip_and_refusal(self):
         answer = Answer(data=[1, 2], source="KIS", ok=True, reason="")
         self.assertEqual(codec.decode(codec.encode(answer)), answer)

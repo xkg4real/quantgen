@@ -14,7 +14,7 @@
 | 앱 설정 (비밀 아님) | **16** (`NEXTGEN_MAX_AGE_<코드>` 하나로 셈) | 2절 |
 | 앱 실행에 쓰는 이름 합계 | **26** | `config.py`, `core/markets.py`의 두 곳에서만 읽음 |
 | 저장소 전체 (도구·연구·테스트·CI 포함) | **49** (아래 3절 셈) | Notion 상업화 분석서의 "47개"와 2개 차이 |
-| 데이터소스 세션이 더할 이름 (연구용) | 7 | 4절, 아직 저장소에 없음 |
+| 데이터소스 세션의 연구용 이름 (DIDM) | 9 | 4절. `core/credentials/names.py`의 `RESEARCH` (KEY-3 PR) |
 
 - 환경을 읽는 곳 (KEY-2 전, main `5888d05` 기준; 지금은 아래 5절): `config.py:34` (`_clean(name)` → `os.getenv`), `core/markets.py:222` (`NEXTGEN_MAX_AGE_<코드>`). `.env`는 `load_dotenv()`가 읽었습니다. KEY-2 (PR #128) 뒤에는 `config._clean`이 `core.credentials.read_setting`을 부르고, `.env`는 개발판에서만 `core.credentials.load_dotenv_for_development()`가 읽습니다. 어느 쪽이든 `.env`가 없어도 앱은 켜집니다 (키가 필요한 기능만 꺼짐).
 - `.env.example`에 있는 이름: 14개 (`FMP_API_KEY`, `KIS_APP_KEY`, `KIS_APP_SECRET`, `OPENDART_API_KEY`, `KRX_API_KEY`, `ANTHROPIC_API_KEY`, `QUANTGEN_AI_MODEL`, `GS_CLIENT_ID`, `GS_CLIENT_SECRET`, `UPBIT_ACCESS_KEY`, `UPBIT_SECRET_KEY`, `NEXTGEN_FICC_CACHE`, `NEXTGEN_FICC_CACHE_TTL`, `NEXTGEN_NO_DATA_GRACE`).

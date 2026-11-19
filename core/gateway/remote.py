@@ -55,8 +55,10 @@ class RemoteRoute:
         request = {"source": source_id, "fn": fn, "args": codec.encode(list(args)),
                    "kwargs": codec.encode(kwargs), "client_version": self._version}
         answer = self._send(request)
-        if not isinstance(answer, dict) or not answer.get("ok"):
-            raise RemoteFailed(str((answer or {}).get("error", "no_answer")))
+        if not isinstance(answer, dict):
+            raise RemoteFailed("bad_answer")
+        if not answer.get("ok"):
+            raise RemoteFailed(str(answer.get("error", "no_answer")))
         return codec.decode(answer.get("result"))
 
     def proxy(self, source_id: str) -> "RemoteProxy":

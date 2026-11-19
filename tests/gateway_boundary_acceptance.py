@@ -1,96 +1,157 @@
-"""KEY-3 boundary test (GATEWAY_DESIGN.md section 3): app code reaches data providers only through core/gateway.
+"""KEY-3 boundary test (GATEWAY_DESIGN.md sections 3 and 6): app code reaches data providers only through
+core/gateway.
 
-It counts, per file, the lines in core/, quantgen_desktop/, ui/ and main.py that import a provider client, call
-yfinance, name the Anthropic API host, or call a config key function. core/gateway/ is the one place allowed to.
-KNOWN lists today's direct calls (main ca5da08: 30 files, 69 lines). A new direct call fails the test; so does a
-file whose count went down without KNOWN being lowered, so the list cannot go stale. KEY-4 brings the core/ and
-main.py rows to zero, KEY-5 (UI session) the screen rows."""
+Python's own parser (ast) reads every .py file in core/, quantgen_desktop/, ui/ and main.py and records, per
+file, each direct way to a provider:
+- an import of a provider module, in any form (`import data.krx.x`, `from data import kis_markets`,
+  `from data.fmp.quote_client import FMPQuoteClient`, `import yfinance`, `import gs_quant...`), including the
+  FRED/Yahoo client core/ficc/data.py (its loaders, or the module itself; type-only names such as Series do not
+  count);
+- `importlib.import_module("<provider module>")` or `__import__(...)` with a literal name;
+- a call to a config key function (`config.kis_ready()` etc.), also through an alias (`import config as QC`) or
+  a direct import (`from config import kis_ready`);
+- the Anthropic API URL as a string literal (`https://api.anthropic.com...`; a host name inside a message does
+  not count).
+
+Provider modules themselves are allowed: core/gateway/ and core/ficc/data.py (the FRED/Yahoo client the gateway
+wraps). tests/fixtures/gateway/known_direct_calls.json lists today's findings per file, by content (not line
+number). Any finding not in the list fails; any listed finding that is gone fails too, so the list cannot go
+stale. KEY-4 empties the core/ and main.py entries, KEY-5 (UI session) the screen entries.
+
+This test also runs in the Compliance workflow, which runs on every pull request (no path filter).
+"""
 from __future__ import annotations
 
-import re
+import ast
+import json
+import sys
 import unittest
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+KNOWN_FILE = ROOT / "tests" / "fixtures" / "gateway" / "known_direct_calls.json"
 SCAN = ("core", "quantgen_desktop", "ui")
-ALLOWED_DIRS = ("core/gateway/",)
-PATTERN = re.compile(
-    r"(from|import) data\.(krx|fmp|crypto|kis_markets|kis_stream|kis_workspace|net)"
-    r"|(^|[^a-z_])(import yfinance|from yfinance|yf\.(download|Ticker|Tickers))"
-    r"|api\.anthropic\.com"
-    r"|config\.(kis_ready|kis_credentials|fmp_key|fmp_ready|opendart_key|opendart_ready|krx_key|krx_ready"
-    r"|anthropic_key|ai_ready|gs_client_id|gs_client_secret|upbit_ready|upbit_keys)\(")
-
-KNOWN = {
-    "core/engine/feed.py": 1,
-    "core/ficc/curve_models.py": 1,
-    "core/ficc/data.py": 2,
-    "core/market/detail_model.py": 1,
-    "core/market/market_cap.py": 2,
-    "core/market/qscore_rankings.py": 1,
-    "core/quant/gsq.py": 2,
-    "core/quant/history.py": 13,
-    "core/quant/insights.py": 3,
-    "core/research/ai_connection.py": 2,
-    "core/research/connections.py": 3,
-    "core/research/crypto_workflow.py": 4,
-    "core/research/derivatives_workflow.py": 2,
-    "core/research/etf_workflow.py": 3,
-    "core/research/market_analysis.py": 1,
-    "core/research/market_board.py": 1,
-    "core/research/watchlist.py": 1,
-    "main.py": 1,
-    "quantgen_desktop/app.py": 2,
-    "quantgen_desktop/market_chart.py": 6,
-    "quantgen_desktop/market_rankings.py": 2,
-    "quantgen_desktop/market_tools.py": 1,
-    "quantgen_desktop/qscore.py": 1,
-    "quantgen_desktop/watchlist_live.py": 2,
-    "ui/crypto_page.py": 1,
-    "ui/derivatives_page.py": 1,
-    "ui/krx_page.py": 1,
-    "ui/macro_state_panel.py": 1,
-    "ui/market_chart_page.py": 4,
-    "ui/settings_page.py": 3,
-}
+ALLOWED = ("core/gateway/", "core/ficc/data.py")
+PROVIDERS = ("data.krx", "data.fmp", "data.crypto", "data.kis_markets", "data.kis_stream", "data.kis_workspace",
+             "data.net", "data.didm", "yfinance", "gs_quant")
+FICC = "core.ficc.data"
+FICC_LOADERS = {"load_many", "load_series", "load_treasury_curve", "load_fx_spot", "load_short_rate",
+                "load_policy_rates", "fred_ready", "yfinance_ready", "probe"}
+KEY_FUNCTIONS = {"kis_ready", "kis_credentials", "fmp_key", "fmp_ready", "opendart_key", "opendart_ready", "krx_key",
+                 "krx_ready", "anthropic_key", "ai_ready", "gs_client_id", "gs_client_secret", "upbit_ready",
+                 "upbit_keys"}
+ANTHROPIC_URL = ("https://api.anthropic.com", "http://api.anthropic.com")
 
 
-def scan() -> dict[str, int]:
+def _provider(name: str) -> bool:
+    return any(name == p or name.startswith(p + ".") for p in PROVIDERS)
+
+
+def findings(source: str) -> list[str]:
+    tree = ast.parse(source)
+    found: list[str] = []
+    config_names = {"config"}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                if _provider(alias.name) or alias.name == FICC:
+                    found.append(f"import:{alias.name}")
+                if alias.name == "config" and alias.asname:
+                    config_names.add(alias.asname)
+        elif isinstance(node, ast.ImportFrom) and node.module and node.level == 0:
+            for alias in node.names:
+                full = f"{node.module}.{alias.name}"
+                if _provider(node.module) or _provider(full):
+                    found.append(f"import:{full}")
+                elif full == FICC:
+                    found.append(f"import:{FICC}")
+                elif node.module == FICC and alias.name in FICC_LOADERS:
+                    found.append(f"import:{full}")
+                elif node.module == "config" and alias.name in KEY_FUNCTIONS:
+                    found.append(f"import:{full}")
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call):
+            func = node.func
+            name = func.attr if isinstance(func, ast.Attribute) else func.id if isinstance(func, ast.Name) else ""
+            if name in ("import_module", "__import__") and node.args and isinstance(node.args[0], ast.Constant) \
+                    and isinstance(node.args[0].value, str):
+                target = node.args[0].value
+                if _provider(target) or target == FICC:
+                    found.append(f"dynamic:{target}")
+            if isinstance(func, ast.Attribute) and isinstance(func.value, ast.Name) \
+                    and func.value.id in config_names and func.attr in KEY_FUNCTIONS:
+                found.append(f"call:config.{func.attr}")
+        elif isinstance(node, ast.Constant) and isinstance(node.value, str) \
+                and any(u in node.value for u in ANTHROPIC_URL):
+            found.append("url:api.anthropic.com")
+    return sorted(found)
+
+
+def scan() -> dict[str, list[str]]:
     files = [ROOT / "main.py"]
     for top in SCAN:
         files.extend(sorted((ROOT / top).rglob("*.py")))
-    found = {}
+    result = {}
     for path in files:
         rel = path.relative_to(ROOT).as_posix()
-        if any(rel.startswith(d) for d in ALLOWED_DIRS) or "__pycache__" in rel:
+        if "__pycache__" in rel or any(rel == a or (a.endswith("/") and rel.startswith(a)) for a in ALLOWED):
             continue
         try:
-            text = path.read_text(encoding="utf-8")
-        except (OSError, UnicodeDecodeError):
+            items = findings(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError, SyntaxError):
             continue
-        count = sum(1 for line in text.splitlines() if PATTERN.search(line))
-        if count:
-            found[rel] = count
-    return found
+        if items:
+            result[rel] = items
+    return result
+
+
+def known() -> dict[str, list[str]]:
+    return json.loads(KNOWN_FILE.read_text(encoding="utf-8"))["files"]
 
 
 class BoundaryTest(unittest.TestCase):
     def test_no_new_direct_provider_calls(self):
-        found = scan()
-        grew = {f: (KNOWN.get(f, 0), n) for f, n in found.items() if n > KNOWN.get(f, 0)}
-        self.assertEqual(grew, {}, "new direct provider calls; go through core.gateway (known, now)")
+        now, listed = scan(), known()
+        new = {f: sorted((Counter(items) - Counter(listed.get(f, []))).elements()) for f, items in now.items()}
+        new = {f: v for f, v in new.items() if v}
+        self.assertEqual(new, {}, "new direct provider access; go through core.gateway")
 
     def test_known_list_is_not_stale(self):
-        found = scan()
-        shrank = {f: (n, found.get(f, 0)) for f, n in KNOWN.items() if found.get(f, 0) < n}
-        self.assertEqual(shrank, {}, "fewer direct calls than KNOWN says; lower KNOWN (known, now)")
+        now, listed = scan(), known()
+        gone = {f: sorted((Counter(items) - Counter(now.get(f, []))).elements()) for f, items in listed.items()}
+        gone = {f: v for f, v in gone.items() if v}
+        self.assertEqual(gone, {}, "listed direct access is gone; remove it from known_direct_calls.json")
 
-    def test_known_totals(self):
-        core_lines = sum(n for f, n in KNOWN.items() if f.startswith("core/") or f == "main.py")
-        screen_lines = sum(n for f, n in KNOWN.items() if f.startswith(("quantgen_desktop/", "ui/")))
-        self.assertEqual((len(KNOWN), core_lines + screen_lines), (30, 69))
-        self.assertEqual((core_lines, screen_lines), (44, 25))
+    def test_known_totals_match_the_design(self):
+        data = json.loads(KNOWN_FILE.read_text(encoding="utf-8"))
+        files = data["files"]
+        core = sum(len(v) for f, v in files.items() if f.startswith("core/") or f == "main.py")
+        screens = sum(len(v) for f, v in files.items() if f.startswith(("quantgen_desktop/", "ui/")))
+        self.assertEqual({"files": len(files), "core_and_main": core, "screens": screens}, data["totals"])
+
+    def test_detector_catches_each_form(self):
+        sample = (
+            "import data.krx.kis_client\nfrom data import kis_markets\nfrom data.fmp.quote_client import X\n"
+            "import yfinance as yf\nimport gs_quant.session\nfrom core.ficc.data import load_series, Series\n"
+            "from core.ficc import data\nimport importlib\nimportlib.import_module('data.net')\n"
+            "import config as QC\nQC.kis_ready()\nimport config\nconfig.fmp_key()\nfrom config import ai_ready\n"
+            "URL = 'https://api.anthropic.com/v1/messages'\nMSG = 'check api.anthropic.com'\n")
+        self.assertEqual(findings(sample), sorted([
+            "import:data.krx.kis_client", "import:data.kis_markets", "import:data.fmp.quote_client.X",
+            "import:yfinance", "import:gs_quant.session", "import:core.ficc.data.load_series",
+            "import:core.ficc.data", "dynamic:data.net", "call:config.kis_ready", "call:config.fmp_key",
+            "import:config.ai_ready", "url:api.anthropic.com"]))
 
 
 if __name__ == "__main__":
-    unittest.main()
+    if "--write-known" in sys.argv:                 # maintenance: regenerate the fixture from the tree
+        files = scan()
+        core = sum(len(v) for f, v in files.items() if f.startswith("core/") or f == "main.py")
+        screens = sum(len(v) for f, v in files.items() if f.startswith(("quantgen_desktop/", "ui/")))
+        KNOWN_FILE.write_text(json.dumps({"files": files, "totals": {"files": len(files), "core_and_main": core,
+                                                                      "screens": screens}},
+                                         indent=1, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
+        print(json.dumps({"files": len(files), "core_and_main": core, "screens": screens}))
+    else:
+        unittest.main()

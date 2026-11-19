@@ -1,6 +1,6 @@
 # 공급원 게이트웨이 설계 (KEY-3)
 
-- 판: v0.1 (2026-11-19). 작성: PAYMENTS_ACCOUNT_KEYS 세션. ID `KEY-3/design`.
+- 판: v0.2 (2026-11-19, 메인 세션의 PR #132 검토 반영: 경계 시험 ast화, 6절 수치). v0.1 2026-11-19. 작성: PAYMENTS_ACCOUNT_KEYS 세션. ID `KEY-3/design`.
 - **소유자 승인: 2026-11-19, 원문 "Key-3 승인"** (이 세션 채팅).
 - 근거: 소유자 D7-G 승인 (2026-11-18 14:15 KST, 원문 "그러면 D7-G의 방식대로 진행하겠습니다", handoff `MERGE_QUEUE.md`, 커밋 `762150c`), 설계 원안 handoff `plans/2026-11-17/D7_ENV_STRUCTURE.md` 5장.
 - 기준: main `ca5da08` (KEY-2 `3249af7`, KEY-2/b `ca5da08` 병합 뒤). 줄 번호는 이 커밋 기준이며 코드가 바뀌면 달라집니다.
@@ -129,10 +129,11 @@ flowchart LR
 | 6 | 키를 넣거나 지우면 해당 클라이언트를 다시 만듦 (재시작 불필요) | `core.credentials.subscribe` → `gateway.reload(source)` | 키를 넣으면 `ready("kis_quote")`가 `key_needed` → `ready`로 바뀜 (같은 프로세스) |
 
 **경계 시험 `tests/gateway_boundary_acceptance.py`.**
-- `core/`, `quantgen_desktop/`, `ui/`, `main.py`에서 공급사 클라이언트 import (`data.krx`, `data.fmp`, `data.crypto`, `data.kis_*`, `data.net`), `yfinance`, `api.anthropic.com`, `config`의 키 함수 사용을 셉니다.
-- 처음에는 6절 목록 (파일별 개수)을 **알려진 예외**로 둡니다. 새 직접 호출이 생기면 실패합니다. 개수가 줄면 예외 목록도 줄이라고 실패합니다 (목록이 썩지 않게).
-- KEY-4가 `core/` 예외를 0으로, KEY-5가 화면 쪽 예외를 0으로 만듭니다.
-- 다른 세션이 새 기능을 넣어도 구조가 다시 흩어지지 않게 계속 켜 둡니다. 새 공급원은 `data/`에 클라이언트를 만들고 `routes.json`에 한 행을 더하는 PR로만 들어옵니다 (데이터소스 세션, 이 세션이 검토).
+- `core/`, `quantgen_desktop/`, `ui/`, `main.py`의 모든 `.py`를 `ast`로 읽어 공급사에 바로 닿는 곳을 찾습니다 (자세한 기준은 6절).
+- 시작 예외 목록은 `tests/fixtures/gateway/known_direct_calls.json`입니다. 파일마다 **내용**으로 고정합니다. 목록에 없는 것이 생기면 실패하고, 목록에 있는 것이 사라졌는데 목록을 줄이지 않아도 실패합니다 (목록이 썩지 않게). 같은 파일에서 하나를 빼고 다른 직접 호출을 넣어도 걸립니다.
+- KEY-4가 `core/`·`main.py` 항목을, KEY-5가 화면 항목을 0으로 만듭니다.
+- Runtime과 Compliance (모든 PR) 두 곳에서 돌아, 경로 필터 밖 파일에 새 직접 호출을 넣어도 잡힙니다.
+- 새 공급원은 `data/`에 클라이언트를 만들고 `routes.json`에 한 행을 더하는 PR로만 들어옵니다 (데이터소스 세션, 이 세션이 검토).
 
 **가짜 서버 시험 `tests/gateway_remote_acceptance.py`.**
 - 같은 프로세스 안의 가짜 서버 (`dispatch.py`를 고정 응답 클라이언트로 돌림)를 띄우고, 프로필을 `personal` ↔ `commercial`(가짜 서버 경유)로 바꿔도 **같은 답** (codec 왕복 후 값이 같음)이 나오는지 봅니다.
@@ -176,49 +177,81 @@ flowchart LR
 
 ## 6. 직접 호출 목록 (경계 시험의 시작 예외)
 
-`git grep` 기준 (main `ca5da08`): **30개 파일 69곳**. D7 보고서는 같은 방법의 다른 셈으로 31개 파일 72곳이라 했습니다 (D7 2장이 "셈 방식에 따라 1~2곳 달라짐"이라 적은 차이). 경계 시험이 같은 정규식으로 정확한 목록을 만들고, 그 목록이 기준입니다.
+**판 2 (2026-11-19, 메인 세션 검토 반영).** 처음 판은 `git grep` 정규식으로 30개 파일 69곳을 셌습니다. 검토에서 빠진 형태가 나와 (아래), 경계 시험을 Python 구문 분석기(`ast`)로 바꾸고 다시 셌습니다. 기준은 `tests/fixtures/gateway/known_direct_calls.json` (파일마다 **내용**으로 고정, 줄 번호 아님)이고, 이 표는 그 파일에서 만든 것입니다.
 
-셈에 쓴 정규식:
-```
-(from|import) data\.(krx|fmp|crypto|kis_markets|kis_stream|kis_workspace|net)
-| (import yfinance|from yfinance|yf\.(download|Ticker|Tickers))
-| api\.anthropic\.com
-| config\.(kis_ready|kis_credentials|fmp_key|fmp_ready|opendart_key|opendart_ready|krx_key|krx_ready|anthropic_key|ai_ready|gs_client_id|gs_client_secret|upbit_ready|upbit_keys)\(
-```
-범위: `core/**.py`, `quantgen_desktop/**.py`, `ui/**.py`, `main.py`. (`core/research/strategy_workflow.py`의 `import config as QC` 별칭 사용은 시험에서 따로 잡음.)
-
-| 층 | 파일 | 곳 | 옮기는 묶음 |
+| 층 | 파일 | 찾은 것 | 옮기는 묶음 |
 |---|---|---|---|
-| `core/` | 17 | 43 | KEY-4 (이 세션). `core/research/markets.py`는 데이터소스 세션이 DS-H에서 같은 규칙으로 |
-| `quantgen_desktop/` | 6 | 14 | KEY-5 (UI 세션) |
-| `ui/` | 6 | 11 | KEY-5 (UI 세션) |
+| `core/` | 27 | 82 | KEY-4 (이 세션) |
 | `main.py` | 1 | 1 | KEY-4 |
-| **합계** | **30** | **69** | |
+| `quantgen_desktop/` | 8 | 16 | KEY-5 (UI 세션) |
+| `ui/` | 12 | 22 | KEY-5 (UI 세션) |
+| **합계** | **48** | **121** (core·main 83, 화면 38) | |
+
+**무엇을 세나 (`tests/gateway_boundary_acceptance.py`의 `findings`):**
+- 공급사 모듈 import, 모든 꼴: `import data.krx.x`, `from data import kis_markets`, `from data.fmp.quote_client import X` (이름마다 하나), `import yfinance`, `import gs_quant...`. 공급사 모듈은 `data.krx`, `data.fmp`, `data.crypto`, `data.kis_markets`, `data.kis_stream`, `data.kis_workspace`, `data.net`, `data.didm`, `yfinance`, `gs_quant`.
+- FRED·Yahoo 클라이언트 `core.ficc.data`: 모듈 자체 import, 또는 로더 이름 (`load_*`, `fred_ready`, `yfinance_ready`, `probe`) import. `Series` 같은 형 이름만 가져오는 것은 세지 않음.
+- `importlib.import_module("<공급사 모듈>")`, `__import__(...)` (글자로 적힌 이름).
+- `config`의 키 함수 호출 (`config.kis_ready()` 등). 별칭 (`import config as QC` → `QC.kis_ready()`)과 `from config import kis_ready`도.
+- Anthropic API 주소 문자열 (`https://api.anthropic.com...`). 안내 문구 속 호스트 이름은 세지 않음 (그래서 `core/research/ai_connection.py`는 목록에서 빠짐).
+
+**허용된 곳 (세지 않음):** `core/gateway/`, 그리고 게이트웨이가 감싸는 FRED·Yahoo 클라이언트 `core/ficc/data.py` 자체.
+
+**검토 3번 (경계 범위) 선택: 넣음.** FRED·Yahoo 로더 (`core.ficc.data`)와 `gs_quant` 직접 사용을 경계에 넣었습니다. 그래서 KEY-4·KEY-5가 목록을 0으로 만들면 FRED·Yahoo·GS도 게이트웨이를 거치고, `commercial`의 `yahoo: off`가 실제로 효력을 갖습니다. **그 전까지는** 앱 코드가 `core.ficc.data`를 직접 부르므로 `routes.json`에서 `yahoo`를 꺼도 그 경로는 막히지 않습니다 (지금 `commercial`은 켜지지 않으므로 실제 영향 없음).
+
+**어디서 도나:** Runtime (경로 필터)과 **Compliance (경로 필터 없음, 모든 PR)** 두 곳. 표준 라이브러리만 씀.
 
 파일별 (많은 순):
 
-| 곳 | 파일 | 묶음 |
+| 찾은 것 | 파일 | 묶음 |
 |---|---|---|
-| 13 | `core/quant/history.py` | KEY-4 |
+| 19 | `core/quant/history.py` | KEY-4 |
+| 9 | `core/quant/gsq.py` | KEY-4 |
+| 7 | `core/market/market_cap.py` | KEY-4 |
+| 7 | `core/research/crypto_workflow.py` | KEY-4 |
 | 6 | `quantgen_desktop/market_chart.py` | KEY-5 |
-| 4 | `ui/market_chart_page.py` | KEY-5 |
-| 4 | `core/research/crypto_workflow.py` | KEY-4 |
-| 3 | `ui/settings_page.py` | KEY-5 |
-| 3 | `core/research/etf_workflow.py` | KEY-4 |
-| 3 | `core/research/connections.py` | KEY-4 |
+| 5 | `ui/market_chart_page.py` | KEY-5 |
+| 4 | `core/research/connections.py` | KEY-4 |
+| 4 | `ui/settings_page.py` | KEY-5 |
 | 3 | `core/quant/insights.py` | KEY-4 |
-| 2 | `quantgen_desktop/watchlist_live.py` | KEY-5 |
-| 2 | `quantgen_desktop/market_rankings.py` | KEY-5 |
+| 3 | `core/research/derivatives_workflow.py` | KEY-4 |
+| 3 | `core/research/etf_workflow.py` | KEY-4 |
+| 3 | `core/research/fx_analysis.py` | KEY-4 |
+| 3 | `ui/fx_page.py` | KEY-5 |
+| 2 | `core/ficc/curve_models.py` | KEY-4 |
+| 2 | `core/ficc/ratesim.py` | KEY-4 |
+| 2 | `core/research/analysis.py` | KEY-4 |
+| 2 | `core/research/market_board.py` | KEY-4 |
+| 2 | `core/research/rates_analysis.py` | KEY-4 |
+| 2 | `core/research/watchlist.py` | KEY-4 |
 | 2 | `quantgen_desktop/app.py` | KEY-5 |
-| 2 | `core/research/derivatives_workflow.py` | KEY-4 |
-| 2 | `core/research/ai_connection.py` | KEY-4 |
-| 2 | `core/quant/gsq.py` | KEY-4 |
-| 2 | `core/market/market_cap.py` | KEY-4 |
-| 2 | `core/ficc/data.py` | KEY-4 |
-| 1 | `ui/macro_state_panel.py`, `ui/krx_page.py`, `ui/derivatives_page.py`, `ui/crypto_page.py` | KEY-5 |
-| 1 | `quantgen_desktop/qscore.py`, `quantgen_desktop/market_tools.py` | KEY-5 |
+| 2 | `quantgen_desktop/market_rankings.py` | KEY-5 |
+| 2 | `quantgen_desktop/watchlist_live.py` | KEY-5 |
+| 2 | `ui/rates_page.py` | KEY-5 |
+| 1 | `core/engine/feed.py` | KEY-4 |
+| 1 | `core/ficc/insights.py` | KEY-4 |
+| 1 | `core/ficc/macro.py` | KEY-4 |
+| 1 | `core/market/detail_model.py` | KEY-4 |
+| 1 | `core/market/directory.py` | KEY-4 |
+| 1 | `core/market/qscore_rankings.py` | KEY-4 |
+| 1 | `core/market/routing.py` | KEY-4 |
+| 1 | `core/quant/risk.py` | KEY-4 |
+| 1 | `core/research/bond_analysis.py` | KEY-4 |
+| 1 | `core/research/market_analysis.py` | KEY-4 |
+| 1 | `core/research/markets.py` | KEY-4 |
+| 1 | `core/research/structuring_analysis.py` | KEY-4 |
 | 1 | `main.py` | KEY-4 |
-| 1 | `core/research/watchlist.py`, `core/research/market_board.py`, `core/research/market_analysis.py`, `core/market/qscore_rankings.py`, `core/market/detail_model.py`, `core/ficc/curve_models.py`, `core/engine/feed.py` | KEY-4 |
+| 1 | `quantgen_desktop/home_view.py` | KEY-5 |
+| 1 | `quantgen_desktop/market_summary.py` | KEY-5 |
+| 1 | `quantgen_desktop/market_tools.py` | KEY-5 |
+| 1 | `quantgen_desktop/qscore.py` | KEY-5 |
+| 1 | `ui/bonds_page.py` | KEY-5 |
+| 1 | `ui/crypto_page.py` | KEY-5 |
+| 1 | `ui/derivatives_page.py` | KEY-5 |
+| 1 | `ui/fcharts.py` | KEY-5 |
+| 1 | `ui/krx_page.py` | KEY-5 |
+| 1 | `ui/macro_state_panel.py` | KEY-5 |
+| 1 | `ui/quant_lab_page.py` | KEY-5 |
+| 1 | `ui/structuring_page.py` | KEY-5 |
 
 KEY-4 원칙: 공급사 호출 줄만 바꿉니다. 주입 자리가 이미 있는 함수 (`loader=`, `status_loaders=`, `probe_loaders=` 등)는 기본값만 게이트웨이로 바꿉니다. 다른 줄은 손대지 않습니다.
 
@@ -229,10 +262,10 @@ KEY-4 원칙: 공급사 호출 줄만 바꿉니다. 주입 자리가 이미 있�
 | 묶음 | 파일 | 담당 | 공유 파일 (대기열 경유) | 공수 (추정) |
 |---|---|---|---|---|
 | KEY-3 | 새 `core/gateway/**`, `tests/gateway_*` + KEY-2/b 검토 후속 5건 (`data/krx/kis_client.py`, `tests/credentials_acceptance.py`, 문서; 브랜치 `claude/payments-key3-prep-20261119`) | 이 세션 | `runtime-smoke.yml` 경로·시험 줄 | 3~4일 |
-| KEY-4 | `core/` 17개 파일 43곳 + `main.py` 1곳 | 이 세션 (+ 데이터소스: `markets.py`) | 없음 (그 기간 이 줄들의 수정 권한) | 2~3일 |
-| KEY-5 | 화면 12개 파일 25곳 + 키·연결 화면 | **UI 세션** (소유자를 거쳐 요청) | 없음 | 1~1.5일 |
+| KEY-4 | `core/` 27개 파일 82곳 + `main.py` 1곳 (6절 판 2) | 이 세션 (+ 데이터소스: `markets.py`) | 없음 (그 기간 이 줄들의 수정 권한) | 2~3일 |
+| KEY-5 | 화면 20개 파일 38곳 + 키·연결 화면 (6절 판 2) | **UI 세션** (소유자를 거쳐 요청) | 없음 | 1~1.5일 |
 
-- **Nautilus 코드 지문:** 지문 입력 27개 파일 (`config.py`, `tools/nautilus/**`, `HARNESS_SOURCES` 11개 등) 중 위 30개 파일과 겹치는 것은 없습니다 (`core.quant.gate_package.HARNESS_SOURCES`로 확인). 그래서 KEY-3·KEY-4는 `config.py`를 건드리지 않는 한 지문을 바꾸지 않습니다. 바꾸게 되면 PR 본문에 적습니다.
+- **Nautilus 코드 지문:** 지문 입력 27개 파일 (`config.py`, `tools/nautilus/**`, `HARNESS_SOURCES` 11개 등) 중 6절의 48개 파일과 겹치는 것은 없습니다 (`core.quant.gate_package.HARNESS_SOURCES`로 확인). 그래서 KEY-3·KEY-4는 `config.py`를 건드리지 않는 한 지문을 바꾸지 않습니다. 바꾸게 되면 PR 본문에 적습니다.
 - **준법:** 새 소스 파일이 생기므로 20개 문서 재검토 대상입니다. PR마다 최신 main merge 뒤 맨 마지막에 기준선 갱신.
 - **CI:** KEY-3 PR이 `runtime-smoke.yml` 경로 목록에 `core/gateway/**`, `tests/gateway_*`를, bounded-fixtures 단계에 시험 모듈 3개를 더합니다.
 
@@ -252,6 +285,6 @@ KEY-4 원칙: 공급사 호출 줄만 바꿉니다. 주입 자리가 이미 있�
 ## 9. 확인 못 한 것 (미검증)
 
 - 공급사별 상용 표시 조건 (KRX·FMP·Cboe·Upbit/Binance 공개 시세), 계약 공급사가 서버 API를 주는지. **법률 자문이 아닙니다.**
-- 69곳 셈은 정규식 기준입니다. 간접 호출 (다른 모듈을 거쳐 공급사에 닿는 경로)은 경계 시험이 import 그래프로 한 번 더 확인합니다.
+- 경계 시험은 앱 코드가 공급사 모듈에 **바로** 닿는 곳만 셉니다. 다른 앱 모듈을 거쳐 닿는 간접 경로 (예: 앱 코드가 공급사를 부르는 다른 앱 함수를 부름)는 그 다른 모듈 쪽에서 셉니다. import 그래프 전체를 따라가는 검사는 하지 않습니다.
 - 회사 서버 위치·형태 (PAY-3, 소유자에게 먼저 여쭘).
 - 공수는 모두 추정입니다.

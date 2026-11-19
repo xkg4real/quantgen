@@ -19,8 +19,13 @@ def dispatch(request: dict, local) -> dict:
         return {"ok": False, "error": "fixed_local"}
     if fn not in source.functions:
         return {"ok": False, "error": "function_not_allowed"}
-    args = codec.decode(request.get("args") or [])
-    kwargs = codec.decode(request.get("kwargs") or {})
+    try:
+        args = codec.decode(request.get("args") or [])
+        kwargs = codec.decode(request.get("kwargs") or {})
+        if not isinstance(args, list) or not isinstance(kwargs, dict):
+            return {"ok": False, "error": "bad_request"}
+    except Exception:
+        return {"ok": False, "error": "bad_request"}
     try:
         result: Any = getattr(local.client(source_id), fn)(*args, **kwargs)
         return {"ok": True, "result": codec.encode(result)}

@@ -169,6 +169,23 @@ class RuleTest(Base):
             self.assertEqual(second.ready, kis_client.requests is not None)
 
 
+class KeyChangeTest(Base):
+    def test_old_client_is_told_and_next_one_is_fresh(self):
+        """Review item 8: a caller holding the old client sees the change; client() builds a new one."""
+        calls = []
+
+        class Holder:
+            def reload_credentials(self):
+                calls.append("reloaded")
+
+        gw.LOCAL.override("fmp", Holder)
+        old = gw.client("fmp")
+        with _no_keys():
+            credentials.set("FMP_API_KEY", FAKE)
+        self.assertEqual(calls, ["reloaded"])
+        self.assertIsNot(gw.client("fmp"), old)
+
+
 class ProfileTest(Base):
     def test_commercial_draft_turns_yahoo_and_fmp_off(self):
         gw._profile_override = "commercial"

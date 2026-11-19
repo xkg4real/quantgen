@@ -56,7 +56,7 @@ class CryptoPublic:
     def upbit_daily(self, market: str = "KRW-BTC", *, days: int = 504):
         return self._upbit.daily(market, days=days)
 
-    def upbit_ticker(self, markets="KRW-BTC"):
+    def upbit_ticker(self, markets="KRW-BTC") -> list[dict]:
         return self._upbit.ticker(markets)
 
     def binance_daily(self, symbol: str = "BTCUSDT", **kwargs):
@@ -65,13 +65,13 @@ class CryptoPublic:
     def binance_funding(self, symbol: str = "BTCUSDT", *, days: int = 730):
         return self._binance.funding(symbol, days=days)
 
-    def binance_premium_index(self, symbol: str = "BTCUSDT"):
+    def binance_premium_index(self, symbol: str = "BTCUSDT") -> dict:
         return self._binance.premium_index(symbol)
 
-    def binance_open_interest_hist(self, symbol: str = "BTCUSDT", **kwargs):
+    def binance_open_interest_hist(self, symbol: str = "BTCUSDT", **kwargs) -> list[dict]:
         return self._binance.open_interest_hist(symbol, **kwargs)
 
-    def coingecko_top(self, n: int = 20):
+    def coingecko_top(self, n: int = 20) -> list[dict]:
         return self._cc.coingecko_top(n)
 
 

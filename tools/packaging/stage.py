@@ -20,7 +20,8 @@ FILES = {"pyproject.toml", "README.md", "main.py", "config.py", "tools/__init__.
          "qa/research_status.json", "qa/acceptance_results.json", "assets/manifest.json"}
 DATA_PREFIXES = ("core/calendars/data/", "core/ficc/schemas/", "core/skills/macro_workflows/",
                  "data/calendars/", "core/market/data/")
-DATA_FILES = {"data/macro/series_registry.yaml", "data/macro/rules_v2.0.0.json", "core/research/display_rights.json"}
+DATA_FILES = {"data/macro/series_registry.yaml", "data/macro/rules_v2.0.0.json", "core/research/display_rights.json",
+              "core/gateway/routes.json"}
 
 
 def allowed(name: str) -> bool:

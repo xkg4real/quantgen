@@ -194,10 +194,10 @@ def _on_key_change(name: str) -> None:
     """D7-G rule 6: a key set or deleted in the app rebuilds the clients that use it."""
     for sid, src in SOURCES.items():
         if name in src.keys:
-            LOCAL.reload(sid)
-            built = LOCAL._clients.get(sid)
-            if built is not None and hasattr(built, "reload_credentials"):
-                built.reload_credentials()
+            old = LOCAL._clients.get(sid)
+            LOCAL.reload(sid)                        # the next client() builds a fresh one
+            if old is not None and hasattr(old, "reload_credentials"):
+                old.reload_credentials()             # a caller still holding the old client sees the change too
 
 
 def _subscribe() -> None:

@@ -14,7 +14,8 @@ class Source:
     id: str
     keys: tuple[str, ...]
     factory: str                     # "module:attribute" of the local client (a class, called with no arguments)
-    functions: tuple[str, ...]       # forwardable through the company route; checked by remote.py and dispatch.py
+    functions: tuple[str, ...]       # forwardable through the company route (remote.py, dispatch.py). Each one's
+                                     # return annotation must be a type the codec carries (tests.gateway_remote_acceptance)
     delay: str                       # "realtime" | "delayed" | "daily" | "on_demand"
     display_policy: str | None       # key in display_rights.json["policies"]; None = not market data
     fixed_local: bool = False        # D7-G rule 1: user brokerage/exchange keys never leave this PC
@@ -30,11 +31,11 @@ SOURCES: dict[str, Source] = {s.id: s for s in (
     Source("upbit_account", ("UPBIT_ACCESS_KEY", "UPBIT_SECRET_KEY"), "data.crypto.crypto_client:UpbitAccount",
            (), "on_demand", None, fixed_local=True),
     Source("crypto_public", (), "core.gateway.local:CryptoPublic",
-           ("upbit_daily", "upbit_ticker", "binance_daily", "binance_funding", "binance_premium_index",
-            "binance_open_interest_hist", "coingecko_top"), "delayed", "Upbit"),
-    Source("fred", (), "core.gateway.local:FiccData", ("load_series", "load_many", "load_treasury_curve",
-                                                       "load_short_rate", "load_policy_rates"), "daily", "fred_other"),
-    Source("yahoo", (), "core.gateway.local:FiccData", ("load_fx_spot",), "delayed", "yahoo"),
+           ("upbit_ticker", "binance_premium_index", "binance_open_interest_hist", "coingecko_top"), "delayed",
+           "Upbit"),
+    # Series and CurvePanel results are not on the wire yet (codec.REGISTERED): nothing forwardable until they are.
+    Source("fred", (), "core.gateway.local:FiccData", (), "daily", "fred_other"),
+    Source("yahoo", (), "core.gateway.local:FiccData", (), "delayed", "yahoo"),
     Source("fmp", ("FMP_API_KEY",), "data.fmp.quote_client:FMPQuoteClient", ("quotes", "quote", "status"),
            "delayed", "fmp"),
     Source("krx_open_api", ("KRX_API_KEY",), "data.krx.krx_market_client:KRXMarketClient",
