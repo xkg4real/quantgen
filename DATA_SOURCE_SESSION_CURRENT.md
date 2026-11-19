@@ -6,7 +6,7 @@ task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
 next_ids: DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e, DS-4b, DS-H
-updated_at: 2026-11-20T00:25:16+09:00
+updated_at: 2026-11-20T01:57:22+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/data-source-didm-20261117
@@ -103,6 +103,7 @@ DS-1 평가표 소유자 확인 완료, DIDM-0 사전등록 V0 **소유자 승�
 - [x] 소유자 승인 (2026-11-19, 원문): "이후 key-3 승인을 완료했고 위 제안을 승인햇습니다. 이에 맞게 지금 부족한 API키/자료 공급원 연결을 진행해주세요. 만약 제가 수동으로 작업해야한다면 이 역시 table 형식으로 어떤 항목을 어떻게 언제 하는지를 알려주세요" ("위 제안" = 결제·계정 세션의 "KEY-3 PR에 연구용 키 이름 9개를 자격 증명 저장소에"). 반영: main `ca5da08` merge (`b935bec`, runtime-smoke 충돌 = main 줄 + DIDM 경로·시험만 다시 더함), `data/didm/keys.py` (저장소가 이름을 알면 `core.credentials.get`, 아니면 환경변수), `tools/didm/keys.py` (status / set 숨김 입력), DS-4b Alpha Vantage·Tiingo·CryptoPanic 연결 (`core/didm/ingest/news.py`, `data/didm/{alphavantage,tiingo,cryptopanic}.py`, `tests/didm_news_acceptance.py`). DIDM 시험 95 OK. 커밋 `df05b21`. 실제 호출은 소유자 무료 키 가입 뒤.
 - [x] 메인 지시 (2026-11-20 00:50 KST, SESSION_PIPELINE) 3): main `9f76b07` (KEY-3) merge commit `f60e314` (runtime-smoke 충돌 = main 줄 + DIDM 경로·시험만 다시 더함). DIDM 시험 95 + `RealStoreRoundTrip` 3 = 98 OK. `tests.credentials_acceptance`·`gateway_*` 3개·`provider_parity` 208 OK (skip 3) — main `9f76b07`에서도 같은 결과 (실패 집합 둘 다 비어 있음). `data/didm/keys.py`가 KEY-3 저장소 경로와 맞음: 연구용 9개 이름 모두 `kind=research`, 저장 → 키링에서 읽기, 환경변수 우선. 커밋 `eb4f3a5`. **PR 직전 상태** (최신 main 합침; 남은 것 = 준수 기준선 갱신 → `--check` → PR, MERGE_QUEUE 8행 "병합: DATA_SOURCE_DIDM" 뒤). `compliance --check` 지금 FAIL (새 파일, 문서 20개 재검토 대상) = 예상.
 - [ ] DS-H 홈 지표 데이터 계층 — **KEY-4 (PR #133, `core/research/markets.py`) 병합 뒤 main에서 시작** (메인 지시)
+- [x] OA-07 OpenDART 소유자 PC 확인 (2026-11-19): 9쪽, 819건. 공식·무료 공급원 6곳 모두 확인 끝. 남은 확인 = 무료 키 3곳 (OA-08).
 - [-] DS-3 — 계획에 없음 (메인 11-20: 소유자 11-18 답 1 "3단계" = RavenPack 대안 9개, Bigdata.com 시험 없음 → RavenPack 견적·Bigdata.com 비교 없음). OA-38 소유자 확인 대기, 원하시면 다시 엶
 <!-- old DS-H line kept below for history -->
 - [ ] DS-H 홈 지표 데이터 계층 ← **소유자 진단 출력 대기** (아직 손대지 않음)
