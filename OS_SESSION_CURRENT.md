@@ -6,11 +6,11 @@ task: os-expansion
 cycle: 2026-11-17
 done_ids: OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f
 next_ids: OS-F1, OS-F2
-updated_at: 2026-11-19T17:30:00+09:00
+updated_at: 2026-11-20T01:30:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/os-pyside6-abort-20261119
-work_commit: 909652d
+work_commit: 8262d6c
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -84,7 +84,7 @@ OS-P0-a~f는 **PR #127로 main에 병합됐습니다**(main `c28b1d7`, CI 8개 �
 - [ ] (11-19 진행 중) **UI 세션 인계: PySide6 전용 간헐 비정상 종료** (UI `23a6371`, 파일 `docs/product/pyside6_abort_2026-11-19/`, 소유자 지시 원문 "그러면 OS세션에 인계할 프롬프트와 파일을 전달/작성해주세요").
   - 재현: `tests.desktop_market_tabs_acceptance` 4개 동시. 고치지 않은 PySide6 6.12.0에서 80번 중 1번, 72번 중 1번. 같은 `malloc_consolidate(): unaligned fastbin chunk detected`가 `delete_owned_widget`에서 남.
   - 배제: `jobs.py` 가설(Python QRunnable 하위 클래스 + 신호 객체 수명). `QThreadPool.start(callable)`과 `Jobs` 자식 신호 객체로 바꾼 사본도 132번 중 1번 같은 비정상 종료 → 원인 아님. 다른 스레드에서의 `JobSignals` 소멸 0건(112건 모두 화면 스레드), 기다리지 않은 Jobs 0건.
-  - 결과(브랜치 `claude/os-pyside6-abort-20261119` `909652d`, `PYSIDE6_TRIAL` 10절): PySide6 6.12.0은 350번 중 5번 비정상 종료. 6.11.3은 160번 중 비정상 종료 0번이지만 잘못된 형식의 래퍼로 TypeError 1번. PyQt6는 160번 중 0번. 원인 위치는 아직 못 찾음(가설: shiboken 래퍼 수명). 9절 "준비 끝" 판정 보류. 다음 방법은 소유자 선택 대기(10절 끝의 1~4).
+  - **원인 확정(소유자 "네 1번으로 진행해주세요")**: 테스트 보조 코드 3곳(`tests/desktop_market_chart_acceptance.py:60`, `tests/desktop_qscore_acceptance.py:53`, `tests/desktop_acceptance.py:443·450`)이 작업 스레드에서 `QThread.currentThread()` 래퍼를 만들어 보관. 그 기록만 빼면 0/96(그대로 7/96). 앱 코드 변경 없음. 고침은 `threading.get_ident()`, 패치는 `docs/platform/pyside6_abort_2026-11-19/ui_fix_thread_fixtures.patch`. 패치 적용 사본은 PySide6로 160번 연속 0(일반) + 160번 연속 0(tcache 끔), PyQt6 73개 통과. lint `15-thread-wrapper`, 점검표 15번, `PYSIDE6_TRIAL` 10-1절 — 브랜치 `claude/os-pyside6-abort-20261119` `8262d6c`. 남은 일: UI 세션이 패치 반영 → OS가 재확인 → 9절 판정 복구.
 - [ ] OS-F1 (F21 뒤, MERGE_QUEUE가 자리 줌), OS-F2 (KEY-2 뒤)
 
 **11-18 추가 검증 (`5816125`):**
