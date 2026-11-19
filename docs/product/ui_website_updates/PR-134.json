@@ -3,7 +3,7 @@
   "source_pr": "https://github.com/xkg4real/quantgen/pull/134",
   "source_branch": "claude/payments-key4a-20261120",
   "source_commit": "ef6b7af476ae",
-  "summary": "KEY-4/a account docs. The website account request (ACCOUNT_SETUP.md part 3) changes: ACC-3 handles NEW_PASSWORD_REQUIRED after an admin temporary password (password rule of step 13, with a one-line suggestion to switch to an authenticator app); ACC-4 names each refusal case and, when an email-MFA member's self-service reset is refused, shows: contact@quantgeneration.com으로 문의하시면 계정을 삭제한 뒤 같은 이메일로 다시 가입하도록 도와드립니다 (저장된 정보는 사라집니다); ACC-9 tests both new paths. Owner decisions OA-42 (second check before a temporary password) and OA-44 (delete and re-register when no second check is possible), 2026-11-20.",
+  "summary": "KEY-4/a account docs. The website account request (ACCOUNT_SETUP.md part 3) changes: ACC-3 handles NEW_PASSWORD_REQUIRED after an admin temporary password (password rule of step 13, with a one-line suggestion to switch to an authenticator app); ACC-4: when Cognito refuses an email-MFA member's self-service reset, the screen shows the guidance in ACCOUNT_SETUP 3부 ACC-4 참조 (contact@quantgeneration.com: after an identity check either a temporary password (OA-42) or delete and re-register with the same email (OA-44)); other errors keep the existing wording; ACC-9 adds three new test paths (temporary-password login and forced change, the refused reset with the contact@ guidance, re-registration with a deleted account's email). Owner decisions OA-42 (second check before a temporary password) and OA-44 (delete and re-register when no second check is possible), 2026-11-20.",
   "changed_files": [
     "docs/commercial/accounts/ACCOUNT_SETUP.md",
     "docs/commercial/accounts/ADMIN_GUIDE.md",
@@ -14,11 +14,11 @@
   ],
   "verification": {
     "tests": "gateway acceptance modules (5): 65 tests OK; compliance --check: consistency PASS, publication BLOCKED, 20 documents, 805 sources.",
-    "limitations": "AWS console labels follow AWS docs and the owner's 2026-11-20 screens; re-registration with a deleted email (T19b, ACC-9) is not yet tested; sign-in IP matching (ADMIN_GUIDE 6.1 (나)②) is unavailable until CloudTrail is shown to identify the member."
+    "limitations": "AWS console labels follow AWS docs and the owner's 2026-11-20 screens; owner console tests T1-T15 done, T16-T19b (email-MFA member, temporary password, delete and re-register) and the web tests W9-W10 and ACC-9 not yet run; the exact Cognito error name for the refused reset is fixed after T17; sign-in IP matching (ADMIN_GUIDE 6.1 (나)②) is unavailable until CloudTrail is shown to identify the member."
   },
   "website_impact": {
     "classification": "account page wording and flow",
-    "action": "The owner pastes the updated ACCOUNT_SETUP.md part 3 block (OWNER_STEPS stage 2 message) into the website session: forced new-password screen with the authenticator-app suggestion, the reset-refused message above, and the ACC-9 tests. The website session writes no wording of its own for these cases. No website change is made here."
+    "action": "The owner pastes the updated ACCOUNT_SETUP.md part 3 block (OWNER_STEPS stage 2 message) into the website session: forced new-password screen with the authenticator-app suggestion, the ACC-4 refusal guidance exactly as written there, and the three ACC-9 test paths. The website session writes no wording of its own for these cases. No website change is made here."
   },
   "delivery": {
     "status": "queued",
