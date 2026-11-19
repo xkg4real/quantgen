@@ -1,6 +1,6 @@
 # 소유자 실행 순서: AWS → 전달 → 시험 → 공개 전
 
-- 판: v1.3.1 (2026-11-19, 메인 PR #133 검토 B10: 1-0의 따로 만드는 예산 줄을 지우고 24a·24b로 모음, 결제 화면 접근 켜기 추가, IAM Identity Center 로그인 확인 반영, 5-2a 법인 이메일·연락처로 명확히, 1-0 소요 15~20분). v1.3 (2026-11-19, 소유자 질문 반영: 1-0 MFA 찾는 길과 로그인 계정, 5절 AWS 계정 이메일). v1.2 (2026-11-19, 6절을 메인 세션 확인대로 고침: 지금 하지 않음, 보통 앱 Python, 브랜치+PR). v1.1 6절 추가, v1 2026-11-18. 작성: PAYMENTS_ACCOUNT_KEYS 세션. 소유자 요청 (원문): "위 항목 중에서 시험, 전달, AWS, 공개 전 4단계를 수행하기 위해서 해야되는 일들을 구체화하여 .md 파일로 만들어 여기서 다운로드하고 볼 수 있도록 해주세요"
+- 판: v1.3.2 (2026-11-19, 소유자 진행 중 확인: 1-0 맨 앞에 프로젝트 계정 Golden Hour Code 확인, 1번에 풀 ID 리전 확인). v1.3.1 (2026-11-19, 메인 PR #133 검토 B10: 1-0의 따로 만드는 예산 줄을 지우고 24a·24b로 모음, 결제 화면 접근 켜기 추가, IAM Identity Center 로그인 확인 반영, 5-2a 법인 이메일·연락처로 명확히, 1-0 소요 15~20분). v1.3 (2026-11-19, 소유자 질문 반영: 1-0 MFA 찾는 길과 로그인 계정, 5절 AWS 계정 이메일). v1.2 (2026-11-19, 6절을 메인 세션 확인대로 고침: 지금 하지 않음, 보통 앱 Python, 브랜치+PR). v1.1 6절 추가, v1 2026-11-18. 작성: PAYMENTS_ACCOUNT_KEYS 세션. 소유자 요청 (원문): "위 항목 중에서 시험, 전달, AWS, 공개 전 4단계를 수행하기 위해서 해야되는 일들을 구체화하여 .md 파일로 만들어 여기서 다운로드하고 볼 수 있도록 해주세요"
 - 반영한 소유자 답 (2026-11-18): Q1 운영자 = 개인 (법인 설립을 알려 주시면 바로 법인명으로 바꿈), Q2 메일 = `contact@quantgeneration.com`, Q3 최소 연령 = 무료 만 14세 / 유료 만 19세.
 - 함께 보는 문서 (브랜치 `claude/payments-keys-20261117`): `docs/commercial/accounts/ACCOUNT_SETUP.md` (설정값, 25단계, 웹사이트 요청 블록), `docs/commercial/accounts/ADMIN_GUIDE.md` (관리자 안내서).
 - *(미검증)* 은 AWS 화면 문구를 확인하지 못한 곳입니다. 화면이 다르면 "단계 번호 + 실제 문구"를 알려 주세요. 문서를 고쳐 드립니다.
@@ -32,7 +32,8 @@
 ### 1-0. 시작 전 (15~20분)
 
 - [ ] `contact@quantgeneration.com` 으로 다른 주소에서 메일을 한 통 보내, 실제로 받는지 확인. 안 오면 여기서 멈추고 웹사이트 세션의 메일 작업을 먼저 끝냅니다 (가입 메일의 회신 주소이자 개인정보 문의 창구라 꼭 받아야 함).
-- [ ] 어느 로그인으로 하나: 운영 풀을 만들 AWS 계정 (2026-11-19 소유자가 유료 플랜으로 올린 계정). 소유자 화면 확인 (2026-11-19): 이 계정은 **IAM Identity Center** 로그인 (오른쪽 위 `AccountFullAccessRole/…`)으로 들어오며, 그래서 IAM의 Users 목록이 비어 있는 것이 정상입니다. **IAM 사용자는 만들지 않습니다.** 1-1 이후도 같은 로그인으로 합니다.
+- [ ] **어느 계정인가 (가장 먼저):** 운영 풀은 **프로젝트 계정 "Golden Hour Code"** (계정 번호 끝 `8543`)에 만듭니다. 시드니 SES의 `quantgeneration.com` 도메인 인증(DKIM SUCCESS)·샌드박스 해제와 개발 풀 `quantgen-dev`가 이 계정에 있기 때문입니다 (웹사이트 세션 기록 2026-11-13). 이름에 "Management Account"가 붙은 관리 계정에 만들면 11번 FROM 칸에 아무것도 나오지 않습니다 (2026-11-19 실제로 겪음). 확인: 오른쪽 위 계정 이름이 Golden Hour Code, Cognito → User pools에 `quantgen-dev`가 보임.
+- [ ] 어느 로그인으로 하나: 위 계정 (2026-11-19 소유자가 유료 플랜으로 올림). 소유자 화면 확인 (2026-11-19): 이 계정은 **IAM Identity Center** 로그인 (오른쪽 위 `AccountFullAccessRole/…`)으로 들어오며, 그래서 IAM의 Users 목록이 비어 있는 것이 정상입니다. **IAM 사용자는 만들지 않습니다.** 1-1 이후도 같은 로그인으로 합니다.
 - [ ] 그 로그인에 MFA: IAM Identity Center 콘솔 → **Users** → 본인 사용자 **이름** → **MFA devices** 탭. 장치가 있으면 끝, 없으면 **Register MFA device** (인증 앱의 QR → 6자리 입력). 2023-11 뒤에 만든 Identity Center는 MFA가 기본으로 켜져 있어 처음 로그인 때 이미 등록했을 수 있습니다. 로그인마다 묻는지는 **Settings** → **Authentication** → Multi-factor authentication **Configure**에서 확인. 〔AWS 문서로 확인: Register an MFA device for users, Configure MFA in IAM Identity Center, 2023-11 MFA 기본값 공지 · 2026-11-19〕
 - [ ] 결제 화면 접근 켜기 (루트만 가능): 루트(계정 이메일)로 한 번 로그인 → 오른쪽 위 계정 → **Account** → **IAM user and role access to Billing information** → **Edit** → **Activate IAM Access** → **Update**. 이걸 켜지 않으면 Identity Center 로그인에서 24a·24b의 **Budgets** 화면이 접근 거부될 수 있습니다. 〔AWS 문서로 확인: Overview of managing access permissions (Billing) · 2026-11-19〕 예산 자체는 24a·24b에서 만듭니다 (받는 메일 `contact@quantgeneration.com`); 여기서 따로 만들지 않습니다.
 - [ ] 메모장 하나를 엽니다. 아래 "적어 둘 것"을 여기에 모읍니다 (PC에만 보관).
@@ -45,7 +46,7 @@
 
 | # | 할 일 | 넣을 값 | 확인 |
 |---|---|---|---|
-| 1 | 콘솔 로그인 → 오른쪽 위 리전 | **Asia Pacific (Sydney) ap-southeast-2** | [ ] |
+| 1 | 콘솔 로그인 (Golden Hour Code 계정) → 오른쪽 위 리전 | **Asia Pacific (Sydney) ap-southeast-2**. 만든 뒤 풀 ID가 `ap-southeast-2_`로 시작하는지 확인 (`us-east-1_` 등이면 리전이 틀린 것: 시드니에 다시 만들고 틀린 풀은 지움; 리전은 옮길 수 없음) | [ ] |
 | 2 | 검색창 `Cognito` → **User pools** → **Create user pool** *(미검증)* | — | [ ] |
 | 3 | 앱 종류와 이름 | **Single-page application (SPA)**, 이름 `quantgen-web` | [ ] |
 | 4 | 로그인 아이디 | **Email** 만 체크 (Username·Phone 체크 안 함) | [ ] |
