@@ -2,7 +2,7 @@
 
 상시 지침: `SESSION_PIPELINE.md` (메인·하부 세션 연결 규칙). 이 문서는 메인이 작업 하나가 끝날 때마다 고친다.
 
-기준 시각: 2026-11-20 00:45 KST (첫판: 메인 세션 조사 workflow wf_0be17a88-d74 + 완결성 검토, 그 뒤 메인이 KEY-4·OA-01 갱신)
+기준 시각: 2026-11-20 04:15 KST (2.1·2.2·세션 지도 갱신) / 첫판 2026-11-20 00:45 KST (첫판: 메인 세션 조사 workflow wf_0be17a88-d74 + 완결성 검토, 그 뒤 메인이 KEY-4·OA-01 갱신)
 git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS 브랜치 8262d6c · DS 브랜치 df05b21
 자료: REMAINING_WORK_2026-11-17.md(공식 ID 출처, 10-27판의 열린 ID도 그대로 유효), REMAINING_WORK_2026-10-27.md, LEDGER.md(KEY-3까지 280줄), CURRENT.md, MERGE_QUEUE.md, 하부 세션 CURRENT 문서 5개, 하부 세션 대화 기록, Notion "REMAINING WORK"(11-19 15:10), GitHub REST. 참고만: REMAINING_WORK_2026-10-29.md(GPT PR #12 브랜치에만, main 미병합)
 원칙: 자료끼리 다르면 git(원장·병합 대기열·PR 상태)을 따른다. 다른 점은 별도 "충돌" 목록에 있다.
@@ -23,8 +23,8 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 
 | 세션 | 종류 | 연락 방법 | 지금 |
 |---|---|---|---|
-| MAIN | 메인(조정·병합) | — | KEY-4 재검증 중 |
-| PAYMENTS_ACCOUNT_KEYS | 하부 (D6) | 메인이 직접 | KEY-4 3차 재검증 대기(push 보류), 소유자 AWS 안내, PAY-0 배정(11-20) |
+| MAIN | 메인(조정·병합) | — | 11-20 04:15 KST: PR #134(4d') CI 대기, KEY-5/a 독립 검토 workflow(wf_56720449-739) |
+| PAYMENTS_ACCOUNT_KEYS | 하부 (D6) | 메인이 직접 | KEY-4/a PR #134 aa4be94 병합 대기, KEY-5/a dc936d4 메인 검토 대기(push 보류), PAY-2 재검증 0a24f02 끝 → OA-39 대기 |
 | OS_EXPANSION | 하부 (D6) | 메인이 직접 | 18:42부터 쉼 (문서상 waiting_on owner, 실제로는 UI가 490562d로 패치를 이미 반영함 → 메인이 알려야 함) |
 | DATA_SOURCE_DIDM | 하부 (D6) | 메인이 직접 | 15:00부터 쉼, 소유자 PC 실행을 기다림. KEY-3 병합 소식 아직 못 받음 |
 | UI/UX | 별도 세션 | 소유자를 거쳐서만 (MERGE_QUEUE 규칙) | 소유자 실행 확인을 기다림 |
@@ -66,7 +66,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 **관문**
 - [x] F 동결 — 2026-11-19 01:32 해제, main 6e077dc (소유자 F22 완료 보고)
 - [x] D7-G — 소유자 승인 2026-11-18 14:15 ("D7-G의 방식대로"), ⑦-1/rulings/2 002a658
-- [~] 병합 차례 — PR 하나씩, 메인이 병합. 지금 4c KEY-4
+- [~] 병합 차례 — PR 하나씩, 메인이 병합. 지금 4d' KEY-4/a (PR #134 CI), 다음 4e OS-F2 → 4f DS-H → 4g DS·DIDM → 4h KEY-5/a
 - [~] F21 뒤 목록 — GH-1, KEY-2, KEY-3 끝. KEY-4, OS-F1, KEY-5, DS·DIDM 남음
 - [!] G1 법인 설립 — 소유자. D-U-N-S, Apple 조직, Windows OV, PAY-4의 관문
 - [!] G2 유사투자자문업 — 소유자(변호사와)
@@ -82,7 +82,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [x] GH-1 — PR #131, ab24dec. 공개 유지, runtime-smoke 겹친 실행 취소
   - 빠진 범위: Compliance 결과물 보관 30→7일(compliance-review.yml 73·92행 아직 30), export.py 링크 안내. 필요하면 GH-1/2로 새로 잡기
 - [x] KEY-3/design, KEY-3 — PR #132, 9f76b07
-- [~] KEY-4 — PR #133 (1절)
+- [x] KEY-4 — PR #133 → main 8445187, 원장 KEY-4 (handoff 4aa4d10)
 - [ ] GH-2 — test_npu.py, mindmap/, .claude/launch.json 'godseye-dev'(12행) 삭제. archive-2026-11 태그(아직 없음) 뒤 _backup/ 삭제. 비밀 검사 CI를 넣을지는 소유자 결정. 로드맵은 "GH-1과 한 PR"이었으나 GH-1은 따로 닫힘
 - [ ] 정책 문서 PR-2 — 계정 서비스 설명(시드니 저장, 탈퇴, 보안 기록, 처리 위탁). AWS 풀과 웹 계정 화면이 생긴 뒤
 - [ ] 2.7 웹 거래 결정 메모 (D12-A) → M-12 — ⑦-2 뒤 관문 풀림. 변호사·KIS 문의는 소유자
@@ -129,11 +129,11 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [x] KEY-3/design — GATEWAY_DESIGN.md v0.2 — 9f76b07
 - [x] KEY-3 — core/gateway + 경계 시험 — 9f76b07 (PR #132)
 - [x] KEY-4 — PR #133 → main 8445187, 원장 KEY-4
-- [~] KEY-4/a — 계정 문서 고침(F1–F9) + OA-42·OA-44 반영 + 자체 시험 1줄 — **PR #134 @ e37c9a9** (main 8445187 합침, 6파일, PR-134.json 포함). 메인 재확인 workflow + CI 대기
+- [~] KEY-4/a — 계정 문서 고침(F1–F9) + OA-42·OA-44 반영 + 자체 시험 1줄 — **PR #134 @ aa4be94** (e37c9a9 위 재검토 고침 S1–S4·N1/N2/N5/N6/N7, 문서 3개). 메인 확인 11-20 04:0x: diff 문서만, 1회용 코드·메일 보관 안 함(기록 3년)·8절 6.1 ① 기준·PR-134.json 유효, 식별자 없음, main fa78df1과 합친 사본 compliance PASS/BLOCKED/20/805. CI 대기 → 녹색이면 병합
 - [~] KEY-5 — 화면 쪽 22파일/44곳 + quantgen_desktop/paper.py + 키·연결 화면(gateway.status()) — 구현은 UI 세션 몫(소유자 경유). **요청문 초안 끝: handoff `plans/2026-11-20/KEY5_UI_REQUEST.md` (0df90ec, PAYMENTS)** — KEY-4 병합 뒤 메인 확정 신호 → 줄 번호 재정렬 → 소유자가 UI 세션에 붙여 넣음. OS-F1 뒤 적용 권장. 앞서 정할 것: set_backend(None) 가/나 안(OA-41)
-- [ ] KEY-5/a — KEY-5 앞 gateway 준비 3건 (G1 data.kis_stream 입구, G2 kis_workspace 순수 값 목록, G3 main.py QuoteFeed 하위 클래스를 공용 모듈로 → paper.py 재사용) — PAYMENTS, KEY-4 병합 뒤 main에서 브랜치, 대기열 4e
+- [~] KEY-5/a — KEY-5 앞 gateway 준비 3건 (G1 data.kis_stream 입구, G2 kis_workspace 순수 값 목록, G3 main.py QuoteFeed 하위 클래스를 공용 모듈로 → paper.py 재사용) — PAYMENTS, KEY-4 병합 뒤 main에서 브랜치, 대기열 **4h**. **코드 끝: `claude/payments-key5a-20261120` @ `dc936d4`** (main 8445187에서, 10파일, + PR #133 3차 검토 C 항목 A1R3-1/4/5·F2/F5/F6/F7). 메인 확인 11-20 04:10: 동결 엔진 4개 바이트 같음, main.py CRLF, code_sha256 10c27010 그대로, 게이트웨이 시험 71 OK. 메인 독립 검토 workflow wf_56720449-739 진행 중 → 고칠 것 PAYMENTS에 한 번에 전달
 - [~] PAY-0 — 문의 7건 초안 + 목록 표 (docs/commercial/inquiries/, 문서 8개) — **초안 끝: `claude/payments-pay0-20261120` @ `7f8939c`** (main 9f76b07에서, 메인 확인 11-20 01:00: 문서만, 비밀값·다른 연락처 없음). PR은 대기열 자리 뒤, 원장은 병합 때. 발송은 소유자(OA-32)
-- [~] PAY-2 — 결제 설계(시나리오 A) — **초안 끝: `claude/payments-pay0-20261120` @ `d0da1b2`** (docs/commercial/payments/ 4개: PAYMENT_DESIGN, PG_COMPARISON, PRIVACY_POLICY_PROPOSAL, README; 메인 확인 11-20 01:05: 문서만). 소유자 결정 P2-01..P2-15(OA-39), 법률 확인 걸린 것 P2-05·06·08·09·10·11·12·14. 약관 02 제4조·03·01 반영은 정책 PR-2. PR은 PAY-0과 함께 대기열 자리 뒤
+- [~] PAY-2 — 결제 설계(시나리오 A) — **초안 끝: `claude/payments-pay0-20261120` @ `d0da1b2`** (docs/commercial/payments/ 4개: PAYMENT_DESIGN, PG_COMPARISON, PRIVACY_POLICY_PROPOSAL, README; 메인 확인 11-20 01:05: 문서만). 소유자 결정 P2-01..P2-15(OA-39), 법률 확인 걸린 것 P2-05·06·08·09·10·11·12·14. 약관 02 제4조·03·01 반영은 정책 PR-2. PR은 PAY-0과 함께 대기열 자리 뒤 **재검증 11-20: `0a24f02`** (main fa78df1 합침 909a3fa 위, PAYMENT_DESIGN·PG_COMPARISON만): 정기결제 증액·유료 전환 동의 30일(2025-02-14 시행) 확인, 다크패턴 시행일 확인, 디지털콘텐츠 철회 제한 요건 해설로 확인(조문 원문 미확인), PG 수수료·정산 주기는 미검증 유지 → PAY-0 03 문의 회신으로 확정. 메인 확인 04:15: 문서 2개만, 비공개 정보 없음.
 - [!] PAY-1 — 데스크톱 로그인 core/account/** — 웹 계정 공개(AUTH_UI_ENABLED) 뒤
 - [!] PAY-3 — 회사 데이터 서버 — 법인·계약 전에는 설계만. 위치는 소유자에게 묻기
 - [!] PAY-4 — 카드 PG 연동 — G1, G3 뒤
