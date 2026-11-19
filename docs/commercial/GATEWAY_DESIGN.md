@@ -1,6 +1,7 @@
 # 공급원 게이트웨이 설계 (KEY-3)
 
 - 판: v0.1 (2026-11-19). 작성: PAYMENTS_ACCOUNT_KEYS 세션. ID `KEY-3/design`.
+- **소유자 승인: 2026-11-19, 원문 "Key-3 승인"** (이 세션 채팅).
 - 근거: 소유자 D7-G 승인 (2026-11-18 14:15 KST, 원문 "그러면 D7-G의 방식대로 진행하겠습니다", handoff `MERGE_QUEUE.md`, 커밋 `762150c`), 설계 원안 handoff `plans/2026-11-17/D7_ENV_STRUCTURE.md` 5장.
 - 기준: main `ca5da08` (KEY-2 `3249af7`, KEY-2/b `ca5da08` 병합 뒤). 줄 번호는 이 커밋 기준이며 코드가 바뀌면 달라집니다.
 - 완료 조건: 소유자 확인. 확인 전에도 KEY-3 코드는 브랜치에서 시작할 수 있습니다 (D7-G 승인). main 병합은 `MERGE_QUEUE.md` 차례에만.

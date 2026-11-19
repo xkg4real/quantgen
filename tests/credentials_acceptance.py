@@ -62,7 +62,7 @@ class LeakyBackend(MemoryBackend):
 
 
 def _clear_secret_env():
-    return patch.dict(os.environ, {n: "" for n in names.SECRETS})
+    return patch.dict(os.environ, {n: "" for n in list(names.SECRETS) + list(names.RESEARCH)})
 
 
 class Base(unittest.TestCase):
@@ -94,6 +94,16 @@ class NamesTest(unittest.TestCase):
             "KRX_API_KEY", "OPENDART_API_KEY", "ANTHROPIC_API_KEY", "GS_CLIENT_ID", "GS_CLIENT_SECRET"]))
         for name in names.SECRETS:
             self.assertIn(names.kind(name), names.KINDS)
+
+    def test_research_names_for_didm(self):
+        """Owner answer 2026-11-19: research (DIDM) names are accepted too, kept apart from the app's ten."""
+        self.assertEqual(sorted(names.RESEARCH), sorted([
+            "FRED_API_KEY", "ECOS_API_KEY", "SEC_EDGAR_USER_AGENT", "ALPHAVANTAGE_API_KEY", "TIINGO_API_KEY",
+            "CRYPTOPANIC_API_KEY", "CME_FEDWATCH_API_ID", "CME_FEDWATCH_API_SECRET", "TRADINGECONOMICS_API_KEY"]))
+        self.assertFalse(set(names.RESEARCH) & set(names.SECRETS))
+        for name in names.RESEARCH:
+            self.assertEqual(names.kind(name), "research")
+            self.assertTrue(names.is_secret(name))
 
     def test_broker_keys_are_user_broker_keys(self):
         for name in ("KIS_APP_KEY", "KIS_APP_SECRET", "UPBIT_ACCESS_KEY", "UPBIT_SECRET_KEY"):
@@ -160,6 +170,13 @@ class WriteTest(Base):
             self.assertFalse(credentials.delete("ANTHROPIC_API_KEY"))
             self.assertEqual(credentials.get("ANTHROPIC_API_KEY"), "")
 
+    def test_research_key_round_trip(self):
+        with _clear_secret_env():
+            credentials.set("ECOS_API_KEY", FAKE)
+            self.assertEqual(credentials.get("ECOS_API_KEY"), FAKE)
+            self.assertEqual(credentials.status("ECOS_API_KEY")["kind"], "research")
+            self.assertTrue(credentials.delete("ECOS_API_KEY"))
+
     def test_unknown_names_refused(self):
         for call in (lambda: credentials.get("NOT_A_KEY"), lambda: credentials.set("NOT_A_KEY", FAKE),
                      lambda: credentials.status("NOT_A_KEY"), lambda: credentials.get_token("NOT_A_KEY")):
@@ -201,6 +218,7 @@ class WriteTest(Base):
             text = repr(credentials.status_all())
         self.assertNotIn(FAKE, text)
         self.assertEqual(len(credentials.status_all()), 10)
+        self.assertEqual(len(credentials.status_all(include_research=True)), 19)
 
     def test_listeners_notified_and_isolated(self):
         seen = []

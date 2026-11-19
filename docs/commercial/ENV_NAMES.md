@@ -82,7 +82,7 @@ Notion "QUANTGEN 상업화 실행 분석서" (`40e5c916fe0c815ba983dd4c4cc7992c`
 
 ## 4. 데이터소스 세션이 더할 이름 (연구용, 따로 표시)
 
-아직 저장소에 없습니다 (`git grep` 0건). 데이터소스 세션이 더하며, **연구 도구 전용**으로 표시합니다. 앱이 실행 중에 부르게 되면 그때 `routes.json` 행과 함께 1절 표로 옮깁니다 (D7 5.5절 "새 공급원 규칙").
+데이터소스 세션 브랜치 (`claude/data-source-didm-20261117`)에 있고 main에는 아직 없습니다. **연구 도구 전용**입니다. 소유자 답 (2026-11-19, "더해주세요")으로 자격 증명 저장소가 이 이름들도 받습니다 (`core/credentials/names.py`의 `RESEARCH`, 종류 `research`). 그래서 OS 키 보관함에 둘 수 있습니다. 연구 도구가 `os.environ` 대신 `core.credentials.get(이름)`으로 읽도록 바꾸는 일은 데이터소스 세션 몫입니다. `ECOS_API_KEY`, `SEC_EDGAR_USER_AGENT`도 같은 묶음입니다. 앱이 실행 중에 부르게 되면 그때 `routes.json` 행과 함께 1절 표로 옮깁니다 (D7 5.5절 "새 공급원 규칙").
 
 | 이름 | 종류 | 담당 | 상용판 |
 |---|---|---|---|
@@ -93,6 +93,8 @@ Notion "QUANTGEN 상업화 실행 분석서" (`40e5c916fe0c815ba983dd4c4cc7992c`
 | `CME_FEDWATCH_API_ID` | 비밀 | 데이터소스 세션 (연구용) | 미정 |
 | `CME_FEDWATCH_API_SECRET` | 비밀 | 데이터소스 세션 (연구용) | 미정 |
 | `TRADINGECONOMICS_API_KEY` | 비밀 | 데이터소스 세션 (연구용) | 미정 |
+| `ECOS_API_KEY` | 비밀 | 데이터소스 세션 (연구용, 한국은행 ECOS) | 미정 |
+| `SEC_EDGAR_USER_AGENT` | 연락처 문자열 (키 아님) | 데이터소스 세션 (연구용, SEC EDGAR) | 미정 |
 
 ## 5. KEY-2 자격증명 저장소 설계
 
