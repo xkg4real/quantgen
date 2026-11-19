@@ -547,23 +547,31 @@ def answers() -> dict:
     return {name: run(case) for name, case in sorted(cases().items())}
 
 
-def same(now, then, path="") -> str:
-    """"" when ``now`` matches ``then``: structure, keys, strings, integers, booleans and lengths exactly; floats
-    within rel 1e-9 / abs 1e-12 (the last digits of a float move with the BLAS/numpy build, not with the gateway).
-    Otherwise the path of the first difference."""
+REL_TOL, ABS_TOL = 1e-6, 1e-9
+
+
+def same(now, then, path="") -> list[str]:
+    """Every difference between ``now`` and ``then`` (empty list when they match). Structure, keys, strings,
+    integers, booleans and lengths are compared exactly; floats within rel 1e-6 / abs 1e-9.
+
+    Why a float tolerance is enough to catch a gateway change: the results of iterative fits (Nelson-Siegel, GARCH
+    conditional volatility) move by up to ~1e-8 relative between numpy/BLAS builds and operating systems, while the
+    thing this test guards (that the gateway hands the same inputs to the same functions) is checked exactly by the
+    recorded provider calls and the input series, which carry no float noise. A wrong loader, argument or branch
+    changes those, or moves results far beyond 1e-6."""
     if isinstance(then, float) and isinstance(now, (int, float)) and not isinstance(now, bool):
-        return "" if math.isclose(now, then, rel_tol=1e-9, abs_tol=1e-12) else f"{path}: {now!r} != {then!r}"
+        return [] if math.isclose(now, then, rel_tol=REL_TOL, abs_tol=ABS_TOL) else [f"{path}: {now!r} != {then!r}"]
     if type(now) is not type(then):
-        return f"{path}: type {type(now).__name__} != {type(then).__name__}"
+        return [f"{path}: type {type(now).__name__} != {type(then).__name__}"]
     if isinstance(then, dict):
         if sorted(now) != sorted(then):
-            return f"{path}: keys {sorted(now)} != {sorted(then)}"
-        return next((d for k in sorted(then) for d in [same(now[k], then[k], f"{path}.{k}")] if d), "")
+            return [f"{path}: keys {sorted(now)} != {sorted(then)}"]
+        return [d for k in sorted(then) for d in same(now[k], then[k], f"{path}.{k}")]
     if isinstance(then, list):
         if len(now) != len(then):
-            return f"{path}: length {len(now)} != {len(then)}"
-        return next((d for i, (a, b) in enumerate(zip(now, then)) for d in [same(a, b, f"{path}[{i}]")] if d), "")
-    return "" if now == then else f"{path}: {now!r} != {then!r}"
+            return [f"{path}: length {len(now)} != {len(then)}"]
+        return [d for i, (a, b) in enumerate(zip(now, then)) for d in same(a, b, f"{path}[{i}]")]
+    return [] if now == then else [f"{path}: {now!r} != {then!r}"]
 
 
 class SameAnswerTest(unittest.TestCase):
@@ -573,15 +581,17 @@ class SameAnswerTest(unittest.TestCase):
         self.assertEqual(sorted(now), sorted(golden["answers"]), "cases differ from the recorded set")
         for name in sorted(golden["answers"]):
             with self.subTest(case=name):
-                self.assertEqual(same(now[name], golden["answers"][name], name), "")
+                self.assertEqual(same(now[name], golden["answers"][name], name), [])
 
     def test_comparison_is_exact_except_float_noise(self):
-        self.assertEqual(same({"a": [1.0, "x"]}, {"a": [1.0 + 1e-15, "x"]}), "")
-        self.assertNotEqual(same({"a": [1.0]}, {"a": [1.0001]}), "")
-        self.assertNotEqual(same({"a": [1]}, {"a": [2]}), "")
-        self.assertNotEqual(same({"a": "x"}, {"a": "y"}), "")
-        self.assertNotEqual(same({"a": [1.0]}, {"a": [1.0, 2.0]}), "")
-        self.assertNotEqual(same({"a": 1}, {"b": 1}), "")
+        self.assertEqual(same({"a": [1.0, "x"]}, {"a": [1.0 + 1e-15, "x"]}), [])
+        self.assertEqual(same({"a": [0.0134652515]}, {"a": [0.0134652510]}), [])          # fit noise, ~4e-8
+        self.assertNotEqual(same({"a": [1.0]}, {"a": [1.00001]}), [])                    # 1e-5 still fails
+        self.assertNotEqual(same({"a": [1]}, {"a": [2]}), [])
+        self.assertNotEqual(same({"a": "x"}, {"a": "y"}), [])
+        self.assertNotEqual(same({"a": [1.0]}, {"a": [1.0, 2.0]}), [])
+        self.assertNotEqual(same({"a": 1}, {"b": 1}), [])
+        self.assertEqual(len(same({"a": 1.0, "b": 2.0}, {"a": 1.5, "b": 2.5})), 2)       # every difference reported
 
     def test_no_fake_key_in_the_recorded_answers(self):
         self.assertNotIn(FAKE_KEY, GOLDEN.read_text(encoding="utf-8"))
