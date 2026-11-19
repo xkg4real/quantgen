@@ -124,7 +124,21 @@
 | G2 | `data.kis_workspace`의 순수 값(`availability_note`, `supported_intervals`, `OVERSEAS_PRICE_DETAIL`)을 FiccData.CONSTANTS처럼 공급사 접근이 아닌 목록으로 둘지 | 막힌 상태에서도 안내 문구는 보여야 함 |
 | G3 | `main.py`의 `QuoteFeed` 하위 클래스를 공용 모듈(예: `core/gateway/feed.py`)로 옮김 | 표 14번 `paper.py`가 재사용 |
 
-G1–G3이 KEY-5 PR보다 먼저 병합돼야 합니다. 메인이 순서를 정합니다.
+G1–G3이 KEY-5 PR보다 먼저 병합돼야 합니다. 메인이 순서를 정합니다 (메인 2026-11-20: KEY-5/a로 이름 붙여 대기열 4e, KEY-4 병합 뒤 최신 main에서 시작).
+
+### KEY-5/a 범위 (3차 검토 C, PR #133에서 넘김; 메인 2026-11-20)
+
+G1–G3과 같은 PAYMENTS PR에서 함 (UI 세션 몫 아님). 기록 위치: main 브랜치 `docs/nautilus_bridge/REMAINING_WORK_2026-11-17.md` KEY-5/a 행 (PR #133 `3e938d2`).
+
+| ID | 무엇 | 할 일 |
+|---|---|---|
+| A1R3-1 | KRX Open API·OpenDART가 막혔을 때 화면·답이 "키 없음 / Set KRX_API_KEY"로 나옴 | `OffClient` 사유를 `market_snapshot`·`filings`·`financials`·`quote`·`indices` 답의 `reason`에 싣는 작은 `KRXGateway` 하위 클래스; 사유 문구 "is company" → "served by the company route" |
+| F2 | 대입 별칭 (`im = importlib.import_module` 뒤 `im("data.krx")`) | 경계 검출기가 셈 |
+| F5 | 짧은 키 모양 서버 오류 코드 | `remote._code`가 거절 |
+| F6 | transport 오류 코드에 예외 클래스 이름이 그대로 들어감 | 고정된 짧은 코드로 |
+| F7 | 엔진 feed가 `krx_gateway()` 결과와 이어졌는지 시험 없음 | `gateway_main_acceptance`에 연결 시험 |
+| A1R3-4 | `QuoteFeed.fmp_blocked`를 읽는 곳 없음 | 화면·상태 행에 사유 표시 (KEY-5 화면과 함께) |
+| A1R3-5 | `KRXGateway`가 `main()`에서 한 번만 만들어짐 | 키·길이 바뀌면 새로 만들기 (규칙 6과 같은 방식) |
 
 ## 7. 소유자가 붙여 넣는 방법
 

@@ -28,7 +28,7 @@
 | # | 누가 | 할 일 |
 |---|---|---|
 | A1 | PAYMENTS 세션 | `ACCOUNT_SETUP.md` 0.1절 "운영자 표기"를 개인 → 법인명으로, `ADMIN_GUIDE.md` 새 판. 메인에 값 목록 전달 |
-| A2 | 메인 세션 | 정책 PR: `docs/compliance/release-profile.json` `operator.legal_name`, `01`·`02`·`16`의 운영자·책임자·계약 주체, 사업자등록번호·통신판매업 신고번호 |
+| A2 | 메인 세션 | 정책 PR: `docs/compliance/release-profile.json`의 필드 (main에서 확인한 이름 그대로) `operator.legal_name`, `operator.representative`, `operator.business_registration`, `operator.ecommerce_registration`, `operator.support_phone`, `operator.address`, `deployment.contracting_entity` (같은 블록의 `operator.support_email`·`operator.privacy_contact`·`operator.refund_contact`도 법인 메일로 바꿀지 확인), 그리고 `01`·`02`·`16`의 운영자·책임자·계약 주체 |
 | A3 | 웹사이트 세션 | 정책 원문 다시 생성 (메인 PR 병합 뒤). 인증 메일 하단 "QUANTGEN · Contact" 줄에 법인명을 넣을지 소유자에게 물음 (아래 B5) |
 | A4 | 모두 | 법인 등기 **뒤에만** "(주)" 등 회사 표시. 〔근거: 상법 제20조·제28조〕 |
 | A5 | 메인 세션 | *(2026-11-20 추가)* A2보다 범위가 넓음: `docs/compliance/FACTS.md` "운영자 개인 표기·문의 메일·이용연령" 절의 **"바꾼 위치" 표 전체** (01·02·03·04·05·06·08·10·16·17·18·20의 `QUANTGEN(운영자 고건)`, `release-profile.json` `operator.legal_name`). 찾기: `grep -rn "운영자 고건" docs/compliance`. README.md 7행·RELEASE_GAPS.md 7행은 단순 치환하지 말고 새 날짜 기록으로 고쳐 씀. "이력 보존" 줄은 옛 문장을 두고 날짜 줄을 더함. 01 176행 개인정보 보호책임자 `고건(운영자 본인)` 검토. 16 F16-01의 사업자등록번호·통신판매업 신고번호 칸 (지금 "해당 없음 (무료 서비스, 사업자 미등록)", `ACCOUNT_SETUP.md` 233행)을 실제 번호로, 공개 전 오타 대조 (16 C16-05). 바꾼 문서의 버전·기준일·현재 상태 줄 갱신 |
@@ -69,7 +69,7 @@
 | E2 | `core/gateway/routes.json` `commercial` 값 확정, `display_rights.json` 갱신 (PAYMENTS + 데이터소스 세션) |
 | E3 | `core/app_identity.py`: `DATA_API_BASE`, Cognito ID, `GATEWAY_PROFILE = "commercial"` (OS 세션) |
 | E4 | 회사 데이터 서버 (PAY-3; 위치는 소유자에게 먼저 물음) |
-| E5 | 유료: 사업자등록, 통신판매업 신고, PG 승인, 유료 만 19세 기준 (PAY-1·PAY-2) |
+| E5 | 유료: 사업자등록, 통신판매업 신고, PG 승인, 유료 만 19세 기준 (PAY-1·PAY-2). 받은 번호·주소는 A2의 `release-profile.json` 필드 (`operator.business_registration`, `operator.ecommerce_registration`, `operator.address`, `operator.support_phone`, `deployment.contracting_entity`)로 메인 정책 PR에 넘김 |
 | E6 | *(2026-11-20 추가)* DIDM·연구용 키 (`core/credentials/names.py` `RESEARCH` 9개): 공급사 데이터를 화면에 보이지 않으면 구조 변경 없이 **키만 사업자 요금제로** (예: Tiingo 개인 $30 → 사업자 $50). 화면 표시·재배포는 별도 계약 (Tiingo·Trading Economics·Cryptopanic Enterprise 등). RavenPack 계약은 DIDM 3단계 뒤. 공급사 상업 약관은 공급사별 확인. 〔근거: handoff `plans/2026-11-17/D14_RAVENPACK_ALTERNATIVES.md` 7.1절·8절, 미검증 표시 포함〕 |
 
 ## F. 앱 서명·배포·스토어 (D-U-N-S 뒤; OS 세션 + 소유자) *(2026-11-20 추가)*
