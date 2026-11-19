@@ -157,8 +157,7 @@ class KeyCheck(unittest.TestCase):
         env = {"ECOS_API_KEY": "secret-value", "FRED_API_KEY": "  ", "SEC_EDGAR_USER_AGENT": "Org x@y"}
         status = key_status(env)
         self.assertEqual(set(status), set(KEY_NAMES))
-        self.assertEqual(status, {"FRED_API_KEY": False, "OPENDART_API_KEY": False,
-                                  "ECOS_API_KEY": True, "SEC_EDGAR_USER_AGENT": True})
+        self.assertEqual({k: v for k, v in status.items() if v}, {"ECOS_API_KEY": True, "SEC_EDGAR_USER_AGENT": True})
         self.assertNotIn("secret-value", repr(status))
 
 

@@ -7,10 +7,10 @@ personal data in the repository). Without it the client refuses to call.
 """
 from __future__ import annotations
 
-import os
 import threading
 import time
 
+from data.didm.keys import MissingKey, get_key, require
 from data.net import session
 
 UA_NAME = "SEC_EDGAR_USER_AGENT"
@@ -21,8 +21,7 @@ _lock = threading.Lock()
 _last = [0.0]
 
 
-class MissingUserAgent(RuntimeError):
-    pass
+MissingUserAgent = MissingKey
 
 
 def _throttle() -> None:
@@ -34,9 +33,7 @@ def _throttle() -> None:
 
 
 def fetch_submissions(cik: int) -> dict:
-    ua = os.environ.get(UA_NAME, "").strip()
-    if not ua:
-        raise MissingUserAgent(f"{UA_NAME} is not set (a generic contact, required by the SEC)")
+    ua = require(UA_NAME, "a generic contact, required by the SEC")
     _throttle()
     resp = session.get(SUBMISSIONS_URL.format(cik=int(cik)), timeout=TIMEOUT_SECONDS,
                        headers={"User-Agent": ua, "Accept-Encoding": "gzip, deflate"})

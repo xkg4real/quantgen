@@ -191,6 +191,8 @@
 
 ## 5. 키 이름 (값 없음)
 
+**2026-11-19 갱신 (소유자 승인: 연구용 키 이름을 자격 증명 저장소에, KEY-3 PR):** DIDM 연결 코드는 모두 `data/didm/keys.py`로 키를 읽습니다. 저장소 (`core.credentials`: 환경변수 → Windows 자격 증명 관리자 → 개발판 `.env`)가 그 이름을 알면 저장소에서, 아직 모르면 (KEY-3 PR이 main에 들어가기 전) 환경변수에서 읽습니다. 저장은 `python -m tools.didm.keys set <이름>` (입력이 화면에 안 보임). 현황은 `python -m tools.didm.keys status` (이름·있음/없음·출처만).
+
 값은 소유자 PC에만 둡니다 (채팅·저장소·로그 금지). KEY-2 (결제·계정 세션) 병합 전에는 환경변수 **이름**만, 병합 뒤에는 `core/credentials`. `.env.example`에 더하는 일은 공유 파일이라 대기열을 거쳐 한 PR로 모읍니다.
 
 | 소스 | 키 이름 | 지금 필요? | 비고 |

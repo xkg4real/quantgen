@@ -37,11 +37,13 @@ from core.didm.ingest import ecos as ecos_ingest
 from core.didm.ingest import filings as filings_ingest
 from core.didm.ingest import gdelt as gdelt_ingest
 from core.didm.ingest import kalshi as kalshi_ingest
+from core.didm.ingest import news as news_ingest
 from core.didm.llm.schema import ess_like
 from core.didm.store import PointInTimeStore
 
 REPO = Path(__file__).resolve().parents[2]
-KEY_NAMES = ("FRED_API_KEY", "OPENDART_API_KEY", "ECOS_API_KEY", "SEC_EDGAR_USER_AGENT")
+KEY_NAMES = ("FRED_API_KEY", "OPENDART_API_KEY", "ECOS_API_KEY", "SEC_EDGAR_USER_AGENT",
+             "ALPHAVANTAGE_API_KEY", "TIINGO_API_KEY", "CRYPTOPANIC_API_KEY")
 
 
 def load_env_file(path: str) -> None:
@@ -55,7 +57,9 @@ def load_env_file(path: str) -> None:
 
 def key_status(env: Mapping[str, str] | None = None) -> dict[str, bool]:
     """Which settings are present (names and True/False only; values are never returned)."""
-    env = os.environ if env is None else env
+    if env is None:
+        from data.didm import keys as didm_keys
+        return {name: didm_keys.key_status(name)["present"] for name in KEY_NAMES}
     return {name: bool(str(env.get(name, "")).strip()) for name in KEY_NAMES}
 FINBERT_MODEL = "ProsusAI/finbert"
 
@@ -234,6 +238,36 @@ def collect_ecos(store: PointInTimeStore, spec: str) -> None:
     print(f"ECOS {stat} {cycle} {start}-{end}: observations {len(rows)}, new {store.append_many(rows)}{note}")
 
 
+def collect_alphavantage(store: PointInTimeStore, tickers: list[str]) -> None:
+    from data.didm import alphavantage
+    rows = news_ingest.alphavantage_rows(alphavantage.fetch_news(tickers=tickers or None), _now())
+    rel = sum(1 for r in rows if r["payload"]["has_relevance_field"])
+    print(f"Alpha Vantage news {','.join(tickers) or 'all'}: articles {len(rows)}, "
+          f"with ticker relevance_score {rel}, new {store.append_many(rows)}")
+
+
+def collect_tiingo(store: PointInTimeStore, tickers: list[str]) -> None:
+    from data.didm import tiingo
+    rows = news_ingest.tiingo_rows(tiingo.fetch_news(tickers=tickers or None), _now())
+    tags = sum(1 for r in rows if r["payload"]["has_tags_field"])
+    back = sum(1 for r in rows if r["payload"]["backfilled"])
+    print(f"Tiingo news {','.join(tickers) or 'all'}: articles {len(rows)}, with tags field {tags}, "
+          f"backfilled (>24h) {back}, new {store.append_many(rows)}")
+
+
+def collect_cryptopanic(store: PointInTimeStore, codes: list[str]) -> None:
+    from data.didm import cryptopanic
+    payload, path = cryptopanic.fetch_posts(codes or None)
+    rows = news_ingest.cryptopanic_rows(payload, _now())
+    voted = sum(1 for r in rows if r["payload"]["votes"] is not None)
+    tagged = sum(1 for r in rows if r["payload"]["currencies"])
+    print(f"CryptoPanic {','.join(codes) or 'all'} (api {path}): posts {len(rows)}, with votes {voted}, "
+          f"with currency tags {tagged}, new {store.append_many(rows)}")
+    if rows and voted == 0:
+        first = sorted((payload.get("results") or [{}])[0].keys())
+        print(f"CryptoPanic field names (first post): {', '.join(first)}")
+
+
 def show_ecos_items(stat: str) -> None:
     """Public table metadata only: item code, name, cycle, first and last period."""
     from data.didm import ecos
@@ -278,6 +312,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--opendart", nargs=2, metavar=("BGN_YYYYMMDD", "END_YYYYMMDD"))
     ap.add_argument("--ecos", action="append", default=[], metavar="STAT,CYCLE,START,END[,ITEM...]")
     ap.add_argument("--kalshi", nargs="*", default=[], metavar="SERIES")
+    ap.add_argument("--alphavantage", nargs="*", metavar="TICKER", help="one NEWS_SENTIMENT call (free: 25/day)")
+    ap.add_argument("--tiingo", nargs="*", metavar="TICKER")
+    ap.add_argument("--cryptopanic", nargs="*", metavar="CODE")
     ap.add_argument("--gdelt-day", metavar="YYYYMMDD", help="fetch all 96 fifteen-minute files of a UTC day")
     ap.add_argument("--gdelt-gkg", action="store_true", help="with --gdelt-day, also GKG files (large)")
     ap.add_argument("--ecos-probe", action="append", default=[], metavar="STAT,CYCLE,START,END[,ITEM]")
@@ -308,6 +345,12 @@ def main(argv: list[str] | None = None) -> int:
             _run("OpenDART", lambda: collect_opendart(store, *args.opendart))
         for spec in args.ecos:
             _run("ECOS", lambda spec=spec: collect_ecos(store, spec))
+        if args.alphavantage is not None:
+            _run("Alpha Vantage", lambda: collect_alphavantage(store, args.alphavantage))
+        if args.tiingo is not None:
+            _run("Tiingo", lambda: collect_tiingo(store, args.tiingo))
+        if args.cryptopanic is not None:
+            _run("CryptoPanic", lambda: collect_cryptopanic(store, args.cryptopanic))
         if args.gdelt_day:
             _run("GDELT day", lambda: collect_gdelt_day(store, args.gdelt_day, args.gdelt_gkg))
         for spec in args.ecos_probe:

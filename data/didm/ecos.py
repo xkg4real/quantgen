@@ -5,9 +5,9 @@ URL path, so the URL is never logged or put in an error message.
 """
 from __future__ import annotations
 
-import os
 from urllib.parse import quote
 
+from data.didm.keys import MissingKey, get_key, require
 from data.net import session
 
 KEY_NAME = "ECOS_API_KEY"
@@ -15,12 +15,8 @@ BASE = "https://ecos.bok.or.kr/api/StatisticSearch"
 TIMEOUT_SECONDS = 30
 
 
-class MissingKey(RuntimeError):
-    pass
-
-
 def has_key() -> bool:
-    return bool(os.environ.get(KEY_NAME, "").strip())
+    return bool(get_key(KEY_NAME))
 
 
 def masked_path(stat_code: str, cycle: str, start: str, end: str, *item_codes: str,
@@ -33,9 +29,7 @@ def masked_path(stat_code: str, cycle: str, start: str, end: str, *item_codes: s
 
 def fetch_series(stat_code: str, cycle: str, start: str, end: str, *item_codes: str,
                  rows: int = 1000, trailing_slash: bool = False) -> dict:
-    key = os.environ.get(KEY_NAME, "").strip()
-    if not key:
-        raise MissingKey(f"{KEY_NAME} is not set")
+    key = require(KEY_NAME)
     if cycle not in ("A", "S", "Q", "M", "SM", "D"):
         raise ValueError(f"bad ECOS cycle {cycle!r}")
     parts = [BASE, quote(key, safe=""), "json", "kr", "1", str(int(rows)),
@@ -50,9 +44,7 @@ def fetch_series(stat_code: str, cycle: str, start: str, end: str, *item_codes: 
 
 def fetch_item_list(stat_code: str) -> dict:
     """StatisticItemList: item codes, names, cycles and available periods of one table."""
-    key = os.environ.get(KEY_NAME, "").strip()
-    if not key:
-        raise MissingKey(f"{KEY_NAME} is not set")
+    key = require(KEY_NAME)
     url = "/".join(["https://ecos.bok.or.kr/api/StatisticItemList", quote(key, safe=""),
                     "json", "kr", "1", "200", quote(stat_code, safe="")])
     resp = session.get(url, timeout=TIMEOUT_SECONDS)
