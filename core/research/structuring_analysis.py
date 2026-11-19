@@ -64,8 +64,8 @@ def execute_structuring(request, *, curve_loader=None):
     from core.ficc.common import parse_tenor
     from core.ficc.curves import curve_from_snapshot
     if curve_loader is None:
-        from core.ficc.data import load_treasury_curve
-        curve_loader=load_treasury_curve
+        from core import gateway
+        curve_loader=gateway.ficc().load_treasury_curve
     q=request
     panel=curve_loader(source=q.source)
     curve=curve_from_snapshot(panel.latest())

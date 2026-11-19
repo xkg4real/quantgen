@@ -8,6 +8,8 @@ from __future__ import annotations
 import json
 from typing import Any, Callable, Optional
 
+import re
+
 from core.gateway import codec
 from core.gateway.sources import SOURCES
 
@@ -35,7 +37,10 @@ def http_transport(base_url: str, token_getter: Callable[[], str], timeout_s: fl
                              timeout=timeout_s)
         if resp.status_code != 200:
             return {"ok": False, "error": f"http_{resp.status_code}"}
-        return resp.json()
+        try:
+            return resp.json()
+        except ValueError:
+            return {"ok": False, "error": "bad_answer"}
     return send
 
 
@@ -54,15 +59,43 @@ class RemoteRoute:
             raise RemoteRefused(f"{source_id}.{fn} is not forwardable")
         request = {"source": source_id, "fn": fn, "args": codec.encode(list(args)),
                    "kwargs": codec.encode(kwargs), "client_version": self._version}
-        answer = self._send(request)
-        if not isinstance(answer, dict):
+        failed = ""
+        try:
+            answer = self._send(request)
+        except Exception as exc:                     # network or transport failure: the class name only
+            failed = "transport_" + re.sub(r"[^A-Za-z0-9_]", "", type(exc).__name__)[:40]   # a class name, ours
+        if failed:                                   # raised outside the except: no __context__ carries the
+            raise RemoteFailed(failed)               # original message (a URL, a token) along
+        if not isinstance(answer, dict) or not isinstance(answer.get("ok"), bool):
             raise RemoteFailed("bad_answer")
-        if not answer.get("ok"):
-            raise RemoteFailed(str(answer.get("error", "no_answer")))
-        return codec.decode(answer.get("result"))
+        if not answer["ok"]:
+            raise RemoteFailed(_code(answer.get("error", "no_answer")))
+        decoded, ok = None, True
+        try:
+            decoded = codec.decode(answer.get("result"))
+        except Exception:
+            ok = False
+        if not ok:
+            raise RemoteFailed("bad_answer")
+        return decoded
 
     def proxy(self, source_id: str) -> "RemoteProxy":
         return RemoteProxy(self, source_id)
+
+
+_CODE = re.compile(r"[A-Za-z0-9_]{1,48}")
+
+
+def _code(error: object) -> str:
+    """A server error code fit for a message: ASCII letters, digits and "_" (a code such as ``http_503`` or an
+    exception class name), at most 48 characters, and not key-shaped: no run of 24 or more letters and digits, and
+    nothing routes.py would call key-like (32 or more key characters, underscores included). Anything else is
+    "bad_answer"."""
+    from core.gateway.routes import _KEY_LIKE
+    text = error if isinstance(error, str) else ""
+    if not _CODE.fullmatch(text) or re.search(r"[A-Za-z0-9]{24,}", text) or _KEY_LIKE.search(text):
+        return "bad_answer"
+    return text
 
 
 class RemoteProxy:

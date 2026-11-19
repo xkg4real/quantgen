@@ -400,8 +400,9 @@ def horizon_pv_distribution(params: ShortRateParams, sim: RateSimResult, *, kind
 
 
 if __name__ == "__main__":
-    from core.ficc.data import load_short_rate, load_treasury_curve
+    from core import gateway
     from core.ficc.curves import curve_from_snapshot
+    load_short_rate, load_treasury_curve = gateway.ficc().load_short_rate, gateway.ficc().load_treasury_curve
 
     hist = load_short_rate("USD", source="synthetic", days=756)
     crv = curve_from_snapshot(load_treasury_curve(source="synthetic", days=60).latest())

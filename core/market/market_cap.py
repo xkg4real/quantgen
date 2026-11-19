@@ -67,7 +67,10 @@ def fmp_batch(symbols, *, key, base_url=None, timeout=None, get=None):
     key never appears in an error.
     """
     import config
-    from data.fmp.quote_client import FMPError, FMPPlanError, FMPQuoteClient, _redact
+    from core import gateway
+    quote_client = gateway.provider("data.fmp.quote_client")
+    FMPError, FMPPlanError, FMPQuoteClient = quote_client.FMPError, quote_client.FMPPlanError, quote_client.FMPQuoteClient
+    _redact = quote_client._redact
     if get is None:
         import requests
         get = requests.get
@@ -130,16 +133,20 @@ def latest_shares(series):
 def yahoo_shares(symbol):
     """(shares, date) from Yahoo's share-count series through the FICC module's yfinance handle; None
     when Yahoo has none. yfinance hides request errors by default, so an unreachable Yahoo also gives None."""
-    from core.ficc import data
-    if data._yf is None:
+    from core import gateway
+    yf = gateway.ficc().yfinance
+    if yf is None:
         raise ModuleNotFoundError("yfinance is not installed")
     start = (datetime.now(timezone.utc).date() - timedelta(days=SHARES_WINDOW_DAYS)).isoformat()
-    return latest_shares(data._yf.Ticker(symbol).get_shares_full(start=start))
+    return latest_shares(yf.Ticker(symbol).get_shares_full(start=start))
 
 
 def _yahoo_installed():
-    from core.ficc import data
-    return data._yf is not None
+    from core import gateway
+    try:
+        return gateway.ficc().yfinance is not None
+    except gateway.GatewayOff:
+        return False                  # yahoo off in the active profile: as if not installed
 
 
 def _default_directory():
@@ -207,15 +214,16 @@ class MarketCapSource:
     """Adds market caps to a US `rankings.Batch`: a figure already in the batch (KIS price-detail) is kept;
     the rest get FMP's stated figure, else Yahoo shares x the row price.
 
-    Every provider is injectable: `fmp_key()` (default `config.fmp_key`), `fmp_fetch(symbols, key=...)`,
+    Every provider is injectable: `fmp_key()` (default: the gateway's `local_key("fmp")`, i.e. `config.fmp_key`),
+    `fmp_fetch(symbols, key=...)`,
     `yahoo_fetch(symbol) -> (shares, date) | None` and `cache` (a `SharesCache`).
     """
 
     def __init__(self, *, fmp_key=None, fmp_fetch=None, yahoo_fetch=None, yahoo_ready=None, cache=None,
                  clock=time.time, workers=WORKERS, deadline=DEADLINE_SECONDS):
         if fmp_key is None:
-            import config
-            fmp_key = config.fmp_key
+            from core import gateway
+            fmp_key = lambda: gateway.local_key("fmp")  # noqa: E731 - config.fmp_key, read at each call
         self._fmp_key, self._fmp_fetch = fmp_key, fmp_fetch or fmp_batch
         self._yahoo_fetch = yahoo_fetch or yahoo_shares
         self._yahoo_ready = yahoo_ready or ((lambda: True) if yahoo_fetch is not None else _yahoo_installed)
@@ -272,7 +280,8 @@ class MarketCapSource:
         if now < until:
             reasons.append(why)
             return {}
-        from data.fmp.quote_client import FMPPlanError
+        from core import gateway
+        FMPPlanError = gateway.provider("data.fmp.quote_client").FMPPlanError
         try:
             stated = self._fmp_fetch(symbols, key=key)
         except FMPPlanError:

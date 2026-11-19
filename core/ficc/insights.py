@@ -632,8 +632,9 @@ def deep_analysis(kind: str, payload: dict, *, question: str = "") -> Analysis:
 if __name__ == "__main__":
     from types import SimpleNamespace
 
-    import config
-    from core.ficc import data, fx, macro, ratesim
+    from core import gateway
+    from core.ficc import fx, macro, ratesim
+    data = gateway.ficc()
     from core.ficc.bonds import Bond, analyze_bond, scenario_pnl
     from core.ficc.curves import analyze_curve, curve_pca
     from core.ficc.swaps import Swap, Swaption, analyze_swap, price_cap_floor, price_swaption
@@ -759,13 +760,9 @@ if __name__ == "__main__":
 
     assert report_prompt("daily_market_commentary") and report_prompt("weekly_fi_fx_strategy")
     assert report_prompt("bond") == ""
-    saved = config.anthropic_key
-    config.anthropic_key = lambda: ""                   # never reach the network here
-    try:
+    with gateway.suspend_key("anthropic"):              # never reach the network here
         a = deep_analysis("weekly_fi_fx_strategy", {"x": 1}, question="views?")
         assert a.error and a.text == "" and a.engine == "none"
-    finally:
-        config.anthropic_key = saved
     q = "views?\n\n" + report_prompt("daily_market_commentary")
     assert q.count("headline") == 1                      # idempotent append
     print("ok")
