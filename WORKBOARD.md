@@ -45,6 +45,8 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 
 ## 1) 지금 진행 중
 
+**11-20 00:50 KST 메인 배정:** OS — UI 브랜치에서 종료 고침 재확인(읽기·시험만) + OS-F2 브랜치 시작 / DATA — main 9f76b07 합치기·시험·인계 문서 갱신(PR 직전 상태로 준비) / PAYMENTS — KEY-4 push 보류, PAY-0 초안 병행
+
 형식: ID — 무엇 — 담당 세션 — 다음 행동 — 근거
 
 - [~] **KEY-4** — core/ 26개 파일 90곳·main.py와 공급처 호출을 게이트웨이 뒤로(동결 feed.py 1줄은 S4 예외), KEY-3 남은 9건 포함 — PAYMENTS(고침), MAIN(검토·병합) — 1차 검토(막힘 2·고침 11) → 3d61aee, 2차 검토(앱 시작 회귀 1 + 고침 3 + 작은 것 7) → 148504a(11-20 00:13 KST). 메인 기본 검사 통과(게이트웨이 시험 114 OK, 준법 PASS 805, 지문 10c27010, feed.py 바이트 일치) → 3차 독립 재검증 workflow 진행 중 → CI 녹색 → merge commit → ledger KEY-4 → MERGE_QUEUE 4c → Notion — PR #133
@@ -290,7 +292,9 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 **24시간 안 열린 항목: 9개 (OA-02 ~ OA-10). 기준 5개 이상 → Claude 앱 푸시 알림 (SESSION_PIPELINE 5절).**
 
 push_log:
-- 2026-11-20 00:4x KST 메인 — 9건 (OA-02~OA-10) — 결과는 아래 줄에 적음
+- 2026-11-20 00:51 KST 메인 — 9건 (OA-02~OA-10) — PushNotification "Mobile push requested"
+
+정기 점검: 메인 세션 예약 작업 "QUANTGEN pipeline check (3h)" (trig_01P2NBVZFChNHJGjVdtrDTyC, 매 3시간 :20, 첫 실행 11-20 03:20 KST)
 
 ### 3.1 24시간 안 (지금 세션을 막고 있음)
 
