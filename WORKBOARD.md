@@ -130,8 +130,8 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [x] KEY-3 — core/gateway + 경계 시험 — 9f76b07 (PR #132)
 - [~] KEY-4 — PR #133, 148504a — 1절
 - [ ] KEY-5 — 화면 쪽 25곳 + 키·연결 화면(gateway.status()) — 구현은 UI 세션 몫(소유자 경유), PAYMENTS는 요청문 작성. KEY-4 뒤, OS-F1 뒤 권장. 그 전에 시험이 credentials.set_backend(None)을 쓸지 결정
-- [~] PAY-0 — 문의 7건 초안 (docs/commercial/inquiries/) — 로드맵 관문 "지금". **11-20 메인 배정: KEY-4 검토를 기다리는 동안 별도 브랜치에서 초안 시작, PR은 대기열 자리 뒤.** 발송은 소유자
-- [ ] PAY-2 — 결제 설계(시나리오 A): 일정, 재시도, 등급 변경, 일할 계산, 해지, 가격 인상 안내, PG 선택, 본인 확인, 유료 회원 정보와 보관 기간, 개인정보 처리방침 개정 — 관문 "지금", 세션 순서상 PAY-0 뒤
+- [~] PAY-0 — 문의 7건 초안 + 목록 표 (docs/commercial/inquiries/, 문서 8개) — **초안 끝: `claude/payments-pay0-20261120` @ `7f8939c`** (main 9f76b07에서, 메인 확인 11-20 01:00: 문서만, 비밀값·다른 연락처 없음). PR은 대기열 자리 뒤, 원장은 병합 때. 발송은 소유자(OA-32)
+- [~] PAY-2 — 결제 설계(시나리오 A): 일정, 재시도, 등급 변경, 일할 계산, 해지, 가격 인상 안내, PG 선택, 본인 확인, 유료 회원 정보와 보관 기간, 개인정보 처리방침 개정안 — **11-20 01:00 메인 배정** (PAY-0 브랜치 위에서 문서만)
 - [!] PAY-1 — 데스크톱 로그인 core/account/** — 웹 계정 공개(AUTH_UI_ENABLED) 뒤
 - [!] PAY-3 — 회사 데이터 서버 — 법인·계약 전에는 설계만. 위치는 소유자에게 묻기
 - [!] PAY-4 — 카드 PG 연동 — G1, G3 뒤
@@ -336,7 +336,7 @@ push_log:
 | OA-29 | Windows 확인: ⑬-2/k (13-7), 13-9/b | MAIN, UI | 11월 | 아님 | 대기 |
 | OA-30 | 빌드 승인: platform-build.yml 실행, 클라우드 Mac 약 $21, Android 폰 시험, 네트워크 허용(pypi.flet.dev, dl.google.com, docs.aws.amazon.com 선택) | OS, PAYMENTS | 11-18 | 아님 | 보류 |
 | OA-31 | 유료: CME FedWatch(2단계, 약 $25/월), Trading Economics 견적(3단계 뒤) | DATA | 11-19 15:00 | 아님 | 보류 |
-| OA-32 | PAY-0 문의 7건 검토·발송, PAY-2 확인, PAY-3 서버 위치 | PAYMENTS | 초안 뒤 | 아님 | 보류 |
+| OA-32 | PAY-0 문의 7건(docs/commercial/inquiries/) 검토·발송과 각 "보내는 방법" 창구 확인, 01 세무사 선정, 07 금융위 문의 전 변호사 검토 여부 결정; 이어서 PAY-2 확인, PAY-3 서버 위치 | PAYMENTS | 11-20 01:00 (초안 7f8939c) | 아님 | 대기 |
 | OA-33 | 웹사이트: W8 Microsoft 365, Track A 범위, 가격 이름 충돌, healthz 확인, 전달 대기 JSON(PR-112, PR-115, PR-117, PR-119, PR-124 등 43개 모두 queued) 전달 | WEBSITE | 11-13 | 아님 | 대기 |
 | OA-34 | KEY-5 요청을 UI 세션에 전달 | PAYMENTS | KEY-4 뒤 | 아님 | 보류 |
 | OA-35 | ⑧-3 GROKTEAM 한 번 실행 | MAIN | — | 아님 (2027-02-01 뒤) | 보류 |
