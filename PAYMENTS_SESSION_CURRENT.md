@@ -6,13 +6,13 @@ task: payments-account-keys
 cycle: 2026-11-17
 done_ids: KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a
 next_ids: KEY-3/design, KEY-3, KEY-4, PAY-0, PAY-2
-updated_at: 2026-11-19T17:20:00+09:00
+updated_at: 2026-11-19T17:10:00+09:00
 stale_after_hours: 3
-waiting_on: review
+waiting_on: ci
 work_branch: claude/payments-key3-prep-20261119
-work_commit: 6b04d28
+work_commit: 4e52b70
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/132
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
@@ -24,6 +24,9 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-19 17:10 갱신:** 메인 "병합: PAYMENTS_ACCOUNT_KEYS"(KEY-3, MERGE_QUEUE 4b). main `ab24dec`(#131 concurrency) merge 충돌 없음 → 기준선 갱신 `4e52b70` (PASS, 803 소스) → **PR #132**. 시험 75 OK, 경계 KNOWN 30/69 그대로, 코드 지문 10c27010 그대로. 메인 병합 전 독립 검토와 CI 대기. CI 중 push 금지(새 push는 이전 Runtime을 취소함). 병합 뒤: LEDGER KEY-3/design·KEY-3 (메인), 다음 KEY-4.
+
 
 **2026-11-19 17:20 갱신:** 정책 PR-1 (#130, main `edbe9f7`) 병합, 메인이 LEDGER에 KEY-1·PAY-A1·PAY-A2·PAY-A2/a 기록 (handoff `ea7aa97`). KEY-3 코드 완료 (PR 없음): 브랜치 `claude/payments-key3-prep-20261119` @ `6b04d28` (main `edbe9f7` merge 포함). `core/gateway/` (sources, routes.json·routes.py 검증, local, remote(꺼짐), codec, dispatch, 입구), 시험 3개 (`gateway_acceptance`, `gateway_remote_acceptance`, `gateway_boundary_acceptance`; 30개 파일 69곳 KNOWN), runtime-smoke 경로·모듈 추가 (부르는 곳 중 경로 목록에 없던 4개 파일 포함). 함께: KEY-2/b 검토 후속 5건, DIDM 연구용 이름 9개, 설계 문서·OWNER_STEPS 6절. 시험 75 OK (gateway+credentials), CI 모듈 목록 회귀 main과 같음 (29, 환경), 코드 지문 10c27010 그대로. **메인의 "병합: PAYMENTS_ACCOUNT_KEYS"(KEY-3) 대기.** 그때: 최신 main merge → 기준선 갱신 → `--check` → PR (head 브랜치 = 이 준비 브랜치).
 
