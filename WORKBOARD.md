@@ -49,7 +49,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 
 형식: ID — 무엇 — 담당 세션 — 다음 행동 — 근거
 
-- [~] **KEY-4** — core/ 26개 파일 90곳·main.py와 공급처 호출을 게이트웨이 뒤로(동결 feed.py 1줄은 S4 예외), KEY-3 남은 9건 포함 — PAYMENTS(고침), MAIN(검토·병합) — 검토 4회 끝(표적 재확인: 시험 변조 12개 모두 잡힘, main 재생성 fixture 차이 0, 117 OK). **d6a1997 CI 녹색 → merge commit → ledger KEY-4 → 4d·4d'(KEY-4/a 계정 문서 고침 3건+작은 것)** — PR #133
+- [x] **KEY-4** — PR #133 → main `8445187` (11-20 03:27 KST), 원장 KEY-4 (handoff 4aa4d10). 후속: 4d 메인 문서 PR, 4d' KEY-4/a, 4e OS-F2, 4f KEY-5/a
 - [~] **소유자 AWS 운영 풀** — Golden Hour Code 계정의 시드니 사용자 풀 — PAYMENTS가 안내, 소유자가 실행 — MFA 결정(1/2/3) → 15단계 계정 복구 → 16·17단계 앱 클라이언트 quantgen-web, Client ID → T1 시험 — 세션 기록 22:04–23:52 KST. 13·14단계 끝
 - [~] **PySide6 간헐 종료 고침** (OS-F1 선행, ID 없음) — 시험 도우미가 QThread.currentThread() 객체를 붙잡고 있던 문제를 threading.get_ident()로 바꿈 — OS(재확인), UI(반영 끝) — 메인이 OS에 "UI가 490562d로 반영함"을 전달 → OS가 UI 브랜치를 읽기·시험만(push 금지)으로 다시 시험 → PYSIDE6_TRIAL 9절 판정 복구 → OS 브랜치 8262d6c(5파일: lint 15, 점검표 15, TRIAL 10-1, 패치)의 main 자리를 메인이 정함(OS-F1 PR에 묶거나 작은 PR) — OS 8262d6c, UI 브랜치 head 490562d(23:24 KST)
 - [!] **UI 7쪽 + PySide6 준비 병합** (MERGE_QUEUE 5) — claude/friendly-bardeen-r6xe8f — UI(소유자 경유) — 소유자가 PC 2대(skymi, whydi)에서 실행 확인 → UI 세션에 "PR 만들어" → 메인이 '병합: UI' — MERGE_QUEUE 5행. OS-F1과 KEY-5가 이것을 기다림
@@ -128,7 +128,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [x] KEY-2/b — KEY-2 검토 후속 — ca5da08 (PR #129)
 - [x] KEY-3/design — GATEWAY_DESIGN.md v0.2 — 9f76b07
 - [x] KEY-3 — core/gateway + 경계 시험 — 9f76b07 (PR #132)
-- [~] KEY-4 — PR #133, 148504a — 1절
+- [x] KEY-4 — PR #133 → main 8445187, 원장 KEY-4
 - [~] KEY-4/a — 계정 문서 고침(F1–F9) + 자체 시험 1줄(SA-INT-1) + 소유자 3-A 시험 결과(T3–T9, T13–T15) — **초안 끝: `claude/payments-key4a-20261120` @ `9fdbb0b`** (d6a1997에서, 메인 확인 11-20 02:0x: 문서 3개+시험 1개+기준선, 계정번호·키·IP·실제 메일 없음, 시험 주소는 '내아이디+' 자리표시). KEY-4 병합 뒤 main 합쳐 PR(대기열 4d'). 남은 확인: T14 View event, T17 오류 이름, T17a 결과 → 6.1 ②·ACC-4 확정
 - [~] KEY-5 — 화면 쪽 22파일/44곳 + quantgen_desktop/paper.py + 키·연결 화면(gateway.status()) — 구현은 UI 세션 몫(소유자 경유). **요청문 초안 끝: handoff `plans/2026-11-20/KEY5_UI_REQUEST.md` (0df90ec, PAYMENTS)** — KEY-4 병합 뒤 메인 확정 신호 → 줄 번호 재정렬 → 소유자가 UI 세션에 붙여 넣음. OS-F1 뒤 적용 권장. 앞서 정할 것: set_backend(None) 가/나 안(OA-41)
 - [ ] KEY-5/a — KEY-5 앞 gateway 준비 3건 (G1 data.kis_stream 입구, G2 kis_workspace 순수 값 목록, G3 main.py QuoteFeed 하위 클래스를 공용 모듈로 → paper.py 재사용) — PAYMENTS, KEY-4 병합 뒤 main에서 브랜치, 대기열 4e
