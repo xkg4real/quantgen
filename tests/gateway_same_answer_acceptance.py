@@ -19,6 +19,7 @@ written as "<date>", and synthetic series are recorded without their dates.
 from __future__ import annotations
 
 import dataclasses
+import hashlib
 import importlib
 import inspect
 import json
@@ -90,6 +91,32 @@ def rec(label: str, args=(), kwargs=None, method: bool = True) -> None:
     CALLS.append([label, {k: _scrub(k, v) for k, v in bound.arguments.items() if k != "self"}])
 
 
+LONG_LIST = 24
+
+
+def _summary(items: list):
+    """A long list as its length, first and last 8 items and two checks over all of it, so the fixture stays small
+    while any changed, added or dropped item still changes the answer: the sum and sum of squares of every number in
+    it (compared within the float tolerance) and a sha256 of everything else, numbers replaced by a placeholder
+    (compared exactly: strings, keys, structure)."""
+    numbers: list[float] = []
+
+    def shape(value):
+        if isinstance(value, (int, float)) and not isinstance(value, bool):
+            numbers.append(float(value))
+            return "#"
+        if isinstance(value, list):
+            return [shape(v) for v in value]
+        if isinstance(value, dict):
+            return {k: shape(v) for k, v in value.items()}
+        return value
+
+    text = json.dumps(shape(items), sort_keys=True, ensure_ascii=False)
+    return {"__n__": len(items), "head": items[:8], "tail": items[-8:],
+            "sum": float(sum(numbers)), "sumsq": float(sum(v * v for v in numbers)),
+            "shape_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest()}
+
+
 def canon(obj, depth: int = 0):
     """JSON-safe, order-stable form of an answer (dataclasses by field, floats exact, other objects by their
     attributes)."""
@@ -105,7 +132,8 @@ def canon(obj, depth: int = 0):
     if isinstance(obj, float):
         return repr(float(obj)) if not math.isfinite(obj) else float(obj)
     if isinstance(obj, (list, tuple)):
-        return [canon(v, depth + 1) for v in obj]
+        items = [canon(v, depth + 1) for v in obj]
+        return _summary(items) if len(items) > LONG_LIST else items
     if isinstance(obj, dict):
         return {str(k): canon(v, depth + 1) for k, v in sorted(obj.items(), key=lambda kv: str(kv[0]))}
     if hasattr(obj, "tolist"):
