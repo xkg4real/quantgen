@@ -603,7 +603,7 @@
     "tests/gateway_boundary_acceptance.py": "57d9e74e9af9091402d68a06b19d88d386b145804b107af40d7124c97b5050f0",
     "tests/gateway_main_acceptance.py": "8fa970f53e645fc52f581b3cdeafb1dd295ff0addb4df6fa1140aaedcd8cc4bb",
     "tests/gateway_remote_acceptance.py": "eea87049e07dae8081330d325bbeaa8e3f258f028d1ee905edc6d5e88cfe9fd5",
-    "tests/gateway_same_answer_acceptance.py": "1bfc2d302d68ea55c7e7ca3171242ce1c0d41bf66bde540fd11be08217055eb3",
+    "tests/gateway_same_answer_acceptance.py": "91e59d5ea698e283cd096873a508ddb95f8e4c8171051a9ccce5e016e552c2c5",
     "tests/glossary_search_acceptance.py": "058922190b05fc585dab3462848b40ea0444a43b4b5e96fdb512cd8ccfc0e64e",
     "tests/golden_tools.py": "24154d79aea43bc91b7c26c33c6b400cd9202cdb4915680a81b4f7cf0fa928ef",
     "tests/history_best_source_acceptance.py": "cda3221001d11599c0b9dab6f71f59a20b7ac762d43adcd6c0b5f2fbce19310f",
@@ -817,161 +817,161 @@
       "document_sha256": "316e056ea90165dafa910d384a9ba9b98cd111f592ca03c7b877bcd65d772ac9",
       "source_digest": "2a36ebe4a509c34a40e03fe415a10e3c5cadbcf6ee180e791b4d8524bd6a9fbd",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.914723+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.473521+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
       "source_digest": "2a36ebe4a509c34a40e03fe415a10e3c5cadbcf6ee180e791b4d8524bd6a9fbd",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.917481+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.475535+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
       "source_digest": "c3c87934137d7ecc65b2e4ef67047a0867c492514f7b89c66e1a210c17e098f1",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.919834+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.477893+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
       "source_digest": "9591f74940c4402e190a0e0616fe6d70206bd14f56f1c990a5bc49b304916fa4",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.921497+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.479374+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
       "source_digest": "6cb7ff69f5f64e98d997874e9a008a5cd31d52481a652cf149f05a133e598d67",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.923156+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.480918+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
       "source_digest": "72c0b71f6dfe8d017ffa007b362e896212f12e0bbf07066f3c4df8c0fc340300",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.925295+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.482376+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "7": {
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
       "source_digest": "2a36ebe4a509c34a40e03fe415a10e3c5cadbcf6ee180e791b4d8524bd6a9fbd",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.926814+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.484461+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "8": {
       "document_sha256": "b1ebf5f8469f355bc6d261789b5ffd402282fea07c83add564ed0dc2dc2fb775",
       "source_digest": "72c0b71f6dfe8d017ffa007b362e896212f12e0bbf07066f3c4df8c0fc340300",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.928931+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.485973+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
       "source_digest": "fa26f997fbe58031fda85638cf45ed6e26314249a95fd5695d2d86d70efa1c09",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.930885+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.487438+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
       "source_digest": "3eb1d2c135a8acfe3c7c2c3fe3a4138bf1e5327dcc467fc4d6b8dd2126c66289",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.932348+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.488811+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
       "source_digest": "dbb69f5ea27dc5eeddd0dc423fd1cee43f1d187ffc04f8ebfb8d6a950c83f581",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.933797+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.490210+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "9478a2356c6eb9e119ccd6b48856b02595c0fa3e7987a1ef294982ffc55b932a",
+      "source_digest": "76142e9f8a57d5cf458ed852e981b1830136aa6190178a6fe052eb3ec6b1b4d2",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.935742+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.491633+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
       "source_digest": "fa26f997fbe58031fda85638cf45ed6e26314249a95fd5695d2d86d70efa1c09",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.937647+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.493732+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
       "source_digest": "fa26f997fbe58031fda85638cf45ed6e26314249a95fd5695d2d86d70efa1c09",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.939675+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.495142+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
       "source_digest": "fa26f997fbe58031fda85638cf45ed6e26314249a95fd5695d2d86d70efa1c09",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.941074+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.496626+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
       "source_digest": "632e256f0d04ef07ed2b237d5af68f12e8ac159b84ee2fb642e13a71896c05d5",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.942451+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.498044+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
       "source_digest": "72c0b71f6dfe8d017ffa007b362e896212f12e0bbf07066f3c4df8c0fc340300",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.944373+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.499959+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
       "source_digest": "2a36ebe4a509c34a40e03fe415a10e3c5cadbcf6ee180e791b4d8524bd6a9fbd",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.946338+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.501409+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
       "source_digest": "c3bf98807e717452156710b71236f025bf24328ef3d79d6bdbc1f5a92b425fa4",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.948311+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.502887+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     },
     "20": {
       "document_sha256": "cc908c5e77b1f70a94e883c933ba7aa4ba24f0a384d4b156b9de7f1a89396d41",
       "source_digest": "2a36ebe4a509c34a40e03fe415a10e3c5cadbcf6ee180e791b4d8524bd6a9fbd",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "PR #133 review 3: tests and fixture (A1-A3, B5), docs (A4-A5 owner decision 2026-11-20, B1-B4, KEY-5/a scope). No product code change; reviewed against the 20 documents.",
-      "reviewed_at": "2026-11-19T16:35:29.949745+00:00",
-      "source_commit": "148504ad8619e2c0f7e31621e8ea824e54d6a6b6"
+      "review_note": "KEY-4/a: tests/gateway_same_answer_acceptance.py adds the SA-INT-1 assertion (integers stay exact inside the summary hash); no product code or compliance document changed",
+      "reviewed_at": "2026-11-19T16:59:52.504286+00:00",
+      "source_commit": "d6a19976668be279bbb27a92a4e56ab51d4e73d0"
     }
   }
 }
