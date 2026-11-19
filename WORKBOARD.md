@@ -152,7 +152,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [x] OS-P0-f — 글꼴 대안, 세그폴트 최소 재현 — c28b1d7
 - [~] PySide6 간헐 종료 고침 (ID 없음. 병합 때 OS-F1/a 같은 하위 ID로 기록) — OS 8262d6c, UI 반영 490562d. OS 재확인 남음. OS 브랜치 5파일은 main 자리 없음 (4절 제안 행)
 - [!] OS-F1 — PySide6 전환 날 (UI는 pyqt6_to_pyside6 --apply, OS는 switch_day.py --apply, 그날 quantgen_desktop/**와 tests/desktop_* 잠금) — MERGE_QUEUE 6행. UI 7쪽 병합, 고침 확인, 소유자 "OS go"가 필요
-- [~] OS-F2 — ~/.nextgen 경로 → core.app_paths.user_data_dir — **브랜치 끝: `claude/os-f2-data-dir-20261120` @ `9858894`** (main 9f76b07에서 9파일, 시험 86 OK, 관련 33파일 실패 목록 main과 같음; 메인 확인 11-20 02:3x). 고칠 것: config.py 줄 끝 CRLF 복원(지금 LF로 바뀌어 전체 파일 변경), 순서에 '표시 파일 있는 플랫폼 폴더 우선'(메인 결정: 새 사용자가 나중에 생긴 ~/.nextgen으로 옮겨 가지 않게). 대기열 4e(abort 기록 1bf2508 함께). Nautilus 지문 바뀜 → owner_confirmed는 그 뒤
+- [~] OS-F2 — ~/.nextgen 경로 → core.app_paths.user_data_dir — **브랜치 `claude/os-f2-data-dir-20261120` @ `2f69c34`** (CRLF 복원 확인: 줄 끝 무시 diff와 같음 9파일 312+/24-; 표시 파일 .quantgen-data-dir로 플랫폼 폴더 우선, 새 시험 7개; 관련 33파일 실패 목록 main과 같음, 통과 832→845; 새 지문 bcaf33d9…). 대기열 4e, abort 기록은 작업 A 뒤 cherry-pick으로 묶음. owner_confirmed는 이것 병합 뒤
 - [ ] OS-F3 — 키 저장, KEY-2와 맞춤 — KEY-2로 덮였는지 메인이 판단
 - [ ] OS-F4 — macOS 차이 — OS-F1, OS-F2 뒤
 - [ ] OS-F5 — macOS CI (로드맵은 "범위 미기재", 플랫폼 계획 2판이 정함) — OS-F4 뒤
