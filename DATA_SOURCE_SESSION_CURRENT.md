@@ -6,11 +6,11 @@ task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
 next_ids: DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e, DS-4b, DS-H
-updated_at: 2026-11-20T02:06:23+09:00
+updated_at: 2026-11-20T02:07:54+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/data-source-didm-20261117
-work_commit: 48049cd
+work_commit: c206b10
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -106,6 +106,7 @@ DS-1 평가표 소유자 확인 완료, DIDM-0 사전등록 V0 **소유자 승�
 - [x] OA-07 OpenDART 소유자 PC 확인 (2026-11-19): 9쪽, 819건. 공식·무료 공급원 6곳 모두 확인 끝. 남은 확인 = 무료 키 3곳 (OA-08).
 - [-] DS-4b CryptoPanic 보류 (2026-11-20, 소유자 지적 확인): 무료 API 없음 (공식 요금: Growth $50/주·$199/월, Enterprise $899/월~; 무료 Developer 2026-04-01 종료 보도). 단계별 비용 결정에 따라 뺌, 코드는 남김. 암호화폐 감성 X열은 Alpha Vantage로 채움. OA-08은 무료 키 2개 (Alpha Vantage, Tiingo). 커밋 `4abe761`.
 - [ ] OA-08 첫 실행 (2026-11-20): `Alpha Vantage failed: NewsError`, `Tiingo failed: RuntimeError` — 원인 문구가 숨겨져 있었음 → 공급사 오류 문구 (키 가림) 출력하게 고침, 커밋 아래 work_commit. **소유자 재실행 대기** (`--alphavantage AAPL --tiingo nvda`).
+- [-] DS-4b 전체 보류 (2026-11-20, OA-08 소유자 PC): Alpha Vantage NEWS_SENTIMENT = "premium endpoint", Tiingo news = HTTP 403 "no permission to access the News API", CryptoPanic = 유료만. 무료로 되는 곳 0 → 단계별 비용 결정대로 보류, 코드는 남김. 뉴스는 GDELT·자체 NLP, 공시는 EDGAR·OpenDART. OA-08 닫힘. 같은 커밋에 safe_detail 가림→자르기 순서 수정 (메인 검토). 커밋 `c206b10`.
 - [-] DS-3 — 계획에 없음 (메인 11-20: 소유자 11-18 답 1 "3단계" = RavenPack 대안 9개, Bigdata.com 시험 없음 → RavenPack 견적·Bigdata.com 비교 없음). OA-38 소유자 확인 대기, 원하시면 다시 엶
 <!-- old DS-H line kept below for history -->
 - [ ] DS-H 홈 지표 데이터 계층 ← **소유자 진단 출력 대기** (아직 손대지 않음)
