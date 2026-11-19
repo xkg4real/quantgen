@@ -25,6 +25,8 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 
 ## 0. 한 줄 요약
 
+**법인 설립 트리거 (소유자 요청 2026-11-19):** 소유자가 "법인 설립 완료되었습니다."라고 보내면 handoff `INCORPORATION_CHECKLIST.md`를 읽고 그 표대로 안내 (회원 MFA·SMS·15번 복구 방법 재검토 포함).
+
 **2026-11-19 20:30 갱신 — KEY-4 PR #133:** 메인 "병합: PAYMENTS_ACCOUNT_KEYS (KEY-4)" (MERGE_QUEUE 4c, handoff acfe23b). main 9f76b07 그대로 → 기준선 갱신 `8c392cb` (PASS, 804소스), snapshot consistent → PR #133 (base main). 메인 독립 검토와 CI 대기, CI 중 push 금지. 병합 뒤: 메인이 LEDGER에 KEY-4 기록 (따로 기록 안 함), 다음은 PAY-0·PAY-2.
 
 **2026-11-19 20:40 갱신 — KEY-4 준비 완료, 메인의 "병합: PAYMENTS_ACCOUNT_KEYS" 대기:** 브랜치 `claude/payments-key4-20261119` @ `c8c1b61` (`c9dfb99` KEY-4 코드 + `c8c1b61` OWNER_STEPS v1.3: 소유자 질문 반영, AWS 로그인 계정·MFA 찾는 길·요금 알림·법인 때 계정 이메일). PyQt 6.12.0 포함 넓은 비교: 관련 138개 모듈 main 1,217 / 브랜치 1,220 시험, 실패 같음 (기존 1건 `adoption_strategy_rules` 환경). `desktop_home_markets_markets` 47개 양쪽 OK (긴 시간 제한으로 따로 실행). 다음: 차례가 오면 최신 main merge → `python -m tools.compliance.check --refresh-baseline --reviewed-by "..." --review-note "..."` → `--check` PASS → PR (본문에 잔여 9건 처리, 앱 동작 동일 근거, 회귀 표, 코드 지문 10c27010 그대로). 소유자 AWS 1단계 진행 중 (2026-11-19: 계정 유료 플랜, 개인 이메일).
