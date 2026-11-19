@@ -1,19 +1,19 @@
 ---
-status: checkpoint
-reason: milestone
+status: handoff
+reason: usage_limit_weekly
 from: claude
 task: payments-account-keys
 cycle: 2026-11-17
-done_ids: KEY-4, KEY-3/design, KEY-3, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a
-next_ids: KEY-4/a, KEY-5/a, PAY-0, PAY-2
-updated_at: 2026-11-20T04:40:00+09:00
+done_ids: KEY-4/a, KEY-4, KEY-3/design, KEY-3, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a
+next_ids: KEY-5/a, PAY-0, PAY-2
+updated_at: 2026-11-20T05:50:00+09:00
 stale_after_hours: 3
-waiting_on: ci
+waiting_on: none
 work_branch: claude/payments-key5a-20261120
 work_commit: dc936d4
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/134
-usage_weekly_pct: unknown
+pr: none
+usage_weekly_pct: 98
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
 session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
@@ -24,6 +24,13 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-20 05:50 갱신 — 주간 사용량 98%로 멈춤 (status: handoff, reason: usage_limit_weekly).** 메인 원문 (05:4x): "계정 주간 사용량 98% (AUTO_STATE 05:37) — 메인은 GPT에 인계했습니다 (handoff 4e7b6b4, CURRENT status: handoff). 새 작업을 시작하지 말고, 작업 중인 것이 있으면 push하고 PAYMENTS_SESSION_CURRENT.md를 handoff로 갱신한 뒤 멈추세요."
+- **끝난 것:** KEY-4 (PR #133, main `8445187`), KEY-4/a (PR #134, 메인 병합·LEDGER 기록 — CURRENT done_ids에 있음). 커밋되지 않은 변경 없음 (작업 폴더 `claude/payments-key5a-20261120` @ `dc936d4`, 깨끗함).
+- **KEY-5/a:** 브랜치 `claude/payments-key5a-20261120` @ `dc936d4` (main `8445187`에서, push함, PR 없음 — 대기열 **4h**, 메인이 "병합: PAYMENTS_ACCOUNT_KEYS"를 적기 전 PR 금지). 메인 검토 결과: handoff `plans/2026-11-20/KEY5A_REVIEW.md`. **재개 순서 (2026-11-24 17:00 KST 뒤):** ① `git show origin/handoff:plans/2026-11-20/KEY5A_REVIEW.md` 전체 읽기 → ② M1 (`core/gateway/feed.py` look_again이 지운 키·막힌 FMP 클라이언트를 계속 씀, docstring 틀림)과 M2 (`_refresh_krx`가 진짜 클라이언트를 먼저 넣고 나중에 막음, 잠금 없음, `_KRX_BUILT`도)를 **실패하는 시험 먼저** 쓰고 고침 → ③ S1–S7 → ④ 게이트웨이 시험 5종·같은 답·경계, CI 모듈 목록·관련 138모듈·함수형 44개(.git 없는 복사본) 실패 목록이 main과 같음, Nautilus code_sha256 `10c27010…` 그대로, 동결 엔진 4파일 백업 zip과 바이트 같음 → ⑤ push 한 번, 메인에 SESSION_PIPELINE 3절 형식 보고. 그 뒤 KEY5_UI_REQUEST 표 14번 (paper.py → `core.gateway.feed.QuoteFeed`, 줄 번호) 갱신은 KEY-5/a 병합 뒤.
+- **PAY-0 / PAY-2:** `claude/payments-pay0-20261120` @ `e869064` (main fa78df1 합침 `909a3fa`, PAY-2 재검증 `0a24f02`, 전자금융거래법 2026-12-17 건은 PG 문의 질문 후보 7번으로만 `e869064`). 메인 지시: 소유자 답 OA-32 (문의 발송·세무사·07 전 변호사 검토), OA-39 (P2-01..15, PG 질문 03번에 추가 여부) 전까지 그대로, 새 조사 금지. PR은 대기열 자리 뒤.
+- **소유자 AWS (2026-11-20):** 1단계 1~23c·25 끝 (운영 풀 `ap-southeast-2_pQEsrAvvb`, 클라이언트 `77qi9vi90i118rck1ppisbca7r` — 공개값), 3-A T1–T15 끝 (결과는 OWNER_STEPS v1.9에 반영). 남은 소유자 일: 1-3 관리 계정 시험 풀 2개 삭제, 2단계 웹사이트 세션 전달 (ACC-3/ACC-4, PR-134.json), OA-43 (11월 크레딧 전 EC2-Other $39.47 등 $48.71 — 메인이 소유자와 확인 중, 지우지 말 것), OA-45 (CloudTrail View event에 회원 식별자 있는지), T16–T19b·W9–W10 (3-B 웹 미리보기 뒤).
+- **이 세션이 재개할 때:** `python3 tools/handoff/push_handoff.py --show`로 CURRENT 상태 확인 (GPT가 returned이면 GPT 작업 먼저 검증), 메인 메시지 확인 뒤 위 KEY-5/a 순서.
 
 **2026-11-20 04:40 갱신 — KEY-4 병합 (main `8445187`, 메인이 LEDGER 기록), KEY-4/a PR #134, KEY-5/a 진행:** KEY-4/a: `claude/payments-key4a-20261120` 에 main 8445187 합침 (`ef6b7af`) → PR #134 (`e37c9a9` PR-134.json) → 메인 재검토 S1–S4·N1/N2/N5–N7 고침 `aa4be94` (6.2 1회용 확인 코드, 동의 메일 보관 대신 기록 3년, 기한 10일, 8절 이메일 변경 본인 확인 = 6.1 ①, PR-134.json). CI 녹색이면 메인 병합. KEY-5/a: `claude/payments-key5a-20261120` @ `dc936d4` (8445187에서, push, PR 없음 — 대기열 4f, OS-F2 4e 뒤 메인이 "병합:" 적음). G1 `data.kis_stream` 입구, G2 별도 목록 없음 (고정 로컬이라 늘 열림), G3 `core/gateway/feed.py`, A1R3-1·A1R3-4·A1R3-5 (`on_change`), F2·F5·F6·F7. 게이트웨이 시험 71 OK, 변조 10개 모두 잡힘, CI 모듈 목록 실패 2개 main과 같음, 지문 10c27010… 그대로, 동결 엔진 4파일 바이트 같음. 남은 확인: 관련 138모듈·함수형 44개 (실행 중). 다음: 결과 확인 → 메인 보고.
 
