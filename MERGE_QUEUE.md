@@ -1,6 +1,6 @@
 # MERGE_QUEUE — main 병합 순서와 동결 (메인 세션이 관리)
 
-updated_at: 2026-11-19T15:20:00+09:00
+updated_at: 2026-11-19T17:01:00+09:00
 coordinator: 메인 세션 (QUANTGEN/MAIN, https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB)
 freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보고("F22까지 성공적으로 마무리했습니다."), main `6e077dc`(소유자 `--no-ff` 병합, 부모 `8e026ab`·`13f4dea`), 그 push의 Compliance success, PR #4 merged. (동결 기간: 2026-11-18T19:10:45+09:00 ~ 위 시각)
 
@@ -23,8 +23,8 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 | 3 | ~~KEY-2~~ | PR #128 | **병합 완료 main `3249af7`** (2026-11-19 10:40 KST). code_sha256 → `10c27010…` |
 | 3b | ~~KEY-2/b~~ | PR #129 | **병합 완료 main `ca5da08`** (2026-11-19 12:18 KST) |
 | 4 | ~~정책 문서 PR-1~~ | PR #130 | **병합 완료 main `edbe9f7`** (2026-11-19 15:03 KST). PR-2(계정 서비스 설명)는 AWS 풀·웹 계정 화면 뒤 |
-| 4a | CI 겹친 실행 자동 취소 + 소유자 GH-1 결정(공개 유지) 기록 | 메인 PR #131 | **지금** (CI 대기 → 녹색이면 병합) |
-| 4b | KEY-3 (게이트웨이 `core/gateway/**`, 소유자 설계 승인 2026-11-19) | PAYMENTS `claude/payments-key3-prep-20261119` | 다음 차례: 준비되면 "병합: PAYMENTS_ACCOUNT_KEYS" |
+| 4a | ~~CI 겹친 실행 자동 취소 + GH-1 기록~~ | PR #131 | **병합 완료 main `ab24dec`** (2026-11-19 16:58 KST) |
+| 4b | KEY-3 (게이트웨이 `core/gateway/**`, 소유자 설계 승인 2026-11-19) | PAYMENTS `claude/payments-key3-prep-20261119` @ `6b04d28` | **병합: PAYMENTS_ACCOUNT_KEYS** (2026-11-19 17:01 KST) — main `ab24dec` merge(runtime-smoke.yml 두 쪽 줄 모두) → 기준선 갱신 → PR. 메인이 병합 전 독립 검토 |
 | 5 | UI 7쪽 + PySide6 준비 | UI `claude/friendly-bardeen-r6xe8f` | 소유자 실행 확인 뒤 (UI 세션 브랜치는 아무도 고치지 않음) |
 | 6 | PySide6 전환 (`pyqt6_to_pyside6 --apply` + `switch_day.py --apply`, 화면 문구 3곳은 UI 세션) | OS | 5 뒤 (OS 세션 제안 순서: UI PR → 전환) |
 | 7 | KEY-3 → KEY-4 → KEY-5 | PAYMENTS | 차례대로 |
