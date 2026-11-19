@@ -41,6 +41,7 @@ from typing import Any, Optional
 
 import config
 from core import credentials as _credentials
+from core.app_paths import user_data_path
 
 try:
     import requests as _once                         # one attempt: the engine's quote path
@@ -67,7 +68,7 @@ _FILE_TOKEN_IGNORED = False                       # set when the KIS key changes
 
 
 def _token_path() -> Path:
-    return _TOKEN_PATH if _TOKEN_PATH is not None else Path.home() / ".nextgen" / "kis_token.json"
+    return _TOKEN_PATH if _TOKEN_PATH is not None else user_data_path("kis_token.json")
 
 
 def _forget_token_on_key_change(name: str) -> None:

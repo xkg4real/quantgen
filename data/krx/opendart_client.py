@@ -26,6 +26,7 @@ from typing import Optional
 from xml.etree import ElementTree
 
 import config
+from core.app_paths import user_data_path
 
 try:
     from data.net import session as requests         # shared session: retry + backoff
@@ -41,7 +42,11 @@ class DARTUnavailable(DARTError):
     pass
 
 
-_CACHE_PATH = Path.home() / ".nextgen" / "dart_corp_codes.json"
+_CACHE_PATH: Optional[Path] = None     # a test may pin it; else the per-user data folder, computed at each use
+
+
+def _cache_path() -> Path:
+    return _CACHE_PATH if _CACHE_PATH is not None else user_data_path("dart_corp_codes.json")
 _CACHE_TTL_S = 7 * 24 * 3600
 _CACHE_LOCK = threading.Lock()
 
@@ -93,7 +98,7 @@ class OpenDARTClient:
     # -- corp code map -------------------------------------------------------
     def _load_cache(self) -> Optional[dict[str, dict]]:
         try:
-            blob = json.loads(_CACHE_PATH.read_text(encoding="utf-8"))
+            blob = json.loads(_cache_path().read_text(encoding="utf-8"))
         except Exception:
             return None
         if time.time() - float(blob.get("fetched_at", 0)) > _CACHE_TTL_S:
@@ -103,8 +108,9 @@ class OpenDARTClient:
 
     def _store_cache(self, entries: dict[str, dict]) -> None:
         try:
-            _CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
-            _CACHE_PATH.write_text(
+            path = _cache_path()
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(
                 json.dumps({"fetched_at": time.time(), "entries": entries},
                            ensure_ascii=False),
                 encoding="utf-8",

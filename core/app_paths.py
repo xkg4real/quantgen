@@ -1,12 +1,14 @@
 """Read-only shipped resources in a source checkout, an installed wheel or a packaged app, and the
 per-user data folder (OS-P0-c).
 
-Nothing here creates, opens or lists a folder; the functions only compute paths. Callers that write
-(config.py, data/krx/kis_client.py, data/krx/opendart_client.py) switch to user_data_dir() in OS-F2,
-after the payments/account session's KEY-2; until then they keep their own ~/.nextgen paths.
+Nothing here creates, opens or lists a folder except migrate_legacy_data(), which runs only with the user's
+explicit consent. The writers (config.py trading/macro/ficc caches, data/krx/kis_client.py token file,
+data/krx/opendart_client.py corp-code cache) take their folder from user_data_dir() since OS-F2 (2026-11-20).
 """
+from dataclasses import dataclass
 import os
 from pathlib import Path
+import shutil
 import sys
 import sysconfig
 
@@ -58,3 +60,61 @@ def user_data_dir(*, home=None, env=None, platform=None) -> Path:
     if legacy.is_dir():
         return legacy
     return _platform_data_dir(home, env, sys.platform if platform is None else platform)
+
+
+def user_data_path(*parts: str) -> Path:
+    """A path inside user_data_dir() (nothing is created)."""
+    return user_data_dir().joinpath(*parts)
+
+
+@dataclass(frozen=True)
+class DataLocation:
+    """Where per-user state lives now, and what a move to the platform folder would do (OS-F2)."""
+    path: Path                 # user_data_dir() today
+    source: str                # "override", "flet", "legacy" or "platform"
+    legacy: Path               # ~/.nextgen
+    platform_path: Path        # the platform folder new installs use
+    can_migrate: bool          # legacy in use, platform folder absent: migrate_legacy_data() may move it
+
+
+def data_location(*, home=None, env=None, platform=None) -> DataLocation:
+    """Describe the data folder for a settings screen or a one-time notice. Checks only whether two folders exist;
+    never lists, opens or moves anything."""
+    env = os.environ if env is None else env
+    home = Path.home() if home is None else Path(home)
+    plat = sys.platform if platform is None else platform
+    current = user_data_dir(home=home, env=env, platform=plat)
+    legacy = home / LEGACY_DATA_DIRNAME
+    target = _platform_data_dir(home, env, plat)
+    if env.get(DATA_DIR_ENV):
+        source = "override"
+    elif env.get(FLET_STORAGE_ENV):
+        source = "flet"
+    elif current == legacy:
+        source = "legacy"
+    else:
+        source = "platform"
+    return DataLocation(current, source, legacy, target,
+                        source == "legacy" and not target.exists())
+
+
+class MigrationRefused(RuntimeError):
+    pass
+
+
+def migrate_legacy_data(*, confirmed: bool, home=None, env=None, platform=None) -> Path:
+    """Move ~/.nextgen to the platform folder, once, after the user agreed in the app (confirmed=True).
+
+    Refuses (MigrationRefused) without consent, when an override decides the folder, when ~/.nextgen is not in use,
+    or when the platform folder already exists (nothing is merged or overwritten). TRADEGEN reads the shared KIS token
+    at ~/.nextgen/kis_token.json, so the consent text must say that sharing ends. Returns the new folder."""
+    if confirmed is not True:
+        raise MigrationRefused("the user has not agreed to move the data folder")
+    where = data_location(home=home, env=env, platform=platform)
+    if where.source != "legacy":
+        raise MigrationRefused(f"the data folder is not ~/.nextgen ({where.source})")
+    if where.platform_path.exists():
+        raise MigrationRefused(f"{where.platform_path} already exists; nothing is merged or overwritten")
+    where.platform_path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+    shutil.move(str(where.legacy), str(where.platform_path))
+    return where.platform_path
