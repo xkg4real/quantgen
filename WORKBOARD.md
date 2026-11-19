@@ -23,7 +23,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 
 | 세션 | 종류 | 연락 방법 | 지금 |
 |---|---|---|---|
-| MAIN | 메인(조정·병합) | — | 11-20 05:40 KST: PR #134 병합(f065ec9), 4e OS-F2 차례 넘김, KEY-5/a 독립 검토 workflow(wf_56720449-739) |
+| MAIN | 메인(조정·병합) | — | 11-20 05:50 KST: **주간 98% → GPT 인계**(CURRENT.md). PR #134 병합(f065ec9), 4e OS-F2 OS가 e44c48e까지, KEY-5/a 검토 결과 plans/2026-11-20/KEY5A_REVIEW.md |
 | PAYMENTS_ACCOUNT_KEYS | 하부 (D6) | 메인이 직접 | KEY-4/a 병합(f065ec9), KEY-5/a dc936d4 메인 검토 대기(push 보류), PAY-2 재검증 0a24f02 끝 → OA-39 대기 |
 | OS_EXPANSION | 하부 (D6) | 메인이 직접 | 18:42부터 쉼 (문서상 waiting_on owner, 실제로는 UI가 490562d로 패치를 이미 반영함 → 메인이 알려야 함) |
 | DATA_SOURCE_DIDM | 하부 (D6) | 메인이 직접 | 15:00부터 쉼, 소유자 PC 실행을 기다림. KEY-3 병합 소식 아직 못 받음 |
@@ -131,7 +131,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [x] KEY-4 — PR #133 → main 8445187, 원장 KEY-4
 - [x] KEY-4/a — 계정 문서 고침(F1–F9) + OA-42·OA-44 반영 + 자체 시험 1줄 — PR #134 @ aa4be94 → **main f065ec9** (11-20 05:36 KST), CI 7개 녹색, 원장 KEY-4/a (handoff 40b9378)
 - [~] KEY-5 — 화면 쪽 22파일/44곳 + quantgen_desktop/paper.py + 키·연결 화면(gateway.status()) — 구현은 UI 세션 몫(소유자 경유). **요청문 초안 끝: handoff `plans/2026-11-20/KEY5_UI_REQUEST.md` (0df90ec, PAYMENTS)** — KEY-4 병합 뒤 메인 확정 신호 → 줄 번호 재정렬 → 소유자가 UI 세션에 붙여 넣음. OS-F1 뒤 적용 권장. 앞서 정할 것: set_backend(None) 가/나 안(OA-41)
-- [~] KEY-5/a — KEY-5 앞 gateway 준비 3건 (G1 data.kis_stream 입구, G2 kis_workspace 순수 값 목록, G3 main.py QuoteFeed 하위 클래스를 공용 모듈로 → paper.py 재사용) — PAYMENTS, KEY-4 병합 뒤 main에서 브랜치, 대기열 **4h**. **코드 끝: `claude/payments-key5a-20261120` @ `dc936d4`** (main 8445187에서, 10파일, + PR #133 3차 검토 C 항목 A1R3-1/4/5·F2/F5/F6/F7). 메인 확인 11-20 04:10: 동결 엔진 4개 바이트 같음, main.py CRLF, code_sha256 10c27010 그대로, 게이트웨이 시험 71 OK. 메인 독립 검토 workflow wf_56720449-739 진행 중 → 고칠 것 PAYMENTS에 한 번에 전달
+- [~] KEY-5/a — KEY-5 앞 gateway 준비 3건 (G1 data.kis_stream 입구, G2 kis_workspace 순수 값 목록, G3 main.py QuoteFeed 하위 클래스를 공용 모듈로 → paper.py 재사용) — PAYMENTS, KEY-4 병합 뒤 main에서 브랜치, 대기열 **4h**. **코드 끝: `claude/payments-key5a-20261120` @ `dc936d4`** (main 8445187에서, 10파일, + PR #133 3차 검토 C 항목 A1R3-1/4/5·F2/F5/F6/F7). 메인 확인 11-20 04:10: 동결 엔진 4개 바이트 같음, main.py CRLF, code_sha256 10c27010 그대로, 게이트웨이 시험 71 OK. 메인 검토 결과 handoff `plans/2026-11-20/KEY5A_REVIEW.md` (주요 M1·M2, 작은 것 S1–S7) → PAYMENTS/이어받는 쪽이 고침
 - [~] PAY-0 — 문의 7건 초안 + 목록 표 (docs/commercial/inquiries/, 문서 8개) — **초안 끝: `claude/payments-pay0-20261120` @ `7f8939c`** (main 9f76b07에서, 메인 확인 11-20 01:00: 문서만, 비밀값·다른 연락처 없음). PR은 대기열 자리 뒤, 원장은 병합 때. 발송은 소유자(OA-32)
 - [~] PAY-2 — 결제 설계(시나리오 A) — **초안 끝: `claude/payments-pay0-20261120` @ `d0da1b2`** (docs/commercial/payments/ 4개: PAYMENT_DESIGN, PG_COMPARISON, PRIVACY_POLICY_PROPOSAL, README; 메인 확인 11-20 01:05: 문서만). 소유자 결정 P2-01..P2-15(OA-39), 법률 확인 걸린 것 P2-05·06·08·09·10·11·12·14. 약관 02 제4조·03·01 반영은 정책 PR-2. PR은 PAY-0과 함께 대기열 자리 뒤 **재검증 11-20: `0a24f02`** (main fa78df1 합침 909a3fa 위, PAYMENT_DESIGN·PG_COMPARISON만): 정기결제 증액·유료 전환 동의 30일(2025-02-14 시행) 확인, 다크패턴 시행일 확인, 디지털콘텐츠 철회 제한 요건 해설로 확인(조문 원문 미확인), PG 수수료·정산 주기는 미검증 유지 → PAY-0 03 문의 회신으로 확정. 메인 확인 04:15: 문서 2개만, 비공개 정보 없음. 후속 `e869064`: 2026-12-17 전자금융거래법 개정 건은 PG 문의 질문 후보(미검증)로만.
 - [!] PAY-1 — 데스크톱 로그인 core/account/** — 웹 계정 공개(AUTH_UI_ENABLED) 뒤
