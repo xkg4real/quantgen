@@ -186,6 +186,9 @@ class FakeServerTest(unittest.TestCase):
             "no_answer": lambda req: {"ok": False},
             "bad_answer     ": lambda req: {"ok": False, "error": "sk_live_" + "a1b2c3d4e5f6a7b8c9d0e1f2a3"},
             "http_503": lambda req: {"ok": False, "error": "http_503"},
+            "bad_answer      ": lambda req: {"ok": False, "error": "abcdef0123456789abcd_ef0123456789abcdef01"},
+            "transport_SSLCertVerificationError": lambda req: (_ for _ in ()).throw(
+                __import__("ssl").SSLCertVerificationError("cert for host with token xyz")),
         }
         for expected, transport in cases.items():
             with self.subTest(expected=expected):

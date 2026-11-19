@@ -134,7 +134,7 @@ def execute_krx(request, *, gateway=None):
     request.validate()
     if gateway is None:
         from core import gateway as data_gateway
-        gateway = data_gateway.provider('data.krx').KRXGateway()
+        gateway = data_gateway.krx_gateway()
     if request.tool == 'snapshot':
         answer = gateway.market_snapshot()
     elif request.tool == 'indices':

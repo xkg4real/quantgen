@@ -28,6 +28,9 @@
   "quantgen_desktop/market_tools.py": [
    "call:config.kis_ready"
   ],
+  "quantgen_desktop/paper.py": [
+   "call:core.engine.feed.QuoteFeed(no fmp_client)"
+  ],
   "quantgen_desktop/qscore.py": [
    "import:data.kis_workspace.MarketDataService"
   ],
@@ -91,7 +94,7 @@
  },
  "totals": {
   "core_and_main": 1,
-  "files": 22,
-  "screens": 43
+  "files": 23,
+  "screens": 44
  }
 }

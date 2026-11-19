@@ -63,9 +63,9 @@ class RemoteRoute:
         try:
             answer = self._send(request)
         except Exception as exc:                     # network or transport failure: the class name only
-            failed = f"transport_{type(exc).__name__}"
+            failed = "transport_" + re.sub(r"[^A-Za-z0-9_]", "", type(exc).__name__)[:40]   # a class name, ours
         if failed:                                   # raised outside the except: no __context__ carries the
-            raise RemoteFailed(_code(failed))        # original message (a URL, a token) along
+            raise RemoteFailed(failed)               # original message (a URL, a token) along
         if not isinstance(answer, dict) or not isinstance(answer.get("ok"), bool):
             raise RemoteFailed("bad_answer")
         if not answer["ok"]:
@@ -87,11 +87,13 @@ _CODE = re.compile(r"[A-Za-z0-9_]{1,48}")
 
 
 def _code(error: object) -> str:
-    """An error code fit for a message: ASCII letters, digits and "_" (a code such as ``http_503`` or an exception
-    class name), at most 48 characters, and not key-shaped (no run of 24 or more letters and digits). Anything
-    else is "bad_answer"."""
+    """A server error code fit for a message: ASCII letters, digits and "_" (a code such as ``http_503`` or an
+    exception class name), at most 48 characters, and not key-shaped: no run of 24 or more letters and digits, and
+    nothing routes.py would call key-like (32 or more key characters, underscores included). Anything else is
+    "bad_answer"."""
+    from core.gateway.routes import _KEY_LIKE
     text = error if isinstance(error, str) else ""
-    if not _CODE.fullmatch(text) or re.search(r"[A-Za-z0-9]{24,}", text):
+    if not _CODE.fullmatch(text) or re.search(r"[A-Za-z0-9]{24,}", text) or _KEY_LIKE.search(text):
         return "bad_answer"
     return text
 

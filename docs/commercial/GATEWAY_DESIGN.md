@@ -126,12 +126,12 @@ flowchart LR
 | 3 | 공개판은 `.env`를 읽지 않음 | KEY-2에서 이미 (`core.credentials.may_read_dotenv`) | KEY-2 시험 재사용; 게이트웨이는 `.env`를 직접 읽지 않음 (grep 시험) |
 | 4 | 결과마다 출처·길·지연·표시권 | `GatewayAnswer` (`answer()`), `status()` 행 | `answer()`의 결과와 `status()`의 모든 행에 네 칸이 있음; `display_rights.json`에 없는 공급원은 `unknown`으로 표시 (빈칸 금지). core가 `provider()`·`ficc()`로 받는 결과는 기존 형 그대로이고 (7a절), 화면이 네 칸을 그리는 일은 KEY-5 |
 | 5 | 화면은 `status()` 행을 그대로 그림. 공급원 이름을 화면 코드에 박지 않음 | KEY-5 (UI 세션) | `status()` 행 스키마 시험; 경계 시험이 화면 쪽 새 직접 호출을 막음 |
-| 6 | 키를 넣거나 지우면 해당 클라이언트를 다시 만듦 (재시작 불필요) | `core.credentials.subscribe` → `_on_key_change`: 다음 `client()`는 새로 만들고, 그동안 내준 클라이언트 (약한 참조로 기억)마다 `reload_credentials()`를 **바뀔 때마다** 부름 | 키를 넣으면 `ready("kis_quote")`가 `key_needed` → `ready`로 바뀜 (같은 프로세스); 키 두 개를 차례로 넣어도 처음 받은 클라이언트가 두 번 다 알림을 받음 |
+| 6 | 키를 넣거나 지우면 해당 클라이언트를 다시 만듦 (재시작 불필요; `client(source)`로 받은 클라이언트만. `provider()`로 클래스를 받아 직접 만든 클라이언트는 만들 때 키를 읽음, 7a절) | `core.credentials.subscribe` → `_on_key_change`: 다음 `client()`는 새로 만들고, 그동안 내준 클라이언트 (약한 참조로 기억)마다 `reload_credentials()`를 **바뀔 때마다** 부름 | 키를 넣으면 `ready("kis_quote")`가 `key_needed` → `ready`로 바뀜 (같은 프로세스); 키 두 개를 차례로 넣어도 처음 받은 클라이언트가 두 번 다 알림을 받음 |
 
 **경계 시험 `tests/gateway_boundary_acceptance.py`.**
 - `core/`, `quantgen_desktop/`, `ui/`, `main.py`의 모든 `.py`를 `ast`로 읽어 공급사에 바로 닿는 곳을 찾습니다 (자세한 기준은 6절). 읽지 못한 파일이 있으면 실패합니다.
 - 시작 예외 목록은 `tests/fixtures/gateway/known_direct_calls.json`입니다. 파일마다 **내용**으로 고정합니다. 목록에 없는 것이 생기면 실패하고, 목록에 있는 것이 사라졌는데 목록을 줄이지 않아도 실패합니다 (목록이 썩지 않게). 같은 파일에서 하나를 빼고 다른 직접 호출을 넣어도 걸립니다.
-- KEY-4가 `core/`·`main.py` 항목을 0으로 만들었고 (2026-11-19), KEY-5가 화면 항목을 0으로 만듭니다.
+- KEY-4가 `core/`·`main.py` 항목을 동결 예외 한 줄 (`core/engine/feed.py`, 6절) 외에 0으로 만들었고 (2026-11-19), KEY-5가 화면 항목을 0으로 만듭니다 (그동안 `SCREEN_CEILING`이 상한).
 - Runtime과 Compliance (모든 PR) 두 곳에서 돌아, 경로 필터 밖 파일에 새 직접 호출을 넣어도 잡힙니다.
 - 새 공급원은 `data/`에 클라이언트를 만들고 `routes.json`에 한 행을 더하는 PR로만 들어옵니다 (데이터소스 세션, 이 세션이 검토).
 
@@ -183,20 +183,21 @@ flowchart LR
 |---|---|---|---|
 | `core/` | 1 (동결 예외; KEY-4 전 27) | 1 (KEY-4 전 91) | KEY-4 끝 |
 | `main.py` | 0 (KEY-4 전 1) | 0 (KEY-4 전 1) | KEY-4 끝 |
-| `quantgen_desktop/` | 8 | 16 | KEY-5 (UI 세션) |
+| `quantgen_desktop/` | 9 | 17 | KEY-5 (UI 세션; `paper.py` 1곳은 2차 검토에서 추가) |
 | `ui/` | 13 | 27 | KEY-5 (UI 세션) |
-| **합계** | **22** | **44** (화면 43 + 동결 예외 1) | |
+| **합계** | **23** | **45** (화면 44 + 동결 예외 1) | |
 
 **동결 예외:** `core/engine/feed.py`의 `import:data.fmp.FMPQuoteClient`. 이 파일은 소유자 S4 판정 (T-RO-01, T-CAP-02; `tests/macro_m5_integration.py` UNTOUCHED 목록, `tests/macro_registry.csv`)으로 `_backup/QUANTGEN_pre_v2_2026-10-05.zip` 원본과 바이트가 같아야 합니다. 그래서 파일은 그대로 두고, 앱 경로의 FMP 클라이언트는 `main.py`의 `QuoteFeed` 하위 클래스가 `gateway.provider("data.fmp")`로 처음 쓸 때 만듭니다 (키 없으면 시작을 막지 않는 것도 그대로). `quantgen_desktop/paper.py`의 `QuoteFeed()`는 화면이라 KEY-5. 시험의 `FROZEN` 표가 이 한 줄만 허용합니다.
 
-**새 직접 호출이 생기면:** 먼저 `test_no_new_direct_provider_calls`가 실패합니다. 목록을 `--write-known`으로 다시 만들어 넘기려 하면 core·main은 `test_core_and_main_go_through_the_gateway`(동결 예외 외 0), 화면은 `test_screen_list_stays_under_the_ceiling`(상한 `SCREEN_CEILING` 21파일·43곳, 지금 목록에 없는 화면 파일 금지; KEY-5가 상한을 내림)이 실패합니다.
+**새 직접 호출이 생기면:** 먼저 `test_no_new_direct_provider_calls`가 실패합니다. 목록을 `--write-known`으로 다시 만들어 넘기려 하면 core·main은 `test_core_and_main_go_through_the_gateway`(동결 예외 외 0), 화면은 `test_screen_list_stays_under_the_ceiling`(상한 `SCREEN_CEILING` 22파일·44곳, 지금 목록에 없는 화면 파일 금지; KEY-5가 상한을 내림)이 실패합니다.
 
 **무엇을 세나 (`tests/gateway_boundary_acceptance.py`의 `findings`):**
 - 공급사 모듈 import, 모든 꼴: `import data.krx.x`, `from data import kis_markets`, `from data.fmp.quote_client import X` (이름마다 하나), `import yfinance`, `import gs_quant...`, 별 import (`from data import *`, `from core.ficc.data import *`). 공급사 모듈은 `data.krx`, `data.fmp`, `data.crypto`, `data.kis_markets`, `data.kis_stream`, `data.kis_workspace`, `data.net`, `data.didm`, `yfinance`, `gs_quant`, `pandas_datareader` (FRED 라이브러리), `fredapi`, `pykrx`. `from config import *`도 셉니다.
 - 상대 import는 파일 위치로 절대 이름을 풀어 셉니다 (`from .data import load_series` → `core.ficc.data.load_series`).
-- FRED·Yahoo 클라이언트 `core.ficc.data`: **허용 목록 방식.** 모듈 자체, 그리고 `local.FiccData.CONSTANTS`(`G10_KRW`, `Series`, `CurvePanel`, `CurveSnapshot`, `_period_for`, `synthetic_*`)에 없는 모든 이름 (`load_*`, `_yf_fetch`, `_fred_fetch`, `_provider_rows`, `_fetch`, `_treasury_from_fred`, 손잡이 `_yf`·`_pdr`·`_requests` 등)을 import로든 속성으로든 쓰면 셉니다. 시험은 그 튜플을 `ast`로 읽어 게이트웨이와 한 목록을 씁니다.
+- FRED·Yahoo 클라이언트 `core.ficc.data`: **허용 목록 방식.** 모듈 자체, 그리고 `local.FiccData.CONSTANTS`(`G10_KRW`, `Series`, `CurvePanel`, `CurveSnapshot`, `_period_for`, `synthetic_*`)에 없는 모든 이름 (`load_*`, `_yf_fetch`, `_fred_fetch`, `_provider_rows`, `_fetch`, `_treasury_from_fred`, 손잡이 `_yf`·`_pdr`·`_requests` 등)을 import로든 속성으로든 쓰면 셉니다. 시험은 그 튜플을 `ast`로 읽어 게이트웨이와 한 목록을 쓰고, 그 8개를 고정해 둡니다 (`test_ficc_allowlist_is_pinned`; `CONSTANTS`와 `EXPOSED`는 겹치지 않음).
+- 동결된 엔진 피드를 FMP 클라이언트 없이 만드는 꼴 (`QuoteFeed()`/`QuoteFeed(g)`, `fmp_client=` 없음): 피드가 스스로 FMP에 닿으므로 셈 (`call:core.engine.feed.QuoteFeed(no fmp_client)`). `main.py`는 게이트웨이 하위 클래스를 쓰고, `quantgen_desktop/paper.py`가 화면 목록에 올라 있음 (KEY-5).
 - 패키지를 import한 뒤 속성으로 닿는 꼴 (`import data` → `data.kis_markets.KISMarkets()`, `from core import ficc` → `ficc.data.load_series(...)`).
-- `importlib.import_module`·`__import__` (별칭 `from importlib import import_module as im`, 키워드 `name=`, 상대 이름 + `package=` (글자, 또는 `__package__`·`__name__`을 검사하는 파일의 이름으로 풀어서), `fromlist` 항목, 공급사를 품은 부모 패키지 (`import_module('data')`, `__import__('core.ficc')` 뒤 속성·`getattr`) 포함; 글자로 적힌 이름만).
+- `importlib.import_module`·`__import__` (별칭 `from importlib import import_module as im`, 키워드 `name=`, 상대 이름 + `package=` (글자, 또는 `__package__`·`__name__`을 검사하는 파일의 이름으로 풀어서), `fromlist` 항목, 공급사를 품은 부모 패키지 (`import_module('data')`, `__import__('core.ficc')` 뒤 속성·`getattr`) `importlib.__import__`, `package=__spec__.parent`, `__import__`의 `level`, `getattr(<import한 패키지>, "글자")` 포함; 글자로 적힌 이름만. 끝내 풀지 못한 상대 이름은 공급원으로 보고 셈 (안전한 쪽으로 실패)).
 - `config`의 키 함수: 호출 (`config.kis_ready()`), 값으로 쓰기 (`f = config.fmp_key`, `getattr(config, "anthropic_key")`), 별칭 (`import config as QC`), `from config import kis_ready`. 키 존재를 알려 주는 `config.*_provider_status` (quant·krx·ficc·crypto)도 셉니다.
 - Anthropic API 주소 문자열 (`https://api.anthropic.com...`). 안내 문구 속 호스트 이름은 세지 않음.
 - 읽거나 구문 분석하지 못한 파일 (SyntaxError, UnicodeDecodeError)은 건너뛰지 않고 **실패**로 봅니다 (`test_unparsable_file_fails`). 파일은 바이트로 `ast`에 주므로 PEP 263 인코딩 선언 (예: utf-7)도 Python이 실행하는 그대로 읽습니다 (`test_coding_cookie_is_honoured`).
@@ -219,9 +220,11 @@ flowchart LR
 | 2 | `quantgen_desktop/market_rankings.py` | KEY-5 |
 | 2 | `quantgen_desktop/watchlist_live.py` | KEY-5 |
 | 2 | `ui/rates_page.py` | KEY-5 |
+| 1 | `core/engine/feed.py` | 동결 예외 (S4) |
 | 1 | `quantgen_desktop/home_view.py` | KEY-5 |
 | 1 | `quantgen_desktop/market_summary.py` | KEY-5 |
 | 1 | `quantgen_desktop/market_tools.py` | KEY-5 |
+| 1 | `quantgen_desktop/paper.py` | KEY-5 |
 | 1 | `quantgen_desktop/qscore.py` | KEY-5 |
 | 1 | `ui/bonds_page.py` | KEY-5 |
 | 1 | `ui/crypto_page.py` | KEY-5 |
@@ -245,7 +248,7 @@ core는 공급사 클라이언트를 직접 import하지 않고 아래 입구만
 
 | 입구 | 하는 일 | 막힌 공급원 (`off`·`company`) |
 |---|---|---|
-| `provider(module, source=None)` | 공급사 모듈. 표 `PROVIDER_MODULES`가 모듈마다 닿는 공급원 **전부**를 적음: `data.krx` → kis_quote·krx_open_api·opendart (`KRXGateway`는 KIS 다음 KRX Open API·OpenDART), `data.crypto.crypto_client` → crypto_public·upbit_account. 고정 로컬이 아닌 것을 모두 검사하고, 하나만 쓰는 호출은 `source=`로 그것만 (Upbit 잔고: `source="upbit_account"`) | `GatewayOff`. `data.net`·`gs_quant`·`gs_quant.timeseries`는 공급원 없음 (공유 HTTP 세션, 오프라인 계산) |
+| `provider(module, source=None)` | 공급사 모듈. 표 `PROVIDER_MODULES`가 모듈마다 닿는 공급원 **전부**를 적음: `data.krx` → kis_quote·krx_open_api·opendart, `data.crypto.crypto_client` → crypto_public·upbit_account. 고정 로컬이 아닌 것을 모두 검사하고, 하나만 쓰는 호출은 `source=`로 그것만 (Upbit 잔고: `source="upbit_account"`). **`source=`는 호출자의 선언일 뿐 모듈 전체에 대한 관문이 아닙니다**: 받은 모듈로 다른 공급원 클라이언트를 만들면 그것은 검사되지 않으므로, 그런 호출은 코드 검토에서 봅니다 | `GatewayOff`. `data.net`·`gs_quant`·`gs_quant.timeseries`는 공급원 없음 (공유 HTTP 세션, 오프라인 계산) |
 | `ficc()` | FRED·Yahoo 로더 (`local.FiccData`). 노출 이름 `EXPOSED` + 값·순수 도우미 `CONSTANTS` + `yfinance` 핸들 | 묶음 로더(`load_many`·`load_series`)의 `source="auto"`: 막힌 id만 SYNTHETIC+사유, 나머지는 읽음. 그 밖 (명시 `source=`, 단일 공급원 로더, `_yf_fetch`·`_fred_fetch`, `yfinance`): `GatewayOff`. `probe()`: 막힌 공급원은 부르지 않고 "off in profile …" 행 |
 | `keys_ready(source)` | `config.kis_ready()`·`fmp_ready()`·`upbit_ready()`·`ai_ready()` | `False` |
 | `local_key(source, part)` | `config.fmp_key()`·`anthropic_key()`·`gs_client_id()`·`gs_client_secret()` (내 PC에서 사용자 키로 공급사에 직접 보내는 기존 코드용) | `""` |
@@ -258,7 +261,8 @@ core는 공급사 클라이언트를 직접 import하지 않고 아래 입구만
 - **규칙 6 (키 바뀜 알림)** 은 `client(source)`로 받은 클라이언트에만 갑니다. `provider()`로 클래스를 받아 직접 만든 클라이언트 (예: `KISMarkets()`)는 지금까지처럼 만들 때 키를 읽습니다.
 - **`keys_ready`가 `False`일 때** 화면은 "키 없음"으로 보일 수 있습니다 (막힘과 구별 안 됨). 구별해 보여 주는 일은 KEY-5 (`status()`의 `state`·`route`를 그대로 그림)에 넘깁니다.
 - **규칙 4 (결과 꼬리표):** core 결과는 지금까지의 형 (`History`, `Series`, `CurvePanel` 등) 그대로입니다 ("앱 동작 동일"). 출처·길·지연·표시권은 `status()` 행과 `answer()`로 화면에 가며, 화면이 그 값을 그리는 일은 KEY-5입니다.
-- **앱 동작 동일 근거:** `tests/gateway_same_answer_acceptance.py`. 바뀐 core 호출 50가지 요청 (load_history의 모든 auto 분기와 키 유무, crypto 잔고·가격, market_cap FMP·요금제 오류, 파생·ETF의 KIS 분기, 채권·금리·구조화·환율 기본 로더, gsq와 가짜 gs_quant 등)을 공급사 모듈 자리에 고정 가짜를 넣고 main `9f76b07` (KEY-4 전)에서 돌린 답과 **가짜가 받은 인자** (실제 시그니처에 묶어 기록)를 `tests/fixtures/gateway/same_answers_main.json`에 적었고, 브랜치에서 같은 요청이 같은 답·같은 인자를 내는지 봅니다. 오늘 날짜에 따라 바뀌는 값은 적지 않습니다.
+- **`krx_gateway()`:** KRX 화면의 `KRXGateway`를 그때 만듭니다. KIS는 고정 로컬이라 늘 실제 클라이언트이고, KRX Open API·OpenDART가 막히면 그 하위 클라이언트를 `OffClient`(준비 안 됨, 상태 행에 사유, 행 목록은 빈 목록, 그 밖의 호출은 `GatewayOff`)로 바꿔 공급사에 닿지 않습니다. `main.py`는 이것을 `main()` 안에서 부르므로, routes.json이 깨졌거나 공급원이 꺼져도 앱은 시작합니다 (PR #133 2차 검토 A1, `tests/gateway_main_acceptance.py`).
+- **앱 동작 동일 근거:** `tests/gateway_same_answer_acceptance.py`. 바뀐 core 호출 51가지 요청 (load_history의 모든 auto 분기와 키 유무, crypto 잔고·가격, market_cap FMP·요금제 오류, 파생·ETF의 KIS 분기, 채권·금리·구조화·환율 기본 로더, gsq와 가짜 gs_quant 등)을 공급사 모듈 자리에 고정 가짜를 넣고 main `9f76b07` (KEY-4 전)에서 돌린 답과 **가짜가 받은 인자** (실제 시그니처에 묶어 기록)를 `tests/fixtures/gateway/same_answers_main.json`에 적었고, 브랜치에서 같은 요청이 같은 답·같은 인자를 내는지 봅니다. 오늘 날짜에 따라 바뀌는 값은 적지 않습니다. 비교는 구조·키·문자열·정수·길이는 정확히, 소수는 상대 1e-6·절대 1e-9 안 (반복 적합 결과는 numpy/BLAS 빌드·OS마다 끝자리가 1e-8 정도 움직임; 게이트웨이 변경은 정확 비교되는 호출 인자·입력열이 잡음). crypto 분석의 김치 프리미엄 ADF·GARCH·요일표 통계는 statsmodels 빌드에 따라 크게 달라 빼고, 그 입력값과 공급원 호출만 비교합니다.
 
 ---
 

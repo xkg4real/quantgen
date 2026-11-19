@@ -504,6 +504,7 @@ def cases():
         "execute_structuring": {"patches": rows, "call": lambda: structuring_analysis.execute_structuring(
             structuring_analysis.StructuringRequest())},
         "execute_fx": {"patches": rows, "call": lambda: fx_analysis.execute_fx(fx_analysis.FXRequest())},
+        "execute_fx.carry": {"patches": rows, "call": lambda: fx_analysis.execute_fx(fx_analysis.FXRequest(tool="carry"))},
         "gsq.with_keys": {"patches": _keys(gs=True), "call": lambda: _gsq_run(True)},
         "gsq.no_keys": {"patches": _keys(), "call": lambda: _gsq_run(False)},
     }

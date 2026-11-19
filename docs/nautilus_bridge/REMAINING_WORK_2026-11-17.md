@@ -78,7 +78,7 @@ handoff `68522f1`
 | KEY-2 | 자격증명 저장소 `core/credentials/**`(OS 키 보관함, `quantgen_cloud` 자리 없음), KIS 토큰 캐시 | D7-G 승인 뒤 브랜치, 병합은 F21 뒤 | 05 7절 작업 3, `MERGE_QUEUE.md` |
 | KEY-3 | 공급원 게이트웨이: 설계 문서 `docs/commercial/GATEWAY_DESIGN.md`, 코드 `core/gateway/**`와 경계 시험 | 설계는 지금, 코드는 D7-G 승인 뒤. 병합은 KEY-2 뒤 | 05 8절, `D7_ENV_STRUCTURE.md` 5장 |
 | KEY-4 | `core/` 18개 파일의 공급사 호출 46곳과 `main.py:54`를 게이트웨이로 | D7-G 승인 뒤, KEY-3 병합 뒤 | 05 8절, `MERGE_QUEUE.md` |
-| KEY-5 | 화면 쪽 25곳과 키·연결 화면(`status()` 행). **UI 세션 몫** | D7-G 승인 뒤, KEY-4 뒤, OS-F1 뒤 권장 | 05 8절, `D7_ENV_STRUCTURE.md` 5.6절, `MERGE_QUEUE.md` |
+| KEY-5 | 화면 쪽 22파일 44곳 (`tests/fixtures/gateway/known_direct_calls.json`의 화면 항목, 상한 `SCREEN_CEILING`; 2026-11-19 KEY-4 PR #133 기준. `quantgen_desktop/paper.py`의 `QuoteFeed()`처럼 동결 피드를 FMP 클라이언트 없이 만드는 곳 포함 — `fmp_client`를 넘기거나 `main.py`의 게이트웨이 하위 클래스를 공용 모듈로 옮겨 재사용)과 키·연결 화면(`status()` 행). **UI 세션 몫** | D7-G 승인 뒤, KEY-4 뒤, OS-F1 뒤 권장 | 05 8절, `D7_ENV_STRUCTURE.md` 5.6절, `MERGE_QUEUE.md` |
 | PAY-0 | 결제 문의 7건 초안 `docs/commercial/inquiries/` | 지금. 발송은 소유자 | 05 8절 |
 | PAY-2 | 결제 설계 문서(일정, 재시도, 상향·하향, 일할 계산, 해지, 가격 인상 고지). 시나리오 A만 | 지금 | 05 8절 |
 | PAY-1 | 데스크톱 로그인 `core/account/**`(같은 풀의 `quantgen-desktop` 클라이언트). 계정 화면은 UI 세션 | 웹 계정 공개 뒤 | 05 8절 |

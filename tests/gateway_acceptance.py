@@ -261,6 +261,11 @@ class LocalTest(Base):
         self.assertEqual(gw.client("crypto_public"), "fake-crypto")
         self.assertIs(gw.client("crypto_public"), gw.client("crypto_public"))
 
+    def test_ficc_constants_and_loaders_do_not_overlap(self):
+        """C2: a name is either a checked loader (EXPOSED) or a pure value (CONSTANTS), never both: a CONSTANTS name
+        is handed out without any route check."""
+        self.assertEqual(set(local.FiccData.CONSTANTS) & set(local.FiccData.EXPOSED), set())
+
     def test_ficc_exposes_only_listed_loaders(self):
         ficc = local.FiccData()
         self.assertTrue(callable(ficc.load_series))

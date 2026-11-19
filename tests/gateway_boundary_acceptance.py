@@ -20,8 +20,9 @@ file, each direct way to a provider:
 Provider modules themselves are allowed: core/gateway/ and core/ficc/data.py (the FRED/Yahoo client the gateway
 wraps). tests/fixtures/gateway/known_direct_calls.json lists today's findings per file, by content (not line
 number). Any finding not in the list fails; any listed finding that is gone fails too, so the list cannot go
-stale. A file that cannot be read or parsed fails the test. KEY-4 emptied the core/ and main.py entries
-(2026-11-19); KEY-5 (UI session) empties the screen entries.
+stale. A file that cannot be read or parsed fails the test. KEY-4 emptied the core/ and main.py entries except
+the one FROZEN line of the S4-frozen core/engine/feed.py (2026-11-19); KEY-5 (UI session) empties the screen entries
+(SCREEN_CEILING caps them meanwhile).
 
 This test also runs in the Compliance workflow, which runs on every pull request (no path filter).
 """
@@ -62,7 +63,9 @@ FICC_SAFE = _ficc_constants()
 # UNTOUCHED list). Its own FMP import stays; the app builds the feed's FMP client through the gateway in main.py.
 FROZEN = {"core/engine/feed.py": ["import:data.fmp.FMPQuoteClient"]}
 # KEY-5 (UI session) lowers this; a regenerated list may never grow past it.
-SCREEN_CEILING = {"files": 21, "sites": 43}
+# 22 / 44 since the PR #133 second review added quantgen_desktop/paper.py (it builds the frozen QuoteFeed without an
+# FMP client, so the feed reaches FMP itself; KEY-5 passes a gateway client or reuses main.py's subclass).
+SCREEN_CEILING = {"files": 22, "sites": 44}
 SCREEN_FILES = (
     "quantgen_desktop/app.py",
     "quantgen_desktop/home_view.py",
@@ -70,6 +73,7 @@ SCREEN_FILES = (
     "quantgen_desktop/market_rankings.py",
     "quantgen_desktop/market_summary.py",
     "quantgen_desktop/market_tools.py",
+    "quantgen_desktop/paper.py",
     "quantgen_desktop/qscore.py",
     "quantgen_desktop/watchlist_live.py",
     "ui/bonds_page.py",
@@ -86,12 +90,15 @@ SCREEN_FILES = (
     "ui/settings_page.py",
     "ui/structuring_page.py",
 )
+# The S4-frozen engine feed builds its own FMPQuoteClient when it is given none (core/engine/feed.py, FROZEN below).
+# Building one without fmp_client is a direct FMP access; main.py uses its gateway subclass instead.
+FROZEN_FEED = "core.engine.feed.QuoteFeed"
 KEY_FUNCTIONS = {"kis_ready", "kis_credentials", "fmp_key", "fmp_ready", "opendart_key", "opendart_ready", "krx_key",
                  "krx_ready", "anthropic_key", "ai_ready", "gs_client_id", "gs_client_secret", "upbit_ready",
                  "upbit_keys", "krx_provider_status", "quant_provider_status", "crypto_provider_status",
                  "ficc_provider_status"}
 ANTHROPIC_URL = ("https://api.anthropic.com", "http://api.anthropic.com")
-DYNAMIC = {"importlib.import_module", "builtins.__import__", "__import__"}
+DYNAMIC = {"importlib.import_module", "importlib.__import__", "builtins.__import__", "__import__"}
 
 
 def _provider(name: str) -> bool:
@@ -163,10 +170,13 @@ def _dynamic_name(node: ast.Call, module: str, is_package: bool) -> list[str]:
             return package_of_file
         if isinstance(value, ast.Name) and value.id == "__name__":
             return module
+        if _dotted(value) == ["__spec__", "parent"]:
+            return package_of_file
         return _literal(value)
 
     name = _literal(node.args[0]) if node.args else ""
-    package, fromlist = "", []
+    package, fromlist, level = "", [], 0
+    is_import = len(node.args) > 2 or any(kw.arg in ("globals", "locals", "fromlist", "level") for kw in node.keywords)
     for kw in node.keywords:
         if kw.arg == "name":
             name = _literal(kw.value)
@@ -174,10 +184,18 @@ def _dynamic_name(node: ast.Call, module: str, is_package: bool) -> list[str]:
             package = package_value(kw.value)
         elif kw.arg == "fromlist" and isinstance(kw.value, (ast.List, ast.Tuple)):
             fromlist = [_literal(e) for e in kw.value.elts]
-    if len(node.args) > 1 and not package:
+        elif kw.arg == "level" and isinstance(kw.value, ast.Constant) and isinstance(kw.value.value, int):
+            level = kw.value.value
+    if len(node.args) > 1 and not package and not is_import:
         package = package_value(node.args[1])
     if len(node.args) > 3 and isinstance(node.args[3], (ast.List, ast.Tuple)):   # __import__(n, g, l, fromlist)
         fromlist = [_literal(e) for e in node.args[3].elts]
+    if len(node.args) > 4 and isinstance(node.args[4], ast.Constant) and isinstance(node.args[4].value, int):
+        level = node.args[4].value                                              # __import__(n, g, l, f, level)
+    if level > 0:                                                               # __import__ relative: as "." * level
+        name, package = "." * level + name, package_of_file
+    if name.startswith(".") and not package:
+        return [name] + [f"{name}.{item}" for item in fromlist if item]       # unresolved relative: kept, fails closed
     if name.startswith(".") and package:
         level = len(name) - len(name.lstrip("."))
         pkg = package.split(".")
@@ -245,16 +263,26 @@ def findings(source: "str | bytes", module: str = "", is_package: bool = False) 
             if target in DYNAMIC or (parts and parts[-1] == "import_module" and len(parts) == 1
                                      and bound.get(parts[0], "") == "importlib.import_module"):
                 for name in _dynamic_name(node, module, is_package):
-                    if _provider(name) or name == FICC or _covered(name) or _parent_package(name):
+                    if _provider(name) or name == FICC or _covered(name) or _parent_package(name) \
+                            or name.startswith("."):                          # a relative name it cannot resolve
                         found.append(f"dynamic:{name}")
                         break
             if parts and len(parts) == 2 and parts[0] in config_names and parts[1] in KEY_FUNCTIONS:
                 found.append(f"call:config.{parts[1]}")
+            if target == FROZEN_FEED and len(node.args) < 2 and not any(kw.arg == "fmp_client"
+                                                                        for kw in node.keywords):
+                found.append(f"call:{FROZEN_FEED}(no fmp_client)")       # its own FMP path, outside the gateway
             if parts and len(parts) == 1 and parts[0] == "getattr" and len(node.args) >= 2:
                 obj = node.args[0]
                 attr = _literal(node.args[1])
                 if isinstance(obj, ast.Name) and obj.id in config_names and attr in KEY_FUNCTIONS:
                     found.append(f"ref:config.{attr}")
+                elif attr and _dotted(obj) and _dotted(obj)[0] in bound and _dotted(obj)[0] not in counted \
+                        and not _covered(".".join([bound[_dotted(obj)[0]]] + _dotted(obj)[1:])):
+                    chain = _dotted(obj)                                        # (an obj already counted as attr: once)
+                    reached = _covered(".".join([bound[chain[0]]] + chain[1:] + [attr]))
+                    if reached:                                                 # getattr(<imported package>, "x")
+                        found.append(f"attr:{reached}")
         elif isinstance(node, ast.Attribute):
             parent = parents.get(id(node))
             if isinstance(parent, ast.Attribute):
@@ -419,6 +447,31 @@ class BoundaryTest(unittest.TestCase):
         for source, expected in cases.items():
             with self.subTest(source=source):
                 self.assertEqual(findings(source, "core.ficc.insights"), sorted(expected))
+
+    def test_detector_catches_the_second_review_forms(self):
+        """PR #133 second review (B2, C2, C3)."""
+        cases = {
+            "from core.engine.feed import QuoteFeed\nQuoteFeed()\n": ["call:core.engine.feed.QuoteFeed(no fmp_client)"],
+            "import importlib\nimportlib.__import__('data.krx')\n": ["dynamic:data.krx"],
+            "import data\ngetattr(data, 'kis_markets').KISMarkets()\n": ["attr:data.kis_markets"],
+            "from core import ficc\ngetattr(ficc.data, '_yf')\n": ["attr:core.ficc.data"],
+            "import importlib\nimportlib.import_module('.data', package=__spec__.parent)\n": ["dynamic:core.ficc.data"],
+            "__import__('data', globals(), locals(), ['krx'], 3)\n": ["dynamic:data"],
+            "import importlib\nimportlib.import_module('.x', package=pkg)\n": ["dynamic:.x"],   # fails closed
+        }
+        for source, expected in cases.items():
+            with self.subTest(source=source):
+                self.assertEqual(findings(source, "core.ficc.insights"), sorted(expected))
+        for source in ("from core.engine.feed import QuoteFeed\nQuoteFeed(g, fmp_client=c)\n",
+                       "from core.engine.feed import QuoteFeed as F\nclass Q(F):\n    pass\n"):
+            with self.subTest(source=source):
+                self.assertEqual(findings(source, "main"), [])
+
+    def test_ficc_allowlist_is_pinned(self):
+        """C2: the names of core.ficc.data the boundary lets through are exactly these pure values and helpers; adding
+        a fetcher (_fred_fetch, _provider_rows, _cache_get...) to FiccData.CONSTANTS fails here first."""
+        self.assertEqual(FICC_SAFE, frozenset({"G10_KRW", "Series", "CurvePanel", "CurveSnapshot", "_period_for",
+                                               "synthetic_series", "synthetic_curve_panel", "synthetic_fx"}))
 
     def test_coding_cookie_is_honoured(self):
         """B3: the scan gives ast the file's bytes, so code hidden behind a PEP 263 cookie is seen as Python runs it."""

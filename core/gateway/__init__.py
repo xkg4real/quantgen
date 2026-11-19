@@ -8,15 +8,25 @@ The app calls only:
 - ``stream(source)``: the streaming client of a source (KIS realtime today);
 - ``answer(source, data, ...)``: wraps a result with source, route, delay and display right (D7-G rule 4).
 
-How core/ reaches the existing local clients (KEY-4; GATEWAY_DESIGN.md section 7):
-- ``provider(module)``: a provider module (``data.kis_markets``, ``data.fmp.quote_client``, ``gs_quant.session``...)
-  for code that builds the client itself; refused with GatewayOff when its source is off. Looked up at call time,
-  so whatever the provider module holds then (a test's patch included) is what the caller gets, as before;
+How core/ and main.py reach the existing local clients (KEY-4; GATEWAY_DESIGN.md section 7a). Each refuses a source
+that is ``blocked()``: off, or on the company route (served only through ``client()``; the user's own key is never
+used while the screens say "company"). Fixed-local sources (kis_quote, kis_account, upbit_account) never read
+routes.json.
+- ``provider(module, source=None)``: a provider module (``data.kis_markets``, ``data.fmp.quote_client``,
+  ``gs_quant.session``...) for code that builds the client itself; checked against every non-fixed source the module
+  reaches, or only ``source=`` (the caller's own statement of which one it uses: a declaration, not a gate over the
+  rest of the module). Looked up at call time, so whatever the provider module holds then (a test's patch included)
+  is what the caller gets, as before;
+- ``krx_gateway()``: the KRX screen's KRXGateway, with the KRX Open API / OpenDART sub-clients replaced by an
+  OffClient when blocked;
 - ``ficc()``: the FRED/Yahoo loaders of core/ficc/data.py, each call checked against the ``fred`` and ``yahoo``
   routes of the providers it would use;
 - ``keys_ready(source)``, ``local_key(source, part)``: the same config.py functions as before (``config.kis_ready``,
-  ``config.fmp_key``...), looked up at call time; ``suspend_key`` and ``status_loaders`` likewise;
+  ``config.fmp_key``...), looked up at call time; ``suspend_key`` (single-threaded self-checks) and ``status_loaders``
+  likewise;
 - ``endpoint(source)``: a provider URL core needs (the Anthropic messages URL).
+Five names are bound once at import, not at call time (all fixed-local or source-less): main.py ``QuoteFeed``'s base,
+gsq ``gs_quant``, history ``_requests`` (data.net session), risk ``_gts`` and quant insights ``_API_URL``.
 
 Which route serves a source comes from ``routes.json`` and the active profile (``core.app_identity.GATEWAY_PROFILE``;
 ``personal`` today). The company route stays closed until ``core.app_identity.company_data_server_configured()``.
@@ -38,7 +48,7 @@ from core.gateway.sources import SOURCES
 
 __all__ = ["client", "ready", "status", "stream", "answer", "route_of", "profile", "reload", "GatewayAnswer",
            "GatewayOff", "RouteError", "SOURCES", "provider", "ficc", "keys_ready", "local_key", "suspend_key",
-           "status_loaders", "endpoint", "PROVIDER_MODULES", "blocked"]
+           "status_loaders", "endpoint", "PROVIDER_MODULES", "blocked", "krx_gateway", "OffClient"]
 
 
 class GatewayOff(RuntimeError):
@@ -324,7 +334,8 @@ def local_key(source: str, part: str = "key") -> str:
 @contextlib.contextmanager
 def suspend_key(source: str, part: str = "key"):
     """Make the key read as absent while the block runs (self-checks that must not reach the network). Same swap
-    of the config function as the code it replaces, restored on exit."""
+    of the config function as the code it replaces, restored on exit. Single-threaded use only: it replaces the
+    module-level config function, so another thread reading the key meanwhile also sees it absent."""
     cfg = _config()
     name = _CONFIG_FUNCTIONS[source][part]
     saved = getattr(cfg, name)
@@ -343,3 +354,49 @@ def status_loaders() -> tuple:
 
 def endpoint(source: str) -> str:
     return _local.ENDPOINTS[source]
+
+
+class OffClient:
+    """Stands in for a sub-client whose source is blocked (off, or on the company route): it answers as an
+    unconfigured client does (``ready`` False, a status row with the reason, empty rows where the real client gives
+    rows) and never reaches the provider. Any other call raises GatewayOff."""
+
+    def __init__(self, source: str, why: str, empty: tuple = ()):
+        self.source = source
+        self.reason = f"{source} is {why} in profile {profile()}"
+        self.ready = False
+        self.has_key = False
+        self._empty = frozenset(empty)
+
+    def status(self) -> dict:
+        return {"ready": False, "reason": self.reason}
+
+    def probe(self) -> dict:
+        return {"ready": False, "reason": self.reason}
+
+    def __getattr__(self, name: str):
+        if name.startswith("__"):
+            raise AttributeError(name)
+        if name in self._empty:
+            return lambda *a, **k: []
+        reason = self.reason
+
+        def refused(*a, **k):
+            raise GatewayOff(reason)
+        return refused
+
+
+def krx_gateway() -> Any:
+    """The KRX screen's KRXGateway (data/krx/gateway.py: KIS first, then the KRX Open API and OpenDART), built now.
+    KIS is fixed-local (rule 1), so it is always the real client; the KRX Open API and OpenDART sub-clients are
+    replaced by an OffClient when their source is blocked, so a blocked provider is never reached and the screen
+    says why. Building it reads routes.json at call time only, never at import: a broken routes file does not stop
+    the app (routes.py), it turns the two non-fixed sub-clients off."""
+    gateway = importlib.import_module("data.krx").KRXGateway()
+    why = blocked("krx_open_api")
+    if why:
+        gateway.krx = OffClient("krx_open_api", why, empty=("all_quotes", "indices"))
+    why = blocked("opendart")
+    if why:
+        gateway.dart = OffClient("opendart", why)
+    return gateway
