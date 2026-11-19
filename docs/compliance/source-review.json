@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "6bcde06c967ea24f46bf879e559a72a54023533d5200d02437073a0f4710c15a",
+    ".github/workflows/runtime-smoke.yml": "eec429393c64495052c95036d22b6d6e41381280e2b705cd67b025fda7721910",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -803,163 +803,163 @@
   "reviews": {
     "1": {
       "document_sha256": "316e056ea90165dafa910d384a9ba9b98cd111f592ca03c7b877bcd65d772ac9",
-      "source_digest": "dff13c7da9c75d83da1f6cddea3ceff353e4544c55824da80d0505132a59146f",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.622945+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "4c7daef97df2892a256f009a9586948fee7745cdcf0f1c0266ba01d210c41814",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.745556+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "dff13c7da9c75d83da1f6cddea3ceff353e4544c55824da80d0505132a59146f",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.625227+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "4c7daef97df2892a256f009a9586948fee7745cdcf0f1c0266ba01d210c41814",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.748419+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "c91ea2a3457567bd5d1cc0eb0e5b34977b0348439e035be79a1e7c6160e62751",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.627738+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "7a49a1fd1dd049f80162419610fbdd0f086a23d9ea8b6c476b645816e5165592",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.750762+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "e5c8cc0c661c51c8954dfbdaf494b2eaed289af57d1729f3197b95856d5b77b3",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.629748+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "d46e856fc81bd4fa60f82c1481244d2eebe706566bec29cbb54d2c9c74bedd11",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.752763+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "8fea791dc35d8b992422285cc72a8a0444ad9594c8df94b933f6c9ff709581cf",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.631577+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "b9125ca490a69649d671463269087e84c93389fd6d19213babdb90768f72f4d3",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.754956+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "b2e7c1d50bc7badc876a1d04f0aa2151a625352a656fe1198c78bc164a175a58",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.634012+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "5e7dbbd3bd75ef496b49fe0f889bff1fce13123c273b4b93347cd1e512e3078a",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.756727+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "7": {
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
-      "source_digest": "dff13c7da9c75d83da1f6cddea3ceff353e4544c55824da80d0505132a59146f",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.635749+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "4c7daef97df2892a256f009a9586948fee7745cdcf0f1c0266ba01d210c41814",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.759001+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "8": {
       "document_sha256": "b1ebf5f8469f355bc6d261789b5ffd402282fea07c83add564ed0dc2dc2fb775",
-      "source_digest": "b2e7c1d50bc7badc876a1d04f0aa2151a625352a656fe1198c78bc164a175a58",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.637654+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "5e7dbbd3bd75ef496b49fe0f889bff1fce13123c273b4b93347cd1e512e3078a",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.760800+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "063d6ae26b09e462e28fac8a00b214d24dba94477cf52a0212dd4dac405da6c0",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.639950+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "1ce73a245b377a8542ce1d71732690a9c1f2e0a1fac4968aef0e11915d99ecb1",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.762910+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "272ffdb9b4105b2fd766407259f2b9e391d5970b9a99343effa56d9206b3caea",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.641793+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "fb9f6489895efc8e80b5534f2749a3921c0b010235752eebaec6c72ad280f926",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.764833+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "20ad4e868bbbde401048b7b946ff17f55638e74f6f91d9bb17b130a379f1db71",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.643522+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "6cdec700933b8b47dc376b0d41c2bd5f7b536456ac899e69b7d359f14fefc9c7",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.767165+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "c51e5d2b37f39710cbf5cc99edfc154b2dc0cdf87d0829fbd7b6144d2b8dca4c",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.645239+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "87562c3a2455c70b3a314520b6ad084523fba9820181e2ad2e6d6cfba6df13aa",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.769106+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "063d6ae26b09e462e28fac8a00b214d24dba94477cf52a0212dd4dac405da6c0",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.647502+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "1ce73a245b377a8542ce1d71732690a9c1f2e0a1fac4968aef0e11915d99ecb1",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.770867+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "063d6ae26b09e462e28fac8a00b214d24dba94477cf52a0212dd4dac405da6c0",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.649267+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "1ce73a245b377a8542ce1d71732690a9c1f2e0a1fac4968aef0e11915d99ecb1",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.773021+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "063d6ae26b09e462e28fac8a00b214d24dba94477cf52a0212dd4dac405da6c0",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.650975+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "1ce73a245b377a8542ce1d71732690a9c1f2e0a1fac4968aef0e11915d99ecb1",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.774749+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "d0607cba1b038bce86204257003038e49f5ba9bf3c2b30e8d8abdf1ee6a06e19",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.653393+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "45069c480e03ad6b066d4f754915a5fa98b62b051cd4b016ffb984561e0d34fe",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.776548+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "b2e7c1d50bc7badc876a1d04f0aa2151a625352a656fe1198c78bc164a175a58",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.655291+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "5e7dbbd3bd75ef496b49fe0f889bff1fce13123c273b4b93347cd1e512e3078a",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.778296+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "dff13c7da9c75d83da1f6cddea3ceff353e4544c55824da80d0505132a59146f",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.657660+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "4c7daef97df2892a256f009a9586948fee7745cdcf0f1c0266ba01d210c41814",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.780075+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "1be37127892bb304b829d35f4f090a79434b7620f54abc0966064a8aefc0c53c",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.659450+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "cf2ee03761595eb1cfac5d809eabe6cfe4fc8533ad12e5492378d3928ca1a422",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.781961+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     },
     "20": {
       "document_sha256": "27989f5f7b39610afbcb2f3c464db2f60e09dd4091bf2edfe9a96b18dd3f8c8e",
-      "source_digest": "dff13c7da9c75d83da1f6cddea3ceff353e4544c55824da80d0505132a59146f",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
-      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:56:34.661336+00:00",
-      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
+      "source_digest": "4c7daef97df2892a256f009a9586948fee7745cdcf0f1c0266ba01d210c41814",
+      "reviewed_by": "Claude CI concurrency review (GH-1)",
+      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
+      "reviewed_at": "2026-11-19T06:09:48.783565+00:00",
+      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
     }
   }
 }
