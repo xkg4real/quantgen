@@ -6,11 +6,11 @@ task: payments-account-keys
 cycle: 2026-11-17
 done_ids: KEY-3/design, KEY-3, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a
 next_ids: KEY-4, PAY-0, PAY-2
-updated_at: 2026-11-19T19:50:00+09:00
+updated_at: 2026-11-19T20:40:00+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: owner
 work_branch: claude/payments-key4-20261119
-work_commit: c9dfb99
+work_commit: c8c1b61
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -24,6 +24,8 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-19 20:40 갱신 — KEY-4 준비 완료, 메인의 "병합: PAYMENTS_ACCOUNT_KEYS" 대기:** 브랜치 `claude/payments-key4-20261119` @ `c8c1b61` (`c9dfb99` KEY-4 코드 + `c8c1b61` OWNER_STEPS v1.3: 소유자 질문 반영, AWS 로그인 계정·MFA 찾는 길·요금 알림·법인 때 계정 이메일). PyQt 6.12.0 포함 넓은 비교: 관련 138개 모듈 main 1,217 / 브랜치 1,220 시험, 실패 같음 (기존 1건 `adoption_strategy_rules` 환경). `desktop_home_markets_markets` 47개 양쪽 OK (긴 시간 제한으로 따로 실행). 다음: 차례가 오면 최신 main merge → `python -m tools.compliance.check --refresh-baseline --reviewed-by "..." --review-note "..."` → `--check` PASS → PR (본문에 잔여 9건 처리, 앱 동작 동일 근거, 회귀 표, 코드 지문 10c27010 그대로). 소유자 AWS 1단계 진행 중 (2026-11-19: 계정 유료 플랜, 개인 이메일).
 
 **2026-11-19 19:50 갱신 — KEY-4 코드 완료, PR 전:** 브랜치 `claude/payments-key4-20261119` @ `c9dfb99` (push함, PR 없음). core 27개 파일·main.py의 직접 호출 92곳을 모두 게이트웨이로 (경계 목록은 화면만 21파일 43곳). 잔여 9건: 1~8 처리 (9는 정보). 입구: `provider(module)`, `ficc()` (호출마다 fred/yahoo 길 확인 → `yahoo: off`가 core 경로에서 실제로 Yahoo만 막음), `keys_ready`, `local_key`, `suspend_key`, `status_loaders`, `endpoint`. "앱 동작 동일": `tests/gateway_same_answer_acceptance.py` 24개 요청을 main `9f76b07`에서 돌린 답(`tests/fixtures/gateway/same_answers_main.json`)과 같음, 고장을 넣으면 실패 확인. 회귀: CI 모듈 목록 main 790 / 브랜치 797, 실패 같음 (환경 2건); 관련 시험 138개 모듈 main 828 / 브랜치 831, 실패 같음. 코드 지문 `10c27010…` 그대로. **남은 것:** PyQt 포함 넓은 비교 결과 기록 → 메인에 준비 알림 → "병합: PAYMENTS_ACCOUNT_KEYS" 뒤에 최신 main merge → 기준선 갱신 (`--refresh-baseline` 뒤 `--check`) → PR.
 
