@@ -1,3 +1,107 @@
+# 2026-11-20 정식 회원 계정 (D11, ACC-1~10) — 플래그 꺼진 채 구현, 미리보기 준비
+
+작성: 웹사이트 세션 (Claude, PC 클론 `C:\Users\whydi\OneDrive\Desktop\website`). 이 절이 아래 기록보다 최신이다.
+
+## 소유자 요청 (원문, 2026-11-20)
+
+> [소유자 → 웹사이트 세션] 정식 회원 계정 (D11) 추가 정보 (2026-11-20)
+> - 운영 사용자 풀: 시드니 ap-southeast-2
+>   - User pool ID: ap-southeast-2_pQEsrAvvb
+>   - Web client ID (quantgen-web, 비밀값 없는 SPA): 77qi9vi90i118rck1ppisbca7r
+> - 소유자 결정 (2026-11-20): 운영자는 개인 (회사 표시 "(주)" 쓰지 않음, 문구는 메인 세션 정책 PR 병합 뒤 원문 재생성),
+>   문의·개인정보 메일 contact@quantgeneration.com (ACC-8), 최소 연령 무료 만 14세 (ACC-1 그대로) / 유료 만 19세 (나중).
+> - 공개 전까지 AUTH_UI_ENABLED=false 유지.
+> - 공개 전 소유자 시험용으로, 플래그를 켠 미리보기 주소 (공개 주소가 아닌 곳) 하나가 필요합니다. 준비되면 주소를 알려 주세요.
+> - 결과는 WEBSITE_AWS_SESSION_CURRENT.md에 기록해 주세요.
+
+요구사항 원문은 quantgen main `docs/commercial/accounts/ACCOUNT_SETUP.md` 3부 (ACC-1~ACC-10)와 4.4절 동의 문구.
+
+## 상태 한 줄
+
+구현 끝, **main에는 병합하지 않음**. 공개 사이트는 바뀌지 않았다 (`https://quantgeneration.com/` HTML SHA-256 `1dbd9ded79bd25a964061ac896a03bd7846f6d264428ca2dfb7b3aaad6bb14de`, 2026-11-20 확인). 실제 운영 풀로는 아직 가입·로그인을 한 번도 해 보지 않았다 (소유자 수동 시험 대기).
+
+## 한 일
+
+- 저장소 `xkg4real/website`, 브랜치 **`auth-preview`**, 커밋 **`2d3bf4c`** (push 됨). main은 `39cee5c` 그대로.
+- 코드 위치: `tools/auth/` (`auth.js` 화면·세션, `srp.js` SRP 로그인 계산, `qr.js` 인증 앱 QR, `auth.css`, 시험 `*.test.mjs`, `e2e/*.cjs`), `tools/build.mjs` (플래그), `tools/serve.mjs` (로컬 미리보기).
+- `site/index.html`, `authoring/**`, `tools/check.mjs`는 건드리지 않았다. 정책 재생성(`npm run policy:rebuild`)이 `site/index.html`을 통째로 다시 쓰고 `build2/build.py`가 출처 해시에 묶여 있어서, 인증 코드는 빌드 때 `dist/index.html`에만 끼워 넣는다.
+- 외부 라이브러리 없음 (설치 금지 규칙). SRP와 QR은 직접 작성. 런타임 CDN 없음.
+
+### 플래그 (`tools/build.mjs`)
+
+| 조건 | 결과 |
+|---|---|
+| `AUTH_UI_ENABLED`가 `true`가 아님 (기본, 모든 브랜치) | `dist/index.html` = `site/index.html` 바이트 복사. SHA `1dbd9ded…` 그대로 |
+| `AUTH_UI_ENABLED=true`, 브랜치 `auth-preview` 또는 로컬 | 인증 화면·CSP·바닥글 변경을 넣어 빌드 (현재 SHA `1030cc85…`) |
+| `AUTH_UI_ENABLED=true`, 그 밖의 브랜치 (main 포함) | `AUTH_UI_RELEASE=true`가 없으면 **빌드 실패** (모든 브랜치용 환경 변수가 main에 새는 사고 방지) |
+| `AUTH_POOL_ID` + `AUTH_CLIENT_ID` | 다른 풀로 바꿔 빌드 (ACC-9 개발 풀 시험용). 형식 검사 |
+
+### 화면 (플래그 켰을 때, 한/영·밝음/어두움·320px)
+
+- ACC-1 `#/signup`: 이메일, 비밀번호, 확인, 입력 중 비밀번호 조건 표시. [필수] 이용약관, [필수] 만 14세 이상, [선택·기본 해제] 소식 메일, 체크 없는 개인정보 안내 문장 + 처리방침 링크 (4.4절 문구 그대로). `SignUp` 때 `custom:terms_ver`·`custom:privacy_ver`(QG_DOCS의 문서 public_revision, 지금 `2026-11-11.1`·`2026-11-13.1`), `custom:age14=Y`, `custom:consent_at`, `custom:mkt_opt`, `custom:mkt_at` 기록.
+- ACC-2 `#/confirm`: 6자리 코드, 코드 다시 받기 (60초 대기, 횟수 제한 안내), 잘못된·만료 코드 안내.
+- ACC-3 `#/login`: SRP 로그인, MFA 단계 (인증 앱·이메일, 둘 다면 선택), 새 비밀번호 요구 처리. 오류는 "이메일 또는 비밀번호가 맞지 않습니다." 하나. 로그인 유지 없음.
+- ACC-4 `#/reset`: 비밀번호 찾기 → 코드 + 새 비밀번호. 관리자가 재설정을 건 회원도 로그인에서 이리로 옴.
+- ACC-5 `#/account`: 내 정보, 이메일 변경 (새 주소 코드 확인), 비밀번호 변경, 2단계 인증 (인증 앱 QR + 설정 키, 이메일 코드) 켜기·끄기, 소식 메일 켜기·끄기, 로그아웃·모든 기기에서 로그아웃, 내 정보 JSON 내려받기 (토큰 없음), 회원 탈퇴 ("탈퇴"/"DELETE" 입력 후 즉시 삭제, 결과 화면).
+- ACC-6 머리글: 로그인하면 "내 계정"·"로그아웃". 플래그 꺼지면 지금 문구 그대로.
+- ACC-7: CSP 메타 (`connect-src 'self' https://cognito-idp.ap-southeast-2.amazonaws.com`), 토큰은 메모리 + 새로고침 토큰만 `sessionStorage['qg-auth-refresh']`, 로그 출력 없음, 분석 스크립트 없음, 자동완성 `new-password`/`current-password`/`one-time-code`.
+- ACC-8 바닥글: 개인정보 처리방침 링크 굵게, "문의·환불·이의제기·개인정보 요청 contact@quantgeneration.com" (영문 동일).
+
+## 검증 (2026-11-20, 이 PC)
+
+| 검사 | 결과 |
+|---|---|
+| `node tools/auth/srp.test.mjs` (서버 쪽 독립 계산과 서명 일치, 한글 비밀번호, 틀린 비밀번호) | PASS |
+| SRP 식을 AWS 원본(amazon-cognito-identity-js `AuthenticationHelper.js`·`CognitoUser.js`·`DateHelper.js`)과 한 줄씩 대조 (검토 에이전트, WebFetch) | 불일치 없음 |
+| `node tools/auth/qr.test.mjs` (Python `qrcode`와 모듈 단위 비교, 마스크 0~7 × 4개 입력) | 32/32 일치 |
+| `node tools/check.mjs` | PASS |
+| 플래그 끈 빌드 SHA = `site/index.html` SHA | 둘 다 `1dbd9ded…` |
+| `AWS_BRANCH=main AUTH_UI_ENABLED=true` 빌드 | 거부됨 (의도대로) |
+| `tools/auth/e2e/auth_matrix.cjs` (9개 경로 × 한/영 × 밝음/어두움 × 1280/320, CSP 위반·콘솔 오류·가로 스크롤) | 72/72 통과 |
+| `tools/auth/e2e/auth_flow.cjs` (Cognito를 흉내 낸 가짜 응답으로 가입 → 코드 → SRP 로그인 + MFA → 계정 기능 → 탈퇴, 검토 지적 회귀 시험 포함) | 21/21 통과 |
+| 검토 4방향 (프로토콜, 보안, 요구사항, 접근성) | 지적 21건 모두 확인·수정 후 위 시험 재통과 |
+
+**운영 클라이언트 확인 (사용자를 만들지 않는 호출만, 2026-11-20)**: CORS 허용, `USER_PASSWORD_AUTH` 꺼짐, 없는 사용자에게도 SRP 질문을 돌려줌 (계정 존재 숨김 켜짐), 새로고침 토큰 흐름 켜짐, 사용자 정의 속성 6개 쓰기 허용, 비밀번호 최소 10자·대문자·소문자·숫자. 시험용 가입은 모두 비밀번호 규칙 위반으로 실패하게 만들어 계정이 생기지 않았다.
+
+## ACC-10 소유자에게: 앱 클라이언트 설정 확인표 (ACCOUNT_SETUP 1.3·D11 3.3과 대조)
+
+| # | 설정 | 기대값 | 밖에서 확인한 결과 |
+|---|---|---|---|
+| C1 | 종류 | SPA, 비밀값 없음 | 맞음 (비밀값 없이 SRP 질문이 옴) |
+| C2 | 인증 흐름 | SRP + 새로고침만 | 비밀번호 직접 로그인 꺼짐, SRP·새로고침 켜짐 확인 |
+| C3 | 토큰 유효 | ID·액세스 60분, 새로고침 7일 | 밖에서 확인 불가 → 콘솔에서 확인 |
+| C4 | 토큰 폐기 | 켬 | 밖에서 확인 불가 → 콘솔 (꺼져 있으면 로그아웃 때 폐기 요청이 실패하지만 화면은 로그아웃됨) |
+| C5 | 계정 존재 숨김 | 켬 | 켜짐 확인 |
+| C6 | 읽기 권한 | email, email_verified, 사용자 정의 6개 | 밖에서 확인 불가 → 콘솔 |
+| C7 | 쓰기 권한 | email, 사용자 정의 6개 | 사용자 정의 6개 쓰기 허용 확인 |
+| P10 | 비밀번호 | 10자, 숫자·소문자·대문자 | 확인. **특수문자 필수 여부는 모름** (계정을 만들지 않고는 확인 불가). WORKBOARD OA-04처럼 특수문자를 켜면 화면이 Cognito 오류 문구를 받아 안내하지만, 입력 중 조건 목록에는 아직 없음 → 켰다면 알려 주세요 |
+| P12 | MFA | 선택, 인증 앱 + 이메일 | 밖에서 확인 불가. 이메일 MFA는 SES 연결이 필요 |
+
+## 미리보기 주소
+
+1. **지금 바로 (이 PC 안에서만)**: `http://localhost:8765/#/signup` — 웹사이트 세션이 `tools/serve.mjs`로 띄운 로컬 서버. 실제 운영 풀에 연결됨. 이 PC에서만 열리고 세션이 끝나면 꺼짐.
+2. **외부에서도 여는 비공개 주소 (소유자 AWS 작업 필요)**: `https://auth-preview.d3nfykcepl196i.amplifyapp.com` — 2026-11-20 확인 시 404 (브랜치 자동 연결 꺼져 있음). 소유자가 Amplify 콘솔에서:
+   1. 앱 → **Connect branch** (브랜치 추가) → `auth-preview`.
+   2. **Environment variables** → `AUTH_UI_ENABLED` = `true`, **브랜치 덮어쓰기(override)를 `auth-preview`에만**. "All branches"로 넣으면 main 빌드가 실패하도록 막아 두었지만, 그래도 브랜치 덮어쓰기로 넣는다.
+   3. **Access control** → `auth-preview` 브랜치에 사용자 이름·비밀번호 (공개 차단). 이걸 안 하면 주소를 아는 누구나 운영 풀에 가입할 수 있다.
+   4. 빌드가 끝나면 위 주소로 시험.
+
+## 플래그 켜기(공개) 전 체크리스트
+
+1. 메인 세션 정책 PR 병합 → 이 저장소에서 정책 원문 재생성 ("(주)" 표기 제거, 처리위탁·국외이전 표). 지금 공개 정책은 아직 옛 표기.
+2. D11 6.1절 8개 (처리방침 표기, 위탁·국외이전 표, 문의 메일 실제 수신, 본인 이메일로 끝에서 끝까지, 관리자 기능, CloudTrail, 경보·예산, 법률 확인 1회).
+3. ACC-9: 개발 풀 자동 시험 — **개발 풀 `quantgen-dev`의 웹 클라이언트 ID가 필요** (없음). 받으면 `AUTH_POOL_ID`/`AUTH_CLIENT_ID`로 빌드해 시험. + 소유자 이메일로 운영 풀 수동 시험 1회 (미리보기 주소에서).
+4. 위 확인표의 "콘솔에서 확인" 항목.
+5. 공개: `auth-preview` → main PR 병합, Amplify main에 `AUTH_UI_ENABLED=true`와 `AUTH_UI_RELEASE=true`, 배포 뒤 세 주소에서 가입 성공 확인 (ACCOUNT_SETUP 0장 7번).
+
+## 남은 것
+
+- 실제 운영 풀에서의 SRP 로그인, 이메일 MFA, MFA 선택, 새 비밀번호 요구, 이메일 변경, 비밀번호 변경은 가짜 응답이나 코드 읽기로만 확인했다.
+- 플래그를 켜도 연구 데모 머리말의 "회원 로그인… 연결되어 있지 않습니다", 홈 가격 카드의 "로그인 후 다운로드 · 준비 중"은 그대로다. 이 문구는 정책·본문 재생성 쪽에서 바꾼다.
+- 로컬 미리보기 설정은 quantgen 작업 폴더의 `.claude/launch.json` (`website-auth-preview`).
+
+---
+
 # 2026-11-13 후속 main 커밋 Amplify SUCCEED 확인 — 파이프라인 운영 기록 완료
 
 ## 확인된 결과
