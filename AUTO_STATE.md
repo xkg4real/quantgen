@@ -1,7 +1,7 @@
 ---
 kind: auto_snapshot
-reason: periodic
-created_at: 2026-11-18T14:18:17+09:00
+reason: usage_limit_weekly
+created_at: 2026-11-20T05:37:55+09:00
 source_branch: main
 source_head: 5888d05
 upstream: origin/main
@@ -9,11 +9,11 @@ patch_base: 5888d05
 unpushed_commits: 0
 uncommitted_files: 0
 patch: none
-usage_pct: unknown
-usage_resets_at: unknown
-session: 5ead23fc-11f6-5b31-b2e8-0872ce407b06
-snapshot_key: none
-current_md_updated_at: 2026-11-18T01:46:49+09:00
+usage_pct: 98.0
+usage_resets_at: 2026-11-24T08:00:00.000Z
+session: 861760db-7312-5fcf-9b6a-7f8c05d2bdae
+snapshot_key: seven_day@2026-11-24T08:00:00.000Z
+current_md_updated_at: 2026-11-20T05:40:00+09:00
 current_md_status: checkpoint
 ---
 
