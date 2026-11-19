@@ -1,6 +1,6 @@
 # MERGE_QUEUE — main 병합 순서와 동결 (메인 세션이 관리)
 
-updated_at: 2026-11-19T10:47:00+09:00
+updated_at: 2026-11-19T12:22:00+09:00
 coordinator: 메인 세션 (QUANTGEN/MAIN, https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB)
 freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보고("F22까지 성공적으로 마무리했습니다."), main `6e077dc`(소유자 `--no-ff` 병합, 부모 `8e026ab`·`13f4dea`), 그 push의 Compliance success, PR #4 merged. (동결 기간: 2026-11-18T19:10:45+09:00 ~ 위 시각)
 
@@ -21,8 +21,8 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 | 1 | ~~⑦-2/a 병합 뒤 main 정리~~ | PR #126 | **병합 완료 main `56fe32a`** (2026-11-19 03:08 KST, CI 전부 녹색) |
 | 2 | ~~OS 작은 PR~~ | PR #127 | **병합 완료 main `c28b1d7`** (2026-11-19 05:09 KST, CI 전부 녹색) |
 | 3 | ~~KEY-2~~ | PR #128 | **병합 완료 main `3249af7`** (2026-11-19 10:40 KST). code_sha256 → `10c27010…` |
-| 3b | KEY-2/b (검토 후속: chmod 실패 시 읽기 계속, key_id, mkstemp, 시험 정리, 문서) | PAYMENTS `claude/payments-keys-key2b-20261119` @ `cc1cfa3` | **병합: PAYMENTS_ACCOUNT_KEYS** (2026-11-19 10:47 KST) — 작업 브랜치에 main `3249af7` merge → cc1cfa3 merge → 기준선 갱신 → PR |
-| 4 | 정책 문서 PR-1 (D11 Q1~Q3만) | 메인 `claude/policy-d11-q1q3-20261119` @ `7377c17` | KEY-2/b 뒤 + 소유자 질문 답 뒤. KEY-2가 01·08·20·FACTS·RELEASE_GAPS를 고쳤으므로 PR 전에 main merge |
+| 3b | ~~KEY-2/b~~ | PR #129 | **병합 완료 main `ca5da08`** (2026-11-19 12:18 KST) |
+| 4 | 정책 문서 PR-1 (D11 Q1~Q3만) | 메인 `claude/policy-d11-q1q3-20261119` @ `413cbe1` | **소유자 질문 답 대기**(표기·주소·메일 수신·호스팅·PR-2 시점). 답이 오면 main `ca5da08` merge 뒤 PR. 그동안 아래 5·6·7은 차례가 오면 먼저 가도 됨 |
 | 5 | UI 7쪽 + PySide6 준비 | UI `claude/friendly-bardeen-r6xe8f` | 소유자 실행 확인 뒤 (UI 세션 브랜치는 아무도 고치지 않음) |
 | 6 | PySide6 전환 (`pyqt6_to_pyside6 --apply` + `switch_day.py --apply`, 화면 문구 3곳은 UI 세션) | OS | 5 뒤 (OS 세션 제안 순서: UI PR → 전환) |
 | 7 | KEY-3 → KEY-4 → KEY-5 | PAYMENTS | 차례대로 |
