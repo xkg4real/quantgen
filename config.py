@@ -22,21 +22,14 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except Exception:
-    pass
+from core import credentials as _credentials
+
+_credentials.load_dotenv_for_development()     # KEY-2 (D7-G): core/credentials decides
 
 
 def _clean(name: str) -> str:
     """Read an env var, rejecting blanks and unedited <placeholder> values."""
-    value = (os.getenv(name) or "").strip()
-    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
-        value = value[1:-1].strip()
-    if value.startswith("<") and value.endswith(">"):
-        return ""
-    return value
+    return _credentials.read_setting(name)
 
 
 def _present(name: str) -> bool:

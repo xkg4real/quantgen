@@ -41,7 +41,7 @@ PR #55/#56이 포함된 `69a2559`의 통합 `147afc0`, 후속 `853de90`과 PR #5
 | 서비스 성격 | 최신 README는 상업 출시 의도를 명시한다. 연구·분석·모의거래 기능이며 실거래 주문 경로는 없다고 설명한다. 정부·KOFIA의 승인을 뜻하지 않는다. | [README 시작 부분](../../README.md), 같은 파일 `Regulatory note` |
 | 화면 | 브라우저는 Flet, 선택 네이티브 화면은 PyQt6이다. 화면별 구현 수준이 다르다. | [main.py](../../main.py), [pyproject.toml](../../pyproject.toml), [네이티브 구현 범위](../DESKTOP_MIGRATION_2026-10-30.md) |
 | 키 입력과 전송 | 키는 환경변수 또는 `.env`에서 읽는다. 설정 화면은 존재 여부를 보여준다. KIS 인증 때 앱 키·시크릿이 발급 서버에 전송된다. | [config.py](../../config.py), [KIS 클라이언트](../../data/krx/kis_client.py) `token` |
-| 인증정보 저장 | KIS Bearer 토큰은 기본 `~/.nextgen/kis_token.json`에 평문 JSON으로 저장된다. “인증정보를 전혀 저장하지 않는다”는 고지는 부정확하다. | [KIS 클라이언트](../../data/krx/kis_client.py) `_TOKEN_PATH`, `_store_token` |
+| 인증정보 저장 | KIS Bearer 토큰은 OS 자격 증명 저장소(`keyring`, `QUANTGEN`/`kis_token`)에 JSON으로 저장되고, 쓸 수 있는 OS 저장소가 없을 때만 `~/.nextgen/kis_token.json`에 평문 JSON(0600)으로 저장된다. 이 파일은 TRADEGEN과 공유되어 앱이 지우지 않는다. 비밀 키 10개는 환경변수 → OS 저장소 → `.env`(개발판만) 순서로 읽는다(KEY-2). “인증정보를 전혀 저장하지 않는다”는 고지는 부정확하다. | [KIS 클라이언트](../../data/krx/kis_client.py) `_token_path`, `_store_token`; [자격 증명 저장소](../../core/credentials/__init__.py) |
 | 계좌 조회 | 통화·기준통화·잔액·잠금금액·평균매수가·총수량과 파생 원화평가액을 처리한다. 평가를 위해 보유 통화 종목으로 Upbit 공개 시세를 추가 요청한다. Flet Crypto Refresh는 키가 있으면 기본 잔액 조회를 포함하며 네이티브는 기본 해제다. | [계좌 API](../../data/crypto/crypto_client.py) `balances`, [Flet 흐름](../../core/research/crypto_workflow.py) `analyze`, [네이티브 화면](../../quantgen_desktop/market_tools.py), [시장 분석](../../core/research/market_analysis.py) |
 | AI 해설 | Anthropic으로 계산 결과·질문·분석 종류·고정 작성 지시문과 해당 시 값 표기 설명을 전송한다. 구조화된 private 필드 제거는 자유 입력 개인정보의 탐지·삭제를 보장하지 않는다. | [분석 전송](../../core/quant/insights.py) `deep_analysis`, [필드 필터](../../core/research/ai_payload.py), [2026-11-06 범위](#ai-commentary-guards-2026-11-06) |
 | AI 선택 | 네이티브는 전송 미리보기·기본 해제 체크박스가 있다. Flet는 안내와 전송 버튼이 있고 동일한 체크박스 절차는 없다. 이 차이만으로 동의의 법적 충족 여부를 단정하지 않는다. | [네이티브 AI](../../quantgen_desktop/commentary.py), [Flet AI](../../ui/ai_panel.py) |
@@ -1080,6 +1080,27 @@ Windows CI에서 창 핸들과 아이콘을 시험하며, 사용자 PC의 Explor
 - 다른 7개 화면(연구 홈·분석 도구·기술지표 가이드·설계/검증·분석·연구 보관함·시스템)의 새 디자인은 소유자 승인을 받기 위한
   시안 이미지이며 앱에 적용되지 않았습니다. 시안 속 수치·공급자 상태·모델 이름은 예시입니다.
 - 01–20의 미확정 사업자·개인정보·권리·요금·환불·접근성 조건과 공개 보류를 유지합니다.
+
+## 플랫폼 확장 준비(OS-P0-a~f) — 2026-11-19 소스 검토 (OS_EXPANSION 세션)
+
+- 새 도구 `tools/qt_port/`(PyQt6→PySide6 변환·점검, 글꼴 비교, 재현 스크립트, 전환일 편집)는 개발자가 저장소에서만
+  실행합니다. 앱이 import하지 않고 앱 번들·휠에 들어가지 않습니다. 네트워크 전송이 없습니다.
+- `core/app_paths.py`의 `user_data_dir()`과 `is_frozen()`은 경로를 계산만 합니다. 폴더를 만들거나 열거나 나열하지
+  않습니다. 기존 `~/.nextgen`이 있으면 그 폴더를 그대로 씁니다. 아직 아무 호출처도 바꾸지 않았습니다(OS-F2, KEY-2 뒤).
+- `core/app_identity.py`는 이름·번들 ID 제안·빈 값(업데이트 주소, 계정 ID, 라이선스 공개키)과 D7-G 게이트웨이 값
+  `GATEWAY_PROFILE = "personal"`, `DATA_API_BASE = ""`(회사 서버 길 꺼짐)만 둡니다. 비밀값은 없고 "(주)" 표기도
+  없습니다. 공급원 호출 방식은 바뀌지 않았습니다.
+- 패키지 앱(`packaging/`): PyInstaller onedir. 데이터 파일은 휠과 같은 허용 목록(`tools/packaging/stage.py`)으로만 넣어
+  `.env`·연구 원장·캐시가 들어가지 않습니다. `QUANTGEN --selfcheck <파일>`은 사용자가 지정한 파일에만 점검 결과를
+  쓰고 네트워크·창을 열지 않습니다. 빌드에 `licenses/THIRD_PARTY_NOTICES.txt`(설치된 패키지의 라이선스 원문)와
+  LGPL-3.0·GPL-3.0 원문을 넣고, Qt 라이브러리와 LGPL 순수 파이썬 패키지(chardet)는 교체 가능한 별도 파일로 둡니다.
+  이것이 LGPL 의무를 충족하는지는 변호사 확인이 필요합니다(법률 자문이 아닙니다,
+  `docs/platform/LICENSE_COMPLIANCE_PREP.md`).
+- `.github/workflows/platform-build.yml`은 수동 실행과 `v*` 태그에서만 돌고, 서명·배포·업로드를 하지 않습니다
+  (macOS는 ad-hoc 서명만). `runtime-smoke.yml`에는 새 시험 모듈과 경로만 더했습니다.
+- `mobile/pyproject.toml`과 `stage.py --profile mobile`은 Android 시험용 묶음 초안입니다. 아직 빌드·배포한 적이 없습니다.
+- 화면·계산·요청·전송·저장 동작은 바뀌지 않았습니다. 01–20의 미확정 사업자·개인정보·권리·요금·환불·접근성 조건과
+  공개 보류(publication BLOCKED)를 유지합니다.
 
 <a id="owner-d11-operator-contact-age-2026-11-19"></a>
 ## 운영자 개인 표기·문의 메일·이용연령 — 2026-11-19 소유자 결정(D11 Q1~Q3)

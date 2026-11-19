@@ -1,0 +1,234 @@
+# Platform builds (OS-P0-b draft): Windows onedir, macOS arm64 .app (ad-hoc signed), Android debug APK (Flet).
+# Runs only by hand (workflow_dispatch) or on a v* tag; never on push or pull request, because after the
+# repository goes private every runner minute is billed (owner decision D5; macOS minutes cost the most).
+# workflow_dispatch works only once this file is on the default branch, so the first run is after the merge
+# and the owner's go-ahead. Nothing here signs with a real certificate or publishes anything.
+name: Platform build
+on:
+  workflow_dispatch:
+    inputs:
+      qt_binding:
+        description: Qt binding to bundle (PyQt6 until the OS-F1 switch)
+        type: choice
+        options: [PyQt6, PySide6]
+        default: PyQt6
+      windows:
+        type: boolean
+        default: true
+      macos:
+        description: macOS arm64 .app (macOS runner minutes cost more)
+        type: boolean
+        default: false
+      android:
+        description: Android debug APK for the owner's phone (Flet)
+        type: boolean
+        default: false
+      font_probe:
+        description: Font probe on Windows and macOS, both bindings (no app build)
+        type: boolean
+        default: false
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+concurrency:
+  group: platform-build-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  PYTHONUTF8: '1'
+  QG_QT_BINDING: ${{ inputs.qt_binding || 'PyQt6' }}
+  QG_BUILD_CHANNEL: beta
+jobs:
+  windows:
+    if: github.event_name == 'push' || inputs.windows
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/.env*
+            !/**/.env*
+            !/docs/asset_expansion/cache/
+            !/paper_live/
+            !/grokteam/
+            !/_backup/
+            !/QUANTGEN_techfund_research_bundle/
+            !/**/*.jsonl
+            !/**/holdout/
+            !/**/frozen/
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install runtime, the chosen Qt binding and PyInstaller
+        shell: bash
+        run: |
+          python -m pip install -r requirements.txt "pyinstaller==6.22.3"
+          if [ "$QG_QT_BINDING" = PySide6 ]; then python -m pip install "PySide6-Essentials==6.12.0"; else python -m pip install "PyQt6==6.12.0"; fi
+      - name: Convert the source to PySide6 (until OS-F1 merges the switch)
+        if: env.QG_QT_BINDING == 'PySide6'
+        shell: bash
+        run: |
+          touch .qt_port_scratch
+          python tools/qt_port/pyqt6_to_pyside6.py --apply .
+      - name: Build onedir app
+        run: pyinstaller --noconfirm --clean packaging/quantgen_desktop.spec
+      - name: Self-check inside the packaged app (imports, fonts, provenance hash, notices, separate Qt DLLs)
+        shell: pwsh
+        run: |
+          $p = Start-Process -FilePath dist\QUANTGEN\QUANTGEN.exe -ArgumentList '--selfcheck', "$PWD\selfcheck-windows.json" -Wait -PassThru
+          Get-Content selfcheck-windows.json
+          if ($p.ExitCode -ne 0) { exit 1 }
+      - name: Check the bundle has one Qt binding and no protected files
+        shell: bash
+        run: |
+          test -x dist/QUANTGEN/QUANTGEN.exe
+          other=$([ "$QG_QT_BINDING" = PySide6 ] && echo PyQt6 || echo PySide6)
+          ! find dist/QUANTGEN -ipath "*$other*" | grep -q .
+          ! find dist/QUANTGEN \( -name '.env*' -o -name '*.jsonl' -o -path '*holdout*' -o -path '*frozen*' \) | grep -q .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: QUANTGEN-windows-${{ env.QG_QT_BINDING }}-${{ github.sha }}
+          path: |
+            dist/QUANTGEN
+            selfcheck-windows.json
+          retention-days: 7
+          if-no-files-found: error
+
+  macos:
+    if: github.event_name == 'push' || inputs.macos
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/.env*
+            !/**/.env*
+            !/docs/asset_expansion/cache/
+            !/paper_live/
+            !/grokteam/
+            !/_backup/
+            !/QUANTGEN_techfund_research_bundle/
+            !/**/*.jsonl
+            !/**/holdout/
+            !/**/frozen/
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install runtime, the chosen Qt binding and PyInstaller
+        run: |
+          python -m pip install -r requirements.txt "pyinstaller==6.22.3"
+          if [ "$QG_QT_BINDING" = PySide6 ]; then python -m pip install "PySide6-Essentials==6.12.0"; else python -m pip install "PyQt6==6.12.0"; fi
+      - name: Convert the source to PySide6 (until OS-F1 merges the switch)
+        if: env.QG_QT_BINDING == 'PySide6'
+        shell: bash
+        run: |
+          touch .qt_port_scratch
+          python tools/qt_port/pyqt6_to_pyside6.py --apply .
+      - name: Build .app
+        run: pyinstaller --noconfirm --clean packaging/quantgen_desktop.spec
+      - name: Self-check inside the packaged app
+        run: |
+          status=0; dist/QUANTGEN.app/Contents/MacOS/QUANTGEN --selfcheck "$PWD/selfcheck-macos.json" || status=$?
+          cat selfcheck-macos.json; exit $status
+      - name: Ad-hoc sign (no Apple account before incorporation; Gatekeeper will still warn)
+        run: |
+          codesign --force --deep --sign - dist/QUANTGEN.app
+          codesign --verify --deep --strict dist/QUANTGEN.app
+          ditto -c -k --keepParent dist/QUANTGEN.app QUANTGEN-macos-arm64.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: QUANTGEN-macos-arm64-${{ env.QG_QT_BINDING }}-${{ github.sha }}
+          path: |
+            QUANTGEN-macos-arm64.zip
+            selfcheck-macos.json
+          retention-days: 7
+          if-no-files-found: error
+
+  android:
+    if: github.event_name == 'workflow_dispatch' && inputs.android
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/.env*
+            !/**/.env*
+            !/docs/asset_expansion/cache/
+            !/paper_live/
+            !/grokteam/
+            !/_backup/
+            !/QUANTGEN_techfund_research_bundle/
+            !/**/*.jsonl
+            !/**/holdout/
+            !/**/frozen/
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Stage the Qt-free Flet app
+        run: python tools/packaging/stage.py --profile mobile --output "$RUNNER_TEMP/quantgen-mobile"
+      - name: Build debug APK (Flet downloads its Flutter SDK)
+        working-directory: ${{ runner.temp }}/quantgen-mobile
+        run: |
+          python -m pip install "flet[all]==0.85.2"
+          flet build apk --yes
+      - uses: actions/upload-artifact@v4
+        with:
+          name: QUANTGEN-android-debug-${{ github.sha }}
+          path: ${{ runner.temp }}/quantgen-mobile/build/apk
+          retention-days: 7
+          if-no-files-found: error
+
+  font_probe:
+    # Which font Qt really draws each Korean, figure, Greek and symbol character with, today's PyQt6 fallback
+    # against the PySide6 alternatives (tools/qt_port/font_probe.py, docs/platform/font_probe/). Reads only
+    # assets/fonts and the probe; builds no app.
+    if: github.event_name == 'workflow_dispatch' && inputs.font_probe
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            assets/fonts
+            tools/qt_port
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Probe both bindings in separate environments
+        shell: bash
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          py() { if [ -x "$1/Scripts/python.exe" ]; then echo "$1/Scripts/python.exe"; else echo "$1/bin/python"; fi; }
+          python -m venv "$RUNNER_TEMP/q" && python -m venv "$RUNNER_TEMP/s"
+          "$(py "$RUNNER_TEMP/q")" -m pip install -q "PyQt6==6.12.0"
+          "$(py "$RUNNER_TEMP/s")" -m pip install -q "PySide6-Essentials==6.12.0"
+          out="$RUNNER_TEMP/font_probe"
+          for m in fallback families substitutions both none; do
+            "$(py "$RUNNER_TEMP/q")" tools/qt_port/font_probe.py --binding PyQt6 --method $m --out "$out" --fonts assets/fonts
+            [ $m = fallback ] || "$(py "$RUNNER_TEMP/s")" tools/qt_port/font_probe.py --binding PySide6 --method $m --out "$out" --fonts assets/fonts
+          done
+          "$(py "$RUNNER_TEMP/q")" tools/qt_port/font_probe.py --compare "$out"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: font-probe-${{ matrix.os }}-${{ github.sha }}
+          path: ${{ runner.temp }}/font_probe
+          retention-days: 7
+          if-no-files-found: error
