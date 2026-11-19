@@ -31,11 +31,10 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 | 4d' | KEY-4/a 계정 문서 고침 (ADMIN_GUIDE 6.1 두 번째 확인 정의, OWNER_STEPS T18 표·Reset password 시험 단계, 작은 것 F4–F9, 자체 시험 1줄) | PAYMENTS | KEY-4 뒤, 4d와 같은 자리(파일 안 겹침) |
 | 5 | UI 7쪽 + PySide6 준비 | UI `claude/friendly-bardeen-r6xe8f` | 소유자 실행 확인 뒤 (UI 세션 브랜치는 아무도 고치지 않음) |
 | 6 | PySide6 전환 (`pyqt6_to_pyside6 --apply` + `switch_day.py --apply`, 화면 문구 3곳은 UI 세션) | OS | 5 뒤 (OS 세션 제안 순서: UI PR → 전환) |
-| 4e | KEY-5/a gateway 준비 3건 (data.kis_stream 입구, kis_workspace 순수 값 목록, QuoteFeed 하위 클래스 공용 모듈) | PAYMENTS | KEY-4·4d 뒤 (11-20 메인이 정함) |
-| 7 | KEY-5 (화면 쪽 22파일/44곳 + quantgen_desktop/paper.py, 키·연결 화면) | PAYMENTS 요청문(handoff plans/2026-11-20/KEY5_UI_REQUEST.md) + UI 구현(소유자 경유) | 6 뒤 권장, 4e 뒤 |
+| 4e | OS-F2 (~/.nextgen → core.app_paths.user_data_dir, config.py 포함 → Nautilus 지문 바뀜) + OS PySide6 종료 원인 기록(1bf2508, 따로 커밋) | OS `claude/os-f2-data-dir-20261120` @ `9858894` | 4d·4d' 뒤 (11-20 메인). 고칠 것: config.py 줄 끝 CRLF 복원, 데이터 폴더 순서에 '표시 파일 있는 플랫폼 폴더 우선' 추가 |
+| 4f | KEY-5/a gateway 준비 3건 (data.kis_stream 입구, kis_workspace 순수 값 목록, QuoteFeed 하위 클래스 공용 모듈) | PAYMENTS | KEY-4·4d 뒤 (11-20 메인이 정함) |
+| 7 | KEY-5 (4f 뒤) (화면 쪽 22파일/44곳 + quantgen_desktop/paper.py, 키·연결 화면) | PAYMENTS 요청문(handoff plans/2026-11-20/KEY5_UI_REQUEST.md) + UI 구현(소유자 경유) | 6 뒤 권장, 4e 뒤 |
 | 8 | DS·DIDM | DS | 차례가 오면. UI 확인이 늦어지면 5보다 앞으로 당길지 메인이 정함 |
-| 제안 | OS-F2 (~/.nextgen → user_data_dir, config.py 포함 → Nautilus 지문 바뀜) | OS | 11-20 브랜치 작업 배정. 자리는 메인이 정함. owner_confirmed 다시 쓰기는 이것 뒤 |
-| 제안 | OS PySide6 간헐 종료 원인 기록 (`claude/os-pyside6-abort-20261119` @ `8262d6c`, 5파일) | OS | OS-F2 PR 또는 OS-F1 날 PR에 묶기 (메인이 정함) |
 | 제안 | 정책 문서 PR-2 (계정 서비스 설명) | 메인/PAYMENTS | AWS 운영 풀 + 웹 계정 화면 뒤 |
 | 미정 | GH-2 정리 PR (test_npu.py, mindmap/, launch.json, _backup/ 태그 뒤) | 메인 | 빈 자리에 |
 
