@@ -172,7 +172,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [ ] DS-4c — CME FedWatch 종가판. DIDM 2단계 시작 때 (약 $25/월)
 - [x] DS-4d — OpenDART·KIND(→OpenDART), SEC EDGAR, ECOS — 6곳 모두 소유자 PC 확인 끝 (OpenDART 819건, c6fda98, 11-20). 원장은 DS·DIDM PR 병합 때
 - [~] DS-4e — Kalshi 브랜치에 있음(236개 시장). Polymarket은 변호사 확인 전까지 꺼둠
-- [!] DS-H — 홈 지표 6개 데이터 계층 (load_home_indicators, core/research/markets.py). 소유자 H4 진단 출력 대기. KEY-4가 core/research/markets.py를 바꾸므로 KEY-4 병합 뒤 main에서 시작
+- [~] DS-H — 홈 지표 6개 데이터 계층 — **브랜치 끝: `claude/ds-home-indicators-20261120` @ `f80b3b0`** (main 8445187에서, 4파일, gateway 경유 확인, 새 시험 20 OK, 회귀 묶음 main과 같음; 메인 확인 11-20 03:5x). 대기열 4f. 남은 것: OA-09 진단 반영, BTC 단위 결정(OA-46), 병합 뒤 UI 세션에 계약 전달(소유자 경유)
 - [-] DS-3 — RavenPack RPA 1.0 견적, Bigdata.com 비교. **관문 확인 끝(11-20 메인):** 소유자 11-18 답(OWNER_RULINGS_LOG 2026-11-18 절, 질문 1)으로 D14 "3단계" = RavenPack 대안 9개(DIDM Stage 3 아님), D14는 대안으로 구성·Bigdata.com 시험 안 함 → DS-3은 계획에 없음. 소유자가 RavenPack 견적을 원하면 다시 엶 (OA-38)
 - [-] DS-2 — Bigdata.com Pro 시범. 쓰지 않음
 - [ ] DS 앱 연결 (ID 없음) — 공급처마다 core/gateway/routes.json 한 줄 + display_rights.json + 법률 의견. 표시권, L 뒤. 구조 변경이라 소유자에게 먼저 알림
@@ -316,6 +316,7 @@ push_log:
 | OA-43 | AWS 비용 출처 확인 — 소유자 11월 막대(11-20 01:5x 공유): EC2-Other $39.47(81%), EC2-Instances $5.55, VPC $2.11, Amplify $1.57, 합 $48.71 → 하루 약 $2.6, 이대로면 월 약 $77–81. 메인 추정(미검증): 작은 인스턴스 1대(t3.micro 급, 약 17.5일)+공인 IPv4 1개(약 17.6일)가 함께 켜져 있고, EC2-Other는 NAT 게이트웨이 또는 t3 unlimited CPU 크레딧 초과(CPU 100% 지속 시 하루 약 $2.16 — 폭주 프로세스나 침해 가능성)와 금액이 맞음. 다음: Cost Explorer EC2-Other를 '사용 유형'으로 묶은 화면 → 메인이 판정. 끄거나 지우지 않음 | PAYMENTS→MAIN | 11-20 01:39 | 24h 안 (권장) | 진행 중 |
 | OA-44 | 이메일 MFA 회원 분실(두 번째 확인 수단 없음) | PAYMENTS→MAIN | 11-20 02:0x | — | **완료** 소유자 "2로 권장합니다. Payment세션에다가 전달해주세요"(2026-11-20 02:04:06 KST) → ② 관리자가 옛 계정을 지우고 같은 이메일로 재가입. PAYMENTS에 전달, OWNER_RULINGS_LOG는 4d |
 | OA-45 | OWNER_STEPS T14: CloudTrail 회원 쪽 이벤트 하나를 View event로 열어 username/sub가 있는지 확인 (6.1 ② 확정용) | PAYMENTS | 11-20 02:0x | 아님 | 대기 |
+| OA-46 | 홈 BTC 단위: 실시간은 Upbit 원화, 일별·그래프는 Yahoo 달러(D8 BTC-USD) → ① 지금처럼 따로 표시 / ② 일별도 Upbit 원화 / ③ 실시간을 해외 거래소 달러로 (메인 권장 ③ 검토: D8과 같은 달러 기준, 원화가는 김치 프리미엄이 섞여 다름 — 표시권 미검증) | DATA→MAIN | 11-20 03:5x | 아님 | 대기 |
 
 ### 3.2 나중 또는 조건부
 

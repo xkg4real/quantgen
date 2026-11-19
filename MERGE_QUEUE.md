@@ -32,9 +32,11 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 | 5 | UI 7쪽 + PySide6 준비 | UI `claude/friendly-bardeen-r6xe8f` | 소유자 실행 확인 뒤 (UI 세션 브랜치는 아무도 고치지 않음) |
 | 6 | PySide6 전환 (`pyqt6_to_pyside6 --apply` + `switch_day.py --apply`, 화면 문구 3곳은 UI 세션) | OS | 5 뒤 (OS 세션 제안 순서: UI PR → 전환) |
 | 4e | OS-F2 (~/.nextgen → core.app_paths.user_data_dir, config.py 포함 → Nautilus 지문 바뀜) + OS PySide6 종료 원인 기록(1bf2508, 따로 커밋) | OS `claude/os-f2-data-dir-20261120` @ `2f69c34` | 4d·4d' 뒤 (11-20 메인). CRLF 복원·표시 파일 우선 반영 확인. 새 지문 bcaf33d9… |
-| 4f | KEY-5/a gateway 준비 3건 (data.kis_stream 입구, kis_workspace 순수 값 목록, QuoteFeed 하위 클래스 공용 모듈) | PAYMENTS | KEY-4·4d 뒤 (11-20 메인이 정함) |
+| 4f | DS-H 홈 지표 6개 데이터 계층 (core/research/markets.py load_home_indicators, 시험, UI용 계약 문서, runtime-smoke 경로) | DATA `claude/ds-home-indicators-20261120` @ `f80b3b0` | 4e 뒤 (11-20 메인). 준비됨 |
+| 4g | DS·DIDM (8행을 당김: UI 소유자 확인 대기 중이라 준비된 것부터) | DATA `claude/data-source-didm-20261117` @ `c206b10` | 4f 뒤 |
+| 4h | KEY-5/a gateway 준비 3건 (data.kis_stream 입구, kis_workspace 순수 값 목록, QuoteFeed 하위 클래스 공용 모듈) | PAYMENTS | KEY-4·4d 뒤 (11-20 메인이 정함) |
 | 7 | KEY-5 (4f 뒤) (화면 쪽 22파일/44곳 + quantgen_desktop/paper.py, 키·연결 화면) | PAYMENTS 요청문(handoff plans/2026-11-20/KEY5_UI_REQUEST.md) + UI 구현(소유자 경유) | 6 뒤 권장, 4e 뒤 |
-| 8 | DS·DIDM | DS | 차례가 오면. UI 확인이 늦어지면 5보다 앞으로 당길지 메인이 정함 |
+| 8 | ~~DS·DIDM~~ → 4g로 당김 (11-20 메인) | DS | — |
 | 제안 | 정책 문서 PR-2 (계정 서비스 설명) | 메인/PAYMENTS | AWS 운영 풀 + 웹 계정 화면 뒤 |
 | 미정 | GH-2 정리 PR (test_npu.py, mindmap/, launch.json, _backup/ 태그 뒤) | 메인 | 빈 자리에 |
 
