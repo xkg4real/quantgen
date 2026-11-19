@@ -168,6 +168,15 @@ CryptoPanic 무료 플랜 (2026-11-20, 소유자 지적 확인; 검색 요약, �
 |---|---|---|
 | 행CP·M4 "무료 플랜 초당 5건" | 공식 API 요금 페이지 (cryptopanic.com/developers/api/plans, 2026-09 사본 기준): **유료만** — Growth (주간) $50/주 (600건/주), Growth $199/월 (연 결제 $179/월, 3,000건/월), Enterprise $899/월부터. 2026 리뷰: 무료 Developer API는 **2026-04-01 종료** 공지 (공식 공지문은 못 찾음) | 엑셀 값은 그대로. **지금은 무료 플랜 없음.** 소유자 답 2 (유료는 단계별)에 따라 CryptoPanic은 **보류** (DS-4b에서 뺌, 커넥터 코드는 남김). 암호화폐 뉴스 감성 (X열)은 엑셀 X4가 함께 적은 Alpha Vantage (`CRYPTO:BTC` 등)로 채움 → X열 대안책 O는 그대로 성립 |
 
+여섯째 실행 (2026-11-20, OA-08, 소유자 PC, 무료 키):
+
+| 소스 | 출력 (공급사 문구, 키 가림) | 판단 |
+|---|---|---|
+| Alpha Vantage `NEWS_SENTIMENT` (AAPL) | "Information: … This is a premium endpoint. You may subscribe to any of the premium plans …" | **뉴스 감성은 무료 키로 안 됨 (유료 전용).** 엑셀 "무료 하루 25건"은 다른 함수 (시세·거시 지표)에는 맞을 수 있으나 뉴스 감성에는 아님. 관련성 필드 확인 (O열)도 무료로는 불가 |
+| Tiingo `/tiingo/news` (nvda) | "HTTP 403 (You do not have permission to access the News API)" | **무료 플랜에 뉴스 없음.** 엑셀 M4 "Tiingo 무료 플랜"은 시세에는 맞을 수 있으나 뉴스에는 아님 |
+
+처리: CryptoPanic과 같이 **보류** (소유자 답 2 "Alpha Vantage·Tiingo 유료는 그 뒤"). 커넥터 코드는 남김. DS-4b (무료 키 뉴스 3곳)는 무료로 쓸 수 있는 곳이 0이라 **전체 보류**. 영향: 뉴스 수집·감성·엔티티는 GDELT (무료, 확인 끝)와 자체 NLP (`D1`)로, 공시 사건은 EDGAR·OpenDART로 채움 → 2절의 "대안책 O" 칸 (F·G·H·X)은 GDELT·자체 NLP로 그대로 성립. 엑셀 칸은 바꾸지 않음.
+
 2절 표 안에서 메인 분석 (D14 3절)과 다르게 읽힐 수 있는 칸:
 
 | 칸 | 2절 값 (엑셀 메모 그대로) | D14·공개 자료 | 처리 |
@@ -214,8 +223,8 @@ CryptoPanic 무료 플랜 (2026-11-20, 소유자 지적 확인; 검색 요약, �
 | ECOS | `ECOS_API_KEY` | 지금 (DS-4d) | 무료 가입 |
 | Trading Economics | `TRADINGECONOMICS_API_KEY` | 아니요 (Stage 3 뒤 견적) | 제안 이름 |
 | GDELT | 없음 | 아니요 | 원본 파일, 키 없음 |
-| Alpha Vantage | `ALPHAVANTAGE_API_KEY` | DS-4b (무료 키) | 제안 이름 |
-| Tiingo | `TIINGO_API_KEY` | DS-4b (무료 키) | 제안 이름 |
+| Alpha Vantage | `ALPHAVANTAGE_API_KEY` | **보류** (뉴스 감성은 유료 전용, 2026-11-20 소유자 PC 확인) | 유료 단계에서 다시 판단 |
+| Tiingo | `TIINGO_API_KEY` | **보류** (무료 플랜 News API 403, 2026-11-20 소유자 PC 확인) | 유료 단계에서 다시 판단 |
 | Cryptopanic | `CRYPTOPANIC_API_KEY` | **보류** (무료 플랜 없음, 최저 $50/주·$199/월, 2026-11-20 확인) | 유료 단계에서 다시 판단 |
 | 자체 NLP | `ANTHROPIC_API_KEY` (기존) | 유료 호출은 질문 2 답 뒤 | 이미 `.env.example`에 있음 |
 

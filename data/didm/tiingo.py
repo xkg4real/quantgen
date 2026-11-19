@@ -1,5 +1,8 @@
 """Tiingo News client for DIDM (DS-4b). Parsing: core.didm.ingest.news.
 
+ON HOLD (owner PC 2026-11-20): the free key is refused for this endpoint (paid only). Paid sources wait for
+the owner's staged-cost decision. The code stays and runs only when a paid key is set.
+
 TIINGO_API_KEY via data.didm.keys, sent in the Authorization header (not the URL). Whether the free plan
 includes the news endpoint is unverified: a 403 here answers that question.
 """

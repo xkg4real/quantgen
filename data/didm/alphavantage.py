@@ -1,5 +1,8 @@
 """Alpha Vantage NEWS_SENTIMENT client for DIDM (DS-4b, free key, 25 requests a day). Parsing: core.didm.ingest.news.
 
+ON HOLD (owner PC 2026-11-20): the free key is refused for this endpoint (paid only). Paid sources wait for
+the owner's staged-cost decision. The code stays and runs only when a paid key is set.
+
 ALPHAVANTAGE_API_KEY via data.didm.keys. The key is a query parameter, so URLs are never logged.
 """
 from __future__ import annotations

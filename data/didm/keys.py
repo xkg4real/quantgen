@@ -31,11 +31,11 @@ class SourceError(RuntimeError):
 
 
 def safe_detail(text: object, *secrets: str, limit: int = 160) -> str:
-    out = " ".join(str(text or "").split())[:limit]
-    for secret in secrets:
+    out = str(text or "")
+    for secret in secrets:          # mask first: a key cut in half by the limit would otherwise leak its start
         if secret:
             out = out.replace(secret, "****")
-    return out
+    return " ".join(out.split())[:limit]
 
 
 def in_store(name: str) -> bool:

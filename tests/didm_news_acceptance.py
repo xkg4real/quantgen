@@ -115,6 +115,15 @@ class SafeErrors(unittest.TestCase):
         msg = keys.safe_detail("Invalid key KEY123 for   this call", "KEY123")
         self.assertEqual(msg, "Invalid key **** for this call")
 
+    def test_key_on_the_cut_boundary_is_masked(self):
+        key = "ABCDEFGHIJKL"
+        text = "x" * 155 + key + " tail"          # key spans characters 155..166, across the 160 cut
+        out = keys.safe_detail(text, key)
+        self.assertLessEqual(len(out), 160)
+        for i in range(4, len(key) + 1):           # no 4+ character piece of the key survives
+            self.assertNotIn(key[:i], out)
+        self.assertIn("****", out)
+
     def test_reason_shows_didm_messages_only(self):
         from tools.didm.collect_daily import _http_reason
         self.assertEqual(_http_reason(keys.SourceError("Tiingo news: HTTP 403 (no news on this plan)")),
