@@ -19,10 +19,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-import config
+from core import gateway
 
 try:
-    import gs_quant
+    gs_quant = gateway.provider("gs_quant")
     _INSTALLED = True
     _VERSION = getattr(gs_quant, "__version__", "?")
 except Exception:                                     # pragma: no cover
@@ -47,11 +47,11 @@ def status() -> GsStatus:
     offline = False
     if _INSTALLED:
         try:
-            import gs_quant.timeseries  # noqa: F401
+            gateway.provider("gs_quant.timeseries")
             offline = True
         except Exception:
             offline = False
-    creds = bool(config.gs_client_id() and config.gs_client_secret())
+    creds = bool(gateway.local_key("gs_marquee", "id") and gateway.local_key("gs_marquee", "secret"))
     detail = ""
     if not _INSTALLED:
         detail = "gs-quant is not installed (pip install gs-quant)."
@@ -72,11 +72,12 @@ def connect() -> GsStatus:
     repeatedly; failure is recorded in the status detail, never raised."""
     if not _INSTALLED:
         return status()
-    cid, secret = config.gs_client_id(), config.gs_client_secret()
+    cid, secret = gateway.local_key("gs_marquee", "id"), gateway.local_key("gs_marquee", "secret")
     if not (cid and secret):
         return status()
     try:
-        from gs_quant.session import Environment, GsSession
+        session = gateway.provider("gs_quant.session")
+        Environment, GsSession = session.Environment, session.GsSession
         GsSession.use(Environment.PROD, client_id=cid, client_secret=secret,
                       scopes=("run_analytics",))
         _session_state.update(active=True, detail="")
@@ -94,7 +95,7 @@ def price_example_swap(tenor: str = "10y", ccy: str = "USD") -> dict:
     if not st.session_active:
         return {"ok": False, "detail": st.detail}
     try:
-        from gs_quant.instrument import IRSwap
+        IRSwap = gateway.provider("gs_quant.instrument").IRSwap
         swap = IRSwap("Pay", tenor, ccy)
         swap.resolve()
         return {"ok": True, "fixed_rate": float(swap.fixed_rate),

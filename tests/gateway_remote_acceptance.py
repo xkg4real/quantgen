@@ -119,21 +119,92 @@ class FakeServerTest(unittest.TestCase):
             self.assertEqual(str(ctx.exception), "bad_answer")
 
     def test_every_forwardable_function_returns_an_encodable_type(self):
-        """Review item 11: each allowlisted function is annotated with a type the codec carries."""
+        """Review item 11 and KEY-4 item 8: each allowlisted function's return type is resolved (typing.get_type_hints)
+        and walked down to its elements: list[X], dict[str, X], tuple, Optional/Union, and the fields of every
+        dataclass it returns, which must be registered in the codec. A bare dict or list is JSON-shaped; the codec
+        still refuses an unknown object inside one at encode time (the server answers result_not_encodable)."""
+        import dataclasses
+        import datetime as dt
         import importlib
-        import re
-        carried = {"dict", "list", "str", "int", "float", "bool", "None", "Optional", "Quote", "FMPQuote", "Answer",
-                   "Candle", "MarketSnapshot"}
+        import types
+        import typing
+
+        registered = {codec._cls(spec) for spec in codec.REGISTERED.values()}
+        leaves = {dict, list, tuple, str, int, float, bool, type(None), dt.date, dt.datetime}
+
+        def check(tp, where, seen):
+            origin = typing.get_origin(tp)
+            if origin in (typing.Union, types.UnionType):
+                for arg in typing.get_args(tp):
+                    check(arg, where, seen)
+                return
+            if origin in (list, tuple, dict):
+                args = [a for a in typing.get_args(tp) if a is not Ellipsis]
+                if origin is dict and args:
+                    self.assertIs(args[0], str, f"{where}: only string keys cross the wire")
+                for arg in args[1:] if origin is dict else args:
+                    check(arg, where, seen)
+                return
+            if tp is typing.Any:
+                self.fail(f"{where}: Any is not a carried type")
+            if dataclasses.is_dataclass(tp):
+                self.assertIn(tp, registered, f"{where}: {tp.__name__} is not registered in the codec")
+                if tp in seen:
+                    return
+                seen.add(tp)
+                for name, field_tp in typing.get_type_hints(tp).items():
+                    check(field_tp, f"{where} -> {tp.__name__}.{name}", seen)
+                return
+            self.assertIn(tp, leaves, f"{where}: {tp!r} is not carried")
+
+        checked = 0
         for sid, src in SOURCES.items():
             if not src.functions:
                 continue
             module, _, attr = src.factory.partition(":")
             cls = getattr(importlib.import_module(module), attr)
             for fn in src.functions:
-                ann = getattr(cls, fn).__annotations__.get("return")
-                self.assertIsNotNone(ann, f"{sid}.{fn} has no return annotation")
-                names = set(re.findall(r"[A-Za-z_]+", ann if isinstance(ann, str) else repr(ann)))
-                self.assertLessEqual(names, carried, f"{sid}.{fn} returns {ann}")
+                hints = typing.get_type_hints(getattr(cls, fn))
+                self.assertIn("return", hints, f"{sid}.{fn} has no return annotation")
+                check(hints["return"], f"{sid}.{fn}", set())
+                checked += 1
+        self.assertGreater(checked, 0)
+
+    def test_remote_wraps_every_broken_answer(self):
+        """KEY-4 item 7: a transport that raises, an `ok` that is not a bool, ok=true with a result the codec
+        cannot read, and an error that is not a plain code all become RemoteFailed, with no provider text."""
+        def raising(request):
+            raise ConnectionError("host said something with a key in it")
+
+        cases = {
+            "transport_ConnectionError": raising,
+            "bad_answer": lambda req: {"ok": "yes", "result": 1},
+            "bad_answer ": lambda req: {"ok": 1, "result": 1},
+            "bad_answer  ": lambda req: {"ok": True, "result": {"__kind__": "os.system", "fields": {}}},
+            "bad_answer   ": lambda req: {"ok": True, "result": {"__kind__": "datetime", "value": "not a date"}},
+            "bad_answer    ": lambda req: {"ok": False, "error": "provider said: key abc is wrong"},
+            "no_answer": lambda req: {"ok": False},
+            "bad_answer     ": lambda req: {"ok": False, "error": "sk_live_" + "a1b2c3d4e5f6a7b8c9d0e1f2a3"},
+            "http_503": lambda req: {"ok": False, "error": "http_503"},
+            "bad_answer      ": lambda req: {"ok": False, "error": "abcdef0123456789abcd_ef0123456789abcdef01"},
+            "transport_SSLCertVerificationError": lambda req: (_ for _ in ()).throw(
+                __import__("ssl").SSLCertVerificationError("cert for host with token xyz")),
+        }
+        for expected, transport in cases.items():
+            with self.subTest(expected=expected):
+                with self.assertRaises(remote.RemoteFailed) as ctx:
+                    remote.RemoteRoute(transport).call("fmp", "quote", "AAPL")
+                self.assertEqual(str(ctx.exception), expected.strip())
+                self.assertIsNone(ctx.exception.__cause__)
+                self.assertIsNone(ctx.exception.__context__)        # the original message is not carried along
+
+    def test_dispatch_refuses_a_request_that_is_not_a_dict(self):
+        """KEY-4 item 7: the server handler never raises on a malformed request."""
+        for request in (None, "fmp", ["fmp", "quote"], 3, {"source": "fmp", "fn": ["quote"]}):
+            with self.subTest(request=request):
+                answer = dispatch(request, self.server_local)
+                self.assertFalse(answer["ok"])
+                self.assertIn(answer["error"], ("bad_request", "function_not_allowed"))
 
     def test_codec_round_trip_and_refusal(self):
         answer = Answer(data=[1, 2], source="KIS", ok=True, reason="")

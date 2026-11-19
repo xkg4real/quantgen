@@ -36,7 +36,13 @@ import numpy as np
 
 from core.ficc.common import BP, FICCError
 from core.ficc.curves import _regime
-from core.ficc.data import Series, load_many
+from core.ficc.data import Series
+
+
+def load_many(ids, **kwargs):
+    """core.ficc.data.load_many through the data-source gateway (KEY-4); same arguments, same answer."""
+    from core import gateway
+    return gateway.ficc().load_many(ids, **kwargs)
 
 _Z_WINDOW = 252
 _CHANGES = (("chg_1d", 1), ("chg_1w", 5), ("chg_1m", 21), ("chg_3m", 63))
