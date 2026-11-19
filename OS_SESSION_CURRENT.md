@@ -6,9 +6,9 @@ task: os-expansion
 cycle: 2026-11-17
 done_ids: OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f
 next_ids: OS-F1, OS-F2
-updated_at: 2026-11-19T05:20:00+09:00
+updated_at: 2026-11-19T12:40:00+09:00
 stale_after_hours: 3
-waiting_on: owner
+waiting_on: none
 work_branch: claude/os-prep-20261117
 work_commit: 090dcae
 uncommitted_changes: no
@@ -81,6 +81,10 @@ OS-P0-a~f는 **PR #127로 main에 병합됐습니다**(main `c28b1d7`, CI 8개 �
 - [x] (11-19) 소유자 "F22까지 완료했습니다. 남은 일을 진행해주세요". main `6e077dc` merge(충돌 없음), compliance 기준선 갱신(consistency PASS, publication BLOCKED, FACTS.md 기록), PR 준비 완료 — `1f6a72e`. MERGE_QUEUE가 아직 freeze ON이라 PR은 열지 않고 메인에 자리 요청함
 - [x] (11-19) UI `5025c6f`를 고치지 않고 재시범: CI 18단계 모두 PyQt6와 같은 종료 코드, 바인딩 때문에 새로 실패한 테스트 0, 세그폴트 0, 지워진 객체 줄 0, OOM 0(`PYSIDE6_TRIAL` 9절) — `6f928b1`
 - [x] (11-19) 메인 "병합: OS" → main `56fe32a` merge, 기준선 재갱신, verify 단계 로컬 711 OK(새 시험 모듈 `-v` 앞 이동 수정 `090dcae`) → **PR #127 열림**, CI 녹색이면 메인이 병합
+- [ ] (11-19 진행 중) **UI 세션 인계: PySide6 전용 간헐 비정상 종료** (UI `23a6371`, 파일 `docs/product/pyside6_abort_2026-11-19/`, 소유자 지시 원문 "그러면 OS세션에 인계할 프롬프트와 파일을 전달/작성해주세요").
+  - 재현: `tests.desktop_market_tabs_acceptance` 4개 동시. 고치지 않은 PySide6 6.12.0에서 80번 중 1번, 72번 중 1번. 같은 `malloc_consolidate(): unaligned fastbin chunk detected`가 `delete_owned_widget`에서 남.
+  - 배제: `jobs.py` 가설(Python QRunnable 하위 클래스 + 신호 객체 수명). `QThreadPool.start(callable)`과 `Jobs` 자식 신호 객체로 바꾼 사본도 132번 중 1번 같은 비정상 종료 → 원인 아님. 다른 스레드에서의 `JobSignals` 소멸 0건(112건 모두 화면 스레드), 기다리지 않은 Jobs 0건.
+  - 진행 중: 같은 부하에서 PyQt6 160번(정말 PySide6만인지)과 PySide6 6.11.3 160번(버전 차이).
 - [ ] OS-F1 (F21 뒤, MERGE_QUEUE가 자리 줌), OS-F2 (KEY-2 뒤)
 
 **11-18 추가 검증 (`5816125`):**
