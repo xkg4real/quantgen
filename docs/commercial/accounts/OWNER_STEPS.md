@@ -1,6 +1,6 @@
 # 소유자 실행 순서: AWS → 전달 → 시험 → 공개 전
 
-- 판: v1.1 (2026-11-19, 6절 "기타 할 일" 추가). v1 2026-11-18. 작성: PAYMENTS_ACCOUNT_KEYS 세션. 소유자 요청 (원문): "위 항목 중에서 시험, 전달, AWS, 공개 전 4단계를 수행하기 위해서 해야되는 일들을 구체화하여 .md 파일로 만들어 여기서 다운로드하고 볼 수 있도록 해주세요"
+- 판: v1.2 (2026-11-19, 6절을 메인 세션 확인대로 고침: 지금 하지 않음, 보통 앱 Python, 브랜치+PR). v1.1 6절 추가, v1 2026-11-18. 작성: PAYMENTS_ACCOUNT_KEYS 세션. 소유자 요청 (원문): "위 항목 중에서 시험, 전달, AWS, 공개 전 4단계를 수행하기 위해서 해야되는 일들을 구체화하여 .md 파일로 만들어 여기서 다운로드하고 볼 수 있도록 해주세요"
 - 반영한 소유자 답 (2026-11-18): Q1 운영자 = 개인 (법인 설립을 알려 주시면 바로 법인명으로 바꿈), Q2 메일 = `contact@quantgeneration.com`, Q3 최소 연령 = 무료 만 14세 / 유료 만 19세.
 - 함께 보는 문서 (브랜치 `claude/payments-keys-20261117`): `docs/commercial/accounts/ACCOUNT_SETUP.md` (설정값, 25단계, 웹사이트 요청 블록), `docs/commercial/accounts/ADMIN_GUIDE.md` (관리자 안내서).
 - *(미검증)* 은 AWS 화면 문구를 확인하지 못한 곳입니다. 화면이 다르면 "단계 번호 + 실제 문구"를 알려 주세요. 문서를 고쳐 드립니다.
@@ -273,37 +273,46 @@ Nautilus 브리지는 코드 파일 27개의 지문(code_sha256)을 잽니다. �
 | 시점 | 코드 지문 (앞 16자리) | 두 표에 지금 적힌 값 |
 |---|---|---|
 | 2026-11-04 서명 때 | `f995600b36c75523` | 이 값 (E1, C3 둘 다) |
-| 지금 main (P3-가 뒤) | `ec72fab3c2ab8f05` | 맞지 않음 → 기록 실행 전에 새로 써야 함 |
-| KEY-2가 main에 들어간 뒤 (예상) | `10c27010176ad477` | 다시 새로 써야 함 |
+| P3-가 뒤 (11-18) | `ec72fab3c2ab8f05` | — |
+| 지금 main (KEY-2 `3249af7` 뒤) | `10c27010176ad477` | 맞지 않음. 다만 OS-F2가 `config.py`를 또 바꿀 예정이라 지금은 쓰지 않음 |
 
-KEY-2 값은 이 세션이 브랜치 `31b724f`에서 계산한 **예상값**입니다. 실제로 쓸 값은 그날 `--fingerprint`가 출력한 값입니다. 그 사이에 지문에 드는 파일이 또 바뀌면 값도 달라집니다.
+`10c27010…`은 이 세션이 계산한 값이고, main `3249af7`의 실제 값과 같습니다. 그날 쓸 값은 그날 `--fingerprint`가 출력한 값입니다 (그 사이에 OS-F2 등으로 바뀝니다).
 
-**언제 하나**
-- **다음 Nautilus 기록 실행(of-record run) 바로 전에 한 번만** 하면 됩니다. 기록 실행을 하지 않는 동안에는 할 필요가 없습니다.
-- KEY-2 병합 전에 기록 실행을 하면, 지금 하고 KEY-2 병합 뒤에 또 해야 합니다.
-- 계획이 없다면 KEY-2가 main에 들어간 뒤 한 번만 하는 편이 덜 번거롭습니다. KEY-2가 병합되면 이 세션이 알려 드립니다.
+**언제 하나 (2026-11-19 메인 세션 확인)**
+- **지금은 하지 않습니다.** 다음 Nautilus 기록 실행 **직전에 한 번만** 합니다. 지금 예정된 기록 실행은 없습니다.
+- 앞으로 OS 세션 작업(OS-F2)이 `config.py`를 한 번 더 바꿀 예정이라 지문이 또 움직입니다. 지금 쓰면 두 번 쓰게 됩니다.
+- **다음 기록 실행을 하실 때 메인 세션이 그날 순서를 드립니다.** 아래는 그날 할 일의 모양입니다.
 
-**어떻게 하나 (소유자 Windows PC, QUANTGEN 폴더의 PowerShell)**
+**어떻게 하나 (그날, 소유자 Windows PC, QUANTGEN 폴더의 PowerShell)**
 
-1. 최신 main을 받습니다: `git pull` (작업 중인 변경이 없는 상태에서).
-2. 두 표의 지문을 잽니다. 읽기만 하고 아무것도 쓰지 않습니다:
+1. 최신 main으로 맞춥니다 (작업 중인 변경이 없는 상태에서):
+   ```powershell
+   git switch main
+   git pull --ff-only
+   ```
+2. 두 표의 지문을 잽니다. **보통 앱 Python**으로 실행합니다. `tests/run_all.py`를 돌리시는 그 Python이고, Nautilus용 환경(ntvenv)이 아닙니다. 읽기만 하는 명령입니다:
    ```powershell
    python -B -m tools.nautilus.runner --fingerprint --table docs\nautilus_bridge\registration\pilot1_E1_spy.json; if ($LASTEXITCODE) { throw "fingerprint" }
    python -B -m tools.nautilus.runner --fingerprint --table docs\nautilus_bridge\registration\pilot2_C3_btcusd.json; if ($LASTEXITCODE) { throw "fingerprint" }
    ```
-   (Nautilus용 Python 환경에서 실행합니다. 7A 때 쓰신 것과 같은 환경입니다.) 각 줄이 `table_sha256`, `code_sha256`, `host_fingerprint`와 `owner_confirmed form:` 한 줄을 출력합니다.
-3. 메모장(UTF-8, **BOM 없음**)으로 두 파일을 엽니다:
-   - `docs/nautilus_bridge/registration/pilot1_E1_spy.json`
-   - `docs/nautilus_bridge/registration/pilot2_C3_btcusd.json`
+   각 줄이 `owner_confirmed form:`으로 시작하는 한 줄을 출력합니다.
+3. 메모장으로 두 파일을 엽니다:
+   - `docs\nautilus_bridge\registration\pilot1_E1_spy.json`
+   - `docs\nautilus_bridge\registration\pilot2_C3_btcusd.json`
 
-   각 파일의 `"owner_confirmed": "..."` 한 줄만 고칩니다.
-   - 꼴: `"<이름>, <오늘 날짜 YYYY-MM-DD>, table <16자리>, code <16자리>"`
-   - 이름은 지금 적힌 것과 같게 씁니다.
-   - table과 code의 16자리는 2번에서 **그 표의** `owner_confirmed form:` 줄이 보여 준 값을 그대로 씁니다. table 값은 보통 그대로입니다 (E1 `d76d2d7301ffe92c`, C3 `e2ec073c309cbfc7`).
-   - `host_fingerprint` 줄은 2번 출력과 같으면 그대로 둡니다. 다르면 멈추고 메인 세션에 2번 출력을 보내세요.
-4. 저장할 때 인코딩을 **"UTF-8"** 로 고릅니다 ("UTF-8 with BOM"이 아님). BOM이 있으면 이후 검사(L1-36)가 실패합니다.
-5. 2번을 다시 실행해 두 표 모두 오류가 없는지 봅니다.
-6. 커밋과 push는 **메인 세션에 먼저 물어보세요.** main에 바로 올릴지 PR로 올릴지, 그리고 그때의 병합 대기열을 메인이 정합니다. 이 세션은 정하지 않습니다(**미검증**). 파일을 올릴 때는 두 파일 이름을 하나씩 적습니다 (`git add -A` 금지).
+   각 파일의 `"owner_confirmed": "..."` **한 줄만** 고칩니다. 값은 2번에서 **그 표의** `owner_confirmed form:` 줄에 나온 그대로입니다 (꼴: `"<이름>, <날짜>, table <16자리>, code <16자리>"`).
+4. `host_fingerprint` 줄은 2번이 같은 값을 출력하면 그대로 둡니다. **다르면 멈추고 메인 세션에 2번 출력을 보내세요.**
+5. 저장할 때 인코딩은 **"UTF-8"** 입니다 ("UTF-8 (BOM 있음)"이 아님). BOM이 있으면 이후 검사(L1-36)가 실패합니다.
+6. 2번을 다시 실행해 두 표 모두 오류가 없는지 봅니다.
+7. **main에 바로 push하지 않습니다.** 브랜치를 만들어 PR로 올립니다 (`<YYYYMMDD>`는 오늘 날짜, `<16자리>`는 2번의 code 값):
+   ```powershell
+   git switch -c owner/nautilus-confirm-<YYYYMMDD>
+   git add docs/nautilus_bridge/registration/pilot1_E1_spy.json docs/nautilus_bridge/registration/pilot2_C3_btcusd.json
+   git commit -m "nautilus: owner_confirmed for code <16자리>"
+   git push -u origin owner/nautilus-confirm-<YYYYMMDD>
+   ```
+   그다음 GitHub 저장소 화면에 뜨는 **Compare & pull request**를 누릅니다.
+8. 메인 세션이 Linux에서 code_sha256을 다시 계산해 두 줄과 맞는지 확인합니다 (RUNBOOK 7A.4와 같은 검토). CI가 녹색이면 메인이 병합합니다. 그날 `MERGE_QUEUE.md`에 자리를 따로 둡니다.
 
 **하지 말 것**
 - `--record-baseline` 등 다른 러너 명령 출력의 지문을 옮겨 적지 않습니다. 7A.3은 위 2번의 두 줄만 씁니다.

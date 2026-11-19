@@ -1,0 +1,226 @@
+{
+ "files": {
+  "core/engine/feed.py": [
+   "import:data.fmp.FMPQuoteClient"
+  ],
+  "core/ficc/curve_models.py": [
+   "import:data.kis_markets.KISMarkets",
+   "import:data.kis_markets.KRW_CURVE_TENORS"
+  ],
+  "core/ficc/insights.py": [
+   "import:core.ficc.data"
+  ],
+  "core/ficc/macro.py": [
+   "import:core.ficc.data.load_many"
+  ],
+  "core/ficc/ratesim.py": [
+   "import:core.ficc.data.load_short_rate",
+   "import:core.ficc.data.load_treasury_curve"
+  ],
+  "core/market/detail_model.py": [
+   "import:data.kis_workspace.supported_intervals"
+  ],
+  "core/market/directory.py": [
+   "import:data.kis_markets"
+  ],
+  "core/market/market_cap.py": [
+   "import:core.ficc.data",
+   "import:core.ficc.data",
+   "import:data.fmp.quote_client.FMPError",
+   "import:data.fmp.quote_client.FMPPlanError",
+   "import:data.fmp.quote_client.FMPPlanError",
+   "import:data.fmp.quote_client.FMPQuoteClient",
+   "import:data.fmp.quote_client._redact"
+  ],
+  "core/market/qscore_rankings.py": [
+   "import:data.kis_workspace.MarketDataService"
+  ],
+  "core/market/routing.py": [
+   "import:core.ficc.data"
+  ],
+  "core/quant/gsq.py": [
+   "call:config.gs_client_id",
+   "call:config.gs_client_id",
+   "call:config.gs_client_secret",
+   "call:config.gs_client_secret",
+   "import:gs_quant",
+   "import:gs_quant.instrument.IRSwap",
+   "import:gs_quant.session.Environment",
+   "import:gs_quant.session.GsSession",
+   "import:gs_quant.timeseries"
+  ],
+  "core/quant/history.py": [
+   "call:config.fmp_key",
+   "call:config.fmp_key",
+   "call:config.fmp_ready",
+   "call:config.kis_ready",
+   "call:config.kis_ready",
+   "call:config.kis_ready",
+   "call:config.kis_ready",
+   "call:config.kis_ready",
+   "import:data.crypto.crypto_client.BinancePublic",
+   "import:data.crypto.crypto_client.CryptoError",
+   "import:data.crypto.crypto_client.UpbitPublic",
+   "import:data.fmp.quote_client._redact",
+   "import:data.kis_markets.CHART_FX",
+   "import:data.kis_markets.CHART_YIELD",
+   "import:data.kis_markets.KISMarkets",
+   "import:data.kis_markets.OVERSEAS_EXCHANGES",
+   "import:data.kis_markets.OVERSEAS_EXCHANGES",
+   "import:data.krx.kis_client.KISClient",
+   "import:data.net.session"
+  ],
+  "core/quant/insights.py": [
+   "call:config.anthropic_key",
+   "call:config.anthropic_key",
+   "url:api.anthropic.com"
+  ],
+  "core/quant/risk.py": [
+   "import:gs_quant.timeseries"
+  ],
+  "core/research/analysis.py": [
+   "import:core.ficc.data.load_series",
+   "import:core.ficc.data.load_short_rate"
+  ],
+  "core/research/bond_analysis.py": [
+   "import:core.ficc.data.load_treasury_curve"
+  ],
+  "core/research/connections.py": [
+   "import:core.ficc.data.probe",
+   "import:data.crypto.crypto_client.probe",
+   "import:data.kis_markets.KISMarkets",
+   "import:data.krx.krx_market_client.KRXMarketClient"
+  ],
+  "core/research/crypto_workflow.py": [
+   "call:config.upbit_ready",
+   "import:core.ficc.data.load_series",
+   "import:data.crypto.crypto_client.BinancePublic",
+   "import:data.crypto.crypto_client.CryptoError",
+   "import:data.crypto.crypto_client.UpbitAccount",
+   "import:data.crypto.crypto_client.UpbitPublic",
+   "import:data.crypto.crypto_client.UpbitPublic"
+  ],
+  "core/research/derivatives_workflow.py": [
+   "call:config.kis_ready",
+   "import:data.kis_markets.KISMarkets",
+   "import:data.kis_markets.front_contract"
+  ],
+  "core/research/etf_workflow.py": [
+   "call:config.kis_ready",
+   "import:data.kis_markets.KISMarkets",
+   "import:data.kis_markets.domestic_index_code"
+  ],
+  "core/research/fx_analysis.py": [
+   "import:core.ficc.data.load_fx_spot",
+   "import:core.ficc.data.load_policy_rates",
+   "import:core.ficc.data.load_short_rate"
+  ],
+  "core/research/market_analysis.py": [
+   "import:data.krx.KRXGateway"
+  ],
+  "core/research/market_board.py": [
+   "import:core.ficc.data.load_series",
+   "import:data.kis_markets.KISMarkets"
+  ],
+  "core/research/markets.py": [
+   "import:core.ficc.data.load_series"
+  ],
+  "core/research/rates_analysis.py": [
+   "import:core.ficc.data.load_short_rate",
+   "import:core.ficc.data.load_treasury_curve"
+  ],
+  "core/research/structuring_analysis.py": [
+   "import:core.ficc.data.load_treasury_curve"
+  ],
+  "core/research/watchlist.py": [
+   "import:data.krx.kis_client.KISClient",
+   "import:data.krx.kis_client.requests"
+  ],
+  "main.py": [
+   "import:data.krx.KRXGateway"
+  ],
+  "quantgen_desktop/app.py": [
+   "import:data.kis_workspace.MarketDataService",
+   "import:data.kis_workspace.MarketDataService"
+  ],
+  "quantgen_desktop/home_view.py": [
+   "import:core.ficc.data.load_series"
+  ],
+  "quantgen_desktop/market_chart.py": [
+   "import:data.kis_stream.KISStream",
+   "import:data.kis_stream.subscription_for",
+   "import:data.kis_workspace.MarketDataService",
+   "import:data.kis_workspace.availability_note",
+   "import:data.kis_workspace.availability_note",
+   "import:data.kis_workspace.supported_intervals"
+  ],
+  "quantgen_desktop/market_rankings.py": [
+   "import:data.kis_workspace.MarketDataService",
+   "import:data.kis_workspace.OVERSEAS_PRICE_DETAIL"
+  ],
+  "quantgen_desktop/market_summary.py": [
+   "import:core.ficc.data.load_series"
+  ],
+  "quantgen_desktop/market_tools.py": [
+   "call:config.kis_ready"
+  ],
+  "quantgen_desktop/qscore.py": [
+   "import:data.kis_workspace.MarketDataService"
+  ],
+  "quantgen_desktop/watchlist_live.py": [
+   "import:data.kis_stream.KISStream",
+   "import:data.kis_workspace.MarketDataService"
+  ],
+  "ui/bonds_page.py": [
+   "import:core.ficc.data.load_treasury_curve"
+  ],
+  "ui/crypto_page.py": [
+   "call:config.upbit_ready"
+  ],
+  "ui/derivatives_page.py": [
+   "call:config.kis_ready"
+  ],
+  "ui/fcharts.py": [
+   "import:core.ficc.data"
+  ],
+  "ui/fx_page.py": [
+   "import:core.ficc.data.load_fx_spot",
+   "import:core.ficc.data.load_policy_rates",
+   "import:core.ficc.data.load_short_rate"
+  ],
+  "ui/krx_page.py": [
+   "import:data.krx.KRXGateway"
+  ],
+  "ui/macro_state_panel.py": [
+   "call:config.kis_ready"
+  ],
+  "ui/market_chart_page.py": [
+   "import:data.kis_stream.KISStream",
+   "import:data.kis_workspace.MarketDataService",
+   "import:data.kis_workspace.availability_note",
+   "import:data.kis_workspace.availability_note",
+   "import:data.kis_workspace.supported_intervals"
+  ],
+  "ui/quant_lab_page.py": [
+   "import:core.ficc.data"
+  ],
+  "ui/rates_page.py": [
+   "import:core.ficc.data.load_short_rate",
+   "import:core.ficc.data.load_treasury_curve"
+  ],
+  "ui/settings_page.py": [
+   "import:core.ficc.data.probe",
+   "import:data.crypto.crypto_client.probe",
+   "import:data.kis_markets.KISMarkets",
+   "import:data.krx.krx_market_client.KRXMarketClient"
+  ],
+  "ui/structuring_page.py": [
+   "import:core.ficc.data.load_treasury_curve"
+  ]
+ },
+ "totals": {
+  "core_and_main": 83,
+  "files": 48,
+  "screens": 38
+ }
+}

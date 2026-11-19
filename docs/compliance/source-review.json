@@ -6,10 +6,10 @@
   "registry_sha256": "d1a62050d33e6c53ac9027db0eb8661317a4aec7fc7eb7b10488cf709b0b8f0f",
   "profile_sha256": "87e78beee01217c45e03638e2f46469a809a2d47075d5ed2d38bc79ceccec3ff",
   "sources": {
-    ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
+    ".github/workflows/compliance-review.yml": "795b2e9435c8eed43b08b98c709b3e2eeb3a7365ad2628855cb164cea0f94ab8",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "eec429393c64495052c95036d22b6d6e41381280e2b705cd67b025fda7721910",
+    ".github/workflows/runtime-smoke.yml": "ffd84e065fb3500f42bcb19afaf96886bf63e4cb37d0e88f9a7d7c4a658b3bfe",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -80,8 +80,8 @@
     "core/calendars/publication.py": "f275ee921eed3a2c4c31547925b943e5a032162800f3bb70365621ff26f38dcf",
     "core/calendars/regime.py": "fcac664c8f3b2d51ff45c67ef27252b1961b38c944dd785f8162d9ffa579d17b",
     "core/calendars/store.py": "4932ad9cbb4a1914f6b75da84e96a74730444cf2f43c756a7c7dd95efb403041",
-    "core/credentials/__init__.py": "37997b7b42faed90eac195079f5b3044f55e23157c11377b6fcfdf2782929b9f",
-    "core/credentials/names.py": "a29688fb2f396bcca90a0c135a1d88e593b18b446d42213769ab2c7a4f98f094",
+    "core/credentials/__init__.py": "1aa554523b402a759a8502d488eb25af77ff7d5d85edf7edc7bbce9d9a8206ce",
+    "core/credentials/names.py": "0c76d2c358bf743d874e8025529490ace8291afc0a11a925fc0e4b158388a5fe",
     "core/crypto/__init__.py": "239a350b379471bb83ac90f3dc25149814f5f58790604236697daf160f5fcd81",
     "core/crypto/analytics.py": "7d7c846f0a363135592b88699190ac8c7251e159756ffb21bbebc128129dfdbf",
     "core/crypto/funding_diagnostic.py": "19e0763b30e0f838d522c4ceedffd8ad7139b69f7257924532593b9bb02a9270",
@@ -135,6 +135,13 @@
     "core/ficc/structured.py": "2e5ac55b70b839792e63b676844b402ea0e83151a735aa64d6ed7ea7e867718a",
     "core/ficc/swaps.py": "0f14e36c17a558bd5a38f2a486355e2186fbd7ad4aa9ba900b65316c3df22f29",
     "core/ficc/vol_products.py": "e81f1df20e6f83e11159412edfb1b5cc45b24e742653c8e1cc39164793728f12",
+    "core/gateway/__init__.py": "1f8ad981f663e2e05f28e717f56243b3e5a2be5190267b0c1c01941a2545a213",
+    "core/gateway/codec.py": "0f582ccb5b1294bc424a7cda7bf0b535f6eb5386c307c592a0e38277f06edd62",
+    "core/gateway/dispatch.py": "b585fa4aa1446332f06ca2eaa16eda369518e4f4be819a9de249dcc84779ccb2",
+    "core/gateway/local.py": "19c9fc4e637712c2450c6cbec8a32b21c67f038b1635a41f98aff09cb5a2dcab",
+    "core/gateway/remote.py": "588b0c3b441381c6f624b86c5f0c7d946984d5d29bc6c988247a6aaa5e46a118",
+    "core/gateway/routes.py": "2b29b44b49c3e81b930e544208c131c9eb12bf07494227eae46dc2ff4c7aba06",
+    "core/gateway/sources.py": "1f3843617e58ffe8034709639eded5e5b01c8c7d880e0490a8f434f5226bef8c",
     "core/i18n.py": "b31a9f40519b2699e9cf3d72a8f9144bd74f0c93ca731df5ceaeabbb120ad6dc",
     "core/market/__init__.py": "1c2c29d460b9c20266f70503993da4824fa68727b45e4e2a6caa3436c18a7918",
     "core/market/detail_model.py": "e73a0a14e0968d09393e15611649eda872d24d5a5a029a2a772fb18f5cfbc8f7",
@@ -300,7 +307,7 @@
     "data/kis_workspace.py": "31ad0c45e37f71030a7f26f1f0eb21b0979f4cabb9093f5095e658990310c204",
     "data/krx/__init__.py": "85eab43f9556eb3a7a207099993842304821caba218b68a3aaaf00d004622dc9",
     "data/krx/gateway.py": "6aec229a790be1cbafbc7bef6b3206ccd585148c6899665fe82102931b0d00e7",
-    "data/krx/kis_client.py": "b7ab7ea476a6f2cb448c71c73c12961e843557e675f3244a190fafd8abfac6f8",
+    "data/krx/kis_client.py": "4af6fa1a0f97c107eba26ee138dce561e0f3f1bd8afcbd6a7de70d9d9da4f469",
     "data/krx/krx_market_client.py": "092fcd34a4000731a9eaba27f27ddd1f396137e27e96e6627b767a688635ab87",
     "data/krx/opendart_client.py": "d038d525d9b66d8633ffe3cc0c43d4da72a5cf9cee3ebf6a9496e68ca08afbff",
     "data/macro/rules_v2.0.0.json": "c74edcd93d05a55eddea860e2fd6ee8e31bcaf00dfd7fbc2b0e41766f766822e",
@@ -407,7 +414,7 @@
     "mobile/pyproject.toml": "2cad54b7e32873320de1d05e1e81cb91ce88f64cd97afc1ec955399fc5922db7",
     "packaging/launch_desktop.py": "7724b54d172f00d87c80abab2ff5214deb5ebcf9105878e24ca7519c166ce4b8",
     "packaging/selfcheck.py": "30dffaa03bf0f29342d3a1aca2945ab17c588c3a4304c59a0880f05b6a523ef1",
-    "pyproject.toml": "ae328503d802c3725e5869313e95f24be5a4bf73b176456a1d0913c1938e7f19",
+    "pyproject.toml": "26bc966048250dd020d173d23b3a9f76fc3de0333e662a3aff8490228fb88382",
     "quantgen_desktop/__init__.py": "1ec1396b13e4b6caae0b8dfcf6201af71ad9756428c5cbcaab9706083691e060",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
     "quantgen_desktop/app.py": "92ee40a3bb986e95997cf611edfa0381ed98bb6022a59f4844b84244106aacd9",
@@ -513,7 +520,7 @@
     "tests/cms_coupon_disclosure_acceptance.py": "1c1fcf30d38c23885e7c236f1ed39302972df972c93c9a20184b3b7ebf3d4010",
     "tests/compliance_acceptance.py": "515c4e52c4643cc4a4679bcacf401af6829b2472a69ae9ca23ded61752c40156",
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
-    "tests/credentials_acceptance.py": "fcddc20d83b3c44cd9815a6ad8068e8be622e9f029a8b7830d82e923f3f14959",
+    "tests/credentials_acceptance.py": "b0c2a0a66a96fc22380eb61c52b1a290abf0c62c9d375b8e0625e15c94a46c2e",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
     "tests/crypto_missing_values_acceptance.py": "be07db163184acb8c0a67dd9c0562045e9f486506539ed9eadb2d06bec2ca038",
     "tests/curve_methods_acceptance.py": "66007a9bee8a7abedce57738f0fff5bd1ae9b2bd1d400b240d032e9a9691bd9b",
@@ -592,6 +599,9 @@
     "tests/frozen_guard.py": "5a8f9a8c33cd0cc279da28db6e8f38c6e9b8abe643d0b7a26821077257f32246",
     "tests/funding_inference_acceptance.py": "dc1eaf4e627411a43ab46dd878a3628c076911ede974554575cc24f101310b7b",
     "tests/fx_basis_disclosure_acceptance.py": "9077bab45713c30e1b63607f87607c92c7a9bef60e094affdc968571405bb99e",
+    "tests/gateway_acceptance.py": "9e44473f4a43dd45819f940e0d125ca7d41b97246a612b8f178265d437cd5ef1",
+    "tests/gateway_boundary_acceptance.py": "f0fe71cc96c42247fb4369a2c81ec788d02db4d4b5984498c8cf8cab2ba19a70",
+    "tests/gateway_remote_acceptance.py": "6d0377b7064b3c460440f91902a4db37532a052b901ac7983d223146cc1a8f05",
     "tests/glossary_search_acceptance.py": "058922190b05fc585dab3462848b40ea0444a43b4b5e96fdb512cd8ccfc0e64e",
     "tests/golden_tools.py": "24154d79aea43bc91b7c26c33c6b400cd9202cdb4915680a81b4f7cf0fa928ef",
     "tests/history_best_source_acceptance.py": "cda3221001d11599c0b9dab6f71f59a20b7ac762d43adcd6c0b5f2fbce19310f",
@@ -726,8 +736,8 @@
     "tools/nautilus/runner.py": "1d6fdd9d376a5991e1333b32f47d4d9af5297cfcab377a63f4924fcaf91c8ced",
     "tools/nautilus/sandbox.py": "fdbc0e51aa3e1abff737d96292c636ada8b82f59b8ffe4131c6471d202475b4e",
     "tools/packaging/smoke_desktop.py": "da8434fb8e0d05320af2f9ee2dec890383d452fb79b0fff85a476de6e3e8574b",
-    "tools/packaging/smoke_installed.py": "de7d99f1a1afc95c8544947509610b257c36ddaac69a64063280ffc2373e4408",
-    "tools/packaging/stage.py": "ed6f089a7820d55dc176fc33574ff78bdf43212f56f7e46d3741025fc9d0aa30",
+    "tools/packaging/smoke_installed.py": "8d6544c04873e036a5bf739096ba9ded73fb6188f2f66e28d85077bf73b30bfa",
+    "tools/packaging/stage.py": "b44a1f8004925776871daf0dbbcaedb7a444936b6d39d4d0c474299895af0b39",
     "tools/packaging/third_party_notices.py": "656098e51c6ef2241df96ec36b43e9636025f7f0efbf36e13afaeb3481c65a8f",
     "tools/paper/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/paper/approval.py": "42829586c3e9daff69ad75520a63e139c0ed0f41de705e60fe02c965769bc138",
@@ -803,163 +813,163 @@
   "reviews": {
     "1": {
       "document_sha256": "316e056ea90165dafa910d384a9ba9b98cd111f592ca03c7b877bcd65d772ac9",
-      "source_digest": "4c7daef97df2892a256f009a9586948fee7745cdcf0f1c0266ba01d210c41814",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.745556+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "ca63035a410f78f804d9733849a310df8eb0271a413c0473f0def01d13638efb",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.760014+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "4c7daef97df2892a256f009a9586948fee7745cdcf0f1c0266ba01d210c41814",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.748419+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "ca63035a410f78f804d9733849a310df8eb0271a413c0473f0def01d13638efb",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.762810+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "7a49a1fd1dd049f80162419610fbdd0f086a23d9ea8b6c476b645816e5165592",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.750762+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "2517954d09a74e8ad8b3e3da808ed5cfadbf95ff0a7ed1fa91fa25ae77b74b03",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.764704+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "d46e856fc81bd4fa60f82c1481244d2eebe706566bec29cbb54d2c9c74bedd11",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.752763+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "219461b70339881aee76b34b036452bf932d8b15171107c5ed0526825e923835",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.767126+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "b9125ca490a69649d671463269087e84c93389fd6d19213babdb90768f72f4d3",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.754956+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "a1a17cdc0281e1f435f4b77df2df40e4bbca9993034080dd3ab5046c7f16200b",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.768775+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "5e7dbbd3bd75ef496b49fe0f889bff1fce13123c273b4b93347cd1e512e3078a",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.756727+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "e80693ad2e269f3e963744a77228d663861518c5eeae388aab4ad9b69c0886fc",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.770340+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "7": {
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
-      "source_digest": "4c7daef97df2892a256f009a9586948fee7745cdcf0f1c0266ba01d210c41814",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.759001+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "ca63035a410f78f804d9733849a310df8eb0271a413c0473f0def01d13638efb",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.771919+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "8": {
       "document_sha256": "b1ebf5f8469f355bc6d261789b5ffd402282fea07c83add564ed0dc2dc2fb775",
-      "source_digest": "5e7dbbd3bd75ef496b49fe0f889bff1fce13123c273b4b93347cd1e512e3078a",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.760800+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "e80693ad2e269f3e963744a77228d663861518c5eeae388aab4ad9b69c0886fc",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.773756+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "1ce73a245b377a8542ce1d71732690a9c1f2e0a1fac4968aef0e11915d99ecb1",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.762910+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "75fdea14853ea1f6308a7ddfe4d5a40131a2b020bd99674692c559f5d8efe78a",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.775444+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "fb9f6489895efc8e80b5534f2749a3921c0b010235752eebaec6c72ad280f926",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.764833+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "642897ac48ca8d434fb215241124464e08344add43bcd6df503e18f8fd850d16",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.777709+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "6cdec700933b8b47dc376b0d41c2bd5f7b536456ac899e69b7d359f14fefc9c7",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.767165+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "b346a054784a1c953eec4eefef506556ae860ae2a2b4d875c3cdafb821649d1e",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.779712+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "87562c3a2455c70b3a314520b6ad084523fba9820181e2ad2e6d6cfba6df13aa",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.769106+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "ace8a977ea31bfd381af98315aecd5eaa51624afae31f99b49090aa8ec242a21",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.781995+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "1ce73a245b377a8542ce1d71732690a9c1f2e0a1fac4968aef0e11915d99ecb1",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.770867+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "75fdea14853ea1f6308a7ddfe4d5a40131a2b020bd99674692c559f5d8efe78a",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.784281+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "1ce73a245b377a8542ce1d71732690a9c1f2e0a1fac4968aef0e11915d99ecb1",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.773021+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "75fdea14853ea1f6308a7ddfe4d5a40131a2b020bd99674692c559f5d8efe78a",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.786018+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "1ce73a245b377a8542ce1d71732690a9c1f2e0a1fac4968aef0e11915d99ecb1",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.774749+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "75fdea14853ea1f6308a7ddfe4d5a40131a2b020bd99674692c559f5d8efe78a",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.787710+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "45069c480e03ad6b066d4f754915a5fa98b62b051cd4b016ffb984561e0d34fe",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.776548+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "7e4ee47a9c135bbd44c7214c8b1a7873ce73d39534468a2c23d4d63f3463ae88",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.790002+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "5e7dbbd3bd75ef496b49fe0f889bff1fce13123c273b4b93347cd1e512e3078a",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.778296+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "e80693ad2e269f3e963744a77228d663861518c5eeae388aab4ad9b69c0886fc",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.793052+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "4c7daef97df2892a256f009a9586948fee7745cdcf0f1c0266ba01d210c41814",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.780075+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "ca63035a410f78f804d9733849a310df8eb0271a413c0473f0def01d13638efb",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.795359+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "cf2ee03761595eb1cfac5d809eabe6cfe4fc8533ad12e5492378d3928ca1a422",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.781961+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "source_digest": "e682b478f54f2976745d7896cda824733e1a63eb15a9afd945c2b5227b1fa0af",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.797550+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     },
     "20": {
-      "document_sha256": "27989f5f7b39610afbcb2f3c464db2f60e09dd4091bf2edfe9a96b18dd3f8c8e",
-      "source_digest": "4c7daef97df2892a256f009a9586948fee7745cdcf0f1c0266ba01d210c41814",
-      "reviewed_by": "Claude CI concurrency review (GH-1)",
-      "review_note": "runtime-smoke.yml gains a concurrency group that cancels an older run of the same pull request or branch; CI scheduling only, no change to what the app collects, sends or stores, so the statements of documents 1 to 20 are unchanged.",
-      "reviewed_at": "2026-11-19T06:09:48.783565+00:00",
-      "source_commit": "edbe9f724fc0856597e5665fbe52fb0d00d86d99"
+      "document_sha256": "cc908c5e77b1f70a94e883c933ba7aa4ba24f0a384d4b156b9de7f1a89396d41",
+      "source_digest": "ca63035a410f78f804d9733849a310df8eb0271a413c0473f0def01d13638efb",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-3 review fixes: ast boundary test also in the Compliance workflow, FRED/Yahoo/GS in boundary scope, routes.json packaged (stage DATA_FILES, package-data, installed smoke), dispatch and remote input handling, codec-carried allowlists",
+      "reviewed_at": "2026-11-19T08:20:01.799754+00:00",
+      "source_commit": "75c530f30ba623565c653e179b392a2e782382fc"
     }
   }
 }

@@ -61,6 +61,8 @@ assert sample.symbol == 'USD/EUR' and not sample.ohlc
 assert len(indicator_values(sample)['RSI14']) == len(sample.dates)
 assert '<svg' in chart_svg(sample,('rsi','macd'),locale=LocaleContext('ko_KR'))
 assert len(display_rights()['registered_series']) == 73
+from core.gateway.routes import load_routes
+assert set(load_routes()['profiles']) == {'personal', 'commercial'}   # routes.json shipped (KEY-3)
 assert LocaleContext('de_DE').number(1234.5) == '1.234,50'
 from core.market.symbols import search as symbol_search
 assert symbol_search('애플')[0].code == 'AAPL'  # bundled overseas name list (UI-16)

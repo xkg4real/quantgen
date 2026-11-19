@@ -50,6 +50,9 @@ jobs:
           python-version: '3.12'
       - name: Exercise stale-source, document and privacy boundaries
         run: python -m unittest tests.compliance_acceptance tests.compliance_export_acceptance -v
+      - name: Data-source gateway boundary (every pull request; standard library only)
+        if: always()
+        run: python -m unittest tests.gateway_boundary_acceptance -v
       - name: Check source and document review fingerprints
         if: always()
         run: python -m tools.compliance.check --check --report-dir "$RUNNER_TEMP/compliance-review"
