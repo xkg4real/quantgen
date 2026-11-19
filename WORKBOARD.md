@@ -92,7 +92,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [x] 2.7 결정 기록 PR — ⑦-1/rulings(7c33955), ⑦-1/rulings/2(002a658). 11-19분은 56fe32a, edbe9f7, ab24dec에 포함
 - [x] 2.7 P3·F 뒤 main PR — ⑦-2, ⑦-2/a
 - [~] 2.7 회원가입 정책 문서 PR — PR-1 끝, PR-2 남음
-- [ ] 다음 기록 — KEY-4 결과, 소유자 MFA 답, OS-F2 자리, D9 답
+- [x] 기록 — PR #135 → main fa78df1: 세션 연결 지시, 계정 결정 3건, OA-42·OA-44, 메인 결정 2건 (원장 SESSION-PIPELINE). 남은 기록: D9 답, OA-38, OA-46
 
 **메인 문서 손볼 것**
 - [x] MERGE_QUEUE — 4c head·상태, 7행 KEY-5만, 윗표 줄 긋기, "비공개 뒤 CI 유료" 규칙 정정, 4d·OS-F2·OS 종료 원인 기록·정책 PR-2 행 — 11-20 메인 (WORKBOARD 첫판과 같은 handoff 커밋)
