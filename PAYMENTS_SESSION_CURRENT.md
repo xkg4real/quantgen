@@ -6,7 +6,7 @@ task: payments-account-keys
 cycle: 2026-11-17
 done_ids: KEY-2
 next_ids: PAY-A1, PAY-A2, KEY-1, KEY-2/b, KEY-3/design, KEY-3, PAY-0, PAY-2
-updated_at: 2026-11-19T11:20:00+09:00
+updated_at: 2026-11-19T11:50:00+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: claude/payments-keys-20261117
@@ -24,6 +24,9 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-19 11:50 갱신:** 메인이 PR #129 (`ad124d1`)를 검증함: 1·2·3·4·6 확인, CI 녹색이면 병합 (push 금지). KEY-3 PR에 넣을 5건을 미리 고쳐 **PR 없는 브랜치** `claude/payments-key3-prep-20261119` @ `0c3d0d5`에 둠: 링크인 토큰 파일은 대상만 바꿈, POSIX O_NOFOLLOW + fchmod로 읽기, key_id는 발급에 쓴 키로, 심어 둔 `.tmp` 링크 시험, ENV_NAMES 19·109행과 20-deletion key_id 범위. credentials 50 OK; 새 시험은 main의 옛 kis_client에서 실패함 (8개). kis_stream 6 오류는 main 코드에서도 같은 환경 오류. **다음:** #129 병합 뒤 KEY-3 설계 문서 → KEY-3 코드 (이 prep 커밋을 포함).
+
 
 **2026-11-19 11:20 갱신:** PR #128 병합됨 (main `3249af7`, 메인이 LEDGER에 KEY-2 기록, handoff `11467ff`). KEY-2/b: 작업 브랜치에 main `3249af7` merge → `cc1cfa3` merge → 기준선 갱신 `ad124d1` (PASS) → **PR #129**. credentials 47 OK, 회귀 실패 집합 main과 같음, 코드 지문 10c27010 그대로. 메인이 CI 녹색이면 병합. 소유자에게 owner_confirmed 안내 (KEY-2 병합으로 이제 필요).
 
