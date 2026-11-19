@@ -69,11 +69,11 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 | P5 | 필수 속성 | **email 하나만** | **아니요** | 확인 |
 | P6 | 스스로 가입 | 켬 (**Enable self-registration**) | 예 | 확인 (토글 경로 확인) |
 | P7 | 가입 확인 | Cognito가 이메일 코드로 확인 (자동 확인 켬) | 예 | 부분 확인 (문구 미검증) |
-| P8 | 계정 복구 | 이메일만 (SMS 안 씀) | 예 | 미검증 (메뉴 문구) |
+| P8 | 계정 복구 | Self-service 켬, **Email if available, otherwise SMS** (전화번호를 받지 않으므로 실제로는 이메일). 이메일 MFA를 켜면 Cognito가 "Email only"를 막음 (MFA 코드와 복구 코드는 다른 통로여야 함). 그래서 **이메일 MFA를 켠 회원은 비밀번호 찾기가 막히고, 관리자가 임시 비밀번호를 발급** (`ADMIN_GUIDE.md` 6절). 소유자 결정 2026-11-19: 이메일 MFA 유지 | 예 | 확인 (AWS 문서: 같은 통로 금지; 콘솔에서 Email only 비활성 확인) |
 | P9 | 메일 발송 | **Amazon SES 사용**. FROM `no-reply@quantgeneration.com`, FROM 이름 `QUANTGEN`, Reply-to `contact@quantgeneration.com` (실제 받는 메일함). 기본 Cognito 메일은 하루 한도가 낮아 운영에 맞지 않음 | 예 | 확인 (한도 숫자 50통은 미검증) |
 | P10 | 비밀번호 정책 | 최소 **10자**, 숫자·소문자·대문자·**특수문자** (소유자 결정 2026-11-19), 임시 비밀번호 7일. 웹 가입 화면은 "특수문자 1개 이상"을 입력 중에 보여 줌 (ACC-1). 특수문자로 인정되는 기호는 Cognito가 정함: `` ^ $ * . [ ] { } ( ) ? " ! @ # % & / \ , > < ' : ; \| _ ~ ` = + - `` (AWS 문서 확인 2026-11-19) | 예 | 제안 (최소 6자 허용·임시 7일 기본은 확인) |
 | P11 | 비밀번호 재사용 금지 | 최근 5개 | 예 | 미검증 (Essentials에서 되는지) |
-| P12 | MFA | **Optional MFA**, 방법 **Authenticator apps** + **Email message**. SMS 끔 | 예 | 확인 (이메일 MFA는 Essentials + 자체 SES) |
+| P12 | MFA | **Optional MFA**, 방법 **Authenticator apps** + **Email message** (소유자 결정 2026-11-19: 이메일 MFA 유지, P8의 결과 감수). SMS 끔 (전화번호를 받지 않음; 유료 단계에서 본인인증으로 번호를 받게 되면 재검토, PAY-2) | 예 | 확인 (이메일 MFA는 Essentials + 자체 SES) |
 | P13 | 이메일 변경 대기 | 새 주소 인증 전까지 기존 주소 유지 ("Keep original attribute value active when an update is pending") | 예 | 미검증 (문구) |
 | P14 | 사용자 정의 속성 | 아래 1.2표 6개, 모두 String, 최대 64자 | 추가만 가능. 필수로 만들 수 없음. 삭제·이름 변경 불가 | 추가 가능·필수 불가 확인, 삭제 불가 미검증 |
 | P15 | 삭제 보호 | 켬 (콘솔로 만든 풀은 기본 켜짐) | 예 | 확인 (기본값), 위치 부분 확인 |
