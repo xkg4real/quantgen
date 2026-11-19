@@ -168,7 +168,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [~] DIDM-0 — PREREG_V0.md. 소유자 승인 11-18. 열린 질문 2개
 - [~] DIDM-1 — SCORE_SCHEMA_V0.md, core/didm/llm/schema.py (14종, novelty_0_100)
 - [~] DS-4a — GDELT, ALFRED + 시점 저장소. 소유자 PC 확인 끝
-- [!] DS-4b — Alpha Vantage, Tiingo (CryptoPanic은 무료 플랜 없음 → 보류, 커넥터 코드는 남김, 암호화폐 뉴스 감성은 Alpha Vantage로 — 4abe761, 11-20). 무료 키 2개 확인 대기
+- [-] DS-4b — Alpha Vantage·Tiingo·CryptoPanic 모두 무료로 뉴스 불가(소유자 PC 11-20) → 보류, 커넥터 코드는 남김. 뉴스·감성·엔티티는 GDELT+자체 NLP, 공시는 EDGAR·OpenDART (c206b10). 유료 공급원은 Stage 3 뒤 판단(소유자 답 2)
 - [ ] DS-4c — CME FedWatch 종가판. DIDM 2단계 시작 때 (약 $25/월)
 - [x] DS-4d — OpenDART·KIND(→OpenDART), SEC EDGAR, ECOS — 6곳 모두 소유자 PC 확인 끝 (OpenDART 819건, c6fda98, 11-20). 원장은 DS·DIDM PR 병합 때
 - [~] DS-4e — Kalshi 브랜치에 있음(236개 시장). Polymarket은 변호사 확인 전까지 꺼둠
@@ -291,7 +291,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 
 ## 3) 소유자 수동 작업 (OWNER_ACTIONS)
 
-**24시간 안 열린 항목: 8개 (OA-03 ~ OA-06, OA-08 ~ OA-10, OA-43). 기준 5개 이상 → Claude 앱 푸시 알림 (SESSION_PIPELINE 5절).**
+**24시간 안 열린 항목: 7개 (OA-03 ~ OA-06, OA-09, OA-10, OA-43). 기준 5개 이상 → Claude 앱 푸시 알림 (SESSION_PIPELINE 5절).**
 
 push_log:
 - 2026-11-20 00:51 KST 메인 — 9건 (OA-02~OA-10) — PushNotification "Mobile push requested"
@@ -310,7 +310,7 @@ push_log:
 | OA-05 | 웹사이트 세션 재개 지시 + 정책 문구 다시 만들기 프롬프트(PR-130.json) 붙이기 | MAIN | 11-19 | 24h 안 | 대기 |
 | OA-06 | UI 7쪽을 skymi, whydi PC에서 실행 확인 → UI 세션에 "PR 만들어" | UI, OS, MAIN | 11-18, 11-19 03:13, 05:11 | 지금 (KEY-4 다음 차례를 막음) | 대기 |
 | OA-07 | OpenDART 확인 다시 실행 | DATA | 11-19 01:29 | — | **완료** 소유자 PC: 9쪽, 공시 819건 저장 (DATA 보고 11-20 01:57, VENDOR_EVAL 3.1 기록 c6fda98). 공식·무료 공급원 6곳 모두 확인 끝 |
-| OA-08 | 무료 키 2개(ALPHAVANTAGE_API_KEY, TIINGO_API_KEY) 등록은 끝, 첫 실행은 원인 숨김으로 판정 불가 → DATA가 오류 문구 표시 고침(48049cd) → **재실행 1회**: git pull 후 `python -m tools.didm.collect_daily --no-gdelt --alphavantage AAPL --tiingo nvda` 출력 붙이기 (키 값은 붙이지 않음) | DATA | 11-19 15:00 (11-20 02:1x 갱신) | 지금 (막힘) | 대기 |
+| OA-08 | 무료 키 확인 | DATA | 11-19 15:00 | — | **완료** 소유자 PC 재실행(11-20): Alpha Vantage 뉴스 = 유료 전용(premium endpoint), Tiingo 뉴스 = 403 권한 없음 → 무료로 되는 뉴스 공급원 0 → DS-4b 전체 보류(코드 남김), 뉴스·감성은 GDELT+자체 NLP로 (c206b10) |
 | OA-09 | 마스터 부록 H4 홈 지표 진단 명령 실행, 출력 붙이기 | DATA (명령은 MAIN) | 11-17 22:13 (4번 요청, 마지막 11-19 15:00) | 지금 (DS-H 막힘) | 대기 |
 | OA-10 | DIDM 질문 답: (a) novelty 보조 조건을 정식으로? (b) 자체 LLM 기반 모델과 학습 데이터 마지막 날짜 (c) 평가표 판단 2칸(자체 NLP 열의 수집 F·실시간 J = X, 자체 NLP 관련성 = X)이 맞는지 — 세 개 모두 DATA 인계 8절에 있음 | DATA | 11-19 00:09 (11-20 00:23 갱신) | 24h 안 | 대기 |
 | OA-43 | AWS 비용 출처 확인 — 소유자 11월 막대(11-20 01:5x 공유): EC2-Other $39.47(81%), EC2-Instances $5.55, VPC $2.11, Amplify $1.57, 합 $48.71 → 하루 약 $2.6, 이대로면 월 약 $77–81. 메인 추정(미검증): 작은 인스턴스 1대(t3.micro 급, 약 17.5일)+공인 IPv4 1개(약 17.6일)가 함께 켜져 있고, EC2-Other는 NAT 게이트웨이 또는 t3 unlimited CPU 크레딧 초과(CPU 100% 지속 시 하루 약 $2.16 — 폭주 프로세스나 침해 가능성)와 금액이 맞음. 다음: Cost Explorer EC2-Other를 '사용 유형'으로 묶은 화면 → 메인이 판정. 끄거나 지우지 않음 | PAYMENTS→MAIN | 11-20 01:39 | 24h 안 (권장) | 진행 중 |
