@@ -5,12 +5,12 @@ from: claude
 task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
-next_ids: DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e, DS-H, DS-4b
-updated_at: 2026-11-18T14:45:00+09:00
+next_ids: DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e, DS-4b, DS-H
+updated_at: 2026-11-19T16:30:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/data-source-didm-20261117
-work_commit: 17a1d66
+work_commit: df05b21
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -100,6 +100,7 @@ DS-1 평가표 소유자 확인 완료, DIDM-0 사전등록 V0 **소유자 승�
 - [x] 소유자 PC 둘째 실행 (2026-11-18): Kalshi 해결 (236개, 가격 236, 유동 80). ECOS 통계표 확정 `722Y001/0101000` = 기준금리 (`060Y001` 데이터 없음), 그러나 월 시계열 INFO-200 → `--ecos-probe` 추가. GDELT 최신 export 404 (게시 전) → 직전 두 칸 대체 + `--gdelt-day` (하루 96칸; 기존은 15분 한 칸만) 추가. 커밋 `5fadc20`, `VENDOR_EVAL` 3.1. **셋째 실행 대기.**
 - [x] 소유자 PC 셋째 실행 (2026-11-18): GDELT 최신 칸 3,090행, 하루치 20261117 96파일·127,432행 (해결). ECOS 0건 원인 = PowerShell이 따옴표 없는 `0101000`을 `101000`으로 바꿈 (항목 코드 없이 306행 받음) → 6자리 숫자 항목 코드 거부·따옴표 안내. 커밋 `a790ce8`. 남은 확인: ECOS 따옴표 재실행, OpenDART (worktree에 키 없음).
 - [x] 소유자 PC 넷째 실행 (2026-11-18): ECOS 기준금리 월별 34개월 (따옴표, 해결). OpenDART는 worktree에 `.env`가 없어 `DARTUnavailable` → `--env-file` 추가 (커밋 `17a1d66`). 확인 완료 5/6 (ALFRED, EDGAR, Kalshi, GDELT, ECOS), OpenDART만 남음.
+- [x] 소유자 승인 (2026-11-19, 원문): "이후 key-3 승인을 완료했고 위 제안을 승인햇습니다. 이에 맞게 지금 부족한 API키/자료 공급원 연결을 진행해주세요. 만약 제가 수동으로 작업해야한다면 이 역시 table 형식으로 어떤 항목을 어떻게 언제 하는지를 알려주세요" ("위 제안" = 결제·계정 세션의 "KEY-3 PR에 연구용 키 이름 9개를 자격 증명 저장소에"). 반영: main `ca5da08` merge (`b935bec`, runtime-smoke 충돌 = main 줄 + DIDM 경로·시험만 다시 더함), `data/didm/keys.py` (저장소가 이름을 알면 `core.credentials.get`, 아니면 환경변수), `tools/didm/keys.py` (status / set 숨김 입력), DS-4b Alpha Vantage·Tiingo·CryptoPanic 연결 (`core/didm/ingest/news.py`, `data/didm/{alphavantage,tiingo,cryptopanic}.py`, `tests/didm_news_acceptance.py`). DIDM 시험 95 OK. 커밋 `df05b21`. 실제 호출은 소유자 무료 키 가입 뒤.
 - [ ] DS-H 홈 지표 데이터 계층 ← **소유자 진단 출력 대기** (아직 손대지 않음)
 - [ ] DS-4b Alpha Vantage·Tiingo·Cryptopanic 무료 키 1회 확인 ← 소유자 무료 키 가입 대기
 
@@ -172,6 +173,8 @@ python -m tools.compliance.check --check -> consistency FAIL, documents need rev
 - 없음 (DS-H는 진단 출력 뒤 시작; `load_home_indicators()`가 병합되면 소유자를 통해 "홈 화면 시작 가능"을 알림).
 
 ## 결제·계정 세션에 전할 것
+
+- (2026-11-19) 데이터소스 쪽 준비 끝: `data/didm/keys.py`가 `credentials.names.is_secret(name)`이 참이면 `credentials.get/status/set`을 씀. KEY-3 브랜치 `8a2886b`의 `RESEARCH` 9개와 이름이 같음 (`data.didm.keys.RESEARCH_KEYS`). KEY-3 PR이 main에 들어가면 데이터소스 쪽 코드 수정 없이 저장소 경로로 바뀜. 따로 요청할 것 없음.
 
 - 새 키 이름 (값 없음, 제안): `FRED_API_KEY` (DS-4a ALFRED, 연구 도구 전용), `ECOS_API_KEY`, `SEC_EDGAR_USER_AGENT` (연락처 문자열; DS-4d), OpenDART는 기존 `OPENDART_API_KEY` (`data/didm/opendart.py`가 `OpenDARTClient._get` 사용), DS-4b용 `ALPHAVANTAGE_API_KEY`, `TIINGO_API_KEY`, `CRYPTOPANIC_API_KEY`; Stage 2 뒤 `CME_FEDWATCH_API_ID`, `CME_FEDWATCH_API_SECRET`; Stage 3 뒤 `TRADINGECONOMICS_API_KEY`.
 - `routes.json` 행: 지금 없음. DIDM 수집은 `tools/didm/` 연구 도구라 게이트웨이 대상 아님 (D7 5.5). 앱이 DIDM 결과를 쓰게 되면 그때 공급원마다 한 행 요청.
