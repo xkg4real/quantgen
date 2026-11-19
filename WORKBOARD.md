@@ -129,7 +129,8 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [x] KEY-3/design — GATEWAY_DESIGN.md v0.2 — 9f76b07
 - [x] KEY-3 — core/gateway + 경계 시험 — 9f76b07 (PR #132)
 - [~] KEY-4 — PR #133, 148504a — 1절
-- [~] KEY-5 — 화면 쪽 22파일/44곳 + quantgen_desktop/paper.py + 키·연결 화면(gateway.status()) — 구현은 UI 세션 몫(소유자 경유), **PAYMENTS가 요청문 초안 작성 중(11-20 01:05 배정, KEY-4 head 148504a 기준, 병합 뒤 확정)**. OS-F1 뒤 권장. 그 전에 시험이 credentials.set_backend(None)을 쓸지 결정
+- [~] KEY-5 — 화면 쪽 22파일/44곳 + quantgen_desktop/paper.py + 키·연결 화면(gateway.status()) — 구현은 UI 세션 몫(소유자 경유). **요청문 초안 끝: handoff `plans/2026-11-20/KEY5_UI_REQUEST.md` (0df90ec, PAYMENTS)** — KEY-4 병합 뒤 메인 확정 신호 → 줄 번호 재정렬 → 소유자가 UI 세션에 붙여 넣음. OS-F1 뒤 적용 권장. 앞서 정할 것: set_backend(None) 가/나 안(OA-41)
+- [ ] KEY-5/a — KEY-5 앞 gateway 준비 3건 (G1 data.kis_stream 입구, G2 kis_workspace 순수 값 목록, G3 main.py QuoteFeed 하위 클래스를 공용 모듈로 → paper.py 재사용) — PAYMENTS, KEY-4 병합 뒤 main에서 브랜치, 대기열 4e
 - [~] PAY-0 — 문의 7건 초안 + 목록 표 (docs/commercial/inquiries/, 문서 8개) — **초안 끝: `claude/payments-pay0-20261120` @ `7f8939c`** (main 9f76b07에서, 메인 확인 11-20 01:00: 문서만, 비밀값·다른 연락처 없음). PR은 대기열 자리 뒤, 원장은 병합 때. 발송은 소유자(OA-32)
 - [~] PAY-2 — 결제 설계(시나리오 A) — **초안 끝: `claude/payments-pay0-20261120` @ `d0da1b2`** (docs/commercial/payments/ 4개: PAYMENT_DESIGN, PG_COMPARISON, PRIVACY_POLICY_PROPOSAL, README; 메인 확인 11-20 01:05: 문서만). 소유자 결정 P2-01..P2-15(OA-39), 법률 확인 걸린 것 P2-05·06·08·09·10·11·12·14. 약관 02 제4조·03·01 반영은 정책 PR-2. PR은 PAY-0과 함께 대기열 자리 뒤
 - [!] PAY-1 — 데스크톱 로그인 core/account/** — 웹 계정 공개(AUTH_UI_ENABLED) 뒤
@@ -344,6 +345,8 @@ push_log:
 | OA-37 | GPT 로컬 커밋 a2d93c2(Notion ⑤-1/a), 7e9e112(Notion ⑩-2/b-private-offline-mvp)가 남아 있는지, push할지 버릴지 | MAIN | 아직 묻지 않음 | 아님 | 대기 |
 | OA-38 | DS-3(RavenPack 견적·Bigdata.com 비교)을 계획에서 빼도 되는지 한 줄 확인 (11-18 D14 답 기준 메인 해석: 뺌) | MAIN | 아직 묻지 않음 | 아님 | 대기 |
 | OA-39 | PAY-2 소유자 결정 P2-01..P2-15 (docs/commercial/payments/PAYMENT_DESIGN.md 결정 표; 특히 P2-08 단순 해지 일할 환불 없음, P2-09 7일 철회 반환 기준, P2-10 가격 인상 미동의 시 종료 — 법률 확인과 함께), PAY-0 03번 PG 문의에 PG_COMPARISON 3절 질문 6개 추가 여부 | PAYMENTS | 11-20 01:05 | 아님 | 대기 |
+| OA-40 | PAY-3 회사 데이터 서버 위치: A 시드니(같은 AWS 계정) / B 서울 / C Cloudflare Workers — 장단점·비용(미검증)은 handoff plans/2026-11-20/KEY5_UI_REQUEST.md 부록, 제안 A | PAYMENTS | 11-20 01:10 | 아님 | 대기 |
+| OA-41 | KEY-5 전: core.credentials.set_backend(None) 가 안(시험에서만) / 나 안(앱도 .env만) — 같은 파일 0절 3항 | PAYMENTS | 11-20 01:10 | 아님 (KEY-5 전) | 대기 |
 
 ---
 
