@@ -168,7 +168,12 @@ def _resolve_backend() -> object:
         backend = keyring.get_keyring()
     except Exception:
         return None
-    candidates = list(getattr(backend, "backends", None) or [backend])    # a ChainerBackend wraps several
+    return _choose(backend)
+
+
+def _choose(backend: object) -> object:
+    """The OS store to use from what keyring offers; a ChainerBackend wraps several. None if no OS store."""
+    candidates = list(getattr(backend, "backends", None) or [backend])
     accepted = [b for b in candidates if _os_backend(b)]
     if not accepted:
         return None

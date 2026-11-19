@@ -38,7 +38,7 @@
 
 - `config.py` 밖에서 이 10개 이름을 직접 읽는 앱 코드는 없습니다. 예외는 연구 도구 `tools/provider_parity/parity_check.py:175-176` (`FMP_API_KEY`, `KIS_APP_KEY`, `KIS_APP_SECRET`, `KIS_BASE_URL`; 앱 실행과 무관)와 그 사본들 (`grokteam/out/frozen_book/...`, 보관 사본).
 - 키 값은 화면에 나오지 않습니다. 설정·연결 화면은 "있음/없음"과 이름만 봅니다 (`config.py:157`, `:238`, `:268`의 `*_provider_status()`).
-- 디스크의 자격 정보: KIS 접근 토큰이 `~/.nextgen/kis_token.json`에 평문 (`data/krx/kis_client.py:54`, 쓰기 `:179-191`). 앱키가 아니라 약 24시간짜리 토큰입니다. KEY-2에서 키 보관함으로 옮길 대상입니다 (5절).
+- 디스크의 자격 정보 (KEY-2 전, main `5888d05`): KIS 접근 토큰이 `~/.nextgen/kis_token.json`에 평문이었습니다. KEY-2 (PR #128)부터는 OS 키 보관함이 먼저이고, 파일은 대체 수단 (0600, TRADEGEN과 공유라 지우지 않음)입니다. 자세한 것은 5절 "KIS 토큰 캐시" 행.
 
 ## 2. 앱 설정 (비밀 아님, 16개)
 
@@ -102,11 +102,11 @@ Notion "QUANTGEN 상업화 실행 분석서" (`40e5c916fe0c815ba983dd4c4cc7992c`
 
 | 부품 | 내용 |
 |---|---|
-| `core/credentials/__init__.py` | `get(name)`, `set(name, value)`, `delete(name)`, `status(name)`. 찾는 순서: ① 프로세스 환경변수 → ② OS 키 보관함 (Python `keyring`, service `"QUANTGEN"`) → ③ `.env` (개발판만). 개발판 판정은 OS 세션의 `core/app_identity.py` (OS-P0-c); 그 파일이 아직 없으면 같은 이름의 함수 자리만 두고 OS 세션과 맞춤 |
+| `core/credentials/__init__.py` | `get(name)`, `set(name, value)`, `delete(name)`, `status(name)`, `read_setting(name)`, `load_dotenv_for_development()`. 찾는 순서: ① 프로세스 환경변수 → ② OS 키 보관함 (Python `keyring`, service `"QUANTGEN"`, OS 기본 저장소만) → ③ `.env` (개발판만). 개발판 판정은 `core/app_identity.may_read_dotenv()` (OS 세션, PR #127로 main에 있음) |
 | `status(name)` | 값 대신 `{"name", "present", "source": "env"|"keyring"|"dotenv"|None}`만 돌려줌. 값은 어떤 반환·예외·로그에도 넣지 않음 |
 | `core/credentials/names.py` | 1절의 비밀 10개와 종류 (사용자 증권사 키 / 사용자 데이터 키 / 사용자 AI 키 / 계정 / 개발 전용). 이름 목록에 없는 이름은 `set` 거절 |
-| `config._clean` | 비밀 10개만 `core.credentials.get`으로. 설정 16개는 지금 그대로 `os.getenv` |
-| KIS 토큰 캐시 | 키 보관함 `QUANTGEN`/`kis_token`을 먼저 읽고, 없거나 만료·깨졌으면 `~/.nextgen/kis_token.json`. 새 토큰은 키 보관함에 쓰고, 쓰기가 거절되면 키 보관함의 낡은 값을 지운 뒤 파일에 씀 (0600, 새로 만드는 폴더는 0700). **파일은 지우지 않음**: TRADEGEN이 같은 KIS 키로 같은 파일을 씀 (research_notes "QUANTGEN TRADEGEN split map"). 영향: QUANTGEN이 키 보관함에 새 토큰을 받으면 TRADEGEN 파일은 갱신되지 않아 TRADEGEN이 따로 토큰을 받을 수 있음 (하루 발급이 최대 2배). 앱에서 KIS 키를 바꾸면 키 보관함 토큰을 지우고 그 실행 동안 파일 토큰을 쓰지 않음. `KISClient.reload_credentials()`로 `ready`를 다시 읽음 (`kis_client.py:174`의 함정) |
+| `config._clean` | `core.credentials.read_setting(name)` 한 줄: 비밀 10개는 위 순서로, 설정 16개는 환경변수에서 (`.env`는 개발판에서 `load_dotenv_for_development()`가 미리 환경에 넣음) |
+| KIS 토큰 캐시 | 키 보관함 `QUANTGEN`/`kis_token`을 먼저 읽고, 없거나 만료·깨졌으면 `~/.nextgen/kis_token.json`. 새 토큰은 키 보관함에 쓰고, 쓰기가 거절되면 키 보관함의 낡은 값을 지운 뒤 파일에 씀 (0600, 새로 만드는 폴더는 0700). **파일은 지우지 않음**: TRADEGEN이 같은 KIS 키로 같은 파일을 씀 (research_notes "QUANTGEN TRADEGEN split map"). 영향: QUANTGEN이 키 보관함에 새 토큰을 받으면 TRADEGEN 파일은 갱신되지 않아 TRADEGEN이 따로 토큰을 받을 수 있음 (하루 발급이 최대 2배). 앱에서 KIS 키를 바꾸면 키 보관함 토큰을 지우고 그 실행 동안 파일 토큰을 쓰지 않음. 다시 시작한 뒤에도 옛 키 토큰을 믿지 않도록, QUANTGEN이 쓰는 토큰에는 `key_id` (앱 키와 서버 주소의 SHA-256 앞 16자리, 키 값은 저장하지 않음)를 함께 적고 다르면 버림 (KEY-2/b). `key_id`가 없는 토큰 (TRADEGEN, 옛 QUANTGEN)은 전처럼 받음: 그런 파일이 옛 키로 받은 것이면 재시작 뒤 만료(약 24시간)까지 쓰일 수 있음. 파일 권한 맞추기는 링크를 따라가지 않고, 실패해도 읽기는 계속함. 임시 파일은 무작위 이름 (mkstemp) `KISClient.reload_credentials()`로 `ready`를 다시 읽음 (`kis_client.py:174`의 함정) |
 | `quantgen_cloud` 자리 | **만들지 않음** (D7-G에서는 게이트웨이 `remote.py`가 그 역할) |
 | 의존성 | `keyring`을 `requirements.txt`, `pyproject.toml`에 버전 범위 고정 (공유 파일, 대기열 경유) |
 | 시험 `tests/credentials_acceptance.py` | 메모리 keyring 백엔드만. `.env`·`~/.nextgen`을 읽지 않음 (`HOME`·`USERPROFILE`을 임시 폴더로). 값이 로그·예외 메시지·`status()`·`repr`에 나오지 않는지 확인. 찾는 순서 3단계, 공개판에서 `.env`를 읽지 않음, 이름 목록 밖 거절, keyring 없음 → 파일 대체 |
