@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "795b2e9435c8eed43b08b98c709b3e2eeb3a7365ad2628855cb164cea0f94ab8",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "84d20eeefdb962e95665fe94a660997794d24e64d38c181539a7b42b7fd099df",
+    ".github/workflows/runtime-smoke.yml": "f3bbe940cf831d1734eb92d54a00be971012543b850906163c7222fec082af75",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -135,11 +135,11 @@
     "core/ficc/structured.py": "2e5ac55b70b839792e63b676844b402ea0e83151a735aa64d6ed7ea7e867718a",
     "core/ficc/swaps.py": "0f14e36c17a558bd5a38f2a486355e2186fbd7ad4aa9ba900b65316c3df22f29",
     "core/ficc/vol_products.py": "e81f1df20e6f83e11159412edfb1b5cc45b24e742653c8e1cc39164793728f12",
-    "core/gateway/__init__.py": "35c7d06fefedc59802b29657129890d3eaf61b88893d324a136045bd0cbb10dd",
+    "core/gateway/__init__.py": "8fb3294e1d15f8e5bdcbc9f9ce26857b1b3b16384b3fb872efb58b7590379741",
     "core/gateway/codec.py": "0f582ccb5b1294bc424a7cda7bf0b535f6eb5386c307c592a0e38277f06edd62",
     "core/gateway/dispatch.py": "888ba751073b3006fe06a38433a2d5d4e4ce9d6f40429adb8c6a667d24bb5cf4",
     "core/gateway/local.py": "7385e1836e620c5e89a771919c520a78363556e40cb50844f9e18c0b3862ec79",
-    "core/gateway/remote.py": "99667d793a73e17e914ba474402a2a66ba2e41b92ea41c425bb50c2d7d0092b9",
+    "core/gateway/remote.py": "63f9336970d73b98a50982b16a513069ac04b5fe88d31f516872746fc133c67e",
     "core/gateway/routes.py": "2b29b44b49c3e81b930e544208c131c9eb12bf07494227eae46dc2ff4c7aba06",
     "core/gateway/sources.py": "1f3843617e58ffe8034709639eded5e5b01c8c7d880e0490a8f434f5226bef8c",
     "core/i18n.py": "b31a9f40519b2699e9cf3d72a8f9144bd74f0c93ca731df5ceaeabbb120ad6dc",
@@ -225,7 +225,7 @@
     "core/research/letf_disclosure.py": "468cbc98101fcde53ea0913ac9a1fc864f5eeace420bc3a5838ce1f6f7ee7bcb",
     "core/research/localized_report.py": "1c6ff55a3d4c326ba76eb58c01cd5fd76dccfb9633bae7c06466f556df352d30",
     "core/research/macro_analysis.py": "78cb709bfcbbe339993574a8a105ff1d50cfacc12967e0c6434de38942fa1135",
-    "core/research/market_analysis.py": "428475ace23c9b112f03fef9b3cc1f128c9d3cf79d4cccd9391986d44f3f737a",
+    "core/research/market_analysis.py": "4f3cf89b4b78c4a961c85b96074f639695a1a35ccce57cd1eb71736158f7162a",
     "core/research/market_board.py": "264af8d1e64a1b87bb1dbf83e038581c509ed81d7f3202639edeadbcb5fb547a",
     "core/research/markets.py": "4a675ead5a5d8769e441faa3c1b3ec5d826676c28ae1927a9913986c3384ba32",
     "core/research/mc_disclosure.py": "a44ddc25d78c17879a6350de014e8bc4f199d8579d58f68d9d1c55d903d9267c",
@@ -409,7 +409,7 @@
     "docs/product/UI_SESSION_PROGRESS_2026-10-31.md": "6f8fd39bdfc77df266095c1e46170c1a679e3267d200a0fc3f6995b196dd0de4",
     "docs/product/UI_WEBSITE_SYNC.md": "37b62baa94dece046c08e70c01d49e4658937cbaa21d3b980c9fcb9099913363",
     "docs/product/ui_drafts_2026-11-17/README.md": "b2166e175e5d7ced820feeb9714a18640a4e08a0ced92c5ea88b9c45c29d2c92",
-    "main.py": "93e9ec5c54934002c922b98c2ef553d14ce25918163c7b8590fd5971da98c8b1",
+    "main.py": "c87f61a1ba60853011d7ba82f5d5a2abfce6e98d3a787705e0ad173a2f94e96e",
     "mindmap/QUANTGEN Macro Neural Link.html": "4dbf731539d418aa67553bd5fd393dfc55550fac737ef89ca4c18c813f7c76c5",
     "mobile/pyproject.toml": "2cad54b7e32873320de1d05e1e81cb91ce88f64cd97afc1ec955399fc5922db7",
     "packaging/launch_desktop.py": "7724b54d172f00d87c80abab2ff5214deb5ebcf9105878e24ca7519c166ce4b8",
@@ -599,10 +599,11 @@
     "tests/frozen_guard.py": "5a8f9a8c33cd0cc279da28db6e8f38c6e9b8abe643d0b7a26821077257f32246",
     "tests/funding_inference_acceptance.py": "dc1eaf4e627411a43ab46dd878a3628c076911ede974554575cc24f101310b7b",
     "tests/fx_basis_disclosure_acceptance.py": "9077bab45713c30e1b63607f87607c92c7a9bef60e094affdc968571405bb99e",
-    "tests/gateway_acceptance.py": "fb4368a664571c7c9b854c8edb9e1d428e6258f7278c952b1e5d55c6eb612f21",
-    "tests/gateway_boundary_acceptance.py": "d47181a58b01fcf8aa6475c780bf4f5355311f5c481341653680b7c34af33c2e",
-    "tests/gateway_remote_acceptance.py": "3dadd11472f0d5e607dad06d4fd799f58d396552a6aa9aeb90847f612c86fcc6",
-    "tests/gateway_same_answer_acceptance.py": "e63033ff02c7159026de41eec4b70a2e40dab7a1aabd416581186afe84ccd146",
+    "tests/gateway_acceptance.py": "3bfc6cea4effeb63847f49db3d61ec82ffe9eb4fcde5fe2d5c60bf9a7cd006f0",
+    "tests/gateway_boundary_acceptance.py": "fec9883939016a41da41c05e0d0196763a36d8a095ad83464e1e0bf719d80194",
+    "tests/gateway_main_acceptance.py": "6472cab7a56f1262e2bb97376ef09cfd8b8bd72cc944bb2b42ee44133a12c273",
+    "tests/gateway_remote_acceptance.py": "eea87049e07dae8081330d325bbeaa8e3f258f028d1ee905edc6d5e88cfe9fd5",
+    "tests/gateway_same_answer_acceptance.py": "b0fafdb8da09273db6c52d95918510d55f9c96d653d591b0bdb4d0ea83e6f355",
     "tests/glossary_search_acceptance.py": "058922190b05fc585dab3462848b40ea0444a43b4b5e96fdb512cd8ccfc0e64e",
     "tests/golden_tools.py": "24154d79aea43bc91b7c26c33c6b400cd9202cdb4915680a81b4f7cf0fa928ef",
     "tests/history_best_source_acceptance.py": "cda3221001d11599c0b9dab6f71f59a20b7ac762d43adcd6c0b5f2fbce19310f",
@@ -814,163 +815,163 @@
   "reviews": {
     "1": {
       "document_sha256": "316e056ea90165dafa910d384a9ba9b98cd111f592ca03c7b877bcd65d772ac9",
-      "source_digest": "7a2fd95fd76b1216e58c1636dade3d6fdd725b116ddb302c97b34c2dc403dc01",
+      "source_digest": "2a36ebe4a509c34a40e03fe415a10e3c5cadbcf6ee180e791b4d8524bd6a9fbd",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.169875+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.126304+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "7a2fd95fd76b1216e58c1636dade3d6fdd725b116ddb302c97b34c2dc403dc01",
+      "source_digest": "2a36ebe4a509c34a40e03fe415a10e3c5cadbcf6ee180e791b4d8524bd6a9fbd",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.172376+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.129004+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "9145140d4fdfc7c2fcb9f1198d56ff93cfbec725f7cc0a75a29640f479924bac",
+      "source_digest": "c3c87934137d7ecc65b2e4ef67047a0867c492514f7b89c66e1a210c17e098f1",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.174113+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.131071+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "3a67aab334e04ec69a70ce3751be9fe16d5739eff2c6b1c9a449fd537b644f99",
+      "source_digest": "9591f74940c4402e190a0e0616fe6d70206bd14f56f1c990a5bc49b304916fa4",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.176122+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.133648+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "d0ee3b2414a26d70a9bf230d135aed38b3d8208d02b24bcc15a846927f4050ba",
+      "source_digest": "6cb7ff69f5f64e98d997874e9a008a5cd31d52481a652cf149f05a133e598d67",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.178226+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.136325+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "1686539640343490d766b926045b112af3937a66040a99b2487a12ed0cedb680",
+      "source_digest": "72c0b71f6dfe8d017ffa007b362e896212f12e0bbf07066f3c4df8c0fc340300",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.180131+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.138762+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "7": {
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
-      "source_digest": "7a2fd95fd76b1216e58c1636dade3d6fdd725b116ddb302c97b34c2dc403dc01",
+      "source_digest": "2a36ebe4a509c34a40e03fe415a10e3c5cadbcf6ee180e791b4d8524bd6a9fbd",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.181669+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.141097+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "8": {
       "document_sha256": "b1ebf5f8469f355bc6d261789b5ffd402282fea07c83add564ed0dc2dc2fb775",
-      "source_digest": "1686539640343490d766b926045b112af3937a66040a99b2487a12ed0cedb680",
+      "source_digest": "72c0b71f6dfe8d017ffa007b362e896212f12e0bbf07066f3c4df8c0fc340300",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.183674+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.142994+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "bcbc2370114bb66248350b777885679a179af8dc2a0e883fcd13857964c6279a",
+      "source_digest": "fa26f997fbe58031fda85638cf45ed6e26314249a95fd5695d2d86d70efa1c09",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.185587+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.144777+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "63d3d05573be733c9320651a5e5249b5da83403fa112b044510aee6b0f747586",
+      "source_digest": "3eb1d2c135a8acfe3c7c2c3fe3a4138bf1e5327dcc467fc4d6b8dd2126c66289",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.187413+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.147068+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "0b7d576969b485849ee2a8e8f5c3381e65991fc9920f5f667440847eb9b74b50",
+      "source_digest": "dbb69f5ea27dc5eeddd0dc423fd1cee43f1d187ffc04f8ebfb8d6a950c83f581",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.188880+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.151048+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "81d5b9dd2563a9da8cf1141abd620b454395a164c82b6ec90be4eb2c7116c116",
+      "source_digest": "9c30729a944248ccc93fe4161b1c6eebcbd74eb83d6b8c767c8d7e369016e369",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.190514+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.153188+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "bcbc2370114bb66248350b777885679a179af8dc2a0e883fcd13857964c6279a",
+      "source_digest": "fa26f997fbe58031fda85638cf45ed6e26314249a95fd5695d2d86d70efa1c09",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.192430+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.154950+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "bcbc2370114bb66248350b777885679a179af8dc2a0e883fcd13857964c6279a",
+      "source_digest": "fa26f997fbe58031fda85638cf45ed6e26314249a95fd5695d2d86d70efa1c09",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.193826+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.157252+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "bcbc2370114bb66248350b777885679a179af8dc2a0e883fcd13857964c6279a",
+      "source_digest": "fa26f997fbe58031fda85638cf45ed6e26314249a95fd5695d2d86d70efa1c09",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.195129+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.159211+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "a926d2cc9705f627c43094f697c94970c826f1b12d0e0494ccb094787637f62a",
+      "source_digest": "632e256f0d04ef07ed2b237d5af68f12e8ac159b84ee2fb642e13a71896c05d5",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.196525+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.160983+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "1686539640343490d766b926045b112af3937a66040a99b2487a12ed0cedb680",
+      "source_digest": "72c0b71f6dfe8d017ffa007b362e896212f12e0bbf07066f3c4df8c0fc340300",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.197989+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.163469+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "7a2fd95fd76b1216e58c1636dade3d6fdd725b116ddb302c97b34c2dc403dc01",
+      "source_digest": "2a36ebe4a509c34a40e03fe415a10e3c5cadbcf6ee180e791b4d8524bd6a9fbd",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.199330+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.165473+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "b622bb45e5d44d67aa4a82ce5cfed57ebdc44d6e80c9156ad0eee5242aae8a60",
+      "source_digest": "c3bf98807e717452156710b71236f025bf24328ef3d79d6bdbc1f5a92b425fa4",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.202152+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.167664+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     },
     "20": {
       "document_sha256": "cc908c5e77b1f70a94e883c933ba7aa4ba24f0a384d4b156b9de7f1a89396d41",
-      "source_digest": "7a2fd95fd76b1216e58c1636dade3d6fdd725b116ddb302c97b34c2dc403dc01",
+      "source_digest": "2a36ebe4a509c34a40e03fe415a10e3c5cadbcf6ee180e791b4d8524bd6a9fbd",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 same-answer test: every difference reported, float tolerance rel 1e-6; test-only change, no data collection, provider or endpoint change",
-      "reviewed_at": "2026-11-19T13:57:52.203556+00:00",
-      "source_commit": "da3c34417768192db7cdc938cc9e2960c903b797"
+      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
+      "reviewed_at": "2026-11-19T15:09:58.169523+00:00",
+      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
     }
   }
 }
