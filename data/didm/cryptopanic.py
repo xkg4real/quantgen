@@ -1,4 +1,8 @@
-"""CryptoPanic posts client for DIDM (DS-4b, free plan). Parsing: core.didm.ingest.news.
+"""CryptoPanic posts client for DIDM. Parsing: core.didm.ingest.news.
+
+ON HOLD (2026-11-20): CryptoPanic no longer has a free API plan (plans page: Growth $50/week or
+$199/month and up; the free Developer plan reportedly ended 2026-04-01). Paid sources wait for the
+owner's staged-cost decision. The code stays; it only runs if a key is set.
 
 CRYPTOPANIC_API_KEY via data.didm.keys; it is a query parameter, so URLs are never logged. The current
 path (developer v2) and the older v1 path are both tried, newest first: which one a free key may use is

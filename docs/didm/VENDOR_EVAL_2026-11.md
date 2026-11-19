@@ -162,6 +162,12 @@
 
 다섯째 실행 (2026-11-19, `--env-file ..\QUANTGEN\.env`): OpenDART 20261117~20261118 전체 공시 목록 9쪽, 819건 저장 (**해결**). 이로써 키 없는/무료 공식 공급원 6곳 (GDELT, ALFRED, SEC EDGAR, Kalshi, ECOS, OpenDART) 모두 소유자 PC에서 수집 확인. 남은 확인: 무료 키 3곳 (Alpha Vantage, Tiingo, CryptoPanic).
 
+CryptoPanic 무료 플랜 (2026-11-20, 소유자 지적 확인; 검색 요약, 호스트는 이 세션에서 막힘):
+
+| 엑셀 | 공개 자료 | 판단 |
+|---|---|---|
+| 행CP·M4 "무료 플랜 초당 5건" | 공식 API 요금 페이지 (cryptopanic.com/developers/api/plans, 2026-09 사본 기준): **유료만** — Growth (주간) $50/주 (600건/주), Growth $199/월 (연 결제 $179/월, 3,000건/월), Enterprise $899/월부터. 2026 리뷰: 무료 Developer API는 **2026-04-01 종료** 공지 (공식 공지문은 못 찾음) | 엑셀 값은 그대로. **지금은 무료 플랜 없음.** 소유자 답 2 (유료는 단계별)에 따라 CryptoPanic은 **보류** (DS-4b에서 뺌, 커넥터 코드는 남김). 암호화폐 뉴스 감성 (X열)은 엑셀 X4가 함께 적은 Alpha Vantage (`CRYPTO:BTC` 등)로 채움 → X열 대안책 O는 그대로 성립 |
+
 2절 표 안에서 메인 분석 (D14 3절)과 다르게 읽힐 수 있는 칸:
 
 | 칸 | 2절 값 (엑셀 메모 그대로) | D14·공개 자료 | 처리 |
@@ -210,7 +216,7 @@
 | GDELT | 없음 | 아니요 | 원본 파일, 키 없음 |
 | Alpha Vantage | `ALPHAVANTAGE_API_KEY` | DS-4b (무료 키) | 제안 이름 |
 | Tiingo | `TIINGO_API_KEY` | DS-4b (무료 키) | 제안 이름 |
-| Cryptopanic | `CRYPTOPANIC_API_KEY` | DS-4b (무료 키) | 제안 이름 |
+| Cryptopanic | `CRYPTOPANIC_API_KEY` | **보류** (무료 플랜 없음, 최저 $50/주·$199/월, 2026-11-20 확인) | 유료 단계에서 다시 판단 |
 | 자체 NLP | `ANTHROPIC_API_KEY` (기존) | 유료 호출은 질문 2 답 뒤 | 이미 `.env.example`에 있음 |
 
 ## 6. 참고 열 (대안이 아님, Stage 3 뒤 기준선)
