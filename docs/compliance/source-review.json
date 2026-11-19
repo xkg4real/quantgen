@@ -394,6 +394,7 @@
     "docs/product/UI_RENDERING_2026-10-31.md": "f006b261d10a28594dc3b31d05424ac144004ca4edca18646ca00b5c0f8a19f6",
     "docs/product/UI_SESSION_PROGRESS_2026-10-31.md": "6f8fd39bdfc77df266095c1e46170c1a679e3267d200a0fc3f6995b196dd0de4",
     "docs/product/UI_WEBSITE_SYNC.md": "37b62baa94dece046c08e70c01d49e4658937cbaa21d3b980c9fcb9099913363",
+    "docs/product/pyside6_abort_2026-11-19/README.md": "099f0f7e9f6c095e2c50f70ce90222d5f96418e44a1af2d37dcca8df4a9dba08",
     "docs/product/ui_drafts_2026-11-17/README.md": "b2166e175e5d7ced820feeb9714a18640a4e08a0ced92c5ea88b9c45c29d2c92",
     "main.py": "2f95c001a369306d5737aa456d918a4b8a62147e1b1421d6b80933ba888f7553",
     "mindmap/QUANTGEN Macro Neural Link.html": "4dbf731539d418aa67553bd5fd393dfc55550fac737ef89ca4c18c813f7c76c5",
@@ -771,163 +772,163 @@
   "reviews": {
     "1": {
       "document_sha256": "546a396893b50ef5d8e95c18be4103f5a2302253d397429859957bd1540724cf",
-      "source_digest": "74fa453a46acae54b7fcb74776e160c7ec08afacb3dfcc31b7c5410498e33776",
+      "source_digest": "d80be9ecf7c26324e79e90165a5eca19be2957a303fe39bf160591b7a7122e5c",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.712490+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.854241+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "2": {
       "document_sha256": "1c7eb9b60585b1fd4d1a23723051454e768b6ea6b31b9e58bd8122ac73cdd5e1",
-      "source_digest": "74fa453a46acae54b7fcb74776e160c7ec08afacb3dfcc31b7c5410498e33776",
+      "source_digest": "d80be9ecf7c26324e79e90165a5eca19be2957a303fe39bf160591b7a7122e5c",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.714896+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.856379+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "3": {
       "document_sha256": "50fcceb8fb66b30a535ff6015a66ff5e5cee801b61433cc3aa99acd3673c4393",
-      "source_digest": "ba39800c34ea868f1491252889cc07306e31e43da0c69576cdd0dfa5f80ba823",
+      "source_digest": "668a3f0b960833c38aa4cfbb71345f3def31063695ac1a1fda9b5b52b0508599",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.720835+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.858185+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "4": {
       "document_sha256": "4a2528a8c62c60983069941ff506c41c6b251ff1f402ef6cf7723e9901bb7a91",
-      "source_digest": "5ddf4ca6a279b969209ba7083fce4b125530a955e55fd668ee37f07589d3ae08",
+      "source_digest": "008268b0304a5bafdfe03b68fa0ab2b55fb43056fcad159f0793930926ad5609",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.722675+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.859976+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "5": {
       "document_sha256": "54164c56f4c3999b8ed65115e411151dca9dd6a46fea7bc57d0a750774d7b555",
-      "source_digest": "d9d6690990a458afae176dc779620923bdc5116cd051295ba518e3bb70203500",
+      "source_digest": "18192728372885b2da44fc4d397b0c2b50f8d52914b2ca842b79765e53430e5d",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.724376+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.861821+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "6": {
       "document_sha256": "5871443de50226c2680aa2c41059c06b4d1290f28f1c859d5ed979fd17a2918e",
-      "source_digest": "6ce9a219cab565a72c767a4454a8e566363a2c4946a5611cc4d6ea802a8d251e",
+      "source_digest": "d40ad749b6afff4a1f59d71f014fc50bad9d721c3bf972197fcf2087128461fd",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.726246+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.863553+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "7": {
       "document_sha256": "437529f84b2cf492d8e04e5e0190c1cd1f15ea06a17ca4da24bbacc070d77ba1",
-      "source_digest": "74fa453a46acae54b7fcb74776e160c7ec08afacb3dfcc31b7c5410498e33776",
+      "source_digest": "d80be9ecf7c26324e79e90165a5eca19be2957a303fe39bf160591b7a7122e5c",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.727988+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.865287+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "8": {
       "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
-      "source_digest": "6ce9a219cab565a72c767a4454a8e566363a2c4946a5611cc4d6ea802a8d251e",
+      "source_digest": "d40ad749b6afff4a1f59d71f014fc50bad9d721c3bf972197fcf2087128461fd",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.729600+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.866999+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "dccb8db174c85d7ab2ac74e4c639a80d12090cbc1a301fbd9ea9f52f0fcc824c",
+      "source_digest": "e5009511b80fb1e728af138415ed0c565dc3660972a07828bcd2cb0e4980b50f",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.731291+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.868665+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "10": {
       "document_sha256": "ce304488b177e5fa81046782034d9a3c23a411ca3cef859d46b7df13ba0c5f5f",
-      "source_digest": "fc8ae4b7caf49f6f9c145e393e7b35bd24f488f8d6e2fbacd7d9122335eb60f7",
+      "source_digest": "5b3aca9f591557aae26caf22969796aa17a6f0dd635d5b60140e373dc2b27c8f",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.733018+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.870294+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "11": {
       "document_sha256": "11a071fe459f3d6f622ec4ee4480200c3e7ed131153e00bd6823e552e43a7004",
-      "source_digest": "a992574baa3c934f0a42ccfff0fbc97c7dce42d6d05d2d71839003adfa10497d",
+      "source_digest": "0087fd46bec32a7a058db33670aaf4dedc80e6072b48e50ded5e2626ceb18d10",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.734585+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.872044+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "12": {
       "document_sha256": "18af1551af29075d92583d7bc84a780f3719662115a7b26e4aeb9efd760d1afc",
-      "source_digest": "8354d13d3c20e8ed25929c4ae166edface7c6ecb056ae3c67ea8fac5a3ae0781",
+      "source_digest": "eb6a2f45b98658ede268e9bceae05c301cbf818e45c6d1384e1893ca30ec2e87",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.736108+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.873866+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "dccb8db174c85d7ab2ac74e4c639a80d12090cbc1a301fbd9ea9f52f0fcc824c",
+      "source_digest": "e5009511b80fb1e728af138415ed0c565dc3660972a07828bcd2cb0e4980b50f",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.737603+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.875493+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "dccb8db174c85d7ab2ac74e4c639a80d12090cbc1a301fbd9ea9f52f0fcc824c",
+      "source_digest": "e5009511b80fb1e728af138415ed0c565dc3660972a07828bcd2cb0e4980b50f",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.739297+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.877303+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "15": {
       "document_sha256": "99b8253de2d54323b48c1dc8edb663bb6105930c24bb15e8f70800aec2a49cf1",
-      "source_digest": "dccb8db174c85d7ab2ac74e4c639a80d12090cbc1a301fbd9ea9f52f0fcc824c",
+      "source_digest": "e5009511b80fb1e728af138415ed0c565dc3660972a07828bcd2cb0e4980b50f",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.741005+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.878889+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "16": {
       "document_sha256": "ff89cdb2a5ee70c3f830162c8e3c8a287291c89fddd7c850ac5b6048d9217f98",
-      "source_digest": "633874eb5236169ba349721c70c41ec081ec137b054cff9ec94f0b78972a1510",
+      "source_digest": "0830f1fc4e5d175548d470e37722b190c5f35d370536f6de084ea955c949c447",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.742617+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.880643+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "17": {
       "document_sha256": "dde1a8a05a26c612255f5858d272019e11cb7caf4542aa017b626ecea968713d",
-      "source_digest": "6ce9a219cab565a72c767a4454a8e566363a2c4946a5611cc4d6ea802a8d251e",
+      "source_digest": "d40ad749b6afff4a1f59d71f014fc50bad9d721c3bf972197fcf2087128461fd",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.744328+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.882232+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "18": {
       "document_sha256": "f41494e3a28b54cd191916f9ee985f795849e6bf67d69c8dffebd7d081d1187d",
-      "source_digest": "74fa453a46acae54b7fcb74776e160c7ec08afacb3dfcc31b7c5410498e33776",
+      "source_digest": "d80be9ecf7c26324e79e90165a5eca19be2957a303fe39bf160591b7a7122e5c",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.746168+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.883793+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "b8bc57879c6ae10844c41a979d131f41b5079a202ab48894cdadb6c83385493c",
+      "source_digest": "bc83ef0ce2c61846145c4394bad79600e4b0bfde3085d308218b670204ac5c3c",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.747751+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.885403+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     },
     "20": {
       "document_sha256": "0bb26298409489acde50b160abaa10068a84cc0e5b756041665f5277435b19eb",
-      "source_digest": "74fa453a46acae54b7fcb74776e160c7ec08afacb3dfcc31b7c5410498e33776",
+      "source_digest": "d80be9ecf7c26324e79e90165a5eca19be2957a303fe39bf160591b7a7122e5c",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 PySide6 verification report and the two reverted commits (code back to 5025c6f) against FACTS and 12-claims; no behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-18T23:03:10.749472+00:00",
-      "source_commit": "847b25cc556cccc491bc9f663f3eddd9b2c906c5"
+      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T01:41:33.886971+00:00",
+      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
     }
   }
 }
