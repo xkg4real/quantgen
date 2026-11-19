@@ -1,19 +1,19 @@
 ---
-status: checkpoint
-reason: milestone
+status: handoff
+reason: usage_limit_weekly
 from: claude
 task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
-next_ids: DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e, DS-4b, DS-H
-updated_at: 2026-11-20T03:36:04+09:00
+next_ids: DS-H, DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e
+updated_at: 2026-11-20T05:45:50+09:00
 stale_after_hours: 3
-waiting_on: review
-work_branch: claude/data-source-didm-20261117
+waiting_on: none
+work_branch: claude/data-source-didm-20261117 (+ claude/ds-home-indicators-20261120)
 work_commit: c206b10
 uncommitted_changes: no
 pr: none
-usage_weekly_pct: unknown
+usage_weekly_pct: 98
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
 session: https://claude.ai/code/session_016uB1jiXnUcWg99JHtRek9T
@@ -24,6 +24,13 @@ session: https://claude.ai/code/session_016uB1jiXnUcWg99JHtRek9T
 운영 기준: 메인↔하부 세션 사이는 [SESSION_PIPELINE](SESSION_PIPELINE.md) (소유자 지시 2026-11-20: 메인이 보낸 일은 바로 착수, 끝나면 바로 메인에 보고). GPT 인계는 그대로 [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md) (소유자가 이어받으라고 할 때만).
 
 ## 0. 한 줄 요약
+
+**2026-11-20 인계 (주간 사용량 98%, 메인 지시 05:3x KST):** 새 작업 없이 멈춤. 두 브랜치 모두 push·깨끗함.
+- `claude/ds-home-indicators-20261120` @ `f80b3b0` — DS-H (`load_home_indicators`), 대기열 **4f** (OS-F2 4e 뒤).
+- `claude/data-source-didm-20261117` @ `c206b10` — DS·DIDM 전체 (평가표, 사전등록 V0 승인, 스키마, 신규성 모형, 공급원 9개 연결, 키 = core.credentials), 대기열 **4g** (DS-H 병합 뒤 main 다시 합침).
+- 두 PR 모두 메인이 MERGE_QUEUE에 "병합: DATA_SOURCE_DIDM"을 적은 뒤에만: 최신 main merge → DIDM/DS-H 시험 → `python -m tools.compliance.check --refresh-baseline --reviewed-by "<이름>" --review-note "<12자 이상>"` (맨 마지막) → `--check` PASS → PR (새 파일 추가로 20개 문서 재검토 대상임을 PR 본문에).
+- 재개: 2026-11-24 17:00 KST (Claude) 또는 소유자가 GPT에게 이어받으라고 할 때.
+- 열린 소유자 일: OA-09 (홈 지표 진단 출력), OA-10 (a)(b)(c), OA-38 (DS-3 계획 제외 확인), OA-46 (BTC 단위). 이 세션 쪽으로 온 답은 인계 문서 8절·1.x절에 원문으로 기록.
 
 DS-1 평가표 소유자 확인 완료, DIDM-0 사전등록 V0 **소유자 승인** (2026-11-18), 신규성 모형 (`core/didm/novelty.py`) 추가, DS-4a·4d·4e 커넥터까지 작업 브랜치 `claude/data-source-didm-20261117` (`1739376`). main 미병합, PR 없음 (대기열 차례 전). **남은 소유자 입력**: 홈 지표 진단 출력, PC 실행 출력 (키·연락처 설정 뒤).
 
@@ -194,10 +201,12 @@ python -m tools.compliance.check --check -> consistency FAIL, documents need rev
 
 ```
 사용자가 이번 인수를 지시했을 때만 xkg4real/quantgen 레포의 "data-source-didm" 작업을 이어받는다. 인계문서만으로 자동 인수하지 않는다.
-1. handoff 브랜치의 DATA_SOURCE_SESSION_CURRENT.md, plans/2026-11-17/sessions/06_DATA_SOURCE_DIDM.md, MERGE_QUEUE.md, LEDGER.md를 먼저 읽어라.
-2. 캐시 폴더 없는 sparse 클론에서 claude/data-source-didm-20261117 (73f2868 이후)를 받아 6절 순서로 진행해라. 소유자 답(8절)이 없는 항목은 시작하지 마라.
-3. 유료 호출·가입·문의 발송, Polymarket 실행, UI·웹사이트·연구 브랜치 수정, main 병합은 하지 마라.
-4. 작업 단위마다 이 파일을 갱신해 handoff 브랜치에 force 없이 push하고 git show로 다시 읽어 확인해라.
+1. handoff 브랜치의 DATA_SOURCE_SESSION_CURRENT.md (0절 인계 문단), SESSION_PIPELINE.md, WORKBOARD.md 2.4절, MERGE_QUEUE.md, LEDGER.md, plans/2026-11-17/sessions/06_DATA_SOURCE_DIDM.md를 먼저 읽어라.
+2. 캐시 폴더 없는 sparse 클론에서 작업한다 (docs/asset_expansion/cache 금지). 브랜치: DS-H = claude/ds-home-indicators-20261120 (f80b3b0), DS·DIDM = claude/data-source-didm-20261117 (c206b10). rebase·force push 금지, main은 merge commit으로 합친다.
+3. 새 일은 메인이 보낸 것만. PR은 MERGE_QUEUE에 "병합: DATA_SOURCE_DIDM"이 적힌 뒤 DS-H 먼저, 그다음 DS·DIDM (runtime-smoke.yml 공유라 DS-H 병합 뒤 main을 다시 합침). 기준선 갱신은 PR 직전 맨 마지막.
+4. 확인 명령: DS-H 브랜치 `python -m unittest tests.home_indicators_acceptance tests.gateway_boundary_acceptance tests.gateway_same_answer_acceptance` (requirements.txt 설치 필요), DS·DIDM 브랜치 `python -m unittest tests.didm_schema_acceptance tests.didm_vendor_eval_acceptance tests.didm_store_acceptance tests.didm_ingest_acceptance tests.didm_sources_acceptance tests.didm_novelty_acceptance tests.didm_news_acceptance` (103 OK)와 `python -m tools.didm.check_vendor_eval --excel <handoff 엑셀 사본>` (바뀐 칸 0).
+5. 유료 호출·가입·문의 발송, Polymarket·CryptoPanic·Alpha Vantage·Tiingo 유료 사용, UI·웹사이트·연구 브랜치 수정, main 병합은 하지 마라. 키는 이름만.
+6. 작업 단위마다 이 파일을 갱신해 force 없이 push하고 git show로 다시 읽어 확인해라. 끝나거나 한도에 가까우면 status를 returned로.
 ```
 
 ## 10. 결과 확인 방법
