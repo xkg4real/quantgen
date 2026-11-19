@@ -54,10 +54,11 @@ def default_home_rows(status="NOT_LOADED"):
 
 
 def _quote_client():
-    from data.krx.kis_client import KISClient, requests
-    if requests is None:
+    from core import gateway
+    kis_client = gateway.provider("data.krx.kis_client")
+    if kis_client.requests is None:
         raise ImportError("KIS transport library unavailable")
-    return KISClient()
+    return kis_client.KISClient()
 
 
 def _number(value, *, optional=False, positive=False, nonnegative=False):

@@ -168,7 +168,8 @@ def _parse_stock_master(text, tail: int):
 
 def _kis_master_text(name: str) -> str:
     """Default loader: the existing keyless KIS master download, held in memory."""
-    from data import kis_markets          # imported here so importing this module loads nothing
+    from core import gateway              # imported here so importing this module loads nothing
+    kis_markets = gateway.provider("data.kis_markets")
     return "\n".join(kis_markets.load_master(name))
 
 

@@ -57,9 +57,9 @@ def funding_rate(symbol, *, series_loader=None, short_rate_loader=None):
     """Same currency choice and explicit 3% fallback as the existing Flet Lab."""
     from core.quant.history import _looks_krx
     if series_loader is None or short_rate_loader is None:
-        from core.ficc.data import load_series, load_short_rate
-        series_loader = series_loader or load_series
-        short_rate_loader = short_rate_loader or load_short_rate
+        from core import gateway
+        series_loader = series_loader or gateway.ficc().load_series
+        short_rate_loader = short_rate_loader or gateway.ficc().load_short_rate
     try:
         if _looks_krx(symbol):
             series = short_rate_loader("KRW", source="auto")

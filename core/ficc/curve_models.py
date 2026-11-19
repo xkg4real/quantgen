@@ -242,8 +242,10 @@ def carry_timing_positions(carry: np.ndarray, *, window: int = 60, step: int = 2
 def krw_curve_panel(*, days: int = 504) -> CurvePanel:
     """CD 91d and KTB 1/3/5/10/20/30y par yields from the KIS chart endpoint,
     intersected on shared dates, percent → decimal."""
-    from data.kis_markets import KISMarkets, KRW_CURVE_TENORS
-    km = KISMarkets()
+    from core import gateway
+    kis_markets = gateway.provider("data.kis_markets")
+    KRW_CURVE_TENORS = kis_markets.KRW_CURVE_TENORS
+    km = kis_markets.KISMarkets()
     series = {}
     for code, tenor in KRW_CURVE_TENORS:
         b = km.krw_yield_daily(code, days=days)

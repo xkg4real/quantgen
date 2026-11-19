@@ -10,6 +10,8 @@ from core.gateway.sources import SOURCES
 
 
 def dispatch(request: dict, local) -> dict:
+    if not isinstance(request, dict):
+        return {"ok": False, "error": "bad_request"}
     source_id = request.get("source")
     fn = request.get("fn")
     source = SOURCES.get(source_id) if isinstance(source_id, str) else None
@@ -17,7 +19,7 @@ def dispatch(request: dict, local) -> dict:
         return {"ok": False, "error": "unknown_source"}
     if source.fixed_local:
         return {"ok": False, "error": "fixed_local"}
-    if fn not in source.functions:
+    if not isinstance(fn, str) or fn not in source.functions:
         return {"ok": False, "error": "function_not_allowed"}
     try:
         args = codec.decode(request.get("args") or [])

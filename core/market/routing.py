@@ -262,11 +262,12 @@ class YahooChartProvider:
 
 
 def _yahoo_frame(symbol, interval, period):
-    """One Yahoo request through the FICC module's yfinance handle (patched in tests)."""
-    from core.ficc import data
-    if data._yf is None:
+    """One Yahoo request through the FICC module's yfinance handle (patched in tests), via the gateway."""
+    from core import gateway
+    yf = gateway.ficc().yfinance
+    if yf is None:
         raise LookupError("yfinance is not installed")
-    frame = data._yf.Ticker(symbol).history(period=period, interval=interval, auto_adjust=False, timeout=10)
+    frame = yf.Ticker(symbol).history(period=period, interval=interval, auto_adjust=False, timeout=10)
     if frame is None or len(frame) == 0:
         return ()
     out = []

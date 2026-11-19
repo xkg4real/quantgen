@@ -31,10 +31,12 @@ def snapshot(*, source: str = "kis", expiry: str = "", rate_pct: Optional[float]
     readable reason when the board cannot be used."""
     out: dict = {"source": source}
     if source == "kis":
-        if not config.kis_ready():
+        from core import gateway
+        if not gateway.keys_ready("kis_quote"):
             raise FICCError("KIS_APP_KEY / KIS_APP_SECRET are not configured; choose the synthetic board.")
-        from data.kis_markets import KISMarkets, front_contract
-        km = KISMarkets()
+        kis_markets = gateway.provider("data.kis_markets")
+        front_contract = kis_markets.front_contract
+        km = kis_markets.KISMarkets()
         expiries = km.option_expiries()
         exp = expiry.strip() or (expiries[0] if expiries else "")
         if not exp:
