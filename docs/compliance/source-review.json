@@ -603,7 +603,7 @@
     "tests/gateway_boundary_acceptance.py": "fec9883939016a41da41c05e0d0196763a36d8a095ad83464e1e0bf719d80194",
     "tests/gateway_main_acceptance.py": "6472cab7a56f1262e2bb97376ef09cfd8b8bd72cc944bb2b42ee44133a12c273",
     "tests/gateway_remote_acceptance.py": "eea87049e07dae8081330d325bbeaa8e3f258f028d1ee905edc6d5e88cfe9fd5",
-    "tests/gateway_same_answer_acceptance.py": "b0fafdb8da09273db6c52d95918510d55f9c96d653d591b0bdb4d0ea83e6f355",
+    "tests/gateway_same_answer_acceptance.py": "077c144c6d3e61fcde798fe7f0b2c609575c860f15895bdd0a095e59f7d0f681",
     "tests/glossary_search_acceptance.py": "058922190b05fc585dab3462848b40ea0444a43b4b5e96fdb512cd8ccfc0e64e",
     "tests/golden_tools.py": "24154d79aea43bc91b7c26c33c6b400cd9202cdb4915680a81b4f7cf0fa928ef",
     "tests/history_best_source_acceptance.py": "cda3221001d11599c0b9dab6f71f59a20b7ac762d43adcd6c0b5f2fbce19310f",
@@ -817,161 +817,161 @@
       "document_sha256": "316e056ea90165dafa910d384a9ba9b98cd111f592ca03c7b877bcd65d772ac9",
       "source_digest": "2a36ebe4a509c34a40e03fe415a10e3c5cadbcf6ee180e791b4d8524bd6a9fbd",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.126304+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.827610+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
       "source_digest": "2a36ebe4a509c34a40e03fe415a10e3c5cadbcf6ee180e791b4d8524bd6a9fbd",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.129004+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.830425+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
       "source_digest": "c3c87934137d7ecc65b2e4ef67047a0867c492514f7b89c66e1a210c17e098f1",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.131071+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.832454+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
       "source_digest": "9591f74940c4402e190a0e0616fe6d70206bd14f56f1c990a5bc49b304916fa4",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.133648+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.834417+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
       "source_digest": "6cb7ff69f5f64e98d997874e9a008a5cd31d52481a652cf149f05a133e598d67",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.136325+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.836220+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
       "source_digest": "72c0b71f6dfe8d017ffa007b362e896212f12e0bbf07066f3c4df8c0fc340300",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.138762+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.838246+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "7": {
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
       "source_digest": "2a36ebe4a509c34a40e03fe415a10e3c5cadbcf6ee180e791b4d8524bd6a9fbd",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.141097+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.839983+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "8": {
       "document_sha256": "b1ebf5f8469f355bc6d261789b5ffd402282fea07c83add564ed0dc2dc2fb775",
       "source_digest": "72c0b71f6dfe8d017ffa007b362e896212f12e0bbf07066f3c4df8c0fc340300",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.142994+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.842359+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
       "source_digest": "fa26f997fbe58031fda85638cf45ed6e26314249a95fd5695d2d86d70efa1c09",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.144777+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.844897+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
       "source_digest": "3eb1d2c135a8acfe3c7c2c3fe3a4138bf1e5327dcc467fc4d6b8dd2126c66289",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.147068+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.846981+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
       "source_digest": "dbb69f5ea27dc5eeddd0dc423fd1cee43f1d187ffc04f8ebfb8d6a950c83f581",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.151048+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.849284+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "9c30729a944248ccc93fe4161b1c6eebcbd74eb83d6b8c767c8d7e369016e369",
+      "source_digest": "bdee730bd6ca3d6dfb6277643abb9f2ca164652be237bc333aa128fbf400db62",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.153188+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.851353+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
       "source_digest": "fa26f997fbe58031fda85638cf45ed6e26314249a95fd5695d2d86d70efa1c09",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.154950+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.853198+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
       "source_digest": "fa26f997fbe58031fda85638cf45ed6e26314249a95fd5695d2d86d70efa1c09",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.157252+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.855266+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
       "source_digest": "fa26f997fbe58031fda85638cf45ed6e26314249a95fd5695d2d86d70efa1c09",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.159211+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.857415+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
       "source_digest": "632e256f0d04ef07ed2b237d5af68f12e8ac159b84ee2fb642e13a71896c05d5",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.160983+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.859410+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
       "source_digest": "72c0b71f6dfe8d017ffa007b362e896212f12e0bbf07066f3c4df8c0fc340300",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.163469+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.860990+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
       "source_digest": "2a36ebe4a509c34a40e03fe415a10e3c5cadbcf6ee180e791b4d8524bd6a9fbd",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.165473+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.862982+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
       "source_digest": "c3bf98807e717452156710b71236f025bf24328ef3d79d6bdbc1f5a92b425fa4",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.167664+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.864583+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     },
     "20": {
       "document_sha256": "cc908c5e77b1f70a94e883c933ba7aa4ba24f0a384d4b156b9de7f1a89396d41",
       "source_digest": "2a36ebe4a509c34a40e03fe415a10e3c5cadbcf6ee180e791b4d8524bd6a9fbd",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 second review fixes: main.py builds KRXGateway at call time with blocked sub-clients replaced, paper.py tracked for KEY-5, boundary and remote code hardening; account docs record owner decisions (special characters, HTML verification mail, email MFA kept); no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T15:09:58.169523+00:00",
-      "source_commit": "2e2462e9f8f0a814c33fa71e11847a1773e3e096"
+      "review_note": "KEY-4 same-answer fixture compacted (long lists summarised); test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T15:11:47.866584+00:00",
+      "source_commit": "62b1d03d60a5aa7b973accb08f94fd33fe68c784"
     }
   }
 }
