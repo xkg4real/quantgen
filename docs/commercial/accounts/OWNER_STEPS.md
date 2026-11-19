@@ -1,6 +1,6 @@
 # 소유자 실행 순서: AWS → 전달 → 시험 → 공개 전
 
-- 판: v1.3.2 (2026-11-19, 소유자 진행 중 확인: 1-0 맨 앞에 프로젝트 계정 Golden Hour Code 확인, 1번에 풀 ID 리전 확인). v1.3.1 (2026-11-19, 메인 PR #133 검토 B10: 1-0의 따로 만드는 예산 줄을 지우고 24a·24b로 모음, 결제 화면 접근 켜기 추가, IAM Identity Center 로그인 확인 반영, 5-2a 법인 이메일·연락처로 명확히, 1-0 소요 15~20분). v1.3 (2026-11-19, 소유자 질문 반영: 1-0 MFA 찾는 길과 로그인 계정, 5절 AWS 계정 이메일). v1.2 (2026-11-19, 6절을 메인 세션 확인대로 고침: 지금 하지 않음, 보통 앱 Python, 브랜치+PR). v1.1 6절 추가, v1 2026-11-18. 작성: PAYMENTS_ACCOUNT_KEYS 세션. 소유자 요청 (원문): "위 항목 중에서 시험, 전달, AWS, 공개 전 4단계를 수행하기 위해서 해야되는 일들을 구체화하여 .md 파일로 만들어 여기서 다운로드하고 볼 수 있도록 해주세요"
+- 판: v1.4 (2026-11-19, 소유자 결정: 13번 비밀번호에 특수문자 반영, 12번 HTML 인증 메일·영어 먼저·Message templates 위치). v1.3.2 (2026-11-19, 소유자 진행 중 확인: 1-0 맨 앞에 프로젝트 계정 Golden Hour Code 확인, 1번에 풀 ID 리전 확인). v1.3.1 (2026-11-19, 메인 PR #133 검토 B10: 1-0의 따로 만드는 예산 줄을 지우고 24a·24b로 모음, 결제 화면 접근 켜기 추가, IAM Identity Center 로그인 확인 반영, 5-2a 법인 이메일·연락처로 명확히, 1-0 소요 15~20분). v1.3 (2026-11-19, 소유자 질문 반영: 1-0 MFA 찾는 길과 로그인 계정, 5절 AWS 계정 이메일). v1.2 (2026-11-19, 6절을 메인 세션 확인대로 고침: 지금 하지 않음, 보통 앱 Python, 브랜치+PR). v1.1 6절 추가, v1 2026-11-18. 작성: PAYMENTS_ACCOUNT_KEYS 세션. 소유자 요청 (원문): "위 항목 중에서 시험, 전달, AWS, 공개 전 4단계를 수행하기 위해서 해야되는 일들을 구체화하여 .md 파일로 만들어 여기서 다운로드하고 볼 수 있도록 해주세요"
 - 반영한 소유자 답 (2026-11-18): Q1 운영자 = 개인 (법인 설립을 알려 주시면 바로 법인명으로 바꿈), Q2 메일 = `contact@quantgeneration.com`, Q3 최소 연령 = 무료 만 14세 / 유료 만 19세.
 - 함께 보는 문서 (브랜치 `claude/payments-keys-20261117`): `docs/commercial/accounts/ACCOUNT_SETUP.md` (설정값, 25단계, 웹사이트 요청 블록), `docs/commercial/accounts/ADMIN_GUIDE.md` (관리자 안내서).
 - *(미검증)* 은 AWS 화면 문구를 확인하지 못한 곳입니다. 화면이 다르면 "단계 번호 + 실제 문구"를 알려 주세요. 문서를 고쳐 드립니다.
@@ -62,23 +62,41 @@
 |---|---|---|---|
 | 10 | **Authentication methods** → Email 구역 → **Edit** *(미검증)* | — | [ ] |
 | 11 | 메일 발송 방식 | **Send email with Amazon SES** *(미검증)*, SES 리전 시드니, FROM `no-reply@quantgeneration.com`, FROM 이름 `QUANTGEN`, Reply-to `contact@quantgeneration.com` → **Save changes** | [ ] |
-| 12 | **Message templates** → **Verification message** | 제목: `[QUANTGEN] 이메일 인증 코드 / Email verification code` · 본문: 아래 상자 그대로 | [ ] |
+| 12 | 왼쪽 메뉴 **Message templates** (Authentication methods 안이 아님) → **Verification message** → **Edit** | Verification type **Code**, 제목: `[QUANTGEN] Email verification code / 이메일 인증 코드` · 본문: 아래 HTML 상자 그대로 (소유자 결정 2026-11-19: 로고 배너·코드 상자, 영어 먼저) | [ ] |
 
-12단계 본문 (그대로 붙여 넣기):
+12단계 본문 (그대로 붙여 넣기; 2026-11-19 소유자가 이 내용으로 저장함):
 ```
-QUANTGEN 이메일 인증 코드: {####}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F4F6F9;padding:24px 0;">
+<tr><td align="center">
+<table role="presentation" width="480" cellpadding="0" cellspacing="0" style="max-width:480px;width:100%;background:#FFFFFF;border-radius:10px;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#111111;">
+<tr><td style="background:#0B1F3A;padding:18px 24px;text-align:center;">
+<img src="https://quantgeneration.com/quantgen-logo-white.png" alt="QUANTGEN" width="155" height="32" style="display:inline-block;width:155px;height:32px;border:0;color:#FFFFFF;font-size:22px;font-weight:bold;letter-spacing:4px;">
+</td></tr>
+<tr><td style="padding:28px 24px 8px 24px;">
+<p style="margin:0 0 6px 0;font-size:17px;font-weight:bold;">Email verification code</p>
+<p style="margin:0;font-size:14px;color:#555555;">이메일 인증 코드</p>
+</td></tr>
+<tr><td align="center" style="padding:20px 24px;">
+<span style="display:inline-block;padding:14px 24px;border:2px solid #0B1F3A;border-radius:8px;background:#F4F6F9;font-family:'Courier New',Courier,monospace;font-size:32px;font-weight:bold;letter-spacing:10px;color:#0B1F3A;">{####}</span>
+</td></tr>
+<tr><td style="padding:8px 24px 28px 24px;font-size:13px;line-height:1.6;color:#555555;">
+Enter this code on the sign-up screen. If you did not request it, you can ignore this email.<br><br>
 이 코드를 가입 화면에 입력해 주세요. 본인이 요청하지 않았다면 이 메일을 무시하셔도 됩니다.
-
-Your QUANTGEN verification code is {####}
-Enter this code on the sign-up screen. If you did not request it, you can ignore this email.
+</td></tr>
+<tr><td style="padding:14px 24px;border-top:1px solid #E5E7EB;font-size:11px;color:#999999;text-align:center;">
+QUANTGEN · Contact / 문의: contact@quantgeneration.com
+</td></tr>
+</table>
+</td></tr>
+</table>
 ```
-광고 문구는 넣지 않습니다.
+로고 `https://quantgeneration.com/quantgen-logo-white.png` (투명 바탕 RGBA 309×64, 웹사이트 세션 확인). 이미지를 막는 메일 프로그램에서는 `alt` 글자 "QUANTGEN"이 남색 배너 위에 보임. Cognito 본문은 HTML 허용, `{####}` 필수, 최대 20,000자 (AWS 문서 확인). 숫자 6칸 따로는 불가 (`{####}`가 통째로 바뀜). 광고 문구는 넣지 않습니다.
 
 **C. 로그인 보안 (약 10분)**
 
 | # | 할 일 | 넣을 값 | 확인 |
 |---|---|---|---|
-| 13 | **Authentication methods** → **Password policy** → **Edit** *(미검증)* | Custom, 최소 **10자**, 숫자·소문자·대문자 요구 (특수문자는 요구 안 함), 임시 비밀번호 **7일**, 재사용 금지 **5** (칸이 없으면 건너뜀) | [ ] |
+| 13 | **Authentication methods** → **Password policy** → **Edit** *(미검증)* | Custom, 최소 **10자**, 숫자·소문자·대문자·**특수문자** 요구 (소유자 결정 2026-11-19: 특수문자 반영), 임시 비밀번호 **7일**, 재사용 금지 **5** (칸이 없으면 건너뜀) | [ ] |
 | 14 | **Sign-in** → **Multi-factor authentication** → **Edit** | MFA enforcement **Optional MFA**, 방법 **Authenticator apps** + **Email message** (SMS는 끔) → 저장 | [ ] |
 | 15 | **Sign-in** → **User account recovery** *(미검증)* | 이메일만 | [ ] |
 
@@ -157,7 +175,7 @@ Enter this code on the sign-up screen. If you did not request it, you can ignore
 
 ### 3-A. 콘솔만으로 (1단계 직후, 약 30분)
 
-준비: 시험용 메일 별칭 (예: `내아이디+qgtest1@gmail.com`), 시험용 비밀번호 1개 (10자 이상, 대·소문자·숫자. **실제로 쓰는 비밀번호와 다르게**, 시험 뒤 버림).
+준비: 시험용 메일 별칭 (예: `내아이디+qgtest1@gmail.com`), 시험용 비밀번호 1개 (10자 이상, 대·소문자·숫자·특수문자. **실제로 쓰는 비밀번호와 다르게**, 시험 뒤 버림).
 
 | # | 할 일 | 정확한 방법 | 기대 결과 | 결과 |
 |---|---|---|---|---|

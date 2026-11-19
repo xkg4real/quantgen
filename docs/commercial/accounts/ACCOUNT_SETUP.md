@@ -1,6 +1,6 @@
 # QUANTGEN 회원 계정 설정 묶음
 
-- 판: v0.2 (2026-11-18, 소유자 답 Q1~Q3 반영). v0.1 2026-11-17. 작성: PAYMENTS_ACCOUNT_KEYS 세션. ID `PAY-A2`.
+- 판: v0.3 (2026-11-19, 소유자 결정: P10 비밀번호 특수문자 요구, 12번 HTML 인증 메일; 3부 ACC-1 비밀번호 규칙 문구도 바뀌어 D11 4장 원문과 그 한 곳이 다름 — 4.6 참고). v0.2 (2026-11-18, 소유자 답 Q1~Q3 반영). v0.1 2026-11-17. 작성: PAYMENTS_ACCOUNT_KEYS 세션. ID `PAY-A2`.
 - 바탕: handoff `plans/2026-11-17/D11_ACCOUNTS_AND_ADMIN_GUIDE.md` 2·3·4장. 관리 방법은 `docs/commercial/accounts/ADMIN_GUIDE.md`.
 - 네 부분: **1부** 운영 풀 설정표 · **2부** 소유자 AWS 순서 (25단계) · **3부** 웹사이트 세션 요청 (복사용) · **4부** 메인 정책 문서 PR에 넣을 값.
 - 소유자 결정 3개(0절)는 2026-11-18에 답을 받아 채웠습니다. 운영자 이름은 0.1절 한 곳에서만 정합니다.
@@ -71,7 +71,7 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 | P7 | 가입 확인 | Cognito가 이메일 코드로 확인 (자동 확인 켬) | 예 | 부분 확인 (문구 미검증) |
 | P8 | 계정 복구 | 이메일만 (SMS 안 씀) | 예 | 미검증 (메뉴 문구) |
 | P9 | 메일 발송 | **Amazon SES 사용**. FROM `no-reply@quantgeneration.com`, FROM 이름 `QUANTGEN`, Reply-to `contact@quantgeneration.com` (실제 받는 메일함). 기본 Cognito 메일은 하루 한도가 낮아 운영에 맞지 않음 | 예 | 확인 (한도 숫자 50통은 미검증) |
-| P10 | 비밀번호 정책 | 최소 **10자**, 숫자·소문자·대문자, 임시 비밀번호 7일 | 예 | 제안 (최소 6자 허용·임시 7일 기본은 확인) |
+| P10 | 비밀번호 정책 | 최소 **10자**, 숫자·소문자·대문자·**특수문자** (소유자 결정 2026-11-19), 임시 비밀번호 7일. 웹 가입 화면은 "특수문자 1개 이상"을 입력 중에 보여 줌 (ACC-1). 특수문자로 인정되는 기호는 Cognito가 정함: `` ^ $ * . [ ] { } ( ) ? " ! @ # % & / \ , > < ' : ; \| _ ~ ` = + - `` (AWS 문서 확인 2026-11-19) | 예 | 제안 (최소 6자 허용·임시 7일 기본은 확인) |
 | P11 | 비밀번호 재사용 금지 | 최근 5개 | 예 | 미검증 (Essentials에서 되는지) |
 | P12 | MFA | **Optional MFA**, 방법 **Authenticator apps** + **Email message**. SMS 끔 | 예 | 확인 (이메일 MFA는 Essentials + 자체 SES) |
 | P13 | 이메일 변경 대기 | 새 주소 인증 전까지 기존 주소 유지 ("Keep original attribute value active when an update is pending") | 예 | 미검증 (문구) |
@@ -155,10 +155,10 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 **B. 메일 (SES)**
 10. 풀 → **Authentication methods** → Email 구역 → **Edit** *(Authentication methods 메뉴는 확인, Email 구역 위치·Edit 미검증)*.
 11. **Send email with Amazon SES** *(미검증)* → SES 리전 시드니 → FROM `no-reply@quantgeneration.com` → FROM 이름 `QUANTGEN` → Reply-to `contact@quantgeneration.com` → **Save changes**.
-12. **Message templates** (**확인**) → **Verification message** → 제목 "[QUANTGEN] 이메일 인증 코드 / Email verification code", 본문 한국어·영어 + `{####}`. 광고 문구 없음.
+12. 왼쪽 메뉴 **Message templates** (**확인**) → **Verification message** → 제목 "[QUANTGEN] Email verification code / 이메일 인증 코드", 본문은 `OWNER_STEPS.md` 12번의 HTML (로고 배너, `{####}` 코드 상자, 영어·한국어; 소유자 결정 2026-11-19). 광고 문구 없음.
 
 **C. 로그인 보안**
-13. **Authentication methods** → **Password policy** → **Edit** *(미검증)* → Custom, 최소 10자, 숫자·소문자·대문자, 임시 7일, 재사용 금지 5.
+13. **Authentication methods** → **Password policy** → **Edit** *(미검증)* → Custom, 최소 10자, 숫자·소문자·대문자·특수문자, 임시 7일, 재사용 금지 5.
 14. **Sign-in** → **Multi-factor authentication** → **Edit** → **MFA enforcement** = **Optional MFA** → **Authenticator apps** + **Email message** → 저장 (**확인**).
 15. **Sign-in** → **User account recovery** *(미검증)* → 이메일만.
 
@@ -193,7 +193,7 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 ```text
 D11 변경: 소유자가 "정식 계정 생성까지 진행"을 지시했습니다. 출시 알림 폼(WEB-3) 대신 정식 회원 계정을 엽니다. 운영 사용자 풀은 시드니 `quantgen-prod` (소유자가 만들고 풀 ID·클라이언트 ID를 전달). 공개 전까지 플래그 `AUTH_UI_ENABLED=false`.
 
-**ACC-1 가입 화면.** 이메일, 비밀번호, 비밀번호 확인. 체크: [필수] 이용약관, [필수] 만 14세 이상, [선택·기본 해제] 소식 이메일(광고). 체크 없는 개인정보 안내 문장(시드니 보관 포함) + 처리방침 링크. 한/영 문구는 D11 문서 2.3절. `SignUp` 호출 때 사용자 정의 속성 `custom:terms_ver`, `custom:privacy_ver`, `custom:age14=Y`, `custom:consent_at`(ISO 시각), `custom:mkt_opt`(Y/N), `custom:mkt_at` 기록. 비밀번호 규칙(10자, 숫자·소문자·대문자)을 입력 중에 보여 줌.
+**ACC-1 가입 화면.** 이메일, 비밀번호, 비밀번호 확인. 체크: [필수] 이용약관, [필수] 만 14세 이상, [선택·기본 해제] 소식 이메일(광고). 체크 없는 개인정보 안내 문장(시드니 보관 포함) + 처리방침 링크. 한/영 문구는 D11 문서 2.3절. `SignUp` 호출 때 사용자 정의 속성 `custom:terms_ver`, `custom:privacy_ver`, `custom:age14=Y`, `custom:consent_at`(ISO 시각), `custom:mkt_opt`(Y/N), `custom:mkt_at` 기록. 비밀번호 규칙(10자, 숫자·소문자·대문자·특수문자)을 입력 중에 보여 줌.
 완료 조건: 필수 체크 없이 가입 불가, 선택 체크 기본 해제, 한/영·밝음/어두움·320px.
 
 **ACC-2 이메일 인증 화면.** 6자리 코드 입력, **"코드 다시 받기"** (`ResendConfirmationCode`) 버튼. 관리자 콘솔에는 자가 가입 회원에게 코드를 다시 보내는 버튼이 없다고 봅니다 (미검증) → 화면에 꼭 필요.
@@ -301,5 +301,7 @@ D11 변경: 소유자가 "정식 계정 생성까지 진행"을 지시했습니�
 1. 1.2표의 속성 이름 6개가 3부 블록의 ACC-1에 모두 있고, ACC-5에는 `custom:mkt_opt`·`custom:mkt_at`이 있음.
 2. 3부 블록이 D11 4장 "복사 시작"~"복사 끝" 사이와 바이트 단위로 같음.
 3. 결과: 아래 줄에 기록.
+
+2026-11-19 소유자 결정 (특수문자 요구)으로 3부 ACC-1의 "비밀번호 규칙(10자, 숫자·소문자·대문자·특수문자)" 한 곳이 D11 4장 원문과 달라졌습니다. 그래서 2번 바이트 대조는 이 날부터 그 한 곳을 뺀 대조입니다. 웹사이트 세션에는 이 문서의 3부 블록을 넘깁니다.
 
 결과 (2026-11-17): 속성 표 6개 ['custom:age14', 'custom:consent_at', 'custom:mkt_at', 'custom:mkt_opt', 'custom:privacy_ver', 'custom:terms_ver']; ACC-1 ['custom:age14', 'custom:consent_at', 'custom:mkt_at', 'custom:mkt_opt', 'custom:privacy_ver', 'custom:terms_ver'] 일치=True; ACC-5 ['custom:mkt_at', 'custom:mkt_opt'] 표 안에 포함=True; 3부 블록 = D11 4장 원문 3667바이트 일치=True
