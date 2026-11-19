@@ -1,4 +1,5 @@
 """core.app_paths (OS-P0-c): packaged-app root and per-user data folder, computed without touching the real home."""
+import json
 from pathlib import Path
 import sys
 import tempfile
@@ -108,6 +109,69 @@ class DataLocationAndMigrationTests(unittest.TestCase):
         with self.assertRaises(app_paths.MigrationRefused):
             app_paths.migrate_legacy_data(confirmed=True, home=self.home, platform="linux",
                                           env={**self.env, "QUANTGEN_DATA_DIR": str(self.home / "o")})
+
+
+class MarkerKeepsTheChosenFolderTests(unittest.TestCase):
+    """Main decision 2026-11-20: QUANTGEN's marker in the platform folder decides before ~/.nextgen."""
+    def setUp(self):
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        self.home = Path(folder.name)
+        self.env = {"XDG_DATA_HOME": str(self.home / "xdg")}
+        self.platform_dir = self.home / "xdg" / "quantgen"
+        self.legacy = self.home / ".nextgen"
+
+    def resolve(self):
+        return app_paths.user_data_dir(home=self.home, env=self.env, platform="linux")
+
+    def ensure(self):
+        with patch.dict("os.environ", self.env, clear=True), patch.object(Path, "home", return_value=self.home), \
+                patch.object(sys, "platform", "linux"):
+            return app_paths.ensure_user_data_dir()
+
+    def test_a_new_user_gets_the_platform_folder_with_the_marker(self):
+        self.assertEqual(self.ensure(), self.platform_dir)
+        marker = json.loads((self.platform_dir / app_paths.DATA_MARKER).read_text(encoding="utf-8"))
+        self.assertEqual(sorted(marker), ["app", "created", "format"])
+        self.assertEqual((marker["app"], marker["format"]), ("QUANTGEN", 1))
+        self.assertEqual(self.platform_dir.stat().st_mode & 0o777, 0o700)
+
+    def test_b_a_later_nextgen_does_not_move_a_new_user(self):
+        self.ensure()
+        self.legacy.mkdir()                                     # e.g. TRADEGEN installed afterwards
+        self.assertEqual(self.resolve(), self.platform_dir)
+        self.assertEqual(app_paths.data_location(home=self.home, env=self.env, platform="linux").source, "platform")
+
+    def test_b_a_folder_a_writer_made_with_mkdir_is_marked_on_the_next_lookup(self):
+        (self.platform_dir / "trading").mkdir(parents=True)   # config.trading_dir() caller, no marker yet
+        self.assertEqual(self.resolve(), self.platform_dir)
+        self.assertTrue((self.platform_dir / app_paths.DATA_MARKER).is_file())
+        self.legacy.mkdir()
+        self.assertEqual(self.resolve(), self.platform_dir)
+
+    def test_c_an_existing_nextgen_user_stays(self):
+        self.legacy.mkdir()
+        self.assertEqual(self.resolve(), self.legacy)
+        self.assertEqual(self.ensure(), self.legacy)
+        self.assertFalse(self.platform_dir.exists())
+
+    def test_d_an_unmarked_platform_folder_does_not_win_over_nextgen(self):
+        self.platform_dir.mkdir(parents=True)                  # made by some other tool
+        self.legacy.mkdir()
+        self.assertEqual(self.resolve(), self.legacy)
+        self.assertEqual(list(self.platform_dir.iterdir()), [])  # not stamped while ~/.nextgen is in use
+
+    def test_describing_never_writes_the_marker(self):
+        self.platform_dir.mkdir(parents=True)
+        app_paths.data_location(home=self.home, env=self.env, platform="linux")
+        self.assertEqual(list(self.platform_dir.iterdir()), [])
+
+    def test_migration_marks_the_moved_folder(self):
+        self.legacy.mkdir()
+        target = app_paths.migrate_legacy_data(confirmed=True, home=self.home, env=self.env, platform="linux")
+        self.assertTrue((target / app_paths.DATA_MARKER).is_file())
+        self.legacy.mkdir()
+        self.assertEqual(self.resolve(), target)
 
 
 class WritersFollowTheDataFolderTests(unittest.TestCase):
