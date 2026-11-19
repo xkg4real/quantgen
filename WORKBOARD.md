@@ -290,10 +290,11 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 
 ## 3) 소유자 수동 작업 (OWNER_ACTIONS)
 
-**24시간 안 열린 항목: 9개 (OA-02 ~ OA-10). 기준 5개 이상 → Claude 앱 푸시 알림 (SESSION_PIPELINE 5절).**
+**24시간 안 열린 항목: 9개 (OA-03 ~ OA-10, OA-43). 기준 5개 이상 → Claude 앱 푸시 알림 (SESSION_PIPELINE 5절).**
 
 push_log:
 - 2026-11-20 00:51 KST 메인 — 9건 (OA-02~OA-10) — PushNotification "Mobile push requested"
+- 2026-11-20 01:40 KST 메인 — OA-02 완료, OA-43 추가로 9건 그대로. 마지막 알림 뒤 6시간 안이라 다시 보내지 않음 (다음 가능 07:51)
 
 정기 점검: 메인 세션 예약 작업 "QUANTGEN pipeline check (3h)" (trig_01P2NBVZFChNHJGjVdtrDTyC, 매 3시간 :20, 첫 실행 11-20 03:20 KST)
 
@@ -302,7 +303,7 @@ push_log:
 | ID | 무엇 | 요청한 세션 | 요청 시각 | 기한(24h 안?) | 상태 |
 |---|---|---|---|---|---|
 | OA-01 | 회원 MFA·계정 복구 결정 | PAYMENTS | 11-19 23:43 | — | **완료** 소유자 "지금 그대로: 이메일 MFA 유지" 선택(11-20 00:00 무렵, PAYMENTS 전달). OWNER_RULINGS_LOG 기록은 메인의 다음 PR |
-| OA-02 | AWS 15–17단계 진행(Golden Hour Code 계정): 계정 복구, 앱 클라이언트 quantgen-web. 새 풀 ID와 Client ID 붙여넣기(클라이언트 비밀은 있는지만 말하기) | PAYMENTS | 11-19 22:45, 23:41 | 지금 (막힘) | 진행 중 |
+| OA-02 | AWS 운영 풀 단계 (Golden Hour Code 계정) | PAYMENTS | 11-19 22:45 | — | **완료** 1~23c·25 끝(11-20, PAYMENTS 보고; 23a/23b는 CloudShell 명령, 24는 기존 월 예산 사용). 기록은 OWNER_STEPS 1-2 |
 | OA-03 | SES no-reply@가 바로 Verified였는지, Cloudflare 규칙이 필요했는지 한 줄 답 | PAYMENTS | 11-19 23:09 | 24h 안 | 대기 |
 | OA-04 | 웹사이트 세션에 "비밀번호 규칙에 특수문자 1개 이상 추가" 문장 붙이기 | PAYMENTS | 11-19 23:37 | 24h 안 | 대기 |
 | OA-05 | 웹사이트 세션 재개 지시 + 정책 문구 다시 만들기 프롬프트(PR-130.json) 붙이기 | MAIN | 11-19 | 24h 안 | 대기 |
@@ -311,13 +312,14 @@ push_log:
 | OA-08 | 무료 키 3개 가입(ALPHAVANTAGE_API_KEY, TIINGO_API_KEY, CRYPTOPANIC_API_KEY) → 등록 → keys status → collect_daily --alphavantage SPY --tiingo nvda --cryptopanic BTC 결과 붙이기 (키 값은 붙이지 않음). FRED_API_KEY는 이미 설정·확인 끝(ALFRED 3,364행) | DATA | 11-19 15:00 (11-20 00:23 갱신) | 지금 (막힘) | 대기 |
 | OA-09 | 마스터 부록 H4 홈 지표 진단 명령 실행, 출력 붙이기 | DATA (명령은 MAIN) | 11-17 22:13 (4번 요청, 마지막 11-19 15:00) | 지금 (DS-H 막힘) | 대기 |
 | OA-10 | DIDM 질문 답: (a) novelty 보조 조건을 정식으로? (b) 자체 LLM 기반 모델과 학습 데이터 마지막 날짜 (c) 평가표 판단 2칸(자체 NLP 열의 수집 F·실시간 J = X, 자체 NLP 관련성 = X)이 맞는지 — 세 개 모두 DATA 인계 8절에 있음 | DATA | 11-19 00:09 (11-20 00:23 갱신) | 24h 안 | 대기 |
+| OA-43 | AWS 크레딧이 끝나기 전에 EC2·VPC 사용(크레딧 제외 10월 $13.73, 11월 $48.71, 대부분 EC2-Instances·EC2-Other·VPC — 우리 작업 아님) 출처를 EC2 Global View로 확인. 확인 전에는 끄거나 지우지 않음 | PAYMENTS | 11-20 01:39 | 24h 안 (권장) | 대기 |
 
 ### 3.2 나중 또는 조건부
 
 | ID | 무엇 | 요청한 세션 | 요청 시각 | 기한(24h 안?) | 상태 |
 |---|---|---|---|---|---|
-| OA-11 | 관리 계정의 풀 2개 삭제 (버지니아 hoa9ag, 시드니 ap-southeast-2_hvH4JqdOu) | PAYMENTS | 11-19 22:23, 22:43 | 아님 (OA-02 뒤) | 대기 |
-| OA-12 | ACC-1~ACC-10 묶음을 웹사이트 세션에 붙였는지·날짜 확인. 17단계 뒤 풀 ID·Client ID 전달 | PAYMENTS | 11-17 | 아님 (OA-02 바로 뒤) | 모름 |
+| OA-11 | 관리 계정의 시험 풀 2개 삭제 (OWNER_STEPS 1-3 경우 1: 삭제 보호 끄기 → Delete) | PAYMENTS | 11-19 22:23 (11-20 갱신) | 아님 | 대기 |
+| OA-12 | 웹사이트 세션에 ACCOUNT_SETUP 3부 블록 + OWNER_STEPS 2단계 메시지(풀 ID·클라이언트 ID 채워짐, ACC-3/ACC-4 새 문구 포함) 전달 — PR #133 병합 뒤 최신본으로 | PAYMENTS | 11-20 (KEY-4 3차 반영) | 아님 | 대기 |
 | OA-13 | ADMIN_GUIDE 부록 C 시험(C1~C8), T1 시험, 출시 전 8항목·118문항 | PAYMENTS | 11-18, 11-19 | 아님 (풀 완성 뒤) | 대기 |
 | OA-14 | D9 "예상 시간"이 작업 시간만인지 한 줄 답 (지금은 나안으로 진행) | MAIN | 11-17 (11-18, 11-19 다시) | 아님 | 대기 |
 | OA-15 | ⑦-2 F6·F7 다시 실행할지 ("F7 재실행 생략 승인" 문구로 생략 가능) | MAIN | 11-19 01:18 | 아님 | 대기 |
