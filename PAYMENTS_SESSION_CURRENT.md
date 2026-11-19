@@ -4,15 +4,15 @@ reason: milestone
 from: claude
 task: payments-account-keys
 cycle: 2026-11-17
-done_ids: KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a
-next_ids: KEY-3/design, KEY-3, KEY-4, PAY-0, PAY-2
-updated_at: 2026-11-19T18:55:00+09:00
+done_ids: KEY-3/design, KEY-3, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a
+next_ids: KEY-4, PAY-0, PAY-2
+updated_at: 2026-11-19T19:20:00+09:00
 stale_after_hours: 3
-waiting_on: ci
-work_branch: claude/payments-key3-prep-20261119
-work_commit: 7f80fc0
+waiting_on: none
+work_branch: claude/payments-key4-20261119
+work_commit: 9f76b07
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/132
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
@@ -24,6 +24,8 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-19 19:20 갱신 — KEY-4 시작:** PR #132 병합 (main `9f76b07`, CI 8개 녹색). 메인이 LEDGER에 KEY-3/design·KEY-3 기록 (따로 기록 안 함). 메인 원문: "다음은 KEY-4입니다. KEY-4 PR 완료 조건에 앞 메시지의 잔여 9건(...)을 넣어 주세요. 준비되면 알려 주시면 "병합: PAYMENTS_ACCOUNT_KEYS"를 적겠습니다. KEY-4가 core 호출처를 바꾸므로 PR 본문에 "앱 동작 동일" 근거(전후 같은 요청·같은 답 시험)를 넣어 주세요." 작업 브랜치 `claude/payments-key4-20261119` (main `9f76b07`에서). 순서: (a) 아래 18:55의 9건 먼저 (경계 검출기·견고성·문서), (b) core 호출처(경계 fixture의 core 27파일 82건 + main.py 1건)를 게이트웨이로, 기존 주입점의 기본값·공급원 호출 줄만 바꿈, (c) 전후 같은 요청·같은 답 시험, (d) fixture 줄이기, 코드 지문 확인 (config.py 안 건드림). 준비되면 메인에 알리고 "병합: PAYMENTS_ACCOUNT_KEYS" 뒤에만 PR.
 
 **2026-11-19 18:55 갱신:** 메인 재검증 `7f80fc0`: 1·2·4·6·7·9·10·11·12 고쳐짐, 3·5·8 일부. 게이트웨이를 아직 아무 코드도 안 부르므로 CI 녹색이면 그대로 병합 (push 금지). **KEY-4 완료 조건 (연결 전에 고칠 것, 메인 2026-11-19 원문 요약):**
 1. [중간] 경계 `FICC_LOADERS`에 `_yf_fetch`·`_fred_fetch`·`_provider_rows` 없음, `from core.ficc.data import *` 미검출. `core/quant/history.py` `yf_history`의 `from core.ficc.data import _yf_fetch, _period_for`가 목록에 없음 → KNOWN에 넣고, `FiccData.EXPOSED`에 종목별 Yahoo 조회를 두거나 설계 6절에 경로 기록. **설계 6절의 "목록을 비우면 yahoo: off가 효과"는 지금 사실이 아님 → 고칠 것.**
