@@ -1,6 +1,6 @@
 # KEY-5 요청문 초안: 화면 쪽 공급사 직접 호출 → core/gateway (UI 세션용)
 
-작성: PAYMENTS_ACCOUNT_KEYS 세션, 2026-11-20 (메인 지시 2026-11-20 00:33 KST). 이 파일은 초안입니다. 소유자가 메인의 확정 신호 뒤에 UI 세션에 붙여 넣습니다.
+작성: PAYMENTS_ACCOUNT_KEYS 세션, 2026-11-20 (메인 지시 2026-11-20 00:50 KST). 이 파일은 초안입니다. 소유자가 메인의 확정 신호 뒤에 UI 세션에 붙여 넣습니다.
 
 ## 0. 먼저 읽을 것 (적용 전제)
 
@@ -24,7 +24,7 @@
   tests/gateway_boundary_acceptance.py(SCREEN_CEILING, SCREEN_FILES, FROZEN), main.py의 QuoteFeed 하위 클래스.
 - 완료 조건: 4절의 명령 → 모두 기대 결과.
 - 하지 말 것: 5절.
-- 끝나면: SESSION_PIPELINE 3절 형식으로 메인에 보고, LEDGER에 ⑬-2/ 또는 KEY-5 ID로 기록.
+- 끝나면: SESSION_PIPELINE 3절 형식으로 메인에 보고하고, 메인에 --done 문자열(ID | 무엇 | 파일 | 커밋 | 검사)을 보고. LEDGER는 메인이 씀.
 ```
 
 ## 2. 파일별 표 (22파일 44곳, `148504a` 기준)
