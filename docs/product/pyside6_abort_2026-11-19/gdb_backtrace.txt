@@ -1,0 +1,76 @@
+# gdb, PySide6-Essentials 6.12.0, UI 5025c6f converted copy, tests.desktop_market_tabs_acceptance (run 2 of slot 3, 2026-11-18)
+# paths shortened: <venv> = the PySide6 venv
+
+[Thread 0x7fffcbfff6c0 (LWP 13736) exited]
+[New Thread 0x7fffcbfff6c0 (LWP 13737)]
+[Thread 0x7fffcbfff6c0 (LWP 13737) exited]
+.[Thread 0x7fffd0a906c0 (LWP 13735) exited]
+[New Thread 0x7fffd0a906c0 (LWP 13738)]
+[Thread 0x7fffd0a906c0 (LWP 13738) exited]
+[New Thread 0x7fffd0a906c0 (LWP 13764)]
+[New Thread 0x7fffcbfff6c0 (LWP 13765)]
+[New Thread 0x7fffbaea96c0 (LWP 13766)]
+[New Thread 0x7fffba6a86c0 (LWP 13767)]
+[New Thread 0x7fffb9ea76c0 (LWP 13768)]
+[New Thread 0x7fffb96a66c0 (LWP 13769)]
+[New Thread 0x7fffb8ea56c0 (LWP 13771)]
+[Thread 0x7fffcbfff6c0 (LWP 13765) exited]
+[Thread 0x7fffd0a906c0 (LWP 13764) exited]
+[Thread 0x7fffbaea96c0 (LWP 13766) exited]
+malloc_consolidate(): unaligned fastbin chunk detected
+Thread 1 "python" received signal SIGABRT, Aborted.
+__pthread_kill_implementation (no_tid=0, signo=6, threadid=<optimized out>) at ./nptl/pthread_kill.c:44
+warning: 44	./nptl/pthread_kill.c: No such file or directory
+  Id   Target Id                                           Frame 
+* 1    Thread 0x7ffff7eae740 (LWP 13695) "python"          __pthread_kill_implementation (no_tid=0, signo=6, threadid=<optimized out>) at ./nptl/pthread_kill.c:44
+  2    Thread 0x7fffe5dff6c0 (LWP 13710) "python"          0x00007ffff7c98e51 in __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0x7fffefdbd660 <thread_status+96>) at ./nptl/futex-internal.c:57
+  3    Thread 0x7fffe55fe6c0 (LWP 13711) "python"          0x00007ffff7c98e51 in __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0x7fffefdbd6e0 <thread_status+224>) at ./nptl/futex-internal.c:57
+  4    Thread 0x7fffe4dfd6c0 (LWP 13712) "python"          0x00007ffff7c98e51 in __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0x7fffefdbd760 <thread_status+352>) at ./nptl/futex-internal.c:57
+  5    Thread 0x7fffd73ff6c0 (LWP 13719) "python"          0x00007ffff7c98e51 in __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0x7fffe1db07e0 <thread_status+96>) at ./nptl/futex-internal.c:57
+  6    Thread 0x7fffd6bfe6c0 (LWP 13720) "python"          0x00007ffff7c98e51 in __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0x7fffe1db0860 <thread_status+224>) at ./nptl/futex-internal.c:57
+  7    Thread 0x7fffd63fd6c0 (LWP 13721) "python"          0x00007ffff7c98e51 in __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0x7fffe1db08e0 <thread_status+352>) at ./nptl/futex-internal.c:57
+  15   Thread 0x7fffba6a86c0 (LWP 13767) "Thread (pooled)" 0x00007ffff7c98e51 in __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x7fffba6a7da0, op=137, expected=0, futex_word=0x103890b4) at ./nptl/futex-internal.c:57
+  16   Thread 0x7fffb9ea76c0 (LWP 13768) "Thread (pooled)" 0x00007ffff7c98e51 in __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x7fffb9ea6da0, op=137, expected=0, futex_word=0xf5d3520) at ./nptl/futex-internal.c:57
+
+# main thread (Thread 1) at the abort
+Thread 1 (Thread 0x7ffff7eae740 (LWP 13695) "python"):
+#0  __pthread_kill_implementation (no_tid=0, signo=6, threadid=<optimized out>) at ./nptl/pthread_kill.c:44
+#1  __pthread_kill_internal (signo=6, threadid=<optimized out>) at ./nptl/pthread_kill.c:78
+#2  __GI___pthread_kill (threadid=<optimized out>, signo=signo@entry=6) at ./nptl/pthread_kill.c:89
+#3  0x00007ffff7c4527e in __GI_raise (sig=sig@entry=6) at ../sysdeps/posix/raise.c:26
+#4  0x00007ffff7c288ff in __GI_abort () at ./stdlib/abort.c:79
+#5  0x00007ffff7c297b6 in __libc_message_impl (fmt=fmt@entry=0x7ffff7dcf8f0 "%s\n") at ../sysdeps/posix/libc_fatal.c:134
+#6  0x00007ffff7ca90d5 in malloc_printerr (str=str@entry=0x7ffff7dd28c0 "malloc_consolidate(): unaligned fastbin chunk detected") at ./malloc/malloc.c:5775
+#7  0x00007ffff7ca9e2c in malloc_consolidate (av=0x7ffff7e04ac0 <main_arena>) at ./malloc/malloc.c:4846
+#8  0x00007ffff7caae85 in _int_free_maybe_consolidate (av=0x7ffff7e04ac0 <main_arena>, size=<optimized out>) at ./malloc/malloc.c:4779
+#9  0x00007ffff7cab51a in _int_free (av=0x7ffff7e04ac0 <main_arena>, p=<optimized out>, have_lock=<optimized out>) at ./malloc/malloc.c:4646
+#10 0x00007ffff7cadeae in __GI___libc_free (mem=0x10254c10) at ./malloc/malloc.c:3398
+#11 0x00007ffff555bd46 in ?? () from <venv>/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6
+#12 0x00007ffff555424e in ?? () from <venv>/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6
+#13 0x00007ffff555458d in ?? () from <venv>/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6
+#14 0x00007ffff5554b7d in QRasterPaintEngine::~QRasterPaintEngine() () from <venv>/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6
+#15 0x00007ffff537e727 in QImageData::~QImageData() () from <venv>/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6
+#16 0x00007ffff537e841 in QImage::~QImage() () from <venv>/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6
+#17 0x00007fffd230be41 in ?? () from <venv>/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqoffscreen.so
+#18 0x00007fffd230be6d in ?? () from <venv>/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqoffscreen.so
+#19 0x00007ffff5481bff in QBackingStore::~QBackingStore() () from <venv>/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6
+#20 0x00007ffff600bf41 in ?? () from <venv>/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Widgets.so.6
+#21 0x00007ffff600c01d in ?? () from <venv>/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Widgets.so.6
+#22 0x00007ffff5fd9b5f in QWidgetPrivate::deleteTLSysExtra() () from <venv>/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Widgets.so.6
+#23 0x00007ffff5feda68 in QWidget::destroy(bool, bool) () from <venv>/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Widgets.so.6
+#24 0x00007ffff5ff4ed0 in QWidget::~QWidget() () from <venv>/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Widgets.so.6
+#25 0x00007ffff6853390 in ?? () from <venv>/lib/python3.13/site-packages/PySide6/QtWidgets.abi3.so
+#26 0x00007ffff4beb5d8 in QObject::event(QEvent*) () from <venv>/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Core.so.6
+#27 0x00007ffff68830de in ?? () from <venv>/lib/python3.13/site-packages/PySide6/QtWidgets.abi3.so
+#28 0x00007ffff5f9694b in QApplicationPrivate::notify_helper(QObject*, QEvent*) () from <venv>/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Widgets.so.6
+#29 0x00007ffff6a3badf in ?? () from <venv>/lib/python3.13/site-packages/PySide6/QtWidgets.abi3.so
+#30 0x00007ffff4b8fe20 in QCoreApplication::notifyInternal2(QObject*, QEvent*) () from <venv>/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Core.so.6
+#31 0x00007ffff4b93b04 in QCoreApplicationPrivate::sendPostedEvents(QObject*, int, QThreadData*) () from <venv>/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Core.so.6
+#32 0x00007ffff14753ab in ?? () from <venv>/lib/python3.13/site-packages/PySide6/QtCore.abi3.so
+#33 0x000000000162bfc4 in cfunction_call ()
+#34 0x0000000001610b3a in _PyEval_EvalFrameDefault ()
+#35 0x000000000160f515 in method_vectorcall ()
+#36 0x0000000001617f05 in _PyEval_EvalFrameDefault ()
+#37 0x000000000160f515 in method_vectorcall ()
+#38 0x0000000001617f05 in _PyEval_EvalFrameDefault ()
+#39 0x00000000016f8b66 in slot_tp_call ()
