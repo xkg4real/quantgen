@@ -1,0 +1,41 @@
+# 홈 지표 6개 데이터 계층 (DS-H, 2026-11-20)
+
+- 담당: DATA_SOURCE_DIDM 세션. 화면 연결은 UI 세션 (`⑬-2/page-redesign/home` 실데이터 연결).
+- 근거: 소유자 요청 (Notion, 2026-11-16) "메인화면 … 주요 지표 6개를 그래프와 함께 구현하도록(앱 키자마자 실시간)", 소유자 결정 D8 (2026-11-17: 6개 유지, 실시간은 BTC (Upbit)와 KOSPI (사용자 KIS 키가 있을 때)만, 나머지는 '일별(지연)'), D7-G/KEY-4 (core는 `core.gateway`로만 공급사에 닿음).
+- 코드: `core/research/markets.py` `load_home_indicators(days=30, ...)`. 시험: `tests/home_indicators_acceptance.py` (오프라인 가짜 공급사).
+- 기존 `load_markets()`는 그대로 둡니다 (KEY-4 같은 답 시험이 고정).
+
+## 호출
+
+```python
+from core.research.markets import load_home_indicators
+rows = load_home_indicators(days=90)      # 6행, SPECS 순서. 네트워크는 이 한 번의 호출 안에서만
+```
+
+- 일별 6개는 **한 번의 로더 호출**: `gateway.ficc().load_many([...6개...], source="auto", days=days)` → 안에서 Yahoo 한 번 (^GSPC, ^KS11, BTC-USD), FRED 한 번 (DEXKOUS, DGS10, VIXCLS).
+- 실시간: BTC = `gateway.provider("data.crypto.crypto_client", source="crypto_public")`의 Upbit `KRW-BTC` ticker (키 없음). KOSPI = `gateway.keys_ready("kis_quote")`가 참일 때만 KIS `index("KOSPI")` (키가 없으면 부르지 않음).
+- 화면은 시작 직후 이 함수를 **작업 스레드에서** 부르고, 실시간 값은 같은 함수를 `live=True`로 주기적으로 다시 부르거나 (일별은 캐시 권장) 따로 갱신합니다. 주기 결정은 UI 세션.
+
+## 행 (dict)
+
+| 키 | 뜻 |
+|---|---|
+| `label`, `symbol`, `provider` (`YFINANCE`/`FRED`), `unit`, `route` | `SPECS` 그대로 |
+| `value`, `change`, `observation_date` | 마지막 관측값, 전일 대비 (% 단위; `unit == "%"`인 금리는 ×100 = bp), 관측일 |
+| `status` | `OBSERVED` / `STALE` (관측일이 7일 넘게 지남) / `UNAVAILABLE` |
+| `reason_code`, `error_code` | 실패 사유 코드 (`FAILURE_REASONS` 중 하나), 예외 이름. 공급사 문구·URL은 들어가지 않음 |
+| `history` | `[{"date", "value"}]` 오래된 것부터, 최대 `days`개. 그래프용. 실패하면 `[]` |
+| `delay` | `delayed_daily` (Yahoo) / `daily` (FRED) — 화면의 "일별(지연)" 표시용 |
+| `display` | `{"source", "policy", "outcome", "publication_authorization"}` — `core/research/display_rights.json`의 `home` 행. Yahoo 3개 `rights_replace`, FRED 2개 `rights_conditional`, VIX `rights_conditional` (Cboe). 공개 허가 false |
+| `live` | BTC·KOSPI만, 나머지는 `None`. `{"source" (UPBIT/KIS), "unit", "value", "change_pct", "as_of", "status" (LIVE / KEY_NEEDED / UNAVAILABLE), "reason_code", "display_outcome"}` |
+
+주의:
+- **BTC의 실시간 값은 원화 (`KRW-BTC`, Upbit)이고, 일별 값·그래프는 달러 (`BTC-USD`, Yahoo)입니다.** 단위가 다르므로 한 숫자로 섞지 말고 `live.unit`을 함께 보여 주세요. (하나로 맞추려면 소유자 결정 필요: 일별도 Upbit 원화로 바꾸거나, 실시간을 Binance USDT로 바꾸기.)
+- **합성 값은 없습니다.** 로더가 공급사 실패로 모의 시계열을 돌려주면 그 행은 `UNAVAILABLE`, `value`·`history`가 비고 `reason_code`에 이유 (예: `rate_limited`, `network_error`, `connection_not_configured` = 게이트웨이에서 꺼짐).
+- 실시간 값이 실패해도 일별 행은 그대로입니다 (`live.status = UNAVAILABLE`).
+
+## 확인 (2026-11-20, 브랜치 `claude/ds-home-indicators-20261120`)
+
+- `tests.home_indicators_acceptance` 20 OK (한 번 호출, 기록·변화율, 표시권, 합성 값 거부, 게이트웨이 꺼짐 사유, 전체 실패 시 비밀 문구 없음, NaN은 버리고 채우지 않음, 실시간 단위·키 없을 때 호출 안 함, 실패 격리, 기본 경로가 `gateway.ficc/provider/keys_ready`를 씀).
+- 게이트웨이 경계·같은 답·main·원격, 자격 증명, 홈·연구 계약 시험: 브랜치 177 OK, main `8445187` 157 OK (실패 집합 같음, 둘 다 없음).
+- 실제 공급사 호출은 하지 않음 (클라우드 네트워크 막힘). 소유자 PC 진단 (OA-09)이 오면 원인 구분을 이 문서에 더함.
