@@ -129,7 +129,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [x] KEY-3/design — GATEWAY_DESIGN.md v0.2 — 9f76b07
 - [x] KEY-3 — core/gateway + 경계 시험 — 9f76b07 (PR #132)
 - [~] KEY-4 — PR #133, 148504a — 1절
-- [~] KEY-4/a — 계정 문서 고침(F1–F9) + 자체 시험 1줄(SA-INT-1) + 소유자 3-A 시험 결과(T3–T9, T13–T15) — **초안 끝: `claude/payments-key4a-20261120` @ `9fdbb0b`** (d6a1997에서, 메인 확인 11-20 02:1x: 문서 3개+시험 1개+기준선, 계정번호·키·IP·실제 메일 없음, 시험 주소는 '내아이디+' 자리표시). KEY-4 병합 뒤 main 합쳐 PR(대기열 4d'). 남은 확인: T14 View event, T17 오류 이름, T17a 결과 → 6.1 ②·ACC-4 확정
+- [~] KEY-4/a — 계정 문서 고침(F1–F9) + 자체 시험 1줄(SA-INT-1) + 소유자 3-A 시험 결과(T3–T9, T13–T15) — **초안 끝: `claude/payments-key4a-20261120` @ `9fdbb0b`** (d6a1997에서, 메인 확인 11-20 02:0x: 문서 3개+시험 1개+기준선, 계정번호·키·IP·실제 메일 없음, 시험 주소는 '내아이디+' 자리표시). KEY-4 병합 뒤 main 합쳐 PR(대기열 4d'). 남은 확인: T14 View event, T17 오류 이름, T17a 결과 → 6.1 ②·ACC-4 확정
 - [~] KEY-5 — 화면 쪽 22파일/44곳 + quantgen_desktop/paper.py + 키·연결 화면(gateway.status()) — 구현은 UI 세션 몫(소유자 경유). **요청문 초안 끝: handoff `plans/2026-11-20/KEY5_UI_REQUEST.md` (0df90ec, PAYMENTS)** — KEY-4 병합 뒤 메인 확정 신호 → 줄 번호 재정렬 → 소유자가 UI 세션에 붙여 넣음. OS-F1 뒤 적용 권장. 앞서 정할 것: set_backend(None) 가/나 안(OA-41)
 - [ ] KEY-5/a — KEY-5 앞 gateway 준비 3건 (G1 data.kis_stream 입구, G2 kis_workspace 순수 값 목록, G3 main.py QuoteFeed 하위 클래스를 공용 모듈로 → paper.py 재사용) — PAYMENTS, KEY-4 병합 뒤 main에서 브랜치, 대기열 4e
 - [~] PAY-0 — 문의 7건 초안 + 목록 표 (docs/commercial/inquiries/, 문서 8개) — **초안 끝: `claude/payments-pay0-20261120` @ `7f8939c`** (main 9f76b07에서, 메인 확인 11-20 01:00: 문서만, 비밀값·다른 연락처 없음). PR은 대기열 자리 뒤, 원장은 병합 때. 발송은 소유자(OA-32)
@@ -310,12 +310,12 @@ push_log:
 | OA-05 | 웹사이트 세션 재개 지시 + 정책 문구 다시 만들기 프롬프트(PR-130.json) 붙이기 | MAIN | 11-19 | 24h 안 | 대기 |
 | OA-06 | UI 7쪽을 skymi, whydi PC에서 실행 확인 → UI 세션에 "PR 만들어" | UI, OS, MAIN | 11-18, 11-19 03:13, 05:11 | 지금 (KEY-4 다음 차례를 막음) | 대기 |
 | OA-07 | OpenDART 확인 다시 실행 | DATA | 11-19 01:29 | — | **완료** 소유자 PC: 9쪽, 공시 819건 저장 (DATA 보고 11-20 01:57, VENDOR_EVAL 3.1 기록 c6fda98). 공식·무료 공급원 6곳 모두 확인 끝 |
-| OA-08 | 무료 키 2개 가입(ALPHAVANTAGE_API_KEY, TIINGO_API_KEY) → 등록 → keys status → collect_daily --alphavantage SPY --tiingo nvda 결과 붙이기 (키 값은 붙이지 않음). FRED는 확인 끝. CryptoPanic은 무료 플랜이 없어 DS-4b에서 뺌(유료 단계에서 판단, 4abe761) | DATA | 11-19 15:00 (11-20 02:1x 갱신) | 지금 (막힘) | 대기 |
+| OA-08 | 무료 키 2개 가입(ALPHAVANTAGE_API_KEY, TIINGO_API_KEY) → 등록 → keys status → collect_daily --alphavantage SPY --tiingo nvda 결과 붙이기 (키 값은 붙이지 않음). FRED는 확인 끝. CryptoPanic은 무료 플랜이 없어 DS-4b에서 뺌(유료 단계에서 판단, 4abe761) | DATA | 11-19 15:00 (11-20 02:0x 갱신) | 지금 (막힘) | 대기 |
 | OA-09 | 마스터 부록 H4 홈 지표 진단 명령 실행, 출력 붙이기 | DATA (명령은 MAIN) | 11-17 22:13 (4번 요청, 마지막 11-19 15:00) | 지금 (DS-H 막힘) | 대기 |
 | OA-10 | DIDM 질문 답: (a) novelty 보조 조건을 정식으로? (b) 자체 LLM 기반 모델과 학습 데이터 마지막 날짜 (c) 평가표 판단 2칸(자체 NLP 열의 수집 F·실시간 J = X, 자체 NLP 관련성 = X)이 맞는지 — 세 개 모두 DATA 인계 8절에 있음 | DATA | 11-19 00:09 (11-20 00:23 갱신) | 24h 안 | 대기 |
 | OA-43 | AWS 비용 출처 확인 — 소유자 11월 막대(11-20 01:5x 공유): EC2-Other $39.47(81%), EC2-Instances $5.55, VPC $2.11, Amplify $1.57, 합 $48.71 → 하루 약 $2.6, 이대로면 월 약 $77–81. 메인 추정(미검증): 작은 인스턴스 1대(t3.micro 급, 약 17.5일)+공인 IPv4 1개(약 17.6일)가 함께 켜져 있고, EC2-Other는 NAT 게이트웨이 또는 t3 unlimited CPU 크레딧 초과(CPU 100% 지속 시 하루 약 $2.16 — 폭주 프로세스나 침해 가능성)와 금액이 맞음. 다음: Cost Explorer EC2-Other를 '사용 유형'으로 묶은 화면 → 메인이 판정. 끄거나 지우지 않음 | PAYMENTS→MAIN | 11-20 01:39 | 24h 안 (권장) | 진행 중 |
-| OA-44 | 이메일 MFA 회원 분실(두 번째 확인 수단 없음) | PAYMENTS→MAIN | 11-20 02:1x | — | **완료** 소유자 "2로 권장합니다. Payment세션에다가 전달해주세요"(2026-11-20 02:04:06 KST) → ② 관리자가 옛 계정을 지우고 같은 이메일로 재가입. PAYMENTS에 전달, OWNER_RULINGS_LOG는 4d |
-| OA-45 | OWNER_STEPS T14: CloudTrail 회원 쪽 이벤트 하나를 View event로 열어 username/sub가 있는지 확인 (6.1 ② 확정용) | PAYMENTS | 11-20 02:1x | 아님 | 대기 |
+| OA-44 | 이메일 MFA 회원 분실(두 번째 확인 수단 없음) | PAYMENTS→MAIN | 11-20 02:0x | — | **완료** 소유자 "2로 권장합니다. Payment세션에다가 전달해주세요"(2026-11-20 02:04:06 KST) → ② 관리자가 옛 계정을 지우고 같은 이메일로 재가입. PAYMENTS에 전달, OWNER_RULINGS_LOG는 4d |
+| OA-45 | OWNER_STEPS T14: CloudTrail 회원 쪽 이벤트 하나를 View event로 열어 username/sub가 있는지 확인 (6.1 ② 확정용) | PAYMENTS | 11-20 02:0x | 아님 | 대기 |
 
 ### 3.2 나중 또는 조건부
 
