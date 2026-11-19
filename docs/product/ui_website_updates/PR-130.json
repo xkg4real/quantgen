@@ -1,0 +1,47 @@
+{
+  "id": "PR-130",
+  "source_pr": "https://github.com/xkg4real/quantgen/pull/130",
+  "source_branch": "claude/policy-d11-q1q3-20261119",
+  "source_commit": "05fef60787af",
+  "summary": "Policy PR-1: owner decisions only. Public operator text becomes QUANTGEN(운영자 고건) (no company mark until a corporation exists); mailbox contact@quantgeneration.com (receipt confirmed 2026-11-19); minimum age 14 free (self-declared) and 19 paid; the street address is removed from every public document; hosting facts recorded (domain registration and email on Cloudflare, website management on AWS). Account-service text (Sydney storage, deletion, security log, processors) is not included and waits for PR-2 after the AWS user pool and the web account pages exist.",
+  "changed_files": [
+    "docs/compliance/01-privacy-policy.md",
+    "docs/compliance/02-terms-of-service.md",
+    "docs/compliance/03-refund-policy.md",
+    "docs/compliance/04-cookie-policy.md",
+    "docs/compliance/05-cookie-consent.md",
+    "docs/compliance/06-form-consent.md",
+    "docs/compliance/08-third-parties.md",
+    "docs/compliance/10-pricing.md",
+    "docs/compliance/11-testimonials.md",
+    "docs/compliance/15-keyboard.md",
+    "docs/compliance/16-business-information.md",
+    "docs/compliance/17-children.md",
+    "docs/compliance/18-marketing-email.md",
+    "docs/compliance/20-deletion.md",
+    "docs/compliance/FACTS.md",
+    "docs/compliance/README.md",
+    "docs/compliance/RELEASE_GAPS.md",
+    "docs/compliance/release-profile.json",
+    "docs/compliance/source-review.json",
+    "docs/nautilus_bridge/OWNER_RULINGS_LOG.md",
+    "docs/product/ui_website_updates/PR-130.json"
+  ],
+  "verification": {
+    "compliance": "python3 -B -m tools.compliance.check --check: consistency PASS, publication BLOCKED, 20 documents, 793 sources; compliance tests 47 OK; two independent review passes, all findings fixed.",
+    "limitations": "Documents stay review-required and publication stays BLOCKED; legal points in the documents are not legal advice; AWS product, region and contracting entity are not yet confirmed."
+  },
+  "website_impact": {
+    "classification": "policy document text",
+    "action": "When the website session regenerates the policy pages from docs/compliance after this merge, the operator line, contact mailbox, minimum age and hosting wording change, and no street address is shown. It must not write its own wording and must keep account-service sections out until PR-2. No website change is made here."
+  },
+  "delivery": {
+    "status": "queued",
+    "destination": "웹사이트 작업공간(AWS)",
+    "reason": "Website is maintained by a separate session; this file records the change only."
+  },
+  "website_application": "unverified",
+  "deployment": "unverified",
+  "merge_commit": "",
+  "merge_status": "opened"
+}

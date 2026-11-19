@@ -114,13 +114,32 @@ def _valid_token(raw: Optional[str], key_id: str = "") -> Optional[str]:
 
 
 def _read_token_file() -> Optional[str]:
+    """Read the shared token file. On POSIX the file is opened without following a link (O_NOFOLLOW) and tightened
+    to 0600 through the same descriptor, so there is no check-then-chmod race. A symlink is read through the link
+    but its target's mode is left alone; a chmod refusal (another owner) never stops the read."""
     path = _token_path()
-    if os.name == "posix":
+    nofollow = getattr(os, "O_NOFOLLOW", 0)
+    if nofollow:
         try:
-            if not path.is_symlink() and path.exists():
-                os.chmod(path, 0o600)                # older versions wrote it world-readable; never through a link
+            fd = os.open(path, os.O_RDONLY | nofollow)
+        except FileNotFoundError:
+            return None
         except OSError:
-            pass                                     # another owner or a filesystem without modes: still read it
+            fd = None                                # a symlink (ELOOP) or an unreadable file: plain read below
+        if fd is not None:
+            try:
+                try:
+                    os.fchmod(fd, 0o600)             # older versions wrote it world-readable
+                except OSError:
+                    pass
+                with os.fdopen(fd, "rb") as handle:
+                    fd = None
+                    return handle.read().decode("utf-8")
+            except Exception:
+                return None
+            finally:
+                if fd is not None:
+                    os.close(fd)
     try:
         return path.read_text(encoding="utf-8")
     except Exception:
@@ -129,8 +148,12 @@ def _read_token_file() -> Optional[str]:
 
 def _write_token_file(text: str) -> None:
     """Owner-only file (0600) in a directory created owner-only (0700); an existing ~/.nextgen keeps its mode.
-    The temporary file has a random name (mkstemp: O_EXCL, 0600), then replaces the target atomically."""
+    The temporary file has a random name (mkstemp: O_EXCL, 0600), then replaces the target atomically. When the
+    token file is a symlink (a shared file kept elsewhere), the link's target is replaced, so the link and the
+    sharing stay intact."""
     path = _token_path()
+    if path.is_symlink():
+        path = Path(os.path.realpath(path))
     path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
     fd, tmp = tempfile.mkstemp(prefix=".kis_token.", suffix=".tmp", dir=str(path.parent))
     try:
@@ -285,10 +308,12 @@ class KISClient:
             return token
         return _valid_token(_read_token_file(), key_id)
 
-    def _store_token(self, token: str, expires_in: float) -> None:
+    def _store_token(self, token: str, expires_in: float, app_key: Optional[str] = None) -> None:
+        """`app_key` is the key the token was minted with (token() passes it), so a key changed while the request
+        was in flight cannot stamp the token with the new key's key_id."""
         global _FILE_TOKEN_IGNORED
         record = {"access_token": token, "expires_at": time.time() + float(expires_in)}
-        key_id = self._key_id()
+        key_id = _key_id(app_key, self.base_url) if app_key is not None else self._key_id()
         if key_id:
             record["key_id"] = key_id
         text = json.dumps(record)
@@ -327,7 +352,7 @@ class KISClient:
             token = payload.get("access_token")
             if not token:
                 raise KISError("token response contained no access_token")
-            self._store_token(token, payload.get("expires_in") or 86400)
+            self._store_token(token, payload.get("expires_in") or 86400, app_key)
             return str(token)
 
     # -- request -------------------------------------------------------------

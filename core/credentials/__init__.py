@@ -264,8 +264,10 @@ def status(name: str) -> dict:
     return {"name": name, "kind": names.kind(name), "present": bool(value), "source": source}
 
 
-def status_all() -> list[dict]:
-    return [status(n) for n in names.SECRETS]
+def status_all(include_research: bool = False) -> list[dict]:
+    """The ten app secrets; with ``include_research`` also the research-tool names (DIDM)."""
+    listed = list(names.SECRETS) + (list(names.RESEARCH) if include_research else [])
+    return [status(n) for n in listed]
 
 
 def set(name: str, value: str) -> None:  # noqa: A001 - the store's verb
