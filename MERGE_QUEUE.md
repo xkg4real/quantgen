@@ -1,6 +1,6 @@
 # MERGE_QUEUE — main 병합 순서와 동결 (메인 세션이 관리)
 
-updated_at: 2026-11-19T19:12:00+09:00
+updated_at: 2026-11-19T20:20:00+09:00
 coordinator: 메인 세션 (QUANTGEN/MAIN, https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB)
 freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보고("F22까지 성공적으로 마무리했습니다."), main `6e077dc`(소유자 `--no-ff` 병합, 부모 `8e026ab`·`13f4dea`), 그 push의 Compliance success, PR #4 merged. (동결 기간: 2026-11-18T19:10:45+09:00 ~ 위 시각)
 
@@ -25,7 +25,7 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 | 4 | ~~정책 문서 PR-1~~ | PR #130 | **병합 완료 main `edbe9f7`** (2026-11-19 15:03 KST). PR-2(계정 서비스 설명)는 AWS 풀·웹 계정 화면 뒤 |
 | 4a | ~~CI 겹친 실행 자동 취소 + GH-1 기록~~ | PR #131 | **병합 완료 main `ab24dec`** (2026-11-19 16:58 KST) |
 | 4b | ~~KEY-3 (게이트웨이)~~ | PR #132 | **병합 완료 main `9f76b07`** (2026-11-19 19:07 KST) |
-| 4c | KEY-4 (core·main 직접 호출 83건을 게이트웨이로) | PAYMENTS | 준비되면 차례. **완료 조건에 KEY-3 검토 잔여 9건 포함**(메인 메시지 2026-11-19 17:5x) |
+| 4c | KEY-4 (core 27파일 91곳·main.py 1곳을 게이트웨이로, KEY-3 검토 잔여 9건) | PAYMENTS `claude/payments-key4-20261119` @ `c8c1b61` | **병합: PAYMENTS_ACCOUNT_KEYS** (2026-11-19 20:20 KST 메인). 최신 main `9f76b07` 합치기 → 준법 기준선 마지막에 갱신 → `--check` PASS → PR. 메인이 독립 검토 뒤 CI 녹색이면 병합 |
 | 5 | UI 7쪽 + PySide6 준비 | UI `claude/friendly-bardeen-r6xe8f` | 소유자 실행 확인 뒤 (UI 세션 브랜치는 아무도 고치지 않음) |
 | 6 | PySide6 전환 (`pyqt6_to_pyside6 --apply` + `switch_day.py --apply`, 화면 문구 3곳은 UI 세션) | OS | 5 뒤 (OS 세션 제안 순서: UI PR → 전환) |
 | 7 | KEY-3 → KEY-4 → KEY-5 | PAYMENTS | 차례대로 |
