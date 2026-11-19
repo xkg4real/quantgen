@@ -529,8 +529,12 @@ def _provider_reasons(source):
 
 
 def _crypto(out):
-    """The parts of the crypto analysis that come from the providers (the GARCH fit and tables follow from them)."""
-    keep = ("source", "usdkrw_source", "balances", "balances_error", "premium_index", "oi", "btc_dates", "kimchi")
+    """The parts of the crypto analysis that come from the providers. The statistics computed from them (kimchi
+    premium ADF test, GARCH fit, weekday table) are left out: they depend on the numpy/statsmodels build (an ADF
+    p-value on these smooth fake series differs by 0.17 between builds), and this test proves the gateway hands the
+    same inputs to the same functions, not that a library reproduces its numbers. The inputs themselves are kept
+    (prices, balances, premium index, open interest, dates) and every provider call is recorded exactly."""
+    keep = ("source", "usdkrw_source", "balances", "balances_error", "premium_index", "oi", "btc_dates", "btc")
     return {k: out.get(k) for k in keep}
 
 
@@ -543,6 +547,25 @@ def answers() -> dict:
     return {name: run(case) for name, case in sorted(cases().items())}
 
 
+def same(now, then, path="") -> str:
+    """"" when ``now`` matches ``then``: structure, keys, strings, integers, booleans and lengths exactly; floats
+    within rel 1e-9 / abs 1e-12 (the last digits of a float move with the BLAS/numpy build, not with the gateway).
+    Otherwise the path of the first difference."""
+    if isinstance(then, float) and isinstance(now, (int, float)) and not isinstance(now, bool):
+        return "" if math.isclose(now, then, rel_tol=1e-9, abs_tol=1e-12) else f"{path}: {now!r} != {then!r}"
+    if type(now) is not type(then):
+        return f"{path}: type {type(now).__name__} != {type(then).__name__}"
+    if isinstance(then, dict):
+        if sorted(now) != sorted(then):
+            return f"{path}: keys {sorted(now)} != {sorted(then)}"
+        return next((d for k in sorted(then) for d in [same(now[k], then[k], f"{path}.{k}")] if d), "")
+    if isinstance(then, list):
+        if len(now) != len(then):
+            return f"{path}: length {len(now)} != {len(then)}"
+        return next((d for i, (a, b) in enumerate(zip(now, then)) for d in [same(a, b, f"{path}[{i}]")] if d), "")
+    return "" if now == then else f"{path}: {now!r} != {then!r}"
+
+
 class SameAnswerTest(unittest.TestCase):
     def test_same_request_same_answer_as_main(self):
         golden = json.loads(GOLDEN.read_text(encoding="utf-8"))
@@ -550,7 +573,15 @@ class SameAnswerTest(unittest.TestCase):
         self.assertEqual(sorted(now), sorted(golden["answers"]), "cases differ from the recorded set")
         for name in sorted(golden["answers"]):
             with self.subTest(case=name):
-                self.assertEqual(now[name], golden["answers"][name])
+                self.assertEqual(same(now[name], golden["answers"][name], name), "")
+
+    def test_comparison_is_exact_except_float_noise(self):
+        self.assertEqual(same({"a": [1.0, "x"]}, {"a": [1.0 + 1e-15, "x"]}), "")
+        self.assertNotEqual(same({"a": [1.0]}, {"a": [1.0001]}), "")
+        self.assertNotEqual(same({"a": [1]}, {"a": [2]}), "")
+        self.assertNotEqual(same({"a": "x"}, {"a": "y"}), "")
+        self.assertNotEqual(same({"a": [1.0]}, {"a": [1.0, 2.0]}), "")
+        self.assertNotEqual(same({"a": 1}, {"b": 1}), "")
 
     def test_no_fake_key_in_the_recorded_answers(self):
         self.assertNotIn(FAKE_KEY, GOLDEN.read_text(encoding="utf-8"))
