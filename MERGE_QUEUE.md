@@ -26,8 +26,9 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 | 4 | ~~정책 문서 PR-1~~ | PR #130 | **병합 완료 main `edbe9f7`** (2026-11-19 15:03 KST). PR-2(계정 서비스 설명)는 AWS 풀·웹 계정 화면 뒤 |
 | 4a | ~~CI 겹친 실행 자동 취소 + GH-1 기록~~ | PR #131 | **병합 완료 main `ab24dec`** (2026-11-19 16:58 KST) |
 | 4b | ~~KEY-3 (게이트웨이)~~ | PR #132 | **병합 완료 main `9f76b07`** (2026-11-19 19:07 KST) |
-| 4c | KEY-4 (core 26파일 90곳·main.py를 게이트웨이로, 동결 feed.py는 S4 예외, KEY-3 검토 잔여 9건) | PAYMENTS PR #133 @ `148504a` | **병합: PAYMENTS_ACCOUNT_KEYS** (2026-11-19 20:20 KST). 메인 검토 1차(막힘 2) → 2차(앱 시작 회귀 1) → 3차 재검증 중(11-20 00:20~). CI 녹색 + 검토 통과 뒤 메인이 merge commit |
+| 4c | KEY-4 (core 26파일 90곳·main.py를 게이트웨이로, 동결 feed.py는 S4 예외, KEY-3 검토 잔여 9건) | PAYMENTS PR #133 @ `d6a1997` | **병합: PAYMENTS_ACCOUNT_KEYS**. 메인 검토 4회(1차 막힘 2 → 2차 앱 시작 회귀 → 3차 막힘 없음 → 표적 재확인 시험 전부 FIXED, 11-20 02:0x). **d6a1997 CI 녹색이면 메인이 merge commit** |
 | 4d | 메인 문서 PR: CLAUDE.md(SESSION_PIPELINE·WORKBOARD 포인터, "법인 설립 완료" → handoff INCORPORATION_CHECKLIST.md), OWNER_RULINGS_LOG(11-19 계정 결정 3건: 비밀번호 특수문자, HTML 인증 메일, 이메일 MFA 유지) | 메인 | KEY-4 바로 뒤 (11-20 메인이 정함) |
+| 4d' | KEY-4/a 계정 문서 고침 (ADMIN_GUIDE 6.1 두 번째 확인 정의, OWNER_STEPS T18 표·Reset password 시험 단계, 작은 것 F4–F9, 자체 시험 1줄) | PAYMENTS | KEY-4 뒤, 4d와 같은 자리(파일 안 겹침) |
 | 5 | UI 7쪽 + PySide6 준비 | UI `claude/friendly-bardeen-r6xe8f` | 소유자 실행 확인 뒤 (UI 세션 브랜치는 아무도 고치지 않음) |
 | 6 | PySide6 전환 (`pyqt6_to_pyside6 --apply` + `switch_day.py --apply`, 화면 문구 3곳은 UI 세션) | OS | 5 뒤 (OS 세션 제안 순서: UI PR → 전환) |
 | 4e | KEY-5/a gateway 준비 3건 (data.kis_stream 입구, kis_workspace 순수 값 목록, QuoteFeed 하위 클래스 공용 모듈) | PAYMENTS | KEY-4·4d 뒤 (11-20 메인이 정함) |

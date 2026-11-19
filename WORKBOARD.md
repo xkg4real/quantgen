@@ -49,7 +49,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 
 형식: ID — 무엇 — 담당 세션 — 다음 행동 — 근거
 
-- [~] **KEY-4** — core/ 26개 파일 90곳·main.py와 공급처 호출을 게이트웨이 뒤로(동결 feed.py 1줄은 S4 예외), KEY-3 남은 9건 포함 — PAYMENTS(고침), MAIN(검토·병합) — 1차(막힘 2) → 2차(앱 시작 회귀) → 3차(148504a, 11-20 01:20): **막힘 없음**, 앱 시작 고침 확인(16회 모두 OK, 막힌 호스트 호출 0). 이 PR에서 고칠 것 5(시험 3: 막힌 공급사 접속 감지, 압축 fixture 순서·정수, crypto 입력; 문서 2: 이메일 MFA 임시 비밀번호 흐름, 6.1 맞교환) + 작은 것 → PAYMENTS 한 번 push → 메인 표적 재확인 + CI 녹색 → merge commit → ledger KEY-4 → 4d — PR #133
+- [~] **KEY-4** — core/ 26개 파일 90곳·main.py와 공급처 호출을 게이트웨이 뒤로(동결 feed.py 1줄은 S4 예외), KEY-3 남은 9건 포함 — PAYMENTS(고침), MAIN(검토·병합) — 검토 4회 끝(표적 재확인: 시험 변조 12개 모두 잡힘, main 재생성 fixture 차이 0, 117 OK). **d6a1997 CI 녹색 → merge commit → ledger KEY-4 → 4d·4d'(KEY-4/a 계정 문서 고침 3건+작은 것)** — PR #133
 - [~] **소유자 AWS 운영 풀** — Golden Hour Code 계정의 시드니 사용자 풀 — PAYMENTS가 안내, 소유자가 실행 — MFA 결정(1/2/3) → 15단계 계정 복구 → 16·17단계 앱 클라이언트 quantgen-web, Client ID → T1 시험 — 세션 기록 22:04–23:52 KST. 13·14단계 끝
 - [~] **PySide6 간헐 종료 고침** (OS-F1 선행, ID 없음) — 시험 도우미가 QThread.currentThread() 객체를 붙잡고 있던 문제를 threading.get_ident()로 바꿈 — OS(재확인), UI(반영 끝) — 메인이 OS에 "UI가 490562d로 반영함"을 전달 → OS가 UI 브랜치를 읽기·시험만(push 금지)으로 다시 시험 → PYSIDE6_TRIAL 9절 판정 복구 → OS 브랜치 8262d6c(5파일: lint 15, 점검표 15, TRIAL 10-1, 패치)의 main 자리를 메인이 정함(OS-F1 PR에 묶거나 작은 PR) — OS 8262d6c, UI 브랜치 head 490562d(23:24 KST)
 - [!] **UI 7쪽 + PySide6 준비 병합** (MERGE_QUEUE 5) — claude/friendly-bardeen-r6xe8f — UI(소유자 경유) — 소유자가 PC 2대(skymi, whydi)에서 실행 확인 → UI 세션에 "PR 만들어" → 메인이 '병합: UI' — MERGE_QUEUE 5행. OS-F1과 KEY-5가 이것을 기다림
