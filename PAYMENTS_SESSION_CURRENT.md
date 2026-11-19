@@ -6,11 +6,11 @@ task: payments-account-keys
 cycle: 2026-11-17
 done_ids: KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a
 next_ids: KEY-3/design, KEY-3, KEY-4, PAY-0, PAY-2
-updated_at: 2026-11-19T17:10:00+09:00
+updated_at: 2026-11-19T18:40:00+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: claude/payments-key3-prep-20261119
-work_commit: 4e52b70
+work_commit: 7f80fc0
 uncommitted_changes: no
 pr: https://github.com/xkg4real/quantgen/pull/132
 usage_weekly_pct: unknown
@@ -24,6 +24,9 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-19 18:40 갱신:** 메인의 PR #132 병합 전 검토 12건 반영 → `7f80fc0` push (PR #132 같은 PR). 핵심: 경계 시험을 ast로 바꾸고 Compliance 워크플로(모든 PR)에도 넣음, 목록은 `tests/fixtures/gateway/known_direct_calls.json` (내용 고정, 48파일 121건: core·main 83, 화면 38), FRED·Yahoo·GS를 경계 범위에 넣음 (선택), `routes.json` 패키징 (stage DATA_FILES, package-data, smoke_installed; 로컬 휠에서 확인). 시험 79 OK, 기준선 PASS (803), 코드 지문 10c27010 그대로. 메인 재확인과 CI 대기.
+
 
 **2026-11-19 17:10 갱신:** 메인 "병합: PAYMENTS_ACCOUNT_KEYS"(KEY-3, MERGE_QUEUE 4b). main `ab24dec`(#131 concurrency) merge 충돌 없음 → 기준선 갱신 `4e52b70` (PASS, 803 소스) → **PR #132**. 시험 75 OK, 경계 KNOWN 30/69 그대로, 코드 지문 10c27010 그대로. 메인 병합 전 독립 검토와 CI 대기. CI 중 push 금지(새 push는 이전 Runtime을 취소함). 병합 뒤: LEDGER KEY-3/design·KEY-3 (메인), 다음 KEY-4.
 
