@@ -6,6 +6,15 @@
 
 ---
 
+# Claude UI 2026-11-19 (2) — PySide6 간헐 비정상 종료 해결 반영
+
+- **이 요약이 아래 기록보다 우선합니다.** work_branch `claude/friendly-bardeen-r6xe8f` · work_commit `414eceb` (테스트 고침 `490562d`). LEDGER `⑬-2/pyside6-verify/2`.
+- 원인(OS 세션, `claude/os-pyside6-abort-20261119` TRIAL 10-1절): 테스트 보조 코드 3곳이 작업 스레드에서 `QThread.currentThread()`를 보관. 앱 코드 아님.
+- 반영: OS 패치 그대로 적용. 확인: PyQt6 네 모듈 73 OK, PySide6 tcache 끔 고치기 전 3/32 → 고친 뒤 0/80, 네 모듈 73 OK.
+- 판정: Linux 기준 UI 브랜치 PySide6 동작 = PyQt6. 남은 것: Windows·macOS(OS 세션 `platform-build.yml`, 소유자 PC). OS 세션의 재확인 대기.
+
+---
+
 # Claude UI 2026-11-19 — PySide6 직접 검증 (소유자 지시)
 
 - status: waiting_on owner · **이 요약이 아래 기록보다 우선합니다.** work_branch `claude/friendly-bardeen-r6xe8f` · work_commit `847b25c` (`quantgen_desktop/`·`tests/`는 `5025c6f`와 같음). LEDGER `⑬-2/pyside6-verify/1`.
