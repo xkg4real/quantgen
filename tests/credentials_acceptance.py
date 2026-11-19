@@ -386,8 +386,53 @@ class KisTokenTest(Base):
     def test_write_leaves_no_temporary_file(self):
         """KEY-2/b item 3: random temporary name, replaced atomically, nothing left behind."""
         credentials.set_backend(None)
-        self._client()._store_token("tok-file", 3600)
+        seen = []
+        real_mkstemp = kis_client.tempfile.mkstemp
+
+        def spy(*args, **kwargs):
+            fd, name = real_mkstemp(*args, **kwargs)
+            seen.append(Path(name).name)
+            return fd, name
+
+        with patch.object(kis_client.tempfile, "mkstemp", spy):
+            self._client()._store_token("tok-file", 3600)
         self.assertEqual(sorted(p.name for p in self.path.parent.iterdir()), ["kis_token.json"])
+        self.assertEqual(len(seen), 1)
+        self.assertNotEqual(seen[0], "kis_token.json.tmp")
+
+    @unittest.skipUnless(os.name == "posix", "POSIX symlinks")
+    def test_planted_tmp_link_is_not_followed(self):
+        """KEY-3 prep item 4: a fixed temporary name would write through a planted link; mkstemp never does."""
+        victim = self.token_dir / "victim.txt"
+        victim.write_text("do not touch", encoding="utf-8")
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        os.symlink(victim, self.path.parent / "kis_token.json.tmp")
+        credentials.set_backend(None)
+        self._client()._store_token("tok-file", 3600)
+        self.assertEqual(victim.read_text(encoding="utf-8"), "do not touch")
+        self.assertEqual(self._client()._cached_token(), "tok-file")
+
+    @unittest.skipUnless(os.name == "posix", "POSIX symlinks")
+    def test_symlinked_token_file_stays_a_link(self):
+        """KEY-3 prep item 1: writing through a shared link replaces the target and keeps the link."""
+        target = self.token_dir / "shared" / "kis_token.json"
+        target.parent.mkdir()
+        target.write_text("{}", encoding="utf-8")
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        os.symlink(target, self.path)
+        credentials.set_backend(None)
+        self._client()._store_token("tok-shared", 3600)
+        self.assertTrue(self.path.is_symlink())
+        self.assertEqual(json.loads(target.read_text(encoding="utf-8"))["access_token"], "tok-shared")
+
+    def test_key_id_comes_from_minting_key(self):
+        """KEY-3 prep item 3: the key that minted the token, not whatever config holds when it is saved."""
+        credentials.set_backend(None)
+        client = self._client()
+        with _clear_secret_env(), patch.dict(os.environ, {"KIS_APP_KEY": "fake-new-key-0000", "KIS_APP_SECRET": FAKE2}):
+            client._store_token("tok-a", 3600, app_key=FAKE)
+        stored = json.loads(self.path.read_text(encoding="utf-8"))["key_id"]
+        self.assertEqual(stored, kis_client._key_id(FAKE, client.base_url))
 
     def test_token_records_key_id_not_key(self):
         credentials.set_backend(None)
