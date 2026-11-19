@@ -4,15 +4,15 @@ reason: milestone
 from: claude
 task: payments-account-keys
 cycle: 2026-11-17
-done_ids: KEY-3/design, KEY-3, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a
-next_ids: KEY-4, PAY-0, PAY-2, KEY-5/a
-updated_at: 2026-11-20T01:45:00+09:00
+done_ids: KEY-4, KEY-3/design, KEY-3, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a
+next_ids: KEY-4/a, KEY-5/a, PAY-0, PAY-2
+updated_at: 2026-11-20T04:40:00+09:00
 stale_after_hours: 3
 waiting_on: ci
-work_branch: claude/payments-key4-20261119
-work_commit: d6a1997
+work_branch: claude/payments-key5a-20261120
+work_commit: dc936d4
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/133
+pr: https://github.com/xkg4real/quantgen/pull/134
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
@@ -24,6 +24,8 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-20 04:40 갱신 — KEY-4 병합 (main `8445187`, 메인이 LEDGER 기록), KEY-4/a PR #134, KEY-5/a 진행:** KEY-4/a: `claude/payments-key4a-20261120` 에 main 8445187 합침 (`ef6b7af`) → PR #134 (`e37c9a9` PR-134.json) → 메인 재검토 S1–S4·N1/N2/N5–N7 고침 `aa4be94` (6.2 1회용 확인 코드, 동의 메일 보관 대신 기록 3년, 기한 10일, 8절 이메일 변경 본인 확인 = 6.1 ①, PR-134.json). CI 녹색이면 메인 병합. KEY-5/a: `claude/payments-key5a-20261120` @ `dc936d4` (8445187에서, push, PR 없음 — 대기열 4f, OS-F2 4e 뒤 메인이 "병합:" 적음). G1 `data.kis_stream` 입구, G2 별도 목록 없음 (고정 로컬이라 늘 열림), G3 `core/gateway/feed.py`, A1R3-1·A1R3-4·A1R3-5 (`on_change`), F2·F5·F6·F7. 게이트웨이 시험 71 OK, 변조 10개 모두 잡힘, CI 모듈 목록 실패 2개 main과 같음, 지문 10c27010… 그대로, 동결 엔진 4파일 바이트 같음. 남은 확인: 관련 138모듈·함수형 44개 (실행 중). 다음: 결과 확인 → 메인 보고.
 
 **2026-11-20 01:45 갱신 — PR #133 3차 검토 반영 push (`3e938d2`, 소유자 요청 T3~T8 `d6a1997`), 메인 표적 재확인·CI 대기:** 메인 3차 검토 (148504a): 병합 막는 것 없음. A1–A5·B1–B5를 한 번에 push (push 보류는 이 한 번만 풀림). 코드 변경 없음 (시험·fixture·문서). A1 `gateway_main_acceptance`가 요청을 기록하고 막힌 KRX·OpenDART 호스트 0건 단언 (personal은 있음); A2 긴 목록 요약에 정수 정확·위치가중합·이웃 차 제곱합, fixture main 9f76b07에서 재생성 (153 KB); A3 김치 프리미엄 산술값 비교; A4·A5 웹사이트 요청 ACC-3 NEW_PASSWORD_REQUIRED·ACC-4 거절 안내, 6.1 두 번째 확인 (소유자 결정 2026-11-20 "권장으로 가겠습니다" = OA-42 해결; OWNER_RULINGS_LOG는 메인이 4d PR에서 씀); B1–B5. 변조 시험 모두 잡힘. CI 목록 828 (환경 2건 그대로), Python 3.12 gateway 65 OK, feed 4파일 zip 일치, 지문 10c27010… 그대로, 기준선 PASS 805. 소유자 AWS: 1~23c·25 끝남 (풀 `ap-southeast-2_pQEsrAvvb`, 클라이언트 `77qi9vi90i118rck1ppisbca7r`, 경보 CloudShell, 24는 기존 $100 예산); Cost Explorer에서 크레딧 전 EC2·VPC 사용 11월 $48.71 — 소유자가 무엇인지 확인 중 (지우지 말 것). 병행 일: PAY-0 (`claude/payments-pay0-20261120` @ 7f8939c), PAY-2 (@ d0da1b2), KEY-5 요청문 handoff 0df90ec·10abea9 (+KEY-5/a 범위 3차 검토 C). 다음: 메인 병합 → LEDGER (메인) → KEY-5/a를 최신 main에서. 1-3 시험 풀 삭제·2단계 웹사이트 전달은 소유자 차례.
 
