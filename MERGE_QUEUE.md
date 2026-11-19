@@ -1,6 +1,7 @@
 # MERGE_QUEUE — main 병합 순서와 동결 (메인 세션이 관리)
 
-updated_at: 2026-11-19T20:20:00+09:00
+updated_at: 2026-11-20T00:45:00+09:00
+전체 업무 체크리스트: `WORKBOARD.md` · 세션 연결 규칙: `SESSION_PIPELINE.md` (2026-11-20 소유자 지시)
 coordinator: 메인 세션 (QUANTGEN/MAIN, https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB)
 freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보고("F22까지 성공적으로 마무리했습니다."), main `6e077dc`(소유자 `--no-ff` 병합, 부모 `8e026ab`·`13f4dea`), 그 push의 Compliance success, PR #4 merged. (동결 기간: 2026-11-18T19:10:45+09:00 ~ 위 시각)
 
@@ -9,10 +10,10 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 | # | 항목 | 브랜치·PR | 상태 | 병합 |
 |---|---|---|---|---|
 | 1 | ~~R3 outage 기록 (GPT)~~ | PR #122 | **병합 완료 main `f058145`** (11-17 23:1x KST) | 메인 |
-| 2 | UI 세션 PR (시장 메인·지표 결론부) | `claude/friendly-bardeen-r6xe8f` | PR #122 병합 전 PNG 승인이 없어 원칙상 F21 뒤(D2-A). 소유자가 P3 시작 전에 승인하면 P3 앞에 넣을 수 있음 | 메인 |
+| 2 | ~~UI 세션 PR (시장 메인·지표 결론부)~~ | PR #124 | **병합 완료 main `8e026ab`** (⑬-2/market-hub/main) | 메인 |
 | 3 | ~~⑦-1 Step 10 마감 기록~~ | 연구 브랜치 | **완료 `efe5bb2`** (11-17 22:06 KST) | — |
-| 4 | P3: main → 연구 브랜치 병합, 소유자 F1~F22 | PR #4 | ⑦-1 뒤. **여기서 freeze 시작** | 소유자 F21 |
-| 5 | 결정 기록 PR (11-17 소유자 답, 자진 보고) | 메인이 만듦 | **다음** (P3 앞) | 메인 |
+| 4 | ~~P3: main → 연구 브랜치 병합, 소유자 F1~F22~~ | PR #4 | **완료** main `6e077dc` (⑦-2, 11-19 01:32 KST freeze 해제) | 소유자 F21 |
+| 5 | ~~결정 기록 PR (11-17 소유자 답, 자진 보고)~~ | ⑦-1/rulings | **완료** `7c33955` | 메인 |
 
 ## F21 뒤 — 지금 순서 (2026-11-19 01:40 KST 메인이 정함; 준비된 것부터)
 
@@ -25,11 +26,16 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 | 4 | ~~정책 문서 PR-1~~ | PR #130 | **병합 완료 main `edbe9f7`** (2026-11-19 15:03 KST). PR-2(계정 서비스 설명)는 AWS 풀·웹 계정 화면 뒤 |
 | 4a | ~~CI 겹친 실행 자동 취소 + GH-1 기록~~ | PR #131 | **병합 완료 main `ab24dec`** (2026-11-19 16:58 KST) |
 | 4b | ~~KEY-3 (게이트웨이)~~ | PR #132 | **병합 완료 main `9f76b07`** (2026-11-19 19:07 KST) |
-| 4c | KEY-4 (core 27파일 91곳·main.py 1곳을 게이트웨이로, KEY-3 검토 잔여 9건) | PAYMENTS `claude/payments-key4-20261119` @ `c8c1b61` | **병합: PAYMENTS_ACCOUNT_KEYS** (2026-11-19 20:20 KST 메인). 최신 main `9f76b07` 합치기 → 준법 기준선 마지막에 갱신 → `--check` PASS → PR. 메인이 독립 검토 뒤 CI 녹색이면 병합 |
+| 4c | KEY-4 (core 26파일 90곳·main.py를 게이트웨이로, 동결 feed.py는 S4 예외, KEY-3 검토 잔여 9건) | PAYMENTS PR #133 @ `148504a` | **병합: PAYMENTS_ACCOUNT_KEYS** (2026-11-19 20:20 KST). 메인 검토 1차(막힘 2) → 2차(앱 시작 회귀 1) → 3차 재검증 중(11-20 00:20~). CI 녹색 + 검토 통과 뒤 메인이 merge commit |
+| 4d | 메인 문서 PR: CLAUDE.md(SESSION_PIPELINE·WORKBOARD 포인터, "법인 설립 완료" → handoff INCORPORATION_CHECKLIST.md), OWNER_RULINGS_LOG(11-19 계정 결정 3건: 비밀번호 특수문자, HTML 인증 메일, 이메일 MFA 유지) | 메인 | KEY-4 바로 뒤 (11-20 메인이 정함) |
 | 5 | UI 7쪽 + PySide6 준비 | UI `claude/friendly-bardeen-r6xe8f` | 소유자 실행 확인 뒤 (UI 세션 브랜치는 아무도 고치지 않음) |
 | 6 | PySide6 전환 (`pyqt6_to_pyside6 --apply` + `switch_day.py --apply`, 화면 문구 3곳은 UI 세션) | OS | 5 뒤 (OS 세션 제안 순서: UI PR → 전환) |
-| 7 | KEY-3 → KEY-4 → KEY-5 | PAYMENTS | 차례대로 |
-| 8 | DS·DIDM | DS | 차례가 오면 |
+| 7 | KEY-5 (화면 쪽 22파일/44곳 + quantgen_desktop/paper.py, 키·연결 화면) | PAYMENTS 요청문 + UI 구현(소유자 경유) | 6 뒤 권장 |
+| 8 | DS·DIDM | DS | 차례가 오면. UI 확인이 늦어지면 5보다 앞으로 당길지 메인이 정함 |
+| 제안 | OS-F2 (~/.nextgen → user_data_dir, config.py 포함 → Nautilus 지문 바뀜) | OS | 11-20 브랜치 작업 배정. 자리는 메인이 정함. owner_confirmed 다시 쓰기는 이것 뒤 |
+| 제안 | OS PySide6 간헐 종료 원인 기록 (`claude/os-pyside6-abort-20261119` @ `8262d6c`, 5파일) | OS | OS-F2 PR 또는 OS-F1 날 PR에 묶기 (메인이 정함) |
+| 제안 | 정책 문서 PR-2 (계정 서비스 설명) | 메인/PAYMENTS | AWS 운영 풀 + 웹 계정 화면 뒤 |
+| 미정 | GH-2 정리 PR (test_npu.py, mindmap/, launch.json, _backup/ 태그 뒤) | 메인 | 빈 자리에 |
 
 한 번에 PR 하나만 main 병합 대기에 둡니다(모두 `docs/compliance/source-review.json`을 바꾸므로 앞 PR이 병합된 뒤 최신 main을 합치고 기준선을 다시 갱신).
 
@@ -46,7 +52,7 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 
 ## 규칙
 
-- 하부 세션은 자기 항목이 이 표의 맨 앞이거나 메인이 "병합: <세션>"이라고 적었을 때만 PR을 엽니다 (비공개 전환 뒤 CI는 유료).
+- 하부 세션은 자기 항목이 이 표의 맨 앞이거나 메인이 "병합: <세션>"이라고 적었을 때만 PR을 엽니다 (GitHub는 공개 유지 — 2026-11-19 소유자 GH-1 결정. 그래도 PR 하나씩: 모두 `docs/compliance/source-review.json`을 바꾸므로).
 - 병합 버튼은 메인이 누릅니다 (CI 통과 시, merge commit).
 - UI/UX 세션과 웹사이트 세션의 브랜치·인계 파일은 아무도 고치지 않습니다. 그 세션에 줄 요청은 소유자를 거칩니다.
 - **owner_confirmed 다시 쓰기 (2026-11-19 메인이 정함):** 다음 Nautilus 기록 실행 직전에 한 번만(OS-F2가 config.py를 또 바꾸므로 지금은 하지 않음). 소유자가 최신 main 클론의 보통 앱 Python으로 `python -B -m tools.nautilus.runner --fingerprint --table <두 표>`(읽기만) → 각 표의 "owner_confirmed" 한 줄만 출력된 form으로(UTF-8, BOM 없음; host_fingerprint는 같으면 그대로) → 브랜치 `owner/nautilus-confirm-<YYYYMMDD>` + PR(main 직접 push 금지) → 메인이 Linux에서 code_sha256 재계산해 대조, CI 녹색이면 병합. 그날 이 표에 자리를 둠. Claude는 이 줄을 쓰지 않음.
