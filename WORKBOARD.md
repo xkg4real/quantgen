@@ -49,7 +49,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 
 형식: ID — 무엇 — 담당 세션 — 다음 행동 — 근거
 
-- [~] **KEY-4** — core/ 26개 파일 90곳·main.py와 공급처 호출을 게이트웨이 뒤로(동결 feed.py 1줄은 S4 예외), KEY-3 남은 9건 포함 — PAYMENTS(고침), MAIN(검토·병합) — 1차 검토(막힘 2·고침 11) → 3d61aee, 2차 검토(앱 시작 회귀 1 + 고침 3 + 작은 것 7) → 148504a(11-20 00:13 KST). 메인 기본 검사 통과(게이트웨이 시험 114 OK, 준법 PASS 805, 지문 10c27010, feed.py 바이트 일치) → 3차 독립 재검증 workflow 진행 중 → CI 녹색 → merge commit → ledger KEY-4 → MERGE_QUEUE 4c → Notion — PR #133
+- [~] **KEY-4** — core/ 26개 파일 90곳·main.py와 공급처 호출을 게이트웨이 뒤로(동결 feed.py 1줄은 S4 예외), KEY-3 남은 9건 포함 — PAYMENTS(고침), MAIN(검토·병합) — 1차(막힘 2) → 2차(앱 시작 회귀) → 3차(148504a, 11-20 02:20): **막힘 없음**, 앱 시작 고침 확인(16회 모두 OK, 막힌 호스트 호출 0). 이 PR에서 고칠 것 5(시험 3: 막힌 공급사 접속 감지, 압축 fixture 순서·정수, crypto 입력; 문서 2: 이메일 MFA 임시 비밀번호 흐름, 6.1 맞교환) + 작은 것 → PAYMENTS 한 번 push → 메인 표적 재확인 + CI 녹색 → merge commit → ledger KEY-4 → 4d — PR #133
 - [~] **소유자 AWS 운영 풀** — Golden Hour Code 계정의 시드니 사용자 풀 — PAYMENTS가 안내, 소유자가 실행 — MFA 결정(1/2/3) → 15단계 계정 복구 → 16·17단계 앱 클라이언트 quantgen-web, Client ID → T1 시험 — 세션 기록 22:04–23:52 KST. 13·14단계 끝
 - [~] **PySide6 간헐 종료 고침** (OS-F1 선행, ID 없음) — 시험 도우미가 QThread.currentThread() 객체를 붙잡고 있던 문제를 threading.get_ident()로 바꿈 — OS(재확인), UI(반영 끝) — 메인이 OS에 "UI가 490562d로 반영함"을 전달 → OS가 UI 브랜치를 읽기·시험만(push 금지)으로 다시 시험 → PYSIDE6_TRIAL 9절 판정 복구 → OS 브랜치 8262d6c(5파일: lint 15, 점검표 15, TRIAL 10-1, 패치)의 main 자리를 메인이 정함(OS-F1 PR에 묶거나 작은 PR) — OS 8262d6c, UI 브랜치 head 490562d(23:24 KST)
 - [!] **UI 7쪽 + PySide6 준비 병합** (MERGE_QUEUE 5) — claude/friendly-bardeen-r6xe8f — UI(소유자 경유) — 소유자가 PC 2대(skymi, whydi)에서 실행 확인 → UI 세션에 "PR 만들어" → 메인이 '병합: UI' — MERGE_QUEUE 5행. OS-F1과 KEY-5가 이것을 기다림
@@ -347,6 +347,7 @@ push_log:
 | OA-39 | PAY-2 소유자 결정 P2-01..P2-15 (docs/commercial/payments/PAYMENT_DESIGN.md 결정 표; 특히 P2-08 단순 해지 일할 환불 없음, P2-09 7일 철회 반환 기준, P2-10 가격 인상 미동의 시 종료 — 법률 확인과 함께), PAY-0 03번 PG 문의에 PG_COMPARISON 3절 질문 6개 추가 여부 | PAYMENTS | 11-20 01:05 | 아님 | 대기 |
 | OA-40 | PAY-3 회사 데이터 서버 위치: A 시드니(같은 AWS 계정) / B 서울 / C Cloudflare Workers — 장단점·비용(미검증)은 handoff plans/2026-11-20/KEY5_UI_REQUEST.md 부록, 제안 A | PAYMENTS | 11-20 01:10 | 아님 | 대기 |
 | OA-41 | KEY-5 전: core.credentials.set_backend(None) 가 안(시험에서만) / 나 안(앱도 .env만) — 같은 파일 0절 3항 | PAYMENTS | 11-20 01:10 | 아님 (KEY-5 전) | 대기 |
+| OA-42 | 이메일 MFA 회원의 비밀번호 분실 처리(ADMIN_GUIDE 6.1): 임시 비밀번호가 MFA 코드와 같은 메일함으로 가서 메일함만 뚫리면 계정 탈취 가능 → ① 그대로 수용 ② 발급 전 두 번째 확인(회원만 아는 정보 또는 최근 로그인 IP) + 강제 변경 때 인증 앱 권장 (메인 권장 ②) | MAIN (3차 검토 DOC3-3) | 11-20 02:25 | 아님 (회원 공개 전) | 대기 |
 
 ---
 
