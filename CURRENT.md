@@ -4,13 +4,13 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-17
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a
 next_ids: KEY-5, OS-F1, OS-F2, PAY-0, PAY-2, DS-1, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-20T03:45:00+09:00
+updated_at: 2026-11-20T05:40:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: main
-work_commit: fa78df1
+work_commit: f065ec9
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -25,6 +25,7 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 
 | 항목 | 상태 | 근거 |
 |---|---|---|
+| KEY-4/a | **병합** (2026-11-20T05:36:28+09:00): PR #134 (PAYMENTS, head `aa4be94`) → main `f065ec9`, CI 7개 녹색(Vercel 무시). 계정 문서 3개(ADMIN_GUIDE v0.3.3, OWNER_STEPS v1.10, ACCOUNT_SETUP) F1–F9, OA-42·OA-44 반영(6.1 두 번째 확인, 6.2 동의 뒤 삭제·같은 이메일 재가입), SA-INT-1 시험 1줄, PR-134.json. 메인 재확인 workflow 4건(S1 동의 위조→1회용 코드, S2 메일 보관→기록 3년, S3 PR-134.json, S4 8절 본인 확인) → aa4be94에서 모두 고침 확인; main fa78df1과 합친 사본 compliance PASS/BLOCKED/20/805. 다음: MERGE_QUEUE 4e OS-F2 "병합: OS" |
 | SESSION_PIPELINE | **가동 + main 반영** (2026-11-20T03:45:00+09:00): handoff SESSION_PIPELINE.md·WORKBOARD.md, PR #135 → main `fa78df1` (CLAUDE.md Session pipeline 절, OWNER_RULINGS_LOG 2026-11-20 절 — 계정 결정 원문은 PAYMENTS 세션 기록과 대조). 하부 3세션 배정 중: PAYMENTS KEY-4/a PR #134·KEY-5/a, OS 작업 A·OS-F2(4e), DATA DS-H(4f)·DS·DIDM(4g). 예약 점검 trig_01P2NBVZFChNHJGjVdtrDTyC 3시간마다. |
 | KEY-4 | **병합** (2026-11-20T03:27:00+09:00): PR #133 (PAYMENTS, head `d6a1997`) → main `8445187`, CI 10개 녹색(Vercel 무시). 메인 검토 4회(1차 막힘 2: S4 동결 feed.py·FICC 내부 이름 → 2차 앱 시작 회귀 → 3차 막힘 없음 → 표적 재확인 시험 변조 12개 모두 잡힘). code_sha256 10c27010 그대로. 후속: 4d 메인 문서 PR, 4d' KEY-4/a 계정 문서(PAYMENTS e305587), 4e OS-F2, 4f KEY-5/a. |
 | KEY-3 | **병합** (2026-11-19T19:10:00+09:00): PR #132 (PAYMENTS, head `7f80fc0`) → main `9f76b07`, CI 8개 녹색. 메인 검토 2회(1차 12건 → 수정 → 재검증 9 고침·3 일부, 우회 16형태 실패 확인, 휠에 routes.json 포함). 게이트웨이는 아직 호출처 없음 → 앱 동작 그대로. 남은 9건(_yf_fetch 경계 밖, 상대 import, 파싱 실패 건너뜀, config 속성 참조, _on_key_change 1회, dispatch/remote 견고성, 문서 주장)은 **KEY-4 완료 조건**으로 PAYMENTS에 전달. 코드 지문 10c27010 그대로. |
