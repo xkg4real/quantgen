@@ -1,6 +1,6 @@
 # 공급원 게이트웨이 설계 (KEY-3)
 
-- 판: v0.3.2 (2026-11-20, PR #133 3차 검토 반영: 6절 화면 44곳·QuoteFeed 규칙·풀지 못한 `level`, 7a절 import 때 정하는 5곳을 코드 docstring과 같게, 같은 답 시험의 긴 목록 비교 방식과 김치 프리미엄 범위, 7절 KEY-5 행). v0.3.1 (2026-11-19, PR #133 메인 검토 반영: 6절 동결 예외·허용 목록·상한, 7a절 막힘(off·company)·묶음 로더·여러 공급원 모듈·예외 5곳·규칙 6 범위, 7절 하네스와 지문). v0.3 (2026-11-19, KEY-4: 6절 판 3, 7a절 새로, 3절 규칙 4·6과 9절 정정 — 메인 세션 KEY-3 검토 잔여 1·8번). v0.2 2026-11-19 (PR #132 검토: 경계 시험 ast화). v0.1 2026-11-19. 작성: PAYMENTS_ACCOUNT_KEYS 세션. ID `KEY-3/design`.
+- 판: v0.3.3 (2026-11-20, KEY-5/a: 5절 서버 오류 코드 세 가지 꼴과 전송 실패 고정 코드, 7a절 `data.kis_stream`·`data.kis_workspace` 입구, 공용 `core/gateway/feed.py`, `krx_gateway()` 답의 막힘 사유와 길·키 바뀜 뒤 다시 설정, `on_change`). v0.3.2 (2026-11-20, PR #133 3차 검토 반영: 6절 화면 44곳·QuoteFeed 규칙·풀지 못한 `level`, 7a절 import 때 정하는 5곳을 코드 docstring과 같게, 같은 답 시험의 긴 목록 비교 방식과 김치 프리미엄 범위, 7절 KEY-5 행). v0.3.1 (2026-11-19, PR #133 메인 검토 반영: 6절 동결 예외·허용 목록·상한, 7a절 막힘(off·company)·묶음 로더·여러 공급원 모듈·예외 5곳·규칙 6 범위, 7절 하네스와 지문). v0.3 (2026-11-19, KEY-4: 6절 판 3, 7a절 새로, 3절 규칙 4·6과 9절 정정 — 메인 세션 KEY-3 검토 잔여 1·8번). v0.2 2026-11-19 (PR #132 검토: 경계 시험 ast화). v0.1 2026-11-19. 작성: PAYMENTS_ACCOUNT_KEYS 세션. ID `KEY-3/design`.
 - **소유자 승인: 2026-11-19, 원문 "Key-3 승인"** (이 세션 채팅).
 - 근거: 소유자 D7-G 승인 (2026-11-18 14:15 KST, 원문 "그러면 D7-G의 방식대로 진행하겠습니다", handoff `MERGE_QUEUE.md`, 커밋 `762150c`), 설계 원안 handoff `plans/2026-11-17/D7_ENV_STRUCTURE.md` 5장.
 - 기준: main `ca5da08` (KEY-2 `3249af7`, KEY-2/b `ca5da08` 병합 뒤). 줄 번호는 이 커밋 기준이며 코드가 바뀌면 달라집니다.
@@ -171,6 +171,7 @@ flowchart LR
 | 거절 | `fixed_local` 공급원은 보내기 전에 거절 (`RemoteRefused`). 서버도 거절 |
 | 실시간 | `stream()`은 웹소켓 `{DATA_API_BASE}/v1/stream`. 지금은 시험용 가짜만 |
 | 실패 | 서버 오류는 `GatewayAnswer(ok=False, reason=...)`. 값을 지어내지 않음 (`data/krx/gateway.py`의 원칙 그대로) |
+| 오류 코드 | `RemoteFailed`의 글은 세 가지 꼴만 (KEY-5/a, 3차 검토 F5): 우리 서버 코드 (`remote.SERVER_CODES`: `bad_request`, `unknown_source`, `fixed_local`, `function_not_allowed`, `result_not_encodable`, `bad_answer`, `no_answer`), HTTP 상태 (`http_503`), 예외 클래스 이름 (대문자로 시작하는 낱말, 숫자 없음, `Error`·`Exception`·`Timeout`으로 끝남; 대문자 약어 낱말은 5자 이하, 다른 낱말은 3자 이상). 그 밖은 짧은 키 모양 글 (`a8Fk3mQ9zX2pL7vB`)도 `bad_answer`. 전송 실패는 클래스 이름 대신 고정 코드 `transport_timeout`·`transport_connection`·`transport_tls`·`transport_error` (F6) |
 | 로그 | 요청 로그에 인자는 남기되 키·토큰은 남기지 않음 |
 
 ---
@@ -258,11 +259,14 @@ core는 공급사 클라이언트를 직접 import하지 않고 아래 입구만
 | `endpoint("anthropic")` | Anthropic 메시지 주소 | — |
 
 - **고정 로컬 공급원 3개 (`kis_quote`, `kis_account`, `upbit_account`)는 `routes.json`을 읽지 않습니다.** 규칙 1로 어떤 프로필에서도 `local_key`이므로 `route_of()`가 표 없이 `local_key`를 돌려줍니다. 그래서 KIS 종목 마스터처럼 "실행 중 파일을 열지 않는" 코드가 그대로이고 (`market_directory_acceptance`), `routes.json`이 깨져도 KIS·Upbit 잔고는 동작하며 `status()`도 그렇게 보여 줍니다 (나머지는 `off`).
-- **"부를 때 조회"의 예외 5곳 (모듈을 읽을 때 한 번 정함, `core/gateway/__init__.py` docstring과 같음):** `main.py` `QuoteFeed`의 기반 클래스 (동결 feed의 `QuoteFeed`; `main.py`는 `krx_gateway` 함수와 이 기반 클래스를 이름에 묶을 뿐, 그때 공급원이나 길을 아무것도 풀지 않음 — KRX 게이트웨이와 FMP 클라이언트는 `main()`·`fmp` 안에서 부를 때 만듦), `core/quant/gsq.py`의 `gs_quant`, `core/quant/history.py`의 `_requests` (`data.net` 공유 세션), `core/quant/risk.py`의 `_gts`, `core/quant/insights.py`의 `_API_URL`. 모두 고정 로컬이거나 공급원 없는 것이라 길 판단과 무관하며, 바뀌기 전에도 모듈 맨 위 import였습니다.
+- **"부를 때 조회"의 예외 5곳 (모듈을 읽을 때 한 번 정함, `core/gateway/__init__.py` docstring과 같음):** `core/gateway/feed.py` `QuoteFeed`의 기반 클래스 (동결 feed의 `QuoteFeed`; KEY-5/a G3에서 `main.py`에서 옮김. `main.py`는 `krx_gateway` 함수와 이 하위 클래스를 이름에 묶을 뿐, 그때 공급원이나 길을 아무것도 풀지 않음 — KRX 게이트웨이와 FMP 클라이언트는 `main()`·`fmp` 안에서 부를 때 만듦), `core/quant/gsq.py`의 `gs_quant`, `core/quant/history.py`의 `_requests` (`data.net` 공유 세션), `core/quant/risk.py`의 `_gts`, `core/quant/insights.py`의 `_API_URL`. 모두 고정 로컬이거나 공급원 없는 것이라 길 판단과 무관하며, 바뀌기 전에도 모듈 맨 위 import였습니다.
 - **규칙 6 (키 바뀜 알림)** 은 `client(source)`로 받은 클라이언트에만 갑니다. `provider()`로 클래스를 받아 직접 만든 클라이언트 (예: `KISMarkets()`)는 지금까지처럼 만들 때 키를 읽습니다.
 - **`keys_ready`가 `False`일 때** 화면은 "키 없음"으로 보일 수 있습니다 (막힘과 구별 안 됨). 구별해 보여 주는 일은 KEY-5 (`status()`의 `state`·`route`를 그대로 그림)에 넘깁니다.
 - **규칙 4 (결과 꼬리표):** core 결과는 지금까지의 형 (`History`, `Series`, `CurvePanel` 등) 그대로입니다 ("앱 동작 동일"). 출처·길·지연·표시권은 `status()` 행과 `answer()`로 화면에 가며, 화면이 그 값을 그리는 일은 KEY-5입니다.
-- **`krx_gateway()`:** KRX 화면의 `KRXGateway`를 그때 만듭니다. KIS는 고정 로컬이라 늘 실제 클라이언트이고, KRX Open API·OpenDART가 막히면 그 하위 클라이언트를 `OffClient`(준비 안 됨, 상태 행에 사유, 행 목록은 빈 목록, 그 밖의 호출은 `GatewayOff`)로 바꿔 공급사에 닿지 않습니다. `main.py`는 이것을 `main()` 안에서 부르므로, routes.json이 깨졌거나 공급원이 꺼져도 앱은 시작합니다 (PR #133 2차 검토 A1, `tests/gateway_main_acceptance.py`).
+- **`krx_gateway()`:** KRX 화면의 `KRXGateway`를 그때 만듭니다. KIS는 고정 로컬이라 늘 실제 클라이언트이고, KRX Open API·OpenDART가 막히면 그 하위 클라이언트를 `OffClient`(준비 안 됨, 상태 행에 사유, 행 목록은 빈 목록, 그 밖의 호출은 `GatewayOff`)로 바꿔 공급사에 닿지 않습니다. `main.py`는 이것을 `main()` 안에서 부르므로, routes.json이 깨졌거나 공급원이 꺼져도 앱은 시작합니다 (PR #133 2차 검토 A1, `tests/gateway_main_acceptance.py`). KEY-5/a (3차 검토 C): 막힌 하위 클라이언트가 있으면 `quote`·`market_snapshot`·`indices`·`filings`·`financials`의 실패 사유가 "Set KRX_API_KEY"·"need OPENDART_API_KEY"가 아니라 `OffClient`의 사유입니다 (company면 "served by the company route", A1R3-1). 앱은 이 게이트웨이를 한 번 만들어 KRX 화면과 엔진 feed가 같은 객체를 쥐므로 (F7), `reload()`나 그 공급원의 키 바뀜 뒤에는 만든 게이트웨이마다 하위 클라이언트를 새로 만들고 막힘을 다시 겁니다 (같은 객체 안에서, A1R3-5).
+- **`core/gateway/feed.py` `QuoteFeed` (KEY-5/a G3, A1R3-4):** 동결 엔진 feed의 하위 클래스. FMP는 `provider("data.fmp")`로 부를 때 만들고, 막히면 클라이언트 없이 `fmp_blocked`에 사유를 두며, 그 사유가 상태 행 (`provider_status`)과 엔진의 종목별 오류 (`last_error`)에 그대로 나옵니다 ("FMP client unavailable" 대신). 길·FMP 키가 바뀌면 클라이언트가 없던 feed는 다시 찾습니다 (`on_change`). `main.py`가 이 클래스를 쓰고, 화면 `quantgen_desktop/paper.py`는 KEY-5에서 이것으로 바꿉니다.
+- **`data.kis_stream`·`data.kis_workspace` (KEY-5/a G1·G2):** 둘 다 `provider()` 입구가 있고 공급원은 고정 로컬 `kis_quote`뿐이라 어떤 프로필·깨진 routes 파일·회사 길에서도 거절되지 않습니다. 그래서 `kis_workspace`의 순수 값 (`availability_note`, `supported_intervals`, `OVERSEAS_PRICE_DETAIL`)을 위한 별도 허용 목록은 두지 않습니다 (G2 결정: 화면 안내 문구가 막힘과 상관없이 늘 보임). 화면 쪽 옮김은 KEY-5.
+- **`on_change(listener)`:** `reload()` 뒤와 키를 저장·삭제한 뒤 불림 (`core/gateway/feed.py`, `krx_gateway()` 다시 설정에 씀). 실패하는 listener는 다른 listener를 막지 않습니다.
 - **앱 동작 동일 근거:** `tests/gateway_same_answer_acceptance.py`. 바뀐 core 호출 51가지 요청 (load_history의 모든 auto 분기와 키 유무, crypto 잔고·가격, market_cap FMP·요금제 오류, 파생·ETF의 KIS 분기, 채권·금리·구조화·환율 기본 로더, gsq와 가짜 gs_quant 등)을 공급사 모듈 자리에 고정 가짜를 넣고 main `9f76b07` (KEY-4 전)에서 돌린 답과 **가짜가 받은 인자** (실제 시그니처에 묶어 기록)를 `tests/fixtures/gateway/same_answers_main.json`에 적었고, 브랜치에서 같은 요청이 같은 답·같은 인자를 내는지 봅니다. 오늘 날짜에 따라 바뀌는 값은 적지 않습니다. 비교는 구조·키·문자열·정수·길이는 정확히, 소수는 상대 1e-6·절대 1e-9 안 (반복 적합 결과는 numpy/BLAS 빌드·OS마다 끝자리가 1e-8 정도 움직임; 게이트웨이 변경은 정확 비교되는 호출 인자·입력열이 잡음). **24개 넘는 목록** (fixture를 작게 두려고 줄임): 앞뒤 8개씩은 위와 같이, 가운데는 정수·문자열·구조를 sha256으로 정확히, 소수는 합·제곱합·위치가중합 `sum((i+1)*x_i)`·이웃 차 제곱합 `sum((x_{i+1}-x_i)**2)`을 같은 허용오차로 비교합니다 (3차 검토 SA3-1·DOC3-5: 가운데 값 둘 바꾸기·가운데 뒤집기·정수 +500을 잡음). crypto 분석은 적합 통계만 뺍니다 (김치 프리미엄의 ADF p값·반감기·AR(1) 감쇠·예측 기울기와 t, GARCH, 요일표: statsmodels 빌드에 따라 크게 달라짐). 김치 프리미엄의 날짜·`premium_pct`·`z_1y`·`btc_usd`·마지막·평균·최대값은 산술 결과라 그대로 비교하므로, Upbit 원화 종가와 USD/KRW가 바뀌면 답이 달라집니다 (3차 검토 SA3-2).
 
 ---
@@ -273,7 +277,8 @@ core는 공급사 클라이언트를 직접 import하지 않고 아래 입구만
 |---|---|---|---|---|
 | KEY-3 | 새 `core/gateway/**`, `tests/gateway_*` + KEY-2/b 검토 후속 5건 (`data/krx/kis_client.py`, `tests/credentials_acceptance.py`, 문서; 브랜치 `claude/payments-key3-prep-20261119`) | 이 세션 | `runtime-smoke.yml` 경로·시험 줄 | 3~4일 |
 | KEY-4 | `core/` 26개 파일 90곳 + `main.py` 1곳, 동결 예외 1곳 (`core/engine/feed.py`, 6절) — **PR #133** | 이 세션 (+ 데이터소스: `markets.py`) | `runtime-smoke.yml` 경로·시험 줄 | 2~3일 |
-| KEY-5 | 화면 22개 파일 44곳 (`quantgen_desktop/paper.py` 포함) + 키·연결 화면 (6절 판 3). 앞선 게이트웨이 일 KEY-5/a (G1~G3, 3차 검토 C) | **UI 세션** (소유자를 거쳐 요청) | 없음 | 1~1.5일 |
+| KEY-5/a | `core/gateway/__init__.py`·`remote.py`·새 `feed.py`, `main.py` (feed 옮김), `tests/gateway_*` (G1~G3, 3차 검토 C) | 이 세션 | 없음 (`runtime-smoke.yml` 경로는 `core/gateway/**`로 이미 덮임) | 1일 |
+| KEY-5 | 화면 22개 파일 44곳 (`quantgen_desktop/paper.py` 포함) + 키·연결 화면 (6절 판 3). KEY-5/a 뒤 | **UI 세션** (소유자를 거쳐 요청) | 없음 | 1~1.5일 |
 
 - **Nautilus 코드 지문:** 지문 입력 27개 파일 (`config.py`, `tools/nautilus/**`, `HARNESS_SOURCES` 11개 등) 중 6절의 49개 파일 (판 3)과 겹치는 것은 없습니다 (`core.quant.gate_package.HARNESS_SOURCES`로 확인). 그래서 KEY-3·KEY-4는 `config.py`를 건드리지 않는 한 지문을 바꾸지 않습니다. 바꾸게 되면 PR 본문에 적습니다. **다만** 하네스는 `core.quant.history`를 거쳐 `core/gateway`를 import하는데, `core/gateway/**`는 지문 입력 밖입니다. 게이트웨이가 바뀌어도 지문은 그대로이므로, 게이트웨이를 바꾸는 PR은 하네스가 쓰는 `history.py` 경로 (`_READY`, `_requests`, KIS·FMP·Yahoo 조회)의 같은 답 시험을 함께 돌립니다.
 - **준법:** 새 소스 파일이 생기므로 20개 문서 재검토 대상입니다. PR마다 최신 main merge 뒤 맨 마지막에 기준선 갱신.

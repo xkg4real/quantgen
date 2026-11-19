@@ -62,8 +62,8 @@ class RemoteRoute:
         failed = ""
         try:
             answer = self._send(request)
-        except Exception as exc:                     # network or transport failure: the class name only
-            failed = "transport_" + re.sub(r"[^A-Za-z0-9_]", "", type(exc).__name__)[:40]   # a class name, ours
+        except Exception as exc:                     # network or transport failure: a fixed code, no text
+            failed = _transport_code(exc)
         if failed:                                   # raised outside the except: no __context__ carries the
             raise RemoteFailed(failed)               # original message (a URL, a token) along
         if not isinstance(answer, dict) or not isinstance(answer.get("ok"), bool):
@@ -84,18 +84,55 @@ class RemoteRoute:
 
 
 _CODE = re.compile(r"[A-Za-z0-9_]{1,48}")
+# The codes our server (dispatch.py) and transport send, by name; an HTTP status; or an exception class name, which
+# dispatch.py sends for a provider failure: capitalised words of letters only, ending in Error/Exception/Timeout.
+SERVER_CODES = frozenset({"bad_request", "unknown_source", "fixed_local", "function_not_allowed",
+                          "result_not_encodable", "bad_answer", "no_answer"})
+_HTTP = re.compile(r"http_[1-5][0-9]{2}")
+_CLASS = re.compile(r"(?:[A-Z][A-Za-z]*)?(?:Error|Exception|Timeout)")
+_WORD = re.compile(r"[A-Z]+(?=[A-Z][a-z]|$)|[A-Z][a-z]+")
+
+
+def _class_name(text: str) -> bool:
+    """An exception class name: capitalised words (``KISError``, ``ConnectTimeout``, ``SSLCertVerificationError``),
+    no digit; an all-capitals word (an acronym) has at most 5 letters and any other word at least 3."""
+    if not _CLASS.fullmatch(text):
+        return False
+    words = _WORD.findall(text)
+    if "".join(words) != text:
+        return False
+    return all(len(w) <= 5 if w.isupper() else len(w) >= 3 for w in words)
 
 
 def _code(error: object) -> str:
-    """A server error code fit for a message: ASCII letters, digits and "_" (a code such as ``http_503`` or an
-    exception class name), at most 48 characters, and not key-shaped: no run of 24 or more letters and digits, and
-    nothing routes.py would call key-like (32 or more key characters, underscores included). Anything else is
-    "bad_answer"."""
+    """A server error code fit for a message. Only three shapes pass: one of our own codes (``SERVER_CODES``), an
+    HTTP status (``http_503``), or an exception class name (letters only, capitalised words, ending in Error,
+    Exception or Timeout). Also at most 48 characters and nothing routes.py would call key-like. Anything else is
+    "bad_answer" -- a short key-shaped string (``a8Fk3mQ9zX2pL7vB``) included (PR #133 review 3, F5)."""
     from core.gateway.routes import _KEY_LIKE
     text = error if isinstance(error, str) else ""
-    if not _CODE.fullmatch(text) or re.search(r"[A-Za-z0-9]{24,}", text) or _KEY_LIKE.search(text):
+    if not _CODE.fullmatch(text) or re.search(r"[A-Za-z0-9]{24,}", text) and not _class_name(text) \
+            or _KEY_LIKE.search(text):
         return "bad_answer"
-    return text
+    if text in SERVER_CODES or _HTTP.fullmatch(text) or _class_name(text):
+        return text
+    return "bad_answer"
+
+
+TRANSPORT_CODES = ("transport_timeout", "transport_connection", "transport_tls", "transport_error")
+
+
+def _transport_code(exc: BaseException) -> str:
+    """A fixed short code for a transport failure, never the exception's class name or text (PR #133 review 3, F6):
+    a third-party class name can carry more than its kind."""
+    import ssl
+    if isinstance(exc, TimeoutError) or "Timeout" in type(exc).__name__:
+        return "transport_timeout"
+    if isinstance(exc, ssl.SSLError) or "SSL" in type(exc).__name__:
+        return "transport_tls"
+    if isinstance(exc, ConnectionError) or "Connection" in type(exc).__name__:
+        return "transport_connection"
+    return "transport_error"
 
 
 class RemoteProxy:

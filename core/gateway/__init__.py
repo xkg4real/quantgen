@@ -18,15 +18,18 @@ routes.json.
   rest of the module). Looked up at call time, so whatever the provider module holds then (a test's patch included)
   is what the caller gets, as before;
 - ``krx_gateway()``: the KRX screen's KRXGateway, with the KRX Open API / OpenDART sub-clients replaced by an
-  OffClient when blocked;
+  OffClient when blocked; its answers carry the OffClient's reason, and every gateway it built is set up again after
+  a route reload or a key change (KEY-5/a);
 - ``ficc()``: the FRED/Yahoo loaders of core/ficc/data.py, each call checked against the ``fred`` and ``yahoo``
   routes of the providers it would use;
 - ``keys_ready(source)``, ``local_key(source, part)``: the same config.py functions as before (``config.kis_ready``,
   ``config.fmp_key``...), looked up at call time; ``suspend_key`` (single-threaded self-checks) and ``status_loaders``
   likewise;
 - ``endpoint(source)``: a provider URL core needs (the Anthropic messages URL).
-Five names are bound once at import, not at call time (all fixed-local or source-less): main.py ``QuoteFeed``'s base,
-gsq ``gs_quant``, history ``_requests`` (data.net session), risk ``_gts`` and quant insights ``_API_URL``.
+Five names are bound once at import, not at call time (all fixed-local or source-less): core/gateway/feed.py
+``QuoteFeed``'s base (the S4-frozen engine feed; main.py imports that subclass), gsq ``gs_quant``, history
+``_requests`` (data.net session), risk ``_gts`` and quant insights ``_API_URL``.
+``on_change(listener)``: called after ``reload()`` and after a key is set or deleted (core/gateway/feed.py uses it).
 
 Which route serves a source comes from ``routes.json`` and the active profile (``core.app_identity.GATEWAY_PROFILE``;
 ``personal`` today). The company route stays closed until ``core.app_identity.company_data_server_configured()``.
@@ -34,9 +37,11 @@ Which route serves a source comes from ``routes.json`` and the active profile (`
 from __future__ import annotations
 
 import contextlib
+import dataclasses
 import importlib
 import json
 import threading
+import weakref
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Optional
@@ -48,7 +53,7 @@ from core.gateway.sources import SOURCES
 
 __all__ = ["client", "ready", "status", "stream", "answer", "route_of", "profile", "reload", "GatewayAnswer",
            "GatewayOff", "RouteError", "SOURCES", "provider", "ficc", "keys_ready", "local_key", "suspend_key",
-           "status_loaders", "endpoint", "PROVIDER_MODULES", "blocked", "krx_gateway", "OffClient"]
+           "status_loaders", "endpoint", "PROVIDER_MODULES", "blocked", "krx_gateway", "OffClient", "on_change"]
 
 
 class GatewayOff(RuntimeError):
@@ -208,6 +213,24 @@ def status() -> list[dict]:
     return rows
 
 
+_listeners: list = []
+
+
+def on_change(listener) -> None:
+    """Call ``listener(name)`` after ``reload()`` (name: the source, or "" for all) and after a key is set or deleted
+    (name: the key). A listener that fails does not stop the others."""
+    if listener not in _listeners:
+        _listeners.append(listener)
+
+
+def _changed(name: str) -> None:
+    for listener in list(_listeners):
+        try:
+            listener(name)
+        except Exception:
+            pass
+
+
 def reload(source: Optional[str] = None) -> None:
     """Rebuild clients (all, or one). Routes are read again too."""
     global _routes, _route_error
@@ -215,6 +238,7 @@ def reload(source: Optional[str] = None) -> None:
         if source is None:
             _routes, _route_error = None, None
         LOCAL.reload(source)
+    _changed(source or "")
 
 
 def _on_key_change(name: str) -> None:
@@ -230,6 +254,7 @@ def _on_key_change(name: str) -> None:
                         reload_credentials()
                     except Exception:
                         pass                         # a client that cannot reload must not break saving a key
+    _changed(name)
 
 
 def _subscribe() -> None:
@@ -248,7 +273,8 @@ PROVIDER_MODULES: dict[str, tuple[str, ...]] = {
     "data.krx": ("kis_quote", "krx_open_api", "opendart"),   # KRXGateway: KIS first, then KRX Open API and OpenDART
     "data.krx.kis_client": ("kis_quote",),
     "data.kis_markets": ("kis_quote",),
-    "data.kis_workspace": ("kis_quote",),
+    "data.kis_workspace": ("kis_quote",),            # pure values too (availability_note...): never blocked (rule 1)
+    "data.kis_stream": ("kis_quote",),               # subscription_for: the KIS realtime subscription (KEY-5/a G1)
     "data.krx.krx_market_client": ("krx_open_api",),
     "data.fmp": ("fmp",),
     "data.fmp.quote_client": ("fmp",),
@@ -363,7 +389,8 @@ class OffClient:
 
     def __init__(self, source: str, why: str, empty: tuple = ()):
         self.source = source
-        self.reason = f"{source} is {why} in profile {profile()}"
+        state = "served by the company route" if why == "company" else why
+        self.reason = f"{source} is {state} in profile {profile()}"
         self.ready = False
         self.has_key = False
         self._empty = frozenset(empty)
@@ -386,17 +413,80 @@ class OffClient:
         return refused
 
 
-def krx_gateway() -> Any:
-    """The KRX screen's KRXGateway (data/krx/gateway.py: KIS first, then the KRX Open API and OpenDART), built now.
-    KIS is fixed-local (rule 1), so it is always the real client; the KRX Open API and OpenDART sub-clients are
-    replaced by an OffClient when their source is blocked, so a blocked provider is never reached and the screen
-    says why. Building it reads routes.json at call time only, never at import: a broken routes file does not stop
-    the app (routes.py), it turns the two non-fixed sub-clients off."""
-    gateway = importlib.import_module("data.krx").KRXGateway()
+_KRX_CLASSES: dict = {}
+_KRX_BUILT: "weakref.WeakSet" = weakref.WeakSet()
+_KRX_SOURCES = ("kis_quote", "krx_open_api", "opendart")
+
+
+def _krx_class(base: type) -> type:
+    """KRXGateway with the blocked sub-client's reason in its answers (PR #133 review 3, A1R3-1): a blocked KRX Open
+    API or OpenDART otherwise reads as "Set KRX_API_KEY" / "need OPENDART_API_KEY", which is not why there is no
+    answer. Built on the provider's class at call time (a test that patches data.krx.KRXGateway gets its class)."""
+    if base in _KRX_CLASSES:
+        return _KRX_CLASSES[base]
+
+    def why(sub) -> str:
+        return sub.reason if isinstance(sub, OffClient) else ""
+
+    def explain(answer, reason: str, *, keep: bool):
+        if answer.ok or not reason:
+            return answer
+        return dataclasses.replace(answer, reason=f"{answer.reason} ({reason})" if keep and answer.reason else reason)
+
+    class GatedKRXGateway(base):
+        def quote(self, ticker):
+            return explain(super().quote(ticker), why(self.krx), keep=True)
+
+        def market_snapshot(self, market="ALL"):
+            return explain(super().market_snapshot(market), why(self.krx), keep=False)
+
+        def indices(self):
+            return explain(super().indices(), why(self.krx), keep=True)
+
+        def filings(self, ticker, **kwargs):
+            return explain(super().filings(ticker, **kwargs), why(self.dart), keep=False)
+
+        def financials(self, ticker, **kwargs):
+            return explain(super().financials(ticker, **kwargs), why(self.dart), keep=False)
+
+    GatedKRXGateway.__name__ = GatedKRXGateway.__qualname__ = base.__name__
+    _KRX_CLASSES[base] = GatedKRXGateway
+    return GatedKRXGateway
+
+
+def _gate_krx(gateway: Any) -> None:
+    """Swap the KRX Open API / OpenDART sub-clients for an OffClient when blocked (KIS is fixed-local)."""
     why = blocked("krx_open_api")
     if why:
         gateway.krx = OffClient("krx_open_api", why, empty=("all_quotes", "indices"))
     why = blocked("opendart")
     if why:
         gateway.dart = OffClient("opendart", why)
+
+
+def krx_gateway() -> Any:
+    """The KRX screen's KRXGateway (data/krx/gateway.py: KIS first, then the KRX Open API and OpenDART), built now.
+    KIS is fixed-local (rule 1), so it is always the real client; the KRX Open API and OpenDART sub-clients are
+    replaced by an OffClient when their source is blocked, so a blocked provider is never reached and the answers say
+    why (the OffClient's reason, not "set the key"). Building it reads routes.json at call time only, never at
+    import: a broken routes file does not stop the app (routes.py), it turns the two non-fixed sub-clients off.
+
+    The app builds it once and hands the same object to the KRX screen and the engine feed, so after ``reload()`` or
+    a key change for one of its sources every gateway built here gets fresh sub-clients and the blocks again, in
+    place (D7-G rule 6; PR #133 review 3, A1R3-5). Construction performs no network request."""
+    gateway = _krx_class(importlib.import_module("data.krx").KRXGateway)()
+    _gate_krx(gateway)
+    _KRX_BUILT.add(gateway)
     return gateway
+
+
+def _refresh_krx(name: str) -> None:
+    if name and name not in _KRX_SOURCES and not any(name in SOURCES[s].keys for s in _KRX_SOURCES):
+        return
+    for gateway in list(_KRX_BUILT):
+        base = type(gateway).__mro__[1]
+        base.__init__(gateway)                       # fresh KIS / KRX Open API / OpenDART clients, keys read again
+        _gate_krx(gateway)
+
+
+on_change(_refresh_krx)

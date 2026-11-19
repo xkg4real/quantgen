@@ -177,7 +177,7 @@ class FakeServerTest(unittest.TestCase):
             raise ConnectionError("host said something with a key in it")
 
         cases = {
-            "transport_ConnectionError": raising,
+            "transport_connection": raising,                     # review 3 F6: a fixed code, not the class name
             "bad_answer": lambda req: {"ok": "yes", "result": 1},
             "bad_answer ": lambda req: {"ok": 1, "result": 1},
             "bad_answer  ": lambda req: {"ok": True, "result": {"__kind__": "os.system", "fields": {}}},
@@ -187,7 +187,7 @@ class FakeServerTest(unittest.TestCase):
             "bad_answer     ": lambda req: {"ok": False, "error": "sk_live_" + "a1b2c3d4e5f6a7b8c9d0e1f2a3"},
             "http_503": lambda req: {"ok": False, "error": "http_503"},
             "bad_answer      ": lambda req: {"ok": False, "error": "abcdef0123456789abcd_ef0123456789abcdef01"},
-            "transport_SSLCertVerificationError": lambda req: (_ for _ in ()).throw(
+            "transport_tls": lambda req: (_ for _ in ()).throw(
                 __import__("ssl").SSLCertVerificationError("cert for host with token xyz")),
         }
         for expected, transport in cases.items():
@@ -197,6 +197,28 @@ class FakeServerTest(unittest.TestCase):
                 self.assertEqual(str(ctx.exception), expected.strip())
                 self.assertIsNone(ctx.exception.__cause__)
                 self.assertIsNone(ctx.exception.__context__)        # the original message is not carried along
+
+    def test_server_codes_have_three_shapes_only(self):
+        """PR #133 review 3 F5/F6: a server code passes only as one of our codes, an HTTP status or an exception class
+        name; a short key-shaped string does not. Transport failures give fixed codes."""
+        kept = ["bad_request", "unknown_source", "fixed_local", "function_not_allowed", "result_not_encodable",
+                "http_503", "http_429", "KISError", "DARTError", "ValueError", "JSONDecodeError", "ConnectTimeout",
+                "SSLCertVerificationError", "IOError"]
+        refused = ["a8Fk3mQ9zX2pL7vB", "abcdefghij", "Xk9fQ2aZ", "tok_4f9a", "QwErTyError", "key_abcd1234", "http_999",
+                   "sk_live_abc", "AbCdEfGhIjKlMnOpError", "provider said no", "", None, 503]
+        for code in kept:
+            with self.subTest(code=code):
+                self.assertEqual(remote._code(code), code)
+        for code in refused:
+            with self.subTest(code=code):
+                self.assertEqual(remote._code(code), "bad_answer")
+        import ssl
+        for exc, code in ((TimeoutError("t"), "transport_timeout"), (ConnectionResetError("c"), "transport_connection"),
+                          (ssl.SSLError("s"), "transport_tls"), (OSError("o"), "transport_error"),
+                          (type("ProviderTokenAbc123Exception", (Exception,), {})("x"), "transport_error")):
+            with self.subTest(exc=type(exc).__name__):
+                self.assertEqual(remote._transport_code(exc), code)
+                self.assertIn(code, remote.TRANSPORT_CODES)
 
     def test_dispatch_refuses_a_request_that_is_not_a_dict(self):
         """KEY-4 item 7: the server handler never raises on a malformed request."""

@@ -48,10 +48,10 @@ from core.app_paths import assets_directory
 from core.theme import BREAKPOINTS, RADII, TRANSITION_MS, active, set_mode
 from core.i18n import LocaleContext
 from ui.localization import translate_controls, LocalizedRoot
-from core.engine.feed import QuoteFeed as _EngineQuoteFeed
 from core.engine.runtime import EngineRuntime
 from core.rules.store import RuleStore
 from core import gateway as _data_gateway
+from core.gateway.feed import QuoteFeed   # the engine feed, FMP through the gateway (S4-frozen base unchanged)
 from ui.bonds_page import build_bonds_page
 from ui.crypto_page import build_crypto_page
 from ui.derivatives_page import build_derivatives_page
@@ -74,29 +74,6 @@ from ui.research_home import build_home_page, build_library_page, build_system_p
 # KEY-4: providers through core/gateway. Nothing here is resolved at import: routes.json is read when main() builds
 # the clients, so a broken routes file or a source turned off never stops the app from starting.
 KRXGateway = _data_gateway.krx_gateway   # KIS always; KRX Open API / OpenDART replaced by an OffClient when blocked
-
-
-class QuoteFeed(_EngineQuoteFeed):
-    """The engine feed with its FMP client built through core/gateway. core/engine/feed.py stays byte-for-byte as
-    frozen by the S4 owner ruling (T-RO-01, T-CAP-02); this only replaces where the client comes from. Still built on
-    first use, so a missing key never blocks startup. When FMP is blocked (off, or company) there is no FMP client
-    and ``fmp_blocked`` says why."""
-
-    fmp_blocked = ""
-
-    @property
-    def fmp(self):
-        if not self._fmp_resolved:
-            with self._lock:
-                if not self._fmp_resolved:
-                    try:
-                        self._fmp = _data_gateway.provider("data.fmp").FMPQuoteClient()
-                    except _data_gateway.GatewayOff as exc:
-                        self._fmp, self.fmp_blocked = None, str(exc)
-                    except Exception:
-                        self._fmp = None
-                    self._fmp_resolved = True
-        return self._fmp
 
 LOCALE = "en"
 
