@@ -184,6 +184,8 @@ class FakeServerTest(unittest.TestCase):
             "bad_answer   ": lambda req: {"ok": True, "result": {"__kind__": "datetime", "value": "not a date"}},
             "bad_answer    ": lambda req: {"ok": False, "error": "provider said: key abc is wrong"},
             "no_answer": lambda req: {"ok": False},
+            "bad_answer     ": lambda req: {"ok": False, "error": "sk_live_" + "a1b2c3d4e5f6a7b8c9d0e1f2a3"},
+            "http_503": lambda req: {"ok": False, "error": "http_503"},
         }
         for expected, transport in cases.items():
             with self.subTest(expected=expected):
@@ -191,6 +193,7 @@ class FakeServerTest(unittest.TestCase):
                     remote.RemoteRoute(transport).call("fmp", "quote", "AAPL")
                 self.assertEqual(str(ctx.exception), expected.strip())
                 self.assertIsNone(ctx.exception.__cause__)
+                self.assertIsNone(ctx.exception.__context__)        # the original message is not carried along
 
     def test_dispatch_refuses_a_request_that_is_not_a_dict(self):
         """KEY-4 item 7: the server handler never raises on a malformed request."""

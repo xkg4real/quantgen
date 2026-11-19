@@ -242,8 +242,17 @@ class ProfileTest(Base):
         self.assertIsInstance(gw.client("fmp"), remote.RemoteProxy)
 
     def test_broken_routes_file_turns_everything_off(self):
+        """A broken routes.json turns every source off, except the fixed-local ones (rule 1): they are local_key in
+        every valid profile, so KIS and the Upbit account keep working and report their key state, as the core paths
+        that reach them do (PR #133 review C6)."""
         gw._routes, gw._route_error = None, "broken"
-        self.assertTrue(all(r["state"] == "off" for r in gw.status()))
+        with _no_keys():
+            rows = {r["source"]: r for r in gw.status()}
+        fixed = {sid for sid, s in SOURCES.items() if s.fixed_local}
+        self.assertEqual(fixed, {"kis_quote", "kis_account", "upbit_account"})
+        self.assertTrue(all(r["state"] == "off" for sid, r in rows.items() if sid not in fixed))
+        self.assertTrue(all(r["route"] == "local_key" and r["state"] == "key_needed"
+                            for sid, r in rows.items() if sid in fixed))
 
 
 class LocalTest(Base):
@@ -275,24 +284,89 @@ class CoreAccessTest(Base):
         self.data = data
 
     def test_yahoo_off_stops_yahoo_tickers_only(self):
-        """Review item 1: with the commercial draft (yahoo off, fred keyless) a Yahoo ticker is refused before
-        any provider is asked, a FRED id still loads, and a synthetic request needs neither."""
+        """Review item 1 and PR #133 review B5: with the commercial draft (yahoo off, fred keyless) a Yahoo ticker is
+        never asked for. Under source="auto" it comes back SYNTHETIC with the reason (as a provider failure does) while
+        the FRED ids of the same batch are still read; an explicit Yahoo request and the Yahoo-only calls raise."""
         gw._profile_override = "commercial"
         with patch.object(self.data, "_provider_rows", self._rows):
-            with self.assertRaises(gw.GatewayOff):
-                gw.ficc().load_series("^GSPC", days=28)
-            with self.assertRaises(gw.GatewayOff):
-                gw.ficc().load_many(["DGS10", "KRW=X"], days=28)
-            with self.assertRaises(gw.GatewayOff):
-                gw.ficc().load_fx_spot("USDKRW", days=28)
-            with self.assertRaises(gw.GatewayOff):
-                gw.ficc()._yf_fetch(["SPY"], "1y")
-            with self.assertRaises(gw.GatewayOff):
-                gw.ficc().yfinance
-            self.assertEqual(self.asked, [])
-            self.assertEqual(gw.ficc().load_series("DGS10", days=28).source, "FRED")
+            sheet = gw.ficc().load_many(iter(["DGS10", "ZN=F", "DGS2", "GC=F"]), days=28)   # C4: an iterator
+            self.assertEqual(list(sheet), ["DGS10", "ZN=F", "DGS2", "GC=F"])
+            self.assertEqual({k: v.source for k, v in sheet.items()},
+                             {"DGS10": "FRED", "DGS2": "FRED", "ZN=F": "SYNTHETIC", "GC=F": "SYNTHETIC"})
+            self.assertIn("yahoo is off in profile commercial", sheet["ZN=F"].note)
+            self.assertEqual(sheet["DGS10"].values, tuple(1.0 + n for n in range(28)))
+            one = gw.ficc().load_series("^GSPC", days=60, label="S&P")
+            self.assertEqual((one.source, one.label), ("SYNTHETIC", "S&P"))
+            for call in (lambda: gw.ficc().load_series("^GSPC", source="yfinance", days=28),
+                         lambda: gw.ficc().load_many(["DGS10", "KRW=X"], source="yfinance", days=28),
+                         lambda: gw.ficc().load_fx_spot("USDKRW", days=28),
+                         lambda: gw.ficc()._yf_fetch(["SPY"], "1y"),
+                         lambda: gw.ficc().yfinance):
+                with self.assertRaises(gw.GatewayOff):
+                    call()
             self.assertEqual(gw.ficc().load_series("^GSPC", source="synthetic", days=60).source, "SYNTHETIC")
-        self.assertEqual(self.asked, [("FRED", ("DGS10",))])
+        self.assertEqual(self.asked, [("FRED", ("DGS10", "DGS2"))])
+
+    def test_probe_does_not_call_a_blocked_provider(self):
+        """PR #133 review B6: the connection check reports a blocked provider instead of calling it."""
+        gw._profile_override = "commercial"
+        calls = []
+        with patch.object(self.data, "_yf_fetch", lambda *a: calls.append("yahoo") or {}), \
+                patch.object(self.data, "_fred_fetch", lambda *a: calls.append("fred") or {"DGS10": [("2026-01-02", 4.0)]}), \
+                patch.object(self.data, "fred_ready", lambda: True), patch.object(self.data, "yfinance_ready", lambda: True):
+            result = gw.ficc().probe()
+        self.assertEqual(calls, ["fred"])
+        self.assertEqual(result["yfinance"], {"ok": False, "detail": "off in profile commercial"})
+        self.assertTrue(result["fred"]["ok"])
+
+    def test_company_route_refuses_the_local_entry_points(self):
+        """PR #133 review B7: a source moved to the company route is served only through client(); core's local
+        entry points refuse it rather than use the user's own key while the screens say "company"."""
+        table = copy.deepcopy(gw._table())
+        for sid in ("fmp", "yahoo"):
+            table["profiles"]["personal"][sid] = ["company"]
+        gw._routes = routes.check_routes(table)
+        gw._remote_override = remote.RemoteRoute(lambda req: {"ok": True, "result": None})
+        self.assertEqual(gw.route_of("fmp"), "company")
+        with self.assertRaises(gw.GatewayOff):
+            gw.provider("data.fmp.quote_client")
+        with self.assertRaises(gw.GatewayOff):
+            gw.ficc()._yf_fetch(["SPY"], "1y")
+        with _no_keys():
+            credentials.set("FMP_API_KEY", FAKE)
+            self.assertEqual(gw.local_key("fmp"), "")
+            self.assertFalse(gw.keys_ready("fmp"))
+        self.assertIsInstance(gw.client("fmp"), remote.RemoteProxy)
+
+    def test_history_cache_does_not_answer_for_a_blocked_source(self):
+        """PR #133 review B8: a Yahoo or crypto series cached on disk is not served while the source is blocked."""
+        from core.quant import history
+        self.assertTrue(history._READY["YFINANCE"]() and history._READY["CRYPTO"]())
+        gw._profile_override = "commercial"
+        self.assertFalse(history._READY["YFINANCE"]())
+        import config
+        with patch.object(config, "FICC_CACHE_TTL_SECONDS", 3600), \
+                patch.object(history, "yf_history", side_effect=history.HistoryError("asked")) as fetch, \
+                patch("pathlib.Path.read_text", side_effect=AssertionError("cache file read")):
+            with self.assertRaises(history.HistoryError):
+                history.load_history("SPY", source="yfinance", days=60)
+        fetch.assert_called_once()
+
+    def test_modules_with_several_sources(self):
+        """PR #133 review B9: data.krx reaches the KRX Open API and OpenDART too; the crypto module serves the fixed-
+        local Upbit account and the public prices, and a caller names the one it uses."""
+        table = copy.deepcopy(gw._table())
+        table["profiles"]["personal"]["opendart"] = ["off"]
+        table["profiles"]["personal"]["crypto_public"] = ["off"]
+        gw._routes = routes.check_routes(table)
+        with self.assertRaises(gw.GatewayOff):
+            gw.provider("data.krx")
+        with self.assertRaises(gw.GatewayOff):
+            gw.provider("data.crypto.crypto_client")
+        self.assertEqual(gw.provider("data.crypto.crypto_client", source="upbit_account").__name__,
+                         "data.crypto.crypto_client")
+        with self.assertRaises(KeyError):
+            gw.provider("data.fmp", source="kis_quote")
 
     def test_personal_profile_serves_both(self):
         with patch.object(self.data, "_provider_rows", self._rows):

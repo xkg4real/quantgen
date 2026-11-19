@@ -354,8 +354,10 @@ def _looks_kis_market(symbol: str) -> bool:
 # --------------------------------------------------------------------------- #
 # Disk cache — a rerun must not spend provider quota on unchanged bars
 # --------------------------------------------------------------------------- #
-# Looked up through `config` at call time (by the gateway): tests swap these functions out.
-_READY = {"FMP": lambda: bool(gateway.local_key("fmp")), "KIS": lambda: gateway.keys_ready("kis_quote")}
+# Looked up through `config` at call time (by the gateway): tests swap these functions out. Yahoo and the crypto
+# venues need no key, but a source the active profile blocks (off, or company) must not answer from an old file.
+_READY = {"FMP": lambda: bool(gateway.local_key("fmp")), "KIS": lambda: gateway.keys_ready("kis_quote"),
+          "YFINANCE": lambda: not gateway.blocked("yahoo"), "CRYPTO": lambda: not gateway.blocked("crypto_public")}
 _CACHE_MIN_ROWS = 30
 
 

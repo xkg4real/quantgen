@@ -48,11 +48,29 @@ from core.app_paths import assets_directory
 from core.theme import BREAKPOINTS, RADII, TRANSITION_MS, active, set_mode
 from core.i18n import LocaleContext
 from ui.localization import translate_controls, LocalizedRoot
-from core.engine.feed import QuoteFeed
+from core.engine.feed import QuoteFeed as _EngineQuoteFeed
 from core.engine.runtime import EngineRuntime
 from core.rules.store import RuleStore
 from core import gateway as _data_gateway
 KRXGateway = _data_gateway.provider("data.krx").KRXGateway   # KEY-4: providers through core/gateway
+
+
+class QuoteFeed(_EngineQuoteFeed):
+    """KEY-4: the engine feed with its FMP client built through core/gateway. core/engine/feed.py stays byte-for-byte
+    as frozen by the S4 owner ruling (T-RO-01, T-CAP-02); this only replaces where the client comes from. Still built
+    on first use, so a missing key never blocks startup."""
+
+    @property
+    def fmp(self):
+        if not self._fmp_resolved:
+            with self._lock:
+                if not self._fmp_resolved:
+                    try:
+                        self._fmp = _data_gateway.provider("data.fmp").FMPQuoteClient()
+                    except Exception:
+                        self._fmp = None
+                    self._fmp_resolved = True
+        return self._fmp
 from ui.bonds_page import build_bonds_page
 from ui.crypto_page import build_crypto_page
 from ui.derivatives_page import build_derivatives_page

@@ -38,7 +38,7 @@ from core.gateway.sources import SOURCES
 
 __all__ = ["client", "ready", "status", "stream", "answer", "route_of", "profile", "reload", "GatewayAnswer",
            "GatewayOff", "RouteError", "SOURCES", "provider", "ficc", "keys_ready", "local_key", "suspend_key",
-           "status_loaders", "endpoint", "PROVIDER_MODULES"]
+           "status_loaders", "endpoint", "PROVIDER_MODULES", "blocked"]
 
 
 class GatewayOff(RuntimeError):
@@ -104,7 +104,11 @@ def _order(source: str) -> list[str]:
 
 
 def route_of(source: str) -> str:
-    """The route that serves `source` now: the first route in its order that is available."""
+    """The route that serves `source` now: the first route in its order that is available. A fixed-local source is
+    ``local_key`` without reading routes.json (rule 1 allows nothing else), so a broken routes file leaves KIS and the
+    Upbit account working, as the core paths that reach them do."""
+    if source in SOURCES and SOURCES[source].fixed_local:
+        return "local_key"
     for route in _order(source):
         if route == "off":
             return "off"
@@ -227,22 +231,23 @@ _subscribe()
 
 
 # -- KEY-4: the ways core/ reaches the existing local clients ----------------------------------------------------
-# Provider module -> the source whose route decides whether core may use it. None: an offline library or shared
+# Provider module -> every source it can reach. provider() checks each one that is not fixed-local; a caller that
+# uses only one of them names it (provider(module, source=...)). An empty tuple: an offline library or shared
 # plumbing that reaches no provider by itself (gs_quant's timeseries maths, the shared HTTP session).
-PROVIDER_MODULES: dict[str, Optional[str]] = {
-    "data.krx": "kis_quote",                     # KRXGateway: KIS first, then the KRX Open API and FMP
-    "data.krx.kis_client": "kis_quote",
-    "data.kis_markets": "kis_quote",
-    "data.kis_workspace": "kis_quote",
-    "data.krx.krx_market_client": "krx_open_api",
-    "data.fmp": "fmp",
-    "data.fmp.quote_client": "fmp",
-    "data.crypto.crypto_client": "crypto_public",
-    "data.net": None,
-    "gs_quant": None,
-    "gs_quant.timeseries": None,
-    "gs_quant.session": "gs_marquee",
-    "gs_quant.instrument": "gs_marquee",
+PROVIDER_MODULES: dict[str, tuple[str, ...]] = {
+    "data.krx": ("kis_quote", "krx_open_api", "opendart"),   # KRXGateway: KIS first, then KRX Open API and OpenDART
+    "data.krx.kis_client": ("kis_quote",),
+    "data.kis_markets": ("kis_quote",),
+    "data.kis_workspace": ("kis_quote",),
+    "data.krx.krx_market_client": ("krx_open_api",),
+    "data.fmp": ("fmp",),
+    "data.fmp.quote_client": ("fmp",),
+    "data.crypto.crypto_client": ("crypto_public", "upbit_account"),   # UpbitAccount: source="upbit_account"
+    "data.net": (),
+    "gs_quant": (),
+    "gs_quant.timeseries": (),
+    "gs_quant.session": ("gs_marquee",),
+    "gs_quant.instrument": ("gs_marquee",),
 }
 
 # Source -> the config.py function behind each part. Looked up on the config module at call time.
@@ -261,28 +266,36 @@ def _config():
     return config
 
 
-def _off(source: str) -> bool:
-    """True when the source is off. A fixed-local source (D7-G rule 1: KIS, Upbit account) is ``local_key`` in
-    every valid profile, so it never needs routes.json read: code that must open no file while it runs (the KIS
-    master download, for one) stays that way."""
+def blocked(source: str) -> str:
+    """Why core may not reach ``source`` on this PC: "off", "company" (served only through ``client(source)``,
+    never by core's local entry points: the user's own key must not be used while the screens say "company"), or
+    "" when the local route serves it. A fixed-local source (D7-G rule 1: kis_quote, kis_account, upbit_account)
+    is ``local_key`` in every valid profile, so routes.json is not read for it."""
     if SOURCES[source].fixed_local:
-        return False
-    return route_of(source) == "off"
+        return ""
+    route = route_of(source)
+    return route if route in ("off", "company") else ""
 
 
-def _refuse_if_off(source: str) -> None:
-    if _off(source):
+def _refuse(source: str) -> None:
+    why = blocked(source)
+    if why == "off":
         raise GatewayOff(f"{source} is off in profile {profile()}")
+    if why == "company":
+        raise GatewayOff(f"{source} is served by the company route in profile {profile()}: only through client()")
 
 
-def provider(module: str) -> Any:
-    """The provider module ``module`` (a key of PROVIDER_MODULES). GatewayOff when its source is off; ImportError
-    as before when the package is not installed."""
+def provider(module: str, source: Optional[str] = None) -> Any:
+    """The provider module ``module`` (a key of PROVIDER_MODULES). GatewayOff when a source it reaches is off or on
+    the company route (only ``source`` when the caller names the one it uses); ImportError as before when the
+    package is not installed."""
     if module not in PROVIDER_MODULES:
         raise KeyError(f"not a provider module: {module}")
-    source = PROVIDER_MODULES[module]
-    if source is not None:
-        _refuse_if_off(source)
+    sources = PROVIDER_MODULES[module]
+    if source is not None and source not in sources:
+        raise KeyError(f"{module} does not serve {source}")
+    for sid in (source,) if source is not None else sources:
+        _refuse(sid)
     return importlib.import_module(module)
 
 
@@ -293,16 +306,17 @@ def ficc() -> Any:
 
 
 def keys_ready(source: str) -> bool:
-    """``config.kis_ready()`` and the like, for a source with a "ready" function; False when the source is off."""
-    if _off(source):
+    """``config.kis_ready()`` and the like, for a source with a "ready" function; False when the source is off or
+    on the company route."""
+    if blocked(source):
         return False
     return bool(getattr(_config(), _CONFIG_FUNCTIONS[source]["ready"])())
 
 
 def local_key(source: str, part: str = "key") -> str:
-    """The user's own key for a source on the local route (``config.fmp_key()`` and the like); "" when off.
-    Only for code on this PC that sends the key to the provider itself, as before."""
-    if _off(source):
+    """The user's own key for a source on the local route (``config.fmp_key()`` and the like); "" when off or on
+    the company route. Only for code on this PC that sends the key to the provider itself, as before."""
+    if blocked(source):
         return ""
     return getattr(_config(), _CONFIG_FUNCTIONS[source][part])()
 

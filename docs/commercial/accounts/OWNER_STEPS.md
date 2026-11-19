@@ -1,6 +1,6 @@
 # 소유자 실행 순서: AWS → 전달 → 시험 → 공개 전
 
-- 판: v1.3 (2026-11-19, 소유자 질문 반영: 1-0 MFA 찾는 길과 로그인 계정, 5절 AWS 계정 이메일). v1.2 (2026-11-19, 6절을 메인 세션 확인대로 고침: 지금 하지 않음, 보통 앱 Python, 브랜치+PR). v1.1 6절 추가, v1 2026-11-18. 작성: PAYMENTS_ACCOUNT_KEYS 세션. 소유자 요청 (원문): "위 항목 중에서 시험, 전달, AWS, 공개 전 4단계를 수행하기 위해서 해야되는 일들을 구체화하여 .md 파일로 만들어 여기서 다운로드하고 볼 수 있도록 해주세요"
+- 판: v1.3.1 (2026-11-19, 메인 PR #133 검토 B10: 1-0의 따로 만드는 예산 줄을 지우고 24a·24b로 모음, 결제 화면 접근 켜기 추가, IAM Identity Center 로그인 확인 반영, 5-2a 법인 이메일·연락처로 명확히, 1-0 소요 15~20분). v1.3 (2026-11-19, 소유자 질문 반영: 1-0 MFA 찾는 길과 로그인 계정, 5절 AWS 계정 이메일). v1.2 (2026-11-19, 6절을 메인 세션 확인대로 고침: 지금 하지 않음, 보통 앱 Python, 브랜치+PR). v1.1 6절 추가, v1 2026-11-18. 작성: PAYMENTS_ACCOUNT_KEYS 세션. 소유자 요청 (원문): "위 항목 중에서 시험, 전달, AWS, 공개 전 4단계를 수행하기 위해서 해야되는 일들을 구체화하여 .md 파일로 만들어 여기서 다운로드하고 볼 수 있도록 해주세요"
 - 반영한 소유자 답 (2026-11-18): Q1 운영자 = 개인 (법인 설립을 알려 주시면 바로 법인명으로 바꿈), Q2 메일 = `contact@quantgeneration.com`, Q3 최소 연령 = 무료 만 14세 / 유료 만 19세.
 - 함께 보는 문서 (브랜치 `claude/payments-keys-20261117`): `docs/commercial/accounts/ACCOUNT_SETUP.md` (설정값, 25단계, 웹사이트 요청 블록), `docs/commercial/accounts/ADMIN_GUIDE.md` (관리자 안내서).
 - *(미검증)* 은 AWS 화면 문구를 확인하지 못한 곳입니다. 화면이 다르면 "단계 번호 + 실제 문구"를 알려 주세요. 문서를 고쳐 드립니다.
@@ -29,12 +29,12 @@
 
 ## 1단계. AWS (운영 풀 만들기)
 
-### 1-0. 시작 전 (5분)
+### 1-0. 시작 전 (15~20분)
 
 - [ ] `contact@quantgeneration.com` 으로 다른 주소에서 메일을 한 통 보내, 실제로 받는지 확인. 안 오면 여기서 멈추고 웹사이트 세션의 메일 작업을 먼저 끝냅니다 (가입 메일의 회신 주소이자 개인정보 문의 창구라 꼭 받아야 함).
-- [ ] 어느 계정으로 로그인하나: 운영 풀을 만들 AWS 계정 (소유자가 2026-11-19 유료 플랜으로 올린 계정). 권장은 그 계정의 루트(이메일 로그인)로 IAM 사용자 `quantgen-admin`을 하나 만들고 (**IAM** → **Users** → **Create user** → 콘솔 접근 체크 → `AdministratorAccess`) 1-1부터는 그 사용자로 로그인 (**IAM user**, 계정 ID 12자리 + 사용자 이름) *(문구 미검증)*. IAM 사용자 만들기가 막히면 루트 + MFA로 진행.
-- [ ] 그 로그인에 MFA가 켜져 있는지: 주소창에 `https://console.aws.amazon.com/iam/home#/security_credentials` → **Multi-factor authentication (MFA)** 구역 → 없으면 **Assign MFA device**. 오른쪽 위 메뉴에 **Security credentials**가 안 보이면 (IAM Identity Center·역할 전환으로 들어온 경우) access portal의 **MFA devices**에서. IAM 사용자는 **IAM** → **Users** → 본인 → **Security credentials** 탭 *(문구 미검증)*.
-- [ ] 요금 알림: 검색창 `Budgets` → **Create budget** → **Zero spend budget** 또는 **Monthly cost budget** (받는 메일은 소유자 메일) *(문구 미검증)*.
+- [ ] 어느 로그인으로 하나: 운영 풀을 만들 AWS 계정 (2026-11-19 소유자가 유료 플랜으로 올린 계정). 소유자 화면 확인 (2026-11-19): 이 계정은 **IAM Identity Center** 로그인 (오른쪽 위 `AccountFullAccessRole/…`)으로 들어오며, 그래서 IAM의 Users 목록이 비어 있는 것이 정상입니다. **IAM 사용자는 만들지 않습니다.** 1-1 이후도 같은 로그인으로 합니다.
+- [ ] 그 로그인에 MFA: IAM Identity Center 콘솔 → **Users** → 본인 사용자 **이름** → **MFA devices** 탭. 장치가 있으면 끝, 없으면 **Register MFA device** (인증 앱의 QR → 6자리 입력). 2023-11 뒤에 만든 Identity Center는 MFA가 기본으로 켜져 있어 처음 로그인 때 이미 등록했을 수 있습니다. 로그인마다 묻는지는 **Settings** → **Authentication** → Multi-factor authentication **Configure**에서 확인. 〔AWS 문서로 확인: Register an MFA device for users, Configure MFA in IAM Identity Center, 2023-11 MFA 기본값 공지 · 2026-11-19〕
+- [ ] 결제 화면 접근 켜기 (루트만 가능): 루트(계정 이메일)로 한 번 로그인 → 오른쪽 위 계정 → **Account** → **IAM user and role access to Billing information** → **Edit** → **Activate IAM Access** → **Update**. 이걸 켜지 않으면 Identity Center 로그인에서 24a·24b의 **Budgets** 화면이 접근 거부될 수 있습니다. 〔AWS 문서로 확인: Overview of managing access permissions (Billing) · 2026-11-19〕 예산 자체는 24a·24b에서 만듭니다 (받는 메일 `contact@quantgeneration.com`); 여기서 따로 만들지 않습니다.
 - [ ] 메모장 하나를 엽니다. 아래 "적어 둘 것"을 여기에 모읍니다 (PC에만 보관).
 
 ### 1-1. 25단계
@@ -254,7 +254,7 @@ history -c
 "법인 설립 완료: <법인 등기상 이름>" 이라고만 말씀해 주세요. 그날 바로:
 1. 이 세션이 계정 문서의 운영자 표기를 법인명으로 바꾸고 (`ACCOUNT_SETUP.md` 0.1절), 메인 세션에 정책 문서 값을 넘깁니다.
 2. 메인 세션 정책 PR → 웹사이트 원문 재생성.
-2a. AWS 계정의 로그인 이메일(루트)과 연락처를 법인 주소로: 오른쪽 위 계정 → **Account** → Account details / Contact information → **Edit** *(문구 미검증)*. 계정은 새로 만들지 않습니다 (풀·회원 그대로). 소유자가 2026-11-19 개인 이메일로 계정을 올렸으므로 이 단계가 필요합니다.
+2a. AWS 계정의 루트 로그인 이메일을 법인 이메일 주소로, 연락처(Contact information: 이름·회사명·우편 주소·전화)를 법인 것으로: 오른쪽 위 계정 → **Account** → Account details / Contact information → **Edit** *(문구 미검증)*. 계정은 새로 만들지 않습니다 (풀·회원 그대로). 소유자가 2026-11-19 개인 이메일로 계정을 올렸으므로 이 단계가 필요합니다.
 3. **이미 회원이 있다면**, 회원 정보를 법인으로 넘기기 **전에** 회원에게 미리 알려야 합니다 (홈페이지 게시라면 30일 이상). 그래서 공개 문서의 이름이 실제로 바뀌는 날은 알림 뒤가 될 수 있습니다. 공개 전(회원 0명)이면 이 절차가 필요 없습니다. 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 제27조, 시행령 제29조 · https://itwiki.kr/w/개인정보_보호법_제27조 · 2026-11-17 확인〕
 
 

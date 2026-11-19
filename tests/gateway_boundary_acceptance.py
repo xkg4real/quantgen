@@ -39,13 +39,53 @@ KNOWN_FILE = ROOT / "tests" / "fixtures" / "gateway" / "known_direct_calls.json"
 SCAN = ("core", "quantgen_desktop", "ui")
 ALLOWED = ("core/gateway/", "core/ficc/data.py")
 PROVIDERS = ("data.krx", "data.fmp", "data.crypto", "data.kis_markets", "data.kis_stream", "data.kis_workspace",
-             "data.net", "data.didm", "yfinance", "gs_quant")
+             "data.net", "data.didm", "yfinance", "gs_quant", "pandas_datareader", "fredapi", "pykrx")
 FICC = "core.ficc.data"
-# The network-reaching names of core/ficc/data.py: its loaders and the per-provider fetchers behind them
-# (type-only names such as Series and pure helpers such as _period_for do not count).
-FICC_LOADERS = {"load_many", "load_series", "load_treasury_curve", "load_fx_spot", "load_short_rate",
-                "load_policy_rates", "fred_ready", "yfinance_ready", "probe", "_yf_fetch", "_fred_fetch",
-                "_provider_rows"}
+LOCAL_FILE = ROOT / "core" / "gateway" / "local.py"
+
+
+def _ficc_constants() -> frozenset[str]:
+    """The names of core/ficc/data.py that reach no provider: ``FiccData.CONSTANTS`` in core/gateway/local.py, read
+    with ast so this test stays standard-library only and shares one list with the gateway. Any other name of the
+    module (a loader, a fetcher, the ``_yf``/``_pdr``/``_requests`` handles, ``_fetch``...) is a finding."""
+    tree = ast.parse(LOCAL_FILE.read_bytes())
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ClassDef) and node.name == "FiccData":
+            for item in node.body:
+                if isinstance(item, ast.Assign) and any(getattr(t, "id", "") == "CONSTANTS" for t in item.targets):
+                    return frozenset(ast.literal_eval(item.value))
+    raise AssertionError("FiccData.CONSTANTS not found in core/gateway/local.py")
+
+
+FICC_SAFE = _ficc_constants()
+# core/engine/feed.py is frozen byte-for-byte by the S4 owner ruling (T-RO-01, T-CAP-02; tests/macro_m5_integration.py
+# UNTOUCHED list). Its own FMP import stays; the app builds the feed's FMP client through the gateway in main.py.
+FROZEN = {"core/engine/feed.py": ["import:data.fmp.FMPQuoteClient"]}
+# KEY-5 (UI session) lowers this; a regenerated list may never grow past it.
+SCREEN_CEILING = {"files": 21, "sites": 43}
+SCREEN_FILES = (
+    "quantgen_desktop/app.py",
+    "quantgen_desktop/home_view.py",
+    "quantgen_desktop/market_chart.py",
+    "quantgen_desktop/market_rankings.py",
+    "quantgen_desktop/market_summary.py",
+    "quantgen_desktop/market_tools.py",
+    "quantgen_desktop/qscore.py",
+    "quantgen_desktop/watchlist_live.py",
+    "ui/bonds_page.py",
+    "ui/crypto_page.py",
+    "ui/derivatives_page.py",
+    "ui/fcharts.py",
+    "ui/fx_page.py",
+    "ui/krx_page.py",
+    "ui/macro_page.py",
+    "ui/macro_state_panel.py",
+    "ui/market_chart_page.py",
+    "ui/quant_lab_page.py",
+    "ui/rates_page.py",
+    "ui/settings_page.py",
+    "ui/structuring_page.py",
+)
 KEY_FUNCTIONS = {"kis_ready", "kis_credentials", "fmp_key", "fmp_ready", "opendart_key", "opendart_ready", "krx_key",
                  "krx_ready", "anthropic_key", "ai_ready", "gs_client_id", "gs_client_secret", "upbit_ready",
                  "upbit_keys", "krx_provider_status", "quant_provider_status", "crypto_provider_status",
@@ -72,7 +112,7 @@ def _covered(dotted: str) -> str:
                 return ".".join(parts[:i])
     if dotted == FICC:
         return FICC
-    if dotted.startswith(FICC + ".") and dotted[len(FICC) + 1:].split(".")[0] in FICC_LOADERS:
+    if dotted.startswith(FICC + ".") and dotted[len(FICC) + 1:].split(".")[0] not in FICC_SAFE:
         return FICC
     return ""
 
@@ -112,9 +152,44 @@ def _literal(node: ast.AST) -> str:
     return node.value if isinstance(node, ast.Constant) and isinstance(node.value, str) else ""
 
 
-def findings(source: str, module: str = "", is_package: bool = False) -> list[str]:
+def _dynamic_name(node: ast.Call, module: str, is_package: bool) -> list[str]:
+    """The absolute module names an ``import_module``/``__import__`` call reaches: the literal name (positional or
+    ``name=``), resolved against ``package=`` (a literal, or ``__package__``/``__name__`` of the scanned file), plus
+    each ``fromlist`` item under it."""
+    package_of_file = module if is_package else module.rpartition(".")[0]
+
+    def package_value(value: ast.AST) -> str:
+        if isinstance(value, ast.Name) and value.id == "__package__":
+            return package_of_file
+        if isinstance(value, ast.Name) and value.id == "__name__":
+            return module
+        return _literal(value)
+
+    name = _literal(node.args[0]) if node.args else ""
+    package, fromlist = "", []
+    for kw in node.keywords:
+        if kw.arg == "name":
+            name = _literal(kw.value)
+        elif kw.arg == "package":
+            package = package_value(kw.value)
+        elif kw.arg == "fromlist" and isinstance(kw.value, (ast.List, ast.Tuple)):
+            fromlist = [_literal(e) for e in kw.value.elts]
+    if len(node.args) > 1 and not package:
+        package = package_value(node.args[1])
+    if len(node.args) > 3 and isinstance(node.args[3], (ast.List, ast.Tuple)):   # __import__(n, g, l, fromlist)
+        fromlist = [_literal(e) for e in node.args[3].elts]
+    if name.startswith(".") and package:
+        level = len(name) - len(name.lstrip("."))
+        pkg = package.split(".")
+        pkg = pkg[:len(pkg) - (level - 1)] if level > 1 else pkg
+        name = ".".join(pkg + ([name.lstrip(".")] if name.lstrip(".") else []))
+    return [name] + [f"{name}.{item}" for item in fromlist if item] if name else []
+
+
+def findings(source: "str | bytes", module: str = "", is_package: bool = False) -> list[str]:
     """Every direct way to a provider in one file. ``module`` is the file's dotted name (for relative imports).
-    Raises SyntaxError for a file Python cannot parse, so such a file fails the test instead of being skipped."""
+    Give the file's bytes so a PEP 263 coding cookie is honoured as Python would. Raises SyntaxError for a file
+    Python cannot parse, so such a file fails the test instead of being skipped."""
     tree = ast.parse(source)
     found: list[str] = []
     bound: dict[str, str] = {"__import__": "__import__"}   # local name -> absolute dotted target
@@ -138,7 +213,7 @@ def findings(source: str, module: str = "", is_package: bool = False) -> list[st
             base = _absolute(node, module, is_package)
             for alias in node.names:
                 if alias.name == "*":
-                    if _provider(base) or base == FICC or _parent_package(base):
+                    if _provider(base) or base == FICC or _parent_package(base) or base == "config":
                         found.append(f"import:{base}.*")
                     continue
                 full = f"{base}.{alias.name}"
@@ -149,7 +224,7 @@ def findings(source: str, module: str = "", is_package: bool = False) -> list[st
                     hit = True
                 elif full == FICC:
                     hit = True
-                elif base == FICC and alias.name in FICC_LOADERS:
+                elif base == FICC and alias.name not in FICC_SAFE:
                     hit = True
                 elif base == "config" and alias.name in KEY_FUNCTIONS:
                     hit = True
@@ -169,22 +244,10 @@ def findings(source: str, module: str = "", is_package: bool = False) -> list[st
             target = ".".join([bound.get(parts[0], parts[0])] + parts[1:]) if parts else ""
             if target in DYNAMIC or (parts and parts[-1] == "import_module" and len(parts) == 1
                                      and bound.get(parts[0], "") == "importlib.import_module"):
-                name = _literal(node.args[0]) if node.args else ""
-                package = ""
-                for kw in node.keywords:
-                    if kw.arg == "name":
-                        name = _literal(kw.value)
-                    elif kw.arg == "package":
-                        package = _literal(kw.value)
-                if len(node.args) > 1 and not package:
-                    package = _literal(node.args[1])
-                if name.startswith(".") and package:
-                    level = len(name) - len(name.lstrip("."))
-                    pkg = package.split(".")
-                    pkg = pkg[:len(pkg) - (level - 1)] if level > 1 else pkg
-                    name = ".".join(pkg + ([name.lstrip(".")] if name.lstrip(".") else []))
-                if name and (_provider(name) or name == FICC or _covered(name)):
-                    found.append(f"dynamic:{name}")
+                for name in _dynamic_name(node, module, is_package):
+                    if _provider(name) or name == FICC or _covered(name) or _parent_package(name):
+                        found.append(f"dynamic:{name}")
+                        break
             if parts and len(parts) == 2 and parts[0] in config_names and parts[1] in KEY_FUNCTIONS:
                 found.append(f"call:config.{parts[1]}")
             if parts and len(parts) == 1 and parts[0] == "getattr" and len(node.args) >= 2:
@@ -231,7 +294,7 @@ def scan() -> tuple[dict[str, list[str]], list[str]]:
             continue
         module, is_package = _module_name(rel)
         try:
-            items = findings(path.read_text(encoding="utf-8"), module, is_package)
+            items = findings(path.read_bytes(), module, is_package)
         except (OSError, UnicodeDecodeError, SyntaxError, ValueError) as exc:
             errors.append(f"{rel}: {type(exc).__name__}")
             continue
@@ -258,9 +321,18 @@ class BoundaryTest(unittest.TestCase):
         self.assertEqual(gone, {}, "listed direct access is gone; remove it from known_direct_calls.json")
 
     def test_core_and_main_go_through_the_gateway(self):
-        """KEY-4 done: no core/ file and not main.py may reach a provider directly; only screens remain (KEY-5)."""
-        left = [f for f in known() if f.startswith("core/") or f == "main.py"]
-        self.assertEqual(left, [])
+        """KEY-4 done: no core/ file and not main.py may reach a provider directly, except the S4-frozen feed.py
+        (FROZEN); only screens remain (KEY-5)."""
+        left = {f: v for f, v in known().items() if f.startswith("core/") or f == "main.py"}
+        self.assertEqual(left, FROZEN)
+
+    def test_screen_list_stays_under_the_ceiling(self):
+        """A regenerated list (--write-known) cannot quietly grow: files and sites stay at or under SCREEN_CEILING,
+        and no screen file outside today's list may appear."""
+        screens = {f: v for f, v in known().items() if f.startswith(("quantgen_desktop/", "ui/"))}
+        self.assertLessEqual(len(screens), SCREEN_CEILING["files"])
+        self.assertLessEqual(sum(len(v) for v in screens.values()), SCREEN_CEILING["sites"])
+        self.assertLessEqual(set(screens), set(SCREEN_FILES))
 
     def test_known_totals_match_the_design(self):
         data = json.loads(KNOWN_FILE.read_text(encoding="utf-8"))
@@ -318,6 +390,40 @@ class BoundaryTest(unittest.TestCase):
             with self.subTest(source=source):
                 self.assertEqual(findings(source, "core.ficc.insights"),
                                  ["import:data.krx.kis_client"] if "kis_client" in source else [])
+
+    def test_detector_catches_the_pr133_review_forms(self):
+        """Forms the PR #133 review found missing (main session, 2026-11-19, A2 and B1-B4)."""
+        cases = {
+            # A2: every name of core.ficc.data outside FiccData.CONSTANTS (the _yf/_pdr/_requests handles, _fetch...)
+            "from core.ficc.data import _yf\n": ["import:core.ficc.data._yf"],
+            "from .data import _yf\n": ["import:core.ficc.data._yf"],
+            "from core.ficc.data import _pdr, _requests, _fetch, _treasury_from_fred\n":
+                ["import:core.ficc.data._fetch", "import:core.ficc.data._pdr", "import:core.ficc.data._requests",
+                 "import:core.ficc.data._treasury_from_fred"],
+            "import core.ficc\ncore.ficc.data._yf.download('SPY')\n": ["attr:core.ficc.data"],
+            "from core import ficc\nficc.data._yf.Ticker('SPY')\n": ["attr:core.ficc.data"],
+            # B1: dynamic import of a parent package, then attributes, getattr or fromlist
+            "__import__('data', fromlist=['krx']).krx.KRXGateway()\n": ["dynamic:data"],
+            "import importlib\nimportlib.import_module('data').krx.KRXGateway()\n": ["dynamic:data"],
+            "import importlib\ngetattr(importlib.import_module('data'), 'krx')\n": ["dynamic:data"],
+            "import importlib\nimportlib.import_module('core.ficc').data.load_series('DGS10')\n": ["dynamic:core.ficc"],
+            "import importlib\nimportlib.import_module('.data', package=__package__)\n": ["dynamic:core.ficc.data"],
+            "__import__('core.ficc', globals(), locals(), ['data'])\n": ["dynamic:core.ficc"],
+            # B2: the FRED library and the other provider libraries
+            "import pandas_datareader.data as web\nweb.DataReader('DGS10', 'fred')\n":
+                ["import:pandas_datareader.data"],
+            "import fredapi\nimport pykrx\n": ["import:fredapi", "import:pykrx"],
+            # B4: config star import
+            "from config import *\nfmp_key()\n": ["import:config.*"],
+        }
+        for source, expected in cases.items():
+            with self.subTest(source=source):
+                self.assertEqual(findings(source, "core.ficc.insights"), sorted(expected))
+
+    def test_coding_cookie_is_honoured(self):
+        """B3: the scan gives ast the file's bytes, so code hidden behind a PEP 263 cookie is seen as Python runs it."""
+        hidden = "# -*- coding: utf-7 -*-\n+AGk-mport data.krx.kis+AF8-client\n".encode("ascii")
+        self.assertEqual(findings(hidden), ["import:data.krx.kis_client"])
 
     def test_unparsable_file_fails(self):
         """3: a file Python cannot parse or decode is an error, not a skipped file."""

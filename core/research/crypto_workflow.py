@@ -66,10 +66,11 @@ def analyze(*, days: int = 730, source: str = "live", card_loader=None, include_
     from core import gateway
     if include_balances and gateway.keys_ready("upbit_account") and source == "live":
         try:
-            cc = gateway.provider("data.crypto.crypto_client")
-            bal = cc.UpbitAccount().balances()
+            account = gateway.provider("data.crypto.crypto_client", source="upbit_account")   # fixed local
+            bal = account.UpbitAccount().balances()
             coins = [f"KRW-{b['currency']}" for b in bal if b["currency"] != "KRW"]
-            out["balances"] = value_holdings(bal, krw_prices(cc.UpbitPublic(), coins))
+            public = gateway.provider("data.crypto.crypto_client", source="crypto_public")
+            out["balances"] = value_holdings(bal, krw_prices(public.UpbitPublic(), coins))
         except Exception as exc:
             out["balances_error"] = f"{type(exc).__name__}: {exc}"
     from core.quant.validate import load_cards

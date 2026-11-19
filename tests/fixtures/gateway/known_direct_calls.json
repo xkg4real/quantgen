@@ -1,5 +1,8 @@
 {
  "files": {
+  "core/engine/feed.py": [
+   "import:data.fmp.FMPQuoteClient"
+  ],
   "quantgen_desktop/app.py": [
    "import:data.kis_workspace.MarketDataService",
    "import:data.kis_workspace.MarketDataService"
@@ -87,8 +90,8 @@
   ]
  },
  "totals": {
-  "core_and_main": 0,
-  "files": 21,
+  "core_and_main": 1,
+  "files": 22,
   "screens": 43
  }
 }
