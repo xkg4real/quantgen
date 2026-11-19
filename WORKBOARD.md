@@ -169,7 +169,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [~] DS-4a — GDELT, ALFRED + 시점 저장소. 소유자 PC 확인 끝
 - [!] DS-4b — Alpha Vantage, Tiingo, CryptoPanic. 코드 끝(df05b21). 무료 키 확인 대기
 - [ ] DS-4c — CME FedWatch 종가판. DIDM 2단계 시작 때 (약 $25/월)
-- [!] DS-4d — OpenDART·KIND(→OpenDART), SEC EDGAR, ECOS. 6개 중 5개 확인, OpenDART만 남음
+- [x] DS-4d — OpenDART·KIND(→OpenDART), SEC EDGAR, ECOS — 6곳 모두 소유자 PC 확인 끝 (OpenDART 819건, c6fda98, 11-20). 원장은 DS·DIDM PR 병합 때
 - [~] DS-4e — Kalshi 브랜치에 있음(236개 시장). Polymarket은 변호사 확인 전까지 꺼둠
 - [!] DS-H — 홈 지표 6개 데이터 계층 (load_home_indicators, core/research/markets.py). 소유자 H4 진단 출력 대기. KEY-4가 core/research/markets.py를 바꾸므로 KEY-4 병합 뒤 main에서 시작
 - [-] DS-3 — RavenPack RPA 1.0 견적, Bigdata.com 비교. **관문 확인 끝(11-20 메인):** 소유자 11-18 답(OWNER_RULINGS_LOG 2026-11-18 절, 질문 1)으로 D14 "3단계" = RavenPack 대안 9개(DIDM Stage 3 아님), D14는 대안으로 구성·Bigdata.com 시험 안 함 → DS-3은 계획에 없음. 소유자가 RavenPack 견적을 원하면 다시 엶 (OA-38)
@@ -290,7 +290,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 
 ## 3) 소유자 수동 작업 (OWNER_ACTIONS)
 
-**24시간 안 열린 항목: 9개 (OA-03 ~ OA-10, OA-43). 기준 5개 이상 → Claude 앱 푸시 알림 (SESSION_PIPELINE 5절).**
+**24시간 안 열린 항목: 8개 (OA-03 ~ OA-06, OA-08 ~ OA-10, OA-43). 기준 5개 이상 → Claude 앱 푸시 알림 (SESSION_PIPELINE 5절).**
 
 push_log:
 - 2026-11-20 00:51 KST 메인 — 9건 (OA-02~OA-10) — PushNotification "Mobile push requested"
@@ -308,7 +308,7 @@ push_log:
 | OA-04 | 웹사이트 세션에 "비밀번호 규칙에 특수문자 1개 이상 추가" 문장 붙이기 | PAYMENTS | 11-19 23:37 | 24h 안 | 대기 |
 | OA-05 | 웹사이트 세션 재개 지시 + 정책 문구 다시 만들기 프롬프트(PR-130.json) 붙이기 | MAIN | 11-19 | 24h 안 | 대기 |
 | OA-06 | UI 7쪽을 skymi, whydi PC에서 실행 확인 → UI 세션에 "PR 만들어" | UI, OS, MAIN | 11-18, 11-19 03:13, 05:11 | 지금 (KEY-4 다음 차례를 막음) | 대기 |
-| OA-07 | OpenDART 확인 다시 실행 (collect_daily --env-file …, 개수와 이유 코드만 붙이기) | DATA | 11-19 01:29, 15:00 | 지금 (막힘) | 대기 |
+| OA-07 | OpenDART 확인 다시 실행 | DATA | 11-19 01:29 | — | **완료** 소유자 PC: 9쪽, 공시 819건 저장 (DATA 보고 11-20 01:57, VENDOR_EVAL 3.1 기록 c6fda98). 공식·무료 공급원 6곳 모두 확인 끝 |
 | OA-08 | 무료 키 3개 가입(ALPHAVANTAGE_API_KEY, TIINGO_API_KEY, CRYPTOPANIC_API_KEY) → 등록 → keys status → collect_daily --alphavantage SPY --tiingo nvda --cryptopanic BTC 결과 붙이기 (키 값은 붙이지 않음). FRED_API_KEY는 이미 설정·확인 끝(ALFRED 3,364행) | DATA | 11-19 15:00 (11-20 00:23 갱신) | 지금 (막힘) | 대기 |
 | OA-09 | 마스터 부록 H4 홈 지표 진단 명령 실행, 출력 붙이기 | DATA (명령은 MAIN) | 11-17 22:13 (4번 요청, 마지막 11-19 15:00) | 지금 (DS-H 막힘) | 대기 |
 | OA-10 | DIDM 질문 답: (a) novelty 보조 조건을 정식으로? (b) 자체 LLM 기반 모델과 학습 데이터 마지막 날짜 (c) 평가표 판단 2칸(자체 NLP 열의 수집 F·실시간 J = X, 자체 NLP 관련성 = X)이 맞는지 — 세 개 모두 DATA 인계 8절에 있음 | DATA | 11-19 00:09 (11-20 00:23 갱신) | 24h 안 | 대기 |
