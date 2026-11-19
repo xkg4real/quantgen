@@ -160,6 +160,8 @@
 
 넷째 실행 (2026-11-18, 커밋 `a790ce8`): ECOS `"722Y001,M,202401,202610,0101000"` (따옴표) → 기준금리 월별 34개월 저장 (**해결**). OpenDART `DARTUnavailable` (worktree 폴더에 `.env`가 없어 키 없음) → 앱 폴더의 `.env`를 읽는 `--env-file` 추가.
 
+다섯째 실행 (2026-11-19, `--env-file ..\QUANTGEN\.env`): OpenDART 20261117~20261118 전체 공시 목록 9쪽, 819건 저장 (**해결**). 이로써 키 없는/무료 공식 공급원 6곳 (GDELT, ALFRED, SEC EDGAR, Kalshi, ECOS, OpenDART) 모두 소유자 PC에서 수집 확인. 남은 확인: 무료 키 3곳 (Alpha Vantage, Tiingo, CryptoPanic).
+
 2절 표 안에서 메인 분석 (D14 3절)과 다르게 읽힐 수 있는 칸:
 
 | 칸 | 2절 값 (엑셀 메모 그대로) | D14·공개 자료 | 처리 |
