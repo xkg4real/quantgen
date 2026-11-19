@@ -9,7 +9,7 @@
 
 ## 적용 범위와 현재 상태
 
-2026-11-19 D11 Q1~Q3 반영: 운영자 개인 표기 QUANTGEN(운영자 고건), 문의 contact@quantgeneration.com(수신 시험 전).
+2026-11-19 D11 Q1~Q3 반영: 운영자 개인 표기 QUANTGEN(운영자 고건), 문의 contact@quantgeneration.com(2026-11-19 소유자 수신 확인), 주소 공개 제외.
 
 사진의 18번 ‘이메일에 수신거부 링크를 추가하기’에 대응한다. QUANTGEN 운영자가 향후 직접 또는 발송업체를 통해 보내는 광고성 이메일의 동의, 표시, 철회, 발송 제외를 정의한다.
 
@@ -62,7 +62,7 @@
 {{marketing.campaign_body}}
 
 발신자: QUANTGEN(운영자 고건)
-사업장 주소: 서울특별시 성북구 안암로 145
+사업장 주소: {{operator.address}}
 연락처: contact@quantgeneration.com / {{operator.support_phone}}
 
 수신 이유: {{marketing.consent_reason_and_date}}

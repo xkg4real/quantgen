@@ -1948,3 +1948,60 @@ F7의 1에 대한 기록 (판정 아님):
 - 앞으로: 연구 브랜치나 main에 올린 뒤에는 그 커밋의 모든 워크플로 결과를 확인한 다음에 소유자 단계를 안내합니다.
 
 - 이 기록의 앞 절들은 고치지 않았습니다.
+
+## 2026-11-19 (2), Claude Code 채팅: 정책 문서 질문 1~7 답
+
+### 1. 소유자 답 (2026-11-19 14:41:45 KST, 메인 세션 채팅, 원문)
+
+> 정책 문서 답변입니다.
+>
+> 1. 네
+> 2. 네
+> 3. 네
+> 4. 웹사이트 도메인 등록 및 이메일 설정을 Cloudflare, 관리는 AWS를 통해서 진행하고 있습니다. 도움이 됐을까요?
+> 5. 네
+> 6. 비공개로 전환 시 windows 검사를 원격/가상환경에서 수행할 수 있으면 비공개, 아니면 아직까지 공개
+> 7. 네
+
+### 2. 질문 (메인 세션 채팅, 원문)
+
+Claude가 2026-11-19 12:2x KST에 메인 세션 채팅으로 여쭌 목록입니다(소유자가 위 답으로 답한 목록. 2번의 거리 주소는
+답 2에 따라 이 기록에서 `<주소>`로 줄였습니다):
+
+1. 운영자 표기를 "QUANTGEN(운영자 고건)"으로 해도 될까요? (권장: 좋음)
+2. 문서의 주소 "`<주소>`"를 공개 문서에서 뺄까요? (권장: 뺌)
+3. contact@quantgeneration.com이 실제로 메일을 받는지 확인해 보셨나요?
+4. 웹사이트 호스팅은 Cloudflare, AWS Amplify, 둘 다 중 어느 쪽인가요?
+5. 계정 서비스 설명(시드니 보관, 회원 탈퇴 등)은 AWS 계정 풀과 웹 회원 화면이 생긴 뒤 PR-2로 넣을까요? (권장: 동의)
+6. GitHub 비공개 전환 시점 (권장: 지금 비공개로 하고, Windows 검사는 소유자 PC에서)
+7. detail.json 처리 (권장: 보관)
+
+### 3. 반영
+
+반영은 정책 문서 PR(브랜치 `claude/policy-d11-q1q3-20261119`)입니다. 20개 문서는 모두 `review-required`, 공개 준비는
+`BLOCKED` 그대로이고 `requirements`·`known_findings`는 바꾸지 않았습니다. 바꾼 위치의 행 번호는
+`docs/compliance/FACTS.md`의 "운영자 개인 표기·문의 메일·이용연령 — 2026-11-19 소유자 결정(D11 Q1~Q3)" 절에 있습니다.
+
+1. **운영자 표기:** `QUANTGEN(운영자 고건)` 그대로입니다. 바꾼 것은 없습니다.
+2. **주소 공개 제외:** 공개 문서와 프로필에서 주소를 뺐습니다. `docs/compliance/release-profile.json`
+   (`operator.address` null), `01-privacy-policy.md`(9절 "권리행사 경로"를 메일과 `{{privacy.rights_request_url}}`로),
+   `16-business-information.md`(2026-10-31 제공 기록 문장, F16-01 사업장 주소 칸 `{{operator.address}}`),
+   `18-marketing-email.md`(F18-02 사업장 주소 칸 `{{operator.address}}`), `FACTS.md`(주소 행과 D11 절), `README.md`,
+   `RELEASE_GAPS.md` 7행. 01·16·18의 현재 상태 줄에 "주소 공개 제외"를 더했습니다. 주소는 유료 판매 전에 다시 정합니다.
+3. **수신 확인:** 소유자가 contact@quantgeneration.com의 수신을 확인했습니다. 01·02·03·08·10·11·15·16·17·18·20의 현재
+   상태 줄, `FACTS.md`(문의 메일 행과 D11 절), `RELEASE_GAPS.md` 7행, `README.md`의 "수신 시험 전"을 "2026-11-19 소유자
+   수신 확인"으로 바꿨습니다. 16번 C16-03의 나머지 조건과 `requirements`는 확인으로 바꾸지 않았습니다.
+4. **호스팅:** 도메인 등록·이메일 설정은 Cloudflare, 웹사이트 관리는 AWS로 기록했습니다. `release-profile.json`
+   (`deployment.hosting_provider` "AWS", `deployment.note`에 이 답), `FACTS.md`(답 원문을 담은 2026-11-19 호스팅·도메인 행,
+   옛 호스팅 업체 행은 유지), `04-cookie-policy.md`(현재 상태 줄, Cloudflare 문단), `08-third-parties.md`(현재 상태 줄,
+   Cloudflare 행 이름, AWS 행 추가), `16-business-information.md`(현재 상태 줄, 2026-10-31 기록 문단의 호스팅 문장),
+   `RELEASE_GAPS.md` 8행, `README.md`. AWS 제품·리전·계약 법인과 Cloudflare 이용 제품은
+   확인 전이고, 답에 없는 제품(질문의 AWS Amplify 포함)은 적지 않았습니다.
+5. **계정 서비스 설명:** AWS 사용자 풀과 웹 회원 화면이 생긴 뒤 PR-2에서 넣습니다. 이번 PR은 그 값을 넣지 않았습니다.
+6. **GitHub 비공개 전환:** 기록만 했습니다(위 2026-11-19 절 5번의 1항에 대한 답). Claude가 Windows 검사를 원격·가상
+   환경에서 돌리는 방법과 비용을 먼저 보고하고, 소유자가 그것으로 정하기 전까지 저장소는 공개 그대로입니다.
+7. **detail.json:** P-D7의 `detail.json`과 `%LOCALAPPDATA%\quantgen\provider_parity` 폴더는 소유자 PC에 지금 그대로
+   보관합니다. 2026-11-04 판정 "detail.json 처리는 Step 10 뒤에 정함"의 후속과 위 2026-11-19 절 5번의 4항은 이 답으로
+   닫힙니다.
+
+- 이 기록의 앞 절들은 고치지 않았습니다.

@@ -4,7 +4,7 @@
   "scope": "named source/document consistency review; not legal or operational certification",
   "source_state": "HEAD commit identifier plus observed working-tree fingerprints; not a clean-checkout attestation",
   "registry_sha256": "d1a62050d33e6c53ac9027db0eb8661317a4aec7fc7eb7b10488cf709b0b8f0f",
-  "profile_sha256": "47ed54c991bb6a1212b852b47cdd2859379414c64b28fe1eee0efcf250fb8610",
+  "profile_sha256": "87e78beee01217c45e03638e2f46469a809a2d47075d5ed2d38bc79ceccec3ff",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
@@ -307,10 +307,10 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "b19b3bff76ad8d99a95fb5576d54e7d6b8d0f8c0969d8ea3b10645935ea44aed",
+    "docs/compliance/FACTS.md": "d20fb2baf0b373db0cb94706df718135cd146e58416ac94be6ddca491b7c658c",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
-    "docs/compliance/README.md": "27aef4dabf513cbb83d4430d8b1db97c4acc85a25b0ddd0c9498338e6db58ec3",
-    "docs/compliance/RELEASE_GAPS.md": "1f5f123f0ecf2420c1b781da592ed83c19e53d82c51dd4bb6895af42e3e7ca3e",
+    "docs/compliance/README.md": "6786a4a0aa0438cd27e614a5df298aaf956b199bb96e50ef3f637e45679e486c",
+    "docs/compliance/RELEASE_GAPS.md": "bfcbd27b9870aad4255c881844d21fd04b980db2bdb7966295ee2f495ac14702",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/A1_TERMINOLOGY_2026-11-06.md": "c52f3a6e72b2cd0cd04263597a77570545c9b037e50a0c34586c7d4e552b93ff",
     "docs/product/A3_READING_LAYOUT_2026-11-06.md": "b0f6595caae843d4a912fc332adc78882f65f9eb579cd7f97f2d33519821cc64",
@@ -802,164 +802,164 @@
   },
   "reviews": {
     "1": {
-      "document_sha256": "773c7e9685d300f2a1d9ede67d8a02769c0d49de4b001e74d4c481d76678b433",
-      "source_digest": "623141af62b96abd762162768d5a96aacf6a6c2701f34dfae3c228f57a918894",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.586956+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "document_sha256": "316e056ea90165dafa910d384a9ba9b98cd111f592ca03c7b877bcd65d772ac9",
+      "source_digest": "dff13c7da9c75d83da1f6cddea3ceff353e4544c55824da80d0505132a59146f",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.622945+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "2": {
-      "document_sha256": "87a75eeec58a1094a0469e3ace9a6e57703b6ea40fd24f0109398113d343e57a",
-      "source_digest": "623141af62b96abd762162768d5a96aacf6a6c2701f34dfae3c228f57a918894",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.590953+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
+      "source_digest": "dff13c7da9c75d83da1f6cddea3ceff353e4544c55824da80d0505132a59146f",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.625227+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "3": {
-      "document_sha256": "47ffac58a0a67502bc6a235b925f30135013860ed21da52315f074fb306f3b5d",
-      "source_digest": "fc4888cc744e311ee9cfa3ed53e26a40360c05d945e46350d27503a36d8a9213",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.593173+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
+      "source_digest": "c91ea2a3457567bd5d1cc0eb0e5b34977b0348439e035be79a1e7c6160e62751",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.627738+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "4": {
-      "document_sha256": "0a223badbec15c6f94a1b12f21d8dd01bfaff18bc0c029821f9e78b30158b069",
-      "source_digest": "cb21d80cba1bae69017716079543506db08464be1a11ccf5944a09d60b8f5efd",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.595123+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
+      "source_digest": "e5c8cc0c661c51c8954dfbdaf494b2eaed289af57d1729f3197b95856d5b77b3",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.629748+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "12d6fe195e91ad0a70ed39a3284f0b10697dca07dd45a487981da66fc5a42b42",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.601091+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "source_digest": "8fea791dc35d8b992422285cc72a8a0444ad9594c8df94b933f6c9ff709581cf",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.631577+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "784911c7a716aa2ec1203803fe6a83a54a4875fb3f16968232d9bff60933e934",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.603111+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "source_digest": "b2e7c1d50bc7badc876a1d04f0aa2151a625352a656fe1198c78bc164a175a58",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.634012+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "7": {
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
-      "source_digest": "623141af62b96abd762162768d5a96aacf6a6c2701f34dfae3c228f57a918894",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.604872+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "source_digest": "dff13c7da9c75d83da1f6cddea3ceff353e4544c55824da80d0505132a59146f",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.635749+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "8": {
-      "document_sha256": "3a13d39cce253786cef8de604ec46b82a92d18baa236fc3d0313f024d13b49f9",
-      "source_digest": "784911c7a716aa2ec1203803fe6a83a54a4875fb3f16968232d9bff60933e934",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.606716+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "document_sha256": "b1ebf5f8469f355bc6d261789b5ffd402282fea07c83add564ed0dc2dc2fb775",
+      "source_digest": "b2e7c1d50bc7badc876a1d04f0aa2151a625352a656fe1198c78bc164a175a58",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.637654+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "0ddb03cab18f390dcfd0b7e355035cc5bd8678244a5810e649a4d84c6c3066d1",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.612710+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "source_digest": "063d6ae26b09e462e28fac8a00b214d24dba94477cf52a0212dd4dac405da6c0",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.639950+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "10": {
-      "document_sha256": "1a5290b7030eadfc1477b97f40c8b04b7c903c31e85bdb276d77b0ab62be9759",
-      "source_digest": "9e7192b4640deed9cee35e72eadc3f221f90216741e70b60d1fad51067f2a49e",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.618321+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
+      "source_digest": "272ffdb9b4105b2fd766407259f2b9e391d5970b9a99343effa56d9206b3caea",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.641793+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "11": {
-      "document_sha256": "ce1d45fad73820fc818d84f86b3ab49ab7803390a2670e06aa10d4f1447bd97d",
-      "source_digest": "fd3ea63af049ef32aca2fb7c6a11aecd92ed71612b457dd122f41d25c1bd5ffe",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.620332+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
+      "source_digest": "20ad4e868bbbde401048b7b946ff17f55638e74f6f91d9bb17b130a379f1db71",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.643522+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "aba178b5fa65f08e31984e9a4046743f3b2f5e96e1bfc62c6efc7867336b404b",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.622330+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "source_digest": "c51e5d2b37f39710cbf5cc99edfc154b2dc0cdf87d0829fbd7b6144d2b8dca4c",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.645239+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "0ddb03cab18f390dcfd0b7e355035cc5bd8678244a5810e649a4d84c6c3066d1",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.624569+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "source_digest": "063d6ae26b09e462e28fac8a00b214d24dba94477cf52a0212dd4dac405da6c0",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.647502+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "0ddb03cab18f390dcfd0b7e355035cc5bd8678244a5810e649a4d84c6c3066d1",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.626652+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "source_digest": "063d6ae26b09e462e28fac8a00b214d24dba94477cf52a0212dd4dac405da6c0",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.649267+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "15": {
-      "document_sha256": "c11d59b7e7a5578c2b6574682ac3ecdbde324fb4ca1aa5e99e97f71fdf53f10a",
-      "source_digest": "0ddb03cab18f390dcfd0b7e355035cc5bd8678244a5810e649a4d84c6c3066d1",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.628891+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
+      "source_digest": "063d6ae26b09e462e28fac8a00b214d24dba94477cf52a0212dd4dac405da6c0",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.650975+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "16": {
-      "document_sha256": "fd9db4d1b82ed9c8953553efbe55e37f13b53b38ef5ec2aa1df704a542c31e20",
-      "source_digest": "fcb4852a1b6fa9bf10981d4210786e5d60bf64456cbc44800d748b1edb7afdbf",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.631139+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
+      "source_digest": "d0607cba1b038bce86204257003038e49f5ba9bf3c2b30e8d8abdf1ee6a06e19",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.653393+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "17": {
-      "document_sha256": "4bf4b7e2b367d1f053f803279ad624243d493bb342333b4cc9e05cf5a43538fb",
-      "source_digest": "784911c7a716aa2ec1203803fe6a83a54a4875fb3f16968232d9bff60933e934",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.632966+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
+      "source_digest": "b2e7c1d50bc7badc876a1d04f0aa2151a625352a656fe1198c78bc164a175a58",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.655291+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "18": {
-      "document_sha256": "2b7c3520f9b3239bbaffd9cb371494fd2a4e3f51ea6b9ad611159c258eb32b31",
-      "source_digest": "623141af62b96abd762162768d5a96aacf6a6c2701f34dfae3c228f57a918894",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.636910+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
+      "source_digest": "dff13c7da9c75d83da1f6cddea3ceff353e4544c55824da80d0505132a59146f",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.657660+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "acd6ce6a9397e6067909e153ea519ac27141cf4aff597b84206267c2158636d4",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.639989+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "source_digest": "1be37127892bb304b829d35f4f090a79434b7620f54abc0966064a8aefc0c53c",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.659450+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     },
     "20": {
-      "document_sha256": "ee577dc10c3023c45893b9da0a1e83c307218b9aa5f3d13dfb2b1c57ca23aa12",
-      "source_digest": "623141af62b96abd762162768d5a96aacf6a6c2701f34dfae3c228f57a918894",
-      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3)",
-      "review_note": "Merge of main ca5da08 (KEY-2/b) into policy PR-1; no document text changed by the merge itself; publication stays blocked.",
-      "reviewed_at": "2026-11-19T05:43:08.642258+00:00",
-      "source_commit": "413cbe1b0501127e1b7a0773781cbb22ce7f2e46"
+      "document_sha256": "27989f5f7b39610afbcb2f3c464db2f60e09dd4091bf2edfe9a96b18dd3f8c8e",
+      "source_digest": "dff13c7da9c75d83da1f6cddea3ceff353e4544c55824da80d0505132a59146f",
+      "reviewed_by": "Claude policy PR-1 review (D11 Q1-Q3, owner answers 2026-11-19)",
+      "review_note": "Owner answers of 2026-11-19 applied: operator display kept, street address removed from public documents and the profile, mailbox receive test confirmed, hosting facts (domain and email Cloudflare, website management AWS) recorded; account-service values left for PR-2; publication stays blocked.",
+      "reviewed_at": "2026-11-19T05:56:34.661336+00:00",
+      "source_commit": "6b7d02a2e26ce509fac832cfa0e16eec8b58965c"
     }
   }
 }

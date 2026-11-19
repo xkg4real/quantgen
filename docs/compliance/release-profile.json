@@ -5,7 +5,7 @@
   "operator": {
     "legal_name": "고건",
     "representative": "고건",
-    "address": "서울특별시 성북구 안암로 145",
+    "address": null,
     "business_registration": null,
     "ecommerce_registration": null,
     "privacy_contact": "contact@quantgeneration.com",
@@ -222,11 +222,11 @@
   },
   "deployment": {
     "service_country": "대한민국",
-    "hosting_provider": "Cloudflare",
+    "hosting_provider": "AWS",
     "hosting_product": null,
     "contracting_entity": null,
     "personal_data_processing_countries": null,
-    "note": "운영 국가와 실제 개인정보 보관·접근 국가는 다르며 계약과 인프라로 확인해야 함"
+    "note": "운영 국가와 실제 개인정보 보관·접근 국가는 다르며 계약과 인프라로 확인해야 함 / 2026-11-19 소유자 답: 도메인 등록·이메일 설정은 Cloudflare, 웹사이트 관리는 AWS. AWS 제품·리전·계약 법인은 확인 전"
   },
   "pricing_source": {
     "reference": "2026-10-31 사용자가 이 작업에서 직접 제공한 요금 설명",
