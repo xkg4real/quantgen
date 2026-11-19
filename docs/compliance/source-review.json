@@ -602,7 +602,7 @@
     "tests/gateway_acceptance.py": "fb4368a664571c7c9b854c8edb9e1d428e6258f7278c952b1e5d55c6eb612f21",
     "tests/gateway_boundary_acceptance.py": "d47181a58b01fcf8aa6475c780bf4f5355311f5c481341653680b7c34af33c2e",
     "tests/gateway_remote_acceptance.py": "3dadd11472f0d5e607dad06d4fd799f58d396552a6aa9aeb90847f612c86fcc6",
-    "tests/gateway_same_answer_acceptance.py": "5525be90ee17544bb1b44b0a8e181146e752adec540834d03167d3b56762e1ae",
+    "tests/gateway_same_answer_acceptance.py": "b42234063596f63210e2949ebde41d9fb7e3d4dfc0799f624ad45324ece3e01f",
     "tests/glossary_search_acceptance.py": "058922190b05fc585dab3462848b40ea0444a43b4b5e96fdb512cd8ccfc0e64e",
     "tests/golden_tools.py": "24154d79aea43bc91b7c26c33c6b400cd9202cdb4915680a81b4f7cf0fa928ef",
     "tests/history_best_source_acceptance.py": "cda3221001d11599c0b9dab6f71f59a20b7ac762d43adcd6c0b5f2fbce19310f",
@@ -816,161 +816,161 @@
       "document_sha256": "316e056ea90165dafa910d384a9ba9b98cd111f592ca03c7b877bcd65d772ac9",
       "source_digest": "7a2fd95fd76b1216e58c1636dade3d6fdd725b116ddb302c97b34c2dc403dc01",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.774266+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.831448+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
       "source_digest": "7a2fd95fd76b1216e58c1636dade3d6fdd725b116ddb302c97b34c2dc403dc01",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.777029+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.833526+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
       "source_digest": "9145140d4fdfc7c2fcb9f1198d56ff93cfbec725f7cc0a75a29640f479924bac",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.779552+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.835164+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
       "source_digest": "3a67aab334e04ec69a70ce3751be9fe16d5739eff2c6b1c9a449fd537b644f99",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.781479+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.838379+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
       "source_digest": "d0ee3b2414a26d70a9bf230d135aed38b3d8208d02b24bcc15a846927f4050ba",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.783260+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.839836+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
       "source_digest": "1686539640343490d766b926045b112af3937a66040a99b2487a12ed0cedb680",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.785048+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.841291+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "7": {
       "document_sha256": "b88a2fa5c10687ec27229b3dcf8fadc9cc434d81c1528c3915f04a011ba02b33",
       "source_digest": "7a2fd95fd76b1216e58c1636dade3d6fdd725b116ddb302c97b34c2dc403dc01",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.787210+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.842757+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "8": {
       "document_sha256": "b1ebf5f8469f355bc6d261789b5ffd402282fea07c83add564ed0dc2dc2fb775",
       "source_digest": "1686539640343490d766b926045b112af3937a66040a99b2487a12ed0cedb680",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.788871+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.844234+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
       "source_digest": "bcbc2370114bb66248350b777885679a179af8dc2a0e883fcd13857964c6279a",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.790587+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.845840+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
       "source_digest": "63d3d05573be733c9320651a5e5249b5da83403fa112b044510aee6b0f747586",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.792130+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.847337+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
       "source_digest": "0b7d576969b485849ee2a8e8f5c3381e65991fc9920f5f667440847eb9b74b50",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.793742+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.848877+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "23b7bb6aae5b4a9eb517eef8583b2e73d21fedcfe35ddf95405e63804546018d",
+      "source_digest": "b6bd968d9eab7bcb688ce7b40498ad24389121e632ae55fb672424e425848270",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.795765+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.850851+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
       "source_digest": "bcbc2370114bb66248350b777885679a179af8dc2a0e883fcd13857964c6279a",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.798097+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.852358+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
       "source_digest": "bcbc2370114bb66248350b777885679a179af8dc2a0e883fcd13857964c6279a",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.799797+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.853968+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
       "source_digest": "bcbc2370114bb66248350b777885679a179af8dc2a0e883fcd13857964c6279a",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.801567+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.855509+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
       "source_digest": "a926d2cc9705f627c43094f697c94970c826f1b12d0e0494ccb094787637f62a",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.803238+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.857119+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
       "source_digest": "1686539640343490d766b926045b112af3937a66040a99b2487a12ed0cedb680",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.805040+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.859182+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
       "source_digest": "7a2fd95fd76b1216e58c1636dade3d6fdd725b116ddb302c97b34c2dc403dc01",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.806586+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.860734+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
       "source_digest": "b622bb45e5d44d67aa4a82ce5cfed57ebdc44d6e80c9156ad0eee5242aae8a60",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.808387+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.862158+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     },
     "20": {
       "document_sha256": "cc908c5e77b1f70a94e883c933ba7aa4ba24f0a384d4b156b9de7f1a89396d41",
       "source_digest": "7a2fd95fd76b1216e58c1636dade3d6fdd725b116ddb302c97b34c2dc403dc01",
       "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
-      "review_note": "KEY-4 review fixes (PR #133): feed.py restored to the S4-frozen bytes, main.py builds the feed FMP client through the gateway, blocked routes (off and company) refused by core entry points, FICC batches degrade per id, no new data collection, provider or endpoint",
-      "reviewed_at": "2026-11-19T13:46:13.810626+00:00",
-      "source_commit": "3f0cc5d30fedbe091df015925ac3314765d8f12a"
+      "review_note": "KEY-4 same-answer test: float tolerance and library-dependent statistics left out; test-only change, no data collection, provider or endpoint change",
+      "reviewed_at": "2026-11-19T13:52:27.863683+00:00",
+      "source_commit": "574966a94feaa2b2d46d9f02add8069e231fde0c"
     }
   }
 }
