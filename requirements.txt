@@ -7,6 +7,8 @@ Babel>=2.17,<3
 requests>=2.31
 websockets>=15,<17
 python-dotenv>=1.0
+# OS credential store for API keys (KEY-2, D7-G): Windows Credential Manager / macOS Keychain
+keyring>=25.6,<26
 tzdata>=2024.1 ; sys_platform == "win32"
 # QUANTGEN quant core
 numpy>=1.26

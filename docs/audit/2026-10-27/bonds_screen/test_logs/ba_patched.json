@@ -1,0 +1,850 @@
+{
+ "label": "patched",
+ "t21": {
+  "r1 c5.5 y4.5": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.",
+    "Price": "107.982",
+    "Yield": "4.500%",
+    "Macaulay": "7.92y",
+    "Modified": "7.74",
+    "Convexity": "73.0",
+    "DV01": "836",
+    "z-spread": "-317.8bp",
+    "Carry (3m)": "-1.177",
+    "Roll-down": "-0.346",
+    "Carry + roll": "-1.524",
+    "Breakeven": "-18.2bp"
+   },
+   "table": [],
+   "notes": [
+    "Synthetic data: Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used."
+   ],
+   "chips": [
+    "curve: SYNTHETIC (simulated, dated 2026-10-27)"
+   ],
+   "seconds": 0.2278
+  },
+  "r2 c4.5 y5.5": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.",
+    "Price": "92.386",
+    "Yield": "5.500%",
+    "Macaulay": "8.07y",
+    "Modified": "7.86",
+    "Convexity": "74.4",
+    "DV01": "726",
+    "z-spread": "-218.9bp",
+    "Carry (3m)": "-1.059",
+    "Roll-down": "-0.021",
+    "Carry + roll": "-1.079",
+    "Breakeven": "-14.9bp"
+   },
+   "table": [],
+   "notes": [
+    "Synthetic data: Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used."
+   ],
+   "chips": [
+    "curve: SYNTHETIC (simulated, dated 2026-10-27)"
+   ],
+   "seconds": 0.206
+  },
+  "r3 c5.5 y5.5": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.",
+    "Price": "100.000",
+    "Yield": "5.500%",
+    "Macaulay": "7.82y",
+    "Modified": "7.61",
+    "Convexity": "71.2",
+    "DV01": "761",
+    "z-spread": "-220.8bp",
+    "Carry (3m)": "-0.989",
+    "Roll-down": "-0.172",
+    "Carry + roll": "-1.160",
+    "Breakeven": "-15.2bp"
+   },
+   "table": [],
+   "notes": [
+    "Synthetic data: Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used."
+   ],
+   "chips": [
+    "curve: SYNTHETIC (simulated, dated 2026-10-27)"
+   ],
+   "seconds": 0.2118
+  },
+  "r4 c5.5 P95": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.",
+    "Price": "95.000",
+    "Yield": "6.178%",
+    "Macaulay": "7.76y",
+    "Modified": "7.52",
+    "Convexity": "69.9",
+    "DV01": "715",
+    "z-spread": "-155.4bp",
+    "Carry (3m)": "-0.870",
+    "Roll-down": "-0.071",
+    "Carry + roll": "-0.941",
+    "Breakeven": "-13.2bp"
+   },
+   "table": [],
+   "notes": [
+    "Synthetic data: Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used."
+   ],
+   "chips": [
+    "curve: SYNTHETIC (simulated, dated 2026-10-27)"
+   ],
+   "seconds": 0.2145
+  },
+  "r5 c5.5 P105": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.",
+    "Price": "105.000",
+    "Yield": "4.863%",
+    "Macaulay": "7.88y",
+    "Modified": "7.70",
+    "Convexity": "72.3",
+    "DV01": "808",
+    "z-spread": "-282.5bp",
+    "Carry (3m)": "-1.107",
+    "Roll-down": "-0.279",
+    "Carry + roll": "-1.386",
+    "Breakeven": "-17.2bp"
+   },
+   "table": [],
+   "notes": [
+    "Synthetic data: Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used."
+   ],
+   "chips": [
+    "curve: SYNTHETIC (simulated, dated 2026-10-27)"
+   ],
+   "seconds": 0.2186
+  },
+  "owner literal: P100 + y4.5": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge."
+   },
+   "table": [],
+   "notes": [
+    "Fill exactly one of Price (per 100) and Yield %: both are filled. Clear one; the blank one is computed from the other."
+   ],
+   "chips": [],
+   "seconds": 0.0002
+  }
+ },
+ "t23_synthetic": {
+  "A c5.5 y4.5": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.",
+    "Price": "107.982",
+    "Yield": "4.500%",
+    "Macaulay": "7.92y",
+    "Modified": "7.74",
+    "Convexity": "73.0",
+    "DV01": "836",
+    "z-spread": "-317.8bp",
+    "Worst": "+100bp parallel: -82,220",
+    "Best": "-100bp parallel: +90,112"
+   },
+   "table": [
+    [
+     "+25bp parallel",
+     "+25.0 at every tenor",
+     "105.855",
+     "-21,266",
+     "-1.97%"
+    ],
+    [
+     "-25bp parallel",
+     "-25.0 at every tenor",
+     "110.158",
+     "+21,759",
+     "+2.02%"
+    ],
+    [
+     "+100bp parallel",
+     "+100.0 at every tenor",
+     "99.760",
+     "-82,220",
+     "-7.61%"
+    ],
+    [
+     "-100bp parallel",
+     "-100.0 at every tenor",
+     "116.993",
+     "+90,112",
+     "+8.35%"
+    ],
+    [
+     "bear steepener",
+     "3m +0.0 / 1y +0.0 / 2y +0.0 / 3y +1.8 / 5y +5.4 / 7y +8.9 / 10y +14.3 / 20y +32.1 / 30y +50.0",
+     "106.882",
+     "-10,997",
+     "-1.02%"
+    ],
+    [
+     "bull steepener",
+     "3m -50.0 / 1y -48.7 / 2y -47.1 / 3y -45.4 / 5y -42.0 / 7y -38.7 / 10y -33.6 / 20y -16.8 / 30y +0.0",
+     "111.037",
+     "+30,550",
+     "+2.83%"
+    ],
+    [
+     "bear flattener",
+     "3m +50.0 / 1y +48.7 / 2y +47.1 / 3y +45.4 / 5y +42.0 / 7y +38.7 / 10y +33.6 / 20y +16.8 / 30y +0.0",
+     "105.020",
+     "-29,619",
+     "-2.74%"
+    ],
+    [
+     "bull flattener",
+     "3m +0.0 / 1y +0.0 / 2y +0.0 / 3y -1.8 / 5y -5.4 / 7y -8.9 / 10y -14.3 / 20y -32.1 / 30y -50.0",
+     "109.096",
+     "+11,146",
+     "+1.03%"
+    ],
+    [
+     "2y-5y-10y fly",
+     "3m +0.0 / 1y +0.0 / 2y -12.5 / 3y +0.0 / 5y +25.0 / 7y +0.0 / 10y -12.5 / 20y +0.0 / 30y +0.0",
+     "108.785",
+     "+8,033",
+     "+0.74%"
+    ]
+   ],
+   "notes": [
+    "Synthetic data: Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used."
+   ],
+   "chips": [
+    "curve: SYNTHETIC (simulated, dated 2026-10-27)"
+   ],
+   "seconds": 0.1438
+  },
+  "B c5.5 y5.5": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.",
+    "Price": "100.000",
+    "Yield": "5.500%",
+    "Macaulay": "7.82y",
+    "Modified": "7.61",
+    "Convexity": "71.2",
+    "DV01": "761",
+    "z-spread": "-220.8bp",
+    "Worst": "+100bp parallel: -75,256",
+    "Best": "-100bp parallel: +82,450"
+   },
+   "table": [
+    [
+     "+25bp parallel",
+     "+25.0 at every tenor",
+     "98.054",
+     "-19,462",
+     "-1.95%"
+    ],
+    [
+     "-25bp parallel",
+     "-25.0 at every tenor",
+     "101.991",
+     "+19,911",
+     "+1.99%"
+    ],
+    [
+     "+100bp parallel",
+     "+100.0 at every tenor",
+     "92.474",
+     "-75,256",
+     "-7.53%"
+    ],
+    [
+     "-100bp parallel",
+     "-100.0 at every tenor",
+     "108.245",
+     "+82,450",
+     "+8.24%"
+    ],
+    [
+     "bear steepener",
+     "3m +0.0 / 1y +0.0 / 2y +0.0 / 3y +1.8 / 5y +5.4 / 7y +8.9 / 10y +14.3 / 20y +32.1 / 30y +50.0",
+     "98.998",
+     "-10,015",
+     "-1.00%"
+    ],
+    [
+     "bull steepener",
+     "3m -50.0 / 1y -48.7 / 2y -47.1 / 3y -45.4 / 5y -42.0 / 7y -38.7 / 10y -33.6 / 20y -16.8 / 30y +0.0",
+     "102.800",
+     "+28,004",
+     "+2.80%"
+    ],
+    [
+     "bear flattener",
+     "3m +50.0 / 1y +48.7 / 2y +47.1 / 3y +45.4 / 5y +42.0 / 7y +38.7 / 10y +33.6 / 20y +16.8 / 30y +0.0",
+     "97.285",
+     "-27,153",
+     "-2.72%"
+    ],
+    [
+     "bull flattener",
+     "3m +0.0 / 1y +0.0 / 2y +0.0 / 3y -1.8 / 5y -5.4 / 7y -8.9 / 10y -14.3 / 20y -32.1 / 30y -50.0",
+     "101.015",
+     "+10,150",
+     "+1.02%"
+    ],
+    [
+     "2y-5y-10y fly",
+     "3m +0.0 / 1y +0.0 / 2y -12.5 / 3y +0.0 / 5y +25.0 / 7y +0.0 / 10y -12.5 / 20y +0.0 / 30y +0.0",
+     "100.726",
+     "+7,258",
+     "+0.73%"
+    ]
+   ],
+   "notes": [
+    "Synthetic data: Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used."
+   ],
+   "chips": [
+    "curve: SYNTHETIC (simulated, dated 2026-10-27)"
+   ],
+   "seconds": 0.1421
+  }
+ },
+ "t23_core": {
+  "A hypothetical": {
+   "+25bp parallel": [
+    105.871676777,
+    -21101.794082
+   ],
+   "-25bp parallel": [
+    110.140772091,
+    21589.159057
+   ],
+   "+100bp parallel": [
+    99.822203117,
+    -81596.530677
+   ],
+   "-100bp parallel": [
+    116.921858949,
+    89400.027645
+   ],
+   "bear steepener": [
+    106.895435914,
+    -10864.202713
+   ],
+   "bull steepener": [
+    111.01771518,
+    30358.589955
+   ],
+   "bear flattener": [
+    105.038267745,
+    -29435.884403
+   ],
+   "bull flattener": [
+    109.082930137,
+    11010.739517
+   ],
+   "2y-5y-10y fly": [
+    108.76782586,
+    7859.696751
+   ]
+  },
+  "A flat@own": {
+   "+25bp parallel": [
+    105.868319833,
+    -21135.363515
+   ],
+   "-25bp parallel": [
+    110.144241813,
+    21623.856278
+   ],
+   "+100bp parallel": [
+    99.809421842,
+    -81724.343433
+   ],
+   "-100bp parallel": [
+    116.936446299,
+    89545.901139
+   ],
+   "bear steepener": [
+    106.892742741,
+    -10891.134438
+   ],
+   "bull steepener": [
+    111.021616115,
+    30397.599302
+   ],
+   "bear flattener": [
+    105.034548272,
+    -29473.079129
+   ],
+   "bull flattener": [
+    109.085666098,
+    11038.099126
+   ],
+   "2y-5y-10y fly": [
+    108.771243622,
+    7893.874375
+   ]
+  },
+  "B hypothetical": {
+   "+25bp parallel": [
+    98.069552552,
+    -19304.474477
+   ],
+   "-25bp parallel": [
+    101.974846483,
+    19748.464825
+   ],
+   "+100bp parallel": [
+    92.534278636,
+    -74657.213642
+   ],
+   "-100bp parallel": [
+    108.176619926,
+    81766.199264
+   ],
+   "bear steepener": [
+    99.011190464,
+    -9888.095356
+   ],
+   "bull steepener": [
+    102.781904759,
+    27819.047591
+   ],
+   "bear flattener": [
+    97.30230284,
+    -26976.9716
+   ],
+   "bull flattener": [
+    101.002118942,
+    10021.189425
+   ],
+   "2y-5y-10y fly": [
+    100.709300438,
+    7093.004377
+   ]
+  },
+  "B flat@own": {
+   "+25bp parallel": [
+    98.06632656,
+    -19336.734402
+   ],
+   "-25bp parallel": [
+    101.97818053,
+    19781.805302
+   ],
+   "+100bp parallel": [
+    92.521994139,
+    -74780.058613
+   ],
+   "-100bp parallel": [
+    108.190634848,
+    81906.348481
+   ],
+   "bear steepener": [
+    99.008610984,
+    -9913.890156
+   ],
+   "bull steepener": [
+    102.785659379,
+    27856.593794
+   ],
+   "bear flattener": [
+    97.298722468,
+    -27012.775319
+   ],
+   "bull flattener": [
+    101.004739278,
+    10047.392783
+   ],
+   "2y-5y-10y fly": [
+    100.712549644,
+    7125.496435
+   ]
+  }
+ },
+ "partial_30y": {
+  "+25bp parallel": -40547.94,
+  "-25bp parallel": 43001.25,
+  "+100bp parallel": -148984.65,
+  "-100bp parallel": 188463.09,
+  "bear steepener": -61437.59,
+  "bull steepener": 17393.18,
+  "bear flattener": -16911.78,
+  "bull flattener": 69496.02,
+  "2y-5y-10y fly": 1333.73
+ },
+ "t24": {
+  "default: c4.5 y4.5 CTD65 CF0.8": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.",
+    "Price": "100.000",
+    "Yield": "4.500%",
+    "Macaulay": "8.16y",
+    "Modified": "7.98",
+    "Convexity": "76.2",
+    "DV01": "798",
+    "z-spread": "-315.9bp",
+    "Position DV01 (calculator)": "798.19",
+    "CTD DV01 / contract": "65.00",
+    "Conversion factor": "0.8000",
+    "Futures DV01": "81.25",
+    "Contracts to sell": "9.82",
+    "Rounded": "10",
+    "Net DV01 after hedge": "-14.31"
+   },
+   "table": [],
+   "notes": [
+    "Synthetic data: Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used.",
+    "Position DV01 (calculator)",
+    "CTD DV01 / contract",
+    "Conversion factor",
+    "contracts = position DV01 x CF / CTD DV01 = 798.19 x 0.8000 / 65.00 = 9.82: sell 10. Net DV01 after the hedge is -14.31 per bp (over-hedged). A DV01 approximation: futures DV01 = CTD DV01 / CF, with CTD DV01 per contract face; CTD and CF are your inputs, not market data; CTD switches, basis, delivery options, invoice price and yield beta are not modelled."
+   ],
+   "chips": [
+    "curve: SYNTHETIC (simulated, dated 2026-10-27)"
+   ],
+   "seconds": 0.0127
+  },
+  "position 798 typed": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.",
+    "Price": "100.000",
+    "Yield": "4.500%",
+    "Macaulay": "8.16y",
+    "Modified": "7.98",
+    "Convexity": "76.2",
+    "DV01": "798",
+    "z-spread": "-315.9bp",
+    "Position DV01 (override)": "798.00",
+    "CTD DV01 / contract": "65.00",
+    "Conversion factor": "0.8000",
+    "Futures DV01": "81.25",
+    "Contracts to sell": "9.82",
+    "Rounded": "10",
+    "Net DV01 after hedge": "-14.50"
+   },
+   "table": [],
+   "notes": [
+    "Synthetic data: Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used.",
+    "Position DV01 (override)",
+    "CTD DV01 / contract",
+    "Conversion factor",
+    "contracts = position DV01 x CF / CTD DV01 = 798.00 x 0.8000 / 65.00 = 9.82: sell 10. Net DV01 after the hedge is -14.50 per bp (over-hedged). A DV01 approximation: futures DV01 = CTD DV01 / CF, with CTD DV01 per contract face; CTD and CF are your inputs, not market data; CTD switches, basis, delivery options, invoice price and yield beta are not modelled."
+   ],
+   "chips": [
+    "curve: SYNTHETIC (simulated, dated 2026-10-27)"
+   ],
+   "seconds": 0.0128
+  }
+ },
+ "edges": {
+  "maturity 0.25 c5.5 y4.5": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.",
+    "Price": "101.613",
+    "Yield": "4.500%",
+    "Macaulay": "0.25y",
+    "Modified": "0.24",
+    "Convexity": "0.2",
+    "DV01": "24.84",
+    "z-spread": "-500.5bp",
+    "Carry (3m)": "-1.027",
+    "Roll-down": "-0.238",
+    "Carry + roll": "-1.265",
+    "Breakeven": "n/a"
+   },
+   "table": [],
+   "notes": [
+    "Synthetic data: Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used."
+   ],
+   "chips": [
+    "curve: SYNTHETIC (simulated, dated 2026-10-27)"
+   ],
+   "seconds": 0.2132
+  },
+  "maturity 0.1 c4.5 y4.5": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.",
+    "Price": "101.796",
+    "Yield": "4.500%",
+    "Macaulay": "0.10y",
+    "Modified": "0.10",
+    "Convexity": "0.1",
+    "DV01": "9.96",
+    "z-spread": "-507.4bp",
+    "Carry (36d)": "-0.520",
+    "Roll-down": "+0.004",
+    "Carry + roll": "-0.516",
+    "Breakeven": "n/a"
+   },
+   "table": [],
+   "notes": [
+    "Synthetic data: Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used."
+   ],
+   "chips": [
+    "curve: SYNTHETIC (simulated, dated 2026-10-27)"
+   ],
+   "seconds": 0.2097
+  },
+  "maturity 1e-10": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.",
+    "Price": "102.250",
+    "Yield": "4.500%",
+    "Macaulay": "0.00y",
+    "Modified": "0.00",
+    "Convexity": "0.0",
+    "DV01": "0.00",
+    "z-spread": "-509.8bp",
+    "Carry (0m)": "-0.000",
+    "Roll-down": "+0.000",
+    "Carry + roll": "-0.000",
+    "Breakeven": "n/a"
+   },
+   "table": [],
+   "notes": [
+    "Synthetic data: Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used."
+   ],
+   "chips": [
+    "curve: SYNTHETIC (simulated, dated 2026-10-27)"
+   ],
+   "seconds": 0.2152
+  },
+  "maturity 1e5": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge."
+   },
+   "table": [],
+   "notes": [
+    "Maturity (years): must be > 0 and <= 100, got 1e5."
+   ],
+   "chips": [],
+   "seconds": 0.0002
+  },
+  "yield '4,5'": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge."
+   },
+   "table": [],
+   "notes": [
+    "Yield %: '4,5' is not a number."
+   ],
+   "chips": [],
+   "seconds": 0.0002
+  },
+  "yield '-0'": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.",
+    "Price": "145.000",
+    "Yield": "0.000%",
+    "Macaulay": "8.53y",
+    "Modified": "8.53",
+    "Convexity": "84.4",
+    "DV01": "1,236",
+    "z-spread": "-758.7bp",
+    "Carry (3m)": "-2.302",
+    "Roll-down": "-1.397",
+    "Carry + roll": "-3.699",
+    "Breakeven": "-29.9bp"
+   },
+   "table": [],
+   "notes": [
+    "Synthetic data: Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used."
+   ],
+   "chips": [
+    "curve: SYNTHETIC (simulated, dated 2026-10-27)"
+   ],
+   "seconds": 0.2066
+  },
+  "coupon blank": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge."
+   },
+   "table": [],
+   "notes": [
+    "Coupon %: required."
+   ],
+   "chips": [],
+   "seconds": 0.0001
+  },
+  "both blank": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge."
+   },
+   "table": [],
+   "notes": [
+    "Fill exactly one of Price (per 100) and Yield %: both are blank."
+   ],
+   "chips": [],
+   "seconds": 0.0002
+  },
+  "hedge CF blank": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge."
+   },
+   "table": [],
+   "notes": [
+    "Conversion factor: required."
+   ],
+   "chips": [],
+   "seconds": 0.0001
+  },
+  "hedge short -798.19": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.",
+    "Price": "100.000",
+    "Yield": "4.500%",
+    "Macaulay": "8.16y",
+    "Modified": "7.98",
+    "Convexity": "76.2",
+    "DV01": "798",
+    "z-spread": "-315.9bp",
+    "Position DV01 (override)": "-798.19",
+    "CTD DV01 / contract": "65.00",
+    "Conversion factor": "0.8000",
+    "Futures DV01": "81.25",
+    "Contracts to buy": "9.82",
+    "Rounded": "10",
+    "Net DV01 after hedge": "+14.31"
+   },
+   "table": [],
+   "notes": [
+    "Synthetic data: Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used.",
+    "Position DV01 (override)",
+    "CTD DV01 / contract",
+    "Conversion factor",
+    "contracts = position DV01 x CF / CTD DV01 = -798.19 x 0.8000 / 65.00 = -9.82: buy 10. Net DV01 after the hedge is +14.31 per bp (over-hedged). A DV01 approximation: futures DV01 = CTD DV01 / CF, with CTD DV01 per contract face; CTD and CF are your inputs, not market data; CTD switches, basis, delivery options, invoice price and yield beta are not modelled.",
+    "Position DV01 -798.19 is your override; this bond's calculator DV01 is 798.19. The hedge is sized on the override."
+   ],
+   "chips": [
+    "curve: SYNTHETIC (simulated, dated 2026-10-27)"
+   ],
+   "seconds": 0.0128
+  },
+  "hedge 682.5 CF1 (exact .5)": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.",
+    "Price": "100.000",
+    "Yield": "4.500%",
+    "Macaulay": "8.16y",
+    "Modified": "7.98",
+    "Convexity": "76.2",
+    "DV01": "798",
+    "z-spread": "-315.9bp",
+    "Position DV01 (override)": "682.50",
+    "CTD DV01 / contract": "65.00",
+    "Conversion factor": "1.0000",
+    "Futures DV01": "65.00",
+    "Contracts to sell": "10.50",
+    "Rounded": "11",
+    "Net DV01 after hedge": "-32.50"
+   },
+   "table": [],
+   "notes": [
+    "Synthetic data: Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used.",
+    "Position DV01 (override)",
+    "CTD DV01 / contract",
+    "Conversion factor",
+    "contracts = position DV01 x CF / CTD DV01 = 682.50 x 1.0000 / 65.00 = 10.50: sell 11. Net DV01 after the hedge is -32.50 per bp (over-hedged). A DV01 approximation: futures DV01 = CTD DV01 / CF, with CTD DV01 per contract face; CTD and CF are your inputs, not market data; CTD switches, basis, delivery options, invoice price and yield beta are not modelled.",
+    "Position DV01 682.50 is your override; this bond's calculator DV01 is 798.19. The hedge is sized on the override."
+   ],
+   "chips": [
+    "curve: SYNTHETIC (simulated, dated 2026-10-27)"
+   ],
+   "seconds": 0.0123
+  },
+  "hedge CTD 0.065": {
+   "stats": {
+    "Bonds": "Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.",
+    "Price": "100.000",
+    "Yield": "4.500%",
+    "Macaulay": "8.16y",
+    "Modified": "7.98",
+    "Convexity": "76.2",
+    "DV01": "798",
+    "z-spread": "-315.9bp",
+    "Position DV01 (calculator)": "798.19",
+    "CTD DV01 / contract": "0.065",
+    "Conversion factor": "0.8000",
+    "Futures DV01": "0.08125",
+    "Contracts to sell": "9,823.82",
+    "Rounded": "9,824",
+    "Net DV01 after hedge": "-0.01"
+   },
+   "table": [],
+   "notes": [
+    "Synthetic data: Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used.",
+    "Position DV01 (calculator)",
+    "CTD DV01 / contract",
+    "Conversion factor",
+    "contracts = position DV01 x CF / CTD DV01 = 798.19 x 0.8000 / 0.065 = 9,823.82: sell 9,824. Net DV01 after the hedge is -0.01 per bp (over-hedged). A DV01 approximation: futures DV01 = CTD DV01 / CF, with CTD DV01 per contract face; CTD and CF are your inputs, not market data; CTD switches, basis, delivery options, invoice price and yield beta are not modelled.",
+    "Check the units: futures DV01 0.08125 per contract and CF 0.8 look unusual. A rough guide, not exchange data: a CF outside 0.1-2 or a futures DV01 outside 5-1000 per contract usually means a per-100 input instead of one contract's face; CTD DV01 is per bp for one contract's face."
+   ],
+   "chips": [
+    "curve: SYNTHETIC (simulated, dated 2026-10-27)"
+   ],
+   "seconds": 0.012
+  }
+ },
+ "timing_synthetic": {
+  "calc": {
+   "wall_median": 0.2203,
+   "wall_all": [
+    0.3011,
+    0.2186,
+    0.2203,
+    0.2172,
+    0.2209
+   ],
+   "data_median": 0.0046,
+   "compute_median": 0.2157
+  },
+  "scenarios": {
+   "wall_median": 0.1496,
+   "wall_all": [
+    0.162,
+    0.1458,
+    0.1462,
+    0.1496,
+    0.1569
+   ],
+   "data_median": 0.0046,
+   "compute_median": 0.1451
+  },
+  "hedge": {
+   "wall_median": 0.0205,
+   "wall_all": [
+    0.0179,
+    0.0285,
+    0.0219,
+    0.0205,
+    0.018
+   ],
+   "data_median": 0.005,
+   "compute_median": 0.0135
+  }
+ },
+ "timing_fred_stub_healthy": {
+  "calc": {
+   "wall_median": 0.2086,
+   "wall_all": [
+    0.3299,
+    0.2086,
+    0.2074
+   ],
+   "data_median": 0.0006,
+   "compute_median": 0.208
+  }
+ },
+ "timing_fred_hung_auto": {
+  "wall_median": 0.4139,
+  "wall_all": [
+   0.4139
+  ],
+  "data_median": 0.2048,
+  "compute_median": 0.2091,
+  "fetch_calls": [
+   11
+  ],
+  "HTTP_TIMEOUT_SECONDS(scaled)": 0.2
+ }
+}

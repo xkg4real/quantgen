@@ -369,8 +369,17 @@ class IndicatorGuide(QWidget):
             self.detail_summary.setText(brief.one_liner)
             place=('가격 위의 선' if study(key).panel=='price' else '가격 아래의 보조 영역') if ctx.language=='ko' else (
                 'Overlay on the price' if study(key).panel=='price' else 'Study area below the price')
-            parts=tuple(zip((ctx.t(f) for f in ('meaning','look','interpret','limit')),
-                            (info.what,place+' · '+', '.join(l.name(ctx.language) for l in study(key).lines),info.how,info.caution)))
+            # Owner 2026-11-17: a short concept, then the conclusion (상승/하락 흐름 쪽으로 읽는 경우, evidence) as the
+            # interpretation; the regime line closes the limits.
+            from core.education import outlook as conclusions
+            if key in conclusions.OUTLOOK:
+                verdict=conclusions.outlook(key,ctx.language)
+                parts=tuple(zip((ctx.t(f) for f in ('meaning','look','interpret','limit')),
+                                (verdict.concept,place+' · '+', '.join(l.name(ctx.language) for l in study(key).lines),
+                                 conclusions.text_block(key,ctx.language),info.caution)))
+            else:
+                parts=tuple(zip((ctx.t(f) for f in ('meaning','look','interpret','limit')),
+                                (info.what,place+' · '+', '.join(l.name(ctx.language) for l in study(key).lines),info.how,info.caution)))
         else:
             self.detail_title.setText(glossary.name(key,ctx));self.detail_category.setText(glossary.category(key,ctx))
             self.detail_summary.setText(glossary.summary(key,ctx));parts=glossary.sections(key,ctx)

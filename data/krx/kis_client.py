@@ -18,15 +18,20 @@ number), and an explicit decision. That is deliberate.
 TOKENS
 ------
 KIS issues a bearer token valid for ~24h and rate-limits issuance hard, so the
-token is cached on disk under `~/.nextgen/kis_token.json` with its expiry. A
-cold start reuses a still-valid token rather than minting a new one; that is the
-difference between the client working and being throttled out for the day. The
-cache file holds a token, never the appkey/appsecret.
+token is cached with its expiry: in the OS credential store (core.credentials,
+item "kis_token"; KEY-2), else in `~/.nextgen/kis_token.json` (owner-only; the
+file is shared with TRADEGEN and never deleted here). A cold start reuses a
+still-valid token rather than minting a new one; that is the difference between
+the client working and being
+throttled out for the day. The cache holds a token, never the appkey/appsecret.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import math
+import os
+import tempfile
 import threading
 import time
 from dataclasses import dataclass
@@ -35,6 +40,7 @@ from pathlib import Path
 from typing import Any, Optional
 
 import config
+from core import credentials as _credentials
 
 try:
     import requests as _once                         # one attempt: the engine's quote path
@@ -51,8 +57,92 @@ class KISUnavailable(KISError):
     """KIS is not configured on this machine."""
 
 
-_TOKEN_PATH = Path.home() / ".nextgen" / "kis_token.json"
+# KEY-2: the shared token file. TRADEGEN reads and writes the same file with the same KIS key (research_notes
+# "QUANTGEN TRADEGEN split map"), so QUANTGEN never deletes it. The path is computed at each use (HOME can change,
+# for example in tests); a test may set _TOKEN_PATH to pin it.
+_TOKEN_PATH: Optional[Path] = None
+_TOKEN_ITEM = "kis_token"                         # core.credentials token name (KEY-2)
 _TOKEN_LOCK = threading.Lock()
+_FILE_TOKEN_IGNORED = False                       # set when the KIS key changes in this process (see below)
+
+
+def _token_path() -> Path:
+    return _TOKEN_PATH if _TOKEN_PATH is not None else Path.home() / ".nextgen" / "kis_token.json"
+
+
+def _forget_token_on_key_change(name: str) -> None:
+    """A token belongs to the app key that minted it. When the KIS key changes here, drop the keyring copy and stop
+    trusting the shared file for this process (it may hold a token for the old key). The file itself stays: it is
+    shared with TRADEGEN."""
+    global _FILE_TOKEN_IGNORED
+    if name not in ("KIS_APP_KEY", "KIS_APP_SECRET"):
+        return
+    with _TOKEN_LOCK:
+        _credentials.delete_token(_TOKEN_ITEM)
+        _FILE_TOKEN_IGNORED = True
+
+
+_credentials.subscribe(_forget_token_on_key_change)
+
+
+def _key_id(app_key: str, base_url: str) -> str:
+    """Which key minted a token: the first 16 hex of a SHA-256 over the app key and server address (KEY-2/b).
+    The key itself is never stored; 64 bits of a hash of a long random key reveal nothing usable."""
+    if not app_key:
+        return ""
+    raw = b"QUANTGEN-KIS-TOKEN\0" + app_key.encode("utf-8") + b"\0" + base_url.encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()[:16]
+
+
+def _valid_token(raw: Optional[str], key_id: str = "") -> Optional[str]:
+    """The token if it is unexpired and, when it records a key_id, was minted with the current key. A token
+    without key_id (older QUANTGEN, or TRADEGEN) is accepted as before."""
+    if not raw:
+        return None
+    try:
+        data = json.loads(raw)
+        token = data.get("access_token")
+        expires = float(data.get("expires_at", 0))
+        stored_id = data.get("key_id")
+    except Exception:
+        return None
+    if stored_id and key_id and stored_id != key_id:
+        return None
+    if token and time.time() < expires - 120:
+        return str(token)
+    return None
+
+
+def _read_token_file() -> Optional[str]:
+    path = _token_path()
+    if os.name == "posix":
+        try:
+            if not path.is_symlink() and path.exists():
+                os.chmod(path, 0o600)                # older versions wrote it world-readable; never through a link
+        except OSError:
+            pass                                     # another owner or a filesystem without modes: still read it
+    try:
+        return path.read_text(encoding="utf-8")
+    except Exception:
+        return None
+
+
+def _write_token_file(text: str) -> None:
+    """Owner-only file (0600) in a directory created owner-only (0700); an existing ~/.nextgen keeps its mode.
+    The temporary file has a random name (mkstemp: O_EXCL, 0600), then replaces the target atomically."""
+    path = _token_path()
+    path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(prefix=".kis_token.", suffix=".tmp", dir=str(path.parent))
+    try:
+        with os.fdopen(fd, "wb") as handle:
+            handle.write(text.encode("utf-8"))
+        os.replace(tmp, path)
+    except BaseException:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
 
 # Read-only guard (M1, TASK-M1-02; spec P0, T-RO-02). The allowlist is frozen in config.py
 # (`config.KIS_QUOTATION_ALLOWLIST`); `_get` checks the path against it before credentials are read or a request
@@ -173,26 +263,41 @@ class KISClient:
         self.timeout_s = timeout_s or config.HTTP_TIMEOUT_SECONDS
         self.ready = bool(config.kis_ready() and requests is not None)
 
+    def reload_credentials(self) -> bool:
+        """Re-read whether KIS keys are set (KEY-2). `ready` is otherwise fixed at construction, so a key
+        entered in the app after the client was built would go unnoticed until a restart."""
+        self.ready = bool(config.kis_ready() and requests is not None)
+        return self.ready
+
     # -- token ---------------------------------------------------------------
-    def _cached_token(self) -> Optional[str]:
+    # KEY-2: the OS credential store (core.credentials, item "kis_token") first, then the shared file
+    # `~/.nextgen/kis_token.json`. An expired or unreadable keyring copy never hides a valid file token.
+    def _key_id(self) -> str:
         try:
-            data = json.loads(_TOKEN_PATH.read_text(encoding="utf-8"))
+            return _key_id(config.kis_credentials()[0], self.base_url)
         except Exception:
-            return None
-        token = data.get("access_token")
-        expires = data.get("expires_at", 0)
-        if token and time.time() < float(expires) - 120:
-            return str(token)
-        return None
+            return ""
+
+    def _cached_token(self) -> Optional[str]:
+        key_id = self._key_id()
+        token = _valid_token(_credentials.get_token(_TOKEN_ITEM), key_id)
+        if token or _FILE_TOKEN_IGNORED:
+            return token
+        return _valid_token(_read_token_file(), key_id)
 
     def _store_token(self, token: str, expires_in: float) -> None:
+        global _FILE_TOKEN_IGNORED
+        record = {"access_token": token, "expires_at": time.time() + float(expires_in)}
+        key_id = self._key_id()
+        if key_id:
+            record["key_id"] = key_id
+        text = json.dumps(record)
+        if _credentials.set_token(_TOKEN_ITEM, text):
+            return
+        _credentials.delete_token(_TOKEN_ITEM)       # a keyring that reads but refuses writes keeps no stale copy
         try:
-            _TOKEN_PATH.parent.mkdir(parents=True, exist_ok=True)
-            _TOKEN_PATH.write_text(
-                json.dumps({"access_token": token,
-                            "expires_at": time.time() + float(expires_in)}),
-                encoding="utf-8",
-            )
+            _write_token_file(text)
+            _FILE_TOKEN_IGNORED = False              # the file now holds this key's token
         except Exception:
             pass          # a non-persistable token still works for this session
 

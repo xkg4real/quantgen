@@ -1,0 +1,31 @@
+# Flet mobile project for the Android trial (OS-A1); staged as the root pyproject.toml by
+#   python tools/packaging/stage.py --profile mobile --output <new folder>
+# then `flet build apk` runs in that folder. Draft: which dependencies have Android wheels is what the
+# owner-phone trial measures (APK size, first start, imports, one Quant Lab result vs desktop). Unverified.
+[project]
+name = "quantgen-mobile"
+version = "2.0.0"
+description = "QUANTGEN companion app (Flet, reduced): market reading and research results"
+requires-python = ">=3.10"
+dependencies = [
+  "flet==0.85.2",
+  "pyyaml>=6.0",
+  "Babel>=2.17,<3",
+  "requests>=2.31",
+  "numpy>=1.26",
+  "pandas>=2.1",
+  # Left out of the first trial (no Android wheels expected, or desktop-only): scipy, statsmodels,
+  # matplotlib, gs-quant, yfinance, pandas-datareader, fastapi, starlette, python-dotenv, PyQt6/PySide6.
+]
+
+[tool.flet]
+org = "com.quantgeneration"       # proposal; see core/app_identity.py BUNDLE_ID (owner confirms)
+product = "QUANTGEN"
+company = "QUANTGEN"
+app = { module = "main", path = "." }
+
+[tool.flet.icon]
+default = "assets/icon.png"
+
+[tool.flet.android]
+# Debug-signed APK only (no upload key before incorporation); never published.

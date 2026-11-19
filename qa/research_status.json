@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-04T15:41:26.911233+00:00",
+  "generated_at": "2026-11-18T16:47:06.939503+00:00",
   "scope": "recorded repository evidence; not a test run or deployment verdict",
   "sources": [
     {
       "path": "README.md",
-      "sha256": "192e22084b362cd96658aa4b694aeb897f273b97383caf2404b3707927028ed9",
+      "sha256": "f298cd06354893f8cb41cbd90f4336edf7257d77d4502cfe2ebf074640899635",
       "normalization": "LF; generated block excluded"
     },
     {
       "path": "qa/acceptance_results.json",
-      "sha256": "89cd556c9557b5347701527544f80d3210a204196d247fe928f1022622efae86",
+      "sha256": "75c4545a52fe585b63f9c4f4f8a3c5b55a75eb211cb926226edb0fc478fa5f68",
       "normalization": "raw bytes"
     },
     {
@@ -22,11 +22,11 @@
   "code_test": {
     "status": "RECORDED",
     "counts": {
-      "PASS": 749,
+      "PASS": 884,
       "FAIL": 0,
-      "NOT_RUN": 121
+      "NOT_RUN": 120
     },
-    "total": 870,
+    "total": 1004,
     "run_at": null,
     "run_commit": null,
     "note": "QA source does not record run time/commit. Do not infer them from generation."

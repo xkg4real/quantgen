@@ -1,15 +1,21 @@
 import hashlib
+import json
 import unittest
 from core.research.runs import canonical
 from core.research.intake import validate_data_receipt, compare_observations
-from tools.status.data_readiness import collect
+from tools.status.data_readiness import ROOT, collect
 
 
 class DataReadinessTests(unittest.TestCase):
     def test_inventory_preserves_not_run_and_does_not_infer_acquisition(self):
         report=collect()
         self.assertEqual(len(report['series']),73)
-        self.assertEqual(len(report['recorded_blockers']),121)
+        # Every NOT_RUN row of the recorded results file is kept as a blocker: count them from the file itself,
+        # so the check does not go stale each time the owner's Windows run replaces qa/acceptance_results.json.
+        rows=json.loads((ROOT/'qa/acceptance_results.json').read_text(encoding='utf-8'))
+        not_run=[r['test'] for r in rows if r['status']=='NOT_RUN']
+        self.assertGreater(len(not_run),0)
+        self.assertEqual([r['test'] for r in report['recorded_blockers']],not_run)
         self.assertTrue(all(r['acquisition_status']=='NOT_VERIFIED' for r in report['series']))
         self.assertTrue(all(r['current_status']=='NOT_RETESTED' for r in report['recorded_blockers']))
 

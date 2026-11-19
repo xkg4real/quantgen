@@ -1,0 +1,121 @@
+/* QUANTGEN draft kit: the native app's tokens (core/theme.py LIGHT, typography.TONE_COLORS) and the stock detail
+   chart's look (stock_detail_style.sheet). Everything here is achievable in Qt style sheets + QPainter. */
+@font-face { font-family: "QG Interface"; src: url("../../../assets/fonts/qg-interface.otf"); font-weight: 400; }
+@font-face { font-family: "QG Interface"; src: url("../../../assets/fonts/qg-interface-medium.otf"); font-weight: 500; }
+@font-face { font-family: "QG Interface"; src: url("../../../assets/fonts/qg-interface-semibold.otf"); font-weight: 600; }
+:root {
+  --bg: #F7F5F0; --surface: #FFFEFB; --surface2: #F1F2EB; --border: #E2E3DB; --line: #ECEDE5;
+  --text: #202823; --muted: #646E68; --faint: #9AA29C; --accent: #194C40; --accent-soft: #E5EEE8;
+  --success: #16745F; --error: #AA543C; --warning: #8a5a00;
+  --up: #C8343D; --down: #2F6DB5; --up-tint: #FDF0F0; --down-tint: #EEF4FB; --flat-tint: #F3F4EE;
+  --soft: #F5F5EF; --radius: 16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1440px; height: 900px; overflow: hidden; }
+body { font-family: "QG Interface", sans-serif; color: var(--text); background: var(--bg); font-size: 13px;
+       letter-spacing: -0.2px; display: flex; -webkit-font-smoothing: antialiased; }
+.num { font-variant-numeric: tabular-nums; letter-spacing: 0; }
+/* ---------- rail (identical to the app) ---------- */
+.rail { width: 190px; flex: none; background: #FDFCF8; border-right: 1px solid var(--line); padding: 22px 12px 16px;
+        display: flex; flex-direction: column; }
+.brand { display: flex; align-items: center; gap: 8px; padding: 0 2px 0 2px; margin-bottom: 22px; }
+.brand .mark { width: 30px; height: 30px; border-radius: 8px; background: var(--accent-soft); display: grid; place-items: center; }
+.brand .word { font-weight: 600; font-size: 16px; color: var(--accent); letter-spacing: 0.2px; }
+.brand .toggle { margin-left: auto; width: 18px; height: 14px; border: 1.6px solid var(--muted); border-radius: 3px; }
+.nav a { display: block; padding: 11px 13px; border-radius: 9px; font-size: 14px; color: var(--text); margin-bottom: 4px; text-decoration: none; }
+.nav a.on { background: var(--accent); color: #fff; font-weight: 600; }
+.rail .bottom { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
+.rail .halt { background: var(--surface2); color: var(--faint); border-radius: 9px; padding: 8px; text-align: center; font-size: 12px; }
+.rail .select { border: 1px solid var(--border); border-radius: 9px; padding: 9px 11px; font-size: 13px; background: var(--surface);
+                display: flex; justify-content: space-between; }
+.rail .select:after { content: "⌄"; color: var(--muted); }
+.rail .cap { font-size: 12px; color: var(--muted); }
+/* ---------- page ---------- */
+.page { flex: 1; min-width: 0; padding: 22px 28px 20px 30px; display: flex; flex-direction: column; gap: 16px; height: 900px; }
+.toolbar { display: flex; align-items: center; gap: 10px; min-height: 40px; }
+.toolbar .title { font-size: 22px; font-weight: 600; letter-spacing: -0.7px; }
+.toolbar .sub { font-size: 12px; color: var(--muted); margin-left: 2px; }
+.toolbar .spacer { flex: 1; }
+.badge { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 11px;
+         color: var(--muted); background: var(--surface2); }
+.badge.ok { color: var(--success); background: var(--accent-soft); }
+.badge.warn { color: var(--warning); background: var(--flat-tint); }
+.badge.err { color: var(--error); background: var(--up-tint); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; display: inline-block; }
+.search { border: 1px solid var(--border); border-radius: 17px; background: var(--surface); padding: 8px 14px; width: 220px; color: var(--faint); font-size: 13px; }
+.btn { border: 0; border-radius: 9px; background: var(--surface2); color: var(--text); font-size: 13px; font-weight: 500; padding: 8px 13px; font-family: inherit; }
+.btn.primary { background: var(--accent); color: #fff; font-weight: 600; }
+.btn.ghost { background: transparent; color: var(--muted); }
+.btn.block { width: 100%; padding: 11px; font-size: 14px; }
+.icon-btn { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; color: var(--muted); }
+.icon-btn.on { background: var(--accent-soft); color: var(--accent); }
+/* segmented (the 종목 | 지표 control) and pill tabs (the period chips) */
+.seg { display: inline-flex; background: var(--surface2); border-radius: 10px; padding: 3px; gap: 3px; }
+.seg span { padding: 6px 14px; border-radius: 8px; font-size: 13px; color: var(--muted); font-weight: 500; }
+.seg span.on { background: var(--surface); color: var(--text); font-weight: 600; box-shadow: 0 1px 0 rgba(0,0,0,.04); }
+.seg.full { display: flex; } .seg.full span { flex: 1; text-align: center; }
+.pills { display: flex; gap: 4px; flex-wrap: wrap; }
+.pills span { padding: 6px 11px; border-radius: 8px; font-size: 13px; color: var(--muted); font-weight: 500; }
+.pills span.on { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.chip { display: inline-block; padding: 4px 10px; border-radius: 11px; background: var(--surface2); font-size: 12px; font-weight: 500; color: var(--text); }
+.chip.ok { background: var(--accent-soft); color: var(--accent); }
+/* body: canvas left, docked column right (the stock detail's DetailBody) */
+.body { flex: 1; min-height: 0; display: flex; gap: 16px; }
+.canvas { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.side { width: 360px; flex: none; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+        padding: 10px 10px 12px; display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+.side .scroll { flex: 1; overflow: hidden; display: flex; flex-direction: column; gap: 14px; padding: 4px 6px 0 4px; }
+.side .foot { border-top: 1px solid var(--line); padding: 12px 4px 2px; display: flex; flex-direction: column; gap: 8px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
+.card.flat { background: transparent; border: 0; padding: 0; }
+.card-title { font-size: 15px; font-weight: 500; letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px; }
+.card-title .more { margin-left: auto; font-size: 12px; color: var(--muted); font-weight: 400; }
+.muted { color: var(--muted); } .faint { color: var(--faint); } .small { font-size: 12px; } .tiny { font-size: 11px; }
+.up { color: var(--up); } .down { color: var(--down); }
+.hr { height: 1px; background: var(--line); }
+/* key-figure strip (the OHLC line) */
+.figs { display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: baseline; font-size: 13px; }
+.figs .k { color: var(--muted); margin-right: 5px; } .figs .v { font-weight: 500; }
+.big { font-size: 30px; font-weight: 600; letter-spacing: -0.6px; }
+.pct-pill { display: inline-flex; padding: 3px 9px; border-radius: 8px; font-weight: 600; font-size: 13px; }
+.pct-pill.up { background: var(--up-tint); } .pct-pill.down { background: var(--down-tint); }
+/* fold section (관심종목 ▾) */
+.fold-head { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; padding: 4px 2px; }
+.fold-head .chev { width: 8px; height: 8px; border-right: 1.6px solid var(--muted); border-bottom: 1.6px solid var(--muted); transform: rotate(45deg); margin: 0 4px -2px 4px; }
+.fold-head .chev.closed { transform: rotate(-45deg); margin-bottom: 0; }
+.fold-head .count { color: var(--muted); font-size: 12px; font-weight: 400; }
+/* fields */
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 10px; }
+.field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+.field .in { border: 1px solid var(--border); border-radius: 9px; background: var(--surface); padding: 8px 10px; font-size: 13px; min-height: 34px;
+             display: flex; justify-content: space-between; align-items: center; }
+.field .in.select:after { content: "⌄"; color: var(--muted); }
+.field .in.ph { color: var(--faint); }
+.field.wide { grid-column: span 2; }
+.hint { font-size: 12px; color: var(--muted); line-height: 1.45; }
+/* rows / tables (the watchlist rows) */
+.rows { display: flex; flex-direction: column; }
+.row { display: flex; align-items: center; gap: 10px; padding: 9px 8px; border-radius: 10px; }
+.row.sel { background: var(--accent-soft); box-shadow: inset 3px 0 0 var(--accent); }
+.avatar { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 600; background: var(--surface2); color: var(--accent); flex: none; }
+.avatar.dark { background: #1F2622; color: #fff; }
+table.t { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+table.t th { text-align: left; font-weight: 500; color: var(--muted); font-size: 12px; padding: 9px 10px; border-bottom: 1px solid var(--line); }
+table.t td { padding: 11px 10px; border-bottom: 1px solid var(--line); }
+table.t tr.sel td { background: var(--accent-soft); }
+table.t td.r, table.t th.r { text-align: right; }
+/* gauges / bars (RangeBar, VolumeBar, Q-SCORE bars) */
+.bar { height: 6px; border-radius: 3px; background: var(--surface2); position: relative; overflow: hidden; }
+.bar > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; background: var(--accent); }
+.gauge { position: relative; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--down-tint), var(--surface2) 50%, var(--up-tint)); }
+.gauge .knob { position: absolute; top: -5px; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); border: 3px solid var(--accent); transform: translateX(-50%); }
+/* guide card (indicator picker's guide) */
+.guide { background: var(--soft); border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 9px; }
+.guide .read { font-size: 14px; font-weight: 500; line-height: 1.45; }
+.verdict { border-radius: 12px; padding: 11px 13px; display: flex; flex-direction: column; gap: 5px; }
+.verdict.up { background: var(--up-tint); } .verdict.down { background: var(--down-tint); } .verdict.flat { background: var(--flat-tint); }
+.verdict b { font-size: 13px; }
+/* empty canvas state */
+.empty { flex: 1; display: grid; place-items: center; text-align: center; color: var(--muted); }
+.empty .ghost { opacity: .5; }
+svg text { font-family: "QG Interface"; }

@@ -1,0 +1,52 @@
+module | head_final.txt | impl_final.txt | rehearsal_final.txt
+macro_m0_harness | 12/0/0 | 12/0/0 | 12/0/0
+macro_m0_integration | 1/0/0 | 1/0/0 | 1/0/0
+macro_m0_rules | 9/0/1 | 9/0/1 | 9/0/1
+macro_m0_schemas | 6/0/0 | 6/0/0 | 6/0/0
+macro_m1_books | 8/0/0 | 8/0/0 | 8/0/0
+macro_m1_calendars | 16/0/5 | 22/0/5 | 24/0/3
+macro_m1_integration | 7/0/0 | 7/0/0 | 7/0/0
+macro_m1_pit | 24/0/7 | 24/0/7 | 24/0/7
+macro_m2_risk | 13/0/15 | 13/0/15 | 13/0/15
+macro_m3_estimators | 12/0/8 | 12/0/8 | 12/0/8
+macro_m4_integration | 5/0/0 | 5/0/0 | 5/0/0
+macro_m4_sleeves | 14/0/7 | 14/0/7 | 14/0/7
+macro_m5_books | 11/0/7 | 11/0/7 | 11/0/7
+macro_m5_fills_events | 9/0/5 | 9/0/5 | 9/0/5
+macro_m5_integration | 5/0/1 | 5/0/1 | 5/0/1
+macro_m6_context | 14/0/2 | 14/0/2 | 14/0/2
+macro_m7_cardp | 13/0/12 | 13/0/12 | 13/0/12
+macro_m7_cards | 15/0/9 | 15/0/9 | 15/0/9
+macro_m7_integration | 7/0/7 | 7/0/7 | 7/0/7
+macro_m7_ledger | 14/0/4 | 14/0/4 | 14/0/4
+macro_m8_forward | 17/0/6 | 17/0/6 | 17/0/6
+macro_m8_integration | 3/0/0 | 3/0/0 | 3/0/0
+macro_m8_pipeline | 19/1/1 | 19/1/1 | 19/1/1
+macro_m9_lab | 11/0/4 | 11/0/4 | 11/0/4
+macro_m9_scenarios | 6/0/4 | 6/0/4 | 6/0/4
+macro_tf_data | 8/0/0 | 8/0/0 | 8/0/0
+macro_tf_gov | 19/0/3 | 19/0/3 | 19/0/3
+macro_tf_integration | 4/0/0 | 4/0/0 | 4/0/0
+macro_tf_screens | 27/0/2 | 27/0/2 | 27/0/2
+macro_ui_overlay | 16/0/0 | 16/0/0 | 16/0/0
+macro_acceptance | 1/1/0 | 1/1/0 | 1/1/0
+engine_acceptance | 89/3/0 | 89/3/0 | 89/3/0
+quant_acceptance | 53/0/0 | 53/0/0 | 53/0/0
+ficc_acceptance | 57/0/0 | 57/0/0 | 57/0/0
+TOTAL | 545/5/110 | 551/5/110 | 553/5/108
+
+head_final.txt -> impl_final.txt:
+   macro_m1_calendars/test_cal01_manifest_pins_signed_utc_and_statement None -> PASS 
+   macro_m1_calendars/test_cal01_same_day_schedule_needs_its_signed_calendar None -> PASS 
+   macro_m1_calendars/test_cal01_shipped_drafts_are_refused_and_acting_inputs_fail_closed PASS -> None 
+   macro_m1_calendars/test_cal01_shipped_files_signed_or_refused None -> PASS 
+   macro_m1_calendars/test_cal01_signed_utc_must_be_iso_utc None -> PASS 
+   macro_m1_calendars/test_cal01_unquoted_time_refused_at_load None -> PASS 
+   macro_m1_calendars/test_cal02_deadline_clock_injected None -> PASS 
+   macro_m1_calendars/test_cal02_known_2026_2027_rows_present None -> PASS 
+   macro_m1_calendars/test_close02_on_the_real_signed_files None -> NOT_RUN 
+   macro_m1_calendars/test_close02_on_the_real_signed_files_is_owner_input NOT_RUN -> None 
+
+impl_final.txt -> rehearsal_final.txt:
+   macro_m1_calendars/test_cal02_2027_files_signed_before_2026_11_01 NOT_RUN -> PASS 
+   macro_m1_calendars/test_close02_on_the_real_signed_files NOT_RUN -> PASS 

@@ -1,0 +1,13 @@
+$ (cwd=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/head) python3 -B /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/head tests.macro_m1_integration /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/logs2/head__macro_m1_integration.json
+rc=0
+PASS test_calendar_coverage_halt_through_the_book_runtime (1.428s)
+PASS test_clocks_adapter_resolves_registry_schedules_on_signed_calendars (0.954s)
+PASS test_data_hook_history_status_and_instruments_agree_with_pit (0.009s)
+PASS test_fixture_generator_instants_from_calendars_and_check_fixture_on_csv (0.005s)
+PASS test_kis_allowlist_frozen_in_config_covers_the_quote_check (0.013s)
+PASS test_stamping_and_lag_audit_on_the_calendar_adapter (0.003s)
+PASS test_unsigned_shipped_calendars_fail_acting_inputs_closed (0.06s)
+not_run=0
+7/7 passed
+
+--- stderr ---

@@ -1,0 +1,55 @@
+diff -ru a/core/calendars/publication.py b/core/calendars/publication.py
+--- a/core/calendars/publication.py
++++ b/core/calendars/publication.py
+@@ -154,6 +154,7 @@
+             monday += timedelta(days=1)
+         instant = _instant(monday, t, tz)
+     elif rule == "same_day":
++        business_day(s["calendar"], obs_date, cal=cal)       # the publisher's calendar must be signed and cover D (T-CAL-01)
+         instant = _instant(obs_date, t, tz)
+     elif rule == "channel_posting_time":
+         if s.get("posting_utc"):
+diff -ru a/core/calendars/store.py b/core/calendars/store.py
+--- a/core/calendars/store.py
++++ b/core/calendars/store.py
+@@ -116,11 +116,28 @@
+     return md5_hex(canonical_json(body))
+ 
+ 
++TIME_KEYS = ("close_local", "open_local", "close_kst", "open_kst", "time", "declared_time", "window_kst")
++
++
++def _reject_unquoted_times(value, where: str) -> None:
++    """PyYAML 1.1 reads an unquoted 12:00 as the sexagesimal int 720: refuse it at load, not at use."""
++    if isinstance(value, dict):
++        for k, v in value.items():
++            if k in TIME_KEYS and v is not None and not (isinstance(v, str) or
++                                                         (isinstance(v, list) and all(isinstance(x, str) for x in v))):
++                raise CalendarUnsigned(f"{where}.{k}: unquoted time {v!r}; quote every HH:MM string")
++            _reject_unquoted_times(v, f"{where}.{k}")
++    elif isinstance(value, list):
++        for i, v in enumerate(value):
++            _reject_unquoted_times(v, f"{where}[{i}]")
++
++
+ def read_yaml(path: Path) -> dict:
+     doc = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+     if not isinstance(doc, dict):
+         raise CalendarUnsigned(f"{path.name}: not a mapping")
+     _reject_native_dates(doc, path.name)
++    _reject_unquoted_times(doc, path.name)
+     return doc
+ 
+ 
+@@ -149,6 +166,11 @@
+                                f"{manifest_row.get('md5')!r}) does not match the file ({doc['version']!r}, {digest})")
+     if not _signed(manifest_row.get("signed_off_by")) or manifest_row["signed_off_by"] != doc["signed_off_by"]:
+         raise CalendarUnsigned(f"{name}: {MANIFEST} signer does not match the file signer")
++    if manifest_row.get("signed_utc") != doc["signed_utc"]:
++        raise CalendarUnsigned(f"{name}: {MANIFEST} signed_utc {manifest_row.get('signed_utc')!r} != file "
++                               f"{doc['signed_utc']!r} (signed_utc sits outside the md5; the manifest pins it)")
++    if not _signed(doc.get("sign_off_statement")):
++        raise CalendarUnsigned(f"{name}: sign_off_statement is empty (the sentence the owner signs is part of the md5)")
+     tests = manifest_row.get("test_ids")
+     if not isinstance(tests, list) or not tests or not all(_signed(t) for t in tests):
+         raise CalendarUnsigned(f"{name}: {MANIFEST} row names no test id (test_per_change: required)")

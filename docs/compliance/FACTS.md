@@ -40,8 +40,8 @@ PR #55/#56이 포함된 `69a2559`의 통합 `147afc0`, 후속 `853de90`과 PR #5
 |---|---|---|
 | 서비스 성격 | 최신 README는 상업 출시 의도를 명시한다. 연구·분석·모의거래 기능이며 실거래 주문 경로는 없다고 설명한다. 정부·KOFIA의 승인을 뜻하지 않는다. | [README 시작 부분](../../README.md), 같은 파일 `Regulatory note` |
 | 화면 | 브라우저는 Flet, 선택 네이티브 화면은 PyQt6이다. 화면별 구현 수준이 다르다. | [main.py](../../main.py), [pyproject.toml](../../pyproject.toml), [네이티브 구현 범위](../DESKTOP_MIGRATION_2026-10-30.md) |
-| 키 입력과 전송 | 키는 환경변수 또는 `.env`에서 읽는다. 설정 화면은 존재 여부를 보여준다. KIS 인증 때 앱 키·시크릿이 발급 서버에 전송된다. | [config.py](../../config.py), [KIS 클라이언트](../../data/krx/kis_client.py) `token` |
-| 인증정보 저장 | KIS Bearer 토큰은 기본 `~/.nextgen/kis_token.json`에 평문 JSON으로 저장된다. “인증정보를 전혀 저장하지 않는다”는 고지는 부정확하다. | [KIS 클라이언트](../../data/krx/kis_client.py) `_TOKEN_PATH`, `_store_token` |
+| 키 입력과 전송 | 키는 환경변수 → OS 자격 증명 저장소(`QUANTGEN`) → `.env`(개발판만) 순서로 읽는다(KEY-2). 설정 화면은 존재 여부를 보여준다. KIS 인증 때 앱 키·시크릿이 발급 서버에 전송된다. | [config.py](../../config.py), [KIS 클라이언트](../../data/krx/kis_client.py) `token` |
+| 인증정보 저장 | KIS Bearer 토큰은 OS 자격 증명 저장소(`keyring`, `QUANTGEN`/`kis_token`)에 JSON으로 저장되고, 쓸 수 있는 OS 저장소가 없을 때만 `~/.nextgen/kis_token.json`에 평문 JSON(0600)으로 저장된다. 이 파일은 TRADEGEN과 공유되어 앱이 지우지 않는다. 비밀 키 10개는 환경변수 → OS 저장소 → `.env`(개발판만) 순서로 읽는다(KEY-2). “인증정보를 전혀 저장하지 않는다”는 고지는 부정확하다. | [KIS 클라이언트](../../data/krx/kis_client.py) `_token_path`, `_store_token`; [자격 증명 저장소](../../core/credentials/__init__.py) |
 | 계좌 조회 | 통화·기준통화·잔액·잠금금액·평균매수가·총수량과 파생 원화평가액을 처리한다. 평가를 위해 보유 통화 종목으로 Upbit 공개 시세를 추가 요청한다. Flet Crypto Refresh는 키가 있으면 기본 잔액 조회를 포함하며 네이티브는 기본 해제다. | [계좌 API](../../data/crypto/crypto_client.py) `balances`, [Flet 흐름](../../core/research/crypto_workflow.py) `analyze`, [네이티브 화면](../../quantgen_desktop/market_tools.py), [시장 분석](../../core/research/market_analysis.py) |
 | AI 해설 | Anthropic으로 계산 결과·질문·분석 종류·고정 작성 지시문과 해당 시 값 표기 설명을 전송한다. 구조화된 private 필드 제거는 자유 입력 개인정보의 탐지·삭제를 보장하지 않는다. | [분석 전송](../../core/quant/insights.py) `deep_analysis`, [필드 필터](../../core/research/ai_payload.py), [2026-11-06 범위](#ai-commentary-guards-2026-11-06) |
 | AI 선택 | 네이티브는 전송 미리보기·기본 해제 체크박스가 있다. Flet는 안내와 전송 버튼이 있고 동일한 체크박스 절차는 없다. 이 차이만으로 동의의 법적 충족 여부를 단정하지 않는다. | [네이티브 AI](../../quantgen_desktop/commentary.py), [Flet AI](../../ui/ai_panel.py) |
@@ -1050,3 +1050,52 @@ Windows CI에서 창 핸들과 아이콘을 시험하며, 사용자 PC의 Explor
 
 합성 임시 저장소의 신규47+기존80=127개 검사가 통과했습니다. 실제 연구·원장·보호 캐시·소유자 PC 실행을 대신하지 않으며 Step10 연구 마감/F를 수행하지 않았습니다. 01/07/20에는 이 저장·오류·삭제 한계를 추가했습니다. 02–06/08–19는 이 비연결 모듈에 따른 영향 여부를 검토했고 원문·미확정 조건을 유지합니다. 전체20문서의 review-required와 공개 BLOCKED는 유지합니다. 소스 지문은 full CI가 성공한 e01e152의 기존 manifest와 이번 exact tree 변경을 합성하고 대상 PR full CI로 재검증하며, 부분 로컬 checkout의 전체 스캔을 주장하지 않습니다.
 
+
+<a id="r3-detached-outage-2026-11-14"></a>
+### 2026-11-14 R3 오류 기록 파일 하위 검토
+
+[오류 파일 범위](../product/R3_DETACHED_OUTAGE_2026-11-14.md)의 **⑨-3a/recorder/1/outage**는 주입된 실패 정보만 명시적 `unrecorded.jsonl`에 JSONL append/flush/fsync합니다. 같은 프로세스의 협력 스레드는 0~2초 process-lock 예산으로 직렬화하지만 설계 ENG-16에 따라 OS sidecar lock은 없고 다중 프로세스를 지원한다고 주장하지 않습니다. 알 수 없는 시각·식별자는 null, 오류 메시지는 최대500자이며 민감정보 필터는 없습니다. 최종 링크/비정규 파일/불완전 tail을 거부하고 불확실한 쓰기를 재시도·복구하지 않습니다. 실제 앱·경로·권한·보유·삭제·화면 알림·동기화 폴더 검사·보고/카운트 연결은 미완료입니다.
+
+신규27검사, 합동154검사(기존127포함, 합산 금지)가 Linux 임시 저장소에서 PASS했습니다. POSIX FIFO와 권한에 따른 symlink 검사는 다른 호스트에서 skip될 수 있으며 실제 소유자 Windows 검증이 아닙니다. 01/07/20의 기록·민감정보·삭제 한계를 추가하고 나머지17문서의 독립 모듈 영향 여부를 재검토했습니다. 외부 전송·주문·요금·계약·의존성·UI·법률/라이선스 증거는 추가하지 않습니다. 원장·보호 캐시·동결 연구는 접근하지 않았고 공개 BLOCKED를 유지합니다. 소스 지문은 문서 정합성 CI가 성공한 ed92dc9의749경로 manifest와 exact 변경을 합성해 대상 CI에서 재검증합니다. 부분 로컬 checkout의 전체 스캔으로 주장하지 않습니다.
+
+
+<a id="market-hub-conclusions-2026-11-17"></a>
+### 2026-11-17 시장 메인 화면·지표 결론부·지표 목록 스크롤 검토
+
+- 시장 메인 화면과 카테고리 메인 화면(`quantgen_desktop/market_hub.py`)은 기존 레일 경로(`shell_rail.market_menu`)만
+  보여 줍니다. 지수 줄은 시장 페이지와 같은 일별 종가 로더(`market_summary`), 주식·ETF 화면의 상위 3개 미리보기는 시장
+  목록과 같은 순위 로더와 같은 그룹별 캐시를 씁니다. 새 공급자·새 호스트·새 전송·주문 기능은 없습니다. 자동 조회가 꺼져
+  있으면 사용자가 불러오기를 누르기 전까지 조회하지 않습니다. 레일의 시장 아래에는 범주만 남고 하위 행은 없습니다.
+- 지표 결론부(`core/education/outlook.py`): 27개 지표마다 상승·하락 흐름 쪽으로 읽는 조건 2개씩, 해석이 뒤집히는 국면,
+  근거 수준(강함·보통·엇갈림·약함·검증 연구 없음)과 이유, 근거 자료 이름을 보여 줍니다. "지금은"은 표시 중인 값과 가격만으로
+  어느 조건에 가까운지 말하며, 확률·승률·목표가·기대수익·매매 지시를 만들지 않습니다. 근거 수준은 공개 문헌 검토(원저자 규칙과
+  동료심사 연구, 인용 재검증)를 요약한 것이고 이 앱의 성과 주장이 아닙니다. 확인되지 않은 연구와 내부 백테스트 수치는 넣지
+  않았습니다. 카드와 보고서에는 "교과서식 해석이에요 · 예측이나 투자 권유가 아니에요"를 함께 둡니다.
+- 사용자가 고른 종목 차트에 조건부 해석을 붙이는 기능은 자본시장법상 투자자문·유사투자자문과의 경계를 법률 검토로 확인해야
+  합니다. 이 기록은 법률상 면제나 등록 불요를 판정하지 않습니다. 공개 준비 보류(publication BLOCKED)를 유지합니다.
+- 지표 목록 스크롤: 실시간 갱신마다 바뀌던 행 높이를 고정(값 너비 유지, 바뀐 것만 갱신, 화면 위 행 위치 유지)했습니다.
+  계산·조회·전송은 바뀌지 않았습니다.
+- 다른 7개 화면(연구 홈·분석 도구·기술지표 가이드·설계/검증·분석·연구 보관함·시스템)의 새 디자인은 소유자 승인을 받기 위한
+  시안 이미지이며 앱에 적용되지 않았습니다. 시안 속 수치·공급자 상태·모델 이름은 예시입니다.
+- 01–20의 미확정 사업자·개인정보·권리·요금·환불·접근성 조건과 공개 보류를 유지합니다.
+
+## 플랫폼 확장 준비(OS-P0-a~f) — 2026-11-19 소스 검토 (OS_EXPANSION 세션)
+
+- 새 도구 `tools/qt_port/`(PyQt6→PySide6 변환·점검, 글꼴 비교, 재현 스크립트, 전환일 편집)는 개발자가 저장소에서만
+  실행합니다. 앱이 import하지 않고 앱 번들·휠에 들어가지 않습니다. 네트워크 전송이 없습니다.
+- `core/app_paths.py`의 `user_data_dir()`과 `is_frozen()`은 경로를 계산만 합니다. 폴더를 만들거나 열거나 나열하지
+  않습니다. 기존 `~/.nextgen`이 있으면 그 폴더를 그대로 씁니다. 아직 아무 호출처도 바꾸지 않았습니다(OS-F2, KEY-2 뒤).
+- `core/app_identity.py`는 이름·번들 ID 제안·빈 값(업데이트 주소, 계정 ID, 라이선스 공개키)과 D7-G 게이트웨이 값
+  `GATEWAY_PROFILE = "personal"`, `DATA_API_BASE = ""`(회사 서버 길 꺼짐)만 둡니다. 비밀값은 없고 "(주)" 표기도
+  없습니다. 공급원 호출 방식은 바뀌지 않았습니다.
+- 패키지 앱(`packaging/`): PyInstaller onedir. 데이터 파일은 휠과 같은 허용 목록(`tools/packaging/stage.py`)으로만 넣어
+  `.env`·연구 원장·캐시가 들어가지 않습니다. `QUANTGEN --selfcheck <파일>`은 사용자가 지정한 파일에만 점검 결과를
+  쓰고 네트워크·창을 열지 않습니다. 빌드에 `licenses/THIRD_PARTY_NOTICES.txt`(설치된 패키지의 라이선스 원문)와
+  LGPL-3.0·GPL-3.0 원문을 넣고, Qt 라이브러리와 LGPL 순수 파이썬 패키지(chardet)는 교체 가능한 별도 파일로 둡니다.
+  이것이 LGPL 의무를 충족하는지는 변호사 확인이 필요합니다(법률 자문이 아닙니다,
+  `docs/platform/LICENSE_COMPLIANCE_PREP.md`).
+- `.github/workflows/platform-build.yml`은 수동 실행과 `v*` 태그에서만 돌고, 서명·배포·업로드를 하지 않습니다
+  (macOS는 ad-hoc 서명만). `runtime-smoke.yml`에는 새 시험 모듈과 경로만 더했습니다.
+- `mobile/pyproject.toml`과 `stage.py --profile mobile`은 Android 시험용 묶음 초안입니다. 아직 빌드·배포한 적이 없습니다.
+- 화면·계산·요청·전송·저장 동작은 바뀌지 않았습니다. 01–20의 미확정 사업자·개인정보·권리·요금·환불·접근성 조건과
+  공개 보류(publication BLOCKED)를 유지합니다.
