@@ -1,6 +1,6 @@
 # MERGE_QUEUE — main 병합 순서와 동결 (메인 세션이 관리)
 
-updated_at: 2026-11-19T12:22:00+09:00
+updated_at: 2026-11-19T14:50:00+09:00
 coordinator: 메인 세션 (QUANTGEN/MAIN, https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB)
 freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보고("F22까지 성공적으로 마무리했습니다."), main `6e077dc`(소유자 `--no-ff` 병합, 부모 `8e026ab`·`13f4dea`), 그 push의 Compliance success, PR #4 merged. (동결 기간: 2026-11-18T19:10:45+09:00 ~ 위 시각)
 
@@ -46,4 +46,5 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 - 하부 세션은 자기 항목이 이 표의 맨 앞이거나 메인이 "병합: <세션>"이라고 적었을 때만 PR을 엽니다 (비공개 전환 뒤 CI는 유료).
 - 병합 버튼은 메인이 누릅니다 (CI 통과 시, merge commit).
 - UI/UX 세션과 웹사이트 세션의 브랜치·인계 파일은 아무도 고치지 않습니다. 그 세션에 줄 요청은 소유자를 거칩니다.
+- **owner_confirmed 다시 쓰기 (2026-11-19 메인이 정함):** 다음 Nautilus 기록 실행 직전에 한 번만(OS-F2가 config.py를 또 바꾸므로 지금은 하지 않음). 소유자가 최신 main 클론의 보통 앱 Python으로 `python -B -m tools.nautilus.runner --fingerprint --table <두 표>`(읽기만) → 각 표의 "owner_confirmed" 한 줄만 출력된 form으로(UTF-8, BOM 없음; host_fingerprint는 같으면 그대로) → 브랜치 `owner/nautilus-confirm-<YYYYMMDD>` + PR(main 직접 push 금지) → 메인이 Linux에서 code_sha256 재계산해 대조, CI 녹색이면 병합. 그날 이 표에 자리를 둠. Claude는 이 줄을 쓰지 않음.
 - **코드 지문 주의 (2026-11-18):** `config.py`는 Nautilus 브리지 code_sha256의 입력입니다. P3-가(소유자 11-18 "1번 : (가) 승인")로 지문은 ec72fab3…가 되고, F21 뒤 KEY-2(`config.py` 변경)가 들어가면 또 바뀝니다. 그런 PR은 본문에 이 사실을 적고, 다음 기록 실행 전에 소유자가 owner_confirmed 두 줄을 새로 씁니다(Claude는 쓰지 않음).
