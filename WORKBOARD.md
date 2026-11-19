@@ -312,7 +312,7 @@ push_log:
 | OA-08 | 무료 키 3개 가입(ALPHAVANTAGE_API_KEY, TIINGO_API_KEY, CRYPTOPANIC_API_KEY) → 등록 → keys status → collect_daily --alphavantage SPY --tiingo nvda --cryptopanic BTC 결과 붙이기 (키 값은 붙이지 않음). FRED_API_KEY는 이미 설정·확인 끝(ALFRED 3,364행) | DATA | 11-19 15:00 (11-20 00:23 갱신) | 지금 (막힘) | 대기 |
 | OA-09 | 마스터 부록 H4 홈 지표 진단 명령 실행, 출력 붙이기 | DATA (명령은 MAIN) | 11-17 22:13 (4번 요청, 마지막 11-19 15:00) | 지금 (DS-H 막힘) | 대기 |
 | OA-10 | DIDM 질문 답: (a) novelty 보조 조건을 정식으로? (b) 자체 LLM 기반 모델과 학습 데이터 마지막 날짜 (c) 평가표 판단 2칸(자체 NLP 열의 수집 F·실시간 J = X, 자체 NLP 관련성 = X)이 맞는지 — 세 개 모두 DATA 인계 8절에 있음 | DATA | 11-19 00:09 (11-20 00:23 갱신) | 24h 안 | 대기 |
-| OA-43 | AWS 크레딧이 끝나기 전에 EC2·VPC 사용(크레딧 제외 10월 $13.73, 11월 $48.71, 대부분 EC2-Instances·EC2-Other·VPC — 우리 작업 아님) 출처를 EC2 Global View로 확인. 확인 전에는 끄거나 지우지 않음 | PAYMENTS | 11-20 01:39 | 24h 안 (권장) | 대기 |
+| OA-43 | AWS 비용 출처 확인 — 소유자 11월 막대(11-20 01:5x 공유): EC2-Other $39.47(81%), EC2-Instances $5.55, VPC $2.11, Amplify $1.57, 합 $48.71 → 하루 약 $2.6, 이대로면 월 약 $77–81. 메인 추정(미검증): 작은 인스턴스 1대(t3.micro 급, 약 17.5일)+공인 IPv4 1개(약 17.6일)가 함께 켜져 있고, EC2-Other는 NAT 게이트웨이 또는 t3 unlimited CPU 크레딧 초과(CPU 100% 지속 시 하루 약 $2.16 — 폭주 프로세스나 침해 가능성)와 금액이 맞음. 다음: Cost Explorer EC2-Other를 '사용 유형'으로 묶은 화면 → 메인이 판정. 끄거나 지우지 않음 | PAYMENTS→MAIN | 11-20 01:39 | 24h 안 (권장) | 진행 중 |
 
 ### 3.2 나중 또는 조건부
 
