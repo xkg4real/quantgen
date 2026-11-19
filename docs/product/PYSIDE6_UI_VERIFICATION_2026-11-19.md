@@ -79,3 +79,25 @@ QT_QPA_PLATFORM=offscreen PYTHONFAULTHANDLER=1 gdb -q -batch -ex run -ex "thread
 3. 원인 후보 부분(시장 화면 차트 미리보기 `on_snapshot`, 실시간 연결, 오른쪽 열 카드 불러오기)을 하나씩 끈 변형으로
    반복합니다.
 4. 필요하면 AddressSanitizer로 빌드한 Qt/PySide6로 돌립니다.
+
+## 해결 (2026-11-19, OS 세션 원인 확정 → UI 세션 반영)
+
+- 원인(OS 세션, `claude/os-pyside6-abort-20261119`의 `docs/platform/PYSIDE6_TRIAL_2026-11-17.md` 10-1절): 앱 코드가 아니라
+  **테스트 보조 코드 3곳**입니다. 가짜 서비스가 스레드 풀 작업 안에서 `QThread.currentThread()`를 불러 그 객체를 보관했습니다
+  (`tests/desktop_market_chart_acceptance.py`, `tests/desktop_qscore_acceptance.py`, `tests/desktop_acceptance.py`). PySide6는 Qt가
+  만들고 지우는 풀 내부 스레드의 Python 래퍼를 만들고, 창과 풀이 사라진 뒤 그 래퍼가 정리되며 해제된 메모리를 건드리는 것으로
+  봅니다(PySide6 내부 동작 부분은 OS 세션의 가설).
+- 고침: OS 세션 패치 `ui_fix_thread_fixtures.patch`를 그대로 적용했습니다(`490562d`). 세 곳 모두 `threading.get_ident()`를
+  기록하고 그 값으로 비교합니다. 앱 코드 변경은 없습니다.
+- UI 세션의 독립 확인. PySide6 6.12.0, 4개 동시 실행, glibc tcache를 꺼서 재현을 잦게 한 조건입니다.
+
+| 대상 | 실행 | 비정상 종료 |
+|---|---|---|
+| 고치기 전(`5025c6f` 코드) `tests.desktop_market_tabs_acceptance` | 32 | 3 (세그폴트) |
+| 고친 뒤(`490562d`) 같은 모듈 | 80 | **0** (80번 모두 통과) |
+| 고친 뒤, 바뀐 네 모듈(PyQt6 / PySide6) | 73개 테스트 | 0 / 0 (모두 통과) |
+
+  고치기 전 재현율이 그대로라면 80번 중 0번이 나올 확률은 약 0.04%입니다. OS 세션 확인(일반 조건 160번, tcache 끔 160번 모두 0)과도
+  일치합니다.
+- **판정:** Linux 기준으로 UI 브랜치의 PySide6 동작은 PyQt6와 같습니다. 남은 확인은 Windows·macOS 실행이며, OS 세션의
+  `platform-build.yml`과 소유자 PC에서 합니다.

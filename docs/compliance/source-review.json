@@ -359,7 +359,7 @@
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md": "0b26452ceb5e1eaed963b60f1a9f5b7bf8276552602fce776ea9b54625885144",
     "docs/product/PROVIDER_PARITY_RERUN_2026-11-11.md": "9604ff31a94d2e182bebfb71ec65cd83ca2f96cb8942deae39d3a337b288d4dd",
-    "docs/product/PYSIDE6_UI_VERIFICATION_2026-11-19.md": "0193a01eaaf90406864b11e06027d3e3f675b3804964d1ed907fb1ab3b54d50e",
+    "docs/product/PYSIDE6_UI_VERIFICATION_2026-11-19.md": "d868e506d49d29571fd7fb1813b7bfc336ed12ad29e2f25203c9a9e4c96888c0",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
@@ -512,7 +512,7 @@
     "tests/desktop_a1_terms_acceptance.py": "2e8613a5e6c25766a138e483c449bfbe8e4098ed48e05d3513a5ca6b46fa781d",
     "tests/desktop_a3_layout_acceptance.py": "0a0fc4de5a4f893020c2e13f9c028506d57bfa744e9c8c2771c5d706a718556a",
     "tests/desktop_a3_reading_acceptance.py": "84d69d2df57bf9592ec5dff00c0df32b24dcc454e06d539e330e3964382ae847",
-    "tests/desktop_acceptance.py": "922f93afe5bb0bbc852bc95df31cb52beb317e9121c192d7484debecdda9291d",
+    "tests/desktop_acceptance.py": "0c0c8db4fd29e83143bbc066ce734f2d9ca59c3cc21c7f6157a06e64a5cf7f39",
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
     "tests/desktop_authored_prose_language_acceptance.py": "72a0704f3a25a1b7b86b4c0f517c59977a80d6ddb9c39174d4e907df4e34debd",
     "tests/desktop_bonds_portfolio_language_acceptance.py": "9987cb3db473db8602265af749a64d573a461f93b0c4bd386ed27dd0ed4f8c4d",
@@ -537,7 +537,7 @@
     "tests/desktop_macro_acceptance.py": "e221eb4a7b4d5db5d941f5d7d33902677b20f7611dbbcf940ef02fa41f2b2fee",
     "tests/desktop_macro_language_acceptance.py": "714ec7acf5c4733e83dbc7910c9bb4cfceb107c5e70c76fe2594738c67f2a670",
     "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
-    "tests/desktop_market_chart_acceptance.py": "f6cc71f30269e34e3fb137134e49268e9a30d7d46a623b1c020c2516b8e2bfef",
+    "tests/desktop_market_chart_acceptance.py": "8b33d20944da982a51b2279dbc1d67d31b615b005f0fc681e03cde5aa8a14759",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_market_first_paint_acceptance.py": "b2fc5d138f12ea6e1b72c598aa96cca2551260b2432cb245727cbd070d99e5fa",
     "tests/desktop_market_hub_acceptance.py": "5132e631c8668794a04f82be1644124a788f15facc0c6cc70b6515bd2e992d78",
@@ -553,7 +553,7 @@
     "tests/desktop_owner_ui_strategy_acceptance.py": "d5319c7d4e659e7b1b370c313350d982d23859b76d579202a5877f04fd1195e0",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
-    "tests/desktop_qscore_acceptance.py": "67db9d30ead27bf375189a1ced3cb60977f6c4600ce7ef40678ce1948867fb06",
+    "tests/desktop_qscore_acceptance.py": "c24c2941dbba1f61a3ef0104cbe0a86f555295ade9432dc28738b4751feef1b6",
     "tests/desktop_quote_coverage_acceptance.py": "a430d1493495a3f2bd440ba62e359f3a8904478c8d4f8f4f8e17bcb577df8e1c",
     "tests/desktop_rates_language_acceptance.py": "31334d0c0d9e3a633e94e8389b23629754d7fd289f479f77a9057b94e3766f45",
     "tests/desktop_responsive_tools_acceptance.py": "3fa58edd10fc71b8d739a2b573331448a0216dcd42a7c56ee99c1d796576e20e",
@@ -772,163 +772,163 @@
   "reviews": {
     "1": {
       "document_sha256": "546a396893b50ef5d8e95c18be4103f5a2302253d397429859957bd1540724cf",
-      "source_digest": "d80be9ecf7c26324e79e90165a5eca19be2957a303fe39bf160591b7a7122e5c",
+      "source_digest": "24970c5b3eb9462e110ef14083bf34b7f536cbd4b6a88173c5f106345d009c49",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.854241+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.012497+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "2": {
       "document_sha256": "1c7eb9b60585b1fd4d1a23723051454e768b6ea6b31b9e58bd8122ac73cdd5e1",
-      "source_digest": "d80be9ecf7c26324e79e90165a5eca19be2957a303fe39bf160591b7a7122e5c",
+      "source_digest": "24970c5b3eb9462e110ef14083bf34b7f536cbd4b6a88173c5f106345d009c49",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.856379+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.014826+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "3": {
       "document_sha256": "50fcceb8fb66b30a535ff6015a66ff5e5cee801b61433cc3aa99acd3673c4393",
-      "source_digest": "668a3f0b960833c38aa4cfbb71345f3def31063695ac1a1fda9b5b52b0508599",
+      "source_digest": "1bef1dfb579eec665b61d5c6dc17a897f50a4cb9c16f82465d443e793cb4d6ec",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.858185+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.016698+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "4": {
       "document_sha256": "4a2528a8c62c60983069941ff506c41c6b251ff1f402ef6cf7723e9901bb7a91",
-      "source_digest": "008268b0304a5bafdfe03b68fa0ab2b55fb43056fcad159f0793930926ad5609",
+      "source_digest": "32958dd56a265ea5ae96f9c8821705b6d081812a8e277f524146ff42b78e6419",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.859976+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.018437+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "5": {
       "document_sha256": "54164c56f4c3999b8ed65115e411151dca9dd6a46fea7bc57d0a750774d7b555",
-      "source_digest": "18192728372885b2da44fc4d397b0c2b50f8d52914b2ca842b79765e53430e5d",
+      "source_digest": "b2a69ab1c9b13182939799f69484668aab8a250187378f73a6b7f4638a0688ad",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.861821+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.020161+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "6": {
       "document_sha256": "5871443de50226c2680aa2c41059c06b4d1290f28f1c859d5ed979fd17a2918e",
-      "source_digest": "d40ad749b6afff4a1f59d71f014fc50bad9d721c3bf972197fcf2087128461fd",
+      "source_digest": "22ad290fe03cd5e46b31cb15035e9d6fbcd5db37649478fd78cc7bac747d04d0",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.863553+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.022565+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "7": {
       "document_sha256": "437529f84b2cf492d8e04e5e0190c1cd1f15ea06a17ca4da24bbacc070d77ba1",
-      "source_digest": "d80be9ecf7c26324e79e90165a5eca19be2957a303fe39bf160591b7a7122e5c",
+      "source_digest": "24970c5b3eb9462e110ef14083bf34b7f536cbd4b6a88173c5f106345d009c49",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.865287+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.024308+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "8": {
       "document_sha256": "848ef8feac5c087d60646cde3e84b078bf964690b34e287ad747f0ca2e508467",
-      "source_digest": "d40ad749b6afff4a1f59d71f014fc50bad9d721c3bf972197fcf2087128461fd",
+      "source_digest": "22ad290fe03cd5e46b31cb15035e9d6fbcd5db37649478fd78cc7bac747d04d0",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.866999+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.026115+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "e5009511b80fb1e728af138415ed0c565dc3660972a07828bcd2cb0e4980b50f",
+      "source_digest": "93b9933598dad92063e5b5c3861957d94f947c06f880f70c3ba92d67c00ac8c2",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.868665+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.027602+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "10": {
       "document_sha256": "ce304488b177e5fa81046782034d9a3c23a411ca3cef859d46b7df13ba0c5f5f",
-      "source_digest": "5b3aca9f591557aae26caf22969796aa17a6f0dd635d5b60140e373dc2b27c8f",
+      "source_digest": "9be288c5d6a690cae5a7c1cdfbf3c8826378617ac76028cc33e663d99f049e39",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.870294+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.029263+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "11": {
       "document_sha256": "11a071fe459f3d6f622ec4ee4480200c3e7ed131153e00bd6823e552e43a7004",
-      "source_digest": "0087fd46bec32a7a058db33670aaf4dedc80e6072b48e50ded5e2626ceb18d10",
+      "source_digest": "2841d5e8c3b1c62191745c8c8fdba2e909c36cd10217e3aa72c8cbae88c454fe",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.872044+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.031238+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "12": {
       "document_sha256": "18af1551af29075d92583d7bc84a780f3719662115a7b26e4aeb9efd760d1afc",
-      "source_digest": "eb6a2f45b98658ede268e9bceae05c301cbf818e45c6d1384e1893ca30ec2e87",
+      "source_digest": "9a97be386696fb5ee180766a17d5e3e2425f849b28ab1e05b5d28865cabcf8d9",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.873866+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.032901+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "e5009511b80fb1e728af138415ed0c565dc3660972a07828bcd2cb0e4980b50f",
+      "source_digest": "93b9933598dad92063e5b5c3861957d94f947c06f880f70c3ba92d67c00ac8c2",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.875493+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.035004+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "e5009511b80fb1e728af138415ed0c565dc3660972a07828bcd2cb0e4980b50f",
+      "source_digest": "93b9933598dad92063e5b5c3861957d94f947c06f880f70c3ba92d67c00ac8c2",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.877303+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.036678+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "15": {
       "document_sha256": "99b8253de2d54323b48c1dc8edb663bb6105930c24bb15e8f70800aec2a49cf1",
-      "source_digest": "e5009511b80fb1e728af138415ed0c565dc3660972a07828bcd2cb0e4980b50f",
+      "source_digest": "93b9933598dad92063e5b5c3861957d94f947c06f880f70c3ba92d67c00ac8c2",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.878889+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.038423+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "16": {
       "document_sha256": "ff89cdb2a5ee70c3f830162c8e3c8a287291c89fddd7c850ac5b6048d9217f98",
-      "source_digest": "0830f1fc4e5d175548d470e37722b190c5f35d370536f6de084ea955c949c447",
+      "source_digest": "661c96e02de5317cad2d90f8f5b72645a7e60e2d391f8b059209a504fcad0966",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.880643+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.040492+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "17": {
       "document_sha256": "dde1a8a05a26c612255f5858d272019e11cb7caf4542aa017b626ecea968713d",
-      "source_digest": "d40ad749b6afff4a1f59d71f014fc50bad9d721c3bf972197fcf2087128461fd",
+      "source_digest": "22ad290fe03cd5e46b31cb15035e9d6fbcd5db37649478fd78cc7bac747d04d0",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.882232+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.042152+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "18": {
       "document_sha256": "f41494e3a28b54cd191916f9ee985f795849e6bf67d69c8dffebd7d081d1187d",
-      "source_digest": "d80be9ecf7c26324e79e90165a5eca19be2957a303fe39bf160591b7a7122e5c",
+      "source_digest": "24970c5b3eb9462e110ef14083bf34b7f536cbd4b6a88173c5f106345d009c49",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.883793+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.044393+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "bc83ef0ce2c61846145c4394bad79600e4b0bfde3085d308218b670204ac5c3c",
+      "source_digest": "d7706d815f5a1e304b62d886b1f1d887a18f74613829ad9110be3b95d5bc6218",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.885403+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.046166+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     },
     "20": {
       "document_sha256": "0bb26298409489acde50b160abaa10068a84cc0e5b756041665f5277435b19eb",
-      "source_digest": "d80be9ecf7c26324e79e90165a5eca19be2957a303fe39bf160591b7a7122e5c",
+      "source_digest": "24970c5b3eb9462e110ef14083bf34b7f536cbd4b6a88173c5f106345d009c49",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Reviewed the 2026-11-19 OS-session handoff folder (prompt, repro shell scripts, gdb excerpt) against FACTS and 12-claims; test tooling only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
-      "reviewed_at": "2026-11-19T01:41:33.886971+00:00",
-      "source_commit": "a3ea10d5883f96cbc14368727bf6a334b21485c3"
+      "review_note": "Reviewed the 2026-11-19 test-fixture fix for the PySide6 abort (thread idents instead of QThread wrappers in three test files) and the verification report update against FACTS and 12-claims; tests only, no app behaviour, host, transmission or order change; publication blockers unchanged.",
+      "reviewed_at": "2026-11-19T15:09:18.047870+00:00",
+      "source_commit": "490562dbf1d0dd95a11b48953bdb6e5eb94de72c"
     }
   }
 }
