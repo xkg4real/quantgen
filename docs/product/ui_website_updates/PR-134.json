@@ -1,0 +1,32 @@
+{
+  "id": "PR-134",
+  "source_pr": "https://github.com/xkg4real/quantgen/pull/134",
+  "source_branch": "claude/payments-key4a-20261120",
+  "source_commit": "ef6b7af476ae",
+  "summary": "KEY-4/a account docs. The website account request (ACCOUNT_SETUP.md part 3) changes: ACC-3 handles NEW_PASSWORD_REQUIRED after an admin temporary password (password rule of step 13, with a one-line suggestion to switch to an authenticator app); ACC-4 names each refusal case and, when an email-MFA member's self-service reset is refused, shows: contact@quantgeneration.com으로 문의하시면 계정을 삭제한 뒤 같은 이메일로 다시 가입하도록 도와드립니다 (저장된 정보는 사라집니다); ACC-9 tests both new paths. Owner decisions OA-42 (second check before a temporary password) and OA-44 (delete and re-register when no second check is possible), 2026-11-20.",
+  "changed_files": [
+    "docs/commercial/accounts/ACCOUNT_SETUP.md",
+    "docs/commercial/accounts/ADMIN_GUIDE.md",
+    "docs/commercial/accounts/OWNER_STEPS.md",
+    "docs/compliance/source-review.json",
+    "tests/gateway_same_answer_acceptance.py",
+    "docs/product/ui_website_updates/PR-134.json"
+  ],
+  "verification": {
+    "tests": "gateway acceptance modules (5): 65 tests OK; compliance --check: consistency PASS, publication BLOCKED, 20 documents, 805 sources.",
+    "limitations": "AWS console labels follow AWS docs and the owner's 2026-11-20 screens; re-registration with a deleted email (T19b, ACC-9) is not yet tested; sign-in IP matching (ADMIN_GUIDE 6.1 (나)②) is unavailable until CloudTrail is shown to identify the member."
+  },
+  "website_impact": {
+    "classification": "account page wording and flow",
+    "action": "The owner pastes the updated ACCOUNT_SETUP.md part 3 block (OWNER_STEPS stage 2 message) into the website session: forced new-password screen with the authenticator-app suggestion, the reset-refused message above, and the ACC-9 tests. The website session writes no wording of its own for these cases. No website change is made here."
+  },
+  "delivery": {
+    "status": "queued",
+    "destination": "웹사이트 작업공간(AWS)",
+    "reason": "Website is maintained by a separate session; this file records the change only."
+  },
+  "website_application": "unverified",
+  "deployment": "unverified",
+  "merge_commit": "",
+  "merge_status": "opened"
+}
