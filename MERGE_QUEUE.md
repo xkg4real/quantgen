@@ -1,7 +1,7 @@
 # MERGE_QUEUE — main 병합 순서와 동결 (메인 세션이 관리)
 
 updated_at: 2026-11-20T03:30:00+09:00
-전체 업무 체크리스트: `WORKBOARD.md` · 세션 연결 규칙: `SESSION_PIPELINE.md` (2026-11-20 소유자 지시)
+전체 업무 체크리스트: `WORKBOARD.md` · 세션 연결 규칙: `SESSION_PIPELINE.md` (2026-11-19 23:00 KST 무렵 소유자 지시)
 coordinator: 메인 세션 (QUANTGEN/MAIN, https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB)
 freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보고("F22까지 성공적으로 마무리했습니다."), main `6e077dc`(소유자 `--no-ff` 병합, 부모 `8e026ab`·`13f4dea`), 그 push의 Compliance success, PR #4 merged. (동결 기간: 2026-11-18T19:10:45+09:00 ~ 위 시각)
 
@@ -28,7 +28,7 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 | 4b | ~~KEY-3 (게이트웨이)~~ | PR #132 | **병합 완료 main `9f76b07`** (2026-11-19 19:07 KST) |
 | 4c | ~~KEY-4~~ | PR #133 | **병합 완료 main `8445187`** (2026-11-20 03:27 KST, CI 10개 녹색, 메인 검토 4회) |
 | 4d | 메인 문서 PR: CLAUDE.md(SESSION_PIPELINE·WORKBOARD 포인터, "법인 설립 완료" → handoff INCORPORATION_CHECKLIST.md), OWNER_RULINGS_LOG(11-19 계정 결정 3건: 비밀번호 특수문자, HTML 인증 메일, 이메일 MFA 유지) | 메인 | **다음** (메인이 만듦, 11-20) — docs만이라 4d'와 함께 열 수 있음(파일 안 겹침, 둘 중 source-review.json을 바꾸는 쪽이 나중에 최신 main 합침) |
-| 4d' | KEY-4/a 계정 문서 고침 (ADMIN_GUIDE 6.1 두 번째 확인 정의, OWNER_STEPS T18 표·Reset password 시험 단계, 작은 것 F4–F9, 자체 시험 1줄) | PAYMENTS | **병합: PAYMENTS_ACCOUNT_KEYS** (2026-11-20 03:30 KST) — 최신 main 8445187 합치기 → 기준선 마지막 → PR. 브랜치 claude/payments-key4a-20261120 @ e305587 |
+| 4d' | KEY-4/a 계정 문서 고침 (F1–F9, OA-42·OA-44 반영, 자체 시험 1줄) | PAYMENTS **PR #134** @ `e37c9a9` | 열림 (11-20 03:3x). 메인 문서 재확인 중 + CI → 병합 |
 | 5 | UI 7쪽 + PySide6 준비 | UI `claude/friendly-bardeen-r6xe8f` | 소유자 실행 확인 뒤 (UI 세션 브랜치는 아무도 고치지 않음) |
 | 6 | PySide6 전환 (`pyqt6_to_pyside6 --apply` + `switch_day.py --apply`, 화면 문구 3곳은 UI 세션) | OS | 5 뒤 (OS 세션 제안 순서: UI PR → 전환) |
 | 4e | OS-F2 (~/.nextgen → core.app_paths.user_data_dir, config.py 포함 → Nautilus 지문 바뀜) + OS PySide6 종료 원인 기록(1bf2508, 따로 커밋) | OS `claude/os-f2-data-dir-20261120` @ `2f69c34` | 4d·4d' 뒤 (11-20 메인). CRLF 복원·표시 파일 우선 반영 확인. 새 지문 bcaf33d9… |

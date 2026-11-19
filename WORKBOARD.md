@@ -129,7 +129,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [x] KEY-3/design — GATEWAY_DESIGN.md v0.2 — 9f76b07
 - [x] KEY-3 — core/gateway + 경계 시험 — 9f76b07 (PR #132)
 - [x] KEY-4 — PR #133 → main 8445187, 원장 KEY-4
-- [~] KEY-4/a — 계정 문서 고침(F1–F9) + 자체 시험 1줄(SA-INT-1) + 소유자 3-A 시험 결과(T3–T9, T13–T15) — **초안 끝: `claude/payments-key4a-20261120` @ `9fdbb0b`** (d6a1997에서, 메인 확인 11-20 02:0x: 문서 3개+시험 1개+기준선, 계정번호·키·IP·실제 메일 없음, 시험 주소는 '내아이디+' 자리표시). KEY-4 병합 뒤 main 합쳐 PR(대기열 4d'). 남은 확인: T14 View event, T17 오류 이름, T17a 결과 → 6.1 ②·ACC-4 확정
+- [~] KEY-4/a — 계정 문서 고침(F1–F9) + OA-42·OA-44 반영 + 자체 시험 1줄 — **PR #134 @ e37c9a9** (main 8445187 합침, 6파일, PR-134.json 포함). 메인 재확인 workflow + CI 대기
 - [~] KEY-5 — 화면 쪽 22파일/44곳 + quantgen_desktop/paper.py + 키·연결 화면(gateway.status()) — 구현은 UI 세션 몫(소유자 경유). **요청문 초안 끝: handoff `plans/2026-11-20/KEY5_UI_REQUEST.md` (0df90ec, PAYMENTS)** — KEY-4 병합 뒤 메인 확정 신호 → 줄 번호 재정렬 → 소유자가 UI 세션에 붙여 넣음. OS-F1 뒤 적용 권장. 앞서 정할 것: set_backend(None) 가/나 안(OA-41)
 - [ ] KEY-5/a — KEY-5 앞 gateway 준비 3건 (G1 data.kis_stream 입구, G2 kis_workspace 순수 값 목록, G3 main.py QuoteFeed 하위 클래스를 공용 모듈로 → paper.py 재사용) — PAYMENTS, KEY-4 병합 뒤 main에서 브랜치, 대기열 4e
 - [~] PAY-0 — 문의 7건 초안 + 목록 표 (docs/commercial/inquiries/, 문서 8개) — **초안 끝: `claude/payments-pay0-20261120` @ `7f8939c`** (main 9f76b07에서, 메인 확인 11-20 01:00: 문서만, 비밀값·다른 연락처 없음). PR은 대기열 자리 뒤, 원장은 병합 때. 발송은 소유자(OA-32)
