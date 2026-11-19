@@ -74,6 +74,7 @@
 
 ## F. 앱 서명·배포·스토어 (D-U-N-S 뒤; OS 세션 + 소유자) *(2026-11-20 추가)*
 지금은 서명 없는 설치파일 공개 배포 금지, Apple 개인 명의 가입 안 함 (서명 주체가 실명으로 보임). 아래가 끝나야 공개 배포.
+
 | # | 할 일 |
 |---|---|
 | F1 | **D-U-N-S** 조회 → 없으면 신청 (무료, 최대 5영업일, Apple 반영 최대 2영업일). Apple은 이 번호로 법인의 실재·법인격·주소를 확인하므로 영문명·주소·전화가 등기와 같아야 함. 〔근거: `claude/cross-platform-expansion-2026-11-11.md` 6절, Apple Developer 가입 안내〕 |
@@ -101,4 +102,4 @@
 
 ## 보강 기록
 - 2026-11-20 (claude.ai 채팅, 소유자 요청 "추가해야 될 부분 있으면 바로바로 넣어주세요"): 먼저 물어볼 것 3~5, 0절, A5~A7, B6~B8, E6, F·G·H절 추가. 기존 줄은 바꾸지 않음. 근거는 줄마다 적음: main `9f76b07`, handoff `e831256`, claude.ai 프로젝트 "QUANTGEN_런칭준비" 문서, 소유자 Notion. 법령 줄은 검색으로 확인한 조문 번호이며 **법률 자문이 아닙니다**.
-- 사본: claude.ai 프로젝트 문서 `claude/incorporation-checklist.md`, Notion Documents "법인 설립 체크리스트". 고칠 때는 이 파일을 먼저 고치고 사본을 맞춤.
+- 원본: GitHub `xkg4real/quantgen` `handoff` 브랜치 `INCORPORATION_CHECKLIST.md`. 사본: claude.ai 프로젝트 "QUANTGEN_런칭준비" 문서 `claude/incorporation-checklist.md`, Notion Documents "법인 설립 체크리스트 (QUANTGEN)". 고칠 때는 원본을 먼저 고치고 사본을 맞춤.
