@@ -1,6 +1,6 @@
 # 소유자 실행 순서: AWS → 전달 → 시험 → 공개 전
 
-- 판: v1.7 (2026-11-20, 소유자 진행 결과와 PR #133 3차 검토: 1단계 1~23c·25 끝남 (24는 기존 예산 사용), 23a·23b를 CloudShell 명령으로 (새 풀은 가입 전이라 콘솔 지표 목록에 없음), 21번 Quick trail create, 24번 기존 예산 규칙과 크레딧 메모, 1-2에 기록한 값, 1-3을 일반 "풀 지우기" 두 경우로 (B2), 15번·2단계·3단계에 이메일 MFA 회원 비밀번호 분실 처리 (A4·A5, 소유자 결정 2026-11-20 "권장으로 가겠습니다")). v1.6 (2026-11-19, 소유자 결정: 이메일 MFA 유지, 15번 복구 방법). v1.5 (2026-11-19, 메인 PR #133 2차 검토 B3·C5: 계정 둘 구분 — MFA는 액세스 포털/관리 계정 경로, 결제 접근은 Budgets가 거부될 때만 Golden Hour Code 루트, 5-2a는 두 계정 모두; 1-3 잘못 만든 풀 지우기와 삭제 보호 끄기; 풀 ID 리전 확인을 7·17번으로). v1.4 (2026-11-19, 소유자 결정: 13번 비밀번호에 특수문자 반영, 12번 HTML 인증 메일·영어 먼저·Message templates 위치). v1.3.2 (2026-11-19, 소유자 진행 중 확인: 1-0 둘째 항목으로 프로젝트 계정 Golden Hour Code 확인, 1번에 풀 ID 리전 확인 — v1.5에서 7·17번으로 옮김). v1.3.1 (2026-11-19, 메인 PR #133 검토 B10: 1-0의 따로 만드는 예산 줄을 지우고 24a·24b로 모음, 결제 화면 접근 켜기 추가, IAM Identity Center 로그인 확인 반영, 5-2a 법인 이메일·연락처로 명확히, 1-0 소요 15~20분). v1.3 (2026-11-19, 소유자 질문 반영: 1-0 MFA 찾는 길과 로그인 계정, 5절 AWS 계정 이메일). v1.2 (2026-11-19, 6절을 메인 세션 확인대로 고침: 지금 하지 않음, 보통 앱 Python, 브랜치+PR). v1.1 6절 추가, v1 2026-11-18. 작성: PAYMENTS_ACCOUNT_KEYS 세션. 소유자 요청 (원문): "위 항목 중에서 시험, 전달, AWS, 공개 전 4단계를 수행하기 위해서 해야되는 일들을 구체화하여 .md 파일로 만들어 여기서 다운로드하고 볼 수 있도록 해주세요"
+- 판: v1.7 (2026-11-20, 소유자 요청 "T3 ~ T8까지 절차를 구체화해서 QUANTGEN_OWNER_STEPS.md를 수정해주세요": 3-A T3~T8 단계별 누를 곳·기대 결과와 CloudShell 값 세 줄; 소유자 진행 결과와 PR #133 3차 검토: 1단계 1~23c·25 끝남 (24는 기존 예산 사용), 23a·23b를 CloudShell 명령으로 (새 풀은 가입 전이라 콘솔 지표 목록에 없음), 21번 Quick trail create, 24번 기존 예산 규칙과 크레딧 메모, 1-2에 기록한 값, 1-3을 일반 "풀 지우기" 두 경우로 (B2), 15번·2단계·3단계에 이메일 MFA 회원 비밀번호 분실 처리 (A4·A5, 소유자 결정 2026-11-20 "권장으로 가겠습니다")). v1.6 (2026-11-19, 소유자 결정: 이메일 MFA 유지, 15번 복구 방법). v1.5 (2026-11-19, 메인 PR #133 2차 검토 B3·C5: 계정 둘 구분 — MFA는 액세스 포털/관리 계정 경로, 결제 접근은 Budgets가 거부될 때만 Golden Hour Code 루트, 5-2a는 두 계정 모두; 1-3 잘못 만든 풀 지우기와 삭제 보호 끄기; 풀 ID 리전 확인을 7·17번으로). v1.4 (2026-11-19, 소유자 결정: 13번 비밀번호에 특수문자 반영, 12번 HTML 인증 메일·영어 먼저·Message templates 위치). v1.3.2 (2026-11-19, 소유자 진행 중 확인: 1-0 둘째 항목으로 프로젝트 계정 Golden Hour Code 확인, 1번에 풀 ID 리전 확인 — v1.5에서 7·17번으로 옮김). v1.3.1 (2026-11-19, 메인 PR #133 검토 B10: 1-0의 따로 만드는 예산 줄을 지우고 24a·24b로 모음, 결제 화면 접근 켜기 추가, IAM Identity Center 로그인 확인 반영, 5-2a 법인 이메일·연락처로 명확히, 1-0 소요 15~20분). v1.3 (2026-11-19, 소유자 질문 반영: 1-0 MFA 찾는 길과 로그인 계정, 5절 AWS 계정 이메일). v1.2 (2026-11-19, 6절을 메인 세션 확인대로 고침: 지금 하지 않음, 보통 앱 Python, 브랜치+PR). v1.1 6절 추가, v1 2026-11-18. 작성: PAYMENTS_ACCOUNT_KEYS 세션. 소유자 요청 (원문): "위 항목 중에서 시험, 전달, AWS, 공개 전 4단계를 수행하기 위해서 해야되는 일들을 구체화하여 .md 파일로 만들어 여기서 다운로드하고 볼 수 있도록 해주세요"
 - 반영한 소유자 답 (2026-11-18): Q1 운영자 = 개인 (법인 설립을 알려 주시면 바로 법인명으로 바꿈), Q2 메일 = `contact@quantgeneration.com`, Q3 최소 연령 = 무료 만 14세 / 유료 만 19세.
 - 함께 보는 문서 (브랜치 `claude/payments-keys-20261117`): `docs/commercial/accounts/ACCOUNT_SETUP.md` (설정값, 25단계, 웹사이트 요청 블록), `docs/commercial/accounts/ADMIN_GUIDE.md` (관리자 안내서).
 - *(미검증)* 은 AWS 화면 문구를 확인하지 못한 곳입니다. 화면이 다르면 "단계 번호 + 실제 문구"를 알려 주세요. 문서를 고쳐 드립니다.
@@ -226,18 +226,28 @@ aws cloudwatch describe-alarms --region $R --alarm-names qg-signup-spike qg-sign
 
 ### 3-A. 콘솔만으로 (1단계 직후, 약 30분)
 
-준비: 시험용 메일 별칭 (예: `내아이디+qgtest1@gmail.com`), 시험용 비밀번호 1개 (10자 이상, 대·소문자·숫자·특수문자. **실제로 쓰는 비밀번호와 다르게**, 시험 뒤 버림).
+준비: 시험용 메일 별칭 (예: `내아이디+qgtest1@gmail.com`), 시험용 비밀번호 1개 (10자 이상, 대·소문자·숫자·특수문자. **실제로 쓰는 비밀번호와 다르게**, 시험 뒤 버림. **작은따옴표(`'`)는 쓰지 않음**: 명령에서 비밀번호를 작은따옴표로 감싸므로 명령이 깨짐).
+
+CloudShell을 열면 먼저 아래 세 줄을 붙여 넣어 값을 정해 둡니다 (`내아이디`만 본인 Gmail 아이디로 바꿈; 이 문서에는 실제 주소를 적지 않음). 그러면 아래 명령 ①~⑥의 `<Client ID>`·`<시험 이메일>` 자리에 `$CLIENT`·`$TESTMAIL`을 그대로 써도 됩니다. 메일로 온 코드는 예시 `123456`(가입 확인)·`654321`(재설정) 자리에 실제 6자리를 넣습니다.
+
+```bash
+R=ap-southeast-2
+CLIENT=77qi9vi90i118rck1ppisbca7r          # quantgen-web (1-2절)
+TESTMAIL='내아이디+qgtest1@gmail.com'      # 시험 별칭
+```
+
+**T3~T8 공통 시작 (콘솔):** 오른쪽 위 계정 **Golden Hour Code**, 리전 **Asia Pacific (Sydney)** 확인 → 위 검색창 `Cognito` → **User pools** → `quantgen-prod` (ID `ap-southeast-2_pQEsrAvvb`) → 왼쪽 **User management** → **Users**. 아래 버튼 이름은 AWS 문서로 확인했지만 문서가 약 1년 전 것이라 화면 문구가 다를 수 있습니다 (문서 확인, 화면 문구 다를 수 있음). 다르면 실제 문구를 결과 칸에 적어 주세요. 〔AWS 문서: [Managing and searching for user accounts](https://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html), [Managing users in your user pool](https://docs.aws.amazon.com/cognito/latest/developerguide/managing-users.html)〕
 
 | # | 할 일 | 정확한 방법 | 기대 결과 | 결과 |
 |---|---|---|---|---|
 | T1 | 시험 계정 가입 | 콘솔 위 `>_` (CloudShell) → 아래 명령 ① | 시험 메일함에 6자리 코드 메일 도착 (발신 `no-reply@quantgeneration.com`, 회신 주소 `contact@`) | |
 | T2 | 가입 확인 | 명령 ② (코드 넣기) | 오류 없음. 콘솔 **Users** 에서 상태 **Confirmed** | |
-| T3 | 회원 목록·검색 (관리자 안내서 1절) | **Users** → 검색 칸 속성 **email** → `내아이디+qgtest` 입력 | 시험 계정 1개 보임 | |
-| T4 | 회원 상세 (2절) | 회원 이름 클릭 | email, sub, custom 속성이 보임. 비밀번호는 어디에도 없음 | |
-| T5 | 정지 전 삭제 버튼 (부록 C7) | **Actions** 를 열어 **Delete user** 가 눌리는지만 보고, **누르지 않음** | 정지 전에는 막혀 있음 (확인할 것) | |
-| T6 | 정지 (4절, 부록 C1) | **Actions** → **Disable user access** → **Disable** | **Enabled** 열이 Disabled | |
-| T7 | 해제 (부록 C3) | **Actions** → **Enable user access** → **Enable** | Enabled로 돌아옴 | |
-| T8 | 비밀번호 재설정 (6절, 부록 C4) | **Actions** → **Reset password** → 확인 | 상태 **Reset required**, 시험 메일함에 코드 메일 | |
+| T3 | 회원 목록·검색 (관리자 안내서 1절) | 1. 공통 시작으로 **Users** 화면. 2. 검색 칸 **왼쪽의 속성 선택**을 **Email**로 바꿈. 3. 검색 칸에 `내아이디+qgtest` 입력 → Enter. 콘솔 검색은 언제나 **앞부분 일치** ("~로 시작")이고 이메일은 대소문자를 가리지 않으므로 주소 앞부분만 넣어도 됩니다. 4. 목록이 안 나오면 CloudShell로 같은 검색: `aws cognito-idp list-users --region ap-southeast-2 --user-pool-id ap-southeast-2_pQEsrAvvb --filter 'email ^= "내아이디+qgtest"'` | 시험 계정 **1개**, 확인 상태 **Confirmed**, 상태 **Enabled** | |
+| T4 | 회원 상세 (2절) | 1. T3 목록에서 그 회원의 **User name** 링크를 누름 (이름이 이메일이 아니라 `xxxxxxxx-xxxx-…` 같은 UUID(sub)일 수 있음). 2. 상세 화면에서 **User information** 구역: User name, User ID (sub), Created / Last modified 시각, Confirmation status, Status (Enabled), MFA setting. 3. **User attributes** 구역: `email`, `email_verified` = true, `custom:terms_ver` = test, `custom:age14` = Y, `custom:mkt_opt` = N. 4. **Groups** 구역 (지금은 없음). 5. 화면 어디에도 비밀번호가 없는지 봄. **아무것도 바꾸지 않음** | 위 값이 보이고 비밀번호는 없음. 실제 구역 이름을 결과 칸에 적기 | |
+| T5 | 정지 전 삭제 (부록 C7) | 1. **Users** 목록으로 돌아가 시험 회원 줄 왼쪽의 **선택 단추(라디오)**를 누름. 2. 목록 위 **Delete** (또는 **Delete user**)를 누름. 3. 열린 확인 창을 읽기만 함: AWS 문서상 삭제 창에는 **Disable user access** 단계가 들어 있고, 접근을 먼저 막아야 지울 수 있음 (API도 정지 뒤 `AdminDeleteUser`). 4. **Cancel**을 누름. **확인(Delete)은 누르지 않음** | 창이 "먼저 정지"를 요구하거나 아직 지울 수 없음. Cancel 뒤 회원은 그대로 **Enabled** | |
+| T6 | 정지 (4절, 부록 C1) | 1. T4처럼 회원 상세로 들어감. 2. 오른쪽 위 **Actions** → **Disable user access**. 3. 확인 창에서 **Disable** | 문서상 효과: 그 회원의 모든 세션 로그아웃, 액세스·새로고침 토큰 폐기, 로그인 막힘. 상세와 목록의 상태가 **Disabled** | |
+| T7 | 해제 (부록 C3) | 1. 같은 회원 상세 → **Actions** → **Enable user access**. 2. 확인 창에서 확인 (**Enable**) | 상태가 **Enabled**로 돌아옴 | |
+| T8 | 비밀번호 재설정 (6절, 부록 C4) | 1. 같은 회원 상세 → **Actions** → **Reset password**. 2. 확인 창에서 확인. 3. 시험 메일함 (Gmail; 안 보이면 스팸함)에서 `no-reply@quantgeneration.com`이 보낸 재설정 코드 메일을 엶. **코드는 1시간 유효** → 1시간 안에 T9 (명령 ③) | 확인 상태 **Reset required** (화면에 `RESET_REQUIRED`로 보일 수 있음), 코드 메일 도착 | |
 | T9 | 새 비밀번호 정하기 (부록 C5 대신) | 명령 ③ (메일의 코드 + 새 시험 비밀번호) | 상태 **Confirmed** 로 돌아옴 | |
 | T10 | 인증 메일 재발송 버튼이 있는지 (0.3표 7번) | 상태가 Unconfirmed인 계정이 없으면 건너뛰고, 있으면 **Actions** 메뉴에 재발송 항목이 있는지만 봄 | 있음/없음 | |
 | T11 | 그룹 넣기·빼기 (9절, 0.3표 6번) | **Groups** → `qg-admins` → **Add user to group** → 시험 계정 → 추가 → 같은 화면에서 빼기 버튼 문구 확인 → 빼기 | 넣기·빼기 모두 됨, 빼기 버튼 실제 문구 | |
@@ -287,6 +297,7 @@ aws cognito-idp admin-set-user-password --region ap-southeast-2 \
 history -c
 ```
 
+- 출처 (T3~T8): AWS 문서 [Managing and searching for user accounts](https://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html) (검색은 앞부분 일치, 정지·해제·재설정·삭제), [Managing users in your user pool](https://docs.aws.amazon.com/cognito/latest/developerguide/managing-users.html). 메인 세션 확인 2026-11-20; 문서가 약 1년 전 것이라 버튼 문구는 화면과 다를 수 있음.
 - 화면에 남는 값: 시험 이메일 1개와 시험 비밀번호 (내 시험 계정이라 개인정보 문제는 없지만, `history -c` 로 지움).
 - ① 에서 `NotAuthorizedException` 이 나오면 자가 가입이 꺼진 것입니다 → **Sign-up** → **Self-service sign-up** → **Edit** → **Enable self-registration** 체크. `InvalidParameterException ... custom:` 이 나오면 9단계 속성 이름이나 16단계 쓰기 권한을 확인하세요.
 - **로그인이 막히는지 (부록 C2)** 는 명령줄로 보기 어렵습니다 (우리 클라이언트는 SRP 로그인만 허용). 3-B에서 웹 화면으로 확인합니다.
