@@ -656,6 +656,11 @@ class SameAnswerTest(unittest.TestCase):
         bumped = list(integers)
         bumped[50] += 500
         self.assertNotEqual(same(canon(bumped), canon(integers)), [])
+        # review 3 SA-INT-1: integers are compared exactly inside the hash, never as float sums; a summary that
+        # masked integers like floats would still see +500 through "sum" and pass the line above, so pin it here.
+        plain, moved = _summary(integers), _summary(bumped)
+        self.assertNotEqual(plain["shape_sha256"], moved["shape_sha256"])
+        self.assertEqual((plain["sum"], plain["sumsq"], plain["wsum"], plain["dsq"]), (0.0, 0.0, 0.0, 0.0))
         self.assertEqual(same(canon([v * (1 + 1e-12) for v in level]), canon(level)), [])   # float noise passes
 
     def test_no_fake_key_in_the_recorded_answers(self):
