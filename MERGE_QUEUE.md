@@ -28,13 +28,13 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 | 4b | ~~KEY-3 (게이트웨이)~~ | PR #132 | **병합 완료 main `9f76b07`** (2026-11-19 19:07 KST) |
 | 4c | ~~KEY-4~~ | PR #133 | **병합 완료 main `8445187`** (2026-11-20 03:27 KST, CI 10개 녹색, 메인 검토 4회) |
 | 4d | ~~메인 문서 PR (CLAUDE.md Session pipeline, OWNER_RULINGS_LOG 2026-11-20)~~ | PR #135 | **병합 완료 main `fa78df1`** (2026-11-20 03:4x KST), 원장 SESSION-PIPELINE |
-| 4d' | KEY-4/a 계정 문서 고침 (F1–F9, OA-42·OA-44 반영, 자체 시험 1줄) | PAYMENTS **PR #134** @ `e37c9a9` | 메인 재확인: F1–F9 대부분 FIXED, 고칠 것 4(6.2 동의 위조 방지 1회용 코드, 동의 메일 보관 기간, PR-134.json 문구, 8절 본인 확인) → PAYMENTS push 한 번 → CI 녹색 → 병합 |
+| 4d' | ~~KEY-4/a 계정 문서 고침 (F1–F9, OA-42·OA-44 반영, 자체 시험 1줄)~~ | PAYMENTS PR #134 @ `aa4be94` | **병합 완료 main `f065ec9`** (2026-11-20 05:36 KST), CI 7개 녹색, 원장 KEY-4/a (handoff 40b9378) |
 | 5 | UI 7쪽 + PySide6 준비 | UI `claude/friendly-bardeen-r6xe8f` | 소유자 실행 확인 뒤 (UI 세션 브랜치는 아무도 고치지 않음) |
 | 6 | PySide6 전환 (`pyqt6_to_pyside6 --apply` + `switch_day.py --apply`, 화면 문구 3곳은 UI 세션) | OS | 5 뒤 (OS 세션 제안 순서: UI PR → 전환) |
-| 4e | OS-F2 (~/.nextgen → core.app_paths.user_data_dir, config.py 포함 → Nautilus 지문 bcaf33d9…) + OS PySide6 종료 원인 기록(5커밋, 작업 A: PySide6 320회 abort 0) | OS `claude/os-f2-data-dir-20261120` @ `f9a3a75` (main 8445187 포함) | 4d' 뒤 "병합: OS" |
+| 4e | OS-F2 (~/.nextgen → core.app_paths.user_data_dir, config.py 포함 → Nautilus 지문 bcaf33d9…) + OS PySide6 종료 원인 기록(5커밋, 작업 A: PySide6 320회 abort 0) | OS `claude/os-f2-data-dir-20261120` @ `f9a3a75` (main 8445187 포함) | **병합: OS** (2026-11-20 05:40 KST 메인). OS가 최신 main `f065ec9` 합침 → 기준선(source-review.json) 마지막에 갱신 → `--check` PASS → PR. 메인 독립 검토 뒤 CI 녹색이면 병합 |
 | 4f | DS-H 홈 지표 6개 데이터 계층 (core/research/markets.py load_home_indicators, 시험, UI용 계약 문서, runtime-smoke 경로) | DATA `claude/ds-home-indicators-20261120` @ `f80b3b0` | 4e 뒤 (11-20 메인). 준비됨 |
 | 4g | DS·DIDM (8행을 당김: UI 소유자 확인 대기 중이라 준비된 것부터) | DATA `claude/data-source-didm-20261117` @ `c206b10` | 4f 뒤 |
-| 4h | KEY-5/a gateway 준비 3건 (data.kis_stream 입구, kis_workspace 순수 값 목록, QuoteFeed 하위 클래스 공용 모듈) | PAYMENTS | KEY-4·4d 뒤 (11-20 메인이 정함) |
+| 4h | KEY-5/a gateway 준비 3건 (data.kis_stream 입구, kis_workspace 순수 값 목록, QuoteFeed 하위 클래스 공용 모듈) | PAYMENTS `claude/payments-key5a-20261120` @ `dc936d4` (main 8445187에서) | 4g 뒤 (11-20 메인이 정함). 메인 독립 검토 진행 중(wf_56720449-739) |
 | 7 | KEY-5 (4f 뒤) (화면 쪽 22파일/44곳 + quantgen_desktop/paper.py, 키·연결 화면) | PAYMENTS 요청문(handoff plans/2026-11-20/KEY5_UI_REQUEST.md) + UI 구현(소유자 경유) | 6 뒤 권장, 4e 뒤 |
 | 8 | ~~DS·DIDM~~ → 4g로 당김 (11-20 메인) | DS | — |
 | 제안 | 정책 문서 PR-2 (계정 서비스 설명) | 메인/PAYMENTS | AWS 운영 풀 + 웹 계정 화면 뒤 |
