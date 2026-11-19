@@ -6,11 +6,11 @@ task: payments-account-keys
 cycle: 2026-11-17
 done_ids: KEY-3/design, KEY-3, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a
 next_ids: KEY-4, PAY-0, PAY-2
-updated_at: 2026-11-19T19:20:00+09:00
+updated_at: 2026-11-19T19:50:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/payments-key4-20261119
-work_commit: 9f76b07
+work_commit: c9dfb99
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -24,6 +24,8 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-19 19:50 갱신 — KEY-4 코드 완료, PR 전:** 브랜치 `claude/payments-key4-20261119` @ `c9dfb99` (push함, PR 없음). core 27개 파일·main.py의 직접 호출 92곳을 모두 게이트웨이로 (경계 목록은 화면만 21파일 43곳). 잔여 9건: 1~8 처리 (9는 정보). 입구: `provider(module)`, `ficc()` (호출마다 fred/yahoo 길 확인 → `yahoo: off`가 core 경로에서 실제로 Yahoo만 막음), `keys_ready`, `local_key`, `suspend_key`, `status_loaders`, `endpoint`. "앱 동작 동일": `tests/gateway_same_answer_acceptance.py` 24개 요청을 main `9f76b07`에서 돌린 답(`tests/fixtures/gateway/same_answers_main.json`)과 같음, 고장을 넣으면 실패 확인. 회귀: CI 모듈 목록 main 790 / 브랜치 797, 실패 같음 (환경 2건); 관련 시험 138개 모듈 main 828 / 브랜치 831, 실패 같음. 코드 지문 `10c27010…` 그대로. **남은 것:** PyQt 포함 넓은 비교 결과 기록 → 메인에 준비 알림 → "병합: PAYMENTS_ACCOUNT_KEYS" 뒤에 최신 main merge → 기준선 갱신 (`--refresh-baseline` 뒤 `--check`) → PR.
 
 **2026-11-19 19:20 갱신 — KEY-4 시작:** PR #132 병합 (main `9f76b07`, CI 8개 녹색). 메인이 LEDGER에 KEY-3/design·KEY-3 기록 (따로 기록 안 함). 메인 원문: "다음은 KEY-4입니다. KEY-4 PR 완료 조건에 앞 메시지의 잔여 9건(...)을 넣어 주세요. 준비되면 알려 주시면 "병합: PAYMENTS_ACCOUNT_KEYS"를 적겠습니다. KEY-4가 core 호출처를 바꾸므로 PR 본문에 "앱 동작 동일" 근거(전후 같은 요청·같은 답 시험)를 넣어 주세요." 작업 브랜치 `claude/payments-key4-20261119` (main `9f76b07`에서). 순서: (a) 아래 18:55의 9건 먼저 (경계 검출기·견고성·문서), (b) core 호출처(경계 fixture의 core 27파일 82건 + main.py 1건)를 게이트웨이로, 기존 주입점의 기본값·공급원 호출 줄만 바꿈, (c) 전후 같은 요청·같은 답 시험, (d) fixture 줄이기, 코드 지문 확인 (config.py 안 건드림). 준비되면 메인에 알리고 "병합: PAYMENTS_ACCOUNT_KEYS" 뒤에만 PR.
 
