@@ -53,7 +53,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [~] **소유자 AWS 운영 풀** — Golden Hour Code 계정의 시드니 사용자 풀 — PAYMENTS가 안내, 소유자가 실행 — MFA 결정(1/2/3) → 15단계 계정 복구 → 16·17단계 앱 클라이언트 quantgen-web, Client ID → T1 시험 — 세션 기록 22:04–23:52 KST. 13·14단계 끝
 - [~] **PySide6 간헐 종료 고침** (OS-F1 선행, ID 없음) — 시험 도우미가 QThread.currentThread() 객체를 붙잡고 있던 문제를 threading.get_ident()로 바꿈 — OS(재확인), UI(반영 끝) — 메인이 OS에 "UI가 490562d로 반영함"을 전달 → OS가 UI 브랜치를 읽기·시험만(push 금지)으로 다시 시험 → PYSIDE6_TRIAL 9절 판정 복구 → OS 브랜치 8262d6c(5파일: lint 15, 점검표 15, TRIAL 10-1, 패치)의 main 자리를 메인이 정함(OS-F1 PR에 묶거나 작은 PR) — OS 8262d6c, UI 브랜치 head 490562d(23:24 KST)
 - [!] **UI 7쪽 + PySide6 준비 병합** (MERGE_QUEUE 5) — claude/friendly-bardeen-r6xe8f — UI(소유자 경유) — 소유자가 PC 2대(skymi, whydi)에서 실행 확인 → UI 세션에 "PR 만들어" → 메인이 '병합: UI' — MERGE_QUEUE 5행. OS-F1과 KEY-5가 이것을 기다림
-- [!] **DS·DIDM 브랜치** (DS-1, DIDM-0, DIDM-1, DS-4a, DS-4b, DS-4d, DS-4e) — 코드는 끝났고 병합 전 — DATA_SOURCE_DIDM — 메인이 KEY-3 병합을 알림 → main 9f76b07(KEY-3)을 브랜치에 합치고 시험 다시 → 소유자 PC 결과(OpenDART, 무료 키) 반영 → 8행 차례에 PR(그 전에 KEY-4가 병합되면 runtime-smoke.yml 때문에 main 다시 합침) — df05b21, DIDM 시험 95개 통과, done_ids 없음
+- [!] **DS·DIDM 브랜치** (DS-1, DIDM-0, DIDM-1, DS-4a, DS-4b, DS-4d, DS-4e) — 코드 끝, **main 9f76b07 합침 완료(f60e314) → head eb4f3a5, PR 직전 상태** (DIDM 시험 98 OK, 게이트웨이·자격증명 208 OK = main과 같음, core/ 밖 변경 0줄; 메인 확인 11-20 00:25) — DATA_SOURCE_DIDM — 남은 것: 소유자 PC 결과(OA-07, OA-08) 반영 → 8행 차례에 최신 main 합치기·기준선·PR — DATA 보고 11-20 00:23
 - [!] **웹사이트 정책 문구 다시 만들기** — PR-130.json 반영 — WEBSITE(소유자 경유) — 소유자가 받은 프롬프트를 웹사이트 세션에 붙이기 — CURRENT "웹사이트 세션 전달은 소유자 경유"
 - [ ] **OS-F2** — config.py·data/krx/kis_client.py·data/krx/opendart_client.py의 ~/.nextgen 경로 전환 — OS(브랜치), MAIN(자리) — 관문 KEY-2(3249af7) 풀림. KEY-4와 파일 겹침 없음(KEY-4는 config.py·data/krx를 바꾸지 않음) → OS 브랜치 작업은 지금 시작 가능. 메인은 MERGE_QUEUE에 행 추가, owner_confirmed 다시 쓰기는 그 뒤로 — MERGE_QUEUE에 행 없음
 
@@ -98,7 +98,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [x] MERGE_QUEUE — 4c head·상태, 7행 KEY-5만, 윗표 줄 긋기, "비공개 뒤 CI 유료" 규칙 정정, 4d·OS-F2·OS 종료 원인 기록·정책 PR-2 행 — 11-20 메인 (WORKBOARD 첫판과 같은 handoff 커밋)
 - [ ] CURRENT.md — next_ids에 진행 중 ID 넣기(KEY-4, KEY-5, OS-F1, OS-F2, GH-2, PAY-0, PAY-2, DS-1 등, 원장 ID는 빼고). 낡은 "PR121 상태" 줄 정리
 - [ ] "역방향 의존 없음" 정정 확인 — MASTER_WORK_DESIGN에는 그 문장이 없음(검색 0건). Notion 플랫폼 계획 7.2 M2 문장은 OS가 11-18 개정 2판에서 고쳤다고 기록(OS_SESSION_CURRENT) → 메인이 확인하고 닫기
-- [ ] D14_RAVENPACK_ALTERNATIVES.md 1절 "3단계" 고치기 (= 대안 9개. DIDM 3단계 아님). 같은 오독에서 나온 DS-3 관문("DIDM Stage 3 통과 뒤")도 다시 확인
+- [ ] D14_RAVENPACK_ALTERNATIVES.md 1절 "3단계" 고치기 (= 대안 9개. DIDM 3단계 아님) — 4d 메인 문서 PR에 넣음. DS-3 관문은 확인 끝(2.4절)
 - [ ] OS-F3 판단 — KEY-2(3249af7)로 끝난 것으로 적을지, macOS·모바일 키체인 범위를 새로 잡을지
 - [ ] OS-P0-d Notion 기록 맞추기 (원장은 "소유자 몫", OS는 "이미 반영")
 - [ ] Notion REMAINING WORK 갱신 (충돌 목록 참고)
@@ -171,7 +171,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [!] DS-4d — OpenDART·KIND(→OpenDART), SEC EDGAR, ECOS. 6개 중 5개 확인, OpenDART만 남음
 - [~] DS-4e — Kalshi 브랜치에 있음(236개 시장). Polymarket은 변호사 확인 전까지 꺼둠
 - [!] DS-H — 홈 지표 6개 데이터 계층 (load_home_indicators, core/research/markets.py). 소유자 H4 진단 출력 대기. KEY-4가 core/research/markets.py를 바꾸므로 KEY-4 병합 뒤 main에서 시작
-- [ ] DS-3 — RavenPack RPA 1.0 견적, Bigdata.com 비교. 관문 "DIDM 3단계 통과 뒤"는 D14의 "3단계" 오독에서 나옴 → 메인이 다시 확인
+- [-] DS-3 — RavenPack RPA 1.0 견적, Bigdata.com 비교. **관문 확인 끝(11-20 메인):** 소유자 11-18 답(OWNER_RULINGS_LOG 2026-11-18 절, 질문 1)으로 D14 "3단계" = RavenPack 대안 9개(DIDM Stage 3 아님), D14는 대안으로 구성·Bigdata.com 시험 안 함 → DS-3은 계획에 없음. 소유자가 RavenPack 견적을 원하면 다시 엶 (OA-38)
 - [-] DS-2 — Bigdata.com Pro 시범. 쓰지 않음
 - [ ] DS 앱 연결 (ID 없음) — 공급처마다 core/gateway/routes.json 한 줄 + display_rights.json + 법률 의견. 표시권, L 뒤. 구조 변경이라 소유자에게 먼저 알림
 - [ ] core/didm/novelty.py — DS·DIDM PR에 포함
@@ -307,9 +307,9 @@ push_log:
 | OA-05 | 웹사이트 세션 재개 지시 + 정책 문구 다시 만들기 프롬프트(PR-130.json) 붙이기 | MAIN | 11-19 | 24h 안 | 대기 |
 | OA-06 | UI 7쪽을 skymi, whydi PC에서 실행 확인 → UI 세션에 "PR 만들어" | UI, OS, MAIN | 11-18, 11-19 03:13, 05:11 | 지금 (KEY-4 다음 차례를 막음) | 대기 |
 | OA-07 | OpenDART 확인 다시 실행 (collect_daily --env-file …, 개수와 이유 코드만 붙이기) | DATA | 11-19 01:29, 15:00 | 지금 (막힘) | 대기 |
-| OA-08 | 무료 키 가입(ALPHAVANTAGE_API_KEY, TIINGO_API_KEY, CRYPTOPANIC_API_KEY, FRED_API_KEY는 선택) → 등록 → keys status, collect_daily 실행 결과 붙이기 (키 값은 붙이지 않음) | DATA | 11-19 15:00 | 지금 (막힘) | 대기 |
+| OA-08 | 무료 키 3개 가입(ALPHAVANTAGE_API_KEY, TIINGO_API_KEY, CRYPTOPANIC_API_KEY) → 등록 → keys status → collect_daily --alphavantage SPY --tiingo nvda --cryptopanic BTC 결과 붙이기 (키 값은 붙이지 않음). FRED_API_KEY는 이미 설정·확인 끝(ALFRED 3,364행) | DATA | 11-19 15:00 (11-20 00:23 갱신) | 지금 (막힘) | 대기 |
 | OA-09 | 마스터 부록 H4 홈 지표 진단 명령 실행, 출력 붙이기 | DATA (명령은 MAIN) | 11-17 22:13 (4번 요청, 마지막 11-19 15:00) | 지금 (DS-H 막힘) | 대기 |
-| OA-10 | DIDM 질문 답: (a) novelty 보조 조건을 정식으로? (b) 자체 LLM 기반 모델과 학습 데이터 마지막 날짜 (c) 평가표 2칸 확인 — (c)는 대화 기록에만 있고 인계 문서 8절에는 (a)(b)만 남음 | DATA | 11-19 00:09 | 24h 안 | 대기 |
+| OA-10 | DIDM 질문 답: (a) novelty 보조 조건을 정식으로? (b) 자체 LLM 기반 모델과 학습 데이터 마지막 날짜 (c) 평가표 판단 2칸(자체 NLP 열의 수집 F·실시간 J = X, 자체 NLP 관련성 = X)이 맞는지 — 세 개 모두 DATA 인계 8절에 있음 | DATA | 11-19 00:09 (11-20 00:23 갱신) | 24h 안 | 대기 |
 
 ### 3.2 나중 또는 조건부
 
@@ -342,6 +342,7 @@ push_log:
 | OA-35 | ⑧-3 GROKTEAM 한 번 실행 | MAIN | — | 아님 (2027-02-01 뒤) | 보류 |
 | OA-36 | 오래 열린 GPT PR #12 닫을지, 그 안의 REMAINING_WORK_2026-10-29 ID(⑫-4, ⑬-3~⑬-7, ⑭-1~⑭-3)를 쓸지 | MAIN | 아직 묻지 않음 (메인이 물을 것) | 아님 | 대기 |
 | OA-37 | GPT 로컬 커밋 a2d93c2(Notion ⑤-1/a), 7e9e112(Notion ⑩-2/b-private-offline-mvp)가 남아 있는지, push할지 버릴지 | MAIN | 아직 묻지 않음 | 아님 | 대기 |
+| OA-38 | DS-3(RavenPack 견적·Bigdata.com 비교)을 계획에서 빼도 되는지 한 줄 확인 (11-18 D14 답 기준 메인 해석: 뺌) | MAIN | 아직 묻지 않음 | 아님 | 대기 |
 
 ---
 
