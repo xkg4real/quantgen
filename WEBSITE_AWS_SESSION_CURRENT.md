@@ -85,6 +85,7 @@
    2. **Environment variables** → `AUTH_UI_ENABLED` = `true`, **브랜치 덮어쓰기(override)를 `auth-preview`에만**. "All branches"로 넣으면 main 빌드가 실패하도록 막아 두었지만, 그래도 브랜치 덮어쓰기로 넣는다.
    3. **Access control** → `auth-preview` 브랜치에 사용자 이름·비밀번호 (공개 차단). 이걸 안 하면 주소를 아는 누구나 운영 풀에 가입할 수 있다.
    4. 빌드가 끝나면 위 주소로 시험.
+   - **2026-11-20 소유자 설정 완료 후 확인**: `auth-preview` 주소 → `401 Unauthorized`, `WWW-Authenticate: Basic` (비밀번호 잠금 작동). 공개 `quantgeneration.com`과 `main` 주소는 SHA `1dbd9ded…`, Last-Modified 19 Nov 14:23:22 GMT 그대로. 잠금 안쪽(플래그 켜진 화면)은 비밀번호가 없어 이 세션이 확인하지 못함 → 소유자가 열어 `#/signup` 확인.
 
 ## 플래그 켜기(공개) 전 체크리스트
 
