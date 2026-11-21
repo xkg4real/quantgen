@@ -4,15 +4,15 @@ reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-17
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a
-next_ids: KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T21:55:24+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
+next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-21T22:00:53+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/key5a-fixes-20261121
-work_commit: 0413cc52a9692710a2febf3aa3a6611fdb59d846
+work_branch: gpt/ui-key5-flet-k2d-20261121
+work_commit: b3731cf3a41932afba4f480049fc2e52c35d9eef
 uncommitted_changes: yes
-pr: 139
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
@@ -20,6 +20,19 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
+---
+
+## KEY-5/a 실제 병합 완료·K2d 검증 — 2026-11-21T22:00:53+09:00
+
+- ROOT execution 2f27d0c2-57cc-46e7-97d6-fc141d4065c9·OS lock20162·동일 task/handoff/cycle 아래 직접 승인 작업을 계속합니다. 자동 감시/예약/자동 인수/run_now는 취소 상태입니다.
+- **KEY-5/a 코드 완료:** PR139/head0413cc52a9692710a2febf3aa3a6611fdb59d846를 expected-head 조건으로 merge했고 실제 main은 dec979a7fae65d5f749e12193fad3d0a9ce8ddf3입니다. 부모53e5e723·0413cc52 및 tree8c121c92e7d806aaeba16e8a65cc35bf55b8e60c가 검증된 tree와 동일하며 main ref·PR closed/merged를 read-back했습니다. 동결 제품/시험/문서10+최종 baseline11의 raw/blob 불변, 실제845source/20policy 정합성 PASS(publication BLOCKED65), 독립 최종검토362893e8 PASS. Runtime44897148350 전체6job·Compliance44897148302·Nautilus 임시원장44897148304 및 exact head check-run10 모두 SUCCESS, 리뷰/코드스레드0. 기존 SESSION_PIPELINE 규칙에 따라 별도 Vercel 실패는 무시했고 설정/배포를 바꾸지 않았습니다.
+- data.kis_stream 입구 등록·workspace 순수 값 목록·QuoteFeed 공용 모듈과 M1 stale FMP 무효화/M2 KRX 원자 갱신을 코드/합성 범위로 완료합니다. 이것은 실제 자격증명·공급사·소유자 PC·권리/법률·운영 및 전체 KEY5/UI 완료가 아닙니다. baseline source_commit45db는 역사적 working-tree 감사 정보이며 실제0413 head와 동일SHA라고 주장하지 않습니다. 실제 source/blob·tree·CI로 연결했습니다.
+- **K2d local WIP:** 실제 b373 부모의 source413에서 제품4+기존 공개5의 정확9파일만 변경, freeze f06a9d0e16aebc888facc58ddad5d74fdf7a2873e4a27d991db1ae60bcdeee92/나머지404·모드·CRLF 불변. 승인6ID/앱8loader·CLI1 AST-only, math/단위/default/문구/CONSTANTS/helper 유지. known e0ba/최종 UI baseline/원격 K2d 코드는 아직 변경0입니다.
+- 원 normal after8c 첫 엄격 비교는 **FAIL 유지**입니다. 원 golden d0d009·writer fdc075·비교기/기준/제품을 성공 목적에 맞춰 고치지 않았습니다. 관찰-only exit1 진단과 두 독립 판독에서 유일3차이는 USD3case의 raw supplied kwargs에 label="" 기본값을 명시 전달한 것입니다. 실제 AST서명으로 재결합한 고정17call·응답·10case UI/분석 의미는 별도 pure 보조판독 e61e3f60에서 일치, 메모리 변조7은 모두 거절됐습니다. 이는 strict PASS/전체 source 동치/실제 API 성능이 아니며 새 앱·모델 실행0입니다. 원 postproof 미도달·outer23/inner24의 역사적 mode 사후증거 한계도 보존합니다.
+- **공개6 재실행 PASS:** 최초4PASS/1FAIL/1ERROR와 실패2 notice 진단은 보존합니다. 실제 원인은 core.app_identity의 선택적 core._build_info 부재를 private finder가 AssertionError로 바꿔 원 ImportError fallback을 막은 도구 문제였습니다. exact 경로·6후보 metadata 부재에만 정상 ModuleNotFoundError를 유지하는 R2Bf63f66/binding789418·독립1d1668 검토 뒤 정확6을 재실행해 수집/실행/기록6·실패/오류/skip0을 확인했습니다. source413/privatepins/원시험/assertion/fixture 전후 불변, optional 부재1과 실제 import200을 분리, 일반 guard위반0·font시도1은 시작 전 거절/실제process0. 기존 합성 SABR·AI메모리payload·offscreenchart 범위로만 판독하며 누락 Hangul glyph 경고·실제 PC 검수 미실시를 보존합니다.
+- 다음은 K2d 거절12 초안 정적검토→ROOT GO→경계13/실제gone6만 known삭제→검증 코드 WIP 보존입니다. K3 원본 factory/lifecycle 준비는 읽기·private초안만이며 제품/실행0입니다. actual G1은 이제 main dec979a의 gateway blob86752로 확인됐지만 K3의 실제 작업 부모는 아직 정하지 않습니다.
+- sapientia는 K2c까지 부분 반영 상태이며 KEY-5/a 공식 완료 동기화가 다음입니다. website8큐는 NOT_SENT·실제 전달/적용/배포0. 전체 KEY5/UI·최종 UI의 최신 main 통합/준법/전체CI/PR·owner PC7/OSgo·실제API/공급사/모델/법률·라이선스/동결연구는 남습니다. 선택 GPT/Gemini 추가 spec 공개·심사는 NOT_PERFORMED입니다.
+
 ---
 
 ## K2d 실제 소스·실패 진단 및 KEY139 전체 CI — 2026-11-21T21:55:24+09:00

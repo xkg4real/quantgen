@@ -1,3 +1,16 @@
+## KEY-5/a 실제 병합 완료·K2d 검증 — 2026-11-21T22:00:53+09:00
+
+- ROOT execution 2f27d0c2-57cc-46e7-97d6-fc141d4065c9·OS lock20162·동일 task/handoff/cycle 아래 직접 승인 작업을 계속합니다. 자동 감시/예약/자동 인수/run_now는 취소 상태입니다.
+- **KEY-5/a 코드 완료:** PR139/head0413cc52a9692710a2febf3aa3a6611fdb59d846를 expected-head 조건으로 merge했고 실제 main은 dec979a7fae65d5f749e12193fad3d0a9ce8ddf3입니다. 부모53e5e723·0413cc52 및 tree8c121c92e7d806aaeba16e8a65cc35bf55b8e60c가 검증된 tree와 동일하며 main ref·PR closed/merged를 read-back했습니다. 동결 제품/시험/문서10+최종 baseline11의 raw/blob 불변, 실제845source/20policy 정합성 PASS(publication BLOCKED65), 독립 최종검토362893e8 PASS. Runtime44897148350 전체6job·Compliance44897148302·Nautilus 임시원장44897148304 및 exact head check-run10 모두 SUCCESS, 리뷰/코드스레드0. 기존 SESSION_PIPELINE 규칙에 따라 별도 Vercel 실패는 무시했고 설정/배포를 바꾸지 않았습니다.
+- data.kis_stream 입구 등록·workspace 순수 값 목록·QuoteFeed 공용 모듈과 M1 stale FMP 무효화/M2 KRX 원자 갱신을 코드/합성 범위로 완료합니다. 이것은 실제 자격증명·공급사·소유자 PC·권리/법률·운영 및 전체 KEY5/UI 완료가 아닙니다. baseline source_commit45db는 역사적 working-tree 감사 정보이며 실제0413 head와 동일SHA라고 주장하지 않습니다. 실제 source/blob·tree·CI로 연결했습니다.
+- **K2d local WIP:** 실제 b373 부모의 source413에서 제품4+기존 공개5의 정확9파일만 변경, freeze f06a9d0e16aebc888facc58ddad5d74fdf7a2873e4a27d991db1ae60bcdeee92/나머지404·모드·CRLF 불변. 승인6ID/앱8loader·CLI1 AST-only, math/단위/default/문구/CONSTANTS/helper 유지. known e0ba/최종 UI baseline/원격 K2d 코드는 아직 변경0입니다.
+- 원 normal after8c 첫 엄격 비교는 **FAIL 유지**입니다. 원 golden d0d009·writer fdc075·비교기/기준/제품을 성공 목적에 맞춰 고치지 않았습니다. 관찰-only exit1 진단과 두 독립 판독에서 유일3차이는 USD3case의 raw supplied kwargs에 label="" 기본값을 명시 전달한 것입니다. 실제 AST서명으로 재결합한 고정17call·응답·10case UI/분석 의미는 별도 pure 보조판독 e61e3f60에서 일치, 메모리 변조7은 모두 거절됐습니다. 이는 strict PASS/전체 source 동치/실제 API 성능이 아니며 새 앱·모델 실행0입니다. 원 postproof 미도달·outer23/inner24의 역사적 mode 사후증거 한계도 보존합니다.
+- **공개6 재실행 PASS:** 최초4PASS/1FAIL/1ERROR와 실패2 notice 진단은 보존합니다. 실제 원인은 core.app_identity의 선택적 core._build_info 부재를 private finder가 AssertionError로 바꿔 원 ImportError fallback을 막은 도구 문제였습니다. exact 경로·6후보 metadata 부재에만 정상 ModuleNotFoundError를 유지하는 R2Bf63f66/binding789418·독립1d1668 검토 뒤 정확6을 재실행해 수집/실행/기록6·실패/오류/skip0을 확인했습니다. source413/privatepins/원시험/assertion/fixture 전후 불변, optional 부재1과 실제 import200을 분리, 일반 guard위반0·font시도1은 시작 전 거절/실제process0. 기존 합성 SABR·AI메모리payload·offscreenchart 범위로만 판독하며 누락 Hangul glyph 경고·실제 PC 검수 미실시를 보존합니다.
+- 다음은 K2d 거절12 초안 정적검토→ROOT GO→경계13/실제gone6만 known삭제→검증 코드 WIP 보존입니다. K3 원본 factory/lifecycle 준비는 읽기·private초안만이며 제품/실행0입니다. actual G1은 이제 main dec979a의 gateway blob86752로 확인됐지만 K3의 실제 작업 부모는 아직 정하지 않습니다.
+- sapientia는 K2c까지 부분 반영 상태이며 KEY-5/a 공식 완료 동기화가 다음입니다. website8큐는 NOT_SENT·실제 전달/적용/배포0. 전체 KEY5/UI·최종 UI의 최신 main 통합/준법/전체CI/PR·owner PC7/OSgo·실제API/공급사/모델/법률·라이선스/동결연구는 남습니다. 선택 GPT/Gemini 추가 spec 공개·심사는 NOT_PERFORMED입니다.
+
+---
+
 # 중앙 K2c 보존·K2d 검증 진척 — 2026-11-21T21:08:53+09:00
 
 - 동일 ROOT execution `2f27d0c2-57cc-46e7-97d6-fc141d4065c9`·OS lock20162 아래 직접 승인 작업을 계속합니다. primary KEY139/0413cc52와 task/handoff/cycle은 유지합니다. 감시/자동 인수/예약/run_now/배포는 취소 상태입니다.
