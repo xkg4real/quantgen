@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "795b2e9435c8eed43b08b98c709b3e2eeb3a7365ad2628855cb164cea0f94ab8",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "92a54f3dd132d0e8104c15d36f6cf035ec981b160f040a5a4f472b9fd58c5909",
+    ".github/workflows/runtime-smoke.yml": "d83235d53b4971df190e211bea41f7e43402324fdcc68dde38dcb9c22a88fda7",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -227,7 +227,7 @@
     "core/research/macro_analysis.py": "78cb709bfcbbe339993574a8a105ff1d50cfacc12967e0c6434de38942fa1135",
     "core/research/market_analysis.py": "4f3cf89b4b78c4a961c85b96074f639695a1a35ccce57cd1eb71736158f7162a",
     "core/research/market_board.py": "264af8d1e64a1b87bb1dbf83e038581c509ed81d7f3202639edeadbcb5fb547a",
-    "core/research/markets.py": "4a675ead5a5d8769e441faa3c1b3ec5d826676c28ae1927a9913986c3384ba32",
+    "core/research/markets.py": "eec62938c82690b7a6322982c634de336a35663f0c59aa8149e7b9bc80c5b201",
     "core/research/mc_disclosure.py": "a44ddc25d78c17879a6350de014e8bc4f199d8579d58f68d9d1c55d903d9267c",
     "core/research/option_disclosure.py": "aafbf64c7660d31b300a4b87f40a4ee36df330a4bdd3d9892de5d74042774879",
     "core/research/portfolio_analysis.py": "8a1acda2788e1ba81e12b0932ed88cced2aa101c7428d726e9b5c065081cce98",
@@ -347,6 +347,7 @@
     "docs/product/FX_CIP_DISCREPANCY_2026-11-02.md": "99a42c71f255e6ff271c66f1245dd45ca63e3627001e17a8848680ca4fc39b32",
     "docs/product/FX_LANGUAGE_2026-10-31.md": "e2c15111acbd1bf6391700c6a0f6616da69d65ce4750654783fd08fbaea3d65f",
     "docs/product/HOME_COMPACT_REVIEW_20261102.md": "45e335e646bca3e25d2beb975f0465ae8b7d57779b10c737cd65dd157426d585",
+    "docs/product/HOME_INDICATORS_DATA_2026-11-20.md": "83be1d10efd360a0d5ffcab88cdc0ebfe44d38004aa348db13d705fba929e5ea",
     "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md": "8ea3908579720e4bb3262e2952251d2b054aa2fcdc3ba34dbb7118e5c6e5d711",
     "docs/product/INDICATOR_GUIDE_DESIGN.md": "09cea58c3cd2859fdc2dbe69f1956c4fec229c6c3a82ab2b1eea0b091e669b4b",
     "docs/product/KIS_MARKET_CHARTS_2026-11-02.md": "77acfb29fa34103bb5e6c8cc94172cd79645ae80fabb78fcedc6462ca3fd9c4c",
@@ -609,6 +610,7 @@
     "tests/glossary_search_acceptance.py": "058922190b05fc585dab3462848b40ea0444a43b4b5e96fdb512cd8ccfc0e64e",
     "tests/golden_tools.py": "24154d79aea43bc91b7c26c33c6b400cd9202cdb4915680a81b4f7cf0fa928ef",
     "tests/history_best_source_acceptance.py": "cda3221001d11599c0b9dab6f71f59a20b7ac762d43adcd6c0b5f2fbce19310f",
+    "tests/home_indicators_acceptance.py": "2585e4a8cd2437f838d94a52ecd2962117fd70e809e700dd14e9d5a87a691c74",
     "tests/home_watchlist_acceptance.py": "86956c94f3aa7a90f496bc5c2bea388a6b2b5f861b5d1ca4421045c55f19165c",
     "tests/indicator_catalog_acceptance.py": "872a75d7e89ae21864f84082823d573337bcf0855d51cad2af19fd491851891a",
     "tests/indicator_engine_acceptance.py": "2012f22d33afe8683ddddf9f48e397df1c5253e6f513168a58855373d38e4c7b",
@@ -817,163 +819,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "e7289ed35ab1cf9ce88656c65090402e543ba4cc074a574f256aaf4e12440b0f",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.281490+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "7e925a5dd0c31100e7147308e984c8b663482e8b240acd57f486e5635445701f",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.554214+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "e7289ed35ab1cf9ce88656c65090402e543ba4cc074a574f256aaf4e12440b0f",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.284478+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "7e925a5dd0c31100e7147308e984c8b663482e8b240acd57f486e5635445701f",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.556316+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "97b27918ff02856b0c44c960cde32d275f606e971a68944929518ca50e5006b7",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.286287+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "7468ba568a192131198f83e146c51861bdb675b9e261553970d8919511e39c5b",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.557721+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "32a68371c70feb081f4673c89d511a934b0bc2cc4ac32e0d74c33081da8638f1",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.287760+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "bfa58f7310856684801525ed7985591d34152ab7783cd3b463bde0add06f64ee",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.559175+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "4d6aa253f5628507bd7c15cc0ca5edd4e9f93942b682c48c73122e10f8b8c3d6",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.289310+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "9cc01715d8ca0fed0340c8f3eb33288e21ad4dead498c2e96922bfc4913d112c",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.560523+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "27b93a06940dc8379e4f1fdd2b78a13c4cb7307fdf1c13f47e368238d50e5475",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.290803+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "fe5ca93684f7b77a5925ff490b1f427981976646ed033b1cac912ab83f78a88f",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.561885+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "e7289ed35ab1cf9ce88656c65090402e543ba4cc074a574f256aaf4e12440b0f",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.292173+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "7e925a5dd0c31100e7147308e984c8b663482e8b240acd57f486e5635445701f",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.563146+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "8": {
       "document_sha256": "b1ebf5f8469f355bc6d261789b5ffd402282fea07c83add564ed0dc2dc2fb775",
-      "source_digest": "27b93a06940dc8379e4f1fdd2b78a13c4cb7307fdf1c13f47e368238d50e5475",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.293436+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "fe5ca93684f7b77a5925ff490b1f427981976646ed033b1cac912ab83f78a88f",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.564392+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "541f380e289898242180ade01c57fac6e28494c1f2cc3e0adb77999f137979e9",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.294793+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "159ea2cef7574f806123300882c113c482e76786f126ba79cd738b60603015a9",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.565571+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "afff535a350447467fea6c38c1b50ecd1c602380e98dc09e52c3d2f325c4afe8",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.296121+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "42a0dd960ff5a92297fc44c87b5e9a12dd2fe651e7e4600bbeda2142bd2e26f9",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.566789+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "89cd6d28114a5c80c31a0621a3a1cd9207a94569ef79ed48b1cf22092b31172a",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.297465+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "f0853cc121d25708b3d7a0725e88bd02252183c9a271b1bead794baa0ca4b4e9",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.568252+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "509ed2f342ef198f9228411abf55fe1a026c85f4d59af6cfaf7f894acd31145c",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed Windows credential fixture isolation across Path.home and platform roots; preserves sentinel key-change assertions, production path precedence and existing policy bodies; 93 isolated tests pass.",
-      "reviewed_at": "2026-11-21T03:29:24.969571+00:00",
-      "source_commit": "74dce42f32883e1be459d71cd6674a40922bcaf0"
+      "source_digest": "8b289e52a3d1f18d443abc40754de23707d59fadd8ad0f88c8593b0c1ba8a5a0",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.569705+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "541f380e289898242180ade01c57fac6e28494c1f2cc3e0adb77999f137979e9",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.300344+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "159ea2cef7574f806123300882c113c482e76786f126ba79cd738b60603015a9",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.571302+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "541f380e289898242180ade01c57fac6e28494c1f2cc3e0adb77999f137979e9",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.301723+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "159ea2cef7574f806123300882c113c482e76786f126ba79cd738b60603015a9",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.572588+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "541f380e289898242180ade01c57fac6e28494c1f2cc3e0adb77999f137979e9",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.303151+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "159ea2cef7574f806123300882c113c482e76786f126ba79cd738b60603015a9",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.573778+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "8d9284db3e2a37201d7b68e42d537e8aa8d2b693c3801e1b3989b83b3bf9ef3d",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.304302+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "59a46970c30644233425d6bcb6219c9fb4e50c80a1061ceaecbe449c42a4a6fd",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.575047+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "27b93a06940dc8379e4f1fdd2b78a13c4cb7307fdf1c13f47e368238d50e5475",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.305637+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "fe5ca93684f7b77a5925ff490b1f427981976646ed033b1cac912ab83f78a88f",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.576598+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "e7289ed35ab1cf9ce88656c65090402e543ba4cc074a574f256aaf4e12440b0f",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.307050+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "7e925a5dd0c31100e7147308e984c8b663482e8b240acd57f486e5635445701f",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.578067+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "e71e5a5ea9ff8b857fb8b926e66d39fa1c535d10c0b2dffdffdabd6733f1bd57",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.308413+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "e3d21e9c28abf240d091e2b82224247e06c8546f1331bb0e0312fcf0c9d11016",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.579378+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     },
     "20": {
       "document_sha256": "e1ef3eb7d55da6e32f27a544415ef36862b18e5658b1c516bbd81c262819e8ec",
-      "source_digest": "e7289ed35ab1cf9ce88656c65090402e543ba4cc074a574f256aaf4e12440b0f",
-      "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.309739+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "source_digest": "7e925a5dd0c31100e7147308e984c8b663482e8b240acd57f486e5635445701f",
+      "reviewed_by": "Codex central 1bfaa7d8",
+      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
+      "reviewed_at": "2026-11-21T05:25:36.580656+00:00",
+      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
     }
   }
 }
