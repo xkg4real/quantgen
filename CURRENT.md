@@ -1,14 +1,14 @@
 ---
-status: taken
+status: returned
 reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2
 next_ids: KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T14:38:32+09:00
+updated_at: 2026-11-21T14:54:13+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: ci
 work_branch: gpt/ds-home-indicators-20261121
 work_commit: 4973111e00ede39d81afc6f3bee894f06fb575fd
 uncommitted_changes: no
@@ -19,7 +19,19 @@ usage_resets_at: 2026-11-24T17:00:00+09:00
 session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 1bfaa7d8-c59c-4c6c-a53d-00acbe3b7e9a
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
+returned_at: 2026-11-21T14:54:13+09:00
 ---
+
+## 부분 인계 — DS-H 전체 CI 대기·UI K1b 원격 보존 — 2026-11-21T14:54:13+09:00
+
+- 전체 Goal은 미완료다. OS-F2 PR136→main **72a055fb05a7e63b641bad07423503fa56e7b4b8**는 완료(정확 head64ff·전체6Runtime/Compliance 성공·tree/parents/ref 대조), 실제 소유자 자료 이전·출시는 별도다. 새 완료 ID는 이번 실행의 OS-F2만이며 K1b/DS-H 부모를 완료로 닫지 않는다.
+- 현재 유일 대기 PR은 코드 범위 [DS-H137](https://github.com/xkg4real/quantgen/pull/137), head **4973111e00ede39d81afc6f3bee894f06fb575fd**, draft다. 합성172 PASS/준법·export47 PASS(중복), 실제809소스·20정책 정합성PASS/publicationBLOCKED65, 독립 최종 검토PASS. Compliance44871383936 성공. 14:53 KST 판독에서 Runtime44871383992 문법2 성공·4설치환경의 UI단계 진행 중, 실패 관측0이며 전체 성공으로 세지 않는다.
+- OA09 조건을 원문으로 대조했다. 원래06 196행의 진단 뒤 착수와 후속 DATA의 메인03:27 배정/“PR은 자리 뒤, 진단 오면 원인 추가”를 구분한다. 최신 사용자 중앙 구현·PR·조건부 병합 승인 안에서 **코드만** 기술 조건 통과 후 통합할 근거가 있다. OA09 실제 출력·원인 판독/홈 실연결·공급사/API/전체 DS-H 완료는 계속 미완료이고 면제하지 않는다. 전체 Runtime 종료·정확 head/현재 main·동결/검토를 다시 확인한 뒤 코드 범위만 ready/조건부 merge를 판단한다.
+- UI 후속 KEY5 K1b(ID13)는 **gpt/ui-key5-native-k1b-20261121@053b6c44d2c8b729cba03c8b3287d1348ac5d9e4**, parentK1ad2, treeb56647dd. 제품은 automatic_board의 준비 조회1곳만 기존 keys_ready("kis_quote")로 전환했고 실제 소멸 known예외1개만 제거했다. 3파일 본문·blob/parent/tree/ref read-back 일치. 기존17검사 PASS(0fail/error/skip), 실제Qt 고정9단계·요청7필드 MATCH, 원본main72a/d2의 대상·3함수 동일 및 독립 before/after PASS. 실제 keys_ready5진입 안의 route/table/provider/network0이며 import 중 기존 data.net session 모듈 해석1회는 target 밖으로 따로 기록했다. 최초 private 관측assert3실패는 분류 오류로 보존했고 제품·golden/comparator를 바꾸지 않았다.
+- K1b 후 남은19화면41접점+동결feed1, 상한22/44·공개시험/CI 불변. 원본UI414·중앙UI822(기존64PASS)·K1ad2(7/14/10/13 및 별도12 차단진입) 모두 보존한다. 집합은 중복이 있어 합산하지 않는다. 최종 UI/KEY5 baseline·선행 G1–G3/전체 CI·PR·실PC7화면·OSgo는 별도다.
+- 다음 DIDM 준비: abd10c6에 DS-H/main을 합칠 runtime-smoke 경로182/고유모듈167/named target173의 합집합 계획(시험 개수 아님, 기존 target 누락0), 새35소스로844 예상(아직 실제 최종 검사 아님). 사전등록V0 원문·.75/.90·70/30·ridge1e-3·AND/asof/UNIQUE 불변 확인. 08의 wheel제외 범위를 tools.didm CLI로 좁히되 “연구 전용” 유지, 20에 명시 --data-dir SQLite와 조건부 부수파일을 추가하는 최소안은 독립 검토 후 **비공개 R2안만 보존**했다. DIDM abd의20본문f887과 OS/DSH20본문829가 달라 최종 main 합류 뒤 실제 원문/SHA로 재적용한다. 생산 정책/기준선/새 DIDM commit·PR은 바꾸지 않았다.
+- sapientia Remaining Work에 OS 코드 완료·DS-H 초안/문서CI 성공·K1b 부분 진척을 최소 반영했고 성공 receipt/원문·변경을 비공개 큐에 원자 보존했다. 부모 취소선은 추가하지 않았다. 웹 영향은 UI/K1a/K1b 세 큐에 보존했으나 지원 채팅 발송 도구가 없어 **미발송/미반영/미배포**다. 실제 UI PR이 생길 때 PR-번호 기록과 수신/적용 증거가 필요하다.
+- 다음 안전 시작: STATE transition·기존 수동 승인·OS 배타 잠금·이 execution/task/handoff/primary497·CURRENT를 대조하고, 최신 SHA CAS로 새 execution을 기록/read-back한 뒤 PR137을 먼저 판독한다. 차례는 DS-H→DIDMabd→KEY45db, 대기 PR 하나. UI/K1b는 준비이며 기존 PC/OSgo 조건을 유지한다. 이미 끝난 E/Pilot/Step10/P3/F를 재실행·재요구하지 않는다. 자동감시·중복예약·run_now·실배포·보호자료/실제원장/연구/서명/태그 작업은 없다. 계정 잔량은 unknown이다. [전체 인계·재현](WEEKLY_HANDOFF_2026-11-21_1bfaa7d8.md).
 
 ## 승인 KEY5 ID13 작은 단위 K1b 준비 — 2026-11-21T14:38:32+09:00
 

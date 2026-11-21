@@ -6,7 +6,7 @@ task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
 next_ids: DS-H, DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e
-updated_at: 2026-11-21T14:36:47+09:00
+updated_at: 2026-11-21T14:54:13+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: gpt/data-source-didm-20261121 (+ gpt/ds-home-indicators-20261121)
@@ -21,6 +21,10 @@ execution_id: 1bfaa7d8-c59c-4c6c-a53d-00acbe3b7e9a
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## 중앙 부분 인계 — 2026-11-21T14:54:13+09:00
+
+DS-H137 exact497의 문서CI/독립PASS·전체Runtime진행. 후속메인배정03:27의코드/PR먼저·진단오면추가문구와최신소유자중앙조건부merge승인을대조해 code-only기술통합과OA09실진단/홈연결완료를구분한다. OA09면제/parent완료아님. DIDMabd는그대로원격보존(새code/policy/PR없음), 다음최신DSH main합류의runtime합집합182paths/167modules/173targets예측·startup/home누락0계획. actual최종844source/20리뷰는아직아니다.08/wheel경계·20/명시data-dir SQLitefootprint최소안R2는독립검토완료/private보존, 기존연구용도·보존/삭제/권리/등록/판정기준불변.20입력원문이현재DIDM/finalOS와다르므로최종mainmerge후최신SHA/old_str로적용한다. 실제DB/API/CLI/모형/PC/출시는실행하지않았다. [전체인계](WEEKLY_HANDOFF_2026-11-21_1bfaa7d8.md).
 
 ## 중앙 Codex DS-H 초안 — 2026-11-21T14:36:47+09:00
 
