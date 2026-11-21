@@ -4,15 +4,15 @@ reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-17
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a
 next_ids: KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T19:31:45+09:00
+updated_at: 2026-11-21T19:48:44+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/data-source-didm-20261121
-work_commit: 6cff16823219ad2bd492c9fb35b648a14b15636a
+work_branch: gpt/key5a-fixes-20261121
+work_commit: 45db2be73e7f87954cab6782ca4b2717dc97fc62
 uncommitted_changes: yes
-pr: 138
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
@@ -21,6 +21,16 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
 ---
+
+## DIDM138 실제 main 병합 완료·KEY5a 최종 단계 인수 — 2026-11-21T19:48:44+09:00
+
+- [PR138](https://github.com/xkg4real/quantgen/pull/138) head6cff16823219ad2bd492c9fb35b648a14b15636a를 expected-head/merge commit으로 병합했다. 실제 **main53e5e7230d24bfcebf77e16762e7117bb5905137**, 부모6d25a33/6cff168·tree023d0749a6c02d76082c7917b59491729ca28a97가 검증한6cff tree와정확히같음을 PR/main/ref/commit에서 read-back했다. 전체6Runtime/문서CI·8checks success, review/inline0·봇댓글만확인, freezeOFF/소유권2f27/최신main확인뒤수행했다. 별도Vercel status실패는소유자SESSION_PIPELINE명시규칙으로무시했으며배포성공뜻이아니다.
+- 공식 **DIDM-1·DS-4a**만 스키마/등록규칙도우미·GDELT/ALFRED/PIT저장소 **코드와합성검사** 완료범위로원장말미에추가했다. 실제844sources/20docs consistencyPASS/publicationBLOCKED65, DIDM137/공통172/공급사147·준법47·독립SQLite10은집합중복합산하지않는다. V0실제11-18승인원문을확인했고0.75/0.90·70/30·ridge.001·UTC/AND/asof/UNIQUE는불변이다. DS-1/OA10·DIDM실모델/표본성과·DS4d/e전체·실API/라이선스/법률/운영은미완료다. 글사본38값·파생171칸과실제XLSX미재검증을분리했다.
+- 이제원격최신ref가45db2be73e7f87954cab6782ca4b2717dc97fc62인 같은 **gpt/key5a-fixes-20261121** 를4h작업브랜치로인수한다. 준비localHEAD45/MERGE_HEAD6cff·원본branch/WIP를그대로보존한다. 실제main53e의tree023=기존candidate6cff tree이므로동결10소스준비와선행입력의동일성을증명했으며미병합후보를main으로가정하지않았다.
+- root만최종소스/20정책검토증거를다시대조하고actual845source/20docs baseline을마지막에갱신·check한다. 실제main023base에KEY동결10과최종source-review만더하고부모45+실제main53e로원격CAS/push/readback한뒤단일4hPR/전체CI로진행한다. CODE27은incoming실제main기준(합법OS-F2 config포함)이며동결engine4·실제지문/owner서명/연구실행은건드리지않는다. 기존83/123/17·독립8/AST4 증거는동일SHA소스의별도집계다.
+- UI K1d630 WIP·Notion반영은보존, K2a local제품2+test5의정확11mock이동·기존15실제PASS/CRLF·405파일불변을독립읽기확인했다. font fc-list1시도는실행전거절/spawn0이며다른network/실자료·원장0과구분한다. after16은semanticPASS뒤 gateway.profile의기존app_identity지연import1개를after94 manifest로명시검증중, blocked12는최종PASS아직아니다. known은2ee로유지해동시지문검증을보호한다. K2b ID20 before설계만있고제품GO0이다.
+- sapientia Notion의DIDM병합/완료2ID동기화는이체크포인트뒤최소수정예정이며미반영을성공으로쓰지않는다. UI/KEY5 전체·최종UI준법/CI/PR/실PC7/OSgo·웹5큐수신/반영은미완료다. 직접작업계속/자동감시·예약·run_now·실제data/원장/동결연구/서명/태그/배포없음. [전체인계](WEEKLY_HANDOFF_2026-11-21_2f27d0c2.md).
+
 
 ## K2a 격리 구현 배정 — 2026-11-21T19:31:45+09:00
 

@@ -1,3 +1,9 @@
+# 중앙 최신 체크포인트 — 2026-11-21T19:48:44+09:00
+
+DIDM138/head6cff → 실제main53e5e723/tree023 병합 완료. 전체6Runtime·Compliance·8checks PASS, 부모/tree/ref read-back 확인. 공식DIDM-1·DS-4a는 코드·합성검사만 완료했으며 실제API/모형성과/권리·법률/운영·DS1/OA10/DS4d/e는 미완료다. 현재담당은 gpt/key5a-fixes-20261121@45db, root2f27/OS잠금20162. 실제main tree동일성을확인했고 최종845소스/20문서 baseline·check→CAS코드/4hPR/전체CI를진행한다. K1d630은검증WIP, K2a local7변경·기존15PASS·독립소스검토PASS/after94·blocked12대기·known고정. NotionDIDM완료동기화pending, UI웹5큐미발송. 자동감시·배포없음. [전체인계](WEEKLY_HANDOFF_2026-11-21_2f27d0c2.md).
+
+---
+
 # 중앙 최신 checkpoint — 2026-11-21T19:10:18+09:00
 
 Primary DIDM138/6cff; actualmain6d; execution2f27d0c2·OSlock20162. FullWindowsRuntimepending, document/Linux/syntaxsuccess. KEYlocal45+6cff prepared83/123/17, independent8/AST4, actual845/20·structure/link0, policy20PASS, finalbaseline/remote4hPR없음. K1d630(remote4본문/parent/tree/ref검증) factory13·regression18/boundary13PASS, screen16files36sites, Notionsynced·web5queuesNOT_SENT. K2before16 strictbootstrapMATCH, afteradapter검토·제품GO0. Parentgoal/fullUI/KEY5/actualPC7/OSgo/외부승인미완료,자동감시·배포없음. [전체](WEEKLY_HANDOFF_2026-11-21_2f27d0c2.md).

@@ -1,9 +1,13 @@
 # MERGE_QUEUE — main 병합 순서와 동결 (메인 세션이 관리)
 
-updated_at: 2026-11-21T19:10:18+09:00
+updated_at: 2026-11-21T19:48:44+09:00
 전체 업무 체크리스트: `WORKBOARD.md` · 세션 연결 규칙: `SESSION_PIPELINE.md` (2026-11-19 23:00 KST 무렵 소유자 지시)
 coordinator: QUANTGEN 메인 Codex (소유자 단일 요청 창구 지정·2026-11-21 승인; 이전 Claude 기록 보존)
 freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보고("F22까지 성공적으로 마무리했습니다."), main `6e077dc`(소유자 `--no-ff` 병합, 부모 `8e026ab`·`13f4dea`), 그 push의 Compliance success, PR #4 merged. (동결 기간: 2026-11-18T19:10:45+09:00 ~ 위 시각)
+
+## 실제4g병합완료·현재4h — 2026-11-21T19:48:44+09:00
+
+**4g DIDM PR138/head6cff → main53e5e723 완료**, exact6Runtime/문서CI/8checks·부모/tree023/ref대조. 공식DIDM-1/DS4a코드·합성만기록, 실API/모델/법률/운영·DS1등미완료. **현재4h KEY45**: 실제main023=준비candidate6cff를대조했고root최종845/20baseline/check·CASコード/새PR/전체CI순서. 지금새활성대기PR없음(역사PR12미변경). UI/K2a는WIP·PC7/OSgo/최종조건보존. 아래시각별문구는이력이다.
 
 ## 현재 실제 대기 — 2026-11-21T19:10:18+09:00
 
