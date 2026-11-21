@@ -1,4 +1,4 @@
-"""One preselected-dock regression with manual closes and real Workspace.
+"""Docked guide regressions with manual closes and real Workspace.
 
 Small original app/interval helper bodies are isolated from full window/provider
 modules. The offline Qt bootstrap supplies the process font/home/runtime policy.
@@ -84,6 +84,62 @@ class GuideDockingContracts(unittest.TestCase):
                 self.assertIsNotNone(guide.chips['ema'].values)
             finally:
                 guide.close();guide.deleteLater()
+                QCoreApplication.sendPostedEvents(None,QEvent.Type.DeferredDelete.value)
+                app.processEvents()
+
+    def test_open_context_keeps_reading_position_across_stacked_pages(self):
+        from datetime import date,timedelta
+        from PyQt6.QtCore import QCoreApplication,QEvent,Qt
+        from PyQt6.QtWidgets import QApplication,QFrame,QStackedWidget,QVBoxLayout,QWidget
+        from core.i18n import LocaleContext
+        from core.education import catalog,indicators as I
+        from quantgen_desktop.localization import UiLabel
+        from quantgen_desktop.stock_detail_style import text
+        from quantgen_desktop.page_kit import Workspace
+        root=Path(__file__).resolve().parents[1]
+        app=QApplication.instance() or QApplication(['guide-scroll-contract','-platform','offscreen'])
+        application=_helpers('quantgen_desktop.app',root/'quantgen_desktop/app.py',('label','panel'),
+            {'UiLabel':UiLabel,'Qt':Qt,'QFrame':QFrame,'QVBoxLayout':QVBoxLayout})
+        stock=_helpers('quantgen_desktop.stock_detail',root/'quantgen_desktop/stock_detail.py',('interval_words',),{'text':text})
+        dates=tuple((date(2020,1,1)+timedelta(days=i)).isoformat() for i in range(120))
+        closes=tuple(10+i*.02+(i%9)*.04 for i in range(120))
+        history=types.SimpleNamespace(symbol='SYNTHETIC_DOCK_TEST',dates=dates,closes=closes,source='FIXED_SYNTHETIC_UI_ONLY')
+        with patch.dict(sys.modules,{'quantgen_desktop.app':application,'quantgen_desktop.stock_detail':stock}), \
+             patch.object(catalog,'historical_case',side_effect=AssertionError('real case forbidden')), \
+             patch.object(I,'historical_case',side_effect=AssertionError('real case forbidden')):
+            from quantgen_desktop.indicator_guide import IndicatorGuide
+            pages=QStackedWidget()
+            try:
+                other=QWidget();pages.addWidget(other)
+                guide=IndicatorGuide(locale=LocaleContext('ko_KR'),history=history)
+                guide.dock_into(Workspace(('Technical indicator guide','기술지표 가이드')))
+                pages.addWidget(guide);pages.resize(1000,800);pages.show()
+                pages.setCurrentWidget(guide)
+                for _ in range(8):app.processEvents()
+                scroll=guide.workspace.canvas_scroll.verticalScrollBar()
+                self.assertEqual(scroll.value(),0)
+                self.assertFalse(guide.context_toggle.isChecked())
+                self.assertTrue(guide.context_host.isHidden())
+                for key in ('rsi','macd','stoch'):guide.choose(key)
+                guide.context_toggle.click()
+                for _ in range(8):app.processEvents()
+                self.assertTrue(guide.context_toggle.isChecked())
+                self.assertTrue(guide.context_host.isVisible())
+                self.assertGreater(scroll.maximum(),100)
+                scroll.setValue(100);self.assertEqual(scroll.value(),100)
+                before=(guide.keys,guide.focus,guide.series,dict(guide.meta),guide.cursor)
+                pages.setCurrentWidget(other)
+                for _ in range(8):app.processEvents()
+                pages.setCurrentWidget(guide)
+                for _ in range(8):app.processEvents()
+                current=pages.currentWidget()
+                self.assertIs(current,guide)
+                self.assertTrue(current.context_toggle.isChecked())
+                self.assertTrue(current.context_host.isVisible())
+                self.assertEqual(current.workspace.canvas_scroll.verticalScrollBar().value(),100)
+                self.assertEqual((current.keys,current.focus,current.series,dict(current.meta),current.cursor),before)
+            finally:
+                pages.close();pages.deleteLater()
                 QCoreApplication.sendPostedEvents(None,QEvent.Type.DeferredDelete.value)
                 app.processEvents()
 

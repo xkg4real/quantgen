@@ -60,17 +60,23 @@ class WorkflowGuidanceTests(unittest.TestCase):
         self.assertEqual(w.stack.currentWidget().verticalScrollBar().value(),0)
         w.navigate('guide');self.settle()
         # Approved page draft (owner 2026-11-17, draft_03_guide): the guide page holds still and its canvas scrolls by
-        # itself, so the reading position kept across visits is the canvas's. Three lower panels make it taller.
+        # itself, so the reading position kept across visits is the canvas's. The compact lesson stays primary;
+        # open its context chart to read the three lower panels and create actual scrollable content.
         self.assertEqual(w.stack.currentWidget().verticalScrollBar().maximum(),0)
         scroll=w.guide_workspace.canvas_scroll.verticalScrollBar()
         self.assertEqual(scroll.value(),0)
         for key in ('rsi','macd','stoch'):w.indicator_guide.choose(key)
+        self.assertFalse(w.indicator_guide.context_toggle.isChecked())
+        w.indicator_guide.context_toggle.click()
         self.settle()
+        self.assertTrue(w.indicator_guide.context_toggle.isChecked())
+        self.assertTrue(w.indicator_guide.context_host.isVisible())
         self.assertGreater(scroll.maximum(),100)
         scroll.setValue(100)
+        self.assertEqual(scroll.value(),100)
         w.navigate('tools');self.settle()
         w.navigate('guide');self.settle()
-        self.assertEqual(scroll.value(),100)
+        self.assertEqual(w.guide_workspace.canvas_scroll.verticalScrollBar().value(),100)
 
     def test_styled_headings_captions_and_inputs_resolve_to_real_text_font(self):
         w=self.window;w.navigate('tools');self.settle()
