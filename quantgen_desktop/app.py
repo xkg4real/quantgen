@@ -63,7 +63,8 @@ TOOL_PANES = (('bonds', 'Bonds'), ('rates', 'Rates'), ('structuring', 'Structuri
 def _production_card_router():
     """Watchlist cards: their own KIS service, KIS first and Yahoo for stocks when KIS cannot answer."""
     from core.market.routing import default_chart_router
-    from data.kis_workspace import MarketDataService
+    from core import gateway
+    MarketDataService = gateway.provider('data.kis_workspace').MarketDataService
     service = MarketDataService()
     return default_chart_router(lambda: service)
 
@@ -78,7 +79,8 @@ class _ProductionProfileLoader:
     def __call__(self, instrument):
         from core.market.routing import default_chart_router
         from core.research.stock_profile import load_profile
-        from data.kis_workspace import MarketDataService
+        from core import gateway
+        MarketDataService = gateway.provider('data.kis_workspace').MarketDataService
         with self._lock:
             if self._service is None:
                 self._service = MarketDataService()
