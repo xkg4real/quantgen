@@ -1,26 +1,32 @@
 ---
-status: handoff
+status: returned
 reason: owner_directed_transfer_to_quantgen_main_codex
 from: gpt
 task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
 next_ids: DS-H, DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e
-updated_at: 2026-11-21T11:59:26+09:00
+updated_at: 2026-11-21T12:33:42+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: ci
 work_branch: gpt/data-source-didm-20261121 (+ gpt/ds-home-indicators-20261121)
-work_commit: 87812679aec6f333d91b867f5892e523e0da9b0c (DIDM); 7ce37917102af9793d3ccbe851c0554058089df9 (DS-H)
+work_commit: abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0 (DIDM); 7ce37917102af9793d3ccbe851c0554058089df9 (DS-H)
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
 session: Codex DIDM 6af7214e-7798-8191-8cfe-66ba373de0ad
-execution_id: didm-gpt-20261121-6af7214e
+execution_id: a3da2627-8d65-4ade-9c47-a1594cb6db15
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## 중앙 Codex 최신 검토·원격 보존 — 2026-11-21T12:33:42+09:00
+
+소유자의단일창구·5담당승인으로root가DATA를인수했다. 별도DIDM채팅의새구현중단은유지하고본중앙담당이이어간다. [중앙인계](WEEKLY_HANDOFF_2026-11-21_a3da2627.md).
+최신원격DIDM은 **abd10c6**(parent8781267)이다. 같은receipt/payload·다른메타데이터를조용히버리는계약불일치를고쳐StoreError로거절·rollback하며기존schema/UNIQUE/asofSQL/사전등록/문턱불변. old5회귀실패→store13/DIDM137PASS, 독립8PASS. 홈7ce3791공통131PASS/독립6, 공급사대조147합성PASS. 실제API/실연구/성능완료로확대하지않는다.
+3파일commit/parent/blob/branch/core본문readback일치, 로컬detachedHEAD도abd10c6동일·보호경로제외clean. OS136새CI후병합→DSH→DIDM차례. 준법기준선·필수CI·PR·main병합·done_ids는미완료다. 현재새수동질문은없고기존OA09/10/38/46만유지한다. 아래878·132개기록은이전관측이력이다.
 
 # 인수인계: DATA_SOURCE_DIDM -> QUANTGEN 메인 Codex
 

@@ -1,16 +1,16 @@
 ---
-status: taken
+status: returned
 reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a
 next_ids: OS-F2, KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T12:20:41+09:00
+updated_at: 2026-11-21T12:33:42+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: gpt/os-f2-data-dir-20261121
-work_commit: 74dce42f32883e1be459d71cd6674a40922bcaf0
+work_commit: 64ff58ed8e6e657d76f9c2f2d946632b03184892
 uncommitted_changes: no
 pr: 136
 usage_weekly_pct: unknown
@@ -20,6 +20,15 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: a3da2627-8d65-4ade-9c47-a1594cb6db15
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 ---
+
+## 부분 인계 — 새 OS CI 대기·5담당 결과 보존 — 2026-11-21T12:33:42+09:00
+
+- [전체 결과·실패 이력·재현·다음 시작점](WEEKLY_HANDOFF_2026-11-21_a3da2627.md), [사용자 진행표](CENTRAL_CODEX_STATUS_2026-11-21.md). execution **a3da2627-8d65-4ade-9c47-a1594cb6db15**. 기존 승인된 직접 작업의 부분 반환이며 전체 Goal 완료가 아니다.
+- PR136 최신 **64ff58ed8e6e657d76f9c2f2d946632b03184892**. 첫74dce42 Windows3job bounded실패(Win3.12:863tests,1failure,15skip)는hostLOCALAPPDATA를격리하지않던credentialfixture때문. 제품정책은그대로두고fixture+검토12만갱신. 기존52검사/assertion보존, 새2격리시험. path/startup/credentials93PASS/keyring설치/skip0·독립5PASS. 새Compliance44861453813 SUCCESS, 새Runtime44861453849진행중. 전체CI/병합/OS-F2완료ID는아직없다.
+- 병렬원격보존: KEY5a **45db2be73e7f87954cab6782ca4b2717dc97fc62**(8파일,parentdc936d4) 및 DIDM **abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0**(3파일,parent8781267), parent/변경파일/blobSHA/branchhead/core본문readback일치. KEYgateway83/관련123+21subtests/독립4, DIDM137/독립8PASS. DSH7ce3791홈공통131PASS·독립6. 사전등록/평가기준/DBschema불변. 차례전PR/부모완료기록없음.
+- UI로컬merge후보는준법2충돌·PC/OSgo·전체CI조건미완료. 실제옛안내문회귀수정과고유14선택검사·한영14합성PNG만확인. 원격UI코드는새로게시하지않았다. startup부분은OS136에이미포함됐다.
+- 15-2 Notion에최신head·최초Windows실패/수정·새문서CI성공·전체CI대기를최소반영하고warning없는성공응답/원문/revision을privatequeue에원자저장. 새완료ID/LEDGER행/부모취소선없음. mainf065ec92유지, 보호자료/실제원장/확인서명/실제배포/예약변경없음.
+- 다음: 소유권·최신SHA CAS/readback→PR136 **새head64ff58e** 전체 CI판독→조건통과시merge→DSH→DIDM **abd10c6**→KEY **45db2be**. UI·미결사업/실PC조건은그대로. 기존E/Pilot/Step10/F는다시요구하지않는다.
 
 ## OS-F2 원격 게시·PR136 전체 CI 대기 — 2026-11-21T12:20:41+09:00
 

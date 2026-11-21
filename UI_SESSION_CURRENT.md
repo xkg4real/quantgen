@@ -1,3 +1,12 @@
+# 중앙 Codex 최신 UI 검토 — 2026-11-21T12:33:42+09:00
+
+- status: returned · waiting_on: owner/ci/dependencies · execution_id: a3da2627-8d65-4ade-9c47-a1594cb6db15. 사용자단일창구승인으로본중앙UI담당이인수·검토했다. 이전별도UI채팅의구현중단과원본브랜치보존은유지한다.
+- UI414eceb+mainf065ec9의격리미커밋merge후보에서bonds기능을보존해충돌해결, portfolio의옛안내문회귀를이미승인된main한영문구로복원했다. 고유14선택case PASS와7페이지한영14PNG(합성Linuxoffscreen)만확인, 전체UI/실제Windows PASS가아니다.
+- FACTS/source-review 충돌2개는보존, 원격UIcommit/push/PR없음. 소유자PC확인·OSgo·최신의존main통합·전체CI·웹영향기록이남는다. startup준비2파일+6회귀/실제Qt진입검증은OS PR136에선별포함됐다.
+- 상세 [중앙누적인계](WEEKLY_HANDOFF_2026-11-21_a3da2627.md), [진행표](CENTRAL_CODEX_STATUS_2026-11-21.md). 실제사용자입력/권리/사업판정은임의확정하지않는다. 아래최신소유자결정·원문·과거기록을전부보존한다.
+
+---
+
 # 소유자 최신 지시 — 메인 Codex 총괄 / UI 세션 인계 (2026-11-21)
 
 - **status: handoff** · from: GPT UI · to: QUANTGEN 메인 Codex · execution_id: ui-main-codex-handoff-20261121 · updated_at: 2026-11-21T12:01:58+09:00.
