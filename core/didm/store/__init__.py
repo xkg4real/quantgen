@@ -92,7 +92,12 @@ class PointInTimeStore:
 
     def append(self, *, source_id: str, item_id: str, kind: str, published_at,
                received_at, payload: Mapping[str, Any], valid_at=None) -> bool:
-        """Append one version. Returns False if the identical version is already stored."""
+        """Append one version; False only for an identical normalized record already stored.
+
+        A matching version key with different kind/publication/validity metadata is an
+        input conflict, not a duplicate. Refuse it without changing history. A correction
+        can be supplied with its later received_at; no receipt time is invented here.
+        """
         for name, val in (("source_id", source_id), ("item_id", item_id), ("kind", kind)):
             if not isinstance(val, str) or not val:
                 raise StoreError(f"{name} must be a non-empty string")
@@ -108,6 +113,15 @@ class PointInTimeStore:
             " received_at, payload, payload_sha256) VALUES (?,?,?,?,?,?,?,?)",
             (source_id, item_id, kind, pub, valid, rec, body, digest),
         )
+        if cur.rowcount == 0:
+            existing = self._db.execute(
+                "SELECT kind, published_at, valid_at, payload FROM items"
+                " WHERE source_id = ? AND item_id = ? AND received_at = ? AND payload_sha256 = ?",
+                (source_id, item_id, rec, digest),
+            ).fetchone()
+            if existing != (kind, pub, valid, body):
+                self._db.rollback()
+                raise StoreError("conflicting metadata for an already stored version")
         self._db.commit()
         return cur.rowcount == 1
 
