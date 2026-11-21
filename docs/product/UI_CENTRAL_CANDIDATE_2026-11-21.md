@@ -1,3 +1,14 @@
+## K2c KRX 화면의 타입 전용 provider 참조 정리 — 2026-11-21
+
+실제 K2b `d66029642efa4bcd7e92b897139b9d947ad01fec`를 부모로 한 승인 ID25 코드 WIP입니다. 원 요청이 허용한 `typing.Any`를 사용해 `ui/krx_page.py`의 typing import·직접 KRXGateway import 제거·주입 인자의 annotation 세 곳만 바꿨습니다. annotation/type-hints 메타데이터와 직접 import 효과의 차이는 의도된 변경입니다. 함수 본문 raw/AST, 나머지 모듈 AST, 모든 인자/default, 주입 gateway의 기존 7개 호출·callback·문구·레이아웃은 동일함을 작성자와 독립 검토자가 확인했습니다. 새 gateway 생성이나 주입 객체 재바인딩은 없습니다.
+
+- 기존 `FletA1HeadersTests.test_krx_five_provider_tables_keep_raw_values_and_accounting_context` 1개를 원문/fixture/assertion 수정 없이 실행했습니다. 실제 수집·실행·기록 각1, 실패·오류·skip·failed-placeholder0입니다. 소스의 daily/filings/financials/snapshot/indices 합성 표5종 선언과 별도 동적 subcase 계측 여부를 구별하며 총시험 수는1로만 기록합니다.
+- 동일 R3 하네스와 별도 실제 d660 binding으로 source412의 canonical/raw SHA/Git blob/mode 및 고정 private 증거를 실행 전후 확인했습니다. engine 관련5모듈은 허용된 선언 import만 관찰됐고 실제 함수 실행 guard 위반0입니다. 내부 폰트 탐색 `fc-list --help` 1회는 시작 전 거절됐으며 공개 테스트 내부의 실제 subprocess 실행0입니다. 실제 GUI/소유자PC/공급사/API/모델/연구/원장 성과를 뜻하지 않습니다.
+- ROOT가 실제 제거된 타입 전용 import1개만 known에서 삭제했습니다. 경계13 PASS(exit0), 최종 scan new/gone/errors0, 화면12파일31접점+동결 core feed1파일입니다. ceiling22/44·SCREEN_FILES22·frozen 내용과 공개 테스트는 보존했습니다.
+- 부모 d660 대비 공개 입력412개 중 변경은 제품1개와 known1개뿐이며 나머지410개 및 mode는 동일합니다. source1 검증 시점의 known788a/원freeze bd753은 별도 보존하고, 최종 known e0ba/새freeze4e431d4d와 구별합니다. known만 바뀐 뒤 공개1을 반복하지 않았습니다. Python3.10 문법 검사도 통과했습니다.
+
+새 before 골든·새 테스트·준법 baseline은 만들거나 수정하지 않았습니다. 전체 UI/KEY5·최신 main/KEY5a 통합·최종 source-review·전체 UI CI/PR·owner PC7/OS go는 남았습니다. 웹사이트 큐는 NOT_SENT이며 실제 전달·적용·배포는 미실시입니다. 아래 원본·앞선 검증 기록은 보존합니다.
+
 ## K2b 파생상품 준비 상태 입구 전환 — 2026-11-21
 
 K2a `7fb6b032e2ab24c681700120ab0abd5b6dd5c6e3`에서 이어지는 승인 ID20 코드 WIP입니다. `ui/derivatives_page.py`의 import와 builder 내부 준비 상태 조회 두 줄만 바꿨습니다. 같은 위치에서 기존 `gateway.keys_ready("kis_quote")`를 사용하며 hidden Board, 명시 선택, 기존 선택 유지, 오류 전파와 인자·계산·문구·레이아웃을 보존합니다. LF196행과 함수 본문 중 나머지 부분도 유지했습니다.

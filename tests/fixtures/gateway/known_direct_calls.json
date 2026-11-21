@@ -32,9 +32,6 @@
    "import:core.ficc.data.load_policy_rates",
    "import:core.ficc.data.load_short_rate"
   ],
-  "ui/krx_page.py": [
-   "import:data.krx.KRXGateway"
-  ],
   "ui/macro_page.py": [
    "call:config.ficc_provider_status"
   ],
@@ -64,7 +61,7 @@
  },
  "totals": {
   "core_and_main": 1,
-    "files": 14,
-    "screens": 32
+    "files": 13,
+    "screens": 31
  }
 }
