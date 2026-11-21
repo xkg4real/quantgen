@@ -1,3 +1,17 @@
+# 중앙 K2b 보존·K2c 진행 범위 — 2026-11-21T20:44:38+09:00
+
+- ROOT execution `2f27d0c2-57cc-46e7-97d6-fc141d4065c9`가 OS 잠금20162 아래 계속 수행 중입니다. primary는 KEY139/0413cc52이며 task/handoff/cycle 및 이전 기록은 유지합니다. 자동 감시·중복 예약·run_now·배포는 재개하지 않았습니다.
+- **K2b 원격 보존:** `gpt/ui-key5-flet-k2b-20261121@d66029642efa4bcd7e92b897139b9d947ad01fec`, 실제 부모K2a7fb6b032/tree629f209d25947504bdd26bc8c8cb85bcbada6a19. 제품1·known1·기록의 원격3본문/경로/blob/부모/tree 및 expected7fb ref CAS/read-back 확인. 원본UI822/K1a/K1b/K1c/K1d/K2a는 보존됐으며 새 UI PR/main 병합은 없습니다.
+- 승인 ID20의 import·readiness 조회 두 줄만 기존 gateway.keys_ready(kis_quote)로 옮겼습니다. before14·after14 작성자/독립 MATCH, gateway14/config bool13+합성오류1/fake GET20, actualimports73 동일집합(target1 raw만 변경). 기존 공개1 PASS(수집/실행/기록 각1·실패/오류/skip0), 최종 경계13 PASS는 서로 합산하지 않습니다. builder14의 worker0과 공개1의 fake snapshot/동기 worker 경로를 구별합니다. 실제 GUI/공급사/API/모델/연구/원장/PC 검증은 추가하지 않았습니다. 폰트 탐색시도1은 시작 전 거절·실제 subprocess0입니다.
+- ROOT가 actualgone1만 known에서 삭제했습니다: blob788a461d2b67fec0f124b8360bbce520aaf527fc. full412 raw/blob/mode 확인, a9aa source1 시점 대비 known1만·실제 부모7fb 대비 제품1+known1/나머지410 불변. 최종 scan new/gone/errors0, 화면13파일32접점+동결feed1·ceiling22/44·SCREEN_FILES22 유지. old6792 snapshot/a9aa·561e/원R2·oracle527d는 새 finalfreeze5b4ebbac와 분리해 보존했습니다. 공개시험·준법 baseline 수정0.
+- sapientia Notion `K2bd660-partial-20261121-2f27d0c2` 부분 진척 반영 성공·부모 취소선0. 웹사이트 큐7개는 NOT_SENT, 실제 전달/적용/배포0입니다. 실제 UI PR의 PR-번호 기록·수신/적용 증거는 남습니다.
+- **K2c 병렬 소유권/다음 범위:** `gpt/ui-key5-flet-k2c-20261121`을 실제 d660296 부모에서 생성하고 ref를 재조회했습니다. d660의 ui/krx_page.py 원blob314b787b8eb934c90ba01853f832c966832f3756도 확인했습니다. 승인 원blob32721b의 ID25가 명시한 타입 Any 전환(typing import·직접 KRXGateway import 제거·annotation 세 편집)만 허용합니다. 실제 source1 구현 전이며 독립 정적 검토 PASS, 전체 함수 body raw/AST·args/default·주입 gateway7호출·문구/배치 보존 증거가 있습니다. 이 checkpoint CAS+execution/read-back과 STATE 저장 뒤 별도 verified source412 copy에서 해당 최소 patch와 기존 public KRX1만 진행합니다. 새로운 before 골든/시험은 만들지 않습니다.
+- K2d ID18/21/22·23·24/33은 공개 source4파일의 앱 loader8식+CLI1 AST-only, 계획 before10입니다. private초안 b425d758은 Native331f9a72 정적검토에서 CHANGES_REQUIRED로 SQLite/fork/DNS·실제history/runs/provenance 차단·안전한 새 출력·동일 source/proof 사후검증 보강 중입니다. 역사적 freeze.base630과 실제 원격7fb의 연결을 별도 receipt로 표시하며 원manifest를 고치지 않습니다. 실제 before/골든/제품/공개test/known/원격 실행은0입니다.
+- **KEY139 현황:** actualhead0413cc52·main53e5e723 기준 source845/docs20 정합성 PASS(publication BLOCKED65), local83/123/17·독립8/main4 별도 PASS. Runtime44897148350 진행 중(문법2 PASS, 설치4 진행·관찰된 실패0), Compliance44897148302 및 Nautilus 임시원장44897148304 SUCCESS. 전체3workflow/필수checks·리뷰·main·freeze·ROOT 소유권을 확인하기 전 merge/KEY-5/a 완료를 기록하지 않습니다. DIDM138/main53e5e723의 공식 DIDM-1·DS-4a 코드·합성 하위 완료는 유지하며 실제 API/모델 성과/법률·라이선스·운영 부모는 미완료입니다.
+- 전체 UI/KEY5, 실제 최신 의존성 통합·최종 source-review/전체CI/UI PR·owner PC7/OS go 및 공급사/법률/라이선스/실행 승인 조건은 남습니다. 다음은 K2c 검증 코드 보존, K2d guard 정적 재검토 후 원본 before만 GO, 그리고 KEY139 전체CI 확인입니다. 더 긴 단계는 실제 증거에 맞춰 계속 기록합니다.
+
+---
+
 # 중앙 K2a 원격 보존 및 다음 검증 — 2026-11-21T20:13:03+09:00
 
 - ROOT execution `2f27d0c2-57cc-46e7-97d6-fc141d4065c9`의 기존 OS 잠금 아래 직접 승인 작업을 계속합니다. 자동 감시·예약·run_now는 취소 상태이며 재개하지 않았습니다.
