@@ -19,9 +19,6 @@
    "import:data.kis_workspace.MarketDataService",
    "import:data.kis_workspace.OVERSEAS_PRICE_DETAIL"
   ],
-  "quantgen_desktop/market_tools.py": [
-   "call:config.kis_ready"
-  ],
   "quantgen_desktop/paper.py": [
    "call:core.engine.feed.QuoteFeed(no fmp_client)"
   ],
@@ -88,7 +85,7 @@
  },
  "totals": {
   "core_and_main": 1,
-  "files": 21,
-  "screens": 42
+  "files": 20,
+  "screens": 41
  }
 }

@@ -121,8 +121,8 @@ class DerivativesPane(ToolPane):
     @staticmethod
     def automatic_board():
         """KIS when its keys are set, else the labelled synthetic demo board (as the Flet page, PR #98)."""
-        import config
-        return 'kis' if config.kis_ready() else 'synthetic'
+        from core import gateway
+        return 'kis' if gateway.keys_ready('kis_quote') else 'synthetic'
 
     def hide_source(self):
         """No board selector (owner issues 04/12): the app picks the board itself instead of failing on a
