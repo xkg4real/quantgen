@@ -1,3 +1,15 @@
+## K2b 파생상품 준비 상태 입구 전환 — 2026-11-21
+
+K2a `7fb6b032e2ab24c681700120ab0abd5b6dd5c6e3`에서 이어지는 승인 ID20 코드 WIP입니다. `ui/derivatives_page.py`의 import와 builder 내부 준비 상태 조회 두 줄만 바꿨습니다. 같은 위치에서 기존 `gateway.keys_ready("kis_quote")`를 사용하며 hidden Board, 명시 선택, 기존 선택 유지, 오류 전파와 인자·계산·문구·레이아웃을 보존합니다. LF196행과 함수 본문 중 나머지 부분도 유지했습니다.
+
+- 원본630에 고정한 before 14사례와 변경 후 14사례를 작성자 및 독립 검토자가 각각 재현해 같은 불변 semantic oracle과 일치함을 확인했습니다. 실제 gateway 진입은 builder별 1회/합계14이며 config 정상 bool13·합성 오류1·가짜 메모리 credential GET20을 구별합니다. 키 존재를 실제 공급사 연결·라이선스 검증으로 해석하지 않습니다.
+- 실제 import 73개의 집합은 동일하며 변경된 import 원문의 지문은 대상 파일1개뿐입니다. 새 후보의 실제 부모7fb와 역사적 before 원본630을 분리해 기록하고, 원본 작성기·oracle·manifest와 최초 실패/정정 이력을 보존했습니다.
+- 기존 공개 회귀 `GroupedNumbers.test_derivatives_paths_are_grouped_and_read_back` 1개를 수정 없이 실행해 수집·실행·기록 각각1, 실패·오류·skip0을 확인했습니다. 가짜 snapshot이 즉시 FICCError를 내는 경로에서 Paths 기본3000·입력12000 전달과 오류표시를 확인합니다. builder-only 14의 worker0과 이 가짜 worker 경로를 구별하며, 이 수들을 합산하지 않습니다.
+- 공개 회귀의 실행 중 쓰기는 임시 fixture 영역에 제한했고, source412 및 고정 증거의 실행 전후 raw SHA·Git blob·mode를 대조했습니다. 폰트 탐색 `fc-list --help` 1회는 시작 전에 거절됐고 실제 subprocess 실행0입니다. 이 결과는 실제 GUI·Windows·소유자PC·모델·공급사/API·동결연구·원장 검증을 뜻하지 않습니다.
+- ROOT가 실제 사라진 `config.kis_ready` 항목1개만 known에서 제거했습니다. 최종 경계13 PASS, new/gone/errors=0, 남은 화면13파일32접점과 frozen core feed1파일입니다. ceiling22/44·SCREEN_FILES22·frozen 내용은 불변입니다. 공개 입력412개 중 부모7fb 대비 변경은 제품1개·known1개이며 나머지410개와 mode는 동일합니다. 원래 source1/known6792 시점의 검증·manifest는 새 최종 freeze와 분리해 보존했습니다.
+
+공개 테스트와 준법 baseline을 수정하지 않았습니다. 전체 UI/KEY5, 최신 main·선행 KEY5a 통합, 최종 준법/source-review·전체 UI CI/PR·소유자PC7/OS go는 여전히 미완료입니다. 웹사이트 영향 검토 큐는 NOT_SENT이며 실제 전달·반영·배포는 미실시입니다. 원본과 앞선 후보 이력은 아래에 보존합니다.
+
 ## K2a 금리·구조화의 기존 gateway 입구 전환 — 2026-11-21
 
 K1d `630e9ba44d84867b01dddce55a5785acc7958269`에서 이어진 코드 WIP입니다. 승인된 KEY-5 요청 34·35·44의 `ui/rates_page.py`와 `ui/structuring_page.py`에 한정해 기존 FICC facade를 원래 조회 시점에 사용합니다. 기본 앱은 계속 native PyQt이며 Flet 화면은 기존 기능 유지 범위입니다. 원래 인자·단위·기본 일수·계산·한국어 문구·배치와 줄바꿈을 보존했습니다.

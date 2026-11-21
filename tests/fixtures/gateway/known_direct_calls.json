@@ -24,9 +24,6 @@
   "ui/crypto_page.py": [
    "call:config.upbit_ready"
   ],
-  "ui/derivatives_page.py": [
-   "call:config.kis_ready"
-  ],
   "ui/fcharts.py": [
    "import:core.ficc.data"
   ],
@@ -67,7 +64,7 @@
  },
  "totals": {
   "core_and_main": 1,
-    "files": 15,
-    "screens": 33
+    "files": 14,
+    "screens": 32
  }
 }

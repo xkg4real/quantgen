@@ -19,7 +19,7 @@ from typing import Callable, Optional
 import flet as ft
 import numpy as np
 
-import config
+from core import gateway
 from core.ficc import equity_deriv as ED
 from core.ficc.common import BP, FICCError
 from core.ficc.swaps import black76
@@ -50,7 +50,7 @@ def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] =
     pal = active()
     # The app picks the board itself: KIS when its keys are set, else the
     # labelled synthetic demo board. The selector stays for tests but is not shown.
-    board = "kis" if config.kis_ready() else "synthetic"
+    board = "kis" if gateway.keys_ready("kis_quote") else "synthetic"
     source = hide_source(ft.Dropdown(label="Board", width=260, value=board,
                                      options=[ft.dropdown.Option(k, v) for k, v in _SOURCES]), board)
     expiry = with_helper(ft.TextField(label="Expiry (YYYYMM)", hint_text="blank = nearest", width=170,
