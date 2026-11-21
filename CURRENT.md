@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a
 next_ids: OS-F2, KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T13:29:16.000+09:00
+updated_at: 2026-11-21T13:51:37.000+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: gpt/os-f2-data-dir-20261121
@@ -20,6 +20,15 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 1bfaa7d8-c59c-4c6c-a53d-00acbe3b7e9a
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 ---
+
+## K1a 원격 보존·독립검토 통과 — 2026-11-21T13:51:37.000+09:00
+
+- 실행 1bfaa7d8-c59c-4c6c-a53d-00acbe3b7e9a의CURRENT frontmatter task/cycle/execution/handoff/branch/commit을명시대조했고소유권유지. K1a **gpt/ui-key5-native-k1a-20261121@d2f675dbb5d420a646473a555e3dd05a0fc57b69**, parentUI822aff9, tree39e3c954. source2/새7test/known/CI/후보설명 총6본문·blobSHA·tree/parent/ref원격readback일치. 기존UI822/Claude414/main보존·UI/main PR없음.
+- KEY5 ID3/12의기본2series호출만기존gateway.ficc로이동. 원본main oracle30816…와UIpre e68cf…둘다불변. main→승인UI의기존문구23차이는별도보존하고요청/수치/관측/source/unit/reason차이0확인. 실제후보__file__/SHA로post10case MATCH, 공개7PASS, 관련Home11+Summary3=14PASS(146.711s), root/독립boundary13PASS. 독립검토가실제gw.ficc/route/blocked/FiccData로합성12진입provider0/network0·fixed_local9불변확인. 그룹간중복이므로합산금지. before7suite는5failure events; explicit off의fakeleaf2회/정상취급→after0회/작성된사유·GatewayOff.
+- knownfixture는새직접접근0/errors0/gone정확2증명후소멸2exemption만제거. 20screenfiles42sites+FROZEN1, ceiling22/44·SCREEN_FILES22그대로. 되돌아온직접import는new위반으로검출됨. 새7module을Qt설치후기존native CI명령에추가(기존module/보안·환경설정불변). Python3.10grammar3PASS. 아직최종baseline/전체K1 CI·PC/OSgo·KEY5부모완료아님; sparsefont/SVG경고는pixel/Windows증거로세지않음.
+- DS-H용private공개소스검토overlay를준비했다. OS807기준sourceSHA일치·정합성PASS, DSH809는정확4변경(2수정/2추가)·구조오류0·20문서digeststale. 실제workingcandidate의registry미materialize와제한overlay의7링크부족은입력준비실패이력으로보존후명시공개입력만보충했다. 실제DSH최종check/최신main/소유자OA09진단으로대체하지않고publicationBLOCKED65유지. 기존OA09조건과최신배정문구해석충돌은완료/면제로임의확정하지않는다.
+- OS136 전체Runtime44861453849는계속판독중(Win3.14전체성공,나머지설치job현재진행중,새실패관측없음). 전체필수통과전main병합없음. 다음OS→DSH→DIDM→KEY5a순서와UI/OSgo·실제증거조건/자동감시취소유지. 검증·sourceproof는private K1A_REMOTE_READBACK/K1A_POST_INDEPENDENT_FINAL_REVIEW_1bfaa7d8.json.
+
 
 ## UI64회귀 완료·KEY5 K1a 작은 단위 준비 — 2026-11-21T13:29:16.000+09:00
 
