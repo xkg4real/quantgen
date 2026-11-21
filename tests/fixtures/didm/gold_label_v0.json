@@ -1,0 +1,15 @@
+{
+  "article_id": "fixture-article-0001",
+  "annotator_id": "annotator-a",
+  "market": "EN",
+  "source_tier": 1,
+  "target_kind": "macro",
+  "entity_id": "US.FFR",
+  "is_subject": true,
+  "event_type": "monetary_policy",
+  "direction": "-1",
+  "is_new_event": true,
+  "claim_status": "confirmed",
+  "published_at": "2026-11-05T19:00:00Z",
+  "received_at": "2026-11-05T19:15:00Z"
+}

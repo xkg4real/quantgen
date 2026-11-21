@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "795b2e9435c8eed43b08b98c709b3e2eeb3a7365ad2628855cb164cea0f94ab8",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "d83235d53b4971df190e211bea41f7e43402324fdcc68dde38dcb9c22a88fda7",
+    ".github/workflows/runtime-smoke.yml": "d6c08d9a480c50e88d902082238c421c3419a0720a506dcf7ee10832811c3c41",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -86,6 +86,18 @@
     "core/crypto/analytics.py": "7d7c846f0a363135592b88699190ac8c7251e159756ffb21bbebc128129dfdbf",
     "core/crypto/funding_diagnostic.py": "19e0763b30e0f838d522c4ceedffd8ad7139b69f7257924532593b9bb02a9270",
     "core/crypto/values.py": "6254994c3125bb248e9b42d5bbb83edec23943ec8dce99d25f03c0713ea24ee3",
+    "core/didm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "core/didm/ingest/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "core/didm/ingest/alfred.py": "bd29193bd8134a7c2a16926311c1cf210325e2beaec0f308c955ec340e2482a9",
+    "core/didm/ingest/ecos.py": "401fdae16ab6225ca8d91bb7c632873a88b6d94738955185c1e7da55fb16c0b1",
+    "core/didm/ingest/filings.py": "9b2d8d01942de98048ffd866312a15b4b850f459705c73f0d4bffb87adb6d6e2",
+    "core/didm/ingest/gdelt.py": "99731a27e6597bfe4a8cd8ff443d60fc232fec708e262589bf740c882a9a3722",
+    "core/didm/ingest/kalshi.py": "4f10f0581bd6aa13f0a9786d2f6b54ab97594b0c2d11b45189fa4ad8ce812bdd",
+    "core/didm/ingest/news.py": "37d84f3cb3bde56ed772235aee1283bca76057006e5044974663f22d80f72afd",
+    "core/didm/llm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "core/didm/llm/schema.py": "110eb847575f0e9bf4b147fa17b97ff7c476cbdbd29de453d9fbe5ebcfcd4856",
+    "core/didm/novelty.py": "840562fc43bea408254cfac625d22534408f85c85741015fc17fd4ddd311f590",
+    "core/didm/store/__init__.py": "368bc91ce8edf904d874ed96be693136280bdf86c5fa81bb9590d24afad1eed3",
     "core/education/__init__.py": "d04a1be2039032cc6150e474930f58e9f5b1e882d8fad1a6b472c313b5456ad4",
     "core/education/catalog.py": "6b3adffbee431a559ab4d6ea976396fb1e746c8ba8b29f3baff64f16b19a9266",
     "core/education/chart.py": "e42562c7fdcbfe5be6743561b1b60a0567ca6da916c292c641c3e84ae6d79771",
@@ -300,6 +312,18 @@
     "data/calendars/index.json": "2b9554ba81120f51804a1df3fcfe0ef810974b660573c8213269074505f35d38",
     "data/crypto/__init__.py": "f07f423c4c4e88823feb526625101d80d90ef5f322a506a73ddf7fbbd292109b",
     "data/crypto/crypto_client.py": "91207df9f32804321fd9b68db7b652fde425b3f90062f7838ca190132d13d1f3",
+    "data/didm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "data/didm/alfred.py": "a1b2b59b6e0d2358aa030ece3732ccbb5999562824afd09b9fb56f86f9f5fbb8",
+    "data/didm/alphavantage.py": "b7872678d921960023efd56b82d17f6cdd446d47249edfda515818d18f77bf1b",
+    "data/didm/cryptopanic.py": "311134cadaea66931fb5e8b4c1cd8ee582d60ba1b8b1ddf68c15b88bbd038468",
+    "data/didm/ecos.py": "15c48d674b98d4fc786aa01ab1c6fea41d0044b0ebbca892d866d89e9c4a1689",
+    "data/didm/edgar.py": "6237874732295b1e2d0e259f44edc4a0e744f3203c5b629bf724f3216f38bf95",
+    "data/didm/gdelt.py": "7623b420553c9f07d27e4b65ae61ef9510966ef6274438d718db101a0a671bde",
+    "data/didm/kalshi.py": "da3685db53b509bd8c3915f6bc39d020c91a73d073d62548fa4e705c7c6bfffb",
+    "data/didm/keys.py": "a712abbbbbd2a3af5e3332c1176c911529d33622ebbae7bd40c2a8c399939700",
+    "data/didm/opendart.py": "b571d9895fe6aec55412353d15debcc197f1375cf63ac0f6fa01a2921bf64b79",
+    "data/didm/polymarket.py": "fe65bbd835d791add326ccdc4370f9336acd33920cb350b6f26d32585dcd0066",
+    "data/didm/tiingo.py": "675ef2b89ffce14b0ae30c301090f6121f2b5da3c272b4e12c39f55a11868ee0",
     "data/fmp/__init__.py": "23b067ddcc2dee0fd36594e1838eaec90d475fa7b862fc4186de6950ab347d1d",
     "data/fmp/quote_client.py": "89d9dee24b32ea2e6b9dd0570ce89a98310f145a535a7acd79863921d91f09de",
     "data/kis_markets.py": "84f63c5bd7592a625df3948a35042ba14f67d4b54775cc5ebd4f490eef9a2b39",
@@ -588,6 +612,13 @@
     "tests/desktop_windows_branding_acceptance.py": "811fb37cf6bdb7550df8abbedfe3a08449b17787d15a28180146a876cfb19a9c",
     "tests/desktop_workflow_guidance_acceptance.py": "12dccb1fc2c3052718d1660da13991ed869f8f139a0de685c98a6438eb14f947",
     "tests/desktop_workspace_readability_acceptance.py": "735e14354046583f1f9974a6120442c96e8f81144effc24a3fc4ba06dbfd2108",
+    "tests/didm_ingest_acceptance.py": "b6c69236fce44daf5e5fc733b18a440f27abdbe4f4fdb3ee8dbb66108eb28a0c",
+    "tests/didm_news_acceptance.py": "1280b0a97c7b48c9bd8610e891c048874d8503ad8a9dba4338068dfef2cda0ce",
+    "tests/didm_novelty_acceptance.py": "ccefc838580aeab523770c0920afec71031b62980fcbdf16150cdaaabc9ed094",
+    "tests/didm_schema_acceptance.py": "5c32fdf9e5a9bc14d564782a21a4c69dec3d24595c72fcbbd65c2bfddbc50caa",
+    "tests/didm_sources_acceptance.py": "8574b9c822e4d7acfc849bd70ffcbd0d03fdca9b8ebf67c50ec0ff1c7f48b781",
+    "tests/didm_store_acceptance.py": "3f54b0b04508850512776d6c6b4c836ed54e3c1e7fae2c91e53b349537c563da",
+    "tests/didm_vendor_eval_acceptance.py": "5a134e1547f047358f33ce56c4cd59a46049154160591194e177e2e1c73e9089",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
     "tests/etf_sleeve_disclosure_acceptance.py": "fa0338f032dfa63d6b003b42b8803cef1d6391be8b36d83e18c021d53cb7fe8a",
     "tests/expansion_acceptance.py": "7c9bff8790d88abdc324057a1e49426c5c0f2b5072acd15e652258a6fb27fc7e",
@@ -730,6 +761,10 @@
     "tools/compliance/export.py": "01cc9f26bb84cbde8b292719aa86ddcc778e22a0c6c93dac5c5a6167330d1dbf",
     "tools/compliance/verify.py": "a7dbb729bfca7bb4bc6070d808173ce6b19db2a2327f4754dc2cfe770c5e8132",
     "tools/debate.py": "5c790556d790d2dec14fe53dfeccc74e519ab6886555bcbfdbec6ce02e8a126d",
+    "tools/didm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tools/didm/check_vendor_eval.py": "6f275c3e1835a6c718ba4bb608db10303bac9fe2c5f08b80fea6ecb890e3e8cc",
+    "tools/didm/collect_daily.py": "35d220d120b60ff79b0b63834a6ba093c1a0f2ae55e6cb5d013c0f935c11b32d",
+    "tools/didm/keys.py": "5c0be624bc5fad400383e866c3ab187ab65614fa7d7ee80dcd5b51c00bc51eb3",
     "tools/handoff/auto_snapshot.py": "e79e3cc15572b0c4fae50784784f9fd234c75440d812104d0abf393bb2571cc6",
     "tools/handoff/mod/hooks/register.test.ts": "2709a0beb01e94689c5be2118f266138ad24b990648afbd58de8086e4d5628fb",
     "tools/handoff/mod/hooks/register.ts": "f7370a361aee2a53d4e1b8355f5a707b52a77d0e852a63bc3a1c743400b39d0b",
@@ -819,163 +854,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "7e925a5dd0c31100e7147308e984c8b663482e8b240acd57f486e5635445701f",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.554214+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "07477f29f521442d7523d0ea5d850ce76185d963851c330389a5396eb22c3616",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.557889+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "7e925a5dd0c31100e7147308e984c8b663482e8b240acd57f486e5635445701f",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.556316+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "07477f29f521442d7523d0ea5d850ce76185d963851c330389a5396eb22c3616",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.560541+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "7468ba568a192131198f83e146c51861bdb675b9e261553970d8919511e39c5b",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.557721+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "8e0306fa955adbafccdf50b77215094dedeb0006bee1794f06285f4899b2c64c",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.562113+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "bfa58f7310856684801525ed7985591d34152ab7783cd3b463bde0add06f64ee",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.559175+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "088bb1ee25cee30015a3a88dda61236cb21049ab861ef36b6641f301facb4bd6",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.563734+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "9cc01715d8ca0fed0340c8f3eb33288e21ad4dead498c2e96922bfc4913d112c",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.560523+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "9af0434791e996caf9cf6f4d787781d675b4509f7ec9d56f5bd4472427a92214",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.565093+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "fe5ca93684f7b77a5925ff490b1f427981976646ed033b1cac912ab83f78a88f",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.561885+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "f8cd60bc06e0728057985c4c54d8a7ea6f092b5f2b5096eda370b66724093df8",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.567083+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "7e925a5dd0c31100e7147308e984c8b663482e8b240acd57f486e5635445701f",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.563146+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "07477f29f521442d7523d0ea5d850ce76185d963851c330389a5396eb22c3616",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.568373+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "8": {
-      "document_sha256": "b1ebf5f8469f355bc6d261789b5ffd402282fea07c83add564ed0dc2dc2fb775",
-      "source_digest": "fe5ca93684f7b77a5925ff490b1f427981976646ed033b1cac912ab83f78a88f",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.564392+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
+      "source_digest": "f8cd60bc06e0728057985c4c54d8a7ea6f092b5f2b5096eda370b66724093df8",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.569749+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "159ea2cef7574f806123300882c113c482e76786f126ba79cd738b60603015a9",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.565571+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "409214110263ccfed7e504a0b4836fa0020dbe28001bd391b0ecee3626229cfe",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.571199+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "42a0dd960ff5a92297fc44c87b5e9a12dd2fe651e7e4600bbeda2142bd2e26f9",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.566789+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "a2924d46a86bf44281deeadc5620eab7e6f99186c058d1c193cc6ff9aac1ede3",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.572514+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "f0853cc121d25708b3d7a0725e88bd02252183c9a271b1bead794baa0ca4b4e9",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.568252+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "ce340451c9bcf9526cc573e612560f00f763508cafd756b9a8b7b2e34dd626d6",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.574249+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "8b289e52a3d1f18d443abc40754de23707d59fadd8ad0f88c8593b0c1ba8a5a0",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.569705+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "1d9284ce42e2da075e279ded5e4c5d96138303cbf8085f90f501bff31cebd60a",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.575754+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "159ea2cef7574f806123300882c113c482e76786f126ba79cd738b60603015a9",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.571302+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "409214110263ccfed7e504a0b4836fa0020dbe28001bd391b0ecee3626229cfe",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.577606+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "159ea2cef7574f806123300882c113c482e76786f126ba79cd738b60603015a9",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.572588+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "409214110263ccfed7e504a0b4836fa0020dbe28001bd391b0ecee3626229cfe",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.579137+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "159ea2cef7574f806123300882c113c482e76786f126ba79cd738b60603015a9",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.573778+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "409214110263ccfed7e504a0b4836fa0020dbe28001bd391b0ecee3626229cfe",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.580501+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "59a46970c30644233425d6bcb6219c9fb4e50c80a1061ceaecbe449c42a4a6fd",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.575047+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "268198a47f4e4261853e1d372f0c75eb8acabbe1c79df595c523a253b4460367",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.582092+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "fe5ca93684f7b77a5925ff490b1f427981976646ed033b1cac912ab83f78a88f",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.576598+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "f8cd60bc06e0728057985c4c54d8a7ea6f092b5f2b5096eda370b66724093df8",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.583968+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "7e925a5dd0c31100e7147308e984c8b663482e8b240acd57f486e5635445701f",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.578067+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "07477f29f521442d7523d0ea5d850ce76185d963851c330389a5396eb22c3616",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.585306+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "e3d21e9c28abf240d091e2b82224247e06c8546f1331bb0e0312fcf0c9d11016",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.579378+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "source_digest": "4b73d2e617613ee8d1ced2525246ee2867585638c8981ed67bd5b71474382e05",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.586496+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     },
     "20": {
-      "document_sha256": "e1ef3eb7d55da6e32f27a544415ef36862b18e5658b1c516bbd81c262819e8ec",
-      "source_digest": "7e925a5dd0c31100e7147308e984c8b663482e8b240acd57f486e5635445701f",
-      "reviewed_by": "Codex central 1bfaa7d8",
-      "review_note": "Reviewed the six-indicator loader, isolated live-readiness failures, calendar validation and source-unit-rights contract against all 20 existing policies on the OS-F2 main source tree; operational and publication evidence remain separate.",
-      "reviewed_at": "2026-11-21T05:25:36.580656+00:00",
-      "source_commit": "7ce37917102af9793d3ccbe851c0554058089df9"
+      "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
+      "source_digest": "07477f29f521442d7523d0ea5d850ce76185d963851c330389a5396eb22c3616",
+      "reviewed_by": "Codex central 2f27d0c2",
+      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
+      "reviewed_at": "2026-11-21T08:51:04.588209+00:00",
+      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
     }
   }
 }
