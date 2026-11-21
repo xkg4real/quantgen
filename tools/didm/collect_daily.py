@@ -90,6 +90,17 @@ def _http_reason(exc: Exception) -> str:
     return name + (f" HTTP {code}" if code is not None else "")
 
 
+def _stamp_completed_batch(rows: list[dict]) -> None:
+    """Use batch completion as a conservative availability time after fetching and parsing.
+
+    The ingest functions accept one timestamp before invoking their fetchers. That
+    initial time must not enter the store as if the downloads had already finished.
+    """
+    received = _now()
+    for row in rows:
+        row["received_at"] = received
+
+
 def collect_gdelt(store: PointInTimeStore) -> tuple[int, list[dict]]:
     from data.didm import gdelt as gdelt_http
     stage = ["lastupdate"]
@@ -113,11 +124,13 @@ def collect_gdelt(store: PointInTimeStore) -> tuple[int, list[dict]]:
             stamps = [gdelt_ingest.previous_stamp(first), first]
             rows, fetched, missing = gdelt_ingest.ingest_stamps(
                 gdelt_http.fetch_bytes_optional, stamps, _now(), kinds=("events", "gkg"))
+            _stamp_completed_batch(rows)
             added = store.append_many(rows)
             print(f"GDELT fallback {stamps[0]}..{stamps[-1]}: files {len(fetched)}, missing {len(missing)}, "
                   f"rows {len(rows)}, new {added} (zip CRC checked, md5 not published for these)")
             return added, rows
         return 0, []
+    _stamp_completed_batch(rows)
     added = store.append_many(rows)
     print(f"GDELT files {len(refs)} ({', '.join(r.stamp + ':' + r.kind for r in refs)}), "
           f"rows {len(rows)}, new {added}")
@@ -133,14 +146,13 @@ def finbert_baseline(store: PointInTimeStore, rows: list[dict]) -> str:
     if not titled:
         return "no_titles"
     clf = pipeline("text-classification", model=FINBERT_MODEL, top_k=None)
-    received = _now()
     n = 0
     for r in titled:
         scores = {d["label"].lower(): float(d["score"]) for d in clf(r["payload"]["page_title"][:512])[0]}
         p_pos, p_neg = scores.get("positive", 0.0), scores.get("negative", 0.0)
         n += store.append(
             source_id="finbert-baseline", item_id=r["item_id"], kind="finbert_baseline",
-            published_at=r["published_at"], received_at=received, valid_at=r["valid_at"],
+            published_at=r["published_at"], received_at=_now(), valid_at=r["valid_at"],
             payload={"model": FINBERT_MODEL, "p_positive": p_pos, "p_negative": p_neg,
                      "p_neutral": scores.get("neutral", 0.0), "ess_like_0_100": ess_like(p_pos, p_neg),
                      "input": "gkg_page_title"})
@@ -154,6 +166,7 @@ def collect_gdelt_day(store: PointInTimeStore, day: str, with_gkg: bool) -> None
     kinds = ("events", "gkg") if with_gkg else ("events",)
     rows, fetched, missing = gdelt_ingest.ingest_stamps(
         gdelt_http.fetch_bytes_optional, gdelt_ingest.stamps_for_day(d), _now(), kinds=kinds)
+    _stamp_completed_batch(rows)
     print(f"GDELT day {day} UTC ({'+'.join(kinds)}): files {len(fetched)}, missing {len(missing)}, "
           f"rows {len(rows)}, new {store.append_many(rows)}")
 
@@ -320,9 +333,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--opendart", nargs=2, metavar=("BGN_YYYYMMDD", "END_YYYYMMDD"))
     ap.add_argument("--ecos", action="append", default=[], metavar="STAT,CYCLE,START,END[,ITEM...]")
     ap.add_argument("--kalshi", nargs="*", default=[], metavar="SERIES")
-    ap.add_argument("--alphavantage", nargs="*", metavar="TICKER", help="one NEWS_SENTIMENT call (free: 25/day)")
-    ap.add_argument("--tiingo", nargs="*", metavar="TICKER")
-    ap.add_argument("--cryptopanic", nargs="*", metavar="CODE")
+    ap.add_argument("--alphavantage", nargs="*", metavar="TICKER",
+                    help="paid NEWS_SENTIMENT endpoint; held by the current data plan")
+    ap.add_argument("--tiingo", nargs="*", metavar="TICKER", help="paid news access; held by the current data plan")
+    ap.add_argument("--cryptopanic", nargs="*", metavar="CODE", help="paid API; held by the current data plan")
     ap.add_argument("--gdelt-day", metavar="YYYYMMDD", help="fetch all 96 fifteen-minute files of a UTC day")
     ap.add_argument("--gdelt-gkg", action="store_true", help="with --gdelt-day, also GKG files (large)")
     ap.add_argument("--ecos-probe", action="append", default=[], metavar="STAT,CYCLE,START,END[,ITEM]")
@@ -344,7 +358,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.finbert:
             print(f"FinBERT baseline: {finbert_baseline(store, rows)}")
         if args.alfred:
-            collect_alfred_api(store, args.alfred)
+            _run("ALFRED", lambda: collect_alfred_api(store, args.alfred))
         for spec in args.alfred_file:
             collect_alfred_file(store, spec)
         if args.edgar:

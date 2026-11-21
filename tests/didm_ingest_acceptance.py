@@ -7,8 +7,11 @@ import io
 import tempfile
 import unittest
 import zipfile
-from datetime import datetime, timezone
+from contextlib import redirect_stdout
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from types import SimpleNamespace
+from unittest import mock
 
 from core.didm.ingest import alfred, gdelt
 from core.didm.store import PointInTimeStore
@@ -171,6 +174,179 @@ class Alfred(unittest.TestCase):
             got = st.as_of("2026-11-06T00:00:00Z", kind="alfred_vintage")
             self.assertEqual(len(got), 3)
             self.assertTrue(all(i.published_at and i.received_at for i in got))
+
+
+class CollectorTiming(unittest.TestCase):
+    """A collected row must not be visible while its download or scoring is still running."""
+
+    def test_gdelt_received_after_download(self):
+        from data.didm import gdelt as gdelt_http
+        from tools.didm import collect_daily
+
+        clock = [RECEIVED]
+        blob = zipped("x.gkg.csv", gkg_line() + "\n")
+        url = "http://data.gdeltproject.org/gdeltv2/20261105190000.gkg.csv.zip"
+        manifest = f"{len(blob)} {hashlib.md5(blob).hexdigest()} {url}"
+
+        def download(_url):
+            clock[0] += timedelta(seconds=20)
+            return blob
+
+        with tempfile.TemporaryDirectory() as tmp, PointInTimeStore(Path(tmp) / "s.sqlite") as st, \
+                mock.patch.object(collect_daily, "_now", side_effect=lambda: clock[0]), \
+                mock.patch.object(gdelt_http, "fetch_text", return_value=manifest), \
+                mock.patch.object(gdelt_http, "fetch_bytes", side_effect=download):
+            added, _ = collect_daily.collect_gdelt(st)
+            self.assertEqual(added, 1)
+            self.assertEqual(st.as_of(clock[0] - timedelta(seconds=1)), [])
+            self.assertEqual(len(st.as_of(clock[0])), 1)
+
+    def test_gdelt_day_received_after_last_download(self):
+        from data.didm import gdelt as gdelt_http
+        from tools.didm import collect_daily
+
+        clock = [RECEIVED]
+        blob = zipped("x.export.CSV", events_line() + "\n")
+
+        def download(url):
+            clock[0] += timedelta(seconds=1)
+            return blob if "20261105000000" in url else None
+
+        with tempfile.TemporaryDirectory() as tmp, PointInTimeStore(Path(tmp) / "s.sqlite") as st, \
+                mock.patch.object(collect_daily, "_now", side_effect=lambda: clock[0]), \
+                mock.patch.object(gdelt_http, "fetch_bytes_optional", side_effect=download):
+            collect_daily.collect_gdelt_day(st, "20261105", with_gkg=False)
+            self.assertEqual(st.as_of(clock[0] - timedelta(seconds=1)), [])
+            self.assertEqual(len(st.as_of(clock[0])), 1)
+
+    def test_gdelt_fallback_received_after_download(self):
+        import requests
+        from data.didm import gdelt as gdelt_http
+        from tools.didm import collect_daily
+
+        clock = [RECEIVED]
+        blob = zipped("x.gkg.csv", gkg_line() + "\n")
+        url = "http://data.gdeltproject.org/gdeltv2/20261105190000.gkg.csv.zip"
+        manifest = f"{len(blob)} {hashlib.md5(blob).hexdigest()} {url}"
+        response = requests.Response()
+        response.status_code = 404
+
+        def download_fallback(url):
+            clock[0] += timedelta(seconds=10)
+            return blob if ".gkg." in url else None
+
+        with tempfile.TemporaryDirectory() as tmp, PointInTimeStore(Path(tmp) / "s.sqlite") as st, \
+                mock.patch.object(collect_daily, "_now", side_effect=lambda: clock[0]), \
+                mock.patch.object(gdelt_http, "fetch_text", return_value=manifest), \
+                mock.patch.object(gdelt_http, "fetch_bytes", side_effect=requests.HTTPError(response=response)), \
+                mock.patch.object(gdelt_http, "fetch_bytes_optional", side_effect=download_fallback):
+            added, _ = collect_daily.collect_gdelt(st)
+            self.assertEqual(added, 1)  # the fixture repeats one item in both fallback files
+            self.assertEqual(st.as_of(clock[0] - timedelta(seconds=1)), [])
+            self.assertEqual(len(st.as_of(clock[0])), 1)
+
+    def test_finbert_received_after_each_score(self):
+        from tools.didm import collect_daily
+
+        clock = [RECEIVED]
+        rows = gdelt.parse_gkg(gkg_line() + "\n" + gkg_line("20261105190000-2") + "\n", RECEIVED)
+
+        def score(_text):
+            clock[0] += timedelta(seconds=10)
+            return [[{"label": "positive", "score": 0.7}, {"label": "negative", "score": 0.1},
+                     {"label": "neutral", "score": 0.2}]]
+
+        fake_transformers = SimpleNamespace(pipeline=lambda *a, **kw: score)
+        with tempfile.TemporaryDirectory() as tmp, PointInTimeStore(Path(tmp) / "s.sqlite") as st, \
+                mock.patch.object(collect_daily, "_now", side_effect=lambda: clock[0]), \
+                mock.patch.dict("sys.modules", {"transformers": fake_transformers}):
+            self.assertEqual(collect_daily.finbert_baseline(st, rows), "scored 2")
+            self.assertEqual(st.as_of(RECEIVED + timedelta(seconds=9)), [])
+            self.assertEqual(len(st.as_of(RECEIVED + timedelta(seconds=10))), 1)
+            self.assertEqual(len(st.as_of(RECEIVED + timedelta(seconds=20))), 2)
+
+
+class AlfredHttp(unittest.TestCase):
+    def fetch(self, pages):
+        from data.didm import alfred as client
+        calls = []
+
+        def get(_url, *, params, timeout):
+            calls.append(dict(params))
+            page = pages[len(calls) - 1]
+            return SimpleNamespace(status_code=200, json=lambda: page)
+
+        with mock.patch.object(client, "require", return_value="test-key"), \
+                mock.patch.object(client.session, "get", side_effect=get), \
+                mock.patch.object(client, "PAGE_LIMIT", 2):
+            result = client.fetch_vintages("CPIAUCSL")
+        return result, calls
+
+    def test_all_pages_reach_parser_and_store(self):
+        obs = Alfred.API["observations"]
+        result, calls = self.fetch([
+            {"count": 3, "offset": 0, "observations": obs[:2]},
+            {"count": 3, "offset": 2, "observations": obs[2:]},
+        ])
+        self.assertEqual([c["offset"] for c in calls], [0, 2])
+        self.assertTrue(all(c["limit"] == 2 for c in calls))
+        rows = alfred.rows_from_api("CPIAUCSL", result, RECEIVED)
+        with tempfile.TemporaryDirectory() as tmp, PointInTimeStore(Path(tmp) / "s.sqlite") as st:
+            self.assertEqual(st.append_many(rows), 3)
+            self.assertEqual(len(st.as_of(RECEIVED)), 3)
+
+    def test_empty_series_finishes(self):
+        result, calls = self.fetch([{"count": 0, "offset": 0, "observations": []}])
+        self.assertEqual(result["observations"], [])
+        self.assertEqual(len(calls), 1)
+
+    def test_incomplete_or_inconsistent_pages_rejected(self):
+        from data.didm.keys import SourceError
+        first = {"count": 3, "offset": 0, "observations": Alfred.API["observations"][:2]}
+        bad_pages = [
+            {"count": 3, "offset": 2, "observations": []},
+            {"count": 3, "offset": 0, "observations": [Alfred.API["observations"][0]]},
+            {"count": 4, "offset": 2, "observations": [Alfred.API["observations"][0]]},
+            {"count": 3, "offset": 2, "observations": Alfred.API["observations"][:2]},
+            {"count": 3.5, "offset": 2, "observations": []},
+        ]
+        for page in bad_pages:
+            with self.subTest(page=page), self.assertRaises(SourceError):
+                self.fetch([first, page])
+
+    def test_later_http_failure_does_not_return_partial_series(self):
+        from data.didm import alfred as client
+        from data.didm.keys import SourceError
+        first = SimpleNamespace(status_code=200, json=lambda: {
+            "count": 3, "offset": 0, "observations": Alfred.API["observations"][:2]})
+        failure = SimpleNamespace(status_code=429, url="https://example.com/?api_key=test-key")
+        with mock.patch.object(client, "require", return_value="test-key"), \
+                mock.patch.object(client.session, "get", side_effect=[first, failure]), \
+                mock.patch.object(client, "PAGE_LIMIT", 2), self.assertRaises(SourceError) as caught:
+            client.fetch_vintages("CPIAUCSL")
+        self.assertIn("429", str(caught.exception))
+        self.assertNotIn("test-key", str(caught.exception))
+
+    def test_transport_failure_is_redacted_and_other_sources_continue(self):
+        import requests
+        from data.didm import alfred as client
+        from tools.didm import collect_daily
+        from data.didm.keys import SourceError
+        error = requests.ConnectionError("GET https://example.com/?api_key=test-key")
+        with mock.patch.object(client, "require", return_value="test-key"), \
+                mock.patch.object(client.session, "get", side_effect=error), \
+                mock.patch.object(client, "has_key", return_value=True):
+            with self.assertRaises(SourceError) as caught:
+                client.fetch_vintages("CPIAUCSL")
+            self.assertNotIn("test-key", str(caught.exception))
+            output = io.StringIO()
+            with tempfile.TemporaryDirectory() as tmp, redirect_stdout(output), \
+                    mock.patch.object(collect_daily, "collect_edgar") as other:
+                self.assertEqual(collect_daily.main([
+                    "--data-dir", tmp, "--no-gdelt", "--alfred", "CPIAUCSL", "--edgar", "320193"]), 0)
+            other.assert_called_once()
+            self.assertIn("ALFRED failed: SourceError: ALFRED: transport failed", output.getvalue())
+            self.assertNotIn("test-key", output.getvalue())
 
 
 class Boundaries(unittest.TestCase):
