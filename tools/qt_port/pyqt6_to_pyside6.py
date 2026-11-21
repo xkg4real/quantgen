@@ -292,6 +292,9 @@ def lint(text: str, path: str) -> list[Finding]:
               and sig[i + 2].type == tokenize.NUMBER):
             add(tok.start[0], "10-int-enum", "QFont.setWeight(<number>) raises TypeError in PySide6 (inside paintEvent it "
                 "leaves the painter open and the app crashes); write QFont.Weight(<number>)")
+        elif tok.string == "currentThread" and prev == "." and nxt == "(" and i >= 2 and sig[i - 2].string == "QThread":
+            add(tok.start[0], "15-thread-wrapper", "QThread.currentThread() on a pool worker makes a Python wrapper of a "
+                "thread Qt deletes; keeping it corrupted the heap in PySide6; record threading.get_ident() instead (review)")
         elif tok.string in ("nextInFocusChain", "previousInFocusChain") and prev == "." and nxt == "(":
             add(tok.start[0], "14-focus-walk", "walking the window's focus chain wraps every widget in it; in PySide6 "
                 "this crashed the app (System page focus_order); collect the part's own widgets with findChildren")
