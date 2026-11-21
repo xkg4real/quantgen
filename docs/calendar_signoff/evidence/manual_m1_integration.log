@@ -1,0 +1,10 @@
+PASS test_calendar_coverage_halt_through_the_book_runtime  (1.6s)
+PASS test_clocks_adapter_resolves_registry_schedules_on_signed_calendars  (1.5s)
+PASS test_data_hook_history_status_and_instruments_agree_with_pit  (0.0s)
+PASS test_fixture_generator_instants_from_calendars_and_check_fixture_on_csv  (0.0s)
+PASS test_kis_allowlist_frozen_in_config_covers_the_quote_check  (0.0s)
+PASS test_stamping_and_lag_audit_on_the_calendar_adapter  (0.0s)
+PASS test_unsigned_shipped_calendars_fail_acting_inputs_closed  (0.6s)
+
+7/7 passed, 0 failed, 0 not run
+exit=0

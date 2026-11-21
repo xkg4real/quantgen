@@ -88,8 +88,8 @@ def execute_rates(request, *, curve_loader=None, rate_loader=None):
     from core.ficc.curves import analyze_curve, curve_from_snapshot, curve_pca
     from core.ficc.swaps import Swap, Swaption, analyze_swap, price_swaption, price_cap_floor
     if curve_loader is None:
-        from core.ficc.data import load_treasury_curve
-        curve_loader = load_treasury_curve
+        from core import gateway
+        curve_loader = gateway.ficc().load_treasury_curve
     panel = curve_loader(source=request.source)
     if request.tool == "curve":
         report = analyze_curve(panel, method=request.method, lookback=request.lookback)
@@ -118,8 +118,8 @@ def execute_rates(request, *, curve_loader=None, rate_loader=None):
     from core.ficc.ratesim import calibrate, simulate, horizon_pv_distribution
     from core.ficc.bonds import Bond
     if rate_loader is None:
-        from core.ficc.data import load_short_rate
-        rate_loader = load_short_rate
+        from core import gateway
+        rate_loader = gateway.ficc().load_short_rate
     series = rate_loader("USD", source=request.source)
     params = calibrate(series, model=request.model)
     report = simulate(params, horizon=request.horizon, n_paths=request.n_paths,

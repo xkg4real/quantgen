@@ -111,9 +111,9 @@ def provider_entries(loaders=None):
     """{id: {'id', 'label', 'ready', 'vars', 'note'}} from config's presence-only reports. No value is read back:
     config returns names and a ready flag, and only those fields are kept."""
     if loaders is None:
-        import config
-        loaders = (config.krx_provider_status, config.ficc_provider_status, config.crypto_provider_status,
-                   config.quant_provider_status)
+        from core import gateway
+        quant, krx, ficc, crypto = gateway.status_loaders()
+        loaders = (krx, ficc, crypto, quant)  # keep the existing display-group order
     entries = {}
     for loader in loaders:
         for entry in loader():

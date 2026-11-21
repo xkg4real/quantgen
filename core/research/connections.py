@@ -22,9 +22,8 @@ def execute_connections(request, *, status_loaders=None, probe_loaders=None):
     request.validate()
     if request.tool == 'presence':
         if status_loaders is None:
-            import config
-            status_loaders = (config.quant_provider_status, config.krx_provider_status,
-                              config.ficc_provider_status, config.crypto_provider_status)
+            from core import gateway
+            status_loaders = gateway.status_loaders()   # config's quant, KRX, FICC, crypto rows
         rows = {}
         for loader in status_loaders:
             for entry in loader():
@@ -34,16 +33,15 @@ def execute_connections(request, *, status_loaders=None, probe_loaders=None):
                     safe_detail(' · '.join(entry.get('vars', ()))), safe_detail(entry.get('note', '')))
         return ConnectionOutput(request, tuple(rows.values()))
     if probe_loaders is None:
+        from core import gateway
         if request.tool == 'krx':
-            from data.krx.krx_market_client import KRXMarketClient
-            probe = KRXMarketClient().probe
+            probe = gateway.provider('data.krx.krx_market_client').KRXMarketClient().probe
         elif request.tool == 'ficc':
-            from core.ficc.data import probe
+            probe = gateway.ficc().probe
         elif request.tool == 'kis':
-            from data.kis_markets import KISMarkets
-            probe = KISMarkets().probe
+            probe = gateway.provider('data.kis_markets').KISMarkets().probe
         else:
-            from data.crypto.crypto_client import probe
+            probe = gateway.provider('data.crypto.crypto_client').probe
     else:
         probe = probe_loaders[request.tool]
     try:

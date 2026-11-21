@@ -112,8 +112,8 @@ def routable_intervals(router, instrument, *, paper=False, supported=None):
     what a ready fallback supports (Yahoo: 1d, 1w and 1M for stocks with a verified ticker).
     """
     if supported is None:
-        from data.kis_workspace import supported_intervals
-        supported = supported_intervals(instrument, paper=paper)
+        from core import gateway
+        supported = gateway.provider("data.kis_workspace").supported_intervals(instrument, paper=paper)
     supported = tuple(supported)
     primary = getattr(router, "primary", None)
     try:

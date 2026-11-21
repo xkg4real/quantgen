@@ -176,5 +176,47 @@ class SystemPageTests(unittest.TestCase):
         self.assertEqual(w.system_theme.current(), 0)
 
 
+class PresenceGatewayContractTests(unittest.TestCase):
+    """The redesigned presence list uses the existing gateway contract and keeps its old group order."""
+
+    def test_default_presence_uses_gateway_in_legacy_group_order_and_discards_extra_fields(self):
+        from core import gateway
+        from quantgen_desktop.connections import provider_entries
+
+        def loader(key, ready):
+            return Mock(return_value=[{'id': key, 'label': key, 'ready': ready,
+                                       'vars': (key.upper() + '_KEY_NAME',), 'note': key + ' note',
+                                       'value': SECRET, 'secret': SECRET}])
+
+        quant, krx, ficc, crypto = (loader('quant', True), loader('krx', False),
+                                     loader('ficc', True), loader('crypto', False))
+        bypass = {name: Mock(return_value=[]) for name in
+                  ('quant_provider_status', 'krx_provider_status', 'ficc_provider_status',
+                   'crypto_provider_status')}
+        with patch.object(gateway, 'status_loaders', return_value=(quant, krx, ficc, crypto)) as access, \
+                patch.multiple(config, **bypass):
+            entries = provider_entries()
+        access.assert_called_once_with()
+        self.assertEqual(list(entries), ['krx', 'ficc', 'crypto', 'quant'])
+        for key, ready in (('krx', False), ('ficc', True), ('crypto', False), ('quant', True)):
+            self.assertEqual(entries[key], {'id': key, 'label': key, 'ready': ready,
+                                           'vars': (key.upper() + '_KEY_NAME',), 'note': key + ' note'})
+        self.assertNotIn(SECRET, repr(entries))
+        for mocked in (quant, krx, ficc, crypto):
+            mocked.assert_called_once_with()
+        for mocked in bypass.values():
+            mocked.assert_not_called()
+
+    def test_explicit_presence_loaders_do_not_consult_gateway(self):
+        from core import gateway
+        from quantgen_desktop.connections import provider_entries
+        supplied = Mock(return_value=[{'id': 'fixture', 'ready': True, 'vars': ()}])
+        with patch.object(gateway, 'status_loaders', side_effect=AssertionError('explicit fixture only')):
+            entries = provider_entries((supplied,))
+        supplied.assert_called_once_with()
+        self.assertEqual(list(entries), ['fixture'])
+        self.assertTrue(entries['fixture']['ready'])
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -58,3 +58,21 @@ Tuesday 17:00 KST. One task runs at a time.
   `tools/handoff/mod` mod, it pushes that snapshot and tells you when weekly usage reaches 98%: hand off as it
   says, publishing with the `--key` it gives.
 - No secrets in the document or the ledger: name `.env` variables, never their values.
+
+## Session pipeline (owner directive 2026-11-19)
+
+The main session (QUANTGEN/MAIN) coordinates sub-sessions (PAYMENTS_ACCOUNT_KEYS, OS_EXPANSION, DATA_SOURCE_DIDM).
+The rules are on the handoff branch in `SESSION_PIPELINE.md` (owner's words quoted in its section 0) and the
+whole-program checklist is `WORKBOARD.md`; read both at session start after `--show`
+(`git show origin/handoff:SESSION_PIPELINE.md`, `git show origin/handoff:WORKBOARD.md`).
+
+- **Sub-session:** report each finished task (or step) to the main session at once with `send_message`, in the
+  format of `SESSION_PIPELINE.md` section 3, and start a task the main session sends in the same turn.
+  Report anything the owner must do by hand at once.
+- **Main session:** check each report against git, tick `WORKBOARD.md`, record ledger IDs, and send the next
+  task. Count the owner's manual items due within 24 hours across all sessions; at 5 or more, send a Claude app
+  push notification (`SESSION_PIPELINE.md` section 5). UI/UX and website sessions are reached only through the
+  owner. When all development is done, test each app's final build in a fresh virtual environment and give
+  the files to the owner.
+- **Incorporation:** when the owner says "법인 설립 완료" (in any session), read
+  `git show origin/handoff:INCORPORATION_CHECKLIST.md` and guide the owner through it as written.

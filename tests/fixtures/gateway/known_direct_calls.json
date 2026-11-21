@@ -1,0 +1,100 @@
+{
+ "files": {
+  "core/engine/feed.py": [
+   "import:data.fmp.FMPQuoteClient"
+  ],
+  "quantgen_desktop/app.py": [
+   "import:data.kis_workspace.MarketDataService",
+   "import:data.kis_workspace.MarketDataService"
+  ],
+  "quantgen_desktop/home_view.py": [
+   "import:core.ficc.data.load_series"
+  ],
+  "quantgen_desktop/market_chart.py": [
+   "import:data.kis_stream.KISStream",
+   "import:data.kis_stream.subscription_for",
+   "import:data.kis_workspace.MarketDataService",
+   "import:data.kis_workspace.availability_note",
+   "import:data.kis_workspace.availability_note",
+   "import:data.kis_workspace.supported_intervals"
+  ],
+  "quantgen_desktop/market_rankings.py": [
+   "import:data.kis_workspace.MarketDataService",
+   "import:data.kis_workspace.OVERSEAS_PRICE_DETAIL"
+  ],
+  "quantgen_desktop/market_summary.py": [
+   "import:core.ficc.data.load_series"
+  ],
+  "quantgen_desktop/market_tools.py": [
+   "call:config.kis_ready"
+  ],
+  "quantgen_desktop/paper.py": [
+   "call:core.engine.feed.QuoteFeed(no fmp_client)"
+  ],
+  "quantgen_desktop/qscore.py": [
+   "import:data.kis_workspace.MarketDataService"
+  ],
+  "quantgen_desktop/watchlist_live.py": [
+   "import:data.kis_stream.KISStream",
+   "import:data.kis_workspace.MarketDataService"
+  ],
+  "ui/bonds_page.py": [
+   "import:core.ficc.data.load_treasury_curve"
+  ],
+  "ui/crypto_page.py": [
+   "call:config.upbit_ready"
+  ],
+  "ui/derivatives_page.py": [
+   "call:config.kis_ready"
+  ],
+  "ui/fcharts.py": [
+   "import:core.ficc.data"
+  ],
+  "ui/fx_page.py": [
+   "import:core.ficc.data.load_fx_spot",
+   "import:core.ficc.data.load_policy_rates",
+   "import:core.ficc.data.load_short_rate"
+  ],
+  "ui/krx_page.py": [
+   "import:data.krx.KRXGateway"
+  ],
+  "ui/macro_page.py": [
+   "call:config.ficc_provider_status"
+  ],
+  "ui/macro_state_panel.py": [
+   "call:config.kis_ready"
+  ],
+  "ui/market_chart_page.py": [
+   "import:data.kis_stream.KISStream",
+   "import:data.kis_workspace.MarketDataService",
+   "import:data.kis_workspace.availability_note",
+   "import:data.kis_workspace.availability_note",
+   "import:data.kis_workspace.supported_intervals"
+  ],
+  "ui/quant_lab_page.py": [
+   "import:core.ficc.data"
+  ],
+  "ui/rates_page.py": [
+   "import:core.ficc.data.load_short_rate",
+   "import:core.ficc.data.load_treasury_curve"
+  ],
+  "ui/settings_page.py": [
+   "call:config.crypto_provider_status",
+   "call:config.krx_provider_status",
+   "call:config.quant_provider_status",
+   "import:core.ficc.data.probe",
+   "import:data.crypto.crypto_client.probe",
+   "import:data.kis_markets.KISMarkets",
+   "import:data.krx.krx_market_client.KRXMarketClient",
+   "ref:config.ficc_provider_status"
+  ],
+  "ui/structuring_page.py": [
+   "import:core.ficc.data.load_treasury_curve"
+  ]
+ },
+ "totals": {
+  "core_and_main": 1,
+  "files": 23,
+  "screens": 44
+ }
+}

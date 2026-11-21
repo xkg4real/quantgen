@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "fixed_local": ["kis_quote", "kis_account", "upbit_account"],
+  "profiles": {
+    "personal": {
+      "kis_quote": ["local_key"],
+      "kis_account": ["local_key"],
+      "upbit_account": ["local_key"],
+      "crypto_public": ["keyless"],
+      "fred": ["keyless"],
+      "yahoo": ["keyless"],
+      "fmp": ["local_key"],
+      "krx_open_api": ["local_key"],
+      "opendart": ["local_key"],
+      "anthropic": ["local_key"],
+      "gs_marquee": ["local_key"]
+    },
+    "commercial": {
+      "kis_quote": ["local_key"],
+      "kis_account": ["local_key"],
+      "upbit_account": ["local_key"],
+      "crypto_public": ["keyless"],
+      "fred": ["keyless"],
+      "yahoo": ["off"],
+      "fmp": ["off"],
+      "krx_open_api": ["local_key"],
+      "opendart": ["local_key"],
+      "anthropic": ["local_key"],
+      "gs_marquee": ["off"]
+    }
+  }
+}

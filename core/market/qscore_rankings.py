@@ -39,8 +39,8 @@ class ScoreCache:
                 continue
             try:
                 if self.load is None:
-                    from data.kis_workspace import MarketDataService
-                    self.load = MarketDataService().load
+                    from core import gateway
+                    self.load = gateway.provider('data.kis_workspace').MarketDataService().load
                 snapshot = self.load(ChartRequest(instrument, '1d', 260, adjusted=True))
                 result = compute_q_score(snapshot, now=now)
             except Exception:

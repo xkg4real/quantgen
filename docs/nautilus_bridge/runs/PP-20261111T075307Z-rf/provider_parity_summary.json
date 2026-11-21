@@ -1,0 +1,152 @@
+{
+ "created_utc": "20261111T075307Z",
+ "integrity": [
+  {
+   "id": "units",
+   "kind": "hard",
+   "outcome": "PASS",
+   "percent_units_ok": true
+  },
+  {
+   "id": "seed",
+   "kind": "hard",
+   "outcome": "PASS",
+   "seed_before_start": true
+  }
+ ],
+ "n_a_outside_evidence_spans": 0,
+ "outcome": "PASS",
+ "pairs": [
+  {
+   "checks": [
+    {
+     "coverage_ok": true,
+     "first_date": "2004-11-01",
+     "id": "coverage",
+     "kind": "hard",
+     "last_date": "2026-09-25",
+     "n_a": 5713,
+     "n_a_outside_b_span": 0,
+     "n_b": 5481,
+     "n_common": 5479,
+     "outcome": "PASS"
+    },
+    {
+     "id": "values",
+     "kind": "hard",
+     "max_abs_bucket": "<=1e-08",
+     "n_common_values": 5475,
+     "n_off_by_tol": 0,
+     "outcome": "PASS"
+    },
+    {
+     "blank_a_value_b": [],
+     "id": "blanks",
+     "kind": "warn",
+     "n_blank_a_value_b": 0,
+     "n_value_a_absent_b": 3,
+     "outcome": "WARN",
+     "truncated": false,
+     "value_a_absent_b": [
+      "2008-12-10",
+      "2008-12-18",
+      "2008-12-24"
+     ]
+    }
+   ],
+   "convention": "rate_pct",
+   "file_sha256": "c61f54cb13ff3f33e24a5a1c007716aa3c3c873a0ebd2ee98345052449f85abe",
+   "has_fetch_record": true,
+   "outcome": "WARN",
+   "provider": "treasury",
+   "role": "independent"
+  },
+  {
+   "checks": [
+    {
+     "coverage_ok": true,
+     "first_date": "2004-11-01",
+     "id": "coverage",
+     "kind": "warn",
+     "last_date": "2026-09-25",
+     "n_a": 5713,
+     "n_a_outside_b_span": 0,
+     "n_b": 5715,
+     "n_common": 5713,
+     "outcome": "PASS"
+    },
+    {
+     "id": "values",
+     "kind": "warn",
+     "max_abs_bucket": "<=1e-08",
+     "n_common_values": 5478,
+     "n_off_by_tol": 0,
+     "outcome": "PASS"
+    },
+    {
+     "blank_a_value_b": [],
+     "id": "blanks",
+     "kind": "warn",
+     "n_blank_a_value_b": 0,
+     "n_value_a_absent_b": 0,
+     "outcome": "PASS",
+     "truncated": false,
+     "value_a_absent_b": []
+    }
+   ],
+   "convention": "rate_pct",
+   "file_sha256": "cd99a6958e8e0d104200472caf4d3ffa04ec09168a48b0cc741a72bcd53037c3",
+   "has_fetch_record": true,
+   "outcome": "PASS",
+   "provider": "fred_now",
+   "role": "vintage"
+  }
+ ],
+ "pinned": {
+  "file": "fred_DGS3MO.csv",
+  "md5": "661722143f24930a29b58c535d227c1b",
+  "md5_ok": true
+ },
+ "providers": {
+  "fred_now": {
+   "convention": "rate_pct",
+   "required": true,
+   "role": "vintage"
+  },
+  "h15": {
+   "convention": "rate_pct",
+   "required": false,
+   "role": "independent"
+  },
+  "treasury": {
+   "convention": "rate_pct",
+   "required": true,
+   "role": "independent"
+  }
+ },
+ "run_id": "PP-20261111T075307Z-rf",
+ "schema": "provider-parity-summary/1",
+ "series": "rf",
+ "thresholds": {
+  "coverage_min": 0.99,
+  "edge_uncovered_max": 5,
+  "range_pct": [
+   -1.0,
+   20.0
+  ],
+  "seed_lookback_days": 31,
+  "unit_max_at_least_pct": 1.0,
+  "value_tol_pct": 0.005
+ },
+ "tool": {
+  "name": "parity_check.py",
+  "sha256": "f2fe72cdee6344076fd6dfec8943259f44bc52445c66cdaf482a19e269770184"
+ },
+ "window": {
+  "end": "2026-09-25",
+  "start": "2004-12-01"
+ },
+ "withheld_reasons": [
+  "h15 not compared: fetch_failed"
+ ]
+}

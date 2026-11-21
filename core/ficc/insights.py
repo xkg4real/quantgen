@@ -123,8 +123,10 @@ def narrate_bond(a: BondAnalytics, scenarios: list[ScenarioRow] | None = None) -
         f"The {name} (coupon paid {b.freq}x a year) prices at {a.price:.3f} per {b.face:g} for "
         f"a yield of {_pct(a.ytm, 3)}: Macaulay duration {a.macaulay:.2f}y, modified "
         f"{a.modified:.2f}, convexity {a.convexity:.1f}.",
-        f"On {_money(b.notional)} notional the DV01 is {_money(a.dv01)} per bp; a +100bp "
-        f"parallel move costs roughly {_money(a.dv01 * 100)} before convexity.",
+        f"On {_money(b.notional)} notional the DV01 is "
+        f"{_money(a.dv01) if abs(a.dv01) >= 100 else f'{a.dv01:,.2f}'} per bp of the bond's "
+        f"own yield; a +100bp move in that yield costs roughly {_money(a.dv01 * 100)} before "
+        f"convexity.",
     ]
     if a.krd:
         t, v = _top(a.krd)
@@ -134,7 +136,10 @@ def narrate_bond(a: BondAnalytics, scenarios: list[ScenarioRow] | None = None) -
     lines.append(f"Against the curve the bond trades at a z-spread of {_bp(a.z_spread)} "
                  f"(curve price {a.curve_price:.3f}).")
     # breakeven_bp has the sign of total: negative carry+roll needs a rally to break even.
-    be = (f"yields can rise {cr.breakeven_bp:.1f}bp before the position loses money"
+    # NaN: the bond matures inside the horizon, so no yield move changes the result.
+    be = ("no yield move changes this hold-to-maturity result: the bond matures "
+          "inside the horizon" if not math.isfinite(cr.breakeven_bp) else
+          f"yields can rise {cr.breakeven_bp:.1f}bp before the position loses money"
           if cr.total >= 0 else
           f"carry and roll are negative and yields must fall {abs(cr.breakeven_bp):.1f}bp "
           f"over the horizon just to break even")
@@ -146,7 +151,8 @@ def narrate_bond(a: BondAnalytics, scenarios: list[ScenarioRow] | None = None) -
     if scenarios:
         worst = min(scenarios, key=lambda r: r.pnl)
         best = max(scenarios, key=lambda r: r.pnl)
-        lines.append(f"Of {len(scenarios)} scenarios the worst is '{worst.name}' at "
+        lines.append(f"Of {len(scenarios)} zero-curve scenarios (z-spread held) the worst is "
+                     f"'{worst.name}' at "
                      f"{_money(worst.pnl, signed=True)} ({worst.pnl_pct * 100:+.2f}%) and the "
                      f"best '{best.name}' at {_money(best.pnl, signed=True)} "
                      f"({best.pnl_pct * 100:+.2f}%).")
@@ -626,8 +632,9 @@ def deep_analysis(kind: str, payload: dict, *, question: str = "") -> Analysis:
 if __name__ == "__main__":
     from types import SimpleNamespace
 
-    import config
-    from core.ficc import data, fx, macro, ratesim
+    from core import gateway
+    from core.ficc import fx, macro, ratesim
+    data = gateway.ficc()
     from core.ficc.bonds import Bond, analyze_bond, scenario_pnl
     from core.ficc.curves import analyze_curve, curve_pca
     from core.ficc.swaps import Swap, Swaption, analyze_swap, price_cap_floor, price_swaption
@@ -753,13 +760,9 @@ if __name__ == "__main__":
 
     assert report_prompt("daily_market_commentary") and report_prompt("weekly_fi_fx_strategy")
     assert report_prompt("bond") == ""
-    saved = config.anthropic_key
-    config.anthropic_key = lambda: ""                   # never reach the network here
-    try:
+    with gateway.suspend_key("anthropic"):              # never reach the network here
         a = deep_analysis("weekly_fi_fx_strategy", {"x": 1}, question="views?")
         assert a.error and a.text == "" and a.engine == "none"
-    finally:
-        config.anthropic_key = saved
     q = "views?\n\n" + report_prompt("daily_market_commentary")
     assert q.count("headline") == 1                      # idempotent append
     print("ok")

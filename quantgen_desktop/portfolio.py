@@ -466,10 +466,8 @@ class PortfolioPane(QWidget):
         self.empty_card.setMinimumHeight(320)
         self.empty = label(EMPTY_STATE, "muted")
         self.empty.localized_text = {
-            'ko': '종목과 목적함수를 정한 뒤 [포트폴리오 분석 실행]을 누르세요. 네 가지 배분 방식을 효율적 프런티어 '
-                  '위에서 함께 비교해요.',
-            'en': 'Choose assets and an objective, then press [Run portfolio analysis] to compare four allocations '
-                  'and their risks on the efficient frontier.'}
+            'ko': '종목과 목적함수를 정한 뒤 분석을 실행하세요. 결과에서 네 가지 배분 방식과 위험을 비교할 수 있어요.',
+            'en': 'Choose assets and an objective, then run the analysis to compare four allocations and their risks.'}
         self.empty.retranslate()
         self.empty.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.empty.setProperty("reading_help_keep_visible", True)

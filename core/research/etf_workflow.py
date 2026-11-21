@@ -45,9 +45,9 @@ def analyze(code: str, *, days: int = 504, source: str = "auto", card_loader=Non
     history_loader = history_loader or load_history
     out: dict = {"code": code, "source": source, "is_krx": _clean(code).isdigit() and len(_clean(code)) == 6}
     km = None
-    if out["is_krx"] and source in ("auto", "kis") and config.kis_ready():
-        from data.kis_markets import KISMarkets
-        km = KISMarkets()
+    from core import gateway
+    if out["is_krx"] and source in ("auto", "kis") and gateway.keys_ready("kis_quote"):
+        km = gateway.provider("data.kis_markets").KISMarkets()
         q = km.etf_quote(_clean(code))
         nav = km.etf_nav_daily(_clean(code), days=days)
         comps = km.etf_components(_clean(code))
@@ -114,8 +114,7 @@ def analyze(code: str, *, days: int = 504, source: str = "auto", card_loader=Non
                 lt.update(index_source=f"SYNTHETIC {index} demo (not market data)", index_status="SYNTHETIC",
                           index_mapping_source="EXPLICIT_SYNTHETIC_DEMO")
             elif km is not None:
-                from data.kis_markets import domestic_index_code
-                index_code = domestic_index_code(index)
+                index_code = gateway.provider("data.kis_markets").domestic_index_code(index)
                 lt.update(index_code=index_code, index_mapping_source=("KIS_IDXCODE_MASTER_EXACT_NAME"
                           if index == "KOSDAQ150" else "EXISTING_KIS_KOSPI200_MAPPING"))
                 idx = km.index_daily(index_code, days=600)

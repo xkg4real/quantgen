@@ -40,8 +40,8 @@ PR #55/#56이 포함된 `69a2559`의 통합 `147afc0`, 후속 `853de90`과 PR #5
 |---|---|---|
 | 서비스 성격 | 최신 README는 상업 출시 의도를 명시한다. 연구·분석·모의거래 기능이며 실거래 주문 경로는 없다고 설명한다. 정부·KOFIA의 승인을 뜻하지 않는다. | [README 시작 부분](../../README.md), 같은 파일 `Regulatory note` |
 | 화면 | 브라우저는 Flet, 선택 네이티브 화면은 PyQt6이다. 화면별 구현 수준이 다르다. | [main.py](../../main.py), [pyproject.toml](../../pyproject.toml), [네이티브 구현 범위](../DESKTOP_MIGRATION_2026-10-30.md) |
-| 키 입력과 전송 | 키는 환경변수 또는 `.env`에서 읽는다. 설정 화면은 존재 여부를 보여준다. KIS 인증 때 앱 키·시크릿이 발급 서버에 전송된다. | [config.py](../../config.py), [KIS 클라이언트](../../data/krx/kis_client.py) `token` |
-| 인증정보 저장 | KIS Bearer 토큰은 기본 `~/.nextgen/kis_token.json`에 평문 JSON으로 저장된다. “인증정보를 전혀 저장하지 않는다”는 고지는 부정확하다. | [KIS 클라이언트](../../data/krx/kis_client.py) `_TOKEN_PATH`, `_store_token` |
+| 키 입력과 전송 | 키는 환경변수 → OS 자격 증명 저장소(`QUANTGEN`) → `.env`(개발판만) 순서로 읽는다(KEY-2). 설정 화면은 존재 여부를 보여준다. KIS 인증 때 앱 키·시크릿이 발급 서버에 전송된다. | [config.py](../../config.py), [KIS 클라이언트](../../data/krx/kis_client.py) `token` |
+| 인증정보 저장 | KIS Bearer 토큰은 OS 자격 증명 저장소(`keyring`, `QUANTGEN`/`kis_token`)에 JSON으로 저장되고, 쓸 수 있는 OS 저장소가 없을 때만 `~/.nextgen/kis_token.json`에 평문 JSON(0600)으로 저장된다. 이 파일은 TRADEGEN과 공유되어 앱이 지우지 않는다. 비밀 키 10개는 환경변수 → OS 저장소 → `.env`(개발판만) 순서로 읽는다(KEY-2). “인증정보를 전혀 저장하지 않는다”는 고지는 부정확하다. | [KIS 클라이언트](../../data/krx/kis_client.py) `_token_path`, `_store_token`; [자격 증명 저장소](../../core/credentials/__init__.py) |
 | 계좌 조회 | 통화·기준통화·잔액·잠금금액·평균매수가·총수량과 파생 원화평가액을 처리한다. 평가를 위해 보유 통화 종목으로 Upbit 공개 시세를 추가 요청한다. Flet Crypto Refresh는 키가 있으면 기본 잔액 조회를 포함하며 네이티브는 기본 해제다. | [계좌 API](../../data/crypto/crypto_client.py) `balances`, [Flet 흐름](../../core/research/crypto_workflow.py) `analyze`, [네이티브 화면](../../quantgen_desktop/market_tools.py), [시장 분석](../../core/research/market_analysis.py) |
 | AI 해설 | Anthropic으로 계산 결과·질문·분석 종류·고정 작성 지시문과 해당 시 값 표기 설명을 전송한다. 구조화된 private 필드 제거는 자유 입력 개인정보의 탐지·삭제를 보장하지 않는다. | [분석 전송](../../core/quant/insights.py) `deep_analysis`, [필드 필터](../../core/research/ai_payload.py), [2026-11-06 범위](#ai-commentary-guards-2026-11-06) |
 | AI 선택 | 네이티브는 전송 미리보기·기본 해제 체크박스가 있다. Flet는 안내와 전송 버튼이 있고 동일한 체크박스 절차는 없다. 이 차이만으로 동의의 법적 충족 여부를 단정하지 않는다. | [네이티브 AI](../../quantgen_desktop/commentary.py), [Flet AI](../../ui/ai_panel.py) |
@@ -101,14 +101,17 @@ Flet와 네이티브의 기존 동의 절차 차이, 자유 질문의 개인정�
 | 항목 | 제공된 정보와 남은 확인 |
 |---|---|
 | 사업자명 | (주)넥스트제너레이션 |
+| 운영자 표기 | 2026-11-19 소유자 결정(D11 Q1): 법인 설립 전까지 운영자는 개인 고건, 공개 표기 QUANTGEN(운영자 고건), 회사 표시 "(주)"를 쓰지 않음. 법인 설립을 알리면 그 법인명으로 바꿈 (docs/nautilus_bridge/OWNER_RULINGS_LOG.md 2026-11-19 절 3). |
 | 대표자 | 고건 |
-| 주소 | 서울특별시 성북구 안암로 145. 추후 변경 가능하므로 공개·판매 전 현재 주소를 재확인 |
+| 주소 | 2026-10-31 제공. 2026-11-19 소유자 결정으로 문서에서 뺌(release-profile operator.address null); 유료 판매 전 다시 정함 |
 | 사업자등록번호 | 미정 |
 | 고객센터·개인정보 연락처 | 미정 |
+| 문의 메일 | 2026-11-19 소유자 결정(D11 Q2): contact@quantgeneration.com(고객지원·개인정보 문의), 2026-11-19 소유자 수신 확인(16번 C16-03의 운영시간·처리 절차 확인은 별도). 전화·환불 연락처는 미정 (docs/nautilus_bridge/OWNER_RULINGS_LOG.md 2026-11-19 절 3). |
 | 판매 요금·구독 | 사용자가 텍스트로 제공: Research 월 29,000원, Pro 월 59,000원, Team Pilot 월 290,000원. 모두 VAT 포함·월 자동 갱신, Team Pilot 최대 5인. 최초 언급한 22페이지 원문은 열람하지 않았으며 직접 제공한 요금 설명을 근거로 반영 |
 | 추가 환불 정책 | 운영자와 협의 필요. 법정 청약철회·하자·환급 권리는 미정으로 유보하거나 축소하지 않음. 상품별 기능·체험·청구일·해지 경로 등은 아직 제공되지 않음 |
 | 서비스 운영 국가 | 대한민국 |
 | 호스팅 업체 | Cloudflare. Workers·Pages·R2 등 제품, 계약 법인, 원본 서버·로그·백업·국외 접근 및 처리 국가·보유기간은 미확정. 대한민국에서 운영한다는 정보만으로 모든 데이터가 국내에 보관된다고 표시하지 않음 |
+| 호스팅·도메인 (2026-11-19) | 소유자 답(원문): "웹사이트 도메인 등록 및 이메일 설정을 Cloudflare, 관리는 AWS를 통해서 진행하고 있습니다." AWS 제품·리전·계약 법인과 Cloudflare 이용 제품은 확인 전 |
 
 ## 앱 UI 변경 — 2026-10-31 소스·문서 정합성 검토
 
@@ -1041,6 +1044,24 @@ Windows CI에서 창 핸들과 아이콘을 시험하며, 사용자 PC의 Explor
 사용자 환경·접근성·실계정 검증을 구분합니다. 01–20의 미확정 사업자/개인정보/권리/요금/환불/접근성
 조건과 공개 보류를 유지하며, 웹 적용/배포는 별도 담당 확인 사항입니다.
 
+<a id="r3-detached-recorder-2026-11-14"></a>
+### 2026-11-14 R3 독립 수명주기 기록기 하위 검토
+
+[범위 기록](../product/R3_DETACHED_RECORDER_2026-11-14.md)의 **⑨-3a/recorder/1/lifecycle**만 구현했습니다. 호출자가 준 UTC·단조 시계, 토큰, 메타데이터와 명시적 저장소를 사용하고 STARTED → PNL_COMPUTED → 종료 이벤트를 기록합니다. 소유자 결정9에 따라 계산 중 초기 PROGRESS는 없으며, 충돌 재시도는 최대5회·같은2초 잠금 예산을 공유합니다. 종료시 두 append도10초 예산을 공유하도록 기존 store에 작은 per-call timeout을 추가했습니다. 파일 I/O·callback 자체의 실행 시간을 제한한다는 뜻은 아닙니다.
+
+기록 실패는 이후 기록을 중지하고 callback에 한 번 전달하며 기존 계산 예외·판정을 변경하지 않습니다. 실패 callback의 영속성·비밀 제거는 구현하지 않았고, 500자 오류 제한을 개인정보 필터라고 부르지 않습니다. Q12 일곱 파일의 공급된 digest 모양만 검증하고 파일을 직접 수집·인증하지 않습니다. 실제 UI/Lab 연결·메타데이터 수집·outage 파일·sync-folder 검사·ledger 링크·fingerprint/shadow 계산·rotation/recovery는 미완료입니다. 삭제·보유기간·외부 전송·의존성·요금·판매·주문·접근성의 새 운영 기능은 없습니다.
+
+합성 임시 저장소의 신규47+기존80=127개 검사가 통과했습니다. 실제 연구·원장·보호 캐시·소유자 PC 실행을 대신하지 않으며 Step10 연구 마감/F를 수행하지 않았습니다. 01/07/20에는 이 저장·오류·삭제 한계를 추가했습니다. 02–06/08–19는 이 비연결 모듈에 따른 영향 여부를 검토했고 원문·미확정 조건을 유지합니다. 전체20문서의 review-required와 공개 BLOCKED는 유지합니다. 소스 지문은 full CI가 성공한 e01e152의 기존 manifest와 이번 exact tree 변경을 합성하고 대상 PR full CI로 재검증하며, 부분 로컬 checkout의 전체 스캔을 주장하지 않습니다.
+
+
+<a id="r3-detached-outage-2026-11-14"></a>
+### 2026-11-14 R3 오류 기록 파일 하위 검토
+
+[오류 파일 범위](../product/R3_DETACHED_OUTAGE_2026-11-14.md)의 **⑨-3a/recorder/1/outage**는 주입된 실패 정보만 명시적 `unrecorded.jsonl`에 JSONL append/flush/fsync합니다. 같은 프로세스의 협력 스레드는 0~2초 process-lock 예산으로 직렬화하지만 설계 ENG-16에 따라 OS sidecar lock은 없고 다중 프로세스를 지원한다고 주장하지 않습니다. 알 수 없는 시각·식별자는 null, 오류 메시지는 최대500자이며 민감정보 필터는 없습니다. 최종 링크/비정규 파일/불완전 tail을 거부하고 불확실한 쓰기를 재시도·복구하지 않습니다. 실제 앱·경로·권한·보유·삭제·화면 알림·동기화 폴더 검사·보고/카운트 연결은 미완료입니다.
+
+신규27검사, 합동154검사(기존127포함, 합산 금지)가 Linux 임시 저장소에서 PASS했습니다. POSIX FIFO와 권한에 따른 symlink 검사는 다른 호스트에서 skip될 수 있으며 실제 소유자 Windows 검증이 아닙니다. 01/07/20의 기록·민감정보·삭제 한계를 추가하고 나머지17문서의 독립 모듈 영향 여부를 재검토했습니다. 외부 전송·주문·요금·계약·의존성·UI·법률/라이선스 증거는 추가하지 않습니다. 원장·보호 캐시·동결 연구는 접근하지 않았고 공개 BLOCKED를 유지합니다. 소스 지문은 문서 정합성 CI가 성공한 ed92dc9의749경로 manifest와 exact 변경을 합성해 대상 CI에서 재검증합니다. 부분 로컬 checkout의 전체 스캔으로 주장하지 않습니다.
+
+
 <a id="market-hub-conclusions-2026-11-17"></a>
 ### 2026-11-17 시장 메인 화면·지표 결론부·지표 목록 스크롤 검토
 
@@ -1094,3 +1115,54 @@ Windows CI에서 창 핸들과 아이콘을 시험하며, 사용자 PC의 Explor
   계산, 순서 동일)을 추가로 고쳤습니다. 화면·계산·요청·전송은 바뀌지 않았습니다.
 - 오프라인 Linux offscreen UI 테스트 107개 모듈로 확인했으며 PySide6 실행·Windows·macOS 확인은 하지 않았습니다.
   01–20의 미확정 조건과 공개 보류(publication BLOCKED)를 유지합니다.
+
+## 플랫폼 확장 준비(OS-P0-a~f) — 2026-11-19 소스 검토 (OS_EXPANSION 세션)
+
+- 새 도구 `tools/qt_port/`(PyQt6→PySide6 변환·점검, 글꼴 비교, 재현 스크립트, 전환일 편집)는 개발자가 저장소에서만
+  실행합니다. 앱이 import하지 않고 앱 번들·휠에 들어가지 않습니다. 네트워크 전송이 없습니다.
+- `core/app_paths.py`의 `user_data_dir()`과 `is_frozen()`은 경로를 계산만 합니다. 폴더를 만들거나 열거나 나열하지
+  않습니다. 기존 `~/.nextgen`이 있으면 그 폴더를 그대로 씁니다. 아직 아무 호출처도 바꾸지 않았습니다(OS-F2, KEY-2 뒤).
+- `core/app_identity.py`는 이름·번들 ID 제안·빈 값(업데이트 주소, 계정 ID, 라이선스 공개키)과 D7-G 게이트웨이 값
+  `GATEWAY_PROFILE = "personal"`, `DATA_API_BASE = ""`(회사 서버 길 꺼짐)만 둡니다. 비밀값은 없고 "(주)" 표기도
+  없습니다. 공급원 호출 방식은 바뀌지 않았습니다.
+- 패키지 앱(`packaging/`): PyInstaller onedir. 데이터 파일은 휠과 같은 허용 목록(`tools/packaging/stage.py`)으로만 넣어
+  `.env`·연구 원장·캐시가 들어가지 않습니다. `QUANTGEN --selfcheck <파일>`은 사용자가 지정한 파일에만 점검 결과를
+  쓰고 네트워크·창을 열지 않습니다. 빌드에 `licenses/THIRD_PARTY_NOTICES.txt`(설치된 패키지의 라이선스 원문)와
+  LGPL-3.0·GPL-3.0 원문을 넣고, Qt 라이브러리와 LGPL 순수 파이썬 패키지(chardet)는 교체 가능한 별도 파일로 둡니다.
+  이것이 LGPL 의무를 충족하는지는 변호사 확인이 필요합니다(법률 자문이 아닙니다,
+  `docs/platform/LICENSE_COMPLIANCE_PREP.md`).
+- `.github/workflows/platform-build.yml`은 수동 실행과 `v*` 태그에서만 돌고, 서명·배포·업로드를 하지 않습니다
+  (macOS는 ad-hoc 서명만). `runtime-smoke.yml`에는 새 시험 모듈과 경로만 더했습니다.
+- `mobile/pyproject.toml`과 `stage.py --profile mobile`은 Android 시험용 묶음 초안입니다. 아직 빌드·배포한 적이 없습니다.
+- 화면·계산·요청·전송·저장 동작은 바뀌지 않았습니다. 01–20의 미확정 사업자·개인정보·권리·요금·환불·접근성 조건과
+  공개 보류(publication BLOCKED)를 유지합니다.
+
+<a id="owner-d11-operator-contact-age-2026-11-19"></a>
+## 운영자 개인 표기·문의 메일·이용연령 — 2026-11-19 소유자 결정(D11 Q1~Q3)
+
+근거는 docs/nautilus_bridge/OWNER_RULINGS_LOG.md 2026-11-19 절 3의 소유자 답 원문이고, 질문은 `687bf65`의 docs/commercial/accounts/ACCOUNT_SETUP.md 28–30행입니다.
+
+- Q1(운영자 표기): 법인 설립 전까지 운영자는 개인 고건입니다. 공개 문서의 표기는 `QUANTGEN(운영자 고건)`이고 회사 표시 "(주)"를 쓰지 않습니다. release-profile.json의 `operator.legal_name`은 개인의 법적 성명 `고건`입니다(`representative`는 기존 `고건` 그대로). 소유자가 법인 설립 완료를 알리면 아래 표의 운영자 표기 위치를 그 법인명으로 바꿉니다.
+- Q2(문의 메일): 고객지원·개인정보 문의 메일은 `contact@quantgeneration.com`입니다(`operator.support_email`, `operator.privacy_contact`). 실제 수신은 2026-11-19 소유자가 확인했습니다(아래 답 3). `refund_contact`·`support_phone`·`business_registration`·`ecommerce_registration`은 null 그대로이고, 주소는 이 Q1~Q3 변경에서는 바꾸지 않았다가 아래 답 2로 뺐습니다.
+- Q3(이용연령): 무료 회원은 만 14세 이상(본인 진술), 유료 이용은 만 19세 이상입니다. 연령 확인·법정대리인 절차는 구현되지 않았습니다.
+- 회원 계정 서비스는 아직 없습니다(AWS 사용자 풀 미생성, 웹 계정 화면 미구현, 가입 화면 꺼짐). 계정 처리 항목은 서비스 구축 뒤 별도 PR에서 다룹니다. 이번 변경은 위 소유자 결정만 반영하며 다른 빈칸, `requirements`, `known_findings`를 채우거나 바꾸지 않았습니다. 20개 문서의 `review-required`와 공개 준비 `BLOCKED`는 유지합니다.
+
+2026-11-19 14:41:45 KST 소유자 답(정책 문서 질문 1~7, docs/nautilus_bridge/OWNER_RULINGS_LOG.md "2026-11-19 (2)" 절의 원문)을 아래처럼 반영했습니다. 답 1(운영자 표기 `QUANTGEN(운영자 고건)` 유지)은 바꿀 것이 없고, 답 6(GitHub 비공개 시점)과 답 7(detail.json 보관)은 정책 문서와 관계없습니다.
+
+- 답 2(주소 공개 제외): 주소를 공개 문서와 release-profile.json에서 뺐습니다. `operator.address`는 null입니다(`operator_information_source.address_provisional`은 그대로). 01 9절의 "우편·권리행사 경로" 행은 "권리행사 경로 | contact@quantgeneration.com, {{privacy.rights_request_url}}"로, 16 F16-01과 18 F18-02의 사업장 주소 값은 `{{operator.address}}` 칸으로 바꿨습니다. 16의 2026-10-31 제공 기록 문장은 옛 사업자명과 주소를 싣지 않는 문장으로 고쳤고, 이 문서 "운영자가 제공한 정보" 표의 주소 행에서도 주소를 지웠습니다. 주소는 유료 판매 전에 다시 정합니다. 위치는 아래 표의 "주소 공개 제외" 행입니다.
+- 답 3(수신 확인): 소유자가 contact@quantgeneration.com이 실제로 메일을 받는지 확인했습니다. 각 문서 현재 상태 줄, 이 문서 109행과 위 Q2 항목, RELEASE_GAPS.md 7행, README.md 7행의 "수신 시험 전"을 "2026-11-19 소유자 수신 확인"으로 바꿨습니다. 16번 C16-03의 나머지 조건(고지한 운영시간·절차대로 처리)과 `requirements`는 확인으로 바꾸지 않았습니다.
+- 답 4(호스팅): 소유자 답 원문은 "웹사이트 도메인 등록 및 이메일 설정을 Cloudflare, 관리는 AWS를 통해서 진행하고 있습니다."입니다. release-profile.json `deployment.hosting_provider`를 `AWS`로 바꾸고 `deployment.note`에 이 답을 덧붙였습니다(`hosting_product`·`contracting_entity`·`personal_data_processing_countries`는 null 그대로). 이 문서 114행(호스팅·도메인 행, 113행의 옛 호스팅 업체 행은 유지), 04 12행·20행, 08 12행·137행(Cloudflare 행 이름)·138행(AWS 행 추가), 16 12행(현재 상태 줄)·18행(2026-10-31 기록 문단의 호스팅 문장), RELEASE_GAPS.md 8행, README.md 7행에 반영했습니다. AWS 제품·리전·계약 법인·로그·처리 국가와 Cloudflare 이용 제품은 확인 전이며, 소유자가 이름을 대지 않은 제품은 적지 않았습니다.
+- 답 5(계정 서비스): 계정 서비스 설명(질문의 예: 시드니 보관, 회원 탈퇴)은 AWS 사용자 풀과 웹 회원 화면이 생긴 뒤 PR-2에서 넣습니다. 이번 변경은 그 값을 넣지 않았습니다.
+
+바꾼 위치(이 변경 기준 행 번호, 문서 번호는 docs/compliance의 파일 번호). 법인으로 바꿀 때는 아래 운영자 표기 위치의 `QUANTGEN(운영자 고건)`과 `operator.legal_name`을 그 법인명으로 바꾸고, 01 보호책임자 표기를 함께 검토하며, 바꾼 문서의 버전·기준일과 현재 상태 줄을 갱신합니다. `grep -rn "운영자 고건" docs/compliance`로 같은 위치를 찾을 수 있습니다. 각 문서 `적용 범위와 현재 상태` 첫 줄의 "2026-11-19 D11 Q1~Q3 반영" 기록, 아래 이력 보존 줄, "문장 재작성" 줄과 이 절은 단순 치환하지 않습니다.
+
+| 항목 | 위치 |
+|---|---|
+| 운영자 표기 `QUANTGEN(운영자 고건)` | 01 8행(서두 담당)·113행(1. 개인정보처리자, `QUANTGEN(운영자 고건, 이하 “운영자”)`); 02 8행(서두 담당)·44행(제1조, `QUANTGEN(운영자 고건, 이하 “운영자”)`)·122행(구매 전 계약 확인서 판매자); 03 30행(판매자와 상품); 04 58행(공개 정책 문안); 05 30행(첫 화면 문안); 06 136행(문의 양식의 최소 고지); 08 7행(서두 관리 주체); 10 61행(가격 안내 양식 판매자); 16 7행(서두 관리 주체)·57행(F16-01 상호·법적 사업자명); 17 7행(서두 관리 주체)·62행(F17-02 개인정보처리자); 18 7행(서두 관리 주체)·46행(F18-01 발신·처리 주체)·60행·64행(F18-02 발신자); 20 7행(서두 관리 주체)·163행(F20-03 결과 통지문) |
+| 운영자 법적 성명 | release-profile.json 6행 `operator.legal_name` = `고건` |
+| 개인정보 보호책임자 | 01 176행 `고건(운영자 본인)` |
+| 문의 메일 `contact@quantgeneration.com` | release-profile.json 11행(`privacy_contact`)·13행(`support_email`); 01 156행(5. 권리 요청)·177행(9. 연락처)·178행(9. 권리행사 경로); 02 108행(제11조); 03 38행(문의·청약철회·해지)·98행(처리 결과 안내); 08 8행; 10 69행; 11 57행; 15 150행; 16 8행·62행(F16-01 고객지원 이메일)·66행(F16-01 개인정보 문의); 17 8행·62행(F17-02); 18 8행·51행(F18-01 철회)·66행(F18-02 연락처)·82행(F18-03); 20 8행·170행(F20-03) |
+| 이용연령 | 02 56행(제3조); 17 16행(현재 상태 문장)·36행(최소 이용연령 문장)·50행(F17-01 최소 만 나이 `14`); RELEASE_GAPS.md 20행 |
+| 주소 공개 제외 (2026-11-19 답 2) | release-profile.json 8행 `operator.address` = null; 01 12행(현재 상태 줄)·178행(9. 권리행사 경로, 주소 대신 메일); 16 12행(현재 상태 줄)·18행(2026-10-31 제공 기록 문장)·59행(F16-01 사업장 주소 `{{operator.address}}`); 18 12행(현재 상태 줄)·65행(F18-02 사업장 주소 `{{operator.address}}`); 이 문서 106행(주소 행); README.md 7행; RELEASE_GAPS.md 7행. 주소를 다시 정하면 `operator.address`를 채우고 이 행의 양식 칸은 그대로 둠 |
+| 문장 재작성(단순 치환 금지) | README.md 7행, RELEASE_GAPS.md 7행: 2026-11-19 결정을 설명하는 문장이므로 법인 설립 때 새 날짜 기록으로 고쳐 씀 |
+| 이력 보존(옛 문장 유지, 날짜 줄 추가) | 이 문서 "운영자가 제공한 정보" 표 103행(사업자명)·104행(운영자 표기)·108행(연락처)·109행(문의 메일); 16 18행(2026-10-31 제공 기록 문장. 2026-11-19 답 2로 옛 사업자명·주소를 빼고 고쳐 씀)·20행(2026-11-19 소유자 결정 줄) |

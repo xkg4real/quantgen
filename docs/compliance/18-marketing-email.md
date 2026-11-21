@@ -1,13 +1,15 @@
 # 18. 광고성 이메일 동의·수신거부 정책 및 메일 양식
 
 - 문서 ID: QG-C18
-- 버전: 1.1
-- 기준일: 2026-10-31
+- 버전: 1.2
+- 기준일: 2026-11-19
 - 상태: review-required
-- 관리 주체: (주)넥스트제너레이션
-- 문의: {{operator.support_email}}
+- 관리 주체: QUANTGEN(운영자 고건)
+- 문의: contact@quantgeneration.com
 
 ## 적용 범위와 현재 상태
+
+2026-11-19 D11 Q1~Q3 반영: 운영자 개인 표기 QUANTGEN(운영자 고건), 문의 contact@quantgeneration.com(2026-11-19 소유자 수신 확인), 주소 공개 제외.
 
 사진의 18번 ‘이메일에 수신거부 링크를 추가하기’에 대응한다. QUANTGEN 운영자가 향후 직접 또는 발송업체를 통해 보내는 광고성 이메일의 동의, 표시, 철회, 발송 제외를 정의한다.
 
@@ -41,12 +43,12 @@
 ### F18-01 광고성 이메일 수신 동의
 
 > [ ] **선택: QUANTGEN 광고성 이메일 수신에 동의합니다.**  
-> 발신·처리 주체: (주)넥스트제너레이션  
+> 발신·처리 주체: QUANTGEN(운영자 고건)  
 > 목적: {{marketing.email_purpose}}  
 > 수집·이용 항목: {{marketing.email_fields}}  
 > 보유·이용기간: {{marketing.consent_retention}}  
 > 동의를 거부할 수 있으며, 거부해도 광고 외 기본 서비스 이용에는 영향을 주지 않습니다.  
-> 철회: 메일의 ‘광고 이메일 수신거부’ 또는 {{marketing.preferences_url}} / 문의 {{operator.support_email}}  
+> 철회: 메일의 ‘광고 이메일 수신거부’ 또는 {{marketing.preferences_url}} / 문의 contact@quantgeneration.com  
 > 고지 버전·적용일: {{marketing.notice_version_date}}
 
 처리 근거가 광고 수신 동의와 별도로 필요한 개인정보 수집·이용 동의라면 그 요건을 갖춘 별도 항목으로 구성한다. 이 한 문장으로 제3자 제공·국외 이전·다른 매체 광고까지 동의한 것으로 처리하지 않는다.
@@ -55,13 +57,13 @@
 
 ```text
 제목: (광고) QUANTGEN {{marketing.campaign_title}}
-발신자: (주)넥스트제너레이션 <{{marketing.sender_email}}>
+발신자: QUANTGEN(운영자 고건) <{{marketing.sender_email}}>
 
 {{marketing.campaign_body}}
 
-발신자: (주)넥스트제너레이션
-사업장 주소: 서울특별시 성북구 안암로 145
-연락처: {{operator.support_email}} / {{operator.support_phone}}
+발신자: QUANTGEN(운영자 고건)
+사업장 주소: {{operator.address}}
+연락처: contact@quantgeneration.com / {{operator.support_phone}}
 
 수신 이유: {{marketing.consent_reason_and_date}}
 광고 이메일 수신거부: {{marketing.unsubscribe_url}}
@@ -77,7 +79,7 @@
 > 적용 시각: {{marketing.unsubscribed_at_timezone}}  
 > 대상: {{marketing.masked_address}}  
 > 처리 ID: {{marketing.unsubscribe_request_id}}  
-> 문의: {{operator.support_email}}  
+> 문의: contact@quantgeneration.com  
 > 계약 이행이나 보안에 필요한 비광고 안내가 있는 경우 그 목적 범위에서 발송될 수 있습니다.
 
 실제 공급자 또는 예약 큐 전파가 실패했다면 ‘처리 완료’를 표시하지 않는다. 요청 접수 상태와 완료를 구분하고 대체 접수 방법·후속 처리 상태를 안내한다. 결과 회신에 새 광고를 포함하지 않는다.
