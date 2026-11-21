@@ -1,12 +1,12 @@
 ---
-status: returned
+status: taken
 reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a
 next_ids: OS-F2, KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T12:33:42+09:00
+updated_at: 2026-11-21T13:04:53+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: gpt/os-f2-data-dir-20261121
@@ -17,9 +17,15 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
 session: 01a183c6-632a-70cc-a0e6-32e764f43087
-execution_id: a3da2627-8d65-4ade-9c47-a1594cb6db15
+execution_id: 1bfaa7d8-c59c-4c6c-a53d-00acbe3b7e9a
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 ---
+
+## 직접 요청 계속 — CI 대기 중 후속 통합 준비 — 2026-11-21T13:04:53+09:00
+
+- 사용자의 "이어서 할거없어?" 및 "ㅇㅋ~"에 따라 기존 승인 범위를 계속한다. 새 실행 1bfaa7d8-c59c-4c6c-a53d-00acbe3b7e9a; 직전 실행a3da2627·task/handoff·OS64ff58e·STATE·최신CURRENT 일치, OS잠금과최신6문서확인후 CAS/read-back으로 인수한다.
+- PR136 새 Runtime44861453849는 아직4환경의네이티브UI 단계가진행중이며실패관측없다. 통과전병합하지않는다. mainf065ec92와freezeOFF유지.
+- 대기중에는 DS-H 최신7ce3791과 검증된OS64ff58e의 격리통합후보를준비·검증하고, UI로컬준법충돌/후속계약정리를진행한다. 이 후보는OS가main에병합됐다는뜻이아니며4f PR은OS병합후최신main을확인한뒤연다. KEY/DIDM기존수정과사전등록/PC/OSgo/법률조건은유지한다.
 
 ## 부분 인계 — 새 OS CI 대기·5담당 결과 보존 — 2026-11-21T12:33:42+09:00
 
