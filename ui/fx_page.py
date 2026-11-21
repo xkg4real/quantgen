@@ -29,8 +29,8 @@ from ui.localization import table_header, literal_text
 from core.ficc import fx, insights
 from core.ficc.sabr_diagnostics import fit_diagnostics, diagnostic_text, diagnostic_tone
 from core.ficc.common import BP, FICCError, parse_tenor, tenor_label
-from core.ficc.data import (G10_KRW, Series, load_fx_spot, load_policy_rates,
-                            load_short_rate)
+from core import gateway
+from core.ficc.data import G10_KRW, Series
 from core.quant.validate import cost_bp
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
@@ -93,7 +93,7 @@ def _rate(field: ft.TextField, ccy: str, source: str) -> tuple[float, Series | N
     v = _num(field)
     if v is not None:
         return v / 100.0, None
-    s = load_short_rate(ccy, source="synthetic" if source == "synthetic" else "auto")
+    s = gateway.ficc().load_short_rate(ccy, source="synthetic" if source == "synthetic" else "auto")
     return float(s.last), s
 
 
@@ -247,7 +247,7 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
     # ----------------------------------------------------------------- tools
     def do_forward() -> list[ft.Control]:
         src = source.value or "auto"
-        spot_s = load_fx_spot(pair.value, source=src)
+        spot_s = gateway.ficc().load_fx_spot(pair.value, source=src)
         p, base, quote = _pair_of(spot_s)
         S, T = float(spot_s.last), parse_tenor(tenor.value or "3m")
         rd, rd_s = _rate(r_dom, quote, src)
@@ -308,7 +308,7 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
 
     def do_option() -> list[ft.Control]:
         src = source.value or "auto"
-        spot_s = load_fx_spot(pair.value, source=src)
+        spot_s = gateway.ficc().load_fx_spot(pair.value, source=src)
         p, base, quote = _pair_of(spot_s)
         S, T = float(spot_s.last), parse_tenor(expiry.value or "3m")
         rd, rd_s = _rate(r_dom, quote, src)
@@ -390,8 +390,8 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
         top, cost = int(_num(top_n, 3.0)), float(_num(cost_bps, cost_bp('fx')))
         reb = int(_num(rebal, 21.0))
         pairs = {c: ("USD" + c if c in _USD_FIRST else c + "USD") for c in G10_KRW if c != "USD"}
-        spots = {pr: load_fx_spot(pr, source=src, days=days) for pr in pairs.values()}
-        rates = load_policy_rates(list(G10_KRW), days=days,
+        spots = {pr: gateway.ficc().load_fx_spot(pr, source=src, days=days) for pr in pairs.values()}
+        rates = gateway.ficc().load_policy_rates(list(G10_KRW), days=days,
                                   source="synthetic" if src == "synthetic" else "auto")
         table_rows = fx.carry_table(spots, rates)
         bt = fx.carry_backtest(spots, rates, top_n=top, cost_bps=cost, rebalance_days=reb)
