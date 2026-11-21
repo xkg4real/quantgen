@@ -41,7 +41,7 @@ from typing import Any, Optional
 
 import config
 from core import credentials as _credentials
-from core.app_paths import user_data_path
+from core.app_paths import ensure_user_data_path, user_data_path
 
 try:
     import requests as _once                         # one attempt: the engine's quote path
@@ -152,7 +152,7 @@ def _write_token_file(text: str) -> None:
     The temporary file has a random name (mkstemp: O_EXCL, 0600), then replaces the target atomically. When the
     token file is a symlink (a shared file kept elsewhere), the link's target is replaced, so the link and the
     sharing stay intact."""
-    path = _token_path()
+    path = _TOKEN_PATH if _TOKEN_PATH is not None else ensure_user_data_path("kis_token.json")
     if path.is_symlink():
         path = Path(os.path.realpath(path))
     path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)

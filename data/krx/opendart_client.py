@@ -26,7 +26,7 @@ from typing import Optional
 from xml.etree import ElementTree
 
 import config
-from core.app_paths import user_data_path
+from core.app_paths import ensure_user_data_path, user_data_path
 
 try:
     from data.net import session as requests         # shared session: retry + backoff
@@ -108,7 +108,7 @@ class OpenDARTClient:
 
     def _store_cache(self, entries: dict[str, dict]) -> None:
         try:
-            path = _cache_path()
+            path = _CACHE_PATH if _CACHE_PATH is not None else ensure_user_data_path("dart_corp_codes.json")
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(
                 json.dumps({"fetched_at": time.time(), "entries": entries},

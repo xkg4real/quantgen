@@ -1,10 +1,13 @@
 """core.app_paths (OS-P0-c): packaged-app root and per-user data folder, computed without touching the real home."""
+import errno
 import json
+import os
 from pathlib import Path
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from core import app_paths
 
@@ -110,6 +113,135 @@ class DataLocationAndMigrationTests(unittest.TestCase):
             app_paths.migrate_legacy_data(confirmed=True, home=self.home, platform="linux",
                                           env={**self.env, "QUANTGEN_DATA_DIR": str(self.home / "o")})
 
+    def test_destination_appearing_after_the_precheck_is_not_merged_or_nested(self):
+        legacy = self.home / ".nextgen"
+        legacy.mkdir()
+        (legacy / "kis_token.json").write_text("synthetic-token", encoding="utf-8")
+        target = self.home / "xdg" / "quantgen"
+        mkdir = Path.mkdir
+
+        def destination_appears(folder, *args, **kwargs):
+            result = mkdir(folder, *args, **kwargs)
+            if folder == target.parent and not target.exists():
+                mkdir(target)
+                (target / "other-app.txt").write_text("keep", encoding="utf-8")
+            return result
+
+        with patch.object(Path, "mkdir", new=destination_appears):
+            with self.assertRaises(app_paths.MigrationRefused):
+                app_paths.migrate_legacy_data(confirmed=True, home=self.home, env=self.env, platform="linux")
+        self.assertEqual((legacy / "kis_token.json").read_text(encoding="utf-8"), "synthetic-token")
+        self.assertEqual((target / "other-app.txt").read_text(encoding="utf-8"), "keep")
+        self.assertFalse((target / ".nextgen").exists())
+
+    def test_marker_failure_does_not_move_the_legacy_token(self):
+        legacy = self.home / ".nextgen"
+        legacy.mkdir()
+        (legacy / "kis_token.json").write_text("synthetic-token", encoding="utf-8")
+        target = self.home / "xdg" / "quantgen"
+        with patch.object(app_paths, "_stamp", side_effect=PermissionError("synthetic marker failure")):
+            with self.assertRaises((app_paths.MigrationRefused, OSError)):
+                app_paths.migrate_legacy_data(confirmed=True, home=self.home, env=self.env, platform="linux")
+        self.assertEqual((legacy / "kis_token.json").read_text(encoding="utf-8"), "synthetic-token")
+        self.assertFalse(target.exists())
+
+    def test_an_empty_destination_appearing_after_the_precheck_is_not_replaced(self):
+        legacy = self.home / ".nextgen"
+        legacy.mkdir()
+        (legacy / "kis_token.json").write_text("synthetic-token", encoding="utf-8")
+        target = self.home / "xdg" / "quantgen"
+        stamp = app_paths._stamp
+
+        def destination_appears(folder):
+            stamp(folder)
+            target.mkdir()
+
+        with patch.object(app_paths, "_stamp", side_effect=destination_appears):
+            with self.assertRaises(app_paths.MigrationRefused):
+                app_paths.migrate_legacy_data(confirmed=True, home=self.home, env=self.env, platform="linux")
+        self.assertEqual((legacy / "kis_token.json").read_text(encoding="utf-8"), "synthetic-token")
+        self.assertEqual(list(target.iterdir()), [])
+
+    def test_exdev_unsupported_and_permission_errors_never_copy_or_delete(self):
+        legacy = self.home / ".nextgen"
+        legacy.mkdir()
+        (legacy / "kis_token.json").write_text("synthetic-token", encoding="utf-8")
+        target = self.home / "xdg" / "quantgen"
+        for error in (errno.EXDEV, errno.ENOSYS, errno.EACCES):
+            with self.subTest(error=error), \
+                    patch.object(app_paths, "_rename_no_replace", side_effect=OSError(error, "synthetic refusal")):
+                with self.assertRaises(app_paths.MigrationRefused) as caught:
+                    app_paths.migrate_legacy_data(confirmed=True, home=self.home, env=self.env, platform="linux")
+                self.assertEqual(caught.exception.__cause__.errno, error)
+                self.assertEqual((legacy / "kis_token.json").read_text(encoding="utf-8"), "synthetic-token")
+                self.assertFalse(target.exists())
+                self.assertTrue((legacy / app_paths.DATA_MARKER).is_file())  # documented harmless residue
+
+    def test_a_directory_marker_is_refused_before_the_legacy_folder_moves(self):
+        legacy = self.home / ".nextgen"
+        legacy.mkdir()
+        (legacy / app_paths.DATA_MARKER).mkdir()
+        (legacy / "kis_token.json").write_text("synthetic-token", encoding="utf-8")
+        with self.assertRaises(app_paths.MigrationRefused):
+            app_paths.migrate_legacy_data(confirmed=True, home=self.home, env=self.env, platform="linux")
+        self.assertEqual((legacy / "kis_token.json").read_text(encoding="utf-8"), "synthetic-token")
+        self.assertFalse((self.home / "xdg" / "quantgen").exists())
+
+    def test_a_legacy_symlink_is_not_advertised_or_moved_as_a_migration(self):
+        elsewhere = self.home / "elsewhere"
+        elsewhere.mkdir()
+        (elsewhere / "kis_token.json").write_text("synthetic-token", encoding="utf-8")
+        legacy = self.home / ".nextgen"
+        try:
+            legacy.symlink_to(elsewhere, target_is_directory=True)
+        except OSError:
+            self.skipTest("this host does not permit directory symlinks")
+        self.assertFalse(self.where().can_migrate)
+        with self.assertRaises(app_paths.MigrationRefused):
+            app_paths.migrate_legacy_data(confirmed=True, home=self.home, env=self.env, platform="linux")
+        self.assertTrue(legacy.is_symlink())
+        self.assertEqual((elsewhere / "kis_token.json").read_text(encoding="utf-8"), "synthetic-token")
+        self.assertFalse((elsewhere / app_paths.DATA_MARKER).exists())
+
+
+class ExclusiveRenameTests(unittest.TestCase):
+    """Check the native operation contracts without claiming the mocked host APIs ran on that OS."""
+    def setUp(self):
+        self.source, self.target = Path("synthetic-source"), Path("synthetic-target")
+
+    def test_posix_native_calls_require_no_replace_and_report_native_errors(self):
+        for platform, symbol, expected in (
+                ("linux", "renameat2", (-100, os.fsencode(self.source), -100, os.fsencode(self.target), 1)),
+                ("darwin", "renamex_np", (os.fsencode(self.source), os.fsencode(self.target), 4))):
+            for result in (0, -1):
+                rename = Mock(return_value=result)
+                with self.subTest(platform=platform, result=result), patch.object(os, "name", "posix"), \
+                        patch.object(sys, "platform", platform), \
+                        patch.object(app_paths.ctypes, "CDLL", return_value=SimpleNamespace(**{symbol: rename})), \
+                        patch.object(app_paths.ctypes, "get_errno", return_value=errno.EEXIST):
+                    if result:
+                        with self.assertRaises(OSError) as caught:
+                            app_paths._rename_no_replace(self.source, self.target)
+                        self.assertEqual(caught.exception.errno, errno.EEXIST)
+                    else:
+                        app_paths._rename_no_replace(self.source, self.target)
+                    rename.assert_called_once_with(*expected)
+
+    def test_missing_native_symbol_and_unsupported_platform_are_refused(self):
+        for platform in ("linux", "darwin", "unsupported-os"):
+            with self.subTest(platform=platform), patch.object(os, "name", "posix"), \
+                    patch.object(sys, "platform", platform), \
+                    patch.object(app_paths.ctypes, "CDLL", return_value=SimpleNamespace()):
+                with self.assertRaises(OSError) as caught:
+                    app_paths._rename_no_replace(self.source, self.target)
+                self.assertEqual(caught.exception.errno, errno.ENOSYS)
+
+    def test_windows_uses_its_no_replace_rename_without_a_posix_fallback(self):
+        with patch.object(os, "name", "nt"), patch.object(os, "rename") as rename, \
+                patch.object(app_paths.ctypes, "CDLL", side_effect=AssertionError("unexpected POSIX API")):
+            app_paths._rename_no_replace(self.source, self.target)
+            rename.assert_called_once_with(self.source, self.target)
+
 
 class MarkerKeepsTheChosenFolderTests(unittest.TestCase):
     """Main decision 2026-11-20: QUANTGEN's marker in the platform folder decides before ~/.nextgen."""
@@ -134,7 +266,8 @@ class MarkerKeepsTheChosenFolderTests(unittest.TestCase):
         marker = json.loads((self.platform_dir / app_paths.DATA_MARKER).read_text(encoding="utf-8"))
         self.assertEqual(sorted(marker), ["app", "created", "format"])
         self.assertEqual((marker["app"], marker["format"]), ("QUANTGEN", 1))
-        self.assertEqual(self.platform_dir.stat().st_mode & 0o777, 0o700)
+        if os.name == "posix":  # Windows stat does not expose POSIX directory permission bits.
+            self.assertEqual(self.platform_dir.stat().st_mode & 0o777, 0o700)
 
     def test_b_a_later_nextgen_does_not_move_a_new_user(self):
         self.ensure()
@@ -142,12 +275,43 @@ class MarkerKeepsTheChosenFolderTests(unittest.TestCase):
         self.assertEqual(self.resolve(), self.platform_dir)
         self.assertEqual(app_paths.data_location(home=self.home, env=self.env, platform="linux").source, "platform")
 
-    def test_b_a_folder_a_writer_made_with_mkdir_is_marked_on_the_next_lookup(self):
-        (self.platform_dir / "trading").mkdir(parents=True)   # config.trading_dir() caller, no marker yet
+    def test_path_getters_do_not_stamp_a_folder_made_without_preparation(self):
+        (self.platform_dir / "trading").mkdir(parents=True)
         self.assertEqual(self.resolve(), self.platform_dir)
-        self.assertTrue((self.platform_dir / app_paths.DATA_MARKER).is_file())
+        with patch.dict(os.environ, self.env, clear=True), patch.object(Path, "home", return_value=self.home), \
+                patch.object(sys, "platform", "linux"):
+            self.assertEqual(app_paths.user_data_path("trading"), self.platform_dir / "trading")
+        self.assertFalse((self.platform_dir / app_paths.DATA_MARKER).exists())
+        self.ensure()  # application startup or a standalone writer explicitly prepares before its first write
         self.legacy.mkdir()
         self.assertEqual(self.resolve(), self.platform_dir)
+
+    def test_preparation_pins_the_platform_choice_during_a_legacy_creation_race(self):
+        mkdir = Path.mkdir
+
+        def legacy_appears(folder, *args, **kwargs):
+            result = mkdir(folder, *args, **kwargs)
+            if folder == self.platform_dir and not self.legacy.exists():
+                mkdir(self.legacy)
+            return result
+
+        with patch.object(Path, "mkdir", new=legacy_appears):
+            self.assertEqual(self.ensure(), self.platform_dir)
+        self.assertTrue(self.legacy.is_dir())
+        self.assertTrue((self.platform_dir / app_paths.DATA_MARKER).is_file())
+        self.assertEqual(self.resolve(), self.platform_dir)
+
+    def test_bad_existing_markers_refuse_preparation_without_overwriting_them(self):
+        self.platform_dir.mkdir(parents=True)
+        marker = self.platform_dir / app_paths.DATA_MARKER
+        for text in ("", "not-json", '{"app":"OTHER","format":1,"created":"2026-01-01"}',
+                     '{"app":"QUANTGEN","format":2,"created":"2026-01-01"}',
+                     '{"app":"QUANTGEN","format":true,"created":"2026-01-01"}',
+                     '{"app":"QUANTGEN","format":1,"created":"not-a-date"}'):
+            marker.write_text(text, encoding="utf-8")
+            with self.subTest(text=text), self.assertRaises(OSError):
+                self.ensure()
+            self.assertEqual(marker.read_text(encoding="utf-8"), text)
 
     def test_c_an_existing_nextgen_user_stays(self):
         self.legacy.mkdir()
@@ -200,6 +364,65 @@ class WritersFollowTheDataFolderTests(unittest.TestCase):
         self.assertFalse(self.data.exists())   # computing a path creates nothing
         with patch.dict(os.environ, {"NEXTGEN_TRADING_DIR": str(self.data / "t")}):
             self.assertEqual(config.trading_dir(), self.data / "t")   # the old overrides still win
+
+
+class StandaloneWriterPreparationTests(unittest.TestCase):
+    """Real KIS/DART file writers with synthetic payloads, no requests, keys, real home or dotenv reads."""
+    def setUp(self):
+        from core import credentials
+        with patch.object(credentials, "load_dotenv_for_development"), \
+                patch.object(credentials, "read_setting", return_value=""):
+            from data.krx import kis_client, opendart_client
+        self.kis, self.dart = kis_client, opendart_client
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        self.home = Path(folder.name)
+        self.platform_dir = self.home / "xdg" / "quantgen"
+        self.legacy = self.home / ".nextgen"
+        for context in (patch.dict(os.environ, {"XDG_DATA_HOME": str(self.home / "xdg")}, clear=True),
+                        patch.object(Path, "home", return_value=self.home), patch.object(sys, "platform", "linux"),
+                        patch.object(self.kis, "_TOKEN_PATH", None), patch.object(self.dart, "_CACHE_PATH", None)):
+            context.start()
+            self.addCleanup(context.stop)
+
+    def test_kis_writer_prepares_the_marker_before_saving_and_reading_its_token(self):
+        token = '{"access_token":"synthetic-token","expires_at":12345}'
+        self.assertFalse(self.platform_dir.exists())
+        self.kis._write_token_file(token)
+        self.assertTrue((self.platform_dir / app_paths.DATA_MARKER).is_file())
+        self.legacy.mkdir()
+        self.assertEqual(self.kis._token_path(), self.platform_dir / "kis_token.json")
+        self.assertEqual(self.kis._read_token_file(), token)
+        self.assertFalse((self.legacy / "kis_token.json").exists())
+
+    def test_dart_writer_prepares_the_marker_before_saving_its_cache(self):
+        client = object.__new__(self.dart.OpenDARTClient)
+        entries = {"005930": {"corp_code": "SYNTHETIC", "corp_name": "Fixture"}}
+        client._store_cache(entries)
+        self.assertTrue((self.platform_dir / app_paths.DATA_MARKER).is_file())
+        self.legacy.mkdir()
+        self.assertEqual(client._load_cache(), entries)
+        self.assertFalse((self.legacy / "dart_corp_codes.json").exists())
+
+    def test_refused_marker_stops_both_writers_before_they_write_payloads(self):
+        self.platform_dir.mkdir(parents=True)
+        (self.platform_dir / app_paths.DATA_MARKER).mkdir()
+        with self.assertRaises(OSError):
+            self.kis._write_token_file("synthetic-token")
+        client = object.__new__(self.dart.OpenDARTClient)
+        client._store_cache({"fixture": {}})  # the existing cache-writer contract swallows storage errors
+        self.assertFalse((self.platform_dir / "kis_token.json").exists())
+        self.assertFalse((self.platform_dir / "dart_corp_codes.json").exists())
+        self.assertTrue((self.platform_dir / app_paths.DATA_MARKER).is_dir())
+
+    def test_explicit_test_paths_remain_pinned_without_preparing_a_default_folder(self):
+        token, cache = self.home / "pinned-token.json", self.home / "pinned-cache.json"
+        with patch.object(self.kis, "_TOKEN_PATH", token), patch.object(self.dart, "_CACHE_PATH", cache):
+            self.kis._write_token_file("synthetic-token")
+            object.__new__(self.dart.OpenDARTClient)._store_cache({"fixture": {}})
+        self.assertEqual(token.read_text(encoding="utf-8"), "synthetic-token")
+        self.assertEqual(json.loads(cache.read_text(encoding="utf-8"))["entries"], {"fixture": {}})
+        self.assertFalse(self.platform_dir.exists())
 
 
 class ApplicationRootTests(unittest.TestCase):
