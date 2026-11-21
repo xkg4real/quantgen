@@ -1,3 +1,19 @@
+# 중앙 Codex 실제 진행 — 2026-11-21T14:11:37.000+09:00
+
+이번 실행은총괄1+하위4담당이며, 기존OS/게이트웨이담당의검증된브랜치도이어보존합니다. 추가상시감시/예약없음.
+
+| 담당 | 이번 실제 결과 | 남은 조건 |
+|---|---|---|
+| 총괄 | 최신CURRENT CAS+UUID/readback·OS잠금, code원격6본문대조·Notion부분동기화 | OS136 Windows3.12전체완료후조건부merge |
+| DATA/통합 | DSH+OS172PASS·K1a7/14PASS·oracle10MATCH, 차단fakeleaf2→0 | DSH최종main/baseline/CI·실OA09 |
+| Native UI | UI64PASS, M0+K1독립13/7/10및12실게이트웨이진입검토 | 실제PC7화면·OSgo·최종UI/KEY5 |
+| QA fixture | exactmain고정oracle·UIpre분리, 실제서명/표시·오류계약고정 | 나머지42화면접점별전후검증 |
+| 문서/프로그램 | WORKBOARD옛담당정정·20정책영향검토·DSH163공개입력복구 | 20source-review최종갱신/전체CI, 출시증거 |
+
+현재 [PR136](https://github.com/xkg4real/quantgen/pull/136) head64ff58e는문법2·Ubuntu3.12·Win3.11/3.14·Compliance성공, Win3.12진행중입니다. mainf065ec92유지·새완료ID/병합없음. [K1a후보d2f675db](https://github.com/xkg4real/quantgen/blob/gpt/ui-key5-native-k1a-20261121/docs/product/UI_CENTRAL_CANDIDATE_2026-11-21.md)는WIP이며주기준선/실PC/배포로세지않습니다. 정확scope·중복검사·실패이력·실제다음명령은[이번인계](WEEKLY_HANDOFF_2026-11-21_1bfaa7d8.md)에있습니다.
+
+---
+
 > **2026-11-21T13:24:33.000+09:00 원격 보존:** [UI후보822aff9](https://github.com/xkg4real/quantgen/tree/gpt/ui-central-integration-20261121)(제품c36f22cd)의부모/8본문/ref일치. 새4status참조gateway연결, 기존경계13·선택4·독립3 PASS(중복), 추가7page64case진행중. 최종준법·전체UI·실PC/OSgo미완료. R3하위121/122실제병합·전체CI를대조해Notion의옛대기를정정했다. OS136전체CI는여전히진행중/새병합없음.
 
 > **2026-11-21T13:09:46.000+09:00 후속 진척:** DS-H+OS 격리 후보 172 PASS(0skip), 독립계약24·격리5 PASS(검사 간 중복 있음). workflow의 기존 모듈 삭제0·path176 정확합집합. UI준법충돌0, 최종source-review/PC/OSgo는미완료. UI새status4참조까지포함해 KEY5연결계획검토중. PR136전체Runtime진행중, mainf065ec92·새완료ID없음. 실행1bfaa7d8.

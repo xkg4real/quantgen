@@ -1,3 +1,12 @@
+# 중앙 Codex 최신 UI·K1a — 2026-11-21T14:11:37.000+09:00
+
+- status: taken · execution_id: 1bfaa7d8-c59c-4c6c-a53d-00acbe3b7e9a · main총괄소유권유지. 원본UI414eceb와중앙UI822aff9보존, 후속gpt/ui-key5-native-k1a-20261121@d2f675db 원격6본문/tree/parent/ref대조완료. mainUI/KEY5완료아님.
+- UI822의기존7모듈64PASS(실패/오류/skip0,기존14/M0와8중복). 후속d2의신규7/관련14/고정UI기준10MATCH/경계13, 독립실factory12차단진입provider0/network0 PASS(중복합산X). 이전main과UI의승인문구23차이보존; request/value/date/source/unit/reason차이0. 원본oracle/comparator불변.
+- known은소멸2exemption만삭제·기존상한22/44유지, 남은20파일42참조+동결feed1. 신규7검사는Qt설치후기존CI명령에추가. 실제K1전체CI/최종준법·최신선행main합침/PR/실PC7화면·OSgo는남음. source-only/K1희소font경고를pixel/Windows성공으로세지않는다.
+- PC확인은최종UI병합전, OSgo는실제바인딩전환전기존조건. 준비/draftPR의새승인관문을만들지않는다. 웹영향UI/K1a큐둘다queued(지원발송도구없음), 수신/적용/배포완료아님. [전체인계](WEEKLY_HANDOFF_2026-11-21_1bfaa7d8.md).
+
+---
+
 # 중앙 Codex 최신 UI 진행 — 2026-11-21T13:24:33.000+09:00
 
 - status: taken · execution_id: 1bfaa7d8-c59c-4c6c-a53d-00acbe3b7e9a · branch: gpt/ui-central-integration-20261121 · head: 822aff9473bede350468ad5e5005e4f08aeb7290 (제품통합c36f22cd, 문서명확화822aff9). 원본414eceb/mainf065를부모로보존하고새8본문/tree/parents/ref대조완료.
