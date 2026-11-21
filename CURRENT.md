@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a
 next_ids: KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T21:22:56+09:00
+updated_at: 2026-11-21T21:55:24+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/key5a-fixes-20261121
@@ -20,6 +20,18 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
+---
+
+## K2d 실제 소스·실패 진단 및 KEY139 전체 CI — 2026-11-21T21:55:24+09:00
+
+- ROOT execution 2f27d0c2-57cc-46e7-97d6-fc141d4065c9·OS lock20162·task/handoff/cycle·primary KEY139/0413cc52 유지, 자동 감시/예약/자동 인수/run_now 취소 상태입니다.
+- K2d actual b373 별도 source413에서 승인 제품4+기존 공개5의 정확9파일만 변경했습니다. actual freeze f06a9d0e16aebc888facc58ddad5d74fdf7a2873e4a27d991db1ae60bcdeee92, 나머지404/모드/CRLF 불변. known e0ba/준법 baseline/원격 코드 변경은 아직0입니다. 원본 before7fb·golden d0d009·writer fdc075·새 after8c41/binding a684는 별도 보존합니다.
+- 정상 after 첫 엄격 비교는 FAIL이며 그대로 보존합니다. 관찰 전용 진단도 exit1을 유지했습니다. 전 JSON 독립 비교 결과 유일한3차이는 USD3case raw supplied kwargs의 label="" 기본값 명시 전달입니다. 실제17 loader signature-bound 인자/응답·10case UI/단위/문구/분석 입력은 일치합니다. 원 golden/비교기/기준/제품을 성공 목적에 맞춰 고치지 않습니다. 별도 pure JSON/AST 보조판독만 승인했으며 엄격 FAIL을 PASS로 대체하지 않습니다. 실제 gateway 진입횟수는 별도 관찰되지 않았습니다.
+- 공개6 첫실행은 4PASS/1FAIL/1ERROR/skip0, 진단용 실패2도 원결과를 보존했습니다. worker notice에서 core.app_identity가 선택적 core._build_info 부재를 처리할 때 private finder가 정상 ImportError를 AssertionError로 바꾼 도구 문제가 확인됐습니다. 제품/차트 결함은 입증되지 않았습니다. exact 모듈·core경로와 모든 import후보의 lstat 부재만 정상 ModuleNotFoundError로 복구하는 R2B f63f66/binding789418을 독립1d1668e1 및 ROOT 검토 후 fresh 공개6 재실행 GO했습니다. 다른 unknown/존재/오류는 차단, 제품/공개assertion/모델guard 변경0입니다.
+- 원8c strict FAIL의 postproof 미도달·outer23/inner24 pin 범위 차이도 보존합니다. 누락1 K2C remote proof는 시작 hardcoded SHA/현재 SHA ac50d075가 일치하나 역사적 별도 mode 전후 지도는 없습니다. STATE/CURRENT는 불변 시험 입력으로 고정하지 않아 정상 진행 기록을 갱신할 수 있습니다.
+- KEY139 actual head0413cc52/main53e5e723에서 Runtime44897148350 전체6 job(Windows3.11/3.12/3.14·Linux3.12·문법3.10/3.11), Compliance44897148302, Nautilus 임시원장44897148304 모두 SUCCESS입니다. check-run10 모두 성공, review/review-comment0. 별도 Vercel status 실패는 기존 SESSION_PIPELINE의 무시 규칙을 따르며 배포/설정을 바꾸지 않습니다. 최신 main/freeze/소스·소유권 재확인 뒤 expected-head PR 병합만 허용하며 아직 KEY-5/a 완료를 기록하지 않습니다.
+- 실제 API/공급사/GUI·owner PC7/OSgo/모델 성과/법률·라이선스/동결연구/원장/전체 UI·KEY5는 미완료입니다. K2d 거절12·public6 최종결과·boundary/코드 보존, KEY139 조건부 병합이 다음 단계입니다. sapientia K2c까지 부분 반영, website8 NOT_SENT·실제 전달/적용/배포0, GPT/Gemini 추가 spec 공개·심사는 NOT_PERFORMED 유지.
+
 ---
 
 ## K2d 승인 최소 구현 시작점 — 2026-11-21T21:22:56+09:00
