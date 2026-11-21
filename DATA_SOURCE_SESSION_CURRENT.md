@@ -6,21 +6,25 @@ task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
 next_ids: DS-H, DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e
-updated_at: 2026-11-21T12:33:42+09:00
+updated_at: 2026-11-21T14:38:45+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: gpt/data-source-didm-20261121 (+ gpt/ds-home-indicators-20261121)
-work_commit: abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0 (DIDM); 7ce37917102af9793d3ccbe851c0554058089df9 (DS-H)
+work_commit: abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0 (DIDM); 4973111e00ede39d81afc6f3bee894f06fb575fd (DS-H)
 uncommitted_changes: no
-pr: none
+pr: 137 (DS-H draft)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
 session: Codex DIDM 6af7214e-7798-8191-8cfe-66ba373de0ad
-execution_id: a3da2627-8d65-4ade-9c47-a1594cb6db15
+execution_id: 1bfaa7d8-c59c-4c6c-a53d-00acbe3b7e9a
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## 중앙 Codex DS-H 초안 — 2026-11-21T14:38:45+09:00
+
+별도 DIDM 세션의 새 구현 중지는 유지하며, 단일 창구 root가 기존 승인을 수행했다. DS-H gpt/ds-home-indicators-20261121 최신4973111, 부모7ce+main72a, 정확5본문·tree/ref 대조 후 초안 PR137. 합성172/준법47PASS(중복),20정책·실제809소스 정합성PASS/publicationBLOCKED. 독립 최종 검토 PASS를 받았고 전체 Runtime/Compliance CI 및 OA09 실제 진단 조건 대조는 남았다. 원문 조건 차이를 임의 면제하지 않으며 실제 공급사/API/소유자 진단·DS-H 완료를 주장하지 않는다. DIDMabd10c6와 사전등록/문턱·모형/LLM/cutoff 선택은 보존한다. 다음 DIDM PR은 DS-H 순서가 해결된 뒤 최신 main·최종 검토/CI로 진행한다. [중앙 인계](WEEKLY_HANDOFF_2026-11-21_1bfaa7d8.md).
 
 ## 중앙 Codex 최신 검토·원격 보존 — 2026-11-21T12:33:42+09:00
 
