@@ -15,7 +15,7 @@ single-column arrangement for callers that build it alone.
 
 Data. The tiles show the rows the window already loads for its quotes table
 (`core.research.watchlist.load_home_markets`, read through `rows_source`). The large chart reads the selected
-market's daily closes from the provider its row names (`core.ficc.data.load_series` with that explicit
+market's daily closes through the gateway from the provider its row names (`gateway.ficc().load_series` with that explicit
 source: Yahoo Finance for S&P 500, KOSPI and Bitcoin, FRED for USD/KRW, the US 10-year yield and VIX). The
 watchlist card router cannot serve these: `core.market.models.Instrument` has no index, rate or FX asset.
 History loads off the UI thread, one market at a time, only while automatic loading is on or after the user
@@ -173,13 +173,15 @@ class MarketHistory:
 def load_market_history(info, *, loader=None, days=HISTORY_DAYS, today=None):
     """Daily closes from the provider the card's row names; never synthetic, never another provider.
 
-    `loader` follows core.ficc.data.load_series (id, source=, days=) -> Series. Never raises: a failure
+    The default loader is gateway.ficc().load_series; an injected `loader` follows (id, source=, days=) -> Series.
+    Never raises: a failure
     returns a MarketHistory with only an authored reason code (provider text can hold credential URLs).
     """
     stamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
     try:
         if loader is None:
-            from core.ficc.data import load_series as loader
+            from core import gateway
+            loader = gateway.ficc().load_series
         series = loader(info.symbol, source=info.provider, days=days)
         if str(series.source).upper() != info.provider.upper():
             raise MarketDataUnavailable("invalid_response")  # a fallback answer is not this market's data

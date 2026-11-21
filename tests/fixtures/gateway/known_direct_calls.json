@@ -7,9 +7,6 @@
    "import:data.kis_workspace.MarketDataService",
    "import:data.kis_workspace.MarketDataService"
   ],
-  "quantgen_desktop/home_view.py": [
-   "import:core.ficc.data.load_series"
-  ],
   "quantgen_desktop/market_chart.py": [
    "import:data.kis_stream.KISStream",
    "import:data.kis_stream.subscription_for",
@@ -21,9 +18,6 @@
   "quantgen_desktop/market_rankings.py": [
    "import:data.kis_workspace.MarketDataService",
    "import:data.kis_workspace.OVERSEAS_PRICE_DETAIL"
-  ],
-  "quantgen_desktop/market_summary.py": [
-   "import:core.ficc.data.load_series"
   ],
   "quantgen_desktop/market_tools.py": [
    "call:config.kis_ready"
@@ -94,7 +88,7 @@
  },
  "totals": {
   "core_and_main": 1,
-  "files": 23,
-  "screens": 44
+  "files": 21,
+  "screens": 42
  }
 }
