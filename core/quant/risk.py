@@ -18,7 +18,8 @@ from core.quant.history import History, TRADING_DAYS
 
 try:                                                  # optional, offline-capable
     import pandas as _pd
-    import gs_quant.timeseries as _gts
+    from core import gateway as _gateway
+    _gts = _gateway.provider("gs_quant.timeseries")
     _GS_OK = True
 except Exception:                                     # pragma: no cover
     _pd = None

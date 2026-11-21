@@ -63,10 +63,12 @@ def execute_fx(request, *, spot_loader=None, rate_loader=None, policy_loader=Non
     import numpy as np
     from core.ficc import fx, insights
     from core.ficc.common import parse_tenor
-    from core.ficc.data import load_fx_spot, load_short_rate, load_policy_rates, G10_KRW
-    spot_loader = spot_loader or load_fx_spot
-    rate_loader = rate_loader or load_short_rate
-    policy_loader = policy_loader or load_policy_rates
+    from core import gateway
+    ficc = gateway.ficc()
+    G10_KRW = ficc.G10_KRW
+    spot_loader = spot_loader or ficc.load_fx_spot
+    rate_loader = rate_loader or ficc.load_short_rate
+    policy_loader = policy_loader or ficc.load_policy_rates
     rate_source = "synthetic" if request.source == "synthetic" else "auto"
     if request.tool == "carry":
         pairs = ["USD"+c if c in ("JPY", "KRW", "CAD", "CHF") else c+"USD" for c in G10_KRW if c != "USD"]

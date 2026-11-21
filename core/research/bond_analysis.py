@@ -52,8 +52,8 @@ def execute_bond(request, *, curve_loader=None):
     from core.ficc.curves import curve_from_snapshot
     from core.ficc.insights import narrate_bond
     if curve_loader is None:
-        from core.ficc.data import load_treasury_curve
-        curve_loader=load_treasury_curve
+        from core import gateway
+        curve_loader=gateway.ficc().load_treasury_curve
     bond=Bond(coupon=request.coupon,maturity=request.maturity,freq=request.frequency,notional=request.notional)
     panel=curve_loader(source=request.source)
     curve=curve_from_snapshot(panel.latest())

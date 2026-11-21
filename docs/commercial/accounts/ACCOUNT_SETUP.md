@@ -1,6 +1,6 @@
 # QUANTGEN 회원 계정 설정 묶음
 
-- 판: v0.2 (2026-11-18, 소유자 답 Q1~Q3 반영). v0.1 2026-11-17. 작성: PAYMENTS_ACCOUNT_KEYS 세션. ID `PAY-A2`.
+- 판: v0.3.3 (2026-11-20, 소유자 결정 OA-44 "2로 권장합니다": P8 두 번째 확인을 할 수 없으면 동의 뒤 계정 삭제·같은 이메일 재가입 (`ADMIN_GUIDE.md` 6.2), 3부 ACC-4 거절 안내 문구와 ACC-9 재가입 시험). v0.3.2 (2026-11-20, 계정 문서 고침 KEY-4/a: P8 두 번째 확인 방법 (메일함에서 읽을 수 없는 것; 로그인 IP 대조는 회원 식별 확인 뒤), 3부 ACC-4 거절 종류를 오류 이름으로·ACC-9 새 두 경로 시험, L1 실제 버킷, 4.2 보안 기록 칸의 회원 식별 미검증 (소유자 시험 T14)). v0.3.1 (2026-11-20, PR #133 3차 검토 A4·A5·B3: 3부 ACC-3 새 비밀번호 단계·ACC-4 거절 안내, P8 두 번째 확인 (소유자 결정 2026-11-20), 2부 1·15단계, 0.1 5번 두 계정, 4.6). v0.3 (2026-11-19, 소유자 결정: P10 비밀번호 특수문자 요구, 12번 HTML 인증 메일; 3부 ACC-1 비밀번호 규칙 문구도 바뀌어 D11 4장 원문과 그 한 곳이 다름 — 4.6 참고). v0.2 (2026-11-18, 소유자 답 Q1~Q3 반영). v0.1 2026-11-17. 작성: PAYMENTS_ACCOUNT_KEYS 세션. ID `PAY-A2`.
 - 바탕: handoff `plans/2026-11-17/D11_ACCOUNTS_AND_ADMIN_GUIDE.md` 2·3·4장. 관리 방법은 `docs/commercial/accounts/ADMIN_GUIDE.md`.
 - 네 부분: **1부** 운영 풀 설정표 · **2부** 소유자 AWS 순서 (25단계) · **3부** 웹사이트 세션 요청 (복사용) · **4부** 메인 정책 문서 PR에 넣을 값.
 - 소유자 결정 3개(0절)는 2026-11-18에 답을 받아 채웠습니다. 운영자 이름은 0.1절 한 곳에서만 정합니다.
@@ -46,7 +46,7 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 | 2 | 메인 세션 | 정책 문서 PR: `release-profile.json` `operator.legal_name`, `01`·`02`·`16`의 운영자·책임자·계약 주체, 사업자등록번호·통신판매업 신고번호 (받은 뒤) | PR 1개 |
 | 3 | 웹사이트 세션 | 정책 원문 다시 생성 (직접 문구를 만들지 않음) | 메인 PR 병합 뒤 |
 | 4 | 소유자 | **회원이 이미 있으면**: 회원 정보를 법인으로 넘기기 **전에** 회원에게 알림 (관리자 안내서 부록 B). 알림 없이 이름만 바꾸면 안 됨 | 알림 뒤 (홈페이지 게시라면 30일 이상) |
-| 5 | 소유자 | AWS 계정 명의·결제 주체를 법인으로 (별도 절차). 사용자 풀은 그대로 | AWS 안내대로 |
+| 5 | 소유자 | AWS 계정 **두 개 모두** (프로젝트 계정 Golden Hour Code, 관리 계정) 명의·결제 주체를 법인으로 (별도 절차, handoff `INCORPORATION_CHECKLIST.md` B1·B2). 사용자 풀은 그대로 | AWS 안내대로 |
 
 - 1~3은 문서 값만 바꾸면 되어 바로 할 수 있습니다. 앱이나 AWS 구조는 바꾸지 않습니다.
 - 4는 법 절차라 "바로"가 안 될 수 있습니다. 공개 전(회원 0명)에 법인이 생기면 4는 필요 없습니다. 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 제27조, 시행령 제29조 · https://itwiki.kr/w/개인정보_보호법_제27조 · 2026-11-17 메인 D11 확인〕
@@ -69,11 +69,11 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 | P5 | 필수 속성 | **email 하나만** | **아니요** | 확인 |
 | P6 | 스스로 가입 | 켬 (**Enable self-registration**) | 예 | 확인 (토글 경로 확인) |
 | P7 | 가입 확인 | Cognito가 이메일 코드로 확인 (자동 확인 켬) | 예 | 부분 확인 (문구 미검증) |
-| P8 | 계정 복구 | 이메일만 (SMS 안 씀) | 예 | 미검증 (메뉴 문구) |
+| P8 | 계정 복구 | Self-service 켬, **Email if available, otherwise SMS** (전화번호를 받지 않으므로 실제로는 이메일). 이메일 MFA를 켜면 Cognito가 "Email only"를 막음 (MFA 코드와 복구 코드는 다른 통로여야 함). 그래서 **이메일 MFA를 켠 회원은 비밀번호 찾기가 막히고, 관리자가 임시 비밀번호를 발급** (`ADMIN_GUIDE.md` 6.1절). 소유자 결정 2026-11-19: 이메일 MFA 유지. **맞교환:** 임시 비밀번호도 그 회원의 메일함으로 가므로 이메일 MFA 회원은 메일함이 유일한 인증 수단이 됨 → 발급 전 **두 번째 확인** (① 메일함에서 읽을 수 없는 정보, 또는 ② 최근 로그인 IP·지역 대조 — ②는 CloudTrail에서 회원이 식별되는 것이 확인될 때까지 사용 불가 (소유자 시험 T14, 2026-11-20); 비밀번호·MFA 코드는 절대 묻지 않음; 방법은 `ADMIN_GUIDE.md` 6.1이 정함), 확인이 틀리면 발급하지 않음, 강제 변경 뒤 인증 앱으로 바꾸기를 권함 (근거: 소유자 결정 2026-11-20 "권장으로 가겠습니다"). 두 번째 확인을 **할 수 없으면** (지금 대부분) 회원 동의를 받아 옛 계정을 지우고 같은 이메일로 다시 가입하게 함 — 옛 정보는 사라지고, 메일함만 가진 사람은 빈 새 계정만 얻음 (`ADMIN_GUIDE.md` 6.2; 근거: 소유자 결정 2026-11-20 "2로 권장합니다" (OWNER_RULINGS_LOG 기록 예정)) | 예 | 확인 (AWS 문서: 같은 통로 금지; 콘솔에서 Email only 비활성 확인) |
 | P9 | 메일 발송 | **Amazon SES 사용**. FROM `no-reply@quantgeneration.com`, FROM 이름 `QUANTGEN`, Reply-to `contact@quantgeneration.com` (실제 받는 메일함). 기본 Cognito 메일은 하루 한도가 낮아 운영에 맞지 않음 | 예 | 확인 (한도 숫자 50통은 미검증) |
-| P10 | 비밀번호 정책 | 최소 **10자**, 숫자·소문자·대문자, 임시 비밀번호 7일 | 예 | 제안 (최소 6자 허용·임시 7일 기본은 확인) |
+| P10 | 비밀번호 정책 | 최소 **10자**, 숫자·소문자·대문자·**특수문자** (소유자 결정 2026-11-19), 임시 비밀번호 7일. 웹 가입 화면은 "특수문자 1개 이상"을 입력 중에 보여 줌 (ACC-1). 특수문자로 인정되는 기호는 Cognito가 정함: `` ^ $ * . [ ] { } ( ) ? " ! @ # % & / \ , > < ' : ; \| _ ~ ` = + - `` (AWS 문서 확인 2026-11-19) | 예 | 제안 (최소 6자 허용·임시 7일 기본은 확인) |
 | P11 | 비밀번호 재사용 금지 | 최근 5개 | 예 | 미검증 (Essentials에서 되는지) |
-| P12 | MFA | **Optional MFA**, 방법 **Authenticator apps** + **Email message**. SMS 끔 | 예 | 확인 (이메일 MFA는 Essentials + 자체 SES) |
+| P12 | MFA | **Optional MFA**, 방법 **Authenticator apps** + **Email message** (소유자 결정 2026-11-19: 이메일 MFA 유지, P8의 결과 감수). SMS 끔 (전화번호를 받지 않음; 유료 단계에서 본인인증으로 번호를 받게 되면 재검토, PAY-2) | 예 | 확인 (이메일 MFA는 Essentials + 자체 SES) |
 | P13 | 이메일 변경 대기 | 새 주소 인증 전까지 기존 주소 유지 ("Keep original attribute value active when an update is pending") | 예 | 미검증 (문구) |
 | P14 | 사용자 정의 속성 | 아래 1.2표 6개, 모두 String, 최대 64자 | 추가만 가능. 필수로 만들 수 없음. 삭제·이름 변경 불가 | 추가 가능·필수 불가 확인, 삭제 불가 미검증 |
 | P15 | 삭제 보호 | 켬 (콘솔로 만든 풀은 기본 켜짐) | 예 | 확인 (기본값), 위치 부분 확인 |
@@ -122,7 +122,7 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 
 | # | 항목 | 값 | 나중에 바꿀 수 있나 | 확인 상태 |
 |---|---|---|---|---|
-| L1 | CloudTrail 추적 | 이름 `qg-audit`, 관리 이벤트 Read+Write, 새 S3 버킷 `qg-audit-<임의값>` | 예 | 확인 (Event history 90일이라 추적 필요) |
+| L1 | CloudTrail 추적 | 이름 `qg-audit`, 관리 이벤트 Read+Write, 새 S3 버킷 (2026-11-20 Quick trail create가 만든 `aws-cloudtrail-logs-<계정 번호>-0bcc59a3`, 400일 만료) | 예 | 확인 (Event history 90일이라 추적 필요) |
 | L2 | 보관 | S3 수명 주기: 현재 버전 400일 뒤 만료 (접속기록 1년 이상) 〔법률 자문이 아닙니다. 근거: 개인정보의 안전성 확보조치 기준 제8조 · https://itwiki.kr/w/개인정보의_안전성_확보조치_기준_제8조 · 2026-11-17 메인 D11 확인〕 | 예 | 제안 (400일) |
 | L3 | 암호화 | SSE-S3 (KMS 새 키는 월 약 $1) | 예 | KMS 요금 미검증 |
 | L4 | CloudWatch 경보 1 | `AWS/Cognito` `SignUpSuccesses` Sum 1시간 > 50 → 메일 | 예 | 지표 이름 확인, 기준값 제안 |
@@ -142,7 +142,7 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 **시작 전**: Reply-to로 쓸 메일함 `contact@quantgeneration.com`이 실제로 받는지 확인 (다른 주소에서 한 통 보내 보기).
 
 **A. 사용자 풀**
-1. AWS 콘솔 로그인 (MFA) → 오른쪽 위 리전을 **Asia Pacific (Sydney) ap-southeast-2** 로.
+1. AWS 콘솔 로그인 (MFA) → 오른쪽 위 계정이 **Golden Hour Code** (프로젝트 계정)인지 확인 (관리 계정 아님) → 리전을 **Asia Pacific (Sydney) ap-southeast-2** 로.
 2. 검색창 `Cognito` → **User pools** → **Create user pool** *(미검증)*.
 3. "Define your application" 화면 *(미검증)*: 종류 **Single-page application (SPA)**, 이름 `quantgen-web`.
 4. 로그인 아이디 *(Options for sign-in identifiers, 미검증)*: **Email** 만 체크.
@@ -155,12 +155,12 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 **B. 메일 (SES)**
 10. 풀 → **Authentication methods** → Email 구역 → **Edit** *(Authentication methods 메뉴는 확인, Email 구역 위치·Edit 미검증)*.
 11. **Send email with Amazon SES** *(미검증)* → SES 리전 시드니 → FROM `no-reply@quantgeneration.com` → FROM 이름 `QUANTGEN` → Reply-to `contact@quantgeneration.com` → **Save changes**.
-12. **Message templates** (**확인**) → **Verification message** → 제목 "[QUANTGEN] 이메일 인증 코드 / Email verification code", 본문 한국어·영어 + `{####}`. 광고 문구 없음.
+12. 왼쪽 메뉴 **Message templates** (**확인**) → **Verification message** → 제목 "[QUANTGEN] Email verification code / 이메일 인증 코드", 본문은 `OWNER_STEPS.md` 12번의 HTML (로고 배너, `{####}` 코드 상자, 영어·한국어; 소유자 결정 2026-11-19). 광고 문구 없음.
 
 **C. 로그인 보안**
-13. **Authentication methods** → **Password policy** → **Edit** *(미검증)* → Custom, 최소 10자, 숫자·소문자·대문자, 임시 7일, 재사용 금지 5.
+13. **Authentication methods** → **Password policy** → **Edit** *(미검증)* → Custom, 최소 10자, 숫자·소문자·대문자·특수문자, 임시 7일, 재사용 금지 5.
 14. **Sign-in** → **Multi-factor authentication** → **Edit** → **MFA enforcement** = **Optional MFA** → **Authenticator apps** + **Email message** → 저장 (**확인**).
-15. **Sign-in** → **User account recovery** *(미검증)* → 이메일만.
+15. **Sign-in** → **User account recovery** *(미검증)* → Self-service 켬, **Email if available, otherwise SMS** (14번에서 이메일 MFA를 켜면 "Email only"는 Cognito가 막음; P8, `OWNER_STEPS.md` 15번과 같음).
 
 **D. 앱 클라이언트**
 16. **App clients** (**확인**) → `quantgen-web` → **Edit** *(미검증)* → 1.3표 C2~C7.
@@ -186,26 +186,26 @@ D11 0장 순서 그대로입니다. 앞 단계가 끝나야 다음으로 갑니�
 
 - 이 세션은 웹사이트 저장소(`xkg4real/website`)를 고치지 않습니다. 아래 블록을 소유자가 웹사이트 세션에 붙여 넣습니다.
 - 이 요청이 마스터 설계의 WEB-3 (출시 알림)·WEB-4 (로그인 UI)를 대신합니다. 공개 전까지 플래그 `AUTH_UI_ENABLED=false`.
-- 블록은 D11 4장과 글자까지 같습니다 (이 세션의 대조 스크립트로 확인, 4.6절).
+- 블록은 D11 4장과 글자까지 같고, 다른 곳은 소유자 결정으로 바뀐 ACC-1 비밀번호 규칙 한 곳과 ACC-3·ACC-4의 이메일 MFA 회원 처리 (2026-11-20, 3차 검토 A4·A5), ACC-4 거절 종류·ACC-9 시험 (2026-11-20, KEY-4/a)입니다 (4.6절).
 - 블록 안의 "만 14세"는 Q3 답(예)과 같습니다. 개인정보 문의 메일은 `contact@quantgeneration.com` (ACC-8).
 
 <!-- website-block:start -->
 ```text
 D11 변경: 소유자가 "정식 계정 생성까지 진행"을 지시했습니다. 출시 알림 폼(WEB-3) 대신 정식 회원 계정을 엽니다. 운영 사용자 풀은 시드니 `quantgen-prod` (소유자가 만들고 풀 ID·클라이언트 ID를 전달). 공개 전까지 플래그 `AUTH_UI_ENABLED=false`.
 
-**ACC-1 가입 화면.** 이메일, 비밀번호, 비밀번호 확인. 체크: [필수] 이용약관, [필수] 만 14세 이상, [선택·기본 해제] 소식 이메일(광고). 체크 없는 개인정보 안내 문장(시드니 보관 포함) + 처리방침 링크. 한/영 문구는 D11 문서 2.3절. `SignUp` 호출 때 사용자 정의 속성 `custom:terms_ver`, `custom:privacy_ver`, `custom:age14=Y`, `custom:consent_at`(ISO 시각), `custom:mkt_opt`(Y/N), `custom:mkt_at` 기록. 비밀번호 규칙(10자, 숫자·소문자·대문자)을 입력 중에 보여 줌.
+**ACC-1 가입 화면.** 이메일, 비밀번호, 비밀번호 확인. 체크: [필수] 이용약관, [필수] 만 14세 이상, [선택·기본 해제] 소식 이메일(광고). 체크 없는 개인정보 안내 문장(시드니 보관 포함) + 처리방침 링크. 한/영 문구는 D11 문서 2.3절. `SignUp` 호출 때 사용자 정의 속성 `custom:terms_ver`, `custom:privacy_ver`, `custom:age14=Y`, `custom:consent_at`(ISO 시각), `custom:mkt_opt`(Y/N), `custom:mkt_at` 기록. 비밀번호 규칙(10자, 숫자·소문자·대문자·특수문자)을 입력 중에 보여 줌.
 완료 조건: 필수 체크 없이 가입 불가, 선택 체크 기본 해제, 한/영·밝음/어두움·320px.
 
 **ACC-2 이메일 인증 화면.** 6자리 코드 입력, **"코드 다시 받기"** (`ResendConfirmationCode`) 버튼. 관리자 콘솔에는 자가 가입 회원에게 코드를 다시 보내는 버튼이 없다고 봅니다 (미검증) → 화면에 꼭 필요.
 완료 조건: 잘못된 코드·만료 코드 안내, 다시 받기 횟수 제한 안내.
 
-**ACC-3 로그인.** SRP 로그인(`USER_SRP_AUTH`), MFA 코드 단계(인증 앱·이메일), "로그인 유지" 없음(새로고침 토큰 7일). 오류 문구는 계정 존재 여부를 드러내지 않음 ("이메일 또는 비밀번호가 맞지 않습니다").
-**ACC-4 비밀번호 찾기·새 비밀번호.** `ForgotPassword` → `ConfirmForgotPassword`. 관리자가 재설정을 건 회원(RESET_REQUIRED)도 이 화면으로 옴.
+**ACC-3 로그인.** SRP 로그인(`USER_SRP_AUTH`), MFA 코드 단계(인증 앱·이메일), "로그인 유지" 없음(새로고침 토큰 7일). 오류 문구는 계정 존재 여부를 드러내지 않음 ("이메일 또는 비밀번호가 맞지 않습니다"). **새 비밀번호 단계:** 관리자가 임시 비밀번호를 준 회원(FORCE_CHANGE_PASSWORD)은 로그인 응답이 `NEW_PASSWORD_REQUIRED` → 새 비밀번호 화면(ACC-1과 같은 규칙: 10자, 숫자·소문자·대문자·특수문자, 입력 중 표시) → `RespondToAuthChallenge`. 임시 비밀번호는 7일 뒤 만료. 이 화면에 "이메일 MFA 대신 인증 앱(OTP)으로 바꾸기를 권합니다" 한 줄과 계정 페이지(ACC-5) 링크.
+**ACC-4 비밀번호 찾기·새 비밀번호.** `ForgotPassword` → `ConfirmForgotPassword`. 관리자가 재설정을 건 회원(RESET_REQUIRED)도 이 화면으로 옴. **이메일 MFA를 켠 회원은 Cognito가 비밀번호 찾기를 거절함**(복구와 MFA가 같은 메일 통로): 그 거절이면 "이 계정은 스스로 비밀번호를 찾을 수 없습니다. 가입한 이메일로 contact@quantgeneration.com에 문의하시면 본인 확인 뒤 임시 비밀번호를 드리거나, 계정을 삭제한 뒤 같은 이메일로 다시 가입하도록 도와드립니다 (삭제하면 저장된 정보는 사라집니다)"를 보여 줌 (관리자 처리: `ADMIN_GUIDE.md` 6.1·6.2). 거절 종류: `ForgotPassword`의 오류 이름(`__type`)과 메시지로 구별 — 정확한 이름은 소유자 시험 T17에서 확정해 전달 (미검증; 확정 전에는 이 안내를 다른 오류에 붙이지 않음). `UserNotFoundException`·`LimitExceededException`·`CodeDeliveryFailureException` 등 다른 오류는 계정 존재 여부를 드러내지 않는 기존 문구 그대로.
 **ACC-5 계정 페이지.** 내 이메일 보기·변경(`UpdateUserAttributes` → 새 주소 코드 확인), 비밀번호 변경, 2단계 인증 켜기·끄기(OTP 앱 QR 등록), 소식 이메일 켜기·끄기(`custom:mkt_opt`·`custom:mkt_at` 갱신), 모든 기기에서 로그아웃(`GlobalSignOut`), **내 정보 내려받기**(`GetUser` 결과를 JSON 파일로), **회원 탈퇴**(`DeleteUser`, 확인 문구 입력 후 즉시 삭제, 결과 화면). 탈퇴는 가입보다 어렵지 않게.
 **ACC-6 머리글·문구.** Log in / Sign up 버튼을 위 화면에 연결(플래그 뒤). 플래그 꺼진 동안은 기존 안내 문장 유지. "(주)넥스트제너레이션" 표기는 메인 세션 정책 PR 병합 뒤 사이트 전체에서 개인 운영자 표기로 바뀜(직접 문구를 만들지 말고 원문 재생성).
 **ACC-7 보안.** Cognito 라이브러리 버전 고정·빌드에 묶기(런타임 CDN 금지), CSP `connect-src`에 `https://cognito-idp.ap-southeast-2.amazonaws.com`만 추가, 토큰은 메모리 또는 sessionStorage(로그 금지), 인증 화면에 분석·추적 스크립트 없음, 비밀번호 입력란 자동완성 `new-password`/`current-password`.
 **ACC-8 하단.** "개인정보 처리방침" 링크를 다른 링크보다 눈에 띄게(굵게). 개인정보 문의 메일 표시(소유자가 받는 메일함 확인 뒤).
-**ACC-9 시험.** 개발 풀로 끝에서 끝까지(가입 → 코드 → 로그인 → MFA → 이메일 변경 → 비밀번호 찾기 → 내려받기 → 탈퇴) 자동 시험 + 소유자 이메일로 운영 풀 수동 시험 1회. 결과를 `WEBSITE_AWS_SESSION_CURRENT.md`에 기록.
+**ACC-9 시험.** 개발 풀로 끝에서 끝까지(가입 → 코드 → 로그인 → MFA → 이메일 변경 → 비밀번호 찾기 → 내려받기 → 탈퇴) 자동 시험 + 소유자 이메일로 운영 풀 수동 시험 1회. 새 두 경로도 시험: ① 관리자가 임시 비밀번호를 준 회원(FORCE_CHANGE_PASSWORD) 로그인 → `NEW_PASSWORD_REQUIRED` → 새 비밀번호 화면(규칙 표시, 인증 앱 권장 줄) → 로그인됨, 7일 지난 임시 비밀번호는 거절 (ACC-3); ② 이메일 MFA 회원의 비밀번호 찾기 → 거절 → contact@ 문의 안내 (임시 비밀번호 또는 삭제 뒤 같은 이메일 재가입 문구), 다른 오류는 기존 문구 (ACC-4); ③ 관리자가 지운 계정의 이메일로 다시 가입 → 새 계정으로 가입·코드 확인·로그인 됨 (`ADMIN_GUIDE.md` 6.2). 결과를 `WEBSITE_AWS_SESSION_CURRENT.md`에 기록.
 **ACC-10 소유자에게 줄 것.** 앱 클라이언트 설정 확인표(3.3절과 대조), 플래그 켜기 전 체크리스트. 웹 안 관리자 화면은 만들지 않음(관리는 AWS 콘솔).
 ```
 <!-- website-block:end -->
@@ -243,7 +243,7 @@ D11 변경: 소유자가 "정식 계정 생성까지 진행"을 지시했습니�
 | `{{privacy.service_basis}}` | 계약 체결·이행에 필요 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 제15조 제1항 제4호 (원문 미확인) · 해설 URL 미확보 · 2026-11-17 메인 D11 2.2절〕 |
 | `{{privacy.service_retention}}` | 회원 탈퇴(계정 삭제) 즉시 삭제. 이메일 인증을 마치지 않은 계정은 7일 뒤 삭제 |
 | 광고 메일 (새 행 또는 `{{privacy.marketing_basis}}`, 06번 문서) | 선택. 항목: 이메일, 수신 동의 여부·시각. 근거: 동의. 보유: 동의 철회 또는 탈퇴 시까지 |
-| `{{privacy.security_log_route}}` | 관리자 작업 기록과 계정 관련 요청 기록 (요청 시각, 접속 IP, 요청 종류, 계정 고유번호). AWS CloudTrail → 시드니 S3 |
+| `{{privacy.security_log_route}}` | 관리자 작업 기록과 계정 관련 요청 기록 (요청 시각, 접속 IP, 요청 종류, 계정 고유번호). AWS CloudTrail → 시드니 S3. *주의 (소유자 시험 T14, 2026-11-20): 회원 쪽 요청 (가입·로그인·비밀번호 찾기)은 시각·접속 IP·요청 종류가 기록되지만 Event history CSV에는 계정 고유번호가 비어 있었음 → 이벤트 원문에 남는지 확인 전까지 "계정 고유번호"는 관리자 작업 기록에만 확실 (미검증)* |
 | `{{privacy.security_log_basis}}` | 안전성 확보 의무 〔법률 자문이 아닙니다. 근거: 개인정보의 안전성 확보조치 기준 제8조 · https://itwiki.kr/w/개인정보의_안전성_확보조치_기준_제8조 · 2026-11-17 메인 D11 확인〕 |
 | `{{privacy.security_log_retention}}` | 1년 (400일 뒤 자동 삭제) |
 | 처리위탁 (`{{privacy.recipient_*}}` 또는 위탁 표) | 수탁자: Amazon Web Services (계약 법인명은 청구서 판매자 표기로 확인, **미검증**). 업무: 회원 계정 보관·인증 (Cognito), 인증 메일 발송 (SES), 웹 호스팅 (Amplify), 보안 기록 보관 (CloudTrail·S3) |
@@ -301,5 +301,7 @@ D11 변경: 소유자가 "정식 계정 생성까지 진행"을 지시했습니�
 1. 1.2표의 속성 이름 6개가 3부 블록의 ACC-1에 모두 있고, ACC-5에는 `custom:mkt_opt`·`custom:mkt_at`이 있음.
 2. 3부 블록이 D11 4장 "복사 시작"~"복사 끝" 사이와 바이트 단위로 같음.
 3. 결과: 아래 줄에 기록.
+
+2026-11-19 소유자 결정 (특수문자 요구)으로 3부 ACC-1의 "비밀번호 규칙(10자, 숫자·소문자·대문자·특수문자)" 한 곳이 D11 4장 원문과 달라졌습니다. 2026-11-20 (PR #133 3차 검토 A4·A5, 소유자 결정 "권장으로 가겠습니다")에 ACC-3의 새 비밀번호 단계와 ACC-4의 이메일 MFA 회원 거절 안내가 더해졌고, 같은 날 계정 문서 고침 (KEY-4/a)에서 ACC-4의 거절 종류와 ACC-9의 새 두 경로 시험이 더해졌습니다. 그래서 2번 바이트 대조는 이 날부터 이 네 곳 (ACC-1, ACC-3, ACC-4, ACC-9)을 뺀 대조입니다. 웹사이트 세션에는 이 문서의 3부 블록을 넘깁니다.
 
 결과 (2026-11-17): 속성 표 6개 ['custom:age14', 'custom:consent_at', 'custom:mkt_at', 'custom:mkt_opt', 'custom:privacy_ver', 'custom:terms_ver']; ACC-1 ['custom:age14', 'custom:consent_at', 'custom:mkt_at', 'custom:mkt_opt', 'custom:privacy_ver', 'custom:terms_ver'] 일치=True; ACC-5 ['custom:mkt_at', 'custom:mkt_opt'] 표 안에 포함=True; 3부 블록 = D11 4장 원문 3667바이트 일치=True
