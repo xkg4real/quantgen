@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a
 next_ids: OS-F2, KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T13:24:33.000+09:00
+updated_at: 2026-11-21T13:29:16.000+09:00
 stale_after_hours: 3
 waiting_on: ci
 work_branch: gpt/os-f2-data-dir-20261121
@@ -20,6 +20,13 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 1bfaa7d8-c59c-4c6c-a53d-00acbe3b7e9a
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 ---
+
+## UI64회귀 완료·KEY5 K1a 작은 단위 준비 — 2026-11-21T13:29:16.000+09:00
+
+- execution 1bfaa7d8-c59c-4c6c-a53d-00acbe3b7e9a 소유권 유지. UI822aff9 제품동결상태의 기존7모듈64case가전부PASS(실패/오류/skip0): Home/Shell26·Library/System11·Compact/A3/Type27,3프로세스exit0. 기존14/M0와8개중복이므로새distinct56이며합산과장하지않는다. source/runnerhash·case별시간·정확ID를private UI_EXPANDED_EVIDENCE_1bfaa7d8.json에저장했다. 실제Windows/전체UI/최종준법은아니다.
+- 승인된KEY5의ID3/12만다음작은단위 K1a로준비한다: home_view.load_market_history와 market_summary.production_series의기본공급원2곳을기존gw.ficc().load_series로옮기고주입loader/명시source/days/날짜값/오류계약은보존한다. 별도gpt/ui-key5-native-k1a-20261121 로컬후보는UI822aff9기반, 수정전두함수AST가mainf065와정확동일임을확인했다. QA의before-main고정fixture작성→다른UI담당독립검토→root구현go→DATA담당2곳수정→독립재생순으로진행한다. 기존UI/DSH후보는동결·보존, core/data/app.py/경계상한/기준선/소유자정책변경없음. 실제KEY5PR은선행G1–G3병합·순서조건유지.
+- 웹영향은지원채팅발송도구부재로private UI_WEBSITE_SYNC_QUEUE_1bfaa7d8.json에queued(실제UI PR번호확정후PR-번호기록). 발송/웹반영/배포로세지않는다. OS136전체CI계속진행중·main병합없음, 다음OS→DSH→DIDM→KEY5a순서유지.
+
 
 ## UI후보 원격 보존·완료기록 정정 — 2026-11-21T13:24:33.000+09:00
 
