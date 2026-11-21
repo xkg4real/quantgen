@@ -6,9 +6,9 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2
 next_ids: KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T14:36:47+09:00
+updated_at: 2026-11-21T14:38:32+09:00
 stale_after_hours: 3
-waiting_on: ci
+waiting_on: none
 work_branch: gpt/ds-home-indicators-20261121
 work_commit: 4973111e00ede39d81afc6f3bee894f06fb575fd
 uncommitted_changes: no
@@ -20,6 +20,10 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 1bfaa7d8-c59c-4c6c-a53d-00acbe3b7e9a
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 ---
+
+## 승인 KEY5 ID13 작은 단위 K1b 준비 — 2026-11-21T14:38:32+09:00
+
+DS-H137 전체 Runtime CI 대기 중 승인된 KEY5 UI 요청의 ID13 한 곳을 병렬로 준비한다. quantgen_desktop/market_tools.py DerivativesPane.automatic_board의 config.kis_ready를 이미 구현된 gateway.keys_ready("kis_quote")로 연결하며 fixed_local 키 정책·kis/synthetic 선택·숨김/명시 선택·request 필드/모형은 보존한다. 원문 plans/2026-11-20/KEY5_UI_REQUEST.md의 기존 범위이고 G1–G3/full KEY5 PR/실제 PC·OSgo 조건을 지우지 않는다. 기존 UI822/K1ad2 소스·fixture는 동결 보존하며 별도 /workspace/work/quantgen-k1b-central-20261121에 허용 공개파일만 준비한다. 구현 전 실제 PyQt before fixture를 별도 QA가 고정하고 다른 담당이 검토한 후, 독립된 구현·after replay·기존 CI/경계 검사를 수행한다. primary는 DS-H4973111과PR137을 유지한다. 새 병합/완료ID·실제 공급사/주문/연구 실행·자동감시는 없다.
 
 ## DS-H 코드 검증·초안 PR137 — 2026-11-21T14:36:47+09:00
 
