@@ -183,7 +183,7 @@ class FletA1HeadersTests(unittest.TestCase):
 
     def test_bond_scenarios_use_display_headers_without_payload_mutation(self):
         panel = synthetic_curve_panel(days=30, seed=42)
-        self.stack.enter_context(patch.object(bonds_page, "load_treasury_curve", return_value=panel))
+        self.stack.enter_context(patch('core.ficc.data.load_treasury_curve', return_value=panel))
         self.inert_charts(bonds_page, "scenario_chart")
         payloads = self.capture_analysis(bonds_page)
         root = bonds_page.build_bonds_page(page())

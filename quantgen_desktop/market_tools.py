@@ -191,6 +191,13 @@ class DerivativesPane(ToolPane):
             ('Mean P&L · bp', fmt(sim.mean_pnl_bp)), ('SE · bp', fmt(sim.se_bp)), ('CVaR95 · bp', fmt(sim.cvar95_bp)),
             ('Hedge volatility', fmt(sim.sigma_hedge, 'pct')), ('Break-even realised vol', fmt(sim.breakeven_vol, 'pct')),
             ('Identity slope / R²', f'{sim.identity_slope:.4f} / {sim.identity_r2:.4f}')], localized_columns=[0, 1])
+        from .metric_help import risk_pair
+        from .page_kit import Text, set_cell_help
+        hedge_label, hedge_hover = risk_pair('cvar', 'hedge_signed_bp', confidence=.95, horizon_days=sim.horizon, unit='bp')
+        set_cell_help(self.tables['Hedge simulation'], 4, (0, 1), hedge_hover)
+        hedge_reading = Text(hedge_label, 'hint', wrap=True)
+        hedge_reading.set_language(getattr(self.window(), 'ui_language', 'ko'))
+        self._place_result_widget(hedge_reading)
         engine = self.tables['Hedge simulation'].item(0, 1)
         if engine is not None and sim.engine in ENGINE_LABELS:  # 'gbm' -> 'GBM' on screen only
             from .localization import CAPTION_ROLE

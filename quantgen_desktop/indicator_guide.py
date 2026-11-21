@@ -503,6 +503,14 @@ class IndicatorGuide(QWidget):
         from .page_kit import Card, EmptyState, KeyFigures, Text
         from .stock_detail_style import label as sd_label
         self.docked=True;self.workspace=ws
+        # A preselected undocked explorer has compact chips without docked
+        # colour bars/value labels. Rebuild only those UI widgets; keep every
+        # selection and the original data/date/report inputs intact.
+        for chip in tuple(self.chips.values()):
+            for part in (chip,getattr(chip,'values',None)):
+                if part is not None:
+                    self.chip_row.removeWidget(part);part.hide();part.deleteLater()
+        self.chips.clear()
         self.educational_lessons=True  # This entry point is the dedicated technical-guide page.
         own=self.layout()
         while own.count():

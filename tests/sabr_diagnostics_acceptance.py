@@ -99,8 +99,8 @@ class SABRDiagnosticTests(unittest.TestCase):
     def test_flet_visible_warning_residuals_and_real_ai_payload(self):
         seen={};page=Mock();page.run_thread.side_effect=lambda work:work()
         def ai(page,**kw):seen.update(payload=kw['payload_fn'](),narrative=kw['narrative']);return ft.Text('AI fixture')
-        with patch.object(fx_page,'load_fx_spot',return_value=spot()), \
-             patch.object(fx_page,'load_short_rate',side_effect=AssertionError('no provider')), \
+        with patch('core.ficc.data.load_fx_spot',return_value=spot()), \
+             patch('core.ficc.data.load_short_rate',side_effect=AssertionError('no provider')), \
              patch.object(fx_page,'analysis_panel',side_effect=ai):
             root=fx_page.build_fx_page(page)
             fields={c.label:c for c in controls(root) if isinstance(c,(ft.TextField,ft.Dropdown))}

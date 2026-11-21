@@ -14,6 +14,27 @@ def _language(widget):
     return "ko" if str(getattr(widget.window(), "ui_language", "ko") or "ko").startswith("ko") else "en"
 
 
+RUN_RISK_ROLE = Qt.ItemDataRole.UserRole + 9182
+
+
+def set_run_help(table, runs, outputs=None):
+    """Associate view metadata with rows without changing the saved run or its cells."""
+    from .metric_help import mc_metadata, risk_pair
+    from .page_kit import set_cell_help
+    outputs = outputs or {}
+    for row, record in enumerate(runs):
+        current = outputs.get(record.get('run_id'))
+        metadata = mc_metadata(record, getattr(current, 'result', None))
+        item = table.item(row, 0)
+        if item is not None:
+            item.setData(RUN_RISK_ROLE, metadata)
+        var_hover = risk_pair('var', 'mc_terminal_loss', **metadata)[1]
+        cvar_hover = risk_pair('cvar', 'mc_terminal_loss', **metadata)[1]
+        set_cell_help(table, row, (0,), tuple(a + "\n\n" + b for a, b in zip(var_hover, cvar_hover)))
+        set_cell_help(table, row, (3,), var_hover)
+        set_cell_help(table, row, (4,), cvar_hover)
+
+
 class RunRowsDelegate(QStyledItemDelegate):
     """One completed Monte Carlo run per row, as the draft's list: the symbol, then the model and the data source,
     then the loss probability and CVaR on the left; the 95% VaR with its caption on the right. It paints the row's six
@@ -38,7 +59,9 @@ class RunRowsDelegate(QStyledItemDelegate):
         figure = number_font(QFont(option.font)); figure.setPixelSize(13); figure.setWeight(QFont.Weight.Medium)
         name_m, small_m, figure_m = QFontMetricsF(name), QFontMetricsF(small), QFontMetricsF(figure)
         var = cell(3).replace("-", "−")
-        caption = "95% VaR"
+        from .metric_help import risk_help
+        metadata = index.data(RUN_RISK_ROLE) or {}
+        caption = risk_help('var', 'mc_terminal_loss', 'ko' if ko else 'en', **metadata).label
         right = max(figure_m.horizontalAdvance(var), small_m.horizontalAdvance(caption)) + 2
         left = QRectF(rect.left(), rect.top(), max(1., rect.width() - right - 12), rect.height())
         line1 = name_m.height()
@@ -48,7 +71,7 @@ class RunRowsDelegate(QStyledItemDelegate):
                          name_m.elidedText(cell(0), Qt.TextElideMode.ElideRight, left.width()))
         painter.setFont(small); painter.setPen(QColor(colors.muted))
         second = " · ".join(t for t in (cell(1), cell(5)) if t)
-        third = (f"손실 확률 {cell(2)} · CVaR {cell(4)}" if ko else f"Loss probability {cell(2)} · CVaR {cell(4)}")
+        third = (f"손실 확률 {cell(2)} · 큰 손실 평균(CVaR) {cell(4)}" if ko else f"Loss probability {cell(2)} · tail mean(CVaR) {cell(4)}")
         y = left.top() + line1 + 2
         for text in (second, third):
             painter.drawText(QRectF(left.left(), y, left.width(), small_m.height()),

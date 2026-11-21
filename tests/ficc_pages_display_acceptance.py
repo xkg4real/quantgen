@@ -142,7 +142,7 @@ class GroupedNumbers(Offline):
 
     def test_bonds_notional_and_position_dv01_accept_separators(self):
         payloads = self.capture(bonds_page)
-        self.stack.enter_context(patch.object(bonds_page, 'load_treasury_curve',
+        self.stack.enter_context(patch('core.ficc.data.load_treasury_curve',
                                               return_value=synthetic_curve_panel(days=30, seed=42)))
         root = bonds_page.build_bonds_page(page())
         self.assertEqual(field(root, 'Notional').value, '1,000,000')
@@ -237,7 +237,7 @@ class NoExpandInWrap(Offline):
                    'fx_spot_chart')
         panel = synthetic_curve_panel(days=30, seed=42)
         self.stack.enter_context(patch('core.ficc.data.load_treasury_curve', return_value=panel))
-        self.stack.enter_context(patch.object(bonds_page, 'load_treasury_curve', return_value=panel))
+        self.stack.enter_context(patch('core.ficc.data.load_treasury_curve', return_value=panel))
         for name, root, label in (('structuring', structuring_page.build_structuring_page(page()), 'Price'),
                                   ('bonds', bonds_page.build_bonds_page(page()), 'Run'),
                                   ('fx', fx_page.build_fx_page(page()), 'Run')):

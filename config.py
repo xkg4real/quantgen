@@ -23,6 +23,7 @@ import os
 from pathlib import Path
 
 from core import credentials as _credentials
+from core.app_paths import user_data_path
 
 _credentials.load_dotenv_for_development()     # KEY-2 (D7-G): core/credentials decides
 
@@ -168,17 +169,18 @@ def krx_provider_status() -> list[dict]:
 # Trading system storage
 # --------------------------------------------------------------------------- #
 # Rules the operator authored, the simulated order book, and the engine's halt
-# state. Kept under ~/.nextgen, on this machine only.
+# state. Kept in the per-user data folder (core.app_paths.user_data_dir: an existing
+# ~/.nextgen, else the platform folder), on this machine only.
 def trading_dir() -> Path:
     override = _clean("NEXTGEN_TRADING_DIR")
-    return Path(override) if override else (Path.home() / ".nextgen" / "trading")
+    return Path(override) if override else user_data_path("trading")
 
 
 # Macro overlay v2 mutable state (artifacts, governance_events.jsonl, book states, alerts). The
 # shipped section 7 store stays read-only in the repository; nothing mutable lives there.
 def macro_dir() -> Path:
     override = _clean("QUANTGEN_MACRO_DIR")
-    return Path(override) if override else (Path.home() / ".nextgen" / "macro")
+    return Path(override) if override else user_data_path("macro")
 
 
 # How old a quote may be before the engine halts rather than acting on it.
@@ -279,7 +281,7 @@ FICC_CACHE_TTL_SECONDS = float(_clean("NEXTGEN_FICC_CACHE_TTL") or str(6 * 3600)
 
 def ficc_cache_dir() -> Path:
     override = _clean("NEXTGEN_FICC_CACHE")
-    return Path(override) if override else (Path.home() / ".nextgen" / "ficc_cache")
+    return Path(override) if override else user_data_path("ficc_cache")
 
 
 def ficc_provider_status() -> list[dict]:

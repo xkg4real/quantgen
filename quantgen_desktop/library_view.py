@@ -131,7 +131,9 @@ def run_entry(run, *, saved=False):
         source = ("no price data", "가격 자료 없음")
     if status == "COMPLETED" and "var_pct" in metrics:
         # As the Build & Test key figures show it: the recorded value, no rise/fall colour (a VaR is not a price move).
-        figure, tone, figure_sub = signed_pct(metrics["var_pct"]), "", ("95% VaR", "95% VaR")
+        from .metric_help import mc_metadata, risk_pair
+        figure, tone = signed_pct(metrics["var_pct"]), ""
+        figure_sub = risk_pair('var', 'mc_terminal_loss', **mc_metadata(run))[0]
     elif status == "RUNNING":
         figure, tone, figure_sub = "—", "", ("calculating", "계산 중")
     else:
@@ -387,11 +389,13 @@ def preview_content(entry, has_rows):
         if entry.status == "COMPLETED" and metrics:
             def number(key):
                 return minus(f"{float(metrics[key]):,.2f}") if key in metrics else "—"
+            from .metric_help import mc_metadata, risk_pair
+            var_label, var_hover = risk_pair('var', 'mc_terminal_loss', **mc_metadata(record))
             content["figures"] = [(("Start", "시작"), number("spot"), ""), (("Median", "중앙값"), number("p50"), ""),
                                   (("Lower 5%", "하위 5%"), number("p05"), "down"),
                                   (("Upper 5%", "상위 5%"), number("p95"), "up"),
                                   (("P(loss)", "손실 확률"), signed_pct(metrics.get("prob_loss")), ""),
-                                  (("95% VaR", "95% VaR"), signed_pct(metrics.get("var_pct")), "")]
+                                  (var_label, signed_pct(metrics.get("var_pct")), "", var_hover)]
             content["chart"] = True
             content["foot"] = ("Simulation · not a guarantee of the future · not investment advice",
                                "시뮬레이션 · 미래 보장 아님 · 투자 권유 아님")
@@ -950,7 +954,13 @@ class RunList(QWidget):
         parts = [p(row.symbol), p(row.symbol_sub), p(row.model), p(row.model_sub),
                  " ".join(x for x in (row.figure, p(row.figure_sub)) if x and x != "—") or row.figure,
                  p(status) if status else row.status, p(official_pair(row.verdict)), self._time(row)[0]]
-        return " · ".join(part for part in parts if part)
+        summary = " · ".join(part for part in parts if part)
+        if row.kind == 'monte_carlo' and row.status == 'COMPLETED':
+            from .metric_help import mc_metadata, risk_help
+            metadata = mc_metadata(row.record)
+            details = [risk_help(kind, 'mc_terminal_loss', self.language, **metadata).hover for kind in ('var', 'cvar')]
+            return summary + "\n\n" + "\n\n".join(details)
+        return summary
 
     def _describe(self):
         row = self.entry()

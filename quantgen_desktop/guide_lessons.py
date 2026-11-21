@@ -376,6 +376,7 @@ class GuideLesson(QWidget):
         self.setObjectName('guideLesson')
         self.setSizePolicy(QSizePolicy.Policy.Ignored,QSizePolicy.Policy.Preferred)
         box=QVBoxLayout(self);box.setContentsMargins(0,0,0,16);box.setSpacing(10)
+        box.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.title=QLabel();self.title.setWordWrap(True);box.addWidget(self.title)
         self.badge=QLabel();self.badge.setWordWrap(True);box.addWidget(self.badge)
         self.starter=QWidget();starter=QHBoxLayout(self.starter);starter.setContentsMargins(0,0,0,0)

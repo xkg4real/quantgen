@@ -24,7 +24,7 @@ from typing import Callable, Optional
 
 import flet as ft
 
-from core.ficc import data as ficc_data
+from core import gateway
 from core.i18n import LocaleContext
 from core.quant.garch import LR_5PCT, NU_NORMAL
 from core.quant.history import HistoryError, _looks_krx, load_history
@@ -108,13 +108,13 @@ def _risk_free(symbol: str = "") -> tuple[float, ft.Control]:
     SYNTHETIC fallback, is the assumed 3% with an error-toned chip."""
     try:
         if _looks_krx(symbol):
-            s = ficc_data.load_short_rate("KRW", source="auto")
+            s = gateway.ficc().load_short_rate("KRW", source="auto")
             if s.source == "FRED":
                 return s.last, local_chip(
                     f"무위험 금리 {s.last * 100:.2f}% (원화 3개월, FRED {s.last_date}, 월별)",
                     f"rf {s.last * 100:.2f}% (KRW 3m, FRED {s.last_date}, monthly)")
         else:
-            s = ficc_data.load_series("DGS3MO", source="auto", days=30)
+            s = gateway.ficc().load_series("DGS3MO", source="auto", days=30)
             if s.source == "FRED":
                 rf = s.last / 100.0                     # FRED yields are percent
                 return rf, local_chip(f"무위험 금리 {rf * 100:.2f}% (FRED DGS3MO {s.last_date})",
@@ -489,10 +489,11 @@ def build_quant_lab_page(page: ft.Page,
 if __name__ == "__main__":
     # Headless driver: no network. FRED is forced off so the "assumed" chip path runs.
     from types import SimpleNamespace
+    from unittest.mock import patch
 
     def _boom(*a, **k):
         raise RuntimeError("network off in driver")
-    ficc_data.load_series = _boom
+    patch("core.ficc.data.load_series", _boom).start()
 
     def walk(c):
         yield c

@@ -1,0 +1,33 @@
+# Beginner chart and risk UI — 2026-11-21
+
+This working UI branch adds compact explanations to the native desktop application. It is a preview candidate; manual owner PC acceptance, live-provider checks and publication approval remain separate.
+
+## Visible changes
+
+- The technical-indicator guide opens with one teaching chart. Labels point to the actual drawn lines; a small step control reveals positions and readings. The existing historical case, source context and original report remain available in the folded case section. Educational prices are explicitly synthetic and never replace a market chart or report input.
+- All 27 guide indicators have a short reading and a limitation. EMA periods describe weighted spans; bounded oscillators keep their registered bounds; missing line segments stay missing. A band edge, crossing or high oscillator value does not guarantee a reversal or a continuing trend.
+- Detached tooltips inherit the application font and theme, with logical-screen-aware wrapping. Numbers, source, observed/received times and literal Unicode text are retained.
+- Stock detail groups PER/PBR/ROE/PSR definitions in a valuation card. PER/PBR use supplied quote values. ROE/PSR numeric fields remain unavailable until a verified provider contract is connected. Comparison averages require verified membership and matching metric period, unit and accounting basis; no theme members or averages are invented.
+- Investor bars use supplied gross buy and sell quantities. Net-only inputs remain labelled net quantities instead of being converted into a buy/sell percentage. Missing sessions and coverage stay visible.
+- Short-sale volume share, a read-only order-book snapshot and trade execution-strength snapshots have concise reading notes. Short-sale volume is distinguished from outstanding short balances; order-book imbalance and execution strength are not predictive probabilities. Source and receipt/observation times stay distinct.
+- VaR and CVaR explanations are connected to the relevant native views. Period, confidence, unit and loss convention come from actual result metadata. Saved records with missing metadata stay unconfirmed. The hedge view retains signed worst-tail P&L; the rates view retains monetary PV loss. Model calculations, stored result schemas and raw values are not changed by these explanations.
+
+## Data and protection boundaries
+
+The domestic ready-client profile path adds one order-book and one execution-snapshot request, with retry disabled and no new polling or streaming lifecycle. The execution endpoint is added to the existing read-only KIS allowlist. No order endpoint, credential policy, account path or confirmation rule is changed. Existing main OS storage protections must be preserved during integration.
+
+No live KIS/API, real credential, private cache, owner database, real ledger, frozen study, AI spec disclosure, deployment or owner acceptance is performed by these cloud checks. Extra GPT/Gemini spec review remains optional and NOT_PERFORMED.
+
+## Evidence recorded so far
+
+- Educational V3 chart checks: 92 geometry observations, a separate 7 pure checks, one missing-segment check and two synthetic PNGs. These groups overlap and are not summed as a full-app test count.
+- Stock/data V3: 19 targeted synthetic tests passed with no failures/errors/skips after preserving the initial widget-cleanup error and its correction. Provider constructors and real transports were not used.
+- Tooltip: 64 actual offscreen observations at four Qt scales. All 32 observations with the bundled QG font fit. Overall 62/64 fit; two unregistered-font fallback cases clipped at 2x scaling and remain recorded failures. This does not establish Windows or arbitrary fallback-font acceptance.
+- Stock risk copy and valuation definitions: 16 and 8 separate pure contracts passed. These do not replace container, risk adapter or full-app checks.
+- Additional risk explanations: eight public contracts and four separate real-Qt component contracts passed, with a preserved harness-only failure before completion. Two stock-detail glue contracts passed on fixed synthetic profiles, using actual view methods and the real insights panel; this is not the complete StockDetail window.
+- Container/export and focused public regression results are recorded as separate groups in the pull request. They are not inferred from, or added to, the earlier observations. A preselected-undocked-to-docked chip lifecycle error found by the container checks is corrected by rebuilding only chip widgets, preserving selection, focus, series and report/date inputs.
+
+## Owner preview
+
+After the integration and targeted checks are recorded, the coordinator supplies the exact preview branch and Windows launcher command. Preview approval does not merge the UI to main. The existing PC7 condition applies before that merge, and OS go-ahead applies before a real storage binding change. The website queue is a record of proposed updates, not proof that HTML was applied or deployed.
+

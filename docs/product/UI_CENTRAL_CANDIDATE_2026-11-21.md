@@ -1,3 +1,14 @@
+## K2d 승인 FICC 조회 입구 — 검증 코드 WIP (2026-11-21)
+
+- 승인 ID18/21/22/23/24/33: bonds/fx/quant_lab/fcharts 4파일의 기존 조회9식(앱8·CLI1정적)을 기존 gateway.ficc()로 연결했다. 원 수치/단위/default/CONSTANTS/helper/문구/CRLF 및 조회 시점을 보존했고 공개5시험의 mock대상8곳만 이동했다. 원본/작성자·독립 정적 대조와 Python3.10 구문 확인. 실제 CLI selfcheck/모델·연구·원장/공급사 요청은 실행하지 않았다.
+- 고정 before10/합성 서명결합 loader17·분석capture3·predicate4는 별도 범위다. 원 normal after 엄격 비교는 raw supplied kwargs에 label="" 기본값이 명시 전달된3곳 때문에 FAIL이며 원 골든/비교기/실패를 보존했다. 관찰-only 전체JSON진단과 독립2판독, 별도 pure JSON/AST 보조검증은 실제 기본인자/응답/10case UI 의미의 일치를 확인하고 메모리변조7을 거절했다. **보조 판독은 원 strict FAIL을 PASS로 바꾸지 않으며 전체 source 동치·실제 API 검증이 아니다.**
+- 공개 회귀6은 최초4PASS/1FAIL/1ERROR를 보존했다. private finder가 실제로 없는 선택 빌드정보 모듈의 정상 ImportError를 AssertionError로 바꾼 문제가 확인됐다. exact 모듈·경로·후보 부재만 보존하는 도구 보완 후 같은6을 재실행해 수집/실행/기록6·실패/오류/skip0, source413/private pin 불변을 확인했다. 실제 합성 SABR·메모리 AI payload·offscreen chart 범위이며 한글 glyph 경고·PC 시각검수 미실시를 별도로 남겼다. 실제 process0(폰트 탐색시도1 시작 전 거절).
+- off/company/invalid × Bond/FX/QuantKRW/USD의 별도 거절12는 첫 실행 PASS. 실제 gateway진입12·routes/parser 관측, KRW short-rate는 FRED_ONLY 거절 후 기존 .03, USD synthetic marker는 값 .045를 예측값으로 쓰지 않고 기존 assumed .03으로 처리한다. source413/private25 full raw/blob/mode 전후 일치. 원 normal 실패의 postproof 미도달 한계를 이 새 시험으로 소급 대체하지 않았다.
+- ROOT는 실제 소멸6만 known에서 삭제했다(새 blob52fc76fe). 경계13 첫 실행 PASS, new/gone/parse errors0·화면8파일25접점+동결feed1·상한22/44/SCREEN_FILES22 불변. 최종 source413 freeze6b36d651; 실제부모b373 대비 제품4+공개5+known1만, 이 후보 기록은 별도다. 원 before/after/실패/보조판독/공개6/거절12/경계13의 수는 중복 합산하지 않는다.
+- 이 브랜치는 검증 코드 보존용이며 UI PR/main/최종준법·전체UI CI·소유자 PC7/OSgo·전체KEY5/UI 완료가 아니다. 실제 API/권리·법률/라이선스/동결연구/실원장/배포 증거를 추가하지 않았다. 현재 추가 소유자 요청(교육 chart-first·툴팁·가치평가/수급 설명)은 별도 교육 UI 브랜치에서 진행하며 이 WIP와 혼동하지 않는다.
+
+---
+
 ## K2c KRX 화면의 타입 전용 provider 참조 정리 — 2026-11-21
 
 실제 K2b `d66029642efa4bcd7e92b897139b9d947ad01fec`를 부모로 한 승인 ID25 코드 WIP입니다. 원 요청이 허용한 `typing.Any`를 사용해 `ui/krx_page.py`의 typing import·직접 KRXGateway import 제거·주입 인자의 annotation 세 곳만 바꿨습니다. annotation/type-hints 메타데이터와 직접 import 효과의 차이는 의도된 변경입니다. 함수 본문 raw/AST, 나머지 모듈 AST, 모든 인자/default, 주입 gateway의 기존 7개 호출·callback·문구·레이아웃은 동일함을 작성자와 독립 검토자가 확인했습니다. 새 gateway 생성이나 주입 객체 재바인딩은 없습니다.

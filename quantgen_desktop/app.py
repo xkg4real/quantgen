@@ -1349,13 +1349,15 @@ class ResearchWindow(QMainWindow):
         self.quant_lead.set_pair(str(params.get("symbol", "")))
         self.quant_lead_note.set_pair((f"· {model} · {r.horizon_days} sessions · {r.n_paths:,} paths",
                                        f"· {ko(model)} · {r.horizon_days}거래일 · 경로 {r.n_paths:,}개"))
+        from .metric_help import mc_metadata, risk_pair
+        var_label, var_hover = risk_pair('var', 'mc_terminal_loss', **mc_metadata(value.run, r))
         self.quant_figures.set_items((
             (("Start", "시작"), f"{r.spot:,.2f}", ""),
             (("Median", "중앙값"), f"{r.median_terminal:,.2f}", ""),
             (("Lower 5%", "하위 5%"), f"{r.p05:,.2f}", "down"),
             (("Upper 5%", "상위 5%"), f"{r.p95:,.2f}", "up"),
             (("P(loss)", "손실 확률"), f"{r.prob_loss:.1%}", ""),
-            (("95% VaR", "95% VaR"), f"{r.var_pct:.1%}".replace("-", "−"), "")))
+            (var_label, f"{r.var_pct:.1%}".replace("-", "−"), "", var_hover)))
         self.quant_figures.show()
         self.quant_lead_row.show()
         self.quant_badge.set_pair(("Run complete · NOT_RUN", "계산 완료 · 검증 NOT_RUN"))
@@ -1403,7 +1405,7 @@ class ResearchWindow(QMainWindow):
         self.portfolio.dock_into(portfolio_side, page=settings)
         settings.addWidget(rule())
         self.risk_fold = Fold(("Individual price simulation risk", "개별 가격 시뮬레이션 위험"))
-        self.risk_table = run_rows_table(["Symbol", "Model", "P(loss)", "VaR 95", "CVaR", "Source"])
+        self.risk_table = run_rows_table(["Symbol", "Model", "P(loss)", "VaR", "CVaR", "Source"])
         self.risk_table.setProperty('localized_columns', [1])
         self.risk_table._qg_status_columns = {5: 'official'}   # SYNTHETIC -> 합성 데이터(SYNTHETIC)
         self.risk_fold.body.addWidget(self.risk_table)
@@ -2255,10 +2257,16 @@ class ResearchWindow(QMainWindow):
             vol_info = volatility_disclosure(r)
             table_rows(self.quant_metrics, [("Spot", f"{r.spot:,.2f}"), ("P5 / P50 / P95", f"{r.p05:,.2f} / {r.median_terminal:,.2f} / {r.p95:,.2f}"),
                 (vol_info["label"], f"{vol_info['value']:.1%}"),
-                ("P(loss)", f"{r.prob_loss:.1%}"), ("VaR 95 / CVaR", f"{r.var_pct:.1%} / {r.cvar_pct:.1%}"),
+                ("P(loss)", f"{r.prob_loss:.1%}"), ("VaR / CVaR", f"{r.var_pct:.1%} / {r.cvar_pct:.1%}"),
                 ("Paths / horizon / seed", f"{r.n_paths:,} / {r.horizon_days} / {value.run['parameters']['seed']}"),
                 ("P(terminal ≥ target)", "—" if r.prob_target is None else f"{r.prob_target:.1%}")] +
                 ([("Horizon-average vol (ann.)", f"{r.garch_horizon_vol:.1%}")] if r.garch is not None else []))
+            from .metric_help import mc_metadata, risk_pair
+            from .page_kit import set_cell_help
+            metadata = mc_metadata(value.run, r)
+            var_hover = risk_pair('var', 'mc_terminal_loss', **metadata)[1]
+            cvar_hover = risk_pair('cvar', 'mc_terminal_loss', **metadata)[1]
+            set_cell_help(self.quant_metrics, 4, (0, 1), tuple(a + "\n\n" + b for a, b in zip(var_hover, cvar_hover)))
             # (group, line): the plain lines are the source text; the display groups them under short
             # headings with a Korean reading per line (owner issues 11 and 14). Display only.
             entries = [("data", f"{'합성 데이터 · ' if h.source=='SYNTHETIC' else ''}{h.source} · {h.first_date} → {h.last_date}"),
@@ -2372,6 +2380,8 @@ class ResearchWindow(QMainWindow):
             MC_MODEL_LABELS.get(r["parameters"]["model"], r["parameters"]["model"]),
             f"{r['metrics']['prob_loss']:.1%}", f"{r['metrics']['var_pct']:.1%}", f"{r['metrics']['cvar_pct']:.1%}",
             r["data"]["source"]] for r in complete])
+        from .risk_page import set_run_help
+        set_run_help(self.risk_table, complete, self.outputs)
         self.risk_table.setVisible(bool(complete))
         self.risk_empty.setVisible(not complete)
         if complete:
@@ -2486,6 +2496,15 @@ class ResearchWindow(QMainWindow):
 
 
 def main():
+    # Prepare and mark the selected data root before any store or engine is built.
+    # Importing this module (tools, code evidence, tests) must stay read-only.
+    from core.app_paths import ensure_user_data_dir
+    try:
+        ensure_user_data_dir()
+    except OSError as exc:
+        print(f"QUANTGEN: cannot prepare local data storage ({type(exc).__name__}); startup stopped.",
+              file=sys.stderr)
+        return 1
     from .windows_branding import set_app_identity, bind_window_icons
     if not set_app_identity():
         print("QUANTGEN: Windows did not accept the application ID; the taskbar may show the Python icon.",

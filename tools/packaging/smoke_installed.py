@@ -11,6 +11,16 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 
+def _data_dirs():
+    """The per-user data folder (core.app_paths, OS-F2) and the platform folder new installs use: never opened here."""
+    from core.app_paths import data_location
+    where = data_location()
+    return tuple(sorted({os.path.abspath(str(where.path)), os.path.abspath(str(where.platform_path))}))
+
+
+PROTECTED_DATA_DIRS = _data_dirs()
+
+
 def guard(event, args):
     if event == "socket.connect":
         raise AssertionError("Installed smoke must be offline")
@@ -20,6 +30,9 @@ def guard(event, args):
             raise AssertionError("Protected path refused")
         if "asset_expansion" in parts and "cache" in parts:
             raise AssertionError("Protected cache refused")
+        full = os.path.abspath(os.fsdecode(args[0]))
+        if any(full == d or full.startswith(d + os.sep) for d in PROTECTED_DATA_DIRS):
+            raise AssertionError("User data folder refused")
         if str(args[0]).endswith(".jsonl"):
             raise AssertionError("Actual ledgers excluded")
 

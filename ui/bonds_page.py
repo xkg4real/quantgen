@@ -25,7 +25,7 @@ from core.ficc.bonds import (Bond, analyze_bond, futures_hedge_ratio, round_cont
                              scenario_pnl, yield_from_price)
 from core.ficc.common import FICCError, bp_text, pct_text, tenor_label
 from core.ficc.curves import curve_from_snapshot
-from core.ficc.data import load_treasury_curve
+from core import gateway
 from core.theme import RADII, active
 from ui import fcharts
 from ui.localization import table_header, literal_text
@@ -287,7 +287,7 @@ def build_bonds_page(page: ft.Page,
         def worker():
             kind, bond = inp["kind"], inp["bond"]
             try:
-                panel = load_treasury_curve(source=inp["source"])
+                panel = gateway.ficc().load_treasury_curve(source=inp["source"])
                 snap = panel.latest()
                 curve = curve_from_snapshot(snap)
                 y = inp["ytm"]

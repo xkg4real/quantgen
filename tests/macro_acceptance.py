@@ -115,8 +115,10 @@ def home_listing() -> tuple:
     `~/.nextgen/macro` (the v2 artifact root), the operator rules store `~/.nextgen/trading/rules.json`, and
     QUANTGEN_MACRO_DIR when set. Not all of `~/.nextgen`: the cockpit tests (now in TRADEGEN) write `~/.nextgen/runs`
     by design, so a concurrent full run tripped T-HERM-02 falsely (Sprint 4 coordinator ruling)."""
-    home = Path.home() / ".nextgen"
-    roots = [home / "macro", home / "trading" / "rules.json"]
+    from core.app_paths import user_data_dir
+    roots = []
+    for home in dict.fromkeys((Path.home() / ".nextgen", user_data_dir())):   # OS-F2: legacy and current folder
+        roots += [home / "macro", home / "trading" / "rules.json"]
     if os.environ.get("QUANTGEN_MACRO_DIR"):
         roots.append(Path(os.environ["QUANTGEN_MACRO_DIR"]))
     rows = []

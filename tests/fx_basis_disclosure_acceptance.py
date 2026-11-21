@@ -150,8 +150,8 @@ class FXBasisDisclosureTests(unittest.TestCase):
                 def deep(kind, payload, **kw):
                     calls.append((kind, payload))
                     return ai_insights.Analysis('synthetic AI result', 'fixture')
-                with patch.object(fx_page, 'load_fx_spot', return_value=spot()), \
-                     patch.object(fx_page, 'load_short_rate', side_effect=AssertionError('no provider')), \
+                with patch('core.ficc.data.load_fx_spot', return_value=spot()), \
+                     patch('core.ficc.data.load_short_rate', side_effect=AssertionError('no provider')), \
                      patch.object(fx_page.fcharts, 'fx_spot_chart', return_value=ft.Text('chart fixture')), \
                      patch.object(ai_insights, 'ai_ready', return_value=True), \
                      patch.object(ai_insights, 'deep_analysis', side_effect=deep), \

@@ -285,7 +285,7 @@ class PageWiring(unittest.TestCase):
     # ---------------------------------------------------------------- Bonds (three tools)
     def test_bonds_every_tool(self):
         panels = self.capture(bonds_page)
-        self.stack.enter_context(patch.object(bonds_page, "load_treasury_curve", return_value=self.panel))
+        self.stack.enter_context(patch('core.ficc.data.load_treasury_curve', return_value=self.panel))
         bond = self.spy(bonds_page, "bond_korean")
         root = bonds_page.build_bonds_page(page())
         for tool in ("calc", "scenarios", "hedge"):

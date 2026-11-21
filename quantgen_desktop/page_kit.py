@@ -410,7 +410,7 @@ class Flow:
 
 class KeyFigures(QWidget):
     """The quiet key-figure line ('가격 101.612   수정 듀레이션 8.007   …'), wrapping when narrow.
-    `set_items([(key pair, value text, tone), ...])`; tone '', 'up', 'down', 'ok' or 'warn'."""
+    `set_items([(key pair, value text, tone[, hover pair]), ...])`; legacy three-tuples stay valid; tone '', 'up', 'down', 'ok' or 'warn'."""
 
     def __init__(self):
         super().__init__()
@@ -423,6 +423,7 @@ class KeyFigures(QWidget):
         self.flow.clear()
         for key, value, *rest in self.items:
             tone = rest[0] if rest else ""
+            hover = rest[1] if len(rest) > 1 else ""
             pair = QWidget()
             row = QHBoxLayout(pair)
             row.setContentsMargins(0, 0, 0, 0)
@@ -431,6 +432,9 @@ class KeyFigures(QWidget):
             k.set_language(self.language)
             v = numbers(Text(str(value), "figValue", selectable=True))
             set_prop(v, "tone", tone or "")
+            if hover:
+                k.setToolTip(pick(self.language, hover))
+                v.setToolTip(pick(self.language, hover))
             row.addWidget(k)
             row.addWidget(v)
             pair.keys = (k, v)
@@ -440,6 +444,40 @@ class KeyFigures(QWidget):
     def set_language(self, language):
         self.language = language
         self.set_items(self.items)
+
+
+CELL_HELP_ROLE = Qt.ItemDataRole.UserRole + 9181
+
+
+class _CellHelp(QObject):
+    """Resolve authored hover pairs when hovered, using the current window language."""
+    def __init__(self, table):
+        super().__init__(table)
+        self.table = table
+        table.viewport().installEventFilter(self)
+
+    def eventFilter(self, watched, event):
+        if event.type() == QEvent.Type.ToolTip:
+            item = self.table.itemAt(event.pos())
+            pair = item.data(CELL_HELP_ROLE) if item is not None else None
+            if pair:
+                from PyQt6.QtWidgets import QToolTip
+                language = getattr(self.table.window(), 'ui_language', 'ko')
+                QToolTip.showText(event.globalPos(), pick(language, pair), self.table)
+                return True
+        return False
+
+
+def set_cell_help(table, row, columns, pair):
+    """Attach display-only explanations; cell values, roles and export rows stay intact."""
+    if not hasattr(table, '_qg_cell_help'):
+        table._qg_cell_help = _CellHelp(table)
+    language = getattr(table.window(), 'ui_language', 'ko')
+    for column in columns:
+        item = table.item(row, column)
+        if item is not None:
+            item.setData(CELL_HELP_ROLE, pair)
+            item.setToolTip(pick(language, pair))
 
 
 class Card(QFrame):
