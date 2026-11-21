@@ -165,8 +165,9 @@ class StartsWhateverRoutesSay(Base):
         if krx_off:
             self.assertEqual(answers["snapshot"].reason, krx.krx.reason)
             self.assertNotIn("KRX_API_KEY", answers["snapshot"].reason)
-            self.assertIn(krx.krx.reason, answers["indices"].reason)
-            self.assertIn(krx.krx.reason, answers["quote"].reason)
+            self.assertEqual(answers["indices"].reason, f"no index provider responded ({krx.krx.reason})")
+            self.assertEqual(answers["quote"].reason,
+                             f"no provider returned 005930 (KIS not configured) ({krx.krx.reason})")
         else:
             self.assertIn("KRX_API_KEY", answers["snapshot"].reason)         # unchanged when nothing is blocked
             self.assertEqual(answers["indices"].reason, "no index provider responded")
@@ -230,9 +231,11 @@ class RouteOrKeyChange(Base):
     def test_key_change_gives_fresh_sub_clients(self):
         module, built = self._start()
         krx = built["krx"]
-        before = (krx.kis, krx.krx, krx.dart)
-        gw._on_key_change("KRX_API_KEY")
-        self.assertTrue(all(a is not b for a, b in zip(before, (krx.kis, krx.krx, krx.dart))))
+        for key in ("KRX_API_KEY", "OPENDART_API_KEY", "KIS_APP_KEY", "KIS_APP_SECRET"):
+            with self.subTest(key=key):
+                before = (krx.kis, krx.krx, krx.dart)
+                gw._on_key_change(key)
+                self.assertTrue(all(a is not b for a, b in zip(before, (krx.kis, krx.krx, krx.dart))))
         unrelated = (krx.kis, krx.krx, krx.dart)
         gw._on_key_change("FMP_API_KEY")                                     # not one of its sources: left alone
         self.assertTrue(all(a is b for a, b in zip(unrelated, (krx.kis, krx.krx, krx.dart))))
@@ -261,7 +264,8 @@ class GatewayQuoteFeed(Base):
         with _no_keys():
             feed = main.QuoteFeed(None)
             self.assertIsNone(feed.fmp)
-        self.assertIn("fmp is off", feed.fmp_blocked)
+        self.assertIn("turned off", feed.fmp_blocked)
+        self.assertNotIn("profile", feed.fmp_blocked)
 
     def test_the_blocked_reason_reaches_status_and_engine(self):
         """A1R3-4: fmp_blocked is what the feed reports, and the feed looks again once FMP is back."""
@@ -280,6 +284,174 @@ class GatewayQuoteFeed(Base):
             gw.reload()                                                      # route back: look again
             self.assertIsInstance(feed.fmp, FMPQuoteClient)
             self.assertEqual(feed.fmp_blocked, "")
+
+
+class ReviewRefreshRegressions(Base):
+    """KEY-5/a review M1/M2: observe calls, not just readiness labels."""
+
+    def _fmp_changes(self, action):
+        from core import credentials
+        from tests.gateway_acceptance import MemoryBackend
+        from types import SimpleNamespace
+        credentials.set_backend(MemoryBackend())
+        market = next(code for code in ("NASDAQ", "NYSE", "US", "AMEX")
+                      if markets.provider_for(code) == markets.FMP)
+        row = SimpleNamespace(price=100, as_of="2026-01-01T00:00:00+00:00", source="SYNTHETIC")
+        try:
+            with _no_keys(), patch.object(FMPQuoteClient, "quotes", return_value={"TEST": row}) as calls:
+                credentials.set("FMP_API_KEY", "synthetic-test-key-one")
+                feed = main.QuoteFeed()
+                self.assertIsNotNone(feed.fetch("TEST", market))
+                first = feed.fmp
+                calls.reset_mock()
+                if action == "delete":
+                    credentials.delete("FMP_API_KEY")
+                elif action == "replace":
+                    credentials.set("FMP_API_KEY", "synthetic-test-key-two")
+                else:
+                    self._routes(fmp=[action])
+                    if action == "company":
+                        gw._remote_override = remote.RemoteRoute(lambda req: {"ok": True, "result": None})
+                    gw._changed("fmp")
+                result = feed.fetch("TEST", market)
+                if action == "replace":
+                    self.assertIsNot(feed.fmp, first)
+                    self.assertIsNotNone(result)
+                    calls.assert_called_once()
+                else:
+                    self.assertIsNone(result)
+                    calls.assert_not_called()
+        finally:
+            credentials.set_backend(None)
+
+    def test_deleted_key_discards_held_fmp_client(self):
+        self._fmp_changes("delete")
+
+    def test_replaced_key_discards_held_fmp_client(self):
+        self._fmp_changes("replace")
+
+    def test_off_route_discards_held_fmp_client(self):
+        self._fmp_changes("off")
+
+    def test_company_route_discards_local_held_fmp_client(self):
+        self._fmp_changes("company")
+
+    def test_unrelated_key_change_keeps_fmp_client(self):
+        with _no_keys():
+            feed = main.QuoteFeed()
+            first = feed.fmp
+            gw._changed("OPENDART_API_KEY")
+            self.assertIs(feed.fmp, first)
+
+    def test_current_route_is_checked_before_refresh_listener(self):
+        import data.krx
+        from data.krx.gateway import Answer
+        from types import SimpleNamespace
+        asked = []
+        class Client:
+            ready = False
+            def all_quotes(self, *_):
+                asked.append("provider")
+                return []
+        class Gateway:
+            def __init__(self):
+                self.kis = SimpleNamespace(ready=False)
+                self.krx = Client()
+                self.dart = SimpleNamespace(ready=False)
+            def market_snapshot(self, market="ALL"):
+                return Answer(self.krx.all_quotes(market), "", ok=False, reason="original")
+        with patch.object(data.krx, "KRXGateway", Gateway):
+            held = gw.krx_gateway()
+            self._routes(krx_open_api=["off"])
+            # The route has changed but the refresh callback has not run yet.
+            self.assertEqual(held.market_snapshot().reason, held.krx.reason)
+            self.assertEqual(asked, [])
+
+    def test_failed_refresh_refuses_the_previously_working_client(self):
+        import data.krx
+        from data.krx.gateway import Answer
+        from types import SimpleNamespace
+        asked, calls = [], [0]
+        class Client:
+            ready = True
+            def all_quotes(self, *_):
+                asked.append("provider")
+                return []
+        class Gateway:
+            def __init__(self):
+                calls[0] += 1
+                if calls[0] > 1:
+                    raise RuntimeError("synthetic construction failure")
+                self.kis = SimpleNamespace(ready=False)
+                self.krx = Client()
+                self.dart = SimpleNamespace(ready=False)
+            def market_snapshot(self, market="ALL"):
+                return Answer(self.krx.all_quotes(market), "", ok=False, reason="original")
+        with patch.object(data.krx, "KRXGateway", Gateway):
+            held = gw.krx_gateway()
+            gw._refresh_krx("KRX_API_KEY")
+            self.assertIsInstance(held.krx, gw.OffClient)
+            self.assertFalse(held.market_snapshot().ok)
+            self.assertIn("unavailable", held.market_snapshot().reason)
+            self.assertEqual(asked, [])
+
+    def test_krx_refresh_never_publishes_ungated_clients(self):
+        import threading
+        from types import SimpleNamespace
+        from data.krx.gateway import Answer
+        import data.krx
+        entered, resume = threading.Event(), threading.Event()
+        asked, errors = [], []
+        count = [0]
+
+        class Client:
+            ready = False
+            def all_quotes(self, *_):
+                asked.append("krx")
+                return []
+            def filings(self, *_args, **_kwargs):
+                asked.append("dart")
+                return []
+
+        class Gateway:
+            def __init__(self):
+                count[0] += 1
+                self.kis = SimpleNamespace(ready=False)
+                self.krx = Client()
+                self.dart = Client()
+                if count[0] == 2:
+                    entered.set()
+                    if not resume.wait(5):
+                        raise AssertionError("test synchronization timeout")
+            def market_snapshot(self, market="ALL"):
+                return Answer(self.krx.all_quotes(market), "", ok=False, reason="old reason")
+
+        self._routes(krx_open_api=["off"], opendart=["off"])
+        with patch.object(data.krx, "KRXGateway", Gateway):
+            held = gw.krx_gateway()
+            before = held.krx, held.dart
+            def refresh():
+                try:
+                    gw._refresh_krx("KRX_API_KEY")
+                except Exception as exc:
+                    errors.append(exc)
+            worker = threading.Thread(target=refresh)
+            worker.start()
+            try:
+                self.assertTrue(entered.wait(5))
+                # Public sub-client reads must still see the previously gated snapshot while construction pauses.
+                self.assertIs(held.krx, before[0])
+                self.assertIs(held.dart, before[1])
+                self.assertEqual(asked, [])
+            finally:
+                resume.set()
+                worker.join(5)
+            self.assertFalse(worker.is_alive())
+            self.assertEqual(errors, [])
+            self.assertIsInstance(held.krx, gw.OffClient)
+            self.assertIsInstance(held.dart, gw.OffClient)
+            self.assertEqual(held.market_snapshot().reason, held.krx.reason)
+            self.assertEqual(asked, [])
 
 
 if __name__ == "__main__":

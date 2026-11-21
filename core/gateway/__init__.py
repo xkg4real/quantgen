@@ -413,6 +413,7 @@ class OffClient:
         return refused
 
 
+_KRX_REFRESH_LOCK = threading.RLock()
 _KRX_CLASSES: dict = {}
 _KRX_BUILT: "weakref.WeakSet" = weakref.WeakSet()
 _KRX_SOURCES = ("kis_quote", "krx_open_api", "opendart")
@@ -422,8 +423,9 @@ def _krx_class(base: type) -> type:
     """KRXGateway with the blocked sub-client's reason in its answers (PR #133 review 3, A1R3-1): a blocked KRX Open
     API or OpenDART otherwise reads as "Set KRX_API_KEY" / "need OPENDART_API_KEY", which is not why there is no
     answer. Built on the provider's class at call time (a test that patches data.krx.KRXGateway gets its class)."""
-    if base in _KRX_CLASSES:
-        return _KRX_CLASSES[base]
+    with _lock:
+        if base in _KRX_CLASSES:
+            return _KRX_CLASSES[base]
 
     def why(sub) -> str:
         return sub.reason if isinstance(sub, OffClient) else ""
@@ -434,24 +436,67 @@ def _krx_class(base: type) -> type:
         return dataclasses.replace(answer, reason=f"{answer.reason} ({reason})" if keep and answer.reason else reason)
 
     class GatedKRXGateway(base):
+        # The shared façade points at one fully built/gated delegate. Never re-initialize it in place.
+        def __init__(self):
+            candidate = base()
+            with _lock:
+                _gate_krx(candidate)
+                self._delegate = candidate
+
+        @property
+        def kis(self):
+            return self._delegate.kis
+
+        @property
+        def krx(self):
+            return self._delegate.krx
+
+        @property
+        def dart(self):
+            return self._delegate.dart
+
+        def _run(self, name, *args, **kwargs):
+            # A route can change before its listener runs. Gate again before any new provider operation.
+            with _lock:
+                target = self._delegate
+                _gate_krx(target)
+                answer = getattr(target, name)(*args, **kwargs)
+                if name in ("quote", "indices", "market_snapshot"):
+                    return explain(answer, why(target.krx), keep=name != "market_snapshot")
+                if name in ("filings", "financials"):
+                    return explain(answer, why(target.dart), keep=False)
+                return answer
+
         def quote(self, ticker):
-            return explain(super().quote(ticker), why(self.krx), keep=True)
+            return self._run("quote", ticker)
+
+        def daily(self, ticker, **kwargs):
+            return self._run("daily", ticker, **kwargs)
 
         def market_snapshot(self, market="ALL"):
-            return explain(super().market_snapshot(market), why(self.krx), keep=False)
+            return self._run("market_snapshot", market)
 
         def indices(self):
-            return explain(super().indices(), why(self.krx), keep=True)
+            return self._run("indices")
 
         def filings(self, ticker, **kwargs):
-            return explain(super().filings(ticker, **kwargs), why(self.dart), keep=False)
+            return self._run("filings", ticker, **kwargs)
 
         def financials(self, ticker, **kwargs):
-            return explain(super().financials(ticker, **kwargs), why(self.dart), keep=False)
+            return self._run("financials", ticker, **kwargs)
+
+        def status(self):
+            return self._run("status")
+
+        @property
+        def any_ready(self):
+            with _lock:
+                _gate_krx(self._delegate)
+                return self._delegate.any_ready
 
     GatedKRXGateway.__name__ = GatedKRXGateway.__qualname__ = base.__name__
-    _KRX_CLASSES[base] = GatedKRXGateway
-    return GatedKRXGateway
+    with _lock:
+        return _KRX_CLASSES.setdefault(base, GatedKRXGateway)
 
 
 def _gate_krx(gateway: Any) -> None:
@@ -475,18 +520,29 @@ def krx_gateway() -> Any:
     a key change for one of its sources every gateway built here gets fresh sub-clients and the blocks again, in
     place (D7-G rule 6; PR #133 review 3, A1R3-5). Construction performs no network request."""
     gateway = _krx_class(importlib.import_module("data.krx").KRXGateway)()
-    _gate_krx(gateway)
-    _KRX_BUILT.add(gateway)
+    with _lock:
+        _gate_krx(gateway._delegate)
+        _KRX_BUILT.add(gateway)
     return gateway
 
 
 def _refresh_krx(name: str) -> None:
     if name and name not in _KRX_SOURCES and not any(name in SOURCES[s].keys for s in _KRX_SOURCES):
         return
-    for gateway in list(_KRX_BUILT):
-        base = type(gateway).__mro__[1]
-        base.__init__(gateway)                       # fresh KIS / KRX Open API / OpenDART clients, keys read again
-        _gate_krx(gateway)
-
+    with _KRX_REFRESH_LOCK:
+        with _lock:
+            gateways = list(_KRX_BUILT)
+        for gateway in gateways:
+            base = type(gateway).__mro__[1]
+            try:
+                candidate = base()                       # unpublished: readers keep the previous gated snapshot
+            except Exception:
+                candidate = base.__new__(base)
+                candidate.kis = OffClient("kis_quote", "unavailable")
+                candidate.krx = OffClient("krx_open_api", "unavailable", empty=("all_quotes", "indices"))
+                candidate.dart = OffClient("opendart", "unavailable")
+            with _lock:
+                _gate_krx(candidate)
+                gateway._delegate = candidate            # publish the complete state in one assignment
 
 on_change(_refresh_krx)

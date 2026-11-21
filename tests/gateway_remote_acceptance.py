@@ -220,6 +220,24 @@ class FakeServerTest(unittest.TestCase):
                 self.assertEqual(remote._transport_code(exc), code)
                 self.assertIn(code, remote.TRANSPORT_CODES)
 
+    def test_actual_provider_unavailable_codes_survive_the_wire(self):
+        for code in ("DARTUnavailable", "KISUnavailable"):
+            with self.subTest(code=code):
+                self.assertEqual(remote._code(code), code)
+                with self.assertRaises(remote.RemoteFailed) as ctx:
+                    remote.RemoteRoute(lambda req: {"ok": False, "error": code}).call("fmp", "quote", "TEST")
+                self.assertEqual(str(ctx.exception), code)
+
+    def test_requests_exception_types_have_fixed_transport_codes(self):
+        from requests import exceptions as req
+        for typ, expected in ((req.ProxyError, "transport_connection"), (req.ConnectionError, "transport_connection"),
+                              (req.SSLError, "transport_tls"), (req.ConnectTimeout, "transport_timeout"),
+                              (req.ReadTimeout, "transport_timeout"), (req.RequestException, "transport_error")):
+            with self.subTest(exception=typ.__name__):
+                self.assertEqual(remote._transport_code(typ("synthetic transport detail")), expected)
+        self.assertEqual(remote._code("ABCDEError"), "ABCDEError")
+        self.assertEqual(remote._code("ABCDEFError"), "bad_answer")
+
     def test_dispatch_refuses_a_request_that_is_not_a_dict(self):
         """KEY-4 item 7: the server handler never raises on a malformed request."""
         for request in (None, "fmp", ["fmp", "quote"], 3, {"source": "fmp", "fn": ["quote"]}):

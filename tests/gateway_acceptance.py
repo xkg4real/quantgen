@@ -223,6 +223,25 @@ class KeyChangeTest(Base):
             self.assertEqual(gw.ready("fmp"), "ready")
         self.assertIsNotNone(held)
 
+    def test_failing_change_listener_does_not_stop_later_listeners(self):
+        before = list(gw._listeners)
+        called = []
+        def broken(name):
+            called.append(("first", name))
+            raise RuntimeError("synthetic listener failure")
+        def last(name):
+            called.append(("last", name))
+        try:
+            gw.on_change(broken)
+            gw.on_change(last)
+            gw.reload("fmp")
+            with _no_keys():
+                credentials.set("FMP_API_KEY", FAKE)
+            self.assertEqual(called, [("first", "fmp"), ("last", "fmp"),
+                                      ("first", "FMP_API_KEY"), ("last", "FMP_API_KEY")])
+        finally:
+            gw._listeners[:] = before
+
 
 class ProfileTest(Base):
     def test_commercial_draft_turns_yahoo_and_fmp_off(self):

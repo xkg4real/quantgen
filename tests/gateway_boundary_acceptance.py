@@ -534,6 +534,12 @@ class BoundaryTest(unittest.TestCase):
             with self.subTest(source=source):
                 self.assertEqual(findings(source, "core.ficc.insights"), sorted(expected))
 
+    def test_three_pass_alias_chain_in_reverse_assignment_order(self):
+        # Alias propagation intentionally supports plain Name assignments, through at most three passes.
+        source = ("import importlib\nthird = second\nsecond = first\nfirst = importlib.import_module\n"
+                  "third('data.fmp')\n")
+        self.assertEqual(findings(source), ["dynamic:data.fmp"])
+
     def test_detector_catches_assignment_aliases(self):
         """PR #133 review 3 F2 (KEY-5/a): the dynamic importers reached through a plain assignment, also chained,
         annotated, or from an aliased importlib; and the gateway feed is not a finding."""

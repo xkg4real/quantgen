@@ -87,7 +87,8 @@ _CODE = re.compile(r"[A-Za-z0-9_]{1,48}")
 # The codes our server (dispatch.py) and transport send, by name; an HTTP status; or an exception class name, which
 # dispatch.py sends for a provider failure: capitalised words of letters only, ending in Error/Exception/Timeout.
 SERVER_CODES = frozenset({"bad_request", "unknown_source", "fixed_local", "function_not_allowed",
-                          "result_not_encodable", "bad_answer", "no_answer"})
+                          "result_not_encodable", "bad_answer", "no_answer",
+                          "DARTUnavailable", "KISUnavailable"})
 _HTTP = re.compile(r"http_[1-5][0-9]{2}")
 _CLASS = re.compile(r"(?:[A-Z][A-Za-z]*)?(?:Error|Exception|Timeout)")
 _WORD = re.compile(r"[A-Z]+(?=[A-Z][a-z]|$)|[A-Z][a-z]+")
@@ -126,11 +127,12 @@ def _transport_code(exc: BaseException) -> str:
     """A fixed short code for a transport failure, never the exception's class name or text (PR #133 review 3, F6):
     a third-party class name can carry more than its kind."""
     import ssl
-    if isinstance(exc, TimeoutError) or "Timeout" in type(exc).__name__:
+    from requests import exceptions as req
+    if isinstance(exc, (TimeoutError, req.Timeout)) or "Timeout" in type(exc).__name__:
         return "transport_timeout"
-    if isinstance(exc, ssl.SSLError) or "SSL" in type(exc).__name__:
+    if isinstance(exc, (ssl.SSLError, req.SSLError)) or "SSL" in type(exc).__name__:
         return "transport_tls"
-    if isinstance(exc, ConnectionError) or "Connection" in type(exc).__name__:
+    if isinstance(exc, (ConnectionError, req.ConnectionError)) or "Connection" in type(exc).__name__:
         return "transport_connection"
     return "transport_error"
 
