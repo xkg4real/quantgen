@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a
 next_ids: KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T20:44:38+09:00
+updated_at: 2026-11-21T21:08:53+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/key5a-fixes-20261121
@@ -20,6 +20,22 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
+---
+
+## K2c 보존·K2d 원본 기준 검증 및 다음 범위 소유권 — 2026-11-21T21:08:53+09:00
+
+- 동일 ROOT execution `2f27d0c2-57cc-46e7-97d6-fc141d4065c9`·OS lock20162 아래 직접 승인 작업을 계속합니다. primary KEY139/0413cc52와 task/handoff/cycle은 유지합니다. 감시/자동 인수/예약/run_now/배포는 취소 상태입니다.
+- **K2c 검증 코드 원격 보존:** `gpt/ui-key5-flet-k2c-20261121@b3731cf3a41932afba4f480049fc2e52c35d9eef`, 실제 부모d660296/tree5693004eb101f2754b559486320bd4d680508368. 제품1·known1·기록의 정확3본문/경로/blob/부모/tree·expected d660 ref CAS/read-back 확인. 원본UI822/K1a/b/c/d/K2a7fb/K2bd660은 보존했습니다. 아직 UI PR/main/최종 baseline은 없습니다.
+- ID25 Any/type-only import 제거/annotation 세 편집은 승인blob32721b에 명시돼 있습니다. 실제 구현 f6acf2aa/blob04e0cc31, 함수 body raw0b9c0323/AST·args/default·주입 gateway7호출·callback·문구/배치는 동일하고 annotation/import 부작용 차이는 의도된 변경입니다. 독립 정적 검토와 기존 public1 첫실행 PASS(수집/실행/기록1·실패/오류/skip0), 별도 boundary13 첫실행 PASS/Python3.10 문법 PASS. 새 골든·시험/준법 baseline 수정0. 합성 표5종의 소스 선언을 동적 subcase 수로 주장하지 않습니다.
+- ROOT known 정확1 삭제 후 blob e0ba25c519612c20378a3b59b684867f08ac9640, scan new/gone/errors0·화면12파일31접점+동결feed1·ceiling22/44/SCREEN_FILES22 유지. source412 raw/blob/mode, 실제부모d660 대비 제품1+known1 외410 불변·최종freeze4e431d4d. old788/source1 bd753 시점 검증/원증거는 별도 보존, known만 바꾼 뒤 public1은 반복하지 않았습니다. 공개1의 engine5모듈은 선언 import만·guard265함수 실제 실행 위반0, 내부 font probe1은 시작 전 거절·실제 subprocess0입니다. 실제 GUI/공급사/API/모델/연구/원장/PC 결과로 확대하지 않습니다.
+- sapientia Notion `K2cb373-partial-20261121-2f27d0c2` 부분 반영 성공·부모 취소선0, 비공개 website 큐8개 NOT_SENT·실제 전달/적용/배포0. 실제 UI PR의 PR-번호 기록/대상 대화 수신 및 웹 적용 증거는 남습니다.
+- **K2d 별도 병렬 소유권:** `gpt/ui-key5-flet-k2d-20261121`을 실제b3731cf 부모에서 만들고 ref를 다시 읽었습니다. 승인 ID18/21/22·23·24/33의 bonds/fx/quant_lab/fcharts source4, 등록import6·실제 loader9식(앱8/CLI1 AST-only) 범위입니다. 해당 실제 구현 부모는 b373이며 before oracle의 원본7fb 및 역사적 origin630과 분리합니다. 제품 GO는 아직0, private 최소패치·after-only 인터페이스를 검토 중이며 새 source copy/제품/공개test/known/baseline/원격 변경은 아직 없습니다.
+- K2d Native R2정적 PASS1c17b1de, frozen writer fdc0758c/binding34db8388. author before10 PASS와 독립 첫QA replay10 PASS: 함수 시그니처 bound 합성loader17·결정적 Bond/FX 분석capture3·순수 predicate4를 합산하지 않습니다. 실제 history/runs/provenance/MC/GARCH/SABR/engine/API/network/DB/backend/원장0, public412/private10pins raw/blob/mode 전후 불변·actual import80 출처 확인. before golden d0d009dc5615f74ae9defc4b4a3315a8e32275b8bce76ca2816c47aa0769d890. 최초 bytecode probe 거절은 계산/골든 전 실패로 원문 보존, 원code/guard 변경 없이 child `-I -B -X pycache_prefix=<각 전용 새 빈 private prefix>`로 source cache를 읽지 않고 재현했습니다. prefix 전후 빈 상태·캐시 쓰기0, 전역환경/HOME 변경0입니다. 실제 CLI/plot/GUI/PC 완료는 아닙니다.
+- **FICC 정책 원문 정정:** ROOT의 KRW fixed-local 추정은 철회했습니다. actual local.py blob82c6be84의 load_short_rate 전체는 FRED_ONLY이며 KRW도 FRED monthly IR3TIB01KRM156N을 사용합니다. off/company/invalid면 KRW는 거절→Quant .03, USD load_series(auto)는 SYNTHETIC 대체→.03입니다. before 정상KRW .027/USD .038 및 fallback .03/.03과 구별합니다. 새 KRW 예외/정책을 만들지 않으며 기존 단위·기본days·math/CONSTANTS/helper/진입 시점만 보존합니다.
+- **K3 읽기 계획:** actual d660의 native market_chart6/watchlist2/Flet market_chart5=known13, runtime 호출수는 아직0입니다. watchlist만 lambda가 기존 service를 캡처하고 호출 시 service.client 속성을 평가합니다. native/Flet은 기존0인자·factory 주입/None-only 대 false-y fallback 시점을 그대로 보존합니다. provider(data.kis_stream/workspace) class/helper를 원래 조회 위치에서 사용하는 안은 기존 G1등록86752에 맞지만 실제 G1 main 반영은 아직입니다. 원지도는 별도 dd87 정정·8f0 연결로 보존, K3계획1dced384·future code parent None·writer/실행/제품0.
+- **KEY139 최신 관찰:** main53e5e723·head0413cc52 유지. Runtime44897148350에서 문법2/Linux3.12/Windows3.11 SUCCESS, Windows3.12·3.14 owner14 UI 단계 진행 중·관찰된 실패0. Compliance44897148302·Nautilus 임시원장44897148304 SUCCESS. source845/docs20 정합성 PASS(publication BLOCKED65) 및 별도 local83/123/17·독립8/main4 유지. 전체3workflow/필수checks·리뷰·main·freeze·ROOT 소유권을 확인할 때만 expected-head merge/KEY-5/a 코드 완료를 기록합니다. DIDM138/main53e의 DIDM-1·DS-4a 코드/합성 하위만 완료는 유지합니다.
+- 전체UI/KEY5·최신의존성 통합·최종 source-review/전체UI CI/PR·owner PC7/OSgo·실제 API/공급사/모델성과/법률·라이선스/운영 증거는 남았습니다. 다음은 K2d private 최소패치와 after-interface 독립 검토 후 source4만 GO, K3는 실제G1 main 후, KEY139 전체CI 확인입니다. 미실시/선택사항 GPT/Gemini spec 추가 공개·검토는 NOT_PERFORMED로 유지합니다.
+
 ---
 
 ## K2b 검증 코드 보존·K2c 다음 범위 소유권 — 2026-11-21T20:44:38+09:00
