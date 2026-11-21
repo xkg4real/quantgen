@@ -1,0 +1,64 @@
+--- a/tests/desktop_market_chart_acceptance.py
++++ b/tests/desktop_market_chart_acceptance.py
+@@ -57,7 +57,7 @@
+ 
+         def load(self, request):
+             self.calls.append(request)
+-            self.threads.append(QThread.currentThread())
++            self.threads.append(threading.get_ident())  # an ident, not a QThread wrapper of the pool's thread (PySide6 heap corruption, 2026-11-19)
+             if self.entered is not None:
+                 self.entered.set()
+                 self.release.wait(4)
+@@ -187,7 +187,7 @@
+     def test_rest_runs_off_gui_thread_and_renders_shared_chart_and_cursor(self):
+         self.load()
+         p = self.pane
+-        self.assertIsNot(self.service.threads[0], self.app.thread())
++        self.assertNotEqual(self.service.threads[0], threading.get_ident())
+         self.assertTrue(p.chart.renderer().isValid())
+         self.assertIn("005930", p.reading.text())
+         self.assertIn("SMA20", p.indicator_reading.text())
+--- a/tests/desktop_qscore_acceptance.py
++++ b/tests/desktop_qscore_acceptance.py
+@@ -50,7 +50,7 @@
+ 
+         def load(self, request):
+             self.calls.append(request)
+-            self.threads.append(QThread.currentThread())
++            self.threads.append(threading.get_ident())  # an ident, not a QThread wrapper of the pool's thread (PySide6 heap corruption, 2026-11-19)
+             if self.entered is not None:
+                 self.entered.set()
+                 self.release.wait(3)
+@@ -186,7 +186,7 @@
+         self.assertEqual(self.score("000660")["status"], "ready")
+         self.assertTrue(all(request.adjusted and request.interval == "1d" and request.limit == 252
+                             for request in self.service.calls))
+-        self.assertTrue(all(thread is not self.app.thread() for thread in self.service.threads))
++        self.assertTrue(all(thread != threading.get_ident() for thread in self.service.threads))
+ 
+     def test_stop_invalidates_inflight_result_and_close_reports_busy(self):
+         self.service.entered, self.service.release = threading.Event(), threading.Event()
+--- a/tests/desktop_acceptance.py
++++ b/tests/desktop_acceptance.py
+@@ -440,17 +440,17 @@
+     def test_single_worker_guard_and_close_guard_gui_delivery(self):
+         self.configure_gbm();release=threading.Event();threads=[]
+         def delayed(q,r):
+-            threads.append(QThread.currentThread())
++            threads.append(threading.get_ident())  # an ident, not a QThread wrapper of the pool's thread (PySide6 heap corruption, 2026-11-19)
+             release.wait(5)
+             return fixture_runner(q,r)
+         self.window.analysis_runner=delayed
+         self.window.run_analysis();self.window.run_analysis()
+         self.assertEqual(len(self.window.session.runs()),1)
+         self.assertFalse(self.window.close())
+-        self.window.jobs.succeeded.connect(lambda _:threads.append(QThread.currentThread()))
++        self.window.jobs.succeeded.connect(lambda _:threads.append(threading.get_ident()))
+         release.set();self.wait_idle()
+-        self.assertNotEqual(threads[0],self.app.thread())
+-        self.assertEqual(threads[1],self.app.thread())
++        self.assertNotEqual(threads[0],threading.get_ident())
++        self.assertEqual(threads[1],threading.get_ident())
+ 
+ 
+ if __name__ == '__main__':unittest.main()

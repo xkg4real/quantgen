@@ -112,6 +112,12 @@ WORKSPACES = (
 
 
 def main(page: ft.Page) -> None:
+    # The GUI entry point owns mutable-storage preparation, never module import.
+    from core.app_paths import ensure_user_data_dir
+    try:
+        ensure_user_data_dir()
+    except OSError:
+        raise RuntimeError("QUANTGEN: cannot prepare local data storage; startup stopped.") from None
     page.qg_locale=LocaleContext('ko_KR')
     page.qg_theme='light'
     page.title = "QUANTGEN"

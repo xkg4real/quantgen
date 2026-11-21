@@ -16,6 +16,16 @@ from zipfile import ZipFile
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 
+def _data_dirs():
+    """The per-user data folder (core.app_paths, OS-F2) and the platform folder new installs use: never opened here."""
+    from core.app_paths import data_location
+    where=data_location()
+    return tuple(sorted({os.path.abspath(str(where.path)),os.path.abspath(str(where.platform_path))}))
+
+
+PROTECTED_DATA_DIRS=_data_dirs()
+
+
 def guard(event,args):
     if event == 'socket.connect': raise AssertionError('Desktop smoke is offline')
     if event == 'open' and isinstance(args[0],(str,bytes,os.PathLike)):
@@ -24,6 +34,9 @@ def guard(event,args):
             raise AssertionError('Protected path refused')
         if ('asset_expansion' in parts and 'cache' in parts) or str(args[0]).endswith('.jsonl'):
             raise AssertionError('Protected cache/ledger refused')
+        full=os.path.abspath(os.fsdecode(args[0]))
+        if any(full==d or full.startswith(d+os.sep) for d in PROTECTED_DATA_DIRS):
+            raise AssertionError('User data folder refused')
 
 
 sys.addaudithook(guard)

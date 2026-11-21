@@ -189,3 +189,77 @@ UI 세션이 점검표 9번(delegate 참조)과 14번(`focus_order`)까지 반�
 - 차이 2개는 단계 9의 `desktop_rates_language_acceptance` 3개 테스트입니다. 단계 9는 두 바인딩 모두 25분 제한에 걸리는데, PySide6가 끊긴 시점이 조금 일러 실행되지 않은 것입니다. 실패가 아닙니다.
 - 두 바인딩 모두 실패하는 테스트 6개(단계 12·18)와 시간 초과 2단계(9·13)는 바인딩과 무관합니다.
 - **판정:** Linux 기준으로 UI 브랜치는 PySide6 전환 준비가 끝났습니다. Windows·macOS 실행은 병합 뒤 `platform-build.yml`(수동 실행)과 소유자 PC에서 확인합니다.
+
+## 10. PySide6 전용 간헐 비정상 종료 (UI 세션 인계, 2026-11-19) — 9절 판정 보류
+
+UI 세션이 PySide6를 직접 설치해 검증하다 발견한 문제를 OS 세션이 이어받았습니다(UI `23a6371`, `docs/product/pyside6_abort_2026-11-19/`). **9절의 "전환 준비 끝" 판정은 이 문제가 풀릴 때까지 보류합니다.**
+
+- 부하: `tests.desktop_market_tabs_acceptance`를 4개씩 동시에 반복했습니다(4코어 Linux, 오프스크린). 비교 조건과 같이 돌린 경우가 많아 실제로는 프로세스 8개가 동시에 돌았습니다.
+- 증상: `malloc_consolidate(): unaligned fastbin chunk detected`(SIGABRT). 항상 테스트 정리의 `delete_owned_widget` → 창 삭제 → 백킹 스토어 `QImage` 해제에서 발견됩니다. 손상을 만든 곳은 그 전입니다.
+
+| 조건 | 실행 수 | 비정상 종료 | 그 밖의 간헐 오류 |
+|---|---|---|---|
+| PySide6 6.12.0 (UI 세션 66번 포함) | 350 | **5** (약 1.4%) | 0 |
+| PySide6 6.12.0 + `jobs.py` 수정(아래) | 위 350에 포함, 132 | 1 | 0 |
+| PySide6 6.11.3 | 160 | 0 | **1** (`QPushButton("?", header.viewport())`에서 `viewport()`가 위젯이 아닌 래퍼를 돌려줘 TypeError) |
+| PyQt6 6.12 | 160 | 0 | 0 |
+
+- 확률: 비율이 1.4%라서 160번 중 0번은 우연히도 약 10% 나옵니다. 그래서 "6.11.3이나 PyQt6에서는 없다"고 단정하지 않습니다. 다만 PyQt6에서는 두 종류의 이상이 한 번도 없었고, PySide6에서는 두 버전 모두 어느 한 종류가 나왔습니다.
+- **배제한 가설:** `jobs.py`. 이것은 Python `QRunnable` 하위 클래스와, 그 안에서 만든 신호 객체를 작업 스레드가 지우는 경로입니다. [PYSIDE-3072](https://bugreports.qt.io/browse/PYSIDE-3072)·[PYSIDE-1826](https://bugreports.qt.io/browse/PYSIDE-1826)과 같은 구조라 의심했습니다. 그래서 `QThreadPool.start(callable)`과 `Jobs`의 자식 신호 객체로 바꾼 사본을 만들었지만, 같은 비정상 종료가 132번 중 1번 났습니다. 신호 객체가 화면 스레드가 아닌 곳에서 지워진 경우는 112건 중 0건이었습니다. 정리 때 기다리지 않은 `Jobs`도 0건이었습니다. UI 세션도 같은 가설을 따로 배제했습니다.
+- **가설(미검증):** PySide6(shiboken)가 Qt 쪽에서 이미 지워진 객체의 Python 래퍼를 계속 쥐고 있다가, 같은 주소에 새 객체가 생기면 옛 래퍼를 돌려주는 수명 문제입니다. 6.11.3의 잘못된 형식 래퍼(TypeError)가 이 증상이고, 그 래퍼로 쓰기가 일어나면 6.12.0의 힙 손상이 됩니다. 원인 위치(파일:줄)는 아직 찾지 못했습니다.
+- **다음 방법 후보:** (1) Qt 쪽에서 지워진 QObject를 `destroyed` 신호로 모두 기록해 두고, 지워진 뒤에 쓰인 래퍼를 찾기. (2) 6.12.0과 6.11.3에서 각각 400번 이상 반복해 버전 차이를 통계로 확정하기. (3) 재현 묶음을 만들어 Qt for Python 버그 보고. (4) 디버그 빌드 Qt/PySide6와 ASan으로 직접 잡기(빌드에 몇 시간).
+
+### 10-1. 원인 확정과 고침 (2026-11-19, 소유자가 고른 ①안)
+
+**원인: 앱 코드가 아니라 테스트 보조 코드입니다.** 테스트용 가짜 서비스가 스레드 풀 작업 안에서 `QThread.currentThread()`를 불러 그 객체를 리스트에 보관합니다. 이런 곳이 세 군데 있습니다.
+
+- `tests/desktop_market_chart_acceptance.py:60`(`FakeService.load`)과 같은 줄의 판정 190행
+- `tests/desktop_qscore_acceptance.py:53`과 189행
+- `tests/desktop_acceptance.py:443`·`450`
+
+이 호출로 PySide6는 Qt가 만들고 Qt가 지우는 스레드 풀 내부 `QThread`의 Python 래퍼를 작업 스레드에서 만듭니다. 창을 지울 때 풀과 그 스레드가 사라진 뒤, 남은 래퍼가 정리되면서 해제된 메모리에 쓰는 것으로 봅니다(PySide6/shiboken 내부 동작이라 이 부분은 가설). PyQt6에서는 같은 코드로 문제가 없습니다.
+
+**좁힌 과정:** glibc tcache를 끄면(`GLIBC_TUNABLES=glibc.malloc.tcache_count=0`) 재현율이 약 1.4%에서 8~20%로 올라 빠르게 비교할 수 있었습니다. 같은 조건에서 PyQt6는 32번 중 0번이었습니다.
+
+| 변형 (문제 테스트 하나, tcache 끔) | 결과 |
+|---|---|
+| 문제 테스트만 / 그 테스트만 뺀 모듈 | 2/32 / 0/32 |
+| 테스트를 단계에서 끊음: 준비 직후 / 종목 선택까지 / 새로고침 뒤 차트 수신까지 | 0/48 / 0/48 / 4/48 |
+| 새로고침 중 차트만 끔 / 프로필 끔 / 카드 끔 | 0/48 / 2/48 / 8/48 |
+| 실시간 연결 끔 / 미리보기 끔 / SVG 로드 끔 / 그리기 끔 / `snapshot_loaded` 끊음 | 10/64 / 7/64 / 3/64 / 5/64 / 4/64 |
+| 차트 작업을 작업 스레드 대신 화면 스레드에서 실행 | **0/80** (같은 때 그대로: 7/80) |
+| 가짜 서비스의 `QThread.currentThread()` 기록만 뺌 | **0/96** (같은 때 그대로: 7/96) |
+
+함께 배제한 것:
+
+- `jobs.py`: 고친 사본에서도 1/132.
+- 함수 안에서 만드는 Qt 클래스 3곳: 고친 사본에서도 5/32.
+- 죽은 위젯 래퍼: 검출기로 0건.
+- PySide6 버전: 6.11.3도 tcache를 끄면 2/32.
+
+**고침(두 바인딩 동일):** 세 곳 모두 `threading.get_ident()`를 기록하고, 판정도 `threading.get_ident()`와 비교합니다. 다른 테스트(`watchlist_live`, `desktop_home_markets_home`)가 이미 쓰는 방식입니다. 패치는 `docs/platform/pyside6_abort_2026-11-19/ui_fix_thread_fixtures.patch`입니다. `tests/desktop_*`는 UI 세션이 고칩니다.
+
+**확인(UI `23a6371` 사본에 패치 적용, PySide6 6.12.0, 4개씩 동시 실행):**
+
+- 일반 조건: `tests.desktop_market_tabs_acceptance` **160번 연속, 비정상 종료 0, 실패 0**
+- tcache 끔(고치기 전 약 8~20%): **160번 연속, 비정상 종료 0, 실패 0**
+- PyQt6: 바뀐 네 모듈(`desktop_market_chart`·`desktop_qscore`·`desktop`·`desktop_market_tabs`) 73개 테스트 통과. PySide6도 같은 73개 통과.
+
+재발 방지로 lint `15-thread-wrapper`와 점검표 15번을 더했습니다.
+
+**판정:** 이 패치를 UI 브랜치에 반영하면, 9절의 판정("Linux 기준 전환 준비 끝")을 되살립니다. 앱 코드에는 바꿀 것이 없습니다. 반영 뒤 OS 세션이 같은 모듈로 다시 확인합니다.
+
+### 10-2. UI 브랜치 반영본 재확인 (UI `414eceb`, 2026-11-20) — 9절 판정 복구
+
+UI 세션이 패치를 그대로 적용했습니다(`490562d`, 보고서·컴플라이언스 `414eceb`). 세 테스트 파일은 OS 패치 결과와 같고, 앱 코드(`quantgen_desktop/`) 변경은 없으며, 테스트의 `currentThread` 호출은 0곳입니다. `--lint`는 38건이고 모두 검토용 4·6묶음과 가드 안 8묶음입니다.
+
+| 조건 (PySide6 6.12.0, `tests.desktop_market_tabs_acceptance`, 4개 동시) | 결과 |
+|---|---|
+| 일반 | **160번 연속 통과, 비정상 종료 0** |
+| tcache 끔(고치기 전 약 8~20%) | **160번 연속 통과, 비정상 종료 0** |
+
+UI 세션도 따로 확인했습니다: tcache 끔에서 고치기 전 32번 중 3번, 고친 뒤 80번 중 0번. 바뀐 네 모듈은 두 바인딩 모두 73개 통과입니다.
+
+같은 `414eceb`에서 PyQt6 6.12.0으로 CI 18단계 묶음(6절 방법)을 다시 돌렸습니다(2026-11-20). 단계별 종료 코드가 `5025c6f` PyQt6 결과와 18단계 모두 같습니다: 9·13단계는 시간 초과(1500초, 두 번 모두 같음), 12단계(`strategy_lab_display_acceptance` 실패 3·오류 1)와 18단계(`indicator_guide_acceptance`, 이 클론에 없는 `docs/product/DATA_READINESS_2026-10-29.json` 1건)는 같은 시험이 같게 실패, 나머지 14단계는 통과. 비정상 종료는 없습니다. 즉 고침은 PyQt6 쪽 결과를 바꾸지 않았습니다.
+
+**판정: 9절 판정을 되살립니다.** Linux 기준으로 UI 브랜치는 PySide6 전환 준비가 끝났습니다. Windows·macOS 실행은 병합 뒤 `platform-build.yml`(수동 실행)과 소유자 PC에서 확인합니다.
