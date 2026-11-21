@@ -197,7 +197,7 @@ class FletA1HeadersTests(unittest.TestCase):
         self.assertIn("scenarios", payloads[0])
 
     def test_rates_curve_dynamic_lookback_preserves_numbers_and_payload(self):
-        self.stack.enter_context(patch.object(rates_page, "load_treasury_curve",
+        self.stack.enter_context(patch("core.ficc.data.load_treasury_curve",
                                              return_value=synthetic_curve_panel(days=30, seed=42)))
         self.inert_charts(rates_page, "curve_chart", "curve_history_chart", "pca_chart")
         payloads = self.capture_analysis(rates_page)

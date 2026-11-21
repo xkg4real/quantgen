@@ -54,10 +54,6 @@
   "ui/quant_lab_page.py": [
    "import:core.ficc.data"
   ],
-  "ui/rates_page.py": [
-   "import:core.ficc.data.load_short_rate",
-   "import:core.ficc.data.load_treasury_curve"
-  ],
   "ui/settings_page.py": [
    "call:config.crypto_provider_status",
    "call:config.krx_provider_status",
@@ -67,14 +63,11 @@
    "import:data.kis_markets.KISMarkets",
    "import:data.krx.krx_market_client.KRXMarketClient",
    "ref:config.ficc_provider_status"
-  ],
-  "ui/structuring_page.py": [
-   "import:core.ficc.data.load_treasury_curve"
   ]
  },
  "totals": {
   "core_and_main": 1,
-    "files": 17,
-    "screens": 36
+    "files": 15,
+    "screens": 33
  }
 }

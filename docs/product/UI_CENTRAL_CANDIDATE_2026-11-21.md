@@ -1,3 +1,16 @@
+## K2a 금리·구조화의 기존 gateway 입구 전환 — 2026-11-21
+
+K1d `630e9ba44d84867b01dddce55a5785acc7958269`에서 이어진 코드 WIP입니다. 승인된 KEY-5 요청 34·35·44의 `ui/rates_page.py`와 `ui/structuring_page.py`에 한정해 기존 FICC facade를 원래 조회 시점에 사용합니다. 기본 앱은 계속 native PyQt이며 Flet 화면은 기존 기능 유지 범위입니다. 원래 인자·단위·기본 일수·계산·한국어 문구·배치와 줄바꿈을 보존했습니다.
+
+- 직접 import 3개를 제거하고 loader 표현식 5곳을 `gateway.ficc()`로 연결했습니다. 실제 앱 콜백 4곳과 정적 검토만 수행한 CLI self-check 1곳을 구별합니다. CLI self-check를 실행했다고 주장하지 않습니다.
+- 공개 테스트 5파일의 patch 대상 11곳만 실제 조회 위치에 맞췄습니다. 테스트 사례·assertion·fixture의 의미는 유지했습니다. ROOT가 known 목록에서 해당 직접 import 3개만 제거했으며 ceiling 22파일/44접점과 frozen feed 항목은 보존했습니다.
+- 검증은 서로 합산하지 않습니다: 기존 공개 회귀 15 PASS, 독립 의미 비교 16 MATCH, 별도 차단 시나리오 12 PASS, 최종 경계 13 PASS. 독립 비교는 합성 provider leaf 15개와 분석 호출 10개를 구별하고 실제 gateway의 off/company/invalid 경로에서 provider·원격·분석·차트·네트워크 호출이 발생하지 않음을 검사했습니다.
+- 최종 스캐너 new/gone/errors=0. 남은 직접 호출은 frozen core feed 1파일과 화면 14파일/33접점입니다. 최초 ceiling과 SCREEN_FILES 22개를 낮추지 않았습니다. 보존한 공개 입력 412개 중 404개는 원본과 동일하며 변경은 제품 2개·공개 테스트 5개·known 1개입니다.
+- 실제 앱 import 비교는 원본 93개에 기존 `core/app_identity.py` 1개가 gateway의 지연 import로 추가된 누적 94개입니다. 해당 파일의 원본 SHA를 확인하고 출처 메타데이터만 별도로 검증했습니다. 불변 before writer·golden과 계산/인자/사례 비교는 유지했습니다.
+- 최초 검증 실패와 guard 보완 이력을 비공개 증거에 보존했습니다. 실제 연구 함수·모델·원장·keyring·외부 API를 실행하지 않았으며 폰트 탐색 subprocess 1회는 시작 전에 거부했습니다. 실제 GUI 렌더링·소유자 PC·OS go·공급사 또는 법률/라이선스 검증을 완료로 표시하지 않습니다.
+
+기존 UI/main 통합, 최종 source-review, UI PR/필수 CI 및 병합은 아직 남았습니다. KEY-5 전체와 UI 부모 항목은 미완료입니다. 웹사이트 영향은 원격 데이터 입구의 동작 일치 여부 검토 대상으로 큐에 보존하며, 지원되는 다른 대화 전송 도구가 없어 전달·실제 웹사이트 반영·배포는 미실시입니다. 본 작업은 배포하지 않습니다.
+
 ## K1d 랭킹·QScore의 기존 gateway 입구 전환 — 2026-11-21T19:04:00+09:00
 
 K1c b93fed6609af27c0b73ba41d572266a814c57768 뒤의 별도 보존 후보다. 승인 KEY5 ID10·11·15만 처리했으며 전체 UI·KEY5 또는 main 병합 완료가 아니다.

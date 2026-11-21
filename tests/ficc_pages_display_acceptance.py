@@ -121,7 +121,7 @@ class GroupedNumbers(Offline):
     def test_structuring_defaults_are_grouped_and_priced_exactly(self):
         payloads = self.capture(structuring_page)
         self.inert(structuring_page.fcharts, 'payoff_chart')
-        self.stack.enter_context(patch.object(structuring_page, 'load_treasury_curve',
+        self.stack.enter_context(patch('core.ficc.data.load_treasury_curve',
                                               return_value=synthetic_curve_panel(days=30, seed=42)))
         root = structuring_page.build_structuring_page(page())
         notional = field(root, 'Notional')
@@ -208,7 +208,7 @@ class HiddenSelectors(Offline):
     def test_results_still_name_the_provider(self):
         self.capture(structuring_page)
         self.inert(structuring_page.fcharts, 'payoff_chart')
-        self.stack.enter_context(patch.object(structuring_page, 'load_treasury_curve',
+        self.stack.enter_context(patch('core.ficc.data.load_treasury_curve',
                                               return_value=synthetic_curve_panel(days=30, seed=42)))
         root = structuring_page.build_structuring_page(page())
         button(root, 'Price').on_click(None)
@@ -236,7 +236,7 @@ class NoExpandInWrap(Offline):
         self.inert(structuring_page.fcharts, 'payoff_chart', 'price_yield_chart', 'krd_chart',
                    'fx_spot_chart')
         panel = synthetic_curve_panel(days=30, seed=42)
-        self.stack.enter_context(patch.object(structuring_page, 'load_treasury_curve', return_value=panel))
+        self.stack.enter_context(patch('core.ficc.data.load_treasury_curve', return_value=panel))
         self.stack.enter_context(patch.object(bonds_page, 'load_treasury_curve', return_value=panel))
         for name, root, label in (('structuring', structuring_page.build_structuring_page(page()), 'Price'),
                                   ('bonds', bonds_page.build_bonds_page(page()), 'Run'),
@@ -308,7 +308,7 @@ class KoreanChrome(Offline):
     def test_structuring_results_read_in_korean(self):
         self.capture(structuring_page)
         self.inert(structuring_page.fcharts, 'payoff_chart')
-        self.stack.enter_context(patch.object(structuring_page, 'load_treasury_curve',
+        self.stack.enter_context(patch('core.ficc.data.load_treasury_curve',
                                               return_value=synthetic_curve_panel(days=30, seed=42)))
         root = structuring_page.build_structuring_page(page())
         button(root, 'Price').on_click(None)
@@ -338,7 +338,7 @@ class SecondReview(Offline):
     def structuring(self, product='ppn', futures='65'):
         self.capture(structuring_page)
         self.inert(structuring_page.fcharts, 'payoff_chart')
-        self.stack.enter_context(patch.object(structuring_page, 'load_treasury_curve',
+        self.stack.enter_context(patch('core.ficc.data.load_treasury_curve',
                                               return_value=synthetic_curve_panel(days=30, seed=42)))
         root = structuring_page.build_structuring_page(page())
         tool = field(root, 'Product')
@@ -387,7 +387,7 @@ class SecondReview(Offline):
         self.assertIn('FX', texts(root))
 
     def test_structuring_inputs_fill_a_12_column_grid_and_price_never_stands_alone(self):
-        self.stack.enter_context(patch.object(structuring_page, 'load_treasury_curve',
+        self.stack.enter_context(patch('core.ficc.data.load_treasury_curve',
                                               return_value=synthetic_curve_panel(days=30, seed=42)))
         root = structuring_page.build_structuring_page(page())
         inputs, sheet = root.controls[1], root.controls[2]

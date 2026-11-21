@@ -111,7 +111,7 @@ class ForwardConventionTests(unittest.TestCase):
                 captured.update(narrative=kwargs['narrative'], payload=kwargs['payload_fn']())
                 return ft.Text('Offline analysis placeholder')
             page = SimpleNamespace(qg_locale=LocaleContext(language))
-            with patch.object(rates_page, 'load_treasury_curve', return_value=panel), \
+            with patch('core.ficc.data.load_treasury_curve', return_value=panel), \
                  patch.object(rates_page, 'stat', side_effect=stat), \
                  patch.object(rates_page, 'notice', side_effect=notice), \
                  patch.object(rates_page, 'analysis_panel', side_effect=capture), \
