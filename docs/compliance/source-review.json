@@ -522,7 +522,7 @@
     "tests/cms_coupon_disclosure_acceptance.py": "1c1fcf30d38c23885e7c236f1ed39302972df972c93c9a20184b3b7ebf3d4010",
     "tests/compliance_acceptance.py": "515c4e52c4643cc4a4679bcacf401af6829b2472a69ae9ca23ded61752c40156",
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
-    "tests/credentials_acceptance.py": "b0c2a0a66a96fc22380eb61c52b1a290abf0c62c9d375b8e0625e15c94a46c2e",
+    "tests/credentials_acceptance.py": "041bdc5c86b3585117e68d3d2f5c42164201bb1d09d271f47cc294553db59ccd",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
     "tests/crypto_missing_values_acceptance.py": "be07db163184acb8c0a67dd9c0562045e9f486506539ed9eadb2d06bec2ca038",
     "tests/curve_methods_acceptance.py": "66007a9bee8a7abedce57738f0fff5bd1ae9b2bd1d400b240d032e9a9691bd9b",
@@ -905,11 +905,11 @@
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "9bafb69378ebbcf1016468766e45cc9193f49f84f28115eab50bb9a7e966940d",
+      "source_digest": "509ed2f342ef198f9228411abf55fe1a026c85f4d59af6cfaf7f894acd31145c",
       "reviewed_by": "GPT central a3da2627 with independent QA",
-      "review_note": "Reviewed explicit OS storage preparation, consent-only exclusive migration, preserved legacy sharing and frozen engine, pure getters and synthetic failure evidence; startup error handling adds no publication or legal approval.",
-      "reviewed_at": "2026-11-21T03:16:24.299116+00:00",
-      "source_commit": "e44c48e1e74908b2e485a1c9eca30463a8c2ba97"
+      "review_note": "Reviewed Windows credential fixture isolation across Path.home and platform roots; preserves sentinel key-change assertions, production path precedence and existing policy bodies; 93 isolated tests pass.",
+      "reviewed_at": "2026-11-21T03:29:24.969571+00:00",
+      "source_commit": "74dce42f32883e1be459d71cd6674a40922bcaf0"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
