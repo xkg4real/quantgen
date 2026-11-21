@@ -23,6 +23,11 @@ previous_returned_at: 2026-11-21T14:54:13+09:00
 returned_at: 2026-11-22T00:12:02+09:00
 ---
 
+### 같은 CI 수리의 인접 legacy 사례 시험 범위 보완
+
+독립 읽기 감사에서 tests/desktop_indicator_guide_acceptance.py의 정확2method(vector_chart_background_keyboard_and_selection_survive_theme_resize, approved_draft_layout_reads_each_study_with_its_conclusion)도 원래 사례chart/hint/fail_row가 기본노출된다는옛전제임을확인했습니다. 실제context_toggle를명시적으로열고 열린상태를확인한뒤 기존 모든렌더폭·배경·키보드·결론·marker/assertion을그대로검증하는 test-fixture 수리만허용합니다. 따라서 로컬변경범위는 기존workflow method1 + guide legacy method2 + 기존guide_docking의새컴포넌트method1 + source-review 기술기준선입니다. 제품파일·임계값·동결/판정/원계산변경0; 나머지기존methods/기록을보존하고 독립검토/합성검증 후 push합니다.
+
+
 ## 승인된 UI PR140 CI 후속 수리 재개 — 2026-11-22T01:45:43+09:00
 
 - 사용자 최신 상태 질문에 따라 실제PR/CI를 확인했습니다. 이전부터 승인된 UI 구현·독립검토·검증·PR 범위의 미완료 CI 수리만 재개합니다. 자동감시/예약/자동인수/run_now는 재개하지 않습니다. 실제소유자PC7·OSgo·데이터/법률/라이선스 조건은 그대로 남습니다.
