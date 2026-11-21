@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code
 next_ids: KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T17:57:15+09:00
+updated_at: 2026-11-21T18:14:17+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/data-source-didm-20261121
@@ -21,6 +21,14 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
 ---
+
+## K1c 원격 보존·KEY5a 독립 통합 준비 — 2026-11-21T18:14:17+09:00
+
+- K1c gpt/ui-key5-native-k1c-20261121 최신 **b93fed6609af27c0b73ba41d572266a814c57768**, parent053/tree0252c361,3본문·blob/parent/tree/ref원격대조완료. app.py원래위치의2import만기존gateway로전환했고known예외2개만제거했다. 별도기존15회귀PASS,불변before의15factory계약MATCH/서비스6·시도7·ready10·import121 확인, 실제gateway15진입(card2/profile13)의data.kis_workspace/source=None·fixedlocalkis_quote route/table/order/remote0·targetdata/network0 독립PASS. 전역기존module해석2회는target밖별도로세며globalprovider0라쓰지않는다. 15factory는GUI화면15개가아니다. 남은18화면39접점+동결feed1·상한22/44·공개test/CI불변,최종fullUI/KEY5/PC7/OSgo완료아님.
+- DIDM4g [PR138](https://github.com/xkg4real/quantgen/pull/138)/6cff의Compliance44887223783 성공, 전체Runtime44887223811은18:14현재in_progress. 문법2와4환경bounded기본검사성공은확인했으나전체성공으로세지않는다. Notion에는DS-H/code완료와DIDM/K1c부분진척만성공반영했고부모취소선없음. 웹전달은UI/K1a/K1b/K1c4개private큐미발송·미반영이다.
+- CI동안 기존승인4h의 **독립 local 준비만** 진행한다. 실제main은여전히6d25a33이고DIDM6cff는미병합후보다. 검증된 gpt/key5a-fixes-20261121 원격45db2be73e7f87954cab6782ca4b2717dc97fc62/동일localHEAD를보존하고,clean확인후별도local gpt/key5a-didm-candidate-20261121에45+검증된6cff를미커밋통합한다. 원래10공개변경과DIDM45의직접교집합0이나commonbase84451871에서main.py의OS-F2시작가드와KEYsharedQuoteFeed변경을함께보존해야한다.
+- root는DATA담당에게위분리후보준비/기존합성회귀GO만준다. main.py는ensure_user_data_dir/OSError시작중단,단일KRX facade를화면+EngineRuntime/QuoteFeed에같이전달하는계약을유지한다. 동결engine/실제데이터·원장·연구실행/서명/환경·키정책변경없음. DIDMworkflow/08/20·V0와현재선행source-review를보존한다. CODE27과KEY10의static경로교집합0만읽기확인했고실제지문/runner를실행하거나서명을쓰지않았다.
+- **4g실제main병합전 KEY5a새원격code·4hPR·최종baseline없음**. 4g통과뒤실제새main/tree와준비후보를대조·필요재합류하고최종20검토/baseline/check·정확head전체CI순서를따른다. 원격45/원본작업폴더를reset/overwrite하지않는다. 읽기근거는private KEY5A_READONLY_INTEGRATION_PLAN_2f27d0c2.md/EVIDENCE.json. 신규인수·진행은latestSHA CAS+execution/read-back, OS잠금유지,자동감시/예약·배포재개없음.
 
 ## DIDM 원격 PR138·K1c 최소 전환 GO — 2026-11-21T17:57:15+09:00
 

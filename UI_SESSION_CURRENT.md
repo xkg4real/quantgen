@@ -1,3 +1,12 @@
+# 중앙 K1c 검증·원격 checkpoint — 2026-11-21T18:14:17+09:00
+
+- status: taken · execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9,총괄root. 최신별도 gpt/ui-key5-native-k1c-20261121@b93fed6609af27c0b73ba41d572266a814c57768(parent053/tree0252c361)3본문/ref확인. 원본UI822/K1ad2/K1b053보존,새UI PR/main병합없음.
+- app2service조회만기존gateway.provider(data.kis_workspace)로이동. 기존15회귀PASS,별도15factory계약고정골든MATCH·독립PASS(서비스6/시도7/ready10),실gateway15target진입모듈/source=None·route/table/order/remote0·targetdata/network0. 기존전역module해석2회별도. factory사례를GUI/Windows/PC완료로확대하지않는다.
+- 정확2제품파일만변경·known2삭제·18screenfiles39sites+동결feed1, ceiling22/44·SCREEN_FILES·공개tests/CI불변. fullUI/KEY5·선행G1–G3/최신main·최종준법/전체CI·실PC7/OSgo는미완료.
+- Notion부분진척성공반영,UI웹큐4개는지원발송도구부재로NOT_SENT/미반영/미배포. 실제UI PR시PR-번호기록/수신증거필요. 현재코드대기열4gDIDM138→4hKEY5a이며별도UI중복작업중지유지. [현재전체실행](WEEKLY_HANDOFF_2026-11-21_2f27d0c2.md).
+
+---
+
 # 중앙 Codex K1b 부분 인계 — 2026-11-21T14:54:13+09:00
 
 - status: returned · execution_id: 1bfaa7d8-c59c-4c6c-a53d-00acbe3b7e9a. 원본UI414/중앙UI822/K1ad2 보존. 새 gpt/ui-key5-native-k1b-20261121 최신053b6c44d2c8b729cba03c8b3287d1348ac5d9e4, parentd2/treeb56647dd·3본문/ref 원격확인. 새PR/전체UI·KEY5완료가 아니다.

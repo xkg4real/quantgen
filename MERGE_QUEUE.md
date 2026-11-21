@@ -1,9 +1,13 @@
 # MERGE_QUEUE — main 병합 순서와 동결 (메인 세션이 관리)
 
-updated_at: 2026-11-21T17:35:29+09:00
+updated_at: 2026-11-21T18:14:17+09:00
 전체 업무 체크리스트: `WORKBOARD.md` · 세션 연결 규칙: `SESSION_PIPELINE.md` (2026-11-19 23:00 KST 무렵 소유자 지시)
 coordinator: QUANTGEN 메인 Codex (소유자 단일 요청 창구 지정·2026-11-21 승인; 이전 Claude 기록 보존)
 freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보고("F22까지 성공적으로 마무리했습니다."), main `6e077dc`(소유자 `--no-ff` 병합, 부모 `8e026ab`·`13f4dea`), 그 push의 Compliance success, PR #4 merged. (동결 기간: 2026-11-18T19:10:45+09:00 ~ 위 시각)
+
+## 현재 실제 대기 — 2026-11-21T18:14:17+09:00
+
+4g DIDM **PR138/6cff168** 단일활성대기, 문서CI성공/전체Runtime44887223811진행중. 오래된PR12는승인안에기록된이력으로미변경. 4h KEY45는독립local45+미병합6cff준비만허용, 실제4gmain병합전새원격code/PR/finalbaseline없음. K1c b93는검증WIP·18화면39접점/PC7·OSgo·최종UI조건미완료. 기존4fDS-H/code 완료/실OA09부모미완료유지.
 
 ## 현재 차례 — 2026-11-21T17:35:29+09:00
 
@@ -61,7 +65,7 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 | 6 | PySide6 전환 (`pyqt6_to_pyside6 --apply` + `switch_day.py --apply`, 화면 문구 3곳은 UI 세션) | OS | 5 뒤 (OS 세션 제안 순서: UI PR → 전환) |
 | 4e | ~~OS-F2 (~/.nextgen → core.app_paths.user_data_dir, config.py 포함 → Nautilus 지문 bcaf33d9…) + OS PySide6 종료 원인 기록(5커밋, 작업 A: PySide6 320회 abort 0)~~ | gpt/os-f2-data-dir-20261121@64ff58e · PR136 → **main72a055f**; 이전준비: OS `claude/os-f2-data-dir-20261120` @ **`e44c48e`** (main f065ec9 합침, 충돌 없음) | **코드병합완료 2026-11-21T14:21:16.000+09:00**; 실제owner이전미검증. 이전상태: **병합: OS** (2026-11-20 05:40 KST 메인). OS가 최신 main `f065ec9` 합침 → 기준선(source-review.json) 마지막에 갱신 → `--check` PASS → PR. 메인 독립 검토 뒤 CI 녹색이면 병합 **11-20 05:4x OS 세션 주간 98%로 중단: 2단계(CRLF·엔진 4파일)까지 끝, 3~6단계(회귀·code_sha256·기준선·PR) 남음 → OS_SESSION_CURRENT 6절** |
 | 4f | ~~DS-H/code 홈 지표6종 데이터 계약·코드 통합~~ (OA09 실제진단/전체DS-H부모는 별도 미완료) | gpt/ds-home-indicators-20261121@4973111 · PR137 → main6d25a33 | 코드 통합 완료 2026-11-21T17:35:29+09:00; 전체6Runtime/문서CI/독립PASS·검사tree정확일치. 이전준비7ce 보존 |
-| 4g | DS·DIDM (8행을 당김: UI 소유자 확인 대기 중이라 준비된 것부터) | DATA `gpt/data-source-didm-20261121` @ `abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0` | 4f 뒤 |
+| 4g | DS·DIDM 코드 통합(실제 API/모형/운영·부모는 별도) | gpt/data-source-didm-20261121@6cff168 · PR138 | 현재차례: 최종844소스/20정책·합성/독립/문서CI PASS, 전체Runtime진행 중; 이전abd준비보존 |
 | 4h | KEY-5/a gateway 준비 3건 (data.kis_stream 입구, kis_workspace 순수 값 목록, QuoteFeed 하위 클래스 공용 모듈) | PAYMENTS `gpt/key5a-fixes-20261121` @ `45db2be73e7f87954cab6782ca4b2717dc97fc62` (dc936d4 기반 수정·검증; PR차례전) | 4g 뒤 (11-20 메인이 정함). 메인 검토 결과 `plans/2026-11-20/KEY5A_REVIEW.md`: 주요 2건(M1 feed가 지운 키·막힌 FMP 계속 사용, M2 _refresh_krx 비원자적 fail-open) PR 전 고칠 것 |
 | 7 | KEY-5 (4f 뒤) (화면 쪽 22파일/44곳 + quantgen_desktop/paper.py, 키·연결 화면) | PAYMENTS 요청문(handoff plans/2026-11-20/KEY5_UI_REQUEST.md) + UI 구현(소유자 경유) | 6 뒤 권장, 4e 뒤 |
 | 8 | ~~DS·DIDM~~ → 4g로 당김 (11-20 메인) | DS | — |
