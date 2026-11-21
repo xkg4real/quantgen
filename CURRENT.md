@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T22:25:04+09:00
+updated_at: 2026-11-21T23:12:39+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-guide-chart-first-20261121
@@ -20,6 +20,20 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
+---
+
+## 새 UI 구현·검증 진척 및 위험 용어 후속 범위 — 2026-11-21T23:12:39+09:00
+
+- 동일 ROOT execution 2f27d0c2-57cc-46e7-97d6-fc141d4065c9/OS lock20162, primary gpt/ui-guide-chart-first-20261121@b3731cf 유지. UI 소스는 아직 로컬 WIP이며 사용자에게 CMD를 넘기기 전 최신 main dec979a 및 K2d7d9a와 통합·검토합니다. 실제 PC7은 최종UI병합 전, OSgo는 실제바인딩전환 전 조건이며 준비/draft PR을 막는 새 관문은 만들지 않습니다. 감시/예약/자동 인수/run_now 취소 유지입니다.
+- **교육27 학습 그림 V3 검증:** 원 계산·가상 입력/engine/공유renderer/outlook/export 변경0. 실제92기하(27×3+11변형)·별도7pure·NaNgap1·PNG2가 통과했고 source36/private16/prefix 전후 일치. RSI 등 bounded축은원0–100/해당bounds, EMA는빠른12·느린26을선에직접표시하고단계1숫자범례를간결화, 값은단계2/tooltip/accessibility에보존했습니다. 기본 학습 그림 하나·원사례차트 접기/한영·전체다크팔레트·원실선점선도확인했습니다. 원형V2 PASS/PNG와초기하네스실패2는별도보존/합산0. 실제컨테이너/undocked Signals/report/DPI·Windows는 아직 후속입니다.
+- **초보용어 실제판독:** stock actualdisplay AST16(동적97.5%/unknown에95%기본부여0/원값·tone·출처hint suffix 불변) 및별도 금융정의 반환8을 확인했습니다. guard/공개7/private3/prefix 불변, 실제Qt/전체앱/모형/실API가 아닙니다. 최초stdlib datetime 지연import guard실패는 원문보존하고 stdlib한줄 선행import만으로해결했으며 금융조건/원함수는 바꾸지 않았습니다.
+- **툴팁 V3 실제관측:** 원문을자르지않고logical screen폭을기준으로max-width를적용했습니다. 4배율(1/1.25/1.5/2) childexit0·원문64exact·PNG64/불변proof. 정상번들QG32는모두화면안에표시, 실제long KO폭952→476/줄바꿈확인. 미등록font32는별도이며클라우드에fallback face가없는2x ENlong2건은tofu/세로잘림으로남았습니다(전체fit62/64). 이2건/원PNG를숨기거나성공으로대체하지않고 실제Windows/fallback확인조건을보존합니다. 원Linux등록폰트가이미14px/400이었으므로사용자Windows글꼴문제를Linuxbefore에서재현했다고주장하지않습니다.
+- **주식정보 Program7:** PBR/BPS·실제투자자매수/매도수량·REST호가/체결강도/panel 구현 및실앱source연결확인. 실제app._ProductionProfileLoader→준비된domestic service.client→stock_profile.load_profile→readonly orderbook/executions각1·retryFalse이며새poll/WS/hoverI/O0. optional은missing/unready/failure격리이며 defaultFalse flag가있는것은아닙니다. 신규실API성공/단위실측/권리승인으로확대하지않습니다.
+- 원19검사 첫실행은18PASS/1ERROR/skip0, source425/privatepins 불변/guard0였습니다. 실제Qt언어·테마재렌더에서QLayoutItem.widget가setParent후None이되는제품버그를발견해로컬widget참조를보존하는1곳을수정했습니다. 원V2/첫실패/19assertion은보존하고sourceV3 panel82b28만갱신한공통425V2(36498682, 나머지424불변)로독립판독후재실행중입니다. 성공을미리계상하지않습니다.
+- **DIDM 추가 구현 GO(위재실행425 postcheck 뒤에만 source수정):** 사용자VaR/CVaR등을초보자가읽게해달라는지시에따라 기존app.py Quant표시접점과 추가 quantgen_desktop/page_kit.py, risk_page.py, library_view.py, market_tools.py, rates.py의표시/도움말metadata접점만허용합니다. page_kit은기존3값tuple계약과값/tone을보존하면서선택help만추가가능합니다. 기존순수 metric_help를재사용하여MC는실제기간/신뢰·초기spot손실%, hedge는부호있는하위5%평균P&L bp, rates는선택시점PV금액손실, stock은실제var_level의일간log손실로구분합니다. 저장metadata가없으면기준미확인, 고정1일95/최대손실/양수loss관례를전역복제하지않습니다. 숫자·모형·저장원문/연구/원장을바꾸지않고짧은표시와hover로설명하며전체앱/모형실행없이합성결과객체·필요Qt로독립검증합니다. ROE자본0은정의불가라는copy명료화도같은단계에서1곳반영가능합니다.
+- Native 실제Guide/Workspace/접기·undocked 기본off·언어·원save_report의memoryZIP입력보존검증은stage2 좁은graph로진행합니다. 수동합성history만주입하고실historical fixture/캐시는열지않습니다. 원legacy context의core.quant.signals.sma/ema2는 exact catalog.indicator_values caller의합성배열계산만관측예외, 새lesson은원core.education.compute_study만씁니다. 실제SignalsPane전체/ResearchWindow/StockDetail전체·MC/GARCH/실history/API/DB/원장·Windows검증으로확대하지않습니다.
+- 신규code공개경로는현재Native2+DIDM5+Program7와위추가5가비겹침분담입니다. 각원형/diff/정확SHA/실테스트·실패를보존하고공통425의변경row를새freeze로연결합니다. 테마질문은대기/업종대체0, ROE단위·회계범위/PSR분모·주식기준/실제peer집합은아직부족합니다. sapientia는KEY139코드완료·K2d7d9a부분/신규요청scope반영성공, website9큐 NOT_SENT/실제전달·적용·배포0, 선택GPT/Gemini추가spec공개·심사는NOT_PERFORMED입니다.
+
 ---
 
 ## K2d 검증 코드 보존·새 주식 정보 구현 GO — 2026-11-21T22:25:04+09:00
