@@ -11,7 +11,8 @@ core.education.outlook, one concept line and one limit line), with the combined 
 at its foot. 투자 용어 shows the glossary: the terms by category on the right, the chosen term on the canvas.
 
 The Signals pane embeds the same class undocked as a history explorer (the stacked layout built in __init__).
-Selections, calculations, exports and texts are the same in both arrangements.
+The docked guide alone adds a separate, explicitly invented teaching diagram;
+the shared history chart, calculations and export inputs keep their original paths.
 """
 from html import escape
 import math
@@ -405,6 +406,7 @@ class IndicatorGuide(QWidget):
         self.series=None;self.cursor=0;self.meta={};self.case_name='2020'
         self.focus=None
         self.docked=False;self.workspace=None;self.cards={};self.hint=None;self._bars=(None,None)
+        self.educational_lessons=False;self.lesson=None  # Signals/history embeds stay off.
         self.detail_timer=QTimer(self);self.detail_timer.setSingleShot(True)
         self.detail_timer.timeout.connect(self.reveal_detail)
         self.market_series=None;self.category='all'
@@ -501,6 +503,7 @@ class IndicatorGuide(QWidget):
         from .page_kit import Card, EmptyState, KeyFigures, Text
         from .stock_detail_style import label as sd_label
         self.docked=True;self.workspace=ws
+        self.educational_lessons=True  # This entry point is the dedicated technical-guide page.
         own=self.layout()
         while own.count():
             item=own.takeAt(0)
@@ -544,22 +547,38 @@ class IndicatorGuide(QWidget):
         canvas.addWidget(figures)
         card=Card(margins=(16,12,16,8),spacing=8)
         self.chart_card=card
+        from .guide_lessons import GuideLesson
+        self.lesson=GuideLesson(card)
+        self.lesson.choose_requested.connect(self.choose)
+        card.body.addWidget(self.lesson)
+        # The primary diagram is the lesson. Keep the original case/date/chart
+        # intact in an explicitly opened secondary view, never a second default plot.
+        self.context_toggle=QPushButton();self.context_toggle.setCheckable(True)
+        self.context_toggle.setProperty('kit','ghost')
+        self.context_toggle.toggled.connect(self._toggle_context_chart)
+        card.body.addWidget(self.context_toggle,0,Qt.AlignmentFlag.AlignLeft)
+        self.context_host=QWidget();self.context_host.setProperty('guide','box')
+        context=QVBoxLayout(self.context_host);context.setContentsMargins(0,8,0,0);context.setSpacing(10)
+        for original in (head,figures):
+            canvas.removeWidget(original);context.addWidget(original)
+        card.body.addWidget(self.context_host)
+        self.context_host.hide()
         legend=QWidget();legend.setProperty('guide','box');legend_row=QHBoxLayout(legend)
         legend_row.setContentsMargins(0,0,0,0);legend_row.setSpacing(10)
         self.chip_host.setParent(None);self.chip_host.setProperty('guide','box');self.chip_row.setSpacing(12)
         legend_row.addWidget(self.chip_host,1)
         self.hint=sd_label(wrap=True);self.hint.setProperty('guide','hint')
         legend_row.addWidget(self.hint,1)
-        card.body.addWidget(legend)
+        context.addWidget(legend)
         for widget in (self.chart,self.readout,self.slider,self.ohlcv_notice,self.line_styles,self.why,self.source):
             self.chart_area.layout().removeWidget(widget)
         self.chart.legend=False;self.chart.candles=True
-        card.body.addWidget(self.chart)
+        context.addWidget(self.chart)
         scrub=QWidget();scrub.setProperty('guide','box');scrub_row=QHBoxLayout(scrub);scrub_row.setContentsMargins(0,0,0,0);scrub_row.setSpacing(10)
         scrub_row.addWidget(self.slider,1)
         self.keys_hint=sd_label();self.keys_hint.setProperty('guide','keys')
         scrub_row.addWidget(self.keys_hint)
-        card.body.addWidget(scrub)
+        context.addWidget(scrub)
         self.readout.setParent(card);self.readout.hide()   # its text stays the chart's accessible description
         self.line_styles.setParent(card);self.line_styles.hide()   # the tags carry each indicator's colour
         # The signals that missed: title, numbered chips (they move the reading date), a short hindsight note.
@@ -576,15 +595,15 @@ class IndicatorGuide(QWidget):
         self.fail_short.setProperty('guide','failNote')
         fail.addWidget(self.fail_short,0,Qt.AlignmentFlag.AlignTop)
         self.fail_rule=QFrame();self.fail_rule.setProperty('guide','rule');self.fail_rule.setFixedHeight(1)
-        card.body.addWidget(self.fail_rule)
-        card.body.addWidget(self.fail_row)
+        context.addWidget(self.fail_rule)
+        context.addWidget(self.fail_row)
         canvas.addWidget(card)
         # Small print: the example's provenance, why it was chosen, missing OHLCV, the hindsight rule in full.
         notes=QWidget();notes.setProperty('guide','box');notes_column=QVBoxLayout(notes);notes_column.setContentsMargins(4,2,4,0);notes_column.setSpacing(3)
         for widget in (self.why,self.source,self.ohlcv_notice,self.fail_note):
             _style(widget,role=None,guide='fine')
             notes_column.addWidget(widget)
-        canvas.addWidget(notes)
+        context.addWidget(notes)
         canvas.addStretch(1)
         self.study.setParent(self);self.study.hide()
         # Right column: 지표 (the studies by category) | 해석 (a card per selected study); the combined reading and the
@@ -762,6 +781,14 @@ class IndicatorGuide(QWidget):
         from .typography import is_dark
         ctx=self.ctx;ko=_ko(ctx)
         colors=getattr(self.window(),'colors',LIGHT)
+        if self.educational_lessons and self.lesson is not None:
+            lesson_key=self.focus if self.focus in self.keys else next(iter(self.keys),None)
+            self.lesson.set_lesson(lesson_key,ctx.language,is_dark(colors))
+            opened=self.context_toggle.isChecked()
+            self.context_toggle.setText(('사례 차트 접기' if opened else '사례 차트 보기') if ko else
+                                        ('Hide context chart' if opened else 'Show context chart'))
+            self.context_toggle.setAccessibleDescription('원래 사례의 날짜·출처·차트. 보고서는 이 사례 기준이에요.' if ko else
+                                                        'The original case dates, source and chart. Reports use this case.')
         self.case_title.setText(self._case_line())
         self.case_box.setVisible(self.external is None)
         count=len(self.keys)
@@ -855,11 +882,18 @@ class IndicatorGuide(QWidget):
             if host.styleSheet()!=sheet:host.setStyleSheet(sheet)
         self._focus_order()
 
+    def _toggle_context_chart(self,opened):
+        self.context_host.setVisible(bool(opened))
+        self._docked_render()
+
     def _focus_order(self):
         """Tab follows the page as it reads: toolbar, the example, the tags, the chart and its date, the signals that
         missed, then the right column (its switch, the choices, the cards) and the glossary list."""
         ws=self.workspace
-        chain=[*ws.switch.buttons,self.clear,self.export,self.case]
+        chain=[*ws.switch.buttons,self.clear,self.export]
+        if self.educational_lessons and self.lesson is not None:
+            chain+=self.lesson.focus_widgets()+[self.context_toggle]
+        chain+=[self.case]
         for key in self.keys:
             chip=self.chips.get(key)
             if chip is not None:chain+=[chip.show_button,chip.remove_button]

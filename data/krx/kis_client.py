@@ -240,6 +240,8 @@ class Quote:
     eps: Optional[float] = None
     sector: Optional[str] = None
     listed_shares: Optional[int] = None
+    pbr: Optional[float] = None
+    bps: Optional[float] = None
 
 
 def _f(value: Any) -> Optional[float]:
@@ -434,7 +436,36 @@ class KISClient:
             eps=_finite_metric(out.get("eps")),
             sector=_sector_name(out.get("bstp_kor_isnm")),
             listed_shares=_listed_shares(out.get("lstn_stcn")),
+            # Same response, official sample74b0a082: no additional quotation request.
+            pbr=_finite_metric(out.get("pbr")),
+            bps=_finite_metric(out.get("bps")),
         )
+
+    def orderbook(self, code: str) -> Optional[dict]:
+        """One read-only REST depth snapshot; not a streaming feed or a trade.
+
+        The provider clock has no supplied date here. Keep it apart from receipt UTC.
+        retry=False makes at most one quotation GET attempt; token setup is separate.
+        """
+        from core.market.detail_insights import normalize_orderbook
+        code = _normalize(code)
+        payload = self._get(
+            "/uapi/domestic-stock/v1/quotations/inquire-asking-price-exp-ccn", "FHKST01010200",
+            {"FID_COND_MRKT_DIV_CODE": _MRKT_STOCK, "FID_INPUT_ISCD": code}, retry=False)
+        return normalize_orderbook(payload, received_at=_now())
+
+    def executions(self, code: str) -> Optional[dict]:
+        """One REST executions/strength snapshot; no polling, paging or WebSocket.
+
+        tday_rltv is the supplied strength reading. Do not infer a formula, scale or
+        aggressor classification from the price/volume fields.
+        """
+        from core.market.detail_insights import normalize_executions
+        code = _normalize(code)
+        payload = self._get(
+            "/uapi/domestic-stock/v1/quotations/inquire-ccnl", "FHKST01010300",
+            {"FID_COND_MRKT_DIV_CODE": _MRKT_STOCK, "FID_INPUT_ISCD": code}, retry=False)
+        return normalize_executions(payload, received_at=_now())
 
     def daily(self, code: str, *, start: Optional[str] = None,
               end: Optional[str] = None, adjusted: bool = True) -> list[dict]:

@@ -186,7 +186,8 @@ def plain_ages(value, lang):
 
 
 # Figures whose tooltip starts with what the term means (spec 6.3; review 2026-11-11: PER, EPS, 시가총액, VaR, CVaR).
-TERM_TIPS = (("시가총액", "term_cap"), ("Market cap", "term_cap"), ("PER", "term_per"), ("EPS", "term_eps"),
+TERM_TIPS = (("시가총액", "term_cap"), ("Market cap", "term_cap"), ("PER", "term_per"), ("PBR", "term_pbr"),
+             ("ROE", "term_roe"), ("PSR", "term_psr"), ("EPS", "term_eps"),
              ("CVaR", "term_cvar"), ("VaR", "term_var"))
 
 
@@ -197,7 +198,7 @@ def term_tip(label_text, lang):
     return ""
 
 
-def display_row(row, lang):
+def display_row(row, lang, *, risk=None):
     """A stock profile row as this view shows it: a typographic minus, Korean units and Korea time in the Korean
     window, 해요체 tooltips that start with what the term means, and no internal engine name. The profile itself
     (reports, exports) is unchanged."""
@@ -210,10 +211,22 @@ def display_row(row, lang):
         hint = polite(korean_times(hint), lang)
     hint = "\n".join(line for line in hint.split("\n") if "gs_quant" not in line and "계산 엔진" not in line
                      and "engine" not in line.lower())
-    term = term_tip(str(row.label), lang)
+    label = row.label
+    term = term_tip(str(label), lang)
+    if "VaR" in str(label):
+        from .metric_help import stock_risk_help
+        metadata = risk if isinstance(risk, dict) else {}
+        help_text = stock_risk_help("cvar" if "CVaR" in str(label) else "var", lang,
+                                    confidence=metadata.get("var_level"), horizon_days=1,
+                                    unit="%", basis="historical_log_loss")
+        term = help_text.hover
+        # The profile's legacy label rounds 97.5 to 98; use raw metadata here.
+        confidence = metadata.get("var_level")
+        if isinstance(confidence, (int, float)) and not isinstance(confidence, bool) and 0 < confidence < 1:
+            label = help_text.label
     if term:
         hint = term + ("\n" + hint if hint else "")
-    return ProfileRow(row.label, value, row.tone, hint)
+    return ProfileRow(label, value, row.tone, hint)
 
 
 class PageLock(QObject):
@@ -1185,6 +1198,9 @@ class StockDetailView(QWidget):
         self.notes = NotesBox(self)
         self.notes.hide()
         page = self.side.stock_page.layout()
+        from .stock_insights import StockInsightsPanel
+        self.insights = StockInsightsPanel(self.side.stock_page)
+        page.insertWidget(page.indexOf(self.side.sections["key_figures"]), self.insights)
         page.insertWidget(page.count() - 1, self.notes)
         from .risk_reward import RiskRewardTool
         self.risk = RiskRewardTool(self)
@@ -2323,6 +2339,7 @@ class StockDetailView(QWidget):
         bar.setValue(max(0, card.mapTo(page, QPoint(0, 0)).y() - 8))
 
     def _clear_sections(self):
+        self.insights.set_profile(None, language=_lang(self.ctx), dark=self.dark)
         self.__dict__["_technical_blocks"] = {}     # the sections delete their blocks: build new ones
         for section in self.side.sections.values():
             section.set_rows([], ctx=self.ctx, dark=self.dark)
@@ -2335,6 +2352,10 @@ class StockDetailView(QWidget):
         """Profile sections folded in the right column (owner: 3-4 figures each, the rest folded)."""
         from core.research.stock_profile import sections
         lang = _lang(self.ctx)
+        self.insights.set_profile(self.profile, language=lang, dark=self.dark)
+        covered_sections = self.insights.covered_sections
+        covered_figures = self.insights.covered_key_figures
+        risk_metadata = self.profile.values.get("risk") if self.profile is not None else None
         by_key = {}
         if self.profile is not None:
             for section in sections(self.profile, lang):
@@ -2348,11 +2369,16 @@ class StockDetailView(QWidget):
         self.section_panels = []
         for key, (sources, title) in groups.items():
             panel = self.side.sections[key]
-            rows = [display_row(row, lang) for source in sources if source in by_key for row in by_key[source].rows]
+            shown_sources = tuple(source for source in sources if source not in covered_sections)
+            rows = [display_row(row, lang, risk=risk_metadata) for source in shown_sources if source in by_key
+                    for row in by_key[source].rows
+                    if not (source == "key_figures" and str(row.label).strip().lower() in covered_figures)]
             if key == "key_figures":
                 rows = key_figures_first(rows)
-            notes = " · ".join(dict.fromkeys(polite(by_key[s].note, lang) for s in sources
+            notes = " · ".join(dict.fromkeys(polite(by_key[s].note, lang) for s in shown_sources
                                              if s in by_key and by_key[s].note))
+            if key == "risk" and rows:
+                notes = text(lang, "risk_meaning_note") + (" · " + notes if notes else "")
             panel.set_title(text(lang, title))
             panel.set_rows(rows, note=notes, ctx=self.ctx, dark=self.dark)
             panel.setVisible(bool(rows))
@@ -2737,6 +2763,7 @@ class StockDetailView(QWidget):
         for section in self.side.sections.values():
             section.set_theme(self.dark)
         self.side.watchlist.set_theme(self.dark)
+        self.insights.set_profile(self.profile, language=_lang(self.ctx), dark=self.dark)
         self.picker.set_theme(self.dark)
         self._toolbar_texts()
         if not self.notes.isHidden():

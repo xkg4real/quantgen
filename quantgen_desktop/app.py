@@ -2445,6 +2445,7 @@ class ResearchWindow(QMainWindow):
         if self.language_store is not None:
             self.language_store.setValue("ui/theme", "dark" if index else "light")
         self.setStyleSheet(typography.window_stylesheet(p, bool(index)))
+        typography.apply_tooltip_theme(QApplication.instance(), p)
         for chart in [*self.findChildren(FanChart), *self.findChildren(FrontierChart), *self.findChildren(LineChart), *self.findChildren(SignedBars)]:
             chart.colors = p
             chart.update()
