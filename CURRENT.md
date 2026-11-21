@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a
 next_ids: OS-F2, KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T12:10:34+09:00
+updated_at: 2026-11-21T12:20:41+09:00
 stale_after_hours: 3
-waiting_on: none
-work_branch: main
-work_commit: f065ec9
-uncommitted_changes: yes
-pr: none
+waiting_on: ci
+work_branch: gpt/os-f2-data-dir-20261121
+work_commit: 74dce42f32883e1be459d71cd6674a40922bcaf0
+uncommitted_changes: no
+pr: 136
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
@@ -20,6 +20,15 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: a3da2627-8d65-4ade-9c47-a1594cb6db15
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 ---
+
+## OS-F2 원격 게시·PR136 전체 CI 대기 — 2026-11-21T12:20:41+09:00
+
+- [PR136](https://github.com/xkg4real/quantgen/pull/136), gpt/os-f2-data-dir-20261121 **74dce42f32883e1be459d71cd6674a40922bcaf0**, parente44c48e. 새commit14파일의내용blobSHA·commitfiles·parent·branchhead와core본문readback일치. 기존OS-F2/Qttool기록까지포함하며mainf065ec92는그대로다.
+- 경로조회순수성유지, 앱시작/native/Flet 및기본KIS/DART쓰기전명시준비. marker비정규/손상거절. 동의후이전은독점rename만허용하고경합/EXDEV/미지원에copy-delete없이거절. 동결engine4파일main동일,config.py/main.pyCRLF유지. 실제27입력code_sha **bcaf33d91adb5c3a2b1c4a181e0827ed17fe8768827539fe7bd8ecbaea0bb34c**;서명대신작성없음.
+- OS합동107PASS(개별app_paths33포함), startup6PASS, compliance/export47PASS(합동53에는startup6포함), 독립합성18PASS(기존검사와중복), 실제Qt6.12 nativeentry성공/실패·import무쓰기검증. Python3.10문법PASS,20문서807source consistencyPASS/publicationBLOCKED. 확대harness·환경실패는별도보존하며전체PASS로소급하지않음. actualWindows/macOS이전/실제사용자자료는미실시.
+- PRRuntime44860609205·Compliance44860609139진행중. 전체필수CI/독립검토조건통과전병합/OS-F2완료ID/부모취소선없음. 신규startup검사를기존runtime경로필터·bounded명령에추가했다.
+- 병렬결과: 최신DIDM132PASS/홈공통131PASS/공급사대조147PASS,엑셀171칸변경0·V0불변. KEY5a8파일수정+gateway83PASS/관련123PASS(21subtests별도)후독립검토중. UI7페이지한영14캡처와고유14선택검사통과,기존main안내문회귀수정;2준법merge충돌·PC확인·전체CI·OSgo미완료. 이들준비를main병합완료로기록하지않는다.
+- 실행 a3da2627-8d65-4ade-9c47-a1594cb6db15. 5담당공유현황은 [중앙진행표](CENTRAL_CODEX_STATUS_2026-11-21.md). 다음OSPR검사판독중DS-H→DIDM→KEY5a순서준비. UI개별PCgate와새사업결정/권리근거는유지한다.
 
 ## 5담당 실제 배정·병렬 검토 시작 — 2026-11-21T12:10:34+09:00
 
