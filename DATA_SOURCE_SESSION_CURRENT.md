@@ -1,22 +1,23 @@
 ---
-status: handoff
-reason: usage_limit_weekly
-from: claude
+status: taken
+reason: owner_requested_resume
+from: gpt
 task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
 next_ids: DS-H, DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e
-updated_at: 2026-11-20T05:45:50+09:00
+updated_at: 2026-11-21T10:50:17+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/data-source-didm-20261117 (+ claude/ds-home-indicators-20261120)
 work_commit: c206b10
 uncommitted_changes: no
 pr: none
-usage_weekly_pct: 98
+usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
-session: https://claude.ai/code/session_016uB1jiXnUcWg99JHtRek9T
+session: Codex DIDM 6af7214e-7798-8191-8cfe-66ba373de0ad
+execution_id: didm-gpt-20261121-6af7214e
 ---
 
 # 인수인계: QUANTGEN/MAIN -> DATA_SOURCE_DIDM
@@ -24,6 +25,8 @@ session: https://claude.ai/code/session_016uB1jiXnUcWg99JHtRek9T
 운영 기준: 메인↔하부 세션 사이는 [SESSION_PIPELINE](SESSION_PIPELINE.md) (소유자 지시 2026-11-20: 메인이 보낸 일은 바로 착수, 끝나면 바로 메인에 보고). GPT 인계는 그대로 [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md) (소유자가 이어받으라고 할 때만).
 
 ## 0. 한 줄 요약
+
+**2026-11-21 GPT 인수:** 소유자 요청으로 이 세션 전용 범위를 인수함 (`didm-gpt-20261121-6af7214e`). DS-H `f80b3b0`와 DS·DIDM `c206b10`을 별도 `gpt/` 브랜치에서 검증·검토·필요한 수정 후 push한다. 중앙 CURRENT/대기열/원장은 메인 세션 소유로 유지. PR은 4e → 4f → 4g 순서를 따른다. 다른 Codex 채팅으로 직접 보내는 도구가 없어 이 파일의 `메인에게` 절로 결과를 공유한다.
 
 **2026-11-20 인계 (주간 사용량 98%, 메인 지시 05:3x KST):** 새 작업 없이 멈춤. 두 브랜치 모두 push·깨끗함.
 - `claude/ds-home-indicators-20261120` @ `f80b3b0` — DS-H (`load_home_indicators`), 대기열 **4f** (OS-F2 4e 뒤).
