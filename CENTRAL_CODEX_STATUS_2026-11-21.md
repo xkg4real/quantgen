@@ -1,3 +1,9 @@
+# 중앙 최신 checkpoint — 2026-11-21T19:10:18+09:00
+
+Primary DIDM138/6cff; actualmain6d; execution2f27d0c2·OSlock20162. FullWindowsRuntimepending, document/Linux/syntaxsuccess. KEYlocal45+6cff prepared83/123/17, independent8/AST4, actual845/20·structure/link0, policy20PASS, finalbaseline/remote4hPR없음. K1d630(remote4본문/parent/tree/ref검증) factory13·regression18/boundary13PASS, screen16files36sites, Notionsynced·web5queuesNOT_SENT. K2before16 strictbootstrapMATCH, afteradapter검토·제품GO0. Parentgoal/fullUI/KEY5/actualPC7/OSgo/외부승인미완료,자동감시·배포없음. [전체](WEEKLY_HANDOFF_2026-11-21_2f27d0c2.md).
+
+---
+
 # 최신 진행 — 2026-11-21T18:14:17+09:00
 
 | 범위 | 실제 결과 | 남은 조건 |

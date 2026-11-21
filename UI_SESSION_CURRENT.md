@@ -1,3 +1,13 @@
+# 중앙 K1d 검증 코드 보존 — 2026-11-21T19:10:18+09:00
+
+- status: taken · root execution2f27d0c2-57cc-46e7-97d6-fc141d4065c9. gpt/ui-key5-native-k1d-20261121@630e9ba44d84867b01dddce55a5785acc7958269(parentb93/tree44941028),4본문/경로/blob/부모/tree/ref대조. 원본UI822/K1ad2/K1b053/K1cb93 전부보존, 새UI PR/main없음.
+- 승인ID10/11/15 rankings2/qscore1 기존gateway전환, fixedfactory13 MATCH·실target8/reference1/import1, 생성6/서비스4/ready6·기존락/캐시/재시도·명시false-y주입·클라이언트동일성/키snapshot·명시reload보존. 별도기존18/경계13PASS, 실제화면16files36sites+동결feed1·상한22/44·공개시험/골든불변. GUI13화면/실PC증거로확대X.
+- sapientia Notion 부분진척반영성공·부모취소선0. 웹5private큐미발송·미적용/미배포, 실제UI PR-번호기록/수신증거남음.
+- K2 rates/structuring(ID34/35/44) before16·strictouter독립MATCH, 앱4곳동적/CLI1AST만·leaf15/analysis10·93소스대조. afteradapter 검토중, 제품GO0. 최종main/G1–G3/전체CI·준법/UI PR/실PC7·OSgo미완료. 현재큐4g138→4hKEY,중복별도세션중지유지.
+- [누적인계](WEEKLY_HANDOFF_2026-11-21_2f27d0c2.md). 아래원문/과거기록보존.
+
+---
+
 # 중앙 K1c 검증·원격 checkpoint — 2026-11-21T18:14:17+09:00
 
 - status: taken · execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9,총괄root. 최신별도 gpt/ui-key5-native-k1c-20261121@b93fed6609af27c0b73ba41d572266a814c57768(parent053/tree0252c361)3본문/ref확인. 원본UI822/K1ad2/K1b053보존,새UI PR/main병합없음.

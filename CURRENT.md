@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code
 next_ids: KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T18:52:08+09:00
+updated_at: 2026-11-21T19:10:18+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/data-source-didm-20261121
@@ -21,6 +21,16 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
 ---
+
+## K1d 검증 코드 원격 보존·KEY5a 준비 완료 — 2026-11-21T19:10:18+09:00
+
+- K1d gpt/ui-key5-native-k1d-20261121 최신 **630e9ba44d84867b01dddce55a5785acc7958269**, parentb93/tree44941028; 4본문·정확4변경경로·각blob/부모/tree/ref 원격 read-back 일치. 승인ID10/11/15의 rankings2+qscore1 조회만 기존gateway로옮겼다. 독립 고정factory13 MATCH(6시도/4서비스/ready6), 실제target8/reference1/import1·같은모듈/sourceNone/기존락과캐시·명시false-y주입/재시도/키snapshot·reload 보존. 대상route/table/order/remote/data/network0, 기존import는별도다. 13factory는13GUI화면이아니다.
+- 별도 기존회귀18·경계13·제품2 Python3.10 grammar PASS, actualscanner new/gone/errors0. 실제소멸known3만root가제거해 화면16파일36접점+동결corefeed1, ceiling22/44·SCREEN_FILES·공개시험/불변writer/oracle보존. source399 중target2 외397불변·추가exactb93 app/시험/helper/routes별도manifest. 초기keyring/희소입력·bootstrap하네스실패와도구create_commit UNKNOWN은이력보존, refs를재확인후검증된630만게시했다.
+- K1d sapientia Notion의같은Remaining Work에부분진척추가 성공, 부모취소선/새doneID0. UI/K1a/K1b/K1c/K1d 웹영향5private큐는NOT_SENT·웹미반영/미배포다. 최종 UI PR에PR-번호기록과실수신/적용증거가필요하다.
+- DIDM138/6cff는문서CI성공·Linux/문법2success, Windows3환경전체Runtime44887223811은계속진행중(이시각조회). 실제main6d25a33·단일PR순서유지. KEYlocal45+6cff는합성83/123/17·별도독립8/AST4와20정책소스영향PASS, 실제845소스·20문서·구조/링크0·baseline20stale만남는다. **실제4gmain병합전 KEY원격새code/4hPR/최종baseline없음**.
+- K2 승인ID34/35/44의rates/structuring2파일3import접점은before16사례만동결했다. 5호출식 중앱4곳동적/CLI자체점검1곳AST만, 합성leaf15/analysis10과각93source exactb93를구분한다. strictouterbootstrap독립before16MATCH·금지접근0; 현재QA는원골든/비교기를보존하는after metadata adapter를검토중이며제품/publictests/known/remote GO아직0이다.
+- 최종선행main/G1–G3·전체UI/KEY5/준법/CI·UI PR/실PC7/OSgo·OA09/OA10 등실제자료/외부권리·법률/모형성과는미완료다. 직접중앙작업은계속중이며자동감시/예약/run_now·실제원장/동결연구/서명/태그/배포없음. [전체현재인계](WEEKLY_HANDOFF_2026-11-21_2f27d0c2.md).
+
 
 ## KEY5a 합성 준비 완료·K1d 좁은 구현 배정 — 2026-11-21T18:52:08+09:00
 
