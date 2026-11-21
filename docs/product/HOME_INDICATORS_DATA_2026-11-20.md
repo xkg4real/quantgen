@@ -33,9 +33,17 @@ rows = load_home_indicators(days=90)      # 6행, SPECS 순서. 네트워크는 
 - **BTC의 실시간 값은 원화 (`KRW-BTC`, Upbit)이고, 일별 값·그래프는 달러 (`BTC-USD`, Yahoo)입니다.** 단위가 다르므로 한 숫자로 섞지 말고 `live.unit`을 함께 보여 주세요. (하나로 맞추려면 소유자 결정 필요: 일별도 Upbit 원화로 바꾸거나, 실시간을 Binance USDT로 바꾸기.)
 - **합성 값은 없습니다.** 로더가 공급사 실패로 모의 시계열을 돌려주면 그 행은 `UNAVAILABLE`, `value`·`history`가 비고 `reason_code`에 이유 (예: `rate_limited`, `network_error`, `connection_not_configured` = 게이트웨이에서 꺼짐).
 - 실시간 값이 실패해도 일별 행은 그대로입니다 (`live.status = UNAVAILABLE`).
+- KIS 키 준비 상태를 확인하는 과정 자체가 실패해도 KOSPI의 실시간 필드만 `UNAVAILABLE`로 격리합니다. 나머지 일별 행과 BTC 실시간 값은 반환하고, 예외 문구 대신 허용된 `reason_code`만 제공합니다.
+- 이력에 남길 모든 관측일은 실제 달력의 `YYYY-MM-DD` 형식인지 검증합니다. 중간 날짜가 잘못된 행도 `UNAVAILABLE`로 반환하며 잘못된 차트 이력을 게시하지 않습니다.
 
 ## 확인 (2026-11-20, 브랜치 `claude/ds-home-indicators-20261120`)
 
 - `tests.home_indicators_acceptance` 20 OK (한 번 호출, 기록·변화율, 표시권, 합성 값 거부, 게이트웨이 꺼짐 사유, 전체 실패 시 비밀 문구 없음, NaN은 버리고 채우지 않음, 실시간 단위·키 없을 때 호출 안 함, 실패 격리, 기본 경로가 `gateway.ficc/provider/keys_ready`를 씀).
 - 게이트웨이 경계·같은 답·main·원격, 자격 증명, 홈·연구 계약 시험: 브랜치 177 OK, main `8445187` 157 OK (실패 집합 같음, 둘 다 없음).
 - 실제 공급사 호출은 하지 않음 (클라우드 네트워크 막힘). 소유자 PC 진단 (OA-09)이 오면 원인 구분을 이 문서에 더함.
+
+## 인계 재검증 보완 (2026-11-21)
+
+- 오프라인 주입 재현에서 KIS 준비 상태 확인 예외가 함수 전체로 전파되는 경우와, 과거 이력 중간의 잘못된 날짜가 `OBSERVED`로 반환되는 경우를 확인해 수정했습니다.
+- `tests.home_indicators_acceptance`는 23개 시험으로 확장했습니다. 준비 상태 확인 실패의 행 격리·문구 비노출, 잘못된 이력 날짜·비표준 날짜 거부, `live=False`일 때 준비 상태와 시세 미호출을 검증합니다.
+- 모든 검증은 주입한 가짜 공급사와 소켓 차단 하에서 수행하며, 실제 HTTP·사용자 키·계정 저장소에 접근하지 않습니다.

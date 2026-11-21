@@ -188,10 +188,10 @@ def _live_value(symbol, fetch, policies, kis_ready):
     source_id, provider, unit, policy = LIVE_SPECS[symbol]
     live = {"source": provider, "unit": unit, "value": None, "change_pct": None, "as_of": None,
             "status": "UNAVAILABLE", "reason_code": None, "display_outcome": policies.get(policy, "unknown")}
-    if source_id == "kis_quote" and not kis_ready():
-        live.update(status="KEY_NEEDED", reason_code="connection_not_configured")
-        return live
     try:
+        if source_id == "kis_quote" and not kis_ready():
+            live.update(status="KEY_NEEDED", reason_code="connection_not_configured")
+            return live
         got = fetch()
         value = float(got["value"]) if got.get("value") is not None else None
         if value is None or not math.isfinite(value) or value <= 0:
@@ -254,8 +254,13 @@ def load_home_indicators(days=30, *, series_loader=None, btc_live=None, kospi_li
             points = [(d, float(v)) for d, v in zip(dates, values) if v is not None and math.isfinite(float(v))]
             if len(points) < 2:
                 raise MarketDataUnavailable("no_observations" if not points else "insufficient_observations")
+            # Every chart point needs a real, canonical ISO day; checking only
+            # the last observation could otherwise publish malformed history.
+            parsed_dates = [date.fromisoformat(d) for d, _ in points]
+            if any(d != parsed.isoformat() for (d, _), parsed in zip(points, parsed_dates)):
+                raise ValueError("Non-canonical observation date")
             last_date = points[-1][0]
-            age = (today - date.fromisoformat(last_date)).days
+            age = (today - parsed_dates[-1]).days
             if age < 0:
                 raise ValueError("Future observation")
             value, previous = points[-1][1], points[-2][1]

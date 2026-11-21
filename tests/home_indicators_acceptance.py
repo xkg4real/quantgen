@@ -93,6 +93,31 @@ class Rows(unittest.TestCase):
         rows = run(series_loader=Calls(future))
         self.assertTrue(all(r["status"] == "UNAVAILABLE" and r["value"] is None for r in rows))
 
+    def test_invalid_earlier_history_date_rejects_only_affected_row(self):
+        def malformed(ids, source, days):
+            out = good_batch(ids, source, days)
+            s = out["^GSPC"]
+            out["^GSPC"] = N(source=s.source, dates=("2026-10-00",) + s.dates[1:],
+                              values=s.values, note="")
+            return out
+        rows = {r["symbol"]: r for r in run(series_loader=Calls(malformed), days=60)}
+        self.assertEqual((rows["^GSPC"]["status"], rows["^GSPC"]["reason_code"]),
+                         ("UNAVAILABLE", "invalid_response"))
+        self.assertIsNone(rows["^GSPC"]["value"])
+        self.assertEqual(rows["^GSPC"]["history"], [])
+        self.assertTrue(all(r["status"] == "OBSERVED" for s, r in rows.items() if s != "^GSPC"))
+
+    def test_non_canonical_iso_dates_are_not_published(self):
+        def compact(ids, source, days):
+            out = good_batch(ids, source, days)
+            s = out["^GSPC"]
+            out["^GSPC"] = N(source=s.source, dates=tuple(d.replace("-", "") for d in s.dates),
+                              values=s.values, note="")
+            return out
+        row = run(series_loader=Calls(compact), live=False)[0]
+        self.assertEqual((row["status"], row["reason_code"], row["history"]),
+                         ("UNAVAILABLE", "invalid_response", []))
+
 
 class NoSyntheticValues(unittest.TestCase):
     def test_simulated_series_is_unavailable(self):
@@ -170,6 +195,20 @@ class Live(unittest.TestCase):
         live = {r["symbol"]: r for r in run()}["^KS11"]["live"]
         self.assertEqual((live["status"], live["value"], live["source"]), ("LIVE", 2650.5, "KIS"))
 
+    def test_kis_readiness_failure_is_isolated_and_redacted(self):
+        readiness = mock.Mock(side_effect=RuntimeError("injected readiness failure SECRET"))
+        quote = mock.Mock()
+        rows = {r["symbol"]: r for r in run(kis_ready=readiness, kospi_live=quote)}
+        self.assertEqual(len(rows), 6)
+        self.assertTrue(all(r["status"] == "OBSERVED" for r in rows.values()))
+        self.assertEqual((rows["^KS11"]["live"]["status"], rows["^KS11"]["live"]["reason_code"]),
+                         ("UNAVAILABLE", "provider_unavailable"))
+        self.assertIsNone(rows["^KS11"]["live"]["value"])
+        self.assertEqual(rows["BTC-USD"]["live"]["status"], "LIVE")
+        self.assertNotIn("SECRET", repr(rows))
+        readiness.assert_called_once_with()
+        quote.assert_not_called()
+
     def test_live_failure_keeps_daily_row(self):
         def fail():
             raise TimeoutError("read timed out")
@@ -184,7 +223,10 @@ class Live(unittest.TestCase):
             self.assertIsNone(row["live"]["value"])
 
     def test_live_off(self):
-        self.assertTrue(all(r["live"] is None for r in run(live=False)))
+        readiness, quote = mock.Mock(), mock.Mock()
+        self.assertTrue(all(r["live"] is None for r in run(live=False, kis_ready=readiness, kospi_live=quote)))
+        readiness.assert_not_called()
+        quote.assert_not_called()
 
 
 class DefaultsGoThroughGateway(unittest.TestCase):
