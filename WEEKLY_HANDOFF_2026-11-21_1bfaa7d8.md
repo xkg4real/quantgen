@@ -1,3 +1,11 @@
+# Latest checkpoint — 2026-11-21T14:21:16.000+09:00
+
+OS-F2 PR136 merged into main 72a055fb05a7e63b641bad07423503fa56e7b4b8; exact tested64ff58ed tree and parents verified. All six Runtime44861453849 and Document44861453813 checks succeeded; separate Vercel commit status failure was ignored under the existing owner rule. OS-F2 completion is code/API/automated verification/merge only, with actual owner data migration and release unperformed. LEDGER OS-F2 appended. CURRENT primary now verified gpt/ds-home-indicators-20261121@7ce3791, waiting_on none for final source review and code-only draft PR preparation. Preserve OA09 diagnostic gap and original condition conflict; do not close the real home/provider scope from synthetic evidence. Root execution remains active and RUN.lock remains held.
+
+The earlier checkpoint below is preserved history. Follow CURRENT and this latest block for state.
+
+---
+
 # QUANTGEN continuation checkpoint — 2026-11-21 / 1bfaa7d8
 
 This is an active-work checkpoint, not a claim that the request is complete. CURRENT.md is authoritative. Root execution: 1bfaa7d8-c59c-4c6c-a53d-00acbe3b7e9a. The owner appointed this conversation the single coordinator, transferred DIDM/UI, and approved implementation, independent review, tests, PRs and conditional merge. Existing separate sessions are stopped; original branches remain intact. Automatic Claude monitoring, duplicate schedules and run_now remain cancelled.

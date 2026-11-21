@@ -1,3 +1,5 @@
+> **2026-11-21T14:21:16.000+09:00: OS-F2 코드 scope 완료·LEDGER 추가.** PR136→main72a055f, 6Runtime/Compliance성공·검사tree동일readback. 다음4fDSH실트리/최종baseline·draftPR준비, OA09진단미제공/원문조건충돌은그대로. UI/KEY5/실PC·사업/출시전체완료아님.
+
 > **2026-11-21T14:11:37.000+09:00 중앙 관측:** OS136은Windows3.12한환경만최종진행중(나머지5 Runtime+Compliance성공); mainf065/freezeOFF·유일대기PR136유지. UI822+K1a d2f675db 원격보존/검증. DSH actual809source·4delta·구조0/stale20, baseline·PR·main/실OA09미완료. [전체인계](WEEKLY_HANDOFF_2026-11-21_1bfaa7d8.md).
 
 > **2026-11-21T13:24:33.000+09:00 후속:** UI후보 head822aff9 / 제품c36f22cd 원격보존·본문대조, system새4직접참조제거(기존22/44상한유지), 확대64회귀진행중. R3이미병합된2하위의Notion상태를실제CI/LEDGER로정정; 새완료ID는없다. OS136전체CI계속대기, [현재진행표](CENTRAL_CODEX_STATUS_2026-11-21.md).
@@ -70,7 +72,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [!] **DS·DIDM 브랜치** (DS-1, DIDM-0, DIDM-1, DS-4a, DS-4b, DS-4d, DS-4e) — 코드 끝, **main 9f76b07 합침 완료(f60e314) → head eb4f3a5, PR 직전 상태** (DIDM 시험 98 OK, 게이트웨이·자격증명 208 OK = main과 같음, core/ 밖 변경 0줄; 메인 확인 11-20 00:25) — DATA_SOURCE_DIDM — 남은 것: 소유자 PC 결과(OA-07, OA-08) 반영 → 8행 차례에 최신 main 합치기·기준선·PR — DATA 보고 11-20 00:23
   - **2026-11-21T13:06:45+09:00 현재 상태:** 위 `eb4f3a5`와 OA-07/OA-08 대기는 과거 이력이다. 공식·무료 공급원 6곳은 소유자 PC 확인이 끝났고, 무료 뉴스 3곳은 이용 불가 확인에 따라 DS-4b 보류 상태다. 이어받을 코드는 **4f DS-H `gpt/ds-home-indicators-20261121@7ce3791` → 4g DS·DIDM `gpt/data-source-didm-20261121@abd10c6`**다. 합성 검증·원격 보존까지 확인했으며 최신 main 통합·준법 기준선·필수 CI·PR·병합은 남았다. OA-09/10/38/46의 실제 사용자 입력은 유지한다.
 - [!] **웹사이트 정책 문구 다시 만들기** — PR-130.json 반영 — WEBSITE(소유자 경유) — 소유자가 받은 프롬프트를 웹사이트 세션에 붙이기 — CURRENT "웹사이트 세션 전달은 소유자 경유"
-- [ ] **OS-F2** — config.py·data/krx/kis_client.py·data/krx/opendart_client.py의 ~/.nextgen 경로 전환 — OS(브랜치), MAIN(자리) — 관문 KEY-2(3249af7) 풀림. KEY-4와 파일 겹침 없음(KEY-4는 config.py·data/krx를 바꾸지 않음) → OS 브랜치 작업은 지금 시작 가능. 메인은 MERGE_QUEUE에 행 추가, owner_confirmed 다시 쓰기는 그 뒤로 — MERGE_QUEUE에 행 없음
+- [x] **OS-F2 코드 구현·자동 검증·main 병합** — **11-21 PR136/main72a055f 완료**(원격tree/전체CI대조, 실제owner자료이전은미검증). 이전정의/진행기록: — config.py·data/krx/kis_client.py·data/krx/opendart_client.py의 ~/.nextgen 경로 전환 — OS(브랜치), MAIN(자리) — 관문 KEY-2(3249af7) 풀림. KEY-4와 파일 겹침 없음(KEY-4는 config.py·data/krx를 바꾸지 않음) → OS 브랜치 작업은 지금 시작 가능. 메인은 MERGE_QUEUE에 행 추가, owner_confirmed 다시 쓰기는 그 뒤로 — MERGE_QUEUE에 행 없음
   - **2026-11-21T13:06:45+09:00 현재 상태:** 위 'MERGE_QUEUE에 행 없음'은 이전 관측이다. 실제 차례는 **4e OS-F2**, `gpt/os-f2-data-dir-20261121@64ff58e` / [PR136](https://github.com/xkg4real/quantgen/pull/136)이다. 첫 Windows fixture 실패를 수정한 새 Compliance44861453813은 성공했고 Runtime44861453849 전체는 CURRENT 관측 시 진행 중이다. 아직 병합·OS-F2 완료는 아니다.
 
 ---

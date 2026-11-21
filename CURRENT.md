@@ -4,13 +4,13 @@ reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-17
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a
-next_ids: OS-F2, KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T14:11:37.000+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2
+next_ids: KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-21T14:21:16.000+09:00
 stale_after_hours: 3
-waiting_on: ci
-work_branch: gpt/os-f2-data-dir-20261121
-work_commit: 64ff58ed8e6e657d76f9c2f2d946632b03184892
+waiting_on: none
+work_branch: gpt/ds-home-indicators-20261121
+work_commit: 7ce37917102af9793d3ccbe851c0554058089df9
 uncommitted_changes: no
 pr: 136
 usage_weekly_pct: unknown
@@ -20,6 +20,14 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 1bfaa7d8-c59c-4c6c-a53d-00acbe3b7e9a
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 ---
+
+## OS-F2 코드 완료·PR136 main 병합 — 2026-11-21T14:21:16.000+09:00
+
+- [PR136](https://github.com/xkg4real/quantgen/pull/136)을 expected_head64ff58ed·merge방식으로병합, main **72a055fb05a7e63b641bad07423503fa56e7b4b8**의부모f065ec92/64ff58ed·tree5c4ae237가검사대상64와정확동일함을readback했다. sourceCURRENT의execution/task/handoff/branch/commit·STATE·freezeOFF·최신main을확인했다. Runtime44861453849의6job(Win3.11/3.12/3.14·Ubuntu3.12·문법3.10/3.11)와Compliance44861453813전체success. GitHubCheckRuns8success이고별도Vercelstatus failure는소유자지시대로무시했으며배포성공으로세지않는다.
+- 완료범위는OS-F2코드경로/시작준비/동의후독점이전API/자동검증/PR병합이며LEDGER에그scope만추가한다. 실제소유자Windows/macOS자료이전·새동의화면·실제연구/서명/출시완료아님. 동결engine4와기존일지유지·27codehashbcaf33d9사유기록, owner_confirmed대신작성없음.
+- 다음4f는검증된동일gpt/ds-home-indicators-20261121 **7ce37917102af9793d3ccbe851c0554058089df9**(원격head확인). 새primary작업전환도이번execution의최신CURRENT CAS/readback으로기록한다. 현재localcandidate HEAD7ce+MERGE_HEAD64는최신main72a와source tree가동일한OS64를준비했고, source809/4delta·구조0/문서stale20을확인했다. HTTP문구2개정정은AST동일이며actualAPI횟수미검증. 최종main기반source tree/20검토기록갱신·실제체크후code-only draftPR준비; OA09진단조건충돌/실제진단미제공은면제·완료로세지않는다. 전체DSH/홈실연결완료로표시하지않는다.
+- UI822/K1ad2독립검증WIP·DIDMabd/KEY45db원격보존, 다음4g→4h→UI/OS순서/PC·OSgo·사업/권리관문은그대로다. 전체Goal미완료·자동감시/배포재개없음. [전체인계](WEEKLY_HANDOFF_2026-11-21_1bfaa7d8.md).
+
 
 ## 중앙 작업 checkpoint — 2026-11-21T14:11:37.000+09:00
 
