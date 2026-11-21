@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a
 next_ids: OS-F2, KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T12:08:12+09:00
+updated_at: 2026-11-21T12:10:34+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: main
@@ -20,6 +20,12 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: a3da2627-8d65-4ade-9c47-a1594cb6db15
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 ---
+
+## 5담당 실제 배정·병렬 검토 시작 — 2026-11-21T12:10:34+09:00
+
+- [중앙 진행표](CENTRAL_CODEX_STATUS_2026-11-21.md). 실제agents: os_f2_review, didm_data_integration, native_ui_integration, key5a_reproduce, independent_qa. 총괄root가공유문서/원격push/PR/병합을담당하고구현담당은격리브랜치와합성검사범위만수정한다.
+- OS 경로조회순수성·동결engine불변을유지하려고명시적앱시작/쓰기전저장소준비를선택했다. QA는legacy marker가디렉터리인경우경로안정성이깨지는추가문제를재현해수정담당에전달. 아직통합완료/새CI/병합을주장하지않는다.
+- DATA최신GPT2브랜치를이어받는것을확인했고MERGE_QUEUE의낡은Claudehead를최신head로고쳤다. UI기존PC확인/Qt전환조건유지. 새완료ID/부모취소선없음. executiona3da2627-8d65-4ade-9c47-a1594cb6db15.
 
 ## 단일 요청 창구·5담당 승인 후 재개 — 2026-11-21T12:08:12+09:00
 
