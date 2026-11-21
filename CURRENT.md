@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a
 next_ids: KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T21:08:53+09:00
+updated_at: 2026-11-21T21:22:56+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/key5a-fixes-20261121
@@ -20,6 +20,15 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
+---
+
+## K2d 승인 최소 구현 시작점 — 2026-11-21T21:22:56+09:00
+
+- 동일 ROOT2f27d0c2-57cc-46e7-97d6-fc141d4065c9, primaryKEY1390413/task/handoff/cycle 유지. gpt/ui-key5-flet-k2d-20261121 실제head b3731cf3a41932afba4f480049fc2e52c35d9eef를 fresh 확인했습니다. below historical before-product 상태를 이 기록으로 갱신합니다.
+- before10 author/독립 PASS·불변golden d0d009, 원fdc/binding34db/source7fb412 보존. actualb373의 공개412+공식기존 FXbasis1(raw9077/blob6b926)로 새root413 copy-only 검증 완료(a0a8be87/813a1f21), 덮어쓰기0·현재4target는원문. 새repo파일/새test가 아닙니다.
+- 독립 최소패치 review4a9058 PASS 및 after-interface scoped8c41/f8e4115a PASS를 확인했습니다. 이 CAS/execution read-back과 STATE 원자 저장 뒤 승인 ID18/21/22·23·24/33에 한정한 제품4file9loader식(앱8·CLI1 AST-only)과 기존 공개5file8mock-target 이동만 GO합니다. 수치/단위/default/계산·실제CONSTANTS/helper·서명·공개assertion/fixture/원형을 보존하며 module-level eagerficc/Any대체/새KRW예외0입니다. Quant .027/.038/.03 기존 동작과 FRED_ONLY 정책을 그대로 따릅니다.
+- 기존 before 비교기·10case/guard 원문과 source원본은 보존합니다. after source9 실제freeze와413binding을 만든 뒤 ROOT가 별도로 정상10/거절/public6 실행을 지시합니다. 실제 API/AI 요청/키/계좌/동결연구/MC/GARCH/원장/환경·설정/배포0. public6의 합성 SABR/AI 메모리 payload 회귀는 before10의SABR0 결과와 별개이며 실제 모델성과로 기록하지 않습니다. known/준법 baseline/원격코드 추가쓰기는 아직0입니다.
+
 ---
 
 ## K2c 보존·K2d 원본 기준 검증 및 다음 범위 소유권 — 2026-11-21T21:08:53+09:00
