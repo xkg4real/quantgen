@@ -6,11 +6,11 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T23:12:39+09:00
+updated_at: 2026-11-21T23:29:13+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-guide-chart-first-20261121
-work_commit: b3731cf3a41932afba4f480049fc2e52c35d9eef
+work_commit: 651e16e3204d62d9c71c3617c429f139f644bccd
 uncommitted_changes: yes
 pr: none
 usage_weekly_pct: unknown
@@ -21,6 +21,16 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
 ---
+
+## UI 검증 소스14 원격 체크포인트 — 2026-11-21T23:29:13+09:00
+
+- execution 2f27d0c2-57cc-46e7-97d6-fc141d4065c9, 동일 task/handoff/session, OS lock20162 유지. gpt/ui-guide-chart-first-20261121@651e16e3204d62d9c71c3617c429f139f644bccd, tree9b9882148f7545cd3da711aafb8ad4dcad64b400, parentb373. common425V2(36498682)의 검증된14개 원문만 동결해 push하고 원격14blob/본문/branch head 모두 read-back했습니다. 이후 위험adapter 소스는 별도후속WIP이며 이커밋으로 미검증 변경을 바꾸지 않았습니다.
+- 실제 Program19 V3는19/19 PASS·skip0·guard0/source425/private/prefix 불변 및 독립QA9a583d 확인. 원18PASS1ERROR를 보존하고 widget cleanup만고쳤습니다. Native Stage1 V3 92기하/별도7pure/NaNgap1/PNG2 PASS 범위 유지; 실제컨테이너 Stage2는 exact10 원UI자원 수신·SVG/root마커핀·변경중공유언어/페이지kit 동결 후 별도진행하며 아직완료주장0입니다.
+- Tooltip 실제64관측은 bundled32/32fit·전체62/64, 미등록2xENlong2개clipping을보존. Program독립FONT64 검토8275f2aa와실대표PNGs확인완료; Windows/DPI 전체증명아님. Risk/financial16+8 별도PASS는합산하지않습니다.
+- 후속risk adapter 기존8+신규test1(source9 a9131112)는구현완료/독립검토·합성결과회귀준비. MC실제기간/신뢰수준·signedhedge P&L·rates PVloss money·저장기록 confidence미기록을그대로설명하며 engine/schema/rawrecord0변경. 실제모델/연구/원장/PC/API0입니다.
+- Program에 기존tests/desktop_stock_detail_acceptance.py의 의도적UI변경2곳(중복PER/수급섹션)과 새tests/stock_insights_glue_acceptance.py의 실제coverage/fallback/언어theme/refetch0 회귀만 승인했습니다. 기존EPS/risk/source/time/legend검증을약화하지않으며 전체StockDetail/모델을클라우드에서실행하지않습니다.
+- main dec979a의 OS-F2/KEY139/DIDM/DSH 및K2d7d9a와의 통합은 root가진행합니다. main845 publicsource를기준선으로복사하여전부hash확인했고UI81차이중73원문/70비중복과private cleanmerge4를검토했습니다. 작업branch는현재이통합전WIP: 아직CMD/최종baseline/fullCI/PC7/실제UImain병합을완료로표시하지않습니다. PC7/OSgo조건유지, 감시/예약/자동인수/배포0.
+
 
 ## 새 UI 구현·검증 진척 및 위험 용어 후속 범위 — 2026-11-21T23:12:39+09:00
 
