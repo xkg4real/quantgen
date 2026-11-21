@@ -9,10 +9,11 @@ file, each direct way to a provider:
   loaders and per-provider fetchers, or the module itself; type-only names such as Series and pure helpers such
   as _period_for do not count);
 - a package imported and then followed by attributes (`import data; data.kis_markets.KISMarkets()`);
-- `importlib.import_module(...)` or `__import__(...)` with a literal name, also aliased, by keyword, or relative
-  with `package=`; a relative name or `__import__` level it cannot resolve (a variable) counts (fails closed);
+- `importlib.import_module(...)` or `__import__(...)` with a literal name, also aliased (by import or by assignment,
+  `im = importlib.import_module`), by keyword, or relative with `package=`; a relative name or `__import__` level it cannot resolve (a variable) counts (fails closed);
 - the S4-frozen core/engine/feed.py QuoteFeed built without an FMP client (`QuoteFeed(g)`, `QuoteFeed(g, None)`,
-  `fmp_client=None`), or subclassed without its own `fmp` (main.py's subclass builds the client through the gateway);
+  `fmp_client=None`), or subclassed without its own `fmp` (core/gateway/feed.py's subclass, which main.py uses, builds
+  the client through the gateway);
 - a config key function or provider status function (`config.kis_ready()`, `config.krx_provider_status()`),
   called or used as a value (`f = config.fmp_key`, `getattr(config, "fmp_key")`), also through an alias
   (`import config as QC`) or a direct import (`from config import kis_ready`);
@@ -66,7 +67,7 @@ FICC_SAFE = _ficc_constants()
 FROZEN = {"core/engine/feed.py": ["import:data.fmp.FMPQuoteClient"]}
 # KEY-5 (UI session) lowers this; a regenerated list may never grow past it.
 # 22 / 44 since the PR #133 second review added quantgen_desktop/paper.py (it builds the frozen QuoteFeed without an
-# FMP client, so the feed reaches FMP itself; KEY-5 passes a gateway client or reuses main.py's subclass).
+# FMP client, so the feed reaches FMP itself; KEY-5 uses core/gateway/feed.QuoteFeed, the subclass main.py uses).
 SCREEN_CEILING = {"files": 22, "sites": 44}
 SCREEN_FILES = (
     "quantgen_desktop/app.py",
@@ -281,6 +282,17 @@ def findings(source: "str | bytes", module: str = "", is_package: bool = False) 
                     counted.add(local)
                 if full == "config":
                     config_names.add(local)
+    for _ in range(3):                         # review 3 F2: im = importlib.import_module (also chained: f = im)
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.Assign, ast.AnnAssign)) and node.value is not None:
+                chain = _dotted(node.value)
+                if not chain or chain[0] not in bound:
+                    continue
+                dotted = ".".join([bound[chain[0]]] + chain[1:])
+                if dotted in DYNAMIC:
+                    for target in (node.targets if isinstance(node, ast.Assign) else [node.target]):
+                        if isinstance(target, ast.Name):
+                            bound[target.id] = dotted
     parents: dict[int, ast.AST] = {}
     for node in ast.walk(tree):
         for child in ast.iter_child_nodes(node):
@@ -521,6 +533,31 @@ class BoundaryTest(unittest.TestCase):
         for source, expected in cases.items():
             with self.subTest(source=source):
                 self.assertEqual(findings(source, "core.ficc.insights"), sorted(expected))
+
+    def test_three_pass_alias_chain_in_reverse_assignment_order(self):
+        # Alias propagation intentionally supports plain Name assignments, through at most three passes.
+        source = ("import importlib\nthird = second\nsecond = first\nfirst = importlib.import_module\n"
+                  "third('data.fmp')\n")
+        self.assertEqual(findings(source), ["dynamic:data.fmp"])
+
+    def test_detector_catches_assignment_aliases(self):
+        """PR #133 review 3 F2 (KEY-5/a): the dynamic importers reached through a plain assignment, also chained,
+        annotated, or from an aliased importlib; and the gateway feed is not a finding."""
+        cases = {
+            "import importlib\nim = importlib.import_module\nim('data.krx')\n": ["dynamic:data.krx"],
+            "import importlib as il\nf = il.import_module\ng = f\ng('data.fmp.quote_client')\n":
+                ["dynamic:data.fmp.quote_client"],
+            "from importlib import import_module\nload: object = import_module\nload('yfinance')\n":
+                ["dynamic:yfinance"],
+            "imp = __import__\nimp('pykrx')\n": ["dynamic:pykrx"],
+            "import importlib\nim = importlib.import_module\nim('.data', package=__package__)\n":
+                ["dynamic:core.ficc.data"],
+            "import importlib\nim = importlib.import_module\nim('json')\n": [],
+            "from core.gateway.feed import QuoteFeed\nQuoteFeed(g)\n": [],
+        }
+        for source, expected in cases.items():
+            with self.subTest(source=source):
+                self.assertEqual(findings(source, "core.ficc.insights", False), sorted(expected))
 
     def test_ficc_allowlist_is_pinned(self):
         """C2: the names of core.ficc.data the boundary lets through are exactly these pure values and helpers; adding

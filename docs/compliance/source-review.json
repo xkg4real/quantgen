@@ -147,11 +147,12 @@
     "core/ficc/structured.py": "2e5ac55b70b839792e63b676844b402ea0e83151a735aa64d6ed7ea7e867718a",
     "core/ficc/swaps.py": "0f14e36c17a558bd5a38f2a486355e2186fbd7ad4aa9ba900b65316c3df22f29",
     "core/ficc/vol_products.py": "e81f1df20e6f83e11159412edfb1b5cc45b24e742653c8e1cc39164793728f12",
-    "core/gateway/__init__.py": "8fb3294e1d15f8e5bdcbc9f9ce26857b1b3b16384b3fb872efb58b7590379741",
+    "core/gateway/__init__.py": "b5d43e7e9df2c6cd9bb254a0e7ea223f8699e08b3c3f9c3103ad8f7010591660",
     "core/gateway/codec.py": "0f582ccb5b1294bc424a7cda7bf0b535f6eb5386c307c592a0e38277f06edd62",
     "core/gateway/dispatch.py": "888ba751073b3006fe06a38433a2d5d4e4ce9d6f40429adb8c6a667d24bb5cf4",
+    "core/gateway/feed.py": "36b9f66bfe0d05b3b00cd942214ed1a1400a8493768b0a901467df09e6c418fd",
     "core/gateway/local.py": "7385e1836e620c5e89a771919c520a78363556e40cb50844f9e18c0b3862ec79",
-    "core/gateway/remote.py": "63f9336970d73b98a50982b16a513069ac04b5fe88d31f516872746fc133c67e",
+    "core/gateway/remote.py": "15c18021d4116bf6c95da157c43d3fe5159078cec8012be44c6c9575c30e86e0",
     "core/gateway/routes.py": "2b29b44b49c3e81b930e544208c131c9eb12bf07494227eae46dc2ff4c7aba06",
     "core/gateway/sources.py": "1f3843617e58ffe8034709639eded5e5b01c8c7d880e0490a8f434f5226bef8c",
     "core/i18n.py": "b31a9f40519b2699e9cf3d72a8f9144bd74f0c93ca731df5ceaeabbb120ad6dc",
@@ -435,7 +436,7 @@
     "docs/product/UI_SESSION_PROGRESS_2026-10-31.md": "6f8fd39bdfc77df266095c1e46170c1a679e3267d200a0fc3f6995b196dd0de4",
     "docs/product/UI_WEBSITE_SYNC.md": "37b62baa94dece046c08e70c01d49e4658937cbaa21d3b980c9fcb9099913363",
     "docs/product/ui_drafts_2026-11-17/README.md": "b2166e175e5d7ced820feeb9714a18640a4e08a0ced92c5ea88b9c45c29d2c92",
-    "main.py": "75a19f610edb43fbd398382747c0f7988201223d262b57af8af953db5fcea6cd",
+    "main.py": "768392a3fddaca06fda168710f757147ad31b679d8c68076d947204704121229",
     "mindmap/QUANTGEN Macro Neural Link.html": "4dbf731539d418aa67553bd5fd393dfc55550fac737ef89ca4c18c813f7c76c5",
     "mobile/pyproject.toml": "2cad54b7e32873320de1d05e1e81cb91ce88f64cd97afc1ec955399fc5922db7",
     "packaging/launch_desktop.py": "7724b54d172f00d87c80abab2ff5214deb5ebcf9105878e24ca7519c166ce4b8",
@@ -633,10 +634,10 @@
     "tests/frozen_guard.py": "5a8f9a8c33cd0cc279da28db6e8f38c6e9b8abe643d0b7a26821077257f32246",
     "tests/funding_inference_acceptance.py": "dc1eaf4e627411a43ab46dd878a3628c076911ede974554575cc24f101310b7b",
     "tests/fx_basis_disclosure_acceptance.py": "9077bab45713c30e1b63607f87607c92c7a9bef60e094affdc968571405bb99e",
-    "tests/gateway_acceptance.py": "1b6e705d2040dac49f399a47699b5d3d5b298d050e9ccaae3027f0818e8e85da",
-    "tests/gateway_boundary_acceptance.py": "57d9e74e9af9091402d68a06b19d88d386b145804b107af40d7124c97b5050f0",
-    "tests/gateway_main_acceptance.py": "8fa970f53e645fc52f581b3cdeafb1dd295ff0addb4df6fa1140aaedcd8cc4bb",
-    "tests/gateway_remote_acceptance.py": "eea87049e07dae8081330d325bbeaa8e3f258f028d1ee905edc6d5e88cfe9fd5",
+    "tests/gateway_acceptance.py": "42c7a19d4eb866cf5e5605391748d08a5d078aeffc3227a7aae55a846a9c3691",
+    "tests/gateway_boundary_acceptance.py": "13575aff22b76fe77f827be7b313641a2f8efcf1e005e37c6ca22de7b9cfe65d",
+    "tests/gateway_main_acceptance.py": "edd6b1ae3628ea4919037791be576f7a570e279fd4f18570f88e7cb71c5835ea",
+    "tests/gateway_remote_acceptance.py": "2eaf6a60a47c905e8d9bb151af75097cbc0ff2888aa64d8a1a87573224f1718e",
     "tests/gateway_same_answer_acceptance.py": "91e59d5ea698e283cd096873a508ddb95f8e4c8171051a9ccce5e016e552c2c5",
     "tests/glossary_search_acceptance.py": "058922190b05fc585dab3462848b40ea0444a43b4b5e96fdb512cd8ccfc0e64e",
     "tests/golden_tools.py": "24154d79aea43bc91b7c26c33c6b400cd9202cdb4915680a81b4f7cf0fa928ef",
@@ -854,163 +855,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "07477f29f521442d7523d0ea5d850ce76185d963851c330389a5396eb22c3616",
+      "source_digest": "4abb5dea07fc7984730be1b2c03b61836f68660f2b38548be8612fa0a90c4f16",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.557889+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.950250+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "07477f29f521442d7523d0ea5d850ce76185d963851c330389a5396eb22c3616",
+      "source_digest": "4abb5dea07fc7984730be1b2c03b61836f68660f2b38548be8612fa0a90c4f16",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.560541+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.952447+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "8e0306fa955adbafccdf50b77215094dedeb0006bee1794f06285f4899b2c64c",
+      "source_digest": "dae0a9ada59b015163b176752e5e50c3c6d5c6ed0de56f07846a40febb591257",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.562113+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.954413+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "088bb1ee25cee30015a3a88dda61236cb21049ab861ef36b6641f301facb4bd6",
+      "source_digest": "742af7a5eedab576cd9b2c64b2c4cbd134f8842e9a9fd376bffdaa258bfe0b26",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.563734+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.955864+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "9af0434791e996caf9cf6f4d787781d675b4509f7ec9d56f5bd4472427a92214",
+      "source_digest": "eaa10a165ccd48063f1913704d34f7716083e37b22ebf7b10a868c3682ffa47f",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.565093+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.957317+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "f8cd60bc06e0728057985c4c54d8a7ea6f092b5f2b5096eda370b66724093df8",
+      "source_digest": "d8cece58711d9a118225ac38041c2d4e2b94e2df01fee2b6faca5970dbde6ddb",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.567083+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.958932+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "07477f29f521442d7523d0ea5d850ce76185d963851c330389a5396eb22c3616",
+      "source_digest": "4abb5dea07fc7984730be1b2c03b61836f68660f2b38548be8612fa0a90c4f16",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.568373+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.960599+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
-      "source_digest": "f8cd60bc06e0728057985c4c54d8a7ea6f092b5f2b5096eda370b66724093df8",
+      "source_digest": "d8cece58711d9a118225ac38041c2d4e2b94e2df01fee2b6faca5970dbde6ddb",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.569749+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.961858+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "409214110263ccfed7e504a0b4836fa0020dbe28001bd391b0ecee3626229cfe",
+      "source_digest": "913665aba2adfe29635eec3955c76dd720b3a78b6f74af39ef6aee0bf1d179fd",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.571199+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.963266+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "a2924d46a86bf44281deeadc5620eab7e6f99186c058d1c193cc6ff9aac1ede3",
+      "source_digest": "fceb63a6b9892d644605c689ed170234b5d89de71bbd7298d45fbe478f00dc07",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.572514+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.964609+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "ce340451c9bcf9526cc573e612560f00f763508cafd756b9a8b7b2e34dd626d6",
+      "source_digest": "c6c0b9b5fb69e357d9c4a383da22afa29d34e5fad31be1821c83d555e56172da",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.574249+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.965952+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "1d9284ce42e2da075e279ded5e4c5d96138303cbf8085f90f501bff31cebd60a",
+      "source_digest": "1d36c7804362d9aca0e28194a91cb52126ddf7a7e7b0225c53988a38ef00d452",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.575754+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.967469+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "409214110263ccfed7e504a0b4836fa0020dbe28001bd391b0ecee3626229cfe",
+      "source_digest": "913665aba2adfe29635eec3955c76dd720b3a78b6f74af39ef6aee0bf1d179fd",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.577606+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.968750+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "409214110263ccfed7e504a0b4836fa0020dbe28001bd391b0ecee3626229cfe",
+      "source_digest": "913665aba2adfe29635eec3955c76dd720b3a78b6f74af39ef6aee0bf1d179fd",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.579137+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.970324+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "409214110263ccfed7e504a0b4836fa0020dbe28001bd391b0ecee3626229cfe",
+      "source_digest": "913665aba2adfe29635eec3955c76dd720b3a78b6f74af39ef6aee0bf1d179fd",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.580501+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.972039+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "268198a47f4e4261853e1d372f0c75eb8acabbe1c79df595c523a253b4460367",
+      "source_digest": "370bb1737ee332eebae596a621ae8e8585296727ced9ea7450f360a035ef9431",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.582092+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.973195+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "f8cd60bc06e0728057985c4c54d8a7ea6f092b5f2b5096eda370b66724093df8",
+      "source_digest": "d8cece58711d9a118225ac38041c2d4e2b94e2df01fee2b6faca5970dbde6ddb",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.583968+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.974604+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "07477f29f521442d7523d0ea5d850ce76185d963851c330389a5396eb22c3616",
+      "source_digest": "4abb5dea07fc7984730be1b2c03b61836f68660f2b38548be8612fa0a90c4f16",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.585306+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.976044+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "4b73d2e617613ee8d1ced2525246ee2867585638c8981ed67bd5b71474382e05",
+      "source_digest": "2e691d1c95a9a7dd2b4cdb77b770ed70a3781e4ac1aa135c77d14095c0a3e86c",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.586496+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.977290+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "07477f29f521442d7523d0ea5d850ce76185d963851c330389a5396eb22c3616",
+      "source_digest": "4abb5dea07fc7984730be1b2c03b61836f68660f2b38548be8612fa0a90c4f16",
       "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed DIDM35 source additions and receipt metadata rollback, fixed preregistration criteria, provider metadata and explicit SQLite storage inventory against all20 existing policies. Actual provider/model/license/operating evidence remains unperformed and publication blocked.",
-      "reviewed_at": "2026-11-21T08:51:04.588209+00:00",
-      "source_commit": "abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0"
+      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
+      "reviewed_at": "2026-11-21T10:52:47.978801+00:00",
+      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
     }
   }
 }
