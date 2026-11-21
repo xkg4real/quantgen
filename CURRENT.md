@@ -4,15 +4,15 @@ reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-17
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code
 next_ids: KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T17:29:41+09:00
+updated_at: 2026-11-21T17:35:29+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/ds-home-indicators-20261121
-work_commit: 4973111e00ede39d81afc6f3bee894f06fb575fd
+work_branch: gpt/data-source-didm-20261121
+work_commit: abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0
 uncommitted_changes: no
-pr: 137
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
@@ -21,6 +21,15 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
 ---
+
+## DS-H 코드 병합 완료·DIDM 통합 시작 — 2026-11-21T17:35:29+09:00
+
+- [PR137](https://github.com/xkg4real/quantgen/pull/137)을 expected head4973111·merge 방식으로 병합했다. 실제 main **6d25a33caae79a4b4c412c5e0ec0e89e73dbe565**, 부모72a055f/4973111·tree1c26a4be가 검사한 source와 정확히 같고 PR/main/ref read-back 일치. Runtime44871383992의 전체6작업·Compliance44871383936 및8CheckRuns success, review/comment0. 별도Vercel status failure는 기존 SESSION_PIPELINE93행의 소유자 지시대로 무시하며 배포 증거로 세지 않는다.
+- 완료는 **DS-H/code** 하위 범위(6종 데이터 계약·합성/자동검증·문서 source-review·코드 PR/main 통합)뿐이다. OA09 실제 소유자 진단·원인 판독·홈 UI 실연결/공급사 실제 응답·권리/법률/전체DS-H 부모는 미완료다. 독립검토·172합성/47준법(export) PASS는 중복합산하지 않는다.
+- 다음4g의 검증된 동일 gpt/data-source-didm-20261121 원격 **abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0**를 primary로 CAS 전환한다. producer의 실제main6d fetch는 성공했으나 no-commit merge는 기존 proxy/promisor blob 수신 실패로 시작 전 중단, HEAD/index/workingtree/MERGE_HEAD 변경0을 확인했다. 보호cache tree를 조회하지 않고 명시 공개path만 mapping·수신해 재시도한다. 이전 clean 원본과 WIP는 보존한다.
+- DIDM20정책 실질 검토와 QA를 병렬 수행한다. 08은 실제 persons/organizations·filer 등 메타데이터 저장범위 및 CLI/패키지 경계·연구전용을 정확히 기술하고,20은 실제 최신main의 명시 data-dir SQLite footprint에 최소 수정한다. 권리/법률/보존 원칙·판정 기준·V0는 바꾸지 않는다. 최종정책/기준선/CI/PR는 아직이다.
+- 증거 문구 보정: 원문 **글사본2행×19=38값**과 파생 평가표 **9×19=171칸**을 구분한다. 이전 “엑셀171칸 보존”을 실제XLSX의171셀 대조로 확대하지 않는다. 과거 openpyxl 검증 이력은 보존하며 이번 실제XLSX 재검사는 하지 않았다. 관련 문서의 과소/과대 표현만 producer가 최소 보정하고 값·문턱을 바꾸지 않는다.
+- 별도 UI/K1c는 기존 승인 ID1/2의 두 service factory를 읽고 before 계약을 준비할 뿐 새 제품 변경 GO는 아직 없다. UI822/K1ad2/K1b053과 실제PC7/OSgo·현재19화면41접점 조건은 그대로다. 새 대기 PR 없음, DIDM→KEY45db 차례·자동감시/예약 취소·보호자료/실제연구/원장/주문/서명/배포 금지를 유지한다. [이번 전체 기록](WEEKLY_HANDOFF_2026-11-21_2f27d0c2.md).
 
 ## 사용자 요청으로 계속 — 2026-11-21T17:29:41+09:00
 

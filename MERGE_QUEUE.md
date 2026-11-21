@@ -1,9 +1,13 @@
 # MERGE_QUEUE — main 병합 순서와 동결 (메인 세션이 관리)
 
-updated_at: 2026-11-21T14:54:13+09:00
+updated_at: 2026-11-21T17:35:29+09:00
 전체 업무 체크리스트: `WORKBOARD.md` · 세션 연결 규칙: `SESSION_PIPELINE.md` (2026-11-19 23:00 KST 무렵 소유자 지시)
 coordinator: QUANTGEN 메인 Codex (소유자 단일 요청 창구 지정·2026-11-21 승인; 이전 Claude 기록 보존)
 freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보고("F22까지 성공적으로 마무리했습니다."), main `6e077dc`(소유자 `--no-ff` 병합, 부모 `8e026ab`·`13f4dea`), 그 push의 Compliance success, PR #4 merged. (동결 기간: 2026-11-18T19:10:45+09:00 ~ 위 시각)
+
+## 현재 차례 — 2026-11-21T17:35:29+09:00
+
+4f DS-H/code PR137→main6d25a33 완료, 실제OA09/홈실연결/부모는 미완료다. **지금4g DIDMabd**에 실제최신main을 합쳐 source/20정책/최종baseline·합성/독립검토 후 PR한다. 현재새대기PR없음. 무조건ref이동/force/rebase없음. 다음4hKEY45db, UI/K1b053보존·PC/OSgo유지. 아래시각별기록은이력이다.
 
 ## 최신 부분 인계 — 2026-11-21T14:54:13+09:00
 
@@ -56,7 +60,7 @@ freeze: **OFF** — 2026-11-19T01:32:00+09:00 해제. 소유자 F22 완료 보�
 | 5 | UI 7쪽 + PySide6 준비 | UI `claude/friendly-bardeen-r6xe8f` | 소유자 실행 확인 뒤 (UI 세션 브랜치는 아무도 고치지 않음) |
 | 6 | PySide6 전환 (`pyqt6_to_pyside6 --apply` + `switch_day.py --apply`, 화면 문구 3곳은 UI 세션) | OS | 5 뒤 (OS 세션 제안 순서: UI PR → 전환) |
 | 4e | ~~OS-F2 (~/.nextgen → core.app_paths.user_data_dir, config.py 포함 → Nautilus 지문 bcaf33d9…) + OS PySide6 종료 원인 기록(5커밋, 작업 A: PySide6 320회 abort 0)~~ | gpt/os-f2-data-dir-20261121@64ff58e · PR136 → **main72a055f**; 이전준비: OS `claude/os-f2-data-dir-20261120` @ **`e44c48e`** (main f065ec9 합침, 충돌 없음) | **코드병합완료 2026-11-21T14:21:16.000+09:00**; 실제owner이전미검증. 이전상태: **병합: OS** (2026-11-20 05:40 KST 메인). OS가 최신 main `f065ec9` 합침 → 기준선(source-review.json) 마지막에 갱신 → `--check` PASS → PR. 메인 독립 검토 뒤 CI 녹색이면 병합 **11-20 05:4x OS 세션 주간 98%로 중단: 2단계(CRLF·엔진 4파일)까지 끝, 3~6단계(회귀·code_sha256·기준선·PR) 남음 → OS_SESSION_CURRENT 6절** |
-| 4f | DS-H 홈 지표 6개 데이터 계층 (core/research/markets.py load_home_indicators, 시험, UI용 계약 문서, runtime-smoke 경로) | DATA `gpt/ds-home-indicators-20261121` @ `7ce37917102af9793d3ccbe851c0554058089df9` | 4e 뒤 (11-20 메인). 준비됨 |
+| 4f | ~~DS-H/code 홈 지표6종 데이터 계약·코드 통합~~ (OA09 실제진단/전체DS-H부모는 별도 미완료) | gpt/ds-home-indicators-20261121@4973111 · PR137 → main6d25a33 | 코드 통합 완료 2026-11-21T17:35:29+09:00; 전체6Runtime/문서CI/독립PASS·검사tree정확일치. 이전준비7ce 보존 |
 | 4g | DS·DIDM (8행을 당김: UI 소유자 확인 대기 중이라 준비된 것부터) | DATA `gpt/data-source-didm-20261121` @ `abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0` | 4f 뒤 |
 | 4h | KEY-5/a gateway 준비 3건 (data.kis_stream 입구, kis_workspace 순수 값 목록, QuoteFeed 하위 클래스 공용 모듈) | PAYMENTS `gpt/key5a-fixes-20261121` @ `45db2be73e7f87954cab6782ca4b2717dc97fc62` (dc936d4 기반 수정·검증; PR차례전) | 4g 뒤 (11-20 메인이 정함). 메인 검토 결과 `plans/2026-11-20/KEY5A_REVIEW.md`: 주요 2건(M1 feed가 지운 키·막힌 FMP 계속 사용, M2 _refresh_krx 비원자적 fail-open) PR 전 고칠 것 |
 | 7 | KEY-5 (4f 뒤) (화면 쪽 22파일/44곳 + quantgen_desktop/paper.py, 키·연결 화면) | PAYMENTS 요청문(handoff plans/2026-11-20/KEY5_UI_REQUEST.md) + UI 구현(소유자 경유) | 6 뒤 권장, 4e 뒤 |
