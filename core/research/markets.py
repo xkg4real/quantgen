@@ -115,7 +115,7 @@ def load_markets(*, loader=None, today=None):
 # --------------------------------------------------------------------------------------------------------------
 # DS-H: the six Home indicators with history, display rights and live values (owner D8, 2026-11-17)
 # --------------------------------------------------------------------------------------------------------------
-# One call for the six daily series (the FICC loader groups them: one Yahoo download, one FRED request),
+# One load_many call for six daily series (Yahoo/FRED loader groups, not a one-HTTP-request guarantee),
 # a history per row for the chart, the display-rights outcome per row (core/research/display_rights.json),
 # and live values only where D8 allows them: Bitcoin from Upbit (keyless, KRW quote, so a separate field
 # with its own unit; the daily BTC-USD series stays Yahoo/USD) and KOSPI from KIS when the user's KIS key

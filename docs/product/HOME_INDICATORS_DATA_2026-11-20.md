@@ -12,7 +12,7 @@ from core.research.markets import load_home_indicators
 rows = load_home_indicators(days=90)      # 6행, SPECS 순서. 네트워크는 이 한 번의 호출 안에서만
 ```
 
-- 일별 6개는 **한 번의 로더 호출**: `gateway.ficc().load_many([...6개...], source="auto", days=days)` → 안에서 Yahoo 한 번 (^GSPC, ^KS11, BTC-USD), FRED 한 번 (DEXKOUS, DGS10, VIXCLS).
+- 일별 6개는 **게이트웨이 로더를 한 번 호출**합니다: `gateway.ficc().load_many([...6개...], source="auto", days=days)`. Yahoo 그룹(^GSPC, ^KS11, BTC-USD)과 FRED 그룹(DEXKOUS, DGS10, VIXCLS)을 기존 로더에 넘깁니다. 이 1회는 Python 로더 호출 수이며, 공급사별 실제 HTTP 요청 1회를 보장하지 않습니다. 라이브러리·fallback·조회 ID에 따라 여러 HTTP 요청이 발생할 수 있고, 실제 요청 횟수는 여기서 검증하지 않았습니다.
 - 실시간: BTC = `gateway.provider("data.crypto.crypto_client", source="crypto_public")`의 Upbit `KRW-BTC` ticker (키 없음). KOSPI = `gateway.keys_ready("kis_quote")`가 참일 때만 KIS `index("KOSPI")` (키가 없으면 부르지 않음).
 - 화면은 시작 직후 이 함수를 **작업 스레드에서** 부르고, 실시간 값은 같은 함수를 `live=True`로 주기적으로 다시 부르거나 (일별은 캐시 권장) 따로 갱신합니다. 주기 결정은 UI 세션.
 

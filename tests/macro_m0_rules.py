@@ -396,7 +396,8 @@ def test_macro_dir_env_override():
     saved = os.environ.get("QUANTGEN_MACRO_DIR")
     try:
         os.environ.pop("QUANTGEN_MACRO_DIR", None)
-        assert config.macro_dir() == Path.home() / ".nextgen" / "macro"
+        from core.app_paths import user_data_path
+        assert config.macro_dir() == user_data_path("macro")   # OS-F2: the per-user data folder
         os.environ["QUANTGEN_MACRO_DIR"] = "X:/macro_tmp"
         assert config.macro_dir() == Path("X:/macro_tmp")
     finally:

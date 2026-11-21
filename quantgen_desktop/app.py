@@ -1689,6 +1689,15 @@ class ResearchWindow(QMainWindow):
 
 
 def main():
+    # Prepare and mark the selected data root before any store or engine is built.
+    # Importing this module (tools, code evidence, tests) must stay read-only.
+    from core.app_paths import ensure_user_data_dir
+    try:
+        ensure_user_data_dir()
+    except OSError as exc:
+        print(f"QUANTGEN: cannot prepare local data storage ({type(exc).__name__}); startup stopped.",
+              file=sys.stderr)
+        return 1
     from .windows_branding import set_app_identity, bind_window_icons
     if not set_app_identity():
         print("QUANTGEN: Windows did not accept the application ID; the taskbar may show the Python icon.",
