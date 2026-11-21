@@ -6,12 +6,12 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code
 next_ids: KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T17:35:29+09:00
+updated_at: 2026-11-21T17:50:12+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/data-source-didm-20261121
 work_commit: abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0
-uncommitted_changes: no
+uncommitted_changes: yes
 pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -21,6 +21,13 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
 ---
+
+## DIDM 실제 통합 후보 동결·검증 — 2026-11-21T17:50:12+09:00
+
+- 실제 local HEADabd10c6 + MERGE_HEAD6d25a33(같은gpt/data-source-didm-20261121,미커밋merge)에서 workflow충돌을해결했다. actualmain의나머지행/보안flags/단계순서를보존하고 양쪽target누락0,182paths/167고유모듈/173distinctnamedtarget·기존4중복을포함한177mentions를확인했다(시험개수와구분). 새source35와V0d825/DBschema/문턱·AND/시점규칙은abd와동일하다.
+- source44공개변경경로·6동결파일SHA를private FINAL_PUBLIC_CHANGED_PATHS/SOURCE_FREEZE.json에보존. 기존proxy로누락된공개blob은명시allowlist path/ref로확인한뒤공식수신하고,missing공개입력만index동일SHA로복구했다. 실제844sources/20정책의unmodifiedchecker는구조·링크오류0이며source-review20stale만남았다. finalbaseline갱신은아직아니다.
+- fresh 합성DIDM137(0.354s)·common172(10.925s)·provider147(13.811s) 모두fail/error/skip0,집합중복합산X. 독립QA의실제통합source합성SQLite10PASS·before관측exact·rollback/UNIQUE/asof/V0보존 및CI구조PASS. 문서08/20최소정정과글사본38/파생171범위보정은실제code에대조했다. 문서20개최종소스영향검토는프로그램담당이마무리중이며root가그뒤finalbaseline/check·코드push/readback·다음PR을수행한다.
+- UI K1c는원문ID1/2의두servicefactory에대한실제서비스/락/캐시 before15사례를준비했고별도QA가독립before검토중이다. 제품GO/새원격코드는아직없다. UI822/K1ad2/K1b053·G1–G3/PC7/OSgo 관문유지. source기준/실제API·FinBERT모델자산/라이선스·법률·실운영/전체DIDM완료로확대하지않는다. 자동감시/예약/실제연구·원장·서명·배포없음.
 
 ## DS-H 코드 병합 완료·DIDM 통합 시작 — 2026-11-21T17:35:29+09:00
 
