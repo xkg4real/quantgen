@@ -1,3 +1,5 @@
+> **2026-11-21T13:24:33.000+09:00 후속:** UI후보 head822aff9 / 제품c36f22cd 원격보존·본문대조, system새4직접참조제거(기존22/44상한유지), 확대64회귀진행중. R3이미병합된2하위의Notion상태를실제CI/LEDGER로정정; 새완료ID는없다. OS136전체CI계속대기, [현재진행표](CENTRAL_CODEX_STATUS_2026-11-21.md).
+
 # QUANTGEN WORKBOARD — 전체 업무 구조도와 체크리스트
 
 ## 최신 중앙 Codex 배정 — 2026-11-21T12:10:34+09:00
@@ -357,14 +359,14 @@ push_log:
 | OA-31 | 유료: CME FedWatch(2단계, 약 $25/월), Trading Economics 견적(3단계 뒤) | DATA | 11-19 15:00 | 아님 | 보류 |
 | OA-32 | PAY-0 문의 7건(docs/commercial/inquiries/) 검토·발송과 각 "보내는 방법" 창구 확인, 01 세무사 선정, 07 금융위 문의 전 변호사 검토 여부 결정; 이어서 PAY-2 확인, PAY-3 서버 위치 | PAYMENTS | 11-20 01:00 (초안 7f8939c) | 아님 | 대기 |
 | OA-33 | 웹사이트: W8 Microsoft 365, Track A 범위, 가격 이름 충돌, healthz 확인, 전달 대기 JSON(PR-112, PR-115, PR-117, PR-119, PR-124 등 43개 모두 queued) 전달 | WEBSITE | 11-13 | 아님 | 대기 |
-| OA-34 | KEY-5 요청을 UI 세션에 전달 | PAYMENTS | KEY-4 뒤 | 아님 | 보류 |
+| OA-34 | KEY-5 요청을 UI 세션에 전달 | PAYMENTS | KEY-4 뒤 | 아님 | 보류(이전 기록). **11-21 중앙 정정:** 단일창구인계로별도채팅전달불필요; 실제KEY5/PC/OSgo완료아님 |
 | OA-35 | ⑧-3 GROKTEAM 한 번 실행 | MAIN | — | 아님 (2027-02-01 뒤) | 보류 |
 | OA-36 | 오래 열린 GPT PR #12 닫을지, 그 안의 REMAINING_WORK_2026-10-29 ID(⑫-4, ⑬-3~⑬-7, ⑭-1~⑭-3)를 쓸지 | MAIN | 아직 묻지 않음 (메인이 물을 것) | 아님 | 대기 |
 | OA-37 | GPT 로컬 커밋 a2d93c2(Notion ⑤-1/a), 7e9e112(Notion ⑩-2/b-private-offline-mvp)가 남아 있는지, push할지 버릴지 | MAIN | 아직 묻지 않음 | 아님 | 대기 |
 | OA-38 | DS-3(RavenPack 견적·Bigdata.com 비교)을 계획에서 빼도 되는지 한 줄 확인 (11-18 D14 답 기준 메인 해석: 뺌) | MAIN | 아직 묻지 않음 | 아님 | 대기 |
 | OA-39 | PAY-2 소유자 결정 P2-01..P2-15 (docs/commercial/payments/PAYMENT_DESIGN.md 결정 표; 특히 P2-08 단순 해지 일할 환불 없음, P2-09 7일 철회 반환 기준, P2-10 가격 인상 미동의 시 종료 — 법률 확인과 함께), PAY-0 03번 PG 문의에 PG_COMPARISON 3절 질문 6개 추가 여부 | PAYMENTS | 11-20 01:05 | 아님 | 대기 |
 | OA-40 | PAY-3 회사 데이터 서버 위치: A 시드니(같은 AWS 계정) / B 서울 / C Cloudflare Workers — 장단점·비용(미검증)은 handoff plans/2026-11-20/KEY5_UI_REQUEST.md 부록, 제안 A | PAYMENTS | 11-20 01:10 | 아님 | 대기 |
-| OA-41 | KEY-5 전: core.credentials.set_backend(None) 가 안(시험에서만) / 나 안(앱도 .env만) — 같은 파일 0절 3항 | PAYMENTS | 11-20 01:10 | 아님 (KEY-5 전) | 대기 |
+| OA-41 | KEY-5 전: core.credentials.set_backend(None) 가 안(시험에서만) / 나 안(앱도 .env만) — 같은 파일 0절 3항 | PAYMENTS | 11-20 01:10 | 아님 (KEY-5 전) | 대기(이전 기록). **11-21 메인 기술선택:** 요청문'소유자/메인'허용에따라가안, 기존앱keyring유지/시험만memory·None격리. 명시OA41답수신으로세지않음. 앱keyring끄기·.env전용화는선택안함 |
 | OA-42 | 이메일 MFA 회원의 비밀번호 분실 처리(ADMIN_GUIDE 6.1) — 임시 비밀번호가 MFA 코드와 같은 메일함으로 가는 맞교환 | MAIN (3차 검토 DOC3-3) | 11-20 01:24 | — | **완료** 소유자 "권장으로 가겠습니다"(11-20 01:25:49 KST) → ② 발급 전 두 번째 확인 + 강제 변경 때 인증 앱 권장. PAYMENTS가 KEY-4 같은 push에 반영, OWNER_RULINGS_LOG는 4d |
 
 ---

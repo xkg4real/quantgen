@@ -1,3 +1,13 @@
+# 중앙 Codex 최신 UI 진행 — 2026-11-21T13:24:33.000+09:00
+
+- status: taken · execution_id: 1bfaa7d8-c59c-4c6c-a53d-00acbe3b7e9a · branch: gpt/ui-central-integration-20261121 · head: 822aff9473bede350468ad5e5005e4f08aeb7290 (제품통합c36f22cd, 문서명확화822aff9). 원본414eceb/mainf065를부모로보존하고새8본문/tree/parents/ref대조완료.
+- FACTS의기존main1134행순서보존+UI34행추가로충돌0. 기존portfolio한영안내복구, systempresence4참조gateway연결. 기존경계13/선택4/독립3 PASS(중복). 7화면한영14합성PNG·14선택case이력보존, 추가64case진행중. 최종source-review는임시main기준선이라아직PASS가아니다.
+- 나머지KEY5의22파일44참조·gateway.status표시와DSH UI연결은미완료. 8최상위/시장9범주구분유지. keyring앱기존정책/시험만격리의메인기술선택이며명시OA41답수신으로세지않는다.
+- UI PR/main병합없음. 최종UI병합전실PC7화면확인·최신의존트리/준법/전체CI·웹영향기록, 실제바인딩전환전OSgo조건유지. 로컬준비/draftPR에새PC선행조건을만들지않는다. [현재후보범위](https://github.com/xkg4real/quantgen/blob/gpt/ui-central-integration-20261121/docs/product/UI_CENTRAL_CANDIDATE_2026-11-21.md).
+- 아래기록전부보존. 원격코드보존과실제PC/배포완료를구분한다.
+
+---
+
 # 중앙 Codex 최신 UI 검토 — 2026-11-21T12:33:42+09:00
 
 - status: returned · waiting_on: owner/ci/dependencies · execution_id: a3da2627-8d65-4ade-9c47-a1594cb6db15. 사용자단일창구승인으로본중앙UI담당이인수·검토했다. 이전별도UI채팅의구현중단과원본브랜치보존은유지한다.
