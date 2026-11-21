@@ -1,18 +1,18 @@
 ---
-status: taken
+status: returned
 reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T23:29:13+09:00
+updated_at: 2026-11-22T00:12:02+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: owner
 work_branch: gpt/ui-guide-chart-first-20261121
-work_commit: 651e16e3204d62d9c71c3617c429f139f644bccd
-uncommitted_changes: yes
-pr: none
+work_commit: eb61463b958bcfd7147b08fd34742afae4cff4e4
+uncommitted_changes: no
+pr: https://github.com/xkg4real/quantgen/pull/140
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
@@ -20,7 +20,55 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
+returned_at: 2026-11-22T00:12:02+09:00
 ---
+
+## 수동 인수인계 / PR140 미리보기 준비 — 2026-11-22T00:12:02+09:00
+
+**자동 감시·예약·자동 Claude 인수·run_now는 취소 상태 그대로입니다.** 동일 ROOT execution `2f27d0c2-57cc-46e7-97d6-fc141d4065c9`, task `claude-resume-20261103`, 기존 handoff ID/session과 OS lock20162를 유지해 처리했습니다. 이번 UI 코드·합성 검증 범위를 보존하고 실제 PC7/전체 CI·실데이터 근거가 필요한 경계에서 수동 반환합니다. UI/KEY5/법률·실운영 전체 완료가 아닙니다. 다음 작업은 사용자의 수동 지시로 이 최신 기록을 읽고 소유권을 검증해 시작하며 예약을 만들거나 재개하지 않습니다.
+
+### 현재 정확한 ref / 검증 범위
+
+| 대상 | 실제 상태 |
+|---|---|
+| main | `dec979a7fae65d5f749e12193fad3d0a9ce8ddf3`, 이번 UI를 main에 병합하지 않음 |
+| 검증 코드 | `bb32d03be3528f6a048fc09eb657a0efd794d771`, tree `4ccfc1843e23844565cb090c7ef45ed201b4e5ae` |
+| 소유자 미리보기 | `gpt/ui-guide-chart-first-20261121@eb61463b958bcfd7147b08fd34742afae4cff4e4`, tree `22be9396fa612396c5cd9059372c29404702ee91` |
+| PR | [140](https://github.com/xkg4real/quantgen/pull/140), draft/open, main 대비108경로; 보호 캐시/.env 변경0 |
+| 마지막 코드 뒤 변경 | eb61463은 bb32d03 뒤 `docs/product/ui_website_updates/PR-140.json` 1개만 추가; 부모/tree/비교/본문/ref read-back으로 확인 |
+
+검증 코드 bb32의 부모는 실제651e16e·maindec979a·K2d7d9a 세 개입니다. 원 Claude UI414ece/중앙822aff/K1a–K2c 이력과 K2d11본문/known52fc, main의 OS-F2·DSH·DIDM·KEY139를 보존했습니다. main/UI의 workflow·FACTS·app 및 새config/KISclient 겹침을 원공통f065 기준으로 합쳤습니다. 실제main의 app.main AST/저장소 준비9행, config OS 경로와 KIS 토큰 경로를 유지했고 config에는 요청된 readonly ccnl 1행만 추가했습니다. 강제 push/Claude·main 직접 push/배포0입니다.
+
+### 이번 UI 결과
+
+- 기술지표27 교육용 차트에 선의 의미·값 비교·관찰/한계 단계를 추가했습니다. 실제자료·Signals·원 계산/공유renderer·원 보고서입력은 유지하며 가상학습 값을 섞지 않습니다. EMA는 최근가격에 가중하는12/26 span, bounded축·NaN gap·선색/점선·실제좌표 주석을 유지합니다. 원사례 차트/날짜/출처는 별도 접기 영역입니다.
+- 시가총액 등 분리된 Qt tooltip에 앱의 글꼴/팔레트/논리화면폭 줄바꿈을 적용했고 값·출처·수신/관측 시각·원문 Unicode를 유지했습니다. PER/PBR/ROE/PSR 뜻은 valuation 카드에서 간결하게 설명합니다.
+- KIS 기존 quote PBR/BPS와 기존 수급의 gross 매수/매도를 연결하고 5/20일 coverage를 표시합니다. net-only를 매수비율로 만들지 않습니다. readonly 호가/체결강도 snapshot은 준비된 국내클라이언트 경로에각1회/retryFalse이며 새 polling/paging/stream수명주기0입니다. 공매도 거래비중은 잔고와 구분합니다. 실제API·권리 검증을 완료한 것은 아닙니다.
+- VaR/CVaR은 짧은 뜻과 실제 기간/신뢰수준/단위/계산기준 hover로 연결했습니다. 저장된신뢰수준누락은 미기록으로 남기고95를채우지 않습니다. MC terminal loss·stock historical loss·hedge signed worst5%P&L(bp)·rates PV금액손실을 구분하며 계산/숫자/record schema/원내보내기수식0변경입니다.
+- 실제컨테이너 검사에서 preselected-undocked→dock 칩에bar가없는 기존버그를 찾아 UI칩만재생성했습니다(기본빈선택앱이항상실패한다는뜻아님). 실제PNG의 과도한QVBox세로간격은 AlignTop1줄로 줄였고 제목·차트·간결설명이 첫화면에 보입니다. SVG/math/text18함수는 이 레이아웃변경과 동일합니다.
+
+### 실제 검증 / 실패 기록 / 한계
+
+- 최종통합 **35개**: guide5/data19/risk8/glue2/dock1, 수집/실행/고유ID35·실패/오류/skip0. 실제 source866 raw/normalized/blob/bytes/mode·private·첫FAIL·0700prefix 전후일치, 안전counter0. fake_get4/inertimport2/mapinit1/sub1 및 main의 pure on_change 등록1만 관측, 실제refresh0. synthetic120 dock문맥의 EMA3/SMA3은 primitive6호출이지 추가test가 아닙니다. 독립post `ca0c07e6`, 결과 `e19320a1`/outer `71b97ac8`; 원bootstrap listener거절/cleanup 실패 ef35·log4c10 보존, exact module-registration+cleanup 하네스만 수정했습니다.
+- 실제 Guide/Workspace **8계약·PNG3**는 별도 PASS입니다. source153/private32/prefix/guard를 확인했고 in-memory ZIP 원입력을 유지했습니다. 현재 b54df931 lesson/ee9df7cf indicator, 독립visual28bde5b2·4b3f7470. 초기 동적UI문구입력 누락2회와 preselected UI오류1회, 수정 전후 결과를 모두 보존했습니다. fullSignalsPane/전체앱/실제Windows·DPI·설치/실디스크보고서 성공을 대신하지 않습니다. KOcollapsed 캡처의 사례toggle 위치/글자 노출은 실제PC7에서 스크롤·포커스와 함께 확인할 관찰사항이며 실제8 toggle/focus 계약은 통과했습니다.
+- Stage1 V3 geometry92/별도pure7/gap1/PNG2 및 tooltip64는 별도범위로 유지합니다. tooltip은 동봉QG32/32 적합이나 총62/64이며 미등록2xENlong2개clipping/tofu 한계를 원flag대로 보존했습니다. 실제Windows 글꼴문제를 Linux재현으로 확정하지 않았고 Qt/Fontconfig의 모든 native C I/O 관측을 주장하지 않습니다.
+- risk 추가공개8+realQt4, stock glue2 및 원data19의 최초18PASS1ERROR/수정후19PASS는 서로 겹칩니다. 합산해 전체성공건수를 만들지 않습니다. 기존stock34 suite/activechart/productionFoldSection 전체 실행을 대신하지 않습니다. 기존stock시험34중 의도된2method만 수정했고 나머지 AST와 EPS/risk/source/time/legend 검증은 보존했습니다.
+- 통합 gateway boundary는 **실제main의15개** stdlib AST 검사 PASS입니다(이전K2d13과다름). K2d 원 normal strict raw-call 비교의 빈label 전달3곳 FAIL은 그대로이며 기존golden/비교기를 바꾸지 않았습니다. 별도 default-bound/응답 의미보조판독 및 공개6/거절12/경계13이 strict PASS를 대신하지 않습니다.
+- 실제원checker의20문서/source866 **정합성PASS / 공개준비BLOCKED65**. 기준선blob `d609823b85fc4757633205b7c68cc33e7818c655`, rawSHA `79591342...`; 실제main 기준선blob9a5e와 main commitdec979를 혼동하지 않습니다. 독립20정책검토565845/f77b12+최종기준선abb1a3a 확인, source_commit은격리plaincopy의null이며 cleanGit checkout attestation이 아닙니다. 법률/라이선스/실제소유자승인을 추가하지 않았습니다.
+
+### 실제 CI / 전달 / 다음 작업
+
+- 이시점 정확 eb61463의 Compliance [44917383129](https://github.com/xkg4real/quantgen/actions/runs/44917383129) SUCCESS, Runtime [44917383160](https://github.com/xkg4real/quantgen/actions/runs/44917383160) 진행중입니다. 전체CI 성공을 선포하지 않습니다. PC7 전 UI/main 병합 및 OSgo 전 실제바인딩전환 금지라는 기존조건을 유지하며 F진행중 다른main PR을 병합하지 않습니다.
+- sapientia Remaining Work에 PR140 코드·합성 검증 진척을 최소추가했고 queue `UI_PR140-preview-code-20261122-2f27d0c2`가 warning없는 page_id 성공응답으로 synced입니다. 부모UI/KEY5 취소선0; 이전계정/f77 우회0. `NOTION_SYNC_QUEUE.json`24기록과 원문/이력을 보존했습니다.
+- 사이트 기록PR-140.json은 원격blob4b208662로 확인했으며 비공개 website queue10번째는 NOT_SENT/appliedfalse/deployedfalse입니다. 실제HTML반영/사이트배포를 하지 않았습니다.
+- 소유자 PC에서 앱을 닫고 기존연구clone에서 다음을 실행합니다: `git fetch origin && git switch gpt/ui-guide-chart-first-20261121 && git pull --ff-only origin gpt/ui-guide-chart-first-20261121 && Start-QUANTGEN-Desktop.cmd`. 예상HEAD eb61463. reset/clean/강제stash/환경·설정·로컬PC변경을 클라우드에서실행하지 않습니다. 연구캐시·실제원장·판정/동결/holdout/사전등록/주문경로/TRADEGEN0변경입니다.
+- 남은 UI 조건: 실제Windows PC7/수신데이터/hover·언어/scroll·DPI, 전체CI와실제공급사근거; ROE/PSR 회계/단위 계약과 테마구성종목·동일기간/단위 근거. 업종을테마로임의대체하거나 평균을만들지않으며 기존비동기소유자질문은답변미수신입니다. 추가 GPT/Gemini spec심사/공개는 선택 NOT_PERFORMED로유지하며 그미실시만으로Windows인계를막지않습니다.
+- 후속독립 KEY5 K3 factory/stream13접점은 private prep으로보존된 미완료 작업입니다. 사용자의 다음수동작업에서 최신동일handoff/LEDGER·branch/head/직전execution2f27·STATE를대조하고 OS잠금획득→CURRENT최신SHA CAS/newexecution/readback 후 별도승인된범위만이어갑니다. 이UI PC미리보기 ref를 소유자확인중에 임의로바꾸거나 별도Claude/UI/DIDM세션과중복하지않습니다.
+
+### 그 주 전체 인계 연결
+
+앞선 아래기록을 삭제하지 않습니다. 이번 실행에서 DSH code PR137→main6d25a33, DIDM code/synthetic PR138→main53e5e723, KEY139→maindec979a(실제fullCI/parents/tree/readback)를 끝냈고 각각 DS-H/code·DIDM-1/DS-4a·KEY-5/a 범위만닫았습니다. 실제OA09/DS-H부모·DS1실provider/DS4d/e실model/법률·전체KEY5·실OS/PC증거는 남습니다. 기존소유자 Pilot/E/Step10/P3/F 완료증거는 보존하고 재실행/누락으로되돌리지 않습니다. 계정사용량은unknown이며42%등과거값이나등록/last_run/완료수로성공·잔량을추정하지않습니다.
+
 
 ## UI 검증 소스14 원격 체크포인트 — 2026-11-21T23:29:13+09:00
 

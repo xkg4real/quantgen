@@ -295,3 +295,5 @@ Claude와 GPT가 끝낸 작업을 한 줄씩 쌓는 기록입니다. 같은 작�
 | 시각 KST | execution | 작업 branch/commit | 검증과 남은 범위 |
 |---|---|---|---|
 | 2026-11-21T23:29:13+09:00 | 2f27d0c2-57cc-46e7-97d6-fc141d4065c9 | gpt/ui-guide-chart-first-20261121 / 651e16e3204d62d9c71c3617c429f139f644bccd | 검증된 common425V2의 code14만 원격push 및14raw/blob/head readback. Program19/19PASS와 QA9a583d, NativeStage1 V3 92geometry+별도7pure+gap1+PNG2, tooltip bundled32fit/total62of64와 fallback2fail 보존. Stage2/risk추가9/glue/fullmain통합/baseline/CI/실제PC7 미완료; 부모UI/KEY5와완료ID목록을닫지않음. |
+
+| 2026-11-22T00:12:02+09:00 | 2f27d0c2-57cc-46e7-97d6-fc141d4065c9 | gpt/ui-guide-chart-first-20261121 / code bb32d03be3528f6a048fc09eb657a0efd794d771; preview eb61463b958bcfd7147b08fd34742afae4cff4e4; PR140 draft | 실제통합35 PASS/독립ca0c07e6/source866불변; 별도Guide8/PNG3·경계15,20문서정합PASS/공개BLOCKED65. Compliance44917383129SUCCESS/Runtime44917383160진행중. bb32의main·K2d부모/tree·22new본문 및eb614웹JSON단독delta/ref검증. NOTION partialsynced/웹NOT_SENT. 실제PC7·OSgo·ROE/PSR/테마근거·실API·권리·UI/main부모미완료로수동반환; 완료ID추가0. |
