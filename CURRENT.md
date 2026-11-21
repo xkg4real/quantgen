@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T22:00:53+09:00
+updated_at: 2026-11-21T22:07:53+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-key5-flet-k2d-20261121
@@ -20,6 +20,16 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
+---
+
+## 소유자 새 지시: 교육용 기술지표 가이드를 차트 중심으로 — 2026-11-21T22:07:53+09:00
+
+- 소유자가 이 대화에서 기술지표 가이드는 교육용이므로 12일선·26일선부터 쉽게 이해하고, 줄글보다 차트의 선을 보며 읽도록 하며 차트에 직접 안내를 넣어도 된다고 수정 지시했습니다. 재승인을 요구하지 않고 진행합니다. 지표별 교육 설명·시각 안내 범위이며 매수/매도 규칙·예측·시장 계산/연구 기준 변경은 아닙니다.
+- ROOT2f27d0c2 execution/OS lock20162 아래 병렬 작업 gpt/ui-guide-chart-first-20261121을 실제 b3731cf3a41932afba4f480049fc2e52c35d9eef에서 생성하고 ref를 다시 읽었습니다. primary K2d는 유지하며 서로 소스가 겹치지 않게 새 격리 복사본을 사용합니다. 원본 b373의 검증 K2c source412(final4e431d4d/remote ac50d075)만 명시 목록·raw/blob/mode로 복사합니다. .env/보호cache/실제home·API/worker·연구·원장은 열거나 실행하지 않습니다.
+- 첫 설계는 선색과 연결된 짧은 이름·무엇을 평균한 것인지·선의 반응 속도·실제 선 위치에 붙는 관찰점입니다. 27지표를 추세/모멘텀/변동성/거래량·수급 특성에 맞춰 설명하고, 일봉이 아닌 자료를 무조건 '일'로 부르지 않습니다. 기존 계산·입력·데이터·27결론/근거·권유 금지 문구와 실제 시장 차트의 기존 동작을 보존합니다. 작은 폭/확대배율·한영·겹침/클리핑·키보드/접근성을 독립 검토합니다.
+- 지금은 source-copy/읽기 및 private 최소 설계·시험 계획만 GO, 제품 patch·새 골든/원격 코드/기준선 변경은 아직0입니다. Native 설계 뒤 ROOT가 정확 파일 범위와 검증을 확정해 별도 구현 GO합니다. K3 stream은 private 초안 진척을 보존하고 잠시 보류하며 실제 writer/제품/실행0입니다.
+- 질문에 대한 읽기 감사로 actual main dec979a의 outlook/study_guide/signal_context가 후보와 같고, 27개 모두 상·하방 조건/시장 국면/한계·근거가 native 가이드 sections로 연결됨을 확인했습니다. 현재값 판독은 교육용이며 수익률 예측·매수 지시가 아닙니다. 후보의 레이아웃과 실제 PC 설치 반영은 별도입니다. 새 문헌 심사·GPT/Gemini spec 공개0, NOT_PERFORMED 선택사항은 유지합니다.
+
 ---
 
 ## KEY-5/a 실제 병합 완료·K2d 검증 — 2026-11-21T22:00:53+09:00
