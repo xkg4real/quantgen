@@ -157,8 +157,8 @@ def kis_batch(service, group, members, *, cancelled=None, progress=None, sleep=t
 
 
 def _overseas_detail():
-    from data.kis_workspace import OVERSEAS_PRICE_DETAIL
-    return OVERSEAS_PRICE_DETAIL
+    from core import gateway
+    return gateway.provider('data.kis_workspace').OVERSEAS_PRICE_DETAIL
 
 
 def _with_detail(record, details, fetch, now):
@@ -257,8 +257,8 @@ class ProductionRankingLoader:
                 if self._factory is not None:
                     self._service = self._factory()
                 else:
-                    from data.kis_workspace import MarketDataService
-                    self._service = MarketDataService()
+                    from core import gateway
+                    self._service = gateway.provider('data.kis_workspace').MarketDataService()
             return self._service
 
     def market_caps(self):

@@ -1,3 +1,16 @@
+## K1d 랭킹·QScore의 기존 gateway 입구 전환 — 2026-11-21T19:04:00+09:00
+
+K1c b93fed6609af27c0b73ba41d572266a814c57768 뒤의 별도 보존 후보다. 승인 KEY5 ID10·11·15만 처리했으며 전체 UI·KEY5 또는 main 병합 완료가 아니다.
+
+- market_rankings의 순수 해외 상세 상수 조회·기본 서비스 생성과 qscore의 기본 서비스 생성 3접점을 같은 위치에서 기존 gateway.provider('data.kis_workspace')로 옮겼다. 명시 false-y 주입·락/캐시·생성 오류/재시도·no-arg 생성·shared client identity·키 snapshot/명시 reload를 보존했다. 모듈·fixed_local 정책·키 저장/API는 바꾸지 않았다.
+- 독립 고정 before factory13 MATCH(생성시도6·서비스4·ready6), 실제 gateway 대상8진입·참조1·기존 import1을 분리 확인했다. 정확한 module 위치인자/source=None·workspace 모듈 identity·rankings 락 안 조회 및 대상 route/table/order/remote/data/network0을 확인했다. factory13은 GUI13화면이 아니다. writer/oracle/comparator와 before 증거를 보존했고 project import 전 외부 bootstrap guard로도 재생했다.
+- 별도 기존 회귀18·경계13 PASS(실패/오류/skip0), 제품2파일 Python3.10 grammar PASS. 기존 market-cap 합성 회귀의 FMP route1/table1은 target workspace route0과 별도다. 초기 keyring 미설치·희소 routes 입력 관련 private 하네스 실패도 보존했고 공개 tests/assertions는 변경하지 않았다.
+- actual scanner의 소멸 known3만 삭제했다. 신규/누락/오류0; 잔여 총17파일은 동결 core feed1 + 화면16파일이며 화면36접점이다. ceiling22/44·SCREEN_FILES22·FROZEN 불변. 기존 source399 중 target2 외397은 불변이며 추가 app·기존 시험/helper·정적 routes는 exact b93 공개 입력이다.
+- 최신 선행 main/G1–G3 합침·전체 UI 회귀/CI·최종 준법 baseline·UI PR·소유자 PC7화면/OSgo는 미완료다. 실제 provider/API·권리/법률·연구 성과·웹 적용/배포 근거를 추가하지 않았다. 실제 UI PR에서 웹 영향 기록과 전달·적용 증거를 별도로 남긴다.
+
+
+---
+
 # Central UI integration candidate — 2026-11-21
 
 This work-in-progress branch preserves Claude UI `414eceb90ce42e67113f9cc592229f3f36f37c83` together with main `f065ec92dbce1e1b34e4adb0b6dbed724305a2f4`. It is not a merged release or a replacement for the owner PC acceptance gate.

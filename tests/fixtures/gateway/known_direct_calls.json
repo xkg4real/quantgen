@@ -11,15 +11,8 @@
    "import:data.kis_workspace.availability_note",
    "import:data.kis_workspace.supported_intervals"
   ],
-  "quantgen_desktop/market_rankings.py": [
-   "import:data.kis_workspace.MarketDataService",
-   "import:data.kis_workspace.OVERSEAS_PRICE_DETAIL"
-  ],
   "quantgen_desktop/paper.py": [
    "call:core.engine.feed.QuoteFeed(no fmp_client)"
-  ],
-  "quantgen_desktop/qscore.py": [
-   "import:data.kis_workspace.MarketDataService"
   ],
   "quantgen_desktop/watchlist_live.py": [
    "import:data.kis_stream.KISStream",
@@ -81,7 +74,7 @@
  },
  "totals": {
   "core_and_main": 1,
-  "files": 19,
-  "screens": 39
+    "files": 17,
+    "screens": 36
  }
 }
