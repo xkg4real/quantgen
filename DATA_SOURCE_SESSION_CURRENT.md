@@ -1,14 +1,14 @@
 ---
-status: returned
-reason: reviewed_branches_ready_waiting_merge_queue
+status: handoff
+reason: owner_directed_transfer_to_quantgen_main_codex
 from: gpt
 task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
 next_ids: DS-H, DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e
-updated_at: 2026-11-21T11:03:55+09:00
+updated_at: 2026-11-21T11:59:26+09:00
 stale_after_hours: 3
-waiting_on: review
+waiting_on: none
 work_branch: gpt/data-source-didm-20261121 (+ gpt/ds-home-indicators-20261121)
 work_commit: 87812679aec6f333d91b867f5892e523e0da9b0c (DIDM); 7ce37917102af9793d3ccbe851c0554058089df9 (DS-H)
 uncommitted_changes: no
@@ -18,13 +18,57 @@ usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
 session: Codex DIDM 6af7214e-7798-8191-8cfe-66ba373de0ad
 execution_id: didm-gpt-20261121-6af7214e
+handoff_to: QUANTGEN_MAIN_CODEX
+implementation_stopped: yes
 ---
 
-# 인수인계: QUANTGEN/MAIN -> DATA_SOURCE_DIDM
+# 인수인계: DATA_SOURCE_DIDM -> QUANTGEN 메인 Codex
 
 운영 기준: 메인↔하부 세션 사이는 [SESSION_PIPELINE](SESSION_PIPELINE.md) (소유자 지시 2026-11-20: 메인이 보낸 일은 바로 착수, 끝나면 바로 메인에 보고). GPT 인계는 그대로 [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md) (소유자가 이어받으라고 할 때만).
 
 ## 0. 한 줄 요약
+
+### 최우선: QUANTGEN 메인 Codex로 인계 — 2026-11-21T11:59:26+09:00
+
+**소유자 최신 지시 (2026-11-21, 이 DIDM 채팅 원문):**
+> 앞으로 QUANTGEN 메인 Codex 세션이 작업을 총괄합니다. 현재 진행한 변경을 보존하고, 브랜치·최신 커밋·PR·검증 결과·미커밋 변경·남은 작업·소유자 결정 사항을 인계 문서에 기록해주세요. 원격 반영 여부까지 확인한 뒤 작업을 인계 상태로 전환하고, 새로운 구현은 시작하지 마세요. 메인 세션이 이어받습니다.
+
+**담당 전환:** 이후 구현·PR·병합·다음 작업 배정은 QUANTGEN 메인 Codex가 총괄한다. 이 DATA_SOURCE_DIDM 세션은 변경을 보존하고 인계 상태로 전환했으며 새 구현을 시작하지 않는다. 아래 과거의 자동 배정·이 세션 재개 관련 문구보다 이 최신 소유자 지시가 우선한다.
+
+| 구분 | DS·DIDM | DS-H 홈 지표 |
+|---|---|---|
+| 보존된 브랜치 | `gpt/data-source-didm-20261121` | `gpt/ds-home-indicators-20261121` |
+| 최신 커밋 (로컬 = 원격) | `87812679aec6f333d91b867f5892e523e0da9b0c` | `7ce37917102af9793d3ccbe851c0554058089df9` |
+| 로컬 작업 폴더 | `/workspace/didm_dev` | `/workspace/didm_home` |
+| PR | 없음 — 해당 head branch로 전체 상태(open/closed/merged) 조회 결과 0건 | 없음 — 동일 조회 결과 0건 |
+| 미커밋·staged·untracked 변경 | 없음 (보호 캐시 경로 제외한 허용 범위 git status/diff 확인) | 없음 (같은 방식) |
+| 원격 반영 | GitHub branch ref GET으로 위 SHA 일치 재확인 | GitHub branch ref GET으로 위 SHA 일치 재확인 |
+| 검증 결과 | DIDM 132 PASS, 공급사 대조 147 PASS, 엑셀 원본 변경 0칸 | 홈23 포함 홈·공통131 PASS |
+| 변경 설명 | `docs/didm/IMPLEMENTATION_REVIEW_2026-11-21.md` | `docs/product/HOME_INDICATORS_DATA_2026-11-20.md` |
+
+검증 결과는 앞선 구현 작업에서 실행한 로그를 이번 인계에서 재확인한 것이다. 이번 차례에는 새 구현·수익률 실험·시험 재실행 없이 상태 확인과 인계 문서 갱신만 했다.
+검증 로그·격리 실행기: `/workspace/didm_work/resume_20261121/`의 `didm_final.log`, `home_regression.log`, `provider_regression_shm.log`, `run_offline.py`, `run_regression.py` (로컬 보조 자료; 코드 변경 자체는 위 두 원격 브랜치에 보존).
+인계 확인 시 원격 main은 `f065ec92dbce1e1b34e4adb0b6dbed724305a2f4`이며 이 두 작업은 아직 main 미병합이다. compliance 기준선 갱신·PR CI는 아직 하지 않았으므로 통과를 주장하지 않는다.
+
+**메인이 이어갈 남은 작업**
+1. 최신 중앙 CURRENT·WORKBOARD·MERGE_QUEUE를 확인한다. 이번 조회 기준 순서는 OS-F2(4e) → DS-H(4f) → DS·DIDM(4g)이며, 대기열에는 아직 옛 Claude 브랜치가 적혀 있다. 메인은 이번 **GPT 브랜치/최신 SHA**로 이어받아 대기열을 갱신해야 한다.
+2. 차례에 맞춰 최신 main을 해당 브랜치에 merge하고 §9의 검증을 수행한다. DS·DIDM은 DS-H 병합 후 main을 다시 합친다. CI workflow의 기존 main 검사와 DIDM/홈 검사를 모두 보존한다.
+3. 각 PR 직전 마지막에 compliance 기준선 갱신·check를 수행한다. 새 파일로 20개 문서 재검토 대상임을 PR에 명시한다. 독립 검토·CI 확인·병합 및 LEDGER/WORKBOARD 완료 기록은 메인이 처리한다. 현재 `done_ids: none`은 아직 main 병합 전이라는 뜻이다.
+4. 앱 UI 연결·실제 정답 집합 채점·모형 유의성/초과수익 검증·TRADEGEN 적용은 이번 구현 검증과 구분해 후속 배정한다. 합성자료 정확도 1.00을 실제 성과로 간주하지 않는다.
+
+**소유자 결정 사항 (확정과 미결 구분)**
+- 확정: RavenPack 대안 9개를 뜻하는 “3단계” 해석, 공식 무료 소스 추가, Kalshi 선택. Alpha Vantage·Tiingo·CryptoPanic 뉴스는 무료 이용 불가 확인 후 보류; OA-08 무료 키 확인은 종료되어 재요청하지 않는다.
+- 확정: 사전등록 V0 승인, 기존 범주를 포괄하는 사건 유형14개, 신규성을 다변량 모형으로 평가, 확률 문턱0.75·목표 정확도0.90, 자체 개발 LLM 포함 학습 cutoff 규칙. PREREG_V0 원문은 보존했다.
+- 미결 OA-09: 소유자 PC 홈 지표 진단 출력. 미결 OA-10: 신규성 다수 범주 대비 보조 조건, 자체 LLM 기반 모델·학습 cutoff, 평가표 판단(c) 확인.
+- 미결 OA-38: RavenPack 견적/Bigdata 비교를 계획에서 제외한 해석 확인. 미결 OA-46: BTC 실시간 KRW와 일별 USD의 표시 단위 결정. 이번 인계에서 새 결정을 추정하거나 새 소유자 질문을 만들지 않는다.
+- 최신 확정: **QUANTGEN 메인 Codex가 총괄하며 이 세션의 새 구현은 중단한다.**
+
+초기 연구 보고서 산출물도 보존되어 있다: `/workspace/didm_output/02_DIDM_Research_Methods_v02_Illustrated.{pdf,md}`, `03_DIDM_Initial_Specification_v02_Illustrated.{pdf,md}` (네 파일 존재 확인). 이 보고서 파일은 코드 브랜치의 원격 반영 대상과 구분되는 로컬 산출물이다.
+
+이 문서는 메인이 읽을 수 있는 공용 handoff 보고다. 다른 채팅으로 직접 메시지를 보냈다는 뜻은 아니다. 중앙 CURRENT·다른 세션 문서·원장·제품 코드는 이번 인계에서 수정하지 않았다.
+
+---
+
 
 **최신 2026-11-21 GPT 검토 완료 / 병합 차례 대기 (2026-11-21T11:03:55+09:00):**
 - DS-H: `gpt/ds-home-indicators-20261121` @ `7ce37917102af9793d3ccbe851c0554058089df9` (main `f065ec9` merge `107fee4`). KIS 준비상태 확인 오류를 실시간 한 행으로 격리하고, 중간 이력 날짜까지 검증. 홈23을 포함한 홈·gateway·credentials·연구계약 **131 tests PASS**.
@@ -221,7 +265,9 @@ python -m tools.compliance.check --check -> consistency FAIL, documents need rev
 - 새 키 이름 (값 없음, 제안): `FRED_API_KEY` (DS-4a ALFRED, 연구 도구 전용), `ECOS_API_KEY`, `SEC_EDGAR_USER_AGENT` (연락처 문자열; DS-4d), OpenDART는 기존 `OPENDART_API_KEY` (`data/didm/opendart.py`가 `OpenDARTClient._get` 사용), DS-4b용 `ALPHAVANTAGE_API_KEY`, `TIINGO_API_KEY`, `CRYPTOPANIC_API_KEY`; Stage 2 뒤 `CME_FEDWATCH_API_ID`, `CME_FEDWATCH_API_SECRET`; Stage 3 뒤 `TRADINGECONOMICS_API_KEY`.
 - `routes.json` 행: 지금 없음. DIDM 수집은 `tools/didm/` 연구 도구라 게이트웨이 대상 아님 (D7 5.5). 앱이 DIDM 결과를 쓰게 되면 그때 공급원마다 한 행 요청.
 
-## 9. 이어받는 에이전트에게 주는 지시문
+## 9. 이어받는 메인 Codex에게 주는 지시문
+
+**이 절의 실행 담당은 QUANTGEN 메인 Codex다. DATA_SOURCE_DIDM 세션은 최신 소유자 지시에 따라 새 구현을 중단했으며, 인계 파일 상태나 기존 큐만으로 스스로 재개하지 않는다.**
 
 1. 소유자의 이번 작업 지시 범위에서만 재개한다. 이 문서 상태 자체는 자동 인수 신호가 아니다. 중앙 CURRENT와 DATA 전용 파일의 execution 소유권을 확인한다.
 2. SESSION_PIPELINE, 최신 MERGE_QUEUE, WORKBOARD 2.4, LEDGER를 읽는다. 현재 완료 ID는 main 병합 전이므로 원장에 없다. 다른 담당의 taken은 선점하지 않는다.
