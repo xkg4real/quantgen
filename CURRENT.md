@@ -6,10 +6,10 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T22:19:05+09:00
+updated_at: 2026-11-21T22:25:04+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/ui-key5-flet-k2d-20261121
+work_branch: gpt/ui-guide-chart-first-20261121
 work_commit: b3731cf3a41932afba4f480049fc2e52c35d9eef
 uncommitted_changes: yes
 pr: none
@@ -20,6 +20,20 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
+---
+
+## K2d 검증 코드 보존·새 주식 정보 구현 GO — 2026-11-21T22:25:04+09:00
+
+- **K2d 원격 보존:** gpt/ui-key5-flet-k2d-20261121@7d9a4d33ac8e13a1509567b0344856d64b1c27a3, 부모b3731cf/treec87888adba5ef881f7247edc26fc0e510648ac56. 정확11변경 경로/본문/blob·부모기준 비교·expected b373 ref CAS/read-back을 확인했습니다. source413 최종freeze6b36d651, known52fc76fe·화면8파일25접점+동결feed1/상한22·44 유지. 원 엄격 normal FAIL/3 default label 전달과 별도 보조판독, 공개6 초기실패/R2B6PASS, 거절12 첫PASS, 경계13 첫PASS를 분리 보존합니다. 전체UI/KEY5/main/PC/실API 완료ID를 추가하지 않습니다.
+- 이 CAS 뒤 primary를 새 소유자 UI 지시의 gpt/ui-guide-chart-first-20261121@실제 b373 부모로 옮겨 계속합니다. 동일 ROOT2f27d0c2·OS lock20162/task/handoff/cycle은 유지, K2d 기존 claim/실제7d9a commit과 검증을 STATE history에 보존합니다. Native2·DIDM5의 비겹침 구현 범위는 직전 기록대로 진행 중입니다.
+- **Program 정확7파일 구현 GO:** data/krx/kis_client.py, data/kis_markets.py, core/research/stock_profile.py, 새 core/market/detail_insights.py, 새 quantgen_desktop/stock_insights.py, 새 tests/detail_insights_acceptance.py, config.py. 공식 KIS 공개고정ref74b0a082의18입력 Gitblob 대조/원문 보존38e973ab와 계획23e8e6bd, 기존4원문 지문/신규3경로 부재를 확인했습니다. 신규 거래/계좌/실API 요청을 수행하지 않습니다.
+- 소유자가 이번 대화에서 요청한 PBR/매수매도비율/호가/체결강도 구현 범위입니다. 기존 현재가응답의 PBR/BPS 및 기존 investor_daily 응답의 개인·외국인·기관 매수·매도 수량만 정규화하며 기존 조회 요청을 늘리지 않습니다. 순매수만 있거나 분모0/누락/불완전이면 실제 gross비율로 바꾸지 않습니다. 기간·보고일·수량/금액·0과미제공을 구별합니다.
+- 호가는 기존 허용된 inquire-asking-price-exp-ccn의10단계 가격·잔량 snapshot, 체결강도는 공식 inquire-ccnl의 tday_rltv/수신시각/조회시각을 분리합니다. config.py 변경은 정확 읽기경로 /uapi/domestic-stock/v1/quotations/inquire-ccnl 문자열1개만입니다. 이 데이터 추가 지시를 구현 근거로 기록하되 동결 읽기제약/주문·계좌·OAuth 경로 거절과 소유자 승인 규칙은 바꾸지 않습니다. 연구 fingerprint/owner_confirmed/서명·등록·원장을 자동 재승인·실행하지 않습니다. 실제 최신main OS-F2 guard는 이후 통합에서 보존하며 old config 전체 덮어쓰기0입니다.
+- 선택 조회는 국내주식 profile 로드당 호가1/체결1·retry=False, paging·새poll·WS0 상한입니다. OAuth/세션 상황까지 포함한 HTTP총횟수를2라고 단정하지 않습니다. 현재 있는 실 WS CTTR 슬롯을 새 계약 없이 실시간수신 완료로 기록하지 않고 REST snapshot과 명시 구별합니다. hover로 새 I/O를 유발하지 않습니다.
+- 새 pure model/panel은 검증된 profile/주입자료만 소비합니다. 공매도는 거래량 비중·수량이며 잔고/대차/숏커버를 추정하지 않고, 호가 잔량은 취소 가능하며 체결강도는 공격적 체결량의 상대치이지 수익예측/확률이 아님을 간단히 설명합니다. 네이티브 stock_detail 연결은 DIDM 단일 작성자에게 정확 계약을 전달해 비겹침 구현합니다.
+- ROE의 회계 범위·단위/연간분기·결산년월, PSR 직접 필드/검증된 매출기간, 테마 구성종목은 아직 확인 부족입니다. finance 경로의 allowlist/guard 확장이나 현재가÷SPS를 실제PSR로 표시하는 작업은 승인하지 않습니다. 테마 비교 질문은 대기 중이며 업종을 테마로 오표시하지 않습니다. peer model은 검증된 membership/동일 단위·기간·basis/coverage 입력이 있을 때만 계산 방법을 표시하고, 없으면 미제공입니다.
+- 폰트6·기존 public desktop시험2는 공식b373 blob과 일치하는 추가 입력으로만 자료화했습니다(폰트02f794a7/test56388a02), 폰트 내용/라이선스·시험 assertion 수정0. 실제 토스 웹 열람·Windows PC/권리·실API/실모델·동결연구/원장·배포는 미실시이고 PC7/OSgo·최신main/준법·전체CI/PR 조건을 보존합니다. 작업 뒤 CMD는 검증된 preview/실제 main 여부와 로컬변경 보호를 구분해 제공합니다.
+
 ---
 
 ## 교육·툴팁 구현 범위 GO와 추가 데이터 요구 — 2026-11-21T22:19:05+09:00
