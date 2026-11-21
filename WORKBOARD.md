@@ -4,6 +4,8 @@
 
 소유자 단일요청창구·5담당계획 승인후메인Codex가총괄한다. [실제담당·진행·검증근거표](CENTRAL_CODEX_STATUS_2026-11-21.md)를 우선한다. DIDM/UI기존세션은handoff/새구현중지확인완료. 데이터는최신GPT DSH7ce37917/DIDM87812679를이어받는다. 구현·회귀는병렬, 병합은OS-F2→DS-H→DS/DIDM→KEY5a순차. 아래과거시각의중단·대기·배정문구는이력이며자동완료로바꾸지않는다. 현재새완료ID/병합은없다.
 
+> **2026-11-21T13:06:45+09:00 문서 대조 보정:** 현재 원격 보존 head는 OS-F2 `64ff58e`(PR136), DS-H `7ce3791`, DS·DIDM `abd10c6`, KEY-5/a `45db2be`다. 위 `87812679`는 DIDM 수정 전 이력이다. CURRENT 13:04:53과 MERGE_QUEUE 12:33:42 기준으로 main `f065ec92` 유지, OS-F2 전체 CI 진행 중이며 새 병합·완료 ID는 없다. 아래 11-20 기준 자료의 대기/분담은 당시 이력으로 읽는다.
+
 
 상시 지침: `SESSION_PIPELINE.md` (메인·하부 세션 연결 규칙). 이 문서는 메인이 작업 하나가 끝날 때마다 고친다.
 
@@ -26,6 +28,8 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 
 **세션 지도**
 
+> **2026-11-21T13:06:45+09:00 담당 보정:** 아래 표는 11-20 Claude 중단 시점 이력이다. 최신 담당은 메인 Codex 총괄과 승인된 하위 담당이며, DATA/UI 별도 채팅은 handoff·새 구현 중단 상태다. UI 원본 `414eceb`는 보존하고 중앙의 격리 gpt 후보에서 통합을 검증한다. PAY-0/PAY-2는 준비 문서와 OA-32/OA-39 대기 상태를 유지한다. 이 주석은 소유자 PC 확인·OS go·사업/법률 결정이나 웹사이트 실제 반영을 대체하지 않는다.
+
 | 세션 | 종류 | 연락 방법 | 지금 |
 |---|---|---|---|
 | MAIN | 메인(조정·병합) | — | 11-20 05:50 KST: **주간 98% → GPT 인계**(CURRENT.md). PR #134 병합(f065ec9), 4e OS-F2 OS가 e44c48e까지, KEY-5/a 검토 결과 plans/2026-11-20/KEY5A_REVIEW.md |
@@ -39,6 +43,7 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - PR은 한 번에 하나만 병합을 기다린다. 병합 버튼은 메인이 누른다. 하부 세션은 자기 행이 맨 앞이거나 메인이 "병합: <세션>"이라고 적었을 때만 PR을 연다.
 - 공유 파일(source-review.json, FACTS.md, config.py, workflows)은 PR 하나씩만 바꾼다. 앞 PR이 병합되면 최신 main을 합치고 기준선을 다시 만든다.
 - UI/UX·웹사이트 세션의 브랜치와 인계 파일은 아무도 고치지 않는다. 다른 세션이 그 브랜치를 시험할 때는 읽기·시험만 하고 push하지 않는다. 그 세션에 줄 요청은 소유자를 거친다.
+  - **2026-11-21 우선 정정:** UI에 대해서는 소유자의 메인 Codex 단일 창구 지정과 UI 인계가 위 과거 요청 경유 절차보다 우선한다. 중앙에서 기존 승인 범위의 UI 통합·검증과 하위 담당 배정을 진행하며 원본 Claude/UI 브랜치는 보존한다. 실제 PC 확인·OS go·새 UI/사업 결정 조건은 남는다. WEBSITE/AWS에 대한 인수·배포 승인이 추가로 확인된 것은 아니므로 웹사이트 전달/실제 반영은 기존 조건을 유지한다.
 - 원장에 있는 ID는 끝난 것이다. 다시 하지 않는다. 추가 작업은 `/2`, 부분 작업은 `/a`를 붙인다.
 - 하부 세션은 LEDGER를 직접 쓰지 않고 `--done` 문자열을 자기 인계 파일에 적어 메인에 알린다 (REMAINING_WORK_2026-11-17 0절).
 - 하나가 끝나면: 작업 브랜치 push → 메인이 ledger `--done` → CURRENT next_ids에서 빼고 done_ids로 → 이 문서에 [x] → MERGE_QUEUE 줄 긋기 → Notion.
@@ -59,8 +64,10 @@ git 기준: main 9f76b07 · PR #133 head 148504a · UI 브랜치 490562d · OS �
 - [~] **PySide6 간헐 종료 고침** (OS-F1 선행, ID 없음) — 시험 도우미가 QThread.currentThread() 객체를 붙잡고 있던 문제를 threading.get_ident()로 바꿈 — OS(재확인), UI(반영 끝) — 메인이 OS에 "UI가 490562d로 반영함"을 전달 → OS가 UI 브랜치를 읽기·시험만(push 금지)으로 다시 시험 → PYSIDE6_TRIAL 9절 판정 복구 → OS 브랜치 8262d6c(5파일: lint 15, 점검표 15, TRIAL 10-1, 패치)의 main 자리를 메인이 정함(OS-F1 PR에 묶거나 작은 PR) — OS 8262d6c, UI 브랜치 head 490562d(23:24 KST)
 - [!] **UI 7쪽 + PySide6 준비 병합** (MERGE_QUEUE 5) — claude/friendly-bardeen-r6xe8f — UI(소유자 경유) — 소유자가 PC 2대(skymi, whydi)에서 실행 확인 → UI 세션에 "PR 만들어" → 메인이 '병합: UI' — MERGE_QUEUE 5행. OS-F1과 KEY-5가 이것을 기다림
 - [!] **DS·DIDM 브랜치** (DS-1, DIDM-0, DIDM-1, DS-4a, DS-4b, DS-4d, DS-4e) — 코드 끝, **main 9f76b07 합침 완료(f60e314) → head eb4f3a5, PR 직전 상태** (DIDM 시험 98 OK, 게이트웨이·자격증명 208 OK = main과 같음, core/ 밖 변경 0줄; 메인 확인 11-20 00:25) — DATA_SOURCE_DIDM — 남은 것: 소유자 PC 결과(OA-07, OA-08) 반영 → 8행 차례에 최신 main 합치기·기준선·PR — DATA 보고 11-20 00:23
+  - **2026-11-21T13:06:45+09:00 현재 상태:** 위 `eb4f3a5`와 OA-07/OA-08 대기는 과거 이력이다. 공식·무료 공급원 6곳은 소유자 PC 확인이 끝났고, 무료 뉴스 3곳은 이용 불가 확인에 따라 DS-4b 보류 상태다. 이어받을 코드는 **4f DS-H `gpt/ds-home-indicators-20261121@7ce3791` → 4g DS·DIDM `gpt/data-source-didm-20261121@abd10c6`**다. 합성 검증·원격 보존까지 확인했으며 최신 main 통합·준법 기준선·필수 CI·PR·병합은 남았다. OA-09/10/38/46의 실제 사용자 입력은 유지한다.
 - [!] **웹사이트 정책 문구 다시 만들기** — PR-130.json 반영 — WEBSITE(소유자 경유) — 소유자가 받은 프롬프트를 웹사이트 세션에 붙이기 — CURRENT "웹사이트 세션 전달은 소유자 경유"
 - [ ] **OS-F2** — config.py·data/krx/kis_client.py·data/krx/opendart_client.py의 ~/.nextgen 경로 전환 — OS(브랜치), MAIN(자리) — 관문 KEY-2(3249af7) 풀림. KEY-4와 파일 겹침 없음(KEY-4는 config.py·data/krx를 바꾸지 않음) → OS 브랜치 작업은 지금 시작 가능. 메인은 MERGE_QUEUE에 행 추가, owner_confirmed 다시 쓰기는 그 뒤로 — MERGE_QUEUE에 행 없음
+  - **2026-11-21T13:06:45+09:00 현재 상태:** 위 'MERGE_QUEUE에 행 없음'은 이전 관측이다. 실제 차례는 **4e OS-F2**, `gpt/os-f2-data-dir-20261121@64ff58e` / [PR136](https://github.com/xkg4real/quantgen/pull/136)이다. 첫 Windows fixture 실패를 수정한 새 Compliance44861453813은 성공했고 Runtime44861453849 전체는 CURRENT 관측 시 진행 중이다. 아직 병합·OS-F2 완료는 아니다.
 
 ---
 
@@ -365,6 +372,18 @@ push_log:
 ## 4) 병합 순서 (MERGE_QUEUE 거울)
 
 MERGE_QUEUE.md의 번호를 그대로 둔다. 번호 없는 "제안" 행은 메인 정리안이고 MERGE_QUEUE.md에 행을 넣어야 한다.
+
+**2026-11-21T13:06:45+09:00 현재 거울 보정** (아래 종전 표는 11-20 관측 이력으로 보존):
+
+| 순서 | 현재 확인된 상태 | 근거 |
+|---|---|---|
+| 4c / 4d / 4d' | KEY-4·중앙 문서·KEY-4/a는 이미 병합 완료 | PR133 `8445187`, PR135 `fa78df1`, PR134 `f065ec9`; MERGE_QUEUE 완료 행 |
+| 4e | OS-F2 PR136, 최신 `64ff58e`, 전체 CI 대기; 현재 유일 병합 대기 PR | CURRENT 13:04:53·MERGE_QUEUE 12:33:42 |
+| 4f / 4g / 4h | DS-H `7ce3791` → DS·DIDM `abd10c6` → KEY-5/a `45db2be`, 각각 앞 PR 병합 뒤 최신 main 검증·기준선·CI·PR | MERGE_QUEUE의 현재 순서; 원격 보존을 병합으로 세지 않음 |
+| 5 / 6 | 중앙 UI 통합 준비, 실제 PC 확인 뒤 UI 병합; 이후 OS go와 PySide6 전환 조건 유지 | UI_SESSION_CURRENT 최신 인계 |
+
+아래 표의 'KEY-4 재검증 중', '4d 대기', 'OS-F2 행 없음', 'DS 8행'은 위 현재 거울의 실행 지시로 쓰지 않는다.
+
 
 | 순서 | 무엇 | 세션 | 상태 | 근거 |
 |---|---|---|---|---|
