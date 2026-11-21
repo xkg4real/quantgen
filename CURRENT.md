@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code
 next_ids: KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T18:38:58+09:00
+updated_at: 2026-11-21T18:52:08+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/data-source-didm-20261121
@@ -21,6 +21,15 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
 ---
+
+## KEY5a 합성 준비 완료·K1d 좁은 구현 배정 — 2026-11-21T18:52:08+09:00
+
+- KEY5a local45+candidate6cff에서 fresh gateway83·관련123·시작경로17 모두 fail/error/skip0, 관련21subtests는 별도다. 실제845sources/20docs, 구조·링크0, 기존baseline과의20stale만 확인했다. 20정책 독립 소스영향 검토는 본문추가수정0, frozen10·incomingCODE27/DIDM45/V0 보존·동결engine4 불변, private독립8 및 startup/shared-identity4는 별도 증거다. 첫 startup17의audit오탐10/누락입력1 실패와 guard수정 이력은 원문 보존했다. 최종baseline/KEY원격코드/4hPR는 실제4gmain병합 전 수행하지 않는다.
+- DIDM138/6cff: Linux와문법2success, Windows3환경 전체검사는 계속진행중이며 실패관측0(18:51확인). 실제main6d25a33 유지. 공식DIDM-1/DS-4a 코드·합성검사 완료조건과 기존V0승인원문을 대조했지만 전체필수CI/병합확인전 done추가0이다. DS-1/OA10·DS-4d/e 전체·실API/모형성과/권리/법률/운영은 미완료 유지한다.
+- K1d 승인ID10/11/15의 before13계약/명시false-y주입·락/캐시·실패재시도·sharedclient·순수상수identity를 작성자와 별도QA가 재생했다. 고정writer22de14bb/oracle88dad5f9 불변, comparer음성22는별도. 모든projectimport전 외부bootstrap(4c8a897d) guard 재생13MATCH·금지데이터/원장/실keyring/network0, 첫하네스실패이력 보존. 공식b93 target2+gateway3본문/399공개copy·actualimports76을독립대조했다. GUI13화면/전체QScore계산 검증으로 확대하지 않는다.
+- 원격 gpt/ui-key5-native-k1d-20261121@b93fed6609af27c0b73ba41d572266a814c57768 생성·ref read-back 확인. root는 DATA구현담당에게 plain별도 /workspace/work/quantgen-k1d-central-20261121 에서 rankings2+qscore1의 기존 data.kis_workspace 조회만 같은자리 gateway.provider로 전환하는 GO를 준다. 제품2파일·실제소멸known3 외 app/base/API/정책/불변writer/oracle/publicassertions/ceiling/FROZEN 변경0. 기존회귀18·별도경계/actualscanner·독립after 검증 뒤 root만 원격보존한다.
+- K2 rates/structuring2파일3등록접점은 별도 담당이 before준비만 한다. 아직 제품변경/새PR없다. 현재UI/KEY5 전체·최종의존main/전체CI/PC7·OSgo는 여전히미완료다. 웹전달4private큐는미발송·미반영, 자동감시/예약·배포재개없음.
+
 
 ## KEY5a 실제 합성 검사·희소 입력 준비 — 2026-11-21T18:38:58+09:00
 
