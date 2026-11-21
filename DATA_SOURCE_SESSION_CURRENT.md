@@ -1,17 +1,17 @@
 ---
-status: taken
-reason: owner_requested_resume
+status: returned
+reason: reviewed_branches_ready_waiting_merge_queue
 from: gpt
 task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
 next_ids: DS-H, DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e
-updated_at: 2026-11-21T10:59:35+09:00
+updated_at: 2026-11-21T11:03:55+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: review
 work_branch: gpt/data-source-didm-20261121 (+ gpt/ds-home-indicators-20261121)
-work_commit: 80d79d8 (DIDM review changes uncommitted); DS-H 7ce37917102af9793d3ccbe851c0554058089df9
-uncommitted_changes: yes (DIDM review fixes; DS-H clean and pushed)
+work_commit: 87812679aec6f333d91b867f5892e523e0da9b0c (DIDM); 7ce37917102af9793d3ccbe851c0554058089df9 (DS-H)
+uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -25,6 +25,17 @@ execution_id: didm-gpt-20261121-6af7214e
 운영 기준: 메인↔하부 세션 사이는 [SESSION_PIPELINE](SESSION_PIPELINE.md) (소유자 지시 2026-11-20: 메인이 보낸 일은 바로 착수, 끝나면 바로 메인에 보고). GPT 인계는 그대로 [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md) (소유자가 이어받으라고 할 때만).
 
 ## 0. 한 줄 요약
+
+**최신 2026-11-21 GPT 검토 완료 / 병합 차례 대기 (2026-11-21T11:03:55+09:00):**
+- DS-H: `gpt/ds-home-indicators-20261121` @ `7ce37917102af9793d3ccbe851c0554058089df9` (main `f065ec9` merge `107fee4`). KIS 준비상태 확인 오류를 실시간 한 행으로 격리하고, 중간 이력 날짜까지 검증. 홈23을 포함한 홈·gateway·credentials·연구계약 **131 tests PASS**.
+- DS·DIDM: `gpt/data-source-didm-20261121` @ `87812679aec6f333d91b867f5892e523e0da9b0c` (main `f065ec9` merge `80d79d8`). 신규성 정답/확률 입력·차원·범위 검증, UTC/DST 시각 일관성, 동일시각 분할 거부, 사전등록의 동일종목 AND 동일유형 조건, GDELT/FinBERT 완료 시각 기록, ALFRED 전체 pagination·오류 격리, 점수 단위 문구를 수정. **DIDM 132 tests PASS**; 공급사 대조 **147 tests PASS**; 원본 엑셀 변경 **0칸**.
+- 두 브랜치 push 완료, 작업 트리 깨끗함. Claude 원래 브랜치·중앙 CURRENT·WORKBOARD·MERGE_QUEUE·LEDGER는 변경하지 않음. **main 미병합, PR 없음.** 로드맵 ID는 병합 전이므로 완료 원장에 추가하지 않음.
+- 최신 queue의 4e(OS-F2) → 4f(DS-H) → 4g(DS·DIDM)를 지킴. 메인은 이제 위 **GPT 브랜치**를 이어받아야 하며, 오래된 Claude head에서 별도 수정을 시작하면 이번 보완이 빠짐.
+- 변경 근거·시험·한계: DIDM 브랜치 `docs/didm/IMPLEMENTATION_REVIEW_2026-11-21.md`; 홈 계약 `docs/product/HOME_INDICATORS_DATA_2026-11-20.md`.
+- 실제 공급사 호출·LLM 다운로드/유료 호출·실제 정답집합·초과수익 검정은 하지 않음. 신규성 1.00은 합성자료 시험값뿐. 확률0.75·목표정확도0.90·70/30·ridge1e-3 유지, PREREG_V0 파일 불변.
+- 기존 소유자 입력 OA-09/OA-10/OA-38/OA-46만 유지. 새 수동 작업 요청 없음. 무료 뉴스 키 재발급/가입은 이미 닫힌 OA-08이므로 다시 요구하지 않음.
+- **아래 11-20 이전 기록의 빈 체크박스·§6 과거 실행명령·§8 무료키 문구는 당시 이력이다. 현재 상태는 이 문단과 §9를 우선한다.**
+
 
 **2026-11-21 GPT 인수:** 소유자 요청으로 이 세션 전용 범위를 인수함 (`didm-gpt-20261121-6af7214e`). DS-H `f80b3b0`와 DS·DIDM `c206b10`을 별도 `gpt/` 브랜치에서 검증·검토·필요한 수정 후 push한다. 중앙 CURRENT/대기열/원장은 메인 세션 소유로 유지. PR은 4e → 4f → 4g 순서를 따른다. 다른 Codex 채팅으로 직접 보내는 도구가 없어 이 파일의 `메인에게` 절로 결과를 공유한다.
 
@@ -185,6 +196,14 @@ python -m tools.compliance.check --check -> consistency FAIL, documents need rev
 
 ## 메인에게
 
+**[DATA_SOURCE_DIDM → 메인] 완료 보고: 기존 DS-H·DS·DIDM 브랜치 검토·수정·오프라인 재검증 (main 병합 전)**
+- 브랜치/커밋: DS-H `gpt/ds-home-indicators-20261121` @ `7ce37917102af9793d3ccbe851c0554058089df9`; DIDM `gpt/data-source-didm-20261121` @ `87812679aec6f333d91b867f5892e523e0da9b0c`. PR 없음.
+- 검사: DIDM132, 홈·공통131, 공급사147 모두 PASS; Excel0변경; diff --check PASS. 신규성 독립 재검토26 PASS, 미해결 중대 지적 없음.
+- 다음: 4e 뒤 4f를 위 GPT 홈 브랜치로 진행. DS-H 병합 뒤 GPT DIDM 브랜치에 최신 main merge → 관련 검사 → compliance 기준선 마지막 갱신/check → 4g PR. 20개 compliance 문서 재검토 대상 표시 필요.
+- 소유자 손이 새로 필요한 일: 없음. 기존 OA 항목 유지.
+- 공용 파일로 보고를 기록했으며, 다른 채팅 직접 메시지는 지원 도구 부재로 보내지 못함.
+
+
 **2026-11-21 GPT checkpoint:** DS-H는 `gpt/ds-home-indicators-20261121` @ `7ce37917102af9793d3ccbe851c0554058089df9`로 push/read-back 완료. main `f065ec9` merge (`107fee4`), KIS 준비상태 예외 행 격리·잘못된 이력 날짜 거부 수정, 홈/게이트웨이/키/연구계약 131 tests PASS (홈23 포함, fixture/소켓 차단). 4e OS-F2 뒤 이 GPT 브랜치를 사용하세요. DS·DIDM은 최신 main merge `80d79d8` 위 입력검증·시점 누출·ALFRED pagination·사전등록 정의 일치 수정 마무리 중; 완료 SHA는 다음 checkpoint에 기록. PR/기준선은 대기열 차례에만. 이 파일은 공유 보고이며 다른 채팅 직접 메시지 전달은 아님.
 
 - 대기열 요청: DS·DIDM 첫 코드 PR 자리 (F21 뒤). 묶음 = 작업 브랜치 전체 (`docs/didm/**`, `core/didm/**`, `data/didm/**`, `tools/didm/**`, `tests/didm_*`, `tests/fixtures/didm/**`, 공유 파일 `runtime-smoke.yml` 경로·시험 줄, `docs/compliance/08-third-parties.md` 행). 이 PR은 `source-review.json`도 바꿉니다 (한 번에 하나 규칙).
@@ -204,15 +223,20 @@ python -m tools.compliance.check --check -> consistency FAIL, documents need rev
 
 ## 9. 이어받는 에이전트에게 주는 지시문
 
-```
-사용자가 이번 인수를 지시했을 때만 xkg4real/quantgen 레포의 "data-source-didm" 작업을 이어받는다. 인계문서만으로 자동 인수하지 않는다.
-1. handoff 브랜치의 DATA_SOURCE_SESSION_CURRENT.md (0절 인계 문단), SESSION_PIPELINE.md, WORKBOARD.md 2.4절, MERGE_QUEUE.md, LEDGER.md, plans/2026-11-17/sessions/06_DATA_SOURCE_DIDM.md를 먼저 읽어라.
-2. 캐시 폴더 없는 sparse 클론에서 작업한다 (docs/asset_expansion/cache 금지). 브랜치: DS-H = claude/ds-home-indicators-20261120 (f80b3b0), DS·DIDM = claude/data-source-didm-20261117 (c206b10). rebase·force push 금지, main은 merge commit으로 합친다.
-3. 새 일은 메인이 보낸 것만. PR은 MERGE_QUEUE에 "병합: DATA_SOURCE_DIDM"이 적힌 뒤 DS-H 먼저, 그다음 DS·DIDM (runtime-smoke.yml 공유라 DS-H 병합 뒤 main을 다시 합침). 기준선 갱신은 PR 직전 맨 마지막.
-4. 확인 명령: DS-H 브랜치 `python -m unittest tests.home_indicators_acceptance tests.gateway_boundary_acceptance tests.gateway_same_answer_acceptance` (requirements.txt 설치 필요), DS·DIDM 브랜치 `python -m unittest tests.didm_schema_acceptance tests.didm_vendor_eval_acceptance tests.didm_store_acceptance tests.didm_ingest_acceptance tests.didm_sources_acceptance tests.didm_novelty_acceptance tests.didm_news_acceptance` (103 OK)와 `python -m tools.didm.check_vendor_eval --excel <handoff 엑셀 사본>` (바뀐 칸 0).
-5. 유료 호출·가입·문의 발송, Polymarket·CryptoPanic·Alpha Vantage·Tiingo 유료 사용, UI·웹사이트·연구 브랜치 수정, main 병합은 하지 마라. 키는 이름만.
-6. 작업 단위마다 이 파일을 갱신해 force 없이 push하고 git show로 다시 읽어 확인해라. 끝나거나 한도에 가까우면 status를 returned로.
-```
+1. 소유자의 이번 작업 지시 범위에서만 재개한다. 이 문서 상태 자체는 자동 인수 신호가 아니다. 중앙 CURRENT와 DATA 전용 파일의 execution 소유권을 확인한다.
+2. SESSION_PIPELINE, 최신 MERGE_QUEUE, WORKBOARD 2.4, LEDGER를 읽는다. 현재 완료 ID는 main 병합 전이므로 원장에 없다. 다른 담당의 taken은 선점하지 않는다.
+3. 보호 캐시 없는 sparse checkout에서 **GPT 브랜치**를 쓴다: DS-H `7ce37917102af9793d3ccbe851c0554058089df9`, DIDM `87812679aec6f333d91b867f5892e523e0da9b0c`. Claude의 원래 브랜치에 이번 수정이 들어 있다고 가정하지 않는다.
+4. 메인의 기존 배정 범위에서 4e → 4f → 4g 순서. 4f에서는 최신 main을 홈 브랜치에 merge. 4g에서는 DS-H가 병합된 최신 main을 DIDM 브랜치에 merge. runtime-smoke 충돌은 최신 main 경로/시험 + 해당 DS-H/DIDM 경로/시험을 모두 보존한다. rebase/force push 금지.
+5. DIDM 검사:
+   `python -m unittest tests.didm_schema_acceptance tests.didm_vendor_eval_acceptance tests.didm_store_acceptance tests.didm_ingest_acceptance tests.didm_sources_acceptance tests.didm_novelty_acceptance tests.didm_news_acceptance` → 132 PASS (추가 수정 전 기준).
+   `python -m tools.didm.check_vendor_eval --excel <handoff 엑셀 사본>` → Excel cells changed 0.
+6. 홈 검사:
+   `python -m unittest tests.home_indicators_acceptance tests.gateway_boundary_acceptance tests.gateway_same_answer_acceptance tests.gateway_main_acceptance tests.gateway_remote_acceptance tests.credentials_acceptance tests.research_home_acceptance tests.research_contract_acceptance` → 131 PASS (홈23 포함).
+7. 공급사 대조:
+   `python -m unittest tests.provider_parity_acceptance tests.provider_parity_btc_diagnose_acceptance` → 147 PASS. 임시 출력 경로는 git 작업 트리 밖이어야 함. 이번 환경은 /tmp/.git 및 /workspace/.git 표식으로 139개가 기존main/작업브랜치 동일하게 실패했으나, **TMPDIR=/dev/shm/didm-verification**에서 147 모두 PASS. 경로 보호 코드를 약화하지 않는다.
+8. 검사는 실제 .env 자동 로드·사용자 키링·네트워크를 차단하고 fixture만 사용한다. 이번 스크래치 실행기: `/workspace/didm_work/resume_20261121/run_offline.py` (DIDM), `run_regression.py` (공통). 다른 환경에서는 동등한 격리를 설정한다. HOME 변수 변경, tests/run_all, macro_m8/m9, qa/acceptance_results.json 재생성 금지.
+9. PR 차례가 오면 마지막에 compliance `--refresh-baseline --reviewed-by "<담당>" --review-note "<구체적 검토>"` → `--check` PASS. 새 파일 때문에 20개 문서 재검토 대상임을 PR에 기재. 이 시점까지 기준선은 의도적으로 갱신하지 않았으며 **compliance 통과/PR CI 통과를 주장하지 않는다**.
+10. 병합은 메인 담당. UI/웹사이트/연구 브랜치·키/게이트웨이 코어, 실제 원장·보호 캐시·비밀 파일·유료 호출은 범위 밖. 앱 표시 연결과 실증연구는 별도 다음 작업이다. 작업 완료마다 DATA 파일을 CAS로 갱신하고 read-back한다.
 
 ## 10. 결과 확인 방법
 
