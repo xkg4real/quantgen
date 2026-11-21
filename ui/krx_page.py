@@ -10,13 +10,12 @@ is blocked" is worse than an error message.
 """
 from __future__ import annotations
 
-from typing import Callable, Optional
+from typing import Any, Callable, Optional
 
 import flet as ft
 
 from core.numfmt import format_compact, format_number, format_price
 from core.theme import RADII, active
-from data.krx import KRXGateway
 from ui.components import colour_for, empty_state, key_value, notice, section
 from ui.ficc_widgets import action, form_row, ko_notice, lchip, ltext
 from ui.localization import table_header, literal_text
@@ -48,7 +47,7 @@ _ASKS = {"quote": ("KIS", "KRX"), "daily": ("KIS",), "filings": ("OpenDART",), "
          "snapshot": ("KRX",), "indices": ("KIS", "KRX")}
 
 
-def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
+def build_krx_page(page: ft.Page, gateway: Any, *, locale: str = "en",
                    on_open_settings: Optional[Callable] = None) -> ft.Control:
     pal = active()
     ticker = ft.TextField(label="KRX code", hint_text="005930", width=180,

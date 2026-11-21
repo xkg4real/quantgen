@@ -110,8 +110,8 @@ class BundledFontCoverageTests(unittest.TestCase):
 
     def test_indicator_chip_remove_uses_a_bundled_multiplication_sign(self):
         times, heavy_x = chr(0x00D7), chr(0x2715)  # multiplication sign; heavy multiplication X
-        self.assertTrue(all(face.supportsCharacter(times) for face in self.faces.values()))
-        self.assertFalse(any(face.supportsCharacter(heavy_x) for face in self.faces.values()))
+        self.assertTrue(all(face.supportsCharacter(ord(times)) for face in self.faces.values()))   # a code point:
+        self.assertFalse(any(face.supportsCharacter(ord(heavy_x)) for face in self.faces.values()))  # PySide6 takes no str
         source = (ROOT / "quantgen_desktop/indicator_guide.py").read_text(encoding="utf-8")
         self.assertTrue("QPushButton('" + times + "')" in source, "the chip remove button must use U+00D7")
         self.assertFalse(heavy_x in source, "U+2715 has no glyph in the bundled font")
@@ -300,7 +300,8 @@ class WindowTypographyTests(unittest.TestCase):
                 self.assertNotIn("PERSONAL RESEARCH", rail_text)
                 self.assertFalse([t for t in rail_text if "Flet" in t or "미리보기" in t or "개인 연구" in t])
         self.assertEqual(w.nav["guide"].text(), "Indicator guide")
-        self.assertEqual(w.guide_subtitle.parentWidget().layout().itemAt(0).widget().text(), "Technical indicator guide")
+        # Approved page draft (owner 2026-11-17, draft_03_guide): the guide's title sits in its toolbar row.
+        self.assertEqual(w.guide_workspace.title.text(), "Technical indicator guide")
         w.set_language("ko")
         self.drain()
         self.assertEqual(w.nav["guide"].text(), "기술지표 가이드")
@@ -336,6 +337,13 @@ class WindowTypographyTests(unittest.TestCase):
         expected = {"title": (30, 600), "heading": (18, 500), "caption": (14, 400), "number": (32, 600),
                     "brand": (17, 600), "": (15, 400)}
         seen = {}
+        for role in ("number", "title"):
+            if not any(widget.property("role") == role for widget in w.findChildren(QLabel)):
+                # Research Home's run counts were the window's only 'number' labels, and the rail pages' big
+                # 'title' labels became the page kit's toolbar titles: the owner-approved drafts (2026-11-17)
+                # show them as a quiet key-figure line and a toolbar title, so the role is checked on a probe.
+                probe = label("0", role)
+                probe.setParent(w.stack.currentWidget().widget())
         for widget in w.findChildren(QLabel):
             role = widget.property("role")
             if role in expected and role not in seen:

@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import QApplication, QVBoxLayout, QWidget
 
 from .rail_menu import ChevronButton, OPEN_DELAY_MS, CLOSE_DELAY_MS
 from .localization import SKIP_PASS
+from .qt_compat import index_of, is_one_of, lookup
 
 
 class MenuPanel(QWidget):
@@ -62,6 +63,16 @@ class InlineMarketMenu(QObject):
         self.focus_timer.timeout.connect(self._reveal_focus)
         QApplication.instance().focusChanged.connect(self._focus_changed)
         QApplication.instance().installEventFilter(self)
+        window.destroyed.connect(self._release_app)   # an application-wide filter leaves with its window
+
+    def _release_app(self, *_):
+        app = QApplication.instance()
+        if app is not None:
+            app.removeEventFilter(self)
+            try:
+                app.focusChanged.disconnect(self._focus_changed)
+            except (TypeError, RuntimeError):
+                pass
 
     def _focus_changed(self,old,new):
         if not self.is_open() or new is None:return
@@ -200,18 +211,18 @@ class InlineMarketMenu(QObject):
 
     def eventFilter(self, watched, event):
         kind = event.type()
-        owned_row = watched in self.roots or hasattr(watched, 'node') and isinstance(watched, ChevronButton)
+        owned_row = is_one_of(watched, self.roots) or hasattr(watched, 'node') and isinstance(watched, ChevronButton)
         if kind == QEvent.Type.Enter:
-            if watched in (self.header, self.strip):
+            if watched is self.header or watched is self.strip:
                 self.open_root()
             if owned_row:
                 self.keyboard = False
                 self.close_timer.stop()
-                depth = 0 if watched in self.roots else watched.level + 1
-                factory = self.roots.get(watched) or (lambda: watched.node.children)
+                depth = 0 if is_one_of(watched, self.roots) else watched.level + 1
+                factory = lookup(self.roots, watched) or (lambda: watched.node.children)
                 self.pending = (watched, depth, factory)
                 self.open_timer.start(OPEN_DELAY_MS)
-        elif kind == QEvent.Type.Leave and (owned_row or watched in (self.header, self.container)):
+        elif kind == QEvent.Type.Leave and (owned_row or watched is self.header or watched is self.container):
             self.close_timer.start(CLOSE_DELAY_MS)
         elif kind == QEvent.Type.KeyPress and owned_row:
             key = event.key()
@@ -229,14 +240,14 @@ class InlineMarketMenu(QObject):
                     self.header.setFocus(Qt.FocusReason.TabFocusReason)
                 return True
             if key == Qt.Key.Key_Right:
-                if watched in self.roots:
+                if is_one_of(watched, self.roots):
                     self.root_clicked(watched, keyboard=True)
                 else:
                     self._open(watched.level + 1, watched, watched.node.children, keyboard=True)
                 return True
             if hasattr(watched, 'level') and key in (Qt.Key.Key_Down, Qt.Key.Key_Up):
                 rows = self.panels[watched.level].rows
-                at = (rows.index(watched) + (1 if key == Qt.Key.Key_Down else -1)) % len(rows)
+                at = (index_of(rows, watched) + (1 if key == Qt.Key.Key_Down else -1)) % len(rows)
                 rows[at].setFocus(Qt.FocusReason.TabFocusReason)
                 self.keyboard = True
                 self.window.rail_scroll.ensureWidgetVisible(rows[at], 0, 12)

@@ -50,7 +50,7 @@ if HAS_QT:
 
         def load(self, request):
             self.calls.append(request)
-            self.threads.append(QThread.currentThread())
+            self.threads.append(threading.get_ident())  # an ident, not a QThread wrapper of the pool's thread (PySide6 heap corruption, 2026-11-19)
             if self.entered is not None:
                 self.entered.set()
                 self.release.wait(3)
@@ -186,7 +186,7 @@ class NativeQScoreTests(unittest.TestCase):
         self.assertEqual(self.score("000660")["status"], "ready")
         self.assertTrue(all(request.adjusted and request.interval == "1d" and request.limit == 252
                             for request in self.service.calls))
-        self.assertTrue(all(thread is not self.app.thread() for thread in self.service.threads))
+        self.assertTrue(all(thread != threading.get_ident() for thread in self.service.threads))
 
     def test_stop_invalidates_inflight_result_and_close_reports_busy(self):
         self.service.entered, self.service.release = threading.Event(), threading.Event()

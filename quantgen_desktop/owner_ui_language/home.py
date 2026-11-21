@@ -2,7 +2,8 @@
 
 Research Home redesign (owner request 2026-11-11, decision UI-D7 point 4): market cards that page left and
 right, the selected market's large chart, the watchlist chart cards, the research sections and the full
-quotes table in a closed fold.
+quotes table in a closed fold. Owner-approved page draft 2026-11-17: tiles, key figures and the chart on the
+left, the watchlist rows and research in the right column; Korean prose in 해요체.
 
 `PAIRS` joins the window catalogue (static chrome the LanguageController translates: section headings and
 the fold title). `TEXT`, `MARKETS` and `UNITS` are read only by `quantgen_desktop.home_view`, which renders
@@ -19,15 +20,15 @@ PAIRS = {
 # key: (English, Korean). Templates use {name} fields in both languages.
 TEXT = {
     'section': ('Major markets', '주요 시장'),
-    'section_note': ('Daily observations · click a card to open its chart', '일별 관측 · 카드를 누르면 아래에 차트가 열립니다'),
+    'section_note': ('Daily observations · pick a tile to change the chart below', '일별 관측 · 타일을 누르면 아래 차트가 바뀌어요'),
     'refresh': ('Refresh', '새로고침'),
-    'refresh_name': ('Refresh the market cards and the chart', '주요 시장 카드와 차트 새로고침'),
+    'refresh_name': ('Refresh the markets, the chart and the watchlist', '주요 시장, 차트, 관심종목 새로고침'),
     'previous': ('Previous markets', '이전 시장'),
     'next': ('Next markets', '다음 시장'),
     'page': ('{first}–{last} of {total}', '{total}개 중 {first}–{last}'),
     'add': ('Add stocks', '종목 추가'),
     'add_tip': ('Search a stock on Markets and press ☆ to add it here.',
-                '시장 화면에서 종목을 검색해 ☆를 누르면 여기에 추가됩니다.'),
+                '시장 화면에서 종목을 검색해 ☆를 누르면 여기에 추가돼요.'),
     'daily': ('Daily closes', '일별 종가'),
     'range_1m': ('1M', '1개월'),
     'range_3m': ('3M', '3개월'),
@@ -38,17 +39,24 @@ TEXT = {
     'card_name': ('{name} {value} {change}', '{name} {value} {change}'),
     'not_loaded': ('Not loaded', '조회 전'),
     'chart_off': ('Not loaded yet. Automatic refresh is off: press Refresh to load the daily closes.',
-                  '아직 불러오지 않았습니다. 자동 새로고침이 꺼져 있어 새로고침을 누르면 일별 종가를 불러옵니다.'),
-    'chart_waiting': ('The daily closes load when Research Home is shown.', '연구 홈을 열면 일별 종가를 불러옵니다.'),
+                  '아직 불러오지 않았어요. 자동 새로고침이 꺼져 있어서 새로고침을 누르면 일별 종가를 불러와요.'),
+    'chart_waiting': ('The daily closes load when Research Home is shown.', '연구 홈을 열면 일별 종가를 불러와요.'),
     'chart_loading': ('Loading the daily closes…', '일별 종가를 불러오는 중…'),
     'chart_failed': ('Could not load the daily closes ({reason}). Press Refresh to try again.',
                      '일별 종가를 불러오지 못했습니다 ({reason}). 새로고침을 눌러 다시 시도하세요.'),
-    'chart_kept': ('Refresh failed ({reason}); the last chart is shown.', '갱신 실패 ({reason}), 마지막 차트를 표시합니다.'),
-    'chart_stale': ('The latest close is more than {days} days old.', '마지막 종가가 {days}일보다 오래됐습니다.'),
-    'chart_short': ('Too few daily closes in this range.', '이 기간의 일별 종가가 너무 적습니다.'),
+    'chart_kept': ('Refresh failed ({reason}); the last chart is shown.', '갱신 실패 ({reason}), 마지막 차트를 보여 줘요.'),
+    'chart_stale': ('The latest close is more than {days} days old.', '마지막 종가가 {days}일보다 오래됐어요.'),
+    'chart_short': ('Too few daily closes in this range.', '이 기간의 일별 종가가 너무 적어요.'),
     'chart_name': ('{name} daily closes, {range}', '{name} 일별 종가, {range}'),
     'source': ('Source {source} · last close {date}', '출처 {source} · 마지막 종가 {date}'),
     'loading': ('Loading…', '불러오는 중…'),
+    # The selected market's key figures and the chart card's legend (approved draft 2026-11-17).
+    'fig_close': ('Close', '종가'),
+    'fig_change': ('Day change', '전일 대비'),
+    'fig_high': ('Range high', '기간 고가'),
+    'fig_low': ('Range low', '기간 저가'),
+    'legend_close': ('Daily close', '일별 종가'),
+    'legend_base': ('First close of the range', '기간 첫 종가'),
 }
 
 # Home market cards: (English name, Korean name), keyed by the core.research.markets symbol.

@@ -1,0 +1,101 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-beginner-chart-risk-pr-140",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "Website HTML remains owner-applied; this record is not delivery, application or deployment evidence.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "gpt/ui-guide-chart-first-20261121",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/140",
+    "implementation_commit": "bb32d03be3528f6a048fc09eb657a0efd794d771",
+    "remote_status": "DRAFT",
+    "merge_commit": null,
+    "verified_head": "bb32d03be3528f6a048fc09eb657a0efd794d771"
+  },
+  "summary_ko": [
+    "기술지표27을 가상 학습 차트의 선·주석으로 설명하고 원사례·보고서 입력과 분리했습니다.",
+    "툴팁 공통 폰트·색상·줄바꿈과 PER/PBR/ROE/PSR·VaR/CVaR의 짧은 뜻/상세설명을 보강했습니다.",
+    "투자자 매수·매도 막대·공매도 구분·읽기전용 호가/체결강도 스냅샷과 해석을 추가했습니다. 검증되지 않은 ROE/PSR 수치·테마 평균은 만들지 않습니다.",
+    "선택된 지표를 도킹할 때의 기존 칩 오류와 교육 화면의 과도한 세로 여백을 고쳤습니다."
+  ],
+  "website_impact": {
+    "classification": "native_ui_and_existing_browser_gateway_followup",
+    "browser_code_changed": true,
+    "shared_sources": [
+      "core/research/stock_profile.py",
+      "core/market/detail_insights.py",
+      "data/kis_markets.py"
+    ],
+    "requested_actions_ko": [
+      "소개 사이트/Docs에 위 교육·지표 설명과 실제 제공 범위/미제공 범위를 반영할지 검토하세요.",
+      "이 PR에 보존된 기존 K2d 브라우저 gateway 전환과 원 strict FAIL/보조판독의 한계는 UI 후보 기록을 따르세요.",
+      "웹 HTML/실제 사이트는 이 작업에서 수정·배포하지 않았습니다."
+    ]
+  },
+  "verification": {
+    "tests": [
+      {
+        "suite": "final integrated synthetic public regressions (guide5/data19/risk8/glue2/dock1)",
+        "passed": 35,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0
+      },
+      {
+        "suite": "actual Guide/Workspace component contracts",
+        "passed": 8,
+        "captures": 3
+      },
+      {
+        "suite": "stdlib-only integrated gateway boundary",
+        "passed": 15
+      }
+    ],
+    "counts_note": "Groups overlap and are not summed. Linux offscreen synthetic component coverage; no full-app or owner Windows acceptance.",
+    "source_review": "20 documents / 866 source inputs consistent; publication BLOCKED65",
+    "ci": "PENDING",
+    "ci_runs": [],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "PC7 remains required before UI main merge."
+  },
+  "website_application": {
+    "status": "not_applied",
+    "applied": false,
+    "deployed": false,
+    "receipt": null
+  },
+  "limits_ko": [
+    "전체UI/main 병합은 아직 하지 않았습니다. PC7·OSgo와 실제 API/권리/법률/라이선스 조건을 유지합니다.",
+    "동봉 폰트32관측은 모두맞았으나 전체64중 미등록fallback2개는2x에서잘렸고 기록을보존했습니다.",
+    "실제 ROE/PSR 회계·단위/테마구성 근거와 실제API/Windows 검증을 코드·합성검증으로 대신하지 않습니다."
+  ],
+  "changed_files": [
+    ".github/workflows/runtime-smoke.yml",
+    "config.py",
+    "data/krx/kis_client.py",
+    "docs/compliance/08-third-parties.md",
+    "docs/compliance/FACTS.md",
+    "quantgen_desktop/app.py",
+    "docs/product/BEGINNER_CHART_AND_RISK_UI_2026-11-21.md",
+    "quantgen_desktop/guide_lessons.py",
+    "quantgen_desktop/indicator_guide.py",
+    "quantgen_desktop/library_view.py",
+    "quantgen_desktop/market_tools.py",
+    "quantgen_desktop/metric_help.py",
+    "quantgen_desktop/owner_ui_language/stock.py",
+    "quantgen_desktop/page_kit.py",
+    "quantgen_desktop/rates.py",
+    "quantgen_desktop/risk_page.py",
+    "tests/desktop_risk_explanations_acceptance.py",
+    "tests/desktop_stock_detail_acceptance.py",
+    "tests/guide_docking_acceptance.py",
+    "tests/guide_lessons_acceptance.py",
+    "tests/stock_insights_glue_acceptance.py",
+    "docs/compliance/source-review.json"
+  ]
+}

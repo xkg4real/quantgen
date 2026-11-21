@@ -29,6 +29,9 @@ PAIRS = {
     "long-only and fully invested; equal weight fixes each weight at 1/N.":
         "과거 표본에 대한 최적화이며 미래 수익 보장이나 공식 게이트 판정이 아닙니다. 모든 결과는 롱온리·"
         "완전투자이며 동일 비중은 각 비중을 1/N로 고정합니다.",
+    # Approved page draft (owner 2026-11-17, draft_05_risk.png): the four-objective comparison card's short headers.
+    "Return": "수익률",
+    "Asset mix": "종목 구성",
     # Signals: backtest parameters as words.
     "Fast {fast} · slow {slow}": "단기 {fast} · 장기 {slow}",
     "Lookback {lookback} sessions": "관찰 기간 {lookback}거래일",

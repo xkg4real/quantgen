@@ -279,6 +279,18 @@ class RatesPane(ToolPane):
                 self.text(hp.note)
         self.result_table('Metrics', ['Metric','Value'], metrics)
         self._metric_captions(metrics, r)
+        if out.horizon_pv is not None:
+            from .metric_help import risk_pair
+            from .page_kit import Text, set_cell_help
+            for row, (name, _value) in enumerate(metrics):
+                kind = 'var' if name == 'VaR 95 · loss' else 'cvar' if name == 'CVaR 95 · loss' else None
+                if kind:
+                    _label, hover = risk_pair(kind, 'rates_pv_loss', confidence=.95, horizon_years=r.horizon)
+                    set_cell_help(self.tables['Metrics'], row, (0, 1), hover)
+            reading = Text(('VaR: loss boundary · CVaR: average large loss',
+                            'VaR는 손실 경계 · CVaR는 큰 손실 평균이에요'), 'hint', wrap=True)
+            reading.set_language(getattr(self.window(), 'ui_language', 'ko'))
+            self._place_result_widget(reading)
         from .rates_narrative import rates_korean
         korean = rates_korean(out)
         self.finished(out.narrative, localized={'ko': korean} if korean is not None else None)

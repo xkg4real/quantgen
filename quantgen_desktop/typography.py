@@ -249,6 +249,36 @@ def flyout_stylesheet(p, dark: bool) -> str:
         """
 
 
+def tooltip_stylesheet(p, families=(), *, max_width=None) -> str:
+    """The detached tooltip uses the same surface, type scale and border as the app."""
+    line = mix(p.border, p.bg, 0.5)
+    family = ", ".join('"' + str(name).replace('\\', '\\\\').replace('"', '\\"') + '"' for name in families)
+    face = f"font-family: {family}; " if family else ""
+    width = f"max-width: {int(max_width)}px; " if max_width is not None else ""
+    return (f"QToolTip {{ background: {p.surface}; color: {p.text}; border: 1px solid {line}; "
+            f"border-radius: 8px; padding: 7px 10px; {width}{face}font-size: 14px; font-weight: 400; }}")
+
+
+def apply_tooltip_theme(app, palette) -> None:
+    """Theme Qt's detached tooltip without replacing other application stylesheet rules.
+
+    Copy the actual application face, including its fallback/features, instead of
+    asking Qt's platform tooltip class to choose a separate system font.
+    """
+    from PyQt6.QtWidgets import QToolTip
+    QToolTip.setFont(scaled_font(app.font(), 14, 400))
+    previous = app.property("qgTooltipStylesheet") or ""
+    current = app.styleSheet()
+    if previous:
+        current = current.replace(previous, "", 1)
+    screen = app.primaryScreen()
+    # Qt reports logical pixels here; multiplying by DPI would scale twice.
+    max_width = min(480, max(1, screen.availableGeometry().width() - 32)) if screen else 480
+    owned = "\n/* QUANTGEN tooltip */\n" + tooltip_stylesheet(palette, app.font().families(), max_width=max_width)
+    app.setStyleSheet(current + owned)
+    app.setProperty("qgTooltipStylesheet", owned)
+
+
 def window_stylesheet(p, dark: bool) -> str:
     """The research window stylesheet.
 
@@ -282,7 +312,7 @@ def window_stylesheet(p, dark: bool) -> str:
           QLabel[role='number'] {{ font-size: 32px; font-weight: 600; letter-spacing: -0.6px; font-family: "QG Interface"; }}
           QLabel[role='muted'], QLabel[role='caption'] {{ color: {p.muted}; }}
           QLabel[role='caption'] {{ font-size: 14px; font-weight: 500; }}
-          QToolTip {{ background: {p.surface}; color: {p.text}; border: 1px solid {line}; padding: 7px 10px; font-size: 14px; font-weight: 400; }}
+          {tooltip_stylesheet(p)}
           QPushButton {{ padding: 7px 12px; border: 1px solid {line}; border-radius: 8px; background: {p.surface}; font-weight: 500; }}
           QPushButton:hover {{ background: {p.accent_soft}; }}
           QPushButton:focus, QLineEdit:focus, QComboBox:focus {{ border: 2px solid {p.accent}; }}

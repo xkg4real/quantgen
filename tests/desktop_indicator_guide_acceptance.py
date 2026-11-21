@@ -121,6 +121,9 @@ class NativeIndicatorGuideTests(unittest.TestCase):
             button=guide.options[key];self.assertTrue(button.isVisible())
             button.setFocus();QTest.keyClick(button,Qt.Key.Key_Space)
         self.assertEqual(guide.keys,('rsi','bb'))
+        # Approved page draft (owner 2026-11-17, draft_03_guide): the choices sit in the right column's 지표 page
+        # and the explanations in its 해석 page; the reader switches to 해석 to read them.
+        guide.reading_side.segment.buttons[1].click();self.app.processEvents()
         self.assertTrue(guide.detail.isVisible());self.assertFalse(guide.detail_body.isVisible())
         guide.detail_more.click();self.assertTrue(guide.detail_body.isVisible())
         self.assertEqual([h.text() for h,b in guide.detail_sections],
@@ -152,6 +155,70 @@ class NativeIndicatorGuideTests(unittest.TestCase):
                        guide.selected_label.text(),*[b.text()+b.accessibleDescription() for b in guide.options.values()],
                        guide.intro.text(),guide.steps.text()]
                 self.assertFalse([t for t in texts if re.search('[가-힣]',t)])
+
+    def test_approved_draft_layout_reads_each_study_with_its_conclusion(self):
+        # Owner 2026-11-17 ("시안 7개 전부 승인, 앱에 적용 진행하세요"), draft_03_guide: toolbar, canvas, right column with
+        # 지표 | 해석; every selected study gets a card with the 결론 block (outlook), one concept and one limit line.
+        from core.education import outlook
+        from core.education.study_guide import short_guide
+        w=self.window;w.resize(1440,900);w.navigate('guide');guide=w.indicator_guide;ws=w.guide_workspace
+        for _ in range(4):self.app.processEvents()
+        self.assertEqual([b.text() for b in ws.switch.buttons],['기술지표 27','투자 용어'])
+        self.assertIn('투자 권유 아님',guide.badge.text())
+        self.assertFalse(guide.reading_empty.isHidden())   # 해석 says what to do before a choice
+        self.assertTrue(guide.hint.isVisible());self.assertFalse(guide.fail_row.isVisible())
+        guide.choose('bb');guide.choose('rsi');guide.show_side(1)
+        for _ in range(4):self.app.processEvents()
+        self.assertEqual(guide.reading_side.segment.buttons[0].text(),'지표 2')
+        self.assertFalse(guide.reading_empty.isVisible())
+        for key in guide.keys:
+            card=guide.detail if key==guide.focus else guide.cards[key]
+            self.assertTrue(card.isVisible(),key)
+            self.assertTrue(card.conclusion.isVisible(),key)
+            self.assertEqual(card.conclusion.title.text(),'결론')
+            self.assertEqual(card.conclusion.now_label.text(),'지금은')
+            self.assertTrue(card.conclusion.grade.text().startswith('근거'),key)
+            self.assertEqual(card.concept.text(),short_guide(key,'ko').one_liner)
+            self.assertEqual(card.limit.text(),outlook.outlook(key,'ko').regime)
+            self.assertTrue(card.reading.text(),key)
+        self.assertTrue(guide.combination.text());self.assertEqual(guide.notice.text(),w.ctx.t('education_only'))
+        self.assertTrue(guide.notice.isVisible())
+        # Each tag carries its values at the reading date; the chart is the reading date's.
+        self.assertTrue(all(chip.values.text() for chip in guide.chips.values()))
+        if guide.events:
+            self.assertTrue(guide.fail_row.isVisible())
+            chips=[guide.event_layout.itemAt(i).widget() for i in range(guide.event_layout.count())]
+            self.assertEqual(len(chips),len(guide.events))
+            chips[0].click();self.assertEqual(guide.cursor,min(e['index'] for e in guide.events))
+            self.assertEqual(guide.slider.value(),guide.cursor)
+        # 투자 용어: the chosen term opens on the canvas with its sections; the indicator selection stays.
+        ws.switch.buttons[1].click();guide.term_buttons['duration'].click()
+        for _ in range(4):self.app.processEvents()
+        self.assertEqual(guide.focus,'duration');self.assertEqual(guide.keys,('rsi','bb'))
+        self.assertTrue(guide.detail.isVisible());self.assertTrue(guide.detail_body.isVisible())
+        self.assertEqual(guide.detail_category.text(),'금리·채권')
+        self.assertFalse(w.jobs.busy);self.provider.assert_not_called()
+
+    def test_approved_layout_never_clips_the_toolbar_or_scrolls_the_page_sideways(self):
+        # A3 on the approved layout (owner 2026-11-17): 1000/1360/2000 px, Korean and English, light and dark.
+        w=self.window;w.navigate('guide');guide=w.indicator_guide;ws=w.guide_workspace
+        guide.choose('bb');guide.choose('rsi');guide.choose('macd')
+        for theme in (0,1):
+            w.change_theme(theme)
+            for language in ('ko','en'):
+                w.set_language(language)
+                for width in (1000,1360,2000):
+                    w.resize(width,800)
+                    for _ in range(8):self.app.processEvents()
+                    with self.subTest(theme=theme,language=language,width=width):
+                        self.assertEqual(w.stack.currentWidget().horizontalScrollBar().maximum(),0)
+                        self.assertEqual(ws.canvas_scroll.horizontalScrollBar().maximum(),0)
+                        shown=[ws.title,*ws.switch.buttons,guide.badge,guide.clear,guide.export]
+                        for widget in [x for x in shown if x.isVisible()]:
+                            self.assertGreaterEqual(widget.width()+1,widget.sizeHint().width(),widget.text())
+                        self.assertLessEqual(ws.toolbar_host.childrenRect().right(),ws.toolbar_host.width())
+                        self.assertEqual(guide.keys,('rsi','macd','bb'))
+        self.provider.assert_not_called()
 
     def test_region_preference_round_trips_without_changing_financial_inputs(self):
         with tempfile.TemporaryDirectory() as folder:

@@ -280,8 +280,10 @@ class OwnerUiFiccTests(unittest.TestCase):
         from quantgen_desktop.source_notes import note_korean
         self.assertEqual(text.count(note_korean(out.panel.note)), 1)
         self.assertNotIn('no market data provider', text)
-        hint = next(label for label in pane.findChildren(QLabel) if getattr(label, 'source_text', '')
-                    .startswith('Enter either price or yield'))
+        # Approved page draft (owner 2026-11-17): the bond form is docked in the tools page's right column, so its
+        # hint is found under `input_box` as well as in the pane.
+        hint = next(label for label in pane.findChildren(QLabel) + pane.input_box.findChildren(QLabel)
+                    if getattr(label, 'source_text', '').startswith('Enter either price or yield'))
         self.assertNotIn('Price', hint.text()); self.assertNotIn('Yield', hint.text())
         self.language('en')
         self.assertIn('\n\nSummary\n', pane.notes.text()); self.assertIn('\n\nKey figures\n• ', pane.notes.text())
@@ -312,7 +314,10 @@ class OwnerUiFiccTests(unittest.TestCase):
     def test_combo_items_and_visible_captions_stay_english_in_an_english_window(self):
         self.language('en')
         for pane in (self.window.rates, self.window.structuring, self.window.fx, self.window.bonds):
-            for widget in pane.findChildren(QLabel) + pane.findChildren(QComboBox):
+            # Approved page draft (owner 2026-11-17): each form is docked in the tools page's right column, outside
+            # the pane; its captions and options are checked there too.
+            for widget in (pane.findChildren(QLabel) + pane.findChildren(QComboBox)
+                           + pane.input_box.findChildren(QLabel) + pane.input_box.findChildren(QComboBox)):
                 texts = [widget.text()] if isinstance(widget, QLabel) else \
                     [widget.itemText(i) for i in range(widget.count())]
                 for text in texts:

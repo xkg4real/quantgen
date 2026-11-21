@@ -17,6 +17,7 @@ from PyQt6.QtCore import QPointF, QRectF, QSize, QTimer, Qt, pyqtSignal, pyqtSlo
 from PyQt6.QtGui import QColor, QPainter, QPen
 from PyQt6.QtWidgets import (QBoxLayout, QFrame, QGridLayout, QHBoxLayout, QPushButton, QScrollArea, QSizePolicy,
                              QStackedWidget, QVBoxLayout, QWidget)
+from .qt_compat import call_later
 
 from core.i18n import LocaleContext
 from core.theme import DARK, LIGHT
@@ -454,7 +455,7 @@ class CompactWatchlist(QWidget):
             self.recent = self.recent[:RECENT_LIMIT]
         self.render()
         if self.isVisible() and self.auto_load:
-            QTimer.singleShot(0, self.refresh)
+            call_later(self, 0, self.refresh)
 
     def items(self):
         from .markets_view import _key
@@ -526,7 +527,7 @@ class CompactWatchlist(QWidget):
         super().showEvent(event)
         if self.auto_load:
             self.poll_timer.start()
-            QTimer.singleShot(0, self.refresh)
+            call_later(self, 0, self.refresh)
 
     def hideEvent(self, event):
         # A running batch stops after its current card (load_cards checks between cards); what it loaded is kept
@@ -545,7 +546,7 @@ class CompactWatchlist(QWidget):
     def sync(self):
         self.render()
         if self.isVisible() and self.auto_load:
-            QTimer.singleShot(0, self.refresh)
+            call_later(self, 0, self.refresh)
 
     def set_locale(self, ctx):
         self.ctx = ctx

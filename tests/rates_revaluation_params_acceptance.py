@@ -131,7 +131,7 @@ class RatesRevaluationParamsTests(unittest.TestCase):
                     def analysis(_page, *, kind, narrative, payload_fn, sections=None):
                         captures.append((kind, narrative, payload_fn()))
                         return ft.Text(narrative)
-                    with patch.object(rates_page, "load_short_rate", return_value=series), \
+                    with patch("core.ficc.data.load_short_rate", return_value=series), \
                          patch.object(rates_page, "_curve", return_value=(panel, curve)), \
                          patch.object(rates_page, "calibrate", return_value=original), \
                          patch.object(rates_page.fcharts, "rate_fan_chart", return_value=ft.Text("chart")), \
