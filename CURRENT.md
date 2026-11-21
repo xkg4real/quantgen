@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a
 next_ids: KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T20:13:03+09:00
+updated_at: 2026-11-21T20:17:50+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/key5a-fixes-20261121
@@ -20,6 +20,15 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
+---
+
+## K2b ID20 검증·구현 병렬 소유권 — 2026-11-21T20:17:50+09:00
+
+- 실행2f27d0c2-57cc-46e7-97d6-fc141d4065c9, task/handoff/cycle 및 primary KEY1390413 유지. `gpt/ui-key5-flet-k2b-20261121`을 실제 K2a7fb6b032e2ab24c681700120ab0abd5b6dd5c6e3 부모에서 만들고 원격 ref를 읽어 확인했습니다. 다른 세션에 넘기거나 선점한 작업이 아닙니다. ROOT만 원격을 갱신합니다.
+- 범위는 승인 ID20 `ui/derivatives_page.py`의 준비 상태 조회1곳을 원래 builder 시점의 기존 `gateway.keys_ready("kis_quote")`로 옮기는 일입니다. 제품/known/공개시험/준법 baseline 변경은 아직0입니다.
+- 원본630의 고정402입력·73실제 import·before14 author PASS, 불변 semantic oracle527d1ff0535d191d3778a8e30b7f50e2841e65119bef049b7a2d111ca623596a. 독립 QA 재현 진행 중이며 PASS 확인 뒤 최소 제품 patch만 허용합니다. Native R2 fa212401 정적 검토 PASS. 원본 writer/oracle를 고치지 않으며 7fb 후보 부모와630 oracle 출처를 별도 기록합니다.
+- 기존 공개 회귀는 가짜 snapshot으로 인자/오류 표시를 확인하는 `GroupedNumbers.test_derivatives_paths_are_grouped_and_read_back`만 추가로 선택합니다. 실제 snapshot/모델/공급사/연구/원장/계좌/네트워크는 실행하지 않습니다. 원본 UI/KEY5 부모·실PC/OSgo·웹전달/배포와 KEY139 전체CI 미완료는 유지합니다.
+
 ---
 
 ## K2a 검증 코드 원격 보존·KEY139 CI 진행 — 2026-11-21T20:13:03+09:00
