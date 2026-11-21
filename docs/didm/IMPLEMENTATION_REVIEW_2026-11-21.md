@@ -33,7 +33,7 @@ Python 3.12 환경에서 고정 자료·주입된 공급사·임시 SQLite·가�
 - DIDM 7개 모듈: **132 tests PASS** — schema, vendor_eval, store, ingest, sources, novelty, news.
 - 신규성 독립 재검토: **26 tests PASS**. UTC/DST, 같은 시각 분할 거부, 승인된 종목·유형 조건 확인.
 - 공급사 대조 기존 2개 모듈: **147 tests PASS** — provider_parity, provider_parity_btc_diagnose.
-- 엑셀 대조: 정보 19종·대안별 171칸, **원본 변경 0칸**, 소유자 확정 차이는 N·O·W로 별도 표시.
+- 엑셀 글 사본 대조: 원문 두 줄 × 정보 19종 = **38값 보존**, 메모·설명에서 파생한 대안 9개 × 19종 = **171칸의 구조·값 불변 및 모순 없음**을 확인했다. 소유자 확정 차이는 N·O·W로 별도 표시했다. 이번 중앙 통합 검증에서 실제 XLSX 파일은 재검사하지 않았다.
 - `git diff --check` PASS. 최신 main의 CI 경로·시험을 보존하고 DIDM 경로·7개 시험 모듈을 더해 merge 충돌 해결.
 - DS-H 별도 브랜치: 홈 전용 23개를 포함한 홈·게이트웨이·키·연구 계약 **131 tests PASS**.
 
