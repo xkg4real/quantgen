@@ -6,12 +6,12 @@ task: data-source-didm
 cycle: 2026-11-17
 done_ids: none
 next_ids: DS-H, DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e
-updated_at: 2026-11-21T10:50:17+09:00
+updated_at: 2026-11-21T10:59:35+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: claude/data-source-didm-20261117 (+ claude/ds-home-indicators-20261120)
-work_commit: c206b10
-uncommitted_changes: no
+work_branch: gpt/data-source-didm-20261121 (+ gpt/ds-home-indicators-20261121)
+work_commit: 80d79d8 (DIDM review changes uncommitted); DS-H 7ce37917102af9793d3ccbe851c0554058089df9
+uncommitted_changes: yes (DIDM review fixes; DS-H clean and pushed)
 pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -184,6 +184,8 @@ python -m tools.compliance.check --check -> consistency FAIL, documents need rev
 - 나중에 앱이 DIDM 결과를 보이려면: 공급원마다 `routes.json` 한 행 + `display_rights.json` + 법률 의견 (구조 변경, 소유자에게 먼저 알림).
 
 ## 메인에게
+
+**2026-11-21 GPT checkpoint:** DS-H는 `gpt/ds-home-indicators-20261121` @ `7ce37917102af9793d3ccbe851c0554058089df9`로 push/read-back 완료. main `f065ec9` merge (`107fee4`), KIS 준비상태 예외 행 격리·잘못된 이력 날짜 거부 수정, 홈/게이트웨이/키/연구계약 131 tests PASS (홈23 포함, fixture/소켓 차단). 4e OS-F2 뒤 이 GPT 브랜치를 사용하세요. DS·DIDM은 최신 main merge `80d79d8` 위 입력검증·시점 누출·ALFRED pagination·사전등록 정의 일치 수정 마무리 중; 완료 SHA는 다음 checkpoint에 기록. PR/기준선은 대기열 차례에만. 이 파일은 공유 보고이며 다른 채팅 직접 메시지 전달은 아님.
 
 - 대기열 요청: DS·DIDM 첫 코드 PR 자리 (F21 뒤). 묶음 = 작업 브랜치 전체 (`docs/didm/**`, `core/didm/**`, `data/didm/**`, `tools/didm/**`, `tests/didm_*`, `tests/fixtures/didm/**`, 공유 파일 `runtime-smoke.yml` 경로·시험 줄, `docs/compliance/08-third-parties.md` 행). 이 PR은 `source-review.json`도 바꿉니다 (한 번에 하나 규칙).
 - LEDGER: 아직 요청 없음 (병합된 ID 없음). 병합 뒤 `--done` 문자열을 여기에 적습니다.
