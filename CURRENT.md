@@ -1,16 +1,16 @@
 ---
-status: taken
+status: returned
 reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-22T01:45:43+09:00
+updated_at: 2026-11-22T02:01:59+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: ci
 work_branch: gpt/ui-guide-chart-first-20261121
-work_commit: eb61463b958bcfd7147b08fd34742afae4cff4e4
+work_commit: ab0e71f515e258f6df37f41f52523c59dc1fd130
 uncommitted_changes: no
 pr: https://github.com/xkg4real/quantgen/pull/140
 usage_weekly_pct: unknown
@@ -20,8 +20,22 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: e3f60f75-beca-4b67-9e22-33bbc4db8f19
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
-returned_at: 2026-11-22T00:12:02+09:00
+returned_at: 2026-11-22T02:01:59+09:00
 ---
+
+## PR140 CI 시험 수리 수동 반환 — 2026-11-22T02:01:59+09:00
+
+- 사용자 “오늘 작업 다 끝난거?” 질문으로 실제상태를 확인해 **전체완료가아님**을보고했습니다. 승인된 UI/CI 범위 안에서만 추가수리했고 자동감시/예약/자동인수/run_now는 재개하지 않았습니다. execution `e3f60f75-beca-4b67-9e22-33bbc4db8f19`, OS배타잠금30394, 동일환경/revision4/cwd를확인했고 직전2f27·task/handoff/branch/head/STATE일치를검증한 CURRENT latestSHA CAS+readback 이후에만 작성했습니다.
+- 현재코드 `gpt/ui-guide-chart-first-20261121@ab0e71f515e258f6df37f41f52523c59dc1fd130`, tree `ea05c97c2c7fee0060cd38e25c4e436f4d2e910a`, 부모eb61463. 정확변경4경로는 tests/desktop_workflow_guidance_acceptance.py, tests/desktop_indicator_guide_acceptance.py, tests/guide_docking_acceptance.py 및 docs/compliance/source-review.json뿐입니다. 각원격본문/blob/ref·비교4경로를read-back했고 제품runtime/계산/데이터/외관은0변경입니다. [PR140](https://github.com/xkg4real/quantgen/pull/140)은 draft/open·main미병합입니다. 소유자UI실화면은이전미리보기와같고 branchHEAD만test/검토기록으로갱신됐습니다.
+- 원Runtime44917383160은 syntax2 PASS, installed4 FAIL입니다. Ubuntu 및Windows3.11/3.12/3.14 **4개원로그**를모두읽고보존했으며 같은42시험의workflow line69 `29 not greater than 100` 1건에서실패했습니다. 새35/live-score/A3단계는그실행의4개installed에서성공했으나 이후skip은PASS가아닙니다. 원실패증거는 private ci-reading-position-e3f60f75/ORIGINAL4_FAILURE_READBACK.json (401caf05...)와4decoded원로그입니다.
+- 원원인은새 chart-first UI의사례차트 기본접힘으로교육화면이짧아졌는데옛시험이3개선택시자동으로큰스크롤이생긴다고가정한것입니다. 앱높이/패딩을추가하거나 >100/offset100 임계값을완화하지않았습니다. 실제context_toggle를열고 checked/visible를검증한뒤 기존조건을유지하고 복귀후 **현재canvas의scrollbar**를다시조회합니다. 인접old guide의 vector grab/background/width·hint/failrow/결론시험도 실제사례열기 fixture만추가해모든기존assertion·수식·자료·다른method를보존했습니다.
+- 실제로컬합성 **36개(guide5/data19/risk8/glue2/dock2)** 수집/실행/고유ID모두PASS·실패/오류/skip0입니다. 새actualQt Guide/Workspace/QStack2페이지의 사례열기/100복귀를포함합니다. actual source866 raw5+normalized·private·이전FAIL·0700prefix 전후동일, 안전counter0·실제API/model/ledger0. module mapinit1/memorysub1/on_change memory1(실제refresh0)/fixed120EMA3+SMA3은별도관측이며추가test로합산하지않습니다. 원제품863raw동일, 정확test3만변경. fullResearchWindow legacy6+2/원42전체를로컬에서돌린것은아니며 **새installed CI의 실제결과가아직필요**합니다. 원결과73ba7bff/outerab959f79·독립post407c1bee·정적SOURCE3dcc7a712/독립65e905d0를연결합니다.
+- 원checker는20문서/source866 정합PASS·공개준비BLOCKED65입니다. test3의registry영향인 **12 claims의기술source fingerprint만** 갱신했고 다른19review object·20정책본문·registry/profile/승인필드는그대로입니다. 새baseline blob `bf0608430be304ebc34da634dbd0a471ca4fd445`, rawSHA `1e2ac8a217c80ff2ea69c224d449fe851563fb794397672c64b7f6e7758c2a29`; 독립readback8e26a08e. 실제법률/권리·소유자승인·출시준비를승인한것이아닙니다.
+- 새정확head ab0e71f의 Compliance [44927449415](https://github.com/xkg4real/quantgen/actions/runs/44927449415) SUCCESS, Runtime [44927449412](https://github.com/xkg4real/quantgen/actions/runs/44927449412) 진행중이라는실관측을남깁니다. **전체CI재검사완료·UI/main완료를아직선포하지않습니다.** Runtime이끝나면사용자다음수동지시로해당head/run/job실제결과를읽고후속실패만수리합니다. 자동재실행/예약감시는없고 CI는승인된기존PR push에따른정상검사입니다.
+- sapientia Remaining Work 최소추가 `UI_PR140-CI-context-e3f60f75-20261122`는warning없는page_id응답으로synced, 원25queue기록보존/부모취소선0입니다. 기존PR-140 website JSON/NOT_SENT10기록은제품변경없는test수리로그대로보존하며사이트수신·실반영·배포0입니다. 원2f27의UI35/Native8/PNG3/폰트62of64·미등록2clipping·K2d원strictFAIL과그보조검증한계를지우거나이36과합산하지않습니다.
+- 남은실제조건은 Runtime전체통과, 소유자Windows PC7와그뒤UI/main병합, OSgo후실제binding, ROE/PSR실제회계·단위/테마구성·비교데이터·실API/법률/라이선스근거입니다. 사용자가없다고확인한증거를코드/합성으로대체하지않고 GPT/Gemini추가spec공개/심사는선택 NOT_PERFORMED로유지합니다. 원Pilot/E/Step10/P3/F완료기록/연구판정·사전등록·동결/holdout/주문·TRADEGEN·.env/보호cache는변경하거나재실행하지않았습니다.
+- 그주전체이력은아래2f27인계의 DSH PR137·DIDM PR138·KEY139 main반영과모든UI후보에그대로이어집니다. 전체Remaining Work완료아닙니다. KEY5K3 factory/stream13은기존private prep미완료입니다. 다음수동작업은 STATE/current_claim의이execution/작업branch/ab0e71f·handoffID를최신CURRENT/LEDGER와대조하고 OS잠금→newexecution/CURRENT 최신SHA CAS/readback 후해당승인범위만재개합니다. 계정사용량은unknown, 완료수/등록/last_run으로성공이나잔량을추정하지않습니다.
+
 
 ### 같은 CI 수리의 인접 legacy 사례 시험 범위 보완
 
