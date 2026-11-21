@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T22:07:53+09:00
+updated_at: 2026-11-21T22:19:05+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-key5-flet-k2d-20261121
@@ -20,6 +20,18 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
+---
+
+## 교육·툴팁 구현 범위 GO와 추가 데이터 요구 — 2026-11-21T22:19:05+09:00
+
+- 새 소유자 직접 지시를 반영합니다: 교육27지표의 차트/선 중심 설명, 시가총액 hover의 글꼴·브랜드 보정, PER/PBR/ROE/PSR 뜻과 비교·개인/외국인/기관 수급 막대·공매도/호가/체결강도 해석, VaR/CVaR의 간결한 초보 설명, 작업 뒤 안전한 Windows CMD 제공입니다. 코드/합성 검증을 계속하되 실제 API/권리·PC 검수 완료를 대신 주장하지 않습니다.
+- ROOT2f27d0c2/OS lock20162 및 primary K2d·동일 task/handoff/cycle 유지. 별도 gpt/ui-guide-chart-first-20261121의 실제 b373 부모와 검증 source412 copy35fb078a를 사용합니다. Native plan8be54156 및 QA 독립 정적 검토가 실제 registry27/값·기간·차트 좌표/Signals 비노출 조건을 대조했습니다.
+- **Native 구현 GO는 정확2파일:** 기존 quantgen_desktop/indicator_guide.py(blob137e8827, raw493ec6f6)와 새 quantgen_desktop/guide_lessons.py입니다. dock_into의 유일 기술지표가이드 호출에서만 교육flag를 켜고 기본 undocked/실 Signals에는 새 기능을 넣지 않습니다. 기존 교육 compute_study의 값·선색/동일좌표로 주석·한번에1지표/짧은단계를 제공합니다. EMA span은 최근가격 가중 설정이며 SMA 고정창 평균과 구분, 실제봉 주기/NaN/없는교차를 지켜 설명합니다. 별도 결정적 합성 학습그림은 실제 관측·보고서 입력으로 섞지 않습니다. 공유 live renderer/math/outlook/export 및 app/theme/typography는 Native 수정0입니다.
+- **DIDM 툴팁 스타일 GO는 정확2파일:** quantgen_desktop/app.py(raw5852f5b6)·typography.py(raw2964765c). c36a029a/QA 검토에 따라 QToolTip 전용 font/palette/브랜드 규칙만 공통 적용하며 다른 앱 QSS·숫자/출처·시각·원문/줄바꿈·event/갱신 경로는 보존합니다. 폰트 자산은 별도 명시 입력으로 확인하고 Qt 합성 before/after·한영/라이트다크/DPI·길이와 literal문자·접근성을 검증합니다. 실제 Windows 재현/PC 완료는 아직 아닙니다.
+- **초보 용어 구현은 primary stock3파일에 한정 GO:** owner_ui_language/stock.py + 새 metric_help.py + stock_detail.py의 표시명/도움말 접점. c0fd496a의 순수 UI 복사·metadata 설계이며 row의 원값/회계기간·프로필/내보내기 및 계산을 바꾸지 않습니다. stock VaR는 실제 var_level/일간 log손실, MC는 실제 horizon/var_level, hedge CVaR는 부호 있는 bp P&L, rates는 PV 금액손실이므로 고정 '1일95%/최대손실' 설명을 전 화면에 복제하지 않습니다. stock_detail의 쓰기 담당은 DIDM 하나로 두고 다른 데이터 view 연결은 그 담당과 조율합니다. 기타 위험 화면 적용은 정확 metadata 접점 확인 뒤 별도 범위를 기록합니다.
+- 추가 가치평가/수급/호가/체결강도의 실제 데이터 계약은 Program이 공식 KIS 공개 예제를 읽어 확인 중입니다. 현재 profile 미제공과 공식 필드 존재를 구별합니다. 기존 investor_daily 원응답에 매수·매도 수량이 있으므로 순매수를 비율로 역산하지 않고 정규화 여부를 검토하며 quote PBR/BPS·호가 snapshot도 원계약/단위를 확인합니다. PSR/ROE·실시간성·회계기간·테마를 추정하지 않습니다. 테마 구성종목 데이터가 없으므로 같은 업종 비교 우선 여부를 소유자에게 질문 중이며 답변 전 업종을 테마로 바꾸거나 가상 평균을 표시하지 않습니다.
+- 네트워크/보안/공유 환경·폰트 자산/라이선스 자체/실제 API·주문·계좌·TRADEGEN·동결연구·원장은 변경/실행0입니다. 실제 토스 웹 화면은 현재 허용 도메인/브라우저 도구에 없어 직접 열람 대조를 완료로 기록하지 않습니다. 기능 요구와 기존 브랜드 기준으로 진행하고 상업 권리 검증으로 대체하지 않습니다. PC7은 최종 UI 병합 전·OSgo는 실제 바인딩 전환 전 조건이며 준비/draft PR의 새 승인 관문은 만들지 않습니다. 감시/예약/자동 인수/run_now 취소·추가 GPT/Gemini spec NOT_PERFORMED는 유지합니다.
+
 ---
 
 ## 소유자 새 지시: 교육용 기술지표 가이드를 차트 중심으로 — 2026-11-21T22:07:53+09:00
