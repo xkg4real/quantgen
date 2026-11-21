@@ -1,17 +1,17 @@
 ---
-status: taken
+status: returned
 reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a
 next_ids: OS-F2, KEY-5/a, DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-21T10:46:39+09:00
+updated_at: 2026-11-21T10:50:32+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: owner
 work_branch: main
 work_commit: f065ec9
-uncommitted_changes: no
+uncommitted_changes: yes
 pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -20,6 +20,15 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 execution_id: 679bce35-4b1b-4e15-baa3-8194c64c5b70
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 ---
+
+## 소유자 요청한 분담 승인안·안전 중단 — 2026-11-21T10:50:32+09:00
+
+- [업무 분담·진행 승인안](GPT_WORK_ALLOCATION_APPROVAL_2026-11-21.md). 소유자 최신 요청 "정리해서 당신이 어떻게 분담하여 어떤 업무를 진행할지, 정리해서 승인요청해주세요."에 따라 추가 구현을 멈추고 승인 답을 기다린다. execution 679bce35-4b1b-4e15-baa3-8194c64c5b70.
+- 최신main f065ec92·준비 브랜치4개·기존 완료ID를 대조했다. OS-F2 이동 경합/marker 실패/저장경로 선택/Windows 검사 문제와 KEY5a stale FMP 및 KRX refresh fail-open을 합성으로 재현했다.
+- 로컬 gpt/os-f2-data-dir-20261121 @ e44c48e1 기반 app_paths.py/tests 두 파일 미커밋 초안은 private patch·checkpoint로 보존. migration 새회귀2개 수정전실패→관련7개 LinuxPASS; 전체/Windows/macOS/실제writer경로 안정성은 미완료다. 코드원격push·새PR·main쓰기없음. front work_branch/commit은 마지막 확인 원격 main을 유지하고 로컬변경은 이 절을 따른다.
+- 병렬 검토 결과와 구체적 분담·순서·완료조건을 승인안에 적었다. 승인 후 OS-F2→DS-H→DS/DIDM→KEY5a 순서, 독립검토·필수CI 통과 후 PR병합. 실제 미결정/소유자실행/표시권·법률·결제 관문은 별도다. 같은 계획에 대한 승인 전에 후속구현을 재개하지 않는다.
+- 별도 DATA/DIDM Codex가 DATA_SOURCE_SESSION_CURRENT를 taken으로 인수했다(069868ad, execution didm-gpt-20261121-6af7214e). 본 세션은 해당 구현을 선점하지 않고 승인안의 담당을 기존세션+독립검토/통합으로 조정했다. 그 합법 변경을 보존한다.
+- 새완료ID/LEDGER/Notion취소선 없음. 보호자료/실제원장/계정/태그·배포·예약변경 없음. 최신CURRENT/STATE·실행ID·미커밋patch를 대조하고 CAS/readback 뒤에 재개한다.
 
 ## 사용자 지시로 최신 Claude 인수 — 2026-11-21T10:46:39+09:00
 
