@@ -1,5 +1,19 @@
 # QUANTGEN 법인 설립 전 인수인계 · 2026년 11월 23일
 
+## 법인 설립 전 작업 기록 · 2026-11-23T04:52:13+09:00
+
+- **Android.** 내부 프리뷰 #141을 main `666e0064d446244bfff6a058441c135eeaab825c`에 병합했습니다. 6개 Runtime 작업과 기술 문서 검사가 성공했고 병합 tree를 재확인했습니다. APK를 만들려면 Platform build에서 main을 선택하고 Android만 켭니다. 기기의 Quant Lab → 예시 계산하기에서 101.01·104.69·108.95를 대조합니다. APK 및 기기 증거는 대기 상태입니다.
+- **DIDM.** EODHD 입력은 main에 있습니다. Alpaca #143은 새 main을 통합한 `5039835ae7d0f99fde2df2f2cef084a70e11b6d9`입니다. 원격 부모·tree와 네 파일을 대조했습니다. 합성 시험 49개와 데스크톱·모바일 staging을 확인했습니다. Massive #144에서 원래 실패한 import 경계는 Windows 세 버전·Ubuntu에서 모두 통과했습니다. V0 식별자 #145도 같은 네 환경에서 해당 단계에 통과했습니다. 세 PR은 실제 수집 또는 상업권 승인을 포함하지 않습니다. MPT는 공식 파일의 헤더와 단위 근거가 남았습니다.
+- **UI.** #140 `f17df92`에서 툴바 배지의 생성 순서를 수정했습니다. 같은 실제 8페이지 Qt 창과 합성 입력의 Linux 시험에서 주창 표시 전 배지 창은 5개에서 0개가 됐습니다. 메인 창은 두 경우 모두 한 번 표시됐습니다. 새 커밋의 전체 CI와 소유자 Windows PC7 실측은 별도로 확인합니다.
+- **Payment/AWS.** 기존 소유자 증거를 비공개 비용 분석에 대조했습니다. 같은 기간의 Usage type × Region 내역이 있어야 비용 귀속을 끝낼 수 있습니다. 결제 문의 및 구독 설계 초안은 기존 결정을 따릅니다.
+- **Remaining Work.** T8-6 수동 게시 도구의 [작업 커밋](https://github.com/xkg4real/quantgen/commit/2d2e7ad5373b2839f4716e741f9c5c5811dcf611)을 검증했습니다. 임시 Git 시험 16개와 독립 조건 30개를 확인했습니다. 공유 변경 PR은 앞선 변경을 반영한 실제 main 기준으로 진행합니다.
+
+- [#140](https://github.com/xkg4real/quantgen/pull/140) `f17df92b` [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45061279851) success · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45061279863) in_progress
+- [#141](https://github.com/xkg4real/quantgen/pull/141) `a35b2f8b` 병합됨 · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45054882305) success · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45054882429) success
+- [#143](https://github.com/xkg4real/quantgen/pull/143) `5039835a` [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45063116183) in_progress · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45063116174) queued
+- [#144](https://github.com/xkg4real/quantgen/pull/144) `270f5daa` [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45058539887) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45058539869) success
+- [#145](https://github.com/xkg4real/quantgen/pull/145) `21a0fbf4` [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45058155099) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45058155071) success
+
 ## 2026-11-23T03:47:46+09:00 · DIDM, Android 및 T8-5
 
 Massive 뉴스 메타데이터를 처리하는 [초안 PR #144](https://github.com/xkg4real/quantgen/pull/144)을 열었습니다. 작업 브랜치 `gpt/didm-b6-massive-news-20261123`, head `6a0336e5cf8e7f52294f518ab437662e3f4869db`, 기준 main `d835d9f495102a6d3244413018db1f9219341716`입니다. 네 파일과 PR 설명·head를 원격에서 대조했습니다. 기사 발행 시각과 직접 수신 시각을 구분하고, 동일 ID의 버전·종목별 감성·페이지 순서를 보존합니다. 원문 링크의 쿼리를 잘라 서로 다른 기사를 같은 주소로 만들던 문제와 커서 처리 문제를 수정했습니다.
