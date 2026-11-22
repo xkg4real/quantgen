@@ -330,4 +330,4 @@ Claude와 GPT가 끝낸 작업을 한 줄씩 쌓는 기록입니다. 같은 작�
 | UI-140/peer-supplied/1 | 2026-11-23T05:32:34+09:00 | 2026-11-17 | gpt | 종목 상세 검증 자료 연동 | core/market/detail_insights.py · core/research/stock_profile.py · quantgen_desktop/stock_insights.py · tests/detail_insights_acceptance.py · source-review.json · PR-140.json | 657523d9302a1dc55a726d1c618fe2523aa58e9c | 기존 23/23, 추가 Qt 흐름 13개, 6개 원격 파일·부모·tree 대조. 합성 자료, 후보 브랜치 |
 | DIDM/B6/massive-ci-old/1 | 2026-11-23T05:52:35+09:00 | 2026-11-17 | gpt | Massive 이전 기준 전체 CI | PR #144 | 270f5daaba0cdbb57be095ec5db54a2c8ee1a08f | 기존 기준 d835d9f4에서 Runtime 6개·문서·체크 8개 성공. main 병합 대기 |
 | DIDM/V0/schema-ci-old/1 | 2026-11-23T05:52:35+09:00 | 2026-11-17 | gpt | V0 식별자 이전 기준 전체 CI | PR #145 | 21a0fbf45268874a6ee0f2e1fbecff29e029acfb | 기존 기준 d835d9f4에서 Runtime 6개·문서·체크 8개 성공. main 병합 대기 |
-
+| UI-140/desktop-fusion/1 | 2026-11-23T06:14:01+09:00 | 2026-11-17 | gpt | 새 창을 만들 때 전역 스타일 중복 변경 수정 | quantgen_desktop/__init__.py · tests/desktop_startup_visibility_acceptance.py · source-review.json · PR-140.json | 90fc4c407139ec5955aede1fe286609947a5527a | 회귀 6/6, 합성 3창 언어복원 전후 1/1, 4개 원격 blob; 사용자 Windows 및 hosted 후속 대기 |

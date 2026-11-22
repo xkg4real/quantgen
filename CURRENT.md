@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-23T06:03:13+09:00
+updated_at: 2026-11-23T06:14:01+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/android-commercial-preview-20261123
@@ -22,6 +22,12 @@ handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06
 previous_returned_at: 2026-11-21T14:54:13+09:00
 returned_at: 2026-11-22T12:49:15+09:00
 ---
+
+## UI 다중 창 Fusion 재설정 수정 · 2026-11-23T06:14:01+09:00
+
+[UI 후보 커밋](https://github.com/xkg4real/quantgen/commit/90fc4c407139ec5955aede1fe286609947a5527a)에서 앱 스타일시트가 기존 Fusion을 감싸는 경우 이미 사용 중인 스타일을 유지합니다. 실제로 다른 스타일을 설치하면 Fusion으로 복구합니다. 서로 다른 두 QApplication 생애에서 세 위젯의 불필요한 Qt StyleChange가 호출당 3회에서 0회로 줄었습니다. 기존 코드가 실패한 회귀를 포함해 시작 화면 시험 6개가 모두 통과했습니다.
+
+같은 합성 환경에서 제품 파일 하나만 바꾸고 213개 입력을 보존해 언어 복원 원문 시험을 전후 각 1회 실행했습니다. 첫 창 36.577→36.631초, 두 번째 51.205→22.783초, 한국어 복원 세 번째 120.462→30.028초였습니다. 두 시험 모두 한국어를 복원하고 임시 설정 폴더를 정리했습니다. 최초 계측 하니스의 폴더 정리 오류는 수정 후 재검증했습니다. Linux Qt 한정이며 Windows PC7과 실제 CI 결과는 별도입니다. 기술 검사 20문서·873소스가 통과했고 기존 차단 65개를 유지했습니다. 후보의 부모와 변경 4개를 원격에서 확인했습니다.
 
 ## UI 전역 스타일 재적용 재현 · 2026-11-23T06:03:13+09:00
 
