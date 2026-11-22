@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "795b2e9435c8eed43b08b98c709b3e2eeb3a7365ad2628855cb164cea0f94ab8",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "96422ecce6a20ee34def2e43ab24a1da2eb50047f5ac0771895c0f0152add3a1",
+    ".github/workflows/runtime-smoke.yml": "ad648e5c5b9b1f6d239a2498a800899a31a02d25dc97a729878ddf011b2f8cb2",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -89,6 +89,7 @@
     "core/didm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "core/didm/ingest/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "core/didm/ingest/alfred.py": "bd29193bd8134a7c2a16926311c1cf210325e2beaec0f308c955ec340e2482a9",
+    "core/didm/ingest/alpaca_news.py": "9517d2ce030695e8352fb8dd650ec6467962fbea5799f2a3a1b53b0a220bc3bf",
     "core/didm/ingest/ecos.py": "401fdae16ab6225ca8d91bb7c632873a88b6d94738955185c1e7da55fb16c0b1",
     "core/didm/ingest/eodhd.py": "04f4d3bf7c7bf86452ebf86062afb5791b962d3b01b66c18db77fe5093dec639",
     "core/didm/ingest/filings.py": "9b2d8d01942de98048ffd866312a15b4b850f459705c73f0d4bffb87adb6d6e2",
@@ -617,6 +618,7 @@
     "tests/desktop_windows_branding_acceptance.py": "811fb37cf6bdb7550df8abbedfe3a08449b17787d15a28180146a876cfb19a9c",
     "tests/desktop_workflow_guidance_acceptance.py": "12dccb1fc2c3052718d1660da13991ed869f8f139a0de685c98a6438eb14f947",
     "tests/desktop_workspace_readability_acceptance.py": "735e14354046583f1f9974a6120442c96e8f81144effc24a3fc4ba06dbfd2108",
+    "tests/didm_alpaca_news_acceptance.py": "56370ad5ebb6e834e8f73a5c60531daec48f72319cb5cac224d93dd70c9ffd09",
     "tests/didm_eodhd_acceptance.py": "b9af87bae6997d4df598005c896ec2357a8908c7ed76058885265312e2846e05",
     "tests/didm_ingest_acceptance.py": "b6c69236fce44daf5e5fc733b18a440f27abdbe4f4fdb3ee8dbb66108eb28a0c",
     "tests/didm_news_acceptance.py": "1280b0a97c7b48c9bd8610e891c048874d8503ad8a9dba4338068dfef2cda0ce",
@@ -861,163 +863,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "bc7bd97e53d8ef61fa89dada96e968f12b4631cce771c0aae2e2aed2ff23b6da",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.015095+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "e0ccbe315037513a47ac78288e97903a278f645805b181c4df6cbbb7f1fc2854",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.643374+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "bc7bd97e53d8ef61fa89dada96e968f12b4631cce771c0aae2e2aed2ff23b6da",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.018274+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "e0ccbe315037513a47ac78288e97903a278f645805b181c4df6cbbb7f1fc2854",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.646395+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "e9d109c6c20f81c8b6b2d0dd6bcd7c669a9b89ce27718fb06974a2c45d52f715",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.021169+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "309c565f22ba1a43e142bc5e29a89162ba5b1f39ad58b58cb2e22fd48fe072f2",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.649108+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "92c799ba91cf9cd848d530da184571691e3008ba883f47e6843d2637076f8366",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.023895+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "987ca4de10a539b9ecc98427495a16bfff49ce2897a92379f899bc5cec9f59da",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.651542+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "c9db2ef6c2869aaffa511ae0153f0eed7186554b7f1cd0efe6a660e3fc1ea781",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.025955+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "e34ae9332e82a62776105b5c979807fc11f1b1c20582aa9bb0b60a7804830cf6",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.653696+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "0ed64aac21c86b2647ca77f1b825992943df8d044b6a2f49f009caea7e48e182",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.028124+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "7782b413d28cdf70b9c782e77893d345df53209f28ecfad013cf7e2c6304f4c9",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.656212+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "bc7bd97e53d8ef61fa89dada96e968f12b4631cce771c0aae2e2aed2ff23b6da",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.030228+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "e0ccbe315037513a47ac78288e97903a278f645805b181c4df6cbbb7f1fc2854",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.658137+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
-      "source_digest": "0ed64aac21c86b2647ca77f1b825992943df8d044b6a2f49f009caea7e48e182",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.032428+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "7782b413d28cdf70b9c782e77893d345df53209f28ecfad013cf7e2c6304f4c9",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.660453+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "6dbe32bac28e5ca91f52129de57e0dc4221aa2ff9d32c7284de8a99f6a2b0d55",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.034495+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "7a005d03ad131a7bc3675d1b77ab7db2d809c6ee6b3c6e21787639bd89c4c48b",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.663079+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "e5c1cdd87ca21f9553e99bdc222a0e08266e46dbbf5d10e82ed7ce302b4584a3",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.037074+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "62d1ac74a4ea08ad56890af8cf96f2b1b879bb2289cc0068668db066a15ee596",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.665414+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "7764cab18e9a4f629421c7c129af424bb891eede4e0c158b2026870a2be11c18",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.039148+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "50ef6da6560d27d94c8533e41d5f97c57c74a591ea3b62e25a26ee41655288ee",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.667567+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "b7e40d89b89d8ab5b30dee5ab3faff96b072fc8c30426e654352faefaea39b06",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.041615+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "eef71b6a735dce884eeaf6a999efe04a1571af29772a5b24d937d23e361b5fa3",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.670045+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "6dbe32bac28e5ca91f52129de57e0dc4221aa2ff9d32c7284de8a99f6a2b0d55",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.044026+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "7a005d03ad131a7bc3675d1b77ab7db2d809c6ee6b3c6e21787639bd89c4c48b",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.672099+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "6dbe32bac28e5ca91f52129de57e0dc4221aa2ff9d32c7284de8a99f6a2b0d55",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.046123+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "7a005d03ad131a7bc3675d1b77ab7db2d809c6ee6b3c6e21787639bd89c4c48b",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.674197+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "6dbe32bac28e5ca91f52129de57e0dc4221aa2ff9d32c7284de8a99f6a2b0d55",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.048432+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "7a005d03ad131a7bc3675d1b77ab7db2d809c6ee6b3c6e21787639bd89c4c48b",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.676438+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "689e62692c7b6059d870db9d89ef2f29c5b1ba1b76dbab3808f433ec8c4c6d3f",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.050885+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "4027806f37fe10780caf9b450a889933fcfc50b0696853d1601bb2f9c72132bd",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.678699+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "0ed64aac21c86b2647ca77f1b825992943df8d044b6a2f49f009caea7e48e182",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.053244+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "7782b413d28cdf70b9c782e77893d345df53209f28ecfad013cf7e2c6304f4c9",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.681009+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "bc7bd97e53d8ef61fa89dada96e968f12b4631cce771c0aae2e2aed2ff23b6da",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.055385+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "e0ccbe315037513a47ac78288e97903a278f645805b181c4df6cbbb7f1fc2854",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.683109+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "813a4b47dbf63034a967e750cfdbc7b67a8bc6393e96ba3894c21075dc8bd797",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.057630+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "351e41ad3da0e049e3a75419a1a1b685c89ad4415ae753bd7976e2b1c238bbe5",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.685036+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "bc7bd97e53d8ef61fa89dada96e968f12b4631cce771c0aae2e2aed2ff23b6da",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.059782+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "e0ccbe315037513a47ac78288e97903a278f645805b181c4df6cbbb7f1fc2854",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.686955+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     }
   }
 }
