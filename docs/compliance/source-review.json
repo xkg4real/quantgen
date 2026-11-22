@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "795b2e9435c8eed43b08b98c709b3e2eeb3a7365ad2628855cb164cea0f94ab8",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "743c1ccc0c28ae937eddfd175a0556f8b4ed239ff694247b8555693b72cc384e",
+    ".github/workflows/runtime-smoke.yml": "ad648e5c5b9b1f6d239a2498a800899a31a02d25dc97a729878ddf011b2f8cb2",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -190,11 +190,11 @@
     "core/quant/gate_stats.py": "3ae17e23e4cb07136d6603a4fe572041c26abbc44369698897603c051e15286a",
     "core/quant/gjr.py": "7b2748c341507af6e4fdd169fd1bc5482d38bcde5dd76966a1962d0cdee23a9a",
     "core/quant/gsq.py": "494b5e28c8a35a49a59b2f7e613d90e175900d212519ab2c1b43fc81b9705382",
-    "core/quant/history.py": "cc858de2b168b491c7c93e35f432833c919cb3fadda6a60ede368300b1a707a1",
+    "core/quant/history.py": "3f4c794187aa69ba42916aaef0f2320ded44469d9009083b12eb3da23f63c85d",
     "core/quant/insights.py": "fdf496a4213070e0e34c406fdb1fd1931c1c6ceb9521e9bae43979d335a853d1",
     "core/quant/instruments.py": "5a228fb771d040cae8f3e4cf7869bd044728c81654b090d70faf67e3b5d3d013",
     "core/quant/lab.py": "d5e44e575a256328155cc84df0514f480f8d55eed0d04bd6d3b1172a70bd90c8",
-    "core/quant/montecarlo.py": "60aae1b3b442fe8bb36bcd21c585c5ac1951cc332ed4a689135d92fd2b49d77d",
+    "core/quant/montecarlo.py": "7f6fae12c0495821abce97e46a1d13dbb4b75d652a2ea8e8d2e049c19f9171c3",
     "core/quant/optimize.py": "028c50332684a7e06db25cbc0466c9ab3d5d877cfd5edf8cc592081e4eb1a6d2",
     "core/quant/refusal.py": "ace787b208e8f47fa7dd7f763ca0198b3a6cceddf780b08b1b4c93892f400190",
     "core/quant/risk.py": "b7bb3371bcbf7f3918a2ecc47cd2635cc092fb3f5eebcfc80f00259eee089ae9",
@@ -214,6 +214,7 @@
     "core/quant/signals.py": "d033d0f146e45ac59db6e1125a2b2256cc96c9c1744093e954adf45e2ccec64a",
     "core/quant/sleeves.py": "39bcdf9a73400ebe9634e75ae8278a3616cb41d90156749b369c1ae9042ef2ac",
     "core/quant/strategies.py": "a141f7f0b65150afc8f9fd00ba84f551a93a2a24ed092c2f8a83988ec086e329",
+    "core/quant/supplied_history.py": "88c9685c13b77dc18bc535e25c67d1726c9dcda2af40b58f35afed75d1f2ecb2",
     "core/quant/tf_books.py": "1ddf163aa280ced7cace5b02aa0ec02b8b1a7b34b51700e51e060b67fcfbbfc4",
     "core/quant/tf_gov.py": "99ad7d0abccfad800c23d23811f7070087201618c9f7f59cb2bf24a089ff579e",
     "core/quant/tf_screens.py": "29b6d6a1a937f0e477c8e88dbdb48bfe661263fdae98e8d6e58cde1dadb59934",
@@ -350,6 +351,7 @@
     "docs/product/A3_READING_LAYOUT_2026-11-06.md": "b0f6595caae843d4a912fc332adc78882f65f9eb579cd7f97f2d33519821cc64",
     "docs/product/ADOPTION_STRATEGY_CHECKS_2026-11-10.md": "995b2ee0508e86291b38735d57b064ecc78549759adb5dd654e5e64e6dd872d4",
     "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "0e854fc8af3bab5e75bc4690e4697ae3b11ebf0d07d762df2c8ab50ca97c13da",
+    "docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md": "43e3b60a7b6784519901cf68957c8536eb634089c80ca04dd65718fe32ee0946",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
     "docs/product/BONDS_PORTFOLIO_LANGUAGE_2026-10-31.md": "469c32828b75b54797bf1ac81a8645688452bce5f0cf7c69132e7236f96f8e59",
@@ -440,6 +442,7 @@
     "docs/product/ui_drafts_2026-11-17/README.md": "b2166e175e5d7ced820feeb9714a18640a4e08a0ced92c5ea88b9c45c29d2c92",
     "main.py": "768392a3fddaca06fda168710f757147ad31b679d8c68076d947204704121229",
     "mindmap/QUANTGEN Macro Neural Link.html": "4dbf731539d418aa67553bd5fd393dfc55550fac737ef89ca4c18c813f7c76c5",
+    "mobile/main.py": "db2d270e972e026b08702891813f37674b0998f5d0d742e9e86a593d05fbb89c",
     "mobile/pyproject.toml": "2cad54b7e32873320de1d05e1e81cb91ce88f64cd97afc1ec955399fc5922db7",
     "packaging/launch_desktop.py": "7724b54d172f00d87c80abab2ff5214deb5ebcf9105878e24ca7519c166ce4b8",
     "packaging/selfcheck.py": "30dffaa03bf0f29342d3a1aca2945ab17c588c3a4304c59a0880f05b6a523ef1",
@@ -710,6 +713,7 @@
     "tests/market_symbols_acceptance.py": "dac7d8af68db34e0ecf7ce451fddc288618eae24988c080d8784b5e480526d78",
     "tests/mc_bootstrap_disclosure_acceptance.py": "e09b191d7a13a74a15b556ce231524222a3d540606707488388322cb635af506",
     "tests/mc_volatility_acceptance.py": "5715fb07e257e88f6a38ace19863c83e926c01bbc5c22573174e4ea1072c2a89",
+    "tests/mobile_startup_acceptance.py": "e6340fa71578e078ecc66f7b0ddc6fb9ccc9b769f92f89f48c3de71acc44e0ad",
     "tests/nautilus_acceptance.py": "6863a7f8b181e31c61e60b9e7f3e43448f5653b598252dcc3adf698ded8ffdf2",
     "tests/nautilus_registration_acceptance.py": "b846a53ecb6eb008a3b0ffbe1eab428b5491c5d1ac342a360368b38854fffda5",
     "tests/nautilus_stub_child.py": "6f0e75014fa6f5778095c0f756e4e88576ffafef7fe0c8af083cc00b5d9604b0",
@@ -783,7 +787,7 @@
     "tools/nautilus/sandbox.py": "fdbc0e51aa3e1abff737d96292c636ada8b82f59b8ffe4131c6471d202475b4e",
     "tools/packaging/smoke_desktop.py": "0d45bb20430e8f4b1a92d7c7db1badc054acf81ae4dedfe725729a6c11393373",
     "tools/packaging/smoke_installed.py": "0427690fbdc33f96095f4ead230f91f569f453c173f1b15ee7b57c49400c15b3",
-    "tools/packaging/stage.py": "b44a1f8004925776871daf0dbbcaedb7a444936b6d39d4d0c474299895af0b39",
+    "tools/packaging/stage.py": "c3e2718385ca68c684678c5885f66bd9f6f3048399992baa09e4ef7df1215885",
     "tools/packaging/third_party_notices.py": "656098e51c6ef2241df96ec36b43e9636025f7f0efbf36e13afaeb3481c65a8f",
     "tools/paper/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/paper/approval.py": "42829586c3e9daff69ad75520a63e139c0ed0f41de705e60fe02c965769bc138",
@@ -859,163 +863,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "0a5b7e6dd29bb08f2dd05d56cdf7e19935c314dbb50d9fad1f7a5be4cec0b736",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.402620+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "e0ccbe315037513a47ac78288e97903a278f645805b181c4df6cbbb7f1fc2854",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.643374+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "0a5b7e6dd29bb08f2dd05d56cdf7e19935c314dbb50d9fad1f7a5be4cec0b736",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.405119+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "e0ccbe315037513a47ac78288e97903a278f645805b181c4df6cbbb7f1fc2854",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.646395+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "af81eb5c9a44f6b09c99bfa8a2e2e1e3715a77de15c5f54a0703dd07de22f290",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.407936+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "309c565f22ba1a43e142bc5e29a89162ba5b1f39ad58b58cb2e22fd48fe072f2",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.649108+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "4aa616578ac0e7d50f335c64de794e9f2712bba608fa0ba85dcda4a5bc740457",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.410422+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "987ca4de10a539b9ecc98427495a16bfff49ce2897a92379f899bc5cec9f59da",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.651542+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "4f78e76762712bf41fb444b5a0393aa2783f1f9f7a92508a70c969db09731aa8",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.412586+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "e34ae9332e82a62776105b5c979807fc11f1b1c20582aa9bb0b60a7804830cf6",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.653696+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "7ce49f85b79f1e7015328098c8509e261a877e25c2ef7278daec4ecc89b05129",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.414816+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "7782b413d28cdf70b9c782e77893d345df53209f28ecfad013cf7e2c6304f4c9",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.656212+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "0a5b7e6dd29bb08f2dd05d56cdf7e19935c314dbb50d9fad1f7a5be4cec0b736",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.416744+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "e0ccbe315037513a47ac78288e97903a278f645805b181c4df6cbbb7f1fc2854",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.658137+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
-      "source_digest": "7ce49f85b79f1e7015328098c8509e261a877e25c2ef7278daec4ecc89b05129",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.418817+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "7782b413d28cdf70b9c782e77893d345df53209f28ecfad013cf7e2c6304f4c9",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.660453+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "54045ef689a1c2860c2e6dbfb67d7e646a00a2781b5f6d7ce7944fb415e6f889",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.421024+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "7a005d03ad131a7bc3675d1b77ab7db2d809c6ee6b3c6e21787639bd89c4c48b",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.663079+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "2706f837b16997519513def386a5a88d72f1128674dfe0b0dfae75ad7ec0fd85",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.422929+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "62d1ac74a4ea08ad56890af8cf96f2b1b879bb2289cc0068668db066a15ee596",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.665414+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "8896605e000dd4f2949f904cf24e28a271d03fe45ae561424678b38c20d9ddd8",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.424887+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "50ef6da6560d27d94c8533e41d5f97c57c74a591ea3b62e25a26ee41655288ee",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.667567+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "91aaea2258ec14efe971ab5329497f968657728a82feca8e1f12fa91bb3f6616",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.426853+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "eef71b6a735dce884eeaf6a999efe04a1571af29772a5b24d937d23e361b5fa3",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.670045+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "54045ef689a1c2860c2e6dbfb67d7e646a00a2781b5f6d7ce7944fb415e6f889",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.428724+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "7a005d03ad131a7bc3675d1b77ab7db2d809c6ee6b3c6e21787639bd89c4c48b",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.672099+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "54045ef689a1c2860c2e6dbfb67d7e646a00a2781b5f6d7ce7944fb415e6f889",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.430824+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "7a005d03ad131a7bc3675d1b77ab7db2d809c6ee6b3c6e21787639bd89c4c48b",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.674197+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "54045ef689a1c2860c2e6dbfb67d7e646a00a2781b5f6d7ce7944fb415e6f889",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.432922+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "7a005d03ad131a7bc3675d1b77ab7db2d809c6ee6b3c6e21787639bd89c4c48b",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.676438+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "f38e7ba7a8f14b2f66f4ac3bff5e8af9472a79826c824d94df92641c90e15389",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.434924+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "4027806f37fe10780caf9b450a889933fcfc50b0696853d1601bb2f9c72132bd",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.678699+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "7ce49f85b79f1e7015328098c8509e261a877e25c2ef7278daec4ecc89b05129",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.437036+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "7782b413d28cdf70b9c782e77893d345df53209f28ecfad013cf7e2c6304f4c9",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.681009+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "0a5b7e6dd29bb08f2dd05d56cdf7e19935c314dbb50d9fad1f7a5be4cec0b736",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.439155+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "e0ccbe315037513a47ac78288e97903a278f645805b181c4df6cbbb7f1fc2854",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.683109+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "b3988be8418edbf47b9a4f2077fabda241245c53eefa995783e925e104fc0bfe",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.441208+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "351e41ad3da0e049e3a75419a1a1b685c89ad4415ae753bd7976e2b1c238bbe5",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.685036+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "0a5b7e6dd29bb08f2dd05d56cdf7e19935c314dbb50d9fad1f7a5be4cec0b736",
-      "reviewed_by": "QUANTGEN independent technical review / payment_evidence 2026-11-23",
-      "review_note": "Supplied Alpaca News metadata validated in memory. Source, version, receipt and token semantics reviewed with 20 independent synthetic tests. Provider acquisition, model, historical archive, commercial rights and release await separate evidence.",
-      "reviewed_at": "2026-11-22T18:16:07.443011+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "e0ccbe315037513a47ac78288e97903a278f645805b181c4df6cbbb7f1fc2854",
+      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:49:18.686955+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     }
   }
 }

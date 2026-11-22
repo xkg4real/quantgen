@@ -6,7 +6,8 @@ The destination must be new. This is an install smoke stage, not a research arch
 
 Profile `mobile` (OS-P0-b, Flet Android trial): the Flet app (main.py, ui/, core/, data/) without Qt. Of
 quantgen_desktop it keeps only the modules the Flet side imports (and what they import), and refuses to stage
-if any of them imports a Qt binding. mobile/pyproject.toml replaces the root pyproject.toml.
+if any of them imports a Qt binding. mobile/main.py and mobile/pyproject.toml replace the desktop entry and
+root pyproject.toml; the manifest names both explicit source-to-destination overrides.
 """
 from pathlib import Path, PurePosixPath
 import argparse
@@ -123,8 +124,8 @@ def mobile_desktop_modules(root: Path, names) -> set:
 
 
 def allowed_mobile(name: str, desktop_modules) -> bool:
-    if name == "pyproject.toml":
-        return False  # replaced by mobile/pyproject.toml
+    if name in {"main.py", "pyproject.toml"}:
+        return False  # explicit mobile overrides, recorded once under their actual source names
     if name.startswith("quantgen_desktop/"):
         return name in desktop_modules
     return allowed(name)
@@ -133,7 +134,15 @@ def allowed_mobile(name: str, desktop_modules) -> bool:
 def stage(root: Path, destination: Path, profile: str = "desktop") -> int:
     names = subprocess.check_output(["git", "ls-files", "-z"], cwd=root).decode().split("\0")
     names = [n for n in names if n]
+    overrides = []
     if profile == "mobile":
+        # These explicit inputs can be new, untracked files during a local trial. The manifest records
+        # where their bytes came from; it does not attest that every input is committed or tracked.
+        for name, target in (("mobile/main.py", "main.py"), ("mobile/pyproject.toml", "pyproject.toml")):
+            source = root / name
+            if source.is_symlink() or source.resolve() != source.absolute() or not source.is_file():
+                raise ValueError("Regular mobile build input required: " + name)
+            overrides.append((source, target, f"{name} -> {target}"))
         desktop_modules = mobile_desktop_modules(root, names)
         selected = [n for n in names if allowed_mobile(n, desktop_modules)]
     else:
@@ -146,9 +155,9 @@ def stage(root: Path, destination: Path, profile: str = "desktop") -> int:
         target = destination / name
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source, target)
-    if profile == "mobile":
-        shutil.copyfile(root / "mobile" / "pyproject.toml", destination / "pyproject.toml")
-        selected = selected + ["mobile/pyproject.toml -> pyproject.toml"]
+    for source, target, manifest_entry in overrides:
+        shutil.copyfile(source, destination / target)
+        selected.append(manifest_entry)
     (destination / "STAGE_MANIFEST.json").write_text(json.dumps(selected, indent=2) + "\n")
     return len(selected)
 
