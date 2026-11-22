@@ -60,7 +60,7 @@ class GuideCaseAnnotationContracts(unittest.TestCase):
             {'UiLabel':UiLabel,'Qt':Qt,'QFrame':QFrame,'QVBoxLayout':QVBoxLayout})
         stock=_helpers('quantgen_desktop.stock_detail',root/'quantgen_desktop/stock_detail.py',
                        ('interval_words',),{'text':text})
-        with patch.dict(sys.modules,{'quantgen_desktop.app':application,'quantgen_desktop.stock_detail':stock}), \
+        with lesson_contracts._module_entries({'quantgen_desktop.app':application,'quantgen_desktop.stock_detail':stock}), \
              patch.object(catalog,'historical_case',side_effect=AssertionError('real case forbidden')), \
              patch.object(I,'historical_case',side_effect=AssertionError('real case forbidden')):
             from quantgen_desktop.indicator_guide import IndicatorGuide
@@ -214,11 +214,20 @@ class GuideCaseAnnotationContracts(unittest.TestCase):
 
     def _display_inputs(self):
         from core.education import catalog,indicators as I
+        from quantgen_desktop import guide_case_annotations as A
+        # The fixture, catalogue and actual legend must share one canonical
+        # registry. A stale alias must fail clearly, not turn supplied rows into
+        # an apparently legitimate missing-data case.
+        self.assertIs(sys.modules.get('core.education.indicators'),I)
+        self.assertIs(catalog.I,I)
+        self.assertIs(A.missing_reason,catalog.missing_reason)
+        self.assertIs(A.study,I.study)
         h=_fixed_history()
         ohlc=tuple((c-.02,c+.3,c-.3,c) for c in h.closes)
         volume=tuple(float(1000+i) for i in range(120))
         supply=I.Supply(tuple((d,float(i),float(-i),0.) for i,d in enumerate(h.dates)),
                         tuple((d,2.,20.) for d in h.dates))
+        self.assertIsInstance(supply,catalog.I.Supply)
         series=catalog.ObservedSeries(h.symbol,h.dates,h.closes,h.source,
             'price',ohlc,volume,'5m','domestic_stock',supply)
         values={}

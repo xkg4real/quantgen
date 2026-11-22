@@ -53,7 +53,7 @@ class GuideDockingContracts(unittest.TestCase):
         dates=tuple((date(2020,1,1)+timedelta(days=i)).isoformat() for i in range(120))
         closes=tuple(10+i*.02+(i%9)*.04 for i in range(120))
         history=types.SimpleNamespace(symbol='SYNTHETIC_DOCK_TEST',dates=dates,closes=closes,source='FIXED_SYNTHETIC_UI_ONLY')
-        with patch.dict(sys.modules,{'quantgen_desktop.app':application,'quantgen_desktop.stock_detail':stock}), \
+        with lesson_contracts._module_entries({'quantgen_desktop.app':application,'quantgen_desktop.stock_detail':stock}), \
              patch.object(catalog,'historical_case',side_effect=AssertionError('real case forbidden')), \
              patch.object(I,'historical_case',side_effect=AssertionError('real case forbidden')):
             from quantgen_desktop.indicator_guide import IndicatorGuide
@@ -104,7 +104,7 @@ class GuideDockingContracts(unittest.TestCase):
         dates=tuple((date(2020,1,1)+timedelta(days=i)).isoformat() for i in range(120))
         closes=tuple(10+i*.02+(i%9)*.04 for i in range(120))
         history=types.SimpleNamespace(symbol='SYNTHETIC_DOCK_TEST',dates=dates,closes=closes,source='FIXED_SYNTHETIC_UI_ONLY')
-        with patch.dict(sys.modules,{'quantgen_desktop.app':application,'quantgen_desktop.stock_detail':stock}), \
+        with lesson_contracts._module_entries({'quantgen_desktop.app':application,'quantgen_desktop.stock_detail':stock}), \
              patch.object(catalog,'historical_case',side_effect=AssertionError('real case forbidden')), \
              patch.object(I,'historical_case',side_effect=AssertionError('real case forbidden')):
             from quantgen_desktop.indicator_guide import IndicatorGuide

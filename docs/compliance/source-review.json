@@ -661,9 +661,9 @@
     "tests/gateway_same_answer_acceptance.py": "91e59d5ea698e283cd096873a508ddb95f8e4c8171051a9ccce5e016e552c2c5",
     "tests/glossary_search_acceptance.py": "058922190b05fc585dab3462848b40ea0444a43b4b5e96fdb512cd8ccfc0e64e",
     "tests/golden_tools.py": "24154d79aea43bc91b7c26c33c6b400cd9202cdb4915680a81b4f7cf0fa928ef",
-    "tests/guide_case_annotations_acceptance.py": "205ac9e1420123bfaf4575ec4663634deca38cbdae7340d83e9be818dc7e0d0a",
-    "tests/guide_docking_acceptance.py": "eb7c50b023a8465958800bb3b64197fef7f12f3e684472145a5229fc3719c32b",
-    "tests/guide_lessons_acceptance.py": "94272e97888663e54dd8d568aaa8910d2bd6fa79630e86f2c84c6763aa2a966c",
+    "tests/guide_case_annotations_acceptance.py": "dd1036d4599bf805a2bb2dc80e3ba646120082eef2c503c400283546d9cb8782",
+    "tests/guide_docking_acceptance.py": "9d2c55c139d36a7eb5059d9ea2ed848d90f9f934a3ea90b8e3b412793769d2b0",
+    "tests/guide_lessons_acceptance.py": "2823473be51daed477d761859041486187377939f7268498876990ccd6a82566",
     "tests/history_best_source_acceptance.py": "cda3221001d11599c0b9dab6f71f59a20b7ac762d43adcd6c0b5f2fbce19310f",
     "tests/home_indicators_acceptance.py": "2585e4a8cd2437f838d94a52ecd2962117fd70e809e700dd14e9d5a87a691c74",
     "tests/home_watchlist_acceptance.py": "86956c94f3aa7a90f496bc5c2bea388a6b2b5f861b5d1ca4421045c55f19165c",
@@ -969,10 +969,10 @@
     },
     "12": {
       "document_sha256": "18af1551af29075d92583d7bc84a780f3719662115a7b26e4aeb9efd760d1afc",
-      "source_digest": "de1b3545c7112d0cdb94c2d3a5aff6b0ecf7ba389cfa6ac324bb0e10109dbbfd",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.349773+00:00",
+      "source_digest": "57d816fbf13d7126b5413ff5d253caf968ec9ffc6a5bda4c6ac5f87d16cc4668",
+      "reviewed_by": "Codex independent UI CI fixture technical policy reviewer",
+      "review_note": "UI4 CI fixture-only correction after preserved 0e78 remote Linux and three Windows failures: restore only fake sys.modules entries instead of rolling back the whole import cache, preserving ordinary imports and one canonical indicators/Supply identity. Add identity and entry-restoration assertions inside the same53 existing test methods. Exactly3 public test files changed; other868 sources and production/math/provider/order/credential/data paths unchanged. Same871 inventory maps this technical change only to claims document12; preserve other19 review objects and all20 policy bodies, registry, profile and approvals. Earlier guarded local preimports masked the failure; original localPASS and remoteFAIL remain distinct, and fresh actual CI is still required. No legal, rights, owner Windows or publication approval is inferred.",
+      "reviewed_at": "2026-11-22T14:13:41.269795+00:00",
       "source_commit": null
     },
     "13": {

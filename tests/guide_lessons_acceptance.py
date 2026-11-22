@@ -3,7 +3,7 @@
 PyQt6 is needed to import the native module; these tests belong after the native
 runtime dependency step. The guarded UI capture/integration checks are separate.
 """
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager
 import importlib.util
 import math
 from pathlib import Path
@@ -16,6 +16,25 @@ from unittest.mock import patch
 import xml.etree.ElementTree as ET
 
 
+@contextmanager
+def _module_entries(replacements):
+    """Restore only our fake module entries, preserving ordinary imports.
+
+    patch.dict(sys.modules) rolls back the entire import cache. That can leave
+    parent-package attributes referring to a different Supply class from the
+    current module, making genuine supplied flow/short rows look unavailable.
+    """
+    missing=object()
+    previous={name:sys.modules.get(name,missing) for name in replacements}
+    sys.modules.update(replacements)
+    try:
+        yield
+    finally:
+        for name,module in previous.items():
+            if module is missing:sys.modules.pop(name,None)
+            else:sys.modules[name]=module
+
+
 @unittest.skipUnless(importlib.util.find_spec('PyQt6'), 'native Qt runtime required')
 class GuideLessonContracts(unittest.TestCase):
     @classmethod
@@ -25,7 +44,7 @@ class GuideLessonContracts(unittest.TestCase):
             cls.denied.append('external access');raise AssertionError('lesson tests forbid external access')
         fake=types.ModuleType('keyring')
         for name in ('get_password','set_password','delete_password','get_keyring','set_keyring'):setattr(fake,name,blocked)
-        cls.stack.enter_context(patch.dict(sys.modules,{'keyring':fake}))
+        cls.stack.enter_context(_module_entries({'keyring':fake}))
         folder=cls.stack.enter_context(tempfile.TemporaryDirectory(prefix='guide-lessons-contract-'))
         cls.stack.enter_context(patch.object(Path,'home',return_value=Path(folder)))
         cls.stack.enter_context(patch.object(socket,'has_ipv6',False))
@@ -52,6 +71,25 @@ class GuideLessonContracts(unittest.TestCase):
         if cls.denied:raise AssertionError('unexpected external access in lesson contract tests')
 
     def test_all_27_registered_lines_have_finite_svg_points(self):
+        # Exercise both restored-entry states and an unrelated import-cache
+        # addition. A whole-cache rollback would silently delete the latter.
+        existing='tests._guide_scope_existing'
+        absent='tests._guide_scope_absent'
+        unrelated='tests._guide_scope_unrelated'
+        for name in (existing,absent,unrelated):self.assertNotIn(name,sys.modules)
+        original=types.ModuleType(existing)
+        replacement=types.ModuleType(existing)
+        imported=types.ModuleType(unrelated)
+        sys.modules[existing]=original
+        try:
+            with _module_entries({existing:replacement,absent:types.ModuleType(absent)}):
+                self.assertIs(sys.modules[existing],replacement)
+                sys.modules[unrelated]=imported
+            self.assertIs(sys.modules[existing],original)
+            self.assertNotIn(absent,sys.modules)
+            self.assertIs(sys.modules[unrelated],imported)
+        finally:
+            for name in (existing,absent,unrelated):sys.modules.pop(name,None)
         L=self.lesson
         self.assertEqual(set(L.LESSONS),{s.key for s in self.studies})
         self.assertEqual(len(L.LESSONS),27)

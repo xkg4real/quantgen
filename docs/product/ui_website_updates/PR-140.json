@@ -196,6 +196,45 @@
       "delivery": "NOT_SENT",
       "applied": false,
       "deployed": false
+    },
+    {
+      "date": "2026-11-22",
+      "execution_id": "771b8c78-a4da-492e-bdf3-309980124cbc",
+      "source_parent": "0e78c0897a43cf46bd92ab42ceca311feecd0d14",
+      "source_freeze": "b6422742090b7ba5f3581bc887b588603a48a98c8f7e7edbc0a88eab03628353",
+      "scope": "Three test fixture isolation files only; production868 inputs unchanged",
+      "changes_ko": [
+        "전체sys.modules 되돌림으로 카탈로그/범례/Supply 클래스가 달라지는 시험 격리 오류를 수정했습니다.",
+        "가짜 모듈 항목만 복원하고 다른 정상 import 유지·기존항목 복원·미존재항목 제거·canonical registry 동일성을 기존53시험에서 검사합니다.",
+        "실제 자료 가용성·폰트·폭·수치·네트워크/보호입력 제한은 변경하지 않았습니다."
+      ],
+      "previous_full_runtime": {
+        "head": "0e78c0897a43cf46bd92ab42ceca311feecd0d14",
+        "run_id": 44993932277,
+        "status": "FAILURE",
+        "jobs": 4,
+        "collected_each": 53,
+        "failed_subtests_each": 52,
+        "failure_scope": "Three guide tests for supply identities/empty legend geometry",
+        "log_evidence_preserved": true
+      },
+      "local_validation": {
+        "unique_tests": 53,
+        "passed": 53,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "report_sha256": "7f73b0e607dd52073664247d262b6bd71377dd65abedf660f36295f845a03ce0",
+        "execution_receipt_sha256": "a607a3ea026c4ea3d6afbf4351c013ed76f9fb7f4e0f41f9fe8d2c76a7844676",
+        "scope": "Same guarded preloaded synthetic Qt runtime; actual fresh CI still required",
+        "source_inputs_unchanged": 871
+      },
+      "source_review": "Original checker PASS20docs/871sources; technical record12 only refreshed, other19 unchanged; publicationBLOCKED65",
+      "actual_fresh_CI": "PENDING_NEW_HEAD",
+      "owner_windows_PC7": "NOT_PERFORMED",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false
     }
   ]
 }
