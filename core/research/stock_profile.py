@@ -36,7 +36,8 @@ from core.i18n import LocaleContext
 from core.numfmt import compact_large_number
 from core.market.models import Candle, ChartRequest, Instrument, MarketSnapshot, utc_now
 from core.market.presentation import indicator_values
-from core.market.detail_insights import normalize_orderbook, normalize_executions
+from core.market.detail_insights import (StockPeerComparisons, normalize_executions, normalize_orderbook,
+                                        stock_peer_comparisons)
 from core.market.routing import ProvidersNotRun, ProvidersUnavailable, describe
 from core.quant.history import History
 from core.quant.risk import analyze_history
@@ -120,6 +121,7 @@ class StockProfile:
     sources: dict = field(default_factory=dict, hash=False)
     fetched: dict = field(default_factory=dict, hash=False)
     attempts: tuple = ()              # core.market.routing.Attempt records of the history load
+    peer_comparisons: StockPeerComparisons | None = field(default=None, hash=False)
 
     @property
     def symbol(self) -> str:
@@ -429,14 +431,15 @@ def _shorts(rows):
 
 def build_profile(instrument, *, candles, quote=None, flows=None, shorts=None, name="", today=None,
                   source="", adjusted=True, fetched_at="", reasons=None, errors=None, fetched=None,
-                  attempts=(), orderbook=None, executions=None) -> StockProfile:
+                  attempts=(), orderbook=None, executions=None, peer_comparisons=()) -> StockProfile:
     """Compute a profile from supplied data; no I/O.
 
     `candles`: daily bars (Candle, or objects/mappings with timestamp/open/high/low/close/volume), adjusted unless
     `adjusted=False`; a Yahoo `source` is always treated as unadjusted. `quote`: a KISClient Quote (domestic; the
     only quote that carries fundamentals) or a chart MarketQuote. `flows`/`shorts`: rows as returned by
     KISMarkets.investor_daily / short_sale_daily. `reasons`/`errors`/`fetched` (keyed by SOURCE_KEYS) let a loader
-    say why a source is missing and when the others arrived.
+    say why a source is missing and when the others arrived. Optional `peer_comparisons` are explicitly supplied
+    financial snapshots for this instrument, dated independently of quotes and daily bars.
     """
     _check_instrument(instrument)
     today = _today(today)
@@ -589,7 +592,8 @@ def build_profile(instrument, *, candles, quote=None, flows=None, shorts=None, n
         change_pct=change_pct, price_basis=basis, candles=bars, adjusted=adjusted and bool(bars),
         as_of=dates[-1] if bars else "", today=today, stale=stale,
         live_eligible=bool(bars) and source.upper() in _KIS_SOURCES, values=values, reasons=why, errors=failed,
-        sources=sources, fetched=stamps, attempts=tuple(attempts or ()))
+        sources=sources, fetched=stamps, attempts=tuple(attempts or ()),
+        peer_comparisons=stock_peer_comparisons(instrument, today, peer_comparisons))
 
 
 # --------------------------------------------------------------------------- #

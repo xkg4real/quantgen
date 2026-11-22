@@ -7,9 +7,13 @@ Financial ratios retain the provider basis; no ROE/PSR or peer data is invented.
 from __future__ import annotations
 
 from collections.abc import Mapping
+from dataclasses import dataclass
 from datetime import date, datetime
 import math
 import re
+from statistics import mean as exact_mean
+
+from core.market.models import Instrument
 
 GROUPS = ("individual", "foreign", "institution")
 
@@ -136,6 +140,8 @@ def peer_comparison(comparison):
     metric = value.get("metric")
     if metric not in ("per", "pbr", "roe", "psr") or not all(_text(value.get(k)) for k in ("unit", "period", "basis")) or not _day(value.get("as_of")):
         return dict(missing, reason="comparison_basis_missing", total=len(members))
+    if _day(membership["as_of"]) > _day(value["as_of"]):
+        return dict(missing, reason="future_membership", total=len(members))
     rows = value.get("observations")
     if not isinstance(rows, (list, tuple)):
         return dict(missing, total=len(members))
@@ -159,13 +165,83 @@ def peer_comparison(comparison):
             excluded.append((member, reason))
         else:
             good.append(n)
-    mean = math.fsum(n / len(good) for n in good) if good else None
+    try:
+        mean = math.fsum(n / len(good) for n in good) if good else None
+    except OverflowError:
+        # At the float limit each divided term may round up; the true mean is still finite.
+        mean = exact_mean(good)
     available = len(good) >= 2 and mean is not None and math.isfinite(mean)
     return {"status": "available" if available else "unavailable", "reason": "" if available else "insufficient_comparable_peers",
             "mean": mean if available else None, "method": "arithmetic mean", "metric": metric,
             "unit": value["unit"], "period": value["period"], "basis": value["basis"], "as_of": value["as_of"],
             "kind": membership["kind"], "group_id": membership["id"], "membership_as_of": membership["as_of"],
             "source": membership["source"], "included": len(good), "total": len(members), "excluded": tuple(excluded)}
+
+
+@dataclass(frozen=True)
+class StockPeerComparisons:
+    subject: Instrument
+    as_of: str
+    averages: tuple[dict, ...]
+
+
+def _member_symbol(subject, symbol):
+    """Require the same asset and an explicit venue for overseas stock identifiers."""
+    if not isinstance(symbol, str):
+        return False
+    exchange, _, code = symbol.rpartition(":")
+    if subject.asset == "domestic_stock" and exchange != subject.exchange:
+        return False
+    try:
+        return Instrument(subject.asset, code, exchange).symbol == symbol
+    except ValueError:
+        return False
+
+
+def stock_peer_comparisons(subject, today, snapshots):
+    """Bind supplied averages to one instrument and one dated membership list.
+
+    Each entry has the peer_comparison fields plus a subject Instrument. A missing
+    ratio can leave other ratios available. Mixing groups, dates or duplicate
+    ratio entries makes the supplied set ambiguous.
+    """
+    if (not isinstance(subject, Instrument) or subject.asset not in ("domestic_stock", "overseas_stock")
+            or not _day(today) or not isinstance(snapshots, (list, tuple)) or not 1 <= len(snapshots) <= 4):
+        return None
+    scope, seen, averages = None, set(), []
+    for raw in snapshots:
+        entry = _map(raw)
+        membership = _map(entry.get("membership"))
+        members = membership.get("members")
+        metric = entry.get("metric")
+        as_of = _day(entry.get("as_of"))
+        if (entry.get("subject") != subject or metric not in ("per", "pbr", "roe", "psr") or metric in seen
+                or not as_of or as_of > _day(today) or _day(membership.get("as_of")) != as_of
+                or not isinstance(members, (tuple, list)) or subject.symbol not in members
+                or any(not _member_symbol(subject, member) for member in members)):
+            return None
+        seen.add(metric)
+        member_set = frozenset(members)
+        if len(member_set) != len(members):
+            return None
+        group = (membership.get("kind"), membership.get("id"), membership.get("source"),
+                 membership.get("proof"), as_of, member_set)
+        if scope is not None and group != scope:
+            return None
+        scope = group
+        rows = entry.get("observations")
+        if not isinstance(rows, (tuple, list)) or entry.get("unit") != ("%" if metric == "roe" else "x"):
+            continue
+        # Do not pool rows from a different universe, reporting basis or snapshot.
+        if any(not isinstance(row, Mapping) or not isinstance(row.get("member"), str)
+               or row["member"] not in member_set
+               or any(row.get(key) != entry.get(key) for key in ("metric", "unit", "period", "basis", "as_of"))
+               for row in rows):
+            continue
+        average = peer_comparison(entry)
+        if average["status"] == "available":
+            averages.append(average)
+    return StockPeerComparisons(subject, as_of, tuple(averages)) if averages else None
 
 
 def _flow_window(window, length, source, received):
@@ -223,7 +299,14 @@ def build_insights(profile, *, comparison=None):
     shorts = {"date": _day(latest.get("date")), "ratio_pct": ratio,
               "qty": number(latest.get("short_qty"), nonnegative=True), "average": dict(average),
               "source": _text(sources.get("short_selling")), "received_at": _received(fetched.get("short_selling"))}
+    instrument, today = getattr(profile, "instrument", None), getattr(profile, "today", None)
+    peers = (stock_peer_comparisons(instrument, today, (comparison,)) if comparison is not None
+             else getattr(profile, "peer_comparisons", None))
+    comparisons = {}
+    if isinstance(peers, StockPeerComparisons) and peers.subject == instrument and peers.as_of <= _day(today):
+        comparisons = {item["metric"]: dict(item) for item in peers.averages}
     return {"metrics": tuple(metrics), "flows": tuple(flows), "flow_windows": flow_windows, "shorts": shorts,
             "orderbook": normalize_orderbook(values.get("orderbook")),
             "executions": normalize_executions(values.get("executions")),
-            "comparison": peer_comparison(comparison), "reasons": dict(reasons), "snapshot": True}
+            "comparisons": comparisons, "comparison": next(iter(comparisons.values())) if len(comparisons) == 1 else peer_comparison(None),
+            "reasons": dict(reasons), "snapshot": True}

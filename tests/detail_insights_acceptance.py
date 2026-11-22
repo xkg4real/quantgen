@@ -4,6 +4,9 @@ No provider/client constructor, real model/history, credentials, endpoint or acc
 is used. Empty price history intentionally keeps existing research computations out.
 """
 import copy
+from dataclasses import replace
+from datetime import date
+from sys import float_info
 from types import SimpleNamespace
 import unittest
 
@@ -29,6 +32,15 @@ def quote():
 
 def profile(**kwargs):
     return build_profile(Instrument(), candles=(), quote=quote(), **kwargs)
+
+
+def peer_snapshot(metric, values=(10, 20), *, subject=None, members=("005930", "000660"), kind="theme"):
+    meta = {"metric": metric, "unit": "%" if metric == "roe" else "x", "period": "FY2025",
+            "basis": "synthetic accounts", "as_of": "2026-11-20"}
+    return dict(meta, subject=subject or Instrument(),
+                membership={"verified": True, "kind": kind, "id": "example", "source": "fixture",
+                            "proof": "sample membership", "as_of": meta["as_of"], "members": members},
+                observations=[dict(meta, member=k, value=n, source="fixture") for k, n in zip(members, values)])
 
 
 class DetailInsightsAcceptance(unittest.TestCase):
@@ -212,6 +224,8 @@ class DetailInsightsAcceptance(unittest.TestCase):
         value = peer_comparison(data)
         self.assertEqual((value["mean"], value["included"], value["total"], value["kind"]), (15, 2, 3, "theme"))
         self.assertEqual(data, before)
+        largest = dict(data, observations=[dict(row, value=float_info.max) for row in data["observations"]])
+        self.assertEqual(peer_comparison(largest)["mean"], float_info.max)
         data["membership"]["verified"] = False
         self.assertIsNone(peer_comparison(data)["mean"])
 
@@ -224,6 +238,75 @@ class DetailInsightsAcceptance(unittest.TestCase):
         data["observations"].append(dict(meta, member="A", value=30, source="test"))
         self.assertEqual(peer_comparison(data)["reason"], "duplicate_peer")
 
+    def test_supplied_averages_stay_with_their_metrics_and_never_become_issuer_data(self):
+        inputs = [peer_snapshot("per"), peer_snapshot("pbr", (1, 2)),
+                  peer_snapshot("roe", (-5, 15)), peer_snapshot("psr", (3, 5))]
+        p = profile(today="2026-11-21", peer_comparisons=inputs)
+        inputs[0]["observations"][0]["value"] = 9000
+        result = build_insights(p)
+        self.assertEqual({key: item["mean"] for key, item in result["comparisons"].items()},
+                         {"per": 15, "pbr": 1.5, "roe": 5, "psr": 4})
+        self.assertEqual([m["value"] for m in result["metrics"]], [10, 1.5, None, None])
+        self.assertEqual(result["comparisons"]["roe"]["unit"], "%")
+        self.assertEqual(result["comparisons"]["per"]["as_of"], "2026-11-20")
+        self.assertEqual(p.as_of, "")  # no daily bars, and the quote has a different receipt date
+        unrelated = replace(p, instrument=Instrument(code="000660"))
+        self.assertEqual(build_insights(unrelated)["comparisons"], {})
+        self.assertEqual(build_insights(replace(p, today=date(2026, 11, 19)))["comparisons"], {})
+        missing = profile()
+        missing.values["peer_comparisons"] = inputs
+        self.assertEqual(build_insights(missing)["comparisons"], {})
+
+    def test_stock_average_requires_the_subject_in_its_verified_dated_market_membership(self):
+        original = peer_snapshot("per")
+        invalid = [
+            dict(original, subject=Instrument(code="000660")),
+            dict(original, subject=Instrument("overseas_stock", "005930", "NAS")),
+            dict(original, membership=dict(original["membership"], members=["000660", "000001"])),
+            dict(original, membership=dict(original["membership"], members=["005930", "NAS:000660"])),
+            dict(original, membership=dict(original["membership"], as_of="2026-11-21")),
+            dict(original, membership=dict(original["membership"], as_of="2026-11-19")),
+            dict(original, membership=dict(original["membership"], verified=False)),
+        ]
+        for entry in invalid:
+            with self.subTest(entry=entry):
+                result = build_insights(profile(today="2026-11-21", peer_comparisons=[entry]))
+                self.assertEqual(result["comparisons"], {})
+        self.assertEqual(peer_comparison(invalid[4])["reason"], "future_membership")
+        self.assertEqual(build_insights(profile(today="2026-11-19", peer_comparisons=[original]))["comparisons"], {})
+
+    def test_ambiguous_inputs_and_mismatched_observations_do_not_make_stock_averages(self):
+        pe = peer_snapshot("per", (10, 20, 30), members=("005930", "000660", "000001"))
+        pb = peer_snapshot("pbr", (1, 2, 3), members=("005930", "000660", "000001"))
+        other_group = dict(pb, membership=dict(pb["membership"], id="other"))
+        other_members = peer_snapshot("pbr", members=("005930", "000660"))
+        other_date = copy.deepcopy(pb)
+        other_date["as_of"] = other_date["membership"]["as_of"] = "2026-11-19"
+        for row in other_date["observations"]:
+            row["as_of"] = other_date["as_of"]
+        for entries in ([pe, pe], [pe, other_group], [pe, other_members], [pe, other_date]):
+            self.assertEqual(build_insights(profile(today="2026-11-21", peer_comparisons=entries))["comparisons"], {})
+        for key, value in (("member", "000002"), ("as_of", "2026-11-19"), ("unit", "%"),
+                           ("metric", "roe"), ("period", "TTM"), ("basis", "different")):
+            mismatched = copy.deepcopy(pb)
+            mismatched["observations"][0][key] = value
+            result = build_insights(profile(today="2026-11-21", peer_comparisons=[pe, mismatched]))
+            self.assertEqual(set(result["comparisons"]), {"per"})
+        for invalid in (dict(pb, unit="%"), dict(pb, observations=[pb["observations"][0]]),
+                        dict(pb, observations=pb["observations"] + [pb["observations"][0]])):
+            result = build_insights(profile(today="2026-11-21", peer_comparisons=[invalid]))
+            self.assertEqual(result["comparisons"], {})
+
+    def test_overseas_sector_keeps_its_venue_and_group_kind(self):
+        target = Instrument("overseas_stock", "AAA", "NAS")
+        item = peer_snapshot("per", subject=target, members=("NAS:AAA", "NAS:BBB"), kind="sector")
+        def result(subject, snapshot):
+            return build_insights(build_profile(subject, candles=(), today="2026-11-21", peer_comparisons=[snapshot]))
+        self.assertEqual(result(target, item)["comparisons"]["per"]["kind"], "sector")
+        self.assertEqual(result(Instrument("overseas_stock", "AAA", "NYS"), item)["comparisons"], {})
+        ambiguous = peer_snapshot("per", subject=target, members=("NAS:AAA", "BBB"))
+        self.assertEqual(result(target, ambiguous)["comparisons"], {})
+
     def test_panel_renders_injected_input_changes_language_and_clears(self):
         from PyQt6.QtWidgets import QApplication, QLabel
         from quantgen_desktop.stock_insights import StockInsightsPanel
@@ -231,8 +314,14 @@ class DetailInsightsAcceptance(unittest.TestCase):
         from quantgen_desktop.typography import mix
         app = QApplication.instance() or QApplication([])
         panel = StockInsightsPanel()
-        p = profile(orderbook=BOOK, executions=TRADES)
+        peer = peer_snapshot("per", (10, 20, 0, None, 5), members=("005930", "000660", "000001", "000002", "000003"))
+        peer["observations"][-1]["source"] = ""
+        p = profile(orderbook=BOOK, executions=TRADES, today="2026-11-21", peer_comparisons=[peer])
         panel.set_profile(p, language="ko")
+        average = next(label for label in panel.findChildren(QLabel) if "테마 평균" in label.text())
+        self.assertIn("2/5개사", average.text())
+        for item in ("000001 · 0 이하 배수", "000002 · 값 미제공", "000003 · 출처 없음"):
+            self.assertIn(item, average.toolTip())
         self.assertTrue(any("기업 가치" in label.text() for label in panel.findChildren(QLabel)))
         self.assertIn(LIGHT.surface, panel.styleSheet())
         self.assertIn(LIGHT.text, panel.styleSheet())
@@ -240,6 +329,10 @@ class DetailInsightsAcceptance(unittest.TestCase):
         self.assertEqual(panel.covered_key_figures, frozenset({"per", "pbr"}))
         self.assertNotIn("flows", panel.covered_sections)
         panel.set_profile(p, language="en", dark=True)
+        average = next(label for label in panel.findChildren(QLabel) if "Theme average" in label.text())
+        self.assertIn("2/5 companies", average.text())
+        for item in ("000001 · Nonpositive multiple", "000002 · Value unavailable", "000003 · Source unavailable"):
+            self.assertIn(item, average.toolTip())
         self.assertTrue(any("Valuation" in label.text() for label in panel.findChildren(QLabel)))
         self.assertIn(DARK.surface, panel.styleSheet())
         self.assertIn(DARK.text, panel.styleSheet())

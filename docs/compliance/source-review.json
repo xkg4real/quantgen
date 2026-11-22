@@ -158,7 +158,7 @@
     "core/gateway/sources.py": "1f3843617e58ffe8034709639eded5e5b01c8c7d880e0490a8f434f5226bef8c",
     "core/i18n.py": "b31a9f40519b2699e9cf3d72a8f9144bd74f0c93ca731df5ceaeabbb120ad6dc",
     "core/market/__init__.py": "1c2c29d460b9c20266f70503993da4824fa68727b45e4e2a6caa3436c18a7918",
-    "core/market/detail_insights.py": "a6163ab9499caac16de893d11f567254fdc9ce444a6e7383b9193f13a454274b",
+    "core/market/detail_insights.py": "921b66f9edf4facf620ecc5d38ac5cc912194e5e3109896ac0cf5800397e816b",
     "core/market/detail_model.py": "83998b39f3a3810e622658e5f8829683c3d5d4e2c97cba7f5fae27359da7023c",
     "core/market/detail_svg.py": "fc3f4f7fe9ece2bbab5f1ce95abea2c3e81e55c8dbee1b8db3fe46f7214acd24",
     "core/market/directory.py": "4434a7fe319b61abbe32662c8372bb794d7fcbff65a2eb6435a3d566c01e7a64",
@@ -255,7 +255,7 @@
     "core/research/runs.py": "480df15cf6ab9458743dcce4eba05b1f1e534e7635756a7c6353ebee5965f6f4",
     "core/research/signals_analysis.py": "40ea88479f4a8b5ac88a5f4ca6d2f65e2093e6e8171c451797cde31113039984",
     "core/research/sleeve_disclosure.py": "66114ab1ebe02f82c3d1cc3edee764c630cf6d05fffae50a5b7435e99e8a4eca",
-    "core/research/stock_profile.py": "8d155c45df6858756213ae4ef8434e412a0d7026ff16719f751f1f20de1b9291",
+    "core/research/stock_profile.py": "23ef6ada34b4467bdda5a9a66ad7e8f2eda1b3a0657afb3a9dd4c51992ca58f7",
     "core/research/strategy_analysis.py": "17f4a7d39209cdfe120834415711138b6847371333e6c7d9c282eee21cb085fd",
     "core/research/strategy_display.py": "98648bbe723b5de3e5c43f99f58ff3e5a55c7b961f35407c4fd97d2c94206ec4",
     "core/research/strategy_exposure.py": "4e0a386ad7b9a28d834a1f372f0789d9f723c3c93fce1c57163a131965805fdb",
@@ -526,7 +526,7 @@
     "quantgen_desktop/stock_detail.py": "07851fc3cb23a6cfc297bf0905bcfa8647b5ee65471c029570421f1a8a1d7824",
     "quantgen_desktop/stock_detail_side.py": "242d3ea7b86334855009f9a125aa3a3a734453c55f9bd17c023fe7a113a2eb98",
     "quantgen_desktop/stock_detail_style.py": "e94d68f0727d2afb3604bec68872479dc122e24941ec5b2098986eb26a9f27e9",
-    "quantgen_desktop/stock_insights.py": "12084e8296968266fbd961c0dcc24dd18852183361916f0b0686a24944a737c4",
+    "quantgen_desktop/stock_insights.py": "bc87e7e32d16c151319fadf7156e85e336ec73f798a868ab9ed76a4fe319d09a",
     "quantgen_desktop/stock_qscore.py": "f1cd095e271e06ab23e460982a76d26ef484e9ef52ec319bb8fc4ddf628b4371",
     "quantgen_desktop/stock_report.py": "98526c093b56f9e267772bfaff13bec1c01264cb578833c7b93a51d79cdfa193",
     "quantgen_desktop/strategy.py": "0b44d9c87f8a174d5c87eff60ffe2a68671ac381644fa6243f26f06812ca5b66",
@@ -633,7 +633,7 @@
     "tests/desktop_windows_branding_acceptance.py": "811fb37cf6bdb7550df8abbedfe3a08449b17787d15a28180146a876cfb19a9c",
     "tests/desktop_workflow_guidance_acceptance.py": "c51493a4bb2c82fcf98a22015b45cc5a7d2ef7b17f6ef853a540125aca9f00e6",
     "tests/desktop_workspace_readability_acceptance.py": "735e14354046583f1f9974a6120442c96e8f81144effc24a3fc4ba06dbfd2108",
-    "tests/detail_insights_acceptance.py": "0d7a715fe5b06de3a88bc9c4fc79ff7345e631964af6f20d5d71dcdf627798f2",
+    "tests/detail_insights_acceptance.py": "0bcbf1beab955492260a2d663219c102dd12327c34b5bf503cf731c241412b6f",
     "tests/didm_eodhd_acceptance.py": "b9af87bae6997d4df598005c896ec2357a8908c7ed76058885265312e2846e05",
     "tests/didm_ingest_acceptance.py": "b6c69236fce44daf5e5fc733b18a440f27abdbe4f4fdb3ee8dbb66108eb28a0c",
     "tests/didm_news_acceptance.py": "1280b0a97c7b48c9bd8610e891c048874d8503ad8a9dba4338068dfef2cda0ce",
@@ -883,27 +883,27 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "82a3554d81c6caff118655cafee216e9219307aa44f2e14cf8ce57ee2960dfbe",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.088512+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "792797e7d08883f75e4e7fccdab6060484d8cd8d99d63175caccfd33ae1fc802",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.708163+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "82a3554d81c6caff118655cafee216e9219307aa44f2e14cf8ce57ee2960dfbe",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.091683+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "792797e7d08883f75e4e7fccdab6060484d8cd8d99d63175caccfd33ae1fc802",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.712003+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "6ba03bca0d0ba9f52dff25f559cf9aa7e7f7b6de66bf4d463ad6ba0ee38606f9",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.094172+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "7bdffb5c0d036021fe29ba39a4f43a7545db297ef8b7b3aea1b9f72afb12c3fc",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.715014+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
@@ -923,123 +923,123 @@
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "a61ad13c8f8492700cc95def1c0a5d4bdd75f11daffc02345c6d472c43230b37",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.096606+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "06d700c69e97a21859d01c39666b679eec4dcd0d89c132abd4a4ada052019c4f",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.718456+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "82a3554d81c6caff118655cafee216e9219307aa44f2e14cf8ce57ee2960dfbe",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.098640+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "792797e7d08883f75e4e7fccdab6060484d8cd8d99d63175caccfd33ae1fc802",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.722041+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "8": {
       "document_sha256": "d18aa347fc7bb730a047392049afb9d79212cf209ba651b9ca4dfde7354fe68f",
-      "source_digest": "a61ad13c8f8492700cc95def1c0a5d4bdd75f11daffc02345c6d472c43230b37",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.100700+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "06d700c69e97a21859d01c39666b679eec4dcd0d89c132abd4a4ada052019c4f",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.724672+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "0cc656d36acba6878c4450fa68b845ecc0ebcea07bc2b077cee7327dfab23913",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.102961+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "559b9de5b061a21873d8b89ae89fd45f8b53842673cf944836f4c6cee593bc8e",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.727988+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "91fde179680b06175163cf08133b7d450497dedcab3389b9a2b0582cc732136e",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.105254+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "7094c5725cb25e08ea8a8e0dc1226035a1a853884451cc9974a6e837a9cb0bec",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.730953+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "0660746bdb9c37878715275d02552f9002d1a969885affc2a1cc6c7afb2e5c1d",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.107185+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "b4664d1909980f089ae8c47883a4f979d34a1fd2a99195266d117fdff124f578",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.735645+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "12": {
       "document_sha256": "18af1551af29075d92583d7bc84a780f3719662115a7b26e4aeb9efd760d1afc",
-      "source_digest": "3ccd4c6afbbefc7a23125ec2cea82ab77e2aec226b44cf9671ebe491d346760d",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.109282+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "bc854b5f2631789dfce01fa3e937ab0e02a45a40478c1209ec33c702439b6fd6",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.737998+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "0cc656d36acba6878c4450fa68b845ecc0ebcea07bc2b077cee7327dfab23913",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.112211+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "559b9de5b061a21873d8b89ae89fd45f8b53842673cf944836f4c6cee593bc8e",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.740177+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "0cc656d36acba6878c4450fa68b845ecc0ebcea07bc2b077cee7327dfab23913",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.114106+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "559b9de5b061a21873d8b89ae89fd45f8b53842673cf944836f4c6cee593bc8e",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.743067+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "0cc656d36acba6878c4450fa68b845ecc0ebcea07bc2b077cee7327dfab23913",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.116169+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "559b9de5b061a21873d8b89ae89fd45f8b53842673cf944836f4c6cee593bc8e",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.746407+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "afc933b95c2b4fba5b1b38ad264b239a4820332241b712970bd4bad580eb2f52",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.118059+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "ff82548bc1e25b01c5266706e44871baaaab22c733ab944b8afa00caa3c8dde1",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.750356+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "a61ad13c8f8492700cc95def1c0a5d4bdd75f11daffc02345c6d472c43230b37",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.120073+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "06d700c69e97a21859d01c39666b679eec4dcd0d89c132abd4a4ada052019c4f",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.752970+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "82a3554d81c6caff118655cafee216e9219307aa44f2e14cf8ce57ee2960dfbe",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.122022+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "792797e7d08883f75e4e7fccdab6060484d8cd8d99d63175caccfd33ae1fc802",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.756271+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "cdbd68f39a28e91203d880ea031275832936cdb859bf4ae79aef43edf22d4ef0",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.685288+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "e858d3321554dc861270a9414f7ae7ea4d4634113b345ba295fe40eb957b01c3",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.758864+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "82a3554d81c6caff118655cafee216e9219307aa44f2e14cf8ce57ee2960dfbe",
-      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
-      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
-      "reviewed_at": "2026-11-22T19:30:09.124397+00:00",
-      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
+      "source_digest": "792797e7d08883f75e4e7fccdab6060484d8cd8d99d63175caccfd33ae1fc802",
+      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
+      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
+      "reviewed_at": "2026-11-22T20:23:58.762358+00:00",
+      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
     }
   }
 }

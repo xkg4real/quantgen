@@ -433,6 +433,26 @@ class StockInsightsPanel(QFrame):
                 strip = ValuationReferenceStrip(item['key'], reference, self.dark, box)
                 layout.addWidget(strip)
                 layout.addWidget(self._label(reference.reading, role='muted', tip=reference.hover))
+            peer = self.model["comparisons"].get(item["key"])
+            if peer:
+                group = self._t("테마", "Theme") if peer["kind"] == "theme" else self._t("업종", "Industry")
+                unit = "%" if peer["unit"] == "%" else self._t("배", "x")
+                value = f"{_fmt(peer['mean'])}{unit}"
+                sample = f"{peer['included']}/{peer['total']}"
+                reading = self._t(f"{group} 평균 {value} · {sample}개사", f"{group} average {value} · {sample} companies")
+                tip = self._t(f"{group} {peer['group_id']} · 산술평균 · 기준일 {peer['as_of']}",
+                              f"{group} {peer['group_id']} · arithmetic mean · as of {peer['as_of']}")
+                membership_source = self._t("구성 출처", "Membership source")
+                tip += f"\n{peer['period']} · {peer['basis']}\n{membership_source} · {peer['source']}"
+                if peer["excluded"]:
+                    reasons = {"nonpositive_multiple": self._t("0 이하 배수", "Nonpositive multiple"),
+                               "missing_value": self._t("값 미제공", "Value unavailable"),
+                               "source_missing": self._t("출처 없음", "Source unavailable"),
+                               "basis_mismatch": self._t("산정 기준 불일치", "Incompatible reporting basis")}
+                    tip += "\n" + self._t("평균에서 제외한 종목", "Excluded from the average")
+                    for symbol, reason in peer["excluded"]:
+                        tip += f"\n{symbol} · {reasons[reason]}"
+                self._note(layout, reading, tip)
             grid.addWidget(box, index // 2, index % 2)
         grid.setColumnStretch(0, 1)
         grid.setColumnStretch(1, 1)
@@ -441,15 +461,15 @@ class StockInsightsPanel(QFrame):
                                 'Illustrative ranges · low multiples alone do not mean quality'),
                    self._t('같은 업종·기간·회계 기준에서 이익의 지속성, ROE, 부채를 함께 살펴요. 성장주·경기민감주·금융업은 해석이 달라요.',
                            'Compare consistent industry, period and accounting bases, earnings durability, ROE and debt. Growth, cyclical and financial businesses differ.'))
-        self._note(body, self._t("PER·PBR 제공값 · ROE·PSR 수치 미연결", "Provider PER/PBR · ROE/PSR not connected"),
+        issuer_note = self._t("PER·PBR 제공값 · ROE·PSR 수치 미연결", "Provider PER/PBR · ROE/PSR not connected")
+        if self.model["comparisons"]:
+            as_of = next(iter(self.model["comparisons"].values()))["as_of"]
+            issuer_note = self._t(f"집단 평균 기준일 {as_of} · 이 종목의 ROE·PSR 미제공",
+                                  f"Peer averages as of {as_of} · issuer ROE/PSR unavailable")
+        self._note(body, issuer_note,
                    self._t("PER·PBR은 공급자 제공값이에요. 회계 기준·기준일은 확인되지 않았어요. ROE·PSR 수치는 아직 연결되지 않았어요.",
                            "PER/PBR are provider values with unconfirmed accounting/reference basis. ROE/PSR values are not connected."))
-        peer = self.model["comparison"]
-        if peer["status"] == "available":
-            group = self._t("테마", "Theme") if peer["kind"] == "theme" else self._t("업종", "Industry")
-            body.addWidget(self._label(f"{group} {peer['metric'].upper()} · {_fmt(peer['mean'])} {peer['unit']} · {peer['included']}/{peer['total']}",
-                                      tip=f"{peer['method']} · {peer['period']} · {peer['basis']} · {peer['as_of']}\n{peer['source']}\n{peer['excluded']}"))
-        else:
+        if not self.model["comparisons"]:
             body.addWidget(self._label(self._t("비교 평균은 미제공이에요. 확인된 비교 집합과 같은 기간·단위의 지표가 필요해요.",
                                              "Peer average unavailable: verified membership and matching period/unit data are needed."), role="muted"))
 

@@ -324,6 +324,41 @@
       "delivery": "NOT_SENT",
       "applied": false,
       "deployed": false
+    },
+    {
+      "date": "2026-11-23",
+      "execution_id": "4470390e-a716-4d3f-a20a-871b89a81151",
+      "source_parent": "f17df92bd59e446fa189168c1273e0b7116e7e3d",
+      "scope": "Stock valuation comparisons from explicitly supplied data",
+      "changes_ko": [
+        "기업 가치 카드에서 자료가 확인된 지표 옆에 테마 또는 업종 평균, 기준일과 표본 수를 표시합니다. 툴팁에서 비교 집단과 기간, 회계 기준, 구성 출처 및 제외된 종목별 사유를 확인할 수 있습니다.",
+        "종목·시장이나 구성일이 맞지 않는 비교는 표시하지 않습니다. 실제 공급 자료가 없는 경우 평균과 개별 ROE·PSR은 미제공입니다."
+      ],
+      "source_pins": {
+        "core/market/detail_insights.py": "8900b20c45a811aae2996dc2766a9196b72e0a99",
+        "core/research/stock_profile.py": "262e161babe1b594711fac59ee0a647542fef3e8",
+        "quantgen_desktop/stock_insights.py": "bffedfe19939a06c711bad10b21648effd269e80",
+        "tests/detail_insights_acceptance.py": "cba30a67283fc3136de1e3f60550d7774749b563"
+      },
+      "website_impact": "If documenting the desktop display, identify the selected stock, dated group and sample count. Use the unavailable state when there is no verified source. Website delivery is owner-managed.",
+      "local_validation": {
+        "original_suite": {
+          "passed": 23,
+          "total": 23,
+          "skipped": 0
+        },
+        "native_stock_detail": {
+          "synthetic_user_scenarios": 13,
+          "existing_peer_methods": 7,
+          "host": "Linux Qt offscreen"
+        },
+        "scope": "Counts may overlap. Includes Korean/English, selected stock/market/date, missing inputs and reasons for exclusion. No live feed or commercial display rights established."
+      },
+      "actual_fresh_CI": "PENDING_NEW_HEAD",
+      "owner_windows_PC7": "NOT_PERFORMED",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false
     }
   ]
 }
