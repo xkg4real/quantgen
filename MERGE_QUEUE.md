@@ -1,3 +1,9 @@
+## DIDM · EODHD 입력 검증 코드 병합
+
+[PR #142](https://github.com/xkg4real/quantgen/pull/142)를 main `d835d9f495102a6d3244413018db1f9219341716`에 병합했습니다. 병합 부모는 기존 main `dec979a`와 작업 head `90d3b4b`이고 병합 tree `b10e572badde546a7c8544321490b872611a1291`은 검증한 코드와 같습니다. 두 SHA와 실제 PR 종료·병합 상태를 다시 읽었습니다. Runtime 45043431571의 여섯 작업과 문서 일관성 45043431652가 성공했고 GitHub check-run 8개가 통과했습니다. 별도 Vercel 배포 상태는 실패이며 SESSION_PIPELINE의 제품 코드 병합 규칙을 적용했습니다. 공식 출시는 이루어지지 않았습니다.
+
+EODHD 단위는 제공된 경제 이벤트의 값·시각·예상치 근거 및 페이지 분할 계약까지입니다. 실제 데이터 수집, 발표 전 컨센서스의 역사 버전, 상업 사용권, 모델 검증은 남았습니다. 다음 단위는 같은 main을 기준으로 Alpaca 뉴스 메타데이터를 검증하고, Android PR #141에 최신 main을 통합하는 것입니다. UI #140은 Qt 테마 중복 적용 및 시험 창 정리 보정을 검증 중입니다. 다른 세션은 같은 파일을 중복 수정할 필요가 없습니다.
+
 ## PR141 Windows fixture 최소수리 전달 checkpoint — 2026-11-23T02:49:20+09:00
 
 - 같은root771b8c78-a4da-492e-bdf3-309980124cbc/task/handoff/OS잠금24775가latestCURRENT5e10785와저장STATE·9c원격ref를대조한뒤동일gpt/android-commercial-preview-20261123에 `693e7cbb39f6e883a093f7484375985eafa83c2a`를expected9c CAS로push/read-back했습니다. 단일부모9c·tree69a2098b036c31198919be3cb324d177dc5926cf·정확3경로본문/blob/compare/PR141head/body가일치합니다. 세경로는시험파일,source-review12,기존PR141웹JSONrevision입니다.
