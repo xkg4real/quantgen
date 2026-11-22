@@ -9,6 +9,83 @@ from __future__ import annotations
 import unittest
 
 
+class DesktopApplicationStyleAcceptance(unittest.TestCase):
+    def check_fusion_lifetime(self):
+        from PyQt6 import sip
+        from PyQt6.QtCore import QEvent
+        from PyQt6.QtWidgets import QApplication, QLabel, QProxyStyle, QStyleFactory
+
+        self.assertIsNone(QApplication.instance())
+        from quantgen_desktop import use_fusion_style  # also runs before QApplication exists
+
+        class Witness(QLabel):
+            style_changes = 0
+
+            def changeEvent(self, event):
+                if event.type() == QEvent.Type.StyleChange:
+                    self.style_changes += 1
+                super().changeEvent(event)
+
+        class NamedProxy(QProxyStyle):
+            def name(self):
+                return "fusion"
+
+        for _ in range(2):
+            app = QApplication(["style-test", "-platform", "offscreen"])
+            app.setStyleSheet("")  # Qt may retain the process stylesheet across application lifetimes
+            self.assertIsNotNone(app.setStyle("Windows"))
+            use_fusion_style()
+            self.assertEqual(app.style().name().lower(), "fusion")
+            label = Witness()
+            label.show()
+            sheet = "QLabel { color: #345678; }"
+            app.setStyleSheet(sheet)
+            app.processEvents()
+            wrapper, changes = app.style(), label.style_changes
+            use_fusion_style()
+            app.processEvents()
+            self.assertIs(app.style(), wrapper, "Fusion under QSS was reinstalled")
+            self.assertEqual(label.style_changes, changes)
+
+            # Another component can replace the base while the same QSS stays active.
+            self.assertIsNotNone(app.setStyle("Windows"))
+            use_fusion_style()
+            self.assertEqual(app.styleSheet(), sheet)
+            app.setStyleSheet("")
+            self.assertEqual(app.style().name().lower(), "fusion")
+
+            for stylesheet in ("", sheet):
+                app.setStyleSheet(stylesheet)
+                app.setStyle(NamedProxy("Windows"))
+                use_fusion_style()
+                self.assertEqual(app.styleSheet(), stylesheet)
+                app.setStyleSheet("")
+                self.assertEqual(app.style().metaObject().className(), "QFusionStyle")
+
+            app.setStyleSheet(sheet)
+            ambiguous = app.style()
+            extra = QStyleFactory.create("Fusion")
+            extra.setParent(ambiguous)
+            use_fusion_style()
+            self.assertIsNot(app.style(), ambiguous, "An ambiguous wrapper must use the normal fallback")
+            self.assertEqual(app.styleSheet(), sheet)
+            sip.delete(label)
+            sip.delete(app)
+            self.assertIsNone(QApplication.instance())
+
+    def test_fusion_survives_application_stylesheets_and_recreation(self):
+        # Other UI tests share a QApplication. Exercise its entire lifetime in an isolated process.
+        import subprocess
+        import sys
+        from pathlib import Path
+
+        subprocess.run(
+            [sys.executable, "-B", "-c", "from tests.desktop_startup_visibility_acceptance import "
+             "DesktopApplicationStyleAcceptance as Case; Case().check_fusion_lifetime()"],
+            cwd=Path(__file__).resolve().parents[1], check=True, timeout=30,
+        )
+
+
 class DesktopStartupVisibilityAcceptance(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

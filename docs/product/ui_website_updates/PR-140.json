@@ -359,6 +359,57 @@
       "delivery": "NOT_SENT",
       "applied": false,
       "deployed": false
+    },
+    {
+      "date": "2026-11-23",
+      "execution_id": "4470390e-a716-4d3f-a20a-871b89a81151",
+      "source_parent": "657523d9302a1dc55a726d1c618fe2523aa58e9c",
+      "scope": "Desktop Qt style handling when opening additional windows",
+      "changes_ko": [
+        "스타일시트를 켠 상태에서 새 창을 열 때 이미 적용한 Fusion 스타일을 전체 앱에 다시 적용하는 문제를 고쳤습니다.",
+        "다른 스타일로 바뀐 경우에는 기존 화면 규칙에 맞게 Fusion으로 복구합니다."
+      ],
+      "source_pins": {
+        "quantgen_desktop/__init__.py": "1b75ab11a33617c2c571e793e3c64a8404ed64bb",
+        "tests/desktop_startup_visibility_acceptance.py": "2acb08142265826248e16715ed364f1fc3ced243"
+      },
+      "website_impact": "Desktop runtime behavior. The owner can describe reduced redundant style changes when reopening a window.",
+      "local_validation": {
+        "regression": {
+          "passed": 6,
+          "total": 6,
+          "host": "Linux Qt offscreen"
+        },
+        "same_style": {
+          "widgets": 3,
+          "events_before": 3,
+          "events_after": 0
+        },
+        "alternate_style_recovered": true,
+        "preference_restore": {
+          "single_linux_offscreen_run_each": true,
+          "source_files": 214,
+          "changed_files": 1,
+          "prior_seconds": [
+            36.577,
+            51.205,
+            120.462
+          ],
+          "candidate_seconds": [
+            36.631,
+            22.783,
+            30.028
+          ],
+          "prior_test": "PASS",
+          "candidate_test": "PASS",
+          "modal_waits": 0
+        }
+      },
+      "actual_fresh_CI": "PENDING_NEW_HEAD",
+      "owner_windows_PC7": "NOT_PERFORMED",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false
     }
   ]
 }

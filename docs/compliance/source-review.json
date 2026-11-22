@@ -449,7 +449,7 @@
     "packaging/launch_desktop.py": "7724b54d172f00d87c80abab2ff5214deb5ebcf9105878e24ca7519c166ce4b8",
     "packaging/selfcheck.py": "30dffaa03bf0f29342d3a1aca2945ab17c588c3a4304c59a0880f05b6a523ef1",
     "pyproject.toml": "26bc966048250dd020d173d23b3a9f76fc3de0333e662a3aff8490228fb88382",
-    "quantgen_desktop/__init__.py": "1ec1396b13e4b6caae0b8dfcf6201af71ad9756428c5cbcaab9706083691e060",
+    "quantgen_desktop/__init__.py": "2e9060bc9787219412a78b3df496516752bb6e1e826f6e3670d5d1643a9cab75",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
     "quantgen_desktop/app.py": "7c0db9fe3896effbb5eaf0abfc869dab84499698640c7c2fd735df4511c456fd",
     "quantgen_desktop/bonds.py": "f7800546d42023f6f2c63b0c47be7d24a2c68a5058115922bba11dd30e794edf",
@@ -622,7 +622,7 @@
     "tests/desktop_risk_reward_acceptance.py": "2a8fa2311890a741e2ac442ccfe31a912cf652220c7bffd0fbb963f5dc8008a4",
     "tests/desktop_sabr_diagnostics_acceptance.py": "08498faacb4e6a1d028ac56c7f8969858c1413c565b476fe258bc566ea3c665e",
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
-    "tests/desktop_startup_visibility_acceptance.py": "07f026c479f0048aa4b99377ba63e10e8d42b063ee837f09373c5200e5b60f99",
+    "tests/desktop_startup_visibility_acceptance.py": "3666afe67948a0e8e613d5745a59b52dd471cfbaa2e554b48953d4b409e195ed",
     "tests/desktop_stock_detail_acceptance.py": "585d73a05907ef13ff8b9e001ed07ba005e1ede2ca5a5d37d46f0449cb8dc530",
     "tests/desktop_strategy_acceptance.py": "53a81cd62f958daacbfb3d0218585257530d8874e57769309298db2ca2c6b586",
     "tests/desktop_strategy_exposure_acceptance.py": "30c7e9f5c9132d77e546827f15232f769c27f19a60c6b21c3664772207c10ce4",
@@ -883,27 +883,27 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "792797e7d08883f75e4e7fccdab6060484d8cd8d99d63175caccfd33ae1fc802",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.708163+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "00674ebfc1ab85fbb3a98660b5d21ea85fb29bd01d75afcff44732785fe4610f",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.713026+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "792797e7d08883f75e4e7fccdab6060484d8cd8d99d63175caccfd33ae1fc802",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.712003+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "00674ebfc1ab85fbb3a98660b5d21ea85fb29bd01d75afcff44732785fe4610f",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.718457+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "7bdffb5c0d036021fe29ba39a4f43a7545db297ef8b7b3aea1b9f72afb12c3fc",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.715014+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "b4b81e8f2a21c24b552469ae003482804b47c407bd5a7ec3720d9dd5ce54665d",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.722541+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
@@ -923,107 +923,107 @@
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "06d700c69e97a21859d01c39666b679eec4dcd0d89c132abd4a4ada052019c4f",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.718456+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "5d37540f9b4bb4b27307985470ddc8d6b9b70d368817c3da33bb9600917b86e0",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.725310+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "792797e7d08883f75e4e7fccdab6060484d8cd8d99d63175caccfd33ae1fc802",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.722041+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "00674ebfc1ab85fbb3a98660b5d21ea85fb29bd01d75afcff44732785fe4610f",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.727505+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     },
     "8": {
       "document_sha256": "d18aa347fc7bb730a047392049afb9d79212cf209ba651b9ca4dfde7354fe68f",
-      "source_digest": "06d700c69e97a21859d01c39666b679eec4dcd0d89c132abd4a4ada052019c4f",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.724672+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "5d37540f9b4bb4b27307985470ddc8d6b9b70d368817c3da33bb9600917b86e0",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.729690+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "559b9de5b061a21873d8b89ae89fd45f8b53842673cf944836f4c6cee593bc8e",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.727988+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "95393d70f15a86690d5a2f7ba4e5f41c22641047ca95fb2dcb769c6a36efc60c",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.732031+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "7094c5725cb25e08ea8a8e0dc1226035a1a853884451cc9974a6e837a9cb0bec",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.730953+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "c4ea0aeb4f84629ac58c456484aa22e379238ae9b0ad595a155423c4769e3ab9",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.734412+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "b4664d1909980f089ae8c47883a4f979d34a1fd2a99195266d117fdff124f578",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.735645+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "a719e0b0c73542307230d9bac339e2063a4f498082199fb591538955fc708f45",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.737314+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     },
     "12": {
       "document_sha256": "18af1551af29075d92583d7bc84a780f3719662115a7b26e4aeb9efd760d1afc",
-      "source_digest": "bc854b5f2631789dfce01fa3e937ab0e02a45a40478c1209ec33c702439b6fd6",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.737998+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "d71fb72b624e44e53e975fe7a1d65ae28cefb7e1a06749f7ffe69eee0b1d0606",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.739797+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "559b9de5b061a21873d8b89ae89fd45f8b53842673cf944836f4c6cee593bc8e",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.740177+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "95393d70f15a86690d5a2f7ba4e5f41c22641047ca95fb2dcb769c6a36efc60c",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.742114+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "559b9de5b061a21873d8b89ae89fd45f8b53842673cf944836f4c6cee593bc8e",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.743067+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "95393d70f15a86690d5a2f7ba4e5f41c22641047ca95fb2dcb769c6a36efc60c",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.744098+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "559b9de5b061a21873d8b89ae89fd45f8b53842673cf944836f4c6cee593bc8e",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.746407+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "95393d70f15a86690d5a2f7ba4e5f41c22641047ca95fb2dcb769c6a36efc60c",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.746744+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "ff82548bc1e25b01c5266706e44871baaaab22c733ab944b8afa00caa3c8dde1",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.750356+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "356ef3efed66bc074b87b909f2eb22b3fdecc77c08f57f4ac5787e9b77ff946c",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.748778+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "06d700c69e97a21859d01c39666b679eec4dcd0d89c132abd4a4ada052019c4f",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.752970+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "5d37540f9b4bb4b27307985470ddc8d6b9b70d368817c3da33bb9600917b86e0",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.751216+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "792797e7d08883f75e4e7fccdab6060484d8cd8d99d63175caccfd33ae1fc802",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.756271+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "00674ebfc1ab85fbb3a98660b5d21ea85fb29bd01d75afcff44732785fe4610f",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.753120+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
@@ -1035,11 +1035,11 @@
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "792797e7d08883f75e4e7fccdab6060484d8cd8d99d63175caccfd33ae1fc802",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.762358+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "00674ebfc1ab85fbb3a98660b5d21ea85fb29bd01d75afcff44732785fe4610f",
+      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
+      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
+      "reviewed_at": "2026-11-22T21:11:01.755131+00:00",
+      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
     }
   }
 }
