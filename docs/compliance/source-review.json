@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "795b2e9435c8eed43b08b98c709b3e2eeb3a7365ad2628855cb164cea0f94ab8",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "ad648e5c5b9b1f6d239a2498a800899a31a02d25dc97a729878ddf011b2f8cb2",
+    ".github/workflows/runtime-smoke.yml": "2cab0313c0b8bdd6025ca49ce7675e5103871d1e2ae5bd23ae456edc4b76153f",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -95,6 +95,7 @@
     "core/didm/ingest/filings.py": "9b2d8d01942de98048ffd866312a15b4b850f459705c73f0d4bffb87adb6d6e2",
     "core/didm/ingest/gdelt.py": "99731a27e6597bfe4a8cd8ff443d60fc232fec708e262589bf740c882a9a3722",
     "core/didm/ingest/kalshi.py": "4f10f0581bd6aa13f0a9786d2f6b54ab97594b0c2d11b45189fa4ad8ce812bdd",
+    "core/didm/ingest/massive_news.py": "6ba428176099c2947581b45354c07e41c874b301e2b0441d3eb59161dc9bdccf",
     "core/didm/ingest/news.py": "37d84f3cb3bde56ed772235aee1283bca76057006e5044974663f22d80f72afd",
     "core/didm/llm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "core/didm/llm/schema.py": "110eb847575f0e9bf4b147fa17b97ff7c476cbdbd29de453d9fbe5ebcfcd4856",
@@ -325,6 +326,7 @@
     "data/didm/gdelt.py": "7623b420553c9f07d27e4b65ae61ef9510966ef6274438d718db101a0a671bde",
     "data/didm/kalshi.py": "da3685db53b509bd8c3915f6bc39d020c91a73d073d62548fa4e705c7c6bfffb",
     "data/didm/keys.py": "a712abbbbbd2a3af5e3332c1176c911529d33622ebbae7bd40c2a8c399939700",
+    "data/didm/massive_news.py": "712875c6a37d32a83ff6907e60b47b53ca445239b0498a6e130f5bf1d972c04b",
     "data/didm/opendart.py": "b571d9895fe6aec55412353d15debcc197f1375cf63ac0f6fa01a2921bf64b79",
     "data/didm/polymarket.py": "fe65bbd835d791add326ccdc4370f9336acd33920cb350b6f26d32585dcd0066",
     "data/didm/tiingo.py": "675ef2b89ffce14b0ae30c301090f6121f2b5da3c272b4e12c39f55a11868ee0",
@@ -621,6 +623,7 @@
     "tests/didm_alpaca_news_acceptance.py": "56370ad5ebb6e834e8f73a5c60531daec48f72319cb5cac224d93dd70c9ffd09",
     "tests/didm_eodhd_acceptance.py": "b9af87bae6997d4df598005c896ec2357a8908c7ed76058885265312e2846e05",
     "tests/didm_ingest_acceptance.py": "b6c69236fce44daf5e5fc733b18a440f27abdbe4f4fdb3ee8dbb66108eb28a0c",
+    "tests/didm_massive_news_acceptance.py": "52e531178c88817191b1acca28b465d503742d674aac4dead82410a050e07ff0",
     "tests/didm_news_acceptance.py": "1280b0a97c7b48c9bd8610e891c048874d8503ad8a9dba4338068dfef2cda0ce",
     "tests/didm_novelty_acceptance.py": "ccefc838580aeab523770c0920afec71031b62980fcbdf16150cdaaabc9ed094",
     "tests/didm_schema_acceptance.py": "5c32fdf9e5a9bc14d564782a21a4c69dec3d24595c72fcbbd65c2bfddbc50caa",
@@ -863,163 +866,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "e0ccbe315037513a47ac78288e97903a278f645805b181c4df6cbbb7f1fc2854",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.643374+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "a8ed2ad15c4743062fa8d9f66e1b4d0558665e8a06bed838773b3fe160e83714",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.599452+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "e0ccbe315037513a47ac78288e97903a278f645805b181c4df6cbbb7f1fc2854",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.646395+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "a8ed2ad15c4743062fa8d9f66e1b4d0558665e8a06bed838773b3fe160e83714",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.602546+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "309c565f22ba1a43e142bc5e29a89162ba5b1f39ad58b58cb2e22fd48fe072f2",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.649108+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "1ad24028d74e8360ee8237d8dd7eccccd672ff71267ff771b1a7ae2b6f498af9",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.604878+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "987ca4de10a539b9ecc98427495a16bfff49ce2897a92379f899bc5cec9f59da",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.651542+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "382d13f9207e371e27976a6c2d8565173f150306e9ccc665451c09af5525eb4c",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.607361+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "e34ae9332e82a62776105b5c979807fc11f1b1c20582aa9bb0b60a7804830cf6",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.653696+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "f1097a92a6cc41627a679e17c24de39ac5f4b468f4e11c11a2212571f3d96d05",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.609487+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "7782b413d28cdf70b9c782e77893d345df53209f28ecfad013cf7e2c6304f4c9",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.656212+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "3ebb217907ce250c5d96a9b21e07faea2abd8211ba865e62519cb9b010490d16",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.612118+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "e0ccbe315037513a47ac78288e97903a278f645805b181c4df6cbbb7f1fc2854",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.658137+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "a8ed2ad15c4743062fa8d9f66e1b4d0558665e8a06bed838773b3fe160e83714",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.614172+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
-      "source_digest": "7782b413d28cdf70b9c782e77893d345df53209f28ecfad013cf7e2c6304f4c9",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.660453+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "3ebb217907ce250c5d96a9b21e07faea2abd8211ba865e62519cb9b010490d16",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.618554+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "7a005d03ad131a7bc3675d1b77ab7db2d809c6ee6b3c6e21787639bd89c4c48b",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.663079+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "6cafbde4f158e8e679cc68100d7c13ed547c9d6aaec21c58ff205872ab2d9282",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.620720+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "62d1ac74a4ea08ad56890af8cf96f2b1b879bb2289cc0068668db066a15ee596",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.665414+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "85260f332938c0b1d904116ebe9bcf23ff2f9308d71bcbe5ea2e5e14730836fb",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.623008+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "50ef6da6560d27d94c8533e41d5f97c57c74a591ea3b62e25a26ee41655288ee",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.667567+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "630a7256be3fb0539594f323b8c6974799b8959deaca93f9578e7aaa38c7eca1",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.625372+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "eef71b6a735dce884eeaf6a999efe04a1571af29772a5b24d937d23e361b5fa3",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.670045+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "69f097b50f9f5eebb14e0a54224000e3806d7fd2d2ebd7b11a99e542c1507a7f",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.629377+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "7a005d03ad131a7bc3675d1b77ab7db2d809c6ee6b3c6e21787639bd89c4c48b",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.672099+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "6cafbde4f158e8e679cc68100d7c13ed547c9d6aaec21c58ff205872ab2d9282",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.635909+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "7a005d03ad131a7bc3675d1b77ab7db2d809c6ee6b3c6e21787639bd89c4c48b",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.674197+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "6cafbde4f158e8e679cc68100d7c13ed547c9d6aaec21c58ff205872ab2d9282",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.640161+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "7a005d03ad131a7bc3675d1b77ab7db2d809c6ee6b3c6e21787639bd89c4c48b",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.676438+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "6cafbde4f158e8e679cc68100d7c13ed547c9d6aaec21c58ff205872ab2d9282",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.642333+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "4027806f37fe10780caf9b450a889933fcfc50b0696853d1601bb2f9c72132bd",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.678699+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "096eb21ea14c02a8aa1371c5e5cb6cae257a5a21af01a5c47461dbc2d56e5e84",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.644740+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "7782b413d28cdf70b9c782e77893d345df53209f28ecfad013cf7e2c6304f4c9",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.681009+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "3ebb217907ce250c5d96a9b21e07faea2abd8211ba865e62519cb9b010490d16",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.646940+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "e0ccbe315037513a47ac78288e97903a278f645805b181c4df6cbbb7f1fc2854",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.683109+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "a8ed2ad15c4743062fa8d9f66e1b4d0558665e8a06bed838773b3fe160e83714",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.649058+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "351e41ad3da0e049e3a75419a1a1b685c89ad4415ae753bd7976e2b1c238bbe5",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.685036+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "a7b3460363b9d5e207f8811a011e9535803c13d3b922e595ed9fda953566d0de",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.651514+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "e0ccbe315037513a47ac78288e97903a278f645805b181c4df6cbbb7f1fc2854",
-      "reviewed_by": "GPT root / compliance_validation and kalshi_completeness independent Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen supplied Alpaca News parser onto actual main666e. Source/version/receipt and opaque token semantics and independent supplied-payload tests reviewed. Preserve Android mobile entry, staging override, supplied-history rules and existing EODHD/mobile suites; add one Alpaca test token. Source/document consistency only. Actual API acquisition, store/AI-model integration, entitlement/rights and release have not been established; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T19:49:18.686955+00:00",
-      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
+      "source_digest": "a8ed2ad15c4743062fa8d9f66e1b4d0558665e8a06bed838773b3fe160e83714",
+      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
+      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T21:42:35.653664+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     }
   }
 }
