@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-23T07:03:33+09:00
+updated_at: 2026-11-23T07:19:06+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/android-commercial-preview-20261123
@@ -22,6 +22,10 @@ handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06
 previous_returned_at: 2026-11-21T14:54:13+09:00
 returned_at: 2026-11-22T12:49:15+09:00
 ---
+
+## Android 내부 APK 검사 및 합성 검증 · 2026-11-23T07:19:06+09:00
+
+OS-A1의 [내부 APK 검사 도구](https://github.com/xkg4real/quantgen/commit/c28194f2bb75a888c68b76f3ea6e88fe753bd477)를 작업 브랜치에서 검증했습니다. 기존 Android 전용 수동 빌드는 APK마다 크기·SHA-256·SDK 서명 검증·인증서 지문을 기록합니다. 대상 설치 폴더에서 관측한 직접 의존성 6개의 버전과 모호한 경우를 구분합니다. 보관 기간 설정은 7일입니다. 같은 회귀시험 8개가 Python 3.12.14와 3.13.5 각각 통과했고, 실제 SDK 34가 서명 없는 683바이트 합성 APK를 거부했습니다. YAML에서 실제 검사 명령을 추출해 SDK 선택 및 출력 경로도 합성 검증했습니다. 서명 성공은 모의 응답으로 확인했습니다. 기술 정합성 20문서·855소스가 통과했고 기존 공개 차단 65건을 유지합니다. 실제 앱 APK, 승인된 수동 빌드, 휴대폰 첫 실행·예시 계산은 대기입니다. 기존 공유 파일 병합 순서를 따릅니다.
 
 ## OS-A1 내부 APK 검사 작업 인수 · 2026-11-23T07:03:33+09:00
 
