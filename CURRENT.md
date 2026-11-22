@@ -1,14 +1,14 @@
 ---
-status: returned
+status: taken
 reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-22T12:49:15+09:00
+updated_at: 2026-11-22T15:02:29+09:00
 stale_after_hours: 3
-waiting_on: ci
+waiting_on: none
 work_branch: gpt/ui-guide-chart-first-20261121
 work_commit: fed639d27268defe13969d9718757718bd876df4
 uncommitted_changes: no
@@ -17,11 +17,18 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
 session: 01a183c6-632a-70cc-a0e6-32e764f43087
-execution_id: 47c97545-1d6c-4871-8a44-fbaca1eb2f82
+execution_id: 6e1ca7eb-74bb-41c3-b056-313bbe8b141c
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
 returned_at: 2026-11-22T12:49:15+09:00
 ---
+
+## 사용자 직접 요청: 시작 깜빡임·선 샘플 범례·가치평가 참고·호가 수량 막대 — 2026-11-22T15:02:29+09:00
+
+같은환경/cwd·STATE cloud_owns_monitoring 확인, 직전47c/task/handoff/branch/fed639·CURRENT924950/반환저장일치 확인 후 OS배타잠금6728와 고유execution6e1ca7eb-74bb-41c3-b056-313bbe8b141c로 최신CURRENT blob CAS/readback 뒤 재개합니다. 사용자 깜빡임은 CMD가아닌 앱창이며, 읽기감사에서 page_kit Card/Soft/Workspace 및 IndicatorGuide.case의 부모연결전 setVisible 패턴을발견했습니다. 합성Qt Show이벤트전후로 재현·최소부모지정순서만고칩니다. 기존 사례차트는첫화면그대로, 큰주석상자·연결선대신 우하단에 실제선색/실선·점선·점/막대 샘플과짧은지표명만그립니다. PER/PBR는기존종목상세톤의간결한참고구간·현재값/한계해석이며보편우량/매수판정·가짜업종평균을만들지않습니다. 호가도실제수량의동일기준길이로 매도파란막대/매수빨간막대를표시하고 원가격·수량·시각/접기·읽기전용조회·권한을유지합니다. 최신추가요청을포함해 오늘범위는이네가지뿐이며 KEY5K3/OS/DIDM/PAY 새구현은시작하지않습니다.
+
+소스는 같은검증된gpt UI브랜치fed639에서격리복사하여진행합니다. page_kit/indicator_guide·최소범례보조·stock_insights/metric_help·관련합성회귀/CI/제품설명·기술source-review/웹영향기록만해당범위입니다. 이전UI자료/engine/renderer/보고서입력/Signals/주문·TRADEGEN·동결연구·.env/보호cache를변경/실행하지않습니다. 모든계산/데이터/제공사실동작·OSbinding·계정조건은보존하고 실제Windows증거를합성으로대체하지않습니다. UI/main은새필수CI·기존PC7후, 실OS전환은OSgo후입니다. 자동감시/예약/run_now0·외부배포0. Remaining Work그림은현재실제완료/진행/외부조건을설명하는보고이며세션재편명령이아닙니다. 종전45/실제호스트PASS·모든실패기록·정식완료ID를보존하고 이번새변경의독립검증을별도로남깁니다.
+
 
 ## 사례 차트·종목 상세 스타일 수정 전달 — 2026-11-22T12:49:15+09:00
 
