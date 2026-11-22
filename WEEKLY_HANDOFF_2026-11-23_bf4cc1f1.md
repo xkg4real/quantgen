@@ -25,3 +25,9 @@
 - [PR #140](https://github.com/xkg4real/quantgen/pull/140) `97152abd` · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45055309365) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45055309366) success
 - [PR #141](https://github.com/xkg4real/quantgen/pull/141) `a35b2f8b` · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45054882429) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45054882305) success
 - [PR #143](https://github.com/xkg4real/quantgen/pull/143) `3b8f39ca` · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45054408521) success · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45054408511) in_progress
+
+## B6 공급원 후속 확인 · 2026-11-23T03:32:27+09:00
+
+현재 main에는 FRED/ALFRED·GDELT·Kalshi 세 공급원의 수집·정규화 경로가 있습니다. 이번 실행에서는 세 공급원을 실계정으로 호출하지 않았습니다. Polymarket은 V0 보류이고 자체 LLM은 평가·입력 뼈대 단계입니다. Atlanta Fed MPT의 분기 SOFR 분포와 FOMC 회의별 확률은 구분합니다.
+
+Massive 공식 뉴스 안내에서 개인 Stocks Basic의 종목 뉴스가 시간 단위 갱신과 2년 이력으로 제공됨을 확인했습니다. API 문서의 published_utc는 발행사 시각이며 서비스 수신 시각과 감성 점수의 과거 가용 시각은 따로 확인해야 합니다. 다음 구현 단위는 제공된 합성 뉴스의 메타데이터를 검증하는 것입니다. 실제 자동 수집과 상업용 QUANTGEN 고객 표시는 기업 계약·권리 확인 뒤 진행합니다. [뉴스 명세](https://massive.com/docs/rest/stocks/news) · [공급사 이력 FAQ](https://massive.com/knowledge-base/article/how-far-back-does-massives-news-and-sentiment-data-go) · [기업 약관](https://massive.com/legal/businesses-terms-of-service)
