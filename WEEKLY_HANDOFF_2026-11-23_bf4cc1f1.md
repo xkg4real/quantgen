@@ -1,5 +1,23 @@
 # QUANTGEN 법인 설립 전 인수인계 · 2026년 11월 23일
 
+## 2026-11-23T03:47:46+09:00 · DIDM, Android 및 T8-5
+
+Massive 뉴스 메타데이터를 처리하는 [초안 PR #144](https://github.com/xkg4real/quantgen/pull/144)을 열었습니다. 작업 브랜치 `gpt/didm-b6-massive-news-20261123`, head `6a0336e5cf8e7f52294f518ab437662e3f4869db`, 기준 main `d835d9f495102a6d3244413018db1f9219341716`입니다. 네 파일과 PR 설명·head를 원격에서 대조했습니다. 기사 발행 시각과 직접 수신 시각을 구분하고, 동일 ID의 버전·종목별 감성·페이지 순서를 보존합니다. 원문 링크의 쿼리를 잘라 서로 다른 기사를 같은 주소로 만들던 문제와 커서 처리 문제를 수정했습니다.
+
+제품 시험 18개와 별도 회귀 사례 18개가 Python 3.12 및 3.13에서 통과했습니다. 기술 문서 정합성 검사는 소스 849개·문서 20개에서 통과했고 기존 공개 차단 65건은 유지했습니다. 실제 Massive 수집, 저장소 연결, 역사적 감성의 가용성과 상업 이용 권한은 미확인입니다.
+
+기존 Kalshi 고정 소스는 20번째 페이지에 다음 커서가 있을 때 40개 합성 행에 대해 미완료로 반환합니다. 커서가 소진된 동일 규모는 완료로 반환합니다. 저장된 개별 행에는 배치 단위 완료 플래그가 없으므로 이를 전체 시장의 증거로 해석할 수 없습니다. Atlanta Fed MPT는 공식 파일 헤더·단위·시각 설명이 필요합니다.
+
+T8-5는 소유자가 승인한 증권사 화면 안내의 범위와 KIS·법률 검토 질문을 담은 비공개 초안을 작성했습니다. 실제 주문이나 외부 발송, 공개 구현은 없습니다. 수동 인계 게시 도구 T8-6은 기존 순서를 따릅니다.
+
+Android 빌드 경로·Flet 진입점·GBM 의존성 선언을 재검토했습니다. 소스상 새 차단 결함은 발견되지 않았습니다. APK·실기기와 UI Windows PC7은 계속 확인이 필요합니다. 각 PR의 실행 상태는 아래와 같습니다.
+
+- [#140](https://github.com/xkg4real/quantgen/pull/140) `97152abd` · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45055309365) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45055309366) success
+- [#141](https://github.com/xkg4real/quantgen/pull/141) `a35b2f8b` · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45054882429) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45054882305) success
+- [#143](https://github.com/xkg4real/quantgen/pull/143) `3b8f39ca` · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45054408521) success · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45054408511) in_progress
+- [#144](https://github.com/xkg4real/quantgen/pull/144) `6a0336e5` · 원격 재조회 시 확인될 새 CI 결과 대기
+
+
 주 작업은 상업용 QUANTGEN의 Android 내부 시험(⑮-5)입니다. 사용자가 지정한 단일 요청 창구에서 DIDM·OS·UI·결제·Remaining Work를 분담합니다. 다음 작업자는 최신 CURRENT와 LEDGER의 커밋을 먼저 대조합니다. 이전 Claude 상시 감시는 취소 상태입니다.
 
 | Remaining Work 범위 | 이번 실행에서 확인한 변경 | 다음 검증 |
