@@ -894,7 +894,10 @@ class Workspace(QWidget):
         return segment
 
     def add_badge(self, pair="", tone=""):
-        return self.add_toolbar(Badge(pair, tone))
+        # A populated badge shows itself. Attach it before rendering its first label.
+        badge = self.add_toolbar(Badge(tone=tone))
+        badge.set_pair(pair)
+        return badge
 
     def add_action(self, pair, kit="secondary"):
         return self.add_toolbar(Button(pair, kit), right=True)

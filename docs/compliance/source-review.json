@@ -502,7 +502,7 @@
     "quantgen_desktop/owner_ui_language/risk.py": "5f96efebe0e540a617f4355d850a85692f19952dade7b54a62d05e78493dc143",
     "quantgen_desktop/owner_ui_language/stock.py": "43f978f3f5bed91044bdc469c43993bb07ca74718f22a2e62a18991fbb2fa496",
     "quantgen_desktop/owner_ui_language/strategy.py": "a6a0d517185ef4a143baefaf6fffadf7902d3dc85b1655aa27da5b1183fc0b15",
-    "quantgen_desktop/page_kit.py": "61b6e9206ca9b0e58797a6d32723878abdb02d8dadd6ff38951b242e9c7c1bb8",
+    "quantgen_desktop/page_kit.py": "890fb54b1c767720fa3e614ccf66248732f473d9d1dcbb95ea8667d2317ef0a5",
     "quantgen_desktop/paper.py": "072c4b12f26cfd8401c3dba65fc4e62eeddc82dd31ca4c42af2081a67782a89d",
     "quantgen_desktop/portfolio.py": "2d495ab45e7f458ae813a012f6b0a31d4e1742b7382e7828610dd5c7a417260f",
     "quantgen_desktop/qscore.py": "01ace13039eb9d3ad90bba472a2b1eac4f961b0ca8d687893fe5068e31c3a67b",
@@ -622,7 +622,7 @@
     "tests/desktop_risk_reward_acceptance.py": "2a8fa2311890a741e2ac442ccfe31a912cf652220c7bffd0fbb963f5dc8008a4",
     "tests/desktop_sabr_diagnostics_acceptance.py": "08498faacb4e6a1d028ac56c7f8969858c1413c565b476fe258bc566ea3c665e",
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
-    "tests/desktop_startup_visibility_acceptance.py": "5924921ebb912b2c4927741dc09498152a23cffb42b46d589b76a944b2fe7c3a",
+    "tests/desktop_startup_visibility_acceptance.py": "07f026c479f0048aa4b99377ba63e10e8d42b063ee837f09373c5200e5b60f99",
     "tests/desktop_stock_detail_acceptance.py": "585d73a05907ef13ff8b9e001ed07ba005e1ede2ca5a5d37d46f0449cb8dc530",
     "tests/desktop_strategy_acceptance.py": "53a81cd62f958daacbfb3d0218585257530d8874e57769309298db2ca2c6b586",
     "tests/desktop_strategy_exposure_acceptance.py": "30c7e9f5c9132d77e546827f15232f769c27f19a60c6b21c3664772207c10ce4",
@@ -883,27 +883,27 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "b51defe7f98ce9ba9d3b1f509f5a54ae6e0e8d699eecd0e6cfa5479b132c1129",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.644856+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "82a3554d81c6caff118655cafee216e9219307aa44f2e14cf8ce57ee2960dfbe",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.088512+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "b51defe7f98ce9ba9d3b1f509f5a54ae6e0e8d699eecd0e6cfa5479b132c1129",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.647687+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "82a3554d81c6caff118655cafee216e9219307aa44f2e14cf8ce57ee2960dfbe",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.091683+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "15d41bf0abdec78c1b48040084fdf29d05249e8183f5b031dfe5d4273bb021c0",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.650096+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "6ba03bca0d0ba9f52dff25f559cf9aa7e7f7b6de66bf4d463ad6ba0ee38606f9",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.094172+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
@@ -923,107 +923,107 @@
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "8ca6cc82f1b2142aaa9fb2bf773d50d5c1fe2356a2384acc619b528db7daa8f1",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.658204+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "a61ad13c8f8492700cc95def1c0a5d4bdd75f11daffc02345c6d472c43230b37",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.096606+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "b51defe7f98ce9ba9d3b1f509f5a54ae6e0e8d699eecd0e6cfa5479b132c1129",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.660480+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "82a3554d81c6caff118655cafee216e9219307aa44f2e14cf8ce57ee2960dfbe",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.098640+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     },
     "8": {
       "document_sha256": "d18aa347fc7bb730a047392049afb9d79212cf209ba651b9ca4dfde7354fe68f",
-      "source_digest": "8ca6cc82f1b2142aaa9fb2bf773d50d5c1fe2356a2384acc619b528db7daa8f1",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.662924+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "a61ad13c8f8492700cc95def1c0a5d4bdd75f11daffc02345c6d472c43230b37",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.100700+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "544a27cd13bd5f76a872f10a35046554c58d4d960349c4d2891f8a870bef0287",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.664995+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "0cc656d36acba6878c4450fa68b845ecc0ebcea07bc2b077cee7327dfab23913",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.102961+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "905c11d9e30f26676e207c888f7d29ea12397616ac7575b9d480cbb804004eea",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.667075+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "91fde179680b06175163cf08133b7d450497dedcab3389b9a2b0582cc732136e",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.105254+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "27afe863d54085a8e165bad3aedbc652f552bc0d3377d4bc0eb20b65cd1eda23",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.669292+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "0660746bdb9c37878715275d02552f9002d1a969885affc2a1cc6c7afb2e5c1d",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.107185+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     },
     "12": {
       "document_sha256": "18af1551af29075d92583d7bc84a780f3719662115a7b26e4aeb9efd760d1afc",
-      "source_digest": "daac8de79dad6ecca1790504e7f64aa6bf8b15ca9c7320315a4e9f2be694d15a",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.671226+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "3ccd4c6afbbefc7a23125ec2cea82ab77e2aec226b44cf9671ebe491d346760d",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.109282+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "544a27cd13bd5f76a872f10a35046554c58d4d960349c4d2891f8a870bef0287",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.673330+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "0cc656d36acba6878c4450fa68b845ecc0ebcea07bc2b077cee7327dfab23913",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.112211+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "544a27cd13bd5f76a872f10a35046554c58d4d960349c4d2891f8a870bef0287",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.675252+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "0cc656d36acba6878c4450fa68b845ecc0ebcea07bc2b077cee7327dfab23913",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.114106+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "544a27cd13bd5f76a872f10a35046554c58d4d960349c4d2891f8a870bef0287",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.677201+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "0cc656d36acba6878c4450fa68b845ecc0ebcea07bc2b077cee7327dfab23913",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.116169+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "7ebee79aa2109467f260de72d11973725ce22632c6bcaab7920f9ad78d4d6a97",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.679200+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "afc933b95c2b4fba5b1b38ad264b239a4820332241b712970bd4bad580eb2f52",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.118059+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "8ca6cc82f1b2142aaa9fb2bf773d50d5c1fe2356a2384acc619b528db7daa8f1",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.681164+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "a61ad13c8f8492700cc95def1c0a5d4bdd75f11daffc02345c6d472c43230b37",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.120073+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "b51defe7f98ce9ba9d3b1f509f5a54ae6e0e8d699eecd0e6cfa5479b132c1129",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.683108+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "82a3554d81c6caff118655cafee216e9219307aa44f2e14cf8ce57ee2960dfbe",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.122022+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
@@ -1035,11 +1035,11 @@
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "b51defe7f98ce9ba9d3b1f509f5a54ae6e0e8d699eecd0e6cfa5479b132c1129",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.687410+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "82a3554d81c6caff118655cafee216e9219307aa44f2e14cf8ce57ee2960dfbe",
+      "reviewed_by": "GPT root / compliance_validation and independent Badge technical review 2026-11-23",
+      "review_note": "Workspace.add_badge attaches an empty Badge to its toolbar before rendering its first label. Exact two-file delta reviewed: original component suite red4/5 to green5/5 and independent real Workspace traces remove transient top-level Badge Show in hidden/visible hosts; empty state, language, tone and suppression/restore retained. Linux offscreen components only; full ResearchWindow, Windows/PC7 and new hosted CI have not been evaluated. Existing workflow, policies/profile and publication controls unchanged.",
+      "reviewed_at": "2026-11-22T19:30:09.124397+00:00",
+      "source_commit": "97152abd2ed5159914adbc38f67eabc16f6f71da"
     }
   }
 }

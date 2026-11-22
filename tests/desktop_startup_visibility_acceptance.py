@@ -94,6 +94,36 @@ class DesktopStartupVisibilityAcceptance(unittest.TestCase):
                 self.assertEqual(workspace.title.isHidden(), title is None)
                 self.assertEqual(self.observer.events, [], "construction exposed a toolbar title")
 
+    def test_toolbar_badges_wait_for_the_workspace_and_follow_text_language_and_suppression(self):
+        from quantgen_desktop.page_kit import Workspace
+
+        workspace = self._keep(Workspace(side=False))
+        badge = workspace.add_badge(("Delayed", "지연"), "warn")
+        empty = workspace.add_badge()
+        self.assertEqual(self.observer.events, [], "constructing a toolbar badge exposed a window")
+        self.assertIs(badge.parentWidget(), workspace.toolbar_host)
+        self.assertEqual(badge.property("kit"), "badge")
+        self.assertEqual(badge.property("tone"), "warn")
+        self.assertEqual(badge.text(), "● 지연")
+        workspace.show()
+        self.app.processEvents()
+        self.assertTrue(badge.isVisible())
+        self.assertTrue(empty.isHidden())
+        workspace.set_language("en")
+        self.assertEqual(badge.text(), "● Delayed")
+        badge.suppress(True)
+        badge.set_pair(("● Updated", "갱신"))
+        workspace.set_language("ko")
+        self.assertTrue(badge.isHidden())
+        badge.suppress(False)
+        self.assertTrue(badge.isVisible())
+        self.assertEqual(badge.text(), "● 갱신")
+        empty.set_pair("Ready")
+        self.assertTrue(empty.isVisible())
+        empty.set_pair("")
+        self.assertTrue(empty.isHidden())
+        self.assertEqual({event["id"] for event in self.observer.events}, {id(workspace)})
+
     def test_explicit_host_show_retains_titles_notes_and_optional_header_behavior(self):
         from PyQt6.QtWidgets import QPushButton, QVBoxLayout, QWidget
         from quantgen_desktop.page_kit import Card, Soft, Workspace
