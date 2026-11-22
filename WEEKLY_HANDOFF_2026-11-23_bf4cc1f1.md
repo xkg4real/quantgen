@@ -1,0 +1,27 @@
+# QUANTGEN 법인 설립 전 인수인계 · 2026년 11월 23일
+
+주 작업은 상업용 QUANTGEN의 Android 내부 시험(⑮-5)입니다. 사용자가 지정한 단일 요청 창구에서 DIDM·OS·UI·결제·Remaining Work를 분담합니다. 다음 작업자는 최신 CURRENT와 LEDGER의 커밋을 먼저 대조합니다. 이전 Claude 상시 감시는 취소 상태입니다.
+
+| Remaining Work 범위 | 이번 실행에서 확인한 변경 | 다음 검증 |
+| --- | --- | --- |
+| Data Source / DIDM · B6 | EODHD 경제 이벤트의 제공 자료 파서와 페이지·시각 검증을 PR #142로 main에 병합. 합성 18개, Runtime 6개 작업과 문서 CI 성공. Alpaca News 제목·종목·생성/수정/수신 시각과 페이지 토큰 검증은 PR #143 초안, 합성 20개 통과 | 각 공급원의 상업 수집·저장·표시 권리와 실제 계정 권한. EODHD 과거 예상치가 발표 전에 어떤 버전으로 존재했는지 확인. Alpaca 제공 지연도 확인 필요. 기존 Polymarket V0 보류 유지 |
+| OS · ⑮-5 | PR #141에 데스크톱 GBM 계산을 실행하는 모바일 예시 버튼을 구현. 합성 종가 30개, 5일, 256경로, 시드 7. 호스트에서 버튼을 두 번 눌러 15개 출력 대조, 중앙값 104.69와 가운데 90% 구간 101.01–108.95 일치. 데스크톱 5개 설정 호환, 모바일 시험 8개 성공. 실제 staging 스크립트가 출력한 파일 401개와 manifest 확인 | 최종 커밋 Runtime, debug APK, 설치 가능한 실제 Android 기기에서 첫 화면·예시 계산·APK 크기·기동 시간 기록 |
+| UI/UX · 데스크톱 PC7 | PR #140에서 같은 테마를 다시 적용할 때 41개 합성 Qt 위젯에 발생한 스타일 이벤트를 81→0건으로 줄임. 실제 테마 전환 81건 유지. 테스트 창 6개의 정상 닫기와 닫기 거부 확인. 원격 웹사이트 기록 갱신, 미전송 | 새 CI 결과. Windows에서 시작·종목 상세·가이드 첫 사례 차트·하단 선 범례·툴팁·호가 막대·창 깜빡임을 확인한 뒤 PC7 판정 |
+| Payment / AWS · OA43 | 기존 비용표의 EC2-Other 집중을 확인. 세부 리소스 귀속은 미확정 | 같은 날짜·비용 지표, Credit 제외, EC2-Other만 선택해 Usage type × Region 비용 내역 확인. 기존 결제 문의와 정기결제 초안은 OA32·39 결정 대기 |
+| 제품 마감 | 지정된 Remaining Work 페이지에서 ⑮-5와 ⑮-10·11의 조건을 대조. 이번 실행은 보고용 기록 | ⑮-10·11 웹 로그인/계정 및 PG 조건, 실기기·권리 증거와 기술 시험을 각각 확인 |
+
+## 재현과 이어서 할 일
+
+1. 저장된 주 브랜치는 `gpt/android-commercial-preview-20261123`, 커밋 `a35b2f8b3be6e1a757028cb8dd0f14dcc4e58050`입니다. UI `97152abd2ed5159914adbc38f67eabc16f6f71da`와 Alpaca `3b8f39ca7b20d57624601f35310277ad2b4c2abc`는 별도 PR입니다. 세 브랜치 모두 main `d835d9f495102a6d3244413018db1f9219341716`를 포함합니다.
+2. Android 빌드는 기존 GitHub Actions **Platform build → Run workflow**에서 Android 브랜치를 선택하고 Android만 켭니다. Windows·macOS·font_probe는 끄고 qt_binding은 기본 PyQt6입니다. 성공 시 실행 Summary의 Artifacts에서 `QUANTGEN-android-debug-<커밋 SHA>`를 받아 실제 기기에서 확인합니다. 현재 클라우드의 Flutter 다운로드 경로는 403이어서 APK를 여기서 만들지 못했습니다. [빌드 화면](https://github.com/xkg4real/quantgen/actions/workflows/platform-build.yml)
+3. 세 PR의 최신 head와 전체 CI, 충돌, F 병합 자리, 리뷰·결정 대기를 다시 확인합니다. 병합은 한 번에 하나씩 진행하고 다른 PR은 새 main을 포함한 결과를 재검증합니다. UI의 Windows PC7와 공개 여부는 별개로 기록합니다.
+4. B6 공급원 표는 사용자 답변으로 구성 확인을 마쳤습니다. 기존 ALFRED/GDELT/Kalshi와 겹치는 재구현을 피합니다. Atlanta Fed MPT 원본 파일 구조와 Massive Basic 권한을 대조하고, 자체 LLM 평가에 필요한 모델 기준시점·검증 표본과 공급사 확인이 남습니다. 실계정·자동 수집·유료 계약 승인 여부를 추정하지 않습니다.
+5. 각 PR, 증거 종류와 미완료 이유를 비공개 Notion 동기화 대기열에 남깁니다. 실제 제공권·결제·실기기 근거 전에는 상위 항목을 완료 처리할 수 없습니다.
+
+[병합된 EODHD #142](https://github.com/xkg4real/quantgen/pull/142) · [Android #141](https://github.com/xkg4real/quantgen/pull/141) · [UI #140](https://github.com/xkg4real/quantgen/pull/140) · [Alpaca #143](https://github.com/xkg4real/quantgen/pull/143)
+
+## 현재 커밋의 CI · 2026-11-23T03:30:31+09:00
+
+- [PR #140](https://github.com/xkg4real/quantgen/pull/140) `97152abd` · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45055309365) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45055309366) success
+- [PR #141](https://github.com/xkg4real/quantgen/pull/141) `a35b2f8b` · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45054882429) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45054882305) success
+- [PR #143](https://github.com/xkg4real/quantgen/pull/143) `3b8f39ca` · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45054408521) success · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45054408511) in_progress

@@ -1,3 +1,7 @@
+## 데스크톱 창 깜빡임과 스타일 · 2026-11-23T03:30:31+09:00
+
+[PR #140](https://github.com/xkg4real/quantgen/pull/140) `97152abd2ed5159914adbc38f67eabc16f6f71da`에는 main d835d9f와 6개 테스트 창의 소유권 정리, 동일한 전역 글꼴·스타일을 다시 쓰는 문제의 수정이 있습니다. 같은 테마를 두 번 적용할 때 81건이던 합성 스타일 이벤트가 0건으로 줄고 실제 테마 전환 81건은 유지됩니다. 이전 취소된 Runtime 기록은 보존합니다. 현재 커밋의 전체 Runtime과 Windows PC7이 남습니다. 웹사이트 반영 기록은 미전송입니다. [인수인계](WEEKLY_HANDOFF_2026-11-23_bf4cc1f1.md)
+
 ## PR141 Windows fixture 최소수리 전달 checkpoint — 2026-11-23T02:49:20+09:00
 
 - 같은root771b8c78-a4da-492e-bdf3-309980124cbc/task/handoff/OS잠금24775가latestCURRENT5e10785와저장STATE·9c원격ref를대조한뒤동일gpt/android-commercial-preview-20261123에 `693e7cbb39f6e883a093f7484375985eafa83c2a`를expected9c CAS로push/read-back했습니다. 단일부모9c·tree69a2098b036c31198919be3cb324d177dc5926cf·정확3경로본문/blob/compare/PR141head/body가일치합니다. 세경로는시험파일,source-review12,기존PR141웹JSONrevision입니다.

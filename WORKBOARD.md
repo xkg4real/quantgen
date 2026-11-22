@@ -1,3 +1,13 @@
+## 법인 설립 전 Remaining Work · 2026-11-23T03:30:31+09:00
+
+EODHD 제공 자료 파싱만 main d835d9f로 병합되었습니다. Android와 UI는 이 main을 통합했습니다. 아래 세 PR은 각각 최신 코드와 테스트를 원격에서 다시 확인한 초안입니다. 준법 문서 CI와 전체 Runtime은 별개로 기록합니다.
+
+- [PR #140](https://github.com/xkg4real/quantgen/pull/140) `97152abd` · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45055309365) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45055309366) success
+- [PR #141](https://github.com/xkg4real/quantgen/pull/141) `a35b2f8b` · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45054882429) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45054882305) success
+- [PR #143](https://github.com/xkg4real/quantgen/pull/143) `3b8f39ca` · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45054408521) success · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45054408511) in_progress
+
+Android 예시 계산·staging과 UI 동일 테마 재적용 수정은 합성 검증을 통과했습니다. 다음은 Android APK와 기기 증거, Windows PC7, Alpaca 전체 CI 및 실제 공급사 권리 확인입니다. 상위 Remaining Work는 계속 열려 있습니다. 자세한 재현 순서와 결제 OA43 증거는 [주간 인수인계](WEEKLY_HANDOFF_2026-11-23_bf4cc1f1.md)에 있습니다.
+
 ## PR141 Windows fixture 최소수리 전달 checkpoint — 2026-11-23T02:49:20+09:00
 
 - 같은root771b8c78-a4da-492e-bdf3-309980124cbc/task/handoff/OS잠금24775가latestCURRENT5e10785와저장STATE·9c원격ref를대조한뒤동일gpt/android-commercial-preview-20261123에 `693e7cbb39f6e883a093f7484375985eafa83c2a`를expected9c CAS로push/read-back했습니다. 단일부모9c·tree69a2098b036c31198919be3cb324d177dc5926cf·정확3경로본문/blob/compare/PR141head/body가일치합니다. 세경로는시험파일,source-review12,기존PR141웹JSONrevision입니다.
