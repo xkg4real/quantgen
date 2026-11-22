@@ -1,3 +1,15 @@
+## 법인 설립 전 Remaining Work · 2026-11-23T05:12:36+09:00
+
+| 분야 | 개발·검증 결과 | 다음 업무 |
+| --- | --- | --- |
+| Android ⑮-5 | [내부 프리뷰 #141](https://github.com/xkg4real/quantgen/pull/141)을 main `666e0064`에 병합했습니다. | [Platform build](https://github.com/xkg4real/quantgen/actions/workflows/platform-build.yml)에서 Android APK를 만들고 휴대폰에서 첫 화면과 예시 계산을 확인합니다. |
+| Data Source · DIDM B6 | EODHD 입력 처리는 main에 있습니다. Alpaca·Massive의 합성 입력 45개가 두 Python 버전에서 각각 통과했습니다. | [Alpaca #143](https://github.com/xkg4real/quantgen/pull/143)의 전체 검사와 검토가 먼저입니다. 이후 [Massive #144](https://github.com/xkg4real/quantgen/pull/144)와 [V0 #145](https://github.com/xkg4real/quantgen/pull/145)를 각각 최신 main에서 확인합니다. 공급원별 실수집·상업권 근거는 남았습니다. |
+| UI/UX | [UI #140](https://github.com/xkg4real/quantgen/pull/140)의 Linux Qt 시험에서 주창 표시 전 별도 배지 창이 5개에서 0개로 줄었습니다. | 전체 검사와 소유자 Windows PC7에서의 깜빡임을 확인합니다. |
+| 결제·AWS | 결제 문의와 구독 설계 초안을 준비했고 AWS CPU 문제의 조치 기록을 대조했습니다. | 문의 발송과 구독 조건은 OA-32·39, EC2-Other 비용 귀속은 OA-43입니다. 비용 귀속에는 같은 기간·비용 기준의 사용 유형별·리전별 명세가 필요합니다. |
+| Remaining Work · 메인 | [T8-6 수동 인계](https://github.com/xkg4real/quantgen/commit/2d2e7ad5373b2839f4716e741f9c5c5811dcf611)와 [GH-2 승인 항목 정리](https://github.com/xkg4real/quantgen/commit/18d5e507014ff6ce28da40df51788218f860796b)를 작업 브랜치에서 검증했습니다. | 공유 파일 변경은 중앙 병합 순서에 맞춰 최신 main에서 검증한 뒤 PR로 검토합니다. |
+
+[주간 인계](WEEKLY_HANDOFF_2026-11-23_bf4cc1f1.md) · [병합 순서](MERGE_QUEUE.md)
+
 ## 법인 설립 전 Remaining Work · 2026-11-23T03:30:31+09:00
 
 EODHD 제공 자료 파싱만 main d835d9f로 병합되었습니다. Android와 UI는 이 main을 통합했습니다. 아래 세 PR은 각각 최신 코드와 테스트를 원격에서 다시 확인한 초안입니다. 준법 문서 CI와 전체 Runtime은 별개로 기록합니다.
