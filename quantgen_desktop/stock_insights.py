@@ -7,13 +7,15 @@ from __future__ import annotations
 
 import math
 
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QColor, QPainter
-from PyQt6.QtWidgets import QFrame, QGridLayout, QLabel, QSizePolicy, QToolButton, QVBoxLayout, QWidget
+from PyQt6.QtCore import QEvent, QRect, QRectF, QSize, Qt
+from PyQt6.QtGui import QColor, QPainter, QPainterPath
+from PyQt6.QtWidgets import (QFrame, QGridLayout, QLabel, QPushButton, QScrollArea,
+                             QSizePolicy, QVBoxLayout, QWidget)
 
 from core.market.detail_insights import build_insights, number
-from core.theme import DARK, LIGHT, RADII
-from .typography import mix, tone_colors
+from core.theme import DARK, LIGHT
+from .stock_detail_style import chevron, label, numbers, sheet
+from .typography import tone_colors
 
 
 def _fmt(value, digits=2):
@@ -53,6 +55,11 @@ class FlowBar(QWidget):
         w, h = self.width(), self.height()
         palette = DARK if self.dark else LIGHT
         tones = tone_colors(self.dark)
+        # The same six-pixel rounded track as the existing stock volume/range bars.
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        track = QPainterPath()
+        track.addRoundedRect(QRectF(0, (h - 6) / 2, w, 6), 3, 3)
+        painter.setClipPath(track)
         painter.fillRect(0, 0, w, h, QColor(palette.surface_2))
         buy, sell = QColor(tones["up"]), QColor(tones["down"])
         if self.fraction is not None:
@@ -65,6 +72,83 @@ class FlowBar(QWidget):
             painter.fillRect(half if self.net >= 0 else half - size, 0, size, h, buy if self.net >= 0 else sell)
             painter.fillRect(half, 0, 1, h, QColor(palette.muted))
         painter.end()
+
+
+class _DepthViewport(QScrollArea):
+    """Keep full read-only figures at the page's normal type size.
+
+    Ordinary sidebar widths fit four columns. Exceptionally wide figures get a
+    horizontal scroll, rather than overlapping adjacent prices or reducing text.
+    """
+    def __init__(self, grid):
+        super().__init__()
+        self.setFrameShape(QFrame.Shape.NoFrame)
+        self.setWidgetResizable(True)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
+        self.setMinimumWidth(0)
+        table = QWidget()
+        grid.setContentsMargins(0, 0, 0, 0)
+        grid.setHorizontalSpacing(6)
+        grid.setVerticalSpacing(7)
+        table.setLayout(grid)
+        self.setWidget(table)
+        table.installEventFilter(self)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._fit_to_contents()
+
+    def eventFilter(self, watched, event):
+        if watched is self.widget() and event.type() in (
+                QEvent.Type.LayoutRequest, QEvent.Type.Show,
+                QEvent.Type.FontChange, QEvent.Type.StyleChange):
+            self._fit_to_contents()
+        return super().eventFilter(watched, event)
+
+    def _fit_to_contents(self):
+        if getattr(self, "_fitting", False):
+            return
+        table = self.widget()
+        if table is None:
+            return
+        self._fitting = True
+        try:
+            labels = table.findChildren(QLabel)
+            for item in labels:
+                item.ensurePolished()
+            grid = table.layout()
+            # Initial style polish can change the fonts after the first resize.
+            # Recompute the actual row geometry, not a stale pre-polish hint.
+            signature = (self.viewport().width(), tuple(
+                (item.text(), item.font().toString(), item.font().letterSpacing(),
+                 item.sizeHint().width(), item.sizeHint().height(), item.isHidden())
+                for item in labels))
+            if signature != getattr(self, "_layout_signature", None):
+                self._layout_signature = signature
+                grid.invalidate()
+            minimum = table.minimumSizeHint()
+            table.setMinimumWidth(minimum.width())
+            width = max(minimum.width(), self.viewport().width())
+            # A wide price leaves less room for the wrapped quantity headers.
+            # Their actual row height is width-dependent, unlike minimumSizeHint.
+            height = max(minimum.height(), grid.totalHeightForWidth(width))
+            grid.setGeometry(QRect(0, 0, width, height))
+            visible_bottom = max((grid.itemAt(i).widget().geometry().bottom() + 1
+                                  for i in range(grid.count())
+                                  if grid.itemAt(i).widget() is not None
+                                  and not grid.itemAt(i).widget().isHidden()), default=0)
+            height = max(height, visible_bottom + grid.contentsMargins().bottom())
+            chrome = max(0, self.height() - self.viewport().height())
+            if minimum.width() > self.viewport().width():
+                chrome = max(chrome, self.horizontalScrollBar().sizeHint().height())
+            height += chrome
+            if self.height() != height:
+                self.setFixedHeight(height)
+            grid.activate()
+        finally:
+            self._fitting = False
 
 
 class StockInsightsPanel(QFrame):
@@ -80,12 +164,16 @@ class StockInsightsPanel(QFrame):
         self.covered_sections = frozenset()
         self.setVisible(False)
 
-    def _label(self, text, *, role="", tip=""):
-        widget = QLabel(text)
-        widget.setWordWrap(True)
+    def _label(self, text, *, role="", tip="", numeric=False, wrap=True):
+        # Use the very same roles and number face as the surrounding stock rows.
+        sd = {"title": "cardTitle", "muted": "rowNote", "value": "rowValue"}.get(role, "body")
+        widget = label(sd, wrap=wrap)
+        widget.setText(text)
+        if numeric or role == "value":
+            numbers(widget)
         widget.setMinimumWidth(0)
-        widget.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
-        widget.setTextFormat(Qt.TextFormat.PlainText)
+        widget.setSizePolicy(QSizePolicy.Policy.Ignored if wrap else QSizePolicy.Policy.Minimum,
+                             QSizePolicy.Policy.Preferred)
         widget.setProperty("insightRole", role)
         if tip:
             widget.setToolTip(tip)
@@ -94,9 +182,10 @@ class StockInsightsPanel(QFrame):
     def _card(self, title):
         frame = QFrame()
         frame.setProperty("insightCard", True)
+        frame.setProperty("sd", "nowRow")
         body = QVBoxLayout(frame)
-        body.setContentsMargins(10, 10, 10, 10)
-        body.setSpacing(7)
+        body.setContentsMargins(6, 4, 6, 4)
+        body.setSpacing(6)
         body.addWidget(self._label(title, role="title"))
         self.body.addWidget(frame)
         return body
@@ -108,17 +197,20 @@ class StockInsightsPanel(QFrame):
         body.addWidget(self._label(short, role="muted", tip=detail))
 
     def _expand(self, body, title, widget):
-        button = QToolButton()
+        button = QPushButton()
+        button.setProperty("sd", "link")
+        button.setProperty("qg_literal", True)
         button.setText(title)
         button.setCheckable(True)
-        button.setArrowType(Qt.ArrowType.RightArrow)
-        button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.setIcon(chevron("right", self.dark))
+        button.setIconSize(QSize(14, 14))
         widget.hide()
         def toggle(checked):
             widget.setVisible(checked)
-            button.setArrowType(Qt.ArrowType.DownArrow if checked else Qt.ArrowType.RightArrow)
+            button.setIcon(chevron("down" if checked else "right", self.dark))
         button.toggled.connect(toggle)
-        body.addWidget(button)
+        body.addWidget(button, 0, Qt.AlignmentFlag.AlignLeft)
         body.addWidget(widget)
 
     def _provenance(self, value):
@@ -142,15 +234,9 @@ class StockInsightsPanel(QFrame):
         if self.model is None:
             return
         palette = DARK if self.dark else LIGHT
-        text, muted = palette.text, palette.muted
-        line, background = mix(palette.border, palette.bg, 0.5), palette.surface
-        self.setStyleSheet(f"""
-            QFrame#stockInsights QFrame[insightCard="true"] {{ background:{background}; border:1px solid {line}; border-radius:{RADII['sm']}px; }}
-            QFrame#stockInsights QLabel {{ color:{text}; background:transparent; border:0; }}
-            QFrame#stockInsights QLabel[insightRole="muted"] {{ color:{muted}; }}
-            QFrame#stockInsights QLabel[insightRole="title"] {{ font-weight:600; }}
-            QFrame#stockInsights QLabel[insightRole="value"] {{ font-size:16px; font-weight:600; }}
-        """)
+        # A closer, partial stylesheet previously bypassed the page's sd roles.
+        # Reuse its source of truth, including N3 sizes/weights and link controls.
+        self.setStyleSheet(sheet(palette, self.dark))
         self._valuation()
         self._flows()
         self._shorts()
@@ -281,16 +367,17 @@ class StockInsightsPanel(QFrame):
             for c, title in enumerate(headers):
                 grid.addWidget(self._label(title, role="muted"), 0, c)
                 grid.setColumnStretch(c, 1)
-            extra = QWidget()
-            more = QGridLayout(extra)
-            more.setContentsMargins(0, 0, 0, 0)
+            more = QGridLayout()
             for c in range(4):
                 more.setColumnStretch(c, 1)
             for n, row in enumerate(book["levels"], 1):
                 for c, key in enumerate(("ask_qty", "ask_price", "bid_price", "bid_qty")):
                     digits = 2 if key.endswith("price") and row[key] is not None and row[key] % 1 else 0
-                    (grid if n <= 3 else more).addWidget(self._label(_fmt(row[key], digits)), n if n <= 3 else n - 4, c)
-            body.addLayout(grid)
+                    value = self._label(_fmt(row[key], digits), role="value", numeric=True, wrap=False)
+                    value.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+                    (grid if n <= 3 else more).addWidget(value, n if n <= 3 else n - 4, c)
+            body.addWidget(_DepthViewport(grid))
+            extra = _DepthViewport(more)
             self._expand(body, self._t("호가 10단계 펼치기", "Expand10 depth levels"), extra)
             body.addWidget(self._label(self._t("가격 원 · 잔량 주", "Prices KRW · sizes shares"), role="muted"))
             body.addWidget(self._label(self._t(f"공급자 시각 {book['provider_time'] or '미제공'} · 날짜 미제공",

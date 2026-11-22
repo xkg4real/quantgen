@@ -11,15 +11,16 @@ core.education.outlook, one concept line and one limit line), with the combined 
 at its foot. 투자 용어 shows the glossary: the terms by category on the right, the chosen term on the canvas.
 
 The Signals pane embeds the same class undocked as a history explorer (the stacked layout built in __init__).
-The docked guide alone adds a separate, explicitly invented teaching diagram;
-the shared history chart, calculations and export inputs keep their original paths.
+The docked guide keeps the original case chart first and adds small explanations
+on its own lines. A separate, explicitly invented diagram is an optional
+supplement below it; history calculations and export inputs keep their paths.
 """
 from html import escape
 import math
 import re
 
 from PyQt6.QtCore import QByteArray, QPointF, QRectF, QSize, QTimer, Qt, pyqtSignal
-from PyQt6.QtGui import QPainter, QColor, QPen, QFont
+from PyQt6.QtGui import QPainter, QColor, QPen, QFont, QFontMetricsF
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (QWidget,QVBoxLayout,QHBoxLayout,QGridLayout,QBoxLayout,QComboBox,QPushButton,QSlider,
                             QFileDialog,QSizePolicy,QLayout,QFrame)
@@ -107,6 +108,10 @@ class TechnicalChart(QSvgWidget):
         # (core.market.detail_svg: candles, bands, sub-panels, the reading date on the time axis) in a window of
         # WINDOW bars that follows the reading date; reference closes keep the catalogue's line chart.
         self.candles=False;self.view_end=None;self.layout_info=None;self.crop=0
+        # Only the dedicated education page enables these painted labels.
+        # The reusable Signals/history explorer keeps its original presentation.
+        self.annotations_enabled=False;self.annotation_focus=None
+        self.annotations=();self.annotation_boxes=()
         self.setMouseTracking(True)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setMinimumWidth(350)
@@ -237,7 +242,8 @@ class TechnicalChart(QSvgWidget):
         from core.theme import LIGHT
         colors=getattr(self.window(),'colors',LIGHT)
         if self.layout_info is not None:
-            painter=QPainter(self);self._paint_candles(painter,colors);painter.end()
+            painter=QPainter(self);self._paint_candles(painter,colors)
+            self._paint_annotations(painter,colors);painter.end()
             return
         _left,_right,x_of=self._bounds()
         x=x_of(self.cursor)
@@ -256,7 +262,69 @@ class TechnicalChart(QSvgWidget):
                 painter.setPen(QPen(QColor(colors.text),1.3));painter.setBrush(QColor(colors.surface))
                 painter.drawEllipse(QPointF(cx,y),8,8)
                 painter.drawText(QRectF(cx-8,y-8,16,16),Qt.AlignmentFlag.AlignCenter,number)
+        self._paint_annotations(painter,colors)
         painter.end()
+
+    def _paint_annotations(self,painter,colors):
+        """Restrained stock-chart typography, connected to this case's exact points.
+
+        Labels are painted, not child widgets: pointer/keyboard handling and the
+        chart's original SVG, dates, cursor and report inputs remain unchanged.
+        """
+        self.annotations=();self.annotation_boxes=()
+        if not self.annotations_enabled:return
+        from .guide_case_annotations import case_annotations
+        from .font_policy import number_font
+        from .typography import scaled_font,is_dark
+        font=number_font(scaled_font(self.font(),12,400))
+        metrics=QFontMetricsF(font);line_height=metrics.lineSpacing()
+        proposed=case_annotations(self.series,self.keys,self.cursor,self.ctx.language,
+                   width=self.width(),legend_top=self.legend_top(),layout=self.layout_info,
+                   crop=self.crop,focus=self.annotation_focus,dark=is_dark(colors))
+        painter.save();painter.setRenderHint(QPainter.RenderHint.Antialiasing,True)
+        painter.setFont(font)
+        drawn=[];boxes=[]
+        for panel in dict.fromkeys(item.panel for item in proposed):
+            group=[item for item in proposed if item.panel==panel]
+            left,top,right,bottom=panel
+            left=max(3.,left+4);right=min(self.width()-3.,right-4)
+            top=max(3.,top+3);bottom=min(self.height()-3.,bottom-3)
+            available=right-left
+            if available<70 or bottom-top<line_height*2+8:continue
+            columns=min(len(group),max(1,int(available//210)))
+            box_height=line_height*2+8;gap=6.
+            rows=max(1,int((bottom-top+gap)//(box_height+gap)))
+            group=group[:columns*rows]
+            cell=(available-gap*(columns-1))/columns
+            box_width=min(230.,cell)
+            for i,item in enumerate(group):
+                bx=left+(i%columns)*(cell+gap)
+                by=top+(i//columns)*(box_height+gap)
+                box=QRectF(bx,by,box_width,box_height)
+                tone=QColor(item.color or colors.text)
+                if item.x is not None and item.y is not None:
+                    # A plain leader and a small point use the line's own colour.
+                    painter.setPen(QPen(tone,0.8))
+                    edge=QPointF(min(max(item.x,box.left()+3),box.right()-3),
+                                min(max(item.y,box.top()+3),box.bottom()-3))
+                    painter.drawLine(edge,QPointF(item.x,item.y))
+                    painter.setBrush(QColor(colors.surface))
+                    painter.drawEllipse(QPointF(item.x,item.y),2.,2.)
+                fill=QColor(colors.surface);fill.setAlpha(240)
+                painter.setBrush(fill);painter.setPen(QPen(QColor(colors.border),0.6))
+                painter.drawRoundedRect(box,3,3)
+                for row,text in enumerate(item.text[:2]):
+                    painter.setPen(QColor(colors.text if row==0 else colors.muted))
+                    fitted=metrics.elidedText(str(text),Qt.TextElideMode.ElideRight,box.width()-12)
+                    painter.drawText(QRectF(box.left()+6,box.top()+4+row*line_height,
+                                           box.width()-12,line_height),
+                                     int(Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter),fitted)
+                drawn.append(item);boxes.append(box)
+        self.annotations=tuple(drawn);self.annotation_boxes=tuple(boxes)
+        painter.restore()
+        full=cursor_text(self.series,self.keys,self.cursor,self.ctx)
+        if drawn:full+='\n'+'\n'.join(' · '.join(item.text) for item in drawn)
+        self.setAccessibleDescription(full);self.setToolTip(full)
 
     def keyPressEvent(self,event):
         if self.series and event.key() in (Qt.Key.Key_Left,Qt.Key.Key_Right,Qt.Key.Key_Home,Qt.Key.Key_End):
@@ -555,22 +623,11 @@ class IndicatorGuide(QWidget):
         canvas.addWidget(figures)
         card=Card(margins=(16,12,16,8),spacing=8)
         self.chart_card=card
-        from .guide_lessons import GuideLesson
-        self.lesson=GuideLesson(card)
-        self.lesson.choose_requested.connect(self.choose)
-        card.body.addWidget(self.lesson)
-        # The primary diagram is the lesson. Keep the original case/date/chart
-        # intact in an explicitly opened secondary view, never a second default plot.
-        self.context_toggle=QPushButton();self.context_toggle.setCheckable(True)
-        self.context_toggle.setProperty('kit','ghost')
-        self.context_toggle.toggled.connect(self._toggle_context_chart)
-        card.body.addWidget(self.context_toggle,0,Qt.AlignmentFlag.AlignLeft)
+        # The owner's case chart remains the first, always-visible figure.
+        # Keep its name/date/price controls in their original canvas positions.
         self.context_host=QWidget();self.context_host.setProperty('guide','box')
-        context=QVBoxLayout(self.context_host);context.setContentsMargins(0,8,0,0);context.setSpacing(10)
-        for original in (head,figures):
-            canvas.removeWidget(original);context.addWidget(original)
+        context=QVBoxLayout(self.context_host);context.setContentsMargins(0,0,0,0);context.setSpacing(10)
         card.body.addWidget(self.context_host)
-        self.context_host.hide()
         legend=QWidget();legend.setProperty('guide','box');legend_row=QHBoxLayout(legend)
         legend_row.setContentsMargins(0,0,0,0);legend_row.setSpacing(10)
         self.chip_host.setParent(None);self.chip_host.setProperty('guide','box');self.chip_row.setSpacing(12)
@@ -580,7 +637,7 @@ class IndicatorGuide(QWidget):
         context.addWidget(legend)
         for widget in (self.chart,self.readout,self.slider,self.ohlcv_notice,self.line_styles,self.why,self.source):
             self.chart_area.layout().removeWidget(widget)
-        self.chart.legend=False;self.chart.candles=True
+        self.chart.legend=False;self.chart.candles=True;self.chart.annotations_enabled=True
         context.addWidget(self.chart)
         scrub=QWidget();scrub.setProperty('guide','box');scrub_row=QHBoxLayout(scrub);scrub_row.setContentsMargins(0,0,0,0);scrub_row.setSpacing(10)
         scrub_row.addWidget(self.slider,1)
@@ -612,6 +669,20 @@ class IndicatorGuide(QWidget):
             _style(widget,role=None,guide='fine')
             notes_column.addWidget(widget)
         context.addWidget(notes)
+        # Invented drawings are a clearly separate, optional supplement AFTER
+        # the original chart and its provenance, never its replacement.
+        supplement=Card(margins=(16,8,16,8),spacing=8)
+        self.lesson_card=supplement
+        self.lesson_toggle=QPushButton();self.lesson_toggle.setCheckable(True)
+        self.lesson_toggle.setProperty('kit','ghost')
+        self.lesson_toggle.toggled.connect(self._toggle_lesson)
+        supplement.body.addWidget(self.lesson_toggle,0,Qt.AlignmentFlag.AlignLeft)
+        from .guide_lessons import GuideLesson
+        self.lesson=GuideLesson(supplement)
+        self.lesson.choose_requested.connect(self.choose)
+        supplement.body.addWidget(self.lesson)
+        self.lesson.hide()
+        canvas.addWidget(supplement)
         canvas.addStretch(1)
         self.study.setParent(self);self.study.hide()
         # Right column: 지표 (the studies by category) | 해석 (a card per selected study); the combined reading and the
@@ -792,11 +863,12 @@ class IndicatorGuide(QWidget):
         if self.educational_lessons and self.lesson is not None:
             lesson_key=self.focus if self.focus in self.keys else next(iter(self.keys),None)
             self.lesson.set_lesson(lesson_key,ctx.language,is_dark(colors))
-            opened=self.context_toggle.isChecked()
-            self.context_toggle.setText(('사례 차트 접기' if opened else '사례 차트 보기') if ko else
-                                        ('Hide context chart' if opened else 'Show context chart'))
-            self.context_toggle.setAccessibleDescription('원래 사례의 날짜·출처·차트. 보고서는 이 사례 기준이에요.' if ko else
-                                                        'The original case dates, source and chart. Reports use this case.')
+            self.chart.annotation_focus=lesson_key
+            opened=self.lesson_toggle.isChecked()
+            self.lesson_toggle.setText(('보조 학습 그림 접기' if opened else '보조 학습 그림 보기') if ko else
+                                       ('Hide supplementary diagram' if opened else 'Show supplementary diagram'))
+            self.lesson_toggle.setAccessibleDescription('사례 아래에 따로 보는 가상 학습 그림이에요. 위 사례 차트와 보고서 값은 바뀌지 않아요.' if ko else
+                                                       'An invented supplement below the case. The original case chart and report values stay unchanged.')
         self.case_title.setText(self._case_line())
         self.case_box.setVisible(self.external is None)
         count=len(self.keys)
@@ -890,8 +962,8 @@ class IndicatorGuide(QWidget):
             if host.styleSheet()!=sheet:host.setStyleSheet(sheet)
         self._focus_order()
 
-    def _toggle_context_chart(self,opened):
-        self.context_host.setVisible(bool(opened))
+    def _toggle_lesson(self,opened):
+        self.lesson.setVisible(bool(opened))
         self._docked_render()
 
     def _focus_order(self):
@@ -899,8 +971,6 @@ class IndicatorGuide(QWidget):
         missed, then the right column (its switch, the choices, the cards) and the glossary list."""
         ws=self.workspace
         chain=[*ws.switch.buttons,self.clear,self.export]
-        if self.educational_lessons and self.lesson is not None:
-            chain+=self.lesson.focus_widgets()+[self.context_toggle]
         chain+=[self.case]
         for key in self.keys:
             chip=self.chips.get(key)
@@ -908,6 +978,9 @@ class IndicatorGuide(QWidget):
         chain+=[self.chart,self.slider]
         chain+=[self.event_layout.itemAt(i).widget() for i in range(self.event_layout.count())
                 if isinstance(self.event_layout.itemAt(i).widget(),QPushButton)]
+        if self.educational_lessons and self.lesson is not None:
+            chain+=[self.lesson_toggle]
+            if self.lesson_toggle.isChecked():chain+=self.lesson.focus_widgets()
         chain+=list(self.reading_side.segment.buttons)
         for category in CATEGORIES:
             group=self.groups[category]

@@ -377,12 +377,13 @@ class GuideLesson(QWidget):
         self.setSizePolicy(QSizePolicy.Policy.Ignored,QSizePolicy.Policy.Preferred)
         box=QVBoxLayout(self);box.setContentsMargins(0,0,0,16);box.setSpacing(10)
         box.setAlignment(Qt.AlignmentFlag.AlignTop)
-        self.title=QLabel();self.title.setWordWrap(True);box.addWidget(self.title)
-        self.badge=QLabel();self.badge.setWordWrap(True);box.addWidget(self.badge)
+        from .stock_detail_style import label
+        self.title=label('cardTitle',wrap=True);box.addWidget(self.title)
+        self.badge=label('rowNote',wrap=True);box.addWidget(self.badge)
         self.starter=QWidget();starter=QHBoxLayout(self.starter);starter.setContentsMargins(0,0,0,0)
         self.start_buttons=[]
         for key in ('sma','ema','rsi'):
-            button=QPushButton();button.setProperty('kit','chip')
+            button=QPushButton();button.setProperty('sd','period')
             button.clicked.connect(lambda checked=False,k=key:self.choose_requested.emit(k))
             starter.addWidget(button);self.start_buttons.append((key,button))
         box.addWidget(self.starter)
@@ -396,10 +397,10 @@ class GuideLesson(QWidget):
         self.figure.setMinimumWidth(320)
         self.figure.setSizePolicy(QSizePolicy.Policy.Ignored,QSizePolicy.Policy.Fixed)
         self.figure.step_requested.connect(self.move_step);box.addWidget(self.figure)
-        self.legend=QLabel();self.legend.setWordWrap(True);self.legend.setTextFormat(Qt.TextFormat.RichText);box.addWidget(self.legend)
-        self.caption=QLabel();self.caption.setWordWrap(True);self.caption.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse);box.addWidget(self.caption)
-        self.limit=QLabel();self.limit.setWordWrap(True);box.addWidget(self.limit)
-        self.context_label=QLabel();self.context_label.setWordWrap(True);box.addWidget(self.context_label)
+        self.legend=label('body',wrap=True);self.legend.setTextFormat(Qt.TextFormat.RichText);box.addWidget(self.legend)
+        self.caption=label('body',wrap=True,selectable=True);box.addWidget(self.caption)
+        self.limit=label('rowNote',wrap=True);box.addWidget(self.limit)
+        self.context_label=label('rowNote',wrap=True);box.addWidget(self.context_label)
 
     def focus_widgets(self):
         return self.buttons+[self.figure] if self.key else [button for _,button in self.start_buttons]
@@ -407,6 +408,8 @@ class GuideLesson(QWidget):
     def set_lesson(self,key,language,dark):
         if key!=self.key:self.step=0
         self.key=key if key in LESSONS else None;self.language=language;self.dark=bool(dark)
+        from .stock_detail_style import sheet
+        self.setStyleSheet(sheet(DARK if self.dark else LIGHT,self.dark))
         accent=(DARK if self.dark else LIGHT).accent
         self.figure.setStyleSheet('QSvgWidget { border: 2px solid transparent; border-radius: 10px; } '
                                  'QSvgWidget:focus { border-color: '+accent+'; }')
@@ -426,14 +429,13 @@ class GuideLesson(QWidget):
         ko=self.language=='ko';key=self.key
         self.title.setText(('선 위에서 배우기 · '+study(key).name(self.language) if key else '선 위에서 배우기') if ko else
                            ('Learn on the lines · '+study(key).name(self.language) if key else 'Learn on the lines'))
-        self.title.setStyleSheet('font-size: 17px; font-weight: 500;')
         self.badge.setText(('가상 5분봉 학습 그림 · 세션별 초기화' if key=='vwap' else '가상 일봉 학습 그림 · 1칸 = 1거래일') if ko else
                            ('Invented 5-minute lesson · resets each session' if key=='vwap' else 'Invented daily-bar lesson · one bar = one trading day'))
         for candidate,button in self.start_buttons:button.setText(('시작: ' if ko else 'Start: ')+study(candidate).label(self.language))
         self.starter.setVisible(not key)
         for widget in (self.step_host,self.figure,self.legend,self.caption,self.limit):widget.setVisible(bool(key))
-        self.context_label.setText(('사례 차트 보기에서 원래 날짜·출처를 확인할 수 있어요. 보고서는 그 사례를 기준으로 하며, 가상 학습 값은 섞이지 않아요.' if ko else
-                                    'Show the context chart to inspect its original dates and source. Reports use that context; invented lesson values stay separate.'))
+        self.context_label.setText(('위 사례 차트에서 원래 날짜·출처를 확인하세요. 이 보조 그림은 가상 예시이며, 사례·보고서 값은 바뀌지 않아요.' if ko else
+                                    'The original dates and source are on the case chart above. This supplementary diagram is invented; case and report values stay unchanged.'))
         if not key:
             self.badge.setText('오른쪽 지표를 고르거나 아래에서 시작해 보세요.' if ko else 'Choose an indicator on the right, or start below.')
             self.geometry_info=None;return

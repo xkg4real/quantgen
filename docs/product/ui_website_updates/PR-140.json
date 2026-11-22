@@ -97,5 +97,53 @@
     "tests/guide_lessons_acceptance.py",
     "tests/stock_insights_glue_acceptance.py",
     "docs/compliance/source-review.json"
+  ],
+  "revisions": [
+    {
+      "date": "2026-11-22",
+      "execution_id": "47c97545-1d6c-4871-8a44-fbaca1eb2f82",
+      "supersedes_presentation": "Original case chart now stays first and visible; invented lesson is optional below.",
+      "changes_ko": [
+        "기존 사례 차트를 첫 화면에 유지하고 그 사례의 선·값 좌표에 짧은 안내를 표시합니다.",
+        "모든 신규 안내·수급·공매도·호가 카드의 글꼴·역할·버튼을 기존 시장 종목 상세 스타일로 통일합니다."
+      ],
+      "source_freeze": "60246ef70896fee07a81f380d8d0335d5c15daaf4c6f51fbea572d71335cef82",
+      "local_validation": {
+        "unique_tests": 45,
+        "passed": 45,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "scope": "Fixed synthetic/native Qt components; not full app or Windows",
+        "report": "FINAL_AUTHORITATIVE45_RUNTIME_6a10bc2d61e7.json",
+        "prior_failures_preserved": true
+      },
+      "full_runtime_ci": "PENDING",
+      "owner_windows": "NOT_PERFORMED",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false,
+      "previous_source_freeze": "e2f325b874daafa4cbed34eb9f71356ed37d1c3a0e9e7dab1f02a9eb480778cd",
+      "source_review": "20 documents / 869 source inputs consistent; publication BLOCKED65",
+      "stock_host_visual": "Authoritative sdSide/sdPage host: KO/light normal, EN/dark normal and wide prices; collapsed3/expanded10 all cell bounds fit. Original standalone contrast/cropping findings preserved.",
+      "previous_local_validation": {
+        "unique_tests": 45,
+        "passed": 45,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "scope": "Fixed synthetic/native Qt components; not full app or Windows",
+        "report_sha256": "66fb537b4728850a2445012dd23cc1213797ce1982794350f3a4f67f542578ac",
+        "prior_failure_preserved": true
+      },
+      "host_probes": {
+        "cases": 3,
+        "states_per_case": 2,
+        "violations": 0,
+        "stock_captures": 6,
+        "guide_captures": 17,
+        "not_added_to_test_count": true
+      }
+    }
   ]
 }

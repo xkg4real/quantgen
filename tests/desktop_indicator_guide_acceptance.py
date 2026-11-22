@@ -95,11 +95,9 @@ class NativeIndicatorGuideTests(unittest.TestCase):
     def test_vector_chart_background_keyboard_and_selection_survive_theme_resize(self):
         w=self.window;w.nav['guide'].click();guide=w.indicator_guide
         for key in ('sma','ema','rsi','macd','bb'):guide.choose(key)
-        self.assertFalse(guide.context_toggle.isChecked())
-        guide.context_toggle.click()
         for _ in range(4):self.app.processEvents()
-        self.assertTrue(guide.context_toggle.isChecked())
         self.assertTrue(guide.context_host.isVisible())
+        self.assertTrue(guide.chart.isVisible())
         for theme in (0,1):
             w.change_theme(theme)
             for width in (1000,1360,2400):
@@ -168,11 +166,8 @@ class NativeIndicatorGuideTests(unittest.TestCase):
         from core.education.study_guide import short_guide
         w=self.window;w.resize(1440,900);w.navigate('guide');guide=w.indicator_guide;ws=w.guide_workspace
         for _ in range(4):self.app.processEvents()
-        self.assertFalse(guide.context_toggle.isChecked())
-        guide.context_toggle.click()
-        for _ in range(4):self.app.processEvents()
-        self.assertTrue(guide.context_toggle.isChecked())
         self.assertTrue(guide.context_host.isVisible())
+        self.assertTrue(guide.chart.isVisible())
         self.assertEqual([b.text() for b in ws.switch.buttons],['기술지표 27','투자 용어'])
         self.assertIn('투자 권유 아님',guide.badge.text())
         self.assertFalse(guide.reading_empty.isHidden())   # 해석 says what to do before a choice
