@@ -144,6 +144,58 @@
         "guide_captures": 17,
         "not_added_to_test_count": true
       }
+    },
+    {
+      "date": "2026-11-22",
+      "execution_id": "6e1ca7eb-74bb-41c3-b056-313bbe8b141c",
+      "supersedes_presentation": "Original case first; compact bottom-right actual-stroke samples replace large chart callouts; existing market stock-detail typography remains authoritative.",
+      "source_parent": "fed639d27268defe13969d9718757718bd876df4",
+      "source_freeze": "fc4075e5a342a27ea0da582ce4a43d270bed21a3ba85cfb2079d537fedc1bad4",
+      "changes_ko": [
+        "숨김 구성요소는 부모에 추가한 뒤 표시하도록 수정했습니다.",
+        "기존 사례 차트를 먼저 보여주며 우측 하단에 실제 선·점·막대 견본과 짧은 이름만 표시합니다.",
+        "PER/PBR 교육용 예시 구간·현재 위치를 표시하고 낮은 배수만으로 우량·매수 판단을 하지 않는 한계를 함께 둡니다.",
+        "파란 매도·빨간 매수 수량 막대와 가운데 가격을 표시합니다. 기본3/확장10단계씩, 전체20수량 공통 척도를 유지합니다.",
+        "긴 가격·수량은 동일한 글꼴과 전체 문자열을 보존하며 필요한 경우 가로로 이동해 볼 수 있습니다."
+      ],
+      "local_validation": {
+        "unique_tests": 53,
+        "passed": 53,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "scope": "Fixed synthetic/native Qt components only; not full app or owner Windows",
+        "report": "FOLLOWUP53_AFTER_R2_RUNTIME_402bb81551b1.json",
+        "report_sha256": "6e2ab1a5b306395cdd54a67e4c620787ffa451820134ee484263c20e914d40e3",
+        "execution_receipt_sha256": "3d374442624d0a8deda6ee47673e897b64c7533b0e2d896c43fe617eb0b1a6a1",
+        "source_inputs_unchanged": 871,
+        "unintended_component_show_events": 0,
+        "prior_failures_preserved": true
+      },
+      "host_probes": {
+        "cases": 3,
+        "states_per_case": 2,
+        "violations": 0,
+        "visible_rows_collapsed": 6,
+        "visible_rows_expanded": 20,
+        "stock_captures": 12,
+        "guide_captures": 17,
+        "not_added_to_test_count": true
+      },
+      "previous_full_runtime": {
+        "head": "fed639d27268defe13969d9718757718bd876df4",
+        "run_id": 44982209688,
+        "status": "FAILURE",
+        "windows": "Three environments failed old normal330 no-horizontal-scroll check; original logs preserved",
+        "linux": "Focused45 passed; later full job cancelled"
+      },
+      "source_review": "20 documents / 871 source inputs consistent; publication BLOCKED65; policy bodies/rights/approvals unchanged",
+      "full_runtime_ci": "PENDING_NEW_HEAD",
+      "owner_windows": "NOT_PERFORMED",
+      "OS_F1": "PyQt6-to-PySide6 Qt binding migration still requires OS go; OS-F2 storage code already main",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false
     }
   ]
 }

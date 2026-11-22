@@ -11,8 +11,8 @@ core.education.outlook, one concept line and one limit line), with the combined 
 at its foot. 투자 용어 shows the glossary: the terms by category on the right, the chosen term on the canvas.
 
 The Signals pane embeds the same class undocked as a history explorer (the stacked layout built in __init__).
-The docked guide keeps the original case chart first and adds small explanations
-on its own lines. A separate, explicitly invented diagram is an optional
+The docked guide keeps the original case chart first with compact visual line
+samples at the plot's bottom right. A separate invented diagram is an optional
 supplement below it; history calculations and export inputs keep their paths.
 """
 from html import escape
@@ -108,10 +108,11 @@ class TechnicalChart(QSvgWidget):
         # (core.market.detail_svg: candles, bands, sub-panels, the reading date on the time axis) in a window of
         # WINDOW bars that follows the reading date; reference closes keep the catalogue's line chart.
         self.candles=False;self.view_end=None;self.layout_info=None;self.crop=0
-        # Only the dedicated education page enables these painted labels.
+        # Only the dedicated education page enables the visual sample legend.
         # The reusable Signals/history explorer keeps its original presentation.
         self.annotations_enabled=False;self.annotation_focus=None
         self.annotations=();self.annotation_boxes=()
+        self.legend_samples=();self.legend_boxes=();self.legend_rect=QRectF()
         self.setMouseTracking(True)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setMinimumWidth(350)
@@ -265,66 +266,115 @@ class TechnicalChart(QSvgWidget):
         self._paint_annotations(painter,colors)
         painter.end()
 
-    def _paint_annotations(self,painter,colors):
-        """Restrained stock-chart typography, connected to this case's exact points.
+    def _legend_panel(self,key):
+        """The existing renderer's plot rectangle, without recalculating studies."""
+        left,right,_x=self._bounds()
+        layout=self.layout_info
+        if layout is not None:
+            if not key or study(key).overlay:
+                return (layout.plot_left,layout.price[0]-self.crop,
+                        layout.plot_right,layout.price[1]-self.crop)
+            from core.market.detail_svg import PANEL_HEAD
+            panel=next((p for p in layout.panels if p[0]==key),None)
+            if panel is None:return None
+            return (layout.plot_left,panel[1]+PANEL_HEAD-self.crop,
+                    layout.plot_right,panel[2]-4-self.crop)
+        top=self.legend_top()
+        if not key or study(key).panel=='price':
+            return (left,top+22,right,top+257)
+        lower=[k for k in self.keys if study(k).panel!='price'
+               and not missing_reason(self.series,k,self.ctx.language)]
+        if key not in lower:return None
+        panel_top=top+285+lower.index(key)*135+22
+        return (left,panel_top,right,panel_top+92)
 
-        Labels are painted, not child widgets: pointer/keyboard handling and the
-        chart's original SVG, dates, cursor and report inputs remain unchanged.
-        """
+    def _paint_annotations(self,painter,colors):
+        """Small actual line samples at the plot's bottom right, with no callouts."""
+        self.legend_samples=();self.legend_boxes=();self.legend_rect=QRectF()
         self.annotations=();self.annotation_boxes=()
         if not self.annotations_enabled:return
-        from .guide_case_annotations import case_annotations
+        from .guide_case_annotations import line_legend,legend_layout
         from .font_policy import number_font
         from .typography import scaled_font,is_dark
+        candle=self.layout_info is not None
+        unavailable=tuple(self.layout_info.unavailable) if candle else ()
+        samples=line_legend(self.series,self.keys,self.ctx.language,
+                   focus=self.annotation_focus,dark=is_dark(colors),
+                   renderer='candles' if candle else 'reference',
+                   unavailable=unavailable,price_color=colors.text)
+        if not samples:return
+        panel=self._legend_panel(samples[0].key)
+        if panel is None:return
         font=number_font(scaled_font(self.font(),12,400))
-        metrics=QFontMetricsF(font);line_height=metrics.lineSpacing()
-        proposed=case_annotations(self.series,self.keys,self.cursor,self.ctx.language,
-                   width=self.width(),legend_top=self.legend_top(),layout=self.layout_info,
-                   crop=self.crop,focus=self.annotation_focus,dark=is_dark(colors))
+        metrics=QFontMetricsF(font)
+        box,rows=legend_layout(samples,panel,metrics.horizontalAdvance,
+                               row_height=max(18.,metrics.lineSpacing()+2))
+        if box is None:return
         painter.save();painter.setRenderHint(QPainter.RenderHint.Antialiasing,True)
         painter.setFont(font)
-        drawn=[];boxes=[]
-        for panel in dict.fromkeys(item.panel for item in proposed):
-            group=[item for item in proposed if item.panel==panel]
-            left,top,right,bottom=panel
-            left=max(3.,left+4);right=min(self.width()-3.,right-4)
-            top=max(3.,top+3);bottom=min(self.height()-3.,bottom-3)
-            available=right-left
-            if available<70 or bottom-top<line_height*2+8:continue
-            columns=min(len(group),max(1,int(available//210)))
-            box_height=line_height*2+8;gap=6.
-            rows=max(1,int((bottom-top+gap)//(box_height+gap)))
-            group=group[:columns*rows]
-            cell=(available-gap*(columns-1))/columns
-            box_width=min(230.,cell)
-            for i,item in enumerate(group):
-                bx=left+(i%columns)*(cell+gap)
-                by=top+(i//columns)*(box_height+gap)
-                box=QRectF(bx,by,box_width,box_height)
-                tone=QColor(item.color or colors.text)
-                if item.x is not None and item.y is not None:
-                    # A plain leader and a small point use the line's own colour.
-                    painter.setPen(QPen(tone,0.8))
-                    edge=QPointF(min(max(item.x,box.left()+3),box.right()-3),
-                                min(max(item.y,box.top()+3),box.bottom()-3))
-                    painter.drawLine(edge,QPointF(item.x,item.y))
-                    painter.setBrush(QColor(colors.surface))
-                    painter.drawEllipse(QPointF(item.x,item.y),2.,2.)
-                fill=QColor(colors.surface);fill.setAlpha(240)
-                painter.setBrush(fill);painter.setPen(QPen(QColor(colors.border),0.6))
-                painter.drawRoundedRect(box,3,3)
-                for row,text in enumerate(item.text[:2]):
-                    painter.setPen(QColor(colors.text if row==0 else colors.muted))
-                    fitted=metrics.elidedText(str(text),Qt.TextElideMode.ElideRight,box.width()-12)
-                    painter.drawText(QRectF(box.left()+6,box.top()+4+row*line_height,
-                                           box.width()-12,line_height),
-                                     int(Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter),fitted)
-                drawn.append(item);boxes.append(box)
-        self.annotations=tuple(drawn);self.annotation_boxes=tuple(boxes)
+        fill=QColor(colors.surface);fill.setAlpha(238)
+        painter.setPen(Qt.PenStyle.NoPen);painter.setBrush(fill)
+        painter.drawRoundedRect(QRectF(*box),3,3)
+        boxes=[]
+        for sample,stroke,text in rows:
+            swatch=QRectF(*stroke);label_box=QRectF(*text)
+            x,y,w=swatch.left(),swatch.center().y(),swatch.width()
+            color=QColor(sample.color);color.setAlphaF(sample.opacity)
+            pen=QPen(color,1.6);pen.setCapStyle(Qt.PenCapStyle.FlatCap)
+            if sample.dash:pen.setDashPattern([v/1.6 for v in sample.dash])
+            painter.setPen(pen);painter.setBrush(Qt.BrushStyle.NoBrush)
+            if sample.style=='dots':
+                painter.setPen(Qt.PenStyle.NoPen);painter.setBrush(color)
+                for xx in (x+4,x+w/2,x+w-4):
+                    painter.drawEllipse(QPointF(xx,y),1.6,1.6)
+            elif sample.style=='bars':
+                if sample.secondary_color:
+                    painter.setPen(Qt.PenStyle.NoPen)
+                    painter.setBrush(color)
+                    painter.drawRect(QRectF(x+4,y-7,5,7))
+                    down=QColor(sample.secondary_color);down.setAlphaF(sample.opacity)
+                    painter.setBrush(down)
+                    painter.drawRect(QRectF(x+13,y,5,6))
+                    painter.setBrush(color)
+                    painter.drawRect(QRectF(x+22,y-5,4,5))
+                else:
+                    painter.setPen(QPen(color,2.,Qt.PenStyle.SolidLine,
+                                        Qt.PenCapStyle.FlatCap))
+                    for xx,dy in ((x+5,-6),(x+14,5),(x+23,-9)):
+                        painter.drawLine(QPointF(xx,y),QPointF(xx,y+dy))
+            elif sample.style=='band':
+                painter.setPen(Qt.PenStyle.NoPen);painter.setBrush(color)
+                painter.drawRect(QRectF(x+1,y-4,w-2,8))
+                if sample.secondary_color:
+                    second=QColor(sample.secondary_color);second.setAlphaF(sample.opacity)
+                    painter.setBrush(second)
+                    painter.drawRect(QRectF(x+w/2,y-4,w/2-1,8))
+                if not sample.secondary_color:
+                    # BB has same-coloured upper/lower boundaries. Cloud fill
+                    # is a region sample; its separately listed spans have
+                    # different colours, so it must not invent common edges.
+                    painter.setPen(QPen(QColor(sample.color),1.2))
+                    painter.drawLine(QPointF(x+1,y-4),QPointF(x+w-1,y-4))
+                    painter.drawLine(QPointF(x+1,y+4),QPointF(x+w-1,y+4))
+            elif sample.style=='candles':
+                painter.setPen(QPen(color,1.))
+                painter.drawLine(QPointF(x+7,y-7),QPointF(x+7,y+7))
+                painter.setBrush(color);painter.drawRect(QRectF(x+4,y-4,6,7))
+                down=QColor(sample.secondary_color)
+                painter.setPen(QPen(down,1.));painter.setBrush(down)
+                painter.drawLine(QPointF(x+21,y-6),QPointF(x+21,y+8))
+                painter.drawRect(QRectF(x+18,y-2,6,7))
+            else:
+                painter.drawLine(QPointF(x+1,y),QPointF(x+w-1,y))
+            painter.setPen(QColor(colors.text))
+            fitted=metrics.elidedText(sample.label,Qt.TextElideMode.ElideRight,label_box.width())
+            painter.drawText(label_box,int(Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter),fitted)
+            boxes.append(swatch.united(label_box))
         painter.restore()
-        full=cursor_text(self.series,self.keys,self.cursor,self.ctx)
-        if drawn:full+='\n'+'\n'.join(' · '.join(item.text) for item in drawn)
-        self.setAccessibleDescription(full);self.setToolTip(full)
+        self.legend_samples=tuple(sample for sample,_stroke,_text in rows)
+        self.legend_boxes=tuple(boxes);self.legend_rect=QRectF(*box)
+        # Compatibility for callers that only inspect the painted overlay list.
+        self.annotations=self.legend_samples;self.annotation_boxes=self.legend_boxes
 
     def keyPressEvent(self,event):
         if self.series and event.key() in (Qt.Key.Key_Left,Qt.Key.Key_Right,Qt.Key.Key_Home,Qt.Key.Key_End):
@@ -514,7 +564,7 @@ class IndicatorGuide(QWidget):
         inner.addLayout(selected)
         self.chip_host=QWidget();self.chip_row=CategoryFlow(self.chip_host)
         inner.addWidget(self.chip_host);self.chips={}
-        self.case=QComboBox()
+        self.case=QComboBox(box)
         self.case.setObjectName('sdInterval');self.case.setMaximumWidth(420)
         for key in ('auto','2020','2022','2019'):self.case.addItem(key,key)
         self.case.currentIndexChanged.connect(self.render)

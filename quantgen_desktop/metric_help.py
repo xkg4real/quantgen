@@ -17,6 +17,73 @@ class MetricHelp:
     hover: str
 
 
+@dataclass(frozen=True)
+class ValuationReference:
+    """Educational display bands, never a company-quality or trading score."""
+    labels: tuple[str, str, str]
+    position: float | None
+    band_index: int | None
+    reading: str
+    hover: str
+
+
+def valuation_reference(metric_id, value, language='ko') -> ValuationReference:
+    """Place an already supplied multiple on explicitly illustrative bands.
+
+    No peer benchmark, expected return or accounting input is inferred. The
+    pointer clips at the display's right edge; the caller retains the raw value.
+    """
+    metric = str(metric_id).lower()
+    if metric not in ('per', 'pbr'):
+        raise KeyError(metric_id)
+    ko = language == 'ko'
+    numeric = isinstance(value, (int, float)) and not isinstance(value, bool)
+    try:
+        shown = float(value) if numeric else math.nan
+    except (OverflowError, TypeError, ValueError):
+        shown = math.nan
+    valid = math.isfinite(shown) and shown > 0
+    if metric == 'per':
+        low, high, cap = 10., 20., 40.
+        labels = ('10 미만', '10–20', '20 초과') if ko else ('<10', '10–20', '>20')
+        readings = (('이익 대비 가격이 낮은 쪽', '이익의 10–20배 구간', '성장 기대·이익 변동 확인') if ko else
+                    ('Lower price per earnings', '10–20 times earnings', 'Check growth and earnings swings'))
+        detail = ('PER 10 미만·10–20·20 초과는 이해를 돕는 참고 구간의 예시이며 업종 평균이나 적정가 기준이 아니에요. '
+                  '낮은 PER는 저평가일 수도 있지만 이익 감소 예상이나 일시적인 고점 이익 때문일 수도 있어요. '
+                  '0 이하·적자·특수한 회계 기준에서는 통상적인 PER 비교를 보류해요.' if ko else
+                  'PER bands below 10, 10–20 and above 20 are illustrative references, not sector averages or fair-value targets. '
+                  'A low PER may reflect undervaluation, expected earnings decline or temporarily high earnings. '
+                  'Usual PER comparisons do not apply to nonpositive multiples, losses or incompatible accounting bases.')
+    else:
+        low, high, cap = 1., 3., 6.
+        labels = ('1 미만', '1–3', '3 초과') if ko else ('<1', '1–3', '>3')
+        readings = (('장부자본보다 낮은 가격', '장부자본의 1–3배', '높은 자본수익성인지 확인') if ko else
+                    ('Price below book equity', '1–3 times book equity', 'Check whether returns justify it'))
+        detail = ('PBR 1배는 가격과 주당 장부자본이 같은 지점이에요. 1 미만·1–3·3 초과는 교육용 참고 구간이지 '
+                  '업종별 우량 기준이 아니에요. 1배 미만도 낮은 수익성·자산 부실·자본 감소 우려 때문일 수 있고, '
+                  '높은 PBR도 높은 ROE와 지속적인 이익으로 설명되는지 확인해야 해요. 자본이 0 이하이면 비교를 보류해요.' if ko else
+                  'PBR of 1 means price equals book equity per share. Below 1, 1–3 and above 3 are educational examples, '
+                  'not sector-specific quality thresholds. Below-book prices can reflect weak profitability, impaired assets or '
+                  'shrinking equity; higher multiples need support from returns on equity and durable earnings. '
+                  'Do not use the usual comparison for nonpositive equity.')
+    detail += ('\n같은 업종·기간·회계 기준에서 이익의 지속성, ROE와 부채를 함께 살펴요. 낮은 배수만으로 좋은 기업·매수 신호를 뜻하지 않아요. '
+               '현재 공급자 값의 기준일·회계 기준은 확인되지 않았어요. 오른쪽 끝은 표시 위치만 제한하며 실제 숫자는 그대로예요.' if ko else
+               '\nCompare the same industry, period and accounting basis, alongside earnings durability, ROE and debt. '
+               'Low multiples alone do not identify a good company or a buy signal. The provider value’s reference date/accounting basis is unconfirmed. '
+               'Only the pointer clips at the right edge; the supplied number stays unchanged.')
+    if not valid:
+        reading = ('값 미제공·0 이하는 비교 보류' if ko else 'Missing or nonpositive: comparison withheld')
+        return ValuationReference(labels, None, None, reading, detail)
+    band = 0 if shown < low else 1 if shown <= high else 2
+    if shown < low:
+        position = shown / low / 3
+    elif shown <= high:
+        position = (1 + (shown-low)/(high-low)) / 3
+    else:
+        position = min(1., (2 + (shown-high)/(cap-high)) / 3)
+    return ValuationReference(labels, position, band, readings[band], detail)
+
+
 def _text(key, language):
     en, ko = TEXT[key]
     return ko if language == "ko" else en

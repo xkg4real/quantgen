@@ -499,9 +499,9 @@ class Card(QFrame):
         self.head.addStretch(1)
         self.head_host = QWidget()
         self.head_host.setLayout(self.head)
+        outer.addWidget(self.head_host)
         self.head_host.setVisible(title is not None)
         self.note.setVisible(note is not None)
-        outer.addWidget(self.head_host)
         body = QWidget()
         body.setObjectName("qgCardBody")
         self.body = QVBoxLayout(body)
@@ -531,10 +531,10 @@ class Soft(QFrame):
         self.layout_ = box
         self.title = Text(title or "", "softTitle")
         self.text = Text(text or "", "hint", wrap=True)
-        self.title.setVisible(title is not None)
-        self.text.setVisible(text is not None)
         box.addWidget(self.title)
         box.addWidget(self.text)
+        self.title.setVisible(title is not None)
+        self.text.setVisible(text is not None)
 
     def set_language(self, language):
         self.title.set_language(language)
@@ -748,7 +748,6 @@ class Workspace(QWidget):
         self.toolbar.setContentsMargins(0, 0, 0, 0)
         self.toolbar.setSpacing(10)
         self.title = Text(title or "", "title")
-        self.title.setVisible(title is not None)
         self.toolbar.addWidget(self.title, 0, Qt.AlignmentFlag.AlignVCenter)
         self.toolbar_left = QHBoxLayout()
         self.toolbar_left.setSpacing(10)
@@ -762,6 +761,7 @@ class Workspace(QWidget):
         toolbar_host.setMinimumHeight(40)
         self.toolbar_host = toolbar_host
         column.addWidget(toolbar_host)
+        self.title.setVisible(title is not None)
         body = QHBoxLayout()
         body.setContentsMargins(0, 0, 0, 0)
         body.setSpacing(16)

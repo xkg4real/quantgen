@@ -6,6 +6,7 @@ timer, provider, credential lookup or network request.
 from __future__ import annotations
 
 import math
+from dataclasses import dataclass
 
 from PyQt6.QtCore import QEvent, QRect, QRectF, QSize, Qt
 from PyQt6.QtGui import QColor, QPainter, QPainterPath
@@ -72,6 +73,103 @@ class FlowBar(QWidget):
             painter.fillRect(half if self.net >= 0 else half - size, 0, size, h, buy if self.net >= 0 else sell)
             painter.fillRect(half, 0, 1, h, QColor(palette.muted))
         painter.end()
+
+
+class ValuationReferenceStrip(QWidget):
+    """A neutral position guide, not a red/green investment rating."""
+    def __init__(self, metric, reference, dark, parent=None):
+        super().__init__(parent)
+        self.metric, self.reference, self.dark = metric, reference, bool(dark)
+        self.setFixedHeight(34)
+        self.setMinimumWidth(0)
+        self.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
+        self.setToolTip(reference.hover)
+        self.setAccessibleName(metric.upper() + ' · ' + reference.reading)
+        self.setAccessibleDescription(reference.hover)
+
+    def paintEvent(self, event):
+        from .font_policy import number_font
+        from .typography import scaled_font
+        painter = QPainter(self)
+        palette = DARK if self.dark else LIGHT
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        painter.setFont(number_font(scaled_font(self.font(), 12, 400)))
+        width = max(0, self.width()-2)
+        painter.setPen(QColor(palette.muted))
+        for i, text in enumerate(self.reference.labels):
+            painter.drawText(QRectF(1+i*width/3, 0, width/3, 18),
+                             int(Qt.AlignmentFlag.AlignCenter), text)
+        track = QRectF(1, 24, width, 4)
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(QColor(palette.surface_2))
+        painter.drawRoundedRect(track, 2, 2)
+        painter.setPen(QColor(palette.border))
+        for fraction in (1/3, 2/3):
+            x = 1+width*fraction
+            painter.drawLine(round(x), 23, round(x), 29)
+        if self.reference.position is not None:
+            x = 1+width*self.reference.position
+            painter.setPen(QColor(palette.accent))
+            painter.drawLine(round(x), 20, round(x), 31)
+        painter.end()
+
+
+class DepthQuantityBar(QWidget):
+    """Observed shares on one common full-snapshot scale, mirrored by side."""
+    def __init__(self, side, quantity, scale, dark, parent=None):
+        super().__init__(parent)
+        self.side, self.quantity, self.scale = side, quantity, scale
+        self.dark = bool(dark)
+        self.color = tone_colors(self.dark)['down' if side == 'ask' else 'up']
+        self.fraction = None if quantity is None else min(1., quantity/scale) if scale > 0 else 0.
+        # Keep QWidget's explicit minimum at zero: a hard minimum of42 would
+        # override the layout's larger intrinsic width for long quantities.
+        self.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Preferred)
+        box = QVBoxLayout(self)
+        box.setContentsMargins(5, 2, 5, 2)
+        self.label = label('rowValue')
+        self.label.setText(_fmt(quantity, 0))
+        self.label.setProperty('insightRole', 'value')
+        self.label.setProperty('depthRole', 'quantity')
+        self.label.setProperty('tone', 'down' if side == 'ask' else 'up')
+        self.label.setAlignment((Qt.AlignmentFlag.AlignRight if side == 'ask' else Qt.AlignmentFlag.AlignLeft)
+                                | Qt.AlignmentFlag.AlignVCenter)
+        self.label.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+        numbers(self.label)
+        box.addWidget(self.label)
+
+    def minimumSizeHint(self):
+        hint = super().minimumSizeHint()
+        margins = self.layout().contentsMargins()
+        full_text = self.label.fontMetrics().horizontalAdvance(self.label.text())
+        return QSize(max(42, hint.width(), full_text + margins.left() + margins.right()), hint.height())
+
+    def sizeHint(self):
+        return super().sizeHint().expandedTo(self.minimumSizeHint())
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        if self.fraction is not None and self.fraction > 0:
+            width = self.width()*self.fraction
+            start = self.width()-width if self.side == 'ask' else 0
+            color = QColor(self.color)
+            color.setAlpha(56 if self.dark else 48)
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.setBrush(color)
+            painter.drawRoundedRect(QRectF(start, 1, width, max(0, self.height()-2)), 3, 3)
+        painter.end()
+
+
+@dataclass(frozen=True)
+class DepthRow:
+    side: str
+    level: int
+    price: float | None
+    quantity: float | None
+    price_label: QLabel
+    quantity_bar: DepthQuantityBar
+    widgets: tuple
 
 
 class _DepthViewport(QScrollArea):
@@ -149,6 +247,69 @@ class _DepthViewport(QScrollArea):
             grid.activate()
         finally:
             self._fitting = False
+
+
+class DepthLadder(_DepthViewport):
+    """Sell levels above buy levels, with the price in one central column."""
+    def __init__(self, levels, language='ko', dark=False, parent=None):
+        levels = tuple(levels)
+        scale = max((row[side+'_qty'] for row in levels for side in ('ask', 'bid')
+                     if row[side+'_qty'] is not None), default=0.)
+        grid = QGridLayout()
+        grid.setColumnStretch(0, 1)
+        grid.setColumnStretch(1, 0)
+        grid.setColumnStretch(2, 1)
+        headers = ('매도 수량', '가격', '매수 수량') if language == 'ko' else ('Sell size', 'Price', 'Buy size')
+        for column, text in enumerate(headers):
+            title = label('rowNote', wrap=True)
+            title.setText(text)
+            title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            grid.addWidget(title, 0, column)
+        rows = []
+        at = 1
+        for side, ordered in (('ask', reversed(levels)), ('bid', levels)):
+            if side == 'bid':
+                gap = QWidget()
+                gap.setFixedHeight(6)
+                grid.addWidget(gap, at, 0, 1, 3)
+                at += 1
+            for row in ordered:
+                price, quantity = row[side+'_price'], row[side+'_qty']
+                bar = DepthQuantityBar(side, quantity, scale, dark)
+                value = label('rowValue')
+                digits = 2 if price is not None and price % 1 else 0
+                value.setText(_fmt(price, digits))
+                value.setProperty('insightRole', 'value')
+                value.setProperty('depthRole', 'price')
+                value.setProperty('tone', 'down' if side == 'ask' else 'up')
+                value.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+                value.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                numbers(value)
+                blank = QWidget()
+                blank.setMinimumWidth(42)
+                cells = (bar, value, blank) if side == 'ask' else (blank, value, bar)
+                for column, widget in enumerate(cells):
+                    grid.addWidget(widget, at, column)
+                rows.append(DepthRow(side, row['level'], price, quantity, value, bar, cells))
+                at += 1
+        super().__init__(grid)
+        self.levels, self.scale, self.rows = levels, scale, tuple(rows)
+        self.language, self.dark = language, bool(dark)
+        grid.setVerticalSpacing(2)
+        if parent is not None:
+            self.setParent(parent)
+        # setVisible follows parenting, so construction cannot expose child windows.
+        self.set_expanded(False)
+
+    def set_expanded(self, expanded):
+        self.expanded = bool(expanded)
+        limit = 10 if self.expanded else 3
+        self.visible_rows = tuple(row for row in self.rows if row.level <= limit)
+        for row in self.rows:
+            for widget in row.widgets:
+                widget.setVisible(row.level <= limit)
+        self._fit_to_contents()
+        self.updateGeometry()
 
 
 class StockInsightsPanel(QFrame):
@@ -254,7 +415,7 @@ class StockInsightsPanel(QFrame):
         self.covered_sections = frozenset(covered)
 
     def _valuation(self):
-        from .metric_help import financial_help
+        from .metric_help import financial_help, valuation_reference
         body = self._card(self._t("기업 가치 한눈에", "Valuation at a glance"))
         grid = QGridLayout()
         grid.setSpacing(9)
@@ -267,10 +428,19 @@ class StockInsightsPanel(QFrame):
             layout.addWidget(self._label(item["key"].upper() + " · " + help_text.label, tip=help_text.hover))
             shown = _fmt(item["value"]) + self._t("배", "x") if item["value"] is not None else self._t("미제공", "Unavailable")
             layout.addWidget(self._label(shown, role="value", tip=help_text.hover + "\n" + self._provenance(item)))
+            if item['key'] in ('per', 'pbr'):
+                reference = valuation_reference(item['key'], item['value'], self.language)
+                strip = ValuationReferenceStrip(item['key'], reference, self.dark, box)
+                layout.addWidget(strip)
+                layout.addWidget(self._label(reference.reading, role='muted', tip=reference.hover))
             grid.addWidget(box, index // 2, index % 2)
         grid.setColumnStretch(0, 1)
         grid.setColumnStretch(1, 1)
         body.addLayout(grid)
+        self._note(body, self._t('참고 구간 예시 · 낮은 배수만으로 우량 판단은 어려워요',
+                                'Illustrative ranges · low multiples alone do not mean quality'),
+                   self._t('같은 업종·기간·회계 기준에서 이익의 지속성, ROE, 부채를 함께 살펴요. 성장주·경기민감주·금융업은 해석이 달라요.',
+                           'Compare consistent industry, period and accounting bases, earnings durability, ROE and debt. Growth, cyclical and financial businesses differ.'))
         self._note(body, self._t("PER·PBR 제공값 · ROE·PSR 수치 미연결", "Provider PER/PBR · ROE/PSR not connected"),
                    self._t("PER·PBR은 공급자 제공값이에요. 회계 기준·기준일은 확인되지 않았어요. ROE·PSR 수치는 아직 연결되지 않았어요.",
                            "PER/PBR are provider values with unconfirmed accounting/reference basis. ROE/PSR values are not connected."))
@@ -359,26 +529,32 @@ class StockInsightsPanel(QFrame):
     def _book(self):
         body = self._card(self._t("호가 · 조회 스냅숏", "Order book · REST snapshot"))
         book = self.model["orderbook"]
+        self.depth_ladder = self.depth_toggle = None
         if book is None:
             body.addWidget(self._label(self._t("호가 자료 미제공", "Depth unavailable")))
         else:
-            grid = QGridLayout()
-            headers = self._t(("매도 잔량", "매도 호가", "매수 호가", "매수 잔량"), ("Ask size", "Ask", "Bid", "Bid size"))
-            for c, title in enumerate(headers):
-                grid.addWidget(self._label(title, role="muted"), 0, c)
-                grid.setColumnStretch(c, 1)
-            more = QGridLayout()
-            for c in range(4):
-                more.setColumnStretch(c, 1)
-            for n, row in enumerate(book["levels"], 1):
-                for c, key in enumerate(("ask_qty", "ask_price", "bid_price", "bid_qty")):
-                    digits = 2 if key.endswith("price") and row[key] is not None and row[key] % 1 else 0
-                    value = self._label(_fmt(row[key], digits), role="value", numeric=True, wrap=False)
-                    value.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-                    (grid if n <= 3 else more).addWidget(value, n if n <= 3 else n - 4, c)
-            body.addWidget(_DepthViewport(grid))
-            extra = _DepthViewport(more)
-            self._expand(body, self._t("호가 10단계 펼치기", "Expand10 depth levels"), extra)
+            ladder = DepthLadder(book['levels'], self.language, self.dark)
+            self.depth_ladder = ladder
+            body.addWidget(ladder)
+            toggle = QPushButton()
+            toggle.setProperty('sd', 'link')
+            toggle.setProperty('qg_literal', True)
+            toggle.setCheckable(True)
+            toggle.setCursor(Qt.CursorShape.PointingHandCursor)
+            toggle.setIconSize(QSize(14, 14))
+            self.depth_toggle = toggle
+            def expand(checked):
+                ladder.set_expanded(checked)
+                toggle.setText(self._t('3단계로 접기' if checked else '10단계 펼치기',
+                                       'Show 3 levels' if checked else 'Show 10 levels'))
+                toggle.setIcon(chevron('down' if checked else 'right', self.dark))
+            toggle.toggled.connect(expand)
+            expand(False)
+            body.addWidget(toggle, 0, Qt.AlignmentFlag.AlignLeft)
+            self._note(body, self._t('파란 막대는 매도 · 빨간 막대는 매수 대기 수량',
+                                    'Blue: waiting sells · red: waiting buys'),
+                       self._t('모든 10단계의 같은 최대 수량으로 막대 길이를 비교해요. 펼쳐도 기준은 바뀌지 않아요. 0은 관측된 빈 잔량이며 —는 자료가 없는 값이에요. 색과 위치는 매수·매도 측 구분이지 전망이 아니에요.',
+                               'Every bar uses the same maximum across the supplied 10 levels on both sides. Expanding keeps that scale. Zero is observed empty quantity; — means missing. Colours and positions identify sides, not forecasts.'))
             body.addWidget(self._label(self._t("가격 원 · 잔량 주", "Prices KRW · sizes shares"), role="muted"))
             body.addWidget(self._label(self._t(f"공급자 시각 {book['provider_time'] or '미제공'} · 날짜 미제공",
                                               f"Provider clock {book['provider_time'] or 'unavailable'} · date unavailable"), role="muted", tip=self._provenance(book)))

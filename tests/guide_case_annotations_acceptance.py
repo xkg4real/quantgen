@@ -1,11 +1,10 @@
-"""Original-case-first guide contracts on fixed, offline display inputs.
+"""Original-case-first and compact visual legend contracts on offline inputs.
 
-The case is the primary chart. Teaching annotations must point to the original
-renderer, not to another set of invented prices. Pure geometry checks inject
-immutable, explicit line values; they do not run an indicator engine or loader.
+Actual SVG renderers supply the independent stroke oracle. Explicit immutable
+values bypass calculation; neither a provider nor an indicator engine runs.
 """
 from contextlib import contextmanager
-from dataclasses import replace
+from dataclasses import FrozenInstanceError, replace
 from datetime import date, timedelta
 import importlib.util
 import math
@@ -33,6 +32,14 @@ class GuideCaseAnnotationContracts(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         lesson_contracts.GuideLessonContracts.setUpClass.__func__(cls)
+        from PyQt6.QtWidgets import QApplication
+        from quantgen_desktop.font_policy import configure_interface_font, INTERFACE_FAMILY
+        cls.app=QApplication.instance() or QApplication(['guide-case-contract','-platform','offscreen'])
+        previous_font=cls.app.font()
+        cls.addClassCleanup(cls.app.setFont,previous_font)
+        family=configure_interface_font(cls.app,Path(__file__).resolve().parents[1]/'assets/fonts')
+        if family!=INTERFACE_FAMILY:
+            raise AssertionError('The production QG font bundle is required for guide layout contracts')
 
     @classmethod
     def tearDownClass(cls):
@@ -83,11 +90,10 @@ class GuideCaseAnnotationContracts(unittest.TestCase):
             self.assertGreaterEqual(y,0)
             self.assertLess(y,guide.workspace.canvas_scroll.viewport().height())
             self.assertFalse(original.grab().isNull())
-            self.assertTrue(original.annotations)
-            text=' '.join(' '.join(a.text) for a in original.annotations)
-            self.assertTrue(any(word in text for word in ('가격','날짜','커서')))
-            self.assertTrue(any(a.index is not None and a.value==guide.series.closes[a.index]
-                                for a in original.annotations))
+            self.assertTrue(original.legend_samples)
+            self.assertEqual(tuple(s.line_id for s in original.legend_samples),('CLOSE',))
+            self.assertEqual(original.legend_samples[0].style,'solid')
+            self._assert_compact_legend(original)
             self.assertEqual((guide.series,guide.series.dates,guide.series.closes,dict(guide.meta),guide.cursor),before)
 
     def test_supplement_toggle_keeps_case_and_reading_state(self):
@@ -138,16 +144,73 @@ class GuideCaseAnnotationContracts(unittest.TestCase):
                                                          expected.palette().color(QPalette.ColorRole.WindowText).rgba())
                                 finally:reference.deleteLater()
                             self.assertFalse(original.grab().isNull())
-                            self.assertTrue(original.annotations)
-                            bounds=original.rect()
-                            for box in original.annotation_boxes:
-                                self.assertGreaterEqual(box.left(),bounds.left())
-                                self.assertGreaterEqual(box.top(),bounds.top())
-                                self.assertLessEqual(box.right(),bounds.right()+1)
-                                self.assertLessEqual(box.bottom(),bounds.bottom()+1)
+                            self.assertTrue(original.legend_samples)
+                            self._assert_compact_legend(original)
                             if ctx.language=='en':
-                                self.assertFalse(re.search('[가-힣]',' '.join(' '.join(a.text) for a in original.annotations)))
+                                self.assertFalse(re.search('[가-힣]',' '.join(a.label for a in original.legend_samples)))
                             self.assertEqual((guide.keys,guide.focus,guide.series,dict(guide.meta),guide.cursor),before)
+
+    def _assert_compact_legend(self,chart):
+        from PyQt6.QtCore import QRectF
+        samples=chart.legend_samples
+        plot=QRectF()
+        left,top,right,bottom=chart._legend_panel(samples[0].key)
+        plot.setCoords(left,top,right,bottom)
+        self.assertTrue(plot.contains(chart.legend_rect))
+        self.assertAlmostEqual(chart.legend_rect.right(),plot.right()-5)
+        self.assertAlmostEqual(chart.legend_rect.bottom(),plot.bottom()-5)
+        self.assertEqual(len(chart.legend_boxes),len(samples))
+        for i,box in enumerate(chart.legend_boxes):
+            self.assertTrue(chart.legend_rect.contains(box))
+            for other in chart.legend_boxes[i+1:]:
+                self.assertFalse(box.intersects(other))
+        for sample in samples:
+            # A legend identifies a stroke; it is not a callout to a date/value.
+            self.assertFalse(hasattr(sample,'index'))
+            self.assertFalse(hasattr(sample,'value'))
+            self.assertFalse(re.search(r'실선|점선|solid line|dotted line|buy signal|sell signal',sample.label,re.I))
+
+    def test_default_case_constructor_never_shows_a_temporary_window(self):
+        from PyQt6.QtCore import QObject,QEvent,QCoreApplication
+        from PyQt6.QtWidgets import QWidget
+
+        class Observer(QObject):
+            def __init__(self):
+                super().__init__();self.windows=[]
+            def eventFilter(self,watched,event):
+                if event.type()==QEvent.Type.Show and isinstance(watched,QWidget) and watched.isWindow():
+                    self.windows.append((type(watched).__name__,watched.objectName()))
+                return False
+
+        # The exact same fixed 120 closes seed both paths. The default constructor
+        # really uses history=None; only its historical-case loader is replaced.
+        with self._guide() as (seed,app):
+            from quantgen_desktop import indicator_guide as guide_module
+            supplied=('2020',seed.series,dict(seed.meta))
+            observer=Observer();app.installEventFilter(observer)
+            guide=None
+            try:
+                with patch.object(guide_module,'historical_case',return_value=supplied) as loader:
+                    guide=guide_module.IndicatorGuide(history=None)
+                    for _ in range(4):app.processEvents()
+                    self.assertTrue(loader.called)
+                    self.assertEqual(observer.windows,[])
+                    self.assertTrue(guide.isHidden())
+                    self.assertIsNone(guide.external)
+                    self.assertIs(guide.case.parentWidget(),guide.selection_box)
+                    self.assertFalse(guide.case.isWindow())
+                    self.assertIs(guide.series,supplied[1])
+                    self.assertEqual(guide.meta,supplied[2])
+                app.removeEventFilter(observer)
+                guide.resize(1000,800);guide.show()
+                for _ in range(4):app.processEvents()
+                self.assertTrue(guide.case.isVisible())
+            finally:
+                app.removeEventFilter(observer)
+                if guide is not None:
+                    guide.close();guide.deleteLater()
+                    QCoreApplication.sendPostedEvents(None,QEvent.Type.DeferredDelete.value)
+                    app.processEvents()
 
     def _display_inputs(self):
         from core.education import catalog,indicators as I
@@ -169,96 +232,161 @@ class GuideCaseAnnotationContracts(unittest.TestCase):
                 values[spec.key][line.id]=tuple(math.nan if i<20 else v for i,v in enumerate(seq))
         return series,values
 
-    def test_all_27_reference_anchors_match_original_svg_lines(self):
+    def test_all_27_reference_samples_match_original_svg_strokes(self):
         from core.i18n import LocaleContext
         from core.theme import DARK,LIGHT
         from core.education import catalog,indicators as I
         from quantgen_desktop import guide_case_annotations as A
         series,values=self._display_inputs()
         def fixed_values(s,keys):
-            self.assertIs(s,series)
+            self.assertIs(s.dates,series.dates)
+            self.assertIs(s.closes,series.closes)
             return {key:values[key] for key in keys}
-        with patch.object(A,'values_for',side_effect=fixed_values), \
-             patch.object(catalog,'values_for',side_effect=fixed_values):
+        with patch.object(catalog,'values_for',side_effect=fixed_values):
+            self.assertEqual(len(I.STUDIES),27)
             for spec in I.STUDIES:
+                display=replace(series,interval='1d') if spec.needs in ('kis_flows','kis_shorts') else series
                 for language in ('ko','en'):
                     for width in (350,700):
                         for dark in (False,True):
                             with self.subTest(key=spec.key,language=language,width=width,dark=dark):
-                                labels=A.case_annotations(series,(spec.key,),80,language,width=width,
-                                                          legend_top=12,dark=dark)
-                                bound=[a for a in labels if a.key==spec.key and a.value is not None]
-                                self.assertTrue(bound)
-                                svg=catalog.chart_svg(series,(spec.key,),locale=LocaleContext(language),
+                                samples=A.line_legend(display,(spec.key,),language,dark=dark)
+                                self.assertEqual(tuple(s.line_id for s in samples),tuple(l.id for l in spec.lines))
+                                svg=catalog.chart_svg(display,(spec.key,),locale=LocaleContext(language),
                                     colors=DARK if dark else LIGHT,width=width,legend=False)
                                 nodes=list(ET.fromstring(svg).iter())
-                                for a in bound:
-                                    self.assertEqual(a.value,values[a.key][a.line_id][a.index])
-                                    self.assertTrue(all(math.isfinite(v) for v in (a.value,a.x,a.y)))
-                                    self.assertTrue(a.text)
-                                    point=f'{a.x:.2f},{a.y:.2f}'
-                                    path=any(n.tag.endswith('path') and n.attrib.get('stroke')==a.color and
-                                             point in n.attrib.get('d','') for n in nodes)
-                                    bar=any(n.tag.endswith('line') and n.attrib.get('stroke')==a.color and
-                                            n.attrib.get('x2')==f'{a.x:.2f}' and
-                                            n.attrib.get('y2')==f'{a.y:.2f}' for n in nodes)
-                                    self.assertTrue(path or bar,('anchor is not on the original line',a))
-                                    if language=='en':self.assertFalse(re.search('[가-힣]',' '.join(a.text)))
+                                # The reference chart draws the base price first,
+                                # then registry lines in order. Siblings can share
+                                # a colour, so colour alone cannot identify a line.
+                                paths=[n for n in nodes if n.tag.endswith('path') and
+                                       n.attrib.get('stroke-width')=='1.6']
+                                self.assertEqual(len(paths),1+sum(l.style!='bars' for l in spec.lines))
+                                study_paths=iter(paths[1:])
+                                for sample,line in zip(samples,spec.lines):
+                                    bars=[n for n in nodes if n.tag.endswith('line')
+                                          and n.attrib.get('stroke')==sample.color
+                                          and n.attrib.get('stroke-width')=='2']
+                                    if line.style=='bars':
+                                        self.assertTrue(bars)
+                                        self.assertEqual(sample.style,'bars')
+                                        self.assertEqual(sample.dash,())
+                                    else:
+                                        # The reference renderer actually draws SAR dots
+                                        # as a solid path; its visible stroke is the oracle.
+                                        actual=next(study_paths)
+                                        self.assertEqual(actual.attrib.get('stroke'),sample.color)
+                                        dash=actual.attrib.get('stroke-dasharray','')
+                                        self.assertEqual(sample.dash,tuple(float(x) for x in dash.split()))
+                                        self.assertEqual(sample.style,'dash' if dash else 'solid')
+                                    self.assertTrue(sample.label)
+                                    if language=='en':self.assertFalse(re.search('[가-힣]',sample.label))
 
-    def test_shifted_candle_anchors_use_actual_window_and_crop(self):
-        from core.market.detail_svg import ChartLayout,PANEL_HEAD
+    def test_all_27_candle_samples_match_actual_markers_bars_and_fills(self):
+        from core.education import indicators as I
+        from core.market.detail_svg import CANDLES,render
         from quantgen_desktop import guide_case_annotations as A
         series,values=self._display_inputs()
-        series=replace(series,snapshot=SimpleNamespace(candles=tuple(
-            SimpleNamespace(open=o,high=h,low=l,close=c,volume=v)
-            for (o,h,l,c),v in zip(series.ohlc,series.volume))))
-        layout=ChartLayout(700,600,12,620,608/80,20,100,70,
-            price=(58,360),volume=(310,360),panels=(('rsi',366,506),),axis_top=550,
-            price_range=(8,20),price_scale=(58,350))
-        crop=46
-        seen=set()
-        for focus in ('ema','rsi'):
-            with patch.object(A,'values_for',side_effect=lambda s,keys:{k:values[k] for k in keys}):
-                annotations=A.case_annotations(series,('ema','rsi'),70,'ko',width=700,legend_top=12,
-                                               layout=layout,crop=crop,focus=focus)
-            finite=[a for a in annotations if a.value is not None]
-            self.assertTrue(finite)
-            for a in finite:
-                seen.add(a.key)
-                self.assertLessEqual(layout.start,a.index);self.assertLess(a.index,layout.stop)
-                self.assertAlmostEqual(a.x,layout.x_of(a.index))
-                self.assertEqual(a.value,values[a.key][a.line_id][a.index])
-                if a.key=='ema':self.assertAlmostEqual(a.y,layout.y_of_price(a.value)-crop)
-                elif a.key=='rsi':
-                    top=366+PANEL_HEAD;bottom=506-4
-                    self.assertAlmostEqual(a.y,bottom-a.value/100*(bottom-top)-crop)
-        self.assertEqual(seen,{'ema','rsi'})
+        candles=tuple(SimpleNamespace(timestamp=d,open=o,high=h,low=l,close=c,volume=v)
+            for d,(o,h,l,c),v in zip(series.dates,series.ohlc,series.volume))
+        for spec in I.STUDIES:
+            display=replace(series,interval='1d') if spec.needs in ('kis_flows','kis_shorts') else series
+            snapshot=SimpleNamespace(candles=candles,request=SimpleNamespace(interval=display.interval,
+                instrument=SimpleNamespace(asset='domestic_stock')))
+            for dark in (False,True):
+                with self.subTest(key=spec.key,dark=dark):
+                    svg,_=render(snapshot,studies=(spec.key,),width=700,height=600,
+                        dark=dark,supply=series.supply,values={spec.key:values[spec.key]})
+                    nodes=list(ET.fromstring(svg).iter())
+                    for language in ('ko','en'):
+                        samples=A.line_legend(display,(spec.key,),language,dark=dark,renderer='candles')
+                        self.assertEqual(tuple(s.line_id for s in samples[:len(spec.lines)]),
+                                         tuple(l.id for l in spec.lines))
+                        for sample,line in zip(samples,spec.lines):
+                            self.assertEqual(sample.style,line.style)
+                            if line.style=='bars':
+                                self.assertEqual((sample.color,sample.secondary_color),CANDLES[dark])
+                                self.assertEqual(sample.opacity,.55)
+                                self.assertTrue(any(n.tag.endswith('rect') and
+                                    n.attrib.get('fill') in CANDLES[dark] and
+                                    n.attrib.get('fill-opacity')=='0.55' for n in nodes))
+                            elif line.style=='dots':
+                                self.assertTrue(any(n.tag.endswith('circle') and
+                                    n.attrib.get('fill')==sample.color for n in nodes))
+                            else:
+                                paths=[n for n in nodes if n.tag.endswith('polyline') and
+                                       n.attrib.get('stroke')==sample.color]
+                                self.assertTrue(paths)
+                                expected='5 4' if sample.style=='dash' else ''
+                                self.assertTrue(any(n.attrib.get('stroke-dasharray','')==expected for n in paths))
+                                self.assertEqual(sample.dash,tuple(float(x) for x in expected.split()))
+                        for sample in samples[len(spec.lines):]:
+                            self.assertEqual(sample.style,'band')
+                            self.assertIn(sample.line_id,('BAND','CLOUD'))
+                            self.assertTrue(any(n.attrib.get('fill') in (sample.color,sample.secondary_color) and
+                                n.attrib.get('fill-opacity')==str(sample.opacity) for n in nodes))
+                            self.assertEqual(sample.opacity,.07 if sample.line_id=='BAND' else .13)
+                    self.assertEqual(len(samples),len(spec.lines)+(spec.key in ('bb','ichimoku')))
 
-    def test_absent_and_nonfinite_values_never_make_fake_anchor(self):
-        from quantgen_desktop import guide_case_annotations as A
-        series,values=self._display_inputs()
-        with patch.object(A,'values_for',return_value={}):
-            absent=A.case_annotations(series,('ema',),80,'en',width=700,legend_top=12)
-        self.assertTrue(absent)
-        self.assertTrue(all(a.value is None and a.x is None and a.y is None for a in absent))
-        empty={'ema':{line:tuple(math.nan for _ in seq) for line,seq in values['ema'].items()}}
-        with patch.object(A,'values_for',return_value=empty):
-            unavailable=A.case_annotations(series,('ema',),80,'ko',width=700,legend_top=12)
-        self.assertTrue(unavailable)
-        self.assertTrue(all(a.value is None and a.x is None and a.y is None for a in unavailable))
-
-    def test_annotations_preserve_original_input_and_avoid_advice(self):
+    def test_missing_study_never_makes_fake_samples_or_mutates_inputs(self):
+        from core.education import indicators as I
         from quantgen_desktop import guide_case_annotations as A
         series,values=self._display_inputs()
         before=(series.dates,series.closes,series.ohlc,series.volume,series.supply)
-        advisory=re.compile(r'매수\s*(추천|신호|타이밍)|매도\s*(추천|신호|타이밍)|매수하세요|매도하세요|'
-                            r'buy signal|sell signal|buy now|sell now|guaranteed',re.I)
-        for language in ('ko','en'):
-            with patch.object(A,'values_for',side_effect=lambda s,keys:{k:values[k] for k in keys}):
-                for key in values:
-                    labels=A.case_annotations(series,(key,),80,language,width=350,legend_top=12)
-                    self.assertFalse(advisory.search(' '.join(' '.join(a.text) for a in labels)))
+        for renderer in ('reference','candles'):
+            self.assertEqual(A.line_legend(None,(),renderer=renderer),())
+            self.assertEqual(A.line_legend(replace(series,closes=()),(),renderer=renderer),())
+            self.assertEqual(A.line_legend(series,('ema',),unavailable=('ema',),renderer=renderer),())
+            self.assertEqual(A.line_legend(replace(series,ohlc=()),('atr',),renderer=renderer),())
+            for language in ('ko','en'):
+                for spec in I.STUDIES:
+                    display=replace(series,interval='1d') if spec.needs in ('kis_flows','kis_shorts') else series
+                    samples=A.line_legend(display,(spec.key,),language,renderer=renderer)
+                    self.assertTrue(samples)
+                    for sample in samples:
+                        self.assertFalse(hasattr(sample,'value'))
+                        self.assertFalse(hasattr(sample,'index'))
+                        self.assertFalse(re.search(r'매수\s*(추천|신호|타이밍)|매도\s*(추천|신호|타이밍)|'
+                            r'매수하세요|매도하세요|buy signal|sell signal|buy now|sell now|guaranteed',sample.label,re.I))
+                    with self.assertRaises(FrozenInstanceError):samples[0].color='#000000'
         self.assertEqual((series.dates,series.closes,series.ohlc,series.volume,series.supply),before)
+
+    def test_compact_legend_geometry_stays_bottom_right_without_collisions(self):
+        from core.education import indicators as I
+        from quantgen_desktop import guide_case_annotations as A
+        series,_values=self._display_inputs()
+        for width in (350,700):
+            for language in ('ko','en'):
+                for dark in (False,True):
+                    for spec in I.STUDIES:
+                        display=replace(series,interval='1d') if spec.needs in ('kis_flows','kis_shorts') else series
+                        for renderer in ('reference','candles'):
+                            with self.subTest(width=width,language=language,key=spec.key,renderer=renderer):
+                                samples=A.line_legend(display,(spec.key,),language,dark=dark,renderer=renderer)
+                                # Deliberately use a lower-panel height as well as a
+                                # narrow width: all original line identities must fit.
+                                panel=(18.,34.,float(width-100),126.)
+                                measure=lambda label:len(label)*6.
+                                box,rows=A.legend_layout(samples,panel,measure)
+                                self.assertIsNotNone(box)
+                                self.assertEqual(tuple(s for s,_w,_l in rows),samples)
+                                x,y,w,h=box
+                                self.assertAlmostEqual(x+w,panel[2]-5)
+                                self.assertAlmostEqual(y+h,panel[3]-5)
+                                self.assertGreaterEqual(x,panel[0]+5)
+                                self.assertGreaterEqual(y,panel[1]+5)
+                                self.assertLessEqual(w,panel[2]-panel[0]-10)
+                                rects=[]
+                                for sample,swatch,label in rows:
+                                    self.assertGreaterEqual(swatch[2],28)
+                                    self.assertGreaterEqual(label[2],measure(sample.label))
+                                    self.assertGreaterEqual(label[0],swatch[0]+swatch[2]+8)
+                                    row=(swatch[0],swatch[1],label[0]+label[2],label[1]+label[3])
+                                    for previous in rects:
+                                        self.assertTrue(row[2]<=previous[0] or previous[2]<=row[0] or
+                                                        row[3]<=previous[1] or previous[3]<=row[1])
+                                    rects.append(row)
+        self.assertEqual(A.legend_layout(samples,(0,0,50,20),lambda _:100),(None,()))
+        self.assertEqual(A.legend_layout((),(0,0,350,200),lambda _:10),(None,()))
 
 
 if __name__=='__main__':unittest.main()
