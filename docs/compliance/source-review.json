@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "795b2e9435c8eed43b08b98c709b3e2eeb3a7365ad2628855cb164cea0f94ab8",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "35838820895971868cfa0588a8e5074ca1622ae3df988eef29b5f056796f58de",
+    ".github/workflows/runtime-smoke.yml": "db24827be50977c40d442fa1cb3c6e82455f51f6bfa6c2a3b3eb4622fa9713fb",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -89,6 +89,7 @@
     "core/didm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "core/didm/ingest/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "core/didm/ingest/alfred.py": "bd29193bd8134a7c2a16926311c1cf210325e2beaec0f308c955ec340e2482a9",
+    "core/didm/ingest/alpaca_news.py": "9517d2ce030695e8352fb8dd650ec6467962fbea5799f2a3a1b53b0a220bc3bf",
     "core/didm/ingest/ecos.py": "401fdae16ab6225ca8d91bb7c632873a88b6d94738955185c1e7da55fb16c0b1",
     "core/didm/ingest/eodhd.py": "04f4d3bf7c7bf86452ebf86062afb5791b962d3b01b66c18db77fe5093dec639",
     "core/didm/ingest/filings.py": "9b2d8d01942de98048ffd866312a15b4b850f459705c73f0d4bffb87adb6d6e2",
@@ -190,11 +191,11 @@
     "core/quant/gate_stats.py": "3ae17e23e4cb07136d6603a4fe572041c26abbc44369698897603c051e15286a",
     "core/quant/gjr.py": "7b2748c341507af6e4fdd169fd1bc5482d38bcde5dd76966a1962d0cdee23a9a",
     "core/quant/gsq.py": "494b5e28c8a35a49a59b2f7e613d90e175900d212519ab2c1b43fc81b9705382",
-    "core/quant/history.py": "cc858de2b168b491c7c93e35f432833c919cb3fadda6a60ede368300b1a707a1",
+    "core/quant/history.py": "3f4c794187aa69ba42916aaef0f2320ded44469d9009083b12eb3da23f63c85d",
     "core/quant/insights.py": "fdf496a4213070e0e34c406fdb1fd1931c1c6ceb9521e9bae43979d335a853d1",
     "core/quant/instruments.py": "5a228fb771d040cae8f3e4cf7869bd044728c81654b090d70faf67e3b5d3d013",
     "core/quant/lab.py": "d5e44e575a256328155cc84df0514f480f8d55eed0d04bd6d3b1172a70bd90c8",
-    "core/quant/montecarlo.py": "60aae1b3b442fe8bb36bcd21c585c5ac1951cc332ed4a689135d92fd2b49d77d",
+    "core/quant/montecarlo.py": "7f6fae12c0495821abce97e46a1d13dbb4b75d652a2ea8e8d2e049c19f9171c3",
     "core/quant/optimize.py": "028c50332684a7e06db25cbc0466c9ab3d5d877cfd5edf8cc592081e4eb1a6d2",
     "core/quant/refusal.py": "ace787b208e8f47fa7dd7f763ca0198b3a6cceddf780b08b1b4c93892f400190",
     "core/quant/risk.py": "b7bb3371bcbf7f3918a2ecc47cd2635cc092fb3f5eebcfc80f00259eee089ae9",
@@ -214,6 +215,7 @@
     "core/quant/signals.py": "d033d0f146e45ac59db6e1125a2b2256cc96c9c1744093e954adf45e2ccec64a",
     "core/quant/sleeves.py": "39bcdf9a73400ebe9634e75ae8278a3616cb41d90156749b369c1ae9042ef2ac",
     "core/quant/strategies.py": "a141f7f0b65150afc8f9fd00ba84f551a93a2a24ed092c2f8a83988ec086e329",
+    "core/quant/supplied_history.py": "88c9685c13b77dc18bc535e25c67d1726c9dcda2af40b58f35afed75d1f2ecb2",
     "core/quant/tf_books.py": "1ddf163aa280ced7cace5b02aa0ec02b8b1a7b34b51700e51e060b67fcfbbfc4",
     "core/quant/tf_gov.py": "99ad7d0abccfad800c23d23811f7070087201618c9f7f59cb2bf24a089ff579e",
     "core/quant/tf_screens.py": "29b6d6a1a937f0e477c8e88dbdb48bfe661263fdae98e8d6e58cde1dadb59934",
@@ -350,6 +352,7 @@
     "docs/product/A3_READING_LAYOUT_2026-11-06.md": "b0f6595caae843d4a912fc332adc78882f65f9eb579cd7f97f2d33519821cc64",
     "docs/product/ADOPTION_STRATEGY_CHECKS_2026-11-10.md": "995b2ee0508e86291b38735d57b064ecc78549759adb5dd654e5e64e6dd872d4",
     "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "0e854fc8af3bab5e75bc4690e4697ae3b11ebf0d07d762df2c8ab50ca97c13da",
+    "docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md": "43e3b60a7b6784519901cf68957c8536eb634089c80ca04dd65718fe32ee0946",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
     "docs/product/BEGINNER_CHART_AND_RISK_UI_2026-11-21.md": "971fe0334af0e4593e805e3b79231735613255d32b799d833b845ea24f73253d",
@@ -445,6 +448,7 @@
     "docs/product/ui_drafts_2026-11-17/README.md": "b2166e175e5d7ced820feeb9714a18640a4e08a0ced92c5ea88b9c45c29d2c92",
     "main.py": "768392a3fddaca06fda168710f757147ad31b679d8c68076d947204704121229",
     "mindmap/QUANTGEN Macro Neural Link.html": "4dbf731539d418aa67553bd5fd393dfc55550fac737ef89ca4c18c813f7c76c5",
+    "mobile/main.py": "db2d270e972e026b08702891813f37674b0998f5d0d742e9e86a593d05fbb89c",
     "mobile/pyproject.toml": "2cad54b7e32873320de1d05e1e81cb91ce88f64cd97afc1ec955399fc5922db7",
     "packaging/launch_desktop.py": "7724b54d172f00d87c80abab2ff5214deb5ebcf9105878e24ca7519c166ce4b8",
     "packaging/selfcheck.py": "30dffaa03bf0f29342d3a1aca2945ab17c588c3a4304c59a0880f05b6a523ef1",
@@ -634,6 +638,7 @@
     "tests/desktop_workflow_guidance_acceptance.py": "c51493a4bb2c82fcf98a22015b45cc5a7d2ef7b17f6ef853a540125aca9f00e6",
     "tests/desktop_workspace_readability_acceptance.py": "735e14354046583f1f9974a6120442c96e8f81144effc24a3fc4ba06dbfd2108",
     "tests/detail_insights_acceptance.py": "0bcbf1beab955492260a2d663219c102dd12327c34b5bf503cf731c241412b6f",
+    "tests/didm_alpaca_news_acceptance.py": "56370ad5ebb6e834e8f73a5c60531daec48f72319cb5cac224d93dd70c9ffd09",
     "tests/didm_eodhd_acceptance.py": "b9af87bae6997d4df598005c896ec2357a8908c7ed76058885265312e2846e05",
     "tests/didm_ingest_acceptance.py": "b6c69236fce44daf5e5fc733b18a440f27abdbe4f4fdb3ee8dbb66108eb28a0c",
     "tests/didm_news_acceptance.py": "1280b0a97c7b48c9bd8610e891c048874d8503ad8a9dba4338068dfef2cda0ce",
@@ -731,6 +736,7 @@
     "tests/market_symbols_acceptance.py": "dac7d8af68db34e0ecf7ce451fddc288618eae24988c080d8784b5e480526d78",
     "tests/mc_bootstrap_disclosure_acceptance.py": "e09b191d7a13a74a15b556ce231524222a3d540606707488388322cb635af506",
     "tests/mc_volatility_acceptance.py": "5715fb07e257e88f6a38ace19863c83e926c01bbc5c22573174e4ea1072c2a89",
+    "tests/mobile_startup_acceptance.py": "e6340fa71578e078ecc66f7b0ddc6fb9ccc9b769f92f89f48c3de71acc44e0ad",
     "tests/nautilus_acceptance.py": "6863a7f8b181e31c61e60b9e7f3e43448f5653b598252dcc3adf698ded8ffdf2",
     "tests/nautilus_registration_acceptance.py": "b846a53ecb6eb008a3b0ffbe1eab428b5491c5d1ac342a360368b38854fffda5",
     "tests/nautilus_stub_child.py": "6f0e75014fa6f5778095c0f756e4e88576ffafef7fe0c8af083cc00b5d9604b0",
@@ -807,7 +813,7 @@
     "tools/nautilus/sandbox.py": "fdbc0e51aa3e1abff737d96292c636ada8b82f59b8ffe4131c6471d202475b4e",
     "tools/packaging/smoke_desktop.py": "0d45bb20430e8f4b1a92d7c7db1badc054acf81ae4dedfe725729a6c11393373",
     "tools/packaging/smoke_installed.py": "0427690fbdc33f96095f4ead230f91f569f453c173f1b15ee7b57c49400c15b3",
-    "tools/packaging/stage.py": "b44a1f8004925776871daf0dbbcaedb7a444936b6d39d4d0c474299895af0b39",
+    "tools/packaging/stage.py": "c3e2718385ca68c684678c5885f66bd9f6f3048399992baa09e4ef7df1215885",
     "tools/packaging/third_party_notices.py": "656098e51c6ef2241df96ec36b43e9636025f7f0efbf36e13afaeb3481c65a8f",
     "tools/paper/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/paper/approval.py": "42829586c3e9daff69ad75520a63e139c0ed0f41de705e60fe02c965769bc138",
@@ -883,163 +889,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "00674ebfc1ab85fbb3a98660b5d21ea85fb29bd01d75afcff44732785fe4610f",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.713026+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "318c88c407895486fe3f53fbda870f3dd28a4f0cb84dd9bc55ab60f289e399fe",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.765466+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "00674ebfc1ab85fbb3a98660b5d21ea85fb29bd01d75afcff44732785fe4610f",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.718457+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "318c88c407895486fe3f53fbda870f3dd28a4f0cb84dd9bc55ab60f289e399fe",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.768301+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "b4b81e8f2a21c24b552469ae003482804b47c407bd5a7ec3720d9dd5ce54665d",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.722541+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "72bfd841771f2e1b1d0ffd285bf619f1204f50c77e9c82a247b3eff86827e682",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.770561+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "532a64af0811aaaa02fb651dfa3e6ca29b59402b4aaae3e402dd58473a94086b",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.652481+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "e7c5470f59dcdcc1626b54fa7f5d5a879361cf4ed1143809b098f4ab4846befa",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.772810+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "ba0ea10ffa8cdeb01418b1db799fc7cafafb53804dbe8f92fa68479ec05a990d",
-      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
-      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:22:02.655903+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "0f425aeb3a1486f6194c07673555ddb535930a5a42b135c8f026fa19b574e97c",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.775327+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "5d37540f9b4bb4b27307985470ddc8d6b9b70d368817c3da33bb9600917b86e0",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.725310+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "b63a59e11ee783b00058f31dee356f66d1ee8fff60abd1eb5743112f98c69444",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.777642+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "00674ebfc1ab85fbb3a98660b5d21ea85fb29bd01d75afcff44732785fe4610f",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.727505+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "318c88c407895486fe3f53fbda870f3dd28a4f0cb84dd9bc55ab60f289e399fe",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.780192+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "8": {
       "document_sha256": "d18aa347fc7bb730a047392049afb9d79212cf209ba651b9ca4dfde7354fe68f",
-      "source_digest": "5d37540f9b4bb4b27307985470ddc8d6b9b70d368817c3da33bb9600917b86e0",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.729690+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "b63a59e11ee783b00058f31dee356f66d1ee8fff60abd1eb5743112f98c69444",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.782206+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "95393d70f15a86690d5a2f7ba4e5f41c22641047ca95fb2dcb769c6a36efc60c",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.732031+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "8657901dc15a16ada8b725c0a7cc4989f27f17b716df3892451ba7ac7deba26c",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.784603+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "c4ea0aeb4f84629ac58c456484aa22e379238ae9b0ad595a155423c4769e3ab9",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.734412+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "75bf0e62fe57db5856974d5283605d8e3e1a18bbfbbb60a05dbadc3b1dc0ecf3",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.787159+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "a719e0b0c73542307230d9bac339e2063a4f498082199fb591538955fc708f45",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.737314+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "c043430603dfeb0ee936567872d1bf9a6ed041d5a532930661cafcea410e632c",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.789398+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "12": {
       "document_sha256": "18af1551af29075d92583d7bc84a780f3719662115a7b26e4aeb9efd760d1afc",
-      "source_digest": "d71fb72b624e44e53e975fe7a1d65ae28cefb7e1a06749f7ffe69eee0b1d0606",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.739797+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "731ad3a2bea06e805abe552d3c9059165a1dc6434a14dbd5ddda1b055ea104b7",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.792051+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "95393d70f15a86690d5a2f7ba4e5f41c22641047ca95fb2dcb769c6a36efc60c",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.742114+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "8657901dc15a16ada8b725c0a7cc4989f27f17b716df3892451ba7ac7deba26c",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.794958+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "95393d70f15a86690d5a2f7ba4e5f41c22641047ca95fb2dcb769c6a36efc60c",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.744098+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "8657901dc15a16ada8b725c0a7cc4989f27f17b716df3892451ba7ac7deba26c",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.797310+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "95393d70f15a86690d5a2f7ba4e5f41c22641047ca95fb2dcb769c6a36efc60c",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.746744+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "8657901dc15a16ada8b725c0a7cc4989f27f17b716df3892451ba7ac7deba26c",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.799721+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "356ef3efed66bc074b87b909f2eb22b3fdecc77c08f57f4ac5787e9b77ff946c",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.748778+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "98e27b234fa31d5fc62cc4b2c00d403c21c713513455833d738acad2379048f0",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.802016+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "5d37540f9b4bb4b27307985470ddc8d6b9b70d368817c3da33bb9600917b86e0",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.751216+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "b63a59e11ee783b00058f31dee356f66d1ee8fff60abd1eb5743112f98c69444",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.804365+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "00674ebfc1ab85fbb3a98660b5d21ea85fb29bd01d75afcff44732785fe4610f",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.753120+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "318c88c407895486fe3f53fbda870f3dd28a4f0cb84dd9bc55ab60f289e399fe",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.806387+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "e858d3321554dc861270a9414f7ae7ea4d4634113b345ba295fe40eb957b01c3",
-      "reviewed_by": "GPT root / compliance_validation independent peer-scope technical review 2026-11-23",
-      "review_note": "Supplied stock-peer scope R3: exact instrument and same dated theme/industry membership source, canonical member symbols and per-metric unit/period/basis; unavailable ratios remain unavailable. Stable finite arithmetic mean and regression updated. Native labels distinguish peer-average date from issuer metrics and expose membership source; original excluded-member hover reasons are preserved in Korean/English. Technical source/document consistency only; dynamic QA recorded separately. No provider selection, live acquisition or invented issuer ratios; policies/profile, rights and release approvals unchanged.",
-      "reviewed_at": "2026-11-22T20:23:58.758864+00:00",
-      "source_commit": "f17df92bd59e446fa189168c1273e0b7116e7e3d"
+      "source_digest": "6288c50c622482cb14826770e8972f6d16efec423ae70d3265a72ad17bf7e4aa",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.808869+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "00674ebfc1ab85fbb3a98660b5d21ea85fb29bd01d75afcff44732785fe4610f",
-      "reviewed_by": "GPT root / compliance_validation independent Fusion lifecycle technical review 2026-11-23",
-      "review_note": "Fusion lifecycle source delta: reuse Fusion only beneath Qt application stylesheet wrapper with one direct unambiguous QFusionStyle child; retain fallback for changed or ambiguous style. Existing startup/style regression adds isolated QApplication lifetime, QSS identity, style-change recovery and recreation cases. Source/document consistency only; runtime/Windows timing claims require their own evidence. Existing workflows, policies/profile and rights/release approvals unchanged.",
-      "reviewed_at": "2026-11-22T21:11:01.755131+00:00",
-      "source_commit": "657523d9302a1dc55a726d1c618fe2523aa58e9c"
+      "source_digest": "318c88c407895486fe3f53fbda870f3dd28a4f0cb84dd9bc55ab60f289e399fe",
+      "reviewed_by": "GPT root / android_mc_reference · independent UI140-main integration technical review, 2026-11-23",
+      "review_note": "Three-way technical review of UI PR 140 (90fc4c40) against actual main 5af37877 including the Android synthetic GBM preview and supplied Alpaca News normalizer. The stock-detail/chart guide, verified supplied peer valuation, lifecycle, all 13 incoming public main paths and both workflow test lists have been checked against their previously verified source. Existing UI product policy documents 8 and 12 retain their accepted versions. This review confirms source and document consistency only. Provider data/rights, public release, physical Windows PC7, APK/phone evidence and site publication require separate evidence.",
+      "reviewed_at": "2026-11-22T21:42:30.811158+00:00",
+      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
     }
   }
 }

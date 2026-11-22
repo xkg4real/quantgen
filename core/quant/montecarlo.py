@@ -59,14 +59,36 @@ finishing at or above a target at the final simulated session.
 from __future__ import annotations
 
 import math
+import sys as _sys
+from importlib import import_module as _import_module
 from dataclasses import dataclass, field
 
 import numpy as np
-from scipy.special import gammaln
 
-from core.quant.garch import (Z_BOUND, GarchFit, bounded_t_stats, fit_garch, horizon_vol,
-                              simulate_returns)
-from core.quant.history import History, TRADING_DAYS
+from core.quant.supplied_history import TRADING_DAYS
+
+# Preserve the desktop module's imports and patch points, while allowing a supplied-price GBM run
+# to start without its provider configuration or the optional SciPy/GARCH model dependencies.
+_OPTIONAL_EXPORTS = {
+    "History": "core.quant.history",
+    "gammaln": "scipy.special",
+    **dict.fromkeys(("Z_BOUND", "GarchFit", "bounded_t_stats", "fit_garch",
+                     "horizon_vol", "simulate_returns"), "core.quant.garch"),
+}
+_module = _sys.modules[__name__]
+
+
+def __getattr__(name):
+    if name not in _OPTIONAL_EXPORTS:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+    value = getattr(_import_module(_OPTIONAL_EXPORTS[name]), name)
+    globals()[name] = value
+    return value
+
+
+def __dir__():
+    return sorted(globals().keys() | _OPTIONAL_EXPORTS.keys())
+
 
 MODELS = ("garch_t", "gbm", "jump", "bootstrap")
 DRIFTS = ("premium", "zero", "rf", "sample")
@@ -98,7 +120,7 @@ class MCResult:
     cvar_pct: float = 0.0             # horizon CVaR (expected shortfall beyond VaR)
     var_level: float = 0.95
     jump_note: str = ""
-    garch: GarchFit | None = field(repr=False, default=None)
+    garch: _module.GarchFit | None = field(repr=False, default=None)
     drift_mode: str = "premium"
     garch_horizon_vol: float = 0.0    # annualised average vol over the horizon (GARCH only)
     rf_rate: float = 0.0              # risk-free rate the drift used (premium / rf modes)
@@ -113,7 +135,7 @@ class MCResult:
         return self.mean_terminal / self.spot - 1.0
 
 
-def _calibrate(history: History) -> tuple[float, float, np.ndarray]:
+def _calibrate(history: _module.History) -> tuple[float, float, np.ndarray]:
     r = history.log_returns()
     if r.size < 20:
         raise ValueError("Need at least 21 sessions of history to calibrate.")
@@ -162,7 +184,7 @@ def _simulate_jump(rng, r, sigma, n_paths, horizon) -> tuple[np.ndarray, str, fl
     # sum to n = 15 is the value for every count Monte Carlo will draw: P(n > 15)
     # is ~1e-35 at any daily intensity a 3-sigma split can produce.
     n = np.arange(0, 16)
-    log_pn = -lam + n * math.log(lam) - gammaln(n + 1)
+    log_pn = -lam + n * math.log(lam) - _module.gammaln(n + 1)
     corr = (0.5 * d_sig ** 2 - lam * jump_mu
             + float(np.log(np.sum(np.exp(log_pn + n * jump_mu + 0.5 * n * n * jump_sig ** 2)))))
     return total, note, corr
@@ -231,7 +253,7 @@ def _drift_note(mode: str, *, rf_rate: float, erp: float, sigma: float, mu: floa
             f"{sigma / math.sqrt(2):.1%} on two years of data")
 
 
-def run_monte_carlo(history: History, *, model: str = "garch_t", n_paths: int = 5000,
+def run_monte_carlo(history: _module.History, *, model: str = "garch_t", n_paths: int = 5000,
                     horizon_days: int = 126, target: float | None = None,
                     var_level: float = 0.95, seed: int = 7,
                     n_sample_paths: int = 40, drift: str = "premium",
@@ -255,22 +277,22 @@ def run_monte_carlo(history: History, *, model: str = "garch_t", n_paths: int = 
     z_bound = None
     bound_note = ""
     if model == "garch_t":
-        fit = fit_garch(r, dist="t")
-        shocks, corr_daily = simulate_returns(fit, n_paths=n_paths, horizon=horizon_days,
+        fit = _module.fit_garch(r, dist="t")
+        shocks, corr_daily = _module.simulate_returns(fit, n_paths=n_paths, horizon=horizon_days,
                                               seed=seed, drift_daily=drift_daily,
                                               rate_daily=rate_daily)
         sigma_report = fit.cond_vol_last
-        mass, v_in = bounded_t_stats(fit.nu, Z_BOUND)
-        g_hvol = horizon_vol(fit, horizon_days, var_in=v_in)      # the vol of the paths drawn
+        mass, v_in = _module.bounded_t_stats(fit.nu, _module.Z_BOUND)
+        g_hvol = _module.horizon_vol(fit, horizon_days, var_in=v_in)      # the vol of the paths drawn
         if fit.innovation == "t":
-            z_bound = Z_BOUND
+            z_bound = _module.Z_BOUND
             how = (f"per step from each path's conditional variance, horizon average; "
-                   f"t innovations bounded at ±{Z_BOUND:g}")
+                   f"t innovations bounded at ±{_module.Z_BOUND:g}")
             out_per_yr = (1.0 - mass) * TRADING_DAYS
             expect = (f"once per {1.0 / out_per_yr:,.0f} years" if out_per_yr > 1e-9
                       else "never in practice")
-            ratio = g_hvol / horizon_vol(fit, horizon_days)   # bounded vs the fit's own forecast
-            bound_note = (f"t innovations are capped at ±{Z_BOUND:g}: this fit expects a larger day "
+            ratio = g_hvol / _module.horizon_vol(fit, horizon_days)   # bounded vs the fit's own forecast
+            bound_note = (f"t innovations are capped at ±{_module.Z_BOUND:g}: this fit expects a larger day "
                           f"{expect} (P {1.0 - mass ** horizon_days:.1%} within the horizon); the cap "
                           f"drops {1.0 - v_in:.2%} of innovation variance, so the fan's vol over this "
                           f"horizon runs {1.0 - ratio:.1%} below the fit's own forecast and VaR/CVaR "
@@ -335,3 +357,7 @@ def run_monte_carlo(history: History, *, model: str = "garch_t", n_paths: int = 
         erp=erp if drift == "premium" else 0.0, drift_note=drift_note,
         correction_annual=corr_daily * TRADING_DAYS, z_bound=z_bound, bound_note=bound_note,
     )
+
+
+# A star import explicitly asks for the desktop exports, including the optional symbols.
+__all__ = [name for name in __dir__() if not name.startswith("_")]
