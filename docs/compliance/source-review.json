@@ -440,7 +440,6 @@
     "docs/product/UI_WEBSITE_SYNC.md": "37b62baa94dece046c08e70c01d49e4658937cbaa21d3b980c9fcb9099913363",
     "docs/product/ui_drafts_2026-11-17/README.md": "b2166e175e5d7ced820feeb9714a18640a4e08a0ced92c5ea88b9c45c29d2c92",
     "main.py": "768392a3fddaca06fda168710f757147ad31b679d8c68076d947204704121229",
-    "mindmap/QUANTGEN Macro Neural Link.html": "4dbf731539d418aa67553bd5fd393dfc55550fac737ef89ca4c18c813f7c76c5",
     "mobile/main.py": "db2d270e972e026b08702891813f37674b0998f5d0d742e9e86a593d05fbb89c",
     "mobile/pyproject.toml": "2cad54b7e32873320de1d05e1e81cb91ce88f64cd97afc1ec955399fc5922db7",
     "packaging/launch_desktop.py": "7724b54d172f00d87c80abab2ff5214deb5ebcf9105878e24ca7519c166ce4b8",
@@ -533,7 +532,6 @@
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
     "requirements-nautilus.txt": "7a720e247bf1a5708aa19e79c1291b6baef87c837719c669ebe5f24e4a4a7e0e",
     "requirements.txt": "51bba6d2dedc96e30c4176d44043536f241802ccfb19d81aad3084ee68bc48a3",
-    "test_npu.py": "fae9f28fa1772b834ede1f22315b93f66feefc586e5afd061e188f091d48b4d4",
     "tests/__init__.py": "db1fcd9d60745c7af2cbaf67c78afaabeb6d3daa51bcab04b786fcd3432658e3",
     "tests/acceptance.py": "52145dced05c3eb193c6eab1905096a478b1940490bba608a44024e24ea7d7fc",
     "tests/adoption_strategy_rules_acceptance.py": "dddcfc9a1eab900437e0d62fddd62f35fc4b5bcfe46cd7c55cf6211698ae7f8d",
@@ -861,163 +859,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "bc7bd97e53d8ef61fa89dada96e968f12b4631cce771c0aae2e2aed2ff23b6da",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.015095+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "21f08afc34a592088a42a03c200deda352c79eeffcda5dd148de3ea0c649252e",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.126556+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "bc7bd97e53d8ef61fa89dada96e968f12b4631cce771c0aae2e2aed2ff23b6da",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.018274+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "21f08afc34a592088a42a03c200deda352c79eeffcda5dd148de3ea0c649252e",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.129717+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "e9d109c6c20f81c8b6b2d0dd6bcd7c669a9b89ce27718fb06974a2c45d52f715",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.021169+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "19292077e335143eb1bf503fd4412d5623f2906049a0270e3ba3fa467db58a15",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.132076+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "92c799ba91cf9cd848d530da184571691e3008ba883f47e6843d2637076f8366",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.023895+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "eb1518e6d06e7249bfd0bb631e3c49187f2091d7fdac5796d89d1cddc50b33f2",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.134172+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "c9db2ef6c2869aaffa511ae0153f0eed7186554b7f1cd0efe6a660e3fc1ea781",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.025955+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "009d072ff37e314b8e740407feab3039e713808c61cd8fb3eb40fd31b0f7d4ad",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.136556+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "0ed64aac21c86b2647ca77f1b825992943df8d044b6a2f49f009caea7e48e182",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.028124+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "4b3909c7be38876c2a810d1ecb07aa50284bd9eade39a6f6c61e32b77166f699",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.139181+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "bc7bd97e53d8ef61fa89dada96e968f12b4631cce771c0aae2e2aed2ff23b6da",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.030228+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "21f08afc34a592088a42a03c200deda352c79eeffcda5dd148de3ea0c649252e",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.141266+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
-      "source_digest": "0ed64aac21c86b2647ca77f1b825992943df8d044b6a2f49f009caea7e48e182",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.032428+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "4b3909c7be38876c2a810d1ecb07aa50284bd9eade39a6f6c61e32b77166f699",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.143706+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "6dbe32bac28e5ca91f52129de57e0dc4221aa2ff9d32c7284de8a99f6a2b0d55",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.034495+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "5e26bbf379a507c52dd2aedf662e2a9e8a41da161303291b4d4d6155d61adad1",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.146428+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "e5c1cdd87ca21f9553e99bdc222a0e08266e46dbbf5d10e82ed7ce302b4584a3",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.037074+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "bccc8d670ee0cf794a0a0fa0cb81990f23c4e7ffa9f768801f37fe795116e9c0",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.148476+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "7764cab18e9a4f629421c7c129af424bb891eede4e0c158b2026870a2be11c18",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.039148+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "bfcd2f27e661e11ac47d951e5f4969dd46070a76414a8666a690a9715ac93a9a",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.150465+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "b7e40d89b89d8ab5b30dee5ab3faff96b072fc8c30426e654352faefaea39b06",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.041615+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "f0645a36e0c4c99a36721d2fde1657d0cbeaf72656b1691f3c290ffa2a65f359",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.152639+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "6dbe32bac28e5ca91f52129de57e0dc4221aa2ff9d32c7284de8a99f6a2b0d55",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.044026+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "5e26bbf379a507c52dd2aedf662e2a9e8a41da161303291b4d4d6155d61adad1",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.154990+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "6dbe32bac28e5ca91f52129de57e0dc4221aa2ff9d32c7284de8a99f6a2b0d55",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.046123+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "5e26bbf379a507c52dd2aedf662e2a9e8a41da161303291b4d4d6155d61adad1",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.157221+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "6dbe32bac28e5ca91f52129de57e0dc4221aa2ff9d32c7284de8a99f6a2b0d55",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.048432+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "5e26bbf379a507c52dd2aedf662e2a9e8a41da161303291b4d4d6155d61adad1",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.159301+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "689e62692c7b6059d870db9d89ef2f29c5b1ba1b76dbab3808f433ec8c4c6d3f",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.050885+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "b99bcad6b75ae38f69f1e3ed947b80f06c361e01c53db80e8ae8b1b485551d8d",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.161520+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "0ed64aac21c86b2647ca77f1b825992943df8d044b6a2f49f009caea7e48e182",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.053244+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "4b3909c7be38876c2a810d1ecb07aa50284bd9eade39a6f6c61e32b77166f699",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.163512+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "bc7bd97e53d8ef61fa89dada96e968f12b4631cce771c0aae2e2aed2ff23b6da",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.055385+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "21f08afc34a592088a42a03c200deda352c79eeffcda5dd148de3ea0c649252e",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.165606+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "813a4b47dbf63034a967e750cfdbc7b67a8bc6393e96ba3894c21075dc8bd797",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.057630+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "b197428f46bb5c5153d17585390c409c495e48bec35b1994954546da53fc4c8b",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.167651+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "bc7bd97e53d8ef61fa89dada96e968f12b4631cce771c0aae2e2aed2ff23b6da",
-      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
-      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
-      "reviewed_at": "2026-11-22T18:21:28.059782+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "21f08afc34a592088a42a03c200deda352c79eeffcda5dd148de3ea0c649252e",
+      "reviewed_by": "GPT root / compliance_validation independent GH-2 cleanup technical review 2026-11-23",
+      "review_note": "GH-2 approved cleanup removes obsolete root test_npu.py and the top-level mindmap surface. Remove only godseye-dev from the explicit launcher candidate; the original checker excludes .claude. Remaining source bytes, workflows, policies/profile and existing safeguards are preserved. Technical source inventory/document consistency review only; no production environment, data acquisition, rights or release approval.",
+      "reviewed_at": "2026-11-22T20:02:44.170247+00:00",
+      "source_commit": "666e0064d446244bfff6a058441c135eeaab825c"
     }
   }
 }
