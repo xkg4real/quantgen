@@ -15,7 +15,7 @@ Android 빌드 경로·Flet 진입점·GBM 의존성 선언을 재검토했습�
 - [#140](https://github.com/xkg4real/quantgen/pull/140) `97152abd` · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45055309365) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45055309366) success
 - [#141](https://github.com/xkg4real/quantgen/pull/141) `a35b2f8b` · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45054882429) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45054882305) success
 - [#143](https://github.com/xkg4real/quantgen/pull/143) `3b8f39ca` · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45054408521) success · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45054408511) in_progress
-- [#144](https://github.com/xkg4real/quantgen/pull/144) `6a0336e5` · 원격 재조회 시 확인될 새 CI 결과 대기
+- [#144](https://github.com/xkg4real/quantgen/pull/144) `6a0336e5` · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45057055218) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45057055229) success (2026-11-23T03:48:47+09:00)
 
 
 주 작업은 상업용 QUANTGEN의 Android 내부 시험(⑮-5)입니다. 사용자가 지정한 단일 요청 창구에서 DIDM·OS·UI·결제·Remaining Work를 분담합니다. 다음 작업자는 최신 CURRENT와 LEDGER의 커밋을 먼저 대조합니다. 이전 Claude 상시 감시는 취소 상태입니다.
