@@ -1,3 +1,18 @@
+## UI 네 건 후속 전달 · 주간 Remaining Work 판독 — 2026-11-22T15:29:58+09:00
+
+- 사용자 수동 요청으로만 진행했습니다. execution `6e1ca7eb-74bb-41c3-b056-313bbe8b141c`, 같은 task/handoff ID·branch·직전 fed639d·STATE 일치 및 OS 잠금 후 최신 CURRENT70c488의 소유권을 검증했습니다. 자동감시·자동 인수·예약·run_now는 재개하지 않습니다.
+- `gpt/ui-guide-chart-first-20261121@0e78c0897a43cf46bd92ab42ceca311feecd0d14` 전달 완료. 부모 fed639d, tree e23517517873ba98437fec2cafd811fd635c3e5d. 정확13경로 본문/blob·단일부모/tree·compare·expected-head CAS·branch/PR read-back 일치. PR140 draft/open, main dec979a 유지, 병합하지 않았습니다.
+- 오늘 구현은 네 건뿐입니다: 부모에 넣은 뒤 표시해 시작 임시 창 방지 / 원사례 첫 화면과 우측하단 실제 선모양 작은 범례 / PER·PBR 교육용 예시 구간·중립 위치 / 파란 매도·빨간 매수 수량과 중앙 가격의 3→10단계씩 호가. 원사례·선택·cursor·zoom·보고서·공유 계산/renderer·데이터/조회/주문 규칙은 보존했습니다. 긴 수량은 실제 글꼴의 전체 문자열 폭을 반영합니다.
+- 최종871 동결 fc4075e5에서 실제 고유53개(4/5/19/8/2/2/7/3/3) PASS, 실패/오류/skip0. 별도 실제330px 종목 호스트3조건/6상태, 6→20행/12→40숫자, 가림0, 정상 가로스크롤0·극단값279. 실제QG·17차트+12종목PNG·소스871/private 전후 일치·안전counter0·0700prefix비움. 보고6e2ab1a5/outer3d374442/독립579e20ac. 전체 앱/Windows/실제 공급사·모델·원장 증거는 아닙니다.
+- 이전 시작 구성요소11 임시Show→수정후0. 첫 후속53 후보 FAIL(98 subtest/오류1)과 원본 로그를 보존했습니다. 실제 긴수량 가림을 고쳤고, 실제 SVG 순서/태그·유효 합성case명·기존 missing-depth 쌍 계약을 검사하도록 시험의 잘못된 oracle을 수정했습니다. 원 폭/폰트/전체수치/세로 경계 기준은 완화하지 않았습니다.
+- 기존 fed639d Runtime44982209688은 전체 FAIL: Windows3환경 동일 정상330폭 가로스크롤106 실패, Linux focused45 이후 전체job취소. 이번 정확0e78 Compliance44993932294 SUCCESS, Runtime44993932277 진행중. 과거 실패/취소를 PASS로 대체하지 않습니다.
+- 원checker 20문서/871소스 정합PASS, 공개BLOCKED65 유지. 최종기준선92538507/raw14d55e74. 정책본문/registry/profile/권리·승인 불변이며 기술기록만 갱신했습니다. 웹 PR-140 revision은 NOT_SENT/미적용/미배포. Notion 직접쓰기는 하지 않고 사용자 붙여넣기 보고로 준비했습니다.
+- 남음: 정확 후보 필수CI·기존 PC7 후 PR140 조건부 병합 → KEY-5 K3 13접점 → OS-F1 Qt 바인딩 PyQt6→PySide6(OS go 필요). OS-F2 저장분리 코드는 이미 main이며 실제 소유자 자료이전은 별도입니다. DS-H 실진단/OA46·DIDM 평가/실증·PAY 계정/법인/PG/권리 조건은 미완료입니다. ROE/PSR 실수치·검증된 테마 평균은 만들지 않습니다.
+- DIDM은 PR138 `53e5e723`에 수집·append-only/as-of 저장·점수 계약·신규성 틀과137 합성시험을 통합한 단계입니다. 과거 소유자 PC의 GDELT/ALFRED/EDGAR/Kalshi/ECOS/OpenDART 수집 증거는 존재하지만 실제 모형 성능·계속 운영·표시권 증거는 아닙니다. DS-4b 무료뉴스는 확인된 이용불가로 보류, V0·14유형·3개월여유·Kalshi 결정을 다시 묻지 않습니다.
+- 상세 주간 완료/미완료·DIDM 단계/재현·다음 시작점: [WEEKLY_HANDOFF_2026-11-22_6e1ca7eb.md](WEEKLY_HANDOFF_2026-11-22_6e1ca7eb.md). 오늘 KEY/OS/DIDM/PAY 추가 구현은 하지 않았습니다. 상위UI/KEY/DIDM 완료ID 추가0, 사용자 요청 없이 재개하지 않습니다.
+
+---
+
 ## 사례 차트·종목 상세 스타일 수정 전달 — 2026-11-22T12:49:15+09:00
 
 - 사용자 정정: 기존 사례 차트가 가이드 첫 화면에 그대로 보이고 그 실제 선·값·구간 위에 짧은 안내를 넣습니다. 모든 UI는 기존 시장→종목 상세의 QG Interface/N3·색·간격·카드·숫자·펼침 버튼 기준을 재사용합니다. 예시 세션 이름은 보고 형식 설명이며 실제 세션 재편 지시가 아닙니다.
