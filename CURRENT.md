@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-23T06:47:19+09:00
+updated_at: 2026-11-23T06:54:39+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/android-commercial-preview-20261123
@@ -22,6 +22,12 @@ handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06
 previous_returned_at: 2026-11-21T14:54:13+09:00
 returned_at: 2026-11-22T12:49:15+09:00
 ---
+
+## UI Windows 3.12 합성 잠금 시험 실패 · 2026-11-23T06:54:39+09:00
+
+새 [#140 Windows 3.12 작업](https://github.com/xkg4real/quantgen/actions/runs/45073779517/job/137366381159)은 6단계 합성 검사 1,081개에서 오류 1개·건너뜀 15개로 중단됐습니다. 같은 경로에 두 writer와 여덟 스레드가 64건을 쓰는 시험에서 한 요청이 쓰기 전에 2초 경로 잠금을 획득하지 못했습니다. 이 환경의 Qt 단계는 실행되지 않았습니다. 두 파일은 #140에서 변경되지 않았고 #143과 기존 #144의 Windows 3.12에서는 같은 시험이 통과했습니다. 최신 #144의 Windows 3.12와 #140의 다른 세 설치 환경도 이 단계를 통과했습니다. 어느 요청의 디스크 쓰기나 실행 대기가 길었는지는 이 로그로 알 수 없습니다.
+
+기존 2초 계약·64건 무결성 판정은 유지합니다. 현재 UI 전체 실행 결과를 보존하고, 동일 head의 실패한 Windows 작업에 한해 한 차례 다시 검사한 뒤 원래 실패와 재시험을 따로 기록합니다. 반복되면 임시 저장소의 해당 시험에서 잠금 획득과 fsync 시간을 분리해 확인합니다. 로컬 병합 입력에서 실제 Qt 시작 화면 6개, 종목 상세/패널과 Qt 없는 import 경계의 선택 검사가 통과했습니다. 실제 Windows PC7은 대기입니다.
 
 [중앙 업무표](WORKBOARD.md)에 Alpaca의 실제 main 병합, Massive·UI 통합과 새 검사, 결제와 Android의 다음 단계를 반영했습니다.
 
