@@ -708,7 +708,7 @@
     "tests/market_symbols_acceptance.py": "dac7d8af68db34e0ecf7ce451fddc288618eae24988c080d8784b5e480526d78",
     "tests/mc_bootstrap_disclosure_acceptance.py": "e09b191d7a13a74a15b556ce231524222a3d540606707488388322cb635af506",
     "tests/mc_volatility_acceptance.py": "5715fb07e257e88f6a38ace19863c83e926c01bbc5c22573174e4ea1072c2a89",
-    "tests/mobile_startup_acceptance.py": "815edabf707330774214a1accf4ed54551d945b3a927c6f11bcd3b2dc44a04c9",
+    "tests/mobile_startup_acceptance.py": "5bdbba796ebe77a8c0e494b488928bf0d5d655bf9f40fce966c613b125278da8",
     "tests/nautilus_acceptance.py": "6863a7f8b181e31c61e60b9e7f3e43448f5653b598252dcc3adf698ded8ffdf2",
     "tests/nautilus_registration_acceptance.py": "b846a53ecb6eb008a3b0ffbe1eab428b5491c5d1ac342a360368b38854fffda5",
     "tests/nautilus_stub_child.py": "6f0e75014fa6f5778095c0f756e4e88576ffafef7fe0c8af083cc00b5d9604b0",
@@ -946,10 +946,10 @@
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "8b7faec9b17669c7bcf5d13b6a1f29c7501db3704e7e21c2479c12b42d95cbdb",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.666690+00:00",
+      "source_digest": "a5f6c7417759347c183da2fe1a71d1ab0fb0367fa0f410a85ba7e2fbae331a11",
+      "reviewed_by": "GPT root / independent Windows fixture portability technical review 2026-11-23",
+      "review_note": "PR141 fixture-only path normalization: canonical temporary root and POSIX manifest comparison preserve stage safety checks and all methods; same11 guarded host methods, new Windows CI required; source/document consistency only, policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T17:43:59.456028+00:00",
       "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "13": {

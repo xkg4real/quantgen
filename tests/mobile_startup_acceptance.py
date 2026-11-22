@@ -25,7 +25,7 @@ class MobileStageTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
-        self.base = Path(self.temporary.name)
+        self.base = Path(self.temporary.name).resolve()
         self.repo = self.base / "source"
         self.repo.mkdir()
         files = {
@@ -73,7 +73,7 @@ class MobileStageTests(unittest.TestCase):
         self.assertEqual(manifest.count("mobile/main.py -> main.py"), 1)
         self.assertEqual(manifest.count("mobile/pyproject.toml -> pyproject.toml"), 1)
         targets = [entry.split(" -> ")[-1] for entry in manifest]
-        actual = sorted(str(p.relative_to(output)) for p in output.rglob("*")
+        actual = sorted(p.relative_to(output).as_posix() for p in output.rglob("*")
                         if p.is_file() and p.name != "STAGE_MANIFEST.json")
         self.assertEqual(sorted(targets), actual)
         self.assertEqual(len(targets), len(set(targets)))

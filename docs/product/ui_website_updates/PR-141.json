@@ -38,12 +38,25 @@
         "failures": 0,
         "errors": 0,
         "skips": 0
+      },
+      {
+        "suite": "same11 methods after Windows-fixture portability correction; independent host confirmation",
+        "passed": 11,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0
       }
     ],
-    "counts_note": "Author and independent runs overlap; not22 unique tests. Prior guard diagnostics preserved; final clean run safety violations0.",
-    "source_review": "20 technical reviews /848sources PASS; publication BLOCKED65; policy/profile/registry unchanged",
-    "ci": "PENDING",
-    "ci_runs": [],
+    "counts_note": "All author/independent/repair confirmations repeat the same11 selected methods and are not summed. Host Linux Flet0.85.2; prior9c wholeRuntime failed on3Windows fixture paths. Fresh exact-head Windows and full CI evidence are still required.",
+    "source_review": "20-document consistency; only technical record12 refreshed for fixture correction, other19 retained; publication BLOCKED65 and policies/profile/registry unchanged.",
+    "ci": "PREVIOUS_9c_RUNTIME_FAILURE; FRESH_EXACT_HEAD_CHECKS_REQUIRED",
+    "ci_runs": [
+      {
+        "id": 45043106514,
+        "head_sha": "9c95b9ee1e9621ce887b0217f0c867bcaf6ed724",
+        "conclusion": "failure"
+      }
+    ],
     "actual_provider_network": "NOT_RUN",
     "user_pc": "Android artifact/owner-phone startup, accessibility and QuantLab parity NOT_PERFORMED"
   },
@@ -55,7 +68,8 @@
   "limits_ko": [
     "내부 shell 및 host control구성/합성staging만 검증. OS-A1 전체 및 상업용 Android 출시 미완료.",
     "Flutter SDK/mobile wheelhost CONNECT403 및 GitHub dispatch capability 부족으로 APK 빌드는 아직 수행하지 않았습니다.",
-    "실제 시세·계정·PG·연구·주문·원장·업로드키·스토어·웹사이트 배포는 이 변경에 포함되지 않습니다."
+    "실제 시세·계정·PG·연구·주문·원장·업로드키·스토어·웹사이트 배포는 이 변경에 포함되지 않습니다.",
+    "Windows 경로 가정 두 곳을 시험에서 보정했으나 실제 해결은 새 정확 head의 Windows CI로 확인합니다. 기존9c Runtime 실패를 host11 PASS로 대체하지 않습니다."
   ],
   "changed_files": [
     "mobile/main.py",
@@ -66,5 +80,27 @@
     "docs/compliance/source-review.json",
     "docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md",
     "docs/product/ui_website_updates/PR-141.json"
+  ],
+  "revisions": [
+    {
+      "kind": "Windows fixture path portability correction",
+      "parent_commit": "9c95b9ee1e9621ce887b0217f0c867bcaf6ed724",
+      "scope": [
+        "tests/mobile_startup_acceptance.py",
+        "docs/compliance/source-review.json"
+      ],
+      "change": "Canonical temporary fixture root and POSIX relative file-list comparison; production code, stage safety checks, assertions, methods, skips and timeouts unchanged.",
+      "test_sha256": "5bdbba796ebe77a8c0e494b488928bf0d5d655bf9f40fce966c613b125278da8",
+      "host_validation": "same11 methods independently PASS, guard0; 473 other selected sources unchanged; actualstage399 preserved",
+      "previous_Runtime": {
+        "id": 45043106514,
+        "head": "9c95b9ee1e9621ce887b0217f0c867bcaf6ed724",
+        "conclusion": "failure",
+        "scope": "3 Windows versions failed fixture path normalization; original logs preserved"
+      },
+      "actual_fresh_Windows_CI_confirmed": false,
+      "website_applied": false,
+      "deployed": false
+    }
   ]
 }
