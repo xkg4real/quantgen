@@ -1209,3 +1209,8 @@ Claude가 받은 뜻(소유자에게 그대로 알림):
 ```
 python3 tools/handoff/push_handoff.py --show   # 기대: checkpoint, from claude, cycle 2026-11-10
 ```
+
+
+### 같은 사용자 요청 추가 — 상세 카드 기본 톤 일치 (2026-11-22)
+
+사용자 실제 스크린샷은 새 수급/공매도/호가 카드의 글꼴·크기·강조·기본 네이티브 펼침 버튼이 같은 페이지 기존 카드와 다르다고 지적했습니다. 기존 페이지의 QG Interface/N3·stock_detail_style와 카드/행/접기 스타일을 재사용하여 새 insight 카드만 일치시키는 UI 수정과 합성 회귀를 추가합니다. 데이터·값·수신시각·원계산/호가·주문·API 동작은 변경하지 않습니다. ROOT scope에 해당 insight presentation 파일과 최소 관련 테스트를 포함합니다.
