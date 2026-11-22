@@ -1,14 +1,14 @@
 ---
-status: returned
+status: taken
 reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-22T15:29:58+09:00
+updated_at: 2026-11-22T23:06:03+09:00
 stale_after_hours: 3
-waiting_on: owner
+waiting_on: none
 work_branch: gpt/ui-guide-chart-first-20261121
 work_commit: 0e78c0897a43cf46bd92ab42ceca311feecd0d14
 uncommitted_changes: no
@@ -17,11 +17,17 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-24T17:00:00+09:00
 session: 01a183c6-632a-70cc-a0e6-32e764f43087
-execution_id: 6e1ca7eb-74bb-41c3-b056-313bbe8b141c
+execution_id: 771b8c78-a4da-492e-bdf3-309980124cbc
 handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06686a77
 previous_returned_at: 2026-11-21T14:54:13+09:00
 returned_at: 2026-11-22T12:49:15+09:00
 ---
+
+## UI 후속 CI 수정 재개 — 2026-11-22T23:06:03+09:00
+
+- execution771b8c78-a4da-492e-bdf3-309980124cbc, OS잠금24775. 저장된6e1/task/handoff/branch/0e78 및 최신CURRENT1eb8da3 일치 후 latestblob CAS/readback으로 승인된 오늘 UI4 마감의 CI 실패를 수정합니다. 부모 PC7/OS go/권리 조건은 유지하며 자동감시·예약·타세션자동인수를 재개하지 않습니다.
+- 정확0e78 Runtime44993932277은 완료FAIL입니다. Linux와Windows3환경에서53개수집 후 investor_flow/short_ratio 합성 availability 관련52subtest실패를 확인했습니다. 기존정상330·긴수량 호가검사는 통과했습니다. 로컬53PASS와원격FAIL을분리보존하며 import/fixture 불일치 원인을 독립검토합니다. 원가용성/폰트/폭/수치/판정 기준은 완화하지 않습니다.
+- 오늘 새DIDM/OS/PAY구현은 시작하지 않습니다. 법인전5갈래 목표의원문·B6소스·Android/TRADEGEN범위·기존AWS분석은 별도 읽기전용 자료대조만 진행합니다. 실제주문/TRADEGEN·API/모델/원장/보호입력·네트워크정책·법인/PG/배포 변경없음.
 
 ## UI 네 건 후속 전달 · 주간 Remaining Work 판독 — 2026-11-22T15:29:58+09:00
 
