@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "795b2e9435c8eed43b08b98c709b3e2eeb3a7365ad2628855cb164cea0f94ab8",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "22654f7db6cc602138aabc36cd559ecac2cf30ddbbeeb958821c9c35063575a5",
+    ".github/workflows/runtime-smoke.yml": "1d584a1dae3a3bfa2774667250859f728f0f97d904097e109629eed8ad0f9e2c",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -643,6 +643,7 @@
     "tests/gateway_same_answer_acceptance.py": "91e59d5ea698e283cd096873a508ddb95f8e4c8171051a9ccce5e016e552c2c5",
     "tests/glossary_search_acceptance.py": "058922190b05fc585dab3462848b40ea0444a43b4b5e96fdb512cd8ccfc0e64e",
     "tests/golden_tools.py": "24154d79aea43bc91b7c26c33c6b400cd9202cdb4915680a81b4f7cf0fa928ef",
+    "tests/handoff_doc_acceptance.py": "e7729c33edf0f05ea76db8bf66ae4463348a6e023d51cb00dab54ab360473ab2",
     "tests/history_best_source_acceptance.py": "cda3221001d11599c0b9dab6f71f59a20b7ac762d43adcd6c0b5f2fbce19310f",
     "tests/home_indicators_acceptance.py": "2585e4a8cd2437f838d94a52ecd2962117fd70e809e700dd14e9d5a87a691c74",
     "tests/home_watchlist_acceptance.py": "86956c94f3aa7a90f496bc5c2bea388a6b2b5f861b5d1ca4421045c55f19165c",
@@ -771,7 +772,7 @@
     "tools/handoff/auto_snapshot.py": "e79e3cc15572b0c4fae50784784f9fd234c75440d812104d0abf393bb2571cc6",
     "tools/handoff/mod/hooks/register.test.ts": "2709a0beb01e94689c5be2118f266138ad24b990648afbd58de8086e4d5628fb",
     "tools/handoff/mod/hooks/register.ts": "f7370a361aee2a53d4e1b8355f5a707b52a77d0e852a63bc3a1c743400b39d0b",
-    "tools/handoff/push_handoff.py": "45e2e3405d78087d5acb91ce4ea415a47fdcab3f13f3331708d07af856b91f29",
+    "tools/handoff/push_handoff.py": "0a125ce7efb1d09c1b3c050d8613cee6182b01b7dea4f30caf6e1fcccd3a1530",
     "tools/nautilus/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/nautilus/egress_probe.py": "e5189484cc5f4891c2278ffdf1d71dc065eface3019b31d4a1f263c4011ddc15",
     "tools/nautilus/launch.py": "3a7a9a3cbbb1f372dbf1598cd8c75eafbd7a116ee622cda259ee2e8aa7fe1577",
@@ -857,163 +858,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "c08b288189cdb62323d8f8a8c21912c839f1e914bbd1b0380e1f624b29c7d3d2",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.110974+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "0c27518c52c5f228561d0a40b368c7bab0765af0c04c6a5d239c64e85784df92",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.643704+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "c08b288189cdb62323d8f8a8c21912c839f1e914bbd1b0380e1f624b29c7d3d2",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.115813+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "0c27518c52c5f228561d0a40b368c7bab0765af0c04c6a5d239c64e85784df92",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.646441+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "00d935cae1149450f053a4ca256652b060cf1cdadb46a647324a1cf6fb036d7b",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.118914+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "7bc01a4153a3f1dfb3546e1432d869e486e7625466fffb4cad9de974d74c197a",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.648674+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "ee8136c11567f34fb60f56f133236c7c1348c01a346649d0da5672ab7ff85848",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.121787+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "8e33e029ca18259c25d72d4d45f4c630bae4e7bc400cf034dc495e9cb9bd0f39",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.650741+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "586f5017df1d036229b19dfbc6a1471f3c1acb268fea6eb830fb2f3902189687",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.124947+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "89a8eaa7afaa0cb13fac17e19e34a57f722bb224abe04fd3ab66315888108990",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.652721+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "b28c3aa7f7b86a76ecf20de233f205aa3c615159259e570c95b7e985eee5cf32",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.127674+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "6d34d9d0d28ce89b80efb9cc2e7d4ca832c0a0f2d04000f90ce710a07f10e679",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.654969+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "c08b288189cdb62323d8f8a8c21912c839f1e914bbd1b0380e1f624b29c7d3d2",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.134041+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "0c27518c52c5f228561d0a40b368c7bab0765af0c04c6a5d239c64e85784df92",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.657113+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
-      "source_digest": "b28c3aa7f7b86a76ecf20de233f205aa3c615159259e570c95b7e985eee5cf32",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.136570+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "6d34d9d0d28ce89b80efb9cc2e7d4ca832c0a0f2d04000f90ce710a07f10e679",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.659248+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "60d99d8b16b101eece67bffd9b07a32e96425e457d7a41b49632454c8b6f1f2e",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.141938+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "46bb7cc8e3feb86a6e6f832c400f6a8f5849781a99c515457c3423786410b8b0",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.661301+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "34062cb3869fe2b18291a70f4915df7655eba1ae15d3a69e22511f0f5e63bace",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.144673+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "ecf7de0f84f4fb2349a589560d0151d6d846ba882c3bb2dfe24630a0b2ce92b6",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.663531+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "7db5617373e7b54bed5ac4daa74c9baace7d3bd18ef9911d5243c046b51034ea",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.149895+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "575a07bef8e02e55750bf39a5508b3b70074e6252a5aa6f2b55501811e6f652c",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.666043+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "6da833c7a7f4ed694c51d7b09ba8d02da433a1f72489226f8bae3599de122c3c",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.152265+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "116b58b28192bb7fd3c3b4b9ea6f7f7948f6a1c078cf8df43596557f17e5fd8f",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.668514+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "60d99d8b16b101eece67bffd9b07a32e96425e457d7a41b49632454c8b6f1f2e",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.154410+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "46bb7cc8e3feb86a6e6f832c400f6a8f5849781a99c515457c3423786410b8b0",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.670691+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "60d99d8b16b101eece67bffd9b07a32e96425e457d7a41b49632454c8b6f1f2e",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.159042+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "46bb7cc8e3feb86a6e6f832c400f6a8f5849781a99c515457c3423786410b8b0",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.673375+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "60d99d8b16b101eece67bffd9b07a32e96425e457d7a41b49632454c8b6f1f2e",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.162531+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "46bb7cc8e3feb86a6e6f832c400f6a8f5849781a99c515457c3423786410b8b0",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.676004+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "bfa612385cb6046685b86b8f92d5f48bc8caf73c4f44541c1130be41718901c4",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.165844+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "c5c5c39025cdc596689c806d286e7437cad47d19ae4b9fd76e9357555a58bb7d",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.678000+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "b28c3aa7f7b86a76ecf20de233f205aa3c615159259e570c95b7e985eee5cf32",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.169423+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "6d34d9d0d28ce89b80efb9cc2e7d4ca832c0a0f2d04000f90ce710a07f10e679",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.680368+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "c08b288189cdb62323d8f8a8c21912c839f1e914bbd1b0380e1f624b29c7d3d2",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.172911+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "0c27518c52c5f228561d0a40b368c7bab0765af0c04c6a5d239c64e85784df92",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.682421+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "48a0348939cc3a74c8ad4ed0a6a7248fc5bc0375b94234f5460147e9de3267c3",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.177000+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "ecf2127ed68dfddef00f3f8c10ac196cbf0e98b311c5b61712d43ed8dacaac3a",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.684600+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "c08b288189cdb62323d8f8a8c21912c839f1e914bbd1b0380e1f624b29c7d3d2",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.180696+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "0c27518c52c5f228561d0a40b368c7bab0765af0c04c6a5d239c64e85784df92",
+      "reviewed_by": "GPT root / compliance_validation and independent manual handoff technical review 2026-11-23",
+      "review_note": "Manual named-lane --doc publishing with report-only commit and readback; central CURRENT/LEDGER path preserved. Final16 synthetic bare-Git methods on Linux Python3.12/3.13 and independent CLI/concurrency probes reviewed; canonical paths, ownership, edit-base conflicts and same-lane races covered. CI adds both PR path selectors and one bounded test module; symlink capability is reported explicitly. No real handoff, recurring automation or legal/commercial approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T19:23:12.686744+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     }
   }
 }
