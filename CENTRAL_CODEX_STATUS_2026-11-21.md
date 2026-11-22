@@ -1,3 +1,19 @@
+## 기존 Goal 진행 checkpoint · PR141/142 및 최신 CI — 2026-11-23T02:32:46+09:00
+
+- root execution771b8c78-a4da-492e-bdf3-309980124cbc, 같은task/handoff/session·환경·OS잠금24775의연속소유권을검증했습니다. 기존법인전다섯갈래Goal은활성입니다. 자동Claude감시/자동인수/예약/run_now는취소상태를유지합니다. 현재기록은전체완료·상업출시·Claude자동반환이아닙니다.
+- Android OS-A1 [PR141](https://github.com/xkg4real/quantgen/pull/141), gpt/android-commercial-preview-20261123@9c95b9ee1e9621ce887b0217f0c867bcaf6ed724(code2bcd44f9). 모바일전용내부shell·명시staging override·기존글꼴/테마, 같은11방법독립PASS/guard0·stage399/source474불변·source848/docs20기술정합PASS. 원격8경로/부모/tree/본문/blob/PRreadback완료. Compliance45043106562SUCCESS이나 **Runtime45043106514FAILURE**로최신확인됐고첫실패로그분석중입니다. host11PASS로전체CI를대체하지않습니다. desktopmain/core/data/수학/의존성/주문정책은불변입니다.
+- DIDM/B6 [PR142](https://github.com/xkg4real/quantgen/pull/142), gpt/didm-b6-eodhd-20261123@90d3b4bf029312430a4ec4692ef7fb90ef548463. supplied EODHD 파싱·forecast시각증거·날짜/page범위계약만구현, 최종04f4d3bf/b9af87ba에서같은18방법독립PASS/guard0/source6불변. source847/docs20기술정합PASS·원격5경로본문/blob/tree/부모/PRreadback. Compliance45043431652SUCCESS/Runtime45043431571진행중. HTTP/키/수집CLI/store/V0/scorer/정답·연구기준연결은없습니다. caller-evidence flag는evidence진위/estimate연결/as-of/actual·previous전체PIT/상업권리를보증하지않고rawJSON은비밀제거기가아닙니다.
+- UI PR140@b1a421a565a1d37245a089fc4ef863e58f3e7791: Compliance45031992365SUCCESS, Runtime45031992373은4installed가step14에서cancelled(syntax2SUCCESS). 선행같은53방법은네환경실제PASS이지만전체Runtime통과아닙니다. 4완료로그는“The operation was canceled.”만확인돼명시timeout/단일교착원인은미확정입니다. 다음후보는기존6 ResearchWindow fixture의DeferredDelete 소유창정리/누적시간측정; 실제원인확정전120분상향/시험생략/기준완화없음. 기존PC7/정확최종CI/main조건유지.
+- 사용자full본문으로B3/B6구성표공백은해소됐습니다. B6참고구성과기존수집기/미구현·권리/PIT 차이를비공개 B6_PROVIDER_MAPPING_2026-11-23.md/JSON에기록했습니다. 비용·coverage는보고서가정이며상업견적/알파/완료율이아닙니다. 기존Kalshi선택/Polymarket hold·DIDM V0판정기준유지. 실제B6수집/모델평가/권리확정은미완료입니다.
+- Android의시장·MonteCarlo·로그인은내부shell에미제공이며APK/서명/휴대폰/parity는미실시입니다. 태스크전용Flet0.85.2/JDK17/Android35 도구8명령은실제exit0이나Flutter SDK/mobilewheelhost CONNECT403으로빌드는미수행입니다. 기존[platform-build](https://github.com/xkg4real/quantgen/actions/workflows/platform-build.yml) Run workflow: ref=gpt/android-commercial-preview-20261123, android=true,windows=false,macos=false,font_probe=false. 현연결도구dispatch미지원/CLI인증실패로실행하지못했고정책우회/환경이전은없습니다.
+- 세PR은모두draft/미병합, 실제main은dec979a7fae65d5f749e12193fad3d0a9ce8ddf3입니다. 필수CI/리뷰/소유권/기존F자리조건이통과한CODE범위만한PR씩병합할수있습니다. 141/142의공유source-review/workflow는후속실제main통합과자기delta기준선재검증이필요합니다. OS-A1/DIDM/부모UI·정식완료ID는닫지않으며APK부재를코드검토의새사업승인으로만들지않습니다. F진행중다른main병합금지유지.
+- 이전main의OS-F2/DS-H-code/DIDM-1·DS4a/KEY5a는중복하지않습니다. 남음: DS-H실진단/OA46, DIDM실제gold/cutoff/모델평가, KEY5K3/OS-F1 ownergo, PAY/AWS계정·법인/PG/UsageType근거. PAY/AWS는읽기검토만, 자원/과금/실PG변경없음. 정책20/status/registry/profile/checker와old20/실패이력보존, publicationBLOCKED65·선택GPT/Gemini추가spec공개심사NOT_PERFORMED유지.
+- Notion은sapientia전용비공개queue부분진척2건/실제pagewrite0, 웹PR141기록queued/NOT_SENT·미적용/미배포입니다. .env/cache/동결·holdout/실제주문·원장/TRADEGEN/로컬PC/공유설정변경0. 작성자/독립은같은11/18이라22/36으로합산하지않습니다.
+- 재현문서: codebranches의docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md와docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md. 같은Flet0.85.2에서python -B -m unittest tests.mobile_startup_acceptance tests.packaging_policy_acceptance -v; DIDM은python -B -m unittest tests.didm_eodhd_acceptance -v.
+- 다음안전시작: STATE/환경/OS잠금→저장execution771/task/handoff/primaryAndroid9c와원격CURRENT일치→latestSHA CAS+새execution/readback. 그후PR141진짜CI실패최소수리, UI6fixture측정·정리단위별도배정, PR142정확headCI검증을현재Goal범위에서계속합니다. 보호증거나owner결정을코드/합성으로대체하지않습니다. 상세누적인계 WEEKLY_HANDOFF_2026-11-22_771b8c78.md. 인계일괄저장은도구응답단절후ref미반영을확인했으며동일latesthead에서파일blob별저장으로복구합니다.
+
+---
+
 ## UI 네 건 후속 전달 · 주간 Remaining Work 판독 — 2026-11-22T15:29:58+09:00
 
 - 사용자 수동 요청으로만 진행했습니다. execution `6e1ca7eb-74bb-41c3-b056-313bbe8b141c`, 같은 task/handoff ID·branch·직전 fed639d·STATE 일치 및 OS 잠금 후 최신 CURRENT70c488의 소유권을 검증했습니다. 자동감시·자동 인수·예약·run_now는 재개하지 않습니다.
