@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-23T03:02:03+09:00
+updated_at: 2026-11-23T03:13:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/android-commercial-preview-20261123
@@ -22,6 +22,12 @@ handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06
 previous_returned_at: 2026-11-21T14:54:13+09:00
 returned_at: 2026-11-22T12:49:15+09:00
 ---
+
+## 법인 설립 전 작업 중간 기록 · 11월 23일
+
+- OS-A1은 공급자 접근 없이 데스크톱 계산의 합성 기준값을 만들었습니다. 종가 30개, GBM, 시드 7, 256경로와 5거래일. 두 독립 프로세스 결과가 같았고 중앙값은 104.688305입니다. 실제 APK와 휴대폰 확인은 남았습니다. PR141과 PR142는 각 head에서 준법 CI 성공, 전체 Runtime 진행 중으로 조회했습니다. 병합 동결 F는 해제되었으며 순차 통합과 최종 CI 검증을 적용합니다.
+- UI PR140의 정확한 b1 소스에서 같은 툴팁 테마를 다시 적용해도 Qt 전체 스타일 이벤트가 발생하는 현상을 재현했습니다. 합성 위젯 41개에서 반복당 81건이었고 로컬 수정 뒤 0건, 실제 테마 전환에서는 81건입니다. 이번 단위는 같은 UI 브랜치에서 6개 창 정리 시험과 이 중복 적용을 보정합니다. PC7·전체 CI·사용자 PC 증상 해소 여부는 별도 확인 대상으로 열려 있습니다.
+- B6의 EODHD 입력 계약과 별개로 Alpaca News가 제공한 행의 메타데이터를 검증하는 단위를 격리 개발 중입니다. 수집·권리·모델 평가 상태는 미확인입니다. Notion Remaining Work의 15-5, 15-10, 15-11과 기존 DIDM 완료 표시를 원문에서 대조했습니다. 새 취소선 또는 페이지 반영은 0건입니다. PAY OA43은 비용 항목별 자료가 필요합니다.
 
 ## 11월 23일 법인 설립 전 작업 재개
 
