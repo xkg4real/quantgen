@@ -6,11 +6,11 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-22T23:06:03+09:00
+updated_at: 2026-11-22T23:18:25+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: ci
 work_branch: gpt/ui-guide-chart-first-20261121
-work_commit: 0e78c0897a43cf46bd92ab42ceca311feecd0d14
+work_commit: b1a421a565a1d37245a089fc4ef863e58f3e7791
 uncommitted_changes: no
 pr: https://github.com/xkg4real/quantgen/pull/140
 usage_weekly_pct: unknown
@@ -22,6 +22,19 @@ handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06
 previous_returned_at: 2026-11-21T14:54:13+09:00
 returned_at: 2026-11-22T12:49:15+09:00
 ---
+
+## UI CI 수리 checkpoint · 상용 Android 방향 확인 — 2026-11-22T23:18:25+09:00
+
+- execution771b8c78-a4da-492e-bdf3-309980124cbc / 같은task/handoff / OS잠금24775. 코드 `gpt/ui-guide-chart-first-20261121@b1a421a565a1d37245a089fc4ef863e58f3e7791`, 부모0e78c08/tree9979b2c1e3610e5f32003ed80d3832c816d8a00d. 정확5경로 본문/blob/compare·부모/tree·expected-headCAS·branch/PR140 body readback 일치. production868입력은변경없고public시험3개만수정했습니다.
+- 원0e78 Runtime44993932277은 Linux+Windows3환경모두53개수집/52subtestFAIL입니다. 원로그보존. patch.dict(sys.modules)의전체캐시복원이동일한Supply를서로다른클래스로만들던시험격리문제였습니다. 가짜모듈항목만복원하고정상import·canonicalregistry동일성회귀를기존시험에추가했습니다. 실제가용성/계산/폰트/폭/수치기준은변경하지않았습니다.
+- 새동결871/b6422742에서합성Qt고유53PASS·실패/오류/skip0, 별도3호스트/6상태·29PNG·가림0·startup0, source/private전후일치·안전0. 실행7f73b0e6/outera607a3ea/사후1383cad7. 기존preload검증범위이며fresh원격CI를대체하지않습니다.
+- 새정확head Compliance45031992365 SUCCESS, Runtime45031992373 진행중. main dec979a/PR140 draft유지, PC7·필수CI·기존검토조건전병합없음. 원checker20문서871source PASS/pubBLOCKED65, 문서12기술기록만갱신/나머지19보존. website NOT_SENT/미적용/미배포.
+- 사용자최신확인: Android대상은 **QUANTGEN 상용 앱**, 제품의앞으로방향도상용입니다. TRADEGEN앱으로해석하지않습니다. [결정기록](OWNER_COMMERCIAL_ANDROID_DIRECTION_2026-11-22.md). 이것이실제주문/권리·법률·PG·정식출시승인을대신하지않습니다.
+- 기존D7-G/KEY-3/Flet모바일선택은승인기록이있습니다. G3는PG유료판매관문으로내부debugAPK시험의선행조건이아닙니다. 다음Android단위는공통core/gateway를쓰는격리빌드환경·APK·실제휴대폰기동/기본화면/합성결과/시험계정권한증거입니다. 계정/Android로그인복귀·안전토큰저장·서버라이선스연결은빈칸으로남깁니다.
+- B6는사용자가첨부MTFE.md를지정했으나현재접근가능첨부/작업폴더/연결문서에서원문을확보하지못했습니다. B6행/헤더/주석텍스트요청이대기중입니다. B6구성/EODHD이용권을추정하지않습니다. 기존DIDM V0/무료소스/과거6종실수집/DS4b보류는유지합니다.
+- AWS비용기록은11월크레딧전48.71달러중EC2-Other39.47달러(약81%)입니다. UsageType/리소스매핑OA43이없어원인확정/삭제/중지하지않습니다. PAY0/2는OA32/OA39대기, 기존새조사금지/법인·서버·PG조건유지입니다.
+- 오늘새DIDM/OS/PAY구현없음, 해당분야는읽기전용판독만진행했습니다. 오늘UI4범위·보호자료/원장/TRADEGEN/실주문/동결연구불변·추가GPT/Gemini심사NOT_PERFORMED·자동감시/예약/run_now취소를유지합니다.
+- 상세 [WEEKLY_HANDOFF_2026-11-22_771b8c78.md](WEEKLY_HANDOFF_2026-11-22_771b8c78.md). 현재진행중인정확후보CI를판독하고필요한승인범위수리만이어갑니다.
 
 ## UI 후속 CI 수정 재개 — 2026-11-22T23:06:03+09:00
 
