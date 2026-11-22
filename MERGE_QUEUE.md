@@ -1,3 +1,7 @@
+## 2026-11-23T07:20:35+09:00 · 검토와 병합 순서
+
+현재 main `5af37877`에서 [Massive #144](https://github.com/xkg4real/quantgen/pull/144) `aa25d276`가 첫 병합 대상입니다. [Runtime 45073845036](https://github.com/xkg4real/quantgen/actions/runs/45073845036) 전체 완료 뒤 최신 head·base·리뷰·freeze와 모든 필수 검사를 대조합니다. 실제 병합되면 그 main을 #145에 통합하고 다시 검사합니다. T8-6 및 GH-2의 기존 자리 뒤에 [Android APK 검사 작업](https://github.com/xkg4real/quantgen/commit/c28194f2bb75a888c68b76f3ea6e88fe753bd477)을 기록합니다. 기술 지문을 공유하므로 차례에 최신 main과 대조해 PR을 엽니다. 소유자 휴대폰 시험은 별도입니다. [UI #140](https://github.com/xkg4real/quantgen/pull/140)은 기존 Windows 3.12 실패·전체 CI·PC7 확인이 남았습니다. 상시 Claude 감시는 취소 상태입니다.
+
 ## 2026-11-23T06:57:34+09:00 · 검토와 병합 순서
 
 현재 main은 `5af37877`입니다. 다음 병합은 [Massive #144](https://github.com/xkg4real/quantgen/pull/144) `aa25d276`: 이 head의 전체 Runtime 45073845036과 문서 검사·리뷰·freeze·기준 main을 확인한 후 병합하고 실제 tree/parents를 읽습니다. 이어서 V0 #145, T8-6, GH-2를 공유 파일 순서로 처리합니다. [UI #140](https://github.com/xkg4real/quantgen/pull/140) `e9950e34`는 Windows 3.12 합성 잠금 오류, 나머지 전체 CI, PC7 확인이 별도로 남았습니다. 45073779517 종료 뒤 동일한 실패 작업만 한 차례 재검사하고 기존 오류도 보존합니다. 결과와 승인 없이 UI를 main에 병합하지 않습니다.

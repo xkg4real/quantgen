@@ -1,5 +1,18 @@
 # QUANTGEN 법인 설립 전 인수인계 · 2026년 11월 23일
 
+## 2026-11-23T07:20:35+09:00 · 법인 설립 전 진행
+
+- **Android ⑮-5 / OS-A1.** 상업용 QUANTGEN 내부 프리뷰 #141은 main에 있습니다. 작업 브랜치 [APK 검사 코드](https://github.com/xkg4real/quantgen/commit/c28194f2bb75a888c68b76f3ea6e88fe753bd477)는 기존 Android 수동 빌드가 파일별 크기·SHA-256·서명 검증 결과와 인증서 지문을 같이 보관하게 합니다. 대상 설치 흔적이 있는 직접 의존성만 기록합니다. 입력 버전 충돌이나 미확인 상태는 별도 표시합니다. 합성 회귀 8개를 Python 3.12.14와 3.13.5에서 각각 통과했고 실제 SDK 34는 서명 없는 합성 APK를 거부했습니다. 서명 성공 경로에는 모의 응답을 사용했습니다. 20문서·855소스 기술 검사 통과, 공개 차단 65건 유지입니다. 기반 main은 `5af37877`, 변경은 6개 파일로 원격 대조했습니다. 재현은 해당 브랜치에서 `python tests/android_apk_evidence_acceptance.py`입니다. 이 브랜치의 PR과 실제 Android 앱 빌드는 대기 중입니다. 병합 순서와 승인 뒤 main의 Platform build에서 Android만 선택해 APK를 만들고 휴대폰 첫 실행·스크롤·예시 계산(101.01 / 104.69 / 108.95)을 확인합니다.
+- **Data Source / DIDM.** B6 구성표는 사용자 제공 2026-11-20 비교 기준으로 B3 8개와 EODHD Fundamentals, 월 $51~201·정보 범위 83/100입니다. EODHD·Alpaca 파서는 main, Massive #144의 최신 Windows·Ubuntu 전체 검사는 실행 중입니다. 다음 V0 #145의 제품 2개는 #144와 충돌 없이 합쳐지는 것을 읽기 전용으로 확인했습니다. 실제 #144 병합 뒤 그 main으로 기술 지문을 갱신하고 다시 검사합니다. 계정 지연·발표 전 예상치·상업적 저장과 표시는 실증 대상입니다.
+- **UI/UX.** 기존 #140은 draft입니다. Windows 3.12 합성 동시쓰기 검사가 실패했고 전체 실행은 아직 끝나지 않았습니다. 종료 뒤 실패한 작업을 대조하고 해당 작업만 재검사할 조건을 확인합니다. 소유자 Windows PC7과 실제 UI 병합이 남았습니다.
+- **결제와 메인 Remaining Work.** OA-43의 EC2-Other 귀속 분석에는 같은 기간 Usage type × Region 명세가 필요합니다. 문의 발송·구독 조건·서버 위치는 OA-32/39/40에서 관리합니다. T8-6 수동 인계와 GH-2 정리는 전용 브랜치에서 공유 파일 순서를 기다립니다. KEY-5/K3 13개 접점은 #140·PC7 이후이며 DS-H 다음 근거는 소유자 OA-09 실진단입니다. [업무표](WORKBOARD.md)에 Android 부분 결과를 반영했고 Notion에는 붙여넣을 보고를 준비했습니다.
+
+- [#144](https://github.com/xkg4real/quantgen/pull/144) `aa25d276` [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45073845036) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45073844942) success
+- [#145](https://github.com/xkg4real/quantgen/pull/145) `21a0fbf4` [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45058155071) success · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45058155099) success
+- [#140](https://github.com/xkg4real/quantgen/pull/140) `e9950e34` [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45073779517) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45073779616) success
+- [#141](https://github.com/xkg4real/quantgen/pull/141) `a35b2f8b` 병합됨 · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45054882305) success · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45054882429) success
+- [#143](https://github.com/xkg4real/quantgen/pull/143) `5039835a` 병합됨 · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45063116183) success · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45063116174) success
+
 ## 2026-11-23T06:57:34+09:00 · 법인 설립 전 진행
 
 - **DIDM B6.** EODHD와 Alpaca 뉴스 입력 처리가 main에 있습니다. #143은 네 설치 환경·두 문법·문서 검사와 check-run 8개 통과 뒤 병합됐습니다. main `5af378779b984153f8a5b8f7ad729869bdfbe70e`의 두 부모와 tree를 재확인했습니다. #144 `aa25d276`는 이 main을 통합해 합성 시험 45개에 필요한 입력이 일치하고 5개 파일만 다릅니다. 새 문서·문법 검사 및 네 환경의 소스 검사가 성공했고 전체 Runtime이 진행 중입니다. #145는 이전 main에서의 CI만 성공했습니다. 실제 뉴스 지연과 상업적 저장·표시, EODHD 발표 전 예상치 이력은 미검증입니다.
