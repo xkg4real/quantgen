@@ -6,7 +6,8 @@ from dataclasses import asdict
 from datetime import datetime, timedelta, timezone
 import unittest
 
-from core.didm.ingest.massive_news import MassiveNewsError, TickerInsight, parse_page
+from core.didm.ingest.massive_news import MassiveNewsError, NewsArticle, NewsPage, TickerInsight
+from data.didm.massive_news import parse_page
 
 
 RECEIVED = datetime(2024, 4, 5, 12, tzinfo=timezone.utc)
@@ -30,7 +31,10 @@ def page(*articles, **fields):
 class MassiveNewsTests(unittest.TestCase):
     def test_publication_and_receipt_have_different_origins(self):
         local = RECEIVED.astimezone(timezone(timedelta(hours=9)))
-        obj = parse_page(page(ARTICLE), local).articles[0]
+        result = parse_page(page(ARTICLE), local)
+        self.assertIsInstance(result, NewsPage)
+        obj = result.articles[0]
+        self.assertIsInstance(obj, NewsArticle)
         self.assertEqual(obj.published_utc_raw, ARTICLE["published_utc"])
         self.assertEqual(obj.published_at_utc, RECEIVED - timedelta(minutes=90))
         self.assertEqual(obj.received_at_utc, RECEIVED)

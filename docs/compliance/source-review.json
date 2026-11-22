@@ -94,7 +94,7 @@
     "core/didm/ingest/filings.py": "9b2d8d01942de98048ffd866312a15b4b850f459705c73f0d4bffb87adb6d6e2",
     "core/didm/ingest/gdelt.py": "99731a27e6597bfe4a8cd8ff443d60fc232fec708e262589bf740c882a9a3722",
     "core/didm/ingest/kalshi.py": "4f10f0581bd6aa13f0a9786d2f6b54ab97594b0c2d11b45189fa4ad8ce812bdd",
-    "core/didm/ingest/massive_news.py": "56fb68262a7561450b3c394ec6894b38fa6d645816d826240973b5ba5bcb45e2",
+    "core/didm/ingest/massive_news.py": "6ba428176099c2947581b45354c07e41c874b301e2b0441d3eb59161dc9bdccf",
     "core/didm/ingest/news.py": "37d84f3cb3bde56ed772235aee1283bca76057006e5044974663f22d80f72afd",
     "core/didm/llm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "core/didm/llm/schema.py": "110eb847575f0e9bf4b147fa17b97ff7c476cbdbd29de453d9fbe5ebcfcd4856",
@@ -324,6 +324,7 @@
     "data/didm/gdelt.py": "7623b420553c9f07d27e4b65ae61ef9510966ef6274438d718db101a0a671bde",
     "data/didm/kalshi.py": "da3685db53b509bd8c3915f6bc39d020c91a73d073d62548fa4e705c7c6bfffb",
     "data/didm/keys.py": "a712abbbbbd2a3af5e3332c1176c911529d33622ebbae7bd40c2a8c399939700",
+    "data/didm/massive_news.py": "712875c6a37d32a83ff6907e60b47b53ca445239b0498a6e130f5bf1d972c04b",
     "data/didm/opendart.py": "b571d9895fe6aec55412353d15debcc197f1375cf63ac0f6fa01a2921bf64b79",
     "data/didm/polymarket.py": "fe65bbd835d791add326ccdc4370f9336acd33920cb350b6f26d32585dcd0066",
     "data/didm/tiingo.py": "675ef2b89ffce14b0ae30c301090f6121f2b5da3c272b4e12c39f55a11868ee0",
@@ -617,7 +618,7 @@
     "tests/desktop_workspace_readability_acceptance.py": "735e14354046583f1f9974a6120442c96e8f81144effc24a3fc4ba06dbfd2108",
     "tests/didm_eodhd_acceptance.py": "b9af87bae6997d4df598005c896ec2357a8908c7ed76058885265312e2846e05",
     "tests/didm_ingest_acceptance.py": "b6c69236fce44daf5e5fc733b18a440f27abdbe4f4fdb3ee8dbb66108eb28a0c",
-    "tests/didm_massive_news_acceptance.py": "6d481f4e655e2de87f8ab18964b90f8d835f042e959dcf1271f0fe53372abcd6",
+    "tests/didm_massive_news_acceptance.py": "52e531178c88817191b1acca28b465d503742d674aac4dead82410a050e07ff0",
     "tests/didm_news_acceptance.py": "1280b0a97c7b48c9bd8610e891c048874d8503ad8a9dba4338068dfef2cda0ce",
     "tests/didm_novelty_acceptance.py": "ccefc838580aeab523770c0920afec71031b62980fcbdf16150cdaaabc9ed094",
     "tests/didm_schema_acceptance.py": "5c32fdf9e5a9bc14d564782a21a4c69dec3d24595c72fcbbd65c2bfddbc50caa",
@@ -859,163 +860,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "8cf3d3b59c7d632058d6ffb9c37635befd5e48e2c354643edf86cb5929fd0949",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.311040+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "a9f3781e86cbe461b219935c3b908ccb730a91be6fcf84bfa8dfe827b8a6ac9d",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.441433+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "8cf3d3b59c7d632058d6ffb9c37635befd5e48e2c354643edf86cb5929fd0949",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.314043+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "a9f3781e86cbe461b219935c3b908ccb730a91be6fcf84bfa8dfe827b8a6ac9d",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.444967+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "eb465cf2016e2c9d0f770c8b181ce987d26b6b2b6ef788556561f2a35d26ab18",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.316823+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "3c1a7c81e92453fd0c34d8b3480977e9cb18616af6a5b1ccd89274e8fd8a0215",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.447425+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "a56946577cd1403fe16163e3209df3654d75ad2aa50015580c20e64acb9e4e90",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.319434+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "c6e2b515afa74cd8eb8635327bf3baad99c7af9b0ac1b5ba8ae2fccbd48ce873",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.450064+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "7e37b85375557be47ea9cbfe4ea87d1a9aa427939e0b987ac7be227fd7971fdb",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.321812+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "205b5927b32f886b81bad5f4d28c4f8ab89ceecdfe4404e7715e2e60009da577",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.452355+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "d5234ef08256df10a4451a2f708c403923093d974d3fa6cb89fdf0c009f97ab1",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.323853+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "cbe2dd8b3622d3ff769daf8ba5b742f432ebb1f3b5c35fb1fc0e09fb880d6b0d",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.454506+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "8cf3d3b59c7d632058d6ffb9c37635befd5e48e2c354643edf86cb5929fd0949",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.325973+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "a9f3781e86cbe461b219935c3b908ccb730a91be6fcf84bfa8dfe827b8a6ac9d",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.456721+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
-      "source_digest": "d5234ef08256df10a4451a2f708c403923093d974d3fa6cb89fdf0c009f97ab1",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.328023+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "cbe2dd8b3622d3ff769daf8ba5b742f432ebb1f3b5c35fb1fc0e09fb880d6b0d",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.458983+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "2115babe8a41ca20a567be0806746d38e1672225be14deb9d1c32d2fd6a2154c",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.330415+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "55066042c79ea3864934389cccc1d9e29c245e2746c4f4fb078a41f27ec762e7",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.460865+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "0f3c6ce44684059ff77e4c4ee0f9db8789f50a416c5dd14013fc71dd912e7f67",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.332485+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "dd65809d461259bddb6606b57e1e24a64dd485e3034eab7a15c7a3c17ca5ccb6",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.463070+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "ee286f9426beb550504f71fc8ebf24e18f57ba5a9cd668215c194ce4d2087316",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.334474+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "b538917c87804c76c2a2a628cdce2394d444b343105679fff2be432325c32d3f",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.465150+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "1ee62686ccaa09856e9b2ccaa46e5b194ffbdf96a0d64a49a04374e4774c0809",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.336768+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "2ffadf0fe177fb5205e87bef333ff40d468b61a03fea8779e49335e5b2d703d4",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.467516+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "2115babe8a41ca20a567be0806746d38e1672225be14deb9d1c32d2fd6a2154c",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.339917+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "55066042c79ea3864934389cccc1d9e29c245e2746c4f4fb078a41f27ec762e7",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.469623+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "2115babe8a41ca20a567be0806746d38e1672225be14deb9d1c32d2fd6a2154c",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.342098+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "55066042c79ea3864934389cccc1d9e29c245e2746c4f4fb078a41f27ec762e7",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.471722+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "2115babe8a41ca20a567be0806746d38e1672225be14deb9d1c32d2fd6a2154c",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.344352+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "55066042c79ea3864934389cccc1d9e29c245e2746c4f4fb078a41f27ec762e7",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.473937+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "98f0c27caa146523984b0aa08a14313a1d03168533deeac8da7aaaa8c013ced4",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.346342+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "af7c3c92aba777f6f7494f9a29382d3bcf629aff78c73015895b223d63fe4ac4",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.475995+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "d5234ef08256df10a4451a2f708c403923093d974d3fa6cb89fdf0c009f97ab1",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.348455+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "cbe2dd8b3622d3ff769daf8ba5b742f432ebb1f3b5c35fb1fc0e09fb880d6b0d",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.478311+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "8cf3d3b59c7d632058d6ffb9c37635befd5e48e2c354643edf86cb5929fd0949",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.350462+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "a9f3781e86cbe461b219935c3b908ccb730a91be6fcf84bfa8dfe827b8a6ac9d",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.480308+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "4505e7b5f250edbc21b11d6cd986bd8aee89a60e761ab64f0bfc98b67e70fa8f",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.352587+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "76f83badf913b486060a0890e14b64f641f831b323f6dcc6d0c0823b533a6321",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.482608+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "8cf3d3b59c7d632058d6ffb9c37635befd5e48e2c354643edf86cb5929fd0949",
-      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation 2026-11-23",
-      "review_note": "Supplied Massive news metadata only. Publication/receipt clocks, repeated IDs and per-ticker labels reviewed. Body, description, reasoning, raw JSON and full page URLs excluded; query/fragment article links withheld entirely, opaque cursor retained once decoded with bounded safety and cycle checks. Final18-method product suite and separate18-method review on Python3.12/3.13; platforms/reruns not aggregated. No acquisition/store/scorer or historical PIT/entitlement/rights/release approval. CI adds one suite; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T18:45:07.354774+00:00",
-      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
+      "source_digest": "a9f3781e86cbe461b219935c3b908ccb730a91be6fcf84bfa8dfe827b8a6ac9d",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and compliance_validation PR144 repair 2026-11-23",
+      "review_note": "PR144 core-boundary repair: supplied page, URL and cursor parsing moved to the data adapter; core retains canonical immutable records and time validation. Original14-file core Boundary check unchanged and reproduced failure then pass. Same18 product methods and separate18-method review pass in focused installed-wheel tests on3.12/3.13 in both import orders with canonical class identity. Prior Runtime45057055218 failure and setup issue preserved; full Runtime rerun remains separate. Workflow/policies/profile unchanged; no acquisition/storage/model/rights/release approval.",
+      "reviewed_at": "2026-11-22T19:01:13.484505+00:00",
+      "source_commit": "6a0336e5cf8e7f52294f518ab437662e3f4869db"
     }
   }
 }
