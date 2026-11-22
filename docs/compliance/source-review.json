@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "795b2e9435c8eed43b08b98c709b3e2eeb3a7365ad2628855cb164cea0f94ab8",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "d6c08d9a480c50e88d902082238c421c3419a0720a506dcf7ee10832811c3c41",
+    ".github/workflows/runtime-smoke.yml": "22654f7db6cc602138aabc36cd559ecac2cf30ddbbeeb958821c9c35063575a5",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -90,6 +90,7 @@
     "core/didm/ingest/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "core/didm/ingest/alfred.py": "bd29193bd8134a7c2a16926311c1cf210325e2beaec0f308c955ec340e2482a9",
     "core/didm/ingest/ecos.py": "401fdae16ab6225ca8d91bb7c632873a88b6d94738955185c1e7da55fb16c0b1",
+    "core/didm/ingest/eodhd.py": "04f4d3bf7c7bf86452ebf86062afb5791b962d3b01b66c18db77fe5093dec639",
     "core/didm/ingest/filings.py": "9b2d8d01942de98048ffd866312a15b4b850f459705c73f0d4bffb87adb6d6e2",
     "core/didm/ingest/gdelt.py": "99731a27e6597bfe4a8cd8ff443d60fc232fec708e262589bf740c882a9a3722",
     "core/didm/ingest/kalshi.py": "4f10f0581bd6aa13f0a9786d2f6b54ab97594b0c2d11b45189fa4ad8ce812bdd",
@@ -613,6 +614,7 @@
     "tests/desktop_windows_branding_acceptance.py": "811fb37cf6bdb7550df8abbedfe3a08449b17787d15a28180146a876cfb19a9c",
     "tests/desktop_workflow_guidance_acceptance.py": "12dccb1fc2c3052718d1660da13991ed869f8f139a0de685c98a6438eb14f947",
     "tests/desktop_workspace_readability_acceptance.py": "735e14354046583f1f9974a6120442c96e8f81144effc24a3fc4ba06dbfd2108",
+    "tests/didm_eodhd_acceptance.py": "b9af87bae6997d4df598005c896ec2357a8908c7ed76058885265312e2846e05",
     "tests/didm_ingest_acceptance.py": "b6c69236fce44daf5e5fc733b18a440f27abdbe4f4fdb3ee8dbb66108eb28a0c",
     "tests/didm_news_acceptance.py": "1280b0a97c7b48c9bd8610e891c048874d8503ad8a9dba4338068dfef2cda0ce",
     "tests/didm_novelty_acceptance.py": "ccefc838580aeab523770c0920afec71031b62980fcbdf16150cdaaabc9ed094",
@@ -855,163 +857,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "4abb5dea07fc7984730be1b2c03b61836f68660f2b38548be8612fa0a90c4f16",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.950250+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "c08b288189cdb62323d8f8a8c21912c839f1e914bbd1b0380e1f624b29c7d3d2",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.110974+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "4abb5dea07fc7984730be1b2c03b61836f68660f2b38548be8612fa0a90c4f16",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.952447+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "c08b288189cdb62323d8f8a8c21912c839f1e914bbd1b0380e1f624b29c7d3d2",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.115813+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "dae0a9ada59b015163b176752e5e50c3c6d5c6ed0de56f07846a40febb591257",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.954413+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "00d935cae1149450f053a4ca256652b060cf1cdadb46a647324a1cf6fb036d7b",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.118914+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "742af7a5eedab576cd9b2c64b2c4cbd134f8842e9a9fd376bffdaa258bfe0b26",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.955864+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "ee8136c11567f34fb60f56f133236c7c1348c01a346649d0da5672ab7ff85848",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.121787+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "eaa10a165ccd48063f1913704d34f7716083e37b22ebf7b10a868c3682ffa47f",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.957317+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "586f5017df1d036229b19dfbc6a1471f3c1acb268fea6eb830fb2f3902189687",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.124947+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "d8cece58711d9a118225ac38041c2d4e2b94e2df01fee2b6faca5970dbde6ddb",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.958932+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "b28c3aa7f7b86a76ecf20de233f205aa3c615159259e570c95b7e985eee5cf32",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.127674+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "4abb5dea07fc7984730be1b2c03b61836f68660f2b38548be8612fa0a90c4f16",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.960599+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "c08b288189cdb62323d8f8a8c21912c839f1e914bbd1b0380e1f624b29c7d3d2",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.134041+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
-      "source_digest": "d8cece58711d9a118225ac38041c2d4e2b94e2df01fee2b6faca5970dbde6ddb",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.961858+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "b28c3aa7f7b86a76ecf20de233f205aa3c615159259e570c95b7e985eee5cf32",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.136570+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "913665aba2adfe29635eec3955c76dd720b3a78b6f74af39ef6aee0bf1d179fd",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.963266+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "60d99d8b16b101eece67bffd9b07a32e96425e457d7a41b49632454c8b6f1f2e",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.141938+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "fceb63a6b9892d644605c689ed170234b5d89de71bbd7298d45fbe478f00dc07",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.964609+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "34062cb3869fe2b18291a70f4915df7655eba1ae15d3a69e22511f0f5e63bace",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.144673+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "c6c0b9b5fb69e357d9c4a383da22afa29d34e5fad31be1821c83d555e56172da",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.965952+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "7db5617373e7b54bed5ac4daa74c9baace7d3bd18ef9911d5243c046b51034ea",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.149895+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "1d36c7804362d9aca0e28194a91cb52126ddf7a7e7b0225c53988a38ef00d452",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.967469+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "6da833c7a7f4ed694c51d7b09ba8d02da433a1f72489226f8bae3599de122c3c",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.152265+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "913665aba2adfe29635eec3955c76dd720b3a78b6f74af39ef6aee0bf1d179fd",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.968750+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "60d99d8b16b101eece67bffd9b07a32e96425e457d7a41b49632454c8b6f1f2e",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.154410+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "913665aba2adfe29635eec3955c76dd720b3a78b6f74af39ef6aee0bf1d179fd",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.970324+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "60d99d8b16b101eece67bffd9b07a32e96425e457d7a41b49632454c8b6f1f2e",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.159042+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "913665aba2adfe29635eec3955c76dd720b3a78b6f74af39ef6aee0bf1d179fd",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.972039+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "60d99d8b16b101eece67bffd9b07a32e96425e457d7a41b49632454c8b6f1f2e",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.162531+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "370bb1737ee332eebae596a621ae8e8585296727ced9ea7450f360a035ef9431",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.973195+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "bfa612385cb6046685b86b8f92d5f48bc8caf73c4f44541c1130be41718901c4",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.165844+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "d8cece58711d9a118225ac38041c2d4e2b94e2df01fee2b6faca5970dbde6ddb",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.974604+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "b28c3aa7f7b86a76ecf20de233f205aa3c615159259e570c95b7e985eee5cf32",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.169423+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "4abb5dea07fc7984730be1b2c03b61836f68660f2b38548be8612fa0a90c4f16",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.976044+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "c08b288189cdb62323d8f8a8c21912c839f1e914bbd1b0380e1f624b29c7d3d2",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.172911+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "2e691d1c95a9a7dd2b4cdb77b770ed70a3781e4ac1aa135c77d14095c0a3e86c",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.977290+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "48a0348939cc3a74c8ad4ed0a6a7248fc5bc0375b94234f5460147e9de3267c3",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.177000+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "4abb5dea07fc7984730be1b2c03b61836f68660f2b38548be8612fa0a90c4f16",
-      "reviewed_by": "Codex central 2f27d0c2",
-      "review_note": "Reviewed all policies 1-20 against frozen KEY5a source10 on verified actual main53e5e723. Existing provider routing, key policy and stored-data boundaries remain; feed callbacks discard stale clients and KRX publication is atomic, without cancelling prior in-flight work or promising remote revocation, TTL or secure deletion. No criterion, order, publication or operating approval changed. Independent full20 source-impact review and exact845 inventory were verified before this final baseline.",
-      "reviewed_at": "2026-11-21T10:52:47.978801+00:00",
-      "source_commit": "45db2be73e7f87954cab6782ca4b2717dc97fc62"
+      "source_digest": "c08b288189cdb62323d8f8a8c21912c839f1e914bbd1b0380e1f624b29c7d3d2",
+      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
+      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
+      "reviewed_at": "2026-11-22T16:18:55.180696+00:00",
+      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
     }
   }
 }
