@@ -1,3 +1,17 @@
+## 사례 차트·종목 상세 스타일 수정 전달 — 2026-11-22T12:49:15+09:00
+
+- 사용자 정정: 기존 사례 차트가 가이드 첫 화면에 그대로 보이고 그 실제 선·값·구간 위에 짧은 안내를 넣습니다. 모든 UI는 기존 시장→종목 상세의 QG Interface/N3·색·간격·카드·숫자·펼침 버튼 기준을 재사용합니다. 예시 세션 이름은 보고 형식 설명이며 실제 세션 재편 지시가 아닙니다.
+- execution47c97545-1d6c-4871-8a44-fbaca1eb2f82 / 같은 환경·OS잠금73428 / 직전e3f와task/handoff/branch/ab0e·STATE 일치 후 latestCURRENT CAS+readback으로 수동 재개했습니다. 자동감시/예약/run_now는 재개하지 않았습니다.
+- 원격 코드 `gpt/ui-guide-chart-first-20261121@fed639d27268defe13969d9718757718bd876df4`, tree716b2f88828f4a1c27a3fee35d7bbd0d6cc3f72d, 부모ab0e71f. 정확13경로 본문/blob·부모/tree·compare13·expected-head CAS 및 branch ref/PR read-back 완료. PR140 draft/open·main미병합, 실제 main dec979a 유지.
+- 원사례/date/source/선택/커서/확대/보고서·Signals·공유엔진/renderer/fontpolicy는 보존했습니다. 기존사례는 접지 않고 첫 도표, 가상보조그림만 아래에서 기본접힘입니다. 실제사례 값·기존 좌표에 주석을 붙이며 없는값은 만들지 않습니다. 수급/공매도/호가의 기존데이터·시각·단위/질의 동작은 보존했습니다.
+- 최종 동결869/source60246ef7에서 실제45개(5/19/8/2/2/6/3) 수집·실행·고유ID 전부PASS, 실패/오류/skip0. 동일실행의 실제sdSide/sdPage 호스트3조건·접힘/펼침6상태는 별도관측이며 test수에더하지 않습니다. 정상3행12셀·추가7행28셀 모두세로표시, 큰가격은가로스크롤로보존, KOlight/ENdark 실제표면색 확인. 17가이드+6호스트 PNG/실제QG등록·안전6counter0/source869 raw5+정규화·private전후일치/0700prefix비움. 결과04ec0908/outer927afb54/독립bf1939ae.
+- 원광역45 PASS66fb537b 뒤 실제호스트 추가3검사에서 2 normal사례의 3번째행(bottom96>viewport82) 가림을 발견했고 FAIL1b7bdb77/캡처를 보존했습니다. 기존45를행표시완료로바꾸지않았습니다. 실제레이아웃/글꼴/표시변경에 따른 측정과 실제셀bottom으로 수정하고 기존stylebookmethod를12/28셀top/bottom검증으로강화했습니다. 원임계값/체크를완화하지않았습니다. 이전missingBabel·JSON-only 로그분류 전수집0실패도보존했습니다.
+- 최종 원checker20문서/869소스 정합PASS, 공개준비BLOCKED65. 기준선c6f0d20f(raw867df69a), 독립검토b52542b4. 정책20본문/registry/profile/승인불변, 영향17개기술기록만갱신하고4·5·19객체보존. 실제법률/권리·소유자승인·출시승인아님.
+- 정확fed의 Compliance44982209689 SUCCESS, Runtime44982209688 진행중이라는 실관측입니다. 이전Runtime44927449412는cancelled로보존합니다. 전체Runtime/전체앱/소유자Windows PC7·실API/모델/원장 성공을주장하지않습니다. PC7 전UI/main병합·OSgo 전실바인딩변경금지, ROE/PSR/테마실수치·법률/라이선스 조건 유지입니다.
+- 웹 PR-140 JSON의 이번revision을 갱신했으나 NOT_SENT/미적용/미배포입니다. Notion은 사용자가 붙여넣을 Remaining Work 기준보고를 요청했으므로 이번회차 직접페이지수정/부모취소선은 하지 않았습니다. 비공개sync queue에 보고준비상태를 남깁니다. 추가 GPT/Gemini spec공개/심사는 선택 NOT_PERFORMED.
+- 상세주간인계 [WEEKLY_HANDOFF_2026-11-22_47c97545.md](WEEKLY_HANDOFF_2026-11-22_47c97545.md). 다음은 사용자PC 미리보기확인/정확Runtime결과 판독 및 기존승인조건충족후PR140 병합입니다. 별도미완료 KEY5K3 factory/stream13, OS-F1, DS-H실진단/DS1·DIDM실근거/PAY문서·사업조건은 Remaining Work대로 남깁니다. 기존 Pilot/E/Step10/P3/F·DSHcode137·DIDM138·KEY139 완료를 재실행/삭제하지 않습니다. UI/전체Remaining Work 완료아니며 정식완료ID추가0입니다.
+
+---
 
 
 ## PR140 CI 시험 수리 수동 반환 — 2026-11-22T02:01:59+09:00
