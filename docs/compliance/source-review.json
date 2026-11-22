@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "795b2e9435c8eed43b08b98c709b3e2eeb3a7365ad2628855cb164cea0f94ab8",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "da53b45c1859cc339639bd245e7121b0578ed548064543cef6b4a466a48b07b6",
+    ".github/workflows/runtime-smoke.yml": "35838820895971868cfa0588a8e5074ca1622ae3df988eef29b5f056796f58de",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -90,6 +90,7 @@
     "core/didm/ingest/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "core/didm/ingest/alfred.py": "bd29193bd8134a7c2a16926311c1cf210325e2beaec0f308c955ec340e2482a9",
     "core/didm/ingest/ecos.py": "401fdae16ab6225ca8d91bb7c632873a88b6d94738955185c1e7da55fb16c0b1",
+    "core/didm/ingest/eodhd.py": "04f4d3bf7c7bf86452ebf86062afb5791b962d3b01b66c18db77fe5093dec639",
     "core/didm/ingest/filings.py": "9b2d8d01942de98048ffd866312a15b4b850f459705c73f0d4bffb87adb6d6e2",
     "core/didm/ingest/gdelt.py": "99731a27e6597bfe4a8cd8ff443d60fc232fec708e262589bf740c882a9a3722",
     "core/didm/ingest/kalshi.py": "4f10f0581bd6aa13f0a9786d2f6b54ab97594b0c2d11b45189fa4ad8ce812bdd",
@@ -534,7 +535,7 @@
     "quantgen_desktop/table_layout.py": "88fe45b9e8df59328bee520d1147f4189d4e4fffc1e8cf488340bb8eeb744eeb",
     "quantgen_desktop/tools.py": "efe9a6f75982a46daa96960db2004962303cf5af2ca87697abc4d24458c0938c",
     "quantgen_desktop/translations.py": "2b94a001ff0d925a570ce1efff3d73f8a08e1de212343f23973e6ba753e6f943",
-    "quantgen_desktop/typography.py": "ea224003e2c4c7c5c1a84dfc71a50a3a3c0db7ddeafca4a6904a610ddea3c070",
+    "quantgen_desktop/typography.py": "b629dcda74b2bc8998afcc2f43219c334f2271cdd84038b80df9fc010fb20380",
     "quantgen_desktop/watchlist.py": "00fe7d042de9987824c22fbc23fb77f6af166261b223fb70e54822232bf1c2fc",
     "quantgen_desktop/watchlist_live.py": "6d7b9dca2f18adf8a7b01a09ca395a6b776835f82d863669d00f90d426994597",
     "quantgen_desktop/wheel_guard.py": "44bfee9b20b358b794cfebdd71f0760b28b99bcd39a45cc36fa450a8d2ce68f6",
@@ -571,13 +572,13 @@
     "tests/desktop_a1_terms_acceptance.py": "2e8613a5e6c25766a138e483c449bfbe8e4098ed48e05d3513a5ca6b46fa781d",
     "tests/desktop_a3_layout_acceptance.py": "0a0fc4de5a4f893020c2e13f9c028506d57bfa744e9c8c2771c5d706a718556a",
     "tests/desktop_a3_reading_acceptance.py": "84d69d2df57bf9592ec5dff00c0df32b24dcc454e06d539e330e3964382ae847",
-    "tests/desktop_acceptance.py": "0c0c8db4fd29e83143bbc066ce734f2d9ca59c3cc21c7f6157a06e64a5cf7f39",
+    "tests/desktop_acceptance.py": "445a2bed1b92f4aa514c9dbd05d2cd4526f6eeff21df154ddfa0e989bd17f047",
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
     "tests/desktop_authored_prose_language_acceptance.py": "72a0704f3a25a1b7b86b4c0f517c59977a80d6ddb9c39174d4e907df4e34debd",
     "tests/desktop_bonds_portfolio_language_acceptance.py": "a812ab07d4d8d005a036b3ccd58c2af5bfe70533935fbaea0a16d928ab17dad1",
     "tests/desktop_carry_language_acceptance.py": "7f58ba4b867a9b0b4b6e672d564f5663931359880096d08e6ff930d2ff23df53",
     "tests/desktop_chart_rendering_acceptance.py": "1c23ec3b8fe6fc0d327cefb361ebd9866614e58c4a98e87a5c6bf066cb17bac9",
-    "tests/desktop_commentary_acceptance.py": "ed1f58c2e133796d77ba3b6cdc5d187321f7491c1091ba3b36853aff773c8250",
+    "tests/desktop_commentary_acceptance.py": "135110a0f53ddbebecf335f923ad2306252a7c99fb3dd442dd2b5e1d6c063a2c",
     "tests/desktop_compact_ui_acceptance.py": "5b3059f7358b43e9ea678b2f72ad16d1995fb79174029b4c397fd4677fe19c54",
     "tests/desktop_funding_inference_acceptance.py": "ebc0c752e57c8dc0c88024eaa171064eea6701e5b22671e437fdf3c8428295dc",
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
@@ -594,9 +595,9 @@
     "tests/desktop_letf_disclosure_acceptance.py": "f70b5bfffb5562aa1f08a7f2417769adb7e91a926816b494c48f4045a79c19f4",
     "tests/desktop_letf_index_acceptance.py": "a5bc0f194c44d154dfbab81dccc4661f0ddade92ba34c906ed5172de7d60e664",
     "tests/desktop_library_acceptance.py": "b6eb4c03efc08f23d396a9ef76c7885e43eb1bdd478eaa09b7b39b4cd70aa6ae",
-    "tests/desktop_macro_acceptance.py": "e221eb4a7b4d5db5d941f5d7d33902677b20f7611dbbcf940ef02fa41f2b2fee",
+    "tests/desktop_macro_acceptance.py": "ef1ceb0f3fd713d841432cec645dc98a7ce4c71e5eb60ef5b3ddd597cdcf87e6",
     "tests/desktop_macro_language_acceptance.py": "714ec7acf5c4733e83dbc7910c9bb4cfceb107c5e70c76fe2594738c67f2a670",
-    "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
+    "tests/desktop_market_acceptance.py": "9a0f65342d079d60a3599cf1278030c4f092bae192958b7478814a587c387603",
     "tests/desktop_market_chart_acceptance.py": "8b33d20944da982a51b2279dbc1d67d31b615b005f0fc681e03cde5aa8a14759",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_market_first_paint_acceptance.py": "b2fc5d138f12ea6e1b72c598aa96cca2551260b2432cb245727cbd070d99e5fa",
@@ -611,7 +612,7 @@
     "tests/desktop_owner_ui_market_acceptance.py": "6d4c94f71f347c5d3042462e4697751f0b1550d1c0712e4857ef1d6a68d7274e",
     "tests/desktop_owner_ui_risk_acceptance.py": "194e9ad04c9e9c62146d832da8254e3f492e5b7f019fea38775e6e4a9c62253c",
     "tests/desktop_owner_ui_strategy_acceptance.py": "d5319c7d4e659e7b1b370c313350d982d23859b76d579202a5877f04fd1195e0",
-    "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
+    "tests/desktop_paper_acceptance.py": "a59e1ff12d39e4424ebaeb08364a89b20a308bbf3c1f485e88c282148c1833df",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
     "tests/desktop_qscore_acceptance.py": "c24c2941dbba1f61a3ef0104cbe0a86f555295ade9432dc28738b4751feef1b6",
     "tests/desktop_quote_coverage_acceptance.py": "a430d1493495a3f2bd440ba62e359f3a8904478c8d4f8f4f8e17bcb577df8e1c",
@@ -623,7 +624,7 @@
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
     "tests/desktop_startup_visibility_acceptance.py": "5924921ebb912b2c4927741dc09498152a23cffb42b46d589b76a944b2fe7c3a",
     "tests/desktop_stock_detail_acceptance.py": "585d73a05907ef13ff8b9e001ed07ba005e1ede2ca5a5d37d46f0449cb8dc530",
-    "tests/desktop_strategy_acceptance.py": "6da05d532c1b74b807ba32ecc9e5cfbce7df042ba32f8d2f9e4a0433b49d6f40",
+    "tests/desktop_strategy_acceptance.py": "53a81cd62f958daacbfb3d0218585257530d8874e57769309298db2ca2c6b586",
     "tests/desktop_strategy_exposure_acceptance.py": "30c7e9f5c9132d77e546827f15232f769c27f19a60c6b21c3664772207c10ce4",
     "tests/desktop_swaption_conversion_acceptance.py": "113e1af795d0a9d592827330a2fdf115487dc4bb0b496d4ee3f3ba0d3b9185af",
     "tests/desktop_system_page_acceptance.py": "6aa6b8b0ceb3a4923e5121290c8087a4adc09217dc83ad0069a6a73fecf347cb",
@@ -633,6 +634,7 @@
     "tests/desktop_workflow_guidance_acceptance.py": "c51493a4bb2c82fcf98a22015b45cc5a7d2ef7b17f6ef853a540125aca9f00e6",
     "tests/desktop_workspace_readability_acceptance.py": "735e14354046583f1f9974a6120442c96e8f81144effc24a3fc4ba06dbfd2108",
     "tests/detail_insights_acceptance.py": "0d7a715fe5b06de3a88bc9c4fc79ff7345e631964af6f20d5d71dcdf627798f2",
+    "tests/didm_eodhd_acceptance.py": "b9af87bae6997d4df598005c896ec2357a8908c7ed76058885265312e2846e05",
     "tests/didm_ingest_acceptance.py": "b6c69236fce44daf5e5fc733b18a440f27abdbe4f4fdb3ee8dbb66108eb28a0c",
     "tests/didm_news_acceptance.py": "1280b0a97c7b48c9bd8610e891c048874d8503ad8a9dba4338068dfef2cda0ce",
     "tests/didm_novelty_acceptance.py": "ccefc838580aeab523770c0920afec71031b62980fcbdf16150cdaaabc9ed094",
@@ -769,7 +771,7 @@
     "tests/status_snapshot_acceptance.py": "69185a46c4675300aa88bf6a441ddd753f4631162c05d174b2794587ed777ade",
     "tests/stock_detail_core_acceptance.py": "4ec37b368fd1abb19a0231a7b89256e68df9a1a590bea48d31f9926cdad6081f",
     "tests/stock_insights_glue_acceptance.py": "8c30577e1df9ea916c697e610e80d100d94409444115e268dea07413947ee758",
-    "tests/stock_insights_style_acceptance.py": "1e38f90ae6b0d6c700999284a53209a5111a15775af3f5a8f300a898468da07a",
+    "tests/stock_insights_style_acceptance.py": "a397fe53ce57485548954063f12c80eedd8f0bd2bf4027a53df3ec5a1c395918",
     "tests/stock_profile_acceptance.py": "36b310d5c5926a16be0852aa288f5ded6a2b6576923f43bfa64f1b3b94d64a67",
     "tests/strategy_exposure_acceptance.py": "3451a355e400ea2bc98c02c401a5b5680a187b190a6b52547ccf868b84867e01",
     "tests/strategy_lab_display_acceptance.py": "aa4d059af693881f449deb38a29be8f4849280643b7adbf4a821c8e6a4781a32",
@@ -881,163 +883,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "d298c6ad2d8fff618842583d657d42cbd0cf9e77b59906763ac259259cb47d6b",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.332801+00:00",
-      "source_commit": null
+      "source_digest": "b51defe7f98ce9ba9d3b1f509f5a54ae6e0e8d699eecd0e6cfa5479b132c1129",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.644856+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "d298c6ad2d8fff618842583d657d42cbd0cf9e77b59906763ac259259cb47d6b",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.335536+00:00",
-      "source_commit": null
+      "source_digest": "b51defe7f98ce9ba9d3b1f509f5a54ae6e0e8d699eecd0e6cfa5479b132c1129",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.647687+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "e53c63bef058b03d9ea2c8844355a2392e25320fd1f0b1824ebca06e64f944b8",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.337331+00:00",
-      "source_commit": null
+      "source_digest": "15d41bf0abdec78c1b48040084fdf29d05249e8183f5b031dfe5d4273bb021c0",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.650096+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "86f55f4a299174fd895b7c521080d93be9e3b406f21481b864e7b4d448a58d2a",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.338704+00:00",
-      "source_commit": null
+      "source_digest": "532a64af0811aaaa02fb651dfa3e6ca29b59402b4aaae3e402dd58473a94086b",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.652481+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "9909401e14d0d6649927c0f60cbec7919c5bc30974d6abf5096c8476083d1849",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.339930+00:00",
-      "source_commit": null
+      "source_digest": "ba0ea10ffa8cdeb01418b1db799fc7cafafb53804dbe8f92fa68479ec05a990d",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.655903+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "0239794f8537116f3b89a2abd78536cb5eed231e15ebf584d4877bde0422eced",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.341275+00:00",
-      "source_commit": null
+      "source_digest": "8ca6cc82f1b2142aaa9fb2bf773d50d5c1fe2356a2384acc619b528db7daa8f1",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.658204+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "d298c6ad2d8fff618842583d657d42cbd0cf9e77b59906763ac259259cb47d6b",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.342406+00:00",
-      "source_commit": null
+      "source_digest": "b51defe7f98ce9ba9d3b1f509f5a54ae6e0e8d699eecd0e6cfa5479b132c1129",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.660480+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "8": {
       "document_sha256": "d18aa347fc7bb730a047392049afb9d79212cf209ba651b9ca4dfde7354fe68f",
-      "source_digest": "0239794f8537116f3b89a2abd78536cb5eed231e15ebf584d4877bde0422eced",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.343668+00:00",
-      "source_commit": null
+      "source_digest": "8ca6cc82f1b2142aaa9fb2bf773d50d5c1fe2356a2384acc619b528db7daa8f1",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.662924+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "6d74e4d16f54f3085e8648031900612b4d76f68f1210bbe12b4ef5183d8963d1",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.344744+00:00",
-      "source_commit": null
+      "source_digest": "544a27cd13bd5f76a872f10a35046554c58d4d960349c4d2891f8a870bef0287",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.664995+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "283b82c8f4964ca96f5d67642e2e63bade4faa5902ae018828c99006935a5ab2",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.346122+00:00",
-      "source_commit": null
+      "source_digest": "905c11d9e30f26676e207c888f7d29ea12397616ac7575b9d480cbb804004eea",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.667075+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "bb2849c63f63d4d126e87e1c18c014a8d079fafb4a6cc5c87bf70669e6ae2f2a",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.348025+00:00",
-      "source_commit": null
+      "source_digest": "27afe863d54085a8e165bad3aedbc652f552bc0d3377d4bc0eb20b65cd1eda23",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.669292+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "12": {
       "document_sha256": "18af1551af29075d92583d7bc84a780f3719662115a7b26e4aeb9efd760d1afc",
-      "source_digest": "57d816fbf13d7126b5413ff5d253caf968ec9ffc6a5bda4c6ac5f87d16cc4668",
-      "reviewed_by": "Codex independent UI CI fixture technical policy reviewer",
-      "review_note": "UI4 CI fixture-only correction after preserved 0e78 remote Linux and three Windows failures: restore only fake sys.modules entries instead of rolling back the whole import cache, preserving ordinary imports and one canonical indicators/Supply identity. Add identity and entry-restoration assertions inside the same53 existing test methods. Exactly3 public test files changed; other868 sources and production/math/provider/order/credential/data paths unchanged. Same871 inventory maps this technical change only to claims document12; preserve other19 review objects and all20 policy bodies, registry, profile and approvals. Earlier guarded local preimports masked the failure; original localPASS and remoteFAIL remain distinct, and fresh actual CI is still required. No legal, rights, owner Windows or publication approval is inferred.",
-      "reviewed_at": "2026-11-22T14:13:41.269795+00:00",
-      "source_commit": null
+      "source_digest": "daac8de79dad6ecca1790504e7f64aa6bf8b15ca9c7320315a4e9f2be694d15a",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.671226+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "6d74e4d16f54f3085e8648031900612b4d76f68f1210bbe12b4ef5183d8963d1",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.351175+00:00",
-      "source_commit": null
+      "source_digest": "544a27cd13bd5f76a872f10a35046554c58d4d960349c4d2891f8a870bef0287",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.673330+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "6d74e4d16f54f3085e8648031900612b4d76f68f1210bbe12b4ef5183d8963d1",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.352459+00:00",
-      "source_commit": null
+      "source_digest": "544a27cd13bd5f76a872f10a35046554c58d4d960349c4d2891f8a870bef0287",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.675252+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "6d74e4d16f54f3085e8648031900612b4d76f68f1210bbe12b4ef5183d8963d1",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.354150+00:00",
-      "source_commit": null
+      "source_digest": "544a27cd13bd5f76a872f10a35046554c58d4d960349c4d2891f8a870bef0287",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.677201+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "47f94cf9a97d36baaa6affcde050f2c45210f23b95cf97f30e48b1fae1b039fa",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.355302+00:00",
-      "source_commit": null
+      "source_digest": "7ebee79aa2109467f260de72d11973725ce22632c6bcaab7920f9ad78d4d6a97",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.679200+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "0239794f8537116f3b89a2abd78536cb5eed231e15ebf584d4877bde0422eced",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.356540+00:00",
-      "source_commit": null
+      "source_digest": "8ca6cc82f1b2142aaa9fb2bf773d50d5c1fe2356a2384acc619b528db7daa8f1",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.681164+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "d298c6ad2d8fff618842583d657d42cbd0cf9e77b59906763ac259259cb47d6b",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.357741+00:00",
-      "source_commit": null
+      "source_digest": "b51defe7f98ce9ba9d3b1f509f5a54ae6e0e8d699eecd0e6cfa5479b132c1129",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.683108+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "81e6ef4d8379896a33e4673e92d087d92499ff39780929ae08711cdcc5b33216",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.359081+00:00",
-      "source_commit": null
+      "source_digest": "cdbd68f39a28e91203d880ea031275832936cdb859bf4ae79aef43edf22d4ef0",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.685288+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "d298c6ad2d8fff618842583d657d42cbd0cf9e77b59906763ac259259cb47d6b",
-      "reviewed_by": "Codex independent follow-up UI technical policy reviewer",
-      "review_note": "R2 follows the preserved actual R1 failures without data-semantic changes: DepthQuantityBar uses actual-font/full-quantity intrinsic width instead of an explicit42px minimum; full supplied quantities, font, prices and common10-level scale stay unchanged. Two test oracles are corrected to actual renderer/synthetic-case/missing-depth/advice-text semantics while retaining full-value and style assertions. Same871 path inventory; actual source changes map to17 documents. ROOT requested full20 technical source impact rereview and refresh; all20 policy bodies, registry, profile and approval fields remain byte-identical. Prior educational PER/PBR limitations, missing/nonpositive withheld values, unconnected ROE/PSR, compact real-stroke legend and parent-before-visible guarantees are retained. Runtime/fullCI/actual owner Windows, legal/licence and publication approvals remain separate.",
-      "reviewed_at": "2026-11-22T06:25:23.360453+00:00",
-      "source_commit": null
+      "source_digest": "b51defe7f98ce9ba9d3b1f509f5a54ae6e0e8d699eecd0e6cfa5479b132c1129",
+      "reviewed_by": "GPT root / independent UI and actual-main EODHD integration technical review 2026-11-23",
+      "review_note": "PR140 reviewed working-tree integration: UI b1 with eight cleanup/tooltip edits plus actual main d835 EODHD parser/test/contract; all UI runtime commands retained with EODHD synthetic module added. Two added monitored paths require all20 technical fingerprints. Minimal Qt cleanup and tooltip regressions are bounded evidence; supplied-input EODHD is not real API/PIT/model/rights proof. Source/document consistency only; full fixture/Windows CI, PC7, site and deployment remain separate; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T18:22:02.687410+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     }
   }
 }

@@ -266,17 +266,21 @@ def apply_tooltip_theme(app, palette) -> None:
     asking Qt's platform tooltip class to choose a separate system font.
     """
     from PyQt6.QtWidgets import QToolTip
-    QToolTip.setFont(scaled_font(app.font(), 14, 400))
+    font = scaled_font(app.font(), 14, 400)
+    if QToolTip.font() != font:
+        QToolTip.setFont(font)
     previous = app.property("qgTooltipStylesheet") or ""
     current = app.styleSheet()
-    if previous:
-        current = current.replace(previous, "", 1)
     screen = app.primaryScreen()
     # Qt reports logical pixels here; multiplying by DPI would scale twice.
     max_width = min(480, max(1, screen.availableGeometry().width() - 32)) if screen else 480
     owned = "\n/* QUANTGEN tooltip */\n" + tooltip_stylesheet(palette, app.font().families(), max_width=max_width)
-    app.setStyleSheet(current + owned)
-    app.setProperty("qgTooltipStylesheet", owned)
+    combined = (current.replace(previous, "", 1) if previous else current) + owned
+    # Even identical QSS makes Qt repolish widgets across the application.
+    if combined != current:
+        app.setStyleSheet(combined)
+    if previous != owned:
+        app.setProperty("qgTooltipStylesheet", owned)
 
 
 def window_stylesheet(p, dark: bool) -> str:

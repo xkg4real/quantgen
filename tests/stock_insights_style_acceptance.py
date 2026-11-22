@@ -50,6 +50,58 @@ class StockInsightsStyleAcceptance(unittest.TestCase):
         for _ in range(4):
             self.app.processEvents()
 
+    def test_reapplying_tooltip_theme_leaves_other_widgets_alone(self):
+        from PyQt6.QtCore import QEvent
+        from PyQt6.QtWidgets import QLabel, QToolTip
+        from core.theme import DARK, LIGHT
+        from quantgen_desktop.typography import apply_tooltip_theme
+        from tests.qt_fixture_cleanup import delete_owned_widget
+
+        class StyleProbe(QLabel):
+            style_changes = 0
+
+            def changeEvent(self, event):
+                if event.type() == QEvent.Type.StyleChange:
+                    self.style_changes += 1
+                super().changeEvent(event)
+
+        app = self.app
+        self.addCleanup(QToolTip.setFont, QToolTip.font())
+        self.addCleanup(app.setStyleSheet, app.styleSheet())
+        self.addCleanup(app.setProperty, 'qgTooltipStylesheet', app.property('qgTooltipStylesheet'))
+        probe = StyleProbe()
+        self.addCleanup(delete_owned_widget, probe)
+        probe.ensurePolished()
+        foreign = 'QLabel#unrelatedFixture { padding: 1px; }'
+        app.setStyleSheet(foreign)
+        app.setProperty('qgTooltipStylesheet', None)
+        for palette in (LIGHT, DARK):
+            apply_tooltip_theme(app, palette)
+            self._settle()
+            expected = app.styleSheet()
+            self.assertIn(palette.surface, expected)
+            self.assertTrue(expected.startswith(foreign))
+            self.assertEqual(expected.count('/* QUANTGEN tooltip */'), 1)
+            probe.style_changes = 0
+            apply_tooltip_theme(app, palette)
+            self._settle()
+            self.assertEqual(probe.style_changes, 0)
+            self.assertEqual(app.styleSheet(), expected)
+
+        # An external stylesheet replacement can leave the saved property stale.
+        app.setStyleSheet(foreign)
+        apply_tooltip_theme(app, DARK)
+        self.assertEqual(app.styleSheet(), expected)
+
+        font = app.font()
+        self.addCleanup(app.setFont, app.font())
+        font.setFamilies(['QG Symbols', 'QG Interface'])
+        app.setFont(font)
+        apply_tooltip_theme(app, DARK)
+        self.assertEqual(QToolTip.font().families(), font.families())
+        self.assertIn('font-family: "QG Symbols", "QG Interface"', app.styleSheet())
+        self.assertEqual(app.styleSheet().count('/* QUANTGEN tooltip */'), 1)
+
     def test_dynamic_labels_match_existing_stock_detail_type_and_palette(self):
         from PyQt6.QtWidgets import QLabel, QVBoxLayout, QWidget
         from core.theme import DARK, LIGHT

@@ -235,6 +235,32 @@
       "delivery": "NOT_SENT",
       "applied": false,
       "deployed": false
+    },
+    {
+      "date": "2026-11-23",
+      "execution_id": "bf4cc1f1-ed41-4ead-b7fe-fc3003a49439",
+      "source_parent": "b1a421a565a1d37245a089fc4ef863e58f3e7791",
+      "changes_ko": [
+        "툴팁 색·글꼴·폭이 같을 때 앱 전체 스타일을 다시 적용하는 동작을 바로잡았습니다. 테마나 글꼴이 실제로 바뀌면 새 스타일을 적용합니다.",
+        "Qt 창을 쓰는 시험 여섯 곳이 작업 종료와 닫힘 승인을 확인한 뒤 해당 창만 정리합니다."
+      ],
+      "local_validation": {
+        "repeated_stylesheet_style_events_before": 81,
+        "repeated_stylesheet_style_events_after": 0,
+        "real_theme_switch_events_after": 81,
+        "fixture_cleanup_observed_cases": 6,
+        "close_veto_preserved_cases": 6,
+        "scope": "Isolated offscreen Qt widgets; Windows end-user visual confirmation pending."
+      },
+      "previous_runtime": {
+        "id": 45031992373,
+        "conclusion": "cancelled"
+      },
+      "actual_fresh_CI": "PENDING_NEW_HEAD",
+      "owner_windows_PC7": "NOT_PERFORMED",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false
     }
   ]
 }

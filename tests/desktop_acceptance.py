@@ -9,6 +9,7 @@ import tempfile
 import threading
 import unittest
 from unittest.mock import patch
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 import dotenv
@@ -259,8 +260,8 @@ class NativeDesktopTests(unittest.TestCase):
     def cleanup_window(self):
         self.wait_idle()
         with patch.object(QMessageBox,'question',return_value=QMessageBox.StandardButton.Yes):
-            self.window.close()
-        self.window.deleteLater();self.app.processEvents()
+            self.assertTrue(self.window.close(), "The fixture window refused to close")
+        delete_owned_widget(self.window);self.app.processEvents()
 
     def wait_idle(self):
         for _ in range(1500):
