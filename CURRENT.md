@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-22T12:25:51+09:00
+updated_at: 2026-11-22T12:46:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-guide-chart-first-20261121
@@ -22,6 +22,15 @@ handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06
 previous_returned_at: 2026-11-21T14:54:13+09:00
 returned_at: 2026-11-22T02:01:59+09:00
 ---
+
+## 실제 호가 행 가림 재현·최종 event-fit 검증 checkpoint — 2026-11-22T12:46:00+09:00
+
+같은 execution47c97545/OSlock73428. 기존45 PASS(66fb537b, source8f51) 뒤 실제 sdSide→sdPage/scroll/bottomstretch 호스트를 추가확인해 normal KO/EN의 3번째호가행(top78/bottom96,viewportbottom82) 가림을재현했습니다. 그3개probe의2FAIL(1b7bdb77)/원PNG/안전0/869불변을보존하며 앞선45결과를완전한행표시PASS로바꾸지않습니다. 회색다크배경은원standalone호스트누락이었고 실제sdSide표면색으로확인됐습니다.
+
+현재수정은 _DepthViewport의 resize/LayoutRequest/Show/FontChange/StyleChange에대한 실제셀높이 재계산입니다. signature가바뀔때만 layoutinvalidate, reentrantguard, 실제cellbottom/scrollbarchrome, timer/polling0. 공용스타일/숫자/자료/제공사동작불변. 기존stylebookmethod에 실제호스트/접힌12셀·펼친28셀의 top/bottom검증을강화했고 원가로폭/스크롤/입력불변assertion유지(총45method그대로). source869 R3 freeze60246ef70896fee07a81f380d8d0335d5c15daaf4c6f51fbea572d71335cef82, 원R2대비 stock_insights.py·style test2만변경/나머지867동일, 독립bdde6a1d. 최종기술기준선c6f0d20f/867df69a와20/869PASS·공개BLOCKED65·정책본문불변(b52542b4)입니다.
+
+현재 FINAL_AUTHORITATIVE45_RUNTIME_6a10bc2d61e7 실제45+동일3호스트검사/6PNG 진행중이고 성공을아직선포하지않습니다. 추가준비허용아닌최종단일실행, 7guard·네트워크/실제모델/원장/PC0경계유지. 코드원격은아직ab0e71f, source13경로push/최종CI/PC7·실병합미완료. 다음은최종결과판독→동결원문13경로CASpush/readback→PR140→상세수동인계/RemainingWork번호보고이며 자동감시/예약0입니다.
+
 
 ## 사례 우선·기존 종목 상세 스타일 수정 checkpoint — 2026-11-22T12:25:51+09:00
 
