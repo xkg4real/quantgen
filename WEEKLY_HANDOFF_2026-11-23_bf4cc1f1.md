@@ -1,5 +1,19 @@
 # QUANTGEN 법인 설립 전 인수인계 · 2026년 11월 23일
 
+## 2026-11-23T06:57:34+09:00 · 법인 설립 전 진행
+
+- **DIDM B6.** EODHD와 Alpaca 뉴스 입력 처리가 main에 있습니다. #143은 네 설치 환경·두 문법·문서 검사와 check-run 8개 통과 뒤 병합됐습니다. main `5af378779b984153f8a5b8f7ad729869bdfbe70e`의 두 부모와 tree를 재확인했습니다. #144 `aa25d276`는 이 main을 통합해 합성 시험 45개에 필요한 입력이 일치하고 5개 파일만 다릅니다. 새 문서·문법 검사 및 네 환경의 소스 검사가 성공했고 전체 Runtime이 진행 중입니다. #145는 이전 main에서의 CI만 성공했습니다. 실제 뉴스 지연과 상업적 저장·표시, EODHD 발표 전 예상치 이력은 미검증입니다.
+- **UI/UX.** 기존 #140에 종목·시장·기준일이 맞을 때만 테마 평균을 보이는 기능과 Qt 스타일 재설정 수정을 반영했습니다. 실제 main 통합 head `e9950e346d0b77bebaa5a77faea0d1ad1169c22c`는 기존 UI 변경 경로 119개를 보존합니다. Linux에서 각 1회 시험한 창 생성 시간은 36.577→36.631, 51.205→22.783, 120.462→30.028초이고 한국어 복원은 전후 통과했습니다. 통합 입력에서 실제 Qt 시작 시험 6개와 상세·패널·Qt 부재 경계 선택 시험이 통과했습니다. 공급사 테마 구성 이력과 상업적 표시권이 필요합니다.
+- **UI CI 실패.** f17의 이전 CI는 설치 작업 네 개가 약 120분에 취소됐습니다. 최신 e995 Windows 3.12는 변경되지 않은 임시 저장소 동시 쓰기 시험에서 경로 잠금 2초를 초과했습니다. 다른 세 환경은 같은 단계를 통과했습니다. 나머지 작업이 실행 중인 동안 해당 실패 작업의 재실행 요청은 GitHub 403(전체 실행 중)으로 거절됐고 attempt 1이 그대로임을 확인했습니다. 실행 종료 뒤 같은 head 및 실패 작업 목록을 다시 읽고, 동일한 오류가 한 작업뿐이면 한 번 재검사합니다. Windows PC7·UI 병합은 대기입니다.
+- **Android·결제.** 상업용 QUANTGEN Android 내부 프리뷰 코드는 main에 있습니다. 다음 작업은 main에서 Platform build의 Android만 선택하여 APK를 만들고 휴대폰 첫 화면·예시 계산(101.01·104.69·108.95)을 확인하는 것입니다. 결제 문의 7건·구독 설계가 있고 OA-32·39·40 소유자 결정, AWS OA-43의 같은 기간 Usage type × Region 비용 자료가 필요합니다.
+- **메인 Remaining Work.** T8-6 수동 인계와 GH-2 정리는 검증된 전용 브랜치에서 공유 파일 순서를 기다립니다. [중앙 업무표](WORKBOARD.md)를 갱신했습니다. 이번 Notion 반영분은 소유자 보고용 비공개 대기열에 보관했습니다.
+
+- [#143](https://github.com/xkg4real/quantgen/pull/143) `5039835a` 병합됨 · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45063116183) success · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45063116174) success
+- [#144](https://github.com/xkg4real/quantgen/pull/144) `aa25d276` [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45073845036) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45073844942) success
+- [#145](https://github.com/xkg4real/quantgen/pull/145) `21a0fbf4` [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45058155071) success · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45058155099) success
+- [#140](https://github.com/xkg4real/quantgen/pull/140) `e9950e34` [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45073779517) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45073779616) success
+- [#141](https://github.com/xkg4real/quantgen/pull/141) `a35b2f8b` 병합됨 · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45054882305) success · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45054882429) success
+
 ## 2026-11-23T05:08:36+09:00 · 법인 설립 전 진행
 
 - **DIDM B6.** 사용자 제공 구성표에 따른 비교안은 B3 8개와 EODHD Fundamentals를 합친 9개입니다. MPT 공식 해설의 두 관측일·계약 분기를 대조했습니다. 분기별 3개월 복리평균 SOFR 분포로 해석하며, 역사 파일의 확률 단위·공표 시각 및 상업 제공 권리는 별도 확인합니다. Alpaca·Massive 합성 45개 사례가 두 Python 버전에서 각각 통과했습니다.
