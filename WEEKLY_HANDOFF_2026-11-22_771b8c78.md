@@ -1,3 +1,13 @@
+## PR141 Windows fixture 최소수리 전달 checkpoint — 2026-11-23T02:49:20+09:00
+
+- 같은root771b8c78-a4da-492e-bdf3-309980124cbc/task/handoff/OS잠금24775가latestCURRENT5e10785와저장STATE·9c원격ref를대조한뒤동일gpt/android-commercial-preview-20261123에 `693e7cbb39f6e883a093f7484375985eafa83c2a`를expected9c CAS로push/read-back했습니다. 단일부모9c·tree69a2098b036c31198919be3cb324d177dc5926cf·정확3경로본문/blob/compare/PR141head/body가일치합니다. 세경로는시험파일,source-review12,기존PR141웹JSONrevision입니다.
+- 시험두표현(temporary root.resolve/relativepath.as_posix)만보정했습니다. Productionstage/앱/정책·모든assertion/8방법/skip/timeout/threshold불변. 같은11방법독립PASS/guard0·source473other불변/actualstage399·기존HEAD/index보존. 기술12만갱신한actual20문서/source848정합PASS·old19및정책/profile/registry/checker불변·publicationBLOCKED65입니다. baseline e06076ff9410fd335bf03419bca1aef0682d067f6bd218a975aab2e745e822fe.
+- 기존9c Runtime45043106514의3Windows실패는원문보존했고8.3별칭원인은미확정입니다. **새정확693e7cbb Runtime45051411309/Compliance45051411310는진행중**이며새Windows/전체CI성공을아직주장하지않습니다. PR141draft·main미병합·APK/서명/ownerphone/MonteCarlo parity미실시. CODE조건과OS-A1실증완료를분리하며새owner재승인을요구하지않습니다.
+- DIDM PR142@90d3b4bf/Compliance45043431652SUCCESS·Runtime45043431571마지막진행중, UI140@b1Runtime45031992373cancelled/준법SUCCESS·PC7미실시입니다. UI6fixture정리·누적시간측정은다음별도단위이며원인미측정상태로production변경/CI120분상향/검사생략을하지않습니다. 기존법인전Goal활성/자동Claude감시·예약·run_now취소유지, 모든부모·정식완료ID미완료입니다.
+- 자세한코드/로그/재현·다음작업은WEEKLY_HANDOFF_2026-11-22_771b8c78.md 최신절과비공개 PR141_WINDOWS_FIX_REMOTE_READBACK_771b8c78.json에보존했습니다. 다음실행은저장execution771/task/handoff/primary693및CURRENT일치를검증한OS잠금→latestSHA CAS+새execution/readback으로현재Goal범위만이어갑니다. 실제Windows/라이선스/API/연구/배포증거를합성으로대체하지않습니다.
+
+---
+
 ## 기존 Goal 진행 checkpoint · PR141/142 및 최신 CI — 2026-11-23T02:32:46+09:00
 
 - root execution771b8c78-a4da-492e-bdf3-309980124cbc, 같은task/handoff/session·환경·OS잠금24775의연속소유권을검증했습니다. 기존법인전다섯갈래Goal은활성입니다. 자동Claude감시/자동인수/예약/run_now는취소상태를유지합니다. 현재기록은전체완료·상업출시·Claude자동반환이아닙니다.
