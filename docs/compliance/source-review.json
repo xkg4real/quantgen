@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "795b2e9435c8eed43b08b98c709b3e2eeb3a7365ad2628855cb164cea0f94ab8",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "02b1ca4c025275b400f2cd3b11f59cfe294ea849bbcd0d191dc13f7ff1eacce6",
+    ".github/workflows/runtime-smoke.yml": "96422ecce6a20ee34def2e43ab24a1da2eb50047f5ac0771895c0f0152add3a1",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -90,6 +90,7 @@
     "core/didm/ingest/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "core/didm/ingest/alfred.py": "bd29193bd8134a7c2a16926311c1cf210325e2beaec0f308c955ec340e2482a9",
     "core/didm/ingest/ecos.py": "401fdae16ab6225ca8d91bb7c632873a88b6d94738955185c1e7da55fb16c0b1",
+    "core/didm/ingest/eodhd.py": "04f4d3bf7c7bf86452ebf86062afb5791b962d3b01b66c18db77fe5093dec639",
     "core/didm/ingest/filings.py": "9b2d8d01942de98048ffd866312a15b4b850f459705c73f0d4bffb87adb6d6e2",
     "core/didm/ingest/gdelt.py": "99731a27e6597bfe4a8cd8ff443d60fc232fec708e262589bf740c882a9a3722",
     "core/didm/ingest/kalshi.py": "4f10f0581bd6aa13f0a9786d2f6b54ab97594b0c2d11b45189fa4ad8ce812bdd",
@@ -188,11 +189,11 @@
     "core/quant/gate_stats.py": "3ae17e23e4cb07136d6603a4fe572041c26abbc44369698897603c051e15286a",
     "core/quant/gjr.py": "7b2748c341507af6e4fdd169fd1bc5482d38bcde5dd76966a1962d0cdee23a9a",
     "core/quant/gsq.py": "494b5e28c8a35a49a59b2f7e613d90e175900d212519ab2c1b43fc81b9705382",
-    "core/quant/history.py": "cc858de2b168b491c7c93e35f432833c919cb3fadda6a60ede368300b1a707a1",
+    "core/quant/history.py": "3f4c794187aa69ba42916aaef0f2320ded44469d9009083b12eb3da23f63c85d",
     "core/quant/insights.py": "fdf496a4213070e0e34c406fdb1fd1931c1c6ceb9521e9bae43979d335a853d1",
     "core/quant/instruments.py": "5a228fb771d040cae8f3e4cf7869bd044728c81654b090d70faf67e3b5d3d013",
     "core/quant/lab.py": "d5e44e575a256328155cc84df0514f480f8d55eed0d04bd6d3b1172a70bd90c8",
-    "core/quant/montecarlo.py": "60aae1b3b442fe8bb36bcd21c585c5ac1951cc332ed4a689135d92fd2b49d77d",
+    "core/quant/montecarlo.py": "7f6fae12c0495821abce97e46a1d13dbb4b75d652a2ea8e8d2e049c19f9171c3",
     "core/quant/optimize.py": "028c50332684a7e06db25cbc0466c9ab3d5d877cfd5edf8cc592081e4eb1a6d2",
     "core/quant/refusal.py": "ace787b208e8f47fa7dd7f763ca0198b3a6cceddf780b08b1b4c93892f400190",
     "core/quant/risk.py": "b7bb3371bcbf7f3918a2ecc47cd2635cc092fb3f5eebcfc80f00259eee089ae9",
@@ -212,6 +213,7 @@
     "core/quant/signals.py": "d033d0f146e45ac59db6e1125a2b2256cc96c9c1744093e954adf45e2ccec64a",
     "core/quant/sleeves.py": "39bcdf9a73400ebe9634e75ae8278a3616cb41d90156749b369c1ae9042ef2ac",
     "core/quant/strategies.py": "a141f7f0b65150afc8f9fd00ba84f551a93a2a24ed092c2f8a83988ec086e329",
+    "core/quant/supplied_history.py": "88c9685c13b77dc18bc535e25c67d1726c9dcda2af40b58f35afed75d1f2ecb2",
     "core/quant/tf_books.py": "1ddf163aa280ced7cace5b02aa0ec02b8b1a7b34b51700e51e060b67fcfbbfc4",
     "core/quant/tf_gov.py": "99ad7d0abccfad800c23d23811f7070087201618c9f7f59cb2bf24a089ff579e",
     "core/quant/tf_screens.py": "29b6d6a1a937f0e477c8e88dbdb48bfe661263fdae98e8d6e58cde1dadb59934",
@@ -348,7 +350,7 @@
     "docs/product/A3_READING_LAYOUT_2026-11-06.md": "b0f6595caae843d4a912fc332adc78882f65f9eb579cd7f97f2d33519821cc64",
     "docs/product/ADOPTION_STRATEGY_CHECKS_2026-11-10.md": "995b2ee0508e86291b38735d57b064ecc78549759adb5dd654e5e64e6dd872d4",
     "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "0e854fc8af3bab5e75bc4690e4697ae3b11ebf0d07d762df2c8ab50ca97c13da",
-    "docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md": "a98f107008f8989a7cbea7a396bee3b9af6b7d2721d911da197f09257cbc9226",
+    "docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md": "43e3b60a7b6784519901cf68957c8536eb634089c80ca04dd65718fe32ee0946",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
     "docs/product/BONDS_PORTFOLIO_LANGUAGE_2026-10-31.md": "469c32828b75b54797bf1ac81a8645688452bce5f0cf7c69132e7236f96f8e59",
@@ -439,7 +441,7 @@
     "docs/product/ui_drafts_2026-11-17/README.md": "b2166e175e5d7ced820feeb9714a18640a4e08a0ced92c5ea88b9c45c29d2c92",
     "main.py": "768392a3fddaca06fda168710f757147ad31b679d8c68076d947204704121229",
     "mindmap/QUANTGEN Macro Neural Link.html": "4dbf731539d418aa67553bd5fd393dfc55550fac737ef89ca4c18c813f7c76c5",
-    "mobile/main.py": "663589c87390e6826c8fac887ed8b4ed4b41a785815e6bfc58637820bb60fd9b",
+    "mobile/main.py": "db2d270e972e026b08702891813f37674b0998f5d0d742e9e86a593d05fbb89c",
     "mobile/pyproject.toml": "2cad54b7e32873320de1d05e1e81cb91ce88f64cd97afc1ec955399fc5922db7",
     "packaging/launch_desktop.py": "7724b54d172f00d87c80abab2ff5214deb5ebcf9105878e24ca7519c166ce4b8",
     "packaging/selfcheck.py": "30dffaa03bf0f29342d3a1aca2945ab17c588c3a4304c59a0880f05b6a523ef1",
@@ -615,6 +617,7 @@
     "tests/desktop_windows_branding_acceptance.py": "811fb37cf6bdb7550df8abbedfe3a08449b17787d15a28180146a876cfb19a9c",
     "tests/desktop_workflow_guidance_acceptance.py": "12dccb1fc2c3052718d1660da13991ed869f8f139a0de685c98a6438eb14f947",
     "tests/desktop_workspace_readability_acceptance.py": "735e14354046583f1f9974a6120442c96e8f81144effc24a3fc4ba06dbfd2108",
+    "tests/didm_eodhd_acceptance.py": "b9af87bae6997d4df598005c896ec2357a8908c7ed76058885265312e2846e05",
     "tests/didm_ingest_acceptance.py": "b6c69236fce44daf5e5fc733b18a440f27abdbe4f4fdb3ee8dbb66108eb28a0c",
     "tests/didm_news_acceptance.py": "1280b0a97c7b48c9bd8610e891c048874d8503ad8a9dba4338068dfef2cda0ce",
     "tests/didm_novelty_acceptance.py": "ccefc838580aeab523770c0920afec71031b62980fcbdf16150cdaaabc9ed094",
@@ -708,7 +711,7 @@
     "tests/market_symbols_acceptance.py": "dac7d8af68db34e0ecf7ce451fddc288618eae24988c080d8784b5e480526d78",
     "tests/mc_bootstrap_disclosure_acceptance.py": "e09b191d7a13a74a15b556ce231524222a3d540606707488388322cb635af506",
     "tests/mc_volatility_acceptance.py": "5715fb07e257e88f6a38ace19863c83e926c01bbc5c22573174e4ea1072c2a89",
-    "tests/mobile_startup_acceptance.py": "5bdbba796ebe77a8c0e494b488928bf0d5d655bf9f40fce966c613b125278da8",
+    "tests/mobile_startup_acceptance.py": "e6340fa71578e078ecc66f7b0ddc6fb9ccc9b769f92f89f48c3de71acc44e0ad",
     "tests/nautilus_acceptance.py": "6863a7f8b181e31c61e60b9e7f3e43448f5653b598252dcc3adf698ded8ffdf2",
     "tests/nautilus_registration_acceptance.py": "b846a53ecb6eb008a3b0ffbe1eab428b5491c5d1ac342a360368b38854fffda5",
     "tests/nautilus_stub_child.py": "6f0e75014fa6f5778095c0f756e4e88576ffafef7fe0c8af083cc00b5d9604b0",
@@ -858,163 +861,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "844f0e81b6ee68e0990256a801b53de5e74687cb539b4b3e5ba5136abeb1cf35",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.640568+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "bc7bd97e53d8ef61fa89dada96e968f12b4631cce771c0aae2e2aed2ff23b6da",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.015095+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "844f0e81b6ee68e0990256a801b53de5e74687cb539b4b3e5ba5136abeb1cf35",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.643440+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "bc7bd97e53d8ef61fa89dada96e968f12b4631cce771c0aae2e2aed2ff23b6da",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.018274+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "11bc694ec426e109ee1ef4b727c3a96dca2dddc18ba9359c1c5e88cc5a16cf2d",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.645585+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "e9d109c6c20f81c8b6b2d0dd6bcd7c669a9b89ce27718fb06974a2c45d52f715",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.021169+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "6eea857d06a603f3b1c9dd5b09b526085d2d1fad3d8cb045feca75f59ffb8a42",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.647847+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "92c799ba91cf9cd848d530da184571691e3008ba883f47e6843d2637076f8366",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.023895+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "633497c4717d3b73cda4794c48a24c3768da4f9426b06dba7ba36317ae62545a",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.650296+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "c9db2ef6c2869aaffa511ae0153f0eed7186554b7f1cd0efe6a660e3fc1ea781",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.025955+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "f8af68be3bf23af0e666874432a75b62d2c5ecfb22378f78dcae3ae8a95e8804",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.652308+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "0ed64aac21c86b2647ca77f1b825992943df8d044b6a2f49f009caea7e48e182",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.028124+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "844f0e81b6ee68e0990256a801b53de5e74687cb539b4b3e5ba5136abeb1cf35",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.654608+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "bc7bd97e53d8ef61fa89dada96e968f12b4631cce771c0aae2e2aed2ff23b6da",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.030228+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
-      "source_digest": "f8af68be3bf23af0e666874432a75b62d2c5ecfb22378f78dcae3ae8a95e8804",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.656677+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "0ed64aac21c86b2647ca77f1b825992943df8d044b6a2f49f009caea7e48e182",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.032428+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "769e224f2a33c16e037e72d238568a019ba8f54023dfbfb4c3bf1f04209a76da",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.659154+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "6dbe32bac28e5ca91f52129de57e0dc4221aa2ff9d32c7284de8a99f6a2b0d55",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.034495+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "15c1b603db1f1e72e408c4f99bf767b410771e0ea5bcb8c8475c131b68d89fc4",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.662359+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "e5c1cdd87ca21f9553e99bdc222a0e08266e46dbbf5d10e82ed7ce302b4584a3",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.037074+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "0cf588e4fe86009eacf5bf4984570b64b4cd7dbe7368d030d432fbed63671da3",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.664351+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "7764cab18e9a4f629421c7c129af424bb891eede4e0c158b2026870a2be11c18",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.039148+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "a5f6c7417759347c183da2fe1a71d1ab0fb0367fa0f410a85ba7e2fbae331a11",
-      "reviewed_by": "GPT root / independent Windows fixture portability technical review 2026-11-23",
-      "review_note": "PR141 fixture-only path normalization: canonical temporary root and POSIX manifest comparison preserve stage safety checks and all methods; same11 guarded host methods, new Windows CI required; source/document consistency only, policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T17:43:59.456028+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "b7e40d89b89d8ab5b30dee5ab3faff96b072fc8c30426e654352faefaea39b06",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.041615+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "769e224f2a33c16e037e72d238568a019ba8f54023dfbfb4c3bf1f04209a76da",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.668840+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "6dbe32bac28e5ca91f52129de57e0dc4221aa2ff9d32c7284de8a99f6a2b0d55",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.044026+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "769e224f2a33c16e037e72d238568a019ba8f54023dfbfb4c3bf1f04209a76da",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.671021+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "6dbe32bac28e5ca91f52129de57e0dc4221aa2ff9d32c7284de8a99f6a2b0d55",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.046123+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "769e224f2a33c16e037e72d238568a019ba8f54023dfbfb4c3bf1f04209a76da",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.673309+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "6dbe32bac28e5ca91f52129de57e0dc4221aa2ff9d32c7284de8a99f6a2b0d55",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.048432+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "da74641896676ae7ad6cd252328975b4cdaa39856440ca37bda3ce796f9a7f21",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.676109+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "689e62692c7b6059d870db9d89ef2f29c5b1ba1b76dbab3808f433ec8c4c6d3f",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.050885+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "f8af68be3bf23af0e666874432a75b62d2c5ecfb22378f78dcae3ae8a95e8804",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.678259+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "0ed64aac21c86b2647ca77f1b825992943df8d044b6a2f49f009caea7e48e182",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.053244+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "844f0e81b6ee68e0990256a801b53de5e74687cb539b4b3e5ba5136abeb1cf35",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.680420+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "bc7bd97e53d8ef61fa89dada96e968f12b4631cce771c0aae2e2aed2ff23b6da",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.055385+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "872ed8d8cc7018631693873875ee1120b195d7f5e74fe29aeec8d95e0bd42b0c",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.682490+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "813a4b47dbf63034a967e750cfdbc7b67a8bc6393e96ba3894c21075dc8bd797",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.057630+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "844f0e81b6ee68e0990256a801b53de5e74687cb539b4b3e5ba5136abeb1cf35",
-      "reviewed_by": "GPT root / independent Android technical delta review 2026-11-23",
-      "review_note": "Android internal preview: mobile-only entry and explicit staging override, same11 guarded tests, workflow trigger; source/doc consistency only. APK/device/parity/rights/release have not been evaluated; policies/profile unchanged. See docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:14:51.684532+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "bc7bd97e53d8ef61fa89dada96e968f12b4631cce771c0aae2e2aed2ff23b6da",
+      "reviewed_by": "QUANTGEN independent technical integration review / remaining_notion 2026-11-23",
+      "review_note": "Reviewed the fixed synthetic GBM demonstration, deferred imports, desktop compatibility checks and supplied EODHD boundaries together on the DIDM merge base. Packaging includes both source sets. Actual APK, device parity, provider acquisition, commercial rights and release require separate evidence.",
+      "reviewed_at": "2026-11-22T18:21:28.059782+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     }
   }
 }

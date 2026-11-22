@@ -133,13 +133,18 @@ class MobileStageTests(unittest.TestCase):
 class MobileEntryTests(unittest.TestCase):
     def test_entry_imports_only_flet_and_static_theme(self):
         tree = ast.parse((ROOT / "mobile/main.py").read_text(encoding="utf-8"))
-        imports = set()
+        handler, = (node for node in ast.walk(tree)
+                    if isinstance(node, ast.FunctionDef) and node.name == "calculate_example")
+        handler_nodes = set(ast.walk(handler))
+        startup_imports, click_imports = set(), set()
         for node in ast.walk(tree):
+            imports = click_imports if node in handler_nodes else startup_imports
             if isinstance(node, ast.Import):
                 imports.update(alias.name for alias in node.names)
             elif isinstance(node, ast.ImportFrom):
                 imports.add(node.module)
-        self.assertEqual(imports, {"__future__", "flet", "core.theme"})
+        self.assertEqual(startup_imports, {"__future__", "flet", "core.theme"})
+        self.assertEqual(click_imports, {"datetime", "core.quant.montecarlo", "core.quant.supplied_history"})
 
     def test_real_flet_controls_without_imports_network_environment_or_writes(self):
         try:
@@ -153,7 +158,7 @@ class MobileEntryTests(unittest.TestCase):
 
         def guarded_import(name, *args, **kwargs):
             root = name.split(".")[0]
-            if root in {"scipy", "matplotlib", "PyQt6", "PySide6", "shiboken6", "sip",
+            if root in {"numpy", "scipy", "matplotlib", "PyQt6", "PySide6", "shiboken6", "sip",
                         "dotenv", "keyring", "data", "ui", "quantgen_desktop", "config"}:
                 raise AssertionError("Disallowed mobile startup import: " + name)
             if root == "core" and name not in {"core", "core.theme"}:
@@ -166,9 +171,13 @@ class MobileEntryTests(unittest.TestCase):
         class FakePage:
             def __init__(self):
                 self.controls = []
+                self.updates = 0
 
             def add(self, *controls):
                 self.controls.extend(controls)
+
+            def update(self):
+                self.updates += 1
 
         page = FakePage()
         with ExitStack() as stack:
@@ -188,22 +197,52 @@ class MobileEntryTests(unittest.TestCase):
         self.assertEqual(page.theme.font_family, "QG Interface")
         self.assertEqual(len(page.controls), 1)
         self.assertFalse(hasattr(page, "window"), "The mobile shell must not require desktop window APIs")
-        pending, labels, scrolling = list(page.controls), [], False
+        pending, labels, buttons, scrolling = list(page.controls), [], [], False
         while pending:
             control = pending.pop()
             if isinstance(control, ft.Text):
-                labels.append(control.value)
+                labels.append(control)
+            if isinstance(control, ft.FilledButton):
+                buttons.append(control)
             scrolling |= getattr(control, "scroll", None) == ft.ScrollMode.AUTO
             pending.extend(getattr(control, "controls", []) or [])
             child = getattr(control, "content", None)
-            if child is not None:
+            if isinstance(child, ft.Control):
                 pending.append(child)
-        content = "\n".join(labels)
+        content = "\n".join(label.value for label in labels)
         self.assertIn("Quant Lab · Monte Carlo", content)
-        self.assertIn("미제공 · 계산 및 결과 대조 미실시", content)
+        self.assertIn("합성 가격 예시", content)
         self.assertIn("미제공 · 실제 데이터 미연결", content)
         self.assertIn("미제공 · 계정 연결 없음", content)
         self.assertTrue(scrolling)
+
+        button, = buttons
+        result, = (label for label in labels if not label.visible and label.value == "")
+        self.assertEqual(page.updates, 0)
+
+        def offline_import(name, *args, **kwargs):
+            if name.split(".")[0] in {"scipy", "config", "data", "dotenv", "keyring", "matplotlib"} or name in {
+                "core.gateway", "core.credentials", "core.quant.history", "core.quant.garch"
+            }:
+                raise AssertionError("Unexpected dependency for supplied-price GBM: " + name)
+            return original_import(name, *args, **kwargs)
+
+        with patch("builtins.__import__", offline_import), patch("socket.socket.connect", forbidden):
+            for count in (1, 2):
+                button.on_click(None)
+                self.assertTrue(result.visible)
+                self.assertEqual(result.value, "5일 뒤 중앙값 104.69 · 가운데 90% 범위 101.01~108.95")
+                self.assertEqual(page.updates, count)
+
+        def missing_numpy(name, *args, **kwargs):
+            if name == "core.quant.montecarlo":
+                raise ModuleNotFoundError("NumPy unavailable in this fixture", name="numpy")
+            return offline_import(name, *args, **kwargs)
+
+        with patch("builtins.__import__", missing_numpy):
+            button.on_click(None)
+        self.assertEqual(result.value, "이 기기에서 계산 모듈을 열 수 없어요.")
+        self.assertEqual(page.updates, 3)
 
 
 if __name__ == "__main__":

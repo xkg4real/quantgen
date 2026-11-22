@@ -1,4 +1,38 @@
-# Android internal preview — startup boundary
+# Android internal preview
+
+## Fixed Monte Carlo example
+
+On the home screen, **Quant Lab · Monte Carlo → 예시 계산하기** runs the same GBM calculation used by
+the desktop Quant Lab. It uses 30 synthetic closes with fixed weekday labels from April 1 to May 10,
+2024. The last close is 105.25. The example simulates five trading sessions with zero log drift, 256
+paths and seed 7. The button displays the median and the interval from the 5th to the 95th percentile.
+
+| Host reference | Value shown |
+| --- | ---: |
+| 5th percentile | 101.01 |
+| Median | 104.69 |
+| 95th percentile | 108.95 |
+
+The actual Flet 0.85.2 button was invoked twice in each of two fresh host processes using a test
+page. All 15 recorded result fields, including the median by session, matched the native desktop
+calculation on the same inputs. The home screen loaded before NumPy or the Monte Carlo engine.
+The button completed the GBM example with SciPy, GARCH, provider modules and account settings excluded.
+
+The eight mobile acceptance tests passed, including the missing-calculation-dependency message.
+For the desktop regression check, the original and updated engines produced identical terminal prices,
+percentile bands, sample paths, risk metrics and explanatory notes across five synthetic model/drift
+combinations covering GBM, jump, bootstrap and GARCH-t. The mobile control exposes only the fixed GBM
+example. Market data, charts and login are outside the preview.
+
+To verify on Android, build the revision containing the button with the manual platform workflow below.
+Record the APK size, signature and resolved dependencies, install it on the owner's phone, measure first
+start, check layout and scrolling, then press **예시 계산하기** and compare the three displayed values.
+The build, dependency installation on Android and phone result remain pending.
+
+## Initial layout-only preview at PR #141
+
+The following record describes the original preview through commit `693e7cbb`, before the calculation
+button was added. The test and staging counts below apply to that revision.
 
 Base: `dec979a7fae65d5f749e12193fad3d0a9ce8ddf3`.
 Branch: `gpt/android-commercial-preview-20261123`.
@@ -14,7 +48,7 @@ controls does not establish APK startup, accessibility, Android dependency suppo
 desktop feature parity, or a commercial launch. No data-provider/account/research/engine modules are
 imported by the mobile entry.
 
-## Validation performed
+### Validation performed
 
 - Pinned Flet 0.85.2: 8 new mobile entry/staging tests and 3 existing packaging tests passed.
 - Independent guarded confirmation: the same 11 methods passed, with no errors, failures, or skips;
@@ -40,7 +74,7 @@ it does not run Flet's application server. Hosts without Flet skip that method; 
 11-method confirmation recorded above. The runtime workflow explicitly runs the new test module and
 also triggers on edits to it.
 
-## Build and remaining evidence
+### Build and remaining evidence at the initial checkpoint
 
 The task-private Flet/CLI 0.85.2, JDK 17.0.13, Android SDK manager 12.0, Android 35r2, build-tools 34.0.0,
 and platform-tools 37.0.3 were installed and verified by eight component commands. Required Flutter

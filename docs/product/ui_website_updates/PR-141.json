@@ -101,6 +101,21 @@
       "actual_fresh_Windows_CI_confirmed": false,
       "website_applied": false,
       "deployed": false
+    },
+    {
+      "date": "2026-11-23",
+      "execution_id": "bf4cc1f1-ed41-4ead-b7fe-fc3003a49439",
+      "source_parent": "693e7cbb39f6e883a093f7484375985eafa83c2a",
+      "integrated_main": "d835d9f495102a6d3244413018db1f9219341716",
+      "changes_ko": [
+        "Android 내부 미리보기에서 예시 계산하기를 누르면 고정된 합성 종가 30개로 5거래일의 모의 가격을 계산합니다.",
+        "시장 조회와 계정 연동은 미제공입니다."
+      ],
+      "host_validation": "Real Flet control invoked offline. The fixed synthetic GBM example returned the same 15 recorded fields as the desktop fixture. Median 104.69, central 90% range 101.01 to 108.95.",
+      "apk": "NOT_PERFORMED",
+      "owner_phone": "NOT_PERFORMED",
+      "website_applied": false,
+      "deployed": false
     }
   ]
 }
