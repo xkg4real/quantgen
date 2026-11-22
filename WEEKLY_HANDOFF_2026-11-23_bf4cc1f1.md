@@ -1,5 +1,17 @@
 # QUANTGEN 법인 설립 전 인수인계 · 2026년 11월 23일
 
+## 2026-11-23T05:08:36+09:00 · 법인 설립 전 진행
+
+- **DIDM B6.** 사용자 제공 구성표에 따른 비교안은 B3 8개와 EODHD Fundamentals를 합친 9개입니다. MPT 공식 해설의 두 관측일·계약 분기를 대조했습니다. 분기별 3개월 복리평균 SOFR 분포로 해석하며, 역사 파일의 확률 단위·공표 시각 및 상업 제공 권리는 별도 확인합니다. Alpaca·Massive 합성 45개 사례가 두 Python 버전에서 각각 통과했습니다.
+- **DIDM 통합 순서.** #143의 문서 검사와 두 문법 검사가 성공했고 설치 환경 4개가 진행 중입니다. 다음 #144와의 CI 파일에서 텍스트 충돌 한 곳을 재현했습니다. Alpaca 다음에 Massive 시험만 추가한 후보를 검증했습니다. 실제 다음 main에서 입력·기술 지문·전체 CI를 다시 검증합니다.
+- **Remaining Work GH-2.** [작업 커밋](https://github.com/xkg4real/quantgen/commit/18d5e507014ff6ce28da40df51788218f860796b)에서 미사용 NPU 예제와 mindmap 파일 5개를 정리하고 개발 실행 설정 하나를 제거했습니다. 연구 화면 문서 2개와 quantgen-web 진입점을 보존했습니다. 합성 패키징·런처 시험 10개, 기술 문서 20개 및 원격 변경 범위를 확인했습니다. 첫 wheel 검증의 시험 경로 문제를 고친 뒤 최종 합성 시험을 통과했습니다. 전용 브랜치까지 완료했고 PR·GH-2 전체 종료는 대기합니다.
+- **Android·UI·결제.** Android 내부 프리뷰는 main 666e0064에 있습니다. Android 단독 APK와 기기 확인, UI #140의 Windows PC7, OA-43의 동일 기간 Usage type × Region 자료가 각각 남았습니다.
+
+- [#143](https://github.com/xkg4real/quantgen/pull/143) `5039835a` [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45063116174) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45063116183) success
+- [#144](https://github.com/xkg4real/quantgen/pull/144) `270f5daa` [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45058539887) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45058539869) success
+- [#145](https://github.com/xkg4real/quantgen/pull/145) `21a0fbf4` [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45058155099) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45058155071) success
+- [#140](https://github.com/xkg4real/quantgen/pull/140) `f17df92b` [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45061279851) success · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45061279863) in_progress
+
 ## 법인 설립 전 작업 기록 · 2026-11-23T04:52:13+09:00
 
 - **Android.** 내부 프리뷰 #141을 main `666e0064d446244bfff6a058441c135eeaab825c`에 병합했습니다. 6개 Runtime 작업과 기술 문서 검사가 성공했고 병합 tree를 재확인했습니다. APK를 만들려면 Platform build에서 main을 선택하고 Android만 켭니다. 기기의 Quant Lab → 예시 계산하기에서 101.01·104.69·108.95를 대조합니다. APK 및 기기 증거는 대기 상태입니다.

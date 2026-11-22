@@ -1,12 +1,12 @@
 ---
-status: taken
+status: checkpoint
 reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-23T05:06:30+09:00
+updated_at: 2026-11-23T05:08:36+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/android-commercial-preview-20261123
@@ -22,6 +22,18 @@ handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06
 previous_returned_at: 2026-11-21T14:54:13+09:00
 returned_at: 2026-11-22T12:49:15+09:00
 ---
+
+## 2026-11-23T05:08:36+09:00 · 법인 설립 전 진행
+
+- **DIDM B6.** 사용자 제공 구성표에 따른 비교안은 B3 8개와 EODHD Fundamentals를 합친 9개입니다. MPT 공식 해설의 두 관측일·계약 분기를 대조했습니다. 분기별 3개월 복리평균 SOFR 분포로 해석하며, 역사 파일의 확률 단위·공표 시각 및 상업 제공 권리는 별도 확인합니다. Alpaca·Massive 합성 45개 사례가 두 Python 버전에서 각각 통과했습니다.
+- **DIDM 통합 순서.** #143의 문서 검사와 두 문법 검사가 성공했고 설치 환경 4개가 진행 중입니다. 다음 #144와의 CI 파일에서 텍스트 충돌 한 곳을 재현했습니다. Alpaca 다음에 Massive 시험만 추가한 후보를 검증했습니다. 실제 다음 main에서 입력·기술 지문·전체 CI를 다시 검증합니다.
+- **Remaining Work GH-2.** [작업 커밋](https://github.com/xkg4real/quantgen/commit/18d5e507014ff6ce28da40df51788218f860796b)에서 미사용 NPU 예제와 mindmap 파일 5개를 정리하고 개발 실행 설정 하나를 제거했습니다. 연구 화면 문서 2개와 quantgen-web 진입점을 보존했습니다. 합성 패키징·런처 시험 10개, 기술 문서 20개 및 원격 변경 범위를 확인했습니다. 첫 wheel 검증의 시험 경로 문제를 고친 뒤 최종 합성 시험을 통과했습니다. 전용 브랜치까지 완료했고 PR·GH-2 전체 종료는 대기합니다.
+- **Android·UI·결제.** Android 내부 프리뷰는 main 666e0064에 있습니다. Android 단독 APK와 기기 확인, UI #140의 Windows PC7, OA-43의 동일 기간 Usage type × Region 자료가 각각 남았습니다.
+
+- [#143](https://github.com/xkg4real/quantgen/pull/143) `5039835a` [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45063116174) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45063116183) success
+- [#144](https://github.com/xkg4real/quantgen/pull/144) `270f5daa` [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45058539887) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45058539869) success
+- [#145](https://github.com/xkg4real/quantgen/pull/145) `21a0fbf4` [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45058155099) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45058155071) success
+- [#140](https://github.com/xkg4real/quantgen/pull/140) `f17df92b` [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45061279851) success · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45061279863) in_progress
 
 ## Remaining Work GH-2 정리 후보 · 2026-11-23T05:06:30+09:00
 
