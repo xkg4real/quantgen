@@ -181,7 +181,7 @@ def validate_record(raw: Mapping[str, Any]) -> ScoreRecord:
     if not isinstance(model_version, str) or not model_version.strip():
         raise SchemaError("model_version must be a non-empty string")
     prompt_sha = raw["prompt_sha256"]
-    if not isinstance(prompt_sha, str) or not _SHA256.match(prompt_sha):
+    if not isinstance(prompt_sha, str) or not _SHA256.fullmatch(prompt_sha):
         raise SchemaError("prompt_sha256 must be 64 lowercase hex characters")
 
     return ScoreRecord(
@@ -297,7 +297,7 @@ def _score(value: Any, name: str) -> float:
 
 
 def _ident(value: Any, name: str) -> str:
-    if not isinstance(value, str) or not _ID.match(value):
+    if not isinstance(value, str) or not _ID.fullmatch(value):
         raise SchemaError(f"{name} must be an identifier string")
     return value
 

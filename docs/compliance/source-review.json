@@ -96,7 +96,7 @@
     "core/didm/ingest/kalshi.py": "4f10f0581bd6aa13f0a9786d2f6b54ab97594b0c2d11b45189fa4ad8ce812bdd",
     "core/didm/ingest/news.py": "37d84f3cb3bde56ed772235aee1283bca76057006e5044974663f22d80f72afd",
     "core/didm/llm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "core/didm/llm/schema.py": "110eb847575f0e9bf4b147fa17b97ff7c476cbdbd29de453d9fbe5ebcfcd4856",
+    "core/didm/llm/schema.py": "a8411c0ef82361c4e888ff5f06c3f7682ecc2a170c71fb1165e08679e2852af4",
     "core/didm/novelty.py": "840562fc43bea408254cfac625d22534408f85c85741015fc17fd4ddd311f590",
     "core/didm/store/__init__.py": "368bc91ce8edf904d874ed96be693136280bdf86c5fa81bb9590d24afad1eed3",
     "core/education/__init__.py": "d04a1be2039032cc6150e474930f58e9f5b1e882d8fad1a6b472c313b5456ad4",
@@ -618,7 +618,7 @@
     "tests/didm_ingest_acceptance.py": "b6c69236fce44daf5e5fc733b18a440f27abdbe4f4fdb3ee8dbb66108eb28a0c",
     "tests/didm_news_acceptance.py": "1280b0a97c7b48c9bd8610e891c048874d8503ad8a9dba4338068dfef2cda0ce",
     "tests/didm_novelty_acceptance.py": "ccefc838580aeab523770c0920afec71031b62980fcbdf16150cdaaabc9ed094",
-    "tests/didm_schema_acceptance.py": "5c32fdf9e5a9bc14d564782a21a4c69dec3d24595c72fcbbd65c2bfddbc50caa",
+    "tests/didm_schema_acceptance.py": "ef5892bbbc34d6980077a5f8ff6bfe6d34660fcbbd0abcaff269b46a774d645e",
     "tests/didm_sources_acceptance.py": "8574b9c822e4d7acfc849bd70ffcbd0d03fdca9b8ebf67c50ec0ff1c7f48b781",
     "tests/didm_store_acceptance.py": "3f54b0b04508850512776d6c6b4c836ed54e3c1e7fae2c91e53b349537c563da",
     "tests/didm_vendor_eval_acceptance.py": "5a134e1547f047358f33ce56c4cd59a46049154160591194e177e2e1c73e9089",
@@ -857,19 +857,19 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "c08b288189cdb62323d8f8a8c21912c839f1e914bbd1b0380e1f624b29c7d3d2",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.110974+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "4d53dfd0b3f45331972d7054ba1a419be502091efd33e9370cac24be3fd50354",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and independent DIDM review 2026-11-23",
+      "review_note": "Validated complete V0 identifier and lowercase 64-character prompt SHA-256 matching. A trailing line feed is rejected. Independent synthetic checks covered 126 boundary cases and 26 product cases; no score, source acquisition, policy, release rights or publication-status change.",
+      "reviewed_at": "2026-11-22T18:57:27.168013+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "c08b288189cdb62323d8f8a8c21912c839f1e914bbd1b0380e1f624b29c7d3d2",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.115813+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "4d53dfd0b3f45331972d7054ba1a419be502091efd33e9370cac24be3fd50354",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and independent DIDM review 2026-11-23",
+      "review_note": "Validated complete V0 identifier and lowercase 64-character prompt SHA-256 matching. A trailing line feed is rejected. Independent synthetic checks covered 126 boundary cases and 26 product cases; no score, source acquisition, policy, release rights or publication-status change.",
+      "reviewed_at": "2026-11-22T18:57:27.171617+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
@@ -897,27 +897,27 @@
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "b28c3aa7f7b86a76ecf20de233f205aa3c615159259e570c95b7e985eee5cf32",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.127674+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "dab4a29ebae682ecb39f16913b4eea97c6a4e6d1b0b085f44e50354efdbe36cb",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and independent DIDM review 2026-11-23",
+      "review_note": "Validated complete V0 identifier and lowercase 64-character prompt SHA-256 matching. A trailing line feed is rejected. Independent synthetic checks covered 126 boundary cases and 26 product cases; no score, source acquisition, policy, release rights or publication-status change.",
+      "reviewed_at": "2026-11-22T18:57:27.174880+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "c08b288189cdb62323d8f8a8c21912c839f1e914bbd1b0380e1f624b29c7d3d2",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.134041+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "4d53dfd0b3f45331972d7054ba1a419be502091efd33e9370cac24be3fd50354",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and independent DIDM review 2026-11-23",
+      "review_note": "Validated complete V0 identifier and lowercase 64-character prompt SHA-256 matching. A trailing line feed is rejected. Independent synthetic checks covered 126 boundary cases and 26 product cases; no score, source acquisition, policy, release rights or publication-status change.",
+      "reviewed_at": "2026-11-22T18:57:27.177284+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
-      "source_digest": "b28c3aa7f7b86a76ecf20de233f205aa3c615159259e570c95b7e985eee5cf32",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.136570+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "dab4a29ebae682ecb39f16913b4eea97c6a4e6d1b0b085f44e50354efdbe36cb",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and independent DIDM review 2026-11-23",
+      "review_note": "Validated complete V0 identifier and lowercase 64-character prompt SHA-256 matching. A trailing line feed is rejected. Independent synthetic checks covered 126 boundary cases and 26 product cases; no score, source acquisition, policy, release rights or publication-status change.",
+      "reviewed_at": "2026-11-22T18:57:27.179805+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
@@ -945,11 +945,11 @@
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "6da833c7a7f4ed694c51d7b09ba8d02da433a1f72489226f8bae3599de122c3c",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.152265+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "17ebf34d876de2b77eb25f808157397783694983347a82839129dd6f606e194e",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and independent DIDM review 2026-11-23",
+      "review_note": "Validated complete V0 identifier and lowercase 64-character prompt SHA-256 matching. A trailing line feed is rejected. Independent synthetic checks covered 126 boundary cases and 26 product cases; no score, source acquisition, policy, release rights or publication-status change.",
+      "reviewed_at": "2026-11-22T18:57:27.182034+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
@@ -985,35 +985,35 @@
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "b28c3aa7f7b86a76ecf20de233f205aa3c615159259e570c95b7e985eee5cf32",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.169423+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "dab4a29ebae682ecb39f16913b4eea97c6a4e6d1b0b085f44e50354efdbe36cb",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and independent DIDM review 2026-11-23",
+      "review_note": "Validated complete V0 identifier and lowercase 64-character prompt SHA-256 matching. A trailing line feed is rejected. Independent synthetic checks covered 126 boundary cases and 26 product cases; no score, source acquisition, policy, release rights or publication-status change.",
+      "reviewed_at": "2026-11-22T18:57:27.184246+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "c08b288189cdb62323d8f8a8c21912c839f1e914bbd1b0380e1f624b29c7d3d2",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.172911+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "4d53dfd0b3f45331972d7054ba1a419be502091efd33e9370cac24be3fd50354",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and independent DIDM review 2026-11-23",
+      "review_note": "Validated complete V0 identifier and lowercase 64-character prompt SHA-256 matching. A trailing line feed is rejected. Independent synthetic checks covered 126 boundary cases and 26 product cases; no score, source acquisition, policy, release rights or publication-status change.",
+      "reviewed_at": "2026-11-22T18:57:27.186418+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "48a0348939cc3a74c8ad4ed0a6a7248fc5bc0375b94234f5460147e9de3267c3",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.177000+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "5879234ec12e33cfe28fa5f2cdf0de357d260b76b1a3275fed969add56d46141",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and independent DIDM review 2026-11-23",
+      "review_note": "Validated complete V0 identifier and lowercase 64-character prompt SHA-256 matching. A trailing line feed is rejected. Independent synthetic checks covered 126 boundary cases and 26 product cases; no score, source acquisition, policy, release rights or publication-status change.",
+      "reviewed_at": "2026-11-22T18:57:27.188787+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "c08b288189cdb62323d8f8a8c21912c839f1e914bbd1b0380e1f624b29c7d3d2",
-      "reviewed_by": "GPT root / independent DIDM input-contract technical review 2026-11-23",
-      "review_note": "Pure supplied EODHD parser/time and bounded page planning; same18 synthetic methods, final clarified-source independent guard0; caller evidence only, not whole-payload PIT/real API/acquisition/model/rights/launch; policies/profile unchanged. See docs/didm/EODHD_SUPPLIED_INPUT_CONTRACT_2026-11-23.md.",
-      "reviewed_at": "2026-11-22T16:18:55.180696+00:00",
-      "source_commit": "dec979a7fae65d5f749e12193fad3d0a9ce8ddf3"
+      "source_digest": "4d53dfd0b3f45331972d7054ba1a419be502091efd33e9370cac24be3fd50354",
+      "reviewed_by": "QUANTGEN technical consistency / GPT root and independent DIDM review 2026-11-23",
+      "review_note": "Validated complete V0 identifier and lowercase 64-character prompt SHA-256 matching. A trailing line feed is rejected. Independent synthetic checks covered 126 boundary cases and 26 product cases; no score, source acquisition, policy, release rights or publication-status change.",
+      "reviewed_at": "2026-11-22T18:57:27.191055+00:00",
+      "source_commit": "d835d9f495102a6d3244413018db1f9219341716"
     }
   }
 }
