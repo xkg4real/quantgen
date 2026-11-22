@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-23T04:25:43+09:00
+updated_at: 2026-11-23T04:33:36+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/android-commercial-preview-20261123
@@ -22,6 +22,12 @@ handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06
 previous_returned_at: 2026-11-21T14:54:13+09:00
 returned_at: 2026-11-22T12:49:15+09:00
 ---
+
+## UI 창 깜빡임 · 2026-11-23T04:33:36+09:00
+
+수정 전에는 화면을 구성할 때 홈·가이드·전략 작성·라이브러리·시스템의 배지 다섯 개가 각각 부모 없는 Qt 창으로 잠시 나타났습니다. 툴바에 배지를 먼저 붙이고 문구를 설정하도록 수정했습니다. 같은 Linux Qt offscreen 조건에서 합성 서비스를 주입한 실제 8페이지 주창을 두 번 비교했습니다. 별도로 나타난 배지 창은 5개에서 0개로 줄었고, 두 실행 모두 메인 창은 한 번만 표시돼 화면 캡처와 유휴 시점까지 유지됐습니다. 배지 회귀시험 5개와 독립 이벤트 비교를 통과했습니다.
+
+[기존 PR #140](https://github.com/xkg4real/quantgen/pull/140)에 `f17df92bd59e446fa189168c1273e0b7116e7e3d` 커밋의 소스·시험·기술 검토·웹 기록 네 파일 및 PR 설명을 다시 확인했습니다. [최신 전체 Runtime](https://github.com/xkg4real/quantgen/actions/runs/45061279863)은 별도입니다. Windows 소유자 PC7 확인, 외부 웹 반영, 실제 사이트 배포는 완료 범위에 들어가지 않습니다.
 
 ## 수동 인계 도구와 UI 첫 표시 · 2026-11-23T04:25:43+09:00
 
