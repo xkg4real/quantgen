@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "795b2e9435c8eed43b08b98c709b3e2eeb3a7365ad2628855cb164cea0f94ab8",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "2cab0313c0b8bdd6025ca49ce7675e5103871d1e2ae5bd23ae456edc4b76153f",
+    ".github/workflows/runtime-smoke.yml": "d90d4ac3a673fb250aac93cfdfc3cc4788a9a6710e9ee70ca4cbb6aaf334d308",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -651,6 +651,7 @@
     "tests/gateway_same_answer_acceptance.py": "91e59d5ea698e283cd096873a508ddb95f8e4c8171051a9ccce5e016e552c2c5",
     "tests/glossary_search_acceptance.py": "058922190b05fc585dab3462848b40ea0444a43b4b5e96fdb512cd8ccfc0e64e",
     "tests/golden_tools.py": "24154d79aea43bc91b7c26c33c6b400cd9202cdb4915680a81b4f7cf0fa928ef",
+    "tests/handoff_doc_acceptance.py": "e7729c33edf0f05ea76db8bf66ae4463348a6e023d51cb00dab54ab360473ab2",
     "tests/history_best_source_acceptance.py": "cda3221001d11599c0b9dab6f71f59a20b7ac762d43adcd6c0b5f2fbce19310f",
     "tests/home_indicators_acceptance.py": "2585e4a8cd2437f838d94a52ecd2962117fd70e809e700dd14e9d5a87a691c74",
     "tests/home_watchlist_acceptance.py": "86956c94f3aa7a90f496bc5c2bea388a6b2b5f861b5d1ca4421045c55f19165c",
@@ -780,7 +781,7 @@
     "tools/handoff/auto_snapshot.py": "e79e3cc15572b0c4fae50784784f9fd234c75440d812104d0abf393bb2571cc6",
     "tools/handoff/mod/hooks/register.test.ts": "2709a0beb01e94689c5be2118f266138ad24b990648afbd58de8086e4d5628fb",
     "tools/handoff/mod/hooks/register.ts": "f7370a361aee2a53d4e1b8355f5a707b52a77d0e852a63bc3a1c743400b39d0b",
-    "tools/handoff/push_handoff.py": "45e2e3405d78087d5acb91ce4ea415a47fdcab3f13f3331708d07af856b91f29",
+    "tools/handoff/push_handoff.py": "0a125ce7efb1d09c1b3c050d8613cee6182b01b7dea4f30caf6e1fcccd3a1530",
     "tools/nautilus/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/nautilus/egress_probe.py": "e5189484cc5f4891c2278ffdf1d71dc065eface3019b31d4a1f263c4011ddc15",
     "tools/nautilus/launch.py": "3a7a9a3cbbb1f372dbf1598cd8c75eafbd7a116ee622cda259ee2e8aa7fe1577",
@@ -866,163 +867,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "0df95c9b9a6980066a8b98d4e535ce41e92910fbf3c26f71f666b76e1dc00e4f",
-      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
-      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T23:37:14.903517+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.806777+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "0df95c9b9a6980066a8b98d4e535ce41e92910fbf3c26f71f666b76e1dc00e4f",
-      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
-      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T23:37:14.906222+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.810417+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "1ad24028d74e8360ee8237d8dd7eccccd672ff71267ff771b1a7ae2b6f498af9",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.604878+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "e3d5080d8d3fb0ecc6c03eaaaee5a5fb483c1368f3e3a056fa1e31cffb653bf1",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.812800+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "382d13f9207e371e27976a6c2d8565173f150306e9ccc665451c09af5525eb4c",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.607361+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "3416f8fd43bf3c894c27adc917dcd557f728865ab3050f2ee4927a51ccae9807",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.815419+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "f1097a92a6cc41627a679e17c24de39ac5f4b468f4e11c11a2212571f3d96d05",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.609487+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "af1a2aa65a55269190bc0fdf5638243c35319ecf05655e8a6c3ffd57a852c05d",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.818025+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "0a698afdd59375a652e9580eff503cb58eedf0b49a2c0191a56e7bc3ece14d83",
-      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
-      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T23:37:14.909803+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "23756f16786c9277a8059a8dddab0a77c2154818f42f260a48d3f8445a34e4e6",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.820438+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "0df95c9b9a6980066a8b98d4e535ce41e92910fbf3c26f71f666b76e1dc00e4f",
-      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
-      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T23:37:14.912296+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.823480+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
-      "source_digest": "0a698afdd59375a652e9580eff503cb58eedf0b49a2c0191a56e7bc3ece14d83",
-      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
-      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T23:37:14.914469+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "23756f16786c9277a8059a8dddab0a77c2154818f42f260a48d3f8445a34e4e6",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.825737+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "6cafbde4f158e8e679cc68100d7c13ed547c9d6aaec21c58ff205872ab2d9282",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.620720+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "035ac5db860c8db69f4adf3993fa820f0f884a74668b83a6d7889b4ac8b70d13",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.828569+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "85260f332938c0b1d904116ebe9bcf23ff2f9308d71bcbe5ea2e5e14730836fb",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.623008+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "4f98a225a6e31dc02c76bfdb3e6141a485822d59f3cef5a54b97c4e307fac263",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.830740+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "630a7256be3fb0539594f323b8c6974799b8959deaca93f9578e7aaa38c7eca1",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.625372+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "ee51db6fdfcf54db77ccc519b94dbf75f8edf39c49684bc1cd96cc66b76f9557",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.833165+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "bf20881e6bf80abe262930e9fcf2b079bb0546f3609a62bf4dacc1e009199ef2",
-      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
-      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T23:37:14.916973+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "1a4ce1f7d60ea570488e42a64c39ecc54ccce0dd0aa74da319459e39f6f3625c",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.835816+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "6cafbde4f158e8e679cc68100d7c13ed547c9d6aaec21c58ff205872ab2d9282",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.635909+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "035ac5db860c8db69f4adf3993fa820f0f884a74668b83a6d7889b4ac8b70d13",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.838118+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "6cafbde4f158e8e679cc68100d7c13ed547c9d6aaec21c58ff205872ab2d9282",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.640161+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "035ac5db860c8db69f4adf3993fa820f0f884a74668b83a6d7889b4ac8b70d13",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.840006+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "6cafbde4f158e8e679cc68100d7c13ed547c9d6aaec21c58ff205872ab2d9282",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.642333+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "035ac5db860c8db69f4adf3993fa820f0f884a74668b83a6d7889b4ac8b70d13",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.847308+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "096eb21ea14c02a8aa1371c5e5cb6cae257a5a21af01a5c47461dbc2d56e5e84",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.644740+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "71c304d35736f42709c99e57e06291d66f7a76844d42887cd3932e0257f9cdc4",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.850440+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "0a698afdd59375a652e9580eff503cb58eedf0b49a2c0191a56e7bc3ece14d83",
-      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
-      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T23:37:14.919346+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "23756f16786c9277a8059a8dddab0a77c2154818f42f260a48d3f8445a34e4e6",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.852562+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "0df95c9b9a6980066a8b98d4e535ce41e92910fbf3c26f71f666b76e1dc00e4f",
-      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
-      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T23:37:14.921563+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.854657+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "3be20eaca8072e5c0d88516cdbff197bf29544afe0475f2e8d3410f37c5c83fa",
-      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
-      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T23:37:14.924058+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "81cc7892956faa064afea5ea8bebdf170b688c2d36cab52addd714218e22225e",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.856655+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "0df95c9b9a6980066a8b98d4e535ce41e92910fbf3c26f71f666b76e1dc00e4f",
-      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
-      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T23:37:14.926298+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.858639+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     }
   }
 }
