@@ -98,7 +98,7 @@
     "core/didm/ingest/massive_news.py": "6ba428176099c2947581b45354c07e41c874b301e2b0441d3eb59161dc9bdccf",
     "core/didm/ingest/news.py": "37d84f3cb3bde56ed772235aee1283bca76057006e5044974663f22d80f72afd",
     "core/didm/llm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "core/didm/llm/schema.py": "110eb847575f0e9bf4b147fa17b97ff7c476cbdbd29de453d9fbe5ebcfcd4856",
+    "core/didm/llm/schema.py": "a8411c0ef82361c4e888ff5f06c3f7682ecc2a170c71fb1165e08679e2852af4",
     "core/didm/novelty.py": "840562fc43bea408254cfac625d22534408f85c85741015fc17fd4ddd311f590",
     "core/didm/store/__init__.py": "368bc91ce8edf904d874ed96be693136280bdf86c5fa81bb9590d24afad1eed3",
     "core/education/__init__.py": "d04a1be2039032cc6150e474930f58e9f5b1e882d8fad1a6b472c313b5456ad4",
@@ -646,7 +646,7 @@
     "tests/didm_massive_news_acceptance.py": "52e531178c88817191b1acca28b465d503742d674aac4dead82410a050e07ff0",
     "tests/didm_news_acceptance.py": "1280b0a97c7b48c9bd8610e891c048874d8503ad8a9dba4338068dfef2cda0ce",
     "tests/didm_novelty_acceptance.py": "ccefc838580aeab523770c0920afec71031b62980fcbdf16150cdaaabc9ed094",
-    "tests/didm_schema_acceptance.py": "5c32fdf9e5a9bc14d564782a21a4c69dec3d24595c72fcbbd65c2bfddbc50caa",
+    "tests/didm_schema_acceptance.py": "ef5892bbbc34d6980077a5f8ff6bfe6d34660fcbbd0abcaff269b46a774d645e",
     "tests/didm_sources_acceptance.py": "8574b9c822e4d7acfc849bd70ffcbd0d03fdca9b8ebf67c50ec0ff1c7f48b781",
     "tests/didm_store_acceptance.py": "3f54b0b04508850512776d6c6b4c836ed54e3c1e7fae2c91e53b349537c563da",
     "tests/didm_vendor_eval_acceptance.py": "5a134e1547f047358f33ce56c4cd59a46049154160591194e177e2e1c73e9089",
@@ -781,7 +781,7 @@
     "tests/stock_detail_core_acceptance.py": "4ec37b368fd1abb19a0231a7b89256e68df9a1a590bea48d31f9926cdad6081f",
     "tests/stock_insights_glue_acceptance.py": "8c30577e1df9ea916c697e610e80d100d94409444115e268dea07413947ee758",
     "tests/stock_insights_style_acceptance.py": "f0e35b11510d6d7bcc4f567d8b62ff220893c46845265c3db492e427f01d09b1",
-    "tests/stock_profile_acceptance.py": "36b310d5c5926a16be0852aa288f5ded6a2b6576923f43bfa64f1b3b94d64a67",
+    "tests/stock_profile_acceptance.py": "749810067f55fd0ac87de462eb6ae20d842047651a2f5e785135032f6c23feef",
     "tests/strategy_exposure_acceptance.py": "3451a355e400ea2bc98c02c401a5b5680a187b190a6b52547ccf868b84867e01",
     "tests/strategy_lab_display_acceptance.py": "aa4d059af693881f449deb38a29be8f4849280643b7adbf4a821c8e6a4781a32",
     "tests/swaption_conversion_acceptance.py": "62a4994aa046a463559f463cd87b6873235a3d80684df515be2fd74bb8ff338a",
@@ -892,19 +892,19 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "cbfae332eba5a1fbbd31ccb6867f328c2fe81c444b53319d5976aa768dcdf18e",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.504282+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "2a69ab2647de800c54c04f8f91c09c5c4725d332d4aaad269c8310014f553e86",
+      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
+      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
+      "reviewed_at": "2026-11-23T01:57:18.385425+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "cbfae332eba5a1fbbd31ccb6867f328c2fe81c444b53319d5976aa768dcdf18e",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.512709+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "2a69ab2647de800c54c04f8f91c09c5c4725d332d4aaad269c8310014f553e86",
+      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
+      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
+      "reviewed_at": "2026-11-23T01:57:18.388154+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
@@ -932,27 +932,27 @@
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "39e8664d05da3b97178448278ba5dadd0c102499d22248c5086368e4a1c2025c",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.523623+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "4f8b7b50a4e56333c1d3e4b7f1bc091bc606cf2a7c18aef837e03f3879966a85",
+      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
+      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
+      "reviewed_at": "2026-11-23T01:57:18.390723+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "cbfae332eba5a1fbbd31ccb6867f328c2fe81c444b53319d5976aa768dcdf18e",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.526254+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "2a69ab2647de800c54c04f8f91c09c5c4725d332d4aaad269c8310014f553e86",
+      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
+      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
+      "reviewed_at": "2026-11-23T01:57:18.392918+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "8": {
       "document_sha256": "d18aa347fc7bb730a047392049afb9d79212cf209ba651b9ca4dfde7354fe68f",
-      "source_digest": "39e8664d05da3b97178448278ba5dadd0c102499d22248c5086368e4a1c2025c",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.528799+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "4f8b7b50a4e56333c1d3e4b7f1bc091bc606cf2a7c18aef837e03f3879966a85",
+      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
+      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
+      "reviewed_at": "2026-11-23T01:57:18.395164+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
@@ -980,11 +980,11 @@
     },
     "12": {
       "document_sha256": "18af1551af29075d92583d7bc84a780f3719662115a7b26e4aeb9efd760d1afc",
-      "source_digest": "d86f7bf5868770479b71ae58fe581d7f016ba9fb0609ff3285d5f985aefd8bd8",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.538014+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "0b1160270d285fef924bc91805431ea58fa785475258f48a00ae937cf5c0f3ae",
+      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
+      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
+      "reviewed_at": "2026-11-23T01:57:18.397165+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
@@ -1020,35 +1020,35 @@
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "39e8664d05da3b97178448278ba5dadd0c102499d22248c5086368e4a1c2025c",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.551109+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "4f8b7b50a4e56333c1d3e4b7f1bc091bc606cf2a7c18aef837e03f3879966a85",
+      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
+      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
+      "reviewed_at": "2026-11-23T01:57:18.400021+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "cbfae332eba5a1fbbd31ccb6867f328c2fe81c444b53319d5976aa768dcdf18e",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.554180+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "2a69ab2647de800c54c04f8f91c09c5c4725d332d4aaad269c8310014f553e86",
+      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
+      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
+      "reviewed_at": "2026-11-23T01:57:18.402226+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "7735eb38d42db4d98d0595aa07d1be0640a30b226aca16d49a862ec05e7a3100",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.557243+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "c30107bca68e8d87139b8bb94cc2fc135d0cc275a02f2a0ebe17e51005afbbb3",
+      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
+      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
+      "reviewed_at": "2026-11-23T01:57:18.404206+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "cbfae332eba5a1fbbd31ccb6867f328c2fe81c444b53319d5976aa768dcdf18e",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.559334+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "2a69ab2647de800c54c04f8f91c09c5c4725d332d4aaad269c8310014f553e86",
+      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
+      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
+      "reviewed_at": "2026-11-23T01:57:18.406377+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     }
   }
 }
