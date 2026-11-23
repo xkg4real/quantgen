@@ -6,7 +6,7 @@
 | UI/UX | [#140](https://github.com/xkg4real/quantgen/pull/140) 170369e1 · 도움말의 글꼴·색을 보존하고 테마 변경을 현재 툴팁에 한정했습니다. Linux Qt 5/5, 렌더링 16쌍 일치, 시장 시험 뒤 잔류 창 2→0입니다. | 새 head 전체 CI와 소유자 Windows PC7에서 앱 열 때 깜빡임을 확인한 뒤 병합 여부를 결정합니다. |
 | Android ⑮-5 | [상업용 앱 내부 프리뷰 #141](https://github.com/xkg4real/quantgen/pull/141)은 main에 있습니다. [APK 검사 코드](https://github.com/xkg4real/quantgen/commit/c28194f2bb75a888c68b76f3ea6e88fe753bd477)를 실제 SDK 34로 검증했습니다. 서명한 시험 APK 통과, 변조본·서명 없는 파일 거부를 확인했습니다. | T8-6·GH-2 뒤 검사 도구를 PR로 반영하고, Android 단독 수동 빌드에서 실제 APK를 받은 뒤 소유자 폰 첫 실행·예시 계산을 확인합니다. |
 | 결제·AWS | 문의 7건과 국내 카드 구독 설계의 기존 초안이 준비돼 있습니다. | 문의 발송 OA-32, 구독 조건 OA-39, 서버 위치 OA-40. 같은 기간 Usage type × Region 비용 내역이 들어오면 OA-43 EC2-Other 귀속을 마칩니다. |
-| Remaining Work · 메인 | [T8-6 수동 인계](https://github.com/xkg4real/quantgen/commit/2d2e7ad5373b2839f4716e741f9c5c5811dcf611) 및 [GH-2 정리](https://github.com/xkg4real/quantgen/commit/18d5e507014ff6ce28da40df51788218f860796b)는 각 작업 브랜치에서 검증했습니다. | 공유 파일 순서에 맞춰 당시 실제 main을 기준으로 PR을 검토합니다. |
+| Remaining Work · 메인 | 5200b6c0da · T8-6 수동 인계 도구를 [PR #146](https://github.com/xkg4real/quantgen/pull/146)로 열었습니다. [GH-2 정리](https://github.com/xkg4real/quantgen/commit/18d5e507014ff6ce28da40df51788218f860796b)는 작업 브랜치에 있습니다. | T8-6 전체 CI와 병합 후 실제 main에서 GH-2를 검증해 PR을 엽니다. 이후 Android APK 검사와 Kalshi가 대기합니다. |
 
 [주간 인계](WEEKLY_HANDOFF_2026-11-23_bf4cc1f1.md) · [병합 순서](MERGE_QUEUE.md)
 
