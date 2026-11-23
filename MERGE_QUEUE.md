@@ -1,3 +1,7 @@
+## 2026-11-23T10:31:10+09:00 · 병합: 메인 세션 T8-6 수동 인계 도구
+
+[#145](https://github.com/xkg4real/quantgen/pull/145)는 전체 CI와 독립 검토를 거쳐 main `05f97df6`에 병합되었습니다. 다음 PR 자리는 T8-6입니다. 실제 main 통합 및 네 파일 기술 검증 후 초안 PR을 열고, 해당 head의 CI와 독립 검토를 확인합니다. 이후 순서는 GH-2 → Android APK 검사 → Kalshi입니다. UI #140은 별도 Windows PC7 확인이 필요합니다.
+
 ## 2026-11-23T09:15:28+09:00 · 검토와 병합 순서
 
 첫 병합 대상은 [#145](https://github.com/xkg4real/quantgen/pull/145) `91be74d9`입니다. [Runtime](https://github.com/xkg4real/quantgen/actions/runs/45084447954)의 네 설치 환경이 전부 끝나면 actual base/head·리뷰·freeze·문서 및 문법/설치 검사를 다시 대조합니다. 조건 충족 시 expected-head로 병합하고 실제 tree·parents를 확인합니다. 이어서 T8-6 → GH-2 → Android APK 검사 도구에 실제 main을 순차 반영합니다. [#140](https://github.com/xkg4real/quantgen/pull/140) `170369e1`은 별도 draft로 전체 [CI](https://github.com/xkg4real/quantgen/actions/runs/45086943498) 및 소유자 Windows PC7이 필요합니다. Step 6은 네 환경에서 통과했습니다. 상시 감시는 꺼 둡니다.
