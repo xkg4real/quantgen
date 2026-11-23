@@ -3,7 +3,7 @@
 | 분야 | 확인한 개발 결과 | 다음 업무 |
 | --- | --- | --- |
 | Data Source · DIDM B6 | EODHD·Alpaca·[Massive #144](https://github.com/xkg4real/quantgen/pull/144) 뉴스·이벤트 입력 처리 코드가 [main](https://github.com/xkg4real/quantgen/commit/51b82989ecc7980f47cede0de18e1ebe5bc51ab6)에 있습니다. Massive의 Windows 3개·Ubuntu 설치 검사, 문법과 문서 검사를 통과했습니다. | [V0 #145](https://github.com/xkg4real/quantgen/pull/145)를 이 main에 통합해 다시 검사합니다. 실계정 뉴스 지연, 발표 전 컨센서스 이력, 상업적 저장·표시권은 별도입니다. |
-| UI/UX | [#140](https://github.com/xkg4real/quantgen/pull/140)의 Windows 3.12는 잠금 시험 실패, 나머지 세 환경은 약 120분 뒤 UI 단계에서 취소됐습니다. 합성 폼 24개에서 테마를 두 번 전환할 때 툴팁 갱신이 숨은 창에 스타일 변경 33,718회를 전달했습니다. | 기존 툴팁 색·글꼴·폭을 유지하고 전체 창 갱신을 줄이는 방법을 실제 Qt로 확인합니다. 기존 시험과 시간 제한, Windows PC7 조건을 유지합니다. |
+| UI/UX | [#140](https://github.com/xkg4real/quantgen/pull/140) 170369e1 · 도움말의 글꼴·색을 보존하고 테마 변경을 현재 툴팁에 한정했습니다. Linux Qt 5/5, 렌더링 16쌍 일치, 시장 시험 뒤 잔류 창 2→0입니다. | 새 head 전체 CI와 소유자 Windows PC7에서 앱 열 때 깜빡임을 확인한 뒤 병합 여부를 결정합니다. |
 | Android ⑮-5 | [내부 프리뷰 #141](https://github.com/xkg4real/quantgen/pull/141)은 main에 있습니다. [APK 검사 코드](https://github.com/xkg4real/quantgen/commit/c28194f2bb75a888c68b76f3ea6e88fe753bd477)는 작업 브랜치에서 검증했습니다. 실제 SDK의 서명 없는 합성 APK 거부와 회귀시험 8개를 확인했습니다. | 병합 순서에 맞춰 검사 코드를 PR로 반영한 뒤, 소유자가 승인한 Android 단독 수동 빌드에서 실제 APK와 기록을 받고 폰 첫 실행·예시 계산을 확인합니다. |
 | 결제·AWS | 문의 7건과 국내 카드 구독 설계의 기존 초안이 준비돼 있습니다. | 문의 발송 OA-32, 구독 조건 OA-39, 서버 위치 OA-40. 같은 기간 Usage type × Region 비용 내역이 들어오면 OA-43 EC2-Other 귀속을 마칩니다. |
 | Remaining Work · 메인 | [T8-6 수동 인계](https://github.com/xkg4real/quantgen/commit/2d2e7ad5373b2839f4716e741f9c5c5811dcf611) 및 [GH-2 정리](https://github.com/xkg4real/quantgen/commit/18d5e507014ff6ce28da40df51788218f860796b)는 각 작업 브랜치에서 검증했습니다. | 공유 파일 순서에 맞춰 당시 실제 main을 기준으로 PR을 검토합니다. |
