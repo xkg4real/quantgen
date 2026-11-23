@@ -3,7 +3,7 @@
 | 분야 | 확인한 개발 결과 | 다음 업무 |
 | --- | --- | --- |
 | Data Source · DIDM B6 | EODHD·Alpaca·Massive 입력 처리에 이어 05f97df63b · V0 ID·해시 검사가 [main](https://github.com/xkg4real/quantgen/commit/05f97df63b7357c614c699428f8a9fc3088eaa3e)에 반영됐습니다. Kalshi 가격·거래량·페이지 검사는 [작업 브랜치](https://github.com/xkg4real/quantgen/commit/77c37c5e5a866d3162b0675b5480378d1c2ead28)에서 검증했습니다. | 기존 대기열 뒤에 Kalshi를 통합합니다. EODHD 발표 전 예상치, Alpaca 계정의 실제 수신 지연, 공급사별 상업권은 확인이 필요합니다. |
-| UI/UX | [#140](https://github.com/xkg4real/quantgen/pull/140) 170369e1 · 도움말의 글꼴·색을 보존하고 테마 변경을 현재 툴팁에 한정했습니다. Linux Qt 5/5, 렌더링 16쌍 일치, 시장 시험 뒤 잔류 창 2→0입니다. | 새 head 전체 CI와 소유자 Windows PC7에서 앱 열 때 깜빡임을 확인한 뒤 병합 여부를 결정합니다. |
+| UI/UX | [#140](https://github.com/xkg4real/quantgen/commit/a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d) a7ebfe1fe9 · 국내 호가·체결을 포함한 시세 조회 5개, 표시 단위와 실패 안내를 합성 시험에서 확인했습니다. 독립 확인 56/56·55/55. | 새 head 전체 CI와 소유자 Windows PC7로 창 깜빡임을 확인합니다. 첫 창의 스타일 적용 비용은 별도 합성 시험 중입니다. |
 | Android ⑮-5 | [상업용 앱 내부 프리뷰 #141](https://github.com/xkg4real/quantgen/pull/141)은 main에 있습니다. [APK 검사 코드](https://github.com/xkg4real/quantgen/commit/c28194f2bb75a888c68b76f3ea6e88fe753bd477)를 실제 SDK 34로 검증했습니다. 서명한 시험 APK 통과, 변조본·서명 없는 파일 거부를 확인했습니다. | T8-6·GH-2 뒤 검사 도구를 PR로 반영하고, Android 단독 수동 빌드에서 실제 APK를 받은 뒤 소유자 폰 첫 실행·예시 계산을 확인합니다. |
 | 결제·AWS | 문의 7건과 국내 카드 구독 설계의 기존 초안이 준비돼 있습니다. | 문의 발송 OA-32, 구독 조건 OA-39, 서버 위치 OA-40. 같은 기간 Usage type × Region 비용 내역이 들어오면 OA-43 EC2-Other 귀속을 마칩니다. |
 | Remaining Work · 메인 | 5200b6c0da · T8-6 수동 인계 도구를 [PR #146](https://github.com/xkg4real/quantgen/pull/146)로 열었습니다. [GH-2 정리](https://github.com/xkg4real/quantgen/commit/18d5e507014ff6ce28da40df51788218f860796b)는 작업 브랜치에 있습니다. | T8-6 전체 CI와 병합 후 실제 main에서 GH-2를 검증해 PR을 엽니다. 이후 Android APK 검사와 Kalshi가 대기합니다. |
