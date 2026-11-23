@@ -315,43 +315,306 @@ class FrontierChart(_CartesianChart):
     def _footer_text(self):
         return display(self, "Annual volatility → · Y: annual return (historical estimate)")
 
+    # The approved page draft (owner 2026-11-17, docs/product/ui_drafts_2026-11-17/draft_05_risk.png): random
+    # portfolios as faint dots, the frontier as the accent line, the capital market line dashed from the risk-free
+    # rate through the max-Sharpe point, single assets as small squares and the four objectives as rings with a name
+    # pill (the selected one filled). Axis figures on the right and below; the axis caption and a legend of the marks
+    # close the chart. Display only: every mark is a value of the optimiser output (single assets are its mean
+    # returns and the diagonal of its covariance), nothing is recomputed.
+    ASPECT = 0.42
+
+    def _say(self, english, korean):
+        return korean if getattr(self.window(), 'ui_language', None) == 'ko' else english
+
+    def _font(self, pixels, weight=None, *, figures=False):
+        from PyQt6.QtGui import QFont
+        font = QFont(self.font())
+        font.setPixelSize(pixels)
+        if weight is not None:
+            font.setWeight(QFont.Weight(weight))
+        if figures:
+            from .font_policy import number_font
+            font = number_font(font)
+        return font
+
+    @staticmethod
+    def _finite(*values):
+        try:
+            return all(math.isfinite(float(v)) for v in values)
+        except (TypeError, ValueError):
+            return False
+
+    def _marks(self):
+        """What the plot shows, read from the output: cloud and frontier points, the objectives
+        [(name, vol, return, sharpe or None, selected)], the single assets [(symbol, vol, return)] and the capital
+        market line (risk-free rate, slope) or None."""
+        o = self.output
+        f = o.frontier
+
+        def pairs(xs, ys):
+            xs = list(xs) if xs is not None else []
+            ys = list(ys) if ys is not None else []
+            return [(float(x), float(y)) for x, y in zip(xs, ys) if self._finite(x, y)]
+        cloud = pairs(getattr(f, 'cloud_vols', None), getattr(f, 'cloud_rets', None))
+        curve = pairs(getattr(f, 'vols', None), getattr(f, 'rets', None))
+        request = getattr(o, 'request', None)
+        chosen = getattr(request, 'objective', None)
+        objectives = []
+        for name, (key, value) in zip(self._legend_names(), o.portfolios.items()):
+            if not self._finite(value.ann_vol, value.ann_return):
+                continue
+            sharpe = getattr(value, 'sharpe', None)
+            objectives.append((name, float(value.ann_vol), float(value.ann_return),
+                               float(sharpe) if self._finite(sharpe) else None,
+                               getattr(value, 'objective', key) == chosen))
+        assets = []
+        stats = getattr(o, 'stats', None)
+        cov, mean = getattr(stats, 'cov', None), getattr(stats, 'mean_returns', None)
+        if cov is not None and mean is not None:
+            for index, symbol in enumerate(getattr(stats, 'symbols', ())):
+                try:
+                    variance, ret = float(cov[index][index]), float(mean[index])
+                except (IndexError, TypeError, ValueError):
+                    continue
+                if variance >= 0 and self._finite(variance, ret):
+                    assets.append((str(symbol), math.sqrt(variance), ret))
+        line = None
+        rf = getattr(request, 'rf_rate', None)
+        best = o.portfolios.get('max_sharpe') if hasattr(o.portfolios, 'get') else None
+        if best is not None and self._finite(rf, best.ann_vol, best.ann_return) and float(best.ann_vol) > 0:
+            line = (float(rf), (float(best.ann_return) - float(rf)) / float(best.ann_vol))
+        return cloud, curve, objectives, assets, line
+
+    def _legend(self, marks):
+        cloud, curve, objectives, assets, line = marks
+        entries = [('line', self._say('Efficient frontier', '효율적 프런티어'))]
+        if line is not None:
+            rf = _axis_number(self, line[0], 2, percent=True)
+            entries.append(('dash', self._say(f'Capital market line · risk-free {rf}', f'자본시장선 · 무위험 {rf}')))
+        if cloud:
+            count = f'{len(cloud):,}'
+            entries.append(('dot', self._say(f'{count} random portfolios', f'무작위 조합 {count}개')))
+        if assets:
+            entries.append(('square', self._say('Single assets', '개별 종목')))
+        return entries
+
+    def _frame(self, marks=None):
+        """(plot rectangle, footer rows [(x, y, kind or None, text, width)], line height, minimum height) for the
+        current size: the y caption above the plot, figures right and below, the axis caption and legend last."""
+        small = QFontMetricsF(self._font(11))
+        figures = QFontMetricsF(self._font(11, figures=True))
+        width, height = self.width(), self.height()
+        caption = self._say('X: annual volatility · Y: annual expected return (historical estimate)',
+                            '가로 연 변동성 · 세로 연 기대수익률 (과거 추정)')
+        entries = self._legend(marks) if marks is not None else []
+        line = math.ceil(small.height()) + 2
+        usable = max(40., width - 24)
+        items = [(kind, text, max(1., min(usable - 22, small.horizontalAdvance(text) + 1))) for kind, text in entries]
+        legend_width = sum(w + 21 for _, _, w in items) + 14 * max(0, len(items) - 1)
+        caption_width = small.horizontalAdvance(caption) + 1
+        rows, y = [], 0.
+        if caption_width + 24 + legend_width <= usable:    # one row: the caption left, the legend right
+            rows.append((12., y, None, caption, caption_width))
+            x = width - 12 - legend_width
+            for kind, text, w in items:
+                rows.append((x, y, kind, text, w))
+                x += w + 21 + 14
+            y += line
+        else:
+            lines = max(1, math.ceil(caption_width / usable))
+            rows.append((12., y, None, caption, usable))
+            y += line * lines + 4
+            x = 12.
+            for kind, text, w in items:
+                if x > 12 and x + w + 21 > width - 12:
+                    x, y = 12., y + line + 2
+                rows.append((x, y, kind, text, w))
+                x += w + 21 + 14
+            y += line if items else 0
+        top = line + 8                                     # '↑ annual expected return' above the plot
+        right = max(figures.horizontalAdvance(t) for t in ('−100%', '100%', '00.0%', '−00.0%')) + 14
+        bottom = math.ceil(figures.height()) + 12 + y + 10
+        plot = QRectF(10, top, max(1., width - 10 - right), max(1., height - top - bottom))
+        footer_top = height - y - 8
+        return (plot, [(x, footer_top + row_y, kind, text, w) for x, row_y, kind, text, w in rows], line,
+                math.ceil(top + bottom + 150))
+
+    def _reserve_text_space(self):
+        if not hasattr(self, '_base_height'):
+            return
+        self.setToolTip('\n'.join(self._legend_names()))
+        marks = self._marks() if getattr(self, 'output', None) is not None else None
+        self.setMinimumHeight(max(self._base_height, self._frame(marks)[3]))
+
     def paintEvent(self,event):
+        from .typography import mix
         p=QPainter(self);p.setRenderHint(QPainter.RenderHint.Antialiasing)
         c=self.colors;p.fillRect(self.rect(),QColor(c.surface))
         if self.output is None:
             p.setPen(QColor(c.muted));p.drawText(self.rect(),Qt.AlignmentFlag.AlignCenter,display(self, "분석 후 효율적 프런티어가 표시됩니다."));return
-        o=self.output;f=o.frontier;ports=list(o.portfolios.values())
-        xs=[*f.cloud_vols,*f.vols,*[v.ann_vol for v in ports]]
-        ys=[*f.cloud_rets,*f.rets,*[v.ann_return for v in ports]]
+        marks=self._marks()
+        cloud,curve,objectives,assets,cml=marks
+        box,footer,line_height,_=self._frame(marks)
+        xs=[x for x,_ in cloud+curve]+[o[1] for o in objectives]+[a[1] for a in assets]
+        ys=[y for _,y in cloud+curve]+[o[2] for o in objectives]+[a[2] for a in assets]
+        if not xs:
+            return
         xmin,xmax=min(xs),max(xs);ymin,ymax=min(ys),max(ys)
         dx=max(xmax-xmin,.001);dy=max(ymax-ymin,.001)
-        xmin-=dx*.1;xmax+=dx*.1;ymin-=dy*.1;ymax+=dy*.1
-        y_labels=[_axis_number(self,ymin+(ymax-ymin)*i/4,1,percent=True) for i in range(5)]
-        x_labels=[_axis_number(self,xmin+(xmax-xmin)*i/4,1,percent=True) for i in range(5)]
-        footer=self._footer_text()
-        layout=_chart_layout(self,y_labels,x_labels,self._legend_names(),footer)
-        box=layout.plot
+        xmin-=dx*.07;xmax+=dx*.07;ymin-=dy*.1;ymax+=dy*.12
         def point(x,y):return QPointF(box.left()+(float(x)-xmin)/(xmax-xmin)*box.width(),box.bottom()-(float(y)-ymin)/(ymax-ymin)*box.height())
-        p.setPen(QPen(QColor(c.border),1))
-        for i in range(5):
-            y=ymin+(ymax-ymin)*i/4;x=xmin+(xmax-xmin)*i/4
-            p.drawLine(point(xmin,y),point(xmax,y))
-            p.setPen(QColor(c.muted));_draw_y_tick(p,layout,point(xmin,y).y(),y_labels[i])
-            _draw_x_tick(p,layout,i,x_labels[i])
-            p.setPen(QPen(QColor(c.border),1))
-        cloud=QColor(c.accent);cloud.setAlpha(45);p.setPen(QPen(cloud,2))
-        for x,y in zip(f.cloud_vols,f.cloud_rets):p.drawPoint(point(x,y))
-        line=QPainterPath()
-        for i,(x,y) in enumerate(zip(f.vols,f.rets)):
-            if i:line.lineTo(point(x,y))
-            else:line.moveTo(point(x,y))
-        p.setPen(QPen(QColor(c.accent),2));p.drawPath(line)
-        colors=(c.accent,'#4474A4','#84649C','#A85F7A')
-        for index,value in enumerate(ports):
-            center=point(value.ann_vol,value.ann_return)
-            color=QColor(colors[index%len(colors)])
-            p.setPen(QPen(color,2));p.setBrush(color);p.drawEllipse(center,4,4)
-        _draw_chart_text(p,layout,c,footer,[colors[i%len(colors)] for i in range(len(ports))])
+        dashed=QColor(mix(c.border,c.surface,.3));faint=QColor(mix(c.muted,c.surface,.45))
+        # Grid and axis figures: returns on the right, volatility below, in round percent steps.
+        p.setFont(self._font(11,figures=True));figures=QFontMetricsF(p.font())
+        y_ticks,y_step=nice_ticks(ymin,ymax,4);x_ticks,x_step=nice_ticks(xmin,xmax,5)
+        y_digits=tick_digits(y_step*100);x_digits=tick_digits(x_step*100)
+        for value in y_ticks:
+            y=point(xmin,value).y()
+            pen=QPen(dashed,1);pen.setDashPattern([3,4]);p.setPen(pen)
+            p.drawLine(QPointF(box.left(),y),QPointF(box.right(),y))
+            p.setPen(QColor(c.muted))
+            p.drawText(QRectF(box.right()+8,y-figures.height()/2,self.width()-box.right()-10,figures.height()),
+                       Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter,_axis_number(self,value,y_digits,percent=True))
+        placed=[]
+        for value in x_ticks:
+            x=point(value,ymin).x();text=_axis_number(self,value,x_digits,percent=True)
+            p.setPen(QPen(QColor(mix(c.border,c.surface,.5)),1));p.drawLine(QPointF(x,box.top()),QPointF(x,box.bottom()))
+            w=figures.horizontalAdvance(text)+6;left=min(max(2.,x-w/2),self.width()-w-2)
+            if any(left<right+6 and left+w>start-6 for start,right in placed):continue
+            placed.append((left,left+w));p.setPen(QColor(c.muted))
+            p.drawText(QRectF(left,box.bottom()+6,w,figures.height()),Qt.AlignmentFlag.AlignCenter,text)
+        p.setFont(self._font(11));small=QFontMetricsF(p.font())
+        p.setPen(faint)
+        p.drawText(QRectF(box.left(),box.top()-line_height-6,box.width(),line_height),
+                   Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter,
+                   small.elidedText(self._say('↑ annual expected return','↑ 연 기대수익률'),Qt.TextElideMode.ElideRight,box.width()))
+        # The marks, clipped to the plot.
+        p.save();p.setClipRect(box.adjusted(-6,-6,6,6))
+        p.setPen(Qt.PenStyle.NoPen);p.setBrush(QColor(mix(c.muted,c.surface,.68)))
+        for x,y in cloud:p.drawEllipse(point(x,y),2.,2.)
+        if cml is not None:
+            rf,slope=cml;pen=QPen(faint,1.3);pen.setDashPattern([5,4]);p.setPen(pen)
+            p.drawLine(point(xmin,rf+slope*xmin),point(xmax,rf+slope*xmax))
+        if len(curve)>1:
+            path=QPainterPath(point(*curve[0]))
+            for x,y in curve[1:]:path.lineTo(point(x,y))
+            p.setBrush(Qt.BrushStyle.NoBrush);p.setPen(QPen(QColor(c.accent),2.2));p.drawPath(path)
+        p.restore()
+        obstacles=[]
+        p.setFont(self._font(11,500));labels=QFontMetricsF(p.font())
+        for symbol,x,y in assets:
+            at=point(x,y);square=QRectF(at.x()-4,at.y()-4,8,8)
+            p.setPen(QPen(QColor(c.muted),1.4));p.setBrush(QColor(c.surface));p.drawRoundedRect(square,2,2)
+            w=labels.horizontalAdvance(symbol)+2;h=labels.height()
+            rect=QRectF(at.x()+9,at.y()-h/2,w,h)
+            if rect.right()>self.width()-2:rect.moveRight(at.x()-9)
+            rect.moveTop(min(max(1.,rect.top()),self.height()-h-1))
+            p.setPen(QColor(c.muted));p.drawText(rect,Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter,symbol)
+            obstacles+=[square.adjusted(-2,-2,2,2),rect]
+        centers=[(point(vol,ret),selected) for _,vol,ret,_,selected in objectives]
+        obstacles=[(rect,1.) for rect in obstacles]+[(QRectF(at.x()-8,at.y()-8,16,16),8.) for at,_ in centers]
+        for (x0,y0),(x1,y1) in zip(curve,curve[1:]):   # pills keep off the frontier line
+            for step in range(4):
+                at=point(x0+(x1-x0)*step/4,y0+(y1-y0)*step/4);obstacles.append((QRectF(at.x()-3,at.y()-3,6,6),2.))
+        self._paint_pills(p,box,objectives,centers,obstacles,c)
+        for at,selected in centers:
+            if selected:
+                p.setPen(Qt.PenStyle.NoPen);p.setBrush(QColor(c.accent_soft));p.drawEllipse(at,11.,11.)
+                p.setPen(QPen(QColor(c.surface),1.6));p.setBrush(QColor(c.accent));p.drawEllipse(at,5.5,5.5)
+            else:
+                p.setPen(QPen(QColor(c.text),1.7));p.setBrush(QColor(c.surface));p.drawEllipse(at,5.,5.)
+        self._paint_footer(p,footer,line_height,c,faint)
+
+    def _paint_pills(self, p, box, objectives, centers, obstacles, c):
+        """A name pill per objective ('Max Sharpe · 0.703') in the free space next to its ring, the selected first.
+        `obstacles` are (rectangle, weight): rings weigh most, then the frontier line, assets and their labels. On a
+        narrow plot the pills are smaller and leave the Sharpe ratio to the comparison table."""
+        from .typography import mix
+        compact = box.width() < 520
+        taken = []
+        for index in sorted(range(len(objectives)), key=lambda i: not objectives[i][4]):
+            name, _, _, sharpe, selected = objectives[index]
+            at = centers[index][0]
+            size = 11 if compact else 12
+            name_font = self._font(size, 600 if selected else 500)
+            figure_font = self._font(size, 600 if selected else 500, figures=True)
+            nm, fm = QFontMetricsF(name_font), QFontMetricsF(figure_font)
+            figure = f'· {sharpe:.3f}' if sharpe is not None and not compact else ''
+            figure_width = fm.horizontalAdvance(figure) + 1 if figure else 0.
+            pad = 7 if compact else 10
+            name_width = max(1., min(nm.horizontalAdvance(name) + 1,
+                                     box.width() - 2 * pad - 4 - (figure_width + 5 if figure else 0)))
+            width = pad + name_width + (5 + figure_width if figure else 0) + pad
+            height = max(nm.height(), fm.height()) + (6 if compact else 8)
+            px, py = at.x(), at.y()
+            candidates = []
+            for lift in (26, 50, 76, 104):              # rings of places, nearest first; above the curve is free
+                candidates += [(px - 14 - width, py - lift - height / 2), (px + 14, py - lift - height / 2),
+                               (px - width / 2, py - lift - height)]
+                if lift == 26:
+                    candidates += [(px - 20 - width, py - height / 2), (px + 20, py - height / 2),
+                                   (px + 14, py + 18 - height / 2), (px - 14 - width, py + 18 - height / 2)]
+            best = None
+            for rank, (x, y) in enumerate(candidates):
+                cx = min(max(box.left() + 2, x), box.right() - width - 2)
+                cy = min(max(box.top() + 2, y), box.bottom() - height - 2)
+                rect = QRectF(cx, cy, width, height)
+                crowd = sum(weight * self._overlap(rect.adjusted(-4, -4, 4, 4), other)
+                            for other, weight in obstacles + [(r, 8.) for r in taken])
+                score = (round(crowd), abs(cx - x) + abs(cy - y) > 24, rank)
+                if best is None or score < best[0]:
+                    best = (score, rect)
+            rect = best[1]
+            taken.append(rect)
+            edge = QPointF(min(max(px, rect.left()), rect.right()), min(max(py, rect.top()), rect.bottom()))
+            p.setPen(QPen(QColor(c.accent if selected else mix(c.muted, c.surface, .45)), 1.2))
+            p.drawLine(edge, at)
+            if selected:
+                p.setPen(Qt.PenStyle.NoPen); p.setBrush(QColor(c.accent))
+            else:
+                p.setPen(QPen(QColor(mix(c.border, c.surface, .1)), 1)); p.setBrush(QColor(c.surface))
+            p.drawRoundedRect(rect, 7, 7)
+            p.setPen(QColor(c.on_accent if selected else c.text))
+            p.setFont(name_font)
+            text_rect = QRectF(rect.left() + pad, rect.top(), name_width, rect.height())
+            p.drawText(text_rect, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+                       nm.elidedText(name, Qt.TextElideMode.ElideRight, name_width))
+            if figure:
+                p.setFont(figure_font)
+                p.drawText(QRectF(text_rect.right() + 5, rect.top(), figure_width, rect.height()),
+                           Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter, figure)
+
+    @staticmethod
+    def _overlap(a, b):
+        r = a.intersected(b)
+        return 0. if r.isEmpty() else r.width() * r.height()
+
+    def _paint_footer(self, p, rows, line_height, c, faint):
+        """The axis caption on the left and the legend of the marks (line, dashed line, dot, square)."""
+        from .typography import mix
+        p.setFont(self._font(11)); metrics = QFontMetricsF(p.font())
+        for x, y, kind, text, width in rows:
+            if kind is None:
+                lines = max(1, math.ceil(metrics.horizontalAdvance(text) / max(1., width)))
+                p.setPen(QColor(c.muted))
+                p.drawText(QRectF(x, y, width, line_height * lines),
+                           Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop | Qt.TextFlag.TextWordWrap, text)
+                continue
+            mid = y + line_height / 2
+            if kind == 'line':
+                p.setPen(QPen(QColor(c.accent), 2)); p.drawLine(QPointF(x, mid), QPointF(x + 16, mid))
+            elif kind == 'dash':
+                pen = QPen(faint, 1.4); pen.setDashPattern([3, 2]); p.setPen(pen)
+                p.drawLine(QPointF(x, mid), QPointF(x + 16, mid))
+            elif kind == 'dot':
+                p.setPen(Qt.PenStyle.NoPen); p.setBrush(QColor(mix(c.muted, c.surface, .68)))
+                p.drawEllipse(QPointF(x + 8, mid), 3., 3.)
+            else:
+                p.setPen(QPen(QColor(c.muted), 1.3)); p.setBrush(QColor(c.surface))
+                p.drawRoundedRect(QRectF(x + 4, mid - 4, 8, 8), 2, 2)
+            p.setPen(QColor(c.muted))
+            p.drawText(QRectF(x + 21, y, width, line_height), Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+                       metrics.elidedText(text, Qt.TextElideMode.ElideRight, width))
 
 
 class LineChart(_CartesianChart):

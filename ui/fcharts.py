@@ -1008,12 +1008,14 @@ def macro_z_chart(sheet: MacroSheet) -> ft.Control:
 if __name__ == "__main__":
     from types import SimpleNamespace
 
-    from core.ficc import data, fx, ratesim, swaps
+    from core import gateway
+    from core.ficc import fx, ratesim, swaps
+    from core.ficc.data import G10_KRW, synthetic_curve_panel, synthetic_fx, synthetic_series
     from core.ficc.bonds import analyze_bond, scenario_pnl
     from core.ficc.curves import analyze_curve, curve_pca
     from core.ficc.macro import macro_sheet
 
-    panel = data.synthetic_curve_panel(days=120)
+    panel = synthetic_curve_panel(days=120)
     report = analyze_curve(panel, method="nelson_siegel")
     curve = report.curve
     bond = Bond(coupon=0.04, maturity=10.0, name="4% 10y")
@@ -1022,12 +1024,12 @@ if __name__ == "__main__":
     F = fx.forward(1.10, 0.045, 0.03, 0.5)
     fit = fx.calibrate_sabr(F, 0.5, [p.strike for p in pts], [p.vol for p in pts])
     ks = np.linspace(pts[0].strike * 0.97, pts[-1].strike * 1.03, 60)
-    params = ratesim.calibrate(data.load_short_rate("USD", source="synthetic", days=300))
+    params = ratesim.calibrate(gateway.ficc().load_short_rate("USD", source="synthetic", days=300))
     sim = ratesim.simulate(params, horizon=1.0, n_paths=300, threshold=0.05)
     hpv = ratesim.horizon_pv_distribution(sim.params, sim, kind="bond", bond=bond, curve=curve)
     pairs = ("EURUSD", "USDJPY", "GBPUSD", "AUDUSD", "USDCAD", "USDCHF", "USDKRW")
-    spots = {p: data.synthetic_fx(p, days=300) for p in pairs}
-    rates = {c: data.synthetic_series(f"RATE_{c}", days=300, kind="rate") for c in data.G10_KRW}
+    spots = {p: synthetic_fx(p, days=300) for p in pairs}
+    rates = {c: synthetic_series(f"RATE_{c}", days=300, kind="rate") for c in G10_KRW}
     product = SimpleNamespace(
         product="Principal-protected note (FX)", issue_price=100.0, fair_value=98.5,
         payoff_grid=tuple((s, 100.0 + max(s - 100.0, 0.0) * 0.8) for s in range(60, 141, 5)))

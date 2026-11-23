@@ -9,6 +9,7 @@ import tempfile
 import threading
 import unittest
 from unittest.mock import patch
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 import dotenv
@@ -259,8 +260,8 @@ class NativeDesktopTests(unittest.TestCase):
     def cleanup_window(self):
         self.wait_idle()
         with patch.object(QMessageBox,'question',return_value=QMessageBox.StandardButton.Yes):
-            self.window.close()
-        self.window.deleteLater();self.app.processEvents()
+            self.assertTrue(self.window.close(), "The fixture window refused to close")
+        delete_owned_widget(self.window);self.app.processEvents()
 
     def wait_idle(self):
         for _ in range(1500):
@@ -440,17 +441,17 @@ class NativeDesktopTests(unittest.TestCase):
     def test_single_worker_guard_and_close_guard_gui_delivery(self):
         self.configure_gbm();release=threading.Event();threads=[]
         def delayed(q,r):
-            threads.append(QThread.currentThread())
+            threads.append(threading.get_ident())  # an ident, not a QThread wrapper of the pool's thread (PySide6 heap corruption, 2026-11-19)
             release.wait(5)
             return fixture_runner(q,r)
         self.window.analysis_runner=delayed
         self.window.run_analysis();self.window.run_analysis()
         self.assertEqual(len(self.window.session.runs()),1)
         self.assertFalse(self.window.close())
-        self.window.jobs.succeeded.connect(lambda _:threads.append(QThread.currentThread()))
+        self.window.jobs.succeeded.connect(lambda _:threads.append(threading.get_ident()))
         release.set();self.wait_idle()
-        self.assertNotEqual(threads[0],self.app.thread())
-        self.assertEqual(threads[1],self.app.thread())
+        self.assertNotEqual(threads[0],threading.get_ident())
+        self.assertEqual(threads[1],threading.get_ident())
 
 
 if __name__ == '__main__':unittest.main()

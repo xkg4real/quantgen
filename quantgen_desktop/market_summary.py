@@ -3,7 +3,7 @@
 Owner reading: "A slim market summary strip at the top is welcome where data exists (국내: 코스피·코스닥; 미국:
 S&P 500·나스닥; 코인: 비트코인·이더리움) — small, not a second hero chart."
 
-Data: the Research Home cards' own path (`home_view.load_market_history`: `core.ficc.data.load_series` with the
+Data: the Research Home cards' own path (`home_view.load_market_history`: `gateway.ficc().load_series` with the
 explicit 'yfinance' provider, keyless Yahoo daily closes, no synthetic or cross-provider fallback; the same
 `HISTORY_DAYS` so Home and this strip share the in-memory cache for ^GSPC, ^KS11 and BTC-USD). Each tile shows
 the last daily close, its change against the close before, and a month of closes as a sparkline. These are
@@ -24,6 +24,7 @@ import threading
 
 from PyQt6.QtCore import QTimer, Qt, pyqtSignal, pyqtSlot
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel, QSizePolicy, QVBoxLayout, QWidget
+from .qt_compat import call_later
 
 from core.i18n import LocaleContext
 from core.market import rankings as R
@@ -47,9 +48,9 @@ def _refresh_seconds():
 
 
 def production_series(symbol, **kwargs):
-    """`core.ficc.data.load_series`, imported when first called (the window's loader for the strip)."""
-    from core.ficc.data import load_series
-    return load_series(symbol, **kwargs)
+    """The gateway's FICC series loader, resolved when called (the window's loader for the strip)."""
+    from core import gateway
+    return gateway.ficc().load_series(symbol, **kwargs)
 
 
 def load_summary(page, *, loader=None, cancelled=None):
@@ -255,7 +256,7 @@ class MarketSummary(QWidget):
         super().showEvent(event)
         if self.auto_load:
             self.timer.start()
-            QTimer.singleShot(0, self.refresh)
+            call_later(self, 0, self.refresh)
 
     def hideEvent(self, event):
         self.timer.stop()
@@ -277,7 +278,7 @@ class MarketSummary(QWidget):
         self.page = page
         self.render()
         if self.auto_load and self.isVisible():
-            QTimer.singleShot(0, self.refresh)
+            call_later(self, 0, self.refresh)
 
     def set_locale(self, ctx):
         self.ctx = ctx

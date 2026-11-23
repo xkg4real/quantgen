@@ -767,6 +767,30 @@ def guide_parts(key, bars, *, language, interval, supply=None, values=None, pric
     return reading, state, gauge, short, long_texts
 
 
+def gauge_labels(key, gauge, lang):
+    """The words under a gauge (study_guide.gauge_value output): the band's lines, or the line the value is read
+    against. Shared by the picker's guide cards and the indicator guide page's reading cards."""
+    if gauge is None:
+        return "", ""
+    kind = gauge[0]
+    if kind == "band":
+        if key == "ichimoku":
+            return text(lang, "gauge_cloud_lower"), ""
+        return text(lang, "gauge_lower"), text(lang, "gauge_upper")
+    if kind in ("offset", "zero", "ratio"):
+        return text(lang, f"gauge_name_{key}") if f"gauge_name_{key}" in _GAUGE_NAMES else text(lang, "gauge_line"), ""
+    return "", ""
+
+
+def gauge_palette(p, dark):
+    """A Gauge's colours for palette `p` (as the stock detail view gives its picker)."""
+    from .typography import TONE_COLORS, mix
+    t = TONE_COLORS[bool(dark)]
+    return {"track": mix(p.border, p.bg, 0.25), "up": t["up"], "down": t["down"], "up_tint": t["up_tint"],
+            "down_tint": t["down_tint"], "accent": p.accent, "muted": p.muted, "band": p.accent_soft,
+            "bg": p.surface}
+
+
 class IndicatorPicker(QWidget):
     """Grouped, folding list of every chart study; emits the new selection."""
     changed = pyqtSignal(tuple)
@@ -927,16 +951,7 @@ class IndicatorPicker(QWidget):
         self.no_match.setVisible(not any_shown)
 
     def gauge_labels(self, key, gauge, lang):
-        if gauge is None:
-            return "", ""
-        kind = gauge[0]
-        if kind == "band":
-            if key == "ichimoku":
-                return text(lang, "gauge_cloud_lower"), ""
-            return text(lang, "gauge_lower"), text(lang, "gauge_upper")
-        if kind in ("offset", "zero", "ratio"):
-            return text(lang, f"gauge_name_{key}") if f"gauge_name_{key}" in _GAUGE_NAMES else text(lang, "gauge_line"), ""
-        return "", ""
+        return gauge_labels(key, gauge, lang)
 
     def render(self):
         """Fill every row (and open guide card) from the chart; the row the reader is looking at stays where it is
@@ -1101,4 +1116,4 @@ _GAUGE_NAMES = ("gauge_name_sma", "gauge_name_ema", "gauge_name_vwap", "gauge_na
 
 
 __all__ = ["IndicatorPicker", "PickerGroup", "PickerRow", "GuideCard", "Gauge", "ChipRow", "Switch", "STARTER",
-           "guide_parts", "state_tone", "state_word"]
+           "guide_parts", "state_tone", "state_word", "gauge_labels", "gauge_palette"]

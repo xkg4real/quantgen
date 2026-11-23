@@ -38,6 +38,7 @@ from PyQt6.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget
 from core.theme import LIGHT
 from .localization import SKIP_PASS
 from .shell_rail import KEYBOARD_FOCUS, set_focus_ring
+from .qt_compat import is_one_of
 
 ROW_HEIGHT = 38            # flyout rows (owner: roomy rows, 36-40 px)
 PANEL_PADDING = 6          # inside the box, around the rows
@@ -348,6 +349,10 @@ class RailFlyouts(QObject):
         self._closer.timeout.connect(self.close_all)
         self._listening = False
         window.installEventFilter(self)
+        window.destroyed.connect(self._stop_listening)   # the application-wide filter leaves with the window
+
+    def _stop_listening(self, *_):
+        self._listen(False)
 
     # Setup ------------------------------------------------------------------------------------
     def watch_root(self, anchor, nodes):
@@ -641,7 +646,7 @@ class RailFlyouts(QObject):
 
     def eventFilter(self, watched, event):
         kind = event.type()
-        if watched in self.roots:
+        if is_one_of(watched, self.roots):
             if kind == QEvent.Type.Enter:
                 self.root_entered(watched)
             elif kind == QEvent.Type.Leave:
@@ -656,7 +661,7 @@ class RailFlyouts(QObject):
         if kind == QEvent.Type.MouseButtonPress and not self._hit(event.globalPosition().toPoint()):
             self.close_all()  # a click elsewhere closes the menu and still does what it does
         elif kind == QEvent.Type.KeyPress and event.key() == Qt.Key.Key_Escape and not self._focus_inside():
-            if not (watched in self.roots):
+            if not is_one_of(watched, self.roots):
                 self.close_all()
                 return True
         return False

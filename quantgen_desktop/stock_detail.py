@@ -37,6 +37,7 @@ from PyQt6.QtCore import QEvent, QObject, QPoint, QSize, QTimer, Qt, pyqtSignal,
 from PyQt6.QtGui import QPalette
 from PyQt6.QtWidgets import (QCheckBox, QComboBox, QFrame, QHBoxLayout, QLineEdit, QMenu, QPushButton, QScrollArea,
                              QSizePolicy, QStyledItemDelegate, QVBoxLayout, QWidget)
+from .qt_compat import call_later, is_one_of
 
 from core.i18n import LocaleContext
 from core.market.models import Instrument
@@ -185,7 +186,8 @@ def plain_ages(value, lang):
 
 
 # Figures whose tooltip starts with what the term means (spec 6.3; review 2026-11-11: PER, EPS, 시가총액, VaR, CVaR).
-TERM_TIPS = (("시가총액", "term_cap"), ("Market cap", "term_cap"), ("PER", "term_per"), ("EPS", "term_eps"),
+TERM_TIPS = (("시가총액", "term_cap"), ("Market cap", "term_cap"), ("PER", "term_per"), ("PBR", "term_pbr"),
+             ("ROE", "term_roe"), ("PSR", "term_psr"), ("EPS", "term_eps"),
              ("CVaR", "term_cvar"), ("VaR", "term_var"))
 
 
@@ -196,7 +198,7 @@ def term_tip(label_text, lang):
     return ""
 
 
-def display_row(row, lang):
+def display_row(row, lang, *, risk=None):
     """A stock profile row as this view shows it: a typographic minus, Korean units and Korea time in the Korean
     window, 해요체 tooltips that start with what the term means, and no internal engine name. The profile itself
     (reports, exports) is unchanged."""
@@ -209,10 +211,22 @@ def display_row(row, lang):
         hint = polite(korean_times(hint), lang)
     hint = "\n".join(line for line in hint.split("\n") if "gs_quant" not in line and "계산 엔진" not in line
                      and "engine" not in line.lower())
-    term = term_tip(str(row.label), lang)
+    label = row.label
+    term = term_tip(str(label), lang)
+    if "VaR" in str(label):
+        from .metric_help import stock_risk_help
+        metadata = risk if isinstance(risk, dict) else {}
+        help_text = stock_risk_help("cvar" if "CVaR" in str(label) else "var", lang,
+                                    confidence=metadata.get("var_level"), horizon_days=1,
+                                    unit="%", basis="historical_log_loss")
+        term = help_text.hover
+        # The profile's legacy label rounds 97.5 to 98; use raw metadata here.
+        confidence = metadata.get("var_level")
+        if isinstance(confidence, (int, float)) and not isinstance(confidence, bool) and 0 < confidence < 1:
+            label = help_text.label
     if term:
         hint = term + ("\n" + hint if hint else "")
-    return ProfileRow(row.label, value, row.tone, hint)
+    return ProfileRow(label, value, row.tone, hint)
 
 
 class PageLock(QObject):
@@ -314,7 +328,7 @@ class PageLock(QObject):
         self._layout_timer.start(0)
 
     def eventFilter(self, watched, event):
-        if watched in self._layout_hosts and event.type() in (
+        if is_one_of(watched, self._layout_hosts) and event.type() in (
                 QEvent.Type.Move, QEvent.Type.Resize, QEvent.Type.LayoutRequest):
             self._layout_timer.start(0)
         if self.scroll is not None and watched is self.scroll.viewport():
@@ -322,7 +336,7 @@ class PageLock(QObject):
                 event.accept()
                 return True
             if event.type() == QEvent.Type.Resize:
-                QTimer.singleShot(0, self.refit)
+                call_later(self, 0, self.refit)
         return False
 
     def release(self):
@@ -557,6 +571,7 @@ class ChartKeys(QObject):
 
     def __init__(self, view):
         super().__init__(view)
+        view.destroyed.connect(self._release)   # the application-wide filter leaves with the view
         self.view = view
         self.installed = False
 
@@ -567,6 +582,9 @@ class ChartKeys(QObject):
             return
         (app.installEventFilter if on else app.removeEventFilter)(self)
         self.installed = on
+
+    def _release(self, *_):
+        self.install(False)
 
     def eventFilter(self, watched, event):
         if event.type() != QEvent.Type.KeyPress or event.key() not in self.KEYS:
@@ -1180,6 +1198,9 @@ class StockDetailView(QWidget):
         self.notes = NotesBox(self)
         self.notes.hide()
         page = self.side.stock_page.layout()
+        from .stock_insights import StockInsightsPanel
+        self.insights = StockInsightsPanel(self.side.stock_page)
+        page.insertWidget(page.indexOf(self.side.sections["key_figures"]), self.insights)
         page.insertWidget(page.count() - 1, self.notes)
         from .risk_reward import RiskRewardTool
         self.risk = RiskRewardTool(self)
@@ -1285,8 +1306,8 @@ class StockDetailView(QWidget):
         self.interval_combo.setObjectName("sdInterval")
         self.interval_combo.setProperty("qg_literal", True)
         self.interval_combo.view().setMinimumWidth(160)   # the popup lists the names at full width
-        self.interval_combo.setItemDelegate(IntervalDelegate(self.interval_combo,
-                                                             lambda key: text(_lang(self.ctx), key)))
+        self.interval_delegate = IntervalDelegate(self.interval_combo, lambda key: text(_lang(self.ctx), key))
+        self.interval_combo.setItemDelegate(self.interval_delegate)   # kept here: PySide6 checklist item 9
         self.interval_combo.activated.connect(self._interval_chosen)
         self.chart.interval.currentIndexChanged.connect(self._sync_interval)
         row.addWidget(self.interval_combo)
@@ -1464,10 +1485,17 @@ class StockDetailView(QWidget):
             self.load_profile()
         # Focus leaves the search box or row the stock was opened from now, and again after the page settles.
         self.focus_chart()
-        QTimer.singleShot(0, self.focus_chart)
+        call_later(self, 0, self.focus_chart)
+
+    def route_opens_to(self, slot):
+        """Stocks opened from this screen (its watchlist) go to `slot` (the Markets page) instead of opening here.
+        The connection is recorded on the view: QObject.receivers() on a bound signal fails in PySide6 (PySide6
+        checklist item 3)."""
+        self.open_requested.connect(slot)
+        self._open_connected = True
 
     def _open(self, instrument):
-        if self.receivers(self.open_requested) > 0:
+        if getattr(self, '_open_connected', False):
             self.open_requested.emit(instrument)
         else:
             self.show_instrument(instrument)
@@ -1536,7 +1564,7 @@ class StockDetailView(QWidget):
     def _jobs_busy(self, busy):
         # Jobs emits succeeded/failed before it clears its job, so a refused load is retried here.
         if not busy and self._reload and self._job_epoch != self._epoch:
-            QTimer.singleShot(0, self.load_profile)
+            call_later(self, 0, self.load_profile)
         self._render_qscore()
 
     @pyqtSlot(object)
@@ -1886,8 +1914,8 @@ class StockDetailView(QWidget):
         """The rail changed the page's width: the page above the view reflows over the next layout passes, so the
         page lock measures the view's place again once they are done."""
         self.lock.refit()
-        QTimer.singleShot(0, self.lock.refit)
-        QTimer.singleShot(60, self.lock.refit)
+        call_later(self.lock, 0, self.lock.refit)
+        call_later(self.lock, 60, self.lock.refit)
 
     def _restore_rail(self, *, leaving=False):
         window = self.window()
@@ -1958,7 +1986,7 @@ class StockDetailView(QWidget):
         window = self.window()
         if window is not self and window.width() != self._window_width:
             self._window_width = window.width()
-            QTimer.singleShot(0, self._sync_rail)
+            call_later(self, 0, self._sync_rail)
 
     # Toolbar compaction (spec 2.3), applied one step at a time until the stock's name has its room:
     # 1 the star drops its words, 2 back keeps only its arrow, 3 the search narrows to 140, 4 stop/reconnect and
@@ -2303,7 +2331,7 @@ class StockDetailView(QWidget):
             self.set_side_shown(True)
         self.side.set_page(0)
         self._scroll_to_qscore()
-        QTimer.singleShot(0, self._scroll_to_qscore)   # again once a column shown just now has its layout
+        call_later(self, 0, self._scroll_to_qscore)   # again once a column shown just now has its layout
 
     def _scroll_to_qscore(self):
         card, page = self.side.qscore, self.side.stock_page
@@ -2311,6 +2339,7 @@ class StockDetailView(QWidget):
         bar.setValue(max(0, card.mapTo(page, QPoint(0, 0)).y() - 8))
 
     def _clear_sections(self):
+        self.insights.set_profile(None, language=_lang(self.ctx), dark=self.dark)
         self.__dict__["_technical_blocks"] = {}     # the sections delete their blocks: build new ones
         for section in self.side.sections.values():
             section.set_rows([], ctx=self.ctx, dark=self.dark)
@@ -2323,6 +2352,10 @@ class StockDetailView(QWidget):
         """Profile sections folded in the right column (owner: 3-4 figures each, the rest folded)."""
         from core.research.stock_profile import sections
         lang = _lang(self.ctx)
+        self.insights.set_profile(self.profile, language=lang, dark=self.dark)
+        covered_sections = self.insights.covered_sections
+        covered_figures = self.insights.covered_key_figures
+        risk_metadata = self.profile.values.get("risk") if self.profile is not None else None
         by_key = {}
         if self.profile is not None:
             for section in sections(self.profile, lang):
@@ -2336,11 +2369,16 @@ class StockDetailView(QWidget):
         self.section_panels = []
         for key, (sources, title) in groups.items():
             panel = self.side.sections[key]
-            rows = [display_row(row, lang) for source in sources if source in by_key for row in by_key[source].rows]
+            shown_sources = tuple(source for source in sources if source not in covered_sections)
+            rows = [display_row(row, lang, risk=risk_metadata) for source in shown_sources if source in by_key
+                    for row in by_key[source].rows
+                    if not (source == "key_figures" and str(row.label).strip().lower() in covered_figures)]
             if key == "key_figures":
                 rows = key_figures_first(rows)
-            notes = " · ".join(dict.fromkeys(polite(by_key[s].note, lang) for s in sources
+            notes = " · ".join(dict.fromkeys(polite(by_key[s].note, lang) for s in shown_sources
                                              if s in by_key and by_key[s].note))
+            if key == "risk" and rows:
+                notes = text(lang, "risk_meaning_note") + (" · " + notes if notes else "")
             panel.set_title(text(lang, title))
             panel.set_rows(rows, note=notes, ctx=self.ctx, dark=self.dark)
             panel.setVisible(bool(rows))
@@ -2725,6 +2763,7 @@ class StockDetailView(QWidget):
         for section in self.side.sections.values():
             section.set_theme(self.dark)
         self.side.watchlist.set_theme(self.dark)
+        self.insights.set_profile(self.profile, language=_lang(self.ctx), dark=self.dark)
         self.picker.set_theme(self.dark)
         self._toolbar_texts()
         if not self.notes.isHidden():
@@ -2749,8 +2788,8 @@ class StockDetailView(QWidget):
         self._hook_rail()
         self.keys.install(True)
         self.lock.engage()
-        QTimer.singleShot(0, self.lock.engage)
-        QTimer.singleShot(0, self._sync_rail)
+        call_later(self.lock, 0, self.lock.engage)
+        call_later(self, 0, self._sync_rail)
 
     def hideEvent(self, event):
         if event.spontaneous():

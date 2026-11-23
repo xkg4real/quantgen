@@ -21,12 +21,18 @@ class CompactFieldGrid(ResponsiveFieldGrid):
         super().__init__(pairs,max_columns=max_columns)
         self.grid.setHorizontalSpacing(GAP);self.grid.setVerticalSpacing(6)
         self._cap_ready=True;self._sync_cap()
-    def _column_minima(self,columns):return [max(176,w) for w in super()._column_minima(columns)]
+    def _column_minima(self,columns):
+        # Docked in a page's right column (page_kit, owner 2026-11-17) two columns share ~330px.
+        floor=128 if getattr(self,'docked',False) else 176
+        return [max(floor,w) for w in super()._column_minima(columns)]
     def compact_cap(self):
         columns=min(self.max_columns,len(self.fields))
         needed=sum(self._column_minima(columns))+(columns-1)*self.grid.horizontalSpacing()
         return max(_base_cap(self.max_columns),needed)
     def _sync_cap(self):
+        if getattr(self,'docked',False):
+            if self.maximumWidth()!=16777215:self.setMaximumWidth(16777215)
+            return
         cap=self.compact_cap()
         if cap!=self.maximumWidth():self.setMaximumWidth(cap)
         box=self.parentWidget()

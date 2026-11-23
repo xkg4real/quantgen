@@ -116,7 +116,7 @@ class OperationFixTests(unittest.TestCase):
         Synthetic events skip that step, so the policy itself is the check.
         """
         w = self.window
-        selectors = [c for c in w.findChildren((QComboBox, QAbstractSpinBox))]
+        selectors = [*w.findChildren(QComboBox), *w.findChildren(QAbstractSpinBox)]   # one type per call (PySide6)
         self.assertTrue(selectors)
         wheel_focus = Qt.FocusPolicy.WheelFocus.value
         loose = [c.accessibleName() or type(c).__name__ for c in selectors

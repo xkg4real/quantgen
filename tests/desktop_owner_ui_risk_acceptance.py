@@ -160,8 +160,15 @@ class OwnerUiRiskTests(unittest.TestCase):
         shown = "\n".join(visible_texts(p))
         for raw in RAW_IDS + ("True", "False", "solver converged", "selected", "comparison"):
             self.assertNotIn(raw, shown)
-        for table in (p.comparison, p.weights, p.correlation):
+        for table in (p.comparison, p.weights):
             self.assert_rows_fit(table)
+        # Approved page draft (owner 2026-11-17, draft_05_risk.png): the correlation table sits behind the weights
+        # card's 상관관계 pill; shown, every row fits as before.
+        p.weights_view.set_current(1, emit=True); self.settle()
+        self.assertTrue(p.correlation.isVisible()); self.assertFalse(p.weights.isVisible())
+        self.assert_rows_fit(p.correlation)
+        p.weights_view.set_current(0, emit=True); self.settle()
+        self.assertTrue(p.weights.isVisible())
         view = p.narrative_view
         self.assertIsInstance(view, NarrativeView)
         self.assertEqual(view.headings()[0], "요약")

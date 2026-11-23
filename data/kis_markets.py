@@ -611,6 +611,13 @@ class KISMarkets:
                         "foreign_reg_net_qty": _f(r.get("frgn_reg_ntby_qty")),
                         "individual_net_qty": _f(r.get("prsn_ntby_qty")),
                         "institution_net_qty": _f(r.get("orgn_ntby_qty")),
+                         # Official74b0a082 fields from this same response; no extra request.
+                         "foreign_buy_qty": _f(r.get("frgn_shnu_vol")),
+                         "foreign_sell_qty": _f(r.get("frgn_seln_vol")),
+                         "individual_buy_qty": _f(r.get("prsn_shnu_vol")),
+                         "individual_sell_qty": _f(r.get("prsn_seln_vol")),
+                         "institution_buy_qty": _f(r.get("orgn_shnu_vol")),
+                         "institution_sell_qty": _f(r.get("orgn_seln_vol")),
                         "raw": {k: v for k, v in r.items() if "ntby" in k}})
         return out
 

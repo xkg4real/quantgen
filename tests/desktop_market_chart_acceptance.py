@@ -57,7 +57,7 @@ if HAS_QT:
 
         def load(self, request):
             self.calls.append(request)
-            self.threads.append(QThread.currentThread())
+            self.threads.append(threading.get_ident())  # an ident, not a QThread wrapper of the pool's thread (PySide6 heap corruption, 2026-11-19)
             if self.entered is not None:
                 self.entered.set()
                 self.release.wait(4)
@@ -187,7 +187,7 @@ class NativeChartLifecycleTests(unittest.TestCase):
     def test_rest_runs_off_gui_thread_and_renders_shared_chart_and_cursor(self):
         self.load()
         p = self.pane
-        self.assertIsNot(self.service.threads[0], self.app.thread())
+        self.assertNotEqual(self.service.threads[0], threading.get_ident())
         self.assertTrue(p.chart.renderer().isValid())
         self.assertIn("005930", p.reading.text())
         self.assertIn("SMA20", p.indicator_reading.text())

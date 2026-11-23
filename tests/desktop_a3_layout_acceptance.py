@@ -141,10 +141,12 @@ class A3ResultLayoutTests(unittest.TestCase):
                     self.assertEqual(self.values(w.quant_metrics), values)
                     self.assertEqual(export_bytes(output.run), run)
                     self.assertEqual(w.commentary_sources(), payload)
-            # Respect the same constraint when its own page is selected.
+            # Respect the same constraint when its own page is selected. Since the approved page drafts (owner
+            # 2026-11-17) the page holds still and its canvas scrolls: the wide form scrolls there, not squashed.
             w.quant_tabs.setCurrentWidget(w.strategy)
             self.settle()
-            self.assertGreater(w.stack.currentWidget().horizontalScrollBar().maximum(), 0)
+            self.assertEqual(w.stack.currentWidget().horizontalScrollBar().maximum(), 0)
+            self.assertGreater(w.quant_workspace.canvas_scroll.horizontalScrollBar().maximum(), 0)
             w.quant_tabs.setCurrentIndex(0)
             self.settle()
             self.assertEqual(w.stack.currentWidget().horizontalScrollBar().maximum(), 0,
@@ -218,7 +220,9 @@ class A3ResultLayoutTests(unittest.TestCase):
                     self.assertEqual(scroll.horizontalScrollBar().maximum(), 0, self.mc_geometry(w))
                     columns = w.quant_form.columns
                     if width == 1360:
-                        self.assertEqual(columns, 3, self.mc_geometry(w))
+                        # Approved page draft (owner 2026-11-17): the form is docked in the 360px right column,
+                        # two columns wide (it was three across the old full-width panel).
+                        self.assertEqual(columns, 2, self.mc_geometry(w))
                     # Native font metrics choose the narrow column count; the
                     # strict viewport/minimum checks must hold on every OS.
                     self.assertEqual([control for _, control in w.quant_form.fields], list(controls))

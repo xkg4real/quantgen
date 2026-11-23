@@ -1082,6 +1082,40 @@ Windows CI에서 창 핸들과 아이콘을 시험하며, 사용자 PC의 Explor
   시안 이미지이며 앱에 적용되지 않았습니다. 시안 속 수치·공급자 상태·모델 이름은 예시입니다.
 - 01–20의 미확정 사업자·개인정보·권리·요금·환불·접근성 조건과 공개 보류를 유지합니다.
 
+<a id="page-redesign-2026-11-17"></a>
+### 2026-11-17 나머지 7개 화면 새 배치 적용 검토
+
+- 소유자가 승인한 시안 7개(연구 홈·분석 도구·기술지표 가이드·설계/검증·분석·연구 보관함·시스템)를 네이티브 앱
+  (`quantgen_desktop/`)에 적용했습니다. 공통 틀은 `quantgen_desktop/page_kit.py`(도구줄·왼쪽 결과 화면·오른쪽 설정 열·
+  맨 아래 실행 버튼)입니다. 바뀐 것은 배치와 표시뿐이며 계산·요청·저장·내보내기·전송 경로, 판정 상태(NOT_RUN 등),
+  기존 안내 문구의 의미는 그대로입니다. 새 공급자·새 호스트·새 전송·주문 기능·자동 저장은 없습니다.
+- 페이지를 열거나 언어·명암·창 크기를 바꾸는 것만으로 조회나 계산을 시작하지 않습니다. 연구 홈 타일의 작은 선은 이미
+  불러온 종가로만 그립니다. 새로고침은 기존 시세·관심종목 로더를 그대로 부릅니다.
+- 시스템 화면의 공급처 목록은 설정 파일에 값이 있는지 여부(로컬)와 설정 이름만 보여 주며 키 값은 표시·저장·내보내지
+  않습니다. 행의 확인 버튼은 기존 연결 확인 도구와 같은 읽기 전용 요청(KIS·KRX·FRED·Yahoo·Upbit·Binance)을 씁니다.
+- 연구 보관함은 이번 앱 세션의 실행 기록만 보여 주며, 포트폴리오·전략 결과 행은 읽기 전용입니다(그 결과의 화면에서
+  저장). AI 해설의 동의·미리보기·전송 절차는 바뀌지 않았습니다. "자동 저장 안 함" 표시를 도구줄에 둡니다.
+- 분석 화면의 효율적 프런티어 그림에 무위험 금리에서 시작하는 자본시장선을 표시용으로 그립니다. 최적화 계산과 결과
+  수치는 그대로입니다. 모의투자 긴급 정지는 오른쪽 열 맨 위와 레일에서 계속 누를 수 있습니다.
+- 기술지표 가이드의 해석 카드는 기존 결론부(`core/education/outlook.py`, [지표 결론부](#market-hub-conclusions-2026-11-17))를
+  다시 쓰며, "함께 읽으면" 줄은 각 지표의 현재 쪽을 세어 말할 뿐 확률·목표가·매매 지시를 만들지 않습니다.
+- 화면 캡처는 오프라인 합성 픽스처로 만든 것이며 실제 시세·실계정·소유자 Windows 환경 확인이 아닙니다. 01–20의 미확정
+  사업자·개인정보·권리·요금·환불·접근성 조건과 공개 보류(publication BLOCKED)를 유지합니다.
+
+<a id="pyside6-readiness-2026-11-18"></a>
+### 2026-11-18 PySide6 전환 대비 화면 코드 정리 검토
+
+- OS_EXPANSION 세션의 점검표(`docs/platform/PYSIDE6_UI_CHECKLIST.md`, `claude/os-prep-20261117`)에 따라 네이티브 앱
+  (`quantgen_desktop/`)의 지연 호출·이벤트 필터·위젯 수명·콤보 데이터 처리를 PyQt6와 PySide6에서 같게 동작하도록
+  고쳤습니다(`quantgen_desktop/qt_compat.py` 등). 바인딩은 여전히 PyQt6이며 화면·계산·요청·저장·전송·주문 경로와
+  문구는 바뀌지 않았습니다. 새 공급자·새 호스트·새 전송은 없습니다.
+- AI 해설에 보낼 계산 결과는 Qt 항목 데이터가 아니라 앱 안의 Python 목록에 그대로 두고 기존 전송 전 검사를 거칩니다.
+  동의·미리보기·전송 절차는 그대로입니다.
+- 같은 날 점검표 9번(표 그리기 객체 보관)과 14번(시스템 화면 Tab 순서를 창 전체 포커스 사슬 대신 각 영역의 위젯으로
+  계산, 순서 동일)을 추가로 고쳤습니다. 화면·계산·요청·전송은 바뀌지 않았습니다.
+- 오프라인 Linux offscreen UI 테스트 107개 모듈로 확인했으며 PySide6 실행·Windows·macOS 확인은 하지 않았습니다.
+  01–20의 미확정 조건과 공개 보류(publication BLOCKED)를 유지합니다.
+
 ## 플랫폼 확장 준비(OS-P0-a~f) — 2026-11-19 소스 검토 (OS_EXPANSION 세션)
 
 - 새 도구 `tools/qt_port/`(PyQt6→PySide6 변환·점검, 글꼴 비교, 재현 스크립트, 전환일 편집)는 개발자가 저장소에서만
@@ -1141,3 +1175,8 @@ Windows CI에서 창 핸들과 아이콘을 시험하며, 사용자 PC의 Explor
 실제 자료를 자동 이전하거나 삭제하지 않습니다. 분리된 이전 API는 명시적 동의 뒤에만 같은 파일시스템의 독점 rename을 시도하며, 목적지 경합·미지원·파일시스템 차이는 복사/삭제 없이 거절합니다. 거절 때 기존 폴더에 작은 표시 파일이 남을 수 있습니다. 기존 legacy 폴더를 옮기면 다른 앱과의 토큰 파일 공유가 끝남을 동의 안내에 포함해야 합니다. standalone 저장소 호출자는 먼저 명시적 준비 API를 호출해야 하고 동결 엔진은 변경하지 않습니다. 새로운 삭제·보유기한·암호화·운영 권한 검증이나 실제 PC 검증을 완료한 변경이 아닙니다.
 
 [구현 범위와 한계](../product/OS_DATA_STORAGE_2026-11-21.md), [경로 API](../../core/app_paths.py), [쓰기·시작 검사](../../tests/app_storage_startup_acceptance.py).
+
+
+## 2026-11-21 beginner chart, tooltip and risk explanation preview
+
+The native educational guide now has explicitly synthetic labelled teaching charts, while its existing historical-case context and report inputs remain available. Tooltip styles use the existing application font/palette and retain raw text/provenance. Stock valuation definitions and investor/short/order-book/execution-strength cards are explanatory displays, not automatic trading or probability claims. Only supplied, period/unit-matched values may be compared; ROE/PSR numbers and unverified peer membership remain unavailable. The ready domestic profile requests two read-only REST snapshots without new polling, paging or order routes. VaR/CVaR explanations retain each view's actual metadata and signed/money loss conventions, including unknown metadata in saved records. No model, ledger, frozen study, owner-approval rule, credential security, real operating right or deployment is approved by this UI work. Manual PC7, OS go-ahead and publication requirements remain open.

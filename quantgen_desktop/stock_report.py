@@ -161,7 +161,7 @@ def write_report(path, report, chart, extension=None):
             document.setDefaultFont(font)
             document.addResource(QTextDocument.ResourceType.ImageResource, QUrl('qg:chart'), chart)
             document.setHtml(_html(report))
-            document.print(writer)
+            (getattr(document, 'print_', None) or document.print)(writer)   # PySide6 names it print_
             del writer
         elif extension == 'png':
             if not chart.save(output, 'PNG'):
