@@ -98,7 +98,7 @@
     "core/didm/ingest/massive_news.py": "6ba428176099c2947581b45354c07e41c874b301e2b0441d3eb59161dc9bdccf",
     "core/didm/ingest/news.py": "37d84f3cb3bde56ed772235aee1283bca76057006e5044974663f22d80f72afd",
     "core/didm/llm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "core/didm/llm/schema.py": "110eb847575f0e9bf4b147fa17b97ff7c476cbdbd29de453d9fbe5ebcfcd4856",
+    "core/didm/llm/schema.py": "a8411c0ef82361c4e888ff5f06c3f7682ecc2a170c71fb1165e08679e2852af4",
     "core/didm/novelty.py": "840562fc43bea408254cfac625d22534408f85c85741015fc17fd4ddd311f590",
     "core/didm/store/__init__.py": "368bc91ce8edf904d874ed96be693136280bdf86c5fa81bb9590d24afad1eed3",
     "core/education/__init__.py": "d04a1be2039032cc6150e474930f58e9f5b1e882d8fad1a6b472c313b5456ad4",
@@ -626,7 +626,7 @@
     "tests/didm_massive_news_acceptance.py": "52e531178c88817191b1acca28b465d503742d674aac4dead82410a050e07ff0",
     "tests/didm_news_acceptance.py": "1280b0a97c7b48c9bd8610e891c048874d8503ad8a9dba4338068dfef2cda0ce",
     "tests/didm_novelty_acceptance.py": "ccefc838580aeab523770c0920afec71031b62980fcbdf16150cdaaabc9ed094",
-    "tests/didm_schema_acceptance.py": "5c32fdf9e5a9bc14d564782a21a4c69dec3d24595c72fcbbd65c2bfddbc50caa",
+    "tests/didm_schema_acceptance.py": "ef5892bbbc34d6980077a5f8ff6bfe6d34660fcbbd0abcaff269b46a774d645e",
     "tests/didm_sources_acceptance.py": "8574b9c822e4d7acfc849bd70ffcbd0d03fdca9b8ebf67c50ec0ff1c7f48b781",
     "tests/didm_store_acceptance.py": "3f54b0b04508850512776d6c6b4c836ed54e3c1e7fae2c91e53b349537c563da",
     "tests/didm_vendor_eval_acceptance.py": "5a134e1547f047358f33ce56c4cd59a46049154160591194e177e2e1c73e9089",
@@ -866,19 +866,19 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "a8ed2ad15c4743062fa8d9f66e1b4d0558665e8a06bed838773b3fe160e83714",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.599452+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "0df95c9b9a6980066a8b98d4e535ce41e92910fbf3c26f71f666b76e1dc00e4f",
+      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
+      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T23:37:14.903517+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "a8ed2ad15c4743062fa8d9f66e1b4d0558665e8a06bed838773b3fe160e83714",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.602546+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "0df95c9b9a6980066a8b98d4e535ce41e92910fbf3c26f71f666b76e1dc00e4f",
+      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
+      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T23:37:14.906222+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
@@ -906,27 +906,27 @@
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "3ebb217907ce250c5d96a9b21e07faea2abd8211ba865e62519cb9b010490d16",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.612118+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "0a698afdd59375a652e9580eff503cb58eedf0b49a2c0191a56e7bc3ece14d83",
+      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
+      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T23:37:14.909803+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "a8ed2ad15c4743062fa8d9f66e1b4d0558665e8a06bed838773b3fe160e83714",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.614172+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "0df95c9b9a6980066a8b98d4e535ce41e92910fbf3c26f71f666b76e1dc00e4f",
+      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
+      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T23:37:14.912296+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
-      "source_digest": "3ebb217907ce250c5d96a9b21e07faea2abd8211ba865e62519cb9b010490d16",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.618554+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "0a698afdd59375a652e9580eff503cb58eedf0b49a2c0191a56e7bc3ece14d83",
+      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
+      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T23:37:14.914469+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
@@ -954,11 +954,11 @@
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "69f097b50f9f5eebb14e0a54224000e3806d7fd2d2ebd7b11a99e542c1507a7f",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.629377+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "bf20881e6bf80abe262930e9fcf2b079bb0546f3609a62bf4dacc1e009199ef2",
+      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
+      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T23:37:14.916973+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
@@ -994,35 +994,35 @@
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "3ebb217907ce250c5d96a9b21e07faea2abd8211ba865e62519cb9b010490d16",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.646940+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "0a698afdd59375a652e9580eff503cb58eedf0b49a2c0191a56e7bc3ece14d83",
+      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
+      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T23:37:14.919346+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "a8ed2ad15c4743062fa8d9f66e1b4d0558665e8a06bed838773b3fe160e83714",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.649058+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "0df95c9b9a6980066a8b98d4e535ce41e92910fbf3c26f71f666b76e1dc00e4f",
+      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
+      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T23:37:14.921563+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "a7b3460363b9d5e207f8811a011e9535803c13d3b922e595ed9fda953566d0de",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.651514+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "3be20eaca8072e5c0d88516cdbff197bf29544afe0475f2e8d3410f37c5c83fa",
+      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
+      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T23:37:14.924058+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "a8ed2ad15c4743062fa8d9f66e1b4d0558665e8a06bed838773b3fe160e83714",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.653664+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "0df95c9b9a6980066a8b98d4e535ce41e92910fbf3c26f71f666b76e1dc00e4f",
+      "reviewed_by": "GPT root / compliance_validation independent V0 identifier integration technical review 2026-11-23",
+      "review_note": "DIDM V0 supplied identifier and prompt-hash fullmatch rejects trailing line endings while preserving valid bounded identifiers, optional entity IDs, schema versions and remaining score fields. Apply frozen two files onto actual post-Massive main; preserve Android/MC/EODHD/Alpaca/Massive and existing CI wiring. Existing126 synthetic cases and26 product methods retain original scope. Technical source/document consistency only; no model execution, real gold/research/API, rights or release approval; policies/profile unchanged.",
+      "reviewed_at": "2026-11-22T23:37:14.926298+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     }
   }
 }

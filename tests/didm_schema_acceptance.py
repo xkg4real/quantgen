@@ -25,6 +25,14 @@ class ScoreRecordAccepts(unittest.TestCase):
         rec = s.validate_record(good())
         self.assertEqual(s.validate_record(rec.as_dict()), rec)
 
+    def test_identifier_and_hash_at_their_length_limits(self):
+        raw = good()
+        raw["record_id"] = "9" + "a._:-/" * 21 + "z"
+        raw["prompt_sha256"] = "0123456789abcdef" * 4
+        rec = s.validate_record(raw)
+        self.assertEqual(rec.record_id, raw["record_id"])
+        self.assertEqual(rec.prompt_sha256, raw["prompt_sha256"])
+
     def test_schema_version_optional_on_input(self):
         raw = good()
         raw.pop("schema_version")
@@ -99,6 +107,14 @@ class ScoreRecordRejects(unittest.TestCase):
         raw["prompt_sha256"] = "ABC"
         self.assertRejects(raw, "prompt_sha256")
 
+    def test_rejects_trailing_newline_in_hash_and_identifiers(self):
+        for name, length in (("prompt_sha256", 64), ("record_id", 128), ("source_id", 128),
+                             ("entity_id", 128), ("origin_cluster_id", 128)):
+            with self.subTest(field=name):
+                raw = good()
+                raw[name] = "a" * length + "\n"
+                self.assertRejects(raw, name)
+
     def test_bool_is_not_a_number(self):
         raw = good()
         raw["relevance_0_100"] = True
@@ -132,6 +148,12 @@ class Helpers(unittest.TestCase):
 
 
 class GoldLabelFormat(unittest.TestCase):
+    def test_rejects_trailing_newline_in_label_identifiers(self):
+        raw = json.loads((FIXTURES / "gold_label_v0.json").read_text(encoding="utf-8"))
+        for name in ("article_id", "annotator_id"):
+            with self.subTest(field=name), self.assertRaisesRegex(s.SchemaError, name):
+                s.validate_gold({**raw, name: "a" * 128 + "\n"})
+
     def test_stage1_example_passes(self):
         raw = json.loads((FIXTURES / "gold_label_v0.json").read_text(encoding="utf-8"))
         label = s.validate_gold(raw)
