@@ -1,12 +1,12 @@
 ---
-status: taken
+status: checkpoint
 reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-17
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-23T09:14:04+09:00
+updated_at: 2026-11-23T09:15:28+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/android-commercial-preview-20261123
@@ -22,6 +22,18 @@ handoff_id: 2026-11-17/claude-resume-20261103/3b0062c901e79bab973a6229a03adcfe06
 previous_returned_at: 2026-11-21T14:54:13+09:00
 returned_at: 2026-11-22T12:49:15+09:00
 ---
+
+## 2026-11-23T09:15:28+09:00 · 법인 설립 전 진행
+
+- **DIDM B6.** 11월 20일 비교표상 B3 8개 공급원에 EODHD Fundamentals를 더한 B6는 월 $51–201, 정보 범위 83/100입니다. EODHD #142, Alpaca #143, Massive #144 입력 처리가 main에 있습니다. Massive는 네 설치 환경과 문서·문법 검사 통과 후 병합했습니다. main `51b82989`의 두 부모와 검사한 tree가 일치합니다. #145 `91be74d9`는 실제 main을 통합했습니다. 문서와 문법 검사는 통과했고 전체 Runtime이 진행 중입니다. 발표 전 컨센서스 이력, 뉴스 실계정 지연, 상업적 저장·표시 조건과 견적이 남았습니다.
+- **UI/UX #140.** 실제 main과 [170369e1](https://github.com/xkg4real/quantgen/commit/170369e1141add2ce2450b78b456b739f038df2f)에 통합한 모든 변경 경로 120개의 원격 blob을 대조했습니다. 밝고 어두운 테마 전환 시 현재 툴팁만 다시 그립니다. Linux Qt에서 화면 16쌍이 일치했고 종목 패널 5/5, 같은 시장 시험 두 번 뒤 남은 창 2→0입니다. 원래 키보드 포커스 검사를 포함한 동일 합성 과정이 수정 전 240초 제한에 미완료였고 수정 뒤 165.740초에 끝났습니다. 문서 20개·소스 882개 일치, 공개 차단 65개입니다. 새 CI의 네 설치 환경 모두 이전 Windows 3.12 실패가 발생한 step 6을 통과했습니다. 전체 설치 검사와 소유자 Windows PC7이 남았습니다. 재현은 두 시험 모듈 `tests.stock_insights_style_acceptance`, `tests.desktop_home_markets_markets_acceptance`입니다. 웹사이트용 PR 기록은 보존했고 배포·적용은 소유자 작업입니다.
+- **Android ⑮-5.** 상업용 QUANTGEN 프리뷰 #141은 main, [APK 검사](https://github.com/xkg4real/quantgen/commit/c28194f2bb75a888c68b76f3ea6e88fe753bd477)는 검증된 작업 브랜치입니다. 실제 SDK에서 만든 서명 시험 APK는 exit 0 및 인증서 지문 일치였고, ZIP 무결성을 유지하며 서명 후 내용을 바꾼 시험 APK는 exit 1로 거부했습니다. 기기 실측과 실제 제품 APK는 남았습니다.
+- **Payment / AWS.** OA-32 문의 발송, OA-39 국내 카드 구독 조건, OA-40 서버 위치 결정, OA-43 EC2-Other $39.47 비용 귀속이 남았습니다. 비용 근거는 같은 기간의 Usage type × Region입니다.
+- **Remaining Work.** T8-6 `2d2e7ad5`는 제품의 수동 문서 게시 도구입니다. #145 실제 병합 뒤 공유 CI 설정과 기술 기준선을 조정하고 합성 시험 16개를 새 조합에서 검사합니다. 이후 GH-2, Android 검사 도구 순서입니다. DS-H는 OA-09 실진단, KEY-5/K3는 #140과 소유자 PC7에 의존합니다. Claude 상시 감시는 취소 상태이며 소유자용 Notion 보고만 준비했습니다.
+
+- [#144](https://github.com/xkg4real/quantgen/pull/144) `aa25d276` 병합됨 · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45073845036) success · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45073844942) success
+- [#145](https://github.com/xkg4real/quantgen/pull/145) `91be74d9` [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45084447954) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45084447988) success
+- [#140](https://github.com/xkg4real/quantgen/pull/140) `170369e1` [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45086943498) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45086943499) success
 
 ## Android ⑮-5 · 실제 SDK의 합성 APK 서명 판독 · 2026-11-23T09:14:04+09:00
 

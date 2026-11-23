@@ -1,3 +1,7 @@
+## 2026-11-23T09:15:28+09:00 · 검토와 병합 순서
+
+첫 병합 대상은 [#145](https://github.com/xkg4real/quantgen/pull/145) `91be74d9`입니다. [Runtime](https://github.com/xkg4real/quantgen/actions/runs/45084447954)의 네 설치 환경이 전부 끝나면 actual base/head·리뷰·freeze·문서 및 문법/설치 검사를 다시 대조합니다. 조건 충족 시 expected-head로 병합하고 실제 tree·parents를 확인합니다. 이어서 T8-6 → GH-2 → Android APK 검사 도구에 실제 main을 순차 반영합니다. [#140](https://github.com/xkg4real/quantgen/pull/140) `170369e1`은 별도 draft로 전체 [CI](https://github.com/xkg4real/quantgen/actions/runs/45086943498) 및 소유자 Windows PC7이 필요합니다. Step 6은 네 환경에서 통과했습니다. 상시 감시는 꺼 둡니다.
+
 ## 2026-11-23T07:20:35+09:00 · 검토와 병합 순서
 
 현재 main `5af37877`에서 [Massive #144](https://github.com/xkg4real/quantgen/pull/144) `aa25d276`가 첫 병합 대상입니다. [Runtime 45073845036](https://github.com/xkg4real/quantgen/actions/runs/45073845036) 전체 완료 뒤 최신 head·base·리뷰·freeze와 모든 필수 검사를 대조합니다. 실제 병합되면 그 main을 #145에 통합하고 다시 검사합니다. T8-6 및 GH-2의 기존 자리 뒤에 [Android APK 검사 작업](https://github.com/xkg4real/quantgen/commit/c28194f2bb75a888c68b76f3ea6e88fe753bd477)을 기록합니다. 기술 지문을 공유하므로 차례에 최신 main과 대조해 PR을 엽니다. 소유자 휴대폰 시험은 별도입니다. [UI #140](https://github.com/xkg4real/quantgen/pull/140)은 기존 Windows 3.12 실패·전체 CI·PC7 확인이 남았습니다. 상시 Claude 감시는 취소 상태입니다.

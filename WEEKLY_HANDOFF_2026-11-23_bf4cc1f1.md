@@ -1,5 +1,17 @@
 # QUANTGEN 법인 설립 전 인수인계 · 2026년 11월 23일
 
+## 2026-11-23T09:15:28+09:00 · 법인 설립 전 진행
+
+- **DIDM B6.** 11월 20일 비교표상 B3 8개 공급원에 EODHD Fundamentals를 더한 B6는 월 $51–201, 정보 범위 83/100입니다. EODHD #142, Alpaca #143, Massive #144 입력 처리가 main에 있습니다. Massive는 네 설치 환경과 문서·문법 검사 통과 후 병합했습니다. main `51b82989`의 두 부모와 검사한 tree가 일치합니다. #145 `91be74d9`는 실제 main을 통합했습니다. 문서와 문법 검사는 통과했고 전체 Runtime이 진행 중입니다. 발표 전 컨센서스 이력, 뉴스 실계정 지연, 상업적 저장·표시 조건과 견적이 남았습니다.
+- **UI/UX #140.** 실제 main과 [170369e1](https://github.com/xkg4real/quantgen/commit/170369e1141add2ce2450b78b456b739f038df2f)에 통합한 모든 변경 경로 120개의 원격 blob을 대조했습니다. 밝고 어두운 테마 전환 시 현재 툴팁만 다시 그립니다. Linux Qt에서 화면 16쌍이 일치했고 종목 패널 5/5, 같은 시장 시험 두 번 뒤 남은 창 2→0입니다. 원래 키보드 포커스 검사를 포함한 동일 합성 과정이 수정 전 240초 제한에 미완료였고 수정 뒤 165.740초에 끝났습니다. 문서 20개·소스 882개 일치, 공개 차단 65개입니다. 새 CI의 네 설치 환경 모두 이전 Windows 3.12 실패가 발생한 step 6을 통과했습니다. 전체 설치 검사와 소유자 Windows PC7이 남았습니다. 재현은 두 시험 모듈 `tests.stock_insights_style_acceptance`, `tests.desktop_home_markets_markets_acceptance`입니다. 웹사이트용 PR 기록은 보존했고 배포·적용은 소유자 작업입니다.
+- **Android ⑮-5.** 상업용 QUANTGEN 프리뷰 #141은 main, [APK 검사](https://github.com/xkg4real/quantgen/commit/c28194f2bb75a888c68b76f3ea6e88fe753bd477)는 검증된 작업 브랜치입니다. 실제 SDK에서 만든 서명 시험 APK는 exit 0 및 인증서 지문 일치였고, ZIP 무결성을 유지하며 서명 후 내용을 바꾼 시험 APK는 exit 1로 거부했습니다. 기기 실측과 실제 제품 APK는 남았습니다.
+- **Payment / AWS.** OA-32 문의 발송, OA-39 국내 카드 구독 조건, OA-40 서버 위치 결정, OA-43 EC2-Other $39.47 비용 귀속이 남았습니다. 비용 근거는 같은 기간의 Usage type × Region입니다.
+- **Remaining Work.** T8-6 `2d2e7ad5`는 제품의 수동 문서 게시 도구입니다. #145 실제 병합 뒤 공유 CI 설정과 기술 기준선을 조정하고 합성 시험 16개를 새 조합에서 검사합니다. 이후 GH-2, Android 검사 도구 순서입니다. DS-H는 OA-09 실진단, KEY-5/K3는 #140과 소유자 PC7에 의존합니다. Claude 상시 감시는 취소 상태이며 소유자용 Notion 보고만 준비했습니다.
+
+- [#144](https://github.com/xkg4real/quantgen/pull/144) `aa25d276` 병합됨 · [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45073845036) success · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45073844942) success
+- [#145](https://github.com/xkg4real/quantgen/pull/145) `91be74d9` [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45084447954) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45084447988) success
+- [#140](https://github.com/xkg4real/quantgen/pull/140) `170369e1` [Runtime packaging smoke](https://github.com/xkg4real/quantgen/actions/runs/45086943498) in_progress · [Compliance document review](https://github.com/xkg4real/quantgen/actions/runs/45086943499) success
+
 ## 2026-11-23T07:20:35+09:00 · 법인 설립 전 진행
 
 - **Android ⑮-5 / OS-A1.** 상업용 QUANTGEN 내부 프리뷰 #141은 main에 있습니다. 작업 브랜치 [APK 검사 코드](https://github.com/xkg4real/quantgen/commit/c28194f2bb75a888c68b76f3ea6e88fe753bd477)는 기존 Android 수동 빌드가 파일별 크기·SHA-256·서명 검증 결과와 인증서 지문을 같이 보관하게 합니다. 대상 설치 흔적이 있는 직접 의존성만 기록합니다. 입력 버전 충돌이나 미확인 상태는 별도 표시합니다. 합성 회귀 8개를 Python 3.12.14와 3.13.5에서 각각 통과했고 실제 SDK 34는 서명 없는 합성 APK를 거부했습니다. 서명 성공 경로에는 모의 응답을 사용했습니다. 20문서·855소스 기술 검사 통과, 공개 차단 65건 유지입니다. 기반 main은 `5af37877`, 변경은 6개 파일로 원격 대조했습니다. 재현은 해당 브랜치에서 `python tests/android_apk_evidence_acceptance.py`입니다. 이 브랜치의 PR과 실제 Android 앱 빌드는 대기 중입니다. 병합 순서와 승인 뒤 main의 Platform build에서 Android만 선택해 APK를 만들고 휴대폰 첫 실행·스크롤·예시 계산(101.01 / 104.69 / 108.95)을 확인합니다.
