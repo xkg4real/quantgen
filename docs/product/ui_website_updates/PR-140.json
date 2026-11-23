@@ -410,6 +410,37 @@
       "delivery": "NOT_SENT",
       "applied": false,
       "deployed": false
+    },
+    {
+      "date": "2026-11-23",
+      "execution_id": "54d3ec35-f4ea-4d4e-a197-4402df53814b",
+      "source_parent": "e9950e346d0b77bebaa5a77faea0d1ad1169c22c",
+      "scope": "Desktop stock-detail tooltips and market-window test cleanup",
+      "changes_ko": [
+        "종목 상세에서 밝은 테마와 어두운 테마를 바꾸면 화면에 떠 있는 도움말 색상이 바로 바뀝니다. 본문 글꼴과 기존 도움말 크기·테두리는 유지합니다."
+      ],
+      "source_pins": {
+        "quantgen_desktop/typography.py": "f814fd8840cc202fd08bf45080c38d7130be001b",
+        "tests/stock_insights_style_acceptance.py": "1450afa649b99fe865fc41462d0b7b92dfd9d0b7",
+        "tests/desktop_home_markets_markets_acceptance.py": "2e47bc8bec2244978b3e5e161c730a7fdb640318"
+      },
+      "website_impact": "Owner copy for the desktop update. The visible Windows startup result requires a separate PC check.",
+      "local_validation": {
+        "platform": "Linux Qt 6.12 offscreen",
+        "paired_matching_tooltip_captures": 16,
+        "stock_style_cases_passed": 5,
+        "unrelated_widgets_observed": 20,
+        "style_changes_on_light_dark_switch": 0,
+        "market_window_test_cleanup": {
+          "original_live_after_two_cases": 2,
+          "candidate_live_after_two_cases": 0
+        }
+      },
+      "actual_fresh_CI": "PENDING_NEW_HEAD",
+      "owner_windows_PC7": "NOT_PERFORMED",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false
     }
   ]
 }

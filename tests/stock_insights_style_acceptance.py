@@ -102,6 +102,67 @@ class StockInsightsStyleAcceptance(unittest.TestCase):
         self.assertIn('font-family: "QG Symbols", "QG Interface"', app.styleSheet())
         self.assertEqual(app.styleSheet().count('/* QUANTGEN tooltip */'), 1)
 
+    def test_changing_tooltip_palette_updates_visible_tip_without_restyling_other_widgets(self):
+        from PyQt6.QtCore import QEvent, QPoint, Qt
+        from PyQt6.QtGui import QColor
+        from PyQt6.QtWidgets import QLabel, QToolTip
+        from core.theme import DARK, LIGHT
+        from quantgen_desktop.typography import apply_tooltip_theme
+        from tests.qt_fixture_cleanup import delete_owned_widget
+
+        class StyleProbe(QLabel):
+            style_changes = 0
+
+            def changeEvent(self, event):
+                if event.type() == QEvent.Type.StyleChange:
+                    self.style_changes += 1
+                super().changeEvent(event)
+
+        app = self.app
+        self.addCleanup(QToolTip.setFont, QToolTip.font())
+        self.addCleanup(app.setStyleSheet, app.styleSheet())
+        self.addCleanup(app.setProperty, 'qgTooltipStylesheet', app.property('qgTooltipStylesheet'))
+        probe = StyleProbe('Unrelated synthetic control')
+        probe.setObjectName('unrelatedFixture')
+        self.addCleanup(delete_owned_widget, probe)
+        app.setStyleSheet('QLabel#unrelatedFixture { padding: 1px; }')
+        app.setProperty('qgTooltipStylesheet', None)
+        probe.resize(240, 70)
+        probe.show()
+        apply_tooltip_theme(app, LIGHT)
+        self._settle()
+        QToolTip.showText(probe.mapToGlobal(QPoint(12, 12)), 'Synthetic tooltip · 합성 도움말', probe)
+        self._settle()
+        tips = [w for w in app.topLevelWidgets()
+                if w.windowType() == Qt.WindowType.ToolTip and w.isVisible()]
+        self.assertEqual(len(tips), 1)
+        tip = tips[0]
+        self.addCleanup(tip.hide)
+        original_text = QToolTip.text()
+
+        def assert_surface(palette):
+            # Check actual painted output, not a dynamic property or QSS string.
+            image = tip.grab().toImage()
+            self.assertFalse(image.isNull())
+            wanted = QColor(palette.surface)
+            matches = sum(image.pixelColor(x, y).rgb() == wanted.rgb()
+                          for x in range(image.width()) for y in range(image.height()))
+            self.assertGreater(matches, image.width() * image.height() * 0.4)
+            return image
+
+        previous_image = assert_surface(LIGHT)
+        for palette in (DARK, LIGHT):
+            with self.subTest(surface=palette.surface):
+                probe.style_changes = 0
+                apply_tooltip_theme(app, palette)
+                self._settle()
+                self.assertEqual(probe.style_changes, 0)
+                self.assertTrue(tip.isVisible())
+                self.assertEqual(QToolTip.text(), original_text)
+                image = assert_surface(palette)
+                self.assertNotEqual(image, previous_image)
+                previous_image = image
+
     def test_dynamic_labels_match_existing_stock_detail_type_and_palette(self):
         from PyQt6.QtWidgets import QLabel, QVBoxLayout, QWidget
         from core.theme import DARK, LIGHT

@@ -11,7 +11,9 @@ Korean market convention: a rise is red and a fall is blue. Each colour meets WC
 """
 from __future__ import annotations
 
+from PyQt6.QtCore import QEvent, QObject, Qt
 from PyQt6.QtGui import QColor, QFont
+from PyQt6.QtWidgets import QWidget
 
 TONES = ("up", "down", "flat")
 
@@ -249,38 +251,106 @@ def flyout_stylesheet(p, dark: bool) -> str:
         """
 
 
-def tooltip_stylesheet(p, families=(), *, max_width=None) -> str:
-    """The detached tooltip uses the same surface, type scale and border as the app."""
-    line = mix(p.border, p.bg, 0.5)
+def _tooltip_geometry(families, max_width) -> str:
     family = ", ".join('"' + str(name).replace('\\', '\\\\').replace('"', '\\"') + '"' for name in families)
     face = f"font-family: {family}; " if family else ""
     width = f"max-width: {int(max_width)}px; " if max_width is not None else ""
+    return f"border-radius: 8px; padding: 7px 10px; {width}{face}font-size: 14px; font-weight: 400;"
+
+
+def tooltip_stylesheet(p, families=(), *, max_width=None) -> str:
+    """The detached tooltip uses the same surface, type scale and border as the app."""
+    line = mix(p.border, p.bg, 0.5)
     return (f"QToolTip {{ background: {p.surface}; color: {p.text}; border: 1px solid {line}; "
-            f"border-radius: 8px; padding: 7px 10px; {width}{face}font-size: 14px; font-weight: 400; }}")
+            f"{_tooltip_geometry(families, max_width)} }}")
+
+
+def _tooltip_colors(p):
+    return p.surface, p.text, mix(p.border, p.bg, 0.5)
+
+
+_TOOLTIP_STYLE_START = "\n/* QUANTGEN tooltip */\n"
+_TOOLTIP_STYLE_END = "\n/* END QUANTGEN tooltip */"
+
+
+class _TooltipThemeFilter(QObject):
+    """Keep theme selection on Qt's tooltip, not on every application widget."""
+
+    def __init__(self, app):
+        super().__init__(app)
+        from core.theme import LIGHT, DARK
+        self.colors = {"light": _tooltip_colors(LIGHT), "dark": _tooltip_colors(DARK)}
+        self.theme = None
+        app.installEventFilter(self)
+
+    def select(self, palette):
+        colors = _tooltip_colors(palette)
+        self.theme = next((name for name, values in self.colors.items() if values == colors), "custom")
+        # An arbitrary Palette remains supported, without accumulating old custom rules.
+        self.colors[self.theme] = colors
+
+    def apply(self, tooltip):
+        if self.theme is None or tooltip.property("qgTooltipTheme") == self.theme:
+            return
+        tooltip.setProperty("qgTooltipTheme", self.theme)
+        style = tooltip.style()
+        style.unpolish(tooltip)
+        style.polish(tooltip)
+        tooltip.update()
+
+    def eventFilter(self, widget, event):
+        # QApplication filters see all events. Inspect widgets only for these two
+        # lifecycle events; Polish runs before the tooltip calculates its size.
+        if event.type() in (QEvent.Type.Polish, QEvent.Type.Show):
+            if isinstance(widget, QWidget) and widget.windowType() == Qt.WindowType.ToolTip:
+                self.apply(widget)
+        return False
+
+    def stylesheet(self, families, max_width):
+        rules = [f"QToolTip {{ border: 1px solid transparent; {_tooltip_geometry(families, max_width)} }}"]
+        for name, (surface, text, line) in self.colors.items():
+            rules.append(f'QToolTip[qgTooltipTheme="{name}"] {{ background: {surface}; color: {text}; border-color: {line}; }}')
+        return _TOOLTIP_STYLE_START + "\n".join(rules) + _TOOLTIP_STYLE_END
 
 
 def apply_tooltip_theme(app, palette) -> None:
     """Theme Qt's detached tooltip without replacing other application stylesheet rules.
 
-    Copy the actual application face, including its fallback/features, instead of
-    asking Qt's platform tooltip class to choose a separate system font.
+    Both standard palettes share one application rule block. Changing theme only
+    repolishes the tooltip; a new font, width, custom palette or replaced app QSS
+    can still require a new block. The originating widget's QSS keeps precedence.
     """
     from PyQt6.QtWidgets import QToolTip
     font = scaled_font(app.font(), 14, 400)
     if QToolTip.font() != font:
         QToolTip.setFont(font)
+    controller = getattr(app, "_qg_tooltip_theme_filter", None)
+    if controller is None:
+        controller = _TooltipThemeFilter(app)
+        app._qg_tooltip_theme_filter = controller
+    controller.select(palette)
     previous = app.property("qgTooltipStylesheet") or ""
     current = app.styleSheet()
+    if not previous or previous not in current:
+        # Qt can retain application QSS across QApplication lifetimes, while
+        # Python attributes and QObject properties belong to the old app only.
+        start = current.find(_TOOLTIP_STYLE_START)
+        end = current.find(_TOOLTIP_STYLE_END, start + len(_TOOLTIP_STYLE_START))
+        if start >= 0 and end >= 0:
+            previous = current[start:end + len(_TOOLTIP_STYLE_END)]
     screen = app.primaryScreen()
     # Qt reports logical pixels here; multiplying by DPI would scale twice.
     max_width = min(480, max(1, screen.availableGeometry().width() - 32)) if screen else 480
-    owned = "\n/* QUANTGEN tooltip */\n" + tooltip_stylesheet(palette, app.font().families(), max_width=max_width)
+    owned = controller.stylesheet(app.font().families(), max_width)
     combined = (current.replace(previous, "", 1) if previous else current) + owned
     # Even identical QSS makes Qt repolish widgets across the application.
     if combined != current:
         app.setStyleSheet(combined)
-    if previous != owned:
+    if app.property("qgTooltipStylesheet") != owned:
         app.setProperty("qgTooltipStylesheet", owned)
+    for widget in app.topLevelWidgets():
+        if widget.windowType() == Qt.WindowType.ToolTip:
+            controller.apply(widget)
 
 
 def window_stylesheet(p, dark: bool) -> str:
