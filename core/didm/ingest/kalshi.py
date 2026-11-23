@@ -17,6 +17,8 @@ pre-registered minimum (PREREG_V0, default 1,000 contracts of volume).
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from decimal import Decimal, InvalidOperation
+from math import isfinite
 from typing import Any, Mapping
 
 SOURCE_ID = "kalshi"
@@ -56,12 +58,16 @@ def _cents(value: Any, name: str) -> float | None:
 def _price(obj: Mapping[str, Any], name: str) -> float | None:
     """Cents 0..100 from '<name>_dollars' (string dollars) or legacy '<name>' (int cents)."""
     dollars = obj.get(f"{name}_dollars")
-    if dollars not in (None, ""):
-        try:
-            return _cents(round(float(dollars) * 100, 6), f"{name}_dollars")
-        except (TypeError, ValueError):
-            raise KalshiError(f"{name}_dollars: bad value {dollars!r}") from None
-    return _cents(obj.get(name), name)
+    if dollars in (None, ""):
+        return _cents(obj.get(name), name)
+    try:
+        # Check the original decimal before either float conversion or cent rounding.
+        amount = Decimal(dollars) if isinstance(dollars, str) else dollars
+        if isinstance(amount, bool) or not 0 <= amount <= 1:
+            raise ValueError
+        return round(float(amount) * 100, 6)
+    except (TypeError, ValueError, OverflowError, InvalidOperation):
+        raise KalshiError(f"{name}_dollars: price must be 0..1 dollars") from None
 
 
 def _count(obj: Mapping[str, Any], name: str) -> float | None:
@@ -70,10 +76,16 @@ def _count(obj: Mapping[str, Any], name: str) -> float | None:
         raw = obj.get(key)
         if raw in (None, ""):
             continue
+        if isinstance(raw, bool):
+            raise KalshiError(f"{key}: boolean is not a contract count")
         try:
             value = float(raw)
-        except (TypeError, ValueError):
-            raise KalshiError(f"{key}: bad value {raw!r}") from None
+            # A nonzero fixed-point string can be too small for the stored float.
+            underflow = value == 0 and isinstance(raw, str) and not Decimal(raw).is_zero()
+        except (TypeError, ValueError, OverflowError, InvalidOperation):
+            raise KalshiError(f"{key}: invalid contract count") from None
+        if not isfinite(value) or underflow:
+            raise KalshiError(f"{key}: contract count cannot be represented")
         if value < 0:
             raise KalshiError(f"{key}: negative")
         return value

@@ -94,7 +94,7 @@
     "core/didm/ingest/eodhd.py": "04f4d3bf7c7bf86452ebf86062afb5791b962d3b01b66c18db77fe5093dec639",
     "core/didm/ingest/filings.py": "9b2d8d01942de98048ffd866312a15b4b850f459705c73f0d4bffb87adb6d6e2",
     "core/didm/ingest/gdelt.py": "99731a27e6597bfe4a8cd8ff443d60fc232fec708e262589bf740c882a9a3722",
-    "core/didm/ingest/kalshi.py": "4f10f0581bd6aa13f0a9786d2f6b54ab97594b0c2d11b45189fa4ad8ce812bdd",
+    "core/didm/ingest/kalshi.py": "3728a492e97f42e1a1617dd2c74460835ad40ac63ba178fb7bd98520d1fcfa58",
     "core/didm/ingest/massive_news.py": "6ba428176099c2947581b45354c07e41c874b301e2b0441d3eb59161dc9bdccf",
     "core/didm/ingest/news.py": "37d84f3cb3bde56ed772235aee1283bca76057006e5044974663f22d80f72afd",
     "core/didm/llm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -324,7 +324,7 @@
     "data/didm/ecos.py": "15c48d674b98d4fc786aa01ab1c6fea41d0044b0ebbca892d866d89e9c4a1689",
     "data/didm/edgar.py": "6237874732295b1e2d0e259f44edc4a0e744f3203c5b629bf724f3216f38bf95",
     "data/didm/gdelt.py": "7623b420553c9f07d27e4b65ae61ef9510966ef6274438d718db101a0a671bde",
-    "data/didm/kalshi.py": "da3685db53b509bd8c3915f6bc39d020c91a73d073d62548fa4e705c7c6bfffb",
+    "data/didm/kalshi.py": "f081cc7cbd1d719bdeb0c48acb7bef61a478e93367373aaf3e10e3230bacc38a",
     "data/didm/keys.py": "a712abbbbbd2a3af5e3332c1176c911529d33622ebbae7bd40c2a8c399939700",
     "data/didm/massive_news.py": "712875c6a37d32a83ff6907e60b47b53ca445239b0498a6e130f5bf1d972c04b",
     "data/didm/opendart.py": "b571d9895fe6aec55412353d15debcc197f1375cf63ac0f6fa01a2921bf64b79",
@@ -627,7 +627,7 @@
     "tests/didm_news_acceptance.py": "1280b0a97c7b48c9bd8610e891c048874d8503ad8a9dba4338068dfef2cda0ce",
     "tests/didm_novelty_acceptance.py": "ccefc838580aeab523770c0920afec71031b62980fcbdf16150cdaaabc9ed094",
     "tests/didm_schema_acceptance.py": "5c32fdf9e5a9bc14d564782a21a4c69dec3d24595c72fcbbd65c2bfddbc50caa",
-    "tests/didm_sources_acceptance.py": "8574b9c822e4d7acfc849bd70ffcbd0d03fdca9b8ebf67c50ec0ff1c7f48b781",
+    "tests/didm_sources_acceptance.py": "a5c9ce36ec2d1f776ea923cbc9312f1a3ff211d5eebab0bedb6dbfda46238ea4",
     "tests/didm_store_acceptance.py": "3f54b0b04508850512776d6c6b4c836ed54e3c1e7fae2c91e53b349537c563da",
     "tests/didm_vendor_eval_acceptance.py": "5a134e1547f047358f33ce56c4cd59a46049154160591194e177e2e1c73e9089",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
@@ -866,19 +866,19 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "a8ed2ad15c4743062fa8d9f66e1b4d0558665e8a06bed838773b3fe160e83714",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.599452+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "16255892123501487fca40f989d7c00fe45d9f1da6f7fd9160dd8e8a98a496cd",
+      "reviewed_by": "GPT root / ai_surface_fixes independent B6 Kalshi R2 technical compliance review 2026-11-23",
+      "review_note": "B6 Kalshi R2 supplied-input protocol fixes only: reject boolean, nonfinite, overflow and nonzero-string float-underflow contract counts; retain fixed-point precedence, legacy fallback, missing/zero semantics and the existing1000-contract liquidity threshold. Validate the original dollar price in the existing0..1range before unchanged six-place cent rounding, rejecting boolean and just-outside-bound values without changing valid prices or legacy cents. Validate markets-list envelopes/rows and string cursors, reject cursor cycles, preserve opaque cursors, market order, terminal completion and capped partial results. Exact frozen three-file delta on pristine actual main51b; all original22 test methods retained,9 synthetic/mock methods added; R1 original29 methods preserved plus2 price methods. Existing runtime CI already executes the suite. Independent143/143 price checks including40004 field comparisons, prior129/129 supplied-input cases,18/18 auxiliary and original Kalshi8/8 on Python3.12.14/3.13.5 are bounded reused evidence, not actual vendor execution. R1 evidence and its price failures remain separately archived. No endpoint, credentials, consent, rights, publication criteria, research, API, ledger or release changes. Technical consistency only; all existing65 publication blockers and policies/profile remain unchanged.",
+      "reviewed_at": "2026-11-23T00:32:20.973935+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "a8ed2ad15c4743062fa8d9f66e1b4d0558665e8a06bed838773b3fe160e83714",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.602546+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "16255892123501487fca40f989d7c00fe45d9f1da6f7fd9160dd8e8a98a496cd",
+      "reviewed_by": "GPT root / ai_surface_fixes independent B6 Kalshi R2 technical compliance review 2026-11-23",
+      "review_note": "B6 Kalshi R2 supplied-input protocol fixes only: reject boolean, nonfinite, overflow and nonzero-string float-underflow contract counts; retain fixed-point precedence, legacy fallback, missing/zero semantics and the existing1000-contract liquidity threshold. Validate the original dollar price in the existing0..1range before unchanged six-place cent rounding, rejecting boolean and just-outside-bound values without changing valid prices or legacy cents. Validate markets-list envelopes/rows and string cursors, reject cursor cycles, preserve opaque cursors, market order, terminal completion and capped partial results. Exact frozen three-file delta on pristine actual main51b; all original22 test methods retained,9 synthetic/mock methods added; R1 original29 methods preserved plus2 price methods. Existing runtime CI already executes the suite. Independent143/143 price checks including40004 field comparisons, prior129/129 supplied-input cases,18/18 auxiliary and original Kalshi8/8 on Python3.12.14/3.13.5 are bounded reused evidence, not actual vendor execution. R1 evidence and its price failures remain separately archived. No endpoint, credentials, consent, rights, publication criteria, research, API, ledger or release changes. Technical consistency only; all existing65 publication blockers and policies/profile remain unchanged.",
+      "reviewed_at": "2026-11-23T00:32:20.977248+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
@@ -906,27 +906,27 @@
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "3ebb217907ce250c5d96a9b21e07faea2abd8211ba865e62519cb9b010490d16",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.612118+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "40b12ba91c277e3a45d53cc58141765968a2d429d538c286ffd129d28fb816ef",
+      "reviewed_by": "GPT root / ai_surface_fixes independent B6 Kalshi R2 technical compliance review 2026-11-23",
+      "review_note": "B6 Kalshi R2 supplied-input protocol fixes only: reject boolean, nonfinite, overflow and nonzero-string float-underflow contract counts; retain fixed-point precedence, legacy fallback, missing/zero semantics and the existing1000-contract liquidity threshold. Validate the original dollar price in the existing0..1range before unchanged six-place cent rounding, rejecting boolean and just-outside-bound values without changing valid prices or legacy cents. Validate markets-list envelopes/rows and string cursors, reject cursor cycles, preserve opaque cursors, market order, terminal completion and capped partial results. Exact frozen three-file delta on pristine actual main51b; all original22 test methods retained,9 synthetic/mock methods added; R1 original29 methods preserved plus2 price methods. Existing runtime CI already executes the suite. Independent143/143 price checks including40004 field comparisons, prior129/129 supplied-input cases,18/18 auxiliary and original Kalshi8/8 on Python3.12.14/3.13.5 are bounded reused evidence, not actual vendor execution. R1 evidence and its price failures remain separately archived. No endpoint, credentials, consent, rights, publication criteria, research, API, ledger or release changes. Technical consistency only; all existing65 publication blockers and policies/profile remain unchanged.",
+      "reviewed_at": "2026-11-23T00:32:20.980669+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "a8ed2ad15c4743062fa8d9f66e1b4d0558665e8a06bed838773b3fe160e83714",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.614172+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "16255892123501487fca40f989d7c00fe45d9f1da6f7fd9160dd8e8a98a496cd",
+      "reviewed_by": "GPT root / ai_surface_fixes independent B6 Kalshi R2 technical compliance review 2026-11-23",
+      "review_note": "B6 Kalshi R2 supplied-input protocol fixes only: reject boolean, nonfinite, overflow and nonzero-string float-underflow contract counts; retain fixed-point precedence, legacy fallback, missing/zero semantics and the existing1000-contract liquidity threshold. Validate the original dollar price in the existing0..1range before unchanged six-place cent rounding, rejecting boolean and just-outside-bound values without changing valid prices or legacy cents. Validate markets-list envelopes/rows and string cursors, reject cursor cycles, preserve opaque cursors, market order, terminal completion and capped partial results. Exact frozen three-file delta on pristine actual main51b; all original22 test methods retained,9 synthetic/mock methods added; R1 original29 methods preserved plus2 price methods. Existing runtime CI already executes the suite. Independent143/143 price checks including40004 field comparisons, prior129/129 supplied-input cases,18/18 auxiliary and original Kalshi8/8 on Python3.12.14/3.13.5 are bounded reused evidence, not actual vendor execution. R1 evidence and its price failures remain separately archived. No endpoint, credentials, consent, rights, publication criteria, research, API, ledger or release changes. Technical consistency only; all existing65 publication blockers and policies/profile remain unchanged.",
+      "reviewed_at": "2026-11-23T00:32:20.983524+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
-      "source_digest": "3ebb217907ce250c5d96a9b21e07faea2abd8211ba865e62519cb9b010490d16",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.618554+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "40b12ba91c277e3a45d53cc58141765968a2d429d538c286ffd129d28fb816ef",
+      "reviewed_by": "GPT root / ai_surface_fixes independent B6 Kalshi R2 technical compliance review 2026-11-23",
+      "review_note": "B6 Kalshi R2 supplied-input protocol fixes only: reject boolean, nonfinite, overflow and nonzero-string float-underflow contract counts; retain fixed-point precedence, legacy fallback, missing/zero semantics and the existing1000-contract liquidity threshold. Validate the original dollar price in the existing0..1range before unchanged six-place cent rounding, rejecting boolean and just-outside-bound values without changing valid prices or legacy cents. Validate markets-list envelopes/rows and string cursors, reject cursor cycles, preserve opaque cursors, market order, terminal completion and capped partial results. Exact frozen three-file delta on pristine actual main51b; all original22 test methods retained,9 synthetic/mock methods added; R1 original29 methods preserved plus2 price methods. Existing runtime CI already executes the suite. Independent143/143 price checks including40004 field comparisons, prior129/129 supplied-input cases,18/18 auxiliary and original Kalshi8/8 on Python3.12.14/3.13.5 are bounded reused evidence, not actual vendor execution. R1 evidence and its price failures remain separately archived. No endpoint, credentials, consent, rights, publication criteria, research, API, ledger or release changes. Technical consistency only; all existing65 publication blockers and policies/profile remain unchanged.",
+      "reviewed_at": "2026-11-23T00:32:20.986355+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
@@ -954,11 +954,11 @@
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "69f097b50f9f5eebb14e0a54224000e3806d7fd2d2ebd7b11a99e542c1507a7f",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.629377+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "c95064289763af091ddaf90fead01d96c162f7896fcbe509c4acf788e95f0e6e",
+      "reviewed_by": "GPT root / ai_surface_fixes independent B6 Kalshi R2 technical compliance review 2026-11-23",
+      "review_note": "B6 Kalshi R2 supplied-input protocol fixes only: reject boolean, nonfinite, overflow and nonzero-string float-underflow contract counts; retain fixed-point precedence, legacy fallback, missing/zero semantics and the existing1000-contract liquidity threshold. Validate the original dollar price in the existing0..1range before unchanged six-place cent rounding, rejecting boolean and just-outside-bound values without changing valid prices or legacy cents. Validate markets-list envelopes/rows and string cursors, reject cursor cycles, preserve opaque cursors, market order, terminal completion and capped partial results. Exact frozen three-file delta on pristine actual main51b; all original22 test methods retained,9 synthetic/mock methods added; R1 original29 methods preserved plus2 price methods. Existing runtime CI already executes the suite. Independent143/143 price checks including40004 field comparisons, prior129/129 supplied-input cases,18/18 auxiliary and original Kalshi8/8 on Python3.12.14/3.13.5 are bounded reused evidence, not actual vendor execution. R1 evidence and its price failures remain separately archived. No endpoint, credentials, consent, rights, publication criteria, research, API, ledger or release changes. Technical consistency only; all existing65 publication blockers and policies/profile remain unchanged.",
+      "reviewed_at": "2026-11-23T00:32:20.988911+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
@@ -994,35 +994,35 @@
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "3ebb217907ce250c5d96a9b21e07faea2abd8211ba865e62519cb9b010490d16",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.646940+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "40b12ba91c277e3a45d53cc58141765968a2d429d538c286ffd129d28fb816ef",
+      "reviewed_by": "GPT root / ai_surface_fixes independent B6 Kalshi R2 technical compliance review 2026-11-23",
+      "review_note": "B6 Kalshi R2 supplied-input protocol fixes only: reject boolean, nonfinite, overflow and nonzero-string float-underflow contract counts; retain fixed-point precedence, legacy fallback, missing/zero semantics and the existing1000-contract liquidity threshold. Validate the original dollar price in the existing0..1range before unchanged six-place cent rounding, rejecting boolean and just-outside-bound values without changing valid prices or legacy cents. Validate markets-list envelopes/rows and string cursors, reject cursor cycles, preserve opaque cursors, market order, terminal completion and capped partial results. Exact frozen three-file delta on pristine actual main51b; all original22 test methods retained,9 synthetic/mock methods added; R1 original29 methods preserved plus2 price methods. Existing runtime CI already executes the suite. Independent143/143 price checks including40004 field comparisons, prior129/129 supplied-input cases,18/18 auxiliary and original Kalshi8/8 on Python3.12.14/3.13.5 are bounded reused evidence, not actual vendor execution. R1 evidence and its price failures remain separately archived. No endpoint, credentials, consent, rights, publication criteria, research, API, ledger or release changes. Technical consistency only; all existing65 publication blockers and policies/profile remain unchanged.",
+      "reviewed_at": "2026-11-23T00:32:20.991640+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "a8ed2ad15c4743062fa8d9f66e1b4d0558665e8a06bed838773b3fe160e83714",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.649058+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "16255892123501487fca40f989d7c00fe45d9f1da6f7fd9160dd8e8a98a496cd",
+      "reviewed_by": "GPT root / ai_surface_fixes independent B6 Kalshi R2 technical compliance review 2026-11-23",
+      "review_note": "B6 Kalshi R2 supplied-input protocol fixes only: reject boolean, nonfinite, overflow and nonzero-string float-underflow contract counts; retain fixed-point precedence, legacy fallback, missing/zero semantics and the existing1000-contract liquidity threshold. Validate the original dollar price in the existing0..1range before unchanged six-place cent rounding, rejecting boolean and just-outside-bound values without changing valid prices or legacy cents. Validate markets-list envelopes/rows and string cursors, reject cursor cycles, preserve opaque cursors, market order, terminal completion and capped partial results. Exact frozen three-file delta on pristine actual main51b; all original22 test methods retained,9 synthetic/mock methods added; R1 original29 methods preserved plus2 price methods. Existing runtime CI already executes the suite. Independent143/143 price checks including40004 field comparisons, prior129/129 supplied-input cases,18/18 auxiliary and original Kalshi8/8 on Python3.12.14/3.13.5 are bounded reused evidence, not actual vendor execution. R1 evidence and its price failures remain separately archived. No endpoint, credentials, consent, rights, publication criteria, research, API, ledger or release changes. Technical consistency only; all existing65 publication blockers and policies/profile remain unchanged.",
+      "reviewed_at": "2026-11-23T00:32:20.994556+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "a7b3460363b9d5e207f8811a011e9535803c13d3b922e595ed9fda953566d0de",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.651514+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "56b3eefc073a870da604e301fcb2329fd30cf9524251edc329194adc9d484f8e",
+      "reviewed_by": "GPT root / ai_surface_fixes independent B6 Kalshi R2 technical compliance review 2026-11-23",
+      "review_note": "B6 Kalshi R2 supplied-input protocol fixes only: reject boolean, nonfinite, overflow and nonzero-string float-underflow contract counts; retain fixed-point precedence, legacy fallback, missing/zero semantics and the existing1000-contract liquidity threshold. Validate the original dollar price in the existing0..1range before unchanged six-place cent rounding, rejecting boolean and just-outside-bound values without changing valid prices or legacy cents. Validate markets-list envelopes/rows and string cursors, reject cursor cycles, preserve opaque cursors, market order, terminal completion and capped partial results. Exact frozen three-file delta on pristine actual main51b; all original22 test methods retained,9 synthetic/mock methods added; R1 original29 methods preserved plus2 price methods. Existing runtime CI already executes the suite. Independent143/143 price checks including40004 field comparisons, prior129/129 supplied-input cases,18/18 auxiliary and original Kalshi8/8 on Python3.12.14/3.13.5 are bounded reused evidence, not actual vendor execution. R1 evidence and its price failures remain separately archived. No endpoint, credentials, consent, rights, publication criteria, research, API, ledger or release changes. Technical consistency only; all existing65 publication blockers and policies/profile remain unchanged.",
+      "reviewed_at": "2026-11-23T00:32:20.997707+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "a8ed2ad15c4743062fa8d9f66e1b4d0558665e8a06bed838773b3fe160e83714",
-      "reviewed_by": "GPT root / compliance_validation independent Massive post-Alpaca integration technical review 2026-11-23",
-      "review_note": "Integrate frozen Massive3 on actual post-Alpaca main. Preserve the core/data network-import boundary, supplied metadata clocks and token semantics, Android mobile/staging/supplied-history inputs and existing EODHD/Alpaca tests; add one Massive suite. Existing synthetic cross-provider and parser/wheel evidence retains its original scope. Technical source/document consistency only; no actual provider acquisition, historical PIT, entitlement/rights or release approval; policies/profile unchanged.",
-      "reviewed_at": "2026-11-22T21:42:35.653664+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "16255892123501487fca40f989d7c00fe45d9f1da6f7fd9160dd8e8a98a496cd",
+      "reviewed_by": "GPT root / ai_surface_fixes independent B6 Kalshi R2 technical compliance review 2026-11-23",
+      "review_note": "B6 Kalshi R2 supplied-input protocol fixes only: reject boolean, nonfinite, overflow and nonzero-string float-underflow contract counts; retain fixed-point precedence, legacy fallback, missing/zero semantics and the existing1000-contract liquidity threshold. Validate the original dollar price in the existing0..1range before unchanged six-place cent rounding, rejecting boolean and just-outside-bound values without changing valid prices or legacy cents. Validate markets-list envelopes/rows and string cursors, reject cursor cycles, preserve opaque cursors, market order, terminal completion and capped partial results. Exact frozen three-file delta on pristine actual main51b; all original22 test methods retained,9 synthetic/mock methods added; R1 original29 methods preserved plus2 price methods. Existing runtime CI already executes the suite. Independent143/143 price checks including40004 field comparisons, prior129/129 supplied-input cases,18/18 auxiliary and original Kalshi8/8 on Python3.12.14/3.13.5 are bounded reused evidence, not actual vendor execution. R1 evidence and its price failures remain separately archived. No endpoint, credentials, consent, rights, publication criteria, research, API, ledger or release changes. Technical consistency only; all existing65 publication blockers and policies/profile remain unchanged.",
+      "reviewed_at": "2026-11-23T00:32:21.000628+00:00",
+      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
     }
   }
 }
