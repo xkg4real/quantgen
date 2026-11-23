@@ -176,6 +176,13 @@ class ResearchWindow(QMainWindow):
         from . import use_fusion_style, use_interface_fonts
         use_fusion_style()  # the look the style sheets and captures were made for, on Windows too
         use_interface_fonts()  # main() loads them first; a window built elsewhere gets the same face
+        app = QApplication.instance()
+        if (app is not None and getattr(app, "_qg_tooltip_theme_filter", None) is None
+                and all(widget is self for widget in app.topLevelWidgets())):
+            # Install the shared tooltip rules before the first window's child
+            # tree exists. Existing windows/popups keep their usual update time;
+            # change_theme still handles later font, screen and stylesheet changes.
+            typography.apply_tooltip_theme(app, DARK if theme_mode == "dark" else LIGHT)
         self.ctx = LocaleContext(locale or ("ko_KR" if language == "ko" else "en_US"))
         self.auto_refresh = auto_refresh
         self.ui_language = self.ctx.language

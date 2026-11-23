@@ -10,6 +10,63 @@ import unittest
 
 
 class DesktopApplicationStyleAcceptance(unittest.TestCase):
+    def test_first_window_prepares_its_tooltip_palette_before_building_children(self):
+        from unittest.mock import patch
+        from PyQt6 import sip
+        from PyQt6.QtGui import QIcon
+        from PyQt6.QtWidgets import QApplication
+        from quantgen_desktop import app as desktop
+
+        class BuildingCentralWidget(Exception):
+            pass
+
+        app = QApplication.instance() or QApplication([])
+        for mode, other_window, controller, expected in (
+            ("light", False, None, desktop.LIGHT),
+            ("dark", False, None, desktop.DARK),
+            ("dark", True, None, None),
+            ("light", False, object(), None),
+        ):
+            with self.subTest(mode=mode, other_window=other_window, has_controller=controller is not None):
+                window = desktop.ResearchWindow.__new__(desktop.ResearchWindow)
+                # Run the real constructor until it requests the central widget, before any pages exist.
+                with (patch("quantgen_desktop.use_fusion_style"), patch("quantgen_desktop.use_interface_fonts"),
+                      patch.object(desktop, "app_icon", return_value=QIcon()),
+                      patch.object(desktop, "QWidget", side_effect=BuildingCentralWidget),
+                      patch.object(desktop, "QApplication") as application,
+                      patch.object(desktop.typography, "apply_tooltip_theme") as apply):
+                    host = application.instance.return_value
+                    host.topLevelWidgets.return_value = [window, object()] if other_window else [window]
+                    host._qg_tooltip_theme_filter = controller
+                    try:
+                        with self.assertRaises(BuildingCentralWidget):
+                            window.__init__(theme_mode=mode, session=object(), auto_refresh=False)
+                        if expected is None:
+                            apply.assert_not_called()
+                        else:
+                            apply.assert_called_once_with(host, expected)
+                    finally:
+                        sip.delete(window)
+
+    def test_theme_changes_still_apply_the_tooltip_palette_after_the_window_stylesheet(self):
+        from unittest.mock import MagicMock, patch
+        from PyQt6.QtWidgets import QApplication
+        from quantgen_desktop import app as desktop
+
+        app = QApplication.instance() or QApplication([])
+        window = MagicMock(brand_symbol_svg=b"", language_store=None)
+        window.findChildren.return_value = []
+        for index, palette in ((1, desktop.DARK), (0, desktop.LIGHT)):
+            with self.subTest(index=index):
+                applied = []
+                window.setStyleSheet.side_effect = lambda sheet: applied.append(("window", sheet))
+                with (patch("quantgen_desktop.research_style.apply"),
+                      patch.object(desktop.typography, "window_stylesheet", return_value="test sheet"),
+                      patch.object(desktop.typography, "apply_tooltip_theme",
+                                   side_effect=lambda host, p: applied.append(("tooltip", host, p)))):
+                    desktop.ResearchWindow.change_theme(window, index)
+                self.assertEqual(applied, [("window", "test sheet"), ("tooltip", app, palette)])
+
     def check_fusion_lifetime(self):
         from PyQt6 import sip
         from PyQt6.QtCore import QEvent

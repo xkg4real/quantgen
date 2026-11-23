@@ -441,6 +441,37 @@
       "delivery": "NOT_SENT",
       "applied": false,
       "deployed": false
+    },
+    {
+      "date": "2026-11-23",
+      "execution_id": "c410c8b6-5827-4c19-b9f1-19bb911b41e3",
+      "source_parent": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d",
+      "scope": "First desktop window tooltip setup",
+      "changes_ko": [
+        "데스크톱 앱의 첫 창에서 차트와 입력칸을 만들기 전에 도움말 스타일을 적용하도록 수정했습니다."
+      ],
+      "source_pins": {
+        "quantgen_desktop/app.py": "d39b4c71d1ebf018488f1c446f1d9c263282d416"
+      },
+      "website_impact": "Owner copy for the desktop startup update.",
+      "local_validation": {
+        "platform": "Linux Qt 6.12 offscreen",
+        "paired_focus_runs_per_version": 1,
+        "instrumented_constructor_seconds": {
+          "before": 69.839,
+          "after": 33.682
+        },
+        "paired_matching_tooltip_captures": 16,
+        "paired_component_scenarios": 13,
+        "keyboard_focus_and_cleanup": "PASS",
+        "paired_measurement_sha256": "e7643197b5e3828f49f61e2f170d4dc51a0fe3cea4ccd364416bf7e97e2ec7fd",
+        "independent_visual_sha256": "d3082396b56446e20084227a8ba89acfdd90a8584e486b6bb052e3497beb7f44"
+      },
+      "actual_fresh_CI": "PENDING_NEW_HEAD",
+      "owner_windows_PC7": "NOT_PERFORMED",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false
     }
   ]
 }

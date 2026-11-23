@@ -457,7 +457,7 @@
     "pyproject.toml": "26bc966048250dd020d173d23b3a9f76fc3de0333e662a3aff8490228fb88382",
     "quantgen_desktop/__init__.py": "2e9060bc9787219412a78b3df496516752bb6e1e826f6e3670d5d1643a9cab75",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "7c0db9fe3896effbb5eaf0abfc869dab84499698640c7c2fd735df4511c456fd",
+    "quantgen_desktop/app.py": "2cb9deb599f0181b2ff31e8bd9eadf9d4751aa2dbb3d8e6bacefd9919730160d",
     "quantgen_desktop/bonds.py": "f7800546d42023f6f2c63b0c47be7d24a2c68a5058115922bba11dd30e794edf",
     "quantgen_desktop/bonds_portfolio_narrative.py": "6608e4940f3f4ee08305c8461b978fa1bb80c4c99545860a795716146771b893",
     "quantgen_desktop/category_picker.py": "7061468ea7104e6a2a3ff6989dd61373f653fc9acfb8ec587e3c077b6ed9e18d",
@@ -628,7 +628,7 @@
     "tests/desktop_risk_reward_acceptance.py": "2a8fa2311890a741e2ac442ccfe31a912cf652220c7bffd0fbb963f5dc8008a4",
     "tests/desktop_sabr_diagnostics_acceptance.py": "08498faacb4e6a1d028ac56c7f8969858c1413c565b476fe258bc566ea3c665e",
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
-    "tests/desktop_startup_visibility_acceptance.py": "3666afe67948a0e8e613d5745a59b52dd471cfbaa2e554b48953d4b409e195ed",
+    "tests/desktop_startup_visibility_acceptance.py": "8b0e688ba0f2bc1a75bd40209f01a9f62c0e7f094f377822f5b3f523a548583c",
     "tests/desktop_stock_detail_acceptance.py": "585d73a05907ef13ff8b9e001ed07ba005e1ede2ca5a5d37d46f0449cb8dc530",
     "tests/desktop_strategy_acceptance.py": "53a81cd62f958daacbfb3d0218585257530d8874e57769309298db2ca2c6b586",
     "tests/desktop_strategy_exposure_acceptance.py": "30c7e9f5c9132d77e546827f15232f769c27f19a60c6b21c3664772207c10ce4",
@@ -892,27 +892,27 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "2a69ab2647de800c54c04f8f91c09c5c4725d332d4aaad269c8310014f553e86",
-      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
-      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
-      "reviewed_at": "2026-11-23T01:57:18.385425+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "e93df2231565564a12cbdab52ca4e7a5a74c1d29ffef11b241b8a90538ee0caa",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.212912+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "2a69ab2647de800c54c04f8f91c09c5c4725d332d4aaad269c8310014f553e86",
-      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
-      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
-      "reviewed_at": "2026-11-23T01:57:18.388154+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "e93df2231565564a12cbdab52ca4e7a5a74c1d29ffef11b241b8a90538ee0caa",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.216266+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "654c5f141e89e4a2d92f84ad0edf20d09bc39fda2d5ce0d9b82984867c6c68e5",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.516038+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "3d8db0edd7355f321aa51e51371896ce7ca6a3e9c2cc116f0447714bae950ff4",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.218877+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
@@ -932,107 +932,107 @@
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "4f8b7b50a4e56333c1d3e4b7f1bc091bc606cf2a7c18aef837e03f3879966a85",
-      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
-      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
-      "reviewed_at": "2026-11-23T01:57:18.390723+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "697940e463c347e0294c775a629aa4a2e77ac3bba4e02bd234b014852d5bae4f",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.221161+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "2a69ab2647de800c54c04f8f91c09c5c4725d332d4aaad269c8310014f553e86",
-      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
-      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
-      "reviewed_at": "2026-11-23T01:57:18.392918+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "e93df2231565564a12cbdab52ca4e7a5a74c1d29ffef11b241b8a90538ee0caa",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.224344+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     },
     "8": {
       "document_sha256": "d18aa347fc7bb730a047392049afb9d79212cf209ba651b9ca4dfde7354fe68f",
-      "source_digest": "4f8b7b50a4e56333c1d3e4b7f1bc091bc606cf2a7c18aef837e03f3879966a85",
-      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
-      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
-      "reviewed_at": "2026-11-23T01:57:18.395164+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "697940e463c347e0294c775a629aa4a2e77ac3bba4e02bd234b014852d5bae4f",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.226354+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "dcaccebbe0f3f65619791856328b80d34e974eba1816aca8165bef85e2d14ca8",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.530875+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "5904a0516353182a4f2e52ef1b4ea500d3e4f0cdd60eac6f40d69c0be406b7a4",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.228710+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "ebd6e2b7aff2c9d42d419ebae6b5ad4033155682717498a9b7419c10707d1158",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.532806+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "0eef0411b46a133ebd222413354f5a61c8b59fdb4056db03923b25446704e492",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.231365+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "6001e144693ae15bb75217f5ab097f4d6064e4166e15a808c92261ca0ebb7e33",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.535490+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "d94879931e79ff42dd0e0864d6e4a1a578098e5d36f91502a21a3983a14fb80f",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.233778+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     },
     "12": {
       "document_sha256": "18af1551af29075d92583d7bc84a780f3719662115a7b26e4aeb9efd760d1afc",
-      "source_digest": "0b1160270d285fef924bc91805431ea58fa785475258f48a00ae937cf5c0f3ae",
-      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
-      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
-      "reviewed_at": "2026-11-23T01:57:18.397165+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "05a34fdd857220a1b880ebdf61b9e2fcbe547238c1cda68347d7e8b997498f5e",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.236288+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "dcaccebbe0f3f65619791856328b80d34e974eba1816aca8165bef85e2d14ca8",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.541209+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "5904a0516353182a4f2e52ef1b4ea500d3e4f0cdd60eac6f40d69c0be406b7a4",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.239289+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "dcaccebbe0f3f65619791856328b80d34e974eba1816aca8165bef85e2d14ca8",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.543359+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "5904a0516353182a4f2e52ef1b4ea500d3e4f0cdd60eac6f40d69c0be406b7a4",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.242070+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "dcaccebbe0f3f65619791856328b80d34e974eba1816aca8165bef85e2d14ca8",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.545643+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "5904a0516353182a4f2e52ef1b4ea500d3e4f0cdd60eac6f40d69c0be406b7a4",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.244567+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "295f423c47894a91cec8f582c4213d546d9dc3c2e80601854cf898ccfa8f1ac5",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: UI140 main51b tooltip source-policy review 2026-11-23",
-      "review_note": "Reviewed all20 source-policy impacts on actual main51b plus preserved e995 UI and Massive3 files, frozen tooltip theme fix, existing market fixture cleanup and workflow union. Preserve existing numbered-policy text and FACTS, SKU/API/provider behavior and all publication gates. Tooltip change keeps appearance and originating-widget precedence while isolating theme repolish; genuine Linux Qt regression baseline fails new case, frozen candidate5/5 passes. One original market testcase repeated twice per variant shows owned windows1to2 before versus0to0 after; all47 test bodies retained. These bounded receipts do not prove complete app performance, full CI, Windows/manual use, legal/licensing/API/pilot/research completion or sole cause of prior CI timeouts. PR140 web JSON is separately pinned, not a discovered source. Technical source/document consistency only; actual main HEAD plus observed working-tree fingerprints, not clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T00:05:26.547999+00:00",
-      "source_commit": "51b82989ecc7980f47cede0de18e1ebe5bc51ab6"
+      "source_digest": "fca7fe67692abecc9602b830c71cbbf56771281168d32b03a7fd2d0da8a6b463",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.247496+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "4f8b7b50a4e56333c1d3e4b7f1bc091bc606cf2a7c18aef837e03f3879966a85",
-      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
-      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
-      "reviewed_at": "2026-11-23T01:57:18.400021+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "697940e463c347e0294c775a629aa4a2e77ac3bba4e02bd234b014852d5bae4f",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.249526+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "2a69ab2647de800c54c04f8f91c09c5c4725d332d4aaad269c8310014f553e86",
-      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
-      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
-      "reviewed_at": "2026-11-23T01:57:18.402226+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "e93df2231565564a12cbdab52ca4e7a5a74c1d29ffef11b241b8a90538ee0caa",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.251972+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
@@ -1044,11 +1044,11 @@
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "2a69ab2647de800c54c04f8f91c09c5c4725d332d4aaad269c8310014f553e86",
-      "reviewed_by": "GPT ai_policy_records: UI140 R2 fixture plus actual-main DIDM source-policy review",
-      "review_note": "Reviewed all20 policy impacts of the exact UI170369 source plus current main05f DIDM fullmatch validation and independently checked synthetic stock fixture R2. Only10 affected technical review records refresh; unchanged10 remain intact. Fixture covers existing read-only KIS GETs with exact routes/TR IDs/params/retry false and parsed synthetic outputs, and corrects stale PBR/BPS expected labels without changing product UI/provider routes or assertions on failure reasons. DIDM main change rejects trailing-newline identifier/hash suffixes; no real provider or research verification. Existing UI policy text, FACTS, marketing/website, approvals and65 publication blockers remain. Technical source/document consistency only, actual main HEAD plus combined working-tree fingerprints; no actual API, Windows/PC, wholeCI or release claim.",
-      "reviewed_at": "2026-11-23T01:57:18.406377+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "e93df2231565564a12cbdab52ca4e7a5a74c1d29ffef11b241b8a90538ee0caa",
+      "reviewed_by": "GPT ai_policy_records: UI140 first-window tooltip initialization source-policy review",
+      "review_note": "Reviewed all20 policy impacts on authenticated UI branch a7eb plus frozen app/test/append-only web record. Existing tooltip helper is invoked before child construction only with no existing controller or other top-level widget; original later theme/font/screen behavior remains. Tests preserve prior module AST and add two focused regressions. Independent Linux/offscreen component13-per-side, matched16 tooltip observations and one paired constructor timing are separate limited evidence, not benchmarks or Windows/PC/fullCI proof. Website revision preserves prior entries and remains NOT_SENT/unapplied/undeployed. Refresh only17 affected records; preserve4,5,19 and all policy text/65 publication blockers. Actual UI HEAD plus candidate working-tree fingerprints, not default-main attribution, legal/licensing approval or public release.",
+      "reviewed_at": "2026-11-23T02:20:51.254150+00:00",
+      "source_commit": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d"
     }
   }
 }
