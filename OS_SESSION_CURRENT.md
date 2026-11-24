@@ -6,11 +6,11 @@ task: os-expansion
 cycle: 2026-11-24
 done_ids: OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, OS-F2
 next_ids: OS-F1
-updated_at: 2026-11-24T20:30:00+09:00
+updated_at: 2026-11-24T23:30:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: claude/os-android-apk-evidence-20261124
-work_commit: 94f257d
+work_branch: claude/os-sale-build-check-20261124
+work_commit: b5d2720
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -28,7 +28,11 @@ session: https://claude.ai/code/session_016uB1jgXiwx42FSUU5ANwM7
 **재개 2026-11-24 (메인 지시 O1·O2·O3).** git으로 확인한 것: GPT가 OS-F2를 병합(PR #136 → main 72a055f; 내 e44c48e와 PySide6 종료 원인 기록 5커밋 포함, 원장 OS-F2). Android 내부 프리뷰 PR #141(666e006) 병합. main b872d8c.
 - **O1 완료** — `claude/os-android-apk-evidence-20261124` @ `94f257d` = gpt `c28194f` + merge main b872d8c. source-review.json 충돌은 main 쪽을 받음(기준선은 PR 차례에 마지막 갱신). android_apk_evidence 시험 Ran 8 OK, 패키징·qt_port 5모듈 Ran 34 OK. `--check`는 기준선 미갱신이라 FAIL(main은 PASS). PR은 MERGE_QUEUE 12번 "병합: OS" 뒤.
 - **O3 완료** — `claude/os-data-folder-guide-20261124` @ `000e210`: docs/product/OS_DATA_FOLDER_OWNER_GUIDE_2026-11-24.md(지금은 옮기지 말 것, 확인·옮기기·되돌리기). 경로 시험 Ran 93 OK (skipped=3).
-- **O2 진행 중** — UI PR #140 head 3483b53: lint 39건(414eceb 38건 + `name` 1건, 도구 자기 이름 오탐), `switch_day --check` 7곳 모두 "to do"(어긋남 0). 시장 탭 160회×2(일반·tcache 끔) 저장소 밖 사본에서 실행 중(스크래치 abort/w140, ui140_repeat.txt). 발견: stock_insights.py:82 `self.metric`이 QWidget.metric()을 가려 PySide6 전용 TypeError(657523d). #140의 1527 포커스 실패는 바인딩 무관.
+- **O2 진행 중** — UI PR #140 head 3483b53: lint 39건(414eceb 38건 + 도구 자기 이름 오탐 1, 규칙 16 브랜치에서 고침), `switch_day --check` 7곳 모두 "to do"(어긋남 0). 시장 탭 160회×2(일반·tcache 끔) 저장소 밖 사본에서 실행 중(스크래치 abort/w140·w140t, ui140_repeat.txt; 23:30 KST 일반 48/160, abort 0). 발견: stock_insights.py:82 `self.metric`이 QWidget.metric()을 가려 PySide6 전용 TypeError(657523d). #140의 1527 포커스 실패는 바인딩 무관(PyQt6 5/5, PySide6 이름 수정본 3/3 같은 단언).
+- **lint 규칙 16 완료** — `claude/os-qt-lint-shadow-20261124` @ `0a92e58`(16-shadow: Qt 가상 함수 이름 속성 대입; main 0건, #140 1건 = stock_insights.py:82).
+- **O4 완료** — `claude/os-macos-differences-20261124` @ `530bcf6`: docs/platform/MACOS_DIFFERENCES_2026-11-24.md(20항목), spec darwin 아이콘·버전·LSMinimumSystemVersion 14, selfcheck os_credential_store.
+- **O5 완료** — `claude/os-sale-build-check-20261124` @ `b5d2720`(O4 포함, selfcheck 충돌 해결): flet-cli 전용 패키지·NEXTGEN 로고 제외, 고지 누락(chardet) 해소, selfcheck sale_build_contents. 요청: 판매 빌드 데이터 프로필이 코드 상수 personal(core 몫).
+- 병합: 메인이 통합 PR로 묶음(이 세션은 PR 안 엶). 통합 대상: apk-evidence 94f257d, data-folder-guide 000e210, qt-lint-shadow 0a92e58, sale-build-check b5d2720(O4 포함).
 
 ## 1. 목표와 완료 조건
 
@@ -128,10 +132,9 @@ python -m tools.compliance.check --check -> consistency FAIL (새 파일; PR 직
 
 ## 6. 다음 할 일 (순서대로)
 
-1. O2: 160회×2 끝나면 abort 수 확인(완료 기준 0), 표(414eceb 대 3483b53 lint 규칙별 건수)와 함께 메인에 보고.
-2. O1 PR: MERGE_QUEUE 12에 "병합: OS"가 적히면 최신 main merge → `python -B -m tools.compliance.check --refresh-baseline` → `--check` PASS → PR(platform-build.yml 실행·서명 안 함).
-3. O3: PR 자리는 메인이 정함(필요하면 기준선 갱신).
-4. OS-F1: UI PR #140 병합 + 소유자 "OS go" 뒤.
+1. O2: `cat <스크래치>/abort/ui140_repeat.txt`가 DONE140이면 일반·tcache 끔 각각 fatal 수 확인(완료 기준 0) → 메인에 보고(lint 표·switch_day·포커스 의견 포함).
+2. 메인 통합 PR 검토 요청이 오면 내 4개 브랜치 부분 확인.
+3. OS-F1: UI PR #140 병합 + 소유자 "OS go" 뒤.
 
 ## 7. 주간 지표 (D9 진척)
 
