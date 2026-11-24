@@ -14,7 +14,7 @@
 <line x1="60" y1="50.0" x2="740" y2="50.0" stroke="#e3e3e3"/>
 <text x="52" y="54.0" text-anchor="end" fill="#555">100%</text>
 <line x1="60" y1="102.0" x2="740" y2="102.0" stroke="#c0392b" stroke-dasharray="6 4" stroke-width="1.5"/>
-<text x="740" y="97.0" text-anchor="end" fill="#c0392b">등록 기준 80%</text>
+<rect x="188" y="80.0" width="92" height="15" fill="#ffffff"/><text x="192" y="97.0" text-anchor="start" fill="#c0392b">등록 기준 80%</text>
 <rect x="75.9" y="50.0" width="36.3" height="260.0" fill="#2f6fab"/>
 <text x="94.0" y="46.0" text-anchor="middle" fill="#222">100</text>
 <rect x="116.1" y="50.0" width="36.3" height="260.0" fill="#d9822b"/>
