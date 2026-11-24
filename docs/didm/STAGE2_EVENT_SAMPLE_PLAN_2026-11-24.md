@@ -3,7 +3,11 @@
 - 작성: DATA_SOURCE 세션 (메인 지시 D15). **계획 문서**입니다. 공급사 호출·코드 변경 없음.
 - 배경: Alpaca·Massive 뉴스는 약관상 개인·비상업 전용이라 연구 표본에서 뺐습니다 (`core/didm/ingest/terms.py`, `SAMPLE_EXPANSION_FEASIBILITY_2026-11-24.md` 9·10절). 남는 무료·상업 가능 경로가 이 세 수집원입니다.
 - 표기: **확인** = 이 저장소 코드·시험 또는 원문으로 본 것. **어림** = 이 문서의 계산 (근거 적음). **미검증** = 확인 못 함.
-- GDELT 약관: "unlimited and unrestricted use for any academic, commercial, or governmental use of any kind without fee", 재배포·사용 시 인용과 링크 필수 — **검색 요약 기준, 미검증** (`www.gdeltproject.org` 원문은 메인이 허용 요청 중. 허용되면 원문 인용으로 바꿈).
+- GDELT 약관 (원문, www.gdeltproject.org/about.html "Terms of Use" 절, 확인일 2026-11-24 (소유자 허용 호스트); 법률 자문 아님):
+  - 상업 이용: "The GDELT Project is an open platform for research and analysis of global society and thus all datasets released by the GDELT Project are available for unlimited and unrestricted use for any academic, commercial, or governmental use of any kind without fee."
+  - 재배포·인용 의무: "You may redistribute, rehost, republish, and mirror any of the GDELT datasets in any form. However, any use or redistribution of the data must include a citation to the GDELT Project and a link to this website (https://www.gdeltproject.org/)." → 수집기는 이미 인용 문구 (`gdelt.ATTRIBUTION`)를 출력함; 제품·논문에 쓸 때도 같은 인용과 링크.
+  - 모델 학습: **원문에 해당 조항 없음** (위 "unlimited and unrestricted use ... of any kind" 외에 학습을 따로 다루는 문장 없음). 데이터 페이지 (www.gdeltproject.org/data.html): "The entire GDELT database is 100% free and open".
+  - 주의: 이 약관은 GDELT가 만든 자료 (사건·GKG 행)에 대한 것이며, 행이 가리키는 **기사 본문의 권리는 각 언론사**에 있음 (약관에 기사 본문 권리 언급 없음). 지금 원칙대로 제목·URL·메타데이터만 저장.
 
 ## 1. 무엇을 사건으로 쓰나
 
@@ -109,7 +113,7 @@ GDELT 권장: (a) 사건 연구 날짜 주변 창 (예: 8-K 사건일 ±1일)만
 
 ## 9. 미검증
 
-- GDELT 약관 원문 (허용 요청 중), GKG 하루 건수·파일 크기, GKG `page_title`이 2015년 초부터 채워지는지, 주제 (themes) 이름 목록.
+- GKG 하루 건수·파일 크기, GKG `page_title`이 2015년 초부터 채워지는지, 주제 (themes) 이름 목록.
 - EDGAR 공개 지연 (acceptance → 공개), 종목당 연간 8-K 수, 7.01·8.01 비중.
 - OpenDART report_nm 문구 목록 (4절은 부분 문자열 예시), 요청 한도의 집계 기간.
 - BigQuery 경로의 요금·약관.
