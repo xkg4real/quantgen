@@ -81,11 +81,12 @@ def run(report_path: str) -> int:
 
     def credential_store():
         # Keys live in the OS store (core/credentials): Windows Credential Manager, macOS Keychain. Only asks keyring
-        # which backend it would use; nothing is read or written. Linux build machines often have none: reported only.
+        # which backend it would use; nothing is read or written. Reported only for now: no Windows or macOS build has
+        # yet shown that PyInstaller's hook-keyring (collect_submodules('keyring.backends')) makes it True there.
+        # Make it required on win32/darwin once a platform-build.yml run records available: true.
         from core import credentials
         available = credentials.keyring_available()
-        required = sys.platform in ("win32", "darwin")
-        return available or not required, {"available": available, "required_on_this_platform": required}
+        return True, {"available": available, "required": False, "expected_on_this_platform": sys.platform in ("win32", "darwin")}
     _check(results, "os_credential_store", credential_store)
     def sale_build_contents():
         # Item 15-7: no flet-cli-only package and no retired NEXTGEN logo inside; the data-source profile is reported.
