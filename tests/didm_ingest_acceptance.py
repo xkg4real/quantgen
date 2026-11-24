@@ -167,6 +167,40 @@ class Alfred(unittest.TestCase):
         with self.assertRaises(alfred.AlfredError):
             alfred.rows_from_api("CPIAUCSL", self.API, datetime(2026, 11, 5))
 
+    def test_invalid_vintage_periods_rejected_by_api_and_manual(self):
+        for start, end in (
+            ("2024-02-29", "unknown"),
+            ("2024-02-29", "2024-02-30"),
+            ("2024-02-29", "2024-02-29garbage"),
+            ("2024-02-29bad", "9999-12-31"),
+            ("2024-02-29", "2024-02-28"),
+        ):
+            with self.subTest(start=start, end=end):
+                observation = dict(self.API["observations"][0], realtime_start=start, realtime_end=end)
+                with self.assertRaises(alfred.AlfredError):
+                    alfred.rows_from_api("CPIAUCSL", {"observations": [observation]}, RECEIVED)
+                with self.assertRaises(alfred.AlfredError):
+                    alfred.rows_from_manual("CPIAUCSL", [(observation["date"], "100", start, end)], RECEIVED)
+
+    def test_inclusive_leap_day_and_open_ended_revision(self):
+        first = ("2024-01-01", "100", "2024-02-29T23:00:00-05:00", datetime(2024, 2, 29))
+        revised = ("2024-01-01", "101", datetime(2024, 3, 1).date(), None)
+        rows = alfred.rows_from_manual("CPIAUCSL", [first, revised], RECEIVED)
+        for cutoff, expected in (("2024-02-28", None), ("2024-02-29", 100),
+                                 ("2024-03-01", 101), ("9999-12-31", 101)):
+            with self.subTest(cutoff=cutoff):
+                self.assertEqual(alfred.value_as_known_on(rows, "2024-01-01", cutoff), expected)
+        self.assertEqual(rows[0]["published_at"], datetime(2024, 2, 29, tzinfo=timezone.utc))
+        self.assertEqual(rows[1]["payload"]["realtime_end"], "9999-12-31")
+
+    def test_existing_invalid_vintage_does_not_supply_a_later_value(self):
+        row = alfred.rows_from_api("CPIAUCSL", self.API, RECEIVED)[0]
+        for end in ("unknown", "2026-10-14", "2026-10-15garbage"):
+            with self.subTest(end=end):
+                legacy = {"payload": dict(row["payload"], realtime_end=end)}
+                with self.assertRaises(alfred.AlfredError):
+                    alfred.value_as_known_on([legacy], "2026-09-01", "2099-01-01")
+
     def test_into_store(self):
         rows = alfred.rows_from_api("CPIAUCSL", self.API, RECEIVED)
         with tempfile.TemporaryDirectory() as tmp, PointInTimeStore(Path(tmp) / "s.sqlite") as st:
