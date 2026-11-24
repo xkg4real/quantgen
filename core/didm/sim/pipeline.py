@@ -28,6 +28,7 @@ from core.didm.llm import cutoffs
 from core.didm.llm import scorer as sc
 from core.didm.llm.judgement import ScoreRequest
 from core.didm.llm.schema import MarketConfirmation, ScoreRecord
+from core.didm.models import confirmation, confirmation_log
 
 
 class PipelineError(ValueError):
@@ -48,6 +49,7 @@ class Stages:
     cells: dict[tuple[int, str, str], shock.Cell]        # (decision index, entity, event type value) -> cell
     dropped: dict[str, int]
     weights_version: str
+    judgement_seal: dict[str, str]                       # record_id -> hash of the validated judgement
 
 
 def record_id(article_id: str, entity_id: str) -> str:
@@ -137,8 +139,9 @@ def run(articles: Sequence, *, linker: Linker, scorer: sc.Scorer, decisions: Seq
             cells[(index, entity, etype.value)] = cell
         for name in dropped:
             dropped[name] += getattr(drop, name)
+    seals = {record_id(req.article_id, req.entity_id): jud.seal for req, jud in batch.judgements}
     return Stages(records, record_article, origin_of, event_of, reports, batch.reject_counts,
-                  assembled.reject_counts, unlinked, cells, dropped, weights.version)
+                  assembled.reject_counts, unlinked, cells, dropped, weights.version, seals)
 
 
 def panel(stages: Stages, entity_ids: Sequence[str], n_decisions: int) -> dict[str, np.ndarray]:
@@ -153,6 +156,42 @@ def panel(stages: Stages, entity_ids: Sequence[str], n_decisions: int) -> dict[s
     out["abs_shock"] = np.abs(out["shock"])
     out["uncertainty"] = np.divide(out["uncertainty"], weight, out=np.zeros_like(weight), where=weight > 0)
     return out
+
+
+def confirmation_entries(stages: Stages, *, returns: np.ndarray, market: np.ndarray, entity_ids: Sequence[str],
+                         decisions: Sequence[datetime],
+                         config: confirmation.ConfirmationConfig = confirmation.DEFAULT_CONFIG) -> tuple:
+    """The didm-confirmation-v0 side record for every record: PENDING when the article is received, then
+    whatever the registered rule says at each later decision, appended only when the verdict changes.
+
+    ``returns[d]`` and ``market[d]`` are the returns of day d, which is closed by ``decisions[d + 1]``.
+    At decision k the returns of days up to k - 1 are known, and nothing later is read.
+    """
+    column = {e: i for i, e in enumerate(entity_ids)}
+    log: tuple = ()
+    for record in sorted(stages.records, key=lambda r: (r.received_at, r.record_id)):
+        seal = stages.judgement_seal[record.record_id]
+        log = confirmation_log.append(log, confirmation_log.make_entry(
+            record_id=record.record_id, judgement_sha256=seal, status=MarketConfirmation.PENDING,
+            known_at=record.received_at, config=config))
+        closing = next((k for k in range(1, len(decisions)) if decisions[k - 1] < record.received_at <= decisions[k]), None)
+        if closing is None or record.entity_id not in column:
+            continue
+        day = closing - 1
+        sign = record.direction_probs[0] - record.direction_probs[1]
+        direction = 1 if sign > 0 else (-1 if sign < 0 else 0)
+        last = MarketConfirmation.PENDING
+        for k in (closing, closing + 1):
+            if k >= len(decisions) or k - 1 >= len(market):
+                break
+            verdict = confirmation.confirm_daily(returns[:, column[record.entity_id]], market, event_index=day,
+                                                 last_known_index=k - 1, predicted_direction=direction, config=config)
+            if verdict.status is not last:
+                log = confirmation_log.append(log, confirmation_log.make_entry(
+                    record_id=record.record_id, judgement_sha256=seal, status=verdict.status,
+                    known_at=decisions[k], config=config))
+                last = verdict.status
+    return log
 
 
 def eligibility_summary(records: Sequence[ScoreRecord], registry: cutoffs.Registry) -> dict[str, int]:

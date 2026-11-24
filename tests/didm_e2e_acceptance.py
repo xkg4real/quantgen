@@ -174,6 +174,43 @@ class FullWorld(unittest.TestCase):
         self.assertTrue(all("Novaquill Partners" in titles[c.index] for c in after))
         self.assertFalse(any("Novaquill Partners" in titles[c.index] for c in before))
 
+    def test_11_market_confirmation_side_record_is_point_in_time(self):
+        """DIDM-8/a: verdicts are appended beside the records; a reader at a decision sees what the
+        registered rule could know then, and nothing that became known later."""
+        from core.didm.llm.schema import MarketConfirmation as MC
+        from core.didm.models import confirmation as cf
+        from core.didm.models import confirmation_log as cl
+        w, dec = self.world, decisions(self.world)
+        log = pl.confirmation_entries(self.stages, returns=w.returns, market=w.market, entity_ids=w.entity_ids,
+                                      decisions=dec)
+        self.assertGreater(len(log), len(self.stages.records))                # PENDING for all, later verdicts for some
+        final = {e.status for e in log}
+        self.assertIn(MC.PENDING, final)
+        self.assertTrue(final & {MC.CONFIRMED, MC.CONTRADICTED, MC.ALREADY_PRICED})
+        self.assertTrue(all(r.market_confirmation is MC.PENDING for r in self.stages.records))   # records untouched
+        column = {e: i for i, e in enumerate(w.entity_ids)}
+        changed = [e for e in log if e.status is not MC.PENDING][:150]
+        self.assertGreater(len(changed), 20)
+        records = {r.record_id: r for r in self.stages.records}
+        for e in changed:
+            record = records[e.record_id]
+            k = dec.index(e.known_at)
+            day = next(i for i in range(1, len(dec)) if dec[i - 1] < record.received_at <= dec[i]) - 1
+            sign = record.direction_probs[0] - record.direction_probs[1]
+            direction = 1 if sign > 0 else -1
+            # what the rule says with returns cut at the day before that decision ...
+            cut_returns = w.returns[:k, column[record.entity_id]]
+            now = cf.confirm_daily(cut_returns, w.market[:k], event_index=day, last_known_index=k - 1,
+                                   predicted_direction=direction)
+            self.assertIs(now.status, e.status)
+            # ... and one decision earlier the reader did not see it yet
+            self.assertIsNot(cl.status_as_of(log, e.record_id, dec[k - 1]), e.status)
+            self.assertIs(cl.status_as_of(log, e.record_id, dec[k]), e.status)
+            self.assertEqual(e.judgement_sha256, self.stages.judgement_seal[e.record_id])
+        # nothing in the log is dated after the last decision, and the shocks do not depend on the log
+        self.assertLessEqual(max(e.known_at for e in log), dec[-1])
+        np.testing.assert_allclose(self.panel["shock"][1:], self.oracle["shock"], rtol=0, atol=1e-12)
+
     def test_6_training_cutoff_rule_applies_to_the_records(self):
         def registry(cutoff):
             return cutoffs.REGISTRY.with_card(cutoffs.ModelCard(

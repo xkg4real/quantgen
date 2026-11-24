@@ -36,6 +36,25 @@ M1과 M5는 판정이 달라질 수 있어 설정값 (`confirmation.Confirmation
 
 이 모듈은 가격 출처를 import하지 않습니다 (`core/**`는 `data.didm`을 import할 수 없음). 수익률 배열, 발표치, 컨센서스, 확률, 거래량을 모두 인자로 받습니다. 시점 규칙 (그 시각에 알 수 있던 값만)은 호출자가 저장소의 `as_of()`로 지키고, 이 모듈은 `last_known_index` 뒤를 읽지 않는 것으로 한 번 더 막습니다.
 
+## 3.1 판정을 쌓는 곁기록 `didm-confirmation-v0` (DIDM-8/a)
+
+레코드는 조립할 때 굳고, 그때는 사건 창이 끝났을 수 없어 `market_confirmation`이 언제나 PENDING입니다. 판정은 며칠 뒤에 나옵니다. 레코드를 고치지 않고 판정을 **덧붙이기 전용 곁기록**에 쌓습니다 (`core/didm/models/confirmation_log.py`).
+
+| 필드 | 뜻 |
+|---|---|
+| `schema` | `didm-confirmation-v0` |
+| `record_id` | 어느 레코드의 판정인가 |
+| `judgement_sha256` | 그 레코드를 만든 판단의 해시 (검증 표식). 같은 레코드에 다른 판단의 판정이 섞이면 거부 |
+| `status` | CONFIRMED / CONTRADICTED / ALREADY_PRICED / PENDING |
+| `known_at` | 그 판정을 **알게 된 시각** (시간대 필수) |
+| `rule_version` | 판정 규칙의 판 (`conf-rule-…`): 등록 숫자와 고른 해석 (`ConfirmationConfig`)의 해시 |
+| `window` | 쓴 창: `{kind: daily, first: 0, last: 1}` 또는 `{kind: intraday, first: 0, last: 60}` |
+
+- **읽는 규칙:** `as_of(곁기록, record_id, 결정 시각)`은 `known_at ≤ 결정 시각`인 줄 중 마지막 것만 돌려줍니다. 아직 아무것도 모르면 PENDING입니다. 나중에 알게 된 판정은 곁기록에 이미 들어 있어도 앞선 결정에서는 보이지 않습니다.
+- **덧붙이기 규칙:** 앞 줄은 바뀌지 않습니다. 같은 레코드에서 더 이른 `known_at`의 줄, 같은 규칙 판에서 확정 판정을 바꾸는 줄은 거부합니다. 규칙 판이 다르면 (해석을 바꿔 다시 판정) 새 줄로 쌓이고, 읽을 때 규칙 판을 골라 읽을 수 있습니다.
+- **파일은 열지 않습니다.** `dumps`/`loads`가 한 줄 JSON을 주고받고, 어디에 쌓을지는 호출자 몫입니다. 저장 위치는 시점 저장소 규칙에 맞춰야 하며 메인이 DATA_SOURCE와 조율합니다 (미정).
+- 끝에서 끝까지 실행 (`pipeline.confirmation_entries`)은 기사를 받은 때 PENDING 한 줄, 그 뒤 결정 시각마다 등록 규칙을 다시 적용해 판정이 바뀔 때만 한 줄을 더합니다. 시험: 곁기록의 판정이 "그 결정 시각까지의 수익률만 잘라서 다시 판정한 것"과 같고, 한 결정 앞에서는 보이지 않으며, 충격은 곁기록과 무관합니다.
+
 ## 4. 아직 없는 것
 
 - 실제 자료 연결 (어느 지수를 시장으로 쓰는지: 사전등록은 KOSPI·S&P 500), 거래일 달력 맞춤, 일중 자료.
@@ -48,4 +67,4 @@ M1과 M5는 판정이 달라질 수 있어 설정값 (`confirmation.Confirmation
 python -B -m unittest tests.didm_confirmation_acceptance
 ```
 
-2026-11-24: 22개 통과. 한 줄 변형 20가지 (문턱, √n 환산, 판정 순서, 창 범위, 미래 자료 읽기, 유동성 하한, 표준편차 식 등) 모두 시험 실패.
+2026-11-24: 28개 통과 (곁기록 6개 포함; 곁기록 변형 14가지 모두 시험 실패). 한 줄 변형 20가지 (문턱, √n 환산, 판정 순서, 창 범위, 미래 자료 읽기, 유동성 하한, 표준편차 식 등) 모두 시험 실패.
