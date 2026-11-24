@@ -6,7 +6,7 @@ CI를 아끼려고 준비된 브랜치를 묶어서 올린다. source-review.jso
 
 | 차례 | 항목 | 들어가는 브랜치 @ 커밋 | 상태 |
 |---|---|---|---|
-| 12~14 | **통합 PR ①** `claude/integration-20261124` | os-android-apk-evidence `94f257d`, os-data-folder-guide `000e210`, ds-connector-fixes `241c0f4`, ds-home-diagnose `b70a78d`, ds-new-sources-plan `6a6516d`, payments-key5a-closeout `502802e`, didm-dev `3626913`(DIDM-2, DIDM-3/a) + 메인 문서(REMAINING_WORK 2026-11-24판, CLAUDE.md, 인계 도구 세션 칸, 결정 기록, CI 시험 목록) | 메인 독립 검토 중 → 기준선 갱신 → PR → CI → 병합 |
+| 12~14 | **통합 PR ①** `claude/integration-20261124` → [PR #150](https://github.com/xkg4real/quantgen/pull/150) @ `4f53f86` | os-android-apk-evidence `94f257d`, os-data-folder-guide `000e210`, ds-connector-fixes `241c0f4`, ds-home-diagnose `b70a78d`, ds-new-sources-plan `6a6516d`, payments-key5a-closeout `502802e`, didm-dev `3626913` + 검토 수정(didm-contract-fixes `feed288`, ds-review-fixes `42795e6`, os-review-fixes `7d6936e`) + 메인 문서 | 독립 검토 5갈래와 수정 재확인 끝(`plans/2026-11-24/INTEGRATION1_REVIEW.md`), 기준선 갱신, **PR 열림(2026-11-24 20:23 KST), CI 진행 중** → 녹색이면 메인이 merge commit으로 병합 |
 | 15 | 정책 문서 PR-2 (회원 계정, 8문서) | policy-pr2 `ba16dce` | 통합 PR ① 병합 뒤 **"병합: PAYMENTS_ACCOUNT_KEYS (P4)"** 를 여기에 적는다. 단독 PR |
 | 16 | **통합 PR ②** | os-qt-lint-shadow `0a92e58`, os-macos-differences `530bcf6`(근거 확인 뒤), ds-collection-status `b4d48bc`, ds-5bc-news `4a646ce`(소유자 N0 승인 확인 뒤), payments-design `31bd651`, didm-dev의 `3626913` 뒤 커밋(보고된 것만) | 15와 기준선이 겹치므로 15 뒤 |
 | 5 | UI PR #140 | `gpt/ui-guide-chart-first-20261121` @ `3483b53` | 그대로: CI 실패·충돌, 담당 미정(OA-48) |
