@@ -7,23 +7,23 @@
 ---
 
 ---
-status: returned
-reason: owner_directed_transfer_to_quantgen_main_codex
-from: gpt
-task: data-source-didm
-cycle: 2026-11-17
+status: checkpoint
+reason: milestone
+from: claude
+task: data-source
+cycle: 2026-11-24
 done_ids: none
-next_ids: DS-H, DS-1, DIDM-0, DIDM-1, DS-4a, DS-4d, DS-4e
-updated_at: 2026-11-21T17:35:29+09:00
+next_ids: DS-5b, DS-5c, DS-5a
+updated_at: 2026-11-24T18:38:22+09:00
 stale_after_hours: 3
-waiting_on: none
-work_branch: gpt/data-source-didm-20261121 (+ gpt/ds-home-indicators-20261121)
-work_commit: abd10c6f8a53df5be8c8eff9d89ecb9eb6837de0 (DIDM); 4973111e00ede39d81afc6f3bee894f06fb575fd (DS-H)
+waiting_on: owner
+work_branch: claude/ds-connector-fixes-20261124 (+ claude/ds-home-diagnose-20261124, claude/ds-new-sources-plan-20261124)
+work_commit: 241c0f4
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
-usage_resets_at: 2026-11-24T17:00:00+09:00
+usage_resets_at: 2026-12-01T17:00:00+09:00
 session: Codex DIDM 6af7214e-7798-8191-8cfe-66ba373de0ad
 execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_to: QUANTGEN_MAIN_CODEX
@@ -53,6 +53,22 @@ DS-H137 exact497의 문서CI/독립PASS·전체Runtime진행. 후속메인배정
 운영 기준: 메인↔하부 세션 사이는 [SESSION_PIPELINE](SESSION_PIPELINE.md) (소유자 지시 2026-11-20: 메인이 보낸 일은 바로 착수, 끝나면 바로 메인에 보고). GPT 인계는 그대로 [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md) (소유자가 이어받으라고 할 때만).
 
 ## 0. 한 줄 요약
+
+**2026-11-24 재개 (DATA_SOURCE, 메인 지시 11-24):** 이 세션은 이제 **DATA_SOURCE**만 (데이터 수집·공급사). DIDM 모형 (`core/didm/llm/**`, `core/didm/novelty.py`, `tests/didm_{schema,novelty}_acceptance.py`, `docs/didm/PREREG_V0.md`·`SCORE_SCHEMA_V0.md`)은 새 세션 DIDM_DEV (session_016uB1jj8iv57xVbx6EbLLwq). 11-20 인계 뒤 GPT가 병합: DS-H/code PR #137 (6d25a33), DS·DIDM 코드 PR #138 (53e5e72), EODHD·Alpaca·Massive 파서 #142~#144, V0 검사 #145. 이전 브랜치 f80b3b0·c206b10은 모두 main에 있음 (다시 하지 않음).
+
+| 일 | 브랜치 @ 커밋 | 상태 | 확인 |
+|---|---|---|---|
+| D1 커넥터 고침 2건 (GPT Kalshi 입력 검사 77c37c5 + ALFRED 개정 기간 593c943) | `claude/ds-connector-fixes-20261124` @ `241c0f4` | PR 전, MERGE_QUEUE 13번 "병합: DATA_SOURCE" 뒤 | sources 31 OK, ingest 27 OK, DIDM 7개 152 OK, 파서 3종 56 OK, didm_* 10개 208 OK, gateway_boundary 15 OK, core/didm 밖 core 변경 0. source-review.json은 main 쪽 유지 (기준선은 PR 직전) |
+| D2 홈 지표 진단 한 줄 명령 (OA-09) | `claude/ds-home-diagnose-20261124` @ `b70a78d` | PR 자리 메인이 정함 | `python -m core.research.markets` 클라우드 종료 0·6줄·stderr 0; home_indicators 23 OK, 새 diagnose 7 OK, 회귀 60 OK |
+| D3 새 공급사 3곳 계획 (문서) | `claude/ds-new-sources-plan-20261124` @ `6a6516d` | 소유자 확인 N0·N1 대기 | check_vendor_eval 엑셀 바뀐 칸 0, vendor_eval 시험 OK |
+
+PR 순서·절차: 메인이 MERGE_QUEUE에 적은 뒤에만. 최신 main merge → 시험 → `python -m tools.compliance.check --refresh-baseline ...` (맨 마지막) → `--check` PASS → PR.
+
+소유자 대기: OA-09 (D2의 새 한 줄 명령으로), N0 (EODHD·Alpaca·Massive 쓸지), N1 (EODHD 유료 시점), OA-46 (BTC 단위), OA-38, OA-10(c).
+
+### (아래는 11-24 이전 기록)
+
+
 
 ### 최우선: QUANTGEN 메인 Codex로 인계 — 2026-11-21T11:59:26+09:00
 
