@@ -14,11 +14,11 @@ task: data-source
 cycle: 2026-11-24
 done_ids: none
 next_ids: DS-5b, DS-5c, DS-5a
-updated_at: 2026-11-24T23:40:00+09:00
+updated_at: 2026-11-25T00:20:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/ds-home-reason-codes-20261124 (+ claude/ds-review-fixes-20261124@9663a99, claude/ds-fedwatch-20261124@5e971c0, claude/ds-edgar-history-20261124@927375b, claude/ds-5bc-news-20261124@4a646ce)
-work_commit: 42795e6 (review fixes) / 9085ac3 (D11) / 93f23fd (D13) / 408d8b4 (D12)
+work_commit: c5563ee (D15) / 60db667 (DS-5b/2)
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -29,6 +29,13 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## DATA_SOURCE (Claude) DS-5b/2·D15 — 2026-11-25T00:20+09:00
+
+- 메인 결정 A (소유자 답 전, 되돌릴 수 있음): Massive·Alpaca Basic·KRX 계열은 연결 확인까지만, 연구·학습·제품 불사용, 추가 수집 중단, 저장분 그대로.
+- B = DS-5b/2: `claude/ds-terms-guard-20261124` @ 60db667 — core/didm/ingest/terms.py RESEARCH_EXCLUDED·research_rows, 수집기 종목 필수+안내, collection_status 표지, 문서 3개 같은 줄, 시험 7.
+- D15: `claude/ds-stage2-events-plan-20261124` @ c5563ee — docs/didm/STAGE2_EVENT_SAMPLE_PLAN_2026-11-24.md.
+- 다음: C (곁기록 배선 tools/didm/confirmations.py) — 메인이 0a1d6c9를 통합 ②에 넣었다는 알림 뒤.
 
 ## DATA_SOURCE (Claude) Alpaca 약관·Massive 대안 — 2026-11-24T23:40+09:00
 
