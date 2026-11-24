@@ -40,6 +40,10 @@ RESEARCH: dict[str, str] = {
     "CME_FEDWATCH_API_ID": "research",
     "CME_FEDWATCH_API_SECRET": "research",
     "TRADINGECONOMICS_API_KEY": "research",
+    # Owner N0 approval 2026-11-24 ("N0 승인, Alpaca·Massive부터 진행하세요"): Alpaca and Massive research data.
+    "ALPACA_API_KEY_ID": "research",
+    "ALPACA_API_SECRET_KEY": "research",
+    "MASSIVE_API_KEY": "research",
 }
 
 # Tokens the app caches. Never read from the environment or .env, only from the keyring.

@@ -14,7 +14,7 @@
 | 앱 설정 (비밀 아님) | **16** (`NEXTGEN_MAX_AGE_<코드>` 하나로 셈) | 2절 |
 | 앱 실행에 쓰는 이름 합계 | **26** | `config.py`, `core/markets.py`의 두 곳에서만 읽음 |
 | 저장소 전체 (도구·연구·테스트·CI 포함) | **49** (아래 3절 셈) | Notion 상업화 분석서의 "47개"와 2개 차이 |
-| 데이터소스 세션의 연구용 이름 (DIDM) | 9 | 4절. `core/credentials/names.py`의 `RESEARCH` (main `9f76b07`, KEY-3) |
+| 데이터소스 세션의 연구용 이름 (DIDM) | 12 | 4절. `core/credentials/names.py`의 `RESEARCH` (main `9f76b07`, KEY-3; Alpaca 2개·Massive 1개 2026-11-24 더함) |
 
 - 환경을 읽는 곳 (KEY-2 전, main `5888d05` 기준; 지금은 아래 5절): `config.py:34` (`_clean(name)` → `os.getenv`), `core/markets.py:222` (`NEXTGEN_MAX_AGE_<코드>`). `.env`는 `load_dotenv()`가 읽었습니다. KEY-2 (PR #128) 뒤에는 `config._clean`이 `core.credentials.read_setting`을 부르고, `.env`는 개발판에서만 `core.credentials.load_dotenv_for_development()`가 읽습니다. 어느 쪽이든 `.env`가 없어도 앱은 켜집니다 (키가 필요한 기능만 꺼짐).
 - `.env.example`에 있는 이름: 14개 (`FMP_API_KEY`, `KIS_APP_KEY`, `KIS_APP_SECRET`, `OPENDART_API_KEY`, `KRX_API_KEY`, `ANTHROPIC_API_KEY`, `QUANTGEN_AI_MODEL`, `GS_CLIENT_ID`, `GS_CLIENT_SECRET`, `UPBIT_ACCESS_KEY`, `UPBIT_SECRET_KEY`, `NEXTGEN_FICC_CACHE`, `NEXTGEN_FICC_CACHE_TTL`, `NEXTGEN_NO_DATA_GRACE`).
@@ -95,6 +95,11 @@ Notion "QUANTGEN 상업화 실행 분석서" (`40e5c916fe0c815ba983dd4c4cc7992c`
 | `TRADINGECONOMICS_API_KEY` | 비밀 | 데이터소스 세션 (연구용) | 미정 |
 | `ECOS_API_KEY` | 비밀 | 데이터소스 세션 (연구용, 한국은행 ECOS) | 미정 |
 | `SEC_EDGAR_USER_AGENT` | 연락처 문자열 (키 아님) | 데이터소스 세션 (연구용, SEC EDGAR) | 미정 |
+| `ALPACA_API_KEY_ID` | 비밀 (키 ID) | 데이터소스 세션 (연구용, Alpaca) | 미정 |
+| `ALPACA_API_SECRET_KEY` | 비밀 | 데이터소스 세션 (연구용, Alpaca) | 미정 |
+| `MASSIVE_API_KEY` | 비밀 | 데이터소스 세션 (연구용, Massive) | 미정 |
+
+- Alpaca·Massive 3개는 소유자 N0 승인 (2026-11-24 18:41 KST, 데이터소스 세션 원문 "N0 승인, Alpaca·Massive부터 진행하세요")으로 더했습니다. EODHD는 N1 답 전이라 넣지 않았습니다. 데이터소스 세션이 연구 도구의 `ENV_ONLY_KEYS`에서 `RESEARCH_KEYS`로 옮깁니다.
 
 ## 5. KEY-2 자격증명 저장소 설계
 
@@ -106,7 +111,7 @@ Notion "QUANTGEN 상업화 실행 분석서" (`40e5c916fe0c815ba983dd4c4cc7992c`
 |---|---|
 | `core/credentials/__init__.py` | `get(name)`, `set(name, value)`, `delete(name)`, `status(name)`, `read_setting(name)`, `load_dotenv_for_development()`. 찾는 순서: ① 프로세스 환경변수 → ② OS 키 보관함 (Python `keyring`, service `"QUANTGEN"`, OS 기본 저장소만) → ③ `.env` (개발판만). 개발판 판정은 `core/app_identity.may_read_dotenv()` (OS 세션, PR #127로 main에 있음) |
 | `status(name)` | 값 대신 `{"name", "present", "source": "env"|"keyring"|"dotenv"|None}`만 돌려줌. 값은 어떤 반환·예외·로그에도 넣지 않음 |
-| `core/credentials/names.py` | 1절의 비밀 10개 (`SECRETS`), 4절의 연구용 9개 (`RESEARCH`), 앱이 받아 두는 토큰 1개 (`TOKENS`: `kis_token`)와 종류 (`user_broker_key` 사용자 증권사 키 / `user_data_key` 사용자 데이터 키 / `user_ai_key` 사용자 AI 키 / `dev_only` 개발 전용 / `token` 토큰 / `research` 연구용). 이름 목록에 없는 이름은 `set` 거절 |
+| `core/credentials/names.py` | 1절의 비밀 10개 (`SECRETS`), 4절의 연구용 12개 (`RESEARCH`), 앱이 받아 두는 토큰 1개 (`TOKENS`: `kis_token`)와 종류 (`user_broker_key` 사용자 증권사 키 / `user_data_key` 사용자 데이터 키 / `user_ai_key` 사용자 AI 키 / `dev_only` 개발 전용 / `token` 토큰 / `research` 연구용). 이름 목록에 없는 이름은 `set` 거절 |
 | `config._clean` | `core.credentials.read_setting(name)` 한 줄: 비밀 10개는 위 순서로, 설정 16개는 환경변수에서 (`.env`는 개발판에서 `load_dotenv_for_development()`가 미리 환경에 넣음) |
 | KIS 토큰 캐시 | 키 보관함 `QUANTGEN`/`kis_token`을 먼저 읽고, 없거나 만료·깨졌으면 `~/.nextgen/kis_token.json`. 새 토큰은 키 보관함에 쓰고, 쓰기가 거절되면 키 보관함의 낡은 값을 지운 뒤 파일에 씀 (0600, 새로 만드는 폴더는 0700). **파일은 지우지 않음**: TRADEGEN이 같은 KIS 키로 같은 파일을 씀 (research_notes "QUANTGEN TRADEGEN split map"). 영향: QUANTGEN이 키 보관함에 새 토큰을 받으면 TRADEGEN 파일은 갱신되지 않아 TRADEGEN이 따로 토큰을 받을 수 있음 (하루 발급이 최대 2배). 앱에서 KIS 키를 바꾸면 키 보관함 토큰을 지우고 그 실행 동안 파일 토큰을 쓰지 않음. 다시 시작한 뒤에도 옛 키 토큰을 믿지 않도록, QUANTGEN이 쓰는 토큰에는 `key_id` (앱 키와 서버 주소의 SHA-256 앞 16자리, 키 값은 저장하지 않음)를 함께 적고 다르면 버림 (KEY-2/b). `key_id`가 없는 토큰 (TRADEGEN, 옛 QUANTGEN)은 전처럼 받음: 그런 파일이 옛 키로 받은 것이면 재시작 뒤 만료(약 24시간)까지 쓰일 수 있음. `key_id`는 앱 키와 서버 주소만 봄: 시크릿만 바꾸면 해당 없음 (그때는 KIS가 토큰을 거절하면 새로 받음). `key_id`는 발급에 쓴 키로 계산함. 파일 권한 맞추기는 링크를 따라가지 않고 (POSIX O_NOFOLLOW로 열어 같은 파일에 fchmod), 실패해도 읽기는 계속함. 임시 파일은 무작위 이름 (mkstemp). 토큰 파일이 링크면 링크는 두고 대상 파일을 바꿈. `KISClient.reload_credentials()`로 `ready`를 다시 읽음 (`ready`는 `KISClient.__init__`에서 한 번 정해짐) |
 | `quantgen_cloud` 자리 | **만들지 않음** (D7-G에서는 게이트웨이 `remote.py`가 그 역할) |

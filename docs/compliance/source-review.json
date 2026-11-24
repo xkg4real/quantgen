@@ -81,7 +81,7 @@
     "core/calendars/regime.py": "fcac664c8f3b2d51ff45c67ef27252b1961b38c944dd785f8162d9ffa579d17b",
     "core/calendars/store.py": "4932ad9cbb4a1914f6b75da84e96a74730444cf2f43c756a7c7dd95efb403041",
     "core/credentials/__init__.py": "1aa554523b402a759a8502d488eb25af77ff7d5d85edf7edc7bbce9d9a8206ce",
-    "core/credentials/names.py": "0c76d2c358bf743d874e8025529490ace8291afc0a11a925fc0e4b158388a5fe",
+    "core/credentials/names.py": "73876b9bd5215b5f67d6542ce4be6dfd4a5f4c1e276df7d7d2db49f0e0a3fd9a",
     "core/crypto/__init__.py": "239a350b379471bb83ac90f3dc25149814f5f58790604236697daf160f5fcd81",
     "core/crypto/analytics.py": "7d7c846f0a363135592b88699190ac8c7251e159756ffb21bbebc128129dfdbf",
     "core/crypto/funding_diagnostic.py": "19e0763b30e0f838d522c4ceedffd8ad7139b69f7257924532593b9bb02a9270",
@@ -553,7 +553,7 @@
     "tests/cms_coupon_disclosure_acceptance.py": "1c1fcf30d38c23885e7c236f1ed39302972df972c93c9a20184b3b7ebf3d4010",
     "tests/compliance_acceptance.py": "515c4e52c4643cc4a4679bcacf401af6829b2472a69ae9ca23ded61752c40156",
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
-    "tests/credentials_acceptance.py": "041bdc5c86b3585117e68d3d2f5c42164201bb1d09d271f47cc294553db59ccd",
+    "tests/credentials_acceptance.py": "b950265f79ca721848bd486c2b53830fe7ee5330be23b9268e35261efeca8bb4",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
     "tests/crypto_missing_values_acceptance.py": "be07db163184acb8c0a67dd9c0562045e9f486506539ed9eadb2d06bec2ca038",
     "tests/curve_methods_acceptance.py": "66007a9bee8a7abedce57738f0fff5bd1ae9b2bd1d400b240d032e9a9691bd9b",
@@ -865,163 +865,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "028846bae2b00d7070a8f18a72e3a2cfc2be2f22bf29c4df888da8d52b7a84be",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.265017+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "source_digest": "8b6ac40831e5b1c30b771d0b228ca42fe5271d4a6e5a781d7c403644b90cd799",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.860057+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "028846bae2b00d7070a8f18a72e3a2cfc2be2f22bf29c4df888da8d52b7a84be",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.267679+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "source_digest": "8b6ac40831e5b1c30b771d0b228ca42fe5271d4a6e5a781d7c403644b90cd799",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.863986+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
       "source_digest": "32ecbf76095cf5557b195441e8d37879b90bbafc57168d4741c0b8497aaec5f2",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.269725+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.867373+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
       "source_digest": "1fdc9d367e5946db52b1ecf4fe8fb826e11b812a922948b14d9fde84b215d5df",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.272053+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.869412+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
       "source_digest": "bcbbd9538f6175da8dcbe11dff8ce1cff0fbac6d7b9f915da471c652e0707b37",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.274407+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.871395+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "ba3e6ce6463ec13586642201ca865b04f636a2fe7bb27e158367e4c0d50b94d9",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.276736+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "source_digest": "44f0d60b897468ada3783a8d26aad3afacb86c7cdc73e7b116264b5576956b9f",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.873293+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "028846bae2b00d7070a8f18a72e3a2cfc2be2f22bf29c4df888da8d52b7a84be",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.278792+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "source_digest": "8b6ac40831e5b1c30b771d0b228ca42fe5271d4a6e5a781d7c403644b90cd799",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.875343+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
-      "source_digest": "ba3e6ce6463ec13586642201ca865b04f636a2fe7bb27e158367e4c0d50b94d9",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.283492+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "source_digest": "44f0d60b897468ada3783a8d26aad3afacb86c7cdc73e7b116264b5576956b9f",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.877261+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
       "source_digest": "d899634a75fa5c640e052fabd44bdfd3cbae6193199eff9653d853c3b7c80946",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.287203+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.879111+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
       "source_digest": "fdba8113d3f12c00efb7e7500a4fd8f07f91fe72d89925142d37f604d183fab4",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.290359+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.881849+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
       "source_digest": "e3ed60577a1f88d531ecdc5bb87fd312808728562a6f56edc5caf1e763afe080",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.292238+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.883931+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "7e2aa1c7aba237783d33d891528836c1d752db3dc7e9f1715ae7f219391fdcb9",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.295975+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "source_digest": "7babccf9e34a6afa50c4bfe4ad2d77622398bd3addb4f620266750169b9cf6d0",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.885983+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
       "source_digest": "d899634a75fa5c640e052fabd44bdfd3cbae6193199eff9653d853c3b7c80946",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.297783+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.887742+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
       "source_digest": "d899634a75fa5c640e052fabd44bdfd3cbae6193199eff9653d853c3b7c80946",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.299513+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.889983+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
       "source_digest": "d899634a75fa5c640e052fabd44bdfd3cbae6193199eff9653d853c3b7c80946",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.303091+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.892048+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
       "source_digest": "916f5fd44c09a3b51976afce98de7c1e409b75e2e230ef0813bdd39b5aa95ca5",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.305311+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.894031+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "ba3e6ce6463ec13586642201ca865b04f636a2fe7bb27e158367e4c0d50b94d9",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.307018+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "source_digest": "44f0d60b897468ada3783a8d26aad3afacb86c7cdc73e7b116264b5576956b9f",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.895784+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "028846bae2b00d7070a8f18a72e3a2cfc2be2f22bf29c4df888da8d52b7a84be",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.308774+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "source_digest": "8b6ac40831e5b1c30b771d0b228ca42fe5271d4a6e5a781d7c403644b90cd799",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.897621+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "644300f6dd9cdfcd1e0d09fef0ae01f440fa7009057c5058072975bcda28f034",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.312637+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "source_digest": "1d390709b8ec8d8fdcc8beb5679ddbddfc80a7b4d820be5369ddf7303384a084",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.899786+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "028846bae2b00d7070a8f18a72e3a2cfc2be2f22bf29c4df888da8d52b7a84be",
-      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
-      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
-      "reviewed_at": "2026-11-24T09:37:31.314963+00:00",
-      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
+      "source_digest": "8b6ac40831e5b1c30b771d0b228ca42fe5271d4a6e5a781d7c403644b90cd799",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "P8: three research key names (Alpaca 2, Massive 1) added to core/credentials/names.py RESEARCH and the count test; names only, no values, no new collection by the app",
+      "reviewed_at": "2026-11-24T10:09:03.901815+00:00",
+      "source_commit": "de32ea10ddedfad8c976e4035049e712056fb43f"
     }
   }
 }

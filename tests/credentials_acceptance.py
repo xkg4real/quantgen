@@ -121,7 +121,9 @@ class NamesTest(unittest.TestCase):
         """Owner answer 2026-11-19: research (DIDM) names are accepted too, kept apart from the app's ten."""
         self.assertEqual(sorted(names.RESEARCH), sorted([
             "FRED_API_KEY", "ECOS_API_KEY", "SEC_EDGAR_USER_AGENT", "ALPHAVANTAGE_API_KEY", "TIINGO_API_KEY",
-            "CRYPTOPANIC_API_KEY", "CME_FEDWATCH_API_ID", "CME_FEDWATCH_API_SECRET", "TRADINGECONOMICS_API_KEY"]))
+            "CRYPTOPANIC_API_KEY", "CME_FEDWATCH_API_ID", "CME_FEDWATCH_API_SECRET", "TRADINGECONOMICS_API_KEY",
+            # owner N0 approval 2026-11-24: Alpaca, Massive (EODHD not yet: N1 unanswered)
+            "ALPACA_API_KEY_ID", "ALPACA_API_SECRET_KEY", "MASSIVE_API_KEY"]))
         self.assertFalse(set(names.RESEARCH) & set(names.SECRETS))
         for name in names.RESEARCH:
             self.assertEqual(names.kind(name), "research")
@@ -240,7 +242,7 @@ class WriteTest(Base):
             text = repr(credentials.status_all())
         self.assertNotIn(FAKE, text)
         self.assertEqual(len(credentials.status_all()), 10)
-        self.assertEqual(len(credentials.status_all(include_research=True)), 19)
+        self.assertEqual(len(credentials.status_all(include_research=True)), 22)   # 10 app + 12 research
 
     def test_listeners_notified_and_isolated(self):
         seen = []
