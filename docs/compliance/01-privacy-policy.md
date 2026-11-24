@@ -13,6 +13,8 @@
 
 2026-11-24 정책 PR-2(회원 계정 서비스): 운영 사용자 풀(Amazon Cognito, 호주 시드니 `ap-southeast-2`)은 2026-11-20 운영자가 만들고 콘솔 시험(가입·확인·검색·정지·해제·재설정·삭제·CloudTrail 기록)을 마쳤다. 웹 가입·로그인·계정 화면은 website 저장소의 미리보기 단계로 기록되어 있으나 이 저장소에서 확인하지 않았다(미검증, 공개 전). 아래 계정 처리 값은 [계정 설정 묶음 4부](../commercial/accounts/ACCOUNT_SETUP.md)와 [관리자 안내서](../commercial/accounts/ADMIN_GUIDE.md) 기준의 제안이며, 웹 계정 화면 공개 전에 실제 화면·저장 위치와 다시 대조한다. 위 2026-11-19 줄의 '회원 계정 서비스는 아직 없음'은 그날의 사실 기록이다. 상태 `review-required`와 공개 준비 `BLOCKED`를 유지한다.
 
+2026-11-24 운영자 결정(문의 메일함, O3): 운영자 답 "설립 뒤 법인 명의로 계약하겠습니다."에 따라 문의 메일함은 법인 설립 뒤 법인 명의 Microsoft 365로 옮기고, 그 전까지 contact@·ceo@ 메일이 Cloudflare Email Routing을 거쳐 운영자의 Gmail 계정에 보관되는 사실과 그 국외 이전은 운영자 답 "네 일단은 gmail이 보관한다는 사실과 국외 이전을 처리방침에 알려주는 걸로 하겠습니다."에 따라 이 방침 1·3·4항에 알린다. Google·Cloudflare 쪽 사실(법인명·연락처·서버 위치·전달 기록)은 공개 문서의 검색 발췌로만 확인했고 원문 대조 전이다(미검증). [사실 기록](FACTS.md#account-service-pr2-2026-11-24)
+
 ### 2026-11-14 R3 독립 기록기 하위 구현
 
 후속 [오류 파일 하위 구현](../product/R3_DETACHED_OUTAGE_2026-11-14.md)은 공급된 시각·실행/계열 식별자·종목·단계·오류를 명시적 `unrecorded.jsonl`에 JSONL로 쓰고 flush/fsync합니다. 같은 프로세스의 협력 스레드만 직렬화하며 OS 잠금·다중 프로세스 보장·암호화·자동 삭제·민감정보 제거는 제공하지 않습니다. 시각이나 식별자를 모르면 null을 유지합니다. 이 callback의 합성 검증과 실제 앱 수집·운영 경로·권한·보유기간 검증은 구분합니다.
@@ -122,7 +124,7 @@ QUANTGEN(운영자 고건, 이하 “운영자”)는 QUANTGEN 제공에 필요�
 | 선택적 Upbit 자산 분석 | 통화, 기준통화(`unit_currency`), 잔액, 잠금 금액, 평균 매수가, 총수량과 파생 원화평가액(`krw_value`); 현재 코드 기준 | Upbit 계좌 API → 실행 기기. 보유 통화 종목을 Upbit 공개 시세 API에 보내 평가액 계산(Upbit가 목록을 거부하면(HTTP 400·404) 같은 종목을 하나씩 다시 요청, 시세가 없는 통화는 평가액을 비워 둠); 서버 실행 시 서버 처리 여부 명시 | {{privacy.upbit_basis}} | {{privacy.upbit_retention}} |
 | 규칙 및 모의연구 기록 관리 | 규칙명·메모·개정 이력·모의주문·판정·저장한 연구 결과 | {{privacy.research_location}} | {{privacy.research_basis}} | {{privacy.research_retention}} |
 | 선택적 외부 AI 해설 | 계산 결과·질문·분석 종류, 고정 작성 지시문과 해당 시 값 표기 설명; 인증정보·개인 계좌 내용을 질문에 입력하지 않도록 안내 | {{privacy.ai_route}} → Anthropic | {{privacy.ai_basis}} | {{privacy.ai_retention}} |
-| 문의 및 권리 행사 처리 | 회신 연락처, 문의 내용, 최소한의 확인 정보 | {{privacy.support_tools}} | {{privacy.support_basis}} | {{privacy.support_retention}} |
+| 문의 및 권리 행사 처리 | 회신 연락처, 문의 내용, 최소한의 확인 정보(메일 문의는 보낸 주소·제목·본문·첨부) | {{privacy.support_tools}}. 메일 문의(contact@·ceo@)는 법인 설립 뒤 법인 명의 Microsoft 365로 옮기기 전까지 Cloudflare Email Routing을 거쳐 운영자의 Gmail 계정(Google, 국외 보관; 보관 국가 미검증)에 보관(3·4항). 회원이 가입 확인·재설정 코드 메일에 답장하면 회신 주소 contact@로 와 같은 경로를 거침 | {{privacy.support_basis}} | {{privacy.support_retention}} |
 | 유료 구매·환불 및 법정 기록 | 실제 계약에서 필요한 거래 식별정보·결제·환불 기록. 미운영 시 해당 행 삭제 | {{privacy.payment_processors}} | 계약 및 적용되는 법적 의무를 구체 기재 | {{privacy.commerce_retention}} |
 | 서비스 보안 | 실제 수집하는 접속 시각·IP·기기/오류 정보만 항목별 기재 | {{privacy.security_log_route}} | {{privacy.security_log_basis}} | {{privacy.security_log_retention}} |
 | 회원 계정 보안 기록 | 관리자 작업 기록(시각, 관리자 로그인 역할, 접속 IP, 브라우저, 대상 계정 고유번호, 작업 종류)과 회원 쪽 계정 요청 기록(가입·가입 확인·로그인·비밀번호 찾기의 시각, 접속 IP, 요청 종류). 회원 쪽 기록에 계정 고유번호가 남는지는 미검증(2026-11-20 소유자 시험 T14: 내보낸 표에서는 비어 있음) | AWS CloudTrail → 시드니 S3 버킷(관리 이벤트) | 안전성 확보 의무 〔법률 자문이 아닙니다. 근거: 개인정보의 안전성 확보조치 기준 제8조〕 | 400일 뒤 자동 삭제(S3 수명 주기). CloudTrail 이벤트 기록 화면 자체는 90일 |
@@ -145,8 +147,8 @@ QUANTGEN(운영자 고건, 이하 “운영자”)는 QUANTGEN 제공에 필요�
 | --- | --- | --- | --- | --- | --- |
 | {{privacy.recipient_type}} | {{privacy.recipient_legal_name}} | {{privacy.recipient_purpose}} | {{privacy.recipient_fields}} | {{privacy.recipient_basis}} | {{privacy.recipient_retention}} |
 | 처리위탁 | Amazon Web Services(계약 법인명은 청구서의 판매자 표기로 확인, 미검증) | 회원 계정 보관·인증(Amazon Cognito), 가입 확인·재설정 코드 메일 발송(Amazon SES), 웹사이트 호스팅(AWS Amplify), 보안 기록 보관(AWS CloudTrail·Amazon S3) | 회원 계정 항목, 보안 기록 | 계정 제공 계약 이행을 위한 위탁. 위탁을 거부하면 회원 계정을 쓸 수 없음(데스크톱 앱의 무료 기능은 계정 없이 사용) | 위 1항 보유기간까지. 재위탁 여부는 AWS 약관으로 확인(미검증) |
-| 처리위탁(미검증) | Cloudflare(계약 법인명 미검증) | 도메인 DNS, 문의 주소(contact@·ceo@) 수신 메일을 운영자 메일함으로 전달(Email Routing) | 문의 메일의 주소·내용(전달 경로 통과) | 문의 처리. Cloudflare의 메일 보존 여부·처리 국가 미검증 | 전달 시점. 보존 여부 미검증 |
-| 처리위탁(미검증, 운영자 확인 전) | Google(Gmail, 운영자 메일함; 계약 법인명 미검증. 법인 설립 뒤 법인 명의 Microsoft 365로 옮길 예정, 2026-11-24 운영자 답) | 전달받은 문의·권리 요청 메일 보관과 회신 | 회신 주소, 문의 내용 | 문의 처리 | {{privacy.support_retention}} |
+| 처리위탁(미검증) | Cloudflare, Inc.(미국; Cloudflare 개인정보처리방침 기준, 계약 법인명 미검증) | 도메인 DNS, 문의 주소(contact@·ceo@) 수신 메일을 운영자의 Gmail 계정으로 전달(Email Routing) | 문의 메일의 주소·제목·본문·첨부(전달 경로 통과), 발신자·수신자·제목·시각·처리 결과 등 전달 기록(Cloudflare 문서 기준, 미검증) | 문의 메일 전달을 위한 위탁. 거부하면 메일 문의를 받을 수 없음 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 제26조(원문 미확인). 저장하지 않는 전달이 위탁에 해당하는지는 미검증〕 | 본문은 저장·열람하지 않고 전달만 한다고 Cloudflare가 공식 문서에서 밝힘(검색 발췌로 확인, 원문 대조·계약상 보장 미검증). 전달 기록의 보존 기간·처리 국가 미검증 |
+| 처리위탁(보관) | Google LLC(운영자의 Gmail 계정; 법인명은 Google 개인정보처리방침 기준, 계약 상대 법인 미검증; 연락처는 4항 표). 법인 설립 뒤 법인 명의 Microsoft 365로 옮길 예정(2026-11-24 운영자 답) | 전달받은 문의·권리 요청 메일 보관과 회신 | 회신 주소, 이름(적은 경우), 제목, 본문, 첨부 | 문의 회신을 위한 보관 위탁. 거부하면 메일 문의에 회신할 수 없음 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 제26조(원문 미확인). 소비자용 Gmail 이용이 위탁에 해당하는지와 같은 조 제1항의 위탁 문서 요건을 Google 약관으로 채우는지는 미검증〕 | {{privacy.support_retention}}. 재위탁 여부는 Google 약관으로 확인(미검증) |
 
 해당하는 항목이 없으면 실제 조사 범위와 기준일을 명시하여 “해당 없음”으로 확정합니다. 향후 추가 시 [외부 서비스 대장](08-third-parties.md)을 갱신합니다.
 
@@ -158,8 +160,9 @@ QUANTGEN(운영자 고건, 이하 “운영자”)는 QUANTGEN 제공에 필요�
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | {{privacy.transfer_recipient}} | {{privacy.transfer_countries}} | {{privacy.transfer_fields}} | {{privacy.transfer_time_method}} | {{privacy.transfer_purpose}} | {{privacy.transfer_retention}} | {{privacy.transfer_basis}} | {{privacy.transfer_refusal}} |
 | Amazon Web Services(계약 법인명 미검증; 연락처는 AWS 개인정보 문의 창구, 주소 미확보) | 호주(시드니, `ap-southeast-2`) | 1항 회원 계정 항목, 보안 기록 | 가입 시와 이용 중 수시, 네트워크 전송 | 회원 계정 보관·인증, 가입 확인·재설정 코드 메일 발송, 보안 기록 보관 | 1항 회원 계정·보안 기록 보유기간과 같음 | 계약 이행을 위한 처리위탁·보관, 처리방침 공개(고지 방식은 운영자 확인 전) 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 제28조의8 제1항 제3호·제2항(원문 미확인)〕 | 가입하지 않거나 탈퇴. 거부하면 회원 계정을 쓸 수 없음(데스크톱 앱의 무료 기능은 계정 없이 사용) |
+| Google LLC(미국; 법인명·주소 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA는 Google 개인정보처리방침 기준, 미검증). 연락처: [Google 개인정보 문의 양식](https://support.google.com/policies/answer/9581826), 국내대리인 구글코리아 유한회사([한국 거주자 추가 정보](https://policies.google.com/privacy/additional?hl=ko&gl=kr) 기준, 미검증) | 미국 등 Google이 서버를 둔 여러 나라(미검증; [데이터센터 위치](https://datacenters.google/locations/)). Google은 정보가 거주국 밖 서버에서 처리될 수 있다고 밝히며 Gmail이 보관되는 국가를 특정해 공개하지 않음(미검증) | 문의·권리 요청 메일의 보낸 주소, 이름(적은 경우), 제목, 본문, 첨부 | contact@·ceo@로 메일이 올 때마다 Cloudflare Email Routing을 거쳐 네트워크로 전송되어 운영자의 Gmail 계정에 보관 | 문의·권리 요청 메일 보관과 회신 | 1항 문의 행 보유기간({{privacy.support_retention}})까지. 운영자가 메일함에서 지운 뒤 Google 쪽에서 완전히 지워지는 시점은 미검증 | 계약 체결·이행을 위한 처리위탁·보관, 처리방침 공개(2026-11-24 운영자 결정) 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 제28조의8 제1항 제3호 가목·제2항, 같은 법 시행령 제31조 제1항 제2호(원문 미확인). 계약과 관계없는 일반 문의에 제3호가 적용되는지, 소비자용 Gmail 이용이 제3자 제공이 아닌 위탁·보관인지에 대한 공식 해석은 미검증〕 | contact@·ceo@로 메일을 보내지 않으면 이전되지 않음. 거부하면 메일 문의에 회신할 수 없음. 메일 밖의 경로는 {{privacy.rights_request_url}}와 웹 계정 페이지의 탈퇴(공개 뒤, 웹 계정 화면 미검증) |
 
-문의 메일 전달·보관(Cloudflare, Google)의 처리 국가와 국외 이전 해당 여부는 미검증이며, 확인 뒤 이 표에 더합니다(운영자 확인 전). 법인 설립 전에 공개하면 Microsoft 365로 옮기기 전까지 Gmail(Google) 보관과 그 국외 이전을 고지해야 하는지 운영자가 확인한다 〔법률 자문이 아닙니다〕.
+문의 메일(contact@·ceo@)은 법인 설립 뒤 법인 명의 Microsoft 365로 옮기기 전까지 Cloudflare Email Routing을 거쳐 운영자의 Gmail 계정에 보관되며, 이 보관과 국외 이전을 위 표의 Google LLC 행으로 알립니다(2026-11-24 운영자 결정). 문의 메일함을 Microsoft 365로 옮기면 3항과 이 표의 Google 행을 새 수탁자·이전받는 자·국가로 고쳐 이 방침을 개정하고, 10항에 따라 변경 내용과 적용일을 알립니다 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 제28조의8 제3항(원문 미확인). 처리방침 공개로 이전한 경우 이전 사항이 바뀔 때 같은 항의 고지·동의가 필요한지는 미검증〕. 이전받는 자에 대한 보호조치를 소비자용 Gmail 약관으로 갖추는지는 운영자 확인 전입니다 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 제28조의8 제4항, 같은 법 시행령 제29조의10(원문 미확인)〕. Cloudflare는 전달하는 메일을 저장하거나 열람하지 않는다고 공식 문서에서 밝히지만 발신자·수신자·제목 등 전달 기록은 남깁니다(Cloudflare 문서의 검색 발췌, 미검증). 이 기록의 보존 기간·처리 국가와 Cloudflare 경로의 국외 이전 해당 여부는 미검증이며, 이 경로를 이 표에 따로 더할지는 운영자 확인 전입니다 〔법률 자문이 아닙니다. 근거: 개인정보 보호법 제28조의8 제1항(국외 처리위탁·보관을 이전에 포함, 원문 미확인)〕.
 
 Anthropic의 명칭만 보고 처리 국가나 데이터 보유기간을 추정하지 않습니다. 국가·재위탁·옵트아웃·데이터 처리 계약이 확정되기 전 개인정보가 들어갈 수 있는 AI 경로를 운영자가 승인하지 않습니다.
 

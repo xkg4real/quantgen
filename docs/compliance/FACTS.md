@@ -1142,9 +1142,10 @@ Windows CI에서 창 핸들과 아이콘을 시험하며, 사용자 PC의 Explor
 
 [구현 범위와 한계](../product/OS_DATA_STORAGE_2026-11-21.md), [경로 API](../../core/app_paths.py), [쓰기·시작 검사](../../tests/app_storage_startup_acceptance.py).
 
+<a id="account-service-pr2-2026-11-24"></a>
 ## 회원 계정 서비스 — 2026-11-24 정책 PR-2
 
-정책 PR-1(2026-11-19)이 미뤄 둔 계정 서비스 칸(시드니 보관, 탈퇴·파기, 보안 기록, 처리위탁)을 01·06·07·08·17·18·20에 넣었다. 값의 출처는 운영자 설정 기록과 시험 기록이며, 이 저장소에는 계정 서비스 코드가 없다.
+정책 PR-1(2026-11-19)이 미뤄 둔 계정 서비스 칸(시드니 보관, 탈퇴·파기, 보안 기록, 처리위탁)을 01·06·07·08·17·18·20에 넣었다. 값의 출처는 운영자 설정 기록과 시험 기록이며, 이 저장소에는 계정 서비스 코드가 없다. 같은 날 운영자 결정(O3)에 따라 문의 메일의 Gmail 보관과 그 국외 이전 고지를 01 1·3·4항, 06, 07, 08, 20에 더했다(아래 문의 메일 행들). Google·Cloudflare 쪽 사실은 2026-11-24 공개 문서의 검색 발췌이며, 이 세션 네트워크에서 원문 페이지가 열리지 않아 원문 대조 전이다(미검증).
 
 | 사실 | 출처 | 확인 상태 |
 |---|---|---|
@@ -1156,9 +1157,12 @@ Windows CI에서 창 핸들과 아이콘을 시험하며, 사용자 PC의 Explor
 | 회원 쪽 요청(가입·확인·비밀번호 찾기)도 시각·접속 IP·요청 종류와 함께 기록되나, 내보낸 표에서는 계정 식별자 칸이 비어 있음 | [관리자 안내서](../commercial/accounts/ADMIN_GUIDE.md) 13절, 소유자 시험 T14 | 계정 식별자 저장 여부 미검증 |
 | 관리자 삭제는 정지 뒤에만 가능, 삭제는 즉시·복구 불가 | 관리자 안내서 5절, 소유자 시험 T5·T13 | 확인(2026-11-20) |
 | 이메일 2단계 인증 회원의 복구: 두 번째 확인 뒤 임시 비밀번호, 확인할 수 없으면 1회용 코드 동의 뒤 삭제·재가입 | 관리자 안내서 6.1·6.2, 소유자 결정 2026-11-20 | 문서 기준(실제 처리 사례 없음) |
-| 문의 주소 contact@·ceo@는 Cloudflare Email Routing으로 운영자 Gmail에 전달, catch-all 꺼짐 | 2026-11-19 운영자 제공 정보(PAYMENTS 세션) | 운영자 화면 확인, 계약·보존·처리 국가 미검증. 문의 메일함을 Microsoft 365로 옮기는 일은 법인 설립 뒤 법인 명의로 계약한다(운영자 답 2026-11-24: "설립 뒤 법인 명의로 계약하겠습니다."). 그 전까지는 이 경로를 쓴다. |
+| 문의 주소 contact@·ceo@는 Cloudflare Email Routing으로 운영자 Gmail에 전달, catch-all 꺼짐 | 2026-11-19 운영자 제공 정보(PAYMENTS 세션) | 운영자 화면 확인, 계약·보존·처리 국가 미검증. 문의 메일함을 Microsoft 365로 옮기는 일은 법인 설립 뒤 법인 명의로 계약한다(운영자 답 2026-11-24: "설립 뒤 법인 명의로 계약하겠습니다."). 그 전까지는 이 경로를 쓰고, 운영자의 Gmail 계정 보관과 그 국외 이전을 처리방침에 알린다(운영자 답 2026-11-24: "네 일단은 gmail이 보관한다는 사실과 국외 이전을 처리방침에 알려주는 걸로 하겠습니다."). |
 | 관리자 콘솔 로그인 2단계 인증(AWS IAM Identity Center) | 계정 설정, 관리자 안내서 10절 | 미검증(실제 등록 여부 운영자 확인 전) |
-| AWS·Cloudflare·Google 계약 법인명, 국외 이전 고지 방식(처리방침 공개로 할지) | 청구서 판매자 표기, 운영자 결정 | 미검증(운영자 확인 전) |
+| 문의 메일의 Gmail(Google) 보관과 국외 이전은 처리방침 공개로 알림(01 1항 문의 행, 3항 Google 행, 4항 Google LLC 행; 06·07·08·20 해당 행) | 운영자 결정 2026-11-24(PAYMENTS 세션): "네 일단은 gmail이 보관한다는 사실과 국외 이전을 처리방침에 알려주는 걸로 하겠습니다." | 결정됨. 개인정보 보호법 제28조의8 제1항 제3호 가목(처리방침 공개)이 계약과 관계없는 문의와 소비자용 Gmail에 적용되는지는 법률 검토 전(미검증) |
+| AWS·Cloudflare·Google 계약 법인명, AWS 국외 이전 고지 방식(O2), Cloudflare 경로를 국외 이전 표에 따로 더할지 | 청구서 판매자 표기, 운영자 결정 | 미검증(운영자 확인 전) |
+| Google: 서버가 전 세계에 있어 정보가 거주국 밖 서버에서 처리될 수 있다고 밝히고 Gmail 보관 국가는 특정해 공개하지 않음. 개인정보처리방침상 법인 Google LLC(미국), 개인정보 문의는 웹 양식, 한국 거주자용 추가 정보 페이지에 국내대리인 구글코리아 유한회사 | https://policies.google.com/privacy/frameworks , https://policies.google.com/privacy , https://support.google.com/policies/answer/9581826 , https://policies.google.com/privacy/additional?hl=ko&gl=kr , https://datacenters.google/locations/ (2026-11-24 검색 발췌) | 원문 직접 열람 전(미검증). 공개 전에 운영자가 각 페이지의 문구와 시행일을 확인 |
+| Cloudflare Email Routing: 전달 메일을 저장·열람하지 않는다고 밝힘. 발신자·수신자·제목·Message-ID·시각·처리 결과·SPF/DKIM/DMARC 결과를 전달 기록으로 남김. 개인정보처리방침상 법인 Cloudflare, Inc.(미국) | https://developers.cloudflare.com/email-routing/ , https://blog.cloudflare.com/introducing-email-routing , https://developers.cloudflare.com/analytics/graphql-api/tutorials/querying-email-routing/ , https://www.cloudflare.com/privacypolicy/ (2026-11-24 검색 발췌) | 원문 직접 열람 전(미검증). 전달 기록 보존 기간·처리 국가·고객 DPA의 Email Routing 적용 여부 미검증 |
 | 웹 가입·로그인·계정 화면 | website 저장소 미리보기(기록상) | 이 저장소에서 미검증, 공개 전 |
 
 상태는 `review-required`, 공개 준비는 `BLOCKED` 그대로다. 법률 판단이 필요한 문장은 각 문서에 "법률 자문이 아닙니다"와 근거를 붙였다.
