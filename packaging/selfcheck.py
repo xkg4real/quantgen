@@ -79,6 +79,14 @@ def run(report_path: str) -> int:
         return True, {"user_data_dir": str(path), "exists": path.is_dir()}
     _check(results, "user_data_dir", data_dir)
 
+    def credential_store():
+        # Keys live in the OS store (core/credentials): Windows Credential Manager, macOS Keychain. Only asks keyring
+        # which backend it would use; nothing is read or written. Linux build machines often have none: reported only.
+        from core import credentials
+        available = credentials.keyring_available()
+        required = sys.platform in ("win32", "darwin")
+        return available or not required, {"available": available, "required_on_this_platform": required}
+    _check(results, "os_credential_store", credential_store)
     def sale_build_contents():
         # Item 15-7: no flet-cli-only package and no retired NEXTGEN logo inside; the data-source profile is reported.
         root = Path(getattr(sys, "_MEIPASS", "."))

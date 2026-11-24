@@ -99,10 +99,21 @@ exe = EXE(
 )
 coll = COLLECT(exe, a.binaries, a.datas, name="QUANTGEN")
 if sys.platform == "darwin":
+    import tomllib
+    version = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
+    png = ROOT / "assets" / "icon.png"
     app = BUNDLE(
         coll,
         name="QUANTGEN.app",
-        icon=None,
+        # PyInstaller turns the PNG into the .icns the Dock and Finder show (needs Pillow: matplotlib brings it).
+        icon=str(png) if png.exists() else None,
         bundle_identifier=None,  # set from core/app_identity.BUNDLE_ID once the owner confirms it
-        info_plist={"NSHighResolutionCapable": True, "CFBundleShortVersionString": "2.0.0"},
+        info_plist={
+            "CFBundleName": "QUANTGEN",
+            "CFBundleDisplayName": "QUANTGEN",
+            "CFBundleShortVersionString": version,  # pyproject.toml, not a second copy of the number
+            "CFBundleVersion": version,
+            "LSMinimumSystemVersion": "14.0",  # PySide6 / PyQt6 6.12 wheels need macOS 14 (LICENSE_COMPLIANCE_PREP)
+            "NSHighResolutionCapable": True,
+        },
     )
