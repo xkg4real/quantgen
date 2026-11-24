@@ -19,3 +19,8 @@
 - 2번: PR #140의 CI 기록(2026-11-24 메인 확인).
 - 3번: `plans/2026-11-24/RESUME_GPT_VERIFY.md`.
 - 5번: OS 세션의 화면 파일 읽기 조사. 실제 Mac 화면에서는 미검증.
+
+## 덧붙임 (2026-11-24 21:00 KST, OS_EXPANSION O2 결과)
+
+- `tests/desktop_stock_detail_acceptance.py:1527`(포커스 검사)는 **PyQt6 원본(PR #140 head `3483b53`)에서도 5회 중 5회 같은 단언으로 실패**한다. PySide6 사본에서는 먼저 `quantgen_desktop/stock_insights.py:82`의 `self.metric` 때문에 TypeError로 죽고, 그 속성 이름만 `_metric`으로 바꾸면 3회 중 3회 PyQt6와 같은 1527 단언에서 실패한다. 즉 1527은 PySide6 전환과 무관한 UI 쪽 포커스 로직 또는 시험 문제이고, `self.metric`은 별개의 PySide6 전용 문제다.
+- PySide6 재확인: `tests.desktop_market_tabs_acceptance` 4개 동시 실행, 일반 160/160, tcache 끔 160/160, 비정상 종료 0. 전환 도구 `switch_day.py --check`는 7곳 모두 적용 가능(누락·모호 0).
