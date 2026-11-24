@@ -175,11 +175,15 @@ def offline_env(home: Path) -> dict:
     variables (both cases) on the dead proxy; user folders and the FICC cache in ``home``."""
     from core.credentials import names
     env = {k: v for k, v in os.environ.items()
-           if k.upper() not in ("NO_PROXY",) + PROXY_NAMES and not names.is_secret(k)}
+           if k.upper() not in ("NO_PROXY",) + PROXY_NAMES and not names.is_secret(k)
+           and k not in ("QUANTGEN_DATA_DIR", "FLET_APP_STORAGE_DATA", "XDG_DATA_HOME")}
     for name in PROXY_NAMES:
         env[name] = env[name.lower()] = DEAD_PROXY
     for name in ("HOME", "USERPROFILE", "APPDATA", "LOCALAPPDATA", "XDG_CACHE_HOME", "XDG_CONFIG_HOME"):
         env[name] = str(home)
+    for name in names.SECRETS:          # set empty, so even a .env loader that slipped through adds no KIS key (PD-1)
+        env[name] = ""
+    env["PYTHON_KEYRING_BACKEND"] = "keyring.backends.null.Keyring"
     env["NEXTGEN_FICC_CACHE"] = str(home / "ficc_cache")
     env["NEXTGEN_FICC_CACHE_TTL"] = "0"
     env["QG_TEST_GUARD_OUT"] = str(home / "guard.json")
@@ -195,7 +199,9 @@ class CommandLine(unittest.TestCase):
             env = offline_env(Path(tmp))
         self.assertNotIn("NO_PROXY", env)
         self.assertNotIn("no_proxy", env)
-        self.assertNotIn("KIS_APP_KEY", env)
+        self.assertEqual(env["KIS_APP_KEY"], "")
+        self.assertEqual(env["PYTHON_KEYRING_BACKEND"], "keyring.backends.null.Keyring")
+        self.assertNotIn("QUANTGEN_DATA_DIR", env)
         self.assertEqual({env[n] for n in PROXY_NAMES + tuple(n.lower() for n in PROXY_NAMES)}, {DEAD_PROXY})
 
     def test_module_runs_offline_exit_0_six_lines(self):
@@ -213,6 +219,41 @@ class CommandLine(unittest.TestCase):
         self.assertEqual(len(lines), 6, proc.stdout)
         self.assertEqual([l.split()[0] for l in lines], [s[1] for s in markets.SPECS])
         self.assertTrue(all(" UNAVAILABLE " in l for l in lines), proc.stdout)   # a reached provider would not be
+
+    @unittest.skipIf(sys.platform == "win32", "POSIX folder mode")
+    def test_command_prepares_data_folder_first(self):
+        """PD-3: with no ~/.nextgen and no QUANTGEN folder the command creates the platform folder 0700 with
+        the QUANTGEN marker (core.app_paths.ensure_user_data_dir), not a bare default-mode cache folder."""
+        import stat
+        import tempfile
+        from core import app_paths
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            env = offline_env(home)
+            env.pop("NEXTGEN_FICC_CACHE")
+            proc = subprocess.run([sys.executable, "-c", BOOTSTRAP], cwd=ROOT, env=env,
+                                  capture_output=True, text=True, timeout=600)
+            folder = app_paths.user_data_dir(home=home, env=env, platform=sys.platform)
+            self.assertEqual(proc.returncode, 0, proc.stderr[-500:])
+            self.assertTrue(folder.is_dir(), folder)
+            self.assertEqual(stat.S_IMODE(folder.stat().st_mode), 0o700)
+            self.assertTrue((folder / app_paths.DATA_MARKER).is_file())
+
+    def test_refused_folder_gives_six_lines_and_no_provider_call(self):
+        called = []
+
+        def refuse():
+            raise PermissionError(13, "denied")
+        lines = markets.main(ensure_data_dir=refuse, run=lambda: called.append(1) or [])
+        self.assertEqual(called, [])
+        self.assertEqual(len(lines), 6)
+        self.assertTrue(all(l.endswith("UNAVAILABLE reason=data_dir_unavailable live=-") for l in lines))
+        self.assertEqual([l.split()[0] for l in lines], [s[1] for s in markets.SPECS])
+
+    def test_folder_prepared_before_diagnosis(self):
+        order = []
+        markets.main(ensure_data_dir=lambda: order.append("ensure"), run=lambda: order.append("run") or [])
+        self.assertEqual(order, ["ensure", "run"])
 
 
 if __name__ == "__main__":

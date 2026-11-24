@@ -367,6 +367,22 @@ def diagnose(capture_yahoo_log=True, **kwargs):
     return lines
 
 
+DATA_DIR_REFUSED = "data_dir_unavailable"   # diagnosis-only line code (not a FAILURE_REASONS member)
+
+
+def main(ensure_data_dir=None, run=None) -> list:
+    """The command: prepare the user data folder first (policy docs 01/07/20: a standalone caller calls the
+    preparation API before anything can write the FICC or yfinance cache; review PD-3, 2026-11-24), then
+    diagnose. A refused folder gives six lines with ``reason=data_dir_unavailable`` and no provider call."""
+    if ensure_data_dir is None:
+        from core.app_paths import ensure_user_data_dir as ensure_data_dir
+    try:
+        ensure_data_dir()
+    except Exception:  # OSError, marker errors: the folder is not usable, so nothing may be written
+        return [f"{spec[1]} UNAVAILABLE reason={DATA_DIR_REFUSED} live=-" for spec in SPECS]
+    return (run or diagnose)()
+
+
 if __name__ == "__main__":
-    for _line in diagnose():
+    for _line in main():
         print(_line)
