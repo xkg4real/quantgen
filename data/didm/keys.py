@@ -18,6 +18,9 @@ RESEARCH_KEYS = (
     "ALPHAVANTAGE_API_KEY", "TIINGO_API_KEY", "CRYPTOPANIC_API_KEY",
     "CME_FEDWATCH_API_ID", "CME_FEDWATCH_API_SECRET", "TRADINGECONOMICS_API_KEY",
 )
+# DS-5b/5c (owner N0, 2026-11-24). Not in core.credentials yet (payments session asked): read from the
+# environment until the store knows them, then move them into RESEARCH_KEYS (get_key needs no change).
+ENV_ONLY_KEYS = ("ALPACA_API_KEY_ID", "ALPACA_API_SECRET_KEY", "MASSIVE_API_KEY")
 APP_KEYS_USED = ("OPENDART_API_KEY",)
 
 

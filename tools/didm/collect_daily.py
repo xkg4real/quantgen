@@ -43,7 +43,8 @@ from core.didm.store import PointInTimeStore
 
 REPO = Path(__file__).resolve().parents[2]
 KEY_NAMES = ("FRED_API_KEY", "OPENDART_API_KEY", "ECOS_API_KEY", "SEC_EDGAR_USER_AGENT",
-             "ALPHAVANTAGE_API_KEY", "TIINGO_API_KEY", "CRYPTOPANIC_API_KEY")
+             "ALPHAVANTAGE_API_KEY", "TIINGO_API_KEY", "CRYPTOPANIC_API_KEY",
+             "ALPACA_API_KEY_ID", "ALPACA_API_SECRET_KEY", "MASSIVE_API_KEY")
 
 
 def load_env_file(path: str) -> None:
@@ -289,6 +290,64 @@ def collect_cryptopanic(store: PointInTimeStore, codes: list[str]) -> None:
         print(f"CryptoPanic field names (first post): {', '.join(first)}")
 
 
+def collect_alpaca_news(store: PointInTimeStore, symbols: list[str], start: str | None, end: str | None,
+                        max_pages: int, fetch=None) -> dict:
+    """DS-5b: Alpaca News pages oldest first, until no next token or ``max_pages``. Receipt = after each page."""
+    from core.didm.ingest import alpaca_news
+    from core.didm.ingest import news_store
+    if fetch is None:
+        from data.didm import alpaca_news as alpaca_http
+        fetch = alpaca_http.fetch_page
+    token, seen, pages, articles, added, first, last = None, (), 0, 0, 0, None, None
+    while pages < max_pages:
+        payload = fetch(symbols or None, start=start, end=end, limit=50, page_token=token)
+        page = alpaca_news.parse_page(payload, _now(), limit=50, current_token=token, seen_tokens=seen)
+        rows = news_store.alpaca_rows(page.articles)
+        added += store.append_many(rows)
+        pages, articles = pages + 1, articles + len(rows)
+        for r in rows:
+            d = r["published_at"].date().isoformat()
+            first, last = min(first or d, d), max(last or d, d)
+        if page.next_page_token is None:
+            token = None
+            break
+        seen = seen + ((token,) if token is not None else ())
+        token = page.next_page_token
+    complete = token is None
+    print(f"Alpaca news {','.join(symbols) or 'all'}: pages {pages} (complete {complete}), articles {articles}, "
+          f"first {first or '-'}, last {last or '-'}, new {added}")
+    return {"pages": pages, "articles": articles, "added": added, "first": first, "last": last}
+
+
+def collect_massive_news(store: PointInTimeStore, ticker: str | None, start: str | None, max_pages: int,
+                         fetch=None) -> dict:
+    """DS-5c: Massive ticker news, oldest first, following next_url cursors (free plan: spaced 12.5 s)."""
+    from core.didm.ingest import news_store
+    from data.didm import massive_news
+    fetch = fetch or massive_news.fetch_page
+    cursor, seen, pages, articles, added, insights, first, last = None, [], 0, 0, 0, 0, None, None
+    while pages < max_pages:
+        payload = fetch(ticker, published_gte=start, cursor=cursor)
+        page = massive_news.parse_page(payload, _now(), seen_cursors=seen)
+        rows = news_store.massive_rows(page.articles)
+        added += store.append_many(rows)
+        pages, articles = pages + 1, articles + len(rows)
+        insights += sum(1 for r in rows if r["payload"]["has_insights"])
+        for r in rows:
+            d = r["published_at"].date().isoformat()
+            first, last = min(first or d, d), max(last or d, d)
+        if page.next_cursor is None:
+            cursor = None
+            break
+        if cursor is not None:
+            seen.append(cursor)
+        cursor = page.next_cursor
+    complete = cursor is None
+    print(f"Massive news {ticker or 'all'}: pages {pages} (complete {complete}), articles {articles}, "
+          f"with insights {insights}, first {first or '-'}, last {last or '-'}, new {added}")
+    return {"pages": pages, "articles": articles, "added": added, "insights": insights}
+
+
 def show_ecos_items(stat: str) -> None:
     """Public table metadata only: item code, name, cycle, first and last period."""
     from data.didm import ecos
@@ -337,6 +396,11 @@ def main(argv: list[str] | None = None) -> int:
                     help="paid NEWS_SENTIMENT endpoint; held by the current data plan")
     ap.add_argument("--tiingo", nargs="*", metavar="TICKER", help="paid news access; held by the current data plan")
     ap.add_argument("--cryptopanic", nargs="*", metavar="CODE", help="paid API; held by the current data plan")
+    ap.add_argument("--alpaca-news", nargs="*", metavar="SYMBOL", help="DS-5b Alpaca News (key id + secret)")
+    ap.add_argument("--massive-news", nargs="*", metavar="TICKER", help="DS-5c Massive ticker news (free: 5/min)")
+    ap.add_argument("--news-start", metavar="YYYY-MM-DD", help="oldest article date for --alpaca-news/--massive-news")
+    ap.add_argument("--news-end", metavar="YYYY-MM-DD", help="newest article date for --alpaca-news")
+    ap.add_argument("--news-max-pages", type=int, default=5, help="page cap per source/ticker (default 5)")
     ap.add_argument("--gdelt-day", metavar="YYYYMMDD", help="fetch all 96 fifteen-minute files of a UTC day")
     ap.add_argument("--gdelt-gkg", action="store_true", help="with --gdelt-day, also GKG files (large)")
     ap.add_argument("--ecos-probe", action="append", default=[], metavar="STAT,CYCLE,START,END[,ITEM]")
@@ -379,6 +443,13 @@ def main(argv: list[str] | None = None) -> int:
             _run("ECOS probe", lambda spec=spec: probe_ecos(spec))
         for stat in args.ecos_items:
             _run("ECOS items", lambda stat=stat: show_ecos_items(stat))
+        if args.alpaca_news is not None:
+            _run("Alpaca news", lambda: collect_alpaca_news(store, args.alpaca_news, args.news_start, args.news_end,
+                                                            args.news_max_pages))
+        if args.massive_news is not None:
+            for ticker in args.massive_news or [None]:
+                _run("Massive news", lambda ticker=ticker: collect_massive_news(store, ticker, args.news_start,
+                                                                                args.news_max_pages))
         for series in args.kalshi:
             _run("Kalshi", lambda series=series: collect_kalshi(store, series))
     print(gdelt_ingest.ATTRIBUTION)
