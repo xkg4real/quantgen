@@ -6,6 +6,7 @@
     python -m tools.didm.collect_daily --data-dir <folder> --no-gdelt --edgar-history 320193 --edgar-from 2015-01-01 --edgar-to 2024-12-31
     python -m tools.didm.collect_daily --data-dir <folder> --no-gdelt --edgar 320193 --opendart 20261117 20261118 \
         --ecos "722Y001,M,202401,202610,0101000" --kalshi KXFED
+    python -m tools.didm.collect_daily --data-dir <folder> --no-gdelt --kalshi-history KXFED --kalshi-from 2021-07-01 --kalshi-to 2024-12-31
 
 In PowerShell, quote every comma-separated value (--ecos "..."): unquoted, PowerShell
 reads it as an array and turns 0101000 into 101000 (owner run 2026-11-18).
@@ -342,6 +343,75 @@ def show_ecos_items(stat: str) -> None:
               f"{r.get('START_TIME')}-{r.get('END_TIME')}")
 
 
+def _epoch(day: str, end_of_day: bool = False) -> int:
+    d = datetime.combine(date.fromisoformat(day), datetime.min.time(), tzinfo=timezone.utc)
+    return int(d.timestamp()) + (86_399 if end_of_day else 0)
+
+
+def _market_ts(market: dict, key: str) -> int | None:
+    raw = market.get(key)
+    if not raw:
+        return None
+    try:
+        t = datetime.fromisoformat(str(raw).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return int((t if t.tzinfo else t.replace(tzinfo=timezone.utc)).timestamp())
+
+
+def collect_kalshi_history(store: PointInTimeStore, series_list: list[str], start: str, end: str | None,
+                           statuses: list[str], max_markets: int, max_pages: int = 20,
+                           list_markets=None, fetch_candles=None, window_days: int = 365) -> list[dict]:
+    """D7: daily candles (period 1440) of markets in a series that were alive between start and end,
+    closed and settled ones included. Market lists use the cursor checks of fetch_all_markets;
+    candle requests are split into windows of at most window_days."""
+    if list_markets is None or fetch_candles is None:
+        from data.didm import kalshi
+        list_markets = list_markets or kalshi.fetch_all_markets
+        fetch_candles = fetch_candles or kalshi.fetch_candlesticks
+    lo = _epoch(start)
+    hi = _epoch(end, end_of_day=True) if end else int(_now().timestamp())
+    if lo > hi:
+        raise SystemExit("--kalshi-from must not be after --kalshi-to")
+    results = []
+    for series in series_list:
+        markets, pages, complete = {}, 0, True
+        for status in statuses:
+            got = list_markets(series, status, max_pages, min_close_ts=lo)
+            pages += got["pages"]
+            complete = complete and got["complete"]
+            for m in got["markets"]:
+                opened = _market_ts(m, "open_time")
+                if m.get("ticker") and (opened is None or opened <= hi):
+                    markets.setdefault(m["ticker"], m)
+        tickers = sorted(markets)[:max_markets]
+        candles = added = with_candles = 0
+        first = last = None
+        for ticker in tickers:
+            m = markets[ticker]
+            a = max(lo, _market_ts(m, "open_time") or lo)
+            b = min(hi, _market_ts(m, "close_time") or hi)
+            rows = []
+            while a <= b:
+                w_end = min(b, a + window_days * 86_400 - 1)
+                rows += kalshi_ingest.candlestick_rows(ticker, fetch_candles(series, ticker, a, w_end, 1440), _now())
+                a = w_end + 1
+            if rows:
+                with_candles += 1
+                days = sorted(r["valid_at"].date().isoformat() for r in rows)
+                first = min(first or days[0], days[0])
+                last = max(last or days[-1], days[-1])
+            candles += len(rows)
+            added += store.append_many(rows)
+        capped = len(markets) > len(tickers)
+        print(f"Kalshi history {series} {start}..{end or 'now'}: markets {len(markets)} (pages {pages}, "
+              f"complete {complete}{', capped at ' + str(max_markets) if capped else ''}), "
+              f"with candles {with_candles}, candles {candles}, first {first or '-'}, last {last or '-'}, new {added}")
+        results.append({"series": series, "markets": len(markets), "read": len(tickers), "complete": complete,
+                        "candles": candles, "added": added})
+    return results
+
+
 def collect_kalshi(store: PointInTimeStore, series: str) -> None:
     from data.didm import kalshi
     got = kalshi.fetch_all_markets(series)
@@ -377,6 +447,13 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--opendart", nargs=2, metavar=("BGN_YYYYMMDD", "END_YYYYMMDD"))
     ap.add_argument("--ecos", action="append", default=[], metavar="STAT,CYCLE,START,END[,ITEM...]")
     ap.add_argument("--kalshi", nargs="*", default=[], metavar="SERIES")
+    ap.add_argument("--kalshi-history", nargs="*", default=[], metavar="SERIES",
+                    help="D7: daily candles of open, closed and settled markets from --kalshi-from")
+    ap.add_argument("--kalshi-from", metavar="YYYY-MM-DD", help="first day for --kalshi-history (required)")
+    ap.add_argument("--kalshi-to", metavar="YYYY-MM-DD", help="last day for --kalshi-history (default now)")
+    ap.add_argument("--kalshi-status", nargs="+", default=["settled", "closed", "open"],
+                    choices=["open", "closed", "settled"])
+    ap.add_argument("--kalshi-max-markets", type=int, default=200, help="markets per series (default 200)")
     ap.add_argument("--alphavantage", nargs="*", metavar="TICKER",
                     help="paid NEWS_SENTIMENT endpoint; held by the current data plan")
     ap.add_argument("--tiingo", nargs="*", metavar="TICKER", help="paid news access; held by the current data plan")
@@ -428,6 +505,12 @@ def main(argv: list[str] | None = None) -> int:
             _run("ECOS items", lambda stat=stat: show_ecos_items(stat))
         for series in args.kalshi:
             _run("Kalshi", lambda series=series: collect_kalshi(store, series))
+        if args.kalshi_history:
+            if not args.kalshi_from:
+                ap.error("--kalshi-history needs --kalshi-from")
+            _run("Kalshi history", lambda: collect_kalshi_history(
+                store, args.kalshi_history, args.kalshi_from, args.kalshi_to, args.kalshi_status,
+                args.kalshi_max_markets))
     print(gdelt_ingest.ATTRIBUTION)
     return 0
 
