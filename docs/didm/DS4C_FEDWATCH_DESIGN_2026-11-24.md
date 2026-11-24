@@ -91,3 +91,10 @@ T9의 인증 방식만 실제 문서 확인 뒤 고정합니다. 나머지는 �
 1. 소유자: 종가판 가입 여부·요금 확인 (OA-31), 키 발급, `setx CME_FEDWATCH_API_ID` / `setx CME_FEDWATCH_API_SECRET`. 이력 저장이 약관상 허용되는지 확인 (D14 질문 2, VENDOR_EVAL 4절). 법률 자문이 아닙니다.
 2. DATA_SOURCE: 공식 API 문서로 인증·필드·갱신 시각 확인 → 어댑터 작성 → T1~T10 → 소유자 PC에서 최신판 1회 + 하루치 이력 1회 실행 안내.
 3. 대안 (가입하지 않을 때): 30일 연방기금금리 선물 (ZQ) 정산가로 같은 확률을 직접 계산하는 길. FedWatch 공개 방법론을 따르면 가능하지만, 선물 정산가 출처와 그 이용 조건을 따로 확인해야 해서 이 문서 범위 밖입니다 (VENDOR_EVAL 3절 "직접 계산 길은 미검토").
+
+## 8. 구현 상태 (D9, 2026-11-24)
+
+- 코드: `core/didm/ingest/fedwatch.py` (2·3·4절 그대로), `tools/didm/collect_daily.py --fedwatch-file PATH`. 실제 호출·키 없음.
+- 소유자 파일 형식 (CSV, UTF-8, 머리줄 필수): `trade_date,meeting_date,lower_bp,upper_bp,probability` + 선택 `published_at,current_lower_bp,current_upper_bp`. 한 줄 = 거래일 × 회의 × 구간. 확률은 0~1 또는 퍼센트 (회의별 합 100이면 /100, `%` 기호 허용). CME에서 받은 파일은 이 열로 옮겨 적습니다 (CME 원래 열 이름은 미검증이라 추측해서 읽지 않음).
+- 검사에 걸린 거래일은 통째로 거부하고 수와 이유 (최대 10개)를 출력합니다. 같은 파일의 다른 거래일은 저장합니다.
+- 시험: `tests/didm_fedwatch_acceptance.py` 11개 = T1~T8, T10 (+ 한 거래일 거부 시 다른 날 유지, 열 누락). **T9 (HTTP 클라이언트)는 OA-31 답과 공식 API 문서 뒤** (`data/didm/fedwatch.py`도 그때 만듦).

@@ -36,6 +36,7 @@ import config  # noqa: F401 - loads the project .env into the environment, like 
 
 from core.didm.ingest import alfred as alfred_ingest
 from core.didm.ingest import ecos as ecos_ingest
+from core.didm.ingest import fedwatch as fedwatch_ingest
 from core.didm.ingest import filings as filings_ingest
 from core.didm.ingest import gdelt as gdelt_ingest
 from core.didm.ingest import kalshi as kalshi_ingest
@@ -214,6 +215,22 @@ def collect_alfred_file(store: PointInTimeStore, spec: str) -> None:
     sheet = wb["Obs. By Real-Time Period"]
     rows = alfred_ingest.rows_from_manual(sid, list(sheet.iter_rows(values_only=True))[1:], _now())
     print(f"ALFRED file {sid}: vintage rows {len(rows)}, new {store.append_many(rows)}")
+
+
+def collect_fedwatch_file(store: PointInTimeStore, path: str) -> dict:
+    """DS-4c (D9): the owner's FedWatch end-of-day file in the documented CSV layout
+    (core.didm.ingest.fedwatch.CSV_COLUMNS). No network; days failing a check are refused whole."""
+    text = Path(path).read_text(encoding="utf-8-sig")
+    days, refused = fedwatch_ingest.read_csv(text)
+    received = _now()
+    rows = [r for d in days for r in fedwatch_ingest.rows(d, received)]
+    added = store.append_many(rows)
+    span = f"{days[0].trade_date}..{days[-1].trade_date}" if days else "-"
+    print(f"FedWatch file {Path(path).name}: trade days {len(days)} ({span}), meeting rows {len(rows)}, "
+          f"refused days {len(refused)}, new {added}")
+    for trade, reason in refused[:10]:
+        print(f"FedWatch refused {trade}: {reason}")
+    return {"days": len(days), "rows": len(rows), "refused": len(refused), "added": added}
 
 
 def _run(label: str, fn) -> None:
@@ -497,6 +514,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--finbert", action="store_true")
     ap.add_argument("--alfred", nargs="*", default=[])
     ap.add_argument("--alfred-file", action="append", default=[], metavar="SERIES=PATH")
+    ap.add_argument("--fedwatch-file", action="append", default=[], metavar="PATH",
+                    help="DS-4c: FedWatch end-of-day CSV (trade_date,meeting_date,lower_bp,upper_bp,probability)")
     ap.add_argument("--edgar", nargs="*", default=[], metavar="CIK")
     ap.add_argument("--edgar-history", nargs="*", default=[], metavar="CIK",
                     help="D6: older filings too (filings.files), limited by --edgar-from/--edgar-to")
@@ -546,6 +565,8 @@ def main(argv: list[str] | None = None) -> int:
             _run("ALFRED", lambda: collect_alfred_api(store, args.alfred))
         for spec in args.alfred_file:
             collect_alfred_file(store, spec)
+        for path in args.fedwatch_file:
+            _run("FedWatch file", lambda path=path: collect_fedwatch_file(store, path))
         if args.edgar:
             _run("EDGAR", lambda: collect_edgar(store, args.edgar))
         if args.edgar_history:
