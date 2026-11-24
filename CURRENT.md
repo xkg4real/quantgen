@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-24
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a, GH-2, PAY-0, PAY-2
 next_ids: DS-H, DS-1, KEY-5, OS-F1, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-24T19:08:00+09:00
+updated_at: 2026-11-24T20:52:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: claude/integration-20261124
-work_commit: 3e2af60
+work_branch: claude/integration2-20261124
+work_commit: ac076c3
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/150
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-12-01T17:00:00+09:00
@@ -25,7 +25,7 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 
 ## 0. 한 줄 요약
 
-GPT가 2026-11-20..23에 병합한 PR 10개를 git·CI로 확인했고(모두 사실, 규칙 위반 없음), 하부 세션을 5개로 늘려 각자 첫 일을 보냈다. 지금 메인은 GH-2 PR #147의 CI를 기다린다. 새 세션 일(DIDM 개발, QuantGPT)과 REMAINING WORK의 남은 일은 병행한다(소유자: "우선순위라기 보다 같이 병행하는걸 잊지 말라는 얘기였습니다").
+GPT가 2026-11-20..23에 병합한 PR 10개를 git·CI로 확인했고(모두 사실, 규칙 위반 없음), 하부 세션을 5개로 늘려 일을 배분했다. 통합 PR ① [#150](https://github.com/xkg4real/quantgen/pull/150)(head `4f53f86`, 기준 main `de32ea1`)은 독립 검토와 수정, 재확인을 마치고 CI를 기다린다(2026-11-24 20:52 KST 현재 Windows·Ubuntu 설치 작업 4건 진행 중, 나머지 5건 성공). 통합 ② `claude/integration2-20261124` @ `ac076c3`은 origin에 있고 독립 검토 8갈래가 진행 중이다. 새 세션 일(DIDM 개발, QuantGPT)과 REMAINING WORK의 남은 일은 병행한다(소유자: "우선순위라기 보다 같이 병행하는걸 잊지 말라는 얘기였습니다").
 
 ## 1. 목표와 완료 조건
 
@@ -86,8 +86,15 @@ GPT가 2026-11-20..23에 병합한 PR 10개를 git·CI로 확인했고(모두 �
 - [x] 통합 브랜치 ② 시험 묶음 `claude/integration2-20261124` @ `5253613` (①의 3e2af60 위): os-qt-lint-shadow `0a92e58`, payments-design `31bd651`, ds-collection-status `b4d48bc`, ds-5bc-news `4a646ce`. runtime-smoke 한 줄 충돌 2번은 합집합으로 정리. DIDM·경계 시험 300 OK
 - [x] 환경: 소유자가 Default에 호스트 5개 추가 승인(sraf.nd.edu, huggingface.co, arxiv.org, trec.nist.gov, econ.korea.ac.kr)
 - [x] 소유자의 N0 승인("N0 승인, Alpaca·Massive부터 진행하세요", 2026-11-24 18:41 KST, DATA_SOURCE 세션, 데스크톱 앱 사람 입력, 문구는 세션이 띄운 제안과 같음)을 세션 기록에서 확인. N1(EODHD)은 답 없음
-- [ ] 통합 PR ① 독립 검토(5갈래) ← **여기 진행 중**. DIDM 갈래 끝남: 큰 지적 3(자격 판정이 received_at만 봄, 조립 필드 출처를 시험이 안 봄, 기준선), 작은 지적 8 → `plans/2026-11-24/INTEGRATION1_REVIEW.md`, DIDM_DEV가 `claude/didm-contract-fixes-20261124`(3626913에서)로 고치는 중. 나머지 4갈래(data, os-pay, main, policy) 진행 중
-- [ ] QUANTGPT: 9건 끝남(`quantgpt-q0` @ `326f5a5`, 메인이 122 OK와 `qgpt/` 밖 변경 없음 확인). 그 세션이 "신뢰 기기 전용"이 되어 메인의 직접 전달이 거절됨 → 전달은 `WORKBOARD.md`의 "메인 → QUANTGPT" 절, 소유자에게 한 줄 붙여 넣기 요청(OA-54)
+- [x] 통합 PR ① 독립 검토 5갈래 + 지적별 반박 확인 + 수정 뒤 재확인(DIDM 12/12, 자료 11/11, OS 8/8 닫힘). 기록은 `plans/2026-11-24/INTEGRATION1_REVIEW.md`. 수정 병합: didm-contract-fixes `feed288`, ds-review-fixes `8e86fdd`·`9663a99`·`42795e6`, os-review-fixes `c94b2de`·`7d6936e`. 메인 커밋 `6decc49`, `dde5761`, `6d217a3`, `2bd4cb2`, `0c485eb`, 기준선 `4f53f86`(PASS / BLOCKED / 20 / 865)
+- [x] 통합 PR ① [#150](https://github.com/xkg4real/quantgen/pull/150) 엶(head `4f53f86`). 로컬 최종 시험 1,322개 중 1,321 통과(건너뜀 3, 오류 1은 main에서도 같은 `tests.web_branding_acceptance`의 이 가상환경 문제)
+- [ ] #150 CI ← **여기 대기 중**. 2026-11-24 20:52 KST: 문서 정합성, 임시 원장 2건, 문법 2건 성공. 설치 작업 4건(windows 3.11·3.12·3.14, ubuntu 3.12) 진행 중. Vercel 상태와 댓글은 무시
+- [x] 통합 ② `claude/integration2-20261124` @ `ac076c3`(origin): ①의 `4f53f86` 위에 os-qt-lint-shadow `0a92e58`, payments-design `31bd651`, ds-collection-status `b4d48bc`, ds-5bc-news `4a646ce`, ds-edgar-history `927375b`, payments-not-entitled `75c56fb`, payments-research-keys `26768ed`, os-sale-build-check `662a3d9`, ds-fedwatch `5e971c0`, os-linux-differences `16232af`, ds-home-reason-codes `9f9dbda`, ds-sample-feasibility `408d8b4`, ds-by-entity `93f23fd`, didm-dev `9b81479`. CI 시험 줄에 DIDM 시험 6개 추가(148개, 약 50초, 로컬 통과). REMAINING_WORK 2026-11-24판에 DIDM-2/2, DIDM-9/e2e, DIDM-8/a, DIDM-7/a, DIDM-9/b, DIDM-9/c, DS-6/2, DS-H/reasons, DS-7 등록
+- [ ] 통합 ② 독립 검토 8갈래(didm-sim, didm-pipeline, data-connectors, home-reasons, os, payments, portability, policy) 진행 중. 스크립트는 메인 세션 작업 폴더에만 있음(다시 돌리려면 같은 8갈래로 새로 검토)
+- [x] DIDM_DEV: `claude/didm-dev-20261124` @ `9b81479`(DIDM-3/b, 4/a, 4/b, 5, 7, 8, 9, 2/2, 9/e2e; Stage 0 시도 1회 판정 REVISE; 사전등록 V0.1 제안서 14문항은 소유자 답 대기, `docs/didm/PREREG_V0.md`는 그대로). 다음 일 배정(2026-11-24 20:35 KST): DIDM-8/a, DIDM-7/a, DIDM-9/b, DIDM-9/c, 판단 v1 제안에 입장·공식 표시 절
+- [x] QUANTGPT: 9건 끝남(`quantgpt-q0` @ `326f5a5`, 메인이 122 OK와 `qgpt/` 밖 변경 없음 확인). 그 세션과 PAYMENTS 세션이 "신뢰 기기 전용"이 되어 메인의 직접 전달이 거절됨 → 전달은 handoff `WORKBOARD.md`의 "메인 → QUANTGPT"(1~15), "메인 → PAYMENTS_ACCOUNT_KEYS"(1~5) 절, 소유자에게 한 줄 붙여 넣기 요청(OA-54, OA-55)
+- [x] 환경: 소유자가 Default에 공급사 문서 호스트 6개 추가 승인(docs.alpaca.markets, alpaca.markets, massive.com, opendart.fss.or.kr, www.data.go.kr, openapi.krx.co.kr). DATA_SOURCE에 공급사 문서 대조(D14) 배정
+- [ ] 연구 단위 3개 구현 진행 중(메인 워크플로, 아직 push 없음): ⑨-4/2/d `claude/r94-baselines-20261124`, ⑨-3a/recorder/1/payload `claude/r93a-payload-20261124`, ⑧-1/c `claude/r81c-h2-sheet-20261124`
 
 **마지막으로 통과한 검증:**
 
@@ -100,17 +107,18 @@ Ran 40 tests ... OK
 
 ## 5. 중단 지점
 
-멈추지 않았다. 커밋되지 않은 변경 없음. 통합 브랜치 두 개는 origin에 있고 PR은 아직 없다. 준법 기준선(`docs/compliance/source-review.json`)은 통합 ①에서 아직 갱신하지 않았다(지금 `--check`는 FAIL: 새 소스 때문에 20개 문서 재검토 표시, 검토 뒤 마지막 커밋으로 갱신). 열린 PR: #148(고칠 것 있음, 보류), #140(UI 초안, 담당 미정), #12(오래된 것).
+멈추지 않았다. 커밋되지 않은 변경 없음. 열린 PR: #150(통합 ①, CI 대기), #148(고칠 것 있음, 보류), #140(UI 초안, 담당 미정), #12(오래된 것). 통합 ②는 origin에 있고 PR은 아직 없다(① 병합과 정책 PR-2 뒤). 통합 ②의 준법 기준선은 아직 갱신하지 않았다(검토 뒤 마지막 커밋으로 갱신).
 
 ## 6. 다음 할 일 (순서대로)
 
-1. 통합 PR ①: 남은 검토 4갈래 결과를 `plans/2026-11-24/INTEGRATION1_REVIEW.md`에 덧붙이고, 지적은 해당 세션이 자기 브랜치에 고친 커밋을 올리면 `claude/integration-20261124`에 합친다. 그 뒤 `python -B -m tools.compliance.check --refresh-baseline --reviewed-by "<검토자>" --review-note "<실제 검토 내용>"` → `--check` PASS → PR → CI 녹색 → merge commit 병합(Vercel 무시) — 완료 기준: main에 7개 브랜치와 메인 문서가 있음, `tests.handoff_doc_acceptance` 17 OK, DIDM 시험이 CI 목록에 있음
-2. 병합 뒤 원장 기록(`--done`, REMAINING_WORK 2026-11-24판이 main에 있어야 ID가 유효): QGPT-01/a `c7e7494`, QGPT-02 `073725b`, QGPT-04 `3e76b35`, QGPT-05 `735e2c0`, QGPT-21 `30b3279`, QGPT-03 `7478f82`, QGPT-20 `273cdec`, QGPT-11 `326f5a5`(이상 `quantgpt-q0` 브랜치, main 병합 없음), DIDM-2, DIDM-3/a, DS-4a/2, DS-4e/2, DS-H/diag, KEY-5/a/2, OS-A1/apk-evidence, OS-F2/guide, SESSION-PIPELINE/2
-3. MERGE_QUEUE에 "병합: PAYMENTS_ACCOUNT_KEYS (P4)" 적고 알림 → 정책 문서 PR-2 `policy-pr2` @ `ba16dce` 단독 PR(확인 안 된 사실은 문장마다 미검증 표시)
-4. 통합 PR ②: `claude/integration2-20261124`에 최신 main을 합치고, os-macos-differences `530bcf6`(OS가 동결 빌드의 키 보관함 점검 근거를 내거나 "보고만"으로 낮춘 뒤), DIDM의 3626913 뒤 커밋(보고된 것), P7·P8·D6·D7이 오면 함께 → 기준선 갱신 → PR → CI → 병합
+1. PR #150: `get_check_runs`로 head `4f53f86`의 검사를 본다. 전부 성공이면 merge commit으로 병합(Vercel 무시). 실패하면 그 작업의 로그를 읽고 담당 세션과 통합 브랜치에서 고친 뒤 push, 감시 대상 소스가 바뀌면 기준선 다시 갱신 — 완료 기준: main에 7개 브랜치와 메인 문서가 있음, `tests.handoff_doc_acceptance` 17 OK
+2. 병합 뒤 원장 기록(`--done`, REMAINING_WORK 2026-11-24판이 main에 있어야 ID가 유효): DIDM-2 `ba28b02`, DIDM-3/a `3626913`, DS-4a/2, DS-4e/2, DS-H/diag, KEY-5/a/2 `502802e`, OS-A1/apk-evidence `94f257d`, OS-F2/guide `000e210`, SESSION-PIPELINE/2, 그리고 `quantgpt-q0` 브랜치의 QGPT-01/a `c7e7494`, QGPT-02 `073725b`, QGPT-04 `3e76b35`, QGPT-05 `735e2c0`, QGPT-21 `30b3279`, QGPT-03 `7478f82`, QGPT-02/replay `88e42d3`, QGPT-20 `273cdec`, QGPT-11 `326f5a5`
+3. MERGE_QUEUE에 "병합: PAYMENTS_ACCOUNT_KEYS (P4)" 적고 알림(WORKBOARD "메인 → PAYMENTS_ACCOUNT_KEYS" 절에도) → 정책 문서 PR-2 `claude/policy-pr2-20261124` @ `ee1628d` 단독 PR, 메인이 검토하고 병합
+4. 통합 PR ②: 검토 8갈래의 지적을 담당 세션이 고치면 합치고, main(① 병합 뒤)을 합치고, OS 후속 브랜치·P10·P11·D14가 오면 함께, `docs/product/ui_website_updates/PR-<번호>.json`(D11 문구는 DATA_SOURCE 보고에 있음) 추가, 기준선 갱신 → PR → CI → 병합 → 원장(DIDM-3/b, 4/a, 4/b, 5, 7, 8, 9, 2/2, 9/e2e, DS-4c/design, DS-4c/code, DS-4d/2, DS-4e/3, DS-5b, DS-5c, DS-6, DS-6/2, DS-H/reasons, DS-7, PAY-1/design, PAY-3/design, PAY-3/not-entitled, KEY-6, OS-F1/lint16, OS-F3/survey, OS-SALE/check, OS-F6/plan)
 5. DATA_SOURCE에 병합 알림 → OA-09 한 줄 명령을 main 기준으로 다시 받아 소유자에게 전달. DS-H, DS-1은 소유자 OA-09·OA-10(c) 답으로 닫음. KEY-5·OS-F1은 UI PR #140(OA-48) 뒤
-6. 연구·제품 ID(⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑧-1): 지금 시작할 수 있는 것을 가려 배분(조사 진행 중)
-7. PR #148: 고친 커밋이 오면 `PR148_REVIEW.md`의 "병합 전 다시 볼 것" 3가지 확인 뒤 병합. Notion REMAINING WORK 갱신
+6. 연구 단위 3개가 끝나면 복제본을 확인하고 브랜치를 올린 뒤 ⑨-4/2/e, ⑨-3a/trial-counts/1을 시작, 연구 PR로 묶음
+7. 소유자에게: DIDM 제안서 14문항(권고 포함), TRADEGEN 확인 4가지, 판매 빌드 구성과 Linux 판매 여부, 기준선 라이선스와 기반 모델, Stage 1 주석자·도구·권리, DATA 표본 결정, PAYMENTS 결정표
+8. PR #148: 고친 커밋이 오면 `PR148_REVIEW.md`의 "병합 전 다시 볼 것" 3가지 확인 뒤 병합. Notion REMAINING WORK 갱신
 
 ## 7. 주의사항 / 하지 말 것
 
