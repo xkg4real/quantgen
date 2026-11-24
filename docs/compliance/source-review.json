@@ -443,7 +443,6 @@
     "docs/product/UI_WEBSITE_SYNC.md": "37b62baa94dece046c08e70c01d49e4658937cbaa21d3b980c9fcb9099913363",
     "docs/product/ui_drafts_2026-11-17/README.md": "b2166e175e5d7ced820feeb9714a18640a4e08a0ced92c5ea88b9c45c29d2c92",
     "main.py": "768392a3fddaca06fda168710f757147ad31b679d8c68076d947204704121229",
-    "mindmap/QUANTGEN Macro Neural Link.html": "4dbf731539d418aa67553bd5fd393dfc55550fac737ef89ca4c18c813f7c76c5",
     "mobile/main.py": "db2d270e972e026b08702891813f37674b0998f5d0d742e9e86a593d05fbb89c",
     "mobile/pyproject.toml": "2cad54b7e32873320de1d05e1e81cb91ce88f64cd97afc1ec955399fc5922db7",
     "packaging/launch_desktop.py": "7724b54d172f00d87c80abab2ff5214deb5ebcf9105878e24ca7519c166ce4b8",
@@ -536,7 +535,6 @@
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
     "requirements-nautilus.txt": "7a720e247bf1a5708aa19e79c1291b6baef87c837719c669ebe5f24e4a4a7e0e",
     "requirements.txt": "51bba6d2dedc96e30c4176d44043536f241802ccfb19d81aad3084ee68bc48a3",
-    "test_npu.py": "fae9f28fa1772b834ede1f22315b93f66feefc586e5afd061e188f091d48b4d4",
     "tests/__init__.py": "db1fcd9d60745c7af2cbaf67c78afaabeb6d3daa51bcab04b786fcd3432658e3",
     "tests/acceptance.py": "52145dced05c3eb193c6eab1905096a478b1940490bba608a44024e24ea7d7fc",
     "tests/adoption_strategy_rules_acceptance.py": "dddcfc9a1eab900437e0d62fddd62f35fc4b5bcfe46cd7c55cf6211698ae7f8d",
@@ -867,163 +865,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.806777+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "028846bae2b00d7070a8f18a72e3a2cfc2be2f22bf29c4df888da8d52b7a84be",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.265017+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.810417+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "028846bae2b00d7070a8f18a72e3a2cfc2be2f22bf29c4df888da8d52b7a84be",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.267679+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "e3d5080d8d3fb0ecc6c03eaaaee5a5fb483c1368f3e3a056fa1e31cffb653bf1",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.812800+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "32ecbf76095cf5557b195441e8d37879b90bbafc57168d4741c0b8497aaec5f2",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.269725+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "3416f8fd43bf3c894c27adc917dcd557f728865ab3050f2ee4927a51ccae9807",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.815419+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "1fdc9d367e5946db52b1ecf4fe8fb826e11b812a922948b14d9fde84b215d5df",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.272053+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "af1a2aa65a55269190bc0fdf5638243c35319ecf05655e8a6c3ffd57a852c05d",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.818025+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "bcbbd9538f6175da8dcbe11dff8ce1cff0fbac6d7b9f915da471c652e0707b37",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.274407+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "23756f16786c9277a8059a8dddab0a77c2154818f42f260a48d3f8445a34e4e6",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.820438+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "ba3e6ce6463ec13586642201ca865b04f636a2fe7bb27e158367e4c0d50b94d9",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.276736+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.823480+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "028846bae2b00d7070a8f18a72e3a2cfc2be2f22bf29c4df888da8d52b7a84be",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.278792+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
-      "source_digest": "23756f16786c9277a8059a8dddab0a77c2154818f42f260a48d3f8445a34e4e6",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.825737+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "ba3e6ce6463ec13586642201ca865b04f636a2fe7bb27e158367e4c0d50b94d9",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.283492+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "035ac5db860c8db69f4adf3993fa820f0f884a74668b83a6d7889b4ac8b70d13",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.828569+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "d899634a75fa5c640e052fabd44bdfd3cbae6193199eff9653d853c3b7c80946",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.287203+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "4f98a225a6e31dc02c76bfdb3e6141a485822d59f3cef5a54b97c4e307fac263",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.830740+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "fdba8113d3f12c00efb7e7500a4fd8f07f91fe72d89925142d37f604d183fab4",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.290359+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "ee51db6fdfcf54db77ccc519b94dbf75f8edf39c49684bc1cd96cc66b76f9557",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.833165+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "e3ed60577a1f88d531ecdc5bb87fd312808728562a6f56edc5caf1e763afe080",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.292238+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "1a4ce1f7d60ea570488e42a64c39ecc54ccce0dd0aa74da319459e39f6f3625c",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.835816+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "7e2aa1c7aba237783d33d891528836c1d752db3dc7e9f1715ae7f219391fdcb9",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.295975+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "035ac5db860c8db69f4adf3993fa820f0f884a74668b83a6d7889b4ac8b70d13",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.838118+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "d899634a75fa5c640e052fabd44bdfd3cbae6193199eff9653d853c3b7c80946",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.297783+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "035ac5db860c8db69f4adf3993fa820f0f884a74668b83a6d7889b4ac8b70d13",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.840006+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "d899634a75fa5c640e052fabd44bdfd3cbae6193199eff9653d853c3b7c80946",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.299513+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "035ac5db860c8db69f4adf3993fa820f0f884a74668b83a6d7889b4ac8b70d13",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.847308+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "d899634a75fa5c640e052fabd44bdfd3cbae6193199eff9653d853c3b7c80946",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.303091+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "71c304d35736f42709c99e57e06291d66f7a76844d42887cd3932e0257f9cdc4",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.850440+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "916f5fd44c09a3b51976afce98de7c1e409b75e2e230ef0813bdd39b5aa95ca5",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.305311+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "23756f16786c9277a8059a8dddab0a77c2154818f42f260a48d3f8445a34e4e6",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.852562+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "ba3e6ce6463ec13586642201ca865b04f636a2fe7bb27e158367e4c0d50b94d9",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.307018+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.854657+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "028846bae2b00d7070a8f18a72e3a2cfc2be2f22bf29c4df888da8d52b7a84be",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.308774+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "81cc7892956faa064afea5ea8bebdf170b688c2d36cab52addd714218e22225e",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.856655+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "644300f6dd9cdfcd1e0d09fef0ae01f440fa7009057c5058072975bcda28f034",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.312637+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.858639+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "028846bae2b00d7070a8f18a72e3a2cfc2be2f22bf29c4df888da8d52b7a84be",
+      "reviewed_by": "Claude main session (QUANTGEN/MAIN): GH-2 source-policy consistency review 2026-11-24",
+      "review_note": "Reviewed all 20 policy documents against the GH-2 removals: test_npu.py (16-line local NPU demo that loads a local model folder; no network, no user data), five mindmap/ research files (four text documents and one PDF; not imported, not packaged, no runtime behaviour) and the godseye-dev launcher entry in .claude/launch.json (a developer launcher for an unrelated local folder). No document cites these files (grep of docs/compliance and FACTS.md: no match). The removals change no data flow, third party, retention period, permission, disclosure or user-facing behaviour, so no document text changes. _backup/ is not touched. Publication stays BLOCKED as before.",
+      "reviewed_at": "2026-11-24T09:37:31.314963+00:00",
+      "source_commit": "bf78b6b6d821f2d249d8c849bd87e7216bb91c7d"
     }
   }
 }
