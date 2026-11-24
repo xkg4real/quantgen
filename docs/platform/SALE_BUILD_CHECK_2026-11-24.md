@@ -43,3 +43,28 @@
 - 이 브랜치 빌드(Linux, PyQt6; `collected |= set(LGPL_PURE_PYTHON)` 한 줄은 빌드 뒤에 더함 — 지금 목록이 비어 있어 결과에 영향 없음): PyInstaller rc 0, `--selfcheck` rc 0, 13항목 모두 ok(`sale_build_contents` 포함). `_internal`에 위 6개 패키지·로고 없음.
 - main 빌드(같은 조건): `_internal/chardet` 43개 파일, 로고 2개, 고지에 chardet 없음 — 1표의 "main" 열.
 - Windows·macOS 빌드와 PySide6 빌드는 `platform-build.yml`에서 확인(실행하지 않음).
+
+## 5. 다시 돌리는 명령
+
+같은 조건(Linux, `pip install -r requirements.txt "PyQt6==6.12.0" "pyinstaller==6.22.3"`)에서 저장소 루트에서 실행합니다. `<REF>`는 비교할 커밋(main이면 `de32ea1`, 이 브랜치면 그 커밋), `<OUT>`은 저장소 밖의 새 폴더입니다. 저장소 안에 빌드 폴더를 만들지 않습니다.
+
+```bash
+REF=de32ea1; OUT=$(mktemp -d)
+git worktree add --detach "$OUT/src" "$REF"
+(cd "$OUT/src" && QG_QT_BINDING=PyQt6 python -m PyInstaller --noconfirm \
+    --distpath "$OUT/dist" --workpath "$OUT/work" packaging/quantgen_desktop.spec > "$OUT/build.log" 2>&1); echo "build rc=$?"
+QT_QPA_PLATFORM=offscreen HOME=$(mktemp -d) "$OUT/dist/QUANTGEN/QUANTGEN" --selfcheck "$OUT/selfcheck.json"; echo "selfcheck rc=$?"
+
+# 1) 자체 점검 항목: main은 12항목, 이 브랜치는 13항목(+ sale_build_contents, os_credential_store는 O4와 합친 뒤)
+python -c "import json,sys; r=json.load(open(sys.argv[1])); print(r['ok'], [(x['check'], x['ok']) for x in r['results']])" "$OUT/selfcheck.json"
+# 2) 앱 폴더 안의 flet-cli 전용 패키지와 예전 로고 (main: chardet, nextgen_logo_*.png 2개 / 이 브랜치: 없음)
+ls "$OUT/dist/QUANTGEN/_internal" | grep -i -E '^(chardet|flet_cli|cookiecutter|slugify|text_unidecode|binaryornot)'
+ls "$OUT/dist/QUANTGEN/_internal/assets" | grep -i nextgen_logo
+ls "$OUT/dist/QUANTGEN/_internal/chardet" 2>/dev/null | wc -l          # main: 43
+# 3) 고지에 chardet이 있는지 (main: 없음 = 누락) 와 배포 패키지 수 (main 75 / 이 브랜치 74)
+grep -c -i '^- chardet ' "$OUT/work/quantgen_desktop/qg_hooks/THIRD_PARTY_NOTICES.txt"
+grep 'third-party notices for' "$OUT/build.log"
+git worktree remove --force "$OUT/src"
+```
+
+두 커밋을 같은 방법으로 빌드한 뒤 `diff <(ls A/_internal) <(ls B/_internal)`로 앱 폴더 차이를 볼 수 있습니다.
