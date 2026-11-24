@@ -47,9 +47,9 @@ GPT 작업에서 메인이 본 위험(소유자 판단 필요, OA-53): (1) PR #1
 | OA-04 | 웹사이트 세션에 "비밀번호 특수문자 1개 이상" 규칙 전달 | WEBSITE |
 | OA-05 | 웹사이트 세션에 정책 문구 재생성 프롬프트(PR-130.json) 붙이기 | WEBSITE |
 | OA-49 (새) | QUANTGPT 세션에 QuantGPT 설계·실행 명세서 v1.0 파일 올리기 (공개 저장소에 올리지 않기로 해서 세션에 직접) | QUANTGPT가 요약만으로 시작함 |
-| OA-50 (새) | TRADEGEN 공유: QUANTGPT 세션이 띄우는 신뢰 확인 카드에 답하기, 또는 요약을 TRADEGEN_GITHUB 세션에 직접 붙이기 | TRADEGEN 공유 |
+| OA-50 (새) | TRADEGEN 공유: 2026-11-24 19:0x 로컬 세션 "QUANTGEN/TRADEGEN model split"이 git 경로를 제안 → 메인이 handoff `QUANTGPT_TRADEGEN.md`(출력 인터페이스)를 올림. TRADEGEN 쪽 소비 계약 문서 PR(xkg4real/tradegen)이 오면 반영. 소유자가 할 일은 QUANTGPT 세션의 신뢰 확인 카드가 뜨면 답하는 것뿐(안 해도 git 경로로 공유됨) | — |
 
-24시간 밖(새로 생긴 것): OA-51 skills.sh 호스트 허용(환경 승인 창) · OA-52 QuantGPT 결정 3개(AMIE 거시 분석을 owner 전용 작업 유형으로 넣을지, ChronoGPT 자리를 지금 만들지, NPU 벤치마크 앞당길지)와 W4 날짜(비전 문서 6주차 vs 명세서 2027-02-15) · OA-53 위 GPT 작업 위험 4건 · OA-43 후속(EC2 CPU 크레딧 Standard로 되돌림, 22번 포트 좁히기, CPU 경보). 그 밖의 OA 항목은 아래 3절 표 그대로이며 상태 대조는 `plans/2026-11-24/RESUME_BOARD.md` 5절.
+24시간 밖(새로 생긴 것): OA-51 skills.sh 호스트 허용(환경 승인 창) · OA-52 QuantGPT 설계 결정 3개와 일정 기준(내용은 메인이 소유자에게 직접 물음, 공개 문서에 적지 않음) · OA-53 위 GPT 작업 위험 4건 · OA-43 후속(EC2 CPU 크레딧 Standard로 되돌림, 22번 포트 좁히기, CPU 경보). 그 밖의 OA 항목은 아래 3절 표 그대로이며 상태 대조는 `plans/2026-11-24/RESUME_BOARD.md` 5절.
 OA-47(인계 잠금): **완료** — 소유자 "GPT 인계를 읽고 이어서 진행하라"(2026-11-24) → 메인이 `--force`로 인수(handoff `8a93ce6`).
 
 push_log (2026-11-24): 18:5x KST 1회 — OA-48, 09, 10, 03, 04, 05, 49, 50.
