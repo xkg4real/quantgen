@@ -64,9 +64,19 @@ git 기준: main `de32ea1` (#147 GH-2 → `dfae585`, #149 PAY-0·PAY-2 → `de32
 11. (19:20) TRADEGEN 메인 세션이 요청(M11-T7)을 보냈다: QuantGPT·DIDM 출력 스냅샷을 정해진 주기로 남겨 오프라인으로 전달. 메인의 답은 `QUANTGPT_TRADEGEN.md` v0.2 9절(handoff `ae10345`): 접수, 아직 시작하지 않음, 특성 스냅샷 형식 제안, 시작 전 소유자 확인 4가지. QUANTGPT는 주기 실행을 시작하지 않는다. 받는 쪽 계약은 tradegen main `b828b2d`의 `docs/direction-forecast-contract.md`이며 그쪽 7절이 v0.1의 차이를 적어 두었다(경계는 D14 닫힘 전체, `issued_at` 구분, 요청 해시와 스냅샷 해시 구분). 봉투에 `issued_at`, 디코딩 설정, `rag_index_version`, 확신 점수를 더하는 일(그 세션 제안 ②)은 8번 목록 뒤에 QGPT-02/2로 진행한다. 인용·시점 누출을 owner 모드에서도 기권으로 두는 것은 그대로 둔다.
 12. (19:20) OA-50(TRADEGEN 공유)은 닫는다: QUANTGPT의 전달이 "delivered"였고 TRADEGEN 쪽 계약 문서가 답으로 왔다.
 
+### 메인 → PAYMENTS_ACCOUNT_KEYS (직접 전달이 막힌 동안 이 절이 전달 통로)
+
+2026-11-24 19:2x KST부터 PAYMENTS 세션도 "신뢰 기기 전용"이 되어 메인의 send_message가 거절된다(`elevated_session_untrusted_device`; 소유자 요청으로 WEBSITE 세션에 전달하려고 신뢰 확인을 받은 뒤로 보임, 미검증). PAYMENTS → 메인 보고는 그대로 온다. **PAYMENTS는 일을 하나 끝낼 때마다 `git fetch origin handoff` 뒤 이 절을 읽는다.**
+
+1. (19:25) O3 확정 보고 받음(소유자 원문: Gmail 보관과 국외 이전을 처리방침에 알림, WEBSITE 세션에 자동 반영 요청 전달). P4 브랜치에 고지 문구를 넣은 커밋을 보고할 것.
+2. (19:25) P10(판매 빌드의 게이트웨이 프로필)은 19:1x에 보낸 지시 그대로 진행. 병합은 소유자 확인("공개 빌드는 commercial 프로필 고정") 뒤.
+3. (19:25) **다음 일 P11: 웹 거래 결정 메모 D12-A** (문서만; `docs/nautilus_bridge/REMAINING_WORK_2026-11-17.md:153`, handoff `sessions/01_MAIN_CLAUDE.md:105`). 조건이던 ⑦-2는 끝났다. 내용: 선택지 A/B/C와 각각의 쟁점, KIS에 물을 것, 변호사에게 물을 것, 주문 모듈 설계 초안 M-12(`eba94f0`)와의 관계, 결제·계정(PAY-1·PAY-3)과 맞물리는 점, 소유자가 정할 것 표. 주문 코드 없음, "거래 기능이 있다"는 표현 없음, 법률 판단마다 〔법률 자문이 아닙니다〕. 자리: `docs/commercial/trading/WEB_TRADING_DECISION_MEMO_2026-11-24.md`, 브랜치 `claude/payments-web-trading-memo-20261124` (main 기준). 근거는 저장소 문서와 OWNER_RULINGS_LOG의 줄 번호로, 확인 안 된 것은 미검증으로.
+4. P4(정책 PR-2)의 "병합: PAYMENTS_ACCOUNT_KEYS (P4)" 알림은 통합 PR ① 병합 뒤 `MERGE_QUEUE.md` 맨 위와 이 절에 적는다. P7(`75c56fb`)·P8(`26768ed`)·P5·P6(`31bd651`)은 통합 ② 묶음에 이미 합쳐 두었다(각 브랜치의 기준선 갱신분은 통합 때 메인이 다시 갱신).
+5. 다른 세션이나 소유자 PC 세션(WEBSITE, UI, TRADEGEN)에 전할 것이 더 생기면 신뢰 확인을 다시 받지 말고 메인 보고에 적는다.
+
 ### C'. 소유자 수동 작업
 
-24시간 안(푸시 18:34 KST 발송분 그대로 + 1건): OA-48, OA-09, OA-10, OA-03, OA-04, OA-05, OA-49, OA-50, **OA-54(새)** QUANTGPT 세션에 한 줄 붙여 넣기 — "앞으로 일을 하나 끝낼 때마다 handoff 브랜치 WORKBOARD.md의 '메인 → QUANTGPT' 절을 읽고 따르세요." (메인이 그 세션에 직접 보낼 수 없게 됨).
+24시간 안(푸시 18:34 KST 발송분 + 2건): OA-48, OA-09, OA-10, OA-03, OA-04, OA-05, OA-49(메인이 19:2x에 파일 2개를 소유자에게 다시 건넴: 명세서 원본과 닿지 않은 글 묶음), **OA-54(새)** QUANTGPT 세션에 한 줄 붙여 넣기 — "앞으로 일을 하나 끝낼 때마다 handoff 브랜치 WORKBOARD.md의 '메인 → QUANTGPT' 절을 읽고 따르세요.", **OA-55(새)** PAYMENTS 세션에 한 줄 붙여 넣기 — "앞으로 일을 하나 끝낼 때마다 handoff 브랜치 WORKBOARD.md의 '메인 → PAYMENTS_ACCOUNT_KEYS' 절을 읽고 따르세요." (두 세션 모두 신뢰 확인 뒤 메인이 직접 보낼 수 없게 됨). OA-50은 닫음(TRADEGEN 공유 끝, 답으로 계약 문서와 M11-T7 요청이 옴).
 
 24시간 밖(오늘 새로 생긴 것, 내용은 각 세션 문서):
 
