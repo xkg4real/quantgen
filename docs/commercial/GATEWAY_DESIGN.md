@@ -171,7 +171,7 @@ flowchart LR
 | 거절 | `fixed_local` 공급원은 보내기 전에 거절 (`RemoteRefused`). 서버도 거절 |
 | 실시간 | `stream()`은 웹소켓 `{DATA_API_BASE}/v1/stream`. 지금은 시험용 가짜만 |
 | 실패 | 서버 오류는 `GatewayAnswer(ok=False, reason=...)`. 값을 지어내지 않음 (`data/krx/gateway.py`의 원칙 그대로) |
-| 오류 코드 | `RemoteFailed`의 글은 세 가지 꼴만 (KEY-5/a, 3차 검토 F5): 우리 서버 코드 (`remote.SERVER_CODES`: `bad_request`, `unknown_source`, `fixed_local`, `function_not_allowed`, `result_not_encodable`, `bad_answer`, `no_answer`, 실제 공급사 예외 `DARTUnavailable`·`KISUnavailable`), HTTP 상태 (`http_503`), 예외 클래스 이름 (대문자로 시작하는 낱말, 숫자 없음, `Error`·`Exception`·`Timeout`으로 끝남; 대문자 약어 낱말은 5자 이하, 다른 낱말은 3자 이상). 그 밖은 짧은 키 모양 글 (`a8Fk3mQ9zX2pL7vB`)도 `bad_answer`. 전송 실패는 클래스 이름 대신 고정 코드 `transport_timeout`·`transport_connection`·`transport_tls`·`transport_error` (F6). `requests`의 예외 상속도 검사하므로 `ProxyError`는 `transport_connection`, `SSLError`는 `transport_tls` |
+| 오류 코드 | `RemoteFailed`의 글은 세 가지 꼴만 (KEY-5/a, 3차 검토 F5): 우리 서버 코드 (`remote.SERVER_CODES`: `bad_request`, `unknown_source`, `fixed_local`, `function_not_allowed`, `result_not_encodable`, `bad_answer`, `no_answer`, 실제 공급사 예외 `DARTUnavailable`·`KISUnavailable`, 이용 권한 없음 `not_entitled` — 회사 서버가 그 계정에 그 공급원 권한이 없을 때, 앱은 이 PC 키로 넘어가지 않음 (PAY-3 S-6, `tests/gateway_remote_acceptance.py`)), HTTP 상태 (`http_503`), 예외 클래스 이름 (대문자로 시작하는 낱말, 숫자 없음, `Error`·`Exception`·`Timeout`으로 끝남; 대문자 약어 낱말은 5자 이하, 다른 낱말은 3자 이상). 그 밖은 짧은 키 모양 글 (`a8Fk3mQ9zX2pL7vB`)도 `bad_answer`. 전송 실패는 클래스 이름 대신 고정 코드 `transport_timeout`·`transport_connection`·`transport_tls`·`transport_error` (F6). `requests`의 예외 상속도 검사하므로 `ProxyError`는 `transport_connection`, `SSLError`는 `transport_tls` |
 | 로그 | 요청 로그에 인자는 남기되 키·토큰은 남기지 않음 |
 
 ---

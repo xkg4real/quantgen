@@ -88,7 +88,8 @@ _CODE = re.compile(r"[A-Za-z0-9_]{1,48}")
 # dispatch.py sends for a provider failure: capitalised words of letters only, ending in Error/Exception/Timeout.
 SERVER_CODES = frozenset({"bad_request", "unknown_source", "fixed_local", "function_not_allowed",
                           "result_not_encodable", "bad_answer", "no_answer",
-                          "DARTUnavailable", "KISUnavailable"})
+                          "DARTUnavailable", "KISUnavailable",
+                          "not_entitled"})                   # PAY-3 S-6: the account has no right to this source
 _HTTP = re.compile(r"http_[1-5][0-9]{2}")
 _CLASS = re.compile(r"(?:[A-Z][A-Za-z]*)?(?:Error|Exception|Timeout)")
 _WORD = re.compile(r"[A-Z]+(?=[A-Z][a-z]|$)|[A-Z][a-z]+")
