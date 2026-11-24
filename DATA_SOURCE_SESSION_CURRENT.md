@@ -14,11 +14,11 @@ task: data-source
 cycle: 2026-11-24
 done_ids: none
 next_ids: DS-5b, DS-5c, DS-5a
-updated_at: 2026-11-24T20:10:00+09:00
+updated_at: 2026-11-24T20:30:00+09:00
 stale_after_hours: 3
 waiting_on: owner
-work_branch: claude/ds-review-fixes-20261124 (from integration 703aa01; + claude/ds-fedwatch-20261124@5e971c0, claude/ds-edgar-history-20261124@927375b, claude/ds-5bc-news-20261124@4a646ce)
-work_commit: 8e86fdd
+work_branch: claude/ds-home-reason-codes-20261124 (+ claude/ds-review-fixes-20261124@9663a99, claude/ds-fedwatch-20261124@5e971c0, claude/ds-edgar-history-20261124@927375b, claude/ds-5bc-news-20261124@4a646ce)
+work_commit: 5f5c7fd
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -29,6 +29,13 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## DATA_SOURCE (Claude) PD-3·D11·소유자 실측 — 2026-11-24T20:30+09:00
+
+- PD-3/PD-1: claude/ds-review-fixes-20261124 @ 9663a99 (진단 명령이 ensure_user_data_dir 먼저, 거부 시 reason=data_dir_unavailable).
+- D11: claude/ds-home-reason-codes-20261124 @ 5f5c7fd (integration c7df9eb + 9663a99 병합 위). provider_failure_reason이 감싼 전송 실패를 network_timeout/network_error로. 새 코드 없음. 비화면 521 OK, 화면 4모듈 OK, desktop_home_markets_markets는 변경 전에도 이 컨테이너에서 멈춤(환경).
+- 소유자 PC 실측 (2026-11-24, claude/ds-5bc-news-20261124 @ 4a646ce): Alpaca `pages 2 (complete True), articles 60, first 2026-11-01, last 2026-11-24, new 60`; Massive `pages 2 (complete False), articles 200, with insights 200, first 2026-11-01, last 2026-11-21, new 200`. → 무료 키로 두 곳 모두 뉴스 조회 가능. 과거 깊이·권리는 미확인.
+- 다음: PR ② 병합 뒤 NEW_SOURCES_PLAN 3절·COLLECTION_STATUS_GUIDE 2절에 실측 반영, ENV_ONLY_KEYS → RESEARCH_KEYS, D10 확인. 소유자 선택 실행: `--news-start 2015-01-01 --news-max-pages 1`로 과거 깊이.
 
 ## DATA_SOURCE (Claude) 통합 PR ① 검토 DS-1~DS-9 수정 — 2026-11-24
 
