@@ -14,11 +14,11 @@ task: data-source
 cycle: 2026-11-24
 done_ids: none
 next_ids: DS-5b, DS-5c, DS-5a
-updated_at: 2026-11-24T21:40:00+09:00
+updated_at: 2026-11-24T22:30:00+09:00
 stale_after_hours: 3
 waiting_on: owner
-work_branch: claude/ds-collection-status-20261124 (+ claude/ds-5bc-news-20261124@4a646ce, claude/ds-connector-fixes-20261124@241c0f4, claude/ds-home-diagnose-20261124@b70a78d, claude/ds-new-sources-plan-20261124@6a6516d)
-work_commit: b4d48bc
+work_branch: claude/ds-edgar-history-20261124 (includes D1 241c0f4 and D4/D5 b4d48bc by merge; + claude/ds-5bc-news-20261124@4a646ce, claude/ds-home-diagnose-20261124@b70a78d, claude/ds-new-sources-plan-20261124@6a6516d)
+work_commit: 927375b
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -29,6 +29,16 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## DATA_SOURCE (Claude) D6·D7·D8 — 2026-11-24T22:30+09:00
+
+- 메인 지시 (11-24): D6 EDGAR 과거 목록, D7 Kalshi 과거 일봉, D8 COLLECTION_STATUS_GUIDE 표 갱신. 실제 호출·키 없음, PR은 메인 통합 PR ②.
+- 브랜치 `claude/ds-edgar-history-20261124` (main de32ea1 기준): f2429cd D6, f3119fc D1 병합 (커서 검사 재사용), e620574 D7, 9dac0c8 D4 브랜치 병합 (runtime-smoke 줄 충돌 해결), 927375b D8.
+- D6: core/didm/ingest/filings.py edgar_history_files/edgar_history_rows (이름·건수 검사, acceptanceDateTime 없으면 접수일 00:00 뉴욕 + time_precision date), data/didm/edgar.py fetch_history_file, collect_daily --edgar-history/--edgar-from/--edgar-to/--edgar-max-files. 시험 9.
+- D7: data/didm/kalshi.py status open/closed/settled + close-time 창 (창 없으면 호출 모양 불변), collect_daily --kalshi-history/--kalshi-from/--kalshi-to/--kalshi-status/--kalshi-max-markets. 시험 7. 미검증: Kalshi min_close_ts·오래된 시장 일봉 제공.
+- D8: docs/didm/COLLECTION_STATUS_GUIDE_2026-11-24.md 2절 EDGAR → 가능, Kalshi 2021~ 가능(미검증), 소유자 실행 예.
+- 검사: DIDM 13모듈+gateway_boundary+packaging_policy 전부 OK; git diff origin/main -- core ':!core/didm' 비어 있음.
+- 다음: 메인 통합 PR ① 병합 알림 → OA-09 main 기준 한 줄 재전달. 소유자 PC 실행으로 Alpaca·Massive·Kalshi 미검증 항목 확인.
 
 ## DATA_SOURCE (Claude) D4·D5 — 2026-11-24T21:40+09:00
 
