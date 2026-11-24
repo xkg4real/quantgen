@@ -1,0 +1,56 @@
+# DIDM-5 Stage 1 측정 도구 V0
+
+- 작성: DIDM_DEV 세션, 2026-11-24. 코드: `core/didm/eval/{metrics,sampling,stage1}.py`, `core/didm/calibration/isotonic.py`, 도구: `tools/didm/stage1_report.py`, 시험: `tests/didm_stage1_acceptance.py`.
+- 기준: `docs/didm/PREREG_V0.md` 3절 Stage 1 행 (동결). 이 문서는 그 행을 **어떻게 재는지**만 정합니다.
+- **Stage 1은 아직 돌리지 않았습니다.** 정답 집합 (사람이 표시한 기사 1,000~1,500건)이 없습니다. 시험은 모두 합성 표시·합성 판단으로 돕니다. 합성 자료에서 나온 GO는 도구가 동작한다는 뜻일 뿐 결과가 아닙니다.
+
+## 1. 등록된 통과 조건과 재는 방법
+
+| 조건 (사전등록 원문) | 재는 방법 (이 세션의 해석, 정답 집합이 생기기 전에 정함) | 코드 |
+|---|---|---|
+| 사람 κ ≥ 0.6 | 주석자 2명의 `event_type`에 대한 Cohen κ (가중 없음). 방향·주제 여부·새 사건 여부의 κ는 함께 보고하되 판정에는 안 씀 | `metrics.cohen_kappa` |
+| 사건 유형 macro-F1 ≥ 0.75 | 정답에 실제로 있는 유형들의 F1 단순 평균. 채점기가 유효한 판단을 못 낸 항목은 오답으로 셈 | `metrics.macro_f1` |
+| 연결 정밀도 ≥ 0.95·재현율 ≥ 0.80 | (기사, 대상) 쌍의 집합 비교. 정답 연결 = 주석자가 "주제임"이라고 한 쌍 | `metrics.linking_scores` |
+| 보정 뒤 ECE ≤ 0.05 | 받은 시각 순으로 앞 70%로 등위(isotonic) 보정 지도를 맞추고 뒤 30%에서 잼. 가장 확률이 큰 표지 기준, 폭이 같은 10칸. **방향 확률과 유형 확률 둘 다** 통과해야 함 | `isotonic.fit_map`, `metrics.top_label_ece` |
+| Brier skill > 0 | 같은 뒤 30%에서, 기준 예측 = 앞 70%의 표지 비율 (뒤쪽 비율을 쓰면 기준 예측이 미래를 봄). 방향·유형 둘 다 | `metrics.brier_skill` |
+| LLM > LM 사전·FinBERT | 세 채점기가 모두 내는 판단인 **방향**의 macro-F1을 전체 정답 집합에서 비교. 엄격히 커야 통과. 차이의 90% 부트스트랩 구간을 함께 보고 (판정에는 안 씀) | `stage1.evaluate` |
+
+판정: 모두 통과 → `GO`. κ < 0.4 또는 LLM ≤ FinBERT → `NO-GO`. 그 밖 → `REVISE` (κ가 0.4~0.6이면 "유형 수를 줄임"을 적음). 아래 중 하나면 결과로 인정하지 않고 `INVALID`:
+
+- 정답 집합이 1,000~1,500건이 아니거나 영·한을 모두 담지 않음.
+- 어떤 채점기든 정답 기사 하나라도 학습 마감일 규칙에 걸림 (`core/didm/llm/cutoffs.py`: 발행일과 받은 날 중 이른 날이 마감일 + 3개월 이후여야 함). 목록에 없는 모델도 여기에 걸림.
+
+임계값은 `stage1.py` 머리의 상수이고 시험이 사전등록 문구와 대조합니다.
+
+## 2. 해석이 들어간 곳 (메인·소유자가 알아야 할 것)
+
+사전등록 표는 한 줄이라 아래는 이 세션이 정했습니다. 정답 집합을 보기 전에 정했고, 바꾸면 이 문서에 날짜와 이유를 적습니다.
+
+1. κ를 유형에만 적용 (방향 κ가 낮아도 판정은 안 바뀜; 보고는 함).
+2. ECE·Brier를 방향과 유형 둘 다에 적용 (하나만 통과하면 REVISE).
+3. "LLM이 이김"을 방향 macro-F1의 단순 비교로 봄 (통계적 유의는 요구하지 않음. 부트스트랩 구간이 0을 걸치면 보고서에 적힘).
+4. 유효한 판단이 없는 항목을 오답으로 셈 (거부율이 높은 채점기가 유리해지지 않게).
+5. 보정 지도를 맞출 최소 항목 수 30, 판단이 있는 항목 60개 미만이면 실행 거부.
+
+다섯 가지는 `stage1.Stage1Config`의 기본값입니다 (`kappa_fields`, `calibration_fields`, `beat_rule`, `missing_judgement`, `min_calibration_items`). 선택지별 영향과 등록 문구 인용은 `PREREG_V0_1_PROPOSAL_2026-11-24.md` 8절에 있고, 소유자 답이 오면 기본값만 바꿉니다.
+
+## 3. 보정 지도
+
+- 표지마다 등위 회귀 (인접 위반 묶기), 적용 뒤 합이 1이 되게 다시 나눔. 지도 버전 = 내용의 SHA-256 앞 16자 (`iso-direction-…`).
+- `assemble_record(..., calibrate_direction=지도.apply_direction, calibration_version=지도.version)`으로 레코드 조립에 연결됩니다.
+- Platt (로지스틱) 보정은 넣지 않았습니다. 등위 보정이 ECE 기준을 못 넘을 때 추가를 검토합니다.
+
+## 4. 다른 평가 묶음에서 쓰기
+
+`core/didm/eval/metrics.py`는 표준 라이브러리만 쓰고 이 저장소의 다른 모듈을 import하지 않습니다 (시험이 확인). 자체 LLM의 뉴스 유형 평가 묶음도 같은 함수로 κ, macro-F1, ECE, Brier를 잴 수 있습니다.
+
+## 5. 실행
+
+```
+python -B -m unittest tests.didm_stage1_acceptance
+python -B -m tools.didm.stage1_report --dir <저장소 밖 폴더>      # 정답 집합이 생긴 뒤
+```
+
+입력 파일 형식은 `tools/didm/stage1_report.py` 머리말에 있습니다. 정답 표시와 기사 글은 저장소 밖에 둡니다 (저장소 안 폴더는 도구가 거부).
+
+2026-11-24: 30개 통과. 한 줄 변형 19가지 (임계값, 자격 규칙, 누락 처리, 지표 식, 분할 방향, 표본 규칙)를 넣었을 때 모두 시험 실패.

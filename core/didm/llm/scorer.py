@@ -20,7 +20,14 @@ from collections import Counter
 from dataclasses import dataclass
 from typing import Any, Callable, Mapping, Protocol, Sequence, runtime_checkable
 
-from core.didm.llm.judgement import Judgement, JudgementError, ScoreRequest, validate_judgement
+from core.didm.llm.judgement import (
+    Judgement,
+    JudgementError,
+    ScoreRequest,
+    check_record_ready,
+    is_validated,
+    validate_judgement,
+)
 from core.didm.llm.schema import (
     SCHEMA_VERSION,
     ScoreRecord,
@@ -73,7 +80,7 @@ class ScorerInfo:
         if not isinstance(self.prompt_sha256, str) or not _SHA256.fullmatch(self.prompt_sha256):
             raise JudgementError("prompt_sha256 must be 64 lowercase hex characters")
         if isinstance(self.temperature, bool) or not isinstance(self.temperature, (int, float)) \
-                or float(self.temperature) != 0.0:
+                or self.temperature != 0:          # compared as it is: float() of a huge integer would overflow
             raise JudgementError("temperature must be 0")
 
 
@@ -133,8 +140,8 @@ def assemble_record(
     (uncalibrated probabilities are ranks only, PREREG_V0 1 A3). The assembled record is
     passed through ``validate_record``, so nothing leaves here that the schema rejects.
     """
-    if not isinstance(judgement, Judgement):
-        raise JudgementError("assemble_record needs a validated Judgement")
+    if not is_validated(judgement):
+        raise JudgementError("assemble_record needs a Judgement returned by validate_judgement, unchanged")
     if not isinstance(info, ScorerInfo) or not isinstance(assembly, Assembly):
         raise JudgementError("assemble_record needs a ScorerInfo and an Assembly")
     if not isinstance(calibration_version, str) or not calibration_version.strip():
@@ -189,8 +196,23 @@ class Batch:
         return dict(Counter(reason for _, reason in self.rejected))
 
 
-def run_scorer(scorer: Scorer, requests: Sequence[ScoreRequest]) -> Batch:
-    """Judge each request once; keep valid judgements, count the rest. No retries."""
+SCORER_RAISED = "scorer raised a schema error"
+
+
+def run_scorer(scorer: Scorer, requests: Sequence[ScoreRequest], *, calibrated: bool) -> Batch:
+    """Judge each request once; keep valid judgements, count the rest. No retries.
+
+    ``calibrated`` says how the batch will be assembled. False means the raw direction probabilities
+    go into records unchanged, so a judgement the record schema would refuse (P(+1) + P(-1) above 1
+    by more than 1e-9) is rejected and counted here, and everything kept can be assembled. True means
+    a calibrator replaces the vector, and the raw vector only has to meet the documented 1e-6.
+
+    A SchemaError raised by the scorer itself (for example output that was not JSON) is counted under
+    one fixed reason; its message is not stored, since a wrapper may quote the model output there.
+    Any other exception from the scorer is a failure of the run and propagates.
+    """
+    if not isinstance(calibrated, bool):
+        raise JudgementError("calibrated must be True or False")
     if not isinstance(scorer, Scorer) or not isinstance(getattr(scorer, "info", None), ScorerInfo):
         raise JudgementError("scorer must have a ScorerInfo `info` and a `judge(request)` method")
     kept: list[tuple[ScoreRequest, Judgement]] = []
@@ -199,10 +221,57 @@ def run_scorer(scorer: Scorer, requests: Sequence[ScoreRequest]) -> Batch:
         if not isinstance(request, ScoreRequest):
             raise JudgementError("requests must be ScoreRequest objects")
         try:
-            kept.append((request, validate_judgement(scorer.judge(request), request)))
-        except SchemaError as exc:
+            raw = scorer.judge(request)
+        except SchemaError:
+            rejected.append((request.article_id, SCORER_RAISED))
+            continue
+        try:
+            judgement = validate_judgement(raw, request)
+            if not calibrated:
+                check_record_ready(judgement)
+        except JudgementError as exc:              # value-free rule text (core/didm/llm/judgement.py)
             rejected.append((request.article_id, str(exc)))
+            continue
+        kept.append((request, judgement))
     return Batch(tuple(kept), tuple(rejected))
+
+
+@dataclass(frozen=True)
+class AssembledBatch:
+    assembled: tuple[Assembled, ...]
+    rejected: tuple[tuple[str, str], ...]     # (article_id, fixed reason)
+
+    @property
+    def reject_counts(self) -> dict[str, int]:
+        return dict(Counter(reason for _, reason in self.rejected))
+
+
+def assemble_batch(pairs: Sequence[tuple[Judgement, Assembly]], info: ScorerInfo, *,
+                   calibrate_direction: DirectionCalibrator | None = None,
+                   calibration_version: str = UNCALIBRATED) -> AssembledBatch:
+    """Assemble many records; one that cannot be assembled is counted and the rest continue.
+
+    The stored reason is the rule text without the offending value. A mistake that concerns the whole
+    batch (no ScorerInfo, a calibrator without a version) is raised, not counted.
+    """
+    if not isinstance(info, ScorerInfo):
+        raise JudgementError("assemble_batch needs a ScorerInfo")
+    if (calibrate_direction is None) != (calibration_version == UNCALIBRATED):
+        raise JudgementError("a calibrator needs a calibration_version, and a version needs a calibrator")
+    done: list[Assembled] = []
+    rejected: list[tuple[str, str]] = []
+    for pair in pairs:
+        judgement, assembly = pair
+        label = judgement.article_id if isinstance(judgement, Judgement) else "?"
+        try:
+            done.append(assemble_record(judgement, info, assembly, calibrate_direction=calibrate_direction,
+                                        calibration_version=calibration_version))
+        except SchemaError as exc:
+            message = str(exc)
+            if message.startswith("unknown "):          # schema messages that quote a value: keep the rule only
+                message = message.split(":", 1)[0]
+            rejected.append((label, message))
+    return AssembledBatch(tuple(done), tuple(rejected))
 
 
 def _checked_probs(value: Any) -> tuple[float, float, float]:

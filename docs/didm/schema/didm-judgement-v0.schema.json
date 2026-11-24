@@ -22,7 +22,12 @@
     },
     "article_id": {
       "type": "string",
-      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:\\-/]{0,127}$(?!\\n)"
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9]",
+      "not": {
+        "pattern": "[^A-Za-z0-9_.:/-]"
+      }
     },
     "target_kind": {
       "enum": [
@@ -212,7 +217,12 @@
         "properties": {
           "entity_id": {
             "type": "string",
-            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:\\-/]{0,127}$(?!\\n)"
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9]",
+            "not": {
+              "pattern": "[^A-Za-z0-9_.:/-]"
+            }
           }
         }
       }
@@ -221,9 +231,9 @@
   "x-didm-cross-field-rules": [
     "article_id, target_kind and entity_id equal the request's",
     "p_subject is 0 when target_kind is none",
-    "event_type_probs sums to 1 within 1e-06",
+    "event_type_probs sums to 1 within 1e-6",
     "event_type is a most probable key of event_type_probs (compared exactly; an exact tie leaves a choice)",
-    "direction_probs sums to 1 within 1e-06",
-    "P(+1) + P(-1) does not exceed 1 (tolerance 1e-9)"
+    "direction_probs sums to 1 within 1e-6 (normalise in float64 if you can)",
+    "when the raw direction_probs go into a record without a calibrator, P(+1) + P(-1) must not exceed 1 by more than 1e-9 (the record schema's bound); with a calibrator this does not apply"
   ]
 }

@@ -41,6 +41,15 @@ class CutoffError(ValueError):
     pass
 
 
+def is_baseline_key(key: str) -> bool:
+    """A named baseline, optionally carrying its pinned snapshot: ``k`` or ``k@<snapshot>`` for k in
+    BASELINE_KEYS. So a scorer can report e.g. ``ProsusAI/finbert@<commit>`` as its model_version and
+    two snapshots of one baseline can each have a row."""
+    if not isinstance(key, str):
+        return False
+    return any(key == k or (key.startswith(k + "@") and len(key) > len(k) + 1) for k in BASELINE_KEYS)
+
+
 class Rule(str, Enum):
     CUTOFF = "cutoff"                    # eligible from cutoff + 3 months
     BASELINE = "prereg-5.4-baseline"     # named in PREREG_V0 5.4; eligible at any date once pinned
@@ -79,7 +88,7 @@ class ModelCard:
         if not (self.snapshot_id and self.source_url and self.checked_on):
             return False
         if self.rule is Rule.BASELINE:
-            return self.key in BASELINE_KEYS
+            return is_baseline_key(self.key)
         return self.effective_cutoff is not None
 
     @property
@@ -152,14 +161,21 @@ def _utc_day(value: date | datetime, name: str) -> date:
     if isinstance(value, datetime):
         if value.tzinfo is None or value.utcoffset() is None:
             raise CutoffError(f"{name} must carry a timezone")
-        return value.astimezone(timezone.utc).date()
+        try:
+            return value.astimezone(timezone.utc).date()
+        except OverflowError:          # a sentinel such as 0001-01-01T00:00+09:00 has no UTC day
+            raise CutoffError(f"{name} is outside the supported date range") from None
     if isinstance(value, date):
         return value
     raise CutoffError(f"{name} must be a date or a timezone-aware datetime")
 
 
 def article_day(published_at: date | datetime, received_at: date | datetime) -> date:
-    """The day the cutoff rule compares: the earlier of the publication day and the receipt day (UTC)."""
+    """The day the cutoff rule compares: the earlier of the publication day and the receipt day (UTC).
+
+    Pass timezone-aware datetimes (the record's own fields). A plain ``date`` is taken as it is, so it
+    must already be the UTC day: 2026-09-30 00:30 KST is 2026-09-29 in UTC.
+    """
     return min(_utc_day(published_at, "published_at"), _utc_day(received_at, "received_at"))
 
 
@@ -211,8 +227,25 @@ class Registry:
 # --- the registry (twin of docs/didm/MODEL_CUTOFFS.md) ---
 
 _ANTHROPIC_URL = "https://platform.claude.com/docs/en/about-claude/models/overview"
+_CHRONO_PAPER = "https://arxiv.org/abs/2502.21206"
 _CHECKED = date(2026, 11, 24)
-_BLOCKED = "출처 페이지를 열지 못함 (세션 네트워크 정책이 호스트를 막음, 2026-11-24)"
+
+# ChronoGPT vintage year -> commit of huggingface.co/manelalab/chrono-gpt-v1-<year>1231 (read 2026-11-24).
+_CHRONO_COMMITS = {
+    1999: "45d6568340081add5c5b1444feb17a94b8f8199d", 2000: "aab8e7f10ffc8a63b557d47ceeca0712ddc0fdfa",
+    2001: "84f4d197fc931bb3cc39d1a071e8436304890921", 2002: "4b48afa531ff3d530b0273e5c64b8ad1381016e4",
+    2003: "6aba09104ca8ccb8febb2a29d2e4c8bb99526638", 2004: "f446364b14657b8f77d864bd305e7caea5e5e209",
+    2005: "64a190a1eba9d0bd4a320225284ceb8376634cda", 2006: "a0a130d03014401d9f7370c50537f49c128da78d",
+    2007: "ca382535273b9f3a6d5ff476f565246b8c90fa07", 2008: "020fcd3af211e574905941a369f9635bca53a8d6",
+    2009: "0c7124691ed3fb527af12dab7013eac1ae56fec7", 2010: "4fb687ab4b3029e5d364423434e6f20019b1b222",
+    2011: "ea5aaed9f362885f367514b067a36cc4faa0ce5e", 2012: "67a896b02f6cdcd2e99d62866a2d334eeaeb99b5",
+    2013: "6f2e595689458b1809d5c6efb9a6095257347ca2", 2014: "4fba07f4ef563b3addf2b05f385d0b347bf1cc0d",
+    2015: "aacd4c4e8020dd0ad686d36f18bcf34cd8003bc3", 2016: "20d93dc9b103644b212db413db4ab1207063d010",
+    2017: "4cc4334a2c2d38ae35deb0bb7fcae642d3f73a10", 2018: "17d7de7945199ff03be989ca84d00c0f59a975af",
+    2019: "7e62517f31b11fad179c79ce79a465aa00c7ee4d", 2020: "c0d2acbd2a378ac79d8a5ae79a9447d23145eb8a",
+    2021: "a070953708ee809e630e4d9652e9c753d7b6782e", 2022: "993711fdf078740fe1c837a3687528e2173443d2",
+    2023: "8ac22e54d37df8bb8037622680414118239fbe53", 2024: "1d9f1b8ff50bb45a6fe1402280e617af4c2d805c",
+}
 
 
 def _claude(key: str) -> ModelCard:
@@ -222,11 +255,25 @@ def _claude(key: str) -> ModelCard:
                      note="출처 표의 Training data cutoff = Jun 2026; 모델 ID가 곧 고정 스냅샷")
 
 
+def _chrono(year: int, commit: str) -> ModelCard:
+    # Paper Table 1 gives "December, 1999" ... "December, 2024"; one checkpoint per year in between.
+    return ModelCard(key=f"manelalab/chrono-gpt-v1-{year}1231", family="ChronoGPT 빈티지", rule=Rule.CUTOFF,
+                     snapshot_id=commit, cutoff=cutoff_from_text(f"{year}-12"), source_url=_CHRONO_PAPER,
+                     checked_on=_CHECKED, note="논문 표 1의 Knowledge Cutoff = December, <연도>")
+
+
 REGISTRY = Registry((
-    ModelCard(key="loughran-mcdonald", family="Loughran-McDonald 사전", rule=Rule.BASELINE, note=_BLOCKED),
-    ModelCard(key="ProsusAI/finbert", family="FinBERT", rule=Rule.BASELINE, note=_BLOCKED),
-    ModelCard(key="chronogpt-vintages", family="ChronoGPT 빈티지", rule=Rule.CUTOFF, note=_BLOCKED),
-    ModelCard(key="qwen3-candidates", family="Qwen3 후보", rule=Rule.CUTOFF, note=_BLOCKED),
+    ModelCard(key="loughran-mcdonald", family="Loughran-McDonald 사전", rule=Rule.BASELINE,
+              snapshot_id="Loughran-McDonald_MasterDictionary_1993-2025.csv (Updated: March, 2026)",
+              source_url="https://sraf.nd.edu/loughranmcdonald-master-dictionary/", checked_on=_CHECKED,
+              note="사전 판 1993-2025; 학술 연구는 무료, 상업 이용은 별도 허가"),
+    ModelCard(key="ProsusAI/finbert", family="FinBERT", rule=Rule.BASELINE,
+              snapshot_id="0bc2ac10dda6929bcb1f77ccc43c7ec5c424f031",
+              source_url="https://huggingface.co/ProsusAI/finbert", checked_on=_CHECKED,
+              note="모델 카드에 마감일 문구 없음; 가중치 라이선스 CC BY-NC-SA 4.0 (비상업)"),
+    *(_chrono(year, commit) for year, commit in _CHRONO_COMMITS.items()),
+    ModelCard(key="qwen3-candidates", family="Qwen3 후보", rule=Rule.CUTOFF,
+              note="모델 카드(Qwen/Qwen3-8B)와 기술 보고서(arXiv 2505.09388)에 학습 마감일 문구 없음"),
     _claude("claude-fable-5-2"),
     _claude("claude-opus-5-5"),
     _claude("claude-sonnet-5-5"),

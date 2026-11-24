@@ -27,11 +27,21 @@
   "properties": {
     "record_id": {
       "type": "string",
-      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:\\-/]{0,127}$(?!\\n)"
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9]",
+      "not": {
+        "pattern": "[^A-Za-z0-9_.:/-]"
+      }
     },
     "source_id": {
       "type": "string",
-      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:\\-/]{0,127}$(?!\\n)"
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9]",
+      "not": {
+        "pattern": "[^A-Za-z0-9_.:/-]"
+      }
     },
     "target_kind": {
       "enum": [
@@ -73,7 +83,12 @@
     },
     "origin_cluster_id": {
       "type": "string",
-      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:\\-/]{0,127}$(?!\\n)"
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9]",
+      "not": {
+        "pattern": "[^A-Za-z0-9_.:/-]"
+      }
     },
     "event_type": {
       "enum": [
@@ -139,7 +154,11 @@
     },
     "prompt_sha256": {
       "type": "string",
-      "pattern": "^[0-9a-f]{64}$(?!\\n)"
+      "minLength": 64,
+      "maxLength": 64,
+      "not": {
+        "pattern": "[^0-9a-f]"
+      }
     },
     "schema_version": {
       "const": "didm-score-v0"
@@ -168,7 +187,12 @@
         "properties": {
           "entity_id": {
             "type": "string",
-            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:\\-/]{0,127}$(?!\\n)"
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9]",
+            "not": {
+              "pattern": "[^A-Za-z0-9_.:/-]"
+            }
           }
         }
       }

@@ -103,6 +103,17 @@ class InHouseModel(unittest.TestCase):
                             source_url=URL, checked_on=date(2026, 11, 24))
         self.assertFalse(m.verified)
 
+    def test_a_baseline_cannot_be_the_base_of_an_in_house_model(self):
+        """A valid, pinned baseline card (no cutoff, so its own constructor accepts it) is still refused as a base."""
+        base = card(key="ProsusAI/finbert", rule=c.Rule.BASELINE, cutoff=None)
+        self.assertTrue(base.verified)
+        with self.assertRaisesRegex(c.CutoffError, "base of an in-house model must follow the cutoff rule"):
+            c.in_house_card("own-1", base=base, finetune_through=date(2025, 1, 31), snapshot_id="s",
+                            source_url=URL, checked_on=date(2026, 11, 24))
+        with self.assertRaises(c.CutoffError):
+            c.in_house_card("own-1", base="not a card", finetune_through=date(2025, 1, 31), snapshot_id="s",
+                            source_url=URL, checked_on=date(2026, 11, 24))
+
     def test_base_must_follow_the_cutoff_rule(self):
         with self.assertRaises(c.CutoffError):
             c.in_house_card("own-1", base=card(rule=c.Rule.BASELINE), finetune_through=date(2025, 1, 31),
@@ -131,6 +142,38 @@ class BackfilledArticles(unittest.TestCase):
         self.assertTrue(c.eligibility(m, published_at=date(2024, 3, 31), received_at=late).eligible)
         self.assertEqual(c.article_day(early, late), early)
         self.assertEqual(c.article_day(late, early), early)
+
+    def test_sentinel_timestamps_fail_closed_with_a_cutoff_error(self):
+        m = card()
+        ok = datetime(2026, 11, 24, tzinfo=timezone.utc)
+        low = datetime(1, 1, 1, 0, 0, tzinfo=timezone(timedelta(hours=9)))             # no UTC day exists
+        high = datetime(9999, 12, 31, 23, 59, 59, tzinfo=timezone(timedelta(hours=-5)))
+        for bad in (low, high):
+            with self.subTest(bad=bad.isoformat()), self.assertRaises(c.CutoffError):
+                c.eligibility(m, published_at=bad, received_at=ok)
+        zero_utc = datetime(1, 1, 1, tzinfo=timezone.utc)
+        self.assertFalse(c.eligibility(m, published_at=zero_utc, received_at=ok).eligible)
+
+    def test_a_plain_date_is_taken_as_the_utc_day(self):
+        claude = c.REGISTRY.get("claude-fable-5-2")                                    # eligible from 2026-09-30
+        kst = timezone(timedelta(hours=9))
+        moment = datetime(2026, 9, 30, 0, 30, tzinfo=kst)                              # 2026-09-29 15:30 UTC
+        later = date(2026, 11, 24)
+        self.assertFalse(c.eligibility(claude, published_at=moment, received_at=later).eligible)
+        self.assertTrue(c.eligibility(claude, published_at=moment.date(), received_at=later).eligible)   # caller's
+        # local date, not the UTC day: the documented reason to pass the record's datetimes
+        self.assertFalse(c.eligibility(claude, published_at=moment.astimezone(timezone.utc).date(),
+                                       received_at=later).eligible)
+
+    def test_registry_call_uses_each_argument_for_what_it_is(self):
+        """Through Registry.eligibility, with the receipt day EARLIER than the publication day (a vendor
+        clock ahead of ours): the receipt day decides. Swapping or duplicating an argument changes the answer."""
+        key = "claude-fable-5-2"                                         # eligible from 2026-09-30
+        early, late = date(2026, 9, 29), date(2026, 10, 5)
+        self.assertFalse(c.REGISTRY.eligibility(key, published_at=late, received_at=early).eligible)
+        self.assertFalse(c.REGISTRY.eligibility(key, published_at=early, received_at=late).eligible)
+        self.assertTrue(c.REGISTRY.eligibility(key, published_at=late, received_at=late).eligible)
+        self.assertFalse(c.REGISTRY.eligibility(key, published_at=early, received_at=early).eligible)
 
     def test_both_timestamps_are_required_by_keyword(self):
         m = card()
@@ -165,7 +208,34 @@ class Baselines(unittest.TestCase):
         self.assertFalse(c.REGISTRY.with_card(m).eligibility(
             "any-llm-2030", published_at=date(2015, 1, 2), received_at=date(2015, 1, 2)).eligible)
 
+    def test_a_baseline_key_may_carry_its_snapshot(self):
+        """Two snapshots of one baseline, each with its own verified row; other look-alike keys are not baselines."""
+        day = date(2015, 1, 2)
+        registry = c.Registry((
+            card(key="loughran-mcdonald@1993-2023", rule=c.Rule.BASELINE, cutoff=None, snapshot_id="LM 1993-2023"),
+            card(key="loughran-mcdonald@1993-2025", rule=c.Rule.BASELINE, cutoff=None, snapshot_id="LM 1993-2025"),
+            card(key="ProsusAI/finbert@0bc2ac1", rule=c.Rule.BASELINE, cutoff=None),
+        ))
+        for key in ("loughran-mcdonald@1993-2023", "loughran-mcdonald@1993-2025", "ProsusAI/finbert@0bc2ac1"):
+            self.assertTrue(registry.eligibility(key, published_at=day, received_at=day).eligible, key)
+        for key in ("loughran-mcdonald-2024", "prosusai/finbert", "ProsusAI/finbert@", "ProsusAI/finbert-tone",
+                    "x@loughran-mcdonald", "other/ProsusAI/finbert@abc"):
+            self.assertFalse(c.is_baseline_key(key), key)
+            self.assertFalse(card(key=key, rule=c.Rule.BASELINE, cutoff=None).verified, key)
+        self.assertFalse(c.is_baseline_key(None))
+        with self.assertRaises(c.CutoffError):
+            registry.with_card(card(key="loughran-mcdonald@1993-2025", rule=c.Rule.BASELINE, cutoff=None))
+
+    def test_pinned_baseline_rows_of_the_shipped_table_are_verified(self):
+        for key in sorted(c.BASELINE_KEYS):
+            row = c.REGISTRY.get(key)
+            self.assertTrue(row.verified, key)
+            self.assertIsNone(row.cutoff)                      # the cutoff column of a baseline row stays empty
+
     def test_a_baseline_card_cannot_carry_a_cutoff(self):
+        for field in ("base_cutoff", "finetune_through"):
+            with self.subTest(field=field), self.assertRaises(c.CutoffError):
+                card(key="ProsusAI/finbert", rule=c.Rule.BASELINE, cutoff=None, **{field: date(2020, 1, 1)})
         with self.assertRaises(c.CutoffError):
             card(key="ProsusAI/finbert", rule=c.Rule.BASELINE, cutoff=date(2030, 1, 1))
         with self.assertRaises(c.CutoffError):
@@ -214,8 +284,23 @@ class TableMatchesRegistry(unittest.TestCase):
         self.assertIsNotNone(c.REGISTRY.get("ProsusAI/finbert"))
 
     def test_registry_examples(self):
-        self.assertFalse(c.REGISTRY.eligibility("ProsusAI/finbert", published_at=date(2020, 1, 2), received_at=date(2020, 1, 2)).eligible)   # not pinned yet
-        self.assertFalse(c.REGISTRY.eligibility("quantgpt-in-house", published_at=date(2099, 1, 1), received_at=date(2099, 1, 1)).eligible)
+        def on(key, day):
+            return c.REGISTRY.eligibility(key, published_at=day, received_at=day).eligible
+        self.assertTrue(on("ProsusAI/finbert", date(2020, 1, 2)))            # pinned, named baseline
+        self.assertTrue(on("loughran-mcdonald", date(2015, 1, 2)))
+        self.assertFalse(on("qwen3-candidates", date(2099, 1, 1)))           # no public cutoff
+        chrono = [m for m in c.REGISTRY if m.family == "ChronoGPT 빈티지"]
+        self.assertEqual(len(chrono), 26)
+        self.assertEqual({len(m.snapshot_id) for m in chrono}, {40})
+        first = c.REGISTRY.get("manelalab/chrono-gpt-v1-19991231")
+        self.assertEqual((first.cutoff, first.eligible_from), (date(1999, 12, 31), date(2000, 3, 31)))
+        # the 2014 vintage may score 2015-03-31 onwards, not January 2015
+        self.assertFalse(on("manelalab/chrono-gpt-v1-20141231", date(2015, 1, 15)))
+        self.assertTrue(on("manelalab/chrono-gpt-v1-20141231", date(2015, 3, 31)))
+        # a 2014 article fetched in 2026 is still a 2014 article for the 2014 vintage
+        self.assertFalse(c.REGISTRY.eligibility("manelalab/chrono-gpt-v1-20141231", published_at=date(2014, 6, 2),
+                                                received_at=date(2026, 11, 24)).eligible)
+        self.assertFalse(on("quantgpt-in-house", date(2099, 1, 1)))
         claude = c.REGISTRY.get("claude-fable-5-2")
         self.assertEqual((claude.cutoff, claude.eligible_from), (date(2026, 6, 30), date(2026, 9, 30)))
         self.assertFalse(c.REGISTRY.eligibility("claude-fable-5-2", published_at=date(2024, 12, 31), received_at=date(2024, 12, 31)).eligible)
@@ -234,6 +319,11 @@ class Boundaries(unittest.TestCase):
     def test_cutoffs_is_in_the_shared_boundary_check(self):
         from tests import didm_contract_acceptance as contract
         self.assertIn("core/didm/llm/cutoffs.py", contract.Boundaries.FILES)
+        source = (ROOT / "core" / "didm" / "llm" / "cutoffs.py").read_text(encoding="utf-8")
+        check = contract.Boundaries()
+        self.assertEqual(check.problems(source), [])                # run here too, so this module stands alone
+        self.assertNotEqual(check.problems(source + "\nimport socket\n"), [])
+        self.assertNotEqual(check.problems(source + "\nSTAMP = datetime.now(timezone.utc)\n"), [])
         self.assertEqual(ast.parse((ROOT / "core" / "didm" / "llm" / "cutoffs.py").read_text(encoding="utf-8")).body[0]
                          .value.value[:6], "DIDM-3")
 

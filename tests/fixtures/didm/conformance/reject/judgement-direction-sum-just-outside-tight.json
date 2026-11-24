@@ -1,6 +1,6 @@
 {
   "kind": "judgement",
-  "note": "P(+1) + P(-1) above 1 inside the sum tolerance; the record schema would refuse it",
+  "note": "direction_probs missing 1 by 1.2e-6 from below",
   "request": {
     "article_id": "art-0001",
     "language": "en",
@@ -35,12 +35,12 @@
       "none": 0.01
     },
     "direction_probs": [
-      0.5000004,
-      0.5000004,
-      0.0
+      0.1,
+      0.7,
+      0.1999988
     ],
     "claim_status": "confirmed"
   },
-  "expect": "p_positive + p_negative exceeds 1",
+  "expect": "direction_probs must sum to 1",
   "json_schema_detects": false
 }

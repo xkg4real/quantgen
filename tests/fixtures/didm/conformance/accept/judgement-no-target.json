@@ -77,7 +77,7 @@
       0.0,
       1.0
     ],
-    "uncertainty_entropy": -0.0,
+    "uncertainty_entropy": 0.0,
     "p_credibility": 0.9,
     "market_confirmation": "PENDING",
     "model_version": "fixture-model-0",

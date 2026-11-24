@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 380" font-family="sans-serif" font-size="12">
+<rect width="760" height="380" fill="#ffffff"/>
+<text x="60" y="22" font-size="15" font-weight="bold" fill="#222">Stage 0: 중심 효과 크기에서의 검정력 (5% 양측, 500회 반복, seed 20261124)</text>
+<line x1="60" y1="310.0" x2="740" y2="310.0" stroke="#e3e3e3"/>
+<text x="52" y="314.0" text-anchor="end" fill="#555">0%</text>
+<line x1="60" y1="258.0" x2="740" y2="258.0" stroke="#e3e3e3"/>
+<text x="52" y="262.0" text-anchor="end" fill="#555">20%</text>
+<line x1="60" y1="206.0" x2="740" y2="206.0" stroke="#e3e3e3"/>
+<text x="52" y="210.0" text-anchor="end" fill="#555">40%</text>
+<line x1="60" y1="154.0" x2="740" y2="154.0" stroke="#e3e3e3"/>
+<text x="52" y="158.0" text-anchor="end" fill="#555">60%</text>
+<line x1="60" y1="102.0" x2="740" y2="102.0" stroke="#e3e3e3"/>
+<text x="52" y="106.0" text-anchor="end" fill="#555">80%</text>
+<line x1="60" y1="50.0" x2="740" y2="50.0" stroke="#e3e3e3"/>
+<text x="52" y="54.0" text-anchor="end" fill="#555">100%</text>
+<line x1="60" y1="102.0" x2="740" y2="102.0" stroke="#c0392b" stroke-dasharray="6 4" stroke-width="1.5"/>
+<rect x="188" y="80.0" width="92" height="15" fill="#ffffff"/><text x="192" y="97.0" text-anchor="start" fill="#c0392b">등록 기준 80%</text>
+<rect x="75.9" y="50.0" width="36.3" height="260.0" fill="#2f6fab"/>
+<text x="94.0" y="46.0" text-anchor="middle" fill="#222">100</text>
+<rect x="116.1" y="50.0" width="36.3" height="260.0" fill="#d9822b"/>
+<text x="134.3" y="46.0" text-anchor="middle" fill="#222">100</text>
+<text x="116.7" y="328" text-anchor="middle" fill="#222">θ₀ 직접 반응</text>
+<rect x="189.2" y="252.8" width="36.3" height="57.2" fill="#2f6fab"/>
+<text x="207.3" y="248.8" text-anchor="middle" fill="#222">22</text>
+<rect x="229.5" y="243.4" width="36.3" height="66.6" fill="#d9822b"/>
+<text x="247.6" y="239.4" text-anchor="middle" fill="#222">26</text>
+<text x="230.0" y="328" text-anchor="middle" fill="#222">δ 지연 비중</text>
+<rect x="302.5" y="294.9" width="36.3" height="15.1" fill="#2f6fab"/>
+<text x="320.7" y="290.9" text-anchor="middle" fill="#222">6</text>
+<rect x="342.8" y="280.4" width="36.3" height="29.6" fill="#d9822b"/>
+<text x="360.9" y="276.4" text-anchor="middle" fill="#222">11</text>
+<text x="343.3" y="328" text-anchor="middle" fill="#222">φ 연결망(5일)</text>
+<rect x="415.9" y="50.0" width="36.3" height="260.0" fill="#2f6fab"/>
+<text x="434.0" y="46.0" text-anchor="middle" fill="#222">100</text>
+<rect x="456.1" y="50.0" width="36.3" height="260.0" fill="#d9822b"/>
+<text x="474.3" y="46.0" text-anchor="middle" fill="#222">100</text>
+<text x="456.7" y="328" text-anchor="middle" fill="#222">ψ 거시 노출</text>
+<rect x="529.2" y="69.2" width="36.3" height="240.8" fill="#2f6fab"/>
+<text x="547.3" y="65.2" text-anchor="middle" fill="#222">93</text>
+<rect x="569.5" y="50.0" width="36.3" height="260.0" fill="#d9822b"/>
+<text x="587.6" y="46.0" text-anchor="middle" fill="#222">100</text>
+<text x="570.0" y="328" text-anchor="middle" fill="#222">γ 변동성·충격</text>
+<rect x="642.5" y="102.0" width="36.3" height="208.0" fill="#2f6fab"/>
+<text x="660.7" y="98.0" text-anchor="middle" fill="#222">80</text>
+<rect x="682.8" y="50.0" width="36.3" height="260.0" fill="#d9822b"/>
+<text x="700.9" y="46.0" text-anchor="middle" fill="#222">100</text>
+<text x="683.3" y="328" text-anchor="middle" fill="#222">η 변동성·불확실성</text>
+<rect x="60" y="352" width="12" height="12" fill="#2f6fab"/>
+<text x="78" y="362" fill="#222">유형 1개, N=200</text>
+<rect x="290" y="352" width="12" height="12" fill="#d9822b"/>
+<text x="308" y="362" fill="#222">14개 유형 합침, N=200</text>
+</svg>

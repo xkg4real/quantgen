@@ -25,15 +25,21 @@ from core.didm.llm import schema as s
 ROOT = Path(__file__).resolve().parents[2]
 OUT_DIR = ROOT / "docs" / "didm" / "schema"
 DRAFT = "https://json-schema.org/draft/2020-12/schema"
-# The Python validators use fullmatch. A JSON Schema validator searches, and in Python's regex dialect
-# "$" also matches just before a final newline, so the exported patterns end with a guard that is
-# strict in both dialects (the look-ahead is a no-op in ECMA-262, where "$" is the very end).
-_STRICT_END = r"(?!\n)"
-ID_PATTERN = s._ID.pattern + _STRICT_END
-SHA_PATTERN = s._SHA256.pattern + _STRICT_END
-_TOL = f"{j.SUM_TOLERANCE:g}"
+# The Python validators use fullmatch; JSON Schema validators search, and regex engines disagree about
+# "$" (Python and Java let it match before a final line break) and about look-aheads (Go's RE2 has none).
+# So the exported rules use no anchor at the end and no look-ahead: a first-character pattern, a negated
+# character class under "not", and explicit lengths. Every engine reads these the same way.
+# tests/didm_contract_acceptance.py checks them against schema._ID and schema._SHA256 character by character.
+ID_FIRST = "^[A-Za-z0-9]"
+ID_FORBIDDEN = "[^A-Za-z0-9_.:/-]"
+ID_MAX = 128
+SHA_FORBIDDEN = "[^0-9a-f]"
+SHA_LENGTH = 64
+_TOL = f"{j.SUM_TOLERANCE:.0e}".replace("e-0", "e-")
 
-_IDENT = {"type": "string", "pattern": ID_PATTERN}
+_IDENT = {"type": "string", "minLength": 1, "maxLength": ID_MAX, "pattern": ID_FIRST,
+          "not": {"pattern": ID_FORBIDDEN}}
+_SHA = {"type": "string", "minLength": SHA_LENGTH, "maxLength": SHA_LENGTH, "not": {"pattern": SHA_FORBIDDEN}}
 _TIMESTAMP = {"type": "string", "format": "date-time",
               "description": "ISO 8601 with a timezone; a value without one is rejected."}
 _SCORE = {"type": "number", "minimum": 0, "maximum": 100}
@@ -69,7 +75,7 @@ def score_schema() -> dict:
         "p_credibility": _PROB,
         "market_confirmation": {"enum": _values(s.MarketConfirmation)},
         "model_version": {"type": "string", "pattern": r"\S"},
-        "prompt_sha256": {"type": "string", "pattern": SHA_PATTERN},
+        "prompt_sha256": _SHA,
         "schema_version": {"const": s.SCHEMA_VERSION},
     }
     missing = [name for name in s.REQUIRED if name not in properties]
@@ -138,8 +144,9 @@ def judgement_schema() -> dict:
             "p_subject is 0 when target_kind is none",
             f"event_type_probs sums to 1 within {_TOL}",
             "event_type is a most probable key of event_type_probs (compared exactly; an exact tie leaves a choice)",
-            f"direction_probs sums to 1 within {_TOL}",
-            "P(+1) + P(-1) does not exceed 1 (tolerance 1e-9)",
+            f"direction_probs sums to 1 within {_TOL} (normalise in float64 if you can)",
+            "when the raw direction_probs go into a record without a calibrator, P(+1) + P(-1) must not "
+            "exceed 1 by more than 1e-9 (the record schema's bound); with a calibrator this does not apply",
         ],
     }
 
