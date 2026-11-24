@@ -31,6 +31,8 @@ import sys
 from datetime import date, timedelta
 from pathlib import Path
 
+from core.didm.ingest import terms
+
 STORE_FILE = "didm_store.sqlite"
 SAMPLE = (2015, 2024)
 MAX_LISTED_GAPS = 10
@@ -91,6 +93,7 @@ def summarize(db: sqlite3.Connection, *, since: date | None = None,
             "missing_receive_days": len(gaps),
             "missing_examples": [d.isoformat() for d in gaps[:MAX_LISTED_GAPS]],
             "sample_years": {str(y): years.get(f"{y:04d}", 0) for y in range(sample[0], sample[1] + 1)},
+            "research_excluded": terms.is_research_excluded(source_id),
         })
     return {"store_last_received": overall_last[:10] if overall_last else None,
             "sample": list(sample), "sources": sources}
@@ -140,6 +143,7 @@ def by_entity(db: sqlite3.Connection) -> list[dict]:
         counts = [e["items"] for e in ents]
         out.append({
             "source_id": source_id, "kind": kind, "entities": len(ents),
+            "research_excluded": terms.is_research_excluded(source_id),
             "untagged_items": untagged.get((source_id, kind), 0),
             "items_per_entity": ({"min": min(counts), "median": _median(counts), "max": max(counts)}
                                  if counts else None),
@@ -156,6 +160,8 @@ def entity_lines(groups: list[dict]) -> list[str]:
         spread = g["items_per_entity"]
         head = (f"by entity {g['source_id']} / {g['kind']}: entities {g['entities']}, untagged items "
                 f"{g['untagged_items']}")
+        if g["research_excluded"]:
+            head += " [EXCLUDED from research]"
         if spread:
             head += f", items per entity min {spread['min']} median {spread['median']:g} max {spread['max']}"
         out.append(head)
@@ -180,7 +186,8 @@ def lines(summary: dict) -> list[str]:
             f"valid {s['valid_from']}..{s['valid_to']}, received {s['received_from']}..{s['received_to']} "
             f"on {s['receive_days']} days, missing {s['missing_receive_days']} days"
             + (f" (e.g. {', '.join(s['missing_examples'][:3])})" if s["missing_examples"] else "")
-            + f", sample years with data {covered}/{hi - lo + 1}")
+            + f", sample years with data {covered}/{hi - lo + 1}"
+            + (f" [EXCLUDED from research: {terms.NOTICE}]" if s["research_excluded"] else ""))
     return out
 
 

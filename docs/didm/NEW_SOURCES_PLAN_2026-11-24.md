@@ -49,6 +49,8 @@
 - Massive: 무료 Basic은 **뉴스 2년치만**, 2021-04 이전은 거의 없음, 감성 (insights)은 2024-07-02부터. 개인 약관은 **개인·비상업·비업무 용도만**, 시장자료 약관 5(g)는 **AI·ML 학습 금지**, 플랜 종료 뒤 30일 안 삭제. → 지금 플랜으로는 DIDM 학습·검증 자료에 쓰지 않는 것을 제안 (소유자 결정).
 - Benzinga 묶음 (Massive): 2009-04-27~, 요금 페이지 "$99/month per dataset" (개인 요금표; 사업자 조건은 별도).
 
+- 약관상 연구 표본 제외 (source_id): `alpaca-news`, `krx-listing-datagokr`, `krx-openapi`, `massive-news` — 개인·비상업 약관: 연결 확인용, 연구 표본·학습 불가. 근거: `SAMPLE_EXPANSION_FEASIBILITY_2026-11-24.md` 9·10절 (2026-11-24 원문 확인, 법률 자문 아님). 목록은 `core/didm/ingest/terms.py` 한 곳에 있고, 이 줄과 다르면 `tests.didm_terms_guard_acceptance`가 실패합니다.
+
 ## 4. 범위 (DS-5a·5b·5c) — 소유자 확인 전에는 시작하지 않음
 
 | ID | 시작 조건 | 할 일 | 완료 조건 |
