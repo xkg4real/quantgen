@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
+from unittest.mock import call, patch
 
 from core.didm.ingest import ecos, filings, kalshi
 from core.didm.store import PointInTimeStore
@@ -129,6 +130,32 @@ class Kalshi(unittest.TestCase):
         with self.assertRaises(kalshi.KalshiError):
             kalshi.market_snapshot_rows({"markets": [{"ticker": "X", "yes_bid_dollars": "abc"}]}, RECEIVED)
 
+    def test_dollar_price_rejected_before_rounding_to_probability(self):
+        invalid = (True, False, "1.000000004", "-0.000000004", "1.00000000000000000001",
+                   "-1e-1000", "NaN", float("inf"), "-Infinity", "bad", 10**400)
+        for value in invalid:
+            for field in ("last_price", "yes_bid", "yes_ask"):
+                with self.subTest(value=value, field=field), self.assertRaises(kalshi.KalshiError):
+                    market = {"ticker": "X", field: 50, field + "_dollars": value}
+                    kalshi.market_snapshot_rows({"markets": [market]}, RECEIVED)
+            with self.subTest(value=value, field="close"), self.assertRaises(kalshi.KalshiError):
+                candle = {"end_period_ts": 1763337600, "price": {"close": 50, "close_dollars": value}}
+                kalshi.candlestick_rows("X", {"candlesticks": [candle]}, RECEIVED)
+
+    def test_valid_dollars_keep_cent_rounding_and_legacy_fallback(self):
+        for value in (0, 1, "0.0000", "1.0000", 0.61, "0.123456789", "0.99999999999999999999", "0.000000004"):
+            with self.subTest(value=value):
+                cents = round(float(value) * 100, 6)
+                market = {"ticker": "X", "last_price_dollars": value, "last_price": 37}
+                snapshot = kalshi.market_snapshot_rows({"markets": [market]}, RECEIVED)[0]["payload"]
+                candle = {"end_period_ts": 1763337600, "price": {"close_dollars": value, "close": 37}}
+                closed = kalshi.candlestick_rows("X", {"candlesticks": [candle]}, RECEIVED)[0]["payload"]
+                self.assertEqual((snapshot["last_price"], closed["close"]), (cents, cents))
+                self.assertEqual((snapshot["p_yes"], closed["p_yes"]), (cents / 100, cents / 100))
+        for blank in (None, ""):
+            market = {"ticker": "X", "last_price_dollars": blank, "last_price": 37}
+            self.assertEqual(kalshi.market_snapshot_rows({"markets": [market]}, RECEIVED)[0]["payload"]["p_yes"], 0.37)
+
     def test_candles_current_fields(self):
         payload = {"candlesticks": [{"end_period_ts": 1763337600, "price": {"close_dollars": "0.5800"},
                                      "volume_fp": "3000.00", "open_interest_fp": "8000.00"}]}
@@ -149,6 +176,80 @@ class Kalshi(unittest.TestCase):
     def test_naive_received(self):
         with self.assertRaises(kalshi.KalshiError):
             kalshi.candlestick_rows("X", CANDLES, datetime(2026, 11, 18))
+
+    def test_invalid_counts_rejected_in_snapshots_and_candles(self):
+        invalid = (True, False, float("nan"), "Infinity", "-Infinity", 10**400, "1e-1000", "-1e-1000")
+        for name in ("volume", "open_interest", "volume_24h"):
+            for key in (name, name + "_fp"):
+                for value in invalid:
+                    with self.subTest(key=key, value=value):
+                        market = {"ticker": "X", name: 12, key: value}
+                        with self.assertRaises(kalshi.KalshiError):
+                            kalshi.market_snapshot_rows({"markets": [market]}, RECEIVED)
+                        if name != "volume_24h":
+                            candle = {"end_period_ts": 1763337600, name: 12, key: value}
+                            with self.assertRaises(kalshi.KalshiError):
+                                kalshi.candlestick_rows("X", {"candlesticks": [candle]}, RECEIVED)
+
+    def test_fixed_point_and_legacy_counts_at_liquidity_threshold(self):
+        markets = [
+            {"ticker": "A", "volume_fp": "999.75", "volume": 1001, "open_interest_fp": "0.00"},
+            {"ticker": "B", "volume_fp": "", "volume": 1000},
+            {"ticker": "C", "volume_24h_fp": None, "volume_24h": 3},
+        ]
+        rows = kalshi.market_snapshot_rows({"markets": markets}, RECEIVED)
+        self.assertEqual([(r["payload"]["volume"], r["payload"]["liquid"]) for r in rows],
+                         [(999.75, False), (1000, True), (None, False)])
+        self.assertEqual(rows[0]["payload"]["open_interest"], 0)
+        self.assertEqual(rows[2]["payload"]["volume_24h"], 3)
+
+
+class KalshiPagination(unittest.TestCase):
+    def setUp(self):
+        from data.didm import kalshi as client
+        self.client = client
+
+    def test_bad_envelopes_do_not_complete_a_partial_batch(self):
+        for invalid in (None, [], {}, {"markets": None}, {"markets": {}}, {"markets": "x"}, {"markets": [1]}):
+            with self.subTest(invalid=invalid):
+                pages = [{"markets": [{"ticker": "A"}], "cursor": "next"}, invalid]
+                with patch.object(self.client, "fetch_markets", side_effect=pages) as fetch:
+                    with self.assertRaises(self.client.SourceError):
+                        self.client.fetch_all_markets("SERIES")
+                    self.assertEqual(fetch.call_count, 2)
+
+    def test_invalid_cursor_types_never_mean_complete(self):
+        for token in (False, 0, 1, [], {}, True):
+            with self.subTest(token=token), patch.object(self.client, "fetch_markets",
+                                                        return_value={"markets": [], "cursor": token}):
+                with self.assertRaises(self.client.SourceError):
+                    self.client.fetch_all_markets("SERIES", max_pages=1)
+
+    def test_repeated_cursor_is_an_error_even_at_the_cap(self):
+        pages = [{"markets": [], "cursor": token} for token in ("x", "y", "x")]
+        with patch.object(self.client, "fetch_markets", side_effect=pages) as fetch:
+            with self.assertRaises(self.client.SourceError):
+                self.client.fetch_all_markets("SERIES", max_pages=3)
+            self.assertEqual(fetch.call_count, 3)
+
+    def test_empty_page_continues_and_repeated_markets_keep_order(self):
+        row_a, row_b = {"ticker": "A"}, {"ticker": "B"}
+        for terminal in ({}, {"cursor": None}, {"cursor": ""}):
+            with self.subTest(terminal=terminal):
+                pages = [{"markets": [row_a], "cursor": " first "}, {"markets": [], "cursor": "second"},
+                         {"markets": [row_b, row_a], **terminal}]
+                with patch.object(self.client, "fetch_markets", side_effect=pages) as fetch:
+                    result = self.client.fetch_all_markets("SERIES", "closed", max_pages=3)
+                    self.assertEqual(result, {"markets": [row_a, row_b, row_a], "pages": 3, "complete": True})
+                    self.assertEqual(fetch.call_args_list, [call("SERIES", "closed", cursor=token)
+                                                           for token in (None, " first ", "second")])
+
+    def test_new_cursor_at_the_cap_keeps_partial_results(self):
+        row = {"ticker": "A"}
+        with patch.object(self.client, "fetch_markets", return_value={"markets": [row], "cursor": "next"}) as fetch:
+            result = self.client.fetch_all_markets("SERIES", max_pages=1)
+            self.assertEqual(result, {"markets": [row], "pages": 1, "complete": False})
+            fetch.assert_called_once_with("SERIES", "open", cursor=None)
 
 
 class KeyCheck(unittest.TestCase):

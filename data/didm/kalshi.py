@@ -8,6 +8,7 @@ Terms and availability from Korea are not legally reviewed (not legal advice).
 from __future__ import annotations
 
 import re
+from collections.abc import Mapping
 
 from data.didm.keys import SourceError
 from data.net import session
@@ -41,12 +42,23 @@ def fetch_markets(series_ticker: str, status: str = "open", limit: int = 200,
 def fetch_all_markets(series_ticker: str, status: str = "open", max_pages: int = 20) -> dict:
     """Follow the response cursor; returns {"markets": [...], "pages": n, "complete": bool}."""
     markets, cursor = [], None
+    seen_cursors = set()
     for page in range(1, max_pages + 1):
         payload = fetch_markets(series_ticker, status, cursor=cursor)
-        markets += payload.get("markets") or []
+        if not isinstance(payload, Mapping) or not isinstance(payload.get("markets"), list):
+            raise SourceError("Kalshi /markets: expected a markets list")
+        batch = payload["markets"]
+        if any(not isinstance(market, Mapping) for market in batch):
+            raise SourceError("Kalshi /markets: expected market objects")
+        markets.extend(batch)
         cursor = payload.get("cursor")
-        if not cursor:
+        if cursor is None or cursor == "":
             return {"markets": markets, "pages": page, "complete": True}
+        if not isinstance(cursor, str):
+            raise SourceError("Kalshi /markets: cursor must be a string")
+        if cursor in seen_cursors:
+            raise SourceError("Kalshi /markets: repeated cursor")
+        seen_cursors.add(cursor)
     return {"markets": markets, "pages": max_pages, "complete": False}
 
 
