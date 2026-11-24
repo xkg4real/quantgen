@@ -39,7 +39,7 @@
 
 - spec 구문 확인(`ast.parse`). Windows·Linux 분기는 바뀌지 않음.
 - `tests.packaging_policy_acceptance`, `tests.third_party_notices_acceptance`, `tests.app_identity_acceptance`, `tests.credentials_acceptance` 통과(임시 HOME).
-- selfcheck를 소스에서 실행해 `os_credential_store`가 Linux에서 `{"available": false, "required_on_this_platform": false}`, ok로 기록됨을 봄.
+- selfcheck를 소스에서 실행해 `os_credential_store`가 Linux에서 `{"available": false, "required": false, "expected_on_this_platform": false}`, ok로 기록됨을 봄(보고만 판).
 - 실제 .app 빌드·Dock 아이콘·Keychain은 Mac에서만 확인됩니다: `platform-build.yml`을 macos 입력으로 수동 실행(소유자 또는 메인이 정할 때) → selfcheck JSON의 `os_credential_store` detail `available`이 true(그 뒤 필수 전환), 내려받은 .app의 Dock 아이콘과 "정보 가져오기" 버전 2.0.0.
 
 ## 4. UI 세션에 보낼 요청 (소유자 경유)
