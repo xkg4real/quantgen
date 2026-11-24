@@ -14,11 +14,11 @@ task: data-source
 cycle: 2026-11-24
 done_ids: none
 next_ids: DS-5b, DS-5c, DS-5a
-updated_at: 2026-11-25T00:20:00+09:00
+updated_at: 2026-11-25T00:50:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/ds-home-reason-codes-20261124 (+ claude/ds-review-fixes-20261124@9663a99, claude/ds-fedwatch-20261124@5e971c0, claude/ds-edgar-history-20261124@927375b, claude/ds-5bc-news-20261124@4a646ce)
-work_commit: c5563ee (D15) / 60db667 (DS-5b/2)
+work_commit: 1886b22 (DS-8)
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -29,6 +29,11 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## DATA_SOURCE (Claude) DS-8 — 2026-11-25T00:50+09:00
+
+- `claude/ds-confirmations-store-20261124` @ 1886b22 (integration2 0dfd1aa 기준): tools/didm/confirmations.py + 시험 9, 변형 5 잡힘, didm 457 OK.
+- 메인 지시와 다른 점 1개: received_at = 실제 쓴 시각 (읽기 규칙 시험용), 운영에서는 known_at과 5분 이내. 메인 확인 대기.
 
 ## DATA_SOURCE (Claude) DS-5b/2·D15 — 2026-11-25T00:20+09:00
 
