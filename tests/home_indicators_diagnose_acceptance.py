@@ -168,19 +168,40 @@ def sendto(self, data, *rest):
         raise ConnectionRefusedError(errno.ECONNREFUSED, "blocked by test")
     return _sendto(self, data, *rest)
 socket.socket.connect, socket.socket.connect_ex, socket.socket.sendto = connect, connect_ex, sendto
+# Self-check: one lookup and one connection the guard must refuse and record; the test requires both, so a
+# guard that is not installed fails the test (main's follow-up review). Both stay on this machine.
+try:
+    socket.getaddrinfo("guard-probe.invalid", 443)
+except OSError:
+    pass
+with socket.socket() as _probe:
+    _probe.settimeout(1)
+    try:
+        _probe.connect(("127.0.0.1", 1))
+    except OSError:
+        pass
+# Every file named .env the process opens is recorded through an audit hook (independent of the patches below).
+env_opens = []
+def _audit(event, args):
+    if event == "open" and args and os.path.basename(str(args[0])) == ".env":
+        env_opens.append(str(args[0])[-80:])
+sys.addaudithook(_audit)
+neutralized = []
 try:
     import dotenv
     dotenv.load_dotenv = lambda *a, **k: False
+    neutralized.append("dotenv")
 except ImportError:
-    pass
+    neutralized.append("dotenv-absent")
 from core import credentials
 credentials.load_dotenv_for_development = lambda: None
 credentials.set_backend(None)
+neutralized.append("credentials")
 try:
     runpy.run_module("core.research.markets", run_name="__main__", alter_sys=True)
 finally:
     with open(os.environ["QG_TEST_GUARD_OUT"], "w", encoding="utf-8") as f:
-        json.dump({"blocked": blocked, "deps": deps}, f)
+        json.dump({"blocked": blocked, "deps": deps, "env_opens": env_opens, "neutralized": neutralized}, f)
 """
 
 
@@ -217,8 +238,8 @@ def offline_env(home: Path, proxy_port: int) -> dict:
     for name in ("HOME", "USERPROFILE", "APPDATA", "LOCALAPPDATA", "XDG_CACHE_HOME", "XDG_CONFIG_HOME",
                  "WIN_PD_OVERRIDE_LOCAL_APPDATA", "WIN_PD_OVERRIDE_APPDATA"):   # platformdirs on Windows (DSF-12)
         env[name] = str(home)
-    for name in names.SECRETS:          # set empty, so even a .env loader that slipped through adds no KIS key (PD-1)
-        env[name] = ""
+    for name in list(names.SECRETS) + list(names.RESEARCH):   # empty: a .env loader that slipped through adds
+        env[name] = ""                                          # no app or research key (PD-1, follow-up review)
     env["PYTHON_KEYRING_BACKEND"] = "keyring.backends.null.Keyring"
     env["NEXTGEN_FICC_CACHE"] = str(home / "ficc_cache")
     env["NEXTGEN_FICC_CACHE_TTL"] = "0"
@@ -254,6 +275,7 @@ class CommandLine(unittest.TestCase):
         self.assertNotIn("NO_PROXY", env)
         self.assertNotIn("no_proxy", env)
         self.assertEqual(env["KIS_APP_KEY"], "")
+        self.assertEqual(env["FRED_API_KEY"], "")
         self.assertEqual(env["PYTHON_KEYRING_BACKEND"], "keyring.backends.null.Keyring")
         self.assertNotIn("QUANTGEN_DATA_DIR", env)
         self.assertEqual(env["WIN_PD_OVERRIDE_LOCAL_APPDATA"], tmp)
@@ -267,7 +289,12 @@ class CommandLine(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stderr[-500:])           # before the record (DSF-8)
         self.assertIsNotNone(record, "child wrote no guard record: " + proc.stderr[-500:])
         self.assertEqual(proc.stderr, "")                       # no provider text, URL or traceback reaches it
-        self.assertEqual(record["blocked"], {"dns": [], "connect": []})   # nothing left through Python sockets
+        # only the bootstrap's own probes were refused: the guard is installed and nothing else left
+        self.assertEqual(record["blocked"]["dns"], ["guard-probe.invalid"])
+        self.assertEqual(record["blocked"]["connect"], ["('127.0.0.1', 1)"])
+        self.assertEqual(record["env_opens"], [])                          # no .env opened (audit hook)
+        self.assertIn("credentials", record["neutralized"])
+        self.assertTrue({"dotenv", "dotenv-absent"} & set(record["neutralized"]))
         lines = proc.stdout.strip().splitlines()
         self.assertEqual(len(lines), 6, proc.stdout)
         self.assertEqual([l.split()[0] for l in lines], [s[1] for s in markets.SPECS])
