@@ -36,7 +36,15 @@ git 기준: main `de32ea1` (#147 GH-2 → `dfae585`, #149 PAY-0·PAY-2 → `de32
 | OS | O4 보강(키 보관함 점검을 "보고만"으로) `558a613`, O5 15-7 판매 빌드 점검(chardet 고지 누락 닫음, 안 쓰는 패키지·로고 제외) | os-sale-build-check @ `4b88a05` (O4 포함) | 통합 PR ② (메인 독립 검토 뒤) | [x] 보고 · [ ] 검토 |
 | OS | O6 OS-F3 Linux 차이 조사 | (예정) | 다음 묶음 | [ ] 배분함 (19:1x) |
 | DIDM_DEV | DIDM-3/b 마감일 표 35행 중 33행 검증(LM 사전, FinBERT, ChronoGPT 26개; Qwen3·자체 LLM 미검증 유지) | didm-dev @ `e01bb08` | 통합 PR ② | [x] 보고 · [ ] 병합 |
-| DIDM_DEV | 통합 PR ① 검토 지적 13건 수정 | didm-contract-fixes (3626913에서) | 통합 PR ① | [ ] 진행 중 |
+| DIDM_DEV | 통합 PR ① 검토 지적 12건 수정 | didm-contract-fixes @ `feed288` | 통합 PR ① (합침 `703aa01`, 독립 재확인 중) | [x] 보고 |
+| DIDM_DEV | DIDM-4/a Stage 0 모의실험 시도 1회, 판정 REVISE | didm-dev @ `72edc0f` | 통합 PR ② | [x] 보고 · [ ] 병합 |
+| DIDM_DEV | DIDM-5 Stage 1 측정 도구(Stage 1 자체는 미실행) | didm-dev @ `fc4b830` | 통합 PR ② | [x] 보고 · [ ] 병합 |
+| DIDM_DEV | DIDM-8 시장 확인·거시 서프라이즈, DIDM-7 개체 연결·군집화, DIDM-4/b V0.1 제안서 | didm-dev | 다음 묶음 | [ ] 배분함 (19:4x) |
+| DATA_SOURCE | 통합 PR ① 검토 지적 DS-1~DS-9, PD-1, PD-3 수정 | ds-review-fixes @ `9663a99` | 통합 PR ① (합침 `d770b89`, 독립 재확인 중) | [x] 보고 |
+| DATA_SOURCE | D11 전송 실패 분류(홈 화면 사유 코드) | ds-home-reason-codes (예정) | 통합 PR ② | [ ] 배분함 (19:4x) |
+| OS | 통합 PR ① 검토 지적 OSPAY-2~8, PD-4 수정 | os-review-fixes (예정) | 통합 PR ① | [ ] 진행 중 |
+| OS | O7 Qt 빌드에서 Flet 빼기 계획(문서), runtime-smoke 한 줄 | os-linux-differences @ `16232af` | 통합 PR ② (합침) | [x] 보고 |
+| MAIN | 통합 PR ① 검토 지적 MAIN-2~9, PD-2, PD-5, OSPAY-9, OSPAY-10 수정 | integration @ `dde5761` | 통합 PR ① | [x] 고침. MAIN-1(기준선)은 마지막 커밋 |
 | MAIN | 통합 PR ①: 위 7브랜치 + REMAINING_WORK 2026-11-24판, CLAUDE.md, 인계 도구 세션 칸 2개, 결정 기록, CI 시험 목록 | integration @ `3e2af60` | PR → CI → 병합 | [ ] 독립 검토 중 (5갈래) |
 | MAIN | 출처 호스트 5개 환경 승인 | — | — | [x] 2026-11-24 19:0x 소유자 승인 (sraf.nd.edu, huggingface.co, arxiv.org, trec.nist.gov, econ.korea.ac.kr) |
 | MAIN | PR #148 스킬 | quant-skills @ `462f7df` | 보류 | [ ] 막는 지적 1 + 큰 지적 4 (`plans/2026-11-24/PR148_REVIEW.md`) 고친 뒤 |
@@ -63,6 +71,8 @@ git 기준: main `de32ea1` (#147 GH-2 → `dfae585`, #149 PAY-0·PAY-2 → `de32
 10. (19:20) DIDM_DEV가 확인한 사실(DIDM-3/b, `claude/didm-dev-20261124` @ `e01bb08`의 `docs/didm/MODEL_CUTOFFS.md`): Qwen3은 모델 카드와 기술 보고서에 학습 마감일이 없어 사전 등록 규칙상 과거 검증 자격이 없다. Qwen3을 기반으로 한 자체 모델도 같은 이유로 자격이 없다(미세조정 자료 날짜와 무관). 과거 검증에 쓸 모델이면 마감일이 공개된 기반 모델이 필요하다. 앞으로 받는 기사만 채점하는 용도는 이 규칙과 별개다. QGPT-01/b의 후보 근거 확인에 이 조건을 넣는다(후보마다 "공식 출처에 학습 마감일이 있는가"). 기반 모델을 무엇으로 할지는 소유자 결정(OA-10 (b), OA-52)이다.
 11. (19:20) TRADEGEN 메인 세션이 요청(M11-T7)을 보냈다: QuantGPT·DIDM 출력 스냅샷을 정해진 주기로 남겨 오프라인으로 전달. 메인의 답은 `QUANTGPT_TRADEGEN.md` v0.2 9절(handoff `ae10345`): 접수, 아직 시작하지 않음, 특성 스냅샷 형식 제안, 시작 전 소유자 확인 4가지. QUANTGPT는 주기 실행을 시작하지 않는다. 받는 쪽 계약은 tradegen main `b828b2d`의 `docs/direction-forecast-contract.md`이며 그쪽 7절이 v0.1의 차이를 적어 두었다(경계는 D14 닫힘 전체, `issued_at` 구분, 요청 해시와 스냅샷 해시 구분). 봉투에 `issued_at`, 디코딩 설정, `rag_index_version`, 확신 점수를 더하는 일(그 세션 제안 ②)은 8번 목록 뒤에 QGPT-02/2로 진행한다. 인용·시점 누출을 owner 모드에서도 기권으로 두는 것은 그대로 둔다.
 12. (19:20) OA-50(TRADEGEN 공유)은 닫는다: QUANTGPT의 전달이 "delivered"였고 TRADEGEN 쪽 계약 문서가 답으로 왔다.
+13. (19:45) DIDM_DEV의 지표 모듈을 같이 쓴다: `core/didm/eval/metrics.py`(브랜치 `claude/didm-dev-20261124` @ `fc4b830`, 통합 ② 뒤 main)는 표준 라이브러리만 쓰고 저장소의 다른 모듈을 import하지 않는다. 뉴스 유형 평가 묶음에서 `cohen_kappa`, `macro_f1`, `top_label_ece`, `brier_skill`, `paired_bootstrap`을 그대로 쓰면 DIDM과 같은 자로 재게 된다. `qgpt/`가 `core`를 import할 수 없는 구조면 복사하지 말고 QGPT-62/a의 적합 시험에서 두 구현의 결과가 같은지 고정 입력으로 대조한다.
+14. (19:45) 완료 ID 이름: 재생 점검은 `QGPT-02/replay`로 등록했다(통합 브랜치 `docs/nautilus_bridge/REMAINING_WORK_2026-11-24.md` 2.1절). 인계 문서의 done_ids에서 `QGPT-replay`를 `QGPT-02/replay`로 고친다. 인계 도구의 QUANTGPT 칸은 `quantgpt`와 `quantgpt-q0` 두 이름을 모두 받게 고쳤다(통합 PR ① 병합 뒤 `--doc`로 올릴 수 있음).
 
 ### 메인 → PAYMENTS_ACCOUNT_KEYS (직접 전달이 막힌 동안 이 절이 전달 통로)
 
@@ -88,6 +98,7 @@ git 기준: main `de32ea1` (#147 GH-2 → `dfae585`, #149 PAY-0·PAY-2 → `de32
 | DATA_SOURCE | Alpaca 무료(Paper) 키·Massive 무료 키 발급 후 수집기 1회 실행(편할 때), N1 EODHD 유료 여부, D4 수집 현황 명령 1회 실행(병합 뒤) | `DATA_SOURCE_SESSION_CURRENT.md` |
 | OS | 번들 ID 확인, Intel Mac 지원 여부, Mac 화면 글꼴 확인, UI 요청 4건(단축키 표시 등) 전달 | `OS_SESSION_CURRENT.md`, `docs/platform/MACOS_DIFFERENCES_2026-11-24.md`(병합 뒤) |
 | DIDM Stage 0 (OA-56, 새) | 모의실험 판정 REVISE(합성 자료, 시도 1회, `claude/didm-dev-20261124` @ `72edc0f`의 `docs/didm/STAGE0_REPORT_V0.md`). 사전등록에 닿는 변경 4가지의 승인 여부: (가) 지연 비중을 비율 대신 차이로·20일 대신 5일·유형 합침 먼저, (나) 연결망 층을 관문에서 빼고 보고만, (다) HAR 월 계수를 포함률 점검에서 제외, (라) 모형 비교를 계수 검정으로. 그리고 Stage 3 변동성 기준(QLIKE 2%)이 중심 가정에서 0.14%인 점. DIDM_DEV가 V0.1 제안서를 쓰는 중 | 제안서 예정 `docs/didm/PREREG_V0_1_PROPOSAL_2026-11-24.md` |
+| DIDM Stage 1 준비 (OA-61, 새) | 실제 Stage 1을 돌리려면: 주석자 2명과 판정자 1명 지정, 표시 도구 결정, 후보 기사 본문을 주석자에게 보여 줄 권리 확인(공급사 약관). 그리고 Stage 1을 재는 방법의 해석 5가지 확인(DIDM-4/b 제안서에 포함 예정) | `claude/didm-dev-20261124` @ `fc4b830`의 `docs/didm/{STAGE1_TOOLS_V0,GOLD_SET_V0,LABELLING_GUIDE_V0}.md` |
 | TRADEGEN M11-T7 (OA-57, 새) | 출력 스냅샷 주기 전달: 시작 여부·모델·비용, 보관 위치, 대상 범위, DIDM 평가 표본과의 분리 | `QUANTGPT_TRADEGEN.md` v0.2 9.4절 |
 | 판매 빌드 (OA-58, 새) | 공개 빌드를 commercial 프로필로 고정할지(지금은 personal로 나감), Linux 판매 여부와 기준 배포판 | `docs/platform/SALE_BUILD_CHECK_2026-11-24.md`, `LINUX_DIFFERENCES_2026-11-24.md`(통합 ② 병합 뒤) |
 | 기준선 라이선스·기반 모델 (OA-59, 새) | FinBERT(CC BY-NC-SA)·LM 사전(학술 무료)을 연구 비교용으로만 둘지, 자체 LLM 기반 모델을 학습 마감일이 공개된 것으로 할지(Qwen3은 공개 마감일 없음) | `docs/didm/MODEL_CUTOFFS.md` |
