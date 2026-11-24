@@ -7,6 +7,7 @@ personal data in the repository). Without it the client refuses to call.
 """
 from __future__ import annotations
 
+import re
 import threading
 import time
 
@@ -15,6 +16,8 @@ from data.net import session
 
 UA_NAME = "SEC_EDGAR_USER_AGENT"
 SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik:010d}.json"
+HISTORY_URL = "https://data.sec.gov/submissions/{name}"
+_HISTORY_NAME = re.compile(r"^CIK\d{10}-submissions-\d{3}\.json$")
 MIN_INTERVAL_S = 0.125  # 8 requests per second, under the SEC's 10
 TIMEOUT_SECONDS = 30
 _lock = threading.Lock()
@@ -39,4 +42,17 @@ def fetch_submissions(cik: int) -> dict:
                        headers={"User-Agent": ua, "Accept-Encoding": "gzip, deflate"})
     if resp.status_code != 200:
         raise SourceError(f"EDGAR CIK {int(cik)}: HTTP {resp.status_code}")
+    return resp.json()
+
+
+def fetch_history_file(name: str) -> dict:
+    """One older submissions file named in ``filings.files`` (D6). Same User-Agent and spacing."""
+    if not _HISTORY_NAME.match(name or ""):
+        raise ValueError(f"not a submissions file name: {name!r}")
+    ua = require(UA_NAME, "a generic contact, required by the SEC")
+    _throttle()
+    resp = session.get(HISTORY_URL.format(name=name), timeout=TIMEOUT_SECONDS,
+                       headers={"User-Agent": ua, "Accept-Encoding": "gzip, deflate"})
+    if resp.status_code != 200:
+        raise SourceError(f"EDGAR {name}: HTTP {resp.status_code}")
     return resp.json()

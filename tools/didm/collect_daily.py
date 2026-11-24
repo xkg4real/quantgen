@@ -3,6 +3,7 @@
     python -m tools.didm.collect_daily --data-dir <folder outside the repository> [--finbert]
     python -m tools.didm.collect_daily --data-dir <folder> --alfred CPIAUCSL PAYEMS
     python -I -m tools.didm.collect_daily --data-dir <folder> --alfred-file CPIAUCSL=<downloaded .xlsx>
+    python -m tools.didm.collect_daily --data-dir <folder> --no-gdelt --edgar-history 320193 --edgar-from 2015-01-01 --edgar-to 2024-12-31
     python -m tools.didm.collect_daily --data-dir <folder> --no-gdelt --edgar 320193 --opendart 20261117 20261118 \
         --ecos "722Y001,M,202401,202610,0101000" --kalshi KXFED
 
@@ -26,7 +27,7 @@ from __future__ import annotations
 import argparse
 import os
 import sys
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Mapping
 
@@ -227,6 +228,44 @@ def collect_edgar(store: PointInTimeStore, ciks: list[str]) -> None:
         print(f"EDGAR CIK {int(cik)}: filings {len(rows)}, new {store.append_many(rows)}")
 
 
+def collect_edgar_history(store: PointInTimeStore, ciks: list[str], start: str | None, end: str | None,
+                          max_files: int, fetch_submissions=None, fetch_file=None) -> list[dict]:
+    """D6: filings between start and end (filing dates, inclusive) from filings.recent plus the older
+    submissions files that overlap the range. Same User-Agent and spacing as --edgar."""
+    if fetch_submissions is None or fetch_file is None:
+        from data.didm import edgar
+        fetch_submissions = fetch_submissions or edgar.fetch_submissions
+        fetch_file = fetch_file or edgar.fetch_history_file
+    lo = date.fromisoformat(start) if start else None
+    hi = date.fromisoformat(end) if end else None
+    if lo and hi and lo > hi:
+        raise SystemExit("--edgar-from must not be after --edgar-to")
+
+    def in_range(row: dict) -> bool:
+        d = date.fromisoformat(row["payload"]["filing_date"])
+        return (lo is None or d >= lo) and (hi is None or d <= hi)
+
+    results = []
+    for cik in ciks:
+        subs = fetch_submissions(int(cik))
+        received = _now()
+        rows = [r for r in filings_ingest.edgar_rows(subs, received) if in_range(r)]
+        files = filings_ingest.edgar_history_files(subs, lo, hi)
+        read = 0
+        for entry in files[:max_files]:
+            payload = fetch_file(entry["name"])
+            rows += [r for r in filings_ingest.edgar_history_rows(subs, entry, payload, _now()) if in_range(r)]
+            read += 1
+        dates = sorted(r["payload"]["filing_date"] for r in rows)
+        added = store.append_many(rows)
+        complete = read == len(files)
+        print(f"EDGAR history CIK {int(cik)} {start or '-'}..{end or '-'}: files {read}/{len(files)} "
+              f"(complete {complete}), filings {len(rows)}, first {dates[0] if dates else '-'}, "
+              f"last {dates[-1] if dates else '-'}, new {added}")
+        results.append({"cik": int(cik), "files": len(files), "read": read, "filings": len(rows), "added": added})
+    return results
+
+
 def collect_opendart(store: PointInTimeStore, bgn: str, end: str) -> None:
     from data.didm import opendart
     pages = opendart.fetch_listing(bgn, end)
@@ -330,6 +369,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--alfred", nargs="*", default=[])
     ap.add_argument("--alfred-file", action="append", default=[], metavar="SERIES=PATH")
     ap.add_argument("--edgar", nargs="*", default=[], metavar="CIK")
+    ap.add_argument("--edgar-history", nargs="*", default=[], metavar="CIK",
+                    help="D6: older filings too (filings.files), limited by --edgar-from/--edgar-to")
+    ap.add_argument("--edgar-from", metavar="YYYY-MM-DD", help="earliest filing date for --edgar-history")
+    ap.add_argument("--edgar-to", metavar="YYYY-MM-DD", help="latest filing date for --edgar-history")
+    ap.add_argument("--edgar-max-files", type=int, default=10, help="older files per company (default 10)")
     ap.add_argument("--opendart", nargs=2, metavar=("BGN_YYYYMMDD", "END_YYYYMMDD"))
     ap.add_argument("--ecos", action="append", default=[], metavar="STAT,CYCLE,START,END[,ITEM...]")
     ap.add_argument("--kalshi", nargs="*", default=[], metavar="SERIES")
@@ -363,6 +407,9 @@ def main(argv: list[str] | None = None) -> int:
             collect_alfred_file(store, spec)
         if args.edgar:
             _run("EDGAR", lambda: collect_edgar(store, args.edgar))
+        if args.edgar_history:
+            _run("EDGAR history", lambda: collect_edgar_history(store, args.edgar_history, args.edgar_from,
+                                                                args.edgar_to, args.edgar_max_files))
         if args.opendart:
             _run("OpenDART", lambda: collect_opendart(store, *args.opendart))
         for spec in args.ecos:
