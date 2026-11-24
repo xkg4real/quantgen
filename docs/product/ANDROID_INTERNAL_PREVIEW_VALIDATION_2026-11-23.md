@@ -38,8 +38,16 @@ The artifact name retains `debug` for compatibility. The receipt records the Flu
 `NOT_OBSERVED`. Identifying that mode requires separate evidence from the Flutter build.
 
 The receipt's overall status covers APK integrity and signature verification. Its dependencies section
-lists selected package versions observed in Flet's target staging directory and flags missing or
-conflicting evidence. Confirm these versions separately. On the phone, measure startup and run the example above.
+lists selected package versions observed in Flet's target staging directory, read from entries directly in
+`build/site-packages` and from its Android ABI folders (`arm64-v8a`, `armeabi-v7a`, `x86_64`, `x86`), where
+serious_python installs packages per ABI (`abi`, `abi_packages`). It flags missing evidence (a package not seen at all;
+a package seen in some ABI folders but not in others, `abi_missing`, which makes the status `PARTIAL_METADATA`),
+two versions in one place (`conflicting_versions`), ABIs that disagree (`abi_disagreements`) and a direct entry
+whose version differs from the ABI folders (`direct_abi_disagreements`); the last three make it
+`CONFLICTING_METADATA`. The per-ABI layout comes from
+reading serious_python's packaging source; no real Flet build has confirmed it yet, so `nested_layout:
+NO_ABI_FOLDERS` with empty package lists on a real run means the layout differs and the versions were not seen.
+When verification fails, the job prints the receipt in the log and the tool prints its fixed error codes. Confirm these versions separately. On the phone, measure startup and run the example above.
 Record the results alongside the build revision.
 
 ## Initial layout-only preview at PR #141

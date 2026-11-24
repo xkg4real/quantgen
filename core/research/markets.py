@@ -289,7 +289,8 @@ def load_home_indicators(days=30, *, series_loader=None, btc_live=None, kospi_li
 # Six lines, one per indicator: symbol, status, reason code, live status. No values, keys, URLs or provider
 # text. Always exits 0: a failure is reported as a reason code, not a traceback. On an older checkout the
 # command prints nothing and exits 0 (this file had no __main__ block before OA-09), or fails with
-# "No module named core.research.markets" before 2026-10-29: no output at all is the diagnosis.
+# an error containing "No module named" (the core.research package) before 2026-10-29: no output at all
+# is the diagnosis.
 # --------------------------------------------------------------------------------------------------------------
 def diagnose_lines(rows):
     lines = []
@@ -333,7 +334,7 @@ class _LogCapture:
         # around a connection reset too) only after the transport rules (review DS-3, 2026-11-24).
         if re.search(r"CERTIFICATE_VERIFY_FAILED|certificate|SSLCertVerificationError|curl: \(60\)", text):
             return "certificate_error"
-        if re.search(r"timed out|Timeout", text):
+        if re.search(r"timed out|Timeout|timeout after|curl: \(28\)", text):
             return "network_timeout"
         if re.search(r"ConnectionError|Connection reset|ConnectionResetError|CONNECT tunnel failed|curl: \(\d+\)"
                      r"|Could not resolve|getaddrinfo|Name or service not known|NameResolution|NewConnectionError",
@@ -367,6 +368,22 @@ def diagnose(capture_yahoo_log=True, **kwargs):
     return lines
 
 
+DATA_DIR_REFUSED = "data_dir_unavailable"   # diagnosis-only line code (not a FAILURE_REASONS member)
+
+
+def main(ensure_data_dir=None, run=None) -> list:
+    """The command: prepare the user data folder first (policy docs 01/07/20: a standalone caller calls the
+    preparation API before anything can write the FICC or yfinance cache; review PD-3, 2026-11-24), then
+    diagnose. A refused folder gives six lines with ``reason=data_dir_unavailable`` and no provider call."""
+    if ensure_data_dir is None:
+        from core.app_paths import ensure_user_data_dir as ensure_data_dir
+    try:
+        ensure_data_dir()
+    except Exception:  # OSError, marker errors: the folder is not usable, so nothing may be written
+        return [f"{spec[1]} UNAVAILABLE reason={DATA_DIR_REFUSED} live=-" for spec in SPECS]
+    return (run or diagnose)()
+
+
 if __name__ == "__main__":
-    for _line in diagnose():
+    for _line in main():
         print(_line)
