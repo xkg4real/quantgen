@@ -29,6 +29,8 @@ def _shares(value, language):
     size = abs(value)
     sign = "+" if value > 0 else "−" if value < 0 else ""
     if language == "ko":
+        if size >= 1e7:                     # 1,000만주 and up: whole 만 keep the line short
+            return f"{sign}{size / 10000:,.0f}만주"
         return f"{sign}{size / 10000:,.1f}만주" if size >= 10000 else f"{sign}{size:,.0f}주"
     if size >= 1e6:
         return f"{sign}{size / 1e6:,.1f}M"
@@ -384,7 +386,7 @@ class _DepthViewport(QScrollArea):
 
 class DepthLadder(_DepthViewport):
     """Sell levels above buy levels, with the price in one central column."""
-    def __init__(self, levels, language='ko', dark=False, parent=None, *, last_price=None):
+    def __init__(self, levels, language='ko', dark=False, parent=None, *, last_price=None, price_basis=''):
         levels = tuple(levels)
         self.current_label = None
         scale = max((row[side+'_qty'] for row in levels for side in ('ask', 'bid')
@@ -403,26 +405,38 @@ class DepthLadder(_DepthViewport):
         at = 1
         for side, ordered in (('ask', reversed(levels)), ('bid', levels)):
             if side == 'bid':
-                if last_price is None:
+                names = {'quote': ('현재가', 'Last', '시세 조회의 현재가예요. 호가 조회 시각과 다를 수 있어요.',
+                                   'Last price from the quote; its time may differ from the depth snapshot.'),
+                         'daily_close': ('마지막 거래일 종가', 'Last daily close',
+                                         '시세 조회값이 없어 마지막 거래일 종가를 보여줘요. 지금 호가와 시각이 달라요.',
+                                         'No quote was received, so this is the last daily close; it is older than the depth.')}
+                named = names.get(price_basis)
+                if last_price is None or named is None:
                     gap = QWidget()
                     gap.setFixedHeight(6)
                     grid.addWidget(gap, at, 0, 1, 3)
                 else:
-                    # The quote's last price between the two sides; rules either side.
-                    for column in (0, 2):
-                        rule = QFrame()
-                        rule.setProperty('sd', 'rule')
-                        rule.setFixedHeight(1)
-                        grid.addWidget(rule, at, column, Qt.AlignmentFlag.AlignVCenter)
+                    # The price between the two sides, with rules either side, across all three columns.
+                    line = QWidget()
+                    row_box = QHBoxLayout(line)
+                    row_box.setContentsMargins(0, 0, 0, 0)
+                    row_box.setSpacing(6)
                     current = label('rowNote')
                     digits = 2 if last_price % 1 else 0
-                    current.setText(('현재가 ' if language == 'ko' else 'Last ') + _fmt(last_price, digits))
+                    current.setText(named[0 if language == 'ko' else 1] + ' ' + _fmt(last_price, digits))
                     current.setAlignment(Qt.AlignmentFlag.AlignCenter)
                     current.setProperty('depthRole', 'last')
-                    current.setToolTip('시세 조회의 현재가예요. 호가 조회 시각과 다를 수 있어요.' if language == 'ko' else
-                                       'Last price from the quote; its time may differ from the depth snapshot.')
+                    current.setToolTip(named[2 if language == 'ko' else 3])
                     numbers(current)
-                    grid.addWidget(current, at, 1)
+                    for item in ('rule', current, 'rule'):
+                        if item == 'rule':
+                            rule = QFrame()
+                            rule.setProperty('sd', 'rule')
+                            rule.setFixedHeight(1)
+                            row_box.addWidget(rule, 1, Qt.AlignmentFlag.AlignVCenter)
+                        else:
+                            row_box.addWidget(item, 0)
+                    grid.addWidget(line, at, 0, 1, 3)
                     self.current_label = current
                 at += 1
             for row in ordered:
@@ -600,7 +614,7 @@ class StockInsightsPanel(QFrame):
                 if item["value"] is not None and item["value"] > 0:
                     basis = self._t("주당순이익(EPS)", "earnings per share") if item["key"] == "per" else \
                         self._t("주당순자산(BPS)", "book value per share")
-                    times = _fmt(item["value"], 1)
+                    times = _fmt(item["value"])   # same digits as the value above, so a band edge reads alike
                     layout.addWidget(self._label(self._t(f"주가가 {basis}의 {times}배예요",
                                                          f"The price is {times} times {basis}"),
                                                  role="muted", tip=help_text.hover))
@@ -659,14 +673,14 @@ class StockInsightsPanel(QFrame):
         for group in ("individual", "foreign", "institution"):
             head = QHBoxLayout()
             head.setContentsMargins(0, 0, 0, 0)
-            head.setSpacing(8)
-            head.addWidget(self._label(labels[group]), 1)
+            head.setSpacing(6)
+            head.addWidget(self._label(labels[group], wrap=False), 1)
             row = sums[max(sums)].get(group) if sums else None
             tip = self._t("순매수 = 매수 수량 − 매도 수량 (주)", "Net = bought − sold (shares)")
             if row is not None and row["buy_fraction"] is not None:
                 buy_text, sell_text = display_split(row["buy_fraction"])
-                tip += self._t(f"\n{row['sessions']}일 거래량 중 매수 {buy_text} · 매도 {sell_text}",
-                               f"\n{row['sessions']}-day volume: buy {buy_text} · sell {sell_text}")
+                tip += self._t(f"\n매수·매도 양쪽 자료가 있는 {row['reported_pairs']}/{row['sessions']}일 기준 · 이 투자자 거래량 중 매수 {buy_text} · 매도 {sell_text}",
+                               f"\nOver the {row['reported_pairs']}/{row['sessions']} days with both sides: buy {buy_text} · sell {sell_text} of this group's volume")
             if row is not None:
                 tip += "\n" + self._provenance(row)
             shown = False
@@ -676,8 +690,10 @@ class StockInsightsPanel(QFrame):
                 if net is None:
                     continue
                 if shown:
-                    head.addWidget(self._label("·", role="muted", wrap=False), 0)
-                exact = self._t(f"{length}일 순매수 {net:+,.0f}주", f"{length}-day net {net:+,.0f} shares")
+                    head.addSpacing(4)          # with the layout's 6 px: a clear gap, no separator glyph
+                reported = sums[length][group]["net_reported"]
+                exact = self._t(f"{length}일 순매수 {net:+,.0f}주 · 자료 {reported}/{length}일",
+                                f"{length}-day net {net:+,.0f} shares · reported {reported}/{length} days")
                 value = self._label(self._t(f"{length}일 {_shares(net, 'ko')}", f"{length}d {_shares(net, 'en')}"),
                                     role="value", wrap=False, tip=exact + "\n" + tip)
                 value.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
@@ -802,7 +818,8 @@ class StockInsightsPanel(QFrame):
             body.addWidget(self._label(self._t("호가 자료 미제공", "Depth unavailable")))
         else:
             ladder = DepthLadder(book['levels'], self.language, self.dark,
-                                 last_price=self.model.get('last_price'))
+                                 last_price=self.model.get('last_price'),
+                                 price_basis=self.model.get('price_basis', ''))
             self.depth_ladder = ladder
             body.addWidget(ladder)
             self._depth_totals(body, book)
@@ -856,6 +873,9 @@ class StockInsightsPanel(QFrame):
         buy.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         middle = self._label(name, role='muted', wrap=False)
         middle.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # On a narrow column the name gives way; the two totals keep their full digits.
+        middle.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
+        middle.setToolTip(name)
         head.addWidget(sell, 0)
         head.addWidget(middle, 1)
         head.addWidget(buy, 0)
@@ -863,8 +883,11 @@ class StockInsightsPanel(QFrame):
         bar = SideShareBar(ask, bid, self.dark)
         total = ask + bid
         if total > 0:
-            bar.setToolTip(self._t(f'{name} 중 매도 {ask / total:.1%} · 매수 {bid / total:.1%}\n대기 주문이라 취소·이동할 수 있어요.',
-                                   f'{name}: sell {ask / total:.1%} · buy {bid / total:.1%}\nWaiting orders can be cancelled or moved.'))
+            ask_text, bid_text = display_split(ask / total)   # complementary tenths: always 100.0% together
+            bar.setToolTip(self._t(f'{name} 중 매도 {ask_text} · 매수 {bid_text}\n대기 주문이라 취소·이동할 수 있어요.',
+                                   f'{name}: sell {ask_text} · buy {bid_text}\nWaiting orders can be cancelled or moved.'))
+            for widget in (sell, buy):
+                widget.setToolTip(bar.toolTip())
         self.depth_share = bar
         body.addWidget(bar)
 

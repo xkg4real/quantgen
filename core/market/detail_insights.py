@@ -336,7 +336,9 @@ def build_insights(profile, *, comparison=None):
         comparisons = {item["metric"]: dict(item) for item in peers.averages}
     last_price = number(getattr(profile, "last_price", None), positive=True)
     return {"metrics": tuple(metrics), "flows": tuple(flows), "flow_windows": flow_windows,
-            "flow_daily": flow_daily, "last_price": last_price, "shorts": shorts,
+            "flow_daily": flow_daily, "last_price": last_price,
+            # 'quote' or 'daily_close' (stock_profile.price_basis): what the last price is, for its label.
+            "price_basis": str(getattr(profile, "price_basis", "") or ""), "shorts": shorts,
             "orderbook": normalize_orderbook(values.get("orderbook")),
             "executions": normalize_executions(values.get("executions")),
             "comparisons": comparisons, "comparison": next(iter(comparisons.values())) if len(comparisons) == 1 else peer_comparison(None),
