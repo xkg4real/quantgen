@@ -2,9 +2,17 @@
 
 This records APK bytes and SDK signature verification, not phone startup,
 Flutter build mode, a release/debug key identity, or Android wheel compatibility.
-Optional dependency observations are limited to six direct distribution metadata
-headers in Flet's documented build/site-packages directory. They are not a lock
-file or proof of complete target dependency resolution. No key store is read.
+Optional dependency observations are limited to six distribution metadata headers
+in Flet's build/site-packages directory: entries directly in it and in its Android
+ABI folders (arm64-v8a, armeabi-v7a, x86_64, x86), where serious_python installs
+packages per ABI. They are not a lock file or proof of complete target dependency
+resolution. No key store is read.
+
+Paths: each path given on the command line is a root. Its own ancestors may be
+symbolic links (macOS keeps temporary folders under /var -> /private/var); the root
+is resolved once and its resolved form must not contain a protected name. Entries
+found inside a root (APKs, apksigner, metadata) and the output file itself must not
+be symbolic links. A non-PASS result prints its fixed error codes on stderr.
 """
 from __future__ import annotations
 
@@ -24,26 +32,42 @@ PACKAGES = ("flet", "pyyaml", "babel", "requests", "numpy", "pandas")
 _DIGEST = re.compile(r"Signer #([1-9][0-9]*) certificate SHA-256 digest: ([0-9a-fA-F]{64})", re.ASCII)
 _VERSION = re.compile(r"[0-9][A-Za-z0-9.!+_-]{0,127}", re.ASCII)
 _PROTECTED = {".aws", ".codex", ".agents", ".nextgen", "paper_live", "grokteam", "_backup", "holdout", "frozen"}
+ABIS = ("arm64-v8a", "armeabi-v7a", "x86_64", "x86")
 
 
 class EvidenceError(Exception):
     """A fixed public error code, never external tool output or private input."""
 
 
-def _path(value: str | Path) -> Path:
-    raw = Path(value)
-    if ".." in raw.parts:
-        raise EvidenceError("parent_traversal_path")
-    p = raw.absolute()
+def _check_names(p: Path) -> None:
     parts = tuple(x.lower() for x in p.parts)
     if any(x.startswith(".env") or x in _PROTECTED for x in parts):
         raise EvidenceError("protected_path")
     if any(parts[i:i + 3] == ("docs", "asset_expansion", "cache") for i in range(len(parts))):
         raise EvidenceError("protected_path")
-    # Do not follow directory or leaf aliases into unrelated user storage.
-    if any(x.is_symlink() for x in (p, *p.parents)):
+
+
+def _root(value: str | Path) -> Path:
+    """A path given on the command line: no '..', no protected name as written or once resolved."""
+    raw = Path(value)
+    if ".." in raw.parts:
+        raise EvidenceError("parent_traversal_path")
+    _check_names(raw.absolute())
+    resolved = raw.absolute().resolve()
+    _check_names(resolved)
+    return resolved
+
+
+def _child(parent: Path, name: str) -> Path:
+    """An entry inside a resolved root: never a symbolic link, never a protected name."""
+    if name in ("", ".", "..") or "/" in name or "\\" in name:
+        raise EvidenceError("parent_traversal_path")
+    entry = parent / name
+    _check_names(entry)
+    # Do not follow an alias out of the inspected folder into unrelated user storage.
+    if entry.is_symlink():
         raise EvidenceError("symlink_path")
-    return p
+    return entry
 
 
 def _sha256(path: Path) -> tuple[int, str]:
@@ -94,7 +118,7 @@ def _signature(apk: Path, signer: Path) -> dict:
 def _artifact(apk: Path, signer: Path) -> dict:
     item = {"file": apk.name, "status": "FAIL"}
     try:
-        apk = _path(apk)
+        apk = _child(apk.parent, apk.name)
         if not apk.is_file():
             raise EvidenceError("not_regular_apk")
         size, digest = _sha256(apk)
@@ -142,42 +166,66 @@ def _distribution_header(metadata: Path) -> tuple[str, str]:
     return name, version
 
 
+def _read_location(directory: Path) -> dict:
+    """{package: [versions]} from *.dist-info entries directly in one folder."""
+    found = {name: [] for name in PACKAGES}
+    for entry in sorted(directory.iterdir()):
+        if not entry.name.endswith(".dist-info"):
+            continue
+        expected = re.sub(r"[-_.]+", "-", entry.name[:-10].split("-", 1)[0]).lower()
+        if expected not in PACKAGES:
+            continue
+        info = _child(directory, entry.name)
+        metadata = _child(info, "METADATA") if info.is_dir() else None
+        if metadata is None or not metadata.is_file():
+            raise EvidenceError("package_metadata_missing")
+        name, version = _distribution_header(metadata)
+        if name != expected:
+            raise EvidenceError("package_metadata_name_mismatch")
+        found[name].append(version)
+    return {name: sorted(set(versions)) for name, versions in found.items()}
+
+
 def _dependencies(value: str | None) -> dict:
     result = {
-        "status": "NOT_OBSERVED", "scope": "direct build/site-packages distribution metadata only",
+        "status": "NOT_OBSERVED",
+        "scope": "build/site-packages distribution metadata only: direct entries and Android ABI folders",
         "abi": "NOT_OBSERVED", "complete_target_resolution": "NOT_ESTABLISHED",
-        "nested_layout": "NOT_INSPECTED", "conflicting_versions": [],
-        "packages": {name: [] for name in PACKAGES},
+        "nested_layout": "NOT_OBSERVED", "conflicting_versions": [], "abi_disagreements": [],
+        "packages": {name: [] for name in PACKAGES}, "abi_packages": {},
     }
     if value is None:
         return result
     try:
-        root = _path(value)
+        root = _root(value)
         if root.name != "site-packages" or root.parent.name != "build":
             raise EvidenceError("not_flet_target_site_packages")
         if not root.exists():
             return result
         if not root.is_dir():
             raise EvidenceError("not_target_metadata_directory")
-        for entry in sorted(root.iterdir()):
-            if not entry.name.endswith(".dist-info"):
-                continue
-            expected = re.sub(r"[-_.]+", "-", entry.name[:-10].split("-", 1)[0]).lower()
-            if expected not in PACKAGES:
-                continue
-            directory = _path(entry)
-            metadata = _path(directory / "METADATA")
-            if not directory.is_dir() or not metadata.is_file():
-                raise EvidenceError("package_metadata_missing")
-            name, version = _distribution_header(metadata)
-            if name != expected:
-                raise EvidenceError("package_metadata_name_mismatch")
-            result["packages"][name].append(version)
-        result["packages"] = {name: sorted(set(versions)) for name, versions in result["packages"].items()}
-        result["conflicting_versions"] = [name for name, versions in result["packages"].items() if len(versions) > 1]
+        locations = {"": _read_location(root)}
+        for abi in ABIS:
+            folder = root / abi
+            if folder.is_symlink():
+                raise EvidenceError("symlink_path")
+            if folder.is_dir():
+                locations[abi] = _read_location(_child(root, abi))
+        abis = [abi for abi in ABIS if abi in locations]
+        result["abi"] = abis or "NOT_OBSERVED"
+        result["nested_layout"] = "INSPECTED_ABI_FOLDERS" if abis else "NO_ABI_FOLDERS"
+        result["abi_packages"] = {abi: locations[abi] for abi in abis}
+        # Within one location two versions of a package conflict; across ABIs a different version disagrees.
+        result["conflicting_versions"] = sorted({name for found in locations.values()
+                                                 for name, versions in found.items() if len(versions) > 1})
+        result["abi_disagreements"] = sorted(
+            name for name in PACKAGES
+            if len({tuple(locations[abi][name]) for abi in abis if locations[abi][name]}) > 1)
+        result["packages"] = {name: sorted({v for found in locations.values() for v in found[name]})
+                              for name in PACKAGES}
         observed = sum(bool(versions) for versions in result["packages"].values())
         result["status"] = "OBSERVED_METADATA" if observed == len(PACKAGES) else ("PARTIAL_METADATA" if observed else "NOT_OBSERVED")
-        if result["conflicting_versions"]:
+        if result["conflicting_versions"] or result["abi_disagreements"]:
             result["status"] = "CONFLICTING_METADATA"
     except EvidenceError as exc:
         result.update(status="ERROR", error=str(exc))
@@ -194,12 +242,14 @@ def inspect(apk_dir: str, build_tools: str, target_site_packages: str | None = N
         "limits": "Signature evidence does not establish signer key identity, build mode, target imports or device startup.",
     }
     try:
-        directory = _path(apk_dir)
-        tools = _path(build_tools)
-        signer = _path(tools / ("apksigner.bat" if os.name == "nt" else "apksigner"))
+        directory = _root(apk_dir)
+        tools = _root(build_tools)
         if not directory.is_dir():
             raise EvidenceError("apk_directory_missing")
-        if not tools.is_dir() or not signer.is_file():
+        if not tools.is_dir():
+            raise EvidenceError("signature_tool_missing")
+        signer = _child(tools, "apksigner.bat" if os.name == "nt" else "apksigner")
+        if not signer.is_file():
             raise EvidenceError("signature_tool_missing")
         apks = sorted(p for p in directory.iterdir() if p.suffix.lower() == ".apk")
         if not apks:
@@ -214,8 +264,15 @@ def inspect(apk_dir: str, build_tools: str, target_site_packages: str | None = N
     return report
 
 
+def _output(value: str) -> Path:
+    raw = Path(value)
+    if ".." in raw.parts:
+        raise EvidenceError("parent_traversal_path")
+    return _child(_root(raw.absolute().parent), raw.name)
+
+
 def _write_new_report(output: str, report: dict) -> None:
-    target = _path(output)
+    target = _output(output)
     if target.exists():
         raise EvidenceError("output_exists")
     if not target.parent.is_dir():
@@ -246,7 +303,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--target-site-packages")
     options = parser.parse_args(argv)
     try:
-        target = _path(options.output)
+        target = _output(options.output)
         if target.exists():
             raise EvidenceError("output_exists")
         report = inspect(options.apk_dir, options.build_tools, options.target_site_packages)
@@ -258,7 +315,26 @@ def main(argv: list[str] | None = None) -> int:
         print("receipt_write_failed", file=sys.stderr)
         return 2
     print(report["status"])
+    if report["status"] != "PASS":
+        # Fixed public codes only (never tool output or paths), so a failed CI run shows why.
+        print(" ".join(error_codes(report)) or "no_error_code", file=sys.stderr)
     return 0 if report["status"] == "PASS" else 1
+
+
+def error_codes(report: dict) -> list[str]:
+    codes = []
+    if report.get("error"):
+        codes.append(f"report:{report['error']}")
+    for item in report.get("artifacts", []):
+        if item.get("error"):
+            codes.append(f"{item['file']}:{item['error']}")
+        signature = item.get("signature") or {}
+        if signature.get("error"):
+            codes.append(f"{item['file']}:signature:{signature['error']}")
+    dependencies = report.get("dependencies") or {}
+    if dependencies.get("error"):
+        codes.append(f"dependencies:{dependencies['error']}")
+    return codes
 
 
 if __name__ == "__main__":
