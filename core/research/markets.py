@@ -31,6 +31,19 @@ class MarketDataUnavailable(ValueError):
         super().__init__(self.reason_code)
 
 
+# Transport failures as urllib3/requests wrap them inside another library's message (pandas_datareader's
+# RemoteDataError, FICCError, KISError): class names glued to other words, so no word boundary, plus the
+# OS texts on Linux, macOS and Windows (D11, 2026-11-24, after integration review DS-3). Timeouts are tested
+# first. "Max retries exceeded" alone is deliberately absent: urllib3 also writes it when 5xx retries run
+# out ("too many 500 error responses"), which is a provider failure, not the network.
+_WRAPPED_TIMEOUT = (r"ConnectTimeoutError|ReadTimeoutError|timed out|WinError 10060|"
+                    r"connection attempt failed because the connected party did not properly respond")
+_WRAPPED_NETWORK = (r"NameResolutionError|NewConnectionError|ConnectionResetError|Connection reset|"
+                    r"Connection refused|Connection aborted|getaddrinfo failed|Name or service not known|"
+                    r"Temporary failure in name resolution|nodename nor servname|Errno 1100[14]|"
+                    r"WinError 1005[34]|WinError 10061|WinError 10065|Network is unreachable|No route to host")
+
+
 def provider_failure_reason(exc):
     """Classify established failure evidence without exposing provider text.
 
@@ -66,9 +79,11 @@ def provider_failure_reason(exc):
         return "dependency_incompatible"
     if re.search(r"\b(?:SSLError|SSLCertVerificationError|CERTIFICATE_VERIFY_FAILED)\b", evidence):
         return "certificate_error"
-    if re.search(r"\b(?:ReadTimeout|ConnectTimeout|TimeoutError|Timeout)\b", evidence):
+    if re.search(r"\b(?:ReadTimeout|ConnectTimeout|TimeoutError|Timeout)\b", evidence) or re.search(
+            _WRAPPED_TIMEOUT, evidence, re.IGNORECASE):
         return "network_timeout"
-    if re.search(r"\b(?:ConnectionError|ConnectionRefusedError|ConnectError|ProxyError|gaierror)\b", evidence):
+    if re.search(r"\b(?:ConnectionError|ConnectionRefusedError|ConnectError|ProxyError|gaierror)\b", evidence) \
+            or re.search(_WRAPPED_NETWORK, evidence):
         return "network_error"
     missing = re.search(r"\b(?:YFINANCE|FRED) returned only (\d+) observations\b", evidence)
     if missing:
