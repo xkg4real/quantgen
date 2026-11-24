@@ -5,6 +5,8 @@
 - 키 값은 이 문서, 채팅, 화면 출력 어디에도 적지 않습니다. 명령은 키 **이름**만 씁니다. 돈이 드는 가입·결제는 하지 않습니다.
 - 수집 자료는 `%LOCALAPPDATA%\QUANTGEN\didm\didm_store.sqlite`에만 쌓이고 저장소에 올라가지 않습니다.
 
+- 약관상 연구 표본 제외 (source_id): `alpaca-news`, `krx-listing-datagokr`, `krx-openapi`, `massive-news` — 개인·비상업 약관: 연결 확인용, 연구 표본·학습 불가. 근거: `SAMPLE_EXPANSION_FEASIBILITY_2026-11-24.md` 9·10절 (2026-11-24 원문 확인, 법률 자문 아님). 목록은 `core/didm/ingest/terms.py` 한 곳에 있고, 이 줄과 다르면 `tests.didm_terms_guard_acceptance`가 실패합니다.
+
 ## 한눈에
 
 | 단계 | 할 일 | 걸리는 시간 | 실패해도 다음 단계 |
@@ -60,7 +62,9 @@ python -m tools.didm.collect_daily --check-keys
 - 기대: `ALPACA_API_KEY_ID: True`, `ALPACA_API_SECRET_KEY: True`, `MASSIVE_API_KEY: True`, `SEC_EDGAR_USER_AGENT: True` (값은 나오지 않음).
 - 실패 때: False면 새 창을 열었는지, `setx` 이름 철자를 확인. 따옴표 안에 키 앞뒤 공백이 있어도 지워서 읽습니다.
 
-## 4. 뉴스 수집 1회 (DS-5b/5c)
+## 4. 뉴스 수집 1회 (DS-5b/5c, 연결 확인용)
+
+이 단계는 **연결 확인만**입니다. 받은 기사는 연구 표본·학습에 쓰지 않습니다 (위 "약관상 연구 표본 제외" 줄). 종목을 반드시 적어야 하며 (시장 전체 수집 안 함), 실행하면 첫 줄에 그 안내가 나옵니다.
 
 ```
 python -m tools.didm.collect_daily --data-dir "$env:LOCALAPPDATA\QUANTGEN\didm" --no-gdelt --alpaca-news AAPL --massive-news AAPL --news-start 2026-11-01 --news-max-pages 2

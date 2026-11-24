@@ -41,6 +41,7 @@ from core.didm.ingest import filings as filings_ingest
 from core.didm.ingest import gdelt as gdelt_ingest
 from core.didm.ingest import kalshi as kalshi_ingest
 from core.didm.ingest import news as news_ingest
+from core.didm.ingest import terms
 from core.didm.llm.schema import ess_like
 from core.didm.store import PointInTimeStore
 
@@ -536,8 +537,10 @@ def main(argv: list[str] | None = None) -> int:
                     help="paid NEWS_SENTIMENT endpoint; held by the current data plan")
     ap.add_argument("--tiingo", nargs="*", metavar="TICKER", help="paid news access; held by the current data plan")
     ap.add_argument("--cryptopanic", nargs="*", metavar="CODE", help="paid API; held by the current data plan")
-    ap.add_argument("--alpaca-news", nargs="*", metavar="SYMBOL", help="DS-5b Alpaca News (key id + secret)")
-    ap.add_argument("--massive-news", nargs="*", metavar="TICKER", help="DS-5c Massive ticker news (free: 5/min)")
+    ap.add_argument("--alpaca-news", nargs="+", metavar="SYMBOL",
+                    help="DS-5b Alpaca News, connection check only (personal non-commercial terms); symbols required")
+    ap.add_argument("--massive-news", nargs="+", metavar="TICKER",
+                    help="DS-5c Massive ticker news, connection check only (personal non-commercial terms); tickers required")
     ap.add_argument("--news-start", metavar="YYYY-MM-DD", help="oldest article date for --alpaca-news/--massive-news")
     ap.add_argument("--news-end", metavar="YYYY-MM-DD", help="newest article date for --alpaca-news")
     ap.add_argument("--news-max-pages", type=int, default=5, help="page cap per source/ticker (default 5)")
@@ -588,11 +591,13 @@ def main(argv: list[str] | None = None) -> int:
             _run("ECOS probe", lambda spec=spec: probe_ecos(spec))
         for stat in args.ecos_items:
             _run("ECOS items", lambda stat=stat: show_ecos_items(stat))
+        if args.alpaca_news is not None or args.massive_news is not None:
+            print(f"Alpaca/Massive news: {terms.NOTICE} (DS-5b/2; core/didm/ingest/terms.py)")
         if args.alpaca_news is not None:
             _run("Alpaca news", lambda: collect_alpaca_news(store, args.alpaca_news, args.news_start, args.news_end,
                                                             args.news_max_pages))
         if args.massive_news is not None:
-            for ticker in args.massive_news or [None]:
+            for ticker in args.massive_news:
                 _run("Massive news", lambda ticker=ticker: collect_massive_news(store, ticker, args.news_start,
                                                                                 args.news_max_pages))
         for series in args.kalshi:

@@ -38,6 +38,8 @@ gdelt-gkg2 / gdelt_gkg: items 3 (versions 3), valid 2026-11-17..2026-11-20, rece
 | `missing N days` | 첫 수신일 (또는 `--since`)부터 저장소 마지막 수신일 사이에 그 공급원이 아무것도 받지 않은 날 수 | GDELT·Kalshi 일별 수집이면 0이어야 함. ALFRED·ECOS·EDGAR처럼 필요할 때만 돌리는 것은 빈 날이 정상 |
 | `sample years with data a/b` | 표본 연도 중 자료가 한 건이라도 있는 해 | `--json`의 `sample_years`에 연도별 건수 |
 
+- 약관상 연구 표본 제외 (source_id): `alpaca-news`, `krx-listing-datagokr`, `krx-openapi`, `massive-news` — 개인·비상업 약관: 연결 확인용, 연구 표본·학습 불가. 근거: `SAMPLE_EXPANSION_FEASIBILITY_2026-11-24.md` 9·10절 (2026-11-24 원문 확인, 법률 자문 아님). 목록은 `core/didm/ingest/terms.py` 한 곳에 있고, 이 줄과 다르면 `tests.didm_terms_guard_acceptance`가 실패합니다.
+
 ## 2. Stage 2 표본 (2015~2024)에 지금 수집기로 채울 수 있는가
 
 기준: 이 저장소의 지금 코드 (main `de32ea1` + DS-5b/5c 브랜치 `claude/ds-5bc-news-20261124` + D6·D7 브랜치 `claude/ds-edgar-history-20261124`, D8 갱신 2026-11-24). "채움"은 코드 변경 없이 소유자가 명령으로 받을 수 있다는 뜻입니다.
