@@ -122,5 +122,16 @@ coordinator: 메인 세션 QUANTGEN/MAIN (session_01H6RrzMUzF8vwK8xkX977mB)
 - 프로젝트 스킬은 저장소 `.claude/skills/`, 서브에이전트는 `.claude/agents/`에 둔다. 첫 묶음은 PR #148(`claude/quant-skills-20261123` @ `462f7df`): `nautilus-portfolio-bridge`(QUANTGEN 규칙, 우선), `nautilus-trader`, `nautilus-authoring`, `strategy-workflow`, `tearsheet-generator`, `portfolio-optimizer`, 서브에이전트 `quant-analyst`. 병합 전에는 그 브랜치에서 읽는다.
 - 각 하부 세션은 일에 맞는 스킬을 먼저 읽는다. 지시문에 세션별 목록을 적는다(예: QUANTGPT는 `claude-api`, `skill-creator`, `code-review`, `security-review`; DIDM_DEV는 `data:statistical-analysis`, `backtest-expert`).
 - 외부 스킬은 그대로 설치하지 않는다. PR #148처럼 출처·커밋·라이선스·뺀 내용을 `.claude/THIRD_PARTY_NOTICES.md`에 적고, 원격 실행·유료 작업·실거래·키 관련 지시를 뺀 뒤 메인 검토를 거쳐 넣는다.
-- 스킬 검색 사이트 skills.sh(`/find-skills`가 쓰는 `npx skills find`)는 클라우드 환경의 네트워크 규칙에 막혀 있다(2026-11-24 확인, 허용은 소유자 승인 사항). `/reload-skills`는 터미널 전용 명령이다. 그동안은 공개 스킬 저장소를 직접 읽어 후보를 찾는다(QuantGPT 후보: huggingface/skills의 `trl-training`, `huggingface-llm-trainer`, `huggingface-community-evals`, `hf-mem`, `hf-cli`).
+- 스킬 검색(`/find-skills`의 방법): 소유자가 2026-11-24 기본 환경에 skills.sh 호스트를 허용했다. 클라우드 세션에서 `npx skills find`는 프록시를 타지 못해 "No skills found"만 내므로, 검색 API를 직접 부른다: `curl -sS "https://skills.sh/api/search?q=<검색어>&limit=8"` (결과: 출처 저장소, 스킬 이름, 설치 수). `/reload-skills`는 터미널 전용 명령이다.
+- 고르는 기준(find-skills 스킬의 규칙): 설치 수 1,000 이상을 우선하고 100 미만은 쓰지 않는다. 공식 출처(anthropics, huggingface, microsoft, vercel-labs 등)를 우선한다. 검색 결과만으로 권하지 않고 저장소를 읽어 확인한다.
+- 2026-11-24 검색 결과에서 고른 후보 (아직 설치·도입하지 않음, 쓰기 전에 위 감사 절차를 거침):
+
+  | 세션 | 후보 (출처@스킬, 설치 수) | 쓸 때 |
+  |---|---|---|
+  | QUANTGPT | huggingface/skills@huggingface-llm-trainer (2,518), huggingface/skills@huggingface-datasets (2,756), huggingface/skills@huggingface-local-models (2,160), orchestra-research/ai-research-skills@peft-fine-tuning (1,186), wshobson/agents@llm-evaluation (13,857), wshobson/agents@prompt-engineering-patterns (24,908) | 평가 하네스(QGPT-10~12), 미세조정(QGPT-40~42). 지금 Q0에는 필요 없음 |
+  | DIDM_DEV | anthropics/knowledge-work-plugins@statistical-analysis (4,979, 계정의 `data:statistical-analysis`와 같은 계열), wshobson/agents@backtesting-frameworks (18,154) | Stage 0 모의실험·검정력, Stage 2 이후 |
+  | 공통 | wshobson/agents@python-testing-patterns (41,432), vercel-labs/skills@find-skills (4,512,142) | 시험 작성, 스킬 찾기 |
+  | OS | PySide6 관련 결과는 모두 설치 수 250 미만이라 고르지 않음. 계정에 있는 Qt 공식 스킬(`qt-development-skills:*`)을 씀 | — |
+  | PAYMENTS | AWS Cognito 관련 결과는 모두 설치 수 25 미만이라 고르지 않음 | — |
+  | OpenVINO·NPU | 맞는 결과 없음 (공식 문서를 직접 읽음) | — |
 
