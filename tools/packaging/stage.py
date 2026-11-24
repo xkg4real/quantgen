@@ -24,6 +24,9 @@ DATA_PREFIXES = ("core/calendars/data/", "core/ficc/schemas/", "core/skills/macr
 DATA_FILES = {"data/macro/series_registry.yaml", "data/macro/rules_v2.0.0.json", "core/research/display_rights.json",
               "core/gateway/routes.json"}
 
+# Item 15-7: the earlier NEXTGEN logos; nothing in the app reads them, and the sale build must not carry the old brand.
+RETIRED_ASSETS = {"assets/nextgen_logo_dark.png", "assets/nextgen_logo_light.png"}
+
 
 def allowed(name: str) -> bool:
     p = PurePosixPath(name)
@@ -43,7 +46,7 @@ def allowed(name: str) -> bool:
     if name.startswith(DATA_PREFIXES) and p.suffix in (".yaml", ".json"):
         return True
     if name.startswith("assets/") and p.suffix in (".png", ".ico", ".svg", ".otf", ".ttf", ".txt"):
-        return True
+        return name not in RETIRED_ASSETS
     return False
 
 

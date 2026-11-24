@@ -79,6 +79,19 @@ def run(report_path: str) -> int:
         return True, {"user_data_dir": str(path), "exists": path.is_dir()}
     _check(results, "user_data_dir", data_dir)
 
+    def sale_build_contents():
+        # Item 15-7: no flet-cli-only package and no retired NEXTGEN logo inside; the data-source profile is reported.
+        root = Path(getattr(sys, "_MEIPASS", "."))
+        cli_only = ("flet_cli", "cookiecutter", "slugify", "text_unidecode", "binaryornot", "chardet")
+        found = sorted({p.relative_to(root).parts[0] for p in root.iterdir()
+                        if p.name.split(".")[0].split("-")[0] in cli_only})
+        found += [m for m in cli_only if importlib.util.find_spec(m) is not None and m not in found]
+        logos = sorted(str(p.relative_to(root)) for p in (root / "assets").glob("nextgen_logo_*"))
+        from core import app_identity
+        return not found and not logos, {"flet_cli_only": found, "retired_logos": logos,
+                                         "gateway_profile": getattr(app_identity, "GATEWAY_PROFILE", None)}
+    _check(results, "sale_build_contents", sale_build_contents)
+
     def bundle_names():
         root = Path(getattr(sys, "_MEIPASS", "."))
         bad = []
