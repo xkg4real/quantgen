@@ -1,9 +1,10 @@
 # DIDM_DEV 세션 인계 문서
 
 - session: DIDM_DEV (https://claude.ai/code/session_016uB1jj8iv57xVbx6EbLLwq), 메인: QUANTGEN/MAIN (session_01H6RrzMUzF8vwK8xkX977mB)
-- updated_at: 2026-11-24 (KST)
-- work_branch: `claude/didm-dev-20261124` (main b872d8c에서 시작), work_commit: `ba28b02`
-- PR: 없음 (MERGE_QUEUE에 "병합: DIDM_DEV"가 적힌 뒤에만 엶). 원장은 메인이 씀.
+- updated_at: 2026-11-24 19:30 KST
+- work_branch: `claude/didm-dev-20261124` (main b872d8c에서 시작), work_commit: `72edc0f`
+- 수정 전용 브랜치: `claude/didm-contract-fixes-20261124` @ `feed288` (3626913에서, 통합 PR ①에 합쳐짐: 메인 703aa01)
+- PR: 없음 (메인이 통합 PR로 묶음; 이 세션은 PR을 열지 않음). 원장은 메인이 씀.
 
 ## 0. 소유자 지시 원문 (2026-11-24, 메인 세션 전달)
 
@@ -19,17 +20,24 @@
 
 | ID | 상태 | 커밋 | 검사 |
 |---|---|---|---|
-| DIDM-2 채점기 계약 | 끝 (push) | ba28b02 | `python -B -m unittest tests.didm_contract_acceptance tests.didm_schema_acceptance` → Ran 56 OK; `python -B -m tools.didm.export_schema --check` → 종료 0; `git diff origin/main -- core/didm/llm/schema.py` 비어 있음 |
-| DIDM-3 모델 학습 마감일 목록 | 다음 | — | — |
-| DIDM-4 Stage 0 모의실험 | 그다음 | — | — |
+| DIDM-2 채점기 계약 | 끝 | ba28b02, 검토 수정 feed288 | `python -B -m unittest tests.didm_contract_acceptance tests.didm_schema_acceptance` → 43 + 26 OK; `python -B -m tools.didm.export_schema --check` → 종료 0; schema.py 변경 없음 |
+| DIDM-3/a 마감일 규칙 코드·표 | 끝 | 3626913, 검토 수정 feed288 | `tests.didm_cutoffs_acceptance` 24 OK |
+| DIDM-3/b 표 채움 (출처 페이지 직접 확인) | 끝 | e01bb08 | 35행 중 33행 검증됨; Qwen3·자체 LLM 미검증 |
+| 통합 PR ① 검토 지적 12건 | 끝 | feed288 → 4f38621로 개발 브랜치에 합침 | 변형 25개 중 생존 0 |
+| DIDM-4 Stage 0 모의실험 | 시도 1회 끝, **판정 REVISE** | 6aaba25(격자 선커밋), 325fad7, 72edc0f | `tests.didm_stage0_acceptance` 34 OK; `python -B -m tools.didm.stage0_report --seed 20261124 --out <저장소 밖> --workers 4` 두 번 → 출력 동일, `STAGE0: REVISE` |
+| DIDM-5 Stage 1 측정 도구 | 다음 | — | — |
 
-DIDM-2 내용: 판단 `didm-judgement-v0` 9개 필드 (`core/didm/llm/judgement.py`), 채점기 인터페이스·레코드 조립 (`core/didm/llm/scorer.py`), JSON Schema 2개 (`docs/didm/schema/`), 적합성 예시 accept 10·reject 34, 문서 `docs/didm/SCORER_CONTRACT_V0.md`.
+개발 브랜치 전체: DIDM_DEV 시험 5개 모듈 153 OK.
 
 ## 3. 열린 것
 
-- 보정 지도 버전: 사전등록 5절 7번은 기록마다 남기라고 하나 `didm-score-v0`에 필드가 없음. 지금은 `Assembled.calibration_version` 곁기록. 레코드 필드 추가는 새 스키마 버전 (메인 판단).
-- PR 때 필요한 공유 파일 변경 (지금은 하지 않음): `.github/workflows/runtime-smoke.yml`의 시험 목록에 `tests.didm_contract_acceptance` 추가, `docs/compliance/source-review.json` 기준선 갱신.
-- 이 컨테이너에는 scipy가 없음. DIDM 코드는 numpy와 표준 라이브러리만 씀.
+- **Stage 0 REVISE의 뜻** (`docs/didm/STAGE0_REPORT_V0.md`): θ₀·γ·ψ·η 통과. δ(지연 비중) 검정력 22%, φ(연결망) 11%, 신뢰 상태·연결망 없는 모형이 표본 밖에서 뚜렷이 지지 않음, HAR 월 계수 포함률 56%. 고칠 안 (가)~(라)는 보고서 5절에 제안으로만 있음. 적용하면 시도 2회로 기록. (가)는 사전등록 Stage 2 문구와 닿아 V0.1이 필요한지 메인·소유자 판단 대기.
+- 보정 지도 버전: 지금은 `Assembled.calibration_version` 곁기록. DIDM-5에서 `didm-score-v1` 제안으로 묶어 메인에 올림 (메인 결정 2026-11-24).
+- 라이선스: FinBERT 가중치 CC BY-NC-SA 4.0, LM 사전 학술 무료·상업 별도 허가. 소유자 확인 대기, 그 전까지 연구 비교용으로만. 저장소·배포물에 두 파일 없음.
+- Qwen3은 공개 학습 마감일이 없어 과거 검증 자격 없음 → 자체 LLM의 기반 모델 선택에 영향 (QUANTGPT에 전달됨).
+- 공유 파일 (runtime-smoke.yml 시험 목록, source-review.json 기준선)은 메인이 통합 PR에서 처리. 다음 묶음에 `tests.didm_stage0_acceptance` 추가 필요.
+- 이 컨테이너에는 scipy·matplotlib이 없음. DIDM 코드는 numpy와 표준 라이브러리만 씀.
+- 미검증: 호스트 CI, Python 3.13 이외 판에서의 Stage 0 숫자 일치.
 
 ## 4. 이어받는 법
 
