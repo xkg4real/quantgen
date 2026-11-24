@@ -1,0 +1,28 @@
+{
+  "kind": "record",
+  "note": "firm target with a positive direction",
+  "record": {
+    "record_id": "conf-0002",
+    "source_id": "sec-edgar",
+    "target_kind": "firm",
+    "entity_id": "US:AAPL",
+    "published_at": "2026-11-05T19:00:00Z",
+    "received_at": "2026-11-05T19:15:00Z",
+    "relevance_0_100": 90.0,
+    "ess_like_0_100": 62.5,
+    "novelty_0_100": 81.25,
+    "origin_cluster_id": "cl-20261105-0001",
+    "event_type": "earnings",
+    "direction_probs": [
+      0.5,
+      0.25,
+      0.25
+    ],
+    "uncertainty_entropy": 1.0397207708399179,
+    "p_credibility": 0.95,
+    "market_confirmation": "CONFIRMED",
+    "model_version": "fixture-model-0",
+    "prompt_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "schema_version": "didm-score-v0"
+  }
+}

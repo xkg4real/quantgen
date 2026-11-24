@@ -1,0 +1,60 @@
+{
+  "kind": "judgement",
+  "note": "Korean-language firm judgement",
+  "request": {
+    "article_id": "art-0002",
+    "language": "ko",
+    "title": "합성 제목: 가상 회사 분기 실적 발표",
+    "body": "합성 본문입니다.",
+    "target_kind": "firm",
+    "entity_id": "KR:005930",
+    "entity_name": "가상 회사"
+  },
+  "judgement": {
+    "judgement_version": "didm-judgement-v0",
+    "article_id": "art-0002",
+    "target_kind": "firm",
+    "entity_id": "KR:005930",
+    "p_subject": 0.81,
+    "event_type": "earnings",
+    "event_type_probs": {
+      "monetary_policy": 0.028571428571428574,
+      "inflation": 0.028571428571428574,
+      "employment": 0.028571428571428574,
+      "growth": 0.028571428571428574,
+      "fiscal": 0.028571428571428574,
+      "trade_tariffs": 0.028571428571428574,
+      "geopolitics": 0.028571428571428574,
+      "election_policy": 0.028571428571428574,
+      "earnings": 0.6,
+      "mergers_acquisitions": 0.028571428571428574,
+      "management": 0.028571428571428574,
+      "regulation_litigation": 0.028571428571428574,
+      "supply_chain": 0.028571428571428574,
+      "crypto_regulation_hack": 0.028571428571428574,
+      "none": 0.028571428571428574
+    },
+    "direction_probs": [
+      0.55,
+      0.15,
+      0.3
+    ],
+    "claim_status": "reported"
+  },
+  "scorer_info": {
+    "model_version": "fixture-model-0",
+    "prompt_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "temperature": 0
+  },
+  "assembly": {
+    "record_id": "conf-j-0002",
+    "source_id": "opendart",
+    "published_at": "2026-11-05T19:00:00Z",
+    "received_at": "2026-11-05T19:15:00Z",
+    "relevance_0_100": 88.0,
+    "novelty_0_100": 97.5,
+    "origin_cluster_id": "cl-20261105-0001",
+    "p_credibility": 0.9,
+    "market_confirmation": "PENDING"
+  }
+}
