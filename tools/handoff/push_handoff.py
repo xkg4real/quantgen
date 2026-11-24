@@ -58,15 +58,25 @@ KST = timezone(timedelta(hours=9))
 # The owner's weekly usage limit refills on Tuesdays at 17:00 KST; a cycle is named by the Tuesday it began.
 REFILL_WEEKDAY, REFILL_HOUR = 1, 17
 LEDGER = "LEDGER.md"
-# The three sub-sessions have assigned task names. UI and website also maintain
-# named Markdown reports; their existing documents have no required front matter.
+# The five sub-sessions have assigned task names (a tuple lists every name a lane accepts). UI and website
+# also maintain named Markdown reports; their existing documents have no required front matter.
+# 2026-11-24: the data lane kept its file and became data sourcing only ("data-source"; the old name is still
+# accepted), and the DIDM development and QuantGPT sub-sessions got lanes of their own.
 LANE_DOCS = {
     "OS_SESSION_CURRENT.md": "os-expansion",
     "PAYMENTS_SESSION_CURRENT.md": "payments-account-keys",
-    "DATA_SOURCE_SESSION_CURRENT.md": "data-source-didm",
+    "DATA_SOURCE_SESSION_CURRENT.md": ("data-source", "data-source-didm"),
+    "DIDM_SESSION_CURRENT.md": "didm-dev",
+    "QUANTGPT_SESSION_CURRENT.md": "quantgpt",
     "UI_SESSION_CURRENT.md": None,
     "WEBSITE_AWS_SESSION_CURRENT.md": None,
 }
+
+
+def lane_tasks(name: str) -> tuple[str, ...]:
+    """Task names the lane file accepts (empty for a report without an assigned task)."""
+    tasks = LANE_DOCS[name]
+    return (tasks,) if isinstance(tasks, str) else tuple(tasks or ())
 _DASHES = re.compile(r"[\u2010-\u2015\u2212\ufe58\ufe63\uff0d]")
 ID_SEPARATORS = re.compile(r"[\s,\uff0c\u3001;\uff1b\u25b6\u2192>\[\]]+")
 ID_SHAPE = re.compile(r"^[0-9a-z][0-9a-z.\-/]*$")
@@ -502,8 +512,9 @@ def lane_edit_base(path: Path) -> str | None:
 
 def lane_refusal(name: str, old: dict[str, str], new: dict[str, str]) -> str | None:
     task = new.get("task")
-    if task and task != "none" and task != LANE_DOCS[name] and (
-            LANE_DOCS[name] is not None or task in LANE_DOCS.values()):
+    own = lane_tasks(name)
+    assigned = {t for lane in LANE_DOCS for t in lane_tasks(lane)}
+    if task and task != "none" and task not in own and (own or task in assigned):
         return "the document names a task assigned to a different lane"
     status = old.get("status", "").lower()
     if status == "taken" or (status == "checkpoint" and not is_stale(old)):

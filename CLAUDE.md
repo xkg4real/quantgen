@@ -61,7 +61,9 @@ Tuesday 17:00 KST. One task runs at a time.
 
 ## Session pipeline (owner directive 2026-11-19)
 
-The main session (QUANTGEN/MAIN) coordinates sub-sessions (PAYMENTS_ACCOUNT_KEYS, OS_EXPANSION, DATA_SOURCE_DIDM).
+The main session (QUANTGEN/MAIN) coordinates five sub-sessions since 2026-11-24 (PAYMENTS_ACCOUNT_KEYS,
+OS_EXPANSION, DATA_SOURCE (data sourcing, formerly DATA_SOURCE_DIDM), DIDM_DEV (DIDM model work) and QUANTGPT (the
+own LLM system, code name QuantGPT)).
 The rules are on the handoff branch in `SESSION_PIPELINE.md` (owner's words quoted in its section 0) and the
 whole-program checklist is `WORKBOARD.md`; read both at session start after `--show`
 (`git show origin/handoff:SESSION_PIPELINE.md`, `git show origin/handoff:WORKBOARD.md`).
@@ -74,5 +76,10 @@ whole-program checklist is `WORKBOARD.md`; read both at session start after `--s
   push notification (`SESSION_PIPELINE.md` section 5). UI/UX and website sessions are reached only through the
   owner. When all development is done, test each app's final build in a fresh virtual environment and give
   the files to the owner.
+- **QuantGPT and DIDM:** QuantGPT code lives under `qgpt/` on branch `claude/quantgpt-q0-20261124` until the main
+  session gives it a merge turn; its design spec is not in this public repository (owner decision 2026-11-24), so write
+  only IDs, code, tests and small synthetic examples here, never spec text. DATA_SOURCE and DIDM_DEV each change only
+  their own paths (the split is at the top of `WORKBOARD.md`). What is shared with the TRADEGEN side is the interface
+  document `git show origin/handoff:QUANTGPT_TRADEGEN.md`; nobody here pushes to the tradegen repository.
 - **Incorporation:** when the owner says "법인 설립 완료" (in any session), read
   `git show origin/handoff:INCORPORATION_CHECKLIST.md` and guide the owner through it as written.
