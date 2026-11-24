@@ -25,7 +25,11 @@ def load(folder: str) -> list[tuple[str, dict]]:
 def assemble(case: dict) -> sc.Assembled:
     request = j.validate_request(case["request"])
     judgement = j.validate_judgement(case["judgement"], request)
-    return sc.assemble_record(judgement, sc.ScorerInfo(**case["scorer_info"]), sc.Assembly(**case["assembly"]))
+    extra = {}
+    if "calibrated_direction" in case:               # the calibrated path: a fixed stand-in calibrator
+        fixed = tuple(case["calibrated_direction"])
+        extra = dict(calibrate_direction=lambda raw: fixed, calibration_version=case["calibration_version"])
+    return sc.assemble_record(judgement, sc.ScorerInfo(**case["scorer_info"]), sc.Assembly(**case["assembly"]), **extra)
 
 
 def json_schema_errors(schema: dict, value, path: str = "$") -> list[str]:
@@ -46,8 +50,13 @@ def json_schema_errors(schema: dict, value, path: str = "$") -> list[str]:
         out.append(f"{path}: const")
     if "enum" in schema and value not in schema["enum"]:
         out.append(f"{path}: enum")
-    if isinstance(value, str) and "pattern" in schema and not re.search(schema["pattern"], value):
-        out.append(f"{path}: pattern")
+    if isinstance(value, str):
+        if "pattern" in schema and not re.search(schema["pattern"], value):
+            out.append(f"{path}: pattern")
+        if len(value) < schema.get("minLength", 0) or len(value) > schema.get("maxLength", len(value)):
+            out.append(f"{path}: string length")
+    if "not" in schema and not json_schema_errors(schema["not"], value, path):
+        out.append(f"{path}: not")
     if isinstance(value, (int, float)) and not isinstance(value, bool):
         if "minimum" in schema and value < schema["minimum"]:
             out.append(f"{path}: minimum")
@@ -93,8 +102,8 @@ class ConformanceExamples(unittest.TestCase):
                 self.assertEqual(s.validate_record(record.as_dict()), record)
 
     def test_every_assembled_record_equals_the_expected_record_field_by_field(self):
-        """The expected records were written out by hand (plain arithmetic), so a field taken from the
-        wrong place in assemble_record shows up here."""
+        """The expected records were computed separately from the formulas (by the fixture generator,
+        not by assemble_record), so a field taken from the wrong place in assemble_record shows up here."""
         seen = 0
         for name, case in load("accept"):
             if case["kind"] != "judgement":
@@ -381,7 +390,7 @@ class RunScorer(unittest.TestCase):
         scorer = FakeScorer({"art-0001": self.good,
                              "art-0002x": dict(self.good, article_id="art-0002x", rationale="text"),
                              "art-0003x": "not json"})
-        batch = sc.run_scorer(scorer, [self.request, r2, r3])
+        batch = sc.run_scorer(scorer, [self.request, r2, r3], calibrated=False)
         self.assertEqual([req.article_id for req, _ in batch.judgements], ["art-0001"])
         self.assertEqual([a for a, _ in batch.rejected], ["art-0002x", "art-0003x"])
         self.assertEqual(sum(batch.reject_counts.values()), 2)
@@ -389,14 +398,14 @@ class RunScorer(unittest.TestCase):
 
     def test_a_judgement_for_another_article_is_not_attached(self):
         scorer = FakeScorer({"art-0001": dict(self.good, article_id="art-7777")})
-        batch = sc.run_scorer(scorer, [self.request])
+        batch = sc.run_scorer(scorer, [self.request], calibrated=False)
         self.assertEqual(batch.judgements, ())
         self.assertIn("article_id does not match", batch.rejected[0][1])
 
     def test_scorer_failures_other_than_schema_errors_are_not_swallowed(self):
         scorer = FakeScorer({"art-0001": RuntimeError("backend down")})
         with self.assertRaises(RuntimeError):
-            sc.run_scorer(scorer, [self.request])
+            sc.run_scorer(scorer, [self.request], calibrated=False)
 
     def test_reject_reasons_never_carry_model_output(self):
         leak = "FULL ARTICLE TEXT " * 40
@@ -413,7 +422,7 @@ class RunScorer(unittest.TestCase):
             answers[request.article_id] = (dict(output, article_id=request.article_id)
                                            if isinstance(output, dict) and output.get("article_id") != leak
                                            else output)
-        batch = sc.run_scorer(FakeScorer(answers), requests)
+        batch = sc.run_scorer(FakeScorer(answers), requests, calibrated=True)
         self.assertEqual(len(batch.rejected), len(bad_outputs))
         for article_id, reason in batch.rejected:
             self.assertNotIn("FULL ARTICLE", reason, article_id)
@@ -421,7 +430,7 @@ class RunScorer(unittest.TestCase):
         # one key per rule, not one per offending value
         two = sc.run_scorer(FakeScorer({"art-leak-0": dict(self.good, article_id="art-leak-0", event_type="aaa"),
                                         "art-leak-1": dict(self.good, article_id="art-leak-1", event_type="bbb")}),
-                            requests[:2])
+                            requests[:2], calibrated=True)
         self.assertEqual(two.reject_counts, {"unknown event_type": 2})
 
     def test_a_huge_integer_is_a_counted_rejection_not_a_crash(self):
@@ -429,23 +438,49 @@ class RunScorer(unittest.TestCase):
                              ("event_type_probs", dict(self.good["event_type_probs"], none=10 ** 400))):
             with self.subTest(field=field):
                 scorer = FakeScorer({"art-0001": dict(self.good, **{field: value})})
-                batch = sc.run_scorer(scorer, [self.request])
+                batch = sc.run_scorer(scorer, [self.request], calibrated=False)
                 self.assertEqual(batch.judgements, ())
                 self.assertIn("must be finite", batch.rejected[0][1])
 
     def test_a_kept_judgement_can_always_be_assembled(self):
         """What run_scorer keeps, assemble_record accepts: P(+1) + P(-1) above 1 is rejected up front."""
         scorer = FakeScorer({"art-0001": dict(self.good, direction_probs=[0.5000004, 0.5000004, 0.0])})
-        batch = sc.run_scorer(scorer, [self.request])
+        batch = sc.run_scorer(scorer, [self.request], calibrated=False)
         self.assertEqual(batch.judgements, ())
         self.assertEqual(batch.reject_counts, {"p_positive + p_negative exceeds 1": 1})
+
+    def test_one_rule_gives_one_reject_reason_whatever_the_model_left_out(self):
+        probs = self.good["event_type_probs"]
+        outputs = [dict(self.good, event_type_probs={k: v for k, v in probs.items() if k not in drop})
+                   for drop in (("none",), ("earnings",), ("earnings", "none"), ("inflation", "fiscal", "growth"))]
+        outputs.append(dict(self.good, event_type_probs={}))
+        requests, answers = [], {}
+        for i, output in enumerate(outputs):
+            request = j.validate_request(dict(a_case()["request"], article_id=f"art-miss-{i}"))
+            requests.append(request)
+            answers[request.article_id] = dict(output, article_id=request.article_id)
+        batch = sc.run_scorer(FakeScorer(answers), requests, calibrated=True)
+        self.assertEqual(batch.reject_counts, {"missing event_type_probs keys": 5})
+        ranges = {f"art-r-{i}": dict(self.good, article_id=f"art-r-{i}", event_type_probs=dict(probs, **{key: 1.5}))
+                  for i, key in enumerate(("none", "earnings", "fiscal"))}
+        reqs = [j.validate_request(dict(a_case()["request"], article_id=k)) for k in ranges]
+        self.assertEqual(sc.run_scorer(FakeScorer(ranges), reqs, calibrated=True).reject_counts,
+                         {"event_type_probs value must be in [0, 1]": 3})
+
+    def test_an_error_raised_by_the_scorer_wrapper_is_counted_without_its_text(self):
+        leak = "model did not return JSON: FULL ARTICLE TEXT " * 5
+        for error in (j.JudgementError(leak), s.SchemaError(leak)):
+            with self.subTest(error=type(error).__name__):
+                batch = sc.run_scorer(FakeScorer({"art-0001": error}), [self.request], calibrated=True)
+                self.assertEqual(batch.rejected, (("art-0001", sc.SCORER_RAISED),))
+                self.assertNotIn("FULL ARTICLE", batch.rejected[0][1])
 
     def test_object_without_info_is_not_a_scorer(self):
         class NoInfo:
             def judge(self, request):
                 return {}
         with self.assertRaises(j.JudgementError):
-            sc.run_scorer(NoInfo(), [self.request])
+            sc.run_scorer(NoInfo(), [self.request], calibrated=False)
 
     def test_fake_scorer_satisfies_the_protocol(self):
         self.assertIsInstance(FakeScorer({}), sc.Scorer)
@@ -471,8 +506,8 @@ class Tolerances(unittest.TestCase):
     def test_sum_tolerance_is_1e_6_and_the_schema_text_follows_the_code(self):
         self.assertEqual(j.SUM_TOLERANCE, 1e-6)
         rules = export_schema.judgement_schema()["x-didm-cross-field-rules"]
-        self.assertIn("event_type_probs sums to 1 within 1e-06", rules)
-        self.assertIn("direction_probs sums to 1 within 1e-06", rules)
+        self.assertIn("event_type_probs sums to 1 within 1e-6", rules)
+        self.assertTrue(any(rule.startswith("direction_probs sums to 1 within 1e-6") for rule in rules))
         original = j.SUM_TOLERANCE
         try:
             j.SUM_TOLERANCE = 1e-3
@@ -494,42 +529,112 @@ class Tolerances(unittest.TestCase):
             total = sum(raw["direction_probs"]) if "direction" in name else sum(raw["event_type_probs"].values())
             self.assertAlmostEqual(abs(total - 1), 2e-6, places=9)
 
-    def test_exported_patterns_refuse_a_trailing_newline_under_search(self):
-        import re
-        for pattern, good in ((export_schema.ID_PATTERN, "conf-0001"), (export_schema.SHA_PATTERN, "a" * 64)):
-            self.assertTrue(re.search(pattern, good))
-            self.assertFalse(re.search(pattern, good + "\n"))
-            self.assertFalse(re.search(pattern, good + "\n\n"))
+    def test_exported_string_rules_equal_the_python_patterns(self):
+        """No look-ahead and no end anchor in the export (regex engines disagree on both); the three
+        parts together must accept exactly what schema._ID and schema._SHA256 accept by fullmatch."""
+        ident, sha = export_schema._IDENT, export_schema._SHA
+        for rule in (ident, sha):
+            for text in (rule.get("pattern", ""), rule["not"]["pattern"]):
+                self.assertNotIn("(?", text)
+                self.assertNotIn("$", text)
+        samples = ["", "a", "Z9", "a" * 128, "a" * 129, "a_.:-/b", ".a", "-a", "_a", "a b", "a\n", "a\r", "a\r\n",
+                   "\na", "a\u2028", "a\x85", "a\tb", "é", "aé", "a" * 64, "0" * 64, "f" * 63, "f" * 65, "A" * 64,
+                   "0123456789abcdef" * 4, "0123456789abcdef" * 4 + "\n", "g" * 64]
+        samples += ["a" + chr(i) for i in range(0, 256)] + [chr(i) + "a" for i in range(0, 256)]
+        samples += ["0" * 63 + chr(i) for i in range(0, 256)]
+        for text in samples:
+            self.assertEqual(not json_schema_errors(ident, text), bool(s._ID.fullmatch(text)), repr(text))
+            self.assertEqual(not json_schema_errors(sha, text), bool(s._SHA256.fullmatch(text)), repr(text))
+
+
+class RawVectorAndCalibration(unittest.TestCase):
+    """A raw direction vector only has to meet the documented 1e-6. The record's tighter bound on
+    P(+1) + P(-1) applies where the raw vector goes into a record unchanged."""
+
+    def setUp(self):
+        self.case = dict(load("accept"))["judgement-float32-softmax.json"]
+        self.request = j.validate_request(self.case["request"])
+
+    def test_float32_softmax_is_a_valid_judgement_and_assembles_with_a_calibrator(self):
+        raw = self.case["judgement"]["direction_probs"]
+        self.assertGreater(raw[0] + raw[1], 1 + 1e-9)
+        self.assertLess(abs(sum(raw) - 1), 1e-6)
+        out = assemble(self.case)
+        self.assertEqual(out.record.direction_probs, (0.6, 0.3, 0.1))
+        self.assertEqual(out.raw_direction_probs, tuple(raw))
+        self.assertEqual(out.calibration_version, "cal-fixture-1")
+
+    def test_without_a_calibrator_it_is_rejected_and_counted_up_front(self):
+        scorer = FakeScorer({"art-0006": self.case["judgement"]})
+        kept = sc.run_scorer(scorer, [self.request], calibrated=True)
+        self.assertEqual(len(kept.judgements), 1)
+        dropped = sc.run_scorer(scorer, [self.request], calibrated=False)
+        self.assertEqual(dropped.judgements, ())
+        self.assertEqual(dropped.reject_counts, {self.case["uncalibrated_expect"]: 1})
+        with self.assertRaises(j.JudgementError):
+            j.check_record_ready(kept.judgements[0][1])
+        with self.assertRaises(s.SchemaError):                       # and assembly without a calibrator refuses too
+            sc.assemble_record(kept.judgements[0][1], sc.ScorerInfo(**self.case["scorer_info"]),
+                               sc.Assembly(**self.case["assembly"]))
+
+    def test_everything_kept_for_an_uncalibrated_batch_assembles(self):
+        import random
+        rng = random.Random(8)
+        base, info = a_case(), sc.ScorerInfo(**a_case()["scorer_info"])
+        request, asm = j.validate_request(base["request"]), sc.Assembly(**base["assembly"])
+        kept = dropped = 0
+        for _ in range(3000):
+            x, y = rng.random(), rng.random()
+            vec = [x / (x + y), y / (x + y), 0.0]
+            vec[rng.randrange(2)] += rng.choice([0.0, 3e-8, 4e-7, -4e-7, 9e-7])
+            batch = sc.run_scorer(FakeScorer({"art-0001": dict(base["judgement"], direction_probs=vec)}), [request],
+                                  calibrated=False)
+            if batch.judgements:
+                sc.assemble_record(batch.judgements[0][1], info, asm)      # must not raise
+                kept += 1
+            else:
+                dropped += 1
+        self.assertGreater(kept, 500)
+        self.assertGreater(dropped, 500)
+
+    def test_calibrated_flag_is_required(self):
+        with self.assertRaises(TypeError):
+            sc.run_scorer(FakeScorer({}), [])
+        with self.assertRaises(j.JudgementError):
+            sc.run_scorer(FakeScorer({}), [], calibrated="yes")
 
 
 class Boundaries(unittest.TestCase):
+    """Allow-list: each file may import only these modules. Anything else (a network library, a provider
+    package, a validator library, the clock) is a finding, whatever its name."""
     FILES = ("core/didm/llm/judgement.py", "core/didm/llm/scorer.py", "core/didm/llm/cutoffs.py",
              "tools/didm/export_schema.py")
-    BANNED = ("data", "requests", "urllib", "http", "socket", "ssl", "ftplib", "smtplib", "jsonschema", "pydantic",
-              "time", "anthropic", "openai", "transformers", "torch", "subprocess")
-    CLOCK_CALLS = ("now", "today", "utcnow", "fromtimestamp", "time", "monotonic", "perf_counter")
+    STDLIB = ("__future__", "argparse", "calendar", "collections", "dataclasses", "datetime", "enum", "json", "math",
+              "pathlib", "re", "sys", "typing")
+    PROJECT = ("core.didm.llm",)
+    DYNAMIC = ("importlib", "__import__", "exec", "eval", "import_module")
+    CLOCK = ("now", "today", "utcnow", "fromtimestamp", "utcfromtimestamp")
 
-    @staticmethod
-    def imported(tree: ast.AST) -> list[str]:
-        names = []
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Import):
-                names += [a.name for a in node.names]
-            elif isinstance(node, ast.ImportFrom):
-                module = node.module or ""
-                names.append(module)
-                names += [f"{module}.{a.name}" if module else a.name for a in node.names]
-        return names
+    @classmethod
+    def allowed(cls, module: str) -> bool:
+        return module in cls.STDLIB or any(module == p or module.startswith(p + ".") for p in cls.PROJECT)
 
     def problems(self, source: str) -> list[str]:
-        tree = ast.parse(source)
-        found = [f"import {name}" for name in self.imported(tree) if name.split(".")[0] in self.BANNED]
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Call):
-                func = node.func
-                name = func.attr if isinstance(func, ast.Attribute) else getattr(func, "id", "")
-                if name in self.CLOCK_CALLS:
-                    found.append(f"call {name}()")
+        found = []
+        for node in ast.walk(ast.parse(source)):
+            if isinstance(node, ast.Import):
+                found += [f"import {a.name}" for a in node.names if not self.allowed(a.name)]
+            elif isinstance(node, ast.ImportFrom):
+                if node.level or not self.allowed(node.module or ""):
+                    found.append(f"from {'.' * node.level}{node.module or ''} import ...")
+                # a clock or dynamic-import name pulled in directly
+                found += [f"import name {a.name}" for a in node.names if a.name in self.CLOCK + self.DYNAMIC]
+            elif isinstance(node, ast.Attribute) and node.attr in self.CLOCK + self.DYNAMIC:
+                found.append(f"reference .{node.attr}")
+            elif isinstance(node, ast.Name) and node.id in self.DYNAMIC + self.CLOCK:
+                found.append(f"reference {node.id}")
+            elif isinstance(node, ast.Constant) and isinstance(node.value, str) and node.value in self.CLOCK:
+                found.append(f"clock name as a string: {node.value}")       # getattr(datetime, "now")
         return found
 
     def test_no_provider_network_clock_or_validator_library(self):
@@ -537,15 +642,30 @@ class Boundaries(unittest.TestCase):
             with self.subTest(rel):
                 self.assertEqual(self.problems((ROOT / rel).read_text(encoding="utf-8")), [])
 
-    def test_the_check_sees_ordinary_import_and_clock_forms(self):
-        for line in ("from urllib.request import urlopen", "import http.client", "from data import didm",
-                     "import data.didm.keys as k", "import socket", "from time import sleep",
-                     "from datetime import datetime\nx = datetime.now()", "import datetime\nx = datetime.date.today()",
-                     "from datetime import datetime, timezone\n_STARTED = datetime.now(timezone.utc)",
-                     "from datetime import datetime\nx = datetime.utcnow()"):
-            with self.subTest(line=line):
-                self.assertNotEqual(self.problems(line), [])
-        self.assertEqual(self.problems("from datetime import date, datetime, timezone\nx = date(2026, 1, 1)"), [])
+    def test_the_check_sees_dynamic_and_indirect_forms(self):
+        bad = ("from urllib.request import urlopen", "import http.client", "from data import didm",
+               "import data.didm.keys as k", "import socket", "from time import sleep", "import time",
+               "import httpx", "import urllib3", "import aiohttp", "import asyncio", "import xmlrpc.client",
+               "import os\nos.system('x')", "import subprocess", "import jsonschema", "from . import data",
+               "import importlib\nimportlib.import_module('urllib.request')", "__import__('socket')",
+               "exec('import socket')", "eval('1')",
+               "from datetime import datetime\nx = datetime.now()", "import datetime\nx = datetime.date.today()",
+               "from datetime import datetime, timezone\n_STARTED = datetime.now(timezone.utc)",
+               "from datetime import datetime\nx = datetime.utcnow()",
+               "from datetime import datetime\nstamp = datetime.now\nstamp()",
+               "from datetime import datetime\nfrom dataclasses import field\nx = field(default_factory=datetime.now)",
+               "from datetime import datetime\ngetattr(datetime, 'now')()",
+               "from datetime import datetime\nx = datetime.fromtimestamp(0)")
+        for source in bad:
+            with self.subTest(source=source):
+                self.assertNotEqual(self.problems(source), [])
+        fine = ("from datetime import date, datetime, timezone\nx = date(2026, 1, 1)",
+                "import datetime\nx = datetime.time(9, 0)", "from datetime import time\nx = time(9, 0)",
+                "from core.didm.llm import schema as s", "from core.didm.llm.schema import EventType",
+                "import re\nimport math\nfrom dataclasses import dataclass")
+        for source in fine:
+            with self.subTest(source=source):
+                self.assertEqual(self.problems(source), [])
 
     def test_schema_py_still_has_the_v0_surface(self):
         self.assertEqual(s.SCHEMA_VERSION, "didm-score-v0")

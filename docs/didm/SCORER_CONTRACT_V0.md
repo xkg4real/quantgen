@@ -38,7 +38,7 @@ ScoreRequest ─▶ Scorer.judge() ─▶ 판단(JSON) ─▶ validate_judgement
 | `p_subject` | 0~1 | 대상이 기사의 주제일 확률, 보정 전 원값. 대상이 없으면 0 |
 | `event_type` | 15개 값 중 하나 | `event_type_probs`에서 확률이 가장 큰 키. 정확히 같은 값의 동률일 때만 그중 하나를 고를 수 있음 (오차 허용 없음) |
 | `event_type_probs` | 15개 키 전부 | 각 0~1, 합 1 (오차 1e-6) |
-| `direction_probs` | [P(+1), P(−1), P(0)] | 각 0~1, 합 1 (오차 1e-6), 그리고 P(+1) + P(−1) ≤ 1 (오차 1e-9, 레코드 스키마와 같은 조건). 보정 전 원값 |
+| `direction_probs` | [P(+1), P(−1), P(0)] | 각 0~1, 합 1 (오차 1e-6). 보정 전 원값. **float64로 정규화하기를 권장**합니다: float32 소프트맥스는 합이 3e-8쯤 어긋나는데, 허용치 1e-6 안이라 판단으로는 유효하지만 아래 5절의 무보정 조립에서는 거부됩니다 |
 | `claim_status` | `reported` / `confirmed` | 정답 집합 `GoldLabel.claim_status`와 같은 값 |
 
 자유 서술 (근거 문장 등)은 받지 않습니다.
@@ -57,7 +57,9 @@ ScoreRequest ─▶ Scorer.judge() ─▶ 판단(JSON) ─▶ validate_judgement
 | `ScorerInfo` | `model_version`, `prompt_sha256` |
 
 - `Assembly`에는 위 9개 값 말고 그 값들을 계산한 대상 (`article_id`, `target_kind`, `entity_id`)도 들어갑니다. 판단과 다르면 `assemble_record`가 거부합니다 (다른 기사·다른 종목의 참신성·관련성 값이 붙는 것을 막음).
-- 너무 큰 정수처럼 실수로 바꿀 수 없는 숫자는 판단에서도 조립에서도 거부로 셉니다 (묶음 전체가 멈추지 않음).
+- 너무 큰 정수처럼 실수로 바꿀 수 없는 숫자: 판단 단계 (`run_scorer`)에서는 거부로 세고 묶음은 계속됩니다. 조립 단계 (`assemble_record`)는 `OverflowError` 대신 `JudgementError` (`SchemaError`의 하위)를 올리고, 세는 것은 호출하는 쪽의 일입니다 (조립용 묶음 함수는 아직 없음).
+- **원값이 레코드에 그대로 들어가는 길 (보정기 없는 조립)** 에서는 레코드 스키마의 더 엄격한 조건 P(+1) + P(−1) ≤ 1 (오차 1e-9)이 적용됩니다. `run_scorer(..., calibrated=False)`는 이 조건에 걸리는 판단을 미리 거부로 세므로 (사유 고정 문구 `p_positive + p_negative exceeds 1`), 남긴 판단은 모두 조립됩니다. `calibrated=True`면 원값에는 1e-6만 적용합니다 (보정기가 벡터를 바꾸므로).
+- 거부 사유는 규칙마다 고정 문구 하나입니다 (빠진 키 목록이나 값에 따라 갈라지지 않음). 채점기 래퍼가 스스로 `SchemaError`를 올리면 그 글은 저장하지 않고 `scorer raised a schema error` 하나로 셉니다.
 - `p_subject`는 레코드에 그대로 들어가지 않습니다. 관련성 모형 (사전등록 4.1절, y = `is_subject`)의 설명변수이고, `relevance_0_100`은 그 모형의 출력입니다.
 - 보정: `assemble_record(..., calibrate_direction=함수, calibration_version="...")`. 보정기 없이 조립하면 원값이 들어가고 곁기록의 `calibration_version`이 `uncalibrated`입니다 (보정 전 확률은 순위로만, 사전등록 1절 A3).
 - **알려진 틈:** 사전등록 5절 7번은 보정 지도 버전을 기록마다 남기라고 하는데 `didm-score-v0`에는 그 필드가 없습니다. 지금은 `Assembled.calibration_version`으로 레코드 옆에 둡니다. 레코드 필드로 넣는 것은 새 스키마 버전입니다 (미결, 메인 판단).
@@ -71,16 +73,16 @@ python -B -m tools.didm.export_schema            # 다시 만들기
 python -B -m tools.didm.export_schema --check    # 코드와 같으면 종료 코드 0
 ```
 
-식별자·해시 패턴은 끝에 `(?!\n)`을 붙여 내보냅니다. 파이썬 검증기는 전체 일치로 보지만 JSON Schema 검증기는 부분 검색을 하므로, 끝에 줄바꿈이 붙은 값이 통과하지 않게 한 것입니다.
+식별자·해시 규칙은 **끝 고정(`$`)과 선읽기 없이** 내보냅니다: 첫 글자 패턴 `^[A-Za-z0-9]`, 금지 글자 `not {pattern: [^A-Za-z0-9_.:/-]}`, 길이 1~128 (해시는 금지 글자 `[^0-9a-f]`, 길이 64). 정규식 엔진마다 `$`와 선읽기의 동작이 달라서입니다 (파이썬·자바는 `$`가 끝 줄바꿈 앞에서도 맞고, Go는 선읽기를 지원하지 않음). 시험이 이 세 부분을 파이썬 검증기와 글자 단위로 대조합니다. 미검증: 파이썬 밖 엔진에서의 실제 실행 (이 세션에는 Go·자바가 없음).
 
 JSON Schema로 쓸 수 없는 규칙 (합 1, ESS·엔트로피 일치, 요청과 같은 대상, 최대 확률 유형)은 파일의 `x-didm-cross-field-rules`에 글로 적혀 있고, 판정 기준은 파이썬 검증기와 적합성 예시입니다.
 
 ## 7. 적합성 예시
 
-`tests/fixtures/didm/conformance/accept/` 11개 (레코드 6, 판단 5), `reject/` 43개 (레코드 21, 판단 22). 거부 예시마다 `expect` (오류 글의 일부)와 `json_schema_detects` (JSON Schema만으로 잡히는지)가 있습니다. 판단 적합 예시에는 **기대 레코드 (`expected_record`)** 가 있어 조립 결과를 필드 하나하나 비교합니다 (기대값은 조립 함수를 부르지 않고 따로 계산해 적은 값). 경계 예시: 합이 1에서 5e-7 벗어난 것은 통과, 2e-6 벗어난 것은 거부. 글은 모두 합성입니다. 새 채점기는 이 예시를 통과해야 합니다.
+`tests/fixtures/didm/conformance/accept/` 12개 (레코드 6, 판단 6), `reject/` 47개 (레코드 25, 판단 22). 거부 예시마다 `expect` (오류 글의 일부)와 `json_schema_detects` (JSON Schema만으로 잡히는지)가 있습니다. 판단 적합 예시에는 **기대 레코드 (`expected_record`)** 가 있어 조립 결과를 필드 하나하나 비교합니다 (기대값은 예시 생성 스크립트가 공식으로 따로 계산한 값이고 조립 함수를 부르지 않음). 경계 예시: 합이 1에서 5e-7 벗어난 것은 통과, 2e-6 벗어난 것은 거부; float32 소프트맥스 벡터는 보정 길에서 통과하고 무보정 길에서 거부 (`uncalibrated_expect`). 글은 모두 합성입니다. 새 채점기는 이 예시를 통과해야 합니다.
 
 ```
 python -B -m unittest tests.didm_contract_acceptance tests.didm_schema_acceptance
 ```
 
-2026-11-24 (검토 반영 뒤): 계약 43 + 스키마 26 통과.
+2026-11-24 (두 번째 검토 반영 뒤): 계약 49 + 스키마 26 통과.

@@ -11,7 +11,7 @@
 3. 출처가 달까지만 적으면 (예: "Jun 2026") 그 달의 마지막 날로 봅니다 (늦은 쪽 = 보수적).
 4. 자체 LLM: 마감일 = 기반 모델의 마감일과 미세조정 자료 마지막 날 중 **늦은 날**. 둘 중 하나라도 모르면 자격 없음.
 5. 상용 API 모델도 같은 규칙. 느슨하게 하는 예외는 없습니다.
-6. 사전등록 5절 4번이 마감일 이전 구간에 쓰라고 이름을 적은 기준선 (Loughran-McDonald 사전, FinBERT)은 기사 날짜 제한이 없습니다. 다만 **고정 스냅샷·출처·확인일이 있어야** 쓸 수 있고, 이 예외는 코드의 `BASELINE_KEYS` 두 키에만 적용됩니다 (다른 모델에 "기준선" 표시를 붙여도 자격이 생기지 않음). ChronoGPT는 빈티지마다 고정 시점이 마감일이고 2번 규칙을 그대로 따릅니다.
+6. 사전등록 5절 4번이 마감일 이전 구간에 쓰라고 이름을 적은 기준선 (Loughran-McDonald 사전, FinBERT)은 기사 날짜 제한이 없습니다. 다만 **고정 스냅샷·출처·확인일이 있어야** 쓸 수 있고, 이 예외는 코드의 `BASELINE_KEYS` 두 기준선에만 적용됩니다 (다른 모델에 "기준선" 표시를 붙여도 자격이 생기지 않음). 기준선 행의 키는 `loughran-mcdonald` 또는 `loughran-mcdonald@<스냅샷>` 꼴 (FinBERT도 같음)이어서, 채점기가 스냅샷이 붙은 `model_version`을 보고할 수 있고 한 기준선의 두 스냅샷이 각각 한 행을 가질 수 있습니다. **기준선 행에는 스냅샷 ID·출처·확인일만 적고 마감일 칸은 `—`로 둡니다** (마감일을 넣으면 코드가 거부: 마감일이 있는 모델은 마감일 규칙을 따라야 함). ChronoGPT는 빈티지마다 고정 시점이 마감일이고 2번 규칙을 그대로 따릅니다.
 7. 목록에 없는 `model_version`은 자격 없음 (닫힌 쪽으로 실패).
 8. 모델 버전이 바뀌면 새 행입니다 (사전등록 5절 6번).
 
@@ -78,8 +78,11 @@
 from core.didm.llm.cutoffs import REGISTRY
 REGISTRY.eligibility("claude-fable-5-2", published_at=record.published_at, received_at=record.received_at)
 # -> Eligibility(eligible, reason, eligible_from); 두 시각이 모두 필요하고 이른 날로 판정
+# 레코드의 시간대 있는 datetime을 그대로 넘깁니다. date를 넘기면 그대로 UTC 날로 취급하므로
+# 현지 날짜를 넘기면 하루 어긋날 수 있습니다 (2026-09-30 00:30 KST는 UTC로 2026-09-29).
+# UTC 날이 없는 값 (예: 0001-01-01T00:00+09:00)은 CutoffError.
 ```
 
 ```
-python -B -m unittest tests.didm_cutoffs_acceptance
+python -B -m unittest tests.didm_cutoffs_acceptance tests.didm_contract_acceptance
 ```

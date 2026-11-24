@@ -20,7 +20,13 @@ from collections import Counter
 from dataclasses import dataclass
 from typing import Any, Callable, Mapping, Protocol, Sequence, runtime_checkable
 
-from core.didm.llm.judgement import Judgement, JudgementError, ScoreRequest, validate_judgement
+from core.didm.llm.judgement import (
+    Judgement,
+    JudgementError,
+    ScoreRequest,
+    check_record_ready,
+    validate_judgement,
+)
 from core.didm.llm.schema import (
     SCHEMA_VERSION,
     ScoreRecord,
@@ -189,8 +195,23 @@ class Batch:
         return dict(Counter(reason for _, reason in self.rejected))
 
 
-def run_scorer(scorer: Scorer, requests: Sequence[ScoreRequest]) -> Batch:
-    """Judge each request once; keep valid judgements, count the rest. No retries."""
+SCORER_RAISED = "scorer raised a schema error"
+
+
+def run_scorer(scorer: Scorer, requests: Sequence[ScoreRequest], *, calibrated: bool) -> Batch:
+    """Judge each request once; keep valid judgements, count the rest. No retries.
+
+    ``calibrated`` says how the batch will be assembled. False means the raw direction probabilities
+    go into records unchanged, so a judgement the record schema would refuse (P(+1) + P(-1) above 1
+    by more than 1e-9) is rejected and counted here, and everything kept can be assembled. True means
+    a calibrator replaces the vector, and the raw vector only has to meet the documented 1e-6.
+
+    A SchemaError raised by the scorer itself (for example output that was not JSON) is counted under
+    one fixed reason; its message is not stored, since a wrapper may quote the model output there.
+    Any other exception from the scorer is a failure of the run and propagates.
+    """
+    if not isinstance(calibrated, bool):
+        raise JudgementError("calibrated must be True or False")
     if not isinstance(scorer, Scorer) or not isinstance(getattr(scorer, "info", None), ScorerInfo):
         raise JudgementError("scorer must have a ScorerInfo `info` and a `judge(request)` method")
     kept: list[tuple[ScoreRequest, Judgement]] = []
@@ -199,9 +220,18 @@ def run_scorer(scorer: Scorer, requests: Sequence[ScoreRequest]) -> Batch:
         if not isinstance(request, ScoreRequest):
             raise JudgementError("requests must be ScoreRequest objects")
         try:
-            kept.append((request, validate_judgement(scorer.judge(request), request)))
-        except SchemaError as exc:
+            raw = scorer.judge(request)
+        except SchemaError:
+            rejected.append((request.article_id, SCORER_RAISED))
+            continue
+        try:
+            judgement = validate_judgement(raw, request)
+            if not calibrated:
+                check_record_ready(judgement)
+        except JudgementError as exc:              # value-free rule text (core/didm/llm/judgement.py)
             rejected.append((request.article_id, str(exc)))
+            continue
+        kept.append((request, judgement))
     return Batch(tuple(kept), tuple(rejected))
 
 

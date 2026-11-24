@@ -1,6 +1,6 @@
 {
   "kind": "judgement",
-  "note": "P(+1) + P(-1) above 1 inside the sum tolerance; the record schema would refuse it",
+  "note": "one event_type_probs value above 1",
   "request": {
     "article_id": "art-0001",
     "language": "en",
@@ -32,15 +32,15 @@
       "regulation_litigation": 0.01,
       "supply_chain": 0.01,
       "crypto_regulation_hack": 0.01,
-      "none": 0.01
+      "none": 1.5
     },
     "direction_probs": [
-      0.5000004,
-      0.5000004,
-      0.0
+      0.1,
+      0.7,
+      0.2
     ],
     "claim_status": "confirmed"
   },
-  "expect": "p_positive + p_negative exceeds 1",
-  "json_schema_detects": false
+  "expect": "event_type_probs value must be in [0, 1]",
+  "json_schema_detects": true
 }

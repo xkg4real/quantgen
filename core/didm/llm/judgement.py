@@ -170,9 +170,9 @@ def validate_judgement(raw: Mapping[str, Any], request: ScoreRequest) -> Judgeme
     direction = tuple(_wrap(_prob, p, "direction_probs") for p in direction)
     if abs(sum(direction) - 1.0) > SUM_TOLERANCE:
         raise JudgementError("direction_probs must sum to 1")
-    # The record schema allows only 1e-9 on P(+1) + P(-1); reject here so the judgement is counted
-    # as rejected instead of failing later at assembly.
-    _wrap(ess_like, direction[0], direction[1])
+    # The raw vector is held to the documented 1e-6 only. The record schema's tighter bound on
+    # P(+1) + P(-1) (1e-9) applies where a raw vector goes into a record unchanged: see
+    # check_record_ready(), used by run_scorer for batches assembled without a calibrator.
 
     claim = raw["claim_status"]
     if not isinstance(claim, str) or claim not in CLAIM_STATUSES:
@@ -188,6 +188,16 @@ def validate_judgement(raw: Mapping[str, Any], request: ScoreRequest) -> Judgeme
         direction_probs=direction,  # type: ignore[arg-type]
         claim_status=claim,
     )
+
+
+def check_record_ready(judgement: Judgement) -> None:
+    """Raise JudgementError if the RAW direction probabilities could not go into a record as they are.
+
+    The record schema allows P(+1) + P(-1) to exceed 1 by 1e-9 only, tighter than the 1e-6 a raw
+    vector may miss a sum of 1 by (a float32 softmax typically misses by about 3e-8). When a
+    calibrator replaces the vector this does not matter; without one it does.
+    """
+    _wrap(ess_like, judgement.direction_probs[0], judgement.direction_probs[1])
 
 
 # --- helpers ---
@@ -236,8 +246,8 @@ def _type_probs(value: Any) -> tuple[tuple[str, float], ...]:
         raise JudgementError("unknown event_type_probs keys")
     missing = [n for n in names if n not in value]
     if missing:
-        raise JudgementError(f"missing event_type_probs keys: {missing}")
-    out = tuple((n, _wrap(_prob, value[n], f"event_type_probs[{n}]")) for n in names)
+        raise JudgementError("missing event_type_probs keys")
+    out = tuple((n, _wrap(_prob, value[n], "event_type_probs value")) for n in names)
     if abs(sum(p for _, p in out) - 1.0) > SUM_TOLERANCE:
         raise JudgementError("event_type_probs must sum to 1")
     return out
@@ -245,5 +255,5 @@ def _type_probs(value: Any) -> tuple[tuple[str, float], ...]:
 
 __all__ = [
     "CLAIM_STATUSES", "JUDGEMENT_REQUIRED", "JUDGEMENT_VERSION", "LANGUAGES", "REQUEST_REQUIRED",
-    "Judgement", "JudgementError", "ScoreRequest", "validate_judgement", "validate_request",
+    "Judgement", "JudgementError", "ScoreRequest", "check_record_ready", "validate_judgement", "validate_request",
 ]

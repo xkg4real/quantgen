@@ -41,6 +41,15 @@ class CutoffError(ValueError):
     pass
 
 
+def is_baseline_key(key: str) -> bool:
+    """A named baseline, optionally carrying its pinned snapshot: ``k`` or ``k@<snapshot>`` for k in
+    BASELINE_KEYS. So a scorer can report e.g. ``ProsusAI/finbert@<commit>`` as its model_version and
+    two snapshots of one baseline can each have a row."""
+    if not isinstance(key, str):
+        return False
+    return any(key == k or (key.startswith(k + "@") and len(key) > len(k) + 1) for k in BASELINE_KEYS)
+
+
 class Rule(str, Enum):
     CUTOFF = "cutoff"                    # eligible from cutoff + 3 months
     BASELINE = "prereg-5.4-baseline"     # named in PREREG_V0 5.4; eligible at any date once pinned
@@ -79,7 +88,7 @@ class ModelCard:
         if not (self.snapshot_id and self.source_url and self.checked_on):
             return False
         if self.rule is Rule.BASELINE:
-            return self.key in BASELINE_KEYS
+            return is_baseline_key(self.key)
         return self.effective_cutoff is not None
 
     @property
@@ -152,14 +161,21 @@ def _utc_day(value: date | datetime, name: str) -> date:
     if isinstance(value, datetime):
         if value.tzinfo is None or value.utcoffset() is None:
             raise CutoffError(f"{name} must carry a timezone")
-        return value.astimezone(timezone.utc).date()
+        try:
+            return value.astimezone(timezone.utc).date()
+        except OverflowError:          # a sentinel such as 0001-01-01T00:00+09:00 has no UTC day
+            raise CutoffError(f"{name} is outside the supported date range") from None
     if isinstance(value, date):
         return value
     raise CutoffError(f"{name} must be a date or a timezone-aware datetime")
 
 
 def article_day(published_at: date | datetime, received_at: date | datetime) -> date:
-    """The day the cutoff rule compares: the earlier of the publication day and the receipt day (UTC)."""
+    """The day the cutoff rule compares: the earlier of the publication day and the receipt day (UTC).
+
+    Pass timezone-aware datetimes (the record's own fields). A plain ``date`` is taken as it is, so it
+    must already be the UTC day: 2026-09-30 00:30 KST is 2026-09-29 in UTC.
+    """
     return min(_utc_day(published_at, "published_at"), _utc_day(received_at, "received_at"))
 
 
