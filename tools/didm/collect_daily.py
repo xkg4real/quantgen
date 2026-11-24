@@ -234,6 +234,19 @@ def collect_fedwatch_file(store: PointInTimeStore, path: str) -> dict:
     return {"days": len(days), "rows": len(rows), "refused": len(refused), "added": added}
 
 
+def collect_gdelt_files(store: PointInTimeStore, paths: list[str]) -> dict:
+    """DS-10: GDELT 2.0 events / GKG files the owner downloaded (zip or csv, GDELT's file names). No network."""
+    from core.didm.ingest import gdelt_files
+    total = added = 0
+    for path in paths:
+        f = Path(path)
+        rows = gdelt_files.read_file(f.name, f.read_bytes(), _now())
+        n = store.append_many(rows)
+        total, added = total + len(rows), added + n
+        print(f"GDELT file {f.name}: rows {len(rows)}, new {n}")
+    return {"rows": total, "added": added}
+
+
 def _run(label: str, fn) -> None:
     try:
         fn()
@@ -515,6 +528,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--finbert", action="store_true")
     ap.add_argument("--alfred", nargs="*", default=[])
     ap.add_argument("--alfred-file", action="append", default=[], metavar="SERIES=PATH")
+    ap.add_argument("--gdelt-file", nargs="+", default=[], metavar="PATH",
+                    help="DS-10: GDELT 2.0 files you downloaded (YYYYMMDDHHMMSS.export.CSV[.zip] / .gkg.csv[.zip])")
     ap.add_argument("--fedwatch-file", action="append", default=[], metavar="PATH",
                     help="DS-4c: FedWatch end-of-day CSV (trade_date,meeting_date,lower_bp,upper_bp,probability)")
     ap.add_argument("--edgar", nargs="*", default=[], metavar="CIK")
@@ -568,6 +583,8 @@ def main(argv: list[str] | None = None) -> int:
             _run("ALFRED", lambda: collect_alfred_api(store, args.alfred))
         for spec in args.alfred_file:
             collect_alfred_file(store, spec)
+        if args.gdelt_file:
+            _run("GDELT file", lambda: collect_gdelt_files(store, args.gdelt_file))
         for path in args.fedwatch_file:
             _run("FedWatch file", lambda path=path: collect_fedwatch_file(store, path))
         if args.edgar:
