@@ -22,7 +22,7 @@
     "p_credibility": 0.95,
     "market_confirmation": "CONTRADICTED",
     "model_version": "fixture-model-0",
-    "prompt_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "prompt_sha256": "a1b2c3d4e5f60718a1b2c3d4e5f60718a1b2c3d4e5f60718a1b2c3d4e5f60718",
     "schema_version": "didm-score-v0"
   }
 }

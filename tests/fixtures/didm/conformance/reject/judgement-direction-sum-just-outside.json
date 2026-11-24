@@ -1,0 +1,46 @@
+{
+  "kind": "judgement",
+  "note": "direction_probs missing 1 by 2e-6",
+  "request": {
+    "article_id": "art-0001",
+    "language": "en",
+    "title": "Synthetic headline: central bank holds its policy rate",
+    "body": null,
+    "target_kind": "macro",
+    "entity_id": "US.FFR",
+    "entity_name": "US policy rate"
+  },
+  "judgement": {
+    "judgement_version": "didm-judgement-v0",
+    "article_id": "art-0001",
+    "target_kind": "macro",
+    "entity_id": "US.FFR",
+    "p_subject": 0.92,
+    "event_type": "monetary_policy",
+    "event_type_probs": {
+      "monetary_policy": 0.86,
+      "inflation": 0.01,
+      "employment": 0.01,
+      "growth": 0.01,
+      "fiscal": 0.01,
+      "trade_tariffs": 0.01,
+      "geopolitics": 0.01,
+      "election_policy": 0.01,
+      "earnings": 0.01,
+      "mergers_acquisitions": 0.01,
+      "management": 0.01,
+      "regulation_litigation": 0.01,
+      "supply_chain": 0.01,
+      "crypto_regulation_hack": 0.01,
+      "none": 0.01
+    },
+    "direction_probs": [
+      0.1,
+      0.7,
+      0.200002
+    ],
+    "claim_status": "confirmed"
+  },
+  "expect": "direction_probs must sum to 1",
+  "json_schema_detects": false
+}

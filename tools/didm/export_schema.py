@@ -25,8 +25,13 @@ from core.didm.llm import schema as s
 ROOT = Path(__file__).resolve().parents[2]
 OUT_DIR = ROOT / "docs" / "didm" / "schema"
 DRAFT = "https://json-schema.org/draft/2020-12/schema"
-ID_PATTERN = s._ID.pattern
-SHA_PATTERN = s._SHA256.pattern
+# The Python validators use fullmatch. A JSON Schema validator searches, and in Python's regex dialect
+# "$" also matches just before a final newline, so the exported patterns end with a guard that is
+# strict in both dialects (the look-ahead is a no-op in ECMA-262, where "$" is the very end).
+_STRICT_END = r"(?!\n)"
+ID_PATTERN = s._ID.pattern + _STRICT_END
+SHA_PATTERN = s._SHA256.pattern + _STRICT_END
+_TOL = f"{j.SUM_TOLERANCE:g}"
 
 _IDENT = {"type": "string", "pattern": ID_PATTERN}
 _TIMESTAMP = {"type": "string", "format": "date-time",
@@ -84,6 +89,7 @@ def score_schema() -> dict:
         "allOf": [_TARGET_RULE],
         "x-didm-cross-field-rules": [
             "direction_probs sums to 1 within 1e-6",
+            "P(+1) + P(-1) does not exceed 1 (tolerance 1e-9)",
             "ess_like_0_100 equals 50 + 50*(P(+1) - P(-1)) within 1e-6",
             "uncertainty_entropy equals the Shannon entropy (nats) of direction_probs within 1e-6",
             "published_at and received_at carry a timezone",
@@ -130,9 +136,10 @@ def judgement_schema() -> dict:
         "x-didm-cross-field-rules": [
             "article_id, target_kind and entity_id equal the request's",
             "p_subject is 0 when target_kind is none",
-            "event_type_probs sums to 1 within 1e-6",
-            "event_type is a most probable key of event_type_probs",
-            "direction_probs sums to 1 within 1e-6",
+            f"event_type_probs sums to 1 within {_TOL}",
+            "event_type is a most probable key of event_type_probs (compared exactly; an exact tie leaves a choice)",
+            f"direction_probs sums to 1 within {_TOL}",
+            "P(+1) + P(-1) does not exceed 1 (tolerance 1e-9)",
         ],
     }
 
@@ -160,16 +167,8 @@ def check() -> list[str]:
         if not path.is_file():
             problems.append(f"{rel}: missing")
             continue
-        on_disk = path.read_text(encoding="utf-8")
-        if on_disk != text:
+        if path.read_text(encoding="utf-8") != text:
             problems.append(f"{rel}: differs from the code (run python -B -m tools.didm.export_schema)")
-            continue
-        data = json.loads(on_disk)
-        if data["title"] == s.SCHEMA_VERSION:
-            if data["properties"]["event_type"]["enum"] != _values(s.EventType):
-                problems.append(f"{rel}: event types differ from EventType")
-            if tuple(data["required"]) != s.REQUIRED:
-                problems.append(f"{rel}: required fields differ from schema.REQUIRED")
     return problems
 
 

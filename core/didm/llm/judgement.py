@@ -13,6 +13,9 @@ Every scorer returns the same judgement shape, so baselines and LLMs are compare
 one footing (PREREG_V0 6, ablation order). Validation rejects instead of repairing:
 unknown fields, missing fields and out-of-range values raise ``JudgementError``.
 
+Error messages name the rule and the field, never the offending value: a scorer's output may
+quote the article, and reject reasons are stored and counted (core/didm/llm/scorer.py).
+
 Pure standard library; no network, no clock reads, no model calls.
 """
 from __future__ import annotations
@@ -25,6 +28,7 @@ from core.didm.llm.schema import (
     SchemaError,
     TargetKind,
     _enum,
+    ess_like,
     _ident,
     _prob,
 )
@@ -128,12 +132,15 @@ def validate_request(raw: Mapping[str, Any]) -> ScoreRequest:
     )
 
 
-def validate_judgement(raw: Mapping[str, Any], request: ScoreRequest | None = None) -> Judgement:
+def validate_judgement(raw: Mapping[str, Any], request: ScoreRequest) -> Judgement:
     """Return a Judgement or raise JudgementError naming the first problem.
 
-    With ``request`` the echoed ``article_id`` and target must equal the request's:
-    a judgement for another article or another entity is rejected, never re-attached.
+    ``request`` is required: the echoed ``article_id`` and target must equal the request's.
+    A judgement for another article or another entity is rejected, never re-attached, so the
+    entity in a record is always the one DIDM asked about and never one the model chose.
     """
+    if not isinstance(request, ScoreRequest):
+        raise JudgementError("validate_judgement needs the ScoreRequest the judgement answers")
     if not isinstance(raw, Mapping):
         raise JudgementError("judgement must be a mapping")
     _exact_fields(raw, JUDGEMENT_REQUIRED, "judgement")
@@ -142,11 +149,10 @@ def validate_judgement(raw: Mapping[str, Any], request: ScoreRequest | None = No
 
     article_id = _wrap(_ident, raw["article_id"], "article_id")
     kind, entity = _target(raw)
-    if request is not None:
-        if article_id != request.article_id:
-            raise JudgementError("article_id does not match the request")
-        if kind is not request.target_kind or entity != request.entity_id:
-            raise JudgementError("target does not match the request")
+    if article_id != request.article_id:
+        raise JudgementError("article_id does not match the request")
+    if kind is not request.target_kind or entity != request.entity_id:
+        raise JudgementError("target does not match the request")
 
     p_subject = _wrap(_prob, raw["p_subject"], "p_subject")
     if kind is TargetKind.NONE and p_subject != 0.0:
@@ -155,7 +161,7 @@ def validate_judgement(raw: Mapping[str, Any], request: ScoreRequest | None = No
     event_type = _wrap(_enum, EventType, raw["event_type"], "event_type")
     type_probs = _type_probs(raw["event_type_probs"])
     top = max(p for _, p in type_probs)
-    if dict(type_probs)[event_type.value] < top - SUM_TOLERANCE:
+    if dict(type_probs)[event_type.value] < top:      # exact comparison; only an exact tie leaves a choice
         raise JudgementError("event_type must be a most probable key of event_type_probs")
 
     direction = raw["direction_probs"]
@@ -164,6 +170,9 @@ def validate_judgement(raw: Mapping[str, Any], request: ScoreRequest | None = No
     direction = tuple(_wrap(_prob, p, "direction_probs") for p in direction)
     if abs(sum(direction) - 1.0) > SUM_TOLERANCE:
         raise JudgementError("direction_probs must sum to 1")
+    # The record schema allows only 1e-9 on P(+1) + P(-1); reject here so the judgement is counted
+    # as rejected instead of failing later at assembly.
+    _wrap(ess_like, direction[0], direction[1])
 
     claim = raw["claim_status"]
     if not isinstance(claim, str) or claim not in CLAIM_STATUSES:
@@ -186,7 +195,7 @@ def validate_judgement(raw: Mapping[str, Any], request: ScoreRequest | None = No
 def _exact_fields(raw: Mapping[str, Any], required: tuple[str, ...], what: str) -> None:
     extra = set(raw) - set(required)
     if extra:
-        raise JudgementError(f"unknown {what} fields: {sorted(map(str, extra))}")
+        raise JudgementError(f"unknown {what} fields")
     for name in required:
         if name not in raw:
             raise JudgementError(f"missing {what} field: {name}")
@@ -199,7 +208,12 @@ def _wrap(fn, *args):
     except JudgementError:
         raise
     except SchemaError as exc:
-        raise JudgementError(str(exc)) from None
+        message = str(exc)
+        if message.startswith("unknown "):          # schema._enum quotes the value; keep the rule only
+            message = message.split(":", 1)[0]
+        raise JudgementError(message) from None
+    except OverflowError:                           # an integer too large for a float (schema._num)
+        raise JudgementError(f"{args[-1]} must be finite") from None
 
 
 def _target(raw: Mapping[str, Any]) -> tuple[TargetKind, str | None]:
@@ -219,7 +233,7 @@ def _type_probs(value: Any) -> tuple[tuple[str, float], ...]:
         raise JudgementError("event_type_probs must be an object keyed by event type")
     extra = set(value) - set(names)
     if extra:
-        raise JudgementError(f"unknown event_type_probs keys: {sorted(map(str, extra))}")
+        raise JudgementError("unknown event_type_probs keys")
     missing = [n for n in names if n not in value]
     if missing:
         raise JudgementError(f"missing event_type_probs keys: {missing}")
