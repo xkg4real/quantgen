@@ -1097,8 +1097,9 @@ Windows CI에서 창 핸들과 아이콘을 시험하며, 사용자 PC의 Explor
   LGPL-3.0·GPL-3.0 원문을 넣고, Qt 라이브러리와 LGPL 순수 파이썬 패키지(chardet)는 교체 가능한 별도 파일로 둡니다.
   이것이 LGPL 의무를 충족하는지는 변호사 확인이 필요합니다(법률 자문이 아닙니다,
   `docs/platform/LICENSE_COMPLIANCE_PREP.md`).
-- `.github/workflows/platform-build.yml`은 수동 실행과 `v*` 태그에서만 돌고, 서명·배포·업로드를 하지 않습니다
-  (macOS는 ad-hoc 서명만). `runtime-smoke.yml`에는 새 시험 모듈과 경로만 더했습니다.
+- `.github/workflows/platform-build.yml`은 수동 실행 또는 `v*` 태그로 시작합니다. Android 빌드는 수동 입력에서 선택하며,
+  산출물은 GitHub Actions에 업로드하도록 구성되어 있습니다. 설정된 보관 기간은 7일입니다. macOS는 ad-hoc 서명을 사용합니다. 스토어 출시는 별도 절차입니다.
+  `runtime-smoke.yml`에는 새 시험 모듈과 경로만 더했습니다.
 - `mobile/pyproject.toml`과 `stage.py --profile mobile`은 Android 시험용 묶음 초안입니다. 아직 빌드·배포한 적이 없습니다.
 - 화면·계산·요청·전송·저장 동작은 바뀌지 않았습니다. 01–20의 미확정 사업자·개인정보·권리·요금·환불·접근성 조건과
   공개 보류(publication BLOCKED)를 유지합니다.
