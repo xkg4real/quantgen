@@ -150,6 +150,36 @@ class GuideLessonContracts(unittest.TestCase):
         self.assertIsNone(L.crossing((-1,0,-1),(0,0,0)))
         self.assertEqual(L.crossing((-1,1),(0,0)),1)
 
+    def test_korean_lesson_text_has_no_bong_and_one_polite_register(self):
+        """Owner R-D9-2: '봉' appears in no Korean text; lesson lines read in 해요체."""
+        import ast
+        import re
+        L=self.lesson
+        register=re.compile(r"(수 있음|아님|없었음|높음|낮음)(\s*[.)]|\s·|$)")
+        for key,lines in L.LESSONS.items():
+            for ko,_ in lines:
+                with self.subTest(key=key,line=ko):
+                    self.assertNotIn('봉',ko)
+                    self.assertFalse(register.search(ko))
+                    self.assertTrue(ko.endswith('요.'),ko)
+            for step in (0,1,2):
+                with self.subTest(key=key,step=step):
+                    svg,info=L.lesson_svg(key,step,'ko',width=420)
+                    texts=[n.text or '' for n in ET.fromstring(svg).iter('{http://www.w3.org/2000/svg}text')]
+                    texts+=[a['label'] for a in info['anchors']]+[info['axis_unit']]
+                    self.assertFalse([t for t in texts if '봉' in t],texts)
+                    self.assertFalse([t for t in texts if register.search(t)],texts)
+        # The widget's badge, legend, caption and note strings live in the same module.
+        tree=ast.parse(Path(L.__file__).read_text(encoding='utf-8'))
+        literals=[n.value for n in ast.walk(tree) if isinstance(n,ast.Constant) and isinstance(n.value,str)]
+        self.assertFalse([s for s in literals if '봉' in s])
+        self.assertEqual(L.slot_name(179,'1d','ko'),'180일째')
+        self.assertEqual(L.slot_name(0,'5m','ko'),'1번째 5분')
+        self.assertEqual(L.slot_name(0,'1d','en'),'bar 1')
+        self.assertEqual(L.number(339.25,'quantity'),'339')
+        self.assertEqual(L.number(-1107.48,'quantity'),'−1,107')
+        self.assertEqual(L.number(70,'index'),'70.00')
+
     def test_teaching_only_interface_and_primary_ema_line_roles(self):
         L=self.lesson
         _,info=L.lesson_svg('ema',0,'ko',width=350)

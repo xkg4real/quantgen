@@ -25,87 +25,87 @@ from core.theme import LIGHT, DARK
 # instruction to trade. Registry keys, parameters and calculation categories stay
 # in their original modules.
 LESSONS = {
-    'sma': (('최근 20봉 종가를 같은 비중으로 평균낸 선', 'An equal-weight mean of the last 20 closes'),
-            ('가격과 평균선의 거리를 보세요.', 'Compare the price with its average.'),
-            ('평균은 늦게 반응해요. 횡보하면 위아래로 자주 오갈 수 있어요.', 'An average lags. Sideways prices can cross it repeatedly.')),
-    'ema': (('최근 종가에 더 큰 비중을 주는 가중평균', 'A moving average that weights recent closes more'),
-            ('12봉 설정은 빠르게, 26봉 설정은 천천히 반응해요.', 'The 12-bar setting reacts faster than the 26-bar setting.'),
-            ('12봉 EMA는 최근 12개만의 단순평균이 아니에요. 교차가 추세 지속을 보장하지 않아요.', 'EMA 12 is not a simple mean of only the last 12 closes. A crossing does not guarantee a continuing trend.')),
-    'macd': (('빠른 EMA12에서 느린 EMA26을 뺀 값', 'EMA 12 minus EMA 26'),
-             ('MACD와 신호선의 위치, 막대의 부호를 비교해요.', 'Compare MACD with its signal line and the sign of the bars.'),
+    'sma': (('최근 20일 종가를 똑같은 비중으로 평균낸 선이에요.', 'An equal-weight mean of the last 20 closes'),
+            ('가격과 평균선 사이의 거리를 보세요.', 'Compare the price with its average.'),
+            ('평균이라 가격보다 늦게 움직여요. 옆으로 오갈 때는 선을 자주 넘나들 수 있어요.', 'An average lags. Sideways prices can cross it repeatedly.')),
+    'ema': (('최근 종가에 더 큰 비중을 두는 평균선이에요.', 'A moving average that weights recent closes more'),
+            ('12일 설정은 빠르게, 26일 설정은 천천히 따라와요.', 'The 12-bar setting reacts faster than the 26-bar setting.'),
+            ('EMA 12는 최근 12일만의 평균이 아니에요. 교차해도 흐름이 이어진다는 보장은 없어요.', 'EMA 12 is not a simple mean of only the last 12 closes. A crossing does not guarantee a continuing trend.')),
+    'macd': (('빠른 평균(EMA 12)에서 느린 평균(EMA 26)을 뺀 값이에요.', 'EMA 12 minus EMA 26'),
+             ('MACD선이 신호선보다 위인지, 막대가 0 위인지 보세요.', 'Compare MACD with its signal line and the sign of the bars.'),
              ('막대는 두 선의 차이예요. 가격 변화율이나 수익률이 아니에요.', 'A bar is the gap between the lines, not a price return.')),
-    'ichimoku': (('가격 범위의 중간값과 앞뒤로 옮긴 선', 'Price-range midpoints and shifted lines'),
-                ('전환 9·기준 26·범위 52봉. 이동은 현재 봉을 첫째로 센 26번째, 즉 25칸이에요.', 'The ranges are 9/26/52 bars. Shifts reach the 26th bar counting the current bar first: 25 spaces.'),
-                ('선행스팬은 계산한 값을 옮겨 그린 선이지 미래를 관측한 값이 아니에요.', 'A leading span is a shifted calculation, not an observation of the future.')),
-    'psar': (('가격 위아래에 놓이는 SAR 점', 'SAR dots above or below the price'),
-             ('점이 가격의 어느 쪽에 있는지 보세요.', 'See which side of the price contains the dots.'),
-             ('횡보에서는 점의 위치가 자주 바뀔 수 있어요.', 'Dots can switch sides repeatedly in a sideways market.')),
-    'adx': (('ADX는 강도, +DI·−DI는 방향 성분', 'ADX measures strength; +DI and −DI are directional components'),
-            ('ADX와 두 DI를 서로 구분해서 읽어요.', 'Read ADX separately from the two DI lines.'),
-            ('ADX가 높다는 말만으로 가격 상승을 뜻하지 않아요.', 'A high ADX alone does not mean that prices are rising.')),
-    'envelope': (('20봉 평균에서 위아래 5% 떨어진 선', 'Lines 5% above and below the 20-bar mean'),
-                 ('가격이 고정 비율의 띠 어디에 놓이는지 보세요.', 'Locate the price inside or outside the fixed-percentage band.'),
-                 ('띠 밖으로 나갔다고 반드시 평균으로 돌아오지는 않아요.', 'Moving outside the band does not guarantee a return to its mean.')),
-    'keltner': (('EMA20 중심에 ATR10의 2배 폭을 더한 채널', 'EMA 20 with a width of twice ATR 10'),
-                ('중심선과 변동폭으로 만든 위·아래 선을 구분해요.', 'Separate the centre line from the volatility-based edges.'),
-                ('변동폭이 커지면 채널도 넓어져요. 경계는 확정된 가격 한계가 아니에요.', 'The channel widens with volatility. Its edges are not guaranteed price limits.')),
-    'donchian': (('최근 20봉 최고·최저와 그 중간', 'The high, low and midpoint of the last 20 bars'),
-                ('가격과 최근 범위의 경계를 비교해요.', 'Compare the price with the edges of its recent range.'),
-                ('새 고가·저가가 나오면 경계도 바뀌어요.', 'The edges change when new highs or lows appear.')),
-    'rsi': (('14봉 상승·하락폭을 비교한 0~100 지수', 'A 0–100 index comparing gains and losses over 14 bars'),
-            ('30·70 기준선과 현재 선의 위치를 비교해요.', 'Compare the line with the 30 and 70 reference levels.'),
-            ('70 위·30 아래에 오래 머물 수 있어요. 반전을 확정하지 않아요.', 'It can stay above 70 or below 30. Neither position confirms a reversal.')),
-    'stoch': (('최근 14봉 고저 범위에서 종가의 위치', 'The close within the last 14 bars’ high–low range'),
-              ('%K와 이를 평활한 %D, 20·80 기준을 비교해요.', 'Compare %K, its smoothed %D and the 20/80 levels.'),
-              ('높은 값은 범위 위쪽이라는 뜻이지 곧 하락한다는 뜻이 아니에요.', 'A high value means near the top of the range, not an imminent price fall.')),
-    'stochrsi': (('가격이 아니라 RSI 범위 안의 위치', 'The position of RSI within its own range'),
-                 ('RSI14에 다시 14봉 범위와 3·3 평활을 적용해요.', 'RSI 14 is measured over a 14-bar range, then smoothed 3/3.'),
-                 ('RSI 자체보다 민감해요. 짧은 움직임에도 교차가 잦을 수 있어요.', 'It is more sensitive than RSI itself and can cross often.')),
-    'cci': (('가격이 평소 평균에서 얼마나 멀어졌는지', 'How far the price is from its usual average'),
-            ('0·±100을 기준으로 위치를 보세요.', 'Compare the line with 0 and ±100.'),
-            ('0~100으로 제한되지 않아요. ±100 밖에서도 계속 움직일 수 있어요.', 'It is not bounded by 0–100 and can continue beyond ±100.')),
-    'williams': (('14봉 범위에서 종가가 놓인 −100~0 위치', 'The close in a 14-bar range, scaled from −100 to 0'),
+    'ichimoku': (('가격 범위의 가운데 값과, 그 값을 앞뒤로 옮겨 그린 선들이에요.', 'Price-range midpoints and shifted lines'),
+                ('기간은 9·26·52일이에요. 오늘을 첫째로 세어 26번째, 곧 25칸 옮겨 그려요.', 'The ranges are 9/26/52 bars. Shifts reach the 26th bar counting the current bar first: 25 spaces.'),
+                ('앞쪽에 그린 선행스팬은 계산값을 옮긴 것이지 미래를 본 값이 아니에요.', 'A leading span is a shifted calculation, not an observation of the future.')),
+    'psar': (('가격 위나 아래에 찍히는 점(SAR)이에요.', 'SAR dots above or below the price'),
+             ('점이 가격의 위쪽에 있는지 아래쪽에 있는지 보세요.', 'See which side of the price contains the dots.'),
+             ('옆으로 오갈 때는 점이 위아래로 자주 바뀔 수 있어요.', 'Dots can switch sides repeatedly in a sideways market.')),
+    'adx': (('ADX는 움직임의 세기, +DI·−DI는 오르는 힘과 내리는 힘이에요.', 'ADX measures strength; +DI and −DI are directional components'),
+            ('ADX와 두 DI 선을 따로 읽어요.', 'Read ADX separately from the two DI lines.'),
+            ('ADX가 높다는 것만으로 가격이 오른다는 뜻은 아니에요.', 'A high ADX alone does not mean that prices are rising.')),
+    'envelope': (('20일 평균에서 위아래로 5%씩 떨어뜨린 선이에요.', 'Lines 5% above and below the 20-bar mean'),
+                 ('가격이 띠 안에 있는지, 밖에 있는지 보세요.', 'Locate the price inside or outside the fixed-percentage band.'),
+                 ('띠 밖으로 나가도 꼭 평균으로 돌아오지는 않아요.', 'Moving outside the band does not guarantee a return to its mean.')),
+    'keltner': (('EMA 20을 가운데 두고 평균 변동폭(ATR 10)의 2배만큼 벌린 통로예요.', 'EMA 20 with a width of twice ATR 10'),
+                ('가운데 선과 위·아래 경계를 나눠서 보세요.', 'Separate the centre line from the volatility-based edges.'),
+                ('움직임이 커지면 통로도 넓어져요. 경계는 정해진 가격 한계가 아니에요.', 'The channel widens with volatility. Its edges are not guaranteed price limits.')),
+    'donchian': (('최근 20일의 최고가·최저가와 그 가운데를 이은 선이에요.', 'The high, low and midpoint of the last 20 bars'),
+                ('가격이 최근 범위의 위·아래 끝에 얼마나 가까운지 보세요.', 'Compare the price with the edges of its recent range.'),
+                ('새 최고가나 최저가가 나오면 경계도 함께 바뀌어요.', 'The edges change when new highs or lows appear.')),
+    'rsi': (('최근 14일 동안 오른 폭과 내린 폭을 비교해 0~100으로 나타낸 값이에요.', 'A 0–100 index comparing gains and losses over 14 bars'),
+            ('선이 30·70 기준선에 대해 어디에 있는지 보세요.', 'Compare the line with the 30 and 70 reference levels.'),
+            ('70 위나 30 아래에 오래 머물 수 있어요. 그것만으로 방향이 바뀐다고 볼 수 없어요.', 'It can stay above 70 or below 30. Neither position confirms a reversal.')),
+    'stoch': (('최근 14일 최고가·최저가 사이에서 종가가 어느 높이에 있는지 나타내요.', 'The close within the last 14 bars’ high–low range'),
+              ('%K와 이를 부드럽게 한 %D를 20·80 기준선과 함께 보세요.', 'Compare %K, its smoothed %D and the 20/80 levels.'),
+              ('값이 높으면 범위 위쪽이라는 뜻이지, 곧 내린다는 뜻은 아니에요.', 'A high value means near the top of the range, not an imminent price fall.')),
+    'stochrsi': (('가격이 아니라 RSI가 자기 범위 안에서 어디쯤인지 나타내요.', 'The position of RSI within its own range'),
+                 ('RSI 14에 다시 14일 범위를 적용하고 3·3으로 부드럽게 해요.', 'RSI 14 is measured over a 14-bar range, then smoothed 3/3.'),
+                 ('RSI보다 민감해요. 작은 움직임에도 교차가 잦을 수 있어요.', 'It is more sensitive than RSI itself and can cross often.')),
+    'cci': (('가격이 평소 평균에서 얼마나 멀어졌는지 나타내요.', 'How far the price is from its usual average'),
+            ('0과 ±100 기준선에 대해 선의 위치를 보세요.', 'Compare the line with 0 and ±100.'),
+            ('0~100 안에 갇힌 값이 아니에요. ±100 밖에서도 계속 움직일 수 있어요.', 'It is not bounded by 0–100 and can continue beyond ±100.')),
+    'williams': (('최근 14일 범위에서 종가가 어디에 있는지 −100~0으로 나타내요.', 'The close in a 14-bar range, scaled from −100 to 0'),
                  ('−20에 가까우면 범위 위쪽, −80에 가까우면 아래쪽이에요.', 'Near −20 is toward the range top; near −80 is toward its bottom.'),
-                 ('음수 축이에요. −20이 −80보다 위라는 점을 확인해요.', 'The scale is negative: −20 is above −80.')),
-    'roc': (('12봉 전 종가 대비 현재 종가의 변화율', 'The percentage change from the close 12 bars earlier'),
-            ('0% 위·아래와 변화의 크기를 함께 봐요.', 'Read both the sign around 0% and the size of the change.'),
-            ('0~100 지수가 아니에요. 과거 변화율이 다음 수익률은 아니에요.', 'This is not a 0–100 index or a forecast of the next return.')),
-    'disparity': (('평균 가격을 100으로 놓고 현재 위치를 비교', 'The current price with its average set to 100'),
+                 ('음수 눈금이에요. −20이 −80보다 위쪽이에요.', 'The scale is negative: −20 is above −80.')),
+    'roc': (('12일 전 종가와 비교해 지금 종가가 몇 % 변했는지 나타내요.', 'The percentage change from the close 12 bars earlier'),
+            ('0% 위인지 아래인지와 변화 크기를 함께 보세요.', 'Read both the sign around 0% and the size of the change.'),
+            ('0~100 지수가 아니에요. 지난 변화율이 다음 수익률은 아니에요.', 'This is not a 0–100 index or a forecast of the next return.')),
+    'disparity': (('평균 가격을 100으로 놓고 지금 가격이 어디쯤인지 나타내요.', 'The current price with its average set to 100'),
                   ('100이면 평균과 같고, 105면 평균보다 5% 높아요.', '100 equals the mean; 105 is 5% above it.'),
-                  ('높거나 낮아도 괴리가 더 커질 수 있어요.', 'The distance can keep growing even at a high or low value.')),
-    'psychology': (('최근 10봉 중 상승한 봉의 비율', 'The share of rising bars among the last 10 bars'),
-                   ('얼마나 크게 올랐는지가 아니라 상승 횟수를 세요.', 'It counts rising bars, not the size of their gains.'),
-                   ('같은 값이어도 실제 가격 변화폭은 다를 수 있어요.', 'Equal values can accompany very different price changes.')),
-    'bb': (('20봉 평균에서 표준편차 2배 떨어진 밴드', 'Bands two standard deviations from the 20-bar mean'),
-           ('가격의 위치와 밴드 사이 폭을 함께 봐요.', 'Compare the price position and the distance between the bands.'),
-           ('밴드는 미래 가격의 95% 보장 구간이 아니에요.', 'The bands do not guarantee a 95% range for future prices.')),
-    'atr': (('갭까지 포함한 14봉 평균 변동폭', 'The 14-bar average true range, including gaps'),
-            ('가격과 같은 단위로 움직임의 폭을 읽어요.', 'Read the movement range in the same units as the price.'),
-            ('ATR 상승은 변동폭 증가예요. 상승 방향을 뜻하지 않아요.', 'A rising ATR means a wider range, not a rising price direction.')),
-    'percent_b': (('위·아래 밴드 사이에서 현재 가격이 놓인 위치', 'Where the current price sits between the two bands'),
-                  ('종가가 두 볼린저 밴드 사이 어디인지 비율로 읽어요.', 'Locate the close between the Bollinger bands as a ratio.'),
-                  ('밴드 밖에서는 0 미만·1 초과도 가능해요.', 'Outside the bands, values can be below 0 or above 1.')),
-    'bandwidth': (('가격을 감싼 밴드가 얼마나 좁고 넓은지', 'How narrow or wide the bands around the price are'),
-                  ('폭이 좁아지고 넓어지는 정도를 %로 비교해요.', 'Compare narrowing and widening as a percentage.'),
+                  ('이미 높거나 낮아도 차이가 더 벌어질 수 있어요.', 'The distance can keep growing even at a high or low value.')),
+    'psychology': (('최근 10일 가운데 오른 날의 비율이에요.', 'The share of rising bars among the last 10 bars'),
+                   ('오른 폭이 아니라 오른 날의 수만 세는 값이에요.', 'It counts rising bars, not the size of their gains.'),
+                   ('값이 같아도 실제 가격 변화 폭은 다를 수 있어요.', 'Equal values can accompany very different price changes.')),
+    'bb': (('20일 평균에서 평소 흔들림 크기(표준편차)의 2배만큼 위아래로 벌린 띠예요.', 'Bands two standard deviations from the 20-bar mean'),
+           ('가격이 띠의 어디에 있는지와 띠의 폭을 함께 보세요.', 'Compare the price position and the distance between the bands.'),
+           ('띠가 앞으로의 가격 범위를 95% 보장하지는 않아요.', 'The bands do not guarantee a 95% range for future prices.')),
+    'atr': (('전날 종가와 벌어진 틈(갭)까지 넣은 14일 평균 변동폭이에요.', 'The 14-bar average true range, including gaps'),
+            ('가격과 같은 단위로 하루에 움직이는 폭을 읽어요.', 'Read the movement range in the same units as the price.'),
+            ('ATR이 오르면 움직임이 커진 것이지, 가격이 오른다는 뜻은 아니에요.', 'A rising ATR means a wider range, not a rising price direction.')),
+    'percent_b': (('위·아래 볼린저 밴드 사이에서 지금 가격이 어디쯤인지 나타내요.', 'Where the current price sits between the two bands'),
+                  ('0이면 아래 밴드, 1이면 위 밴드, 0.5면 가운데예요.', 'Locate the close between the Bollinger bands as a ratio.'),
+                  ('밴드 밖에서는 0보다 작거나 1보다 클 수 있어요.', 'Outside the bands, values can be below 0 or above 1.')),
+    'bandwidth': (('가격을 감싼 밴드가 얼마나 좁고 넓은지 나타내요.', 'How narrow or wide the bands around the price are'),
+                  ('폭이 좁아지는지 넓어지는지 %로 비교해요.', 'Compare narrowing and widening as a percentage.'),
                   ('폭이 좁다고 다음 움직임의 방향을 알 수는 없어요.', 'A narrow width does not reveal the direction of the next move.')),
-    'volume_ma': (('최근 20봉 거래량의 평균', 'The mean volume of the last 20 bars'),
-                  ('거래량 막대와 평균선을 비교해요.', 'Compare each volume bar with the mean line.'),
-                  ('거래량 증가만으로 매수·매도 방향을 알 수는 없어요.', 'More volume alone does not identify a buying or selling direction.')),
-    'obv': (('상승 봉 거래량을 더하고 하락 봉 거래량을 뺀 누계', 'Volume added on rising closes and subtracted on falling closes'),
-            ('시작점 이후 누적 방향을 읽어요. 금액이 아니라 수량이에요.', 'Read the cumulative direction since the start, in quantity rather than money.'),
-            ('투자 주체의 실제 자금 유입·유출을 측정한 값이 아니에요.', 'It does not measure actual cash flowing in or out by investor group.')),
-    'mfi': (('가격·거래량으로 만든 14봉 0~100 지수', 'A 14-bar 0–100 index using price and volume'),
-            ('20·80 기준과 선의 위치를 비교해요.', 'Compare the line with the 20 and 80 levels.'),
-            ('이름과 달리 기관·외국인의 실제 자금을 뜻하지 않아요.', 'Despite its name, it does not measure actual institutional or foreign funds.')),
-    'vwap': (('세션 시작부터 거래량 비중으로 평균낸 가격', 'A volume-weighted mean price since the session began'),
-             ('거래가 많은 봉이 평균에 더 큰 영향을 줘요.', 'Bars with more volume affect the mean more.'),
-             ('5분봉 학습 예시예요. 새 세션에서 초기화하며 일봉 VWAP는 그리지 않아요.', 'This is a five-minute lesson. VWAP restarts each session and is not drawn on daily bars.')),
-    'investor_flow': (('외국인·기관·개인의 일별 순매수 수량 누계', 'Cumulative daily net-buy quantities by investor group'),
-                      ('0 기준 위·아래와 세 선의 차이를 비교해요.', 'Compare the three lines and their positions around zero.'),
-                      ('가상 국내 일봉 수급이에요. 수량이지 금액이 아니며 해외·분봉에 대입하지 않아요.', 'These are invented domestic daily flows, in shares rather than money; not overseas or intraday data.')),
-    'short_ratio': (('그날 거래량 중 공매도 거래 수량의 비중', 'The short-sale share of that day’s traded volume'),
-                    ('각 일봉의 거래 비중을 %로 읽어요.', 'Read the percentage of traded volume for each daily bar.'),
-                    ('가상 국내 일봉 예시예요. 미청산 공매도 잔고 비율과 달라요.', 'This invented domestic daily example is not the outstanding short-position ratio.')),
+    'volume_ma': (('최근 20일 거래량의 평균이에요.', 'The mean volume of the last 20 bars'),
+                  ('그날 거래량 막대가 평균선보다 높은지 낮은지 보세요.', 'Compare each volume bar with the mean line.'),
+                  ('거래량이 늘었다는 것만으로 사는 쪽인지 파는 쪽인지 알 수 없어요.', 'More volume alone does not identify a buying or selling direction.')),
+    'obv': (('오른 날의 거래량은 더하고 내린 날의 거래량은 빼서 쌓은 값이에요.', 'Volume added on rising closes and subtracted on falling closes'),
+            ('쌓인 값이 오르는지 내리는지 보세요. 금액이 아니라 주식 수예요.', 'Read the cumulative direction since the start, in quantity rather than money.'),
+            ('투자자들이 실제로 넣거나 뺀 돈을 잰 값이 아니에요.', 'It does not measure actual cash flowing in or out by investor group.')),
+    'mfi': (('가격과 거래량으로 만든 14일 기준 0~100 지수예요.', 'A 14-bar 0–100 index using price and volume'),
+            ('선이 20·80 기준선에 대해 어디에 있는지 보세요.', 'Compare the line with the 20 and 80 levels.'),
+            ('이름과 달리 기관·외국인의 실제 자금 흐름을 뜻하지 않아요.', 'Despite its name, it does not measure actual institutional or foreign funds.')),
+    'vwap': (('장이 열린 뒤부터 거래가 많은 가격에 더 무게를 둬 평균낸 가격이에요.', 'A volume-weighted mean price since the session began'),
+             ('거래가 많았던 5분 구간일수록 평균에 더 큰 영향을 줘요.', 'Bars with more volume affect the mean more.'),
+             ('5분 간격 학습 예시예요. 날마다 새로 계산하며 일별 차트에는 그리지 않아요.', 'This is a five-minute lesson. VWAP restarts each session and is not drawn on daily bars.')),
+    'investor_flow': (('외국인·기관·개인이 날마다 순매수한 수량을 쌓아 올린 값이에요.', 'Cumulative daily net-buy quantities by investor group'),
+                      ('0 위인지 아래인지, 세 선이 서로 얼마나 벌어지는지 보세요.', 'Compare the three lines and their positions around zero.'),
+                      ('가상 국내 일별 수급이에요. 금액이 아닌 주식 수이며 해외·분 단위 자료에는 쓰지 않아요.', 'These are invented domestic daily flows, in shares rather than money; not overseas or intraday data.')),
+    'short_ratio': (('그날 거래량 가운데 공매도로 거래된 수량의 비중이에요.', 'The short-sale share of that day’s traded volume'),
+                    ('하루하루의 공매도 거래 비중을 %로 읽어요.', 'Read the percentage of traded volume for each daily bar.'),
+                    ('가상 국내 일별 예시예요. 아직 갚지 않은 공매도 잔고 비율과는 달라요.', 'This invented domestic daily example is not the outstanding short-position ratio.')),
 }
 
 
@@ -147,7 +147,9 @@ def lesson_values(key):
 def number(value,kind):
     if not math.isfinite(float(value)):return '—'
     suffix='%' if kind=='percent' else ''
-    return f'{float(value):,.2f}{suffix}'.replace('-','−')
+    # Share counts read as whole shares; "339.25주" looked like a fractional holding.
+    digits=0 if kind=='quantity' else 2
+    return f'{float(value):,.{digits}f}{suffix}'.replace('-','−')
 
 
 @dataclass(frozen=True)
@@ -177,16 +179,22 @@ def crossing(values,other):
     return None
 
 
+def slot_name(index,interval,language):
+    """One-based position on the lesson's x axis, in plain day/five-minute wording (owner R-D9-2)."""
+    if language!='ko':return f'bar {index+1}'
+    return f'{index+1}번째 5분' if interval!='1d' else f'{index+1}일째'
+
+
 def line_role(key,line,language):
     roles={
-        ('ema','EMA12'):('최근 가격에 더 빨리 반응하는 선 · 12봉 설정','Reacts faster to recent prices · 12-bar setting'),
-        ('ema','EMA26'):('큰 흐름을 천천히 따라가는 선 · 26봉 설정','Follows the broader movement more slowly · 26-bar setting'),
-        ('sma','SMA20'):('가격을 같은 비중으로 고르게 평균낸 선 · 20봉','An equal-weight average of prices · 20 bars'),
+        ('ema','EMA12'):('최근 가격에 더 빨리 반응하는 선 · 12일 설정','Reacts faster to recent prices · 12-bar setting'),
+        ('ema','EMA26'):('큰 흐름을 천천히 따라가는 선 · 26일 설정','Follows the broader movement more slowly · 26-bar setting'),
+        ('sma','SMA20'):('가격을 같은 비중으로 고르게 평균낸 선 · 20일','An equal-weight average of prices · 20 bars'),
         ('macd','MACD'):('빠른 가격 흐름과 느린 흐름 사이의 거리','The gap between faster and slower price movements'),
         ('macd','SIGNAL'):('그 거리를 더 부드럽게 이은 비교선','A smoother comparison line for that gap'),
         ('macd','HISTOGRAM'):('두 선 사이가 얼마나 벌어졌는지 보여 주는 막대','Bars showing the gap between those two lines'),
-        ('ichimoku','TENKAN'):('짧은 가격 범위의 가운데 · 9봉','The midpoint of a shorter price range · 9 bars'),
-        ('ichimoku','KIJUN'):('더 긴 가격 범위의 가운데 · 26봉','The midpoint of a longer price range · 26 bars'),
+        ('ichimoku','TENKAN'):('짧은 가격 범위의 가운데 · 9일','The midpoint of a shorter price range · 9 bars'),
+        ('ichimoku','KIJUN'):('더 긴 가격 범위의 가운데 · 26일','The midpoint of a longer price range · 26 bars'),
         ('ichimoku','SPAN_A'):('두 가운데 선을 합쳐 앞쪽으로 옮긴 선','The two midpoints averaged and shifted forward'),
         ('ichimoku','SPAN_B'):('더 넓은 가격 범위의 가운데를 앞쪽으로 이동','A wider range midpoint shifted forward'),
         ('ichimoku','CHIKOU'):('현재 종가를 뒤쪽으로 옮겨 놓은 선','The current close shifted backward'),
@@ -194,14 +202,14 @@ def line_role(key,line,language):
         ('adx','PDI'):('위쪽으로 움직인 가격의 성분','The component of upward price movement'),
         ('adx','MDI'):('아래쪽으로 움직인 가격의 성분','The component of downward price movement'),
         ('envelope','ENV_UPPER'):('평균 가격보다 5% 위인 선','The line 5% above the mean price'),
-        ('envelope','ENV_MIDDLE'):('가격 흐름의 가운데 · 20봉 평균','The centre of the price movement · 20-bar mean'),
+        ('envelope','ENV_MIDDLE'):('가격 흐름의 가운데 · 20일 평균','The centre of the price movement · 20-bar mean'),
         ('envelope','ENV_LOWER'):('평균 가격보다 5% 아래인 선','The line 5% below the mean price'),
         ('keltner','KC_UPPER'):('가격의 흔들림을 반영한 위쪽 경계','An upper edge that reflects the price range'),
         ('keltner','KC_MIDDLE'):('최근 가격에 더 무게를 둔 가운데 선','The centre line weighted toward recent prices'),
         ('keltner','KC_LOWER'):('가격의 흔들림을 반영한 아래쪽 경계','A lower edge that reflects the price range'),
-        ('donchian','DC_UPPER'):('최근 20봉에서 가장 높았던 가격','The highest price over the last 20 bars'),
+        ('donchian','DC_UPPER'):('최근 20일 동안 가장 높았던 가격','The highest price over the last 20 bars'),
         ('donchian','DC_MIDDLE'):('최고 가격과 최저 가격 사이의 가운데','The midpoint between the highest and lowest prices'),
-        ('donchian','DC_LOWER'):('최근 20봉에서 가장 낮았던 가격','The lowest price over the last 20 bars'),
+        ('donchian','DC_LOWER'):('최근 20일 동안 가장 낮았던 가격','The lowest price over the last 20 bars'),
         ('stoch','STOCH_K'):('최근 가격 범위 중 어느 높이에 왔는지','Where the close sits within its recent range'),
         ('stoch','STOCH_D'):('그 높이를 부드럽게 이은 비교선','A smoother line for comparing that position'),
         ('stochrsi','STOCHRSI_K'):('가격이 아닌 RSI 자체 범위 안에서의 위치','The position in RSI’s range, rather than the price range'),
@@ -266,13 +274,13 @@ def lesson_svg(key,step,language,*,width=700,dark=False,font_family='QG Interfac
     for pos,line in enumerate(selected):
         arr=values[line.id];index=event if event is not None else last_finite(arr)
         if index is None:continue
-        value=float(arr[index]);bar_name=f'{index+1}봉' if language=='ko' else f'bar {index+1}'
+        value=float(arr[index]);bar_name=slot_name(index,bars.interval,language)
         label=line_role(key,line,language) if step==0 else line.name(language)+' · '+number(value,line.kind)+' · '+bar_name
         if step==0 and not label.startswith(('①','②','③')):label=f'{pos+1} '+label
         if step==2:
-            label=words(('이 봉 전후 위치가 바뀜','Positions switch across this bar'),language) if event is not None else (
-                words(('교차 표시 없음','No crossing is marked'),language) if key in eligible else
-                words(('현재 예시의 선 위 값','A value on the example line'),language))
+            label=words(('여기서 두 값의 위아래가 바뀌어요','Positions switch across this bar'),language) if event is not None else (
+                words(('표시할 교차가 없어요','No crossing is marked'),language) if key in eligible else
+                words(('예시 선 위의 값이에요','A value on the example line'),language))
             if comparison_name is not None:label+=' · '+line.name(language)+' / '+comparison_name
         anchors.append({'line':line.id,'index':index,'value':value,'color':palette[line.id],
                         'label':label,'number':pos+1,'text_rows':_wrap(label,width-56,measure)})
@@ -309,10 +317,11 @@ def lesson_svg(key,step,language,*,width=700,dark=False,font_family='QG Interfac
         value=plot.high-(plot.high-plot.low)*frac;y=plot.top+plot.height*frac
         svg.append(f'<path d="M {plot.left} {y:.3f} H {plot.left+plot.width}" stroke="{rule}"/>')
         svg.append(f'<text x="{plot.left+plot.width+8}" y="{y+4:.3f}" fill="{muted}" font-size="12">{escape(number(value,line_specs[0].kind))}</text>')
+    reference_labels=[]
     for level in reference:
         _,y=plot.point(0,level)
         svg.append(f'<path d="M {plot.left} {y:.3f} H {plot.left+plot.width}" stroke="{muted}" stroke-dasharray="3 5" opacity=".6"/>')
-        svg.append(f'<text x="{plot.left+4}" y="{y-5:.3f}" fill="{muted}" font-size="12">{escape(number(level,line_specs[0].kind))}</text>')
+        reference_labels.append((y,number(level,line_specs[0].kind)))
     paths={}
     def draw_series(name,arr,color,style='solid',stroke_width=2):
         points=[];segments=[];segment=[]
@@ -336,6 +345,12 @@ def lesson_svg(key,step,language,*,width=700,dark=False,font_family='QG Interfac
     if spec.panel=='price':draw_series('CLOSE',bars.close,muted,stroke_width=1)
     if spec.panel=='volume':draw_series('VOLUME',bars.volume,rule,'bars')
     for line in line_specs:draw_series(line.id,values[line.id],palette[line.id],line.style)
+    # Reference values sit above the lines on a small background, so a line
+    # crossing the left edge no longer runs through "0.00" or "70.00".
+    for y,text in reference_labels:
+        box_w=measure(text)+8
+        svg.append(f'<rect x="{plot.left+1}" y="{y-19:.3f}" width="{box_w:.1f}" height="16" rx="3" fill="{bg}" opacity=".9"/>')
+        svg.append(f'<text x="{plot.left+5}" y="{y-6:.3f}" fill="{muted}" font-size="12">{escape(text)}</text>')
     for anchor in anchors:
         x,y=plot.point(anchor['index'],anchor['value']);anchor['point']=(x,y)
         bx,by,bw,bh=anchor['label_box'];color=anchor['color']
@@ -344,8 +359,8 @@ def lesson_svg(key,step,language,*,width=700,dark=False,font_family='QG Interfac
         svg.append(f'<rect x="{bx}" y="{by}" width="{bw}" height="{bh}" rx="6" fill="{bg}" stroke="{color}"/>')
         for row,text in enumerate(anchor['text_rows']):
             svg.append(f'<text x="{bx+12}" y="{by+23+row*18}" fill="{color}">{escape(text)}</text>')
-    first=words(('오래된 봉','Earlier bars'),language) if step==0 else words(('1봉','Bar 1'),language)
-    last=words(('최근 봉','Recent bars'),language) if step==0 else words((f'{len(bars)}봉',f'Bar {len(bars)}'),language)
+    first=words(('← 과거','Earlier bars'),language) if step==0 else (slot_name(0,bars.interval,language) if language=='ko' else 'Bar 1')
+    last=words(('최근 →','Recent bars'),language) if step==0 else (slot_name(len(bars)-1,bars.interval,language) if language=='ko' else f'Bar {len(bars)}')
     svg.append(f'<text x="{plot.left}" y="{top+plot_height+25}" fill="{muted}" font-size="12">{first}</text>')
     svg.append(f'<text x="{plot.left+plot.width}" y="{top+plot_height+25}" fill="{muted}" text-anchor="end" font-size="12">{last}</text>')
     svg.append('</g></svg>')
@@ -429,7 +444,7 @@ class GuideLesson(QWidget):
         ko=self.language=='ko';key=self.key
         self.title.setText(('선 위에서 배우기 · '+study(key).name(self.language) if key else '선 위에서 배우기') if ko else
                            ('Learn on the lines · '+study(key).name(self.language) if key else 'Learn on the lines'))
-        self.badge.setText(('가상 5분봉 학습 그림 · 세션별 초기화' if key=='vwap' else '가상 일봉 학습 그림 · 1칸 = 1거래일') if ko else
+        self.badge.setText(('가상 학습 그림 · 한 칸 = 5분 · 날마다 새로 계산해요' if key=='vwap' else '가상 학습 그림 · 한 칸 = 하루(거래일)') if ko else
                            ('Invented 5-minute lesson · resets each session' if key=='vwap' else 'Invented daily-bar lesson · one bar = one trading day'))
         for candidate,button in self.start_buttons:button.setText(('시작: ' if ko else 'Start: ')+study(candidate).label(self.language))
         self.starter.setVisible(not key)
@@ -452,8 +467,10 @@ class GuideLesson(QWidget):
         for i,line in enumerate(spec.lines):
             index=last_finite(values[line.id]);value=number(values[line.id][index],line.kind) if index is not None else '—'
             style={'solid':('실선','solid'),'dash':('점선','dashed'),'dots':('점','dots'),'bars':('막대','bars')}[line.style][0 if ko else 1]
-            bar_name=(f'{index+1}봉' if ko else f'bar {index+1}') if index is not None else '—'
-            compact=f'{i+1} {line.name(self.language)} · {style}'
+            bar_name=slot_name(index,bars.interval,self.language) if index is not None else '—'
+            # "막대 · 막대" said the same thing twice; a bar series named for its style needs no style word.
+            name=line.name(self.language)
+            compact=f'{i+1} {name}' if name.lower()==style.lower() else f'{i+1} {name} · {style}'
             detail=f'{compact} · {value} ({bar_name})'
             visible=detail if self.step==1 else compact
             legend.append(f'<span style="color:{palette[line.id]}">{escape(visible)}</span>')
@@ -469,16 +486,21 @@ class GuideLesson(QWidget):
         self.legend.setAccessibleDescription('\n'.join(plain))
         concept,comparison,limit=LESSONS[key]
         text=words(concept if self.step==0 else comparison if self.step==1 else limit,self.language)
-        if self.step==0 and key=='ema':text+=(' · 12·26은 봉 수 설정이에요. 이 예시는 일봉이에요.' if ko else ' · 12/26 are bar-span settings; this example uses daily bars.')
+        if self.step==0 and key=='ema':text+=(' 12·26은 반응 속도를 정하는 기간 설정이고, 이 예시는 하루 단위예요.' if ko else ' · 12/26 are bar-span settings; this example uses daily bars.')
         if self.step==2 and info['crossing_index'] is not None:
-            text=(f"{info['crossing_index']+1}봉 전후 두 값의 위치가 바뀌었어요. " if ko else
+            # Observation first, then the indicator's limit, each as its own sentence.
+            where=slot_name(info['crossing_index'],bars.interval,self.language)
+            text=(f"{where} 무렵 두 값의 위아래가 바뀌었어요. " if ko else
                   f"The values switch positions across bar {info['crossing_index']+1}. ")+text
+        note=('계산에 필요한 앞부분과 빈 값은 선을 잇지 않아요. 교육용 예시이며 예측이나 매매 지시가 아니에요.' if ko else
+              'Warm-up and missing values stay blank. Education only; no prediction or trading instruction.')
         if self.step==2 and info['comparison_name'] is not None:
-            text+=(' 교차는 빈 값 없이 이웃한 두 봉에서 위치가 분명히 바뀔 때만 표시해요.' if ko else
-                   ' A crossing is marked only when adjacent finite bars clearly switch sides.')
+            # The marking rule is a footnote, not part of the reading itself.
+            step_unit='5분 구간' if bars.interval!='1d' else '날'
+            note=(f'교차는 값이 비지 않은 이웃한 두 {step_unit} 사이에서 위아래가 바뀔 때만 표시해요. ' if ko else
+                  'A crossing is marked only when adjacent finite bars clearly switch sides. ')+note
         self.caption.setText(text)
-        self.limit.setText(('계산 준비 구간·없는 값은 선을 잇지 않아요. 교육용이며 예측·매매 지시가 아니에요.' if ko else
-                            'Warm-up and missing values stay blank. Education only; no prediction or trading instruction.'))
+        self.limit.setText(note)
         description='\n'.join([self.badge.text(),info['axis_unit'],text,*plain,*[a['label'] for a in info['anchors']],self.limit.text()])
         self.figure.setAccessibleName(self.title.text());self.figure.setAccessibleDescription(description)
         self.caption.setAccessibleDescription(description)
