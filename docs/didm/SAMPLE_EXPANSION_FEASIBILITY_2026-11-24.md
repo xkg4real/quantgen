@@ -93,7 +93,7 @@
 4. D13 (종목별 건수 집계 옵션) 진행 여부 → 메인 승인 (2026-11-24), 진행 중.
 5. 별칭 사전 새 수집 옵션 8.4의 1~4 중 무엇을 할지, 공공데이터포털 키 발급 여부.
 6. 군집화 글을 제목만으로 시작할지 (8.3 권장).
-7. (D14) Massive 뉴스를 모형 학습·검증 자료에서 뺄지, 이미 저장한 200건 (2026-11-24 실측)을 보관할지 삭제할지 (9.2 1번). Alpaca 약관 PDF 확인을 위해 `files.alpaca.markets` 허용 여부 (9.2 2번).
+7. (D14) Massive·Alpaca 뉴스를 모형 학습·검증 자료에서 뺄지 (둘 다 개인·비상업),, 이미 저장한 200건 (2026-11-24 실측)을 보관할지 삭제할지 (9.2 1번). Alpaca 약관 PDF 확인을 위해 `files.alpaca.markets` 허용 여부 (9.2 2번).
 
 ## 7. 출처 (2026-11-24 검색 요약)
 
@@ -185,7 +185,7 @@
 | Alpaca | 호출 한도 | 표의 "Historical API calls": Basic 200/min, Algo Trader Plus 10,000/min (주식·옵션 표). 뉴스 전용 한도는 이 표에 없음. 출시 블로그: "200 calls per minute for Free plans" (뉴스 API 베타 당시) | 위 + alpaca.markets/blog/introducing-news-api-for-real-time-fiancial-news | 주식 한도 확인; 뉴스 한도는 블로그 (옛 베타 문구) 기준 |
 | Alpaca | 과거 깊이 | 문서 v1.4.2: "historical news data dating back to 2015 ... average of 130+ news articles per day. All news data is currently provided directly by Benzinga". 현재 판 문서는 시작 연도를 적지 않음 | docs.alpaca.markets/us/v1.4.2/docs/historical-news-data, docs.alpaca.markets/us/docs/historical-news-data | 2015는 옛 판 문서 기준. 실제 첫 기사 날짜는 소유자 PC 실측 필요 |
 | Alpaca | 용도 안내 | 현재 판 문서 "Sentiment analysis: Build a labeled dataset from past headlines, summaries, and content, and train models that score the sentiment of new articles" | docs.alpaca.markets/us/docs/historical-news-data | 확인 (사용 예시일 뿐, 약관이 아님) |
-| Alpaca | 약관 (저장·파생) | 약관·시장자료 계약은 PDF로 `files.alpaca.markets`에 있음 (Terms and Conditions, NYSE/Nasdaq 시장자료 계약). 허용 호스트가 아니고 내려받기 금지 규칙이라 **열지 않음** | alpaca.markets/disclosures (목록) | **미검증** — 필요 호스트: `files.alpaca.markets` |
+| Alpaca | **약관 (이용 범위)** | 소유자 허용 (2026-11-24)으로 PDF를 읽음. "Personal and Non-Commercial Usage: ... you agree to use the Services and Content solely for your own personal and non-commercial purposes. Should you wish to use the Services and Content for any other purposes, including without limitation commercial usage, or making the Services and Content available to others through your own application (a 'User Application'), you shall provide Alpaca with 30 days advance written notice"; "Content is provided exclusively for personal and noncommercial access and use. No part of the Service or Content may be copied, reproduced, republished ... for publication or distribution or for any commercial enterprise, without Alpaca's express prior written consent." 'General news' 와 Third-Party Content (Benzinga)가 Content에 포함. AI·ML 학습 조항은 이 문서에 없음. 문서에 판 날짜 표시 없음 | s3.amazonaws.com/files.alpaca.markets/disclosures/library/TermsAndConditions.pdf (Alpaca 문서 바닥글의 'Terms & Conditions' 링크; `files.alpaca.markets` 직접 주소는 이 환경에서 막힘) | 확인 |
 | Massive | 과거 깊이 | "ticker news starts on 22 June 2016, with all history on Stocks Starter and above and **2 years on Stocks Basic**, but it is sparse until late April 2021" — 2016-06-22~2021-04-21 500건 미만, 2016~2019 연 50건 미만, 2020 약 200건 | massive.com/knowledge-base/article/how-far-back-does-massives-news-and-sentiment-data-go | 확인 |
 | Massive | 감성 (insights) | "the insights sentiment field starts with articles published on 2 July 2024" (17:46 UTC 이전 기사에는 없음, 과거 기사에 덧붙일 방법 없음). 뉴스 끝점은 1시간마다 갱신, 게재 뒤 1시간 미만~수 시간 늦게 도착 | 위 | 확인 |
 | Massive | Benzinga 묶음 | 지식베이스: 2009-04-27부터. 요금 페이지: "Benzinga ... $99/month per dataset" | 위 + massive.com/pricing | 확인 |
@@ -202,7 +202,7 @@
 ### 9.2 바뀌는 판단
 
 1. **Massive 무료 (개인) 플랜은 DIDM에 쓰기 어렵습니다.** QUANTGEN은 상업 앱이고 DIDM은 모형 학습이 목적인데, 개인 약관은 비상업·비업무 용도만 허용하고 시장자료 약관 5(g)는 AI·ML 학습을 금지합니다. 또 무료 Basic은 뉴스 2년치만, 감성은 2024-07-02부터입니다. → **제안: Massive 뉴스는 수집 연결 확인 (2026-11-24 실측) 까지로 두고, 모형 학습·검증 자료로는 쓰지 않음. 쓰려면 사업자 (Businesses) 약관·요금 확인이 먼저.** 이미 저장한 200건의 처리 (보관·삭제)는 소유자 결정 사항입니다.
-2. **Alpaca는 약관 미확인이 남습니다.** 문서는 무료 계정·과거 뉴스·감성 모형 학습 예시를 보여 주지만, 저장·파생·상업 이용 조항은 `files.alpaca.markets`의 PDF에 있어 아직 못 봤습니다. Massive와 같은 제약 (개인·비상업)이 있으면 2절의 "미국 820 × 2015~2024 (공시 + Alpaca 뉴스)" 경로도 공시 단독으로 줄어듭니다. → **표본 결정 전에 Alpaca 약관 확인이 필요.**
+2. **Alpaca 무료 계정도 개인·비상업 전용입니다** (9.1 약관 인용). 상업 목적이면 30일 전 서면 통지, 콘텐츠를 상업 사업에 복제·이용하려면 Alpaca의 사전 서면 동의가 필요합니다. AI 학습 조항은 없지만 상업 사업 안의 복제 금지에 걸릴 수 있습니다. → 2절의 "미국 820 × 2015~2024 (공시 + Alpaca 뉴스)" 경로는 **Alpaca의 서면 동의 없이는 공시 단독으로 줄어듭니다.** 대안은 10절.
 3. **KRX 계열 (공공데이터포털·KRX Open API)은 비상업 전용입니다.** 8.4의 `--krx-listing`은 상업 앱 연구에 그대로 쓰기 어렵고, 상업 이용은 KRX Data Marketplace 유료 구매. → 한국 별칭 사전은 OpenDART (공시 목록의 날짜별 회사명 + corpCode.xml) 중심으로.
 4. **OpenDART 10년치 전체 목록:** 회사 지정 없이 3개월씩 (40구간 이상) + 쪽 나눔, 요청 한도 20,000건 (기간 미검증). 회사 지정 (corp_code, 최대 100개)이면 기간 제한이 풀리므로 표본 종목을 정한 뒤 회사별로 받는 편이 호출이 적을 수 있습니다.
 
@@ -210,9 +210,37 @@
 
 | 항목 | 필요 호스트 |
 |---|---|
-| Alpaca 약관·시장자료 계약 (뉴스 저장·파생·상업 이용) | `files.alpaca.markets` (PDF, 내려받기 허용 필요) |
+| Alpaca 시장자료 계약 (Nasdaq·NYSE, 시세용) | 뉴스와 무관해 이번에 보지 않음 |
 | Massive 사업자 약관·요금 (상업·학습 허용 여부) | `massive.com` (허용됨, 이번 범위 밖이라 다음에) |
 | Benzinga 원 라이선스 (Alpaca 고객 적용 판) | Alpaca 약관 안에 있을 가능성 |
 | KRX상장종목정보 자료 시작일 | 키가 필요한 API 호출 (이번 규칙상 안 함) |
 | OpenDART 요청 한도의 집계 기간 | `opendart.fss.or.kr` 다른 안내 페이지 |
 | SEC formerNames 구조, EDGAR 시작 연도 | `www.sec.gov`·`data.sec.gov` (연락처 User-Agent 필요 → 소유자 PC) |
+
+
+## 10. Massive 대안 (소유자 요청 2026-11-24)
+
+조건: QUANTGEN은 상업 앱이고 DIDM은 모형 학습이 목적 → **상업 이용**과 **학습 이용**이 약관상 가능해야 함. 그다음 종목 태그, 과거 깊이 (2015~), 시각 (공개 시각), 비용. 확인 방법: 웹 검색 요약 (해당 공급사 호스트는 이 환경에서 막혀 원문을 직접 열지 못함 → 행마다 "검색 요약"). 법률 자문이 아닙니다.
+
+| 대안 | 상업 이용 | 학습 이용 | 종목 태그 | 과거 | 비용 | 판단 |
+|---|---|---|---|---|---|---|
+| **GDELT 2.0** (이미 연결) | 허용 — "unlimited and unrestricted use for any academic, commercial, or governmental use of any kind without fee", 재배포 시 인용·링크 필수 (GDELT About, 검색 요약) | 금지 조항 없음 (위 문구) | 없음 (조직 이름 → 자체 연결) | 2015-02~ | 무료 | **Go** — 지금 바로. 단 기사 본문 권리는 언론사, 저장은 제목·메타데이터만 (지금 원칙) |
+| **SEC EDGAR 8-K (+ 보도자료 첨부 Exhibit 99.1)** (이미 연결, D6) | 공공 공시 | 공시 메타데이터 (서식·항목 코드·시각)는 문제 작음. 첨부 보도자료 본문은 회사 저작물 — 본문 처리는 정책 결정 (6절 3번) | CIK (정확) | 공시 전체 (D6) | 무료 | **Go** — 8-K 항목 코드 (2.02 실적, 5.02 임원 등)가 사실상 "회사 뉴스 사건". 본문 없이도 사건 시각·유형은 정확 |
+| **OpenDART** (한국, 이미 연결) | 약관에 상업 금지 조항 못 찾음 (9.1) | 같음 | corp_code (정확) | 3개월씩 | 무료 | **Go** (한국) |
+| **Benzinga 직접 계약** | 사업자 계약 | **학습용 데이터셋을 따로 판매** ("Fully licensed ... datasets - ideal for training Large Language Models", 검색 요약). 단 제3자 (Firecrawl) 경유 판은 "일반 AI 모형 학습 금지, 비공개 인스턴스만" | 있음 | 미검증 (Massive의 Benzinga 묶음은 2009-04~) | 견적 (공개 가격 없음) | **조건부 Go** — Alpaca·Massive 뉴스의 원 출처와 같은 자료를 학습 권리째 사는 길. 견적·이력 깊이·학습 조항을 서면으로 받은 뒤 결정 |
+| **Tiingo Commercial** | "Commercial accounts ... licensed for internal commercial usage", 재배포 금지 (Tiingo 문서, 검색 요약) | 언급 없음 (미검증) | 있음 | 요금표상 Power·Commercial은 뉴스 **3개월**만, 1995~ 전체는 상위 (Enterprise) — 표가 모호 | Commercial $50/월 (검색 요약) | **보류** — 내부 상업 이용은 되나 과거 뉴스가 3개월이면 표본 (2015~)에 못 씀. 상위 요금 견적 필요 |
+| **EODHD 상업 라이선스** | 별도 상업 라이선스 (문의) | 언급 없음 (미검증) | 있음 + 일별 감성 | 미검증 | 견적 | **보류** — 무료·개인 요금은 상업 불가. DS-5a (N1)와 묶어 견적 |
+| RavenPack (WRDS 학교 구독) | 학술 연구만 (학교 계약) | 학교 계약 범위 | 있음 (엔티티 ID) | 2000~ (미검증) | 학교 구독 | **No-go (제품용)** — 상업 앱에 못 씀. 학술 논문용 기준선으로만 |
+| Finnhub 무료 | 개인 전용이라는 자료가 다수 (검색 요약) | 미검증 | 있음 | 1~2년 | 무료/유료 | **No-go** (무료) |
+| FNSPID (공개 연구 데이터셋, 1999~2023, 1,570만 건) | **CC BY-NC 4.0 — 상업 이용 금지** (Hugging Face 판) | — | 있음 | 1999~2023 | 무료 | **No-go** (제품용) |
+| Massive Basic / Alpaca Basic | 개인·비상업 (9.1 원문) | Massive는 학습 금지 | 있음 | Massive 2년 / Alpaca 2015~ | 무료 | **No-go** (상업·학습). Alpaca는 서면 동의를 받으면 재검토 |
+| 공공데이터포털·KRX Open API | 비상업 (9.1 원문) | — | 종목 목록 | — | 무료 | **No-go** (상업) |
+
+### 10.1 권장 순서
+
+1. **지금 (무료, 권리 문제 작음):** GDELT 2.0 + EDGAR 8-K 항목 코드 (미국) + OpenDART (한국)로 Stage 2 사건 표본을 만듭니다. "뉴스"보다 좁지만 시각·유형이 정확하고 상업·학습 제약이 없습니다 (GDELT는 인용 필수).
+2. **뉴스 텍스트가 꼭 필요하면:** Benzinga에 학습 권리 포함 견적을 요청 (이력 깊이·종목 태그·학습·보관 조항을 서면으로). Alpaca에는 상업 이용 서면 동의를 문의하는 길도 있으나 Benzinga 원 약관 (학습 제한) 이 따라올 수 있어 Benzinga 직접 계약이 더 깔끔합니다.
+3. **비교용:** Tiingo 상위 요금·EODHD 상업 라이선스 견적은 DS-5a (N1) 결정 때 함께.
+4. **이미 받은 자료:** Massive 200건·Alpaca 60건은 개인·비상업 조건으로 받은 것이므로 학습·검증에 쓰지 않고, 보관·삭제는 소유자 결정 (Massive는 플랜 종료 뒤 30일 안 삭제 의무).
+
+출처 (검색 요약, 2026-11-24): benzinga.com/apis/datasets-for-training-llms-and-ai-applications, firecrawl.dev/terms/third-party-data/benzinga/C-1.0.0, api.tiingo.com/documentation, api.tiingo.com/products/news-api, eodhd.com/financial-apis/terms-conditions, gdeltproject.org/about.html, huggingface.co/datasets/khaihernlow/fnspid, wrds-www.wharton.upenn.edu (RavenPack), massive.com/compare/massive-vs-finnhub. 원문 확인이 필요한 호스트: www.benzinga.com, api.tiingo.com, eodhd.com, www.gdeltproject.org.
