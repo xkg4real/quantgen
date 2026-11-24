@@ -15,7 +15,7 @@
 | 3 | 고지 누락 | **chardet 파일은 들어갔는데 `THIRD_PARTY_NOTICES.txt`에 chardet이 없음**: `.py`로 두는 패키지는 `a.pure`에서 빠져 고지 수집에서 빠졌음 | chardet 자체가 빠져 해소. 앞으로 `.py`로 두는 패키지는 고지에도 들어가게 `collected`에 더함 | spec `collected \|= set(LGPL_PURE_PYTHON)` |
 | 4 | 예전 NEXTGEN 로고 | `assets/nextgen_logo_dark.png`·`_light.png`가 들어감. 앱 코드(`quantgen_desktop`·`core`·`ui`·`main.py`·`mobile`)에서 쓰는 곳 없음 | 없음 | `stage.py` `RETIRED_ASSETS`(spec·wheel·모바일 묶음 공통) |
 | 5 | 배포 패키지 수 | 75 | 74 (flet-cli 하나 줄어듦. chardet은 3번 이유로 원래 목록에 없었음) | 빌드 로그 "third-party notices for N distributions" |
-| 6 | 자체 점검 | 기존 12항목 | `sale_build_contents` 추가: 위 패키지와 로고가 없을 것, 데이터 소스 프로필을 기록. 실측 `ok`, `gateway_profile: "personal"` | `packaging/selfcheck.py` |
+| 6 | 자체 점검 | 11항목 | `sale_build_contents` 추가: 위 패키지와 로고가 없을 것, 데이터 소스 프로필을 기록. 실측 `ok`, `gateway_profile: "personal"` | `packaging/selfcheck.py` |
 
 ## 2. PySide6 LGPL 점검 (OS-F1 전환 뒤 판매 빌드)
 
@@ -40,7 +40,7 @@
 ## 4. 확인한 검사
 
 - `tests.packaging_policy_acceptance`, `tests.third_party_notices_acceptance`, `tests.app_identity_acceptance` 통과.
-- 이 브랜치 빌드(Linux, PyQt6; `collected |= set(LGPL_PURE_PYTHON)` 한 줄은 빌드 뒤에 더함 — 지금 목록이 비어 있어 결과에 영향 없음): PyInstaller rc 0, `--selfcheck` rc 0, 13항목 모두 ok(`sale_build_contents` 포함). `_internal`에 위 6개 패키지·로고 없음.
+- 이 브랜치 빌드(Linux, PyQt6; `collected |= set(LGPL_PURE_PYTHON)` 한 줄은 빌드 뒤에 더함 — 지금 목록이 비어 있어 결과에 영향 없음): PyInstaller rc 0, `--selfcheck` rc 0, 12항목 모두 ok(빌드한 커밋 `be60b2a`: main 11항목 + `sale_build_contents`; O4를 합친 지금은 `os_credential_store`까지 13항목). `_internal`에 위 6개 패키지·로고 없음.
 - main 빌드(같은 조건): `_internal/chardet` 43개 파일, 로고 2개, 고지에 chardet 없음 — 1표의 "main" 열.
 - Windows·macOS 빌드와 PySide6 빌드는 `platform-build.yml`에서 확인(실행하지 않음).
 
@@ -55,7 +55,7 @@ git worktree add --detach "$OUT/src" "$REF"
     --distpath "$OUT/dist" --workpath "$OUT/work" packaging/quantgen_desktop.spec > "$OUT/build.log" 2>&1); echo "build rc=$?"
 QT_QPA_PLATFORM=offscreen HOME=$(mktemp -d) "$OUT/dist/QUANTGEN/QUANTGEN" --selfcheck "$OUT/selfcheck.json"; echo "selfcheck rc=$?"
 
-# 1) 자체 점검 항목: main은 12항목, 이 브랜치는 13항목(+ sale_build_contents, os_credential_store는 O4와 합친 뒤)
+# 1) 자체 점검 항목: main 11, be60b2a 12(+ sale_build_contents), O4를 합친 이 브랜치 13(+ os_credential_store, 보고만)
 python -c "import json,sys; r=json.load(open(sys.argv[1])); print(r['ok'], [(x['check'], x['ok']) for x in r['results']])" "$OUT/selfcheck.json"
 # 2) 앱 폴더 안의 flet-cli 전용 패키지와 예전 로고 (main: chardet, nextgen_logo_*.png 2개 / 이 브랜치: 없음)
 ls "$OUT/dist/QUANTGEN/_internal" | grep -i -E '^(chardet|flet_cli|cookiecutter|slugify|text_unidecode|binaryornot)'
