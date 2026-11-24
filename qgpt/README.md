@@ -12,6 +12,7 @@ runtime dependencies. Model weights and adapters are never committed.
 | --- | --- |
 | `quantgpt/envelope.py` | the common output envelope `qgpt-env-v1` |
 | `quantgpt/router.py` | task code -> contract; requests without a task code are refused |
+| `quantgpt/pipeline.py` | one request -> one envelope (admit, generate, contract, policy, numbers, citations, look-ahead) |
 | `quantgpt/contracts/` | input/output contracts for the seven task types, strategy card QSS v0 |
 | `quantgpt/policy/` | policy filter (blocks in `tool` mode, records only in `owner` mode) |
 | `quantgpt/rag/` | evidence store and `as_of` filter |

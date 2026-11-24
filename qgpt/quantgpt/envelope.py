@@ -51,7 +51,7 @@ _SHA256 = r"[0-9a-f]{64}"
 _ENVELOPE = S.obj(
     {
         "envelope_version": S.const(ENVELOPE_VERSION),
-        "task": S.string(enum=TASKS),
+        "task": S.nullable(S.string(enum=TASKS)),       # null only for a request that named no task
         "mode": S.string(enum=MODES),
         "status": S.string(enum=STATUSES),
         "body": S.nullable(S.json_object()),
@@ -90,6 +90,8 @@ def validate_envelope(env: Any, body_spec: Callable[[Any, str], None] | None = N
     """
     _ENVELOPE(env, "$")
     status, mode, task = env["status"], env["mode"], env["task"]
+    if task is None and (status != "blocked" or env.get("reason_code") != "no_task_code"):
+        raise SchemaError("$.task: is null only when a request without a task code was blocked")
     if task in OWNER_ONLY_TASKS and mode != "owner" and status == "ok":
         raise SchemaError(f"$.task: {task} is not offered in {mode} mode")
     if status == "ok":
@@ -122,7 +124,7 @@ def display_body(env: dict) -> dict | None:
     return env["body"] if env["status"] == "ok" else None
 
 
-def refusal(task: str, mode: str, status: str, reason_code: str, *, request_hash: str, model_id: str,
+def refusal(task: str | None, mode: str, status: str, reason_code: str, *, request_hash: str, model_id: str,
             adapter: str | None, prompt_version: str, rules_version: str, label_ko: str,
             violations: tuple[str, ...] = (), latency_ms: int = 0) -> dict:
     """Build an envelope that carries no body (abstain, blocked or error)."""
