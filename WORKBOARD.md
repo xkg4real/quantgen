@@ -87,6 +87,11 @@ git 기준: main `de32ea1` (#147 GH-2 → `dfae585`, #149 PAY-0·PAY-2 → `de32
 | PAYMENTS 로그인 | D-1 로그인 방식(제안: 관리형 로그인 + PKCE), D-2 로그인 도메인, D-3 관리형 가입 링크가 동의 체크를 우회하는지(미검증), D-4 새로고침 30일·회전 | 같은 문서 |
 | DATA_SOURCE | Alpaca 무료(Paper) 키·Massive 무료 키 발급 후 수집기 1회 실행(편할 때), N1 EODHD 유료 여부, D4 수집 현황 명령 1회 실행(병합 뒤) | `DATA_SOURCE_SESSION_CURRENT.md` |
 | OS | 번들 ID 확인, Intel Mac 지원 여부, Mac 화면 글꼴 확인, UI 요청 4건(단축키 표시 등) 전달 | `OS_SESSION_CURRENT.md`, `docs/platform/MACOS_DIFFERENCES_2026-11-24.md`(병합 뒤) |
+| DIDM Stage 0 (OA-56, 새) | 모의실험 판정 REVISE(합성 자료, 시도 1회, `claude/didm-dev-20261124` @ `72edc0f`의 `docs/didm/STAGE0_REPORT_V0.md`). 사전등록에 닿는 변경 4가지의 승인 여부: (가) 지연 비중을 비율 대신 차이로·20일 대신 5일·유형 합침 먼저, (나) 연결망 층을 관문에서 빼고 보고만, (다) HAR 월 계수를 포함률 점검에서 제외, (라) 모형 비교를 계수 검정으로. 그리고 Stage 3 변동성 기준(QLIKE 2%)이 중심 가정에서 0.14%인 점. DIDM_DEV가 V0.1 제안서를 쓰는 중 | 제안서 예정 `docs/didm/PREREG_V0_1_PROPOSAL_2026-11-24.md` |
+| TRADEGEN M11-T7 (OA-57, 새) | 출력 스냅샷 주기 전달: 시작 여부·모델·비용, 보관 위치, 대상 범위, DIDM 평가 표본과의 분리 | `QUANTGPT_TRADEGEN.md` v0.2 9.4절 |
+| 판매 빌드 (OA-58, 새) | 공개 빌드를 commercial 프로필로 고정할지(지금은 personal로 나감), Linux 판매 여부와 기준 배포판 | `docs/platform/SALE_BUILD_CHECK_2026-11-24.md`, `LINUX_DIFFERENCES_2026-11-24.md`(통합 ② 병합 뒤) |
+| 기준선 라이선스·기반 모델 (OA-59, 새) | FinBERT(CC BY-NC-SA)·LM 사전(학술 무료)을 연구 비교용으로만 둘지, 자체 LLM 기반 모델을 학습 마감일이 공개된 것으로 할지(Qwen3은 공개 마감일 없음) | `docs/didm/MODEL_CUTOFFS.md` |
+| N0 확인 (OA-60, 새) | DATA_SOURCE 세션의 "N0 승인, Alpaca·Massive부터 진행하세요"가 의도한 승인인지 한 줄 확인(문구가 세션이 띄운 제안과 같음) | 메인 세션 보고 |
 | UI (소유자 경유) | PR #140 `quantgen_desktop/stock_insights.py:82`의 `self.metric`이 PySide6에서 `QWidget.metric()`을 가림(lint 16이 잡음), KEY5_UI_REQUEST_V2 | OA-48 답과 함께 |
 
 push_log (2026-11-24): 18:34 KST 1회 — OA-48, 09, 10, 03, 04, 05, 49, 50.

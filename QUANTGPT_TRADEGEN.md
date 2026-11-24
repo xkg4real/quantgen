@@ -1,6 +1,6 @@
 # QUANTGPT_TRADEGEN — QuantGPT 출력 인터페이스 (TRADEGEN 공유용)
 
-- 판: v0.2 초안 (2026-11-24). 받는 쪽 계약: xkg4real/tradegen main `b828b2d` `docs/direction-forecast-contract.md`(`tradegen-direction-forecast-v1`). 작성: QUANTGEN 메인 세션. 구현 담당: 하부 세션 QUANTGPT (quantgen 브랜치 `claude/quantgpt-q0-20261124`, 디렉터리 `qgpt/`).
+- 판: v0.2 초안 (2026-11-24, 같은 날 1절의 DIDM 관문 상태 한 줄 갱신). 받는 쪽 계약: xkg4real/tradegen main `b828b2d` `docs/direction-forecast-contract.md`(`tradegen-direction-forecast-v1`). 작성: QUANTGEN 메인 세션. 구현 담당: 하부 세션 QUANTGPT (quantgen 브랜치 `claude/quantgpt-q0-20261124`, 디렉터리 `qgpt/`).
 - 근거: 소유자 지시 2026-11-24 "QuantGPT에 대한 내용을 TRADEGEN 세션에도 공유하여 진행해주세요", TRADEGEN 오케스트레이션 세션("QUANTGEN/TRADEGEN model split")의 요청(같은 날).
 - 이 저장소는 공개 상태라 **인터페이스만** 적는다. 설계 명세서 본문, 모델 후보, 세부 일정, 가중치는 적지 않는다(소유자 결정 2026-11-24: 명세서는 공개하지 않음).
 - 구현 전 초안이다. 필드가 바뀌면 판 번호를 올리고 아래 "바뀐 내역"에 적는다. TRADEGEN 쪽 소비 계약 문서(xkg4real/tradegen의 문서 PR)가 올라오면 맞춰 고친다.
@@ -13,7 +13,7 @@
 | QuantGPT가 내지 않는 것 | 가격 방향·수익률 예측값, 매수·매도 확률, 주문·주문 초안·주문 버튼 값, 호가 조정값, 자동 실행 신호 |
 
 - 그래서 BR-26(호가 괴리 Y 조정)과 OQ9(매수 우위)의 **후보 모형으로 바로 쓸 수 있는 수치 출력은 지금 설계에 없다.**
-- 수치 신호에 가까운 것은 QuantGPT가 아니라 DIDM 쪽 설계다. DIDM은 뉴스·공시 판단을 충격으로 바꿔 위험 덮개(노출을 줄이는 방향)로 내보내는 연구 계획이고, Stage 0~5 관문을 통과한 뒤에만 동결된 산출물을 읽기 전용으로 내보낸다. 단독 알파는 NO-GO로 사전 등록돼 있다(`docs/didm/PREREG_V0.md`). 아직 어느 관문도 돌리지 않았다.
+- 수치 신호에 가까운 것은 QuantGPT가 아니라 DIDM 쪽 설계다. DIDM은 뉴스·공시 판단을 충격으로 바꿔 위험 덮개(노출을 줄이는 방향)로 내보내는 연구 계획이고, Stage 0~5 관문을 통과한 뒤에만 동결된 산출물을 읽기 전용으로 내보낸다. 단독 알파는 NO-GO로 사전 등록돼 있다(`docs/didm/PREREG_V0.md`). Stage 0(합성 자료 모의실험)을 2026-11-24에 1회 돌렸고 판정은 REVISE다(당일 직접 반응과 변동성 층은 통과, 지연 비중과 연결망 파급은 검정력 미달). 실제 자료를 쓰는 관문(Stage 1~5)은 아직 돌리지 않았다.
 - QuantGPT에 "거시 사건 분석"(자산별 방향·기간·대안 시나리오를 담는 구조화 출력, owner 모드 전용, 행동·주문 필드 없음) 작업 유형을 더할지는 **소유자 결정 대기**다. 더해져도 그 `direction` 값은 보정된 확률이 아니라 정성 판단이고, 검증 전에는 관찰·모의 기록에만 쓴다.
 - TRADEGEN이 방향·확률 모형을 필요로 하면, 그것은 QuantGPT 출력 필드가 아니라 TRADEGEN의 사전 등록 연구(`research_lab`)에서 QuantGPT·DIDM 출력을 **입력 특성**으로 쓰는 별도 모형으로 설계하는 것이 지금 구조에 맞다.
 
