@@ -1,3 +1,22 @@
+## 2026-11-24T18:45:00+09:00 · 메인 Claude 인수 — 지금 대기열 (이 블록이 아래 11-21~23 블록보다 우선)
+
+소유자 지시("GPT 인계를 읽고 이어서 진행하라", 2026-11-24)로 메인 Claude(session_01H6RrzMUzF8vwK8xkX977mB)가 다시 조정한다(handoff `8a93ce6`). GPT가 병합한 것(메인이 git·CI로 확인, `plans/2026-11-24/RESUME_GPT_VERIFY.md`): #136 `72a055f` OS-F2, #137 `6d25a33` DS-H/code, #138 `53e5e72` DIDM-1·DS-4a, #139 `dec979a` KEY-5/a, #142 `d835d9f`, #141 `666e006`, #143 `5af3787`, #144 `51b8298`, #145 `05f97df`, #146 `b872d8c`. 아래 "T8-6이 다음 차례"라는 줄은 낡았다(#146 병합됨).
+
+| 차례 | 항목 | 브랜치 / PR | 상태 |
+|---|---|---|---|
+| 9 | Claude 스킬 6개 + quant-analyst | PR #148 `claude/quant-skills-20261123` @ `462f7df` | 문서 정합성 검사 성공. 메인 독립 검토(wf_3a7ca4ae-206) 뒤 병합 |
+| 10 | PAY-0·PAY-2 문서 12개 | `claude/payments-pay0-20261120` @ `e869064` | **병합: PAYMENTS_ACCOUNT_KEYS** (2026-11-24 18:45 KST 메인). 최신 main 합침 → `--check` PASS → PR. source-review.json을 건드리지 않으므로 9와 나란히 진행 |
+| 11 | GH-2 (test_npu.py, mindmap/ 5개, launch.json godseye-dev 항목 삭제) | PR #147 draft `gpt/gh2-unused-tools-20261123` @ `bf78b6b` | 메인이 이어받음. 문서 정합성 FAIL → 최신 main 합치고 기준선 갱신. `_backup/`·archive 태그는 범위 밖 |
+| 12 | Android APK 검사 도구 | `gpt/android-apk-evidence-20261123` @ `c28194f` → OS가 `claude/os-android-apk-evidence-20261124`로 준비 | 11 뒤 "병합: OS" |
+| 13 | Kalshi 입력 검사 + ALFRED 개정값 기간 | `77c37c5`, `593c943` → DATA_SOURCE가 `claude/ds-connector-fixes-20261124`로 준비 | 12 뒤 "병합: DATA_SOURCE" |
+| 14 | 메인 문서 PR: REMAINING_WORK 새 판(QGPT·DIDM-2~ ID 등록), CLAUDE.md 세션 5개, `push_handoff.py` LANE_DOCS에 DIDM·QUANTGPT, OWNER_RULINGS_LOG 2026-11-24 | 메인 | 13 뒤(또는 틈이 나면 먼저) |
+| 5 | UI 7쪽 + PySide6 준비 + 11-21~23 UI 변경 + KEY-5 K1a~K2d | PR #140 draft `gpt/ui-guide-chart-first-20261121` @ `3483b53` (414eceb 포함) | CI 실패(Ubuntu 3.12·Windows 3.11: tests/desktop_stock_detail_acceptance.py:1527), main과 충돌. **담당 미정 — 소유자 결정 대기(OA-48)**. 고친 뒤 소유자 Windows 확인 → 병합 |
+| 6 | PySide6 전환 (OS-F1) | OS | 5 뒤 + 소유자 "OS go" |
+| 7 | KEY-5 남은 화면 접점 (PR #140 기준 8파일 25곳) | 요청문 v2(PAYMENTS, `plans/2026-11-24/KEY5_UI_REQUEST_V2.md` 예정) + UI 구현 | 5 뒤 |
+| — | DIDM_DEV (DIDM-2, 3, 4), QUANTGPT (`qgpt/`) | `claude/didm-dev-20261124`, `claude/quantgpt-q0-20261124` | 브랜치 작업 중. PR 차례는 보고가 오면 정함. QUANTGPT의 `qgpt/`는 main PR을 열지 않음 |
+
+규칙은 그대로: PR은 "병합: <세션>"이 적힌 뒤에만, source-review.json을 바꾸는 PR은 한 번에 하나, 병합 버튼은 메인, Vercel 상태는 무시.
+
 ## 2026-11-23T10:31:10+09:00 · 병합: 메인 세션 T8-6 수동 인계 도구
 
 [#145](https://github.com/xkg4real/quantgen/pull/145)는 전체 CI와 독립 검토를 거쳐 main `05f97df6`에 병합되었습니다. 다음 PR 자리는 T8-6입니다. 실제 main 통합 및 네 파일 기술 검증 후 초안 PR을 열고, 해당 head의 CI와 독립 검토를 확인합니다. 이후 순서는 GH-2 → Android APK 검사 → Kalshi입니다. UI #140은 별도 Windows PC7 확인이 필요합니다.
