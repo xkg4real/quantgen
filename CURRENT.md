@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-24
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a
 next_ids: DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2, GH-2, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-24T18:45:00+09:00
+updated_at: 2026-11-24T19:30:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: main
 work_commit: b872d8c
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/147
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-12-01T17:00:00+09:00
@@ -25,7 +25,7 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 
 ## 0. 한 줄 요약
 
-GPT가 2026-11-20..23에 한 일을 git·CI와 대조하는 중이며(워크플로 wf_831f72a0-085), 끝나는 대로 WORKBOARD·MERGE_QUEUE·SESSION_PIPELINE을 고치고 하부 세션 5개(PAYMENTS, OS, DATA_SOURCE, DIDM 개발, QUANTGPT)에 일을 보냅니다. 소유자 우선순위: REMAINING WORK의 남은 일을 빨리 끝내기.
+GPT가 2026-11-20..23에 병합한 PR 10개를 git·CI로 확인했고(모두 사실, 규칙 위반 없음), 하부 세션을 5개로 늘려 각자 첫 일을 보냈다. 지금 메인은 GH-2 PR #147의 CI를 기다린다. 새 세션 일(DIDM 개발, QuantGPT)과 REMAINING WORK의 남은 일은 병행한다(소유자: "우선순위라기 보다 같이 병행하는걸 잊지 말라는 얘기였습니다").
 
 ## 1. 목표와 완료 조건
 
@@ -64,31 +64,45 @@ GPT가 2026-11-20..23에 한 일을 git·CI와 대조하는 중이며(워크플�
 |---|---|---|
 | GPT의 `taken` 문서를 `--force`로 인수 | 소유자 지시 "GPT 인계를 읽고 이어서 진행하라"(2026-11-24). GPT의 마지막 git 활동은 2026-11-23 12:43 KST(handoff), 그 뒤 약 29시간 동안 어느 브랜치에도 새 커밋 없음(메인 확인 2026-11-24 18:20 KST) | 기다리기: 소유자가 진행을 지시함 |
 | 인수 직후 먼저 checkpoint를 올리고 검증 결과는 다음 게시에서 채움 | 두 에이전트가 같은 일을 하지 않게 잠금을 먼저 잡음 | 검증이 끝난 뒤 한 번에 게시: 그 사이 잠금이 GPT에 남음 |
+| QuantGPT 코드는 quantgen 브랜치 `claude/quantgpt-q0-20261124`의 `qgpt/`에서 시작, main PR은 열지 않음 | 소유자 결정 2026-11-24 "공개 quantgen에서 시작". `qgpt/`는 앱 패키징·게이트웨이 경계 검사·compliance 추적 밖 | 비공개 저장소를 기다리기: 소유자가 지금 시작을 지시 |
+| QuantGPT 명세서 v1.0 전문은 저장소(공개)에 올리지 않고 세션 지시문으로만 전달, 공개 문서에는 ID와 인터페이스만 | 소유자 결정 2026-11-24 "공개하지 않음 (Recommended)" | 명세서의 `docs/quantgpt/` 사본: 일정·규제 검토·모델 선택이 공개됨 |
+| TRADEGEN 공유는 handoff `QUANTGPT_TRADEGEN.md`(인터페이스만)로 | 소유자 결정 "TRADEGEN_GITHUB 다시 열기 (Recommended)"대로 보관을 풀었으나 클라우드 → 소유자 PC 세션 메시지가 거절됨(신뢰 확인이 이 세션에서 처리되지 않음). TRADEGEN 쪽 로컬 세션이 git 경로를 제안 | 직접 메시지: 거절됨 |
+| PR #148(스킬)은 병합 보류 | 독립 검토에서 막는 것 1(긁어 온 NautilusTrader 문서의 라이선스 표기 오류), 주요 4(`allowed-tools`가 Bash·Write·Edit를 승인 없이 풀어 줌 등) 확인 → `plans/2026-11-24/PR148_REVIEW.md` | 그대로 병합 |
+| GH-2 PR #147은 메인이 GPT 브랜치에 커밋을 더해 이어감 | GPT의 일을 인수했고 남은 것은 기준선 갱신뿐 | 새 PR: 같은 변경을 두 번 올리게 됨 |
 
 ## 4. 진행 상황
 
-- [x] `--show`, CURRENT·README·TEMPLATE 읽기, main `b872d8c`·handoff `38ccd06` 확인
-- [ ] GPT 작업 검증 (병합 PR, 열린 PR #140 #141 #147, ALFRED 브랜치 `593c943`) ← **여기 진행 중** (워크플로 wf_831f72a0-085)
-- [ ] PR #148 스킬 독립 검토 (워크플로 wf_3a7ca4ae-206)
-- [ ] WORKBOARD·MERGE_QUEUE·SESSION_PIPELINE 갱신, 세션 2개 생성, 지시문 5개 발송, TRADEGEN 공유, 푸시 알림
+- [x] `--show`, CURRENT·README·TEMPLATE 읽기, 인수(handoff `8a93ce6`, `--force`, 소유자 "GPT 인계를 읽고 이어서 진행하라")
+- [x] GPT 작업 검증 (`plans/2026-11-24/RESUME_GPT_VERIFY.md`): 병합 PR 10개(#136 `72a055f` OS-F2, #137 `6d25a33` DS-H/code, #138 `53e5e72` DIDM-1·DS-4a, #139 `dec979a` KEY-5/a, #142, #141, #143, #144, #145, #146 `b872d8c`) 모두 병합 트리 = 시험한 head 트리, 병합 전 검사 전부 녹색. `core/engine` 4파일은 백업 zip과 바이트 같음, `qa/` 변경 없음, owner_confirmed 쓰기 없음. KEY-5/a 검토 지적 M1·M2는 main에서 고쳐짐. Nautilus code_sha256은 `bcaf33d9…`(OS-F2의 config.py 변경 때문)
+- [x] 문서·git 대조 (`plans/2026-11-24/RESUME_BOARD.md`), handoff `SESSION_PIPELINE.md` v1.1, `MERGE_QUEUE.md`·`WORKBOARD.md` 맨 위 "현재 기준" 블록
+- [x] 세션 생성 2개: QUANTGPT `session_016uB1jfyCrLC5oipyVVMyCe`, DIDM_DEV `session_016uB1jj8iv57xVbx6EbLLwq`. 지시문 발송 5개(PAYMENTS P1~P3, OS O1~O3, DATA_SOURCE D1~D3, DIDM-2·3·4, QGPT-01/a~)
+- [x] 푸시 알림 1회(2026-11-24 18:34 KST, 24시간 안 8건), 3시간 정기 점검 다시 켬(하부 세션 5곳)
+- [x] TRADEGEN 공유: handoff `QUANTGPT_TRADEGEN.md` v0.1 (`4ff9bdb`)
+- [x] PR #148 독립 검토 → 병합 보류, `plans/2026-11-24/PR148_REVIEW.md` (`d08e944`)
+- [ ] GH-2: PR #147에 기준선 갱신 커밋 `c6f3874` push, 초안 해제, CI 대기 ← **여기서 기다리는 중**
+- [ ] 메인 문서 PR(대기열 14)
 
 **마지막으로 통과한 검증:**
 
 ```
-git for-each-ref --sort=-committerdate refs/remotes/origin | head   (w1124/main 클론, 전체 head fetch 뒤)
-가장 새 커밋: origin/handoff 38ccd06 2026-11-23 12:43:37 +0900 — 그 뒤 새 커밋 없음
+(w1124/gh2 @ c6f3874) python -B -m tools.compliance.check --check
+{"consistency_status": "PASS", "publication_status": "BLOCKED", "document_count": 20, "source_file_count": 855}
+python -B -m unittest tests.compliance_acceptance tests.packaging_policy_acceptance tests.third_party_notices_acceptance
+Ran 40 tests ... OK
 ```
 
 ## 5. 중단 지점
 
-아직 저장소를 바꾸지 않았습니다(이 문서 게시가 첫 쓰기). 커밋되지 않은 변경 없음.
+멈추지 않았다. 커밋되지 않은 변경 없음. 열린 것: PR #147(CI 진행 중), PR #148(고칠 것 있음), PR #140(UI 초안, 담당 미정), PR #12(오래된 것).
 
 ## 6. 다음 할 일 (순서대로)
 
-1. GPT 작업 검증 결과를 이 문서 4절에 채워 다시 게시 — 완료 기준: 병합 PR마다 원장 행·커밋·파일이 맞는지 표로 적힘
-2. GH-2 (GPT PR #147, 문서 정합성 검사 FAIL로 보류) 이어받기 — 완료 기준: `python -B -m tools.compliance.check --check` consistency PASS, CI 녹색, 병합, 원장 GH-2
-3. DS-H, DS-1, KEY-5, OS-F1, PAY-0, PAY-2 — 하부 세션 지시문으로 배분 (WORKBOARD 2절에 세션별 다음 일)
-4. QuantGPT: `REMAINING_WORK` 새 판에 QGPT ID 등록(메인 PR), QUANTGPT 세션 생성, 소유자 작업 U-01(비공개 저장소) 요청
+1. GH-2 PR #147: CI(문서 정합성, Runtime이 돌면 그것까지)가 녹색이면 merge commit으로 병합(Vercel 무시) → `--done "GH-2 | ..."` → MERGE_QUEUE 11 완료 표시 → 12번에 "병합: OS" — 완료 기준: main에 `test_npu.py`, `mindmap/`, launch.json의 godseye-dev 항목이 없음, `--check` PASS
+2. 하부 세션 보고 처리: 보고마다 git 확인 → WORKBOARD 표시 → 다음 일 발송. PAYMENTS의 PAY-0·PAY-2 PR은 병합 차례를 이미 받음(MERGE_QUEUE 10) — 완료 기준: PR CI 녹색, 병합, 원장 PAY-0, PAY-2
+3. DS-H, DS-1: DATA_SOURCE의 D1·D2 보고와 소유자 OA-09·OA-10(c) 답으로 닫음. KEY-5·OS-F1은 UI PR #140(OA-48) 뒤
+4. 메인 문서 PR(대기열 14): `docs/nautilus_bridge/REMAINING_WORK_2026-11-24.md`(QGPT-, DIDM-2~9, DIDM-S1~S5, DS-5a~5c를 한 줄 범위로 등록, 명세서 본문 없이), `CLAUDE.md` 세션 5개, `tools/handoff/push_handoff.py` LANE_DOCS에 `DIDM_SESSION_CURRENT.md`·`QUANTGPT_SESSION_CURRENT.md`, `OWNER_RULINGS_LOG.md` 2026-11-24 절(지시 원문과 결정 3개)
+5. 빠진 원장 행(#146 병합, DS-1, DIDM-0, DS-4d, DS-4e): 근거 확인 뒤 `--done`
+6. PR #148: 고친 커밋이 오면 `PR148_REVIEW.md`의 "병합 전 다시 볼 것" 3가지 확인 뒤 병합
 
 ## 7. 주의사항 / 하지 말 것
 
@@ -98,8 +112,9 @@ git for-each-ref --sort=-committerdate refs/remotes/origin | head   (w1124/main 
 
 ## 8. 사용자에게 물어야 할 것
 
-- QuantGPT 비공개 저장소 `xkg4real/quantgpt` 생성과 Claude GitHub 앱 접근 허용 (명세서 소유자 작업 U-01)
-- 그 밖의 항목은 `WORKBOARD.md` 3절
+- 24시간 안 8건은 `WORKBOARD.md` 맨 위 블록 C (OA-48 UI PR #140 담당, OA-09, OA-10, OA-03, OA-04, OA-05, OA-49 QUANTGPT 세션에 명세서 파일 올리기, OA-50 TRADEGEN 공유)
+- PR #148을 누가 고칠지(만든 세션 / 메인), HyperFrequency 스킬의 라이선스(README 문구뿐)를 받아들일지
+- QuantGPT 설계 결정 3개와 일정 기준(OA-52), GPT 작업에서 나온 위험 4건(OA-53), skills.sh 호스트 허용(OA-51)
 
 ## 9. 이어받는 에이전트에게 주는 지시문
 
