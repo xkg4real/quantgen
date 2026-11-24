@@ -9,9 +9,11 @@ from __future__ import annotations
 from collections.abc import Collection, Mapping
 from datetime import datetime
 import re
+import time as _time
 from urllib.parse import parse_qsl, unquote, urlsplit
 
 from core.didm.ingest.massive_news import MassiveNewsError, NewsArticle, NewsPage, build_article, receipt_utc
+from data.didm.keys import SourceError, require, safe_detail
 
 
 _CREDENTIAL_QUERY = re.compile(r"(?:^|[?&;])\s*api_?key\s*=", re.IGNORECASE)
@@ -109,3 +111,48 @@ def parse_page(payload: Mapping, received_at: datetime, *, seen_cursors: Collect
     if next_cursor is not None and next_cursor in seen_cursors:
         raise MassiveNewsError("next_url: repeated cursor")
     return NewsPage(tuple(_article(row, received) for row in rows), next_cursor)
+
+
+# --------------------------------------------------------------------------------------------------------------
+# HTTP (DS-5c, owner N0 2026-11-24). The key goes in the Authorization header, never in the URL; the parser above
+# already refuses a next_url that carries a key. Free plan: 5 requests per minute (Massive knowledge base, 2026-11-24
+# search summary, unverified), so pages are spaced by MIN_INTERVAL_S.
+# --------------------------------------------------------------------------------------------------------------
+KEY_NAME = "MASSIVE_API_KEY"
+NEWS_URL = "https://api.massive.com/v2/reference/news"
+TIMEOUT_SECONDS = 30
+MIN_INTERVAL_S = 12.5
+_TICKER_RE = re.compile(r"^[A-Z0-9.\-:]{1,20}$")
+_last_call = [0.0]
+
+
+def fetch_page(ticker: str | None = None, *, published_gte: str | None = None, limit: int = 100,
+               cursor: str | None = None, sleep=_time.sleep, clock=_time.monotonic) -> dict:
+    """One page of /v2/reference/news (ascending by published_utc). Returns the JSON; parse with parse_page."""
+    from data.net import session
+    key = require(KEY_NAME)
+    if ticker is not None and not _TICKER_RE.match(ticker):
+        raise ValueError("bad ticker")
+    if not 1 <= int(limit) <= 1000:
+        raise ValueError("limit must be 1..1000")
+    params = {"limit": int(limit), "order": "asc", "sort": "published_utc"}
+    if ticker:
+        params["ticker"] = ticker
+    if published_gte:
+        params["published_utc.gte"] = published_gte
+    if cursor:
+        params["cursor"] = cursor
+    wait = _last_call[0] + MIN_INTERVAL_S - clock()
+    if _last_call[0] and wait > 0:
+        sleep(wait)
+    _last_call[0] = clock()
+    resp = session.get(NEWS_URL, params=params, timeout=TIMEOUT_SECONDS,
+                       headers={"Authorization": f"Bearer {key}"})
+    if resp.status_code != 200:
+        try:
+            body = resp.json()
+            detail = body.get("message") or body.get("error") or ""
+        except Exception:  # noqa: BLE001 - not JSON
+            detail = ""
+        raise SourceError(f"Massive news: HTTP {resp.status_code}" + (f" ({safe_detail(detail, key)})" if detail else ""))
+    return resp.json()

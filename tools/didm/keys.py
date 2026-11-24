@@ -24,7 +24,7 @@ def main(argv: list[str] | None = None) -> int:
     p_set.add_argument("name", choices=keys.RESEARCH_KEYS + keys.APP_KEYS_USED)
     args = ap.parse_args(argv)
     if args.cmd == "status":
-        for name in keys.RESEARCH_KEYS + keys.APP_KEYS_USED:
+        for name in keys.RESEARCH_KEYS + keys.APP_KEYS_USED + keys.ENV_ONLY_KEYS:
             st = keys.key_status(name)
             where = st["source"] or "-"
             store = "store" if st["in_store"] else "env only (store after KEY-3)"
