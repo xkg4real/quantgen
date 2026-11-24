@@ -1,4 +1,4 @@
-"""Publish a handoff document as CURRENT.md on the code-free `handoff` branch.
+"""Publish CURRENT.md or your named lane document on the code-free handoff branch.
 
 The working tree and the checked-out branch are never touched: the commit is built with git plumbing on a
 temporary index, so this is safe to run from a hook while an agent is mid-edit. Rules the branch's README.md
@@ -24,6 +24,10 @@ states and this script enforces:
   one, and a row whose commit is not on the remote are input errors.
 - After the push, the commit is read back from the remote: its CURRENT.md must be the bytes that were sent
   and its LEDGER.md must hold the new rows.
+- With `--doc FILE`, pass the named report for your assigned OS, payments, data, UI or website lane.
+  Edit the file in a handoff checkout (detached is fine), or bring it into your topic checkout with
+  `git checkout origin/handoff -- FILE` before editing it. A standalone draft can prepend or append
+  a note to the complete current report. Only that report is published and read back.
 
 Exit codes: 0 published and verified, 2 bad input (fix it and publish again), 3 refused (locked, unreadable, an
 untaken handoff or a live checkpoint of another task, or an ID another writer already recorded), 4 git or
@@ -31,6 +35,7 @@ network failure, or a read-back that did not match (the push may have landed: ru
 publish, and a re-publish of the same document, prints `push_handoff: <branch> at <sha> (<status> <task>)`.
 
     python3 tools/handoff/push_handoff.py path/to/handoff.md [--key seven_day@<resets_at>] [--done "..."]...
+    python3 tools/handoff/push_handoff.py --doc path/to/OS_SESSION_CURRENT.md
     python3 tools/handoff/push_handoff.py --show            # the remote CURRENT.md front matter and the ledger tip
     python3 tools/handoff/push_handoff.py --ledger          # the whole ledger
 """
@@ -53,6 +58,15 @@ KST = timezone(timedelta(hours=9))
 # The owner's weekly usage limit refills on Tuesdays at 17:00 KST; a cycle is named by the Tuesday it began.
 REFILL_WEEKDAY, REFILL_HOUR = 1, 17
 LEDGER = "LEDGER.md"
+# The three sub-sessions have assigned task names. UI and website also maintain
+# named Markdown reports; their existing documents have no required front matter.
+LANE_DOCS = {
+    "OS_SESSION_CURRENT.md": "os-expansion",
+    "PAYMENTS_SESSION_CURRENT.md": "payments-account-keys",
+    "DATA_SOURCE_SESSION_CURRENT.md": "data-source-didm",
+    "UI_SESSION_CURRENT.md": None,
+    "WEBSITE_AWS_SESSION_CURRENT.md": None,
+}
 _DASHES = re.compile(r"[\u2010-\u2015\u2212\ufe58\ufe63\uff0d]")
 ID_SEPARATORS = re.compile(r"[\s,\uff0c\u3001;\uff1b\u25b6\u2192>\[\]]+")
 ID_SHAPE = re.compile(r"^[0-9a-z][0-9a-z.\-/]*$")
@@ -459,9 +473,127 @@ def show_ledger(remote: str, branch: str) -> int:
     return 0
 
 
+def lane_entry(parent: str, name: str, *, directory: Path | None = None) -> str:
+    """Tree mode/type/object ID, or empty for an absent file; no checkout or index use."""
+    prefix = ("-C", str(directory)) if directory is not None else ()
+    listing = git(*prefix, "ls-tree", parent, "--", name)
+    return listing.partition("\t")[0]
+
+
+def lane_edit_base(path: Path) -> str | None:
+    """Use the checked-out handoff revision the edit started from, not today's fetch."""
+    directory = path.parent.resolve()
+    prefix = ("-C", str(directory))
+    top = git(*prefix, "rev-parse", "--show-toplevel", check=False)
+    if not top or Path(top).resolve() != directory:
+        return None
+    # A handoff worktree may be detached. A topic worktree can also have a
+    # tracked report, or an index copy from 'git checkout origin/handoff -- FILE'.
+    head = lane_entry("HEAD", path.name, directory=directory)
+    if head or git(*prefix, "symbolic-ref", "--short", "-q", "HEAD", check=False) == "handoff":
+        return head
+    staged = git(*prefix, "ls-files", "--stage", "--", path.name)
+    if staged:
+        mode, oid, stage = staged.partition("\t")[0].split()
+        if stage == "0":
+            return f"{mode} blob {oid}"
+    return None
+
+
+def lane_refusal(name: str, old: dict[str, str], new: dict[str, str]) -> str | None:
+    task = new.get("task")
+    if task and task != "none" and task != LANE_DOCS[name] and (
+            LANE_DOCS[name] is not None or task in LANE_DOCS.values()):
+        return "the document names a task assigned to a different lane"
+    status = old.get("status", "").lower()
+    if status == "taken" or (status == "checkpoint" and not is_stale(old)):
+        # A shared agent name (e.g. 'gpt') alone cannot identify the session.
+        execution = old.get("execution_id", "")
+        same_execution = (execution and execution.lower() not in ("none", "unknown")
+                          and not execution.startswith("<") and execution == new.get("execution_id"))
+        if (old.get("from") != new.get("from") or not (same_writer(old, new) or same_execution)
+                or any(old.get(k) and new.get(k) != old[k] for k in ("session", "execution_id"))):
+            return "the lane has an active owner; its session or execution does not match"
+    return None
+
+
+def publish_lane(path: Path, remote: str, message: str | None) -> int:
+    """Publish only the named report. Keep central ownership, ledger and history untouched."""
+    name = path.name
+    def protected(p: Path) -> bool:
+        parts = tuple(part.casefold() for part in p.parts)
+        return (".git" in parts or ".nextgen" in parts or any(part == ".env" or part.startswith(".env.") for part in parts)
+                or any(parts[i:i+3] == ("docs", "asset_expansion", "cache") for i in range(len(parts))))
+
+    if name not in LANE_DOCS or ".." in path.parts or protected(path.absolute()):
+        print("push_handoff: --doc needs a named lane file outside protected paths", file=sys.stderr)
+        return 2
+    path = path.parent.resolve() / name
+    if protected(path) or path.is_symlink() or not path.is_file():
+        print("push_handoff: --doc needs a regular lane file outside protected paths", file=sys.stderr)
+        return 2
+    if remote.startswith("-") or remote not in git("remote").splitlines():
+        print("push_handoff: --doc needs a configured Git remote", file=sys.stderr)
+        return 2
+    new_raw = path.read_bytes()
+    try:
+        text = new_raw.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        text = ""
+    if not text.strip() or "\0" in text or (message and "handoff-key:" in message):
+        print("push_handoff: give a nonempty UTF-8 lane document and an ordinary message", file=sys.stderr)
+        return 2
+    new = front_matter(text)
+    base = lane_edit_base(path)
+    parent = fetch(remote, "handoff")
+    original = lane_entry(parent, name)
+    for _ in range(3):
+        entry = lane_entry(parent, name)
+        if entry and not entry.startswith("100644 blob "):
+            print(f"push_handoff: {name} is not a regular lane document on handoff", file=sys.stderr)
+            return 3
+        old_raw = git_bytes("cat-file", "blob", entry.split()[2]) if entry else b""
+        if old_raw == new_raw:
+            commit = parent
+        else:
+            keeps_report = bool(old_raw) and (new_raw.startswith(old_raw) or new_raw.endswith(old_raw))
+            if entry != original or (base is not None and entry != base and not keeps_report):
+                print(f"push_handoff: {name} changed since this edit; reconcile the latest document", file=sys.stderr)
+                return 3
+            if base is None and entry and not keeps_report:
+                print(f"push_handoff: edit {name} in a handoff checkout or preserve the current report "
+                      "when appending or prepending a note", file=sys.stderr)
+                return 3
+            try:
+                old_text = old_raw.decode("utf-8-sig")
+            except UnicodeDecodeError:
+                print(f"push_handoff: {name} is unreadable on handoff", file=sys.stderr)
+                return 3
+            why = lane_refusal(name, front_matter(old_text), new)
+            if why:
+                print(f"push_handoff: {name}: {why}", file=sys.stderr)
+                return 3
+            commit = commit_files(parent, {name: new_raw}, message or f"handoff: {name}")
+            if not push_commit(remote, "handoff", commit):
+                parent = fetch(remote, "handoff")
+                continue
+        tip = fetch(remote, "handoff")
+        ancestor = subprocess.run(["git", "merge-base", "--is-ancestor", commit, tip], capture_output=True)
+        if (ancestor.returncode or lane_entry(tip, name) != lane_entry(commit, name)
+                or git_bytes("show", f"{tip}:{name}", check=False) != new_raw):
+            print(f"push_handoff: {name} did not match at remote read-back", file=sys.stderr)
+            return 4
+        print(f"push_handoff: handoff at {commit[:7]} ({name}), verified on {remote}")
+        return 0
+    print("push_handoff: the remote kept moving; gave up after 3 attempts", file=sys.stderr)
+    return 4
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("file", nargs="?", type=Path, help="handoff document to publish as CURRENT.md")
+    ap.add_argument("--doc", type=Path, metavar="FILE",
+                    help="publish your named lane Markdown file to handoff using its basename")
     ap.add_argument("--show", action="store_true", help="print the remote CURRENT.md front matter and exit")
     ap.add_argument("--force", action="store_true", help="publish over a lock or an untaken handoff (owner's say-so)")
     ap.add_argument("--key", help="usage-window key, written as a 'handoff-key:' commit trailer")
@@ -473,6 +605,15 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("-m", "--message")
     args = ap.parse_args(argv)
     try:
+        if args.doc is not None:
+            if (args.file or args.show or args.ledger or args.done or args.key is not None
+                    or args.force or args.branch != "handoff"):
+                ap.error("--doc publishes only its lane file on handoff; use it separately from CURRENT/ledger options")
+            try:
+                return publish_lane(args.doc, args.remote, args.message)
+            except OSError as e:
+                print(f"push_handoff: {e}", file=sys.stderr)
+                return 4
         if args.show:
             return show(args.remote, args.branch)
         if args.ledger:
