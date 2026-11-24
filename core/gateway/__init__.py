@@ -31,8 +31,10 @@ Five names are bound once at import, not at call time (all fixed-local or source
 ``_requests`` (data.net session), risk ``_gts`` and quant insights ``_API_URL``.
 ``on_change(listener)``: called after ``reload()`` and after a key is set or deleted (core/gateway/feed.py uses it).
 
-Which route serves a source comes from ``routes.json`` and the active profile (``core.app_identity.GATEWAY_PROFILE``;
-``personal`` today). The company route stays closed until ``core.app_identity.company_data_server_configured()``.
+Which route serves a source comes from ``routes.json`` and the active profile ``profile()``: ``commercial`` in a public
+build whatever else says (P10, build info ``core._build_info``), otherwise ``core.app_identity.GATEWAY_PROFILE``
+(``personal`` in a source checkout or wheel). The company route stays closed until
+``core.app_identity.company_data_server_configured()``.
 """
 from __future__ import annotations
 
@@ -40,6 +42,7 @@ import contextlib
 import dataclasses
 import importlib
 import json
+import sys
 import threading
 import weakref
 from dataclasses import dataclass, field
@@ -94,7 +97,23 @@ def _table() -> Optional[dict]:
         return _routes
 
 
+def _profile_locked() -> bool:
+    """P10: build info fixes the profile to "commercial" (a public build; core.app_identity.gateway_profile_locked).
+    If app_identity cannot be imported, the build info the runtime hook left in sys.modules is read directly."""
+    try:
+        from core import app_identity
+    except ImportError:
+        info = sys.modules.get("core._build_info")
+        return info is not None and getattr(info, "CHANNEL", "dev") not in ("dev", "beta")
+    return app_identity.gateway_profile_locked()
+
+
 def profile() -> str:
+    """The active profile. A locked build (public) is "commercial" before anything else is looked at, so neither the
+    test override, app_identity.GATEWAY_PROFILE nor a fallback can make it "personal" (P10). Otherwise as before:
+    the test override, then app_identity.GATEWAY_PROFILE (resolved from build info at import), else "personal"."""
+    if _profile_locked():
+        return "commercial"
     if _profile_override in PROFILES:
         return _profile_override
     try:

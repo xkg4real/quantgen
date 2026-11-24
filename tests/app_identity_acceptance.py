@@ -1,5 +1,8 @@
 """core.app_identity (OS-P0-c): one place for names and IDs; empty until decided, no secrets, no company suffix."""
 from pathlib import Path
+import importlib
+import importlib.util
+import os
 import re
 import sys
 import types
@@ -9,6 +12,27 @@ from unittest.mock import patch
 from core import app_identity
 
 SOURCE = Path(app_identity.__file__).read_text(encoding="utf-8")
+_MISSING = object()
+
+
+def _info(channel=_MISSING, profile=_MISSING):
+    """The core._build_info module packaging/rthook_build_info.py.in puts in sys.modules (fields left out when _MISSING)."""
+    fields = {}
+    if channel is not _MISSING:
+        fields["CHANNEL"] = channel
+    if profile is not _MISSING:
+        fields["GATEWAY_PROFILE"] = profile
+    return types.SimpleNamespace(QT_BINDING="PyQt6", SOURCE_COMMIT="unknown", CALCULATION_SHA256="", **fields)
+
+
+def _fresh_identity(info):
+    """core.app_identity as a new process imports it after the runtime hook ran (info None: no build info, a source
+    checkout or wheel). Loaded as a separate module object, so the module the other tests use is left alone."""
+    spec = importlib.util.spec_from_file_location("_p10_fresh_app_identity", app_identity.__file__)
+    module = importlib.util.module_from_spec(spec)
+    with patch.dict(sys.modules, {"core._build_info": info}):     # None in sys.modules: the import fails, as without a hook
+        spec.loader.exec_module(module)
+    return module
 
 
 class IdentityTests(unittest.TestCase):
@@ -51,6 +75,88 @@ class IdentityTests(unittest.TestCase):
         for channel, expected in (("public", "public"), ("beta", "beta"), ("bogus", "dev")):
             with self.subTest(channel=channel), patch.dict(sys.modules, {"core._build_info": types.SimpleNamespace(CHANNEL=channel)}):
                 self.assertEqual(app_identity.build_channel(), expected)
+
+
+class GatewayProfileFromBuildInfo(unittest.TestCase):
+    """P10 (2026-11-24): the gateway profile comes from build info like the channel, and a public build is always
+    "commercial" (GATEWAY_DESIGN.md section 2, "프로필은 누가 정하나")."""
+
+    def test_public_build_runs_commercial_and_selfcheck_reports_it(self):
+        # What packaging/selfcheck.py sale_build_contents records (getattr(app_identity, "GATEWAY_PROFILE", None),
+        # OS branch claude/os-sale-build-check-20261124) is the module value a public build imports.
+        fresh = _fresh_identity(_info("public"))
+        self.assertEqual(getattr(fresh, "GATEWAY_PROFILE", None), "commercial")
+        with patch.dict(sys.modules, {"core._build_info": _info("public")}):
+            self.assertEqual(fresh.gateway_profile(), "commercial")
+            self.assertTrue(fresh.gateway_profile_locked())
+            self.assertEqual(app_identity.gateway_profile(), "commercial")     # read at call time, like build_channel()
+
+    def test_public_build_ignores_the_profile_field(self):
+        for profile in (_MISSING, "personal", "commercial", "Personal", "bogus", "", None, 1):
+            with self.subTest(profile=profile):
+                self.assertEqual(_fresh_identity(_info("public", profile)).GATEWAY_PROFILE, "commercial")
+                with patch.dict(sys.modules, {"core._build_info": _info("public", profile)}):
+                    self.assertEqual(app_identity.gateway_profile(), "commercial")
+
+    def test_environment_cannot_turn_a_public_build_personal(self):
+        env = {"QG_GATEWAY_PROFILE": "personal", "GATEWAY_PROFILE": "personal", "QG_BUILD_CHANNEL": "dev",
+               "CHANNEL": "dev"}
+        with patch.dict(os.environ, env):
+            self.assertEqual(_fresh_identity(_info("public", "personal")).GATEWAY_PROFILE, "commercial")
+            with patch.dict(sys.modules, {"core._build_info": _info("public")}):
+                self.assertEqual(app_identity.gateway_profile(), "commercial")
+        self.assertNotRegex(SOURCE, r"\bimport os\b|\bfrom os\b|environ\s*[\[.]|getenv",
+                            "the profile and the channel are never read from environment variables")
+
+    def test_reload_keeps_a_public_build_commercial(self):
+        try:
+            with patch.dict(sys.modules, {"core._build_info": _info("public", "personal")}):
+                importlib.reload(app_identity)
+                self.assertEqual(app_identity.GATEWAY_PROFILE, "commercial")
+        finally:
+            importlib.reload(app_identity)
+        self.assertEqual(app_identity.GATEWAY_PROFILE, "personal")              # back to the source checkout
+
+    def test_source_run_and_dev_or_beta_builds_keep_today_s_profile(self):
+        cases = (
+            (None, "personal"),                                   # source checkout or wheel: no build info
+            (_info("dev"), "personal"), (_info("beta"), "personal"), (_info(), "personal"),   # no profile field
+            (_info("dev", "personal"), "personal"), (_info("beta", "personal"), "personal"),
+            (_info("beta", "commercial"), "commercial"), (_info("dev", "commercial"), "commercial"),
+        )
+        for info, expected in cases:
+            with self.subTest(info=info):
+                fresh = _fresh_identity(info)
+                self.assertEqual(fresh.GATEWAY_PROFILE, expected)
+                with patch.dict(sys.modules, {"core._build_info": info}):
+                    self.assertEqual(fresh.gateway_profile(), expected)
+                    self.assertFalse(fresh.gateway_profile_locked())
+        self.assertEqual(app_identity.GATEWAY_PROFILE, "personal")
+        self.assertEqual(app_identity.gateway_profile(), "personal")
+        self.assertEqual(app_identity.build_channel(), "dev")
+        self.assertTrue(app_identity.may_read_dotenv())
+
+    def test_garbled_build_info_fails_closed_to_commercial(self):
+        """A profile value or a channel this code does not know never gives "personal": the stricter profile. The
+        app still starts (the gateway is not refused); the build spec also rejects such values (OS hand-off)."""
+        for info in (_info("beta", "bogus"), _info("beta", "Commercial"), _info("dev", "personal "), _info("dev", ""),
+                     _info("beta", None), _info("dev", 1), _info("PUBLIC", "personal"), _info("Public"),
+                     _info("public ", "personal"), _info("", "personal"), _info(None, "personal")):
+            with self.subTest(info=info):
+                self.assertEqual(_fresh_identity(info).GATEWAY_PROFILE, "commercial")
+        for channel in ("PUBLIC", "", None):            # build_channel() itself is unchanged: an unknown channel is "dev"
+            with self.subTest(channel=channel), patch.dict(sys.modules, {"core._build_info": _info(channel)}):
+                self.assertEqual(app_identity.build_channel(), "dev")
+                self.assertTrue(app_identity.gateway_profile_locked())
+
+    def test_company_route_gate_follows_the_resolved_profile(self):
+        public = _fresh_identity(_info("public"))
+        source = _fresh_identity(None)
+        for module in (public, source):
+            module.DATA_API_BASE = "https://company.invalid"
+        self.assertTrue(public.company_data_server_configured())
+        self.assertFalse(source.company_data_server_configured())
+        self.assertFalse(app_identity.company_data_server_configured())         # DATA_API_BASE is still ""
 
 
 if __name__ == "__main__":

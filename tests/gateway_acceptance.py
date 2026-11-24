@@ -8,6 +8,8 @@ import copy
 import json
 import os
 import re
+import sys
+import types
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -272,6 +274,126 @@ class ProfileTest(Base):
         self.assertTrue(all(r["state"] == "off" for sid, r in rows.items() if sid not in fixed))
         self.assertTrue(all(r["route"] == "local_key" and r["state"] == "key_needed"
                             for sid, r in rows.items() if sid in fixed))
+
+
+def _build(channel, **fields):
+    """The core._build_info module packaging/rthook_build_info.py.in puts in sys.modules before the app starts."""
+    return patch.dict(sys.modules, {"core._build_info": types.SimpleNamespace(CHANNEL=channel, **fields)})
+
+
+class PublicBuildProfileTest(Base):
+    """P10 (2026-11-24): a public build runs "commercial" (yahoo, fmp, gs_marquee off); nothing at run time turns it
+    back to "personal". Source runs and dev/beta builds keep today's profile and the test override."""
+    NO_DISPLAY_RIGHT = ("yahoo", "fmp", "gs_marquee")
+
+    def _assert_commercial(self):
+        self.assertEqual(gw.profile(), "commercial")
+        for sid in self.NO_DISPLAY_RIGHT:
+            self.assertEqual(gw.ready(sid), "off")
+            self.assertEqual(gw.blocked(sid), "off")
+        with self.assertRaises(gw.GatewayOff):
+            gw.client("fmp")
+        with self.assertRaises(gw.GatewayOff):
+            gw.provider("data.fmp.quote_client")
+        with self.assertRaises(gw.GatewayOff):
+            gw.provider("gs_quant.session")
+        self.assertEqual(gw.route_of("kis_quote"), "local_key")          # rule 1: fixed-local in every profile
+        self.assertEqual(gw.ready("fred"), "ready")
+
+    def test_public_build_is_commercial(self):
+        for fields in ({}, {"GATEWAY_PROFILE": "personal"}, {"GATEWAY_PROFILE": "bogus"}):
+            with self.subTest(fields=fields), _build("public", **fields):
+                self._assert_commercial()
+
+    def test_override_cannot_turn_a_public_build_personal(self):
+        with _build("public"), _no_keys():
+            credentials.set("FMP_API_KEY", FAKE)
+            for override in ("personal", "commercial", "bogus", None):
+                with self.subTest(override=override):
+                    gw._profile_override = override
+                    self._assert_commercial()
+                    self.assertFalse(gw.keys_ready("fmp"))
+                    self.assertEqual(gw.local_key("fmp"), "")
+
+    def test_app_identity_value_cannot_turn_a_public_build_personal(self):
+        from core import app_identity
+        for value in ("personal", "bogus", None):
+            with self.subTest(value=value), _build("public"), patch.object(app_identity, "GATEWAY_PROFILE", value):
+                self._assert_commercial()
+        saved = app_identity.GATEWAY_PROFILE
+        del app_identity.GATEWAY_PROFILE                                   # the getattr default ("personal")
+        try:
+            with _build("public"):
+                self.assertEqual(gw.profile(), "commercial")
+            self.assertEqual(gw.profile(), "personal")
+        finally:
+            app_identity.GATEWAY_PROFILE = saved
+
+    def test_unimportable_app_identity_still_fails_closed(self):
+        import core
+        saved = core.app_identity
+        del core.app_identity                                              # so the import inside profile() fails
+        try:
+            with patch.dict(sys.modules, {"core.app_identity": None}):
+                with self.assertRaises(ImportError):
+                    from core import app_identity  # noqa: F401
+                with _build("public"):
+                    self.assertEqual(gw.profile(), "commercial")
+                with _build("public"):
+                    gw._profile_override = "personal"
+                    self.assertEqual(gw.profile(), "commercial")
+                gw._profile_override = None
+                self.assertEqual(gw.profile(), "personal")                 # source run: as before
+                gw._profile_override = "commercial"
+                self.assertEqual(gw.profile(), "commercial")
+        finally:
+            core.app_identity = saved
+
+    def test_environment_reload_and_route_reload_keep_a_public_build_commercial(self):
+        env = {"QG_GATEWAY_PROFILE": "personal", "GATEWAY_PROFILE": "personal", "QG_BUILD_CHANNEL": "dev"}
+        with _build("public"), patch.dict(os.environ, env):
+            gw._profile_override = "personal"
+            gw.reload()
+            self._assert_commercial()
+            gw._routes, gw._route_error = None, None                       # routes read again from the shipped file
+            with _no_keys():
+                rows = {r["source"]: r for r in gw.status()}
+            self.assertTrue(all(rows[sid]["state"] == "off" for sid in self.NO_DISPLAY_RIGHT))
+        names = re.compile(r"\bos\.environ|getenv")
+        for path in (ROOT / "core" / "gateway").glob("*.py"):
+            with self.subTest(path=path.name):
+                self.assertIsNone(names.search(path.read_text(encoding="utf-8")),
+                                  "the gateway reads no environment variable (the profile above all)")
+
+    def test_unknown_channel_fails_closed(self):
+        for channel in ("PUBLIC", "Public", "public ", "", None):
+            with self.subTest(channel=channel), _build(channel, GATEWAY_PROFILE="personal"):
+                gw._profile_override = "personal"
+                self.assertEqual(gw.profile(), "commercial")
+
+    def test_source_run_and_dev_beta_builds_keep_the_override(self):
+        cases = ((None, "personal"), (_build("dev"), "personal"), (_build("beta"), "personal"),
+                 (_build("dev", GATEWAY_PROFILE="personal"), "personal"))
+        for build, default in cases:
+            with self.subTest(build=build and build.values), (build or patch.dict(sys.modules, {})):
+                gw._profile_override = None
+                self.assertEqual(gw.profile(), default)
+                self.assertEqual(gw.ready("yahoo"), "ready")
+                gw._profile_override = "commercial"
+                self.assertEqual(gw.profile(), "commercial")
+                self.assertEqual(gw.ready("yahoo"), "off")
+                gw._profile_override = "personal"
+                self.assertEqual(gw.profile(), "personal")
+                gw._profile_override = "bogus"
+                self.assertEqual(gw.profile(), default)
+
+    def test_shipped_commercial_table_keeps_no_display_right_sources_off_this_pc(self):
+        """What a public build runs: yahoo, fmp and gs_marquee are never on the user's key or keyless in the shipped
+        commercial table (a contract may later move one to "company"; then this test changes with routes.json)."""
+        table = routes.load_routes()["profiles"]["commercial"]
+        for sid in self.NO_DISPLAY_RIGHT:
+            with self.subTest(source=sid):
+                self.assertFalse({"local_key", "keyless"} & set(table[sid]), table[sid])
 
 
 class LocalTest(Base):

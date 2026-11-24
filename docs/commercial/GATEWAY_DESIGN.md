@@ -1,6 +1,6 @@
 # 공급원 게이트웨이 설계 (KEY-3)
 
-- 판: v0.3.3 (2026-11-20, KEY-5/a: 5절 서버 오류 코드 세 가지 꼴과 전송 실패 고정 코드, 7a절 `data.kis_stream`·`data.kis_workspace` 입구, 공용 `core/gateway/feed.py`, `krx_gateway()` 답의 막힘 사유와 길·키 바뀜 뒤 다시 설정, `on_change`). v0.3.2 (2026-11-20, PR #133 3차 검토 반영: 6절 화면 44곳·QuoteFeed 규칙·풀지 못한 `level`, 7a절 import 때 정하는 5곳을 코드 docstring과 같게, 같은 답 시험의 긴 목록 비교 방식과 김치 프리미엄 범위, 7절 KEY-5 행). v0.3.1 (2026-11-19, PR #133 메인 검토 반영: 6절 동결 예외·허용 목록·상한, 7a절 막힘(off·company)·묶음 로더·여러 공급원 모듈·예외 5곳·규칙 6 범위, 7절 하네스와 지문). v0.3 (2026-11-19, KEY-4: 6절 판 3, 7a절 새로, 3절 규칙 4·6과 9절 정정 — 메인 세션 KEY-3 검토 잔여 1·8번). v0.2 2026-11-19 (PR #132 검토: 경계 시험 ast화). v0.1 2026-11-19. 작성: PAYMENTS_ACCOUNT_KEYS 세션. ID `KEY-3/design`.
+- 판: v0.3.4 (2026-11-24, P10: 프로필을 빌드 정보 `core._build_info.GATEWAY_PROFILE`에서 읽고 공개(public) 빌드는 `commercial` 고정 — 2절 "프로필은 누가 정하나"와 OS 인계 한 줄, 3절 P10 행, 0·4·6·8·9절 맞춤; 기준 main `de32ea1`; main 병합은 소유자 확인 "공개 빌드는 commercial 프로필 고정" 뒤). v0.3.3 (2026-11-20, KEY-5/a: 5절 서버 오류 코드 세 가지 꼴과 전송 실패 고정 코드, 7a절 `data.kis_stream`·`data.kis_workspace` 입구, 공용 `core/gateway/feed.py`, `krx_gateway()` 답의 막힘 사유와 길·키 바뀜 뒤 다시 설정, `on_change`). v0.3.2 (2026-11-20, PR #133 3차 검토 반영: 6절 화면 44곳·QuoteFeed 규칙·풀지 못한 `level`, 7a절 import 때 정하는 5곳을 코드 docstring과 같게, 같은 답 시험의 긴 목록 비교 방식과 김치 프리미엄 범위, 7절 KEY-5 행). v0.3.1 (2026-11-19, PR #133 메인 검토 반영: 6절 동결 예외·허용 목록·상한, 7a절 막힘(off·company)·묶음 로더·여러 공급원 모듈·예외 5곳·규칙 6 범위, 7절 하네스와 지문). v0.3 (2026-11-19, KEY-4: 6절 판 3, 7a절 새로, 3절 규칙 4·6과 9절 정정 — 메인 세션 KEY-3 검토 잔여 1·8번). v0.2 2026-11-19 (PR #132 검토: 경계 시험 ast화). v0.1 2026-11-19. 작성: PAYMENTS_ACCOUNT_KEYS 세션. ID `KEY-3/design`.
 - **소유자 승인: 2026-11-19, 원문 "Key-3 승인"** (이 세션 채팅).
 - 근거: 소유자 D7-G 승인 (2026-11-18 14:15 KST, 원문 "그러면 D7-G의 방식대로 진행하겠습니다", handoff `MERGE_QUEUE.md`, 커밋 `762150c`), 설계 원안 handoff `plans/2026-11-17/D7_ENV_STRUCTURE.md` 5장.
 - 기준: main `ca5da08` (KEY-2 `3249af7`, KEY-2/b `ca5da08` 병합 뒤). 줄 번호는 이 커밋 기준이며 코드가 바뀌면 달라집니다.
@@ -13,12 +13,14 @@
 
 앱(화면과 core)은 공급사를 직접 부르지 않고 `core/gateway` 한 곳만 부릅니다. 게이트웨이는 `routes.json`의 설정에 따라 공급원마다 길을 고릅니다.
 
-| 길 | 뜻 | 지금 (`personal`) | 법인 뒤 (`commercial`) |
+| 길 | 뜻 | 소스 실행·개발/베타 빌드 (`personal`) | 공개 빌드 (`commercial`, P10)·법인 뒤 |
 |---|---|---|---|
 | `local_key` | 사용자 PC에서 사용자 키로 공급사 직접 호출 (지금 방식) | 켜짐 | 사용자 키 공급원에 계속 |
 | `keyless` | 키 없는 공개 공급원 직접 호출 | 켜짐 | 표시 조건 확인 뒤 |
 | `company` | 회사 데이터 서버를 거침 (`remote.py`) | **꺼짐** (주소 빈 값) | 계약 데이터 |
 | `off` | 쓰지 않음 | — | 계약 못 한 공급원 |
+
+**P10 (2026-11-24):** 공개(public) 빌드는 `commercial`을 돌립니다 (지금 초안 값: `yahoo`·`fmp`·`gs_marquee` 꺼짐). 소스 실행·wheel·개발/베타 빌드는 그대로 `personal`입니다. 누가 어떻게 정하는지는 2절 "프로필은 누가 정하나".
 
 법인 뒤 남는 일은 `routes.json`의 `commercial` 값, 회사 서버, 계약뿐입니다. 앱 구조는 바뀌지 않습니다 (소유자 조건: "앱의 구조를 수정"해야 하면 거부).
 
@@ -72,7 +74,6 @@ flowchart LR
 ```json
 {
   "schema": 1,
-  "active_profile_from": "core.app_identity.GATEWAY_PROFILE",
   "profiles": {
     "personal": {
       "kis_quote":     ["local_key"],
@@ -106,8 +107,31 @@ flowchart LR
 ```
 
 - 값은 길의 **순서**입니다. 앞 길이 `ready`가 아니면 다음 길을 봅니다 (예: 나중에 `["company", "local_key"]`).
-- `commercial` 값은 **초안**입니다. 계약 답이 오기 전에는 켜지지 않습니다 (`GATEWAY_PROFILE = "personal"`, `DATA_API_BASE = ""`, `core/app_identity.py`). 위 `commercial`은 "계약이 없으면 끄는" 보수적 초안이고, 계약이 생기면 그 공급원을 `["company"]`로 바꿉니다.
-- 활성 프로필은 `core.app_identity.GATEWAY_PROFILE` (OS 세션, main에 있음)에서 읽습니다. `company` 길은 `core.app_identity.company_data_server_configured()`가 참일 때만 열립니다.
+- `commercial` 값은 **초안**입니다: "계약이 없으면 끄는" 보수적 초안이고, 계약이 생기면 그 공급원을 `["company"]`로 바꿉니다. **P10부터 공개 빌드가 이 값을 씁니다** (아래). 회사 길은 `DATA_API_BASE = ""` (`core/app_identity.py`)라 아직 닫혀 있습니다.
+- 파일에는 어느 프로필을 쓸지 적지 않습니다 (예전 판의 `"active_profile_from"` 키는 실제 파일에 없었음). 활성 프로필은 `core.gateway.profile()`이 아래 규칙으로 정합니다. `company` 길은 `core.app_identity.company_data_server_configured()`(프로필 `commercial` + `DATA_API_BASE`)가 참일 때만 열립니다.
+
+**프로필은 누가 정하나 (P10, 2026-11-24).** 발견: OS 세션 `docs/platform/SALE_BUILD_CHECK_2026-11-24.md` 3절 (브랜치 `claude/os-sale-build-check-20261124`) — 프로필이 코드 상수 `GATEWAY_PROFILE = "personal"`이라 판매 빌드도 `personal`로 나갔고 selfcheck가 `gateway_profile: "personal"`을 기록했음.
+
+- **인터페이스:** 빌드 정보 모듈 `core._build_info`의 문자열 필드 **`GATEWAY_PROFILE`**, 허용 값 **`"personal"`, `"commercial"`**. 이 모듈은 파일이 아니고 `packaging/rthook_build_info.py.in`이 앱 시작 전에 `sys.modules`에 넣습니다 (그래서 앱 옆에 둔 파일로 바꿀 수 없음). 채널 `CHANNEL` (`"dev"`·`"beta"`·`"public"`)과 같은 방식으로 읽습니다: `core.app_identity.gateway_profile()`이 `build_channel()`과 같은 `from core import _build_info`를 씁니다.
+- **누가 쓰나:** OS 세션 (`packaging/rthook_build_info.py.in`, `packaging/quantgen_desktop.spec`, `packaging/selfcheck.py`). 지금 훅에는 이 필드가 없지만 `CHANNEL = "public"`은 이미 쓰므로, 이 변경만으로 공개 빌드는 `commercial`이 됩니다. 필드는 베타·개발 빌드에서 `commercial`을 돌려 볼 때와 기록용입니다.
+- **규칙 (코드·시험):**
+
+| 빌드 정보 | 프로필 |
+|---|---|
+| 없음: 소스 실행, wheel, 모바일 APK | `personal` (지금과 같음) |
+| `CHANNEL` `dev`·`beta`, `GATEWAY_PROFILE` 없음 | `personal` (지금과 같음) |
+| `CHANNEL` `dev`·`beta` + `"personal"` 또는 `"commercial"` | 그 값 |
+| `CHANNEL` `dev`·`beta` + 그 밖의 값 (오타, 대소문자, 빈 값, 문자열 아님) | `commercial` (안전한 쪽으로 실패) |
+| **`CHANNEL` `"public"`** | **`commercial` 고정**: 필드가 없거나 `"personal"`이거나 무엇이든 |
+| `CHANNEL`이 모르는 값 (`"PUBLIC"`, `"public "`, 빈 값, `None`) | `commercial` (안전한 쪽으로 실패; `.env` 판단의 `build_channel()`은 예전처럼 `dev`로 봄 — 9절) |
+
+- **모르는 값의 처리 (선택: `commercial`로 떨어뜨림, 게이트웨이를 멈추지 않음).** 게이트웨이를 멈추면 고정 로컬 셋 밖의 모든 공급원이 꺼져 (깨진 `routes.json`과 같음) 앱을 쓸 수 없게 되지만, `commercial`은 표시권 없는 공급원만 끄므로 판매판 규칙을 지키면서 앱은 돕니다. 어떤 경우에도 공개 빌드가 조용히 `personal`이 되지는 않습니다. 빌드 spec도 모르는 값을 빌드 때 거절합니다 (OS 몫, 아래 한 줄).
+- **어디서 강제:**
+  1. `core.app_identity.GATEWAY_PROFILE`은 import 때 `gateway_profile()`로 정해집니다 (`IS_DEV_BUILD`처럼). 빌드의 selfcheck가 기록하는 값이고 (`sale_build_contents`, OS 브랜치), `company_data_server_configured()`가 보는 값입니다.
+  2. `core.gateway.profile()`은 맨 먼저 `app_identity.gateway_profile_locked()` (부를 때 빌드 정보를 읽음)를 보고, 잠긴 빌드 (`CHANNEL`이 `public`이거나 모르는 값)면 `commercial`을 돌려줍니다. 시험용 `_profile_override`, `app_identity.GATEWAY_PROFILE`의 값·없음, 잘못된 값의 `personal` 대체, `app_identity` import 실패 (그때는 `sys.modules`의 빌드 정보를 직접 읽음)보다 앞입니다. `gw.reload()`와 `importlib.reload(app_identity)` 뒤에도 같습니다.
+  3. 환경 변수는 어디서도 읽지 않습니다 (`QG_GATEWAY_PROFILE`·`QG_BUILD_CHANNEL`은 빌드 때 spec만 읽음). 시험이 `core/app_identity.py`와 `core/gateway/*.py` 소스를 검사합니다.
+- **소스 실행·개발/베타 빌드:** 지금과 같습니다 (`personal`, 시험용 override 그대로 동작). 시험: `tests/app_identity_acceptance.py` `GatewayProfileFromBuildInfo`, `tests/gateway_acceptance.py` `PublicBuildProfileTest`.
+- **OS 인계 한 줄:** P10(core): `core.app_identity`가 `core._build_info.GATEWAY_PROFILE`(`"personal"`|`"commercial"`; 없으면 `personal`, 그 밖의 값은 `commercial`)을 읽고, `CHANNEL`이 `"public"`(또는 모르는 값)이면 필드·게이트웨이 override·환경 변수와 상관없이 `commercial`로 고정합니다 — OS는 `packaging/rthook_build_info.py.in`에 `_info.GATEWAY_PROFILE = "@GATEWAY_PROFILE@"`를 더하고, `packaging/quantgen_desktop.spec`이 `QG_GATEWAY_PROFILE`(기본: `public`이면 `commercial`, 그 밖은 `personal`; 모르는 값·`public`+`personal`은 `SystemExit`)로 채우며, `selfcheck.py`의 `build_info` 키에 `GATEWAY_PROFILE`을 넣고 `sale_build_contents`가 `core.gateway.profile()`을 기록해 `CHANNEL`이 `public`인데 `commercial`이 아니면 실패하게 해 주세요.
 - **회사 키는 이 파일 어디에도 없습니다** (규칙 2). 주소도 `app_identity`에 있고 여기에는 없습니다.
 
 **검증 (`routes.py`, 실패하면 앱 시작 시 `RouteError`):**
@@ -124,6 +148,7 @@ flowchart LR
 | 1 | 사용자 증권사·거래소 키 공급원 (KIS 시세·잔고·주문, Upbit 잔고)은 `local_key` 고정. 회사 서버는 증권사 키·계좌·주문을 다루지 않음 | `routes.py` 검증 + `remote.py`가 그런 공급원 요청을 `RemoteRefused`로 거절 + `dispatch.py`도 거절 | `fixed_local`을 `company`로 바꾼 `routes.json`이 거절됨; `remote.call("kis_account", ...)`이 거절됨 |
 | 2 | 회사 키는 설치파일·`routes.json`·저장소 어디에도 없음 | `routes.py`의 키 모양 검사; 저장소 검사 | 키 모양 문자열을 넣은 `routes.json` 거절; `core/gateway/**`에 키 모양 문자열 0개 |
 | 3 | 공개판은 `.env`를 읽지 않음 | KEY-2에서 이미 (`core.credentials.may_read_dotenv`) | KEY-2 시험 재사용; 게이트웨이는 `.env`를 직접 읽지 않음 (grep 시험) |
+| P10 | 공개(public) 빌드는 `commercial` 프로필 고정 (2절 "프로필은 누가 정하나"; main 병합은 소유자 확인 뒤) | `core.app_identity.gateway_profile()`·`gateway_profile_locked()` (빌드 정보), `core.gateway.profile()`이 override보다 먼저 | `PublicBuildProfileTest`: override·`app_identity` 값과 없음·import 실패·환경 변수·reload·모르는 채널에도 `commercial`, 소스·개발·베타는 override 그대로; `tests/app_identity_acceptance.py` `GatewayProfileFromBuildInfo`: 빌드 정보 표, selfcheck가 읽는 값, 모르는 값은 `commercial` |
 | 4 | 결과마다 출처·길·지연·표시권 | `GatewayAnswer` (`answer()`), `status()` 행 | `answer()`의 결과와 `status()`의 모든 행에 네 칸이 있음; `display_rights.json`에 없는 공급원은 `unknown`으로 표시 (빈칸 금지). core가 `provider()`·`ficc()`로 받는 결과는 기존 형 그대로이고 (7a절), 화면이 네 칸을 그리는 일은 KEY-5 |
 | 5 | 화면은 `status()` 행을 그대로 그림. 공급원 이름을 화면 코드에 박지 않음 | KEY-5 (UI 세션) | `status()` 행 스키마 시험; 경계 시험이 화면 쪽 새 직접 호출을 막음 |
 | 6 | 키를 넣거나 지우면 해당 클라이언트를 다시 만듦 (재시작 불필요; `client(source)`로 받은 클라이언트만. `provider()`로 클래스를 받아 직접 만든 클라이언트는 만들 때 키를 읽음, 7a절) | `core.credentials.subscribe` → `_on_key_change`: 다음 `client()`는 새로 만들고, 그동안 내준 클라이언트 (약한 참조로 기억)마다 `reload_credentials()`를 **바뀔 때마다** 부름 | 키를 넣으면 `ready("kis_quote")`가 `key_needed` → `ready`로 바뀜 (같은 프로세스); 키 두 개를 차례로 넣어도 처음 받은 클라이언트가 두 번 다 알림을 받음 |
@@ -143,7 +168,7 @@ flowchart LR
 
 ## 4. 공급원별 길 (D7 5.4 표, 공급원 id 확정)
 
-| id | 공급원 | 키 (`core/credentials/names.py`) | `personal` | `commercial` (초안) | 비고 |
+| id | 공급원 | 키 (`core/credentials/names.py`) | `personal` | `commercial` (초안; 공개 빌드, P10) | 비고 |
 |---|---|---|---|---|---|
 | `kis_quote` | KIS 시세·차트·실시간 | `KIS_APP_KEY`, `KIS_APP_SECRET` | `local_key` (고정) | `local_key` (고정) | 코스콤이 사용자 키 구조를 허용하지 않으면 별도 공급원 (`krx_licensed`)을 `company`로 더함 — 미정 |
 | `kis_account` | KIS 잔고 (주문은 나중) | 같음 | `local_key` (고정) | `local_key` (고정) | 서버 금지 |
@@ -207,7 +232,7 @@ flowchart LR
 
 **허용된 곳 (세지 않음):** `core/gateway/`, 그리고 게이트웨이가 감싸는 FRED·Yahoo 클라이언트 `core/ficc/data.py` 자체.
 
-**검토 3번 (경계 범위) 선택: 넣음.** FRED·Yahoo 로더 (`core.ficc.data`)와 `gs_quant` 직접 사용을 경계에 넣었습니다. **KEY-4 뒤 사실:** `core/`의 FRED·Yahoo 호출은 모두 `gateway.ficc()`를 지나고, 호출마다 그 요청이 닿을 공급원 (`_route`로 Yahoo 티커/FRED id를 가림)의 길을 봅니다. 그래서 `commercial`의 `yahoo: off`는 core 경로에서 Yahoo 티커만 막고 FRED id는 그대로 둡니다: `source="auto"`의 FRED+Yahoo 묶음은 Yahoo id만 SYNTHETIC(사유 포함)으로 돌려주고 FRED id는 계속 읽으며, Yahoo를 콕 집은 요청과 Yahoo 전용 호출은 `GatewayOff` (`CoreAccessTest.test_yahoo_off_stops_yahoo_tickers_only`). `history.py` 디스크 캐시도 막힌 공급원의 옛 파일을 내주지 않습니다. **화면 44곳 (KEY-5 전)은 아직 `core.ficc.data` 등을 직접 부르므로 그 경로는 막히지 않습니다** (지금 `commercial`은 켜지지 않으므로 실제 영향 없음).
+**검토 3번 (경계 범위) 선택: 넣음.** FRED·Yahoo 로더 (`core.ficc.data`)와 `gs_quant` 직접 사용을 경계에 넣었습니다. **KEY-4 뒤 사실:** `core/`의 FRED·Yahoo 호출은 모두 `gateway.ficc()`를 지나고, 호출마다 그 요청이 닿을 공급원 (`_route`로 Yahoo 티커/FRED id를 가림)의 길을 봅니다. 그래서 `commercial`의 `yahoo: off`는 core 경로에서 Yahoo 티커만 막고 FRED id는 그대로 둡니다: `source="auto"`의 FRED+Yahoo 묶음은 Yahoo id만 SYNTHETIC(사유 포함)으로 돌려주고 FRED id는 계속 읽으며, Yahoo를 콕 집은 요청과 Yahoo 전용 호출은 `GatewayOff` (`CoreAccessTest.test_yahoo_off_stops_yahoo_tickers_only`). `history.py` 디스크 캐시도 막힌 공급원의 옛 파일을 내주지 않습니다. **화면 44곳 (KEY-5 전)은 아직 `core.ficc.data` 등을 직접 부르므로 그 경로는 막히지 않습니다** (P10 뒤 공개 빌드는 `commercial`을 돌리므로 **실제 영향 있음**: KEY-5 전까지 공개 빌드도 이 화면 경로로 Yahoo·FMP에 닿을 수 있음. 예: `quantgen_desktop/home_view.py`·`market_summary.py`의 `core.ficc.data.load_series`, `quantgen_desktop/paper.py`의 `QuoteFeed` (`fmp_client` 없음)).
 
 **어디서 도나:** Runtime (경로 필터)과 **Compliance (경로 필터 없음, 모든 PR)** 두 곳. 표준 라이브러리만 씀.
 
@@ -294,11 +319,14 @@ core는 공급사 클라이언트를 직접 import하지 않고 아래 입구만
 | 계약: 코스콤/KRX, Yahoo 대체, FMP 표시 또는 제외, Cboe (VIX) | 소유자 (법인) | 없음 |
 | 회사 데이터 서버: `dispatch.py`를 회사 키로, 계정·요금제 확인, 사용자 수 기록 | 이 세션 + 소유자 (PAY-3) | 없음 |
 | `routes.json` `commercial` 값 확정, `display_rights.json` 갱신 | 이 세션 + 데이터소스 세션 | 설정 파일만 |
-| `core/app_identity.py`: `DATA_API_BASE`, Cognito ID, `GATEWAY_PROFILE = "commercial"` | OS 세션 | 설정 값만 |
+| `core/app_identity.py`: `DATA_API_BASE`, Cognito ID. 프로필은 값으로 바꾸지 않음: 빌드 정보가 정하고 공개 빌드는 P10부터 이미 `commercial` (2절) | OS 세션 | 설정 값만 (프로필은 빌드 spec의 `QG_GATEWAY_PROFILE`) |
 
 남는 위험: 계약 공급사가 "사용자 PC에서만 도는 SDK"만 허용하면, 그 공급사용 `local.py` 클라이언트 하나를 더합니다 (새 공급원 추가, 0.5~1일 추정). 화면·core 수정은 없습니다.
 
 ## 9. 확인 못 한 것 (미검증)
+
+- P10: 이 변경으로 공개 빌드를 실제로 패키징해 `--selfcheck`를 돌려 보지 않았습니다 (시험은 런타임 훅이 넣는 빌드 정보 모듈을 흉내 냄). OS 세션 빌드에서 `gateway_profile: "commercial"`을 확인해야 합니다.
+- P10이 막지 않는 것: (a) KEY-5 전 화면 44곳의 직접 호출 (6절). (b) 설치 폴더의 `routes.json`은 일반 데이터 파일이라 사용자가 `commercial` 표의 `yahoo`·`fmp`·`gs_marquee`를 다시 켤 수 있음: `check_routes`는 `commercial`의 내용을 고정하지 않고, 시험 (`test_shipped_commercial_table_keeps_no_display_right_sources_off_this_pc`)은 배포 파일만 고정함 — 후속 후보: `check_routes`가 `commercial`에서 그 셋의 `local_key`·`keyless`를 거절. (c) wheel·모바일 APK는 빌드 정보를 쓰지 않아 채널 `dev` (`personal`, `.env` 읽음) — OS·메인 결정. (d) `build_channel()`은 모르는 채널을 `dev`로 보아 `.env`를 읽게 둠 (규칙 3 쪽; P10은 프로필만 `commercial`로 막음).
 
 - 공급사별 상용 표시 조건 (KRX·FMP·Cboe·Upbit/Binance 공개 시세), 계약 공급사가 서버 API를 주는지. **법률 자문이 아닙니다.**
 - 경계 시험은 `core/`·`quantgen_desktop/`·`ui/`·`main.py` 안에서 공급사 모듈에 **바로** 닿는 곳만 셉니다. 세지 않는 것: 검사 범위 밖 모듈 (`data/` 안의 서로 부르기, `tools/`, 연구 스크립트)을 거쳐 닿는 경로, 이름을 실행 중에 만들어 import하는 경로 (`import_module(name)`의 `name`이 변수), 앱 코드가 공급사 객체를 인자로 받아 쓰는 경우 (그 객체를 만든 쪽에서 셈). import 그래프 전체를 따라가는 검사는 하지 않습니다.
