@@ -10,20 +10,28 @@ no price and volume 0; those 200 rows stay in the append-only store without
 ``parser`` and are superseded by rows carrying ``parser = PARSER``.
 Both forms are read; a missing volume is recorded as missing (None), never as 0.
 
+v0.3 (integration review DS-7/DS-8, 2026-11-24): a side quoted at bid 0 or ask 100 cents is read as an
+empty side (no resting orders), so ``p_yes`` falls back to the last price (else None) instead of a mid such
+as 0.5 from 0/100; ``book_empty``/``one_sided`` record it. Whether Kalshi really writes an empty side as
+0.0000 / 1.0000 is **unverified** until an owner-PC run. Tickers must be strings of the client's ticker
+pattern; a market or candle that is not an object raises KalshiError; -0.0 is stored as 0.0.
+
 Prices are kept in cents (0-100) = implied probability x 100. Thin markets are noisy:
 each row carries volume and open interest, and ``liquid`` is set against a
 pre-registered minimum (PREREG_V0, default 1,000 contracts of volume).
 """
 from __future__ import annotations
 
+import re
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
 from math import isfinite
 from typing import Any, Mapping
 
 SOURCE_ID = "kalshi"
-PARSER = "kalshi-v0.2"
+PARSER = "kalshi-v0.3"
 MIN_VOLUME = 1_000
+_TICKER = re.compile(r"^[A-Z0-9][A-Z0-9_.\-]{0,99}$")   # same pattern as data/didm/kalshi.py
 
 
 class KalshiError(ValueError):
@@ -33,6 +41,12 @@ class KalshiError(ValueError):
 def _aware(received_at: datetime) -> None:
     if not isinstance(received_at, datetime) or received_at.tzinfo is None:
         raise KalshiError("received_at must be timezone-aware")
+
+
+def _ticker(value: Any) -> str:
+    if not isinstance(value, str) or not _TICKER.match(value):
+        raise KalshiError(f"bad ticker {str(value)[:40]!r}")
+    return value
 
 
 def _ts(value: Any, name: str) -> datetime:
@@ -52,7 +66,7 @@ def _cents(value: Any, name: str) -> float | None:
         return None
     if isinstance(value, bool) or not isinstance(value, (int, float)) or not 0 <= value <= 100:
         raise KalshiError(f"{name}: price must be 0..100 cents, got {value!r}")
-    return float(value)
+    return float(value) + 0.0
 
 
 def _price(obj: Mapping[str, Any], name: str) -> float | None:
@@ -65,7 +79,7 @@ def _price(obj: Mapping[str, Any], name: str) -> float | None:
         amount = Decimal(dollars) if isinstance(dollars, str) else dollars
         if isinstance(amount, bool) or not 0 <= amount <= 1:
             raise ValueError
-        return round(float(amount) * 100, 6)
+        return round(float(amount) * 100, 6) + 0.0      # + 0.0 turns -0.0 into 0.0
     except (TypeError, ValueError, OverflowError, InvalidOperation):
         raise KalshiError(f"{name}_dollars: price must be 0..1 dollars") from None
 
@@ -88,7 +102,7 @@ def _count(obj: Mapping[str, Any], name: str) -> float | None:
             raise KalshiError(f"{key}: contract count cannot be represented")
         if value < 0:
             raise KalshiError(f"{key}: negative")
-        return value
+        return value + 0.0
     return None
 
 
@@ -100,12 +114,14 @@ def market_snapshot_rows(payload: Mapping[str, Any], received_at: datetime) -> l
         raise KalshiError("payload has no markets list")
     out = []
     for m in markets:
-        ticker = m.get("ticker")
-        if not ticker:
-            raise KalshiError("market without ticker")
+        if not isinstance(m, Mapping):
+            raise KalshiError("market is not an object")
+        ticker = _ticker(m.get("ticker"))
         bid, ask = _price(m, "yes_bid"), _price(m, "yes_ask")
         last = _price(m, "last_price")
-        mid = (bid + ask) / 2 if bid is not None and ask is not None and ask >= bid else None
+        has_bid = bid is not None and bid > 0
+        has_ask = ask is not None and ask < 100
+        mid = (bid + ask) / 2 if has_bid and has_ask and ask >= bid else None
         prob = mid if mid is not None else last
         volume = _count(m, "volume")
         out.append({
@@ -120,6 +136,7 @@ def market_snapshot_rows(payload: Mapping[str, Any], received_at: datetime) -> l
                 "status": m.get("status"), "close_time": m.get("close_time"),
                 "yes_bid": bid, "yes_ask": ask, "last_price": last,
                 "p_yes": prob / 100 if prob is not None else None,
+                "book_empty": not has_bid and not has_ask, "one_sided": has_bid != has_ask,
                 "volume": volume, "volume_24h": _count(m, "volume_24h"),
                 "open_interest": _count(m, "open_interest"),
                 "liquid": volume is not None and volume >= MIN_VOLUME,
@@ -139,8 +156,11 @@ def candlestick_rows(ticker: str, payload: Mapping[str, Any], received_at: datet
     candles = payload.get("candlesticks")
     if not isinstance(candles, list):
         raise KalshiError("payload has no candlesticks list")
+    ticker = _ticker(ticker)
     out = []
     for c in candles:
+        if not isinstance(c, Mapping) or not isinstance(c.get("price") or {}, Mapping):
+            raise KalshiError("candle is not an object")
         end = _ts(c.get("end_period_ts"), "end_period_ts")
         price = c.get("price") or {}
         close = _price(price, "close")
