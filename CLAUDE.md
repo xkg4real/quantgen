@@ -79,7 +79,7 @@ whole-program checklist is `WORKBOARD.md`; read both at session start after `--s
 - **QuantGPT and DIDM:** QuantGPT code lives under `qgpt/` on branch `claude/quantgpt-q0-20261124` until the main
   session gives it a merge turn; its design spec is not in this public repository (owner decision 2026-11-24), so write
   only IDs, code, tests and small synthetic examples here, never spec text. DATA_SOURCE and DIDM_DEV each change only
-  their own paths (the split is at the top of `WORKBOARD.md`). What is shared with the TRADEGEN side is the interface
+  their own paths (the split is in section 1 of `docs/nautilus_bridge/REMAINING_WORK_2026-11-24.md`). What is shared with the TRADEGEN side is the interface
   document `git show origin/handoff:QUANTGPT_TRADEGEN.md`; nobody here pushes to the tradegen repository.
 - **Incorporation:** when the owner says "법인 설립 완료" (in any session), read
   `git show origin/handoff:INCORPORATION_CHECKLIST.md` and guide the owner through it as written.

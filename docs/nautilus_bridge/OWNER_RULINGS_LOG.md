@@ -2151,13 +2151,13 @@ CloudTrail 회원 기록에 회원 식별이 확인되지 않음)을 들어 물�
 >
 > 위 작업과 더불어, 다음 요청사항을 참고하여 Task를 새롭게 구분/생성/진행하도록 진행해주세요.
 >
-> 1. 기존의 OS확장, Payment, Data Sourcing과 더불어 DIDM 개발, 그리고 아래에서 설명할 자체 LLM에 대한 세션도 하부 세션에 분리하여 추가해주세요.
+> 1\. 기존의 OS확장, Payment, Data Sourcing과 더불어 DIDM 개발, 그리고 아래에서 설명할 자체 LLM에 대한 세션도 하부 세션에 분리하여 추가해주세요.
 >
-> 1. 자체 LLM에 대한 개발을 착수할 것. 이때, 자체 LLM의 설계와 관련된 파일은 첨부된 .md 파일 및 Notion의 Autonomous Macro Intelligence Engine을 참고해주세요. 이때, 이와 유사한 구조를 가진 qlib에 대한 문서도 첨부하였으니 참고하시길 바랍니다.
-> 2. 위 자체 LLM 개발에 대한 하위 session의 이름은 코드명 QuantGPT로 설정해주시고, 개발에 대한 reference 차 Notion의 Econ493 - 인공지능기반경제분석 -> 신경망과 딥러닝 페이지를 참고해주세요. 참고로 원본 내용은 econ.korea.ac.kr/~chirokhan/econ493/tut 에 있습니다.
-> 3. QuantGPT에 대한 내용을 TRADEGEN 세션에도 공유하여 진행해주세요.
-> 4. Claude Code skills and subagents 세션에서 적용한 skill 들을 참고 및 다음 /find-skills에 대한 claude code cli 명령을 참고하여 해당 스킬을 적용 및 이를 통해 relevant 한 skill들을 찾아서 능동적으로 적용해주세요. 만약 못찾으면 /reload-skills  적용 후 스킬 적용해주세요.
-> 5. Claude.md에 있는 가이드라인을 준수하여 진행해주세요.
+> 1\. 자체 LLM에 대한 개발을 착수할 것. 이때, 자체 LLM의 설계와 관련된 파일은 첨부된 .md 파일 및 Notion의 Autonomous Macro Intelligence Engine을 참고해주세요. 이때, 이와 유사한 구조를 가진 qlib에 대한 문서도 첨부하였으니 참고하시길 바랍니다.
+> 2\. 위 자체 LLM 개발에 대한 하위 session의 이름은 코드명 QuantGPT로 설정해주시고, 개발에 대한 reference 차 Notion의 Econ493 - 인공지능기반경제분석 -> 신경망과 딥러닝 페이지를 참고해주세요. 참고로 원본 내용은 econ.korea.ac.kr/~chirokhan/econ493/tut 에 있습니다.
+> 3\. QuantGPT에 대한 내용을 TRADEGEN 세션에도 공유하여 진행해주세요.
+> 4\. Claude Code skills and subagents 세션에서 적용한 skill 들을 참고 및 다음 /find-skills에 대한 claude code cli 명령을 참고하여 해당 스킬을 적용 및 이를 통해 relevant 한 skill들을 찾아서 능동적으로 적용해주세요. 만약 못찾으면 /reload-skills  적용 후 스킬 적용해주세요.
+> 5\. Claude.md에 있는 가이드라인을 준수하여 진행해주세요.
 
 이어진 말 (같은 날, 차례대로):
 
