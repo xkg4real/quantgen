@@ -194,6 +194,54 @@ class LintTests(unittest.TestCase):
         self.assertEqual({(f.line, f.group) for f in port.lint(text, "t.py")}, {(4, "15-thread-wrapper")})
 
 
+    def test_attribute_hiding_a_qt_virtual_is_reported(self):
+        # UI PR #140: ValuationReferenceStrip kept `self.metric = <str>`; PySide6 then calls it as QWidget::metric().
+        text = src("""\
+            from @OLD@.QtWidgets import QWidget, QStyledItemDelegate
+            from @OLD@.QtCore import QAbstractTableModel
+            from enum import Enum
+            class Strip(QWidget):
+                def __init__(self, metric):
+                    super().__init__()
+                    self.metric, self.reference = metric, None
+                    self.metrics = metric
+            class Child(Strip):
+                def set(self, e):
+                    self.event: str = e
+                    setattr(self, "sizeHint", 3)
+            class Table(QAbstractTableModel):
+                def __init__(self, rows):
+                    self.data = rows
+                    self.paint = None
+            class Painter(QStyledItemDelegate):
+                def __init__(s):
+                    s.paint = None
+            class Plain:
+                def __init__(self):
+                    self.event = 1
+            class Kind(Enum):
+                def go(self):
+                    self.metric = 2
+            def free(w):
+                w.metric = 1
+            """)
+        found = {(f.line, f.group) for f in port.lint(text, "s.py")}
+        self.assertEqual(found, {(7, "16-shadow"), (11, "16-shadow"), (12, "16-shadow"), (15, "16-shadow"),
+                                 (19, "16-shadow")})
+
+    def test_unknown_base_counts_only_in_a_qt_file(self):
+        body = """\
+            from widgets import Card
+            class Tile(Card):
+                def __init__(self):
+                    self.metric = 'per'
+            """
+        self.assertEqual(port.lint(src(body), "a.py"), [])
+        self.assertEqual(port.lint("from tools.qt_port import pyqt6_to_pyside6 as port\n", "c.py"), [])
+        flagged = port.lint(src("from @OLD@.QtWidgets import QLabel\n" + textwrap.dedent(body)), "b.py")
+        self.assertEqual([(f.line, f.group) for f in flagged], [(5, "16-shadow")])
+
+
 class CommandTests(unittest.TestCase):
     def test_apply_refuses_a_git_checkout_and_is_idempotent_on_a_scratch_copy(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -37,6 +37,7 @@ from pathlib import Path, PurePosixPath
 # Spelled in two pieces so that running the tool over its own source leaves it unchanged.
 OLD = "Py" + "Qt6"
 NEW = "Py" + "Side6"
+TOOL_MODULE = "pyqt6" + "_to_pyside6"  # this tool imported by name (a test does); not a binding name
 RENAMES = {"pyqt" + "Signal": "Signal", "pyqt" + "Slot": "Slot", "pyqt" + "Property": "Property"}
 
 DEFAULT_PATHS = ("quantgen_desktop", "tests", "tools", "core", "ui", "data", "packaging", "mobile",
@@ -224,6 +225,35 @@ FALLBACK_FONT_API = ("addApplicationFallbackFontFamily", "applicationFallbackFon
                      "removeApplicationFallbackFontFamily", "setApplicationFallbackFontFamilies")
 
 
+# 16-shadow: PySide6 treats an instance attribute named like a C++ virtual as the Python override and calls it
+# (PyQt6 looks only at the class). Measured 2026-11-24 on a QWidget subclass with the attribute set to a string:
+# PySide6 6.12.0 raised "Error calling Python override of QWidget::<name>()" for metric, sizeHint, minimumSizeHint,
+# event, paintEvent, resizeEvent, showEvent, changeEvent, devType and setVisible; PyQt6 6.12.0 ran all of them.
+# Found in UI PR #140 (quantgen_desktop/stock_insights.py ValuationReferenceStrip: self.metric = <str>).
+QT_VIRTUALS = frozenset((
+    # QObject
+    "event", "eventFilter", "timerEvent", "childEvent", "customEvent", "connectNotify", "disconnectNotify",
+    # QPaintDevice
+    "metric", "devType", "paintEngine", "initPainter", "redirected", "sharedPainter",
+    # QWidget
+    "sizeHint", "minimumSizeHint", "heightForWidth", "hasHeightForWidth", "setVisible", "focusNextPrevChild",
+    "inputMethodQuery", "nativeEvent", "paintEvent", "resizeEvent", "moveEvent", "showEvent", "hideEvent",
+    "closeEvent", "changeEvent", "keyPressEvent", "keyReleaseEvent", "mousePressEvent", "mouseReleaseEvent",
+    "mouseDoubleClickEvent", "mouseMoveEvent", "wheelEvent", "enterEvent", "leaveEvent", "focusInEvent",
+    "focusOutEvent", "contextMenuEvent", "tabletEvent", "actionEvent", "dragEnterEvent", "dragMoveEvent",
+    "dragLeaveEvent", "dropEvent", "inputMethodEvent",
+))
+# Extra virtuals of item models and delegates, checked only in classes whose base name says Model / Delegate.
+QT_MODEL_VIRTUALS = frozenset(("data", "setData", "headerData", "setHeaderData", "rowCount", "columnCount",
+                               "flags", "index", "parent", "roleNames", "hasChildren", "canFetchMore", "fetchMore",
+                               "sort", "mimeData", "mimeTypes", "supportedDropActions"))
+QT_DELEGATE_VIRTUALS = frozenset(("paint", "createEditor", "setEditorData", "setModelData",
+                                  "updateEditorGeometry", "displayText", "editorEvent", "helpEvent"))
+NON_QT_BASES = frozenset(("object", "Enum", "IntEnum", "StrEnum", "Flag", "IntFlag", "NamedTuple", "TypedDict",
+                          "Protocol", "Exception", "ValueError", "RuntimeError", "TypeError", "KeyError",
+                          "dict", "list", "tuple", "set", "str", "int", "float", "Generic", "ABC"))
+
+
 @dataclass
 class Finding:
     path: str
@@ -267,6 +297,79 @@ def _bound_method_shot(sig, i):
     return (len(second) >= 3 and second[0] == "self" and all(x == "." for x in second[1::2])
             and all(x.isidentifier() for x in second[2::2]))
 
+def _base_names(cls: ast.ClassDef) -> list[str]:
+    out = []
+    for b in cls.bases:
+        while isinstance(b, ast.Subscript):
+            b = b.value
+        if isinstance(b, ast.Attribute):
+            out.append(b.attr)
+        elif isinstance(b, ast.Name):
+            out.append(b.id)
+    return out
+
+
+def _is_qt_name(name: str) -> bool:
+    return len(name) > 1 and name[0] == "Q" and name[1].isupper()
+
+
+def _shadow_findings(tree, imports_qt: bool):
+    """(line, attribute, class) for `self.<Qt virtual> = ...` in a class that is, or may be, a Qt class."""
+    classes = [n for n in ast.walk(tree) if isinstance(n, ast.ClassDef)]
+    local = {c.name: c for c in classes}
+    memo: dict[str, str] = {}
+
+    def kind(name, seen=()):
+        """'qt', 'maybe' (unknown base in a file that imports Qt) or 'no'."""
+        if name in memo:
+            return memo[name]
+        if _is_qt_name(name):
+            return "qt"
+        cls = local.get(name)
+        if cls is None or name in seen:
+            return "no" if name in NON_QT_BASES or not imports_qt else "maybe"
+        kinds = [kind(b, seen + (name,)) for b in _base_names(cls)]
+        memo[name] = "qt" if "qt" in kinds else ("maybe" if "maybe" in kinds else "no")
+        return memo[name]
+
+    def all_bases(cls, seen=()):
+        names = []
+        for b in _base_names(cls):
+            names.append(b)
+            if b in local and b not in seen:
+                names += all_bases(local[b], seen + (b,))
+        return names
+
+    for cls in classes:
+        if kind(cls.name) == "no":
+            continue
+        bases = all_bases(cls)
+        names = set(QT_VIRTUALS)
+        if any("Model" in b for b in bases):
+            names |= QT_MODEL_VIRTUALS
+        if any("Delegate" in b for b in bases):
+            names |= QT_DELEGATE_VIRTUALS
+        for fn in cls.body:
+            if not isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)) or not fn.args.args:
+                continue
+            me = fn.args.args[0].arg
+            for sub in ast.walk(fn):
+                targets = []
+                if isinstance(sub, ast.Assign):
+                    targets = sub.targets
+                elif isinstance(sub, (ast.AnnAssign, ast.AugAssign)):
+                    targets = [sub.target]
+                elif (isinstance(sub, ast.Call) and _call_name(sub) == "setattr" and len(sub.args) >= 2
+                      and isinstance(sub.args[0], ast.Name) and sub.args[0].id == me
+                      and isinstance(sub.args[1], ast.Constant) and sub.args[1].value in names):
+                    yield sub.lineno, sub.args[1].value, cls.name
+                for target in targets:
+                    for t in ast.walk(target):
+                        if (isinstance(t, ast.Attribute) and isinstance(t.ctx, ast.Store) and t.attr in names
+                                and isinstance(t.value, ast.Name) and t.value.id == me):
+                            yield t.lineno, t.attr, cls.name
+
+
 def lint(text: str, path: str) -> list[Finding]:
     out: list[Finding] = []
     add = lambda line, group, msg: out.append(Finding(path, line, group, msg))
@@ -305,7 +408,7 @@ def lint(text: str, path: str) -> list[Finding]:
             add(tok.start[0], "6-deferred", "deferred call: check the target widget is still alive when it fires (review)")
         elif tok.string == "sip" and nxt == "." and i + 2 < len(sig) and sig[i + 2].string not in ("isdeleted", "delete"):
             add(tok.start[0], "sip", f"sip.{sig[i + 2].string} has no automatic shiboken6 rewrite")
-        elif tok.string.startswith("pyqt") and tok.string not in RENAMES:
+        elif tok.string.startswith("pyqt") and tok.string not in RENAMES and tok.string != TOOL_MODULE:
             add(tok.start[0], "name", f"{tok.string} has no automatic PySide6 rewrite")
         elif tok.string in ("PYQT_VERSION", "PYQT_VERSION_STR", "QVariant"):
             add(tok.start[0], "name", f"{tok.string} does not exist in PySide6")
@@ -340,6 +443,11 @@ def lint(text: str, path: str) -> list[Finding]:
                 elif isinstance(sub, ast.Call) and _call_name(sub) in ("get", "pop", "add", "discard", "setdefault") \
                         and sub.args and isinstance(sub.args[0], ast.Name) and sub.args[0].id == watched:
                     add(sub.lineno, "5-qobject-key", f"Qt object '{watched}' used as a set/dict key inside eventFilter")
+    imports_qt = any(isinstance(n, (ast.Import, ast.ImportFrom)) and any(
+        (getattr(n, "module", None) or a.name).split(".")[0] in (OLD, NEW) for a in n.names) for n in ast.walk(tree))
+    for line, attr, cls_name in _shadow_findings(tree, imports_qt):
+        add(line, "16-shadow", f"{cls_name}: 'self.{attr} = ...' hides the Qt virtual {attr}(); PySide6 calls the "
+            f"attribute as the override (TypeError or wrong behaviour), PyQt6 ignores it; rename the attribute")
     unique = {(f.line, f.group, f.message): f for f in out}
     return sorted(unique.values(), key=lambda f: (f.line, f.group))
 
