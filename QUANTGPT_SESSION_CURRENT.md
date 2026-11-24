@@ -4,13 +4,13 @@ reason: milestone
 from: claude
 task: quantgpt-q0
 cycle: 2026-11-24
-done_ids: QGPT-01/a, QGPT-02, QGPT-04, QGPT-05, QGPT-21, QGPT-03, QGPT-replay
-next_ids: QGPT-11, QGPT-20
-updated_at: 2026-11-24T21:30:00+09:00
+done_ids: QGPT-01/a, QGPT-02, QGPT-04, QGPT-05, QGPT-21, QGPT-03, QGPT-replay, QGPT-20, QGPT-11
+next_ids: none
+updated_at: 2026-11-24T22:30:00+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: main
 work_branch: claude/quantgpt-q0-20261124
-work_commit: 88e42d3
+work_commit: 326f5a5
 uncommitted_changes: no
 pr: none
 session: https://claude.ai/code/session_016uB1jfyCrLC5oipyVVMyCe
@@ -42,6 +42,8 @@ session: https://claude.ai/code/session_016uB1jfyCrLC5oipyVVMyCe
 | QGPT-21 | 30b3279 | quantgpt/tools/protocol.py | 호스트 도구 3종(run_calc, get_card, list_cards) |
 | QGPT-03 | 7478f82 | quantgpt/policy/filter.py | 정책 필터 PF-1~6 코드, 시드 규칙 13개 |
 | QGPT-replay | 88e42d3 | quantgpt/pipeline.py, backends/{base,fake}.py | 요청 1개 → 봉투 1개, 가짜 백엔드 재생 |
+| QGPT-20 | 273cdec | quantgpt/rag/index.py | SQLite FTS5 근거 인덱스, as_of 필터, 카드 34개 색인 |
+| QGPT-11 | 326f5a5 | qgpt/eval/scorer.py | 봉투 묶음 채점기(Wilson 95% 구간) |
 
 ## 3. 검사 (다시 돌리는 법)
 
@@ -52,7 +54,7 @@ git checkout claude/quantgpt-q0-20261124 && test ! -e docs/asset_expansion/cache
 cd qgpt && python -B -m unittest discover -s tests
 ```
 
-기대 결과: 108개, 기본 환경에서 107 통과 1 건너뜀(scipy가 없으면 원본 DSR 대조 시험을 건너뜀). numpy와 scipy가 있는 환경에서는 108/108. `git diff --name-only origin/main...HEAD -- . ':!docs/asset_expansion/cache'`는 모두 `qgpt/`로 시작해야 한다.
+기대 결과: 122개, 기본 환경에서 121 통과 1 건너뜀(scipy가 없으면 원본 DSR 대조 시험을 건너뜀). numpy와 scipy가 있는 환경에서는 122/122. `git diff --name-only origin/main...HEAD -- . ':!docs/asset_expansion/cache'`는 모두 `qgpt/`로 시작해야 한다.
 
 ## 4. 정한 것과 이유
 
@@ -74,9 +76,12 @@ cd qgpt && python -B -m unittest discover -s tests
 
 ## 6. 다음 일
 
-1. QGPT-11 채점기(가짜 백엔드): 봉투 묶음(JSON Lines)을 받아 환각률(숫자 미발견), 기권률, 계약 통과율, 누출률을 내는 `qgpt/eval/`. 완료 조건: 고정 봉투 묶음에서 손으로 센 값과 일치하는 unittest.
-2. QGPT-20 SQLite FTS5 인덱스와 as_of 필터(문서·카드만): `quantgpt/rag/`. 완료 조건: as_of보다 늦은 문서가 검색 결과에 0개, 카드 34개 색인.
-3. 명세서 전문이 오면 4절과 다른 점을 메인에 보고하고 맞춘다.
+지시문 5절의 일곱 가지와 후보 두 가지(QGPT-11, QGPT-20)가 끝났다. 다음은 메인의 지시를 기다린다.
+
+1. 명세서 전문이 오면 4절과 다른 점을 메인에 보고하고 맞춘다.
+2. 메인 답 대기: T-NEWS 질문 2개, 숫자 기권 선택지 3개, 인용·시점 누출을 owner 모드에서도 기권으로 둘지.
+3. 실제 백엔드를 붙일 때: request_sha256에 디코딩 설정과 `EvidenceIndex.version()`을 넣는다. 한국어 토크나이저 왕복 시험을 더한다.
+4. 검색 인덱스 한계: 불용어 처리가 없어 "what is the ..." 같은 질의에서 순위가 흐려진다. 평가 문항으로 재 볼 것.
 
 ## 7. TRADEGEN 공유
 
