@@ -247,7 +247,7 @@ D11 변경: 소유자가 "정식 계정 생성까지 진행"을 지시했습니�
 | `{{privacy.security_log_basis}}` | 안전성 확보 의무 〔법률 자문이 아닙니다. 근거: 개인정보의 안전성 확보조치 기준 제8조 · https://itwiki.kr/w/개인정보의_안전성_확보조치_기준_제8조 · 2026-11-17 메인 D11 확인〕 |
 | `{{privacy.security_log_retention}}` | 1년 (400일 뒤 자동 삭제) |
 | 처리위탁 (`{{privacy.recipient_*}}` 또는 위탁 표) | 수탁자: Amazon Web Services (계약 법인명은 청구서 판매자 표기로 확인, **미검증**). 업무: 회원 계정 보관·인증 (Cognito), 인증 메일 발송 (SES), 웹 호스팅 (Amplify), 보안 기록 보관 (CloudTrail·S3) |
-| `{{privacy.rights_request_url}}` | 웹 계정 페이지 주소 (웹사이트 세션이 정함) + `contact@quantgeneration.com` |
+| `{{privacy.rights_request_url}}` | 웹 계정 페이지 주소 (웹사이트 세션이 정함)만. `contact@quantgeneration.com`은 넣지 않음: 처리방침 5항·9항 본문에 따로 적혀 있고, 4항 Google LLC 행 거부 칸이 이 칸을 메일을 거치지 않는 경로로 쓰기 때문 (contact@는 Cloudflare → 운영자의 Gmail 계정 경로, 2026-11-24 정책 PR-2 검토 반영) |
 | `{{privacy.implemented_safeguards}}` | 실제로 한 것만: 관리자 콘솔 2단계 인증, 관리자 작업 기록 1년 보관, 비밀번호는 운영자가 볼 수 없음, 전송 구간 HTTPS, 최소 수집 |
 | `04` 쿠키·저장장치 | 로그인 유지용 토큰을 브라우저 저장소(메모리 또는 sessionStorage)에 둠. 실제 위치는 웹사이트 세션이 확정 |
 
