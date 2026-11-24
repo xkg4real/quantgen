@@ -53,7 +53,11 @@ def _root(value: str | Path) -> Path:
     if ".." in raw.parts:
         raise EvidenceError("parent_traversal_path")
     _check_names(raw.absolute())
-    resolved = raw.absolute().resolve()
+    try:
+        resolved = raw.absolute().resolve()
+    except (RuntimeError, OSError):
+        # Python 3.11/3.12 raise RuntimeError on a symlink loop; never let a path reach stderr in a traceback.
+        raise EvidenceError("symlink_path") from None
     _check_names(resolved)
     return resolved
 
@@ -192,6 +196,7 @@ def _dependencies(value: str | None) -> dict:
         "scope": "build/site-packages distribution metadata only: direct entries and Android ABI folders",
         "abi": "NOT_OBSERVED", "complete_target_resolution": "NOT_ESTABLISHED",
         "nested_layout": "NOT_OBSERVED", "conflicting_versions": [], "abi_disagreements": [],
+        "abi_missing": {}, "direct_abi_disagreements": [],
         "packages": {name: [] for name in PACKAGES}, "abi_packages": {},
     }
     if value is None:
@@ -221,11 +226,23 @@ def _dependencies(value: str | None) -> dict:
         result["abi_disagreements"] = sorted(
             name for name in PACKAGES
             if len({tuple(locations[abi][name]) for abi in abis if locations[abi][name]}) > 1)
+        # A package seen in some ABI folders but not in others, and a direct entry whose version differs from the
+        # version in the ABI folders, are reported too: both are missing or conflicting evidence.
+        seen_in_abi = {name for abi in abis for name in PACKAGES if locations[abi][name]}
+        result["abi_missing"] = {abi: [name for name in PACKAGES if name in seen_in_abi and not locations[abi][name]]
+                                 for abi in abis}
+        result["abi_missing"] = {abi: names for abi, names in result["abi_missing"].items() if names}
+        result["direct_abi_disagreements"] = sorted(
+            name for name in PACKAGES
+            if locations[""][name] and any(locations[abi][name] and locations[abi][name] != locations[""][name]
+                                           for abi in abis))
         result["packages"] = {name: sorted({v for found in locations.values() for v in found[name]})
                               for name in PACKAGES}
         observed = sum(bool(versions) for versions in result["packages"].values())
         result["status"] = "OBSERVED_METADATA" if observed == len(PACKAGES) else ("PARTIAL_METADATA" if observed else "NOT_OBSERVED")
-        if result["conflicting_versions"] or result["abi_disagreements"]:
+        if result["status"] == "OBSERVED_METADATA" and result["abi_missing"]:
+            result["status"] = "PARTIAL_METADATA"
+        if result["conflicting_versions"] or result["abi_disagreements"] or result["direct_abi_disagreements"]:
             result["status"] = "CONFLICTING_METADATA"
     except EvidenceError as exc:
         result.update(status="ERROR", error=str(exc))

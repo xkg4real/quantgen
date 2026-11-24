@@ -402,6 +402,89 @@ class AndroidApkEvidenceAcceptance(unittest.TestCase):
         self.metadata(target / "arm64-v8a" / "numpy-1.0.dist-info", "Name: pandas\nVersion: 1.0\n")
         self.assertEqual(self.dependency_error(target), "package_metadata_name_mismatch")
 
+    # -- 2026-11-24 recheck: loops, missing and disagreeing evidence, both protected-name checks ----------------
+    def test_symlink_loop_gives_a_fixed_code_not_a_traceback(self):
+        self.symlink_or_skip(self.root / "loop_a", self.root / "loop_b", directory=True)
+        self.symlink_or_skip(self.root / "loop_b", self.root / "loop_a", directory=True)
+        self.apks = self.root / "loop_a" / "apk"
+        runner = Mock()
+        self.assertEqual(self.invoke(runner), 1)
+        runner.assert_not_called()
+        err = self.stderr.getvalue()
+        self.assertNotIn("Traceback", err)
+        self.assertNotIn(str(self.root), err)
+        self.assertIn(self.receipt()["error"], ("symlink_path", "apk_directory_missing"))  # 3.13 resolves loops lazily
+
+    def test_resolve_failure_is_symlink_path(self):
+        # Python 3.11 and 3.12 raise RuntimeError("Symlink loop ...") from Path.resolve().
+        (self.apks / "app.apk").write_bytes(b"fixture")
+        real_resolve = Path.resolve
+        def resolve(path, *args, **kwargs):
+            if path.name == "apk":
+                raise RuntimeError(f"Symlink loop from {path}")
+            return real_resolve(path, *args, **kwargs)
+        with patch.object(Path, "resolve", resolve):
+            self.invoke_result = self.invoke(Mock())
+        self.assert_failed("symlink_path", where="report")
+        self.assertNotIn(str(self.root), self.stderr.getvalue())
+
+    def test_protected_name_reached_only_after_resolving_is_refused(self):
+        hidden = self.root / ".nextgen" / "apk"
+        hidden.mkdir(parents=True)
+        (hidden / "app.apk").write_bytes(b"fixture")
+        self.symlink_or_skip(self.root / "innocent", hidden, directory=True)
+        self.apks = self.root / "innocent"
+        runner = Mock()
+        self.invoke_result = self.invoke(runner)
+        runner.assert_not_called()
+        self.assert_failed("protected_path", where="report")
+
+    def test_protected_name_as_written_is_refused_even_if_it_resolves_elsewhere(self):
+        plain = self.root / "plain" / "apk"
+        plain.mkdir(parents=True)
+        (plain / "app.apk").write_bytes(b"fixture")
+        self.symlink_or_skip(self.root / ".nextgen", self.root / "plain", directory=True)
+        self.apks = self.root / ".nextgen" / "apk"
+        runner = Mock()
+        self.invoke_result = self.invoke(runner)
+        runner.assert_not_called()
+        self.assert_failed("protected_path", where="report")
+
+    def test_missing_site_packages_is_not_observed_without_error(self):
+        (self.apks / "app.apk").write_bytes(b"synthetic")
+        target = self.apks.parent / "build" / "site-packages"          # never created: the build did not run
+        self.assertEqual(self.invoke(self.signed, "--target-site-packages", target), 0)
+        dependencies = self.receipt()["dependencies"]
+        self.assertEqual(dependencies["status"], "NOT_OBSERVED")
+        self.assertNotIn("error", dependencies)
+
+    def test_duplicate_version_header_is_refused(self):
+        target = self.root / "build" / "site-packages"
+        self.metadata(target / "arm64-v8a" / "numpy-1.0.dist-info", "Version: 1.0\nVersion: 2.0\nName: numpy\n")  # read stops once both are known
+        self.assertEqual(self.dependency_error(target), "duplicate_metadata_header")
+
+    def test_package_missing_in_one_abi_is_reported(self):
+        (self.apks / "app.apk").write_bytes(b"synthetic")
+        target = self.apks.parent / "build/site-packages"
+        for abi in ("arm64-v8a", "x86_64"):
+            for name in ("flet", "PyYAML", "Babel", "requests", "numpy", "pandas"):
+                if not (abi == "x86_64" and name == "pandas"):
+                    self.distribution(target / abi, name, "1.0")
+        self.assertEqual(self.invoke(self.signed, "--target-site-packages", target), 0)
+        dependencies = self.receipt()["dependencies"]
+        self.assertEqual(dependencies["abi_missing"], {"x86_64": ["pandas"]})
+        self.assertEqual(dependencies["status"], "PARTIAL_METADATA")
+
+    def test_direct_entry_disagreeing_with_abi_folders_is_reported(self):
+        (self.apks / "app.apk").write_bytes(b"synthetic")
+        target = self.apks.parent / "build/site-packages"
+        self.distribution(target, "numpy", "1.0")
+        self.distribution(target / "arm64-v8a", "numpy", "2.0")
+        self.assertEqual(self.invoke(self.signed, "--target-site-packages", target), 0)
+        dependencies = self.receipt()["dependencies"]
+        self.assertEqual(dependencies["direct_abi_disagreements"], ["numpy"])
+        self.assertEqual(dependencies["status"], "CONFLICTING_METADATA")
+
 
 if __name__ == "__main__":
     unittest.main()
