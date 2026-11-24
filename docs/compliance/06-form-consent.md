@@ -116,7 +116,7 @@
 | 소식 메일 | 선택 체크, 기본 해제 | [선택] QUANTGEN 소식·혜택 이메일(광고)을 받겠습니다. 언제든 끌 수 있습니다. | [Optional] Send me QUANTGEN news and offers by email (advertising). You can turn this off any time. |
 
 - 동의 기록은 Amazon Cognito 사용자 정의 속성에 남긴다: `custom:terms_ver`(이용약관 버전), `custom:privacy_ver`(처리방침 버전), `custom:age14`(`Y`), `custom:consent_at`(가입 동의 시각), `custom:mkt_opt`(`Y`/`N`), `custom:mkt_at`(소식 메일 선택·변경 시각). 이 속성에는 이메일·이름 등 개인정보를 넣지 않는다(CloudTrail이 값을 가리지 않음).
-- 소식 메일 선택은 계정 페이지에서 언제든 바꿀 수 있고, 바꾼 시각을 `custom:mkt_at`에 다시 기록한다. 광고 메일 운영 조건은 [18번](18-marketing-email.md)을 따른다.
+- 소식 메일 선택은 계정 페이지에서 언제든 바꿀 수 있고(웹 계정 화면 미검증), 바꾼 시각을 `custom:mkt_at`에 다시 기록한다. 광고 메일 운영 조건은 [18번](18-marketing-email.md)을 따른다.
 - 비밀번호 규칙(10자 이상, 숫자·소문자·대문자·특수문자)은 입력 중에 보여 준다.
 - "[필수] 개인정보 수집·이용 동의" 체크를 따로 둘지는 법률 확인 대상이다 〔법률 자문이 아닙니다. 근거: 계약 이행에 필요한 처리는 동의 대상이 아니라는 해설(개인정보 보호법 제15조 제1항 제4호, 원문 미확인), [계정 설정 4.4](../commercial/accounts/ACCOUNT_SETUP.md)〕.
 - 이 표는 웹 계정 화면이 공개되기 전 제안이며, 공개 전에 실제 화면 문구·체크 기본값·기록 속성과 대조한다(미검증).
