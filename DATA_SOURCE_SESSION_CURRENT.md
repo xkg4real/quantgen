@@ -14,11 +14,11 @@ task: data-source
 cycle: 2026-11-24
 done_ids: none
 next_ids: DS-5b, DS-5c, DS-5a
-updated_at: 2026-11-25T00:50:00+09:00
+updated_at: 2026-11-25T01:40:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/ds-home-reason-codes-20261124 (+ claude/ds-review-fixes-20261124@9663a99, claude/ds-fedwatch-20261124@5e971c0, claude/ds-edgar-history-20261124@927375b, claude/ds-5bc-news-20261124@4a646ce)
-work_commit: 1886b22 (DS-8)
+work_commit: 4919ec1 (DS-10, on DS-9 ac67b19)
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -29,6 +29,13 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## DATA_SOURCE (Claude) GDELT 원문·DS-9·DS-10 — 2026-11-25T01:40+09:00
+
+- GDELT 약관 원문 인용: `claude/ds-stage2-events-plan-20261124` @ 5394e7a (상업·재배포 허용, 인용 의무, 학습 조항 없음).
+- DS-9: `claude/ds-event-rules-20261124` @ ac67b19 — core/didm/ingest/event_rules.py + docs/didm/EVENT_RULES_V0.md (표 일치 시험), 10 시험.
+- DS-10: `claude/ds-gdelt-files-20261124` @ 4919ec1 (DS-9 위) — core/didm/ingest/gdelt_files.py, collect_daily --gdelt-file, docs/didm/GDELT_FILES_V0.md, 8 시험. 코드북 대조는 data.gdeltproject.org 막혀 미검증.
+- 메인: DS-8 received_at = 실제 쓴 시각 수용.
 
 ## DATA_SOURCE (Claude) DS-8 — 2026-11-25T00:50+09:00
 
