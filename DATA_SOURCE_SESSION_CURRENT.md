@@ -14,11 +14,11 @@ task: data-source
 cycle: 2026-11-24
 done_ids: none
 next_ids: DS-5b, DS-5c, DS-5a
-updated_at: 2026-11-24T20:30:00+09:00
+updated_at: 2026-11-24T21:10:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/ds-home-reason-codes-20261124 (+ claude/ds-review-fixes-20261124@9663a99, claude/ds-fedwatch-20261124@5e971c0, claude/ds-edgar-history-20261124@927375b, claude/ds-5bc-news-20261124@4a646ce)
-work_commit: 5f5c7fd
+work_commit: 18c310d (D12) / 5f5c7fd (D11)
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -29,6 +29,12 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## DATA_SOURCE (Claude) D12 — 2026-11-24T21:10+09:00
+
+- 메인 지시 D12: 표본 확대 가능성 조사 (문서만). `claude/ds-sample-feasibility-20261124` @ 18c310d, docs/didm/SAMPLE_EXPANSION_FEASIBILITY_2026-11-24.md.
+- 결론: 미국 820 × 2015~2024 (EDGAR + Alpaca 뉴스)가 무료로 가장 현실적; 500 × 2005~2024는 공시 단독; 한국은 공시 단독. Massive 뉴스는 2021-04 이전 500건 미만 (공식 지식베이스).
+- 결정 대기 (문서 6절): 표본 목표, 한국 공시 단독, 10-K 본문 일부 처리, D13 (collection_status --by-entity).
 
 ## DATA_SOURCE (Claude) PD-3·D11·소유자 실측 — 2026-11-24T20:30+09:00
 
