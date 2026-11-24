@@ -252,6 +252,8 @@ CryptoPanic 무료 플랜 (2026-11-20, 소유자 지적 확인; 검색 요약, �
 | ECOS (한국은행) | 한국 공식 통계 (기준금리, GDP 등) | 커넥터 커밋 (`data/didm/ecos.py`). 빈티지·발표 시각이 없어 `published_at` = 받은 시각 | `ECOS_API_KEY` (새 이름) |
 | Kalshi (답 4) | 예정 사건 확률 (연준 결정 등) | 커넥터 커밋 (`data/didm/kalshi.py`, 키 없음, 조회만). 필드 이름 **미검증** | 없음 |
 
+엑셀 밖 새 공급사 (2026-11-24): EODHD Economic Events, Alpaca News, Massive ticker news — 파서만 main에 있음, 쓸지 여부는 소유자 확인 대기. 계획과 가입 표는 `docs/didm/NEW_SOURCES_PLAN_2026-11-24.md`.
+
 ## 7. 대조 검사
 
 ```
