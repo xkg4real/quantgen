@@ -266,6 +266,34 @@ def _flow_window(window, length, source, received):
     return tuple(rows)
 
 
+def _flow_daily(daily, length):
+    """The profile's own daily net rows, (date, foreign, institution, individual), oldest first.
+
+    Only the most recent `length` sessions (the longest summed window) are kept, so the
+    daily bars and the window sums describe the same days. A blank value stays None;
+    a row without a valid date is dropped rather than guessed.
+    """
+    if not isinstance(daily, (tuple, list)) or length <= 0:
+        return ()
+    rows = []
+    for row in daily:
+        if not isinstance(row, (tuple, list)) or len(row) != 1 + len(GROUPS_DAILY):
+            continue
+        day = _day(row[0])
+        if not day:
+            continue
+        rows.append({"date": day, **{group: number(value)
+                                     for group, value in zip(GROUPS_DAILY, row[1:])}})
+    rows = rows[-length:]
+    if not any(row[group] is not None for row in rows for group in GROUPS_DAILY):
+        return ()
+    return tuple(rows)
+
+
+# The column order of stock_profile._flows "daily" rows.
+GROUPS_DAILY = ("foreign", "institution", "individual")
+
+
 def build_insights(profile, *, comparison=None):
     """Read the already-loaded profile only. Rendering this model cannot issue requests."""
     values = _map(getattr(profile, "values", None))
@@ -287,6 +315,7 @@ def build_insights(profile, *, comparison=None):
     flow_windows = {length: _flow_window(windows[length], length, sources.get("flows"), fetched.get("flows"))
                     for length in sorted(lengths)}
     flows = flow_windows[max(lengths)] if lengths else _flow_window({}, 0, sources.get("flows"), fetched.get("flows"))
+    flow_daily = _flow_daily(flow_data.get("daily"), max(lengths) if lengths else 0)
     short = _map(values.get("short_selling"))
     latest, average = _map(short.get("latest")), _map(short.get("average"))
     average = dict(average)
@@ -305,7 +334,9 @@ def build_insights(profile, *, comparison=None):
     comparisons = {}
     if isinstance(peers, StockPeerComparisons) and peers.subject == instrument and peers.as_of <= _day(today):
         comparisons = {item["metric"]: dict(item) for item in peers.averages}
-    return {"metrics": tuple(metrics), "flows": tuple(flows), "flow_windows": flow_windows, "shorts": shorts,
+    last_price = number(getattr(profile, "last_price", None), positive=True)
+    return {"metrics": tuple(metrics), "flows": tuple(flows), "flow_windows": flow_windows,
+            "flow_daily": flow_daily, "last_price": last_price, "shorts": shorts,
             "orderbook": normalize_orderbook(values.get("orderbook")),
             "executions": normalize_executions(values.get("executions")),
             "comparisons": comparisons, "comparison": next(iter(comparisons.values())) if len(comparisons) == 1 else peer_comparison(None),

@@ -46,8 +46,9 @@ def valuation_reference(metric_id, value, language='ko') -> ValuationReference:
     if metric == 'per':
         low, high, cap = 10., 20., 40.
         labels = ('10 미만', '10–20', '20 초과') if ko else ('<10', '10–20', '>20')
-        readings = (('이익 대비 가격이 낮은 쪽', '이익의 10–20배 구간', '성장 기대·이익 변동 확인') if ko else
-                    ('Lower price per earnings', '10–20 times earnings', 'Check growth and earnings swings'))
+        readings = (('10배 미만 · 이익이 줄어들 전망인지도 확인해요', '이익의 10–20배 구간', '20배 초과 · 성장 기대가 반영됐는지 확인해요') if ko else
+                    ('Below 10 · also check whether earnings are expected to fall', '10–20 times earnings',
+                     'Above 20 · check whether growth expectations explain it'))
         detail = ('PER 10 미만·10–20·20 초과는 이해를 돕는 참고 구간의 예시이며 업종 평균이나 적정가 기준이 아니에요. '
                   '낮은 PER는 저평가일 수도 있지만 이익 감소 예상이나 일시적인 고점 이익 때문일 수도 있어요. '
                   '0 이하·적자·특수한 회계 기준에서는 통상적인 PER 비교를 보류해요.' if ko else
@@ -57,8 +58,9 @@ def valuation_reference(metric_id, value, language='ko') -> ValuationReference:
     else:
         low, high, cap = 1., 3., 6.
         labels = ('1 미만', '1–3', '3 초과') if ko else ('<1', '1–3', '>3')
-        readings = (('장부자본보다 낮은 가격', '장부자본의 1–3배', '높은 자본수익성인지 확인') if ko else
-                    ('Price below book equity', '1–3 times book equity', 'Check whether returns justify it'))
+        readings = (('1배 미만 · 순자산보다 낮은 가격이에요. 수익성도 함께 봐요', '장부자본의 1–3배', '3배 초과 · ROE가 높은지 함께 확인해요') if ko else
+                    ('Below 1 · priced under book equity; check profitability too', '1–3 times book equity',
+                     'Above 3 · check whether ROE is high enough to explain it'))
         detail = ('PBR 1배는 가격과 주당 장부자본이 같은 지점이에요. 1 미만·1–3·3 초과는 교육용 참고 구간이지 '
                   '업종별 우량 기준이 아니에요. 1배 미만도 낮은 수익성·자산 부실·자본 감소 우려 때문일 수 있고, '
                   '높은 PBR도 높은 ROE와 지속적인 이익으로 설명되는지 확인해야 해요. 자본이 0 이하이면 비교를 보류해요.' if ko else
