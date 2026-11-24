@@ -67,6 +67,11 @@
 - **Claude 4개 행 (검증됨).** 출처의 "Latest models" 표를 두 번 따로 열어 같은 값을 확인했습니다. 표의 글 그대로: Training data cutoff "Jun 2026", Reliable knowledge cutoff "Jun 2026" (네 모델 모두). 같은 페이지: "Every Claude model ID is a pinned snapshot, including the dateless IDs used from the 4.6 generation on." 마감일은 달의 마지막 날 (2026-06-30)로 봤습니다. **어느 모델을 Claude 기준선으로 쓸지는 아직 정하지 않았습니다.** 자격 시작이 2026-09-30이므로 Stage 2 (2015~2024)에는 쓸 수 없습니다.
 - **자체 LLM (미검증).** 기반 모델과 미세조정 자료가 정해지면 `in_house_card()`로 행을 만듭니다. 기반 모델이 미검증이면 자체 LLM도 미검증입니다.
 
+## 3.1 배포물과 라이선스 (2026-11-24)
+
+- FinBERT 가중치 (CC BY-NC-SA 4.0, 비상업)와 Loughran-McDonald 사전 파일 (학술 연구 무료, 상업 이용은 별도 허가)은 **이 저장소에도 배포물 (wheel·앱)에도 들어 있지 않습니다.** 2026-11-24에 `git ls-files`로 사전 파일 이름, 가중치 확장자 (`.safetensors`, `.bin`, `.gguf`, `.pt`, `.onnx`)를 찾아 0건임을 확인했습니다. 이 세션은 두 파일을 내려받지 않았습니다.
+- 두 기준선은 소유자의 라이선스 확인이 끝날 때까지 **연구 비교용으로만** 둡니다. 표의 "검증됨"은 스냅샷과 출처를 확인했다는 뜻이고 사용 권리를 확인했다는 뜻이 아닙니다.
+
 ## 4. 쓰는 법
 
 ```python
