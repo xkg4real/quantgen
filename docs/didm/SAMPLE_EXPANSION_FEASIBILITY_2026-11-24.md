@@ -220,11 +220,11 @@
 
 ## 10. Massive 대안 (소유자 요청 2026-11-24)
 
-조건: QUANTGEN은 상업 앱이고 DIDM은 모형 학습이 목적 → **상업 이용**과 **학습 이용**이 약관상 가능해야 함. 그다음 종목 태그, 과거 깊이 (2015~), 시각 (공개 시각), 비용. 확인 방법: 웹 검색 요약 (해당 공급사 호스트는 이 환경에서 막혀 원문을 직접 열지 못함 → 행마다 "검색 요약"). 법률 자문이 아닙니다.
+조건: QUANTGEN은 상업 앱이고 DIDM은 모형 학습이 목적 → **상업 이용**과 **학습 이용**이 약관상 가능해야 함. 그다음 종목 태그, 과거 깊이 (2015~), 시각 (공개 시각), 비용. 확인 방법: 웹 검색 요약 (해당 공급사 호스트는 이 환경에서 막혀 원문을 직접 열지 못함 → 행마다 "검색 요약"). 예외: GDELT 행은 원문 (2026-11-24). 법률 자문이 아닙니다.
 
 | 대안 | 상업 이용 | 학습 이용 | 종목 태그 | 과거 | 비용 | 판단 |
 |---|---|---|---|---|---|---|
-| **GDELT 2.0** (이미 연결) | 허용 — "unlimited and unrestricted use for any academic, commercial, or governmental use of any kind without fee", 재배포 시 인용·링크 필수 (GDELT About, 검색 요약) | 금지 조항 없음 (위 문구) | 없음 (조직 이름 → 자체 연결) | 2015-02~ | 무료 | **Go** — 지금 바로. 단 기사 본문 권리는 언론사, 저장은 제목·메타데이터만 (지금 원칙) |
+| **GDELT 2.0** (이미 연결) | 허용 — 원문: "The GDELT Project is an open platform for research and analysis of global society and thus all datasets released by the GDELT Project are available for unlimited and unrestricted use for any academic, commercial, or governmental use of any kind without fee." 재배포·사용 시 인용과 링크 필수: "You may redistribute, rehost, republish, and mirror any of the GDELT datasets in any form. However, any use or redistribution of the data must include a citation to the GDELT Project and a link to this website (https://www.gdeltproject.org/)." (www.gdeltproject.org/about.html "Terms of Use" 절, 확인일 2026-11-24 (소유자 허용 호스트)) | **원문에 학습 조항 없음** ("unlimited and unrestricted use ... of any kind"만) | 없음 (조직 이름 → 자체 연결) | 2015-02~ | 무료 | **Go** — 지금 바로. 단 기사 본문 권리는 언론사, 저장은 제목·메타데이터만 (지금 원칙) |
 | **SEC EDGAR 8-K (+ 보도자료 첨부 Exhibit 99.1)** (이미 연결, D6) | 공공 공시 | 공시 메타데이터 (서식·항목 코드·시각)는 문제 작음. 첨부 보도자료 본문은 회사 저작물 — 본문 처리는 정책 결정 (6절 3번) | CIK (정확) | 공시 전체 (D6) | 무료 | **Go** — 8-K 항목 코드 (2.02 실적, 5.02 임원 등)가 사실상 "회사 뉴스 사건". 본문 없이도 사건 시각·유형은 정확 |
 | **OpenDART** (한국, 이미 연결) | 약관에 상업 금지 조항 못 찾음 (9.1) | 같음 | corp_code (정확) | 3개월씩 | 무료 | **Go** (한국) |
 | **Benzinga 직접 계약** | 사업자 계약 | **학습용 데이터셋을 따로 판매** ("Fully licensed ... datasets - ideal for training Large Language Models", 검색 요약). 단 제3자 (Firecrawl) 경유 판은 "일반 AI 모형 학습 금지, 비공개 인스턴스만" | 있음 | 미검증 (Massive의 Benzinga 묶음은 2009-04~) | 견적 (공개 가격 없음) | **조건부 Go** — Alpaca·Massive 뉴스의 원 출처와 같은 자료를 학습 권리째 사는 길. 견적·이력 깊이·학습 조항을 서면으로 받은 뒤 결정 |
@@ -243,4 +243,4 @@
 3. **비교용:** Tiingo 상위 요금·EODHD 상업 라이선스 견적은 DS-5a (N1) 결정 때 함께.
 4. **이미 받은 자료:** Massive 200건·Alpaca 60건은 개인·비상업 조건으로 받은 것이므로 학습·검증에 쓰지 않고, 보관·삭제는 소유자 결정 (Massive는 플랜 종료 뒤 30일 안 삭제 의무).
 
-출처 (검색 요약, 2026-11-24): benzinga.com/apis/datasets-for-training-llms-and-ai-applications, firecrawl.dev/terms/third-party-data/benzinga/C-1.0.0, api.tiingo.com/documentation, api.tiingo.com/products/news-api, eodhd.com/financial-apis/terms-conditions, gdeltproject.org/about.html, huggingface.co/datasets/khaihernlow/fnspid, wrds-www.wharton.upenn.edu (RavenPack), massive.com/compare/massive-vs-finnhub. 원문 확인이 필요한 호스트: www.benzinga.com, api.tiingo.com, eodhd.com, www.gdeltproject.org.
+출처 (검색 요약, 2026-11-24): benzinga.com/apis/datasets-for-training-llms-and-ai-applications, firecrawl.dev/terms/third-party-data/benzinga/C-1.0.0, api.tiingo.com/documentation, api.tiingo.com/products/news-api, eodhd.com/financial-apis/terms-conditions, gdeltproject.org/about.html, huggingface.co/datasets/khaihernlow/fnspid, wrds-www.wharton.upenn.edu (RavenPack), massive.com/compare/massive-vs-finnhub. 원문 확인이 필요한 호스트: www.benzinga.com, api.tiingo.com, eodhd.com. (GDELT는 2026-11-24 원문 확인 완료.)
