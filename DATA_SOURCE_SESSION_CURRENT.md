@@ -14,11 +14,11 @@ task: data-source
 cycle: 2026-11-24
 done_ids: none
 next_ids: DS-5b, DS-5c, DS-5a
-updated_at: 2026-11-24T21:10:00+09:00
+updated_at: 2026-11-24T21:40:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/ds-home-reason-codes-20261124 (+ claude/ds-review-fixes-20261124@9663a99, claude/ds-fedwatch-20261124@5e971c0, claude/ds-edgar-history-20261124@927375b, claude/ds-5bc-news-20261124@4a646ce)
-work_commit: 18c310d (D12) / 5f5c7fd (D11)
+work_commit: 93f23fd (D13) / 408d8b4 (D12)
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -29,6 +29,11 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## DATA_SOURCE (Claude) D12 별칭 절·D13 — 2026-11-24T21:40+09:00
+
+- D12 8절 (별칭 사전, DIDM_DEV 요청): `claude/ds-sample-feasibility-20261124` @ 408d8b4. 미국 CIK + SEC former names, 티커 재사용 이력 무료 없음; 한국 corp_code + 공시 목록·KRX상장종목정보 스냅숏; 군집화 글은 제목만 권장; 새 옵션 4개 제안.
+- D13: `claude/ds-by-entity-20261124` @ 93f23fd (**integration2 7df3035 기준**). collection_status --by-entity. 시험 11 OK, didm 331 OK.
 
 ## DATA_SOURCE (Claude) D12 — 2026-11-24T21:10+09:00
 
