@@ -1,0 +1,30 @@
+{
+  "kind": "record",
+  "note": "a boolean where a number belongs",
+  "record": {
+    "record_id": "conf-0001",
+    "source_id": "gdelt-gkg2",
+    "target_kind": "macro",
+    "entity_id": "US.FFR",
+    "published_at": "2026-11-05T19:00:00Z",
+    "received_at": "2026-11-05T19:15:00Z",
+    "relevance_0_100": true,
+    "ess_like_0_100": 20.0,
+    "novelty_0_100": 100.0,
+    "origin_cluster_id": "cl-20261105-0001",
+    "event_type": "monetary_policy",
+    "direction_probs": [
+      0.1,
+      0.7,
+      0.2
+    ],
+    "uncertainty_entropy": 0.8018185525433373,
+    "p_credibility": 0.95,
+    "market_confirmation": "PENDING",
+    "model_version": "fixture-model-0",
+    "prompt_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "schema_version": "didm-score-v0"
+  },
+  "expect": "relevance_0_100 must be a number",
+  "json_schema_detects": true
+}

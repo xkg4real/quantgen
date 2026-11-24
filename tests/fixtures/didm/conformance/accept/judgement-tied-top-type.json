@@ -1,0 +1,60 @@
+{
+  "kind": "judgement",
+  "note": "event_type may be either key of a tie for the top probability",
+  "request": {
+    "article_id": "art-0004",
+    "language": "en",
+    "title": "Synthetic headline: central bank holds its policy rate",
+    "body": null,
+    "target_kind": "macro",
+    "entity_id": "US.FFR",
+    "entity_name": "US policy rate"
+  },
+  "judgement": {
+    "judgement_version": "didm-judgement-v0",
+    "article_id": "art-0004",
+    "target_kind": "macro",
+    "entity_id": "US.FFR",
+    "p_subject": 0.92,
+    "event_type": "inflation",
+    "event_type_probs": {
+      "monetary_policy": 0.5,
+      "inflation": 0.5,
+      "employment": 0.0,
+      "growth": 0.0,
+      "fiscal": 0.0,
+      "trade_tariffs": 0.0,
+      "geopolitics": 0.0,
+      "election_policy": 0.0,
+      "earnings": 0.0,
+      "mergers_acquisitions": 0.0,
+      "management": 0.0,
+      "regulation_litigation": 0.0,
+      "supply_chain": 0.0,
+      "crypto_regulation_hack": 0.0,
+      "none": 0.0
+    },
+    "direction_probs": [
+      0.1,
+      0.7,
+      0.2
+    ],
+    "claim_status": "confirmed"
+  },
+  "scorer_info": {
+    "model_version": "fixture-model-0",
+    "prompt_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "temperature": 0
+  },
+  "assembly": {
+    "record_id": "conf-j-0004",
+    "source_id": "gdelt-gkg2",
+    "published_at": "2026-11-05T19:00:00Z",
+    "received_at": "2026-11-05T19:15:00Z",
+    "relevance_0_100": 88.0,
+    "novelty_0_100": 97.5,
+    "origin_cluster_id": "cl-20261105-0001",
+    "p_credibility": 0.9,
+    "market_confirmation": "PENDING"
+  }
+}
