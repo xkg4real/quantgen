@@ -1,6 +1,6 @@
 # QUANTGPT_TRADEGEN — QuantGPT 출력 인터페이스 (TRADEGEN 공유용)
 
-- 판: v0.1 초안 (2026-11-24). 작성: QUANTGEN 메인 세션. 구현 담당: 하부 세션 QUANTGPT (quantgen 브랜치 `claude/quantgpt-q0-20261124`, 디렉터리 `qgpt/`).
+- 판: v0.2 초안 (2026-11-24). 받는 쪽 계약: xkg4real/tradegen main `b828b2d` `docs/direction-forecast-contract.md`(`tradegen-direction-forecast-v1`). 작성: QUANTGEN 메인 세션. 구현 담당: 하부 세션 QUANTGPT (quantgen 브랜치 `claude/quantgpt-q0-20261124`, 디렉터리 `qgpt/`).
 - 근거: 소유자 지시 2026-11-24 "QuantGPT에 대한 내용을 TRADEGEN 세션에도 공유하여 진행해주세요", TRADEGEN 오케스트레이션 세션("QUANTGEN/TRADEGEN model split")의 요청(같은 날).
 - 이 저장소는 공개 상태라 **인터페이스만** 적는다. 설계 명세서 본문, 모델 후보, 세부 일정, 가중치는 적지 않는다(소유자 결정 2026-11-24: 명세서는 공개하지 않음).
 - 구현 전 초안이다. 필드가 바뀌면 판 번호를 올리고 아래 "바뀐 내역"에 적는다. TRADEGEN 쪽 소비 계약 문서(xkg4real/tradegen의 문서 PR)가 올라오면 맞춰 고친다.
@@ -40,7 +40,7 @@
 | `T-RESEARCH` | 연구 가설 초안 | `research_lab` 사전 등록 파일로만 저장. 자동 실행 없음. 실행마다 시도 1회로 원장에 기록 |
 | `T-REPORT` | 원장·실험 결과 요약(한국어·영어) | 사용 |
 | `T-EXPLAIN` | 호스트가 계산한 보고서 JSON의 해설 | 사용 |
-| `T-NEWS` | 기사 → 유형 판단 | 별도 어댑터·평가셋·관문. 레코드 형식은 `didm-score-v0` |
+| `T-NEWS` | 기사 → 유형 판단 | 별도 어댑터·평가셋·관문. 모델은 판단 `didm-judgement-v0`(9개 필드)만 내고, DIDM 쪽이 레코드 `didm-score-v0`으로 조립한다 |
 | `T-CARD`, `T-QA`, `T-PORT` | 전략 카드 변환, 개념 질의, 포트폴리오 진단 해설 | 필요하면 사용 |
 
 ## 3. 시각과 기간
@@ -59,31 +59,101 @@
 
 - 모델은 `model.id`(기반 모델과 양자화), `model.adapter`(미세조정 어댑터), `model.prompt_version`으로 식별한다. 셋 중 하나라도 바뀌면 다른 모델로 본다(새 카드, 새 시도 수).
 - 시도 원장: 시도 1회 = 목적함수 + 데이터 버전 + 하이퍼파라미터 + 시드 + 모델 버전. 덧붙이기 전용이며 DSR 계산에 시도 수가 들어간다.
-- `request_sha256`: 요청(작업 유형, 모드, 입력, `as_of`, 프롬프트 판)을 정규화한 JSON의 sha256. 정규화 규칙은 QGPT-02 구현 뒤 이 문서에 적는다.
+- `request_sha256`: sha256(정규화 JSON{task, mode, input, model, adapter, prompt_version}). 정규화: 키 정렬, 공백 없음, UTF-8 그대로, NaN·Infinity 거부. 이것은 **요청**의 해시다. 출력 파일의 해시는 9절의 `snapshot_sha256`이며 받는 쪽 계약 2절의 직렬화 규칙을 따른다.
 - 모델 파일: git에 넣지 않는다. 매니페스트(sha256, 크기, 라이선스)로만 식별한다.
 - 같은 입력·같은 모델·같은 디코딩 설정으로 다시 돌렸을 때 결과가 같은지(재생)를 시험하고, 다르면 차이를 보고한다.
 
 ## 6. 생성 주기와 일정
 
 - 생성 주기: 요청이 있을 때만(버튼·명령). QuantGPT가 스스로 주기적으로 돌거나 결과를 밀어 넣지 않는다.
-- 일정: 2026-11-24 기반 작업(계약, 검사, 시도 원장) 착수. TRADEGEN 통합(다리 모듈, owner 화면 해설 버튼, import 경계 시험)은 평가 기준선 관문 뒤, 소유자 승인 뒤다. 날짜는 공개 문서에 적지 않는다(필요하면 세션 메시지나 소유자에게).
+- 일정: 2026-11-24 기반 작업(계약, 검사, 시도 원장) 착수. TRADEGEN 통합(다리 모듈, import 경계 시험)은 평가 기준선 관문 뒤, 소유자 승인 뒤다. v0.1에 적었던 "owner 화면 해설 버튼"은 연구 입력이 아니라 TRADEGEN 앱 변경이므로 이 문서 범위에서 뺀다(별도 검토와 소유자 승인). 날짜는 공개 문서에 적지 않는다(필요하면 세션 메시지나 소유자에게).
 
 ## 7. 경계 (양쪽이 지킬 것)
 
-- `quantgpt` 패키지와 TRADEGEN의 다리 모듈은 `execution`, `execution_accounts`, `execution_control`, `execution_launch`, `execution_network`, `execution_orders`를 import하지 않고, 그 패키지들도 `quantgpt`를 import하지 않는다. AST로 저장소 전체를 검사하는 시험을 둔다.
+- 경계는 받는 쪽 계약 5절의 D14 코드 닫힘 전체다: `core/compliance`, `core/odds`, `execution`, `execution_control`, `execution_orders`, `execution_accounts`, `execution_network`, `execution_launch`, `tools/owner`와 그것들이 import하는 모든 것. `quantgpt` 패키지와 다리 모듈은 이 안의 어떤 것도 import하지 않고, 이 안의 어떤 것도 `quantgpt`·읽기 도구·어댑터를 import하지 않는다(v0.1은 `execution*`만 적었다).
 - QuantGPT에는 브로커 키·계좌·보유 정보를 주지 않는다. 도구 목록에 주문·계좌·키 함수가 없다.
 - QuantGPT 출력은 연구 입력으로만 쓴다(TRADEGEN 쪽 순서: 오프라인 재생 → 사전 등록 기준 전향 검증 → 소유자 서명). 실거래 결과를 QuantGPT·DIDM 학습에 되먹이지 않는다.
 - TRADEGEN 코드 변경은 TRADEGEN 세션과 소유자 승인으로만 한다. QUANTGEN 쪽 세션은 tradegen 저장소에 push하지 않는다.
 
-## 8. TRADEGEN 쪽에 묻는 것 (소비 계약 문서에 답해 주면 됨)
+## 8. TRADEGEN 쪽에 묻는 것 — 답 받음 (받는 쪽 계약 7절, tradegen main `b828b2d`)
+
+네 질문의 답은 받는 쪽 계약 7절에 있다: 건드리면 안 되는 것(D14 닫힘, 소유자 기록과 서명 도구, `.env`와 키, 실제 홈, tradegen 저장소), 사전 등록(방향 예측용은 M11-T4에서 정함, `research_lab`은 동결), 입력 모양(계약 2절), Python 3.13 이상·코드 의존 없음. 아래는 v0.1의 질문 원문이다.
 
 1. QuantGPT가 건드리면 안 되는 경로·파일·원장.
 2. `research_lab` 사전 등록 형식(파일 위치, 필수 필드, 해시·서명 규칙)과, 시도 원장이 목적함수·데이터 버전·하이퍼파라미터·시드를 담을 수 있는지.
 3. BR-26·OQ9에 넣으려는 입력의 모양(값의 범위, 갱신 주기, `as_of` 지연 허용, 결측 처리). 1절 때문에 QuantGPT 출력을 그대로는 쓸 수 없으니, 어떤 특성이 필요한지.
 4. Python·CI 판, 공개 저장소에서 비공개 의존성을 받을 수 있는지.
 
+## 9. TRADEGEN 요청 M11-T7 (2026-11-24): 출력 스냅샷을 정해진 주기로 남겨 달라 — 접수와 답
+
+상태: **접수함. 아직 시작하지 않았다.** 주기 실행에는 QUANTGEN 쪽 소유자 확인 4가지(9.4)가 필요하다. 그 전까지는 6절 그대로 요청이 있을 때만 돈다.
+
+### 9.1 지금 있는 것과 없는 것
+
+| 쪽 | 있는 것 | 없는 것 |
+|---|---|---|
+| QuantGPT | 봉투·계약·검사·정책 필터·시도 원장·근거 색인·채점기, 가짜 백엔드 재생 | 실제 모델로 돌린 출력(기준선 실행 전) |
+| DIDM | 채점기 계약(`didm-judgement-v0` → `didm-score-v0`), 모델 학습 마감일 규칙, 수집기(소유자 PC에서 소유자가 실행할 때만) | 실제 기사에 대한 채점 기록 |
+
+쌓인 출력 기록은 지금 0건이다. 스냅샷은 **시작 시각 이후의 전향 기록**으로만 만든다. 과거 기사를 지금 채점한 값은 모델의 학습 마감일 규칙에서 자격이 없을 수 있고, 받는 쪽 계약 3절 4항으로도 표본 내 값이다.
+
+### 9.2 형식: 예측 형식은 낼 수 없고, 특성 스냅샷 형식을 제안한다
+
+`tradegen-direction-forecast-v1`은 방향 모형의 출력 형식이다. QuantGPT와 DIDM은 방향 모형이 아니어서(1절, 받는 쪽 계약 7절과 같은 판단) `probabilities{up, down, neutral}`, `hurdle_bps`, `horizon_seconds`를 채울 수 없다. 그 형식은 TRADEGEN이 따로 만드는 방향 모형의 출력에 쓰고, QUANTGEN은 그 모형의 **입력 특성**을 아래 형식으로 넘긴다.
+
+제안 `quantgen-feature-snapshot-v0` (초안, 구현 전). 파일 규칙은 받는 쪽 계약 2절과 같게 둔다: UTF-8 JSON 객체 1개, BOM 없음, 16 MiB·5만 건 이하, 중복 키·`NaN`·`Infinity`·모르는 키 없음, 시각은 UTC 초(정수), 확률은 십진 문자열.
+
+| 필드 | 뜻 |
+|---|---|
+| `format` | `quantgen-feature-snapshot-v0` |
+| `producer` | `quantgen-didm` 또는 `quantgpt` |
+| `model.name`, `model.version` | 채점 모델 이름과 판. 한 파일에는 한 모델 판만 |
+| `model.sha256` | 동결한 산출물의 해시. LLM이면 (`model.id`, `model.adapter`, `model.prompt_version`, 디코딩 설정)을 정규화한 JSON의 sha256, 사전·규칙 기준선이면 규칙 파일의 sha256 |
+| `model.training_cutoff`, `model.frozen_at` | 학습 자료의 마지막 시각, 모델과 설정을 고정한 시각 |
+| `generated_at` | 파일을 쓴 시각 |
+| `records[]` | 아래 표 |
+| `snapshot_sha256` | 이 필드를 뺀 문서를 받는 쪽 계약 2절과 같은 방식(`sort_keys=True`, `separators=(",", ":")`, `ensure_ascii=True`)으로 직렬화한 sha256 |
+
+| `records[]` 필드 | 뜻 |
+|---|---|
+| `record_id`, `source_id` | 레코드와 공급원 식별자 (`didm-score-v0` 그대로) |
+| `as_of` | 근거를 쓸 수 있게 된 시각 = `received_at` |
+| `issued_at` | 이 판단이 만들어진 시각. `as_of <= issued_at <= generated_at`. v0.1에는 없던 값이다 |
+| `published_at` | 발행 시각 |
+| `target_kind`, `entity_id` | 판단 대상 |
+| `event_type` | 유형 14개와 `none` |
+| `direction_probs` | 기사 내용이 대상에 주는 방향의 확률 3개(+1, −1, 0). **가격 방향 예측이 아니다.** 보정 판이 없으면 확률로 쓰지 않는다 |
+| `relevance_0_100`, `novelty_0_100`, `ess_like_0_100`, `uncertainty_entropy`, `p_credibility`, `market_confirmation`, `origin_cluster_id` | `didm-score-v0` 그대로 |
+| `calibration_version` | 보정 판. 없으면 `null` |
+
+기사 제목·본문·프롬프트는 넣지 않는다. 필드 이름과 값 규칙의 기준은 quantgen `core/didm/llm/schema.py`와 `docs/didm/schema/`다(채점기 계약은 2026-11-24 통합 중).
+
+### 9.3 주기, 시작 시각, 해시 목록 위치
+
+| 항목 | 값 |
+|---|---|
+| 주기 | 미정 (소유자 확인 뒤). 후보는 소유자 PC의 수집기 실행 뒤 하루 1회 |
+| 시작 시각 | 미정. 정해지면 이 표에 UTC 초와 KST로 적는다 |
+| 해시 목록 위치 | 공개 저장소에 두지 않는다. 비공개 저장소(소유자 생성 대기) 또는 소유자 PC 스냅샷 폴더의 목록 파일. 정해지면 위치의 이름만 적는다 |
+| 전달 | 소유자 PC에서 오프라인으로. QUANTGEN 세션은 tradegen 저장소에 쓰지 않는다 |
+
+### 9.4 QUANTGEN 쪽에서 소유자 확인이 필요한 것 (메인이 소유자에게 묻는다)
+
+1. 주기 실행을 시작할지, 어떤 모델로 돌릴지(API 과금 또는 소유자 PC 로컬 실행: 비용과 한도).
+2. 스냅샷과 해시 목록을 둘 곳.
+3. 대상 범위. TRADEGEN이 보는 시장은 Upbit KRW 가상자산이다. DIDM V0에는 유형 `crypto_regulation_hack`은 있지만 가상자산 시장을 판단 대상으로 두는 정의는 없다. 거시·뉴스 특성만 넘길지, 가상자산 대상을 새로 정할지(새로 정하면 DIDM 쪽 새 사전 등록 항목).
+4. DIDM 자체 평가 표본과 겹치지 않게 시작 시각과 기간을 나누는 방법.
+
+### 9.5 TRADEGEN에 묻는 것
+
+1. 필요한 대상: 시장 코드와, 그 시장에 붙일 거시·뉴스 대상의 목록.
+2. 최소 주기와, `as_of`에서 `issued_at`까지의 지연에 대한 요구(받는 쪽 계약은 기록만 하고 상한을 두지 않음).
+3. 9.2의 특성 스냅샷 형식을 받는 쪽 문서(M11 체크리스트)에 계약으로 적을지, 고칠 필드가 있는지.
+4. 과거분 없이 전향 기록만으로 시작해도 되는지.
+
 ## 바뀐 내역
 
 | 판 | 날짜 | 내용 |
 |---|---|---|
 | v0.1 | 2026-11-24 | 첫 초안 |
+| v0.2 | 2026-11-24 | 받는 쪽 계약(tradegen `b828b2d`) 반영: 경계를 D14 닫힘 전체로, `issued_at` 구분, 요청 해시와 스냅샷 해시 구분, 화면 해설 버튼 제외, 8절 답 받음. 9절 추가: M11-T7 요청 접수, 특성 스냅샷 형식 제안, 시작 전 소유자 확인 4가지 |
