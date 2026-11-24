@@ -1,3 +1,74 @@
+## 2026-11-24 메인 Claude 재개 — 현재 기준 (이 블록이 아래 블록 전부보다 우선)
+
+기준 시각: 2026-11-24 18:45 KST · git 기준: main `b872d8c` · handoff 인수 `8a93ce6` · PR #140 `3483b53` · PR #147 `bf78b6b` · PR #148 `462f7df`
+근거: 메인 워크플로 5갈래 검증(2026-11-24). GPT 작업 대조는 `plans/2026-11-24/RESUME_GPT_VERIFY.md`, 문서·git 대조는 `plans/2026-11-24/RESUME_BOARD.md`.
+소유자 지시(원문은 `SESSION_PIPELINE.md` 0-1절): GPT 인계를 이어받아 세션별로 배분, DIDM 개발·QuantGPT 세션 추가, QuantGPT를 TRADEGEN에 공유, 스킬 적용, 24시간 안 일은 푸시 알림. 새 세션 일과 REMAINING WORK의 남은 일은 **병행**한다("우선순위라기 보다 같이 병행하는걸 잊지 말라는 얘기였습니다").
+
+### A. 세션 지도 (하부 세션 5개)
+
+| 세션 | ID | 지금 하는 일 (2026-11-24 배분) |
+|---|---|---|
+| MAIN | session_01H6RrzMUzF8vwK8xkX977mB | 인수 완료. PR #148 검토, GH-2(#147) 이어받기, 메인 문서 PR(대기열 14), 정기 점검 |
+| PAYMENTS_ACCOUNT_KEYS | session_016uB1jfZfzo935a4uucyT2S | P1 PAY-0·PAY-2 문서 PR(병합 차례 받음) → P2 KEY-5 요청문 v2 → P3 KEY-5/a 작은 지적 S4~S7 |
+| OS_EXPANSION | session_016uB1jgXiwx42FSUU5ANwM7 | O1 Android APK 검사 도구 PR 준비 → O2 PySide6 재확인(UI PR #140 기준, 읽기·시험만) → O3 자료 폴더 이전 안내 한 장 |
+| DATA_SOURCE (전 DATA_SOURCE_DIDM) | session_016uB1jiXnUcWg99JHtRek9T | D1 Kalshi·ALFRED 고침 한 PR로 준비 → D2 홈 지표 진단 한 줄 명령(OA-09용) → D3 새 공급사 3곳 연결 계획 |
+| DIDM_DEV (새로 만듦) | session_016uB1jj8iv57xVbx6EbLLwq | DIDM-2 채점기 계약 → DIDM-3 모델 학습 마감일 목록 → DIDM-4 Stage 0 모의실험. 브랜치 `claude/didm-dev-20261124` |
+| QUANTGPT (새로 만듦) | session_016uB1jfyCrLC5oipyVVMyCe | QGPT-01/a 골격 → QGPT-02 계약·QSS v0 → QGPT-04 검사 → QGPT-05 시도 원장 → QGPT-21 도구 프로토콜 → QGPT-03 필터 코드. 브랜치 `claude/quantgpt-q0-20261124`, 자리 `qgpt/` |
+| UI/UX | 소유자 경유 | PR #140 초안(CI 실패, main과 충돌). 담당 미정(OA-48) |
+| WEBSITE/AWS | 소유자 경유 | 계정 화면 ACC-1~8은 website 저장소 auth-preview에 있다고 기록됨(미검증). 정책 문구 재생성·ACC-9 대기 |
+| TRADEGEN_GITHUB | session_019s6Fyn2GetszXS83ZaV6W9 (소유자 PC) | QuantGPT 요약 공유 대상. 메인의 직접 전달은 거절됨 → QUANTGPT 세션이 시도, 안 되면 소유자가 붙여 넣음(OA-50) |
+
+DATA_SOURCE와 DIDM_DEV의 경계: DATA_SOURCE는 `data/didm/**`, `core/didm/ingest/**`, `core/didm/store/**`, `tools/didm/{collect_daily,keys,check_vendor_eval}.py`, `core/research/markets.py`, 수집 시험 8개. DIDM_DEV는 `core/didm/llm/**`, `core/didm/novelty.py`, 새 `core/didm/{sim,models,eval,calibration,credibility,entities,baselines}/`, `tests/didm_{schema,novelty}_acceptance.py`와 새 DIDM 시험, `docs/didm/PREREG_V0.md`(동결)·`SCORE_SCHEMA_V0.md`. 상대 칸은 메인을 거쳐 요청. `schema.py`의 유형·필수 필드·버전 변경은 새 스키마 버전이며 메인이 DATA_SOURCE와 QUANTGPT에 알린다.
+
+### B. 트랙별 상태 (11-20 이후 바뀐 것)
+
+| 트랙 | 끝난 것 (원장 ID, 커밋) | 열려 있는 것 | 소유자를 기다리는 것 |
+|---|---|---|---|
+| MAIN | [x] `push_handoff.py --doc` PR #146 → `b872d8c` (원장 병합 행 없음) | PR #148, GH-2 PR #147, PR #12, 정책 PR-2(관문 풀림), 대기열 14 메인 문서 PR, 빠진 원장 행(#146 병합, DS-1, DIDM-0, DS-4d, DS-4e) | OA-17, OA-36, 37, 38 |
+| PAYMENTS | [x] KEY-5/a PR #139 → `dec979a` (M1·M2 고쳐짐, 11-24 메인 확인, 게이트웨이 시험 83 OK) | PAY-0·PAY-2 문서(e869064) PR, KEY-5 요청문 v2, S4~S7 | OA-03, 32, 39, 40, 41, 45, 11, 13 |
+| OS | [x] OS-F2 PR #136 → `72a055f` (실제 자료 이전은 안 함) · [~] OS-A1 일부 PR #141 → `666e006` (APK·기기 확인 없음) | APK 검사 도구 c28194f, OS-F1, OS-F3~F5, OS-M2 | OA-18, OA-30, PR #140 Windows 확인, OA-19 (code_sha256 지금 bcaf33d9…, 등록표는 f995600b…) |
+| DATA_SOURCE | [x] DS-H/code PR #137 → `6d25a33` · [x] DS-4a PR #138 → `53e5e72` · 입력 파서 EODHD #142, Alpaca #143, Massive #144 | Kalshi 77c37c5, ALFRED 593c943, DS-H 부모, 실제 수집·권리, DS-1·DS-4d·DS-4e 원장 행 | OA-09, OA-46, OA-38, OA-31, OA-23, "B6" 공급원 표 확인 |
+| DIDM | [x] DIDM-1 PR #138 → `53e5e72` · V0 ID·해시 검사 PR #145 → `05f97df` | DIDM-2~9, DIDM-S1~S5(새 ID, 다음 REMAINING_WORK 판에 등록), `MODEL_CUTOFFS.md` 없음, DIDM-0 원장 행 | OA-10, 골드셋 라벨 담당·한국어 뉴스 출처 |
+| QUANTGPT | 세션 생성, 착수 | QGPT-01/a~ (Q0). 명세서 전문은 공개 저장소에 올리지 않음(소유자 결정) | OA-49 명세서 파일 올리기, OA-52 결정 3개, U-02(HF 토큰, QGPT-12 전) |
+| UI | 병합 없음 | PR #140 빨간 CI·충돌. KEY-5 화면 접점 main 44곳, PR #140 25곳 | OA-48, Windows 확인, OA-16, OA-29 |
+| WEBSITE | ACC-1~8 (website 저장소, 미검증) | 정책 문구 재생성, ACC-9 | OA-04, 05, 33, 운영 풀 수동 시험 |
+| RESEARCH | 없음 | 2.7절 그대로. ⑧-1 H-D5 기한 약 12-19 | OA-15, 19, 26, 27, 28 |
+
+GPT 작업에서 메인이 본 위험(소유자 판단 필요, OA-53): (1) PR #141이 `History` 계산을 새 `core/quant/supplied_history.py`로 옮김 — 판정 C-Q12의 원천 파일 7개 밖. (2) PR #136이 정책 문서 01·07·20과 FACTS.md에 "OS-F2 implementation review" 절을 덧붙임. (3) UI PR #140이 `config.py`의 KIS 허용 목록에 `inquire-ccnl`을 더함(병합하면 Nautilus 지문이 또 바뀜). (4) EODHD·Alpaca·Massive는 VENDOR_EVAL에서 평가하지 않은 공급사.
+
+### C. 소유자 수동 작업 — 24시간 안 8건 (푸시 대상)
+
+| ID | 무엇 | 막고 있는 것 |
+|---|---|---|
+| OA-48 (새) | UI PR #140을 누가 이어갈지(UI 세션 / 메인·하부 세션), 그 안의 KEY-5 K1a~K2d와 config.py 변경을 그대로 둘지 | KEY-5 남은 25곳(PAYMENTS), OS-F1(OS) |
+| OA-09 | 홈 지표 진단 실행 후 출력 붙여 넣기 (DATA_SOURCE가 새 한 줄 명령을 만드는 중, 오면 전달) | DS-H 부모 |
+| OA-10 | DIDM 답 3개: (a) 과반 기준을 정식 통과 조건으로 둘지 (b) 자체 LLM 기반 모델·학습 마감일 (c) 평가표 두 칸 확인 | DIDM_DEV, DS-1 닫기 |
+| OA-03 | SES no-reply가 바로 Verified였는지 한 줄 답 | PAYMENTS 기록 |
+| OA-04 | 웹사이트 세션에 "비밀번호 특수문자 1개 이상" 규칙 전달 | WEBSITE |
+| OA-05 | 웹사이트 세션에 정책 문구 재생성 프롬프트(PR-130.json) 붙이기 | WEBSITE |
+| OA-49 (새) | QUANTGPT 세션에 QuantGPT 설계·실행 명세서 v1.0 파일 올리기 (공개 저장소에 올리지 않기로 해서 세션에 직접) | QUANTGPT가 요약만으로 시작함 |
+| OA-50 (새) | TRADEGEN 공유: QUANTGPT 세션이 띄우는 신뢰 확인 카드에 답하기, 또는 요약을 TRADEGEN_GITHUB 세션에 직접 붙이기 | TRADEGEN 공유 |
+
+24시간 밖(새로 생긴 것): OA-51 skills.sh 호스트 허용(환경 승인 창) · OA-52 QuantGPT 결정 3개(AMIE 거시 분석을 owner 전용 작업 유형으로 넣을지, ChronoGPT 자리를 지금 만들지, NPU 벤치마크 앞당길지)와 W4 날짜(비전 문서 6주차 vs 명세서 2027-02-15) · OA-53 위 GPT 작업 위험 4건 · OA-43 후속(EC2 CPU 크레딧 Standard로 되돌림, 22번 포트 좁히기, CPU 경보). 그 밖의 OA 항목은 아래 3절 표 그대로이며 상태 대조는 `plans/2026-11-24/RESUME_BOARD.md` 5절.
+OA-47(인계 잠금): **완료** — 소유자 "GPT 인계를 읽고 이어서 진행하라"(2026-11-24) → 메인이 `--force`로 인수(handoff `8a93ce6`).
+
+push_log (2026-11-24): 18:5x KST 1회 — OA-48, 09, 10, 03, 04, 05, 49, 50.
+
+### D. 메인의 할 일
+
+- [x] GPT 인계 검증·인수 (handoff `8a93ce6`)
+- [x] 세션 2개 생성, 지시문 5개 발송, 세션 지도·대기열 갱신
+- [ ] PR #148 스킬: 독립 검토 결과 확인 → 병합
+- [ ] GH-2 PR #147: 최신 main 합침, 기준선 갱신, CI 녹색 → 병합, 원장 GH-2
+- [ ] 메인 문서 PR(대기열 14): `REMAINING_WORK_2026-11-24.md`(QGPT-00~, DIDM-2~9, DIDM-S1~S5, DS-5a~5c 등록), `CLAUDE.md` 세션 5개, `push_handoff.py` LANE_DOCS, OWNER_RULINGS_LOG 2026-11-24(지시 원문, 결정 3개)
+- [ ] 빠진 원장 행: #146 병합, DS-1, DIDM-0, DS-4d, DS-4e (근거 확인 뒤)
+- [ ] 정기 점검 예약 작업 다시 켜기(하부 세션 5곳)
+- [ ] Notion REMAINING WORK 갱신
+
+아래 2026-11-21~23 GPT 블록과 2026-11-20판 본문은 이력으로 남긴다. 서로 다르면 이 블록과 git이 우선한다.
+
+---
+
 ## 법인 설립 전 Remaining Work · 2026-11-23T06:47:19+09:00
 
 | 분야 | 확인한 개발 결과 | 다음 업무 |
