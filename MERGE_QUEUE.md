@@ -1,3 +1,18 @@
+## 2026-11-24T19:10:00+09:00 · 메인 — 대기열 갱신 (이 블록이 아래 18:45 블록보다 우선)
+
+끝난 것: 차례 10 PAY-0·PAY-2 → PR #149 → main `de32ea1` · 차례 11 GH-2 → PR #147 → main `dfae585`. 차례 9(PR #148 스킬)는 **보류**: 막는 지적 1건(가져온 NautilusTrader 문서 6개의 출처·라이선스 표기)과 큰 지적 4건, `plans/2026-11-24/PR148_REVIEW.md`.
+
+CI를 아끼려고 준비된 브랜치를 묶어서 올린다. source-review.json(준법 기준선)은 묶음마다 메인이 한 번만 갱신한다. 하부 세션은 아래 브랜치의 PR을 따로 열지 않는다.
+
+| 차례 | 항목 | 들어가는 브랜치 @ 커밋 | 상태 |
+|---|---|---|---|
+| 12~14 | **통합 PR ①** `claude/integration-20261124` | os-android-apk-evidence `94f257d`, os-data-folder-guide `000e210`, ds-connector-fixes `241c0f4`, ds-home-diagnose `b70a78d`, ds-new-sources-plan `6a6516d`, payments-key5a-closeout `502802e`, didm-dev `3626913`(DIDM-2, DIDM-3/a) + 메인 문서(REMAINING_WORK 2026-11-24판, CLAUDE.md, 인계 도구 세션 칸, 결정 기록, CI 시험 목록) | 메인 독립 검토 중 → 기준선 갱신 → PR → CI → 병합 |
+| 15 | 정책 문서 PR-2 (회원 계정, 8문서) | policy-pr2 `ba16dce` | 통합 PR ① 병합 뒤 **"병합: PAYMENTS_ACCOUNT_KEYS (P4)"** 를 여기에 적는다. 단독 PR |
+| 16 | **통합 PR ②** | os-qt-lint-shadow `0a92e58`, os-macos-differences `530bcf6`(근거 확인 뒤), ds-collection-status `b4d48bc`, ds-5bc-news `4a646ce`(소유자 N0 승인 확인 뒤), payments-design `31bd651`, didm-dev의 `3626913` 뒤 커밋(보고된 것만) | 15와 기준선이 겹치므로 15 뒤 |
+| 5 | UI PR #140 | `gpt/ui-guide-chart-first-20261121` @ `3483b53` | 그대로: CI 실패·충돌, 담당 미정(OA-48) |
+| 6, 7 | OS-F1 PySide6 전환, KEY-5 남은 화면 접점 | — | 5 뒤 |
+| — | QUANTGPT `qgpt/` | quantgpt-q0 | main PR 없음(소유자 결정). 원장 행만 기록 |
+
 ## 2026-11-24T18:45:00+09:00 · 메인 Claude 인수 — 지금 대기열 (이 블록이 아래 11-21~23 블록보다 우선)
 
 소유자 지시("GPT 인계를 읽고 이어서 진행하라", 2026-11-24)로 메인 Claude(session_01H6RrzMUzF8vwK8xkX977mB)가 다시 조정한다(handoff `8a93ce6`). GPT가 병합한 것(메인이 git·CI로 확인, `plans/2026-11-24/RESUME_GPT_VERIFY.md`): #136 `72a055f` OS-F2, #137 `6d25a33` DS-H/code, #138 `53e5e72` DIDM-1·DS-4a, #139 `dec979a` KEY-5/a, #142 `d835d9f`, #141 `666e006`, #143 `5af3787`, #144 `51b8298`, #145 `05f97df`, #146 `b872d8c`. 아래 "T8-6이 다음 차례"라는 줄은 낡았다(#146 병합됨).

@@ -1,3 +1,63 @@
+## 2026-11-24 19:10 KST 갱신 — 하부 세션 보고 반영 (이 블록이 아래 18:45 블록보다 우선, 세션 지도 A는 아래 그대로)
+
+git 기준: main `de32ea1` (#147 GH-2 → `dfae585`, #149 PAY-0·PAY-2 → `de32ea1` 병합됨, 원장 3행 기록) · 통합 브랜치 `claude/integration-20261124` (로컬, 독립 검토 중).
+
+### B'. 오늘 받은 보고와 병합 계획 (메인이 git에서 브랜치·파일 수 확인)
+
+| 세션 | 일 | 브랜치 @ 커밋 | 어디로 | 상태 |
+|---|---|---|---|---|
+| OS | O1 Android APK 검사 도구 (OS-A1/apk-evidence) | os-android-apk-evidence @ `94f257d` | 통합 PR ① | [x] 보고 · [ ] 병합 |
+| OS | O3 자료 폴더 이전 안내 (OS-F2/guide) | os-data-folder-guide @ `000e210` | 통합 PR ① | [x] 보고 · [ ] 병합 |
+| OS | lint 규칙 16-shadow (OS-F1/lint16) | os-qt-lint-shadow @ `0a92e58` | 통합 PR ② | [x] 보고 · [ ] 병합 |
+| OS | O4 macOS 차이 조사 + spec·selfcheck (OS-F4) | os-macos-differences @ `530bcf6` | 통합 PR ② (동결 빌드에서 키 보관함 점검이 통과한다는 근거 또는 "보고만"으로 낮춘 뒤) | [x] 보고 · [ ] 근거 |
+| OS | O2 PySide6 160회 재확인, O5 15-7 판매 빌드 점검 | — | — | [ ] 진행 중 |
+| DATA_SOURCE | D1 Kalshi·ALFRED 고침 (DS-4a/2, DS-4e/2) | ds-connector-fixes @ `241c0f4` | 통합 PR ① | [x] 보고 · [ ] 병합 |
+| DATA_SOURCE | D2 홈 지표 진단 명령 (DS-H/diag) | ds-home-diagnose @ `b70a78d` | 통합 PR ① | [x] 보고 · [ ] 병합 → OA-09 한 줄 다시 발급 |
+| DATA_SOURCE | D3 새 공급사 계획 문서 | ds-new-sources-plan @ `6a6516d` | 통합 PR ① | [x] 보고 · [ ] 병합 |
+| DATA_SOURCE | D4 수집 현황 명령·안내, D5 FedWatch 설계 (DS-4c/design) | ds-collection-status @ `b4d48bc` | 통합 PR ② | [x] 보고 · [ ] 병합 |
+| DATA_SOURCE | DS-5b·DS-5c Alpaca·Massive 뉴스 연결기 (코드 단계) | ds-5bc-news @ `4a646ce` (기준 b872d8c) | 통합 PR ② — 소유자의 N0 승인 문장을 메인이 세션 기록에서 확인한 뒤 | [x] 보고 · [ ] 확인 |
+| DATA_SOURCE | D6 EDGAR 과거 목록, D7 Kalshi 과거 일봉 옵션, D8 표본 채움 표 | ds-edgar-history (예정) | 다음 묶음 | [ ] 배분함 (19:0x) |
+| PAYMENTS | P3 KEY-5/a 작은 지적 마감 (KEY-5/a/2) | payments-key5a-closeout @ `502802e` | 통합 PR ① | [x] 보고 · [ ] 병합 |
+| PAYMENTS | P4 정책 문서 PR-2 초안 (회원 계정, 8문서) | policy-pr2 @ `ba16dce` | **단독 PR** — 통합 PR ① 병합 뒤 "병합: PAYMENTS (P4)" | [x] 보고 · [ ] 차례 |
+| PAYMENTS | P5 회사 데이터 서버 설계 (PAY-3/design), P6 데스크톱 로그인 설계 (PAY-1/design) | payments-design @ `31bd651` | 통합 PR ② | [x] 보고 · [ ] 병합 |
+| PAYMENTS | P7 not_entitled 코드, P8 연구용 키 이름 3개(확인 대기), P9 결정 목록 한 장 | (예정) | 다음 묶음 | [ ] 배분함 (19:0x) |
+| DIDM_DEV | DIDM-2 채점기 계약 | didm-dev @ `ba28b02` | 통합 PR ① | [x] 보고 · [ ] 병합 |
+| DIDM_DEV | DIDM-3/a 마감일 규칙·표 (9행 중 5행 미검증) | didm-dev @ `3626913` | 통합 PR ① | [x] 보고 · [ ] 병합 |
+| DIDM_DEV | DIDM-3/b 미검증 행 채우기 (출처 호스트 열림), DIDM-4 Stage 0 모의실험, DIDM-5 | didm-dev (진행) | 통합 PR ② 이후 | [ ] 진행 중 |
+| QUANTGPT | QGPT-01/a `c7e7494`, QGPT-02 `073725b`, QGPT-04 `3e76b35`, QGPT-05 `735e2c0`, QGPT-21 `30b3279`, QGPT-03 `7478f82` | quantgpt-q0 (main PR 없음) | 원장 행은 REMAINING_WORK 2026-11-24판이 main에 들어간 뒤 | [x] 보고 6건 · [ ] 원장 |
+| QUANTGPT | 재생 점검 → QGPT-11 채점기 → QGPT-20 색인 | quantgpt-q0 | — | [ ] 진행 중 |
+| MAIN | 통합 PR ①: 위 7브랜치 + REMAINING_WORK 2026-11-24판, CLAUDE.md, 인계 도구 세션 칸 2개, 결정 기록, CI 시험 목록 | integration @ `3e2af60` | PR → CI → 병합 | [ ] 독립 검토 중 (5갈래) |
+| MAIN | 출처 호스트 5개 환경 승인 | — | — | [x] 2026-11-24 19:0x 소유자 승인 (sraf.nd.edu, huggingface.co, arxiv.org, trec.nist.gov, econ.korea.ac.kr) |
+| MAIN | PR #148 스킬 | quant-skills @ `462f7df` | 보류 | [ ] 막는 지적 1 + 큰 지적 4 (`plans/2026-11-24/PR148_REVIEW.md`) 고친 뒤 |
+
+### 메인 → QUANTGPT (직접 전달이 막힌 동안 이 절이 전달 통로)
+
+2026-11-24 19:0x KST부터 QUANTGPT 세션은 "신뢰 기기 전용"으로 바뀌어 메인의 send_message와 기록 읽기가 거절된다(`elevated_session_untrusted_device`; 원인은 그 세션에서 신뢰 확인 카드에 답한 것으로 보임, 미검증). QUANTGPT → 메인 보고는 그대로 온다. 그래서 메인의 전달은 이 절에 적는다. **QUANTGPT는 일을 하나 끝낼 때마다 `git fetch origin handoff` 뒤 이 절을 읽는다.**
+
+1. (19:0x) 소유자가 Default 환경에 호스트 5개를 허용했다: huggingface.co, arxiv.org, econ.korea.ac.kr, sraf.nd.edu, trec.nist.gov. 쓸 범위: 후보 모델의 모델 카드·라이선스 페이지 읽기(후보표의 라이선스·마감일 근거를 직접 연 페이지로 바꾸기), Econ493 원본 튜토리얼 확인. 가중치·대용량 파일은 받지 않는다. 수업 자료 본문은 공개 저장소에 옮겨 적지 않는다(관례 요약과 URL만).
+2. (19:0x) QGPT-03 보고(`7478f82`, 93 통과 1 건너뜀) 받음. 순서 그대로: 재생 점검 → QGPT-11 → QGPT-20. T-NEWS 출력은 `didm-judgement-v0` 그대로(통합 PR ①이 main에 들어가면 `core/didm/llm/judgement.py`와 `docs/didm/schema/`가 기준).
+3. 전체 정책 규칙 목록과 레드팀 문항을 둘 자리는 소유자 결정 대기(OA-52 묶음). 그때까지 시드 규칙과 합성 문장만.
+4. `QUANTGPT_SESSION_CURRENT.md`를 인계 도구로 올릴 수 있게 하는 변경(세션 칸 추가)은 통합 PR ①에 있다. 병합 알림을 이 절에 적는다.
+
+### C'. 소유자 수동 작업
+
+24시간 안(푸시 18:34 KST 발송분 그대로 + 1건): OA-48, OA-09, OA-10, OA-03, OA-04, OA-05, OA-49, OA-50, **OA-54(새)** QUANTGPT 세션에 한 줄 붙여 넣기 — "앞으로 일을 하나 끝낼 때마다 handoff 브랜치 WORKBOARD.md의 '메인 → QUANTGPT' 절을 읽고 따르세요." (메인이 그 세션에 직접 보낼 수 없게 됨).
+
+24시간 밖(오늘 새로 생긴 것, 내용은 각 세션 문서):
+
+| 묶음 | 항목 | 어디에 |
+|---|---|---|
+| PAYMENTS 정책 PR-2 | O1 계약 이행 근거·필수 동의 체크, O2 AWS 위탁·호주 국외 이전 고지, **O3 문의 메일이 운영자 개인 메일함으로 전달되는 것의 고지 또는 메일함 이전(공개 전 필수)**, O4 보안 기록 400일, O5 처리 기록 3년, O6 문의 메일 보관 기간, O7 14세 본인 진술, O8 광고 메일, O9 관리자 2단계 인증 등록 여부, O10 AWS 계약 법인명, O11 웹 화면 문구 대조 | P9 한 장 (예정 `plans/2026-11-24/PAYMENTS_OWNER_DECISIONS.md`) |
+| PAYMENTS 서버 | OA-40 위치(제안: 시드니에서 시작, 국내 IP 요구가 확인되면 서울), S-1 서버 코드 위치, S-2 이용 권한 저장, S-3 회사 길 실패 시 개인 키 전환(기본 안 함), S-4 사용 기록 보관, S-5 실시간 포함 여부 | 같은 문서 |
+| PAYMENTS 로그인 | D-1 로그인 방식(제안: 관리형 로그인 + PKCE), D-2 로그인 도메인, D-3 관리형 가입 링크가 동의 체크를 우회하는지(미검증), D-4 새로고침 30일·회전 | 같은 문서 |
+| DATA_SOURCE | Alpaca 무료(Paper) 키·Massive 무료 키 발급 후 수집기 1회 실행(편할 때), N1 EODHD 유료 여부, D4 수집 현황 명령 1회 실행(병합 뒤) | `DATA_SOURCE_SESSION_CURRENT.md` |
+| OS | 번들 ID 확인, Intel Mac 지원 여부, Mac 화면 글꼴 확인, UI 요청 4건(단축키 표시 등) 전달 | `OS_SESSION_CURRENT.md`, `docs/platform/MACOS_DIFFERENCES_2026-11-24.md`(병합 뒤) |
+| UI (소유자 경유) | PR #140 `quantgen_desktop/stock_insights.py:82`의 `self.metric`이 PySide6에서 `QWidget.metric()`을 가림(lint 16이 잡음), KEY5_UI_REQUEST_V2 | OA-48 답과 함께 |
+
+push_log (2026-11-24): 18:34 KST 1회 — OA-48, 09, 10, 03, 04, 05, 49, 50.
+
+---
+
 ## 2026-11-24 메인 Claude 재개 — 현재 기준 (이 블록이 아래 블록 전부보다 우선)
 
 기준 시각: 2026-11-24 18:45 KST · git 기준: main `b872d8c` · handoff 인수 `8a93ce6` · PR #140 `3483b53` · PR #147 `bf78b6b` · PR #148 `462f7df`
