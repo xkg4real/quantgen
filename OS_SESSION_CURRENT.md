@@ -1,21 +1,21 @@
 ---
-status: handoff
-reason: usage_limit_weekly
+status: checkpoint
+reason: milestone
 from: claude
 task: os-expansion
-cycle: 2026-11-17
-done_ids: OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f
-next_ids: OS-F2, OS-F1
-updated_at: 2026-11-20T06:10:00+09:00
+cycle: 2026-11-24
+done_ids: OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, OS-F2
+next_ids: OS-F1
+updated_at: 2026-11-24T20:30:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: claude/os-f2-data-dir-20261120
-work_commit: e44c48e
+work_branch: claude/os-android-apk-evidence-20261124
+work_commit: 94f257d
 uncommitted_changes: no
 pr: none
-usage_weekly_pct: 98.0
+usage_weekly_pct: unknown
 usage_5h_pct: unknown
-usage_resets_at: 2026-11-24T08:00:00.000Z
+usage_resets_at: 2026-12-01T17:00:00+09:00
 session: https://claude.ai/code/session_016uB1jgXiwx42FSUU5ANwM7
 ---
 
@@ -25,11 +25,10 @@ session: https://claude.ai/code/session_016uB1jgXiwx42FSUU5ANwM7
 
 ## 0. 한 줄 요약
 
-**주간 사용량 98%로 인계 (2026-11-20 06:10 KST).** 메인이 MERGE_QUEUE 4e에 **병합: OS**를 적었습니다(handoff 811c995). 메인 지시(11-20 05:40 KST, 원문 요지): "`claude/os-f2-data-dir-20261120` @ f9a3a75 (OS-F2 + PySide6 종료 원인 기록)를 PR로 올려 main에 병합되게 준비. 1) main f065ec9 merge 2) config.py CRLF 유지·core/engine feed/state/runtime/__init__ 4개가 `_backup/QUANTGEN_pre_v2_2026-10-05.zip`과 바이트 같음 3) 바뀐 파일 관련 시험 + tests.gateway_*_acceptance 5종 통과, 진짜 ~/.nextgen을 열거나 쓰지 않음(확인 방법을 PR 본문에) 4) 기준선은 마지막에 다시 만들고 `python -B -m tools.compliance.check --check` PASS 5) code_sha256 바뀌면 새 값·이유를 PR 본문에 6) PR 열기(base main, merge commit). 하지 말 것: docs/asset_expansion/cache/ 열기, .env, tests/run_all.py·macro_m8_pipeline·macro_m9_lab·macro_m9_scenarios 실행, qa/acceptance_results.json 재생성, owner_confirmed·host_fingerprint 쓰기, 태그 push, UI 브랜치 수정. 끝나면 SESSION_PIPELINE 3절 형식으로 PR 번호·head SHA·검사 결과를 메인에 보고."
-
-**멈춘 곳:** 1·2단계 끝 — `e44c48e`(main f065ec9 merge, 충돌 없음, push됨). main 대비 14파일 464+/24-(줄 끝 무시해도 같음). `file config.py` → CRLF. engine 4파일 zip과 바이트 같음(True×4). 3단계 회귀는 인계 직후 끝남(e44c48e vs main f065ec9, 임시 HOME, 37파일에서 macro_m8_pipeline 제외 + gateway 5종 + qt_port): 실패 81개 목록 main과 동일, 통과 870→884, 실행 전후 실제 홈 `stat -c %Y ~` 같음. main이 f065ec9 그대로면 6절 2번(회귀)은 끝난 것으로 보고 6절 3번(code_sha256 확인)부터. 4~6단계 안 함. PR 없음.
-
-이전 결과(f9a3a75, main 8445187 기준): 관련 33파일 회귀 실패 83개가 main과 같음, code_sha256 main `10c27010176ad4772a5d4860064c552f21e55b2133923b1fd287a6cc1c4b3414` → 브랜치 `bcaf33d91adb5c3a2b1c4a181e0827ed17fe8768827539fe7bd8ecbaea0bb34c`(config.py 6줄, CRLF 유지). 작업 A 완료(UI 414eceb PySide6 320회 abort 0, PyQt6 18단계 5025c6f와 같음).
+**재개 2026-11-24 (메인 지시 O1·O2·O3).** git으로 확인한 것: GPT가 OS-F2를 병합(PR #136 → main 72a055f; 내 e44c48e와 PySide6 종료 원인 기록 5커밋 포함, 원장 OS-F2). Android 내부 프리뷰 PR #141(666e006) 병합. main b872d8c.
+- **O1 완료** — `claude/os-android-apk-evidence-20261124` @ `94f257d` = gpt `c28194f` + merge main b872d8c. source-review.json 충돌은 main 쪽을 받음(기준선은 PR 차례에 마지막 갱신). android_apk_evidence 시험 Ran 8 OK, 패키징·qt_port 5모듈 Ran 34 OK. `--check`는 기준선 미갱신이라 FAIL(main은 PASS). PR은 MERGE_QUEUE 12번 "병합: OS" 뒤.
+- **O3 완료** — `claude/os-data-folder-guide-20261124` @ `000e210`: docs/product/OS_DATA_FOLDER_OWNER_GUIDE_2026-11-24.md(지금은 옮기지 말 것, 확인·옮기기·되돌리기). 경로 시험 Ran 93 OK (skipped=3).
+- **O2 진행 중** — UI PR #140 head 3483b53: lint 39건(414eceb 38건 + `name` 1건, 도구 자기 이름 오탐), `switch_day --check` 7곳 모두 "to do"(어긋남 0). 시장 탭 160회×2(일반·tcache 끔) 저장소 밖 사본에서 실행 중(스크래치 abort/w140, ui140_repeat.txt). 발견: stock_insights.py:82 `self.metric`이 QWidget.metric()을 가려 PySide6 전용 TypeError(657523d). #140의 1527 포커스 실패는 바인딩 무관.
 
 ## 1. 목표와 완료 조건
 
@@ -127,14 +126,12 @@ python -m tools.compliance.check --check -> consistency FAIL (새 파일; PR 직
 
 커밋 안 된 변경 없음. A의 PyQt6 실행 로그는 이 세션 스크래치에만 있음.
 
-## 6. 다음 할 일 (순서대로, 브랜치 `claude/os-f2-data-dir-20261120` @ `e44c48e`에서)
+## 6. 다음 할 일 (순서대로)
 
-1. main이 f065ec9보다 앞서 있으면 `git fetch origin main && git merge --no-edit origin/main`. 완료: 충돌 없음, `file config.py`가 CRLF.
-2. 회귀: 임시 HOME으로(`HOME=$(mktemp -d) XDG_DATA_HOME=$HOME/.local/share QT_QPA_PLATFORM=offscreen python -m pytest -q` + 아래 파일) main과 브랜치에서 각각 돌려 FAILED/ERROR 목록 비교. 파일: tests/app_paths_acceptance.py credentials_acceptance gateway_acceptance gateway_boundary_acceptance gateway_main_acceptance gateway_remote_acceptance gateway_same_answer_acceptance qt_port_acceptance macro_acceptance macro_m0_rules engine_acceptance nautilus_acceptance packaging_policy_acceptance kis_stream_acceptance kis_workspace_acceptance (macro_m8_pipeline·macro_m9_* 금지). 완료: 실패 목록이 main과 같음(macro_m0_rules test_m0_15_e는 main에도 있는 기존 실패). PR 본문의 ~/.nextgen 근거: 임시 HOME 사용 + 실행 전후 실제 홈의 `stat -c %Y ~` 같음 + 시험이 임시 home만 씀(tests/app_paths_acceptance.py).
-3. code_sha256: `from tools.nautilus.runner import code_sha256; code_sha256(Path('.'))` (dotenv.load_dotenv를 patch해서 import) — 브랜치가 bcaf33d9…인지.
-4. 마지막에 `python -B -m tools.compliance.check --refresh-baseline` → `git add docs/compliance/source-review.json` 커밋 → `python -B -m tools.compliance.check --check` PASS → push.
-5. PR(base main): 저장소에 PR 템플릿 없음. 본문 두 부분 — (가) OS-F2: 경로 순서(QUANTGEN_DATA_DIR → FLET_APP_STORAGE_DATA → `.quantgen-data-dir` 표시 있는 플랫폼 폴더 → 기존 ~/.nextgen → 플랫폼 폴더, 메인 결정 11-20), migrate_legacy_data(confirmed=True)만 이동·합치지 않음, code_sha256 변경과 이유(config.py), ~/.nextgen 근거; (나) PySide6 종료 원인 기록 5커밋(cherry-pick -x, docs/platform 3파일 + tools/qt_port/pyqt6_to_pyside6.py 15-thread-wrapper + tests/qt_port_acceptance.py). 화면 변화 없음 → ui_website_updates 없음. 메인에 PR 번호·head SHA·검사 보고.
-6. OS-F1 (MERGE_QUEUE 6, UI 7쪽 PR 뒤): `switch_day.py --apply` + 리뷰.
+1. O2: 160회×2 끝나면 abort 수 확인(완료 기준 0), 표(414eceb 대 3483b53 lint 규칙별 건수)와 함께 메인에 보고.
+2. O1 PR: MERGE_QUEUE 12에 "병합: OS"가 적히면 최신 main merge → `python -B -m tools.compliance.check --refresh-baseline` → `--check` PASS → PR(platform-build.yml 실행·서명 안 함).
+3. O3: PR 자리는 메인이 정함(필요하면 기준선 갱신).
+4. OS-F1: UI PR #140 병합 + 소유자 "OS go" 뒤.
 
 ## 7. 주간 지표 (D9 진척)
 
