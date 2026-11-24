@@ -9,7 +9,7 @@
     ".github/workflows/compliance-review.yml": "795b2e9435c8eed43b08b98c709b3e2eeb3a7365ad2628855cb164cea0f94ab8",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
     ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
-    ".github/workflows/runtime-smoke.yml": "2346f87d433d83d95f03db35c1b4742484c2b79f49c2f71873148b6a12e4e742",
+    ".github/workflows/runtime-smoke.yml": "60c015dba16df7a80c2d58576a3ad9620cc126001e434b0eb954b0f8790c8341",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -107,7 +107,7 @@
     "core/education/glossary.py": "2143548a945afe7528412b75dc628f2c9d02230b608277acba9e858a876aa618",
     "core/education/indicators.py": "748037f6e001d5ff8814c37a6fa36323f9be79e08bdcfaf36d52413a71ca9298",
     "core/education/outlook.py": "3da14d801f54911ff8341aaa3a75b0b0a6409b2081802e0ff0113e5f0c8083fb",
-    "core/education/reading_cues.py": "21271f6b22df7e36111eb1390741b7b3c51368a6d80e2c5aecc212013fa949d2",
+    "core/education/reading_cues.py": "410f21ccd010a166f90e20e6721844679d63bf39a96bfe27b58cf1ef443ea5b3",
     "core/education/signal_context.py": "fe529f88b5c463fe0bde3a31612b8dd142b1a595b5a42986441bc4ff0bdce7d2",
     "core/education/study_guide.py": "7d99218aa73ef9dc82ec53f08ad3cec8d0c37a7ae531a91b4b7795d89c5bcce4",
     "core/engine/__init__.py": "df385736b31e385fea9202e4ec5651220bfb1bf783aeacff105540f85d21cf85",
@@ -160,7 +160,7 @@
     "core/gateway/sources.py": "1f3843617e58ffe8034709639eded5e5b01c8c7d880e0490a8f434f5226bef8c",
     "core/i18n.py": "b31a9f40519b2699e9cf3d72a8f9144bd74f0c93ca731df5ceaeabbb120ad6dc",
     "core/market/__init__.py": "1c2c29d460b9c20266f70503993da4824fa68727b45e4e2a6caa3436c18a7918",
-    "core/market/detail_insights.py": "03465417d91579008242fb78e431e761ea1520a76a26f068485a93bbe0efcff2",
+    "core/market/detail_insights.py": "593a94ac8668a96c70b93f2ecb00d3fcd5c86f815d33886e882e038dd2ad6a75",
     "core/market/detail_model.py": "83998b39f3a3810e622658e5f8829683c3d5d4e2c97cba7f5fae27359da7023c",
     "core/market/detail_svg.py": "fc3f4f7fe9ece2bbab5f1ce95abea2c3e81e55c8dbee1b8db3fe46f7214acd24",
     "core/market/directory.py": "4434a7fe319b61abbe32662c8372bb794d7fcbff65a2eb6435a3d566c01e7a64",
@@ -473,7 +473,7 @@
     "quantgen_desktop/fx.py": "30c519dee7dac02b55b683773ddee46fe86d78a1e31d155736e5634aa7b05d96",
     "quantgen_desktop/fx_narrative.py": "1078cff2724ff7c6bc75f8146e7893622323899ee5bb1c52100007c11649e52e",
     "quantgen_desktop/guide_case_annotations.py": "576830d3950fc2bc31643e5f3eb46dc4fbf5a9311c20bef716171f61afc0205d",
-    "quantgen_desktop/guide_lessons.py": "091a18cf335af96384ec3fc75b59930d9f50ecf3735307c69bd6604a64bd1423",
+    "quantgen_desktop/guide_lessons.py": "2b556cbee757b1c191bb92f2b3005bdaf4cc4ffe5cf9534d5c83f04b6c4ccd88",
     "quantgen_desktop/home_view.py": "99c06928e8875e45eccb8c47a678377ae42431ee403b9a05730709d6a32419a0",
     "quantgen_desktop/indicator_guide.py": "e1412cdcd69f4319a34009225fd9e46c8303af9779a21a5e7209cf0323bb0ae0",
     "quantgen_desktop/indicator_picker.py": "f113bae8ad864829e1efb0be3bb387bf29f70028d1d1e49a6c9242f70c7c84ff",
@@ -531,7 +531,7 @@
     "quantgen_desktop/stock_detail.py": "07851fc3cb23a6cfc297bf0905bcfa8647b5ee65471c029570421f1a8a1d7824",
     "quantgen_desktop/stock_detail_side.py": "242d3ea7b86334855009f9a125aa3a3a734453c55f9bd17c023fe7a113a2eb98",
     "quantgen_desktop/stock_detail_style.py": "e94d68f0727d2afb3604bec68872479dc122e24941ec5b2098986eb26a9f27e9",
-    "quantgen_desktop/stock_insights.py": "39a86faea5647391a189b2f445be74921a73c604c2adaf9aefb6354e5b26644d",
+    "quantgen_desktop/stock_insights.py": "ac30b86ca56121aa8e299ed71acb289ad97bef00c377ef1837bbec1c79f44973",
     "quantgen_desktop/stock_qscore.py": "f1cd095e271e06ab23e460982a76d26ef484e9ef52ec319bb8fc4ddf628b4371",
     "quantgen_desktop/stock_report.py": "98526c093b56f9e267772bfaff13bec1c01264cb578833c7b93a51d79cdfa193",
     "quantgen_desktop/strategy.py": "0b44d9c87f8a174d5c87eff60ffe2a68671ac381644fa6243f26f06812ca5b66",
@@ -671,7 +671,7 @@
     "tests/golden_tools.py": "24154d79aea43bc91b7c26c33c6b400cd9202cdb4915680a81b4f7cf0fa928ef",
     "tests/guide_case_annotations_acceptance.py": "dd1036d4599bf805a2bb2dc80e3ba646120082eef2c503c400283546d9cb8782",
     "tests/guide_docking_acceptance.py": "9d2c55c139d36a7eb5059d9ea2ed848d90f9f934a3ea90b8e3b412793769d2b0",
-    "tests/guide_lessons_acceptance.py": "2823473be51daed477d761859041486187377939f7268498876990ccd6a82566",
+    "tests/guide_lessons_acceptance.py": "7972ee5772920257d255b8d346d1adbfaf2e100e5b27ab82164022432900bdca",
     "tests/handoff_doc_acceptance.py": "e7729c33edf0f05ea76db8bf66ae4463348a6e023d51cb00dab54ab360473ab2",
     "tests/history_best_source_acceptance.py": "cda3221001d11599c0b9dab6f71f59a20b7ac762d43adcd6c0b5f2fbce19310f",
     "tests/home_indicators_acceptance.py": "2585e4a8cd2437f838d94a52ecd2962117fd70e809e700dd14e9d5a87a691c74",
@@ -779,7 +779,7 @@
     "tests/status_snapshot_acceptance.py": "69185a46c4675300aa88bf6a441ddd753f4631162c05d174b2794587ed777ade",
     "tests/stock_detail_core_acceptance.py": "4ec37b368fd1abb19a0231a7b89256e68df9a1a590bea48d31f9926cdad6081f",
     "tests/stock_insights_glue_acceptance.py": "8c30577e1df9ea916c697e610e80d100d94409444115e268dea07413947ee758",
-    "tests/stock_insights_owner_items_acceptance.py": "d90009806b8f08c56dcc0c9952c0e228ca680cb848adb44ba5ed5bf113e2bd72",
+    "tests/stock_insights_owner_items_acceptance.py": "c787c231837d499a6d037bcfab1f0910950e856681028e6bd8f2006262d7a24e",
     "tests/stock_insights_style_acceptance.py": "f0e35b11510d6d7bcc4f567d8b62ff220893c46845265c3db492e427f01d09b1",
     "tests/stock_profile_acceptance.py": "749810067f55fd0ac87de462eb6ae20d842047651a2f5e785135032f6c23feef",
     "tests/strategy_exposure_acceptance.py": "3451a355e400ea2bc98c02c401a5b5680a187b190a6b52547ccf868b84867e01",
@@ -892,163 +892,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "38c9382ff16b4b6b0807eb0616b266ddba59fcdfc6e2b1032de539bac5b80cc2",
+      "source_digest": "ef1ea410a834e9c880419776255894d54b9487c284a00ca2ae3d12908bbd26c8",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.812620+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.188321+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "38c9382ff16b4b6b0807eb0616b266ddba59fcdfc6e2b1032de539bac5b80cc2",
+      "source_digest": "ef1ea410a834e9c880419776255894d54b9487c284a00ca2ae3d12908bbd26c8",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.815241+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.192550+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "12bcfcbc087dd2a23ef77b1808b4d57267331f50502a8725e92910670f671da0",
+      "source_digest": "d78648015f1d42e0deb404f39ee7c2a6f756cbc69b51ec89cb85e04270090bbf",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.818126+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.194868+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "3de7bce97501dd35733134e15a9a7ecf3962fc1e884d4eff7502e88b3c38d1c4",
+      "source_digest": "bf70cfe4b9b6d7a80f4cd24fa17f5e0fcd9227db1c50abf232255cbe74f34706",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.820693+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.197302+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "1d66b58a3141fcb4929564147ba8a6b73f37f523555cc01b2a55ed712b72a53f",
+      "source_digest": "9c823cd344ff0a21518603d7f1f8b866c5b075a29770331ae7cf143874511f09",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.823537+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.199330+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "802de7bbd30b04bc7f29884b8afcb1f9bc97f1f6cd09c6bded7e1c7eb75726c5",
+      "source_digest": "30f68fd794cd3290ae38bff6024dc577c3629e2362c4d582fdd9d679775e66a8",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.825958+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.200926+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "38c9382ff16b4b6b0807eb0616b266ddba59fcdfc6e2b1032de539bac5b80cc2",
+      "source_digest": "ef1ea410a834e9c880419776255894d54b9487c284a00ca2ae3d12908bbd26c8",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.827670+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.203920+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "8": {
       "document_sha256": "d18aa347fc7bb730a047392049afb9d79212cf209ba651b9ca4dfde7354fe68f",
-      "source_digest": "802de7bbd30b04bc7f29884b8afcb1f9bc97f1f6cd09c6bded7e1c7eb75726c5",
+      "source_digest": "30f68fd794cd3290ae38bff6024dc577c3629e2362c4d582fdd9d679775e66a8",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.830171+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.206855+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "a8d44eb2469074cb4d40b7b6f76b691f2d7f66f7a5739ec19bb68fe2b52a8f3e",
+      "source_digest": "0c29990b539ddd8be181575382a36343436fbb901bd6a4a17ba2dfa657034296",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.832327+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.208744+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "5f9c74f453679b099973f791c51a0e5edfb5770cea40842f9dcb0978a9602a0f",
+      "source_digest": "5c40a17302c38333318eb251e11ecb59aeea3fcf1ddf62f65cf878e50695320e",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.836711+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.210874+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "b59e9affe9bf0b101d3d084bc35bb6956a44eb843e91a551f4033749329f65d6",
+      "source_digest": "6529e372aaf8fbaad35d7b68c44f583dd998b1a7446425942aeccfa36960001f",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.844917+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.212609+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "12": {
       "document_sha256": "18af1551af29075d92583d7bc84a780f3719662115a7b26e4aeb9efd760d1afc",
-      "source_digest": "fd801144e0d85199661c17c94845f94fdcced88b52a79a05abcf43d71f9a9cf7",
+      "source_digest": "ddab1c2c85c6760256cb1ef7b1d7362dfa4102118015607732e9baab084ed78d",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.847088+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.214728+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "a8d44eb2469074cb4d40b7b6f76b691f2d7f66f7a5739ec19bb68fe2b52a8f3e",
+      "source_digest": "0c29990b539ddd8be181575382a36343436fbb901bd6a4a17ba2dfa657034296",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.849171+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.216739+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "a8d44eb2469074cb4d40b7b6f76b691f2d7f66f7a5739ec19bb68fe2b52a8f3e",
+      "source_digest": "0c29990b539ddd8be181575382a36343436fbb901bd6a4a17ba2dfa657034296",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.851194+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.218876+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "a8d44eb2469074cb4d40b7b6f76b691f2d7f66f7a5739ec19bb68fe2b52a8f3e",
+      "source_digest": "0c29990b539ddd8be181575382a36343436fbb901bd6a4a17ba2dfa657034296",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.853405+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.220903+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "979bd67946c08d7a7f0952e8903d3e2ef7e158e114370856d93a9a5a08af5f8d",
+      "source_digest": "b44cbdefab33aa4b989c5dba77a381c61757f4346ada50de7926957f7b52ffb8",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.855486+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.223109+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "802de7bbd30b04bc7f29884b8afcb1f9bc97f1f6cd09c6bded7e1c7eb75726c5",
+      "source_digest": "30f68fd794cd3290ae38bff6024dc577c3629e2362c4d582fdd9d679775e66a8",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.857436+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.224953+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "38c9382ff16b4b6b0807eb0616b266ddba59fcdfc6e2b1032de539bac5b80cc2",
+      "source_digest": "ef1ea410a834e9c880419776255894d54b9487c284a00ca2ae3d12908bbd26c8",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.859455+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.227102+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "902767b8f220323704ce4edd2ea47bb563dd4f3cab75faf2a0ffb801b2cf4a19",
+      "source_digest": "26d9249c665f04adf1d4edad836bd8adbe26b9a4bddf24b8330880eb19872a6b",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.861515+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.228945+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "38c9382ff16b4b6b0807eb0616b266ddba59fcdfc6e2b1032de539bac5b80cc2",
+      "source_digest": "ef1ea410a834e9c880419776255894d54b9487c284a00ca2ae3d12908bbd26c8",
       "reviewed_by": "Claude UI session review",
-      "review_note": "Merged main de32ea10 (payments docs, GH-2 removal of unused demo files, manual handoff tool) into the UI branch and the 2026-11-24 stock insight changes (daily investor columns, filled depth ladder, one-line valuation rows, hide-before-detach). Display-only Qt code and tests; no provider, credential, order, storage or research change; the investor and depth figures are the profile's existing supplied values.",
-      "reviewed_at": "2026-11-24T10:43:03.863267+00:00",
-      "source_commit": "3128216ec615d9050d5c6ef0c6dfe02520dbbd84"
+      "review_note": "2026-11-24 UI follow-up on top of the main de32ea10 merge: stock insight cards (daily investor net-buy columns, filled depth ladder with basis-labelled last price and sell/buy totals, one-line PER/PBR rows), indicator lesson text without 봉 and with Wilder-accurate RSI/ATR wording, two reading-cue wordings, hide-before-detach for re-rendered cards, and the runtime-smoke split into installed + installed-ui (same matrix, same tests, unchanged 120-minute limit, Qt pin read from the desktop extra). Display-only; the figures are the profile's existing supplied values; no provider, credential, network, order, storage or research change.",
+      "reviewed_at": "2026-11-24T11:47:28.231662+00:00",
+      "source_commit": "d882f250b00805ed9494047c71856827f9e3ca7e"
     }
   }
 }
