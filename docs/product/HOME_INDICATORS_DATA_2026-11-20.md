@@ -47,3 +47,16 @@ rows = load_home_indicators(days=90)      # 6행, SPECS 순서. 네트워크는 
 - 오프라인 주입 재현에서 KIS 준비 상태 확인 예외가 함수 전체로 전파되는 경우와, 과거 이력 중간의 잘못된 날짜가 `OBSERVED`로 반환되는 경우를 확인해 수정했습니다.
 - `tests.home_indicators_acceptance`는 23개 시험으로 확장했습니다. 준비 상태 확인 실패의 행 격리·문구 비노출, 잘못된 이력 날짜·비표준 날짜 거부, `live=False`일 때 준비 상태와 시세 미호출을 검증합니다.
 - 모든 검증은 주입한 가짜 공급사와 소켓 차단 하에서 수행하며, 실제 HTTP·사용자 키·계정 저장소에 접근하지 않습니다.
+
+## 소유자 PC 진단 (OA-09, 2026-11-24)
+
+옛 H4 명령을 대신합니다. 앱 폴더에서:
+
+```
+python -m core.research.markets
+```
+
+- 여섯 줄 (지표마다 한 줄): `<기호> <상태> reason=<사유 코드> live=<실시간 상태>[ via=<yfinance가 남긴 원인>]`. 값·키·URL·공급사 문구는 나오지 않습니다. 늘 종료 코드 0.
+- `via=`: yfinance는 네트워크 막힘·TLS 가로채기·요청 제한을 "빈 결과"로 바꿔 돌려주므로 (`reason=no_observations`), 진단 때만 yfinance 자체 기록을 모아 원인을 붙입니다: `rate_limited` (Yahoo 요청 제한), `certificate_error` (보안 프로그램·프록시의 TLS 가로채기), `network_timeout`, `network_error`.
+- 명령 자체가 `No module named` 또는 `has no attribute 'load_home_indicators'`로 실패하면 **오래된 체크아웃**이 원인입니다 (DS-H 이전 코드). 이 경우 코드 수정 없이 최신 main으로 바꾸면 됩니다.
+- 읽는 법 (마스터 부록 H4와 같은 분류): 모든 줄 `network_error` → PC·회사망 차단; Yahoo 3줄만 `via=certificate_error` → 보안 프로그램; Yahoo 3줄만 `via=rate_limited` → Yahoo 제한 (잠시 뒤 다시); FRED 3줄 `network_timeout` → FRED 지연 (3회 × 12초 재시도라 카드가 1~3분 빔); `dependency_missing` → venv 패키지 설치.
