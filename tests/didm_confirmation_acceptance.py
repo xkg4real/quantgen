@@ -287,9 +287,102 @@ class MacroSurprise(unittest.TestCase):
             su.macro_surprise(released=3.4, probability=0.1)
 
 
+from datetime import datetime, timedelta, timezone      # noqa: E402  (used by the side-record tests below)
+
+from core.didm.models import confirmation_log as cl     # noqa: E402
+
+T0 = datetime(2026, 11, 2, 9, 0, tzinfo=timezone.utc)
+SEAL = "ab" * 32
+
+
+def entry(status, hours, record_id="art-1/SYN:001", seal=SEAL, config=cf.DEFAULT_CONFIG):
+    return cl.make_entry(record_id=record_id, judgement_sha256=seal, status=status, known_at=T0 + timedelta(hours=hours),
+                         config=config)
+
+
+class ConfirmationSideRecord(unittest.TestCase):
+    """DIDM-8/a: didm-confirmation-v0. The record is never rewritten; verdicts are appended with the time
+    they became known, and a reader only sees what was known at its decision time."""
+
+    def setUp(self):
+        self.log = cl.append(cl.append((), entry(MC.PENDING, 0)), entry(MC.CONFIRMED, 48))
+
+    def test_reader_sees_only_what_was_known_at_the_decision(self):
+        rid = "art-1/SYN:001"
+        self.assertIsNone(cl.as_of(self.log, rid, T0 - timedelta(minutes=1)))
+        self.assertIs(cl.status_as_of(self.log, rid, T0 - timedelta(minutes=1)), MC.PENDING)     # unknown = PENDING
+        self.assertIs(cl.status_as_of(self.log, rid, T0), MC.PENDING)
+        self.assertIs(cl.status_as_of(self.log, rid, T0 + timedelta(hours=47, minutes=59)), MC.PENDING)
+        self.assertIs(cl.status_as_of(self.log, rid, T0 + timedelta(hours=48)), MC.CONFIRMED)    # at known_at
+        self.assertIs(cl.status_as_of(self.log, rid, T0 + timedelta(days=30)), MC.CONFIRMED)
+        self.assertIs(cl.status_as_of(self.log, "another/record", T0 + timedelta(days=30)), MC.PENDING)
+        with self.assertRaises(cl.ConfirmationLogError):
+            cl.as_of(self.log, rid, datetime(2026, 11, 3, 9, 0))
+
+    def test_a_future_verdict_never_shows_even_if_it_is_already_in_the_log(self):
+        future = cl.append(self.log[:1], entry(MC.CONTRADICTED, 24 * 365))
+        for hours in (0, 24, 24 * 364):
+            self.assertIs(cl.status_as_of(future, "art-1/SYN:001", T0 + timedelta(hours=hours)), MC.PENDING)
+        self.assertIs(cl.status_as_of(future, "art-1/SYN:001", T0 + timedelta(hours=24 * 365)), MC.CONTRADICTED)
+
+    def test_append_only(self):
+        before = tuple(self.log)
+        longer = cl.append(self.log, entry(MC.CONFIRMED, 72))                  # the same verdict again is fine
+        self.assertEqual(longer[:2], before)
+        self.assertEqual(self.log, before)                                     # the old log object is untouched
+        with self.assertRaisesRegex(cl.ConfirmationLogError, "before the record's last entry"):
+            cl.append(self.log, entry(MC.CONFIRMED, 24))
+        with self.assertRaisesRegex(cl.ConfirmationLogError, "final verdict cannot change"):
+            cl.append(self.log, entry(MC.CONTRADICTED, 72))
+        with self.assertRaisesRegex(cl.ConfirmationLogError, "final verdict cannot change"):
+            cl.append(self.log, entry(MC.PENDING, 72))
+        with self.assertRaisesRegex(cl.ConfirmationLogError, "another judgement"):
+            cl.append(self.log, entry(MC.CONFIRMED, 72, seal="cd" * 32))
+        with self.assertRaises(cl.ConfirmationLogError):
+            cl.append(self.log, {"record_id": "x"})
+        other = cl.append(self.log, entry(MC.PENDING, 1, record_id="art-2/SYN:002"))     # other records are independent
+        self.assertEqual(len(other), 3)
+
+    def test_rule_version_marks_the_reading_and_a_new_rule_is_a_new_line(self):
+        later = cf.ConfirmationConfig(already_priced="after_event_window")
+        self.assertRegex(cl.rule_version(), r"^conf-rule-[0-9a-f]{16}$")
+        self.assertNotEqual(cl.rule_version(), cl.rule_version(later))
+        self.assertEqual(self.log[0].rule_version, cl.rule_version())
+        both = cl.append(self.log, entry(MC.ALREADY_PRICED, 72, config=later))          # re-evaluated under another rule
+        when = T0 + timedelta(days=10)
+        self.assertIs(cl.status_as_of(both, "art-1/SYN:001", when, rule=cl.rule_version()), MC.CONFIRMED)
+        self.assertIs(cl.status_as_of(both, "art-1/SYN:001", when, rule=cl.rule_version(later)), MC.ALREADY_PRICED)
+
+    def test_line_round_trip_and_field_list(self):
+        line = cl.dumps(self.log[1])
+        self.assertEqual(cl.loads(line), self.log[1])
+        data = __import__("json").loads(line)
+        self.assertEqual(tuple(sorted(data)), tuple(sorted(cl.FIELDS)))
+        self.assertEqual(data["schema"], "didm-confirmation-v0")
+        self.assertEqual(data["window"], {"kind": "daily", "first": 0, "last": 1})
+        self.assertEqual(cl.intraday_window(), ("intraday", 0, 60))
+        self.assertTrue(data["known_at"].endswith("+00:00"))
+
+    def test_bad_entries_are_rejected_not_repaired(self):
+        good = self.log[1].as_dict()
+        for change in (dict(schema="didm-confirmation-v1"), dict(status="MAYBE"), dict(known_at="2026-11-04T09:00:00"),
+                       dict(known_at=5), dict(record_id="bad id"), dict(judgement_sha256="xyz"),
+                       dict(rule_version="rule-1"), dict(window={"kind": "weekly", "first": 0, "last": 1}),
+                       dict(window={"kind": "daily", "first": 1, "last": 0}),
+                       dict(window={"kind": "daily", "first": 0}), dict(extra=1)):
+            with self.subTest(change=change), self.assertRaises(cl.ConfirmationLogError):
+                cl.validate_entry(dict(good, **change))
+        with self.assertRaises(cl.ConfirmationLogError):
+            cl.validate_entry({k: v for k, v in good.items() if k != "known_at"})
+        with self.assertRaises(cl.ConfirmationLogError):
+            cl.loads("not json")
+
+
 class Boundaries(unittest.TestCase):
     ALLOWED = {"core/didm/models/confirmation.py": ("__future__", "math", "dataclasses", "typing", "numpy",
                                                     "core.didm.llm.schema"),
+               "core/didm/models/confirmation_log.py": ("__future__", "hashlib", "json", "re", "dataclasses", "datetime",
+                                                        "typing", "core.didm.llm.schema", "core.didm.models"),
                "core/didm/models/surprise.py": ("__future__", "math", "dataclasses", "typing")}
 
     def test_reads_no_price_source_network_or_clock(self):
