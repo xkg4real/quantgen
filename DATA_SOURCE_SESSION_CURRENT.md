@@ -14,11 +14,11 @@ task: data-source
 cycle: 2026-11-24
 done_ids: none
 next_ids: DS-5b, DS-5c, DS-5a
-updated_at: 2026-11-24T23:20:00+09:00
+updated_at: 2026-11-24T20:10:00+09:00
 stale_after_hours: 3
 waiting_on: owner
-work_branch: claude/ds-fedwatch-20261124 (+ claude/ds-edgar-history-20261124@927375b, claude/ds-5bc-news-20261124@4a646ce; earlier D1-D3 in main integration PR 1)
-work_commit: see git log of claude/ds-fedwatch-20261124 (D10 commit)
+work_branch: claude/ds-review-fixes-20261124 (from integration 703aa01; + claude/ds-fedwatch-20261124@5e971c0, claude/ds-edgar-history-20261124@927375b, claude/ds-5bc-news-20261124@4a646ce)
+work_commit: 8e86fdd
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -29,6 +29,13 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## DATA_SOURCE (Claude) 통합 PR ① 검토 DS-1~DS-9 수정 — 2026-11-24
+
+- 지시: 메인, `plans/2026-11-24/INTEGRATION1_REVIEW.md` "Data sourcing" 절. 브랜치 `claude/ds-review-fixes-20261124` (integration 703aa01 기준): e0dd51d DS-1~5, da31d2e DS-6, 8e86fdd DS-7~9. 전부 "고침", 반박 없음.
+- DS-1: 진단 명령 시험을 하위 프로세스 BOOTSTRAP (runpy -m 동일) + 소켓 가드 + 프록시 6개 + 임시 HOME + 비밀 이름 제거 + .env·OS 저장소 끔으로. strace로 바깥 연결 0 확인 (127.0.0.1:9만 20건).
+- DS-3: provider_failure_reason은 안 바꿈 (홈 화면 공유) — 후보·영향은 메인 보고에 적음, 따로 결정.
+- 검사: smoke의 didm/home_indicators/gateway/research_home 20모듈 407 OK. 변형 4개 모두 잡힘.
 
 ## DATA_SOURCE (Claude) D9·D10 — 2026-11-24T23:20+09:00
 
