@@ -14,11 +14,11 @@ task: data-source
 cycle: 2026-11-24
 done_ids: none
 next_ids: DS-5b, DS-5c, DS-5a
-updated_at: 2026-11-24T18:38:22+09:00
+updated_at: 2026-11-24T21:10:00+09:00
 stale_after_hours: 3
 waiting_on: owner
-work_branch: claude/ds-connector-fixes-20261124 (+ claude/ds-home-diagnose-20261124, claude/ds-new-sources-plan-20261124)
-work_commit: 241c0f4
+work_branch: claude/ds-5bc-news-20261124 (+ claude/ds-connector-fixes-20261124@241c0f4, claude/ds-home-diagnose-20261124@b70a78d, claude/ds-new-sources-plan-20261124@6a6516d)
+work_commit: 4a646ce
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -29,6 +29,16 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## DATA_SOURCE (Claude) DS-5b/5c 코드 — 2026-11-24T21:10+09:00
+
+- 소유자 요청 원문: "N0 승인, Alpaca·Massive부터 진행하세요" (EODHD DS-5a 유료는 보류, N1 답 대기).
+- 브랜치 `claude/ds-5bc-news-20261124` @ 4a646ce (origin/main b872d8c에서 분기, PR 없음: MERGE_QUEUE "병합: DATA_SOURCE" 대기).
+- 파일: data/didm/alpaca_news.py (신규, 키는 APCA 헤더만, include_content=false), data/didm/massive_news.py (fetch_page, Bearer 헤더, 12.5초 간격), core/didm/ingest/news_store.py (신규, 시점 저장소 행; 본문·요약 없음), tools/didm/collect_daily.py (--alpaca-news, --massive-news, --news-start, --news-end, --news-max-pages), data/didm/keys.py (ENV_ONLY_KEYS: ALPACA_API_KEY_ID, ALPACA_API_SECRET_KEY, MASSIVE_API_KEY), tools/didm/keys.py, tests/didm_news_connectors_acceptance.py (12), runtime-smoke, docs/compliance/08-third-parties.md DIDM 행.
+- 판단: 새 키 이름은 core.credentials에 없어 RESEARCH_KEYS(저장소 등록 전제 시험 있음)와 분리해 환경변수로만 읽음 → 결제·계정 세션이 이름을 등록하면 RESEARCH_KEYS로 옮김.
+- 검사: DIDM 11모듈+gateway_boundary+third_party_notices+packaging_policy 232 OK; `git diff origin/main -- core ':!core/didm'` 비어 있음; check_vendor_eval 엑셀 값 변경 0.
+- 중단 지점: 실제 무료 키 응답 미확인 (Alpaca 무료 계정이 REST 뉴스를 허용하는지, Massive 무료 뉴스 과거 깊이). 소유자 PC 실행 대기 (waiting_on: owner).
+- 다음: 소유자가 무료 키 발급·setx → `python -m tools.didm.collect_daily --data-dir "$env:LOCALAPPDATA\QUANTGEN\didm" --no-gdelt --alpaca-news AAPL --massive-news AAPL --news-start 2026-11-01 --news-max-pages 2`. 완료 조건: 두 줄 모두 "articles N>0", 오류 시 HTTP 코드 문구로 플랜 한계 판정 → NEW_SOURCES_PLAN에 기록.
 
 ## 메인 Codex DIDM 통합 시작 — 2026-11-21T17:35:29+09:00
 
