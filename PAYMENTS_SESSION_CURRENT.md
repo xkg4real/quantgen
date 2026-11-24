@@ -1,21 +1,21 @@
 ---
-status: handoff
-reason: usage_limit_weekly
+status: checkpoint
+reason: milestone
 from: claude
 task: payments-account-keys
-cycle: 2026-11-17
-done_ids: KEY-4/a, KEY-4, KEY-3/design, KEY-3, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a
-next_ids: KEY-5/a, PAY-0, PAY-2
-updated_at: 2026-11-20T05:50:00+09:00
+cycle: 2026-11-24
+done_ids: KEY-5/a, KEY-4/a, KEY-4, KEY-3/design, KEY-3, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a
+next_ids: PAY-0, PAY-2, KEY-5
+updated_at: 2026-11-24T19:10:00+09:00
 stale_after_hours: 3
-waiting_on: none
-work_branch: claude/payments-key5a-20261120
-work_commit: dc936d4
+waiting_on: main
+work_branch: claude/payments-pay0-20261120
+work_commit: 96e93b6
 uncommitted_changes: no
-pr: none
-usage_weekly_pct: 98
+pr: https://github.com/xkg4real/quantgen/pull/149
+usage_weekly_pct: unknown
 usage_5h_pct: unknown
-usage_resets_at: 2026-11-24T17:00:00+09:00
+usage_resets_at: 2026-12-01T17:00:00+09:00
 session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 ---
 
@@ -24,6 +24,12 @@ session: https://claude.ai/code/session_016uB1jfZfzo935a4uucyT2S
 운영 기준: [자동감시 취소·수동 인계](OWNER_HANDOFF_POLICY_2026-11-13.md).
 
 ## 0. 한 줄 요약
+
+**2026-11-24 19:10 갱신 — 재개 (사용량 초기화 뒤), 메인 지시 P1~P3 처리.** 11-20~23 GPT가 KEY-5/a를 병합 (PR #139 → main dec979a, 원장 KEY-5/a; M1·M2는 main에서 고쳐짐). 아래 11-20 05:50 항목의 "KEY-5/a 재개 순서"는 **낡음 — 하지 말 것**.
+- **P1:** PAY-0·PAY-2 문서 12개 → `claude/payments-pay0-20261120` @ `96e93b6` (main b872d8c 합침) → **PR #149** (MERGE_QUEUE 10 "병합: PAYMENTS_ACCOUNT_KEYS"). compliance --check PASS 857. 메인 병합 대기. 문의는 발송 전 초안, P2-01~P2-15는 소유자 대기 (OA-32, OA-39).
+- **P2:** handoff `plans/2026-11-24/KEY5_UI_REQUEST_V2.md` (c77c1252, merge 16ca7443): main b872d8c + PR #140 3483b53 기준, 남은 화면 8파일 25곳 표, paper.py → `core.gateway.feed.QuoteFeed`, OA-41 소유자 답 없음·GPT 가 안 진행. 발견: SCREEN_CEILING이 22/44 그대로 → #140 병합 때 8/25 또는 KEY-5에서 0/0.
+- **P3:** KEY5A_REVIEW S1~S7을 main에서 대조 — S4b만 빈틈 → 시험 1개 (`tests/gateway_remote_acceptance.py` test_class_name_word_length_limits) + 기준선, `claude/payments-key5a-closeout-20261124` @ `502802e`, 게이트웨이 84 OK (main 83). PR은 "병합:" 뒤 (본문 초안은 세션 scratchpad).
+- **다음:** 메인 지시 대기. 소유자 대기: OA-03, OA-11, OA-13, OA-32, OA-39, OA-40, OA-41, OA-45.
 
 **2026-11-20 05:50 갱신 — 주간 사용량 98%로 멈춤 (status: handoff, reason: usage_limit_weekly).** 메인 원문 (05:4x): "계정 주간 사용량 98% (AUTO_STATE 05:37) — 메인은 GPT에 인계했습니다 (handoff 4e7b6b4, CURRENT status: handoff). 새 작업을 시작하지 말고, 작업 중인 것이 있으면 push하고 PAYMENTS_SESSION_CURRENT.md를 handoff로 갱신한 뒤 멈추세요."
 - **끝난 것:** KEY-4 (PR #133, main `8445187`), KEY-4/a (PR #134, 메인 병합·LEDGER 기록 — CURRENT done_ids에 있음). 커밋되지 않은 변경 없음 (작업 폴더 `claude/payments-key5a-20261120` @ `dc936d4`, 깨끗함).
