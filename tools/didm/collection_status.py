@@ -1,0 +1,127 @@
+"""What the owner's DIDM point-in-time store holds, per source: counts, date spans, days without receipts,
+and how much of the Stage 2 sample window (2015-2024, DIDM_DEV) is covered. Read only.
+
+    python -m tools.didm.collection_status --data-dir "%LOCALAPPDATA%\\QUANTGEN\\didm"
+    python -m tools.didm.collection_status --data-dir <folder> --since 2026-11-17 --json
+
+Opens <data-dir>/didm_store.sqlite in SQLite read-only mode (never creates or changes it). Prints only
+source names, kinds, counts and dates: no payload values, titles, URLs or keys.
+
+* items = distinct (source_id, item_id); versions = stored rows (corrections and re-fetches included).
+* valid span = earliest/latest ``valid_at`` (article time or observation date).
+* received span = earliest/latest ``received_at`` (when the collector ran).
+* missing receive days = UTC days between --since (default: first receipt of that source) and the last
+  receipt overall on which that source got nothing. Sources fetched on demand (ALFRED, ECOS, history
+  back-fills) are expected to have gaps; GDELT/Kalshi daily runs should not.
+* sample years = for each year of --sample (default 2015-2024), items whose valid_at falls in it.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sqlite3
+import sys
+from datetime import date, timedelta
+from pathlib import Path
+
+STORE_FILE = "didm_store.sqlite"
+SAMPLE = (2015, 2024)
+MAX_LISTED_GAPS = 10
+
+
+class StatusError(RuntimeError):
+    pass
+
+
+def open_read_only(path: Path) -> sqlite3.Connection:
+    if not path.is_file():
+        raise StatusError(f"no store at {path} (run tools.didm.collect_daily first)")
+    return sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True)
+
+
+def _day(iso: str) -> date:
+    return date.fromisoformat(iso[:10])
+
+
+def _gaps(days: set[date], first: date, last: date) -> list[date]:
+    out, d = [], first
+    while d <= last:
+        if d not in days:
+            out.append(d)
+        d += timedelta(days=1)
+    return out
+
+
+def summarize(db: sqlite3.Connection, *, since: date | None = None,
+              sample: tuple[int, int] = SAMPLE) -> dict:
+    """Per (source_id, kind) summary. Pure read of the items table."""
+    rows = db.execute(
+        "SELECT source_id, kind, COUNT(DISTINCT item_id), COUNT(*), MIN(valid_at), MAX(valid_at),"
+        " MIN(received_at), MAX(received_at) FROM items GROUP BY source_id, kind ORDER BY source_id, kind"
+    ).fetchall()
+    overall_last = db.execute("SELECT MAX(received_at) FROM items").fetchone()[0]
+    sources = []
+    for source_id, kind, items, versions, vmin, vmax, rmin, rmax in rows:
+        days = {_day(r[0]) for r in db.execute(
+            "SELECT DISTINCT substr(received_at, 1, 10) FROM items WHERE source_id = ? AND kind = ?",
+            (source_id, kind))}
+        first = max(since, _day(rmin)) if since else _day(rmin)
+        gaps = _gaps(days, first, _day(overall_last)) if first <= _day(overall_last) else []
+        years = dict(db.execute(
+            "SELECT substr(valid_at, 1, 4) AS y, COUNT(DISTINCT item_id) FROM items"
+            " WHERE source_id = ? AND kind = ? AND y BETWEEN ? AND ? GROUP BY y",
+            (source_id, kind, f"{sample[0]:04d}", f"{sample[1]:04d}")).fetchall())
+        sources.append({
+            "source_id": source_id, "kind": kind, "items": items, "versions": versions,
+            "valid_from": vmin[:10], "valid_to": vmax[:10],
+            "received_from": rmin[:10], "received_to": rmax[:10],
+            "receive_days": len(days),
+            "missing_receive_days": len(gaps),
+            "missing_examples": [d.isoformat() for d in gaps[:MAX_LISTED_GAPS]],
+            "sample_years": {str(y): years.get(f"{y:04d}", 0) for y in range(sample[0], sample[1] + 1)},
+        })
+    return {"store_last_received": overall_last[:10] if overall_last else None,
+            "sample": list(sample), "sources": sources}
+
+
+def lines(summary: dict) -> list[str]:
+    if not summary["sources"]:
+        return ["store is empty"]
+    lo, hi = summary["sample"]
+    out = [f"store last receipt {summary['store_last_received']}; sample years {lo}-{hi}"]
+    for s in summary["sources"]:
+        covered = sum(1 for n in s["sample_years"].values() if n)
+        out.append(
+            f"{s['source_id']} / {s['kind']}: items {s['items']} (versions {s['versions']}), "
+            f"valid {s['valid_from']}..{s['valid_to']}, received {s['received_from']}..{s['received_to']} "
+            f"on {s['receive_days']} days, missing {s['missing_receive_days']} days"
+            + (f" (e.g. {', '.join(s['missing_examples'][:3])})" if s["missing_examples"] else "")
+            + f", sample years with data {covered}/{hi - lo + 1}")
+    return out
+
+
+def main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(description="DIDM store summary (read only, counts and dates only)")
+    ap.add_argument("--data-dir", required=True, help="the folder given to tools.didm.collect_daily")
+    ap.add_argument("--since", metavar="YYYY-MM-DD", help="count missing receive days from this day")
+    ap.add_argument("--sample", nargs=2, type=int, default=list(SAMPLE), metavar=("FROM", "TO"))
+    ap.add_argument("--json", action="store_true")
+    args = ap.parse_args(argv)
+    since = date.fromisoformat(args.since) if args.since else None
+    if args.sample[0] > args.sample[1]:
+        ap.error("--sample FROM must not be after TO")
+    try:
+        db = open_read_only(Path(args.data_dir).expanduser() / STORE_FILE)
+    except StatusError as exc:
+        print(exc, file=sys.stderr)
+        return 1
+    try:
+        summary = summarize(db, since=since, sample=tuple(args.sample))
+    finally:
+        db.close()
+    print(json.dumps(summary, ensure_ascii=False, indent=1) if args.json else "\n".join(lines(summary)))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
