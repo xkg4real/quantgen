@@ -1,0 +1,121 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-android-internal-preview-pr-141",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "Record only; no delivery, website application or deployment. Android is an internal preview and must not be advertised as released.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "gpt/android-commercial-preview-20261123",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/141",
+    "implementation_commit": "2bcd44f9db9faeb1f9cf73a5efb510e2bfecf50d",
+    "remote_status": "DRAFT",
+    "merge_commit": null,
+    "verified_head": "2bcd44f9db9faeb1f9cf73a5efb510e2bfecf50d"
+  },
+  "summary_ko": [
+    "모바일 의존성에서 제외한 SciPy/Matplotlib를 데스크톱 진입점이 즉시 불러오던 시작 문제를 모바일 전용 내부 미리보기로 분리했습니다.",
+    "기존 QUANTGEN 색상·QG Interface 글꼴을 재사용하며 시장·Monte Carlo·로그인 기능은 미제공으로 명시합니다."
+  ],
+  "website_impact": {
+    "classification": "mobile_internal_preview_no_web_runtime_change",
+    "browser_code_changed": false,
+    "shared_sources": [],
+    "requested_actions_ko": [
+      "웹사이트 변경·배포는 수행하지 않았습니다. 실제 APK·휴대폰 검증 전 Android 출시·전체 기능 지원을 광고하지 않습니다.",
+      "내부 개발 기록으로만 보존하고 향후 제공 범위를 실제 검증 뒤 대조합니다."
+    ]
+  },
+  "verification": {
+    "tests": [
+      {
+        "suite": "mobile entry/staging and existing packaging; same11 methods independently confirmed",
+        "passed": 11,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0
+      },
+      {
+        "suite": "same11 methods after Windows-fixture portability correction; independent host confirmation",
+        "passed": 11,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0
+      }
+    ],
+    "counts_note": "All author/independent/repair confirmations repeat the same11 selected methods and are not summed. Host Linux Flet0.85.2; prior9c wholeRuntime failed on3Windows fixture paths. Fresh exact-head Windows and full CI evidence are still required.",
+    "source_review": "20-document consistency; only technical record12 refreshed for fixture correction, other19 retained; publication BLOCKED65 and policies/profile/registry unchanged.",
+    "ci": "PREVIOUS_9c_RUNTIME_FAILURE; FRESH_EXACT_HEAD_CHECKS_REQUIRED",
+    "ci_runs": [
+      {
+        "id": 45043106514,
+        "head_sha": "9c95b9ee1e9621ce887b0217f0c867bcaf6ed724",
+        "conclusion": "failure"
+      }
+    ],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "Android artifact/owner-phone startup, accessibility and QuantLab parity NOT_PERFORMED"
+  },
+  "website_application": {
+    "status": "not_applied",
+    "deployment_status": "not_deployed",
+    "url": "https://quantgeneration.com/"
+  },
+  "limits_ko": [
+    "내부 shell 및 host control구성/합성staging만 검증. OS-A1 전체 및 상업용 Android 출시 미완료.",
+    "Flutter SDK/mobile wheelhost CONNECT403 및 GitHub dispatch capability 부족으로 APK 빌드는 아직 수행하지 않았습니다.",
+    "실제 시세·계정·PG·연구·주문·원장·업로드키·스토어·웹사이트 배포는 이 변경에 포함되지 않습니다.",
+    "Windows 경로 가정 두 곳을 시험에서 보정했으나 실제 해결은 새 정확 head의 Windows CI로 확인합니다. 기존9c Runtime 실패를 host11 PASS로 대체하지 않습니다."
+  ],
+  "changed_files": [
+    "mobile/main.py",
+    "mobile/README.md",
+    "tools/packaging/stage.py",
+    "tests/mobile_startup_acceptance.py",
+    ".github/workflows/runtime-smoke.yml",
+    "docs/compliance/source-review.json",
+    "docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md",
+    "docs/product/ui_website_updates/PR-141.json"
+  ],
+  "revisions": [
+    {
+      "kind": "Windows fixture path portability correction",
+      "parent_commit": "9c95b9ee1e9621ce887b0217f0c867bcaf6ed724",
+      "scope": [
+        "tests/mobile_startup_acceptance.py",
+        "docs/compliance/source-review.json"
+      ],
+      "change": "Canonical temporary fixture root and POSIX relative file-list comparison; production code, stage safety checks, assertions, methods, skips and timeouts unchanged.",
+      "test_sha256": "5bdbba796ebe77a8c0e494b488928bf0d5d655bf9f40fce966c613b125278da8",
+      "host_validation": "same11 methods independently PASS, guard0; 473 other selected sources unchanged; actualstage399 preserved",
+      "previous_Runtime": {
+        "id": 45043106514,
+        "head": "9c95b9ee1e9621ce887b0217f0c867bcaf6ed724",
+        "conclusion": "failure",
+        "scope": "3 Windows versions failed fixture path normalization; original logs preserved"
+      },
+      "actual_fresh_Windows_CI_confirmed": false,
+      "website_applied": false,
+      "deployed": false
+    },
+    {
+      "date": "2026-11-23",
+      "execution_id": "bf4cc1f1-ed41-4ead-b7fe-fc3003a49439",
+      "source_parent": "693e7cbb39f6e883a093f7484375985eafa83c2a",
+      "integrated_main": "d835d9f495102a6d3244413018db1f9219341716",
+      "changes_ko": [
+        "Android 내부 미리보기에서 예시 계산하기를 누르면 고정된 합성 종가 30개로 5거래일의 모의 가격을 계산합니다.",
+        "시장 조회와 계정 연동은 미제공입니다."
+      ],
+      "host_validation": "Real Flet control invoked offline. The fixed synthetic GBM example returned the same 15 recorded fields as the desktop fixture. Median 104.69, central 90% range 101.01 to 108.95.",
+      "apk": "NOT_PERFORMED",
+      "owner_phone": "NOT_PERFORMED",
+      "website_applied": false,
+      "deployed": false
+    }
+  ]
+}

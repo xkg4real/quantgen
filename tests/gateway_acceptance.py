@@ -223,6 +223,25 @@ class KeyChangeTest(Base):
             self.assertEqual(gw.ready("fmp"), "ready")
         self.assertIsNotNone(held)
 
+    def test_failing_change_listener_does_not_stop_later_listeners(self):
+        before = list(gw._listeners)
+        called = []
+        def broken(name):
+            called.append(("first", name))
+            raise RuntimeError("synthetic listener failure")
+        def last(name):
+            called.append(("last", name))
+        try:
+            gw.on_change(broken)
+            gw.on_change(last)
+            gw.reload("fmp")
+            with _no_keys():
+                credentials.set("FMP_API_KEY", FAKE)
+            self.assertEqual(called, [("first", "fmp"), ("last", "fmp"),
+                                      ("first", "FMP_API_KEY"), ("last", "FMP_API_KEY")])
+        finally:
+            gw._listeners[:] = before
+
 
 class ProfileTest(Base):
     def test_commercial_draft_turns_yahoo_and_fmp_off(self):
@@ -433,6 +452,44 @@ class CoreAccessTest(Base):
                          ["quant_provider_status", "krx_provider_status", "ficc_provider_status",
                           "crypto_provider_status"])
         self.assertEqual(gw.endpoint("anthropic"), "https://api.anthropic.com/v1/messages")
+
+
+
+class KisStreamAndWorkspace(unittest.TestCase):
+    """KEY-5/a G1 and G2: the KIS realtime subscription (data.kis_stream) and the KIS workspace's pure values
+    (availability_note, supported_intervals, OVERSEAS_PRICE_DETAIL) come through provider(); their only source is
+    kis_quote, fixed-local (D7-G rule 1), so they are never refused: the screens' guidance text shows in every
+    profile, with a broken routes file and with the company route open. No separate allowlist is needed (G2)."""
+
+    def tearDown(self):
+        gw._profile_override = None
+        gw._remote_override = None
+        gw.reload()
+
+    def _each_state(self):
+        yield "personal"
+        gw._profile_override = "commercial"
+        yield "commercial"
+        gw._profile_override = None
+        gw._routes, gw._route_error = None, "broken"
+        yield "broken routes"
+        gw.reload()
+        gw._remote_override = remote.RemoteRoute(lambda req: {"ok": True, "result": None})
+        yield "company route open"
+
+    def test_reached_through_provider_in_every_state(self):
+        self.assertEqual(gw.PROVIDER_MODULES["data.kis_stream"], ("kis_quote",))
+        self.assertEqual(gw.PROVIDER_MODULES["data.kis_workspace"], ("kis_quote",))
+        self.assertTrue(SOURCES["kis_quote"].fixed_local)
+        for state in self._each_state():
+            with self.subTest(state=state):
+                self.assertEqual(gw.blocked("kis_quote"), "")
+                stream = gw.provider("data.kis_stream")
+                self.assertTrue(callable(stream.subscription_for))
+                workspace = gw.provider("data.kis_workspace")
+                self.assertTrue(callable(workspace.availability_note))
+                self.assertTrue(callable(workspace.supported_intervals))
+                self.assertEqual(len(workspace.OVERSEAS_PRICE_DETAIL), 2)
 
 
 if __name__ == "__main__":

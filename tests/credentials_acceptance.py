@@ -1,7 +1,8 @@
 """KEY-2 credential store (owner decision D7-G, 2026-11-18).
 
-Offline. Never reads `.env` or `~/.nextgen`: `dotenv.load_dotenv` is patched before `config` is imported, HOME
-and USERPROFILE point at a temporary folder, and every keyring call goes to an in-memory backend (or to none).
+Offline. Never reads `.env` or the real user's data folders: imports disable dotenv, the module fixture patches
+Path.home() and all platform data roots, and every keyring call goes to an in-memory backend (or to none).
+HOME/USERPROFILE are not reassigned; explicit QUANTGEN/Flet storage overrides are cleared inside the fixture.
 All values below are fake strings made up for this test.
 """
 from __future__ import annotations
@@ -13,20 +14,41 @@ import shutil
 import tempfile
 import time
 import unittest
+from contextlib import ExitStack, contextmanager
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-_HOME = tempfile.mkdtemp(prefix="qg-credentials-home-")
-_SAVED_HOME = {n: os.environ.get(n) for n in ("HOME", "USERPROFILE")}
-os.environ["HOME"] = _HOME
-os.environ["USERPROFILE"] = _HOME
+_HOME = ""  # assigned by setUpModule; importing this helper module changes no process paths
+
+
+@contextmanager
+def _temporary_storage_home(home):
+    """Isolate every input used by app_paths, including a Windows host's already-marked LOCALAPPDATA."""
+    home = Path(home)
+    storage_env = {"LOCALAPPDATA": str(home / "AppData" / "Local"),
+                   "APPDATA": str(home / "AppData" / "Roaming"),
+                   "XDG_DATA_HOME": str(home / ".local" / "share"),
+                   "QUANTGEN_DATA_DIR": "", "FLET_APP_STORAGE_DATA": ""}
+    with patch.object(Path, "home", return_value=home), patch.dict(os.environ, storage_env):
+        yield
+
+
+def setUpModule():
+    global _HOME
+    folder = tempfile.TemporaryDirectory(prefix="qg-credentials-home-")
+    _HOME = folder.name
+    unittest.addModuleCleanup(folder.cleanup)
+    contexts = ExitStack()
+    unittest.addModuleCleanup(contexts.close)  # restore paths/env before removing the temporary folder
+    contexts.enter_context(_temporary_storage_home(_HOME))
 
 import dotenv  # noqa: E402
+from core import credentials  # noqa: E402
+from core.credentials import names  # noqa: E402
 
-with patch.object(dotenv, "load_dotenv", return_value=False):
+with patch.object(credentials, "load_dotenv_for_development"), \
+        patch.object(dotenv, "load_dotenv", return_value=False):
     import config  # noqa: E402
-    from core import credentials  # noqa: E402
-    from core.credentials import names  # noqa: E402
     from data.krx import kis_client  # noqa: E402
 
 FAKE = "fake-value-for-test-7f3a"
@@ -370,14 +392,14 @@ class KisTokenTest(Base):
         self.assertIsNone(client._cached_token())                           # but not trusted for the new key
 
     def test_real_home_token_file_survives_key_change(self):
-        """Review item 2: with no pinned path the listener still never deletes the file under HOME."""
+        """Review item 2: with no pinned path the listener still never deletes the temporary home's token."""
         home = Path(tempfile.mkdtemp(prefix="qg-fake-home-"))
         self.addCleanup(shutil.rmtree, home, True)
         sentinel = home / ".nextgen" / "kis_token.json"
         sentinel.parent.mkdir(parents=True)
         sentinel.write_text("sentinel", encoding="utf-8")
         with patch.object(kis_client, "_TOKEN_PATH", None), \
-                patch.dict(os.environ, {"HOME": str(home), "USERPROFILE": str(home)}):
+                _temporary_storage_home(home):
             self.assertEqual(kis_client._token_path(), sentinel)
             credentials.set("KIS_APP_KEY", FAKE)
             credentials.delete("KIS_APP_KEY")
@@ -612,15 +634,50 @@ class IsolationTest(unittest.TestCase):
     def test_home_is_temporary(self):
         self.assertEqual(Path.home().resolve(), Path(_HOME).resolve())
 
+    def test_all_storage_roots_are_temporary_and_overrides_are_empty(self):
+        home = Path(_HOME)
+        self.assertEqual(Path(os.environ["LOCALAPPDATA"]), home / "AppData" / "Local")
+        self.assertEqual(Path(os.environ["APPDATA"]), home / "AppData" / "Roaming")
+        self.assertEqual(Path(os.environ["XDG_DATA_HOME"]), home / ".local" / "share")
+        self.assertEqual(os.environ["QUANTGEN_DATA_DIR"], "")
+        self.assertEqual(os.environ["FLET_APP_STORAGE_DATA"], "")
+
+    def test_nested_fixture_ignores_a_synthetic_marked_host_folder_and_restores_inputs(self):
+        from core.app_paths import DATA_MARKER, user_data_dir
+        with tempfile.TemporaryDirectory(prefix="qg-synthetic-host-") as host_folder, \
+                tempfile.TemporaryDirectory(prefix="qg-isolated-home-") as home_folder:
+            host, home = Path(host_folder), Path(home_folder)
+            marked = host / "Local" / "QUANTGEN"
+            marked.mkdir(parents=True)
+            marker = marked / DATA_MARKER
+            marker.write_text('{"app":"QUANTGEN","format":1,"created":"2026-01-01"}', encoding="utf-8")
+            legacy = home / ".nextgen"
+            legacy.mkdir()
+            host_env = {"LOCALAPPDATA": str(host / "Local"), "APPDATA": str(host / "Roaming"),
+                        "XDG_DATA_HOME": str(host / "xdg"), "QUANTGEN_DATA_DIR": str(host / "override"),
+                        "FLET_APP_STORAGE_DATA": str(host / "flet")}
+            with patch.dict(os.environ, host_env):
+                before_home = Path.home()
+                # A plain temporary HOME would still see this marked Windows platform folder.
+                with patch.object(Path, "home", return_value=home), \
+                        patch.dict(os.environ, {"QUANTGEN_DATA_DIR": "", "FLET_APP_STORAGE_DATA": ""}):
+                    self.assertEqual(user_data_dir(platform="win32"), marked)
+                for platform in ("win32", "darwin", "linux"):
+                    with self.subTest(platform=platform), _temporary_storage_home(home):
+                        self.assertEqual(user_data_dir(platform=platform), legacy)
+                        self.assertEqual(os.environ["QUANTGEN_DATA_DIR"], "")
+                        self.assertEqual(os.environ["FLET_APP_STORAGE_DATA"], "")
+                with self.assertRaisesRegex(RuntimeError, "synthetic fixture error"):
+                    with _temporary_storage_home(home):
+                        raise RuntimeError("synthetic fixture error")
+                self.assertEqual(Path.home(), before_home)
+                self.assertEqual({key: os.environ[key] for key in host_env}, host_env)
+            self.assertTrue(marker.is_file())
+            self.assertEqual(list(marked.iterdir()), [marker])  # no token or mutation in the synthetic host folder
+
 
 def tearDownModule():
     credentials.set_backend(credentials._UNSET)
-    shutil.rmtree(_HOME, ignore_errors=True)
-    for name, value in _SAVED_HOME.items():
-        if value is None:
-            os.environ.pop(name, None)
-        else:
-            os.environ[name] = value
 
 
 if __name__ == "__main__":

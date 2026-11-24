@@ -1,0 +1,53 @@
+"""Bank of Korea ECOS client for DIDM (owner answer Q3, 2026-11-18). Parsing: core.didm.ingest.ecos.
+
+Needs ECOS_API_KEY (name only; value on the owner's PC). ECOS puts the key in the
+URL path, so the URL is never logged or put in an error message.
+"""
+from __future__ import annotations
+
+from urllib.parse import quote
+
+from data.didm.keys import MissingKey, SourceError, get_key, require
+from data.net import session
+
+KEY_NAME = "ECOS_API_KEY"
+BASE = "https://ecos.bok.or.kr/api/StatisticSearch"
+TIMEOUT_SECONDS = 30
+
+
+def has_key() -> bool:
+    return bool(get_key(KEY_NAME))
+
+
+def masked_path(stat_code: str, cycle: str, start: str, end: str, *item_codes: str,
+                rows: int = 1000, trailing_slash: bool = False) -> str:
+    """The request path with the key replaced by ****, safe to print."""
+    path = "/".join(["StatisticSearch", "****", "json", "kr", "1", str(int(rows)), stat_code, cycle,
+                     start, end, *item_codes])
+    return path + ("/" if trailing_slash else "")
+
+
+def fetch_series(stat_code: str, cycle: str, start: str, end: str, *item_codes: str,
+                 rows: int = 1000, trailing_slash: bool = False) -> dict:
+    key = require(KEY_NAME)
+    if cycle not in ("A", "S", "Q", "M", "SM", "D"):
+        raise ValueError(f"bad ECOS cycle {cycle!r}")
+    parts = [BASE, quote(key, safe=""), "json", "kr", "1", str(int(rows)),
+             quote(stat_code, safe=""), cycle, quote(start, safe=""), quote(end, safe="")]
+    parts += [quote(c, safe="") for c in item_codes]
+    url = "/".join(parts) + ("/" if trailing_slash else "")
+    resp = session.get(url, timeout=TIMEOUT_SECONDS)
+    if resp.status_code != 200:
+        raise SourceError(f"ECOS {stat_code}: HTTP {resp.status_code}")
+    return resp.json()
+
+
+def fetch_item_list(stat_code: str) -> dict:
+    """StatisticItemList: item codes, names, cycles and available periods of one table."""
+    key = require(KEY_NAME)
+    url = "/".join(["https://ecos.bok.or.kr/api/StatisticItemList", quote(key, safe=""),
+                    "json", "kr", "1", "200", quote(stat_code, safe="")])
+    resp = session.get(url, timeout=TIMEOUT_SECONDS)
+    if resp.status_code != 200:
+        raise SourceError(f"ECOS item list {stat_code}: HTTP {resp.status_code}")
+    return resp.json()

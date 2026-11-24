@@ -183,6 +183,16 @@ class LintTests(unittest.TestCase):
             """)
         self.assertEqual({(f.line, f.group) for f in port.lint(text, "f.py")}, {(2, "14-focus-walk")})
 
+    def test_qthread_current_thread_is_reported(self):
+        text = src("""\
+            import threading
+            from @OLD@.QtCore import QThread
+            def load(seen):
+                seen.append(QThread.currentThread())
+                seen.append(threading.get_ident())
+            """)
+        self.assertEqual({(f.line, f.group) for f in port.lint(text, "t.py")}, {(4, "15-thread-wrapper")})
+
 
 class CommandTests(unittest.TestCase):
     def test_apply_refuses_a_git_checkout_and_is_idempotent_on_a_scratch_copy(self):

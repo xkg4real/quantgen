@@ -98,6 +98,7 @@ KIS 종목 마스터의 원본 줄(`_MASTER_CACHE`)과 검색 색인, 관심종�
 | KIS `_APPROVAL_CACHE`·시세 화면 메모리 | 서버 주소·인증정보 지문별 승인키, snapshot·선택 조건·대기 tick. 새 차트 파일 저장 없음 | 23시간은 승인키 재사용 기준. 연결 중지·브라우저 종료가 전역 캐시 제거·원격 철회를 보장하지 않음. 실제 프로세스·공유 범위·로그·복사본을 확인하여 기존 Bearer 파일과 별도로 처리 |
 | `config.trading_dir()` | 규칙·메모·개정 이력, 모의주문·판정·상태 저장 | `NEXTGEN_TRADING_DIR` 재정의 가능. `.nextgen` 경로는 TRADEGEN 등 다른 프로그램과 공유할 수 있으므로 디렉터리 통째 삭제 금지 |
 | `config.macro_dir()` | 매크로 상태·거버넌스·알림·운영자 기명 기록 가능 | `QUANTGEN_MACRO_DIR` 재정의 가능. 변경 불가 연구 원장과 개인 식별기록의 범위·권한·보존근거를 따로 판단 |
+| DIDM 수집 CLI의 명시적 `<data-dir>/didm_store.sqlite` | 수집 시 소유자가 `--data-dir`로 지정한 현재 수집기 checkout 밖 폴더(기본값 없음). 공급원·항목 ID·종류·발행/유효/수신시각·payload JSON·내용 SHA와 버전 이력을 보존. `PointInTimeStore` 직접 호출은 호출자 경로를 사용 | 수집 프로세스·DB 연결을 종료한 뒤 DB와 실제로 존재하는 동일 스토어 부수 파일·사본의 범위·소유·보존 예외를 확인. SQLite 쓰기에는 `-journal`, WAL 모드 DB에는 `-wal`·`-shm`이 동반될 수 있으나 코드는 journal mode를 고정하지 않음. append-only API·연결 종료는 삭제/자동 TTL이 아니며 기존 동결 연구·이력 보존 원칙을 유지 |
 | `config.ficc_cache_dir()` | 시장 시계열·조회 대상 캐시. 2026-11-11부터 미국 상장주식수 `SHARES_YFINANCE_<기호>.json`(고정 종목, 저장 시각 포함)과 시장 페이지 지수 띠의 계열별 `YFINANCE_<기호>_400.json`(고정 6계열, 기호의 `^`는 `_`, 저장 시각 포함) | `NEXTGEN_FICC_CACHE` 재정의 가능. 공개 시장 데이터와 개인의 조회·경로정보를 구분. TTL 만료를 삭제 완료로 기록하지 않음 |
 | `~/.nextgen/dart_corp_codes.json` | 공시 법인코드 캐시 | 기업 공개자료가 중심이지만 공유 위치와 요청 범위 확인 |
 | Qt `QSettings("QUANTGEN", "QUANTGEN")` | `ui/language`·`ui/locale`·`ui/theme`·`ui/sidebar_collapsed`·`markets/watchlist`(관심종목의 자산 구분·코드·거래소, 최대 20개)·`markets/detail/*`(켠 지표·기간·섹션 접힘·오른쪽 열) 등 애플리케이션 설정. 실제 저장 방식은 OS에 따름 | 설정 이름·소유 범위를 확인하고 필요한 항목만 처리. 모의 초기화로 제거되지 않으며 설정 전체/다른 앱의 저장소를 추정 삭제하지 않음 |
@@ -222,3 +223,12 @@ KIS 종목 마스터의 원본 줄(`_MASTER_CACHE`)과 검색 색인, 관심종�
 [메뉴 클릭·손익비 편집·읽기 쉬운 지표 해설](FACTS.md#ui-interaction-polish-2026-11-14)의 범위와 기존
 자료 흐름을 대조했다. 새 주문·전송·예측 성능 주장·계약 조건은 추가하지 않는다. 기존 미확정 조건과
 공개 준비 보류를 유지하며, 실제 사용자 Windows 환경·웹 배포 완료를 주장하지 않는다.
+
+
+## OS-F2 사용자 자료 경로 — 2026-11-21 구현 검토
+
+경로 조회는 읽기 전용이며, 네이티브/Flet 앱 시작과 기본 KIS·OpenDART 파일 쓰기 전에 선택한 자료 폴더를 명시적으로 준비합니다. 우선순위는 `QUANTGEN_DATA_DIR` → `FLET_APP_STORAGE_DATA` → 표시 파일이 있는 OS별 폴더 → 기존 `~/.nextgen` → OS별 폴더입니다. 기존 기능별 경로 재정의는 유지합니다. 새 플랫폼 폴더의 `.quantgen-data-dir`에는 앱 이름·생성 날짜·형식 번호만 저장합니다. 손상·링크·비정규 표시 파일은 거절하고, 준비 실패 때 다른 폴더로 조용히 전환하지 않습니다.
+
+실제 자료를 자동 이전하거나 삭제하지 않습니다. 분리된 이전 API는 명시적 동의 뒤에만 같은 파일시스템의 독점 rename을 시도하며, 목적지 경합·미지원·파일시스템 차이는 복사/삭제 없이 거절합니다. 거절 때 기존 폴더에 작은 표시 파일이 남을 수 있습니다. 기존 legacy 폴더를 옮기면 다른 앱과의 토큰 파일 공유가 끝남을 동의 안내에 포함해야 합니다. standalone 저장소 호출자는 먼저 명시적 준비 API를 호출해야 하고 동결 엔진은 변경하지 않습니다. 새로운 삭제·보유기한·암호화·운영 권한 검증이나 실제 PC 검증을 완료한 변경이 아닙니다.
+
+[구현 범위와 한계](../product/OS_DATA_STORAGE_2026-11-21.md), [경로 API](../../core/app_paths.py), [쓰기·시작 검사](../../tests/app_storage_startup_acceptance.py).
