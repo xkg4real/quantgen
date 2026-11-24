@@ -281,3 +281,85 @@ def load_home_indicators(days=30, *, series_loader=None, btc_live=None, kospi_li
         rows.append(row)
     return rows
 
+
+
+# --------------------------------------------------------------------------------------------------------------
+# Home indicator diagnosis for the owner's PC (OA-09; replaces the H4 command of the 2026-11-17 plan)
+#     python -m core.research.markets
+# Six lines, one per indicator: symbol, status, reason code, live status. No values, keys, URLs or provider
+# text. Always exits 0: a failure is reported as a reason code, not a traceback. On a checkout older than
+# DS-H (no load_home_indicators) the command itself fails -- that failure is the diagnosis.
+# --------------------------------------------------------------------------------------------------------------
+def diagnose_lines(rows):
+    lines = []
+    for row in rows:
+        live = row.get("live")
+        live_part = "-" if live is None else live["status"] + (f"/{live['reason_code']}" if live.get("reason_code") else "")
+        lines.append(f"{row['symbol']} {row['status']} reason={row.get('reason_code') or '-'} live={live_part}")
+    return lines
+
+
+class _LogCapture:
+    """Collects yfinance's own log lines during a diagnosis (bounded) instead of printing them."""
+
+    def __init__(self, limit=20000):
+        import logging
+        self.logging, self.limit, self.text = logging, limit, []
+        self.handler = logging.Handler()
+        self.handler.emit = lambda record: self.text.append(record.getMessage()[:2000])
+        self.logger = logging.getLogger("yfinance")
+
+    def __enter__(self):
+        self.saved = (self.logger.propagate, self.logger.level)
+        self.logger.addHandler(self.handler)
+        self.logger.propagate = False
+        self.logger.setLevel(self.logging.DEBUG)
+        return self
+
+    def __exit__(self, *exc):
+        self.logger.removeHandler(self.handler)
+        self.logger.propagate, level = self.saved
+        self.logger.setLevel(level)
+
+    def reason(self):
+        """A reason code from what yfinance logged, or None (Yahoo hides transport errors behind empty data)."""
+        text = "\n".join(self.text)[: self.limit]
+        if not text:
+            return None
+        if re.search(r"Too Many Requests|YFRateLimitError|\b429\b", text):
+            return "rate_limited"
+        if re.search(r"SSL|CERTIFICATE_VERIFY_FAILED|certificate", text):
+            return "certificate_error"
+        if re.search(r"timed out|Timeout", text):
+            return "network_timeout"
+        if re.search(r"ConnectionError|CONNECT tunnel failed|curl: \(\d+\)|Could not resolve|getaddrinfo", text):
+            return "network_error"
+        return None
+
+
+def diagnose(capture_yahoo_log=True, **kwargs):
+    """Six lines. With ``capture_yahoo_log`` an empty Yahoo row also shows what yfinance itself logged
+    (``via=<reason>``), since yfinance turns network, TLS and rate-limit failures into an empty download."""
+    capture = _LogCapture() if capture_yahoo_log else None
+    try:
+        if capture:
+            with capture:
+                rows = load_home_indicators(**kwargs)
+        else:
+            rows = load_home_indicators(**kwargs)
+    except Exception as exc:  # whole call failed before any row: every line carries the same reason code
+        reason = provider_failure_reason(exc)
+        rows = [{"symbol": spec[1], "status": "UNAVAILABLE", "reason_code": reason, "live": None} for spec in SPECS]
+    lines = diagnose_lines(rows)
+    hint = capture.reason() if capture else None
+    if hint:
+        for i, row in enumerate(rows):
+            if row.get("provider") == "YFINANCE" and row.get("reason_code") in ("no_observations",
+                                                                               "insufficient_observations"):
+                lines[i] += f" via={hint}"
+    return lines
+
+
+if __name__ == "__main__":
+    for _line in diagnose():
+        print(_line)
