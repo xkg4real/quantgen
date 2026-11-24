@@ -386,6 +386,9 @@ class StockInsightsPanel(QFrame):
             item = self.body.takeAt(0)
             widget = item.widget()
             if widget is not None:
+                # Hide first: addWidget queued a show for a visible panel, and a card
+                # detached before it runs would open as its own top-level window.
+                widget.hide()
                 widget.setParent(None)
                 widget.deleteLater()
         self.model = build_insights(profile, comparison=comparison) if profile is not None else None
@@ -592,6 +595,6 @@ class StockInsightsPanel(QFrame):
             body.addWidget(self._label(_fmt(reading["strength"]), role="value", tip=self._provenance(snapshot)))
             body.addWidget(self._label(self._t(f"공급자 시각 {reading['provider_time'] or '미제공'} · 날짜 미제공",
                                               f"Provider clock {reading['provider_time'] or 'unavailable'} · date unavailable"), role="muted"))
-        self._note(body, self._t("제공값 · 산식/단위 미확인 · 실시간 자동 갱신 아님", "Provider value · formula/unit unconfirmed · not streamed"),
+        self._note(body, self._t("제공값 · 산식·단위 미확인 · 자동으로 새로 고치지 않아요", "Provider value · formula/unit unconfirmed · not streamed"),
                    self._t("공급자가 제공한 체결강도 값이에요. 이 연결의 산식·단위는 확인되지 않았으므로 특정 숫자를 매수·매도 기준으로 쓰지 않아요. 주가가 실제로 전진하는지와 거래량을 같이 보세요. 자동 실시간 갱신은 아니에요.",
                            "This is the provider's strength value; its formula/unit is unconfirmed here, so no fixed number is a trading trigger. Compare actual price progress and volume. This is not an automatically streamed reading."))
