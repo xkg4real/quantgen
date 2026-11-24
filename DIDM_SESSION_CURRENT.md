@@ -1,8 +1,8 @@
 # DIDM_DEV 세션 인계 문서
 
 - session: DIDM_DEV (https://claude.ai/code/session_016uB1jj8iv57xVbx6EbLLwq), 메인: QUANTGEN/MAIN (session_01H6RrzMUzF8vwK8xkX977mB)
-- updated_at: 2026-11-24 21:30 KST
-- work_branch: `claude/didm-dev-20261124` (main b872d8c에서 시작), work_commit: `b2d955c`
+- updated_at: 2026-11-24 22:10 KST
+- work_branch: `claude/didm-dev-20261124` (main b872d8c에서 시작), work_commit: `1e7dbb9`
 - 수정 전용 브랜치: `claude/didm-contract-fixes-20261124` @ `feed288` (3626913에서, 통합 PR ①에 합쳐짐: 메인 703aa01)
 - PR: 없음 (메인이 통합 PR로 묶음; 이 세션은 PR을 열지 않음). 원장은 메인이 씀.
 
@@ -32,21 +32,24 @@
 | DIDM-8 시장 확인·거시 서프라이즈 | 끝 (합성 입력만) | c1929cc | `tests.didm_confirmation_acceptance` 20 OK; 변형 20개 생존 0 |
 | DIDM-7 유사도·근접 중복 군집화·개체 연결 (첫 판) | 끝 (합성 사례만; 실제 정밀도·재현율 미측정) | b2d955c | `tests.didm_entities_acceptance` 23 OK; 변형 20개 생존 0 |
 | DIDM-6 기준선 채점기 래퍼 | 라이선스 답 뒤 (설계 메모만: 제안서 9절) | — | — |
-| DIDM-9 신뢰 상태와 충격 구성 | 메인 배정 대기 | — | — |
+| 재확인 시험 빈틈 + 시장 확인 해석 설정값 + 제안서 0·10절 | 끝 | d71cd7d | 변형 9개 생존 0 |
+| DIDM-9 신뢰 상태와 충격 구성 | 끝 (합성 사례만; 가중치는 임시값) | 1e7dbb9 | `tests.didm_credibility_acceptance` 22 OK; 변형 26개 생존 0 |
+| DIDM-9/e2e 끝에서 끝까지 합성 실행 | **설계만 메인에 보고, 답을 받은 뒤 시작** | — | — |
 
-개발 브랜치 전체: DIDM_DEV 시험 8개 모듈 + novelty + gateway_boundary 251 OK. 등록된 ID 번호는 통합 브랜치 `docs/nautilus_bridge/REMAINING_WORK_2026-11-24.md` 2.2절 (DIDM-6 기준선 래퍼, 7 개체 연결·군집화, 8 시장 확인, 9 신뢰 상태·충격).
+개발 브랜치 전체: DIDM_DEV 시험 9개 모듈 + novelty + gateway_boundary 278 OK. 등록된 ID 번호는 통합 브랜치 `docs/nautilus_bridge/REMAINING_WORK_2026-11-24.md` 2.2절 (DIDM-6 기준선 래퍼, 7 개체 연결·군집화, 8 시장 확인, 9 신뢰 상태·충격).
 
 DIDM-5 문서: `docs/didm/STAGE1_TOOLS_V0.md` (재는 방법과 해석 5가지), `GOLD_SET_V0.md` (표본 규칙), `LABELLING_GUIDE_V0.md` (주석자 안내 초안), `SCORE_SCHEMA_V1_PROPOSAL.md` (보정 지도 버전 필드 제안, 미적용).
 
 ## 3. 열린 것
 
-- **Stage 0 REVISE의 뜻** (`docs/didm/STAGE0_REPORT_V0.md`): θ₀·γ·ψ·η 통과. δ(지연 비중) 검정력 22%, φ(연결망) 11%, 신뢰 상태·연결망 없는 모형이 표본 밖에서 뚜렷이 지지 않음, HAR 월 계수 포함률 56%. 고칠 안은 `docs/didm/PREREG_V0_1_PROPOSAL_2026-11-24.md`에 질문 9개로 정리 (10절; Stage 1 해석 H1~H5와 한국어 기준선 포함) (메인 결정: 네 가지 모두 소유자 답 전에는 적용하지 않음, (다)도 포함). 답이 오면 승인 항목만 `PREREG_V0_1.md`로 옮기고 격자·규칙을 먼저 커밋한 뒤 Stage 0 시도 2회.
+- **Stage 0 REVISE의 뜻** (`docs/didm/STAGE0_REPORT_V0.md`): θ₀·γ·ψ·η 통과. δ(지연 비중) 검정력 22%, φ(연결망) 11%, 신뢰 상태·연결망 없는 모형이 표본 밖에서 뚜렷이 지지 않음, HAR 월 계수 포함률 56%. 고칠 안은 `docs/didm/PREREG_V0_1_PROPOSAL_2026-11-24.md`에 질문 13개로 정리 (12절; Stage 0 6개, Stage 1 해석·한국어 기준선 3개, 시장 확인 M1·M5 2개, 신뢰 상태 C1·C2 2개) (메인 결정: 네 가지 모두 소유자 답 전에는 적용하지 않음, (다)도 포함). 답이 오면 승인 항목만 `PREREG_V0_1.md`로 옮기고 격자·규칙을 먼저 커밋한 뒤 Stage 0 시도 2회.
 - 보정 지도 버전: 지금은 `Assembled.calibration_version` 곁기록. `didm-score-v1` 제안을 메인에 올림 (`docs/didm/SCORE_SCHEMA_V1_PROPOSAL.md`), 적용 시점은 메인 판단.
 - Stage 1을 돌리려면 필요한 것 (소유자): 주석자 2명·판정자 지정, 표시 도구, 기사 본문을 주석자에게 보여 줄 권리 확인. 그 전에는 도구만 있음.
 - 라이선스: FinBERT 가중치 CC BY-NC-SA 4.0, LM 사전 학술 무료·상업 별도 허가. 소유자 확인 대기, 그 전까지 연구 비교용으로만. 저장소·배포물에 두 파일 없음.
 - Qwen3은 공개 학습 마감일이 없어 과거 검증 자격 없음 → 자체 LLM의 기반 모델 선택에 영향 (QUANTGPT에 전달됨).
 - 공유 파일 (runtime-smoke.yml 시험 목록, source-review.json 기준선)은 메인이 통합 PR에서 처리. 다음 묶음에 `tests.didm_stage0_acceptance` 추가 필요.
-- 소유자 확인 대상으로 표시해 둔 선택: 시장 확인 M1~M7 (`MARKET_CONFIRMATION_V0.md` 2절), 군집화·연결 E1~E5 (`ENTITIES_V0.md` 4절). 제안서 질문에 넣을지는 메인 판단 대기.
+- 문구에 없어 정한 선택은 문서마다 번호로: 시장 확인 M1~M7 (`MARKET_CONFIRMATION_V0.md` 2절), 군집화·연결 E1~E5 (`ENTITIES_V0.md` 4절, E1·E2는 Stage 1 정답 집합으로 확인), 신뢰 상태 C1~C10 (`CREDIBILITY_V0.md` 3절). 판정이 달라지는 M1·M5·C1·C2·H1~H5는 설정값 한 곳에 있고 제안서 질문에 들어 있음.
+- 신뢰 가중치는 임시값 (`cred-placeholder-…`). 해결된 소문 집합이 생기면 `fit_weights`로 대체. 보도의 입장 (지지/반박)·공식 여부는 지금 호출자가 줌 (판단 형식에 필드 없음).
 - `run_scorer`는 `calibrated=True/False`가 필수 (무보정이면 레코드의 1e-9 조건을 미리 검사).
 - `confirm_repository_trust`는 부르지 않음 (메인 알림 2026-11-24: 부르면 세션이 신뢰 기기 전용이 되어 메인이 닿지 못함).
 - 이 컨테이너에는 scipy·matplotlib이 없음. DIDM 코드는 numpy와 표준 라이브러리만 씀.
