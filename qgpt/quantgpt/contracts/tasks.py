@@ -109,7 +109,7 @@ def validate_output(task: str, body: Any, payload: Any | None = None) -> Any:
     if task == "T-NEWS" and payload is not None:
         news.check_against_input(body, payload)
     if task == "T-RESEARCH":
-        _ordered(body["prereg"]["data"], "$.prereg.data")
+        _start_before_end(body["prereg"]["data"], "$.prereg.data")
     return body
 
 
@@ -119,11 +119,11 @@ def _contract(task: str) -> Contract:
     return CONTRACTS[task]
 
 
-def _ordered(period: dict, path: str) -> None:
+def _start_before_end(period: dict, path: str) -> None:
     if S.parse_as_of(period["start"]) > S.parse_as_of(period["end"]):
         raise SchemaError(f"{path}: start is after end")
 
 
 def _cross_input(task: str, payload: dict) -> None:
     if task == "T-REPORT":
-        _ordered(payload["period"], "$.period")
+        _start_before_end(payload["period"], "$.period")
