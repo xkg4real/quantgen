@@ -647,7 +647,7 @@
     "tests/gateway_acceptance.py": "42c7a19d4eb866cf5e5605391748d08a5d078aeffc3227a7aae55a846a9c3691",
     "tests/gateway_boundary_acceptance.py": "13575aff22b76fe77f827be7b313641a2f8efcf1e005e37c6ca22de7b9cfe65d",
     "tests/gateway_main_acceptance.py": "edd6b1ae3628ea4919037791be576f7a570e279fd4f18570f88e7cb71c5835ea",
-    "tests/gateway_remote_acceptance.py": "2eaf6a60a47c905e8d9bb151af75097cbc0ff2888aa64d8a1a87573224f1718e",
+    "tests/gateway_remote_acceptance.py": "6ee27c7f5fed746686b28356b1efeb62c497b07414611503999ac7653f4ae41f",
     "tests/gateway_same_answer_acceptance.py": "91e59d5ea698e283cd096873a508ddb95f8e4c8171051a9ccce5e016e552c2c5",
     "tests/glossary_search_acceptance.py": "058922190b05fc585dab3462848b40ea0444a43b4b5e96fdb512cd8ccfc0e64e",
     "tests/golden_tools.py": "24154d79aea43bc91b7c26c33c6b400cd9202cdb4915680a81b4f7cf0fa928ef",
@@ -868,162 +868,162 @@
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
       "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.806777+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.600779+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
       "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.810417+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.603852+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
       "source_digest": "e3d5080d8d3fb0ecc6c03eaaaee5a5fb483c1368f3e3a056fa1e31cffb653bf1",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.812800+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.606354+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
       "source_digest": "3416f8fd43bf3c894c27adc917dcd557f728865ab3050f2ee4927a51ccae9807",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.815419+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.608553+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
       "source_digest": "af1a2aa65a55269190bc0fdf5638243c35319ecf05655e8a6c3ffd57a852c05d",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.818025+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.610539+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
       "source_digest": "23756f16786c9277a8059a8dddab0a77c2154818f42f260a48d3f8445a34e4e6",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.820438+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.612884+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
       "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.823480+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.615316+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
       "source_digest": "23756f16786c9277a8059a8dddab0a77c2154818f42f260a48d3f8445a34e4e6",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.825737+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.617496+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
       "source_digest": "035ac5db860c8db69f4adf3993fa820f0f884a74668b83a6d7889b4ac8b70d13",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.828569+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.619144+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
       "source_digest": "4f98a225a6e31dc02c76bfdb3e6141a485822d59f3cef5a54b97c4e307fac263",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.830740+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.620894+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
       "source_digest": "ee51db6fdfcf54db77ccc519b94dbf75f8edf39c49684bc1cd96cc66b76f9557",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.833165+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.622540+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "1a4ce1f7d60ea570488e42a64c39ecc54ccce0dd0aa74da319459e39f6f3625c",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.835816+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "source_digest": "43272ce2cfa89c68b5ea62b6e09d71267d9df9d654c5dba665e4c01f588c5d37",
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.624657+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
       "source_digest": "035ac5db860c8db69f4adf3993fa820f0f884a74668b83a6d7889b4ac8b70d13",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.838118+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.626443+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
       "source_digest": "035ac5db860c8db69f4adf3993fa820f0f884a74668b83a6d7889b4ac8b70d13",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.840006+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.628536+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
       "source_digest": "035ac5db860c8db69f4adf3993fa820f0f884a74668b83a6d7889b4ac8b70d13",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.847308+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.630301+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
       "source_digest": "71c304d35736f42709c99e57e06291d66f7a76844d42887cd3932e0257f9cdc4",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.850440+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.632524+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
       "source_digest": "23756f16786c9277a8059a8dddab0a77c2154818f42f260a48d3f8445a34e4e6",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.852562+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.634358+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
       "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.854657+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.637367+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
       "source_digest": "81cc7892956faa064afea5ea8bebdf170b688c2d36cab52addd714218e22225e",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.856655+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.639410+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
       "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
-      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
-      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
-      "reviewed_at": "2026-11-23T01:30:53.858639+00:00",
-      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
+      "reviewed_by": "Claude (PAYMENTS_ACCOUNT_KEYS session)",
+      "review_note": "KEY-5/a closeout: one boundary test for the F5 class-name word lengths (tests/gateway_remote_acceptance.py); no product code, provider, key or endpoint change",
+      "reviewed_at": "2026-11-24T09:36:35.641298+00:00",
+      "source_commit": "b872d8cfcb302c8f8995460199e4ac8279ac7431"
     }
   }
 }
