@@ -14,11 +14,11 @@ task: data-source
 cycle: 2026-11-24
 done_ids: none
 next_ids: DS-5b, DS-5c, DS-5a
-updated_at: 2026-11-24T22:30:00+09:00
+updated_at: 2026-11-24T23:20:00+09:00
 stale_after_hours: 3
 waiting_on: owner
-work_branch: claude/ds-edgar-history-20261124 (includes D1 241c0f4 and D4/D5 b4d48bc by merge; + claude/ds-5bc-news-20261124@4a646ce, claude/ds-home-diagnose-20261124@b70a78d, claude/ds-new-sources-plan-20261124@6a6516d)
-work_commit: 927375b
+work_branch: claude/ds-fedwatch-20261124 (+ claude/ds-edgar-history-20261124@927375b, claude/ds-5bc-news-20261124@4a646ce; earlier D1-D3 in main integration PR 1)
+work_commit: see git log of claude/ds-fedwatch-20261124 (D10 commit)
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -29,6 +29,14 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## DATA_SOURCE (Claude) D9·D10 — 2026-11-24T23:20+09:00
+
+- 메인 지시: D9 DS-4c FedWatch 코드 (오프라인, 소유자 파일 경로만), D10 소유자 첫 실행 안내 (통합 PR ② 병합 뒤 main 기준).
+- 브랜치 `claude/ds-fedwatch-20261124` (main de32ea1 기준): e7bc768 D9, 9840c95 D4/D5 병합 + 설계 문서 8절, 그 뒤 D10 커밋.
+- D9: core/didm/ingest/fedwatch.py, collect_daily --fedwatch-file, tests/didm_fedwatch_acceptance.py 11 OK (T1~T8, T10). T9 HTTP는 OA-31 뒤.
+- D10: docs/didm/OWNER_FIRST_RUN_2026-11-24.md (0~9단계, 기대 출력·실패 표).
+- 대기: 통합 PR ② 병합 알림 → (1) ENV_ONLY_KEYS를 RESEARCH_KEYS로 이동 (PAYMENTS P8 26768ed 함께 병합), (2) D10 명령을 main에서 확인, (3) OA-09 한 줄 재전달 (PR ① 뒤).
 
 ## DATA_SOURCE (Claude) D6·D7·D8 — 2026-11-24T22:30+09:00
 
