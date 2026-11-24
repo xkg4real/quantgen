@@ -84,12 +84,14 @@
 | 공급망 상용 DB | 학교 WRDS 계정 또는 계약 | 유료·견적 | — |
 | Benzinga 2009~ (Massive 묶음) | 유료 요금제 | 공식 가격 못 봄 | — |
 
-## 6. 소유자·DIDM_DEV에 묻는 것 (결정 필요)
+## 6. 소유자·DIDM_DEV에 묻는 것 (결정 필요, 8절 별칭 사전 관련 질문 포함)
 
 1. 표본 목표: **미국 820 × 2015~2024 (공시+뉴스)** 와 **500 × 2005~2024 (공시만)** 중 어느 쪽인가.
 2. 한국 표본을 공시 단독으로 둘 것인가.
 3. 공급망 연결을 위해 EDGAR 10-K 본문 일부 처리 (주요 고객 문단 추출)를 허용할 것인가 — 지금은 본문 저장 없음이 원칙.
-4. D13 (종목별 건수 집계 옵션) 진행 여부.
+4. D13 (종목별 건수 집계 옵션) 진행 여부 → 메인 승인 (2026-11-24), 진행 중.
+5. 별칭 사전 새 수집 옵션 8.4의 1~4 중 무엇을 할지, 공공데이터포털 키 발급 여부.
+6. 군집화 글을 제목만으로 시작할지 (8.3 권장).
 
 ## 7. 출처 (2026-11-24 검색 요약)
 
@@ -101,3 +103,70 @@
 - Kalshi 지정: cftc.gov/PressRoom/PressReleases/8302-20
 - 주요 고객 공시: dart.deloitte.com (ASC 280 roadmap 5.7)
 - 공급망 DB: library.hbs.edu (FactSet Revere), wrds-www.wharton.upenn.edu (FactSet Data on WRDS), federalreserve.gov FEDS Notes 2019-06-26, Culot et al. 2023
+
+## 8. 개체 연결용 별칭 사전 (DIDM_DEV 요청, 메인 전달 2026-11-24)
+
+요청 형식: 줄마다 `(별칭, entity_id, firm|macro, 유효 시작일, 유효 종료일 또는 없음)`. 사명 변경과 티커 재사용이 날짜로 들어 있어야 함.
+
+### 8.1 (a) 어디서 만들 수 있나, 과거 이력 깊이
+
+| 공급원 | 주는 것 | 날짜 붙은 이력 | 깊이 | 비용·키 | 상태 |
+|---|---|---|---|---|---|
+| SEC submissions JSON (`data.sec.gov`, 지금 `--edgar`가 이미 받음) | CIK (불변 ID), 현재 이름, **이전 이름 (formerNames)**, 현재 티커·거래소 | 이전 이름에 날짜가 붙는 것으로 알려짐 (키 이름·from/to 둘 다인지는 **미검증**; 제3자 자료는 "이전 이름 + 변경일"만이라고 함) | EDGAR 등록 이후 | 무료, 키 없음 | SEC 공식: "current name, former name, tickers" 포함 (확인). 필드 구조 미검증 → 실제 JSON 한 건으로 확인 필요 |
+| SEC `company_tickers.json` | 현재 티커↔CIK | **없음** (현재 표만) | 현재만 | 무료 | 확인 |
+| 미국 티커 재사용 이력 | — | 무료 공식 출처 **못 찾음** | — | 유료: CRSP 이름·티커 이력 (WRDS 학교 구독, 가격 못 봄) | 미검증 |
+| OpenDART `corpCode.xml` | corp_code (불변 ID), 정식 회사명, 영문명, 종목코드, `modify_date` (기업개황 최종 변경일) | **없음** (현재 이름 + 마지막 변경일만) | 현재만 | 기존 `OPENDART_API_KEY` | 필드: 제3자 정리 (미검증) |
+| OpenDART 공시 목록 (지금 `--opendart`가 받음) | 공시마다 그때의 회사명·report_nm | 공시 날짜별 회사명 → **사명 변경 시점 추정 가능**; "상호변경" 관련 공시 제목으로 변경일 확인 | 공시 목록 깊이 (미검증) | 기존 키 | 방법은 이 저장소 자료로 가능, 공시 제목 문구는 미검증 |
+| 금융위원회_KRX상장종목정보 (공공데이터포털 `data.go.kr` 15094775) | 기준일자별 단축코드, ISIN, 시장, 종목명, 법인명 | 기준일자를 바꿔 조회하면 **날짜별 종목명·코드 스냅숏** → 사명 변경·코드 재사용 구간 계산 가능 | 과거 기준일 조회 가능 여부·시작일 **미검증** | 무료, 공공데이터포털 키 필요 (새 키 이름) | 제공 항목·일 1회 갱신: 확인 (검색 요약). 과거 조회: 미검증 |
+| KRX Open API (`openapi.krx.co.kr`) | 유가증권·코스닥 종목 기본정보 | 기준일 파라미터 미검증 | 미검증 | KRX 인증키 신청 | 미검증 |
+| 거시 별칭 (FOMC, CPI, 기준금리 등) | 자체 목록 | 손으로 날짜 (예: 기관 개명) | — | 없음 | DIDM_DEV와 같이 작성 |
+
+**정리:** 회사 단위 entity_id는 **미국 CIK, 한국 corp_code** (둘 다 불변)로 두는 것이 안전합니다. 이름 이력은 SEC formerNames (미국)·OpenDART 공시 목록과 KRX 기준일 스냅숏 (한국)으로 만들 수 있습니다. **티커 재사용**은 한국은 KRX 기준일 스냅숏으로 가능해 보이나 (미검증), 미국은 무료 출처가 없어 ① 지금부터 매일 `company_tickers.json`을 받아 쌓거나 ② CRSP (유료)를 써야 합니다.
+
+### 8.2 (b) 대상 종목 범위
+
+| 범위 | 미국 | 한국 |
+|---|---|---|
+| 200 / 500 / 1,000 | 모두 가능 (submissions JSON 종목당 1요청, 초당 8회 → 1,000종목 약 2~3분) | 모두 가능 (corpCode.xml 한 번 + 공시 목록은 이미 받는 자료) |
+| 상장폐지 종목 포함 (생존 편향 방지) | CIK는 폐지 뒤에도 남음. **폐지 종목 목록 자체**는 `company_tickers.json`에 없음 → 과거 표본의 종목 목록 출처가 따로 필요 (미검증) | corpCode.xml에 폐지 회사 포함 여부 미검증; KRX 기준일 스냅숏이면 해결 |
+
+### 8.3 (c) 군집화에 넘길 글 (제목만 / 제목+첫 문단) 저장 권리
+
+법률 자문이 아닙니다. 지금 원칙은 모든 공급원에서 **본문·요약을 저장하지 않음** (`docs/compliance/08-third-parties.md` DIDM 행).
+
+| 공급원 | 제목 | 제목+첫 문단 | 근거·상태 |
+|---|---|---|---|
+| EDGAR·OpenDART | 공시 제목 (form, report_nm) 저장 중 | 공공 공시라 권리 문제는 작음. 단 **본문 처리 정책 결정** 필요 (6절 질문 3과 같음) | 정책 결정 사항 |
+| Alpaca (Benzinga) | 저장 중 (headline) | **보류 권장**. Benzinga 라이선스 사본 (제3자 사이트에 올라온 C-1.0.0, 2026-09-21)은 "Benzinga 기능을 복제·경쟁하는 파생 데이터셋 금지", 귀속 표시 삭제 금지. 저장·캐시 조항은 그 사본에 없음. Alpaca 고객에게 적용되는 판인지 **미검증** | Alpaca 시장자료 약관 직접 확인 필요 |
+| Massive | 저장 중 (title) | 공급사가 description 필드를 주지만 저장 안 함. 약관 **미검증** | massive.com 약관 확인 필요 |
+| GDELT | GKG 페이지 제목 저장 중 | 첫 문단은 GDELT가 주지 않음 (기사 URL만) → 기사를 따라가 읽는 코드 경로 없음, 만들지 않음 | 기사 권리는 언론사 |
+
+**권장:** 군집화는 우선 **제목 (+ 공급사 태그·시각)** 만으로 시작하고, 첫 문단은 Alpaca·Massive 약관을 직접 확인한 뒤 결정합니다.
+
+### 8.4 (d) 칸 나눔과 필요한 새 수집 옵션
+
+| 일 | 칸 | 내용 |
+|---|---|---|
+| 별칭 원자료 수집·정규화 | **DATA_SOURCE** | 공급원별 원자료를 시점 저장소에 `kind = entity_alias_source` 행으로 저장 (published_at = 그 이름·코드가 유효해진 날, received_at = 받은 날) |
+| 별칭 사전 조립 (유효 구간 계산, 충돌 해결)·연결 규칙 (기사 → entity_id) | **DIDM_DEV** | `core/didm/` 쪽 (DIDM_DEV 칸) |
+| 새 키 이름 | 결제·계정 세션 | 공공데이터포털 키 (예: `DATA_GO_KR_API_KEY`, 이름은 제안) |
+
+새 수집 옵션 (제안, 소유자·메인 승인 뒤):
+
+1. `--edgar-names CIK...` — 이미 받는 submissions JSON에서 현재 이름·이전 이름 (날짜)·현재 티커를 별칭 원자료 행으로. 새 호스트 없음.
+2. `--sec-ticker-snapshot` — `company_tickers.json`을 하루 한 번 받아 날짜 붙은 스냅숏으로 (미국 티커 재사용 이력을 앞으로 쌓음). 새 호스트 `www.sec.gov` (지금 `data.sec.gov`만 씀).
+3. `--opendart-corpcodes` — corpCode.xml 스냅숏 (기존 키).
+4. `--krx-listing YYYYMMDD [...]` — 공공데이터포털 KRX상장종목정보, 기준일자별 스냅숏. 새 호스트 `apis.data.go.kr`, 새 키.
+
+### 8.5 직접 열어 확인할 호스트 (메인이 환경 승인 요청)
+
+| 호스트 | 확인할 것 |
+|---|---|
+| `www.sec.gov` (개발자 문서), `data.sec.gov` (submissions JSON 한 건) | formerNames 필드 구조·날짜 |
+| `opendart.fss.or.kr` | corpCode.xml 필드, 공시 목록 3개월 제한, 자료 시작 연도 |
+| `www.data.go.kr`, `apis.data.go.kr` | KRX상장종목정보 과거 기준일 조회 가능 여부·시작일 |
+| `openapi.krx.co.kr` | 종목 기본정보 기준일 파라미터 |
+| `alpaca.markets`, `docs.alpaca.markets` | 시장자료 약관 (뉴스 저장·제목·요약) |
+| `massive.com` | 뉴스 약관, 무료 플랜 뉴스 이력 |
+
+이 문서의 8절 출처 (검색 요약): sec.gov/edgar/sec-api-documentation, data.catalyst.coop (PUDL sec10k name changelog, 제3자), data.go.kr/data/15094775/openapi.do, dart-fss.readthedocs.io (corp_code 필드, 제3자), firecrawl.dev/terms/third-party-data/benzinga/C-1.0.0 (Benzinga 약관 사본, 제3자), docs.alpaca.markets/us/docs/streaming-real-time-news.
