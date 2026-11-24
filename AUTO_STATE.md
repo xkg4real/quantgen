@@ -1,19 +1,19 @@
 ---
 kind: auto_snapshot
-reason: usage_limit_weekly
-created_at: 2026-11-20T05:37:55+09:00
+reason: periodic
+created_at: 2026-11-24T18:29:20+09:00
 source_branch: main
-source_head: 5888d05
+source_head: b872d8c
 upstream: origin/main
-patch_base: 5888d05
+patch_base: b872d8c
 unpushed_commits: 0
 uncommitted_files: 0
 patch: none
-usage_pct: 98.0
-usage_resets_at: 2026-11-24T08:00:00.000Z
-session: 861760db-7312-5fcf-9b6a-7f8c05d2bdae
-snapshot_key: seven_day@2026-11-24T08:00:00.000Z
-current_md_updated_at: 2026-11-20T05:40:00+09:00
+usage_pct: unknown
+usage_resets_at: unknown
+session: cf39df7b-5d27-5d98-b216-678a972eddad
+snapshot_key: none
+current_md_updated_at: 2026-11-24T18:45:00+09:00
 current_md_status: checkpoint
 ---
 
@@ -26,21 +26,21 @@ current_md_status: checkpoint
 ## 최근 커밋
 
 ```
-5888d05 Merge pull request #121 from xkg4real/gpt/r3-recorder-20261114
-de6178f fix(ui-text): drop '봉' from the volume_ma reading tip (R-D9-2)
-ea3d596 test: align legacy UI checks with approved shallow market navigation
-ed92dc9 R3: add detached lifecycle recorder with shared lock budgets
-e01e152 Merge pull request #120 from xkg4real/gpt/ui-interaction-delivery-20261114
-cedf910 docs: record native UI delivery and queued website follow-up
-51d7ffb Merge pull request #119 from xkg4real/gpt/market-menu-click-20261114
-b8d5ac8 fix(ui): repair market clicks and refine research chart interactions
-73ed4bf Merge pull request #118 from xkg4real/gpt/chart-ui-delivery-20261113
-d6f1217 Record merged chart tools and Windows launch instructions
-3db656c Merge pull request #117 from xkg4real/gpt/chart-risk-reward-20261113
-3951195 Add draggable chart risk reward and conditional indicator guidance
-1006b5e Merge pull request #115 from xkg4real/gpt/ui-market-navigation-guide-20261113
-d743695 Merge PR115 UI with current main documentation
-eba94f0 Merge pull request #116 from xkg4real/gpt/order-safety-design-20261113
+b872d8c Merge pull request #146 from xkg4real/gpt/handoff-doc-20261123
+5200b6c handoff: integrate the current main and retain the selected-document acceptance tests
+05f97df Merge pull request #145 from xkg4real/gpt/didm-v0-id-validation-20261123
+91be74d Merge the verified Massive main into DIDM V0 input validation
+51b8298 Merge pull request #144 from xkg4real/gpt/didm-b6-massive-news-20261123
+aa25d27 Merge current main and retain both DIDM news adapter tests
+5af3787 Merge pull request #143 from xkg4real/gpt/didm-b6-alpaca-news-20261123
+5039835 Merge verified Android preview from main into the Alpaca news input branch
+666e006 Merge pull request #141 from xkg4real/gpt/android-commercial-preview-20261123
+2d2e7ad handoff: publish a lane document manually without replacing central state
+270f5da DIDM: keep URL handling in the Massive response adapter
+21a0fbf DIDM: require whole-string matches for V0 identifiers and prompt hashes
+6a0336e DIDM: parse supplied Massive ticker-news metadata and preserve receipt times
+a35b2f8 Android: run the supplied GBM example offline and integrate current main
+3b8f39c didm: validate supplied Alpaca News metadata and revision times
 ```
 
 ## 푸시되지 않은 커밋
