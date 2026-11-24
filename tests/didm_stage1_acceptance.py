@@ -366,6 +366,51 @@ class Stage1Verdict(unittest.TestCase):
         self.assertEqual(report.verdict, "INVALID")
         self.assertTrue(any("llm" in n and "1 gold items fail" in n for n in report.notes), report.notes)
 
+    def test_readings_live_in_one_config_and_change_the_verdict_as_documented(self):
+        default = stage1.Stage1Config()
+        self.assertEqual((default.kappa_fields, default.calibration_fields, default.beat_rule, default.missing_judgement),
+                         (("event_type",), ("direction", "event_type"), "point", "wrong"))
+        # (1) kappa also on direction: annotators who agree on type but not on direction now fail kappa
+        w = world()
+        rng = random.Random(9)
+        from dataclasses import replace
+        flip = {"+1": "-1", "-1": "0", "0": "+1"}
+        w["annotator_b"] = [replace(x, direction=s.Direction(flip[x.direction.value])) if rng.random() < 0.45 else x
+                            for x in w["annotator_b"]]
+        kw = dict(registry=REGISTRY, bootstrap_resamples=120)
+        self.assertEqual(stage1.evaluate(**w, **kw).verdict, "GO")
+        both = stage1.evaluate(**w, **kw, config=stage1.Stage1Config(kappa_fields=("event_type", "direction")))
+        self.assertIn(both.verdict, ("REVISE", "NO-GO"))
+        self.assertEqual(len([c for c in both.criteria if c.name.startswith("human kappa")]), 2)
+        # (2) calibration gated on direction only: two criteria fewer
+        one = stage1.evaluate(**world(), **kw, config=stage1.Stage1Config(calibration_fields=("direction",)))
+        self.assertEqual(len(one.criteria), 8)
+        self.assertNotIn("calibration_version_event_type", one.info)
+        # (3) a small edge over FinBERT passes the point rule and fails the bootstrap rule
+        close = world(dir_acc=0.65, fin_acc=0.64, seed=4)      # edge +0.025: GO by the point rule
+        point = stage1.evaluate(**close, **kw)
+        strict = stage1.evaluate(**close, **kw, config=stage1.Stage1Config(beat_rule="bootstrap95"))
+        gap = {c.name: c for c in point.criteria}[f"LLM direction macro-F1 minus {stage1.FINBERT_KEY}"]
+        self.assertTrue(gap.passed and gap.value < 0.05, gap)
+        lower = [c for c in strict.criteria if stage1.FINBERT_KEY in c.name][0]
+        self.assertFalse(lower.passed)
+        self.assertLess(lower.value, 0.0)
+        self.assertEqual(strict.verdict, "REVISE")                    # not No-Go: the point estimate is still above
+        self.assertIn("bootstrap95_vs_" + stage1.FINBERT_KEY, strict.info)
+        # (4) missing judgements skipped instead of counted wrong
+        half = world()
+        half["llm"] = stage1.ScorerRun(LLM, dict(list(half["llm"].judgements.items())[::2]))
+        wrong = stage1.evaluate(**half, **kw)
+        skip = stage1.evaluate(**half, **kw, config=stage1.Stage1Config(missing_judgement="skip"))
+        f1 = lambda r: {c.name: c for c in r.criteria}["event-type macro-F1"].value
+        self.assertLess(f1(wrong), 0.65)
+        self.assertGreater(f1(skip), 0.85)
+        for bad in (dict(kappa_fields=()), dict(kappa_fields=("mood",)), dict(beat_rule="vibes"),
+                    dict(missing_judgement="ignore"), dict(calibration_fields=("p_subject",)),
+                    dict(min_calibration_items=5)):
+            with self.subTest(bad=bad), self.assertRaises(stage1.Stage1Error):
+                stage1.Stage1Config(**bad)
+
     def test_wrong_size_gold_set_is_invalid(self):
         report = run(n=400)
         self.assertEqual(report.verdict, "INVALID")
