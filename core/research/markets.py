@@ -287,8 +287,9 @@ def load_home_indicators(days=30, *, series_loader=None, btc_live=None, kospi_li
 # Home indicator diagnosis for the owner's PC (OA-09; replaces the H4 command of the 2026-11-17 plan)
 #     python -m core.research.markets
 # Six lines, one per indicator: symbol, status, reason code, live status. No values, keys, URLs or provider
-# text. Always exits 0: a failure is reported as a reason code, not a traceback. On a checkout older than
-# DS-H (no load_home_indicators) the command itself fails -- that failure is the diagnosis.
+# text. Always exits 0: a failure is reported as a reason code, not a traceback. On an older checkout the
+# command prints nothing and exits 0 (this file had no __main__ block before OA-09), or fails with
+# "No module named core.research.markets" before 2026-10-29: no output at all is the diagnosis.
 # --------------------------------------------------------------------------------------------------------------
 def diagnose_lines(rows):
     lines = []
@@ -328,12 +329,18 @@ class _LogCapture:
             return None
         if re.search(r"Too Many Requests|YFRateLimitError|\b429\b", text):
             return "rate_limited"
-        if re.search(r"SSL|CERTIFICATE_VERIFY_FAILED|certificate", text):
+        # A certificate word first (curl 60 = certificate problem); a bare "SSL" (yfinance writes "(SSLError)"
+        # around a connection reset too) only after the transport rules (review DS-3, 2026-11-24).
+        if re.search(r"CERTIFICATE_VERIFY_FAILED|certificate|SSLCertVerificationError|curl: \(60\)", text):
             return "certificate_error"
         if re.search(r"timed out|Timeout", text):
             return "network_timeout"
-        if re.search(r"ConnectionError|CONNECT tunnel failed|curl: \(\d+\)|Could not resolve|getaddrinfo", text):
+        if re.search(r"ConnectionError|Connection reset|ConnectionResetError|CONNECT tunnel failed|curl: \(\d+\)"
+                     r"|Could not resolve|getaddrinfo|Name or service not known|NameResolution|NewConnectionError",
+                     text):
             return "network_error"
+        if re.search(r"SSL", text):
+            return "certificate_error"
         return None
 
 

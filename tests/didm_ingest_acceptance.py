@@ -210,6 +210,19 @@ class Alfred(unittest.TestCase):
             self.assertTrue(all(i.published_at and i.received_at for i in got))
 
 
+class AlfredObsDateForms(unittest.TestCase):
+    """Review DS-9: obs_date takes the same forms as known_on instead of silently missing."""
+
+    def test_obs_date_forms(self):
+        from datetime import date
+        rows = alfred.rows_from_manual("CPIAUCSL", [("2024-01-01", "101", "2024-03-01", None)], RECEIVED)
+        for obs in ("2024-01-01", date(2024, 1, 1), "2024-01-01T00:00:00Z", datetime(2024, 1, 1)):
+            with self.subTest(obs=obs):
+                self.assertEqual(alfred.value_as_known_on(rows, obs, "2024-03-12"), 101)
+        with self.assertRaises(alfred.AlfredError):
+            alfred.value_as_known_on(rows, "Jan 2024", "2024-03-12")
+
+
 class CollectorTiming(unittest.TestCase):
     """A collected row must not be visible while its download or scoring is still running."""
 

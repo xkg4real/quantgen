@@ -120,21 +120,32 @@ class HandoffDocTests(unittest.TestCase):
 
     def test_new_lanes_take_only_their_own_task_and_the_data_lane_takes_both_names(self):
         # 2026-11-24: DIDM development and QuantGPT have lanes; the data lane is "data-source" (old name still accepted).
+        # The QuantGPT lane also takes "quantgpt-q0", the name in the document that session first published by hand.
         for name, task in ((DIDM_DOC, "didm-dev"), (QGPT_DOC, "quantgpt"), (DATA_DOC, "data-source")):
             raw = session(task, status="returned")
             (self.clone / name).write_bytes(raw)
             self.assertEqual(self.run_cli("--doc", name), 0, (name, task))
             self.assertEqual(self.remote_bytes(name), raw)
         self.assertIsNone(publisher.lane_refusal(DATA_DOC, {}, {"task": "data-source-didm"}))
+        self.assertIsNone(publisher.lane_refusal(QGPT_DOC, {}, {"task": "quantgpt-q0"}))
         self.assertEqual(publisher.lane_tasks(DATA_DOC), ("data-source", "data-source-didm"))
+        self.assertEqual(publisher.lane_tasks(DIDM_DOC), ("didm-dev",))
+        self.assertEqual(publisher.lane_tasks(QGPT_DOC), ("quantgpt", "quantgpt-q0"))
+        self.assertEqual(publisher.lane_tasks(OS_DOC), ("os-expansion",))
+        self.assertEqual(publisher.lane_tasks(PAY_DOC), ("payments-account-keys",))
         self.assertEqual(publisher.lane_tasks(UI_DOC), ())
+        self.assertEqual(publisher.lane_tasks(WEB_DOC), ())
+        # A report lane (UI, website) refuses every assigned name, including each name of a lane that has two.
         for name, task in ((DIDM_DOC, "quantgpt"), (QGPT_DOC, "didm-dev"), (DATA_DOC, "didm-dev"),
-                           (OS_DOC, "data-source"), (UI_DOC, "quantgpt"), (PAY_DOC, "data-source-didm")):
+                           (OS_DOC, "data-source"), (UI_DOC, "quantgpt"), (PAY_DOC, "data-source-didm"),
+                           (UI_DOC, "data-source"), (WEB_DOC, "data-source-didm"), (UI_DOC, "didm-dev"),
+                           (WEB_DOC, "quantgpt-q0"), (QGPT_DOC, "data-source"), (DIDM_DOC, "quantgpt-q0"),
+                           (OS_DOC, "quantgpt-q0")):
             self.assertEqual(publisher.lane_refusal(name, {}, {"task": task}),
                              "the document names a task assigned to a different lane", (name, task))
         before = self.remote_bytes(OS_DOC)
         (self.clone / OS_DOC).write_bytes(session("quantgpt", status="returned"))
-        self.assertNotEqual(self.run_cli("--doc", OS_DOC), 0)
+        self.assertEqual(self.run_cli("--doc", OS_DOC), 3)
         self.assertEqual(self.remote_bytes(OS_DOC), before)
 
     def test_out_of_tree_drafts_preserve_published_markdown(self):

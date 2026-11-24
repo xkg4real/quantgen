@@ -24,7 +24,7 @@ states and this script enforces:
   one, and a row whose commit is not on the remote are input errors.
 - After the push, the commit is read back from the remote: its CURRENT.md must be the bytes that were sent
   and its LEDGER.md must hold the new rows.
-- With `--doc FILE`, pass the named report for your assigned OS, payments, data, UI or website lane.
+- With `--doc FILE`, pass the named report for your assigned OS, payments, data, DIDM, QuantGPT, UI or website lane.
   Edit the file in a handoff checkout (detached is fine), or bring it into your topic checkout with
   `git checkout origin/handoff -- FILE` before editing it. A standalone draft can prepend or append
   a note to the complete current report. Only that report is published and read back.
@@ -61,13 +61,14 @@ LEDGER = "LEDGER.md"
 # The five sub-sessions have assigned task names (a tuple lists every name a lane accepts). UI and website
 # also maintain named Markdown reports; their existing documents have no required front matter.
 # 2026-11-24: the data lane kept its file and became data sourcing only ("data-source"; the old name is still
-# accepted), and the DIDM development and QuantGPT sub-sessions got lanes of their own.
+# accepted), and the DIDM development and QuantGPT sub-sessions got lanes of their own. The QuantGPT session's
+# first document was published by hand with the task name "quantgpt-q0", so that name is accepted too.
 LANE_DOCS = {
     "OS_SESSION_CURRENT.md": "os-expansion",
     "PAYMENTS_SESSION_CURRENT.md": "payments-account-keys",
     "DATA_SOURCE_SESSION_CURRENT.md": ("data-source", "data-source-didm"),
     "DIDM_SESSION_CURRENT.md": "didm-dev",
-    "QUANTGPT_SESSION_CURRENT.md": "quantgpt",
+    "QUANTGPT_SESSION_CURRENT.md": ("quantgpt", "quantgpt-q0"),
     "UI_SESSION_CURRENT.md": None,
     "WEBSITE_AWS_SESSION_CURRENT.md": None,
 }
@@ -77,6 +78,8 @@ def lane_tasks(name: str) -> tuple[str, ...]:
     """Task names the lane file accepts (empty for a report without an assigned task)."""
     tasks = LANE_DOCS[name]
     return (tasks,) if isinstance(tasks, str) else tuple(tasks or ())
+
+
 _DASHES = re.compile(r"[\u2010-\u2015\u2212\ufe58\ufe63\uff0d]")
 ID_SEPARATORS = re.compile(r"[\s,\uff0c\u3001;\uff1b\u25b6\u2192>\[\]]+")
 ID_SHAPE = re.compile(r"^[0-9a-z][0-9a-z.\-/]*$")

@@ -20,8 +20,8 @@
 | 공급사 | 채우는 칸 | 지금 그 칸을 채우는 것 | 더하는 가치 |
 |---|---|---|---|
 | EODHD Economic Events | T 발표치·컨센서스, K 미국 거시 이벤트 감시 | 엑셀: Trading Economics (유료·견적, Stage 3 뒤) | 컨센서스로 "예상 대비 충격" 계산 (사전등록 4절). **단, 과거 예상치는 발표 시점 증거가 없어 과거 검증에 못 씀** (EODHD 계약 문서) → 앞으로 쌓는 값에만 의미 |
-| Alpaca News (Benzinga) | F 뉴스 수집, H 티커 태깅, P 과거 뉴스 (2015~) | GDELT (2015-02~, 금융 특화 아님), EDGAR·OpenDART (공시) | **2015년부터 티커 붙은 금융 뉴스 원문 메타데이터** → Stage 2 (2015~2024) 사건연구 표본에 직접 쓸 수 있음. 감성 점수 없음 (자체 NLP) |
-| Massive ticker news | F, H, G (기사별 종목 감성 `insights`, 있으면) | GDELT + 자체 NLP | 종목별 감성이 붙은 뉴스. 무료 이력 깊이는 미검증 |
+| Alpaca News (Benzinga) | F 뉴스 수집, H 티커 태깅, P 과거 뉴스 (2015~) | GDELT (2015-02~, 금융 특화 아님), EDGAR·OpenDART (공시) | 티커 붙은 금융 뉴스 메타데이터 (공급사 안내상 2015년부터). **무료 조회·저장 권리·이력 깊이가 확인되면** Stage 2 (2015~2024) 사건연구 표본 후보 (미검증, 아래 3절). 과거 구간은 PREREG 5절 1항대로 `published_at` + 1거래일 지연; `updated_at`이 `created_at`보다 늦은 기사는 표시하고 따로 셈 (파서 계약상 `created_at`·`updated_at`은 변하지 않은 과거 판을 보증하지 않음). 감성 점수 없음 (자체 NLP) |
+| Massive ticker news | F, H, G (기사별 종목 감성 `insights`, 있으면) | GDELT + 자체 NLP | 종목별 감성이 붙은 뉴스. 무료 이력 깊이는 미검증. **감성 점수는 PREREG 5절 5항 확인 (과거 값이 당시 계산값인지) 전에는 과거 검증에 쓰지 않음** (파서 계약: 기사 시각이 감성 부여 시각을 보증하지 않음) |
 
 ## 2. 키 이름 (결제·계정 세션에 요청, 값 없음)
 
@@ -48,7 +48,7 @@
 
 | ID | 시작 조건 | 할 일 | 완료 조건 |
 |---|---|---|---|
-| DS-5b Alpaca News | N0 승인 + 소유자가 무료 키 발급 + 결제·계정 세션이 키 이름 2개 등록 (또는 그 전엔 환경변수) | `data/didm/alpaca_news.py` (헤더 인증, `SourceError`로 공급사 문구·키 가림, 쪽 넘김), 저장소 행 변환 (`published_at` = `created_at`, `received_at` = 받은 시각, 본문·요약·이미지 저장 안 함), `collect_daily --alpaca-news` (기간·종목), 고정 자료 시험 | 소유자 PC 1회 실행: 행 수·이력 시작일 출력, 무료 403이면 보류로 기록 |
+| DS-5b Alpaca News | N0 승인 + 소유자가 무료 키 발급 + 결제·계정 세션이 키 이름 2개 등록 (또는 그 전엔 환경변수) | `data/didm/alpaca_news.py` (헤더 인증, `SourceError`로 공급사 문구·키 가림, 쪽 넘김), 저장소 행 변환 (`published_at` = `created_at`, `updated_at`도 함께 저장해 정정 판은 새 행으로 쌓음, `received_at` = 받은 시각, 본문·요약·이미지 저장 안 함), `collect_daily --alpaca-news` (기간·종목), 고정 자료 시험 | 소유자 PC 1회 실행: 행 수·이력 시작일 출력, 무료 403이면 보류로 기록 |
 | DS-5c Massive news | DS-5b와 같음 (키 1개) | `data/didm/massive_news.py`에 HTTP 함수 추가 (기존 파서 재사용), 저장소 행 변환, `collect_daily --massive-news`, 분당 5회 제한 지키기 | 소유자 PC 1회 실행: 행 수, `insights` 유무, 이력 시작일 |
 | DS-5a EODHD Economic Events | N0 승인 + **소유자 유료 결정** (무료 확인 불가) | `data/didm/eodhd.py` (쿼리 키, 기존 쪽 나누기 계획 사용), 저장소 행 변환 (예상치는 발표 시점 증거가 없으면 `historically_eligible=false` 유지), 수집기 옵션 | 소유자 PC 1회 실행, 예상치 발표 시점 증거 유무 기록 |
 
