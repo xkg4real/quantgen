@@ -20,7 +20,7 @@
 | 9 | Windows 작업표시줄 ID | `windows_branding.py:14·24` | win32에서만 | 아무 일도 안 함(정상) | 없음 | — |
 | 10 | 번들 정보 | `packaging/quantgen_desktop.spec` `info_plist` | 버전 "2.0.0" 직접 적음, 최소 OS 없음 | Finder "정보 가져오기" 버전이 pyproject와 어긋날 수 있음, macOS 13 이하에서 실행 시 알 수 없는 오류 | **고침**: 버전을 `pyproject.toml`에서 읽음, `CFBundleName`·`CFBundleDisplayName`·`CFBundleVersion`, `LSMinimumSystemVersion` 14.0(6.12 휠 최소 버전) | OS |
 | 11 | 번들 ID | spec `bundle_identifier=None` | — | 번들 ID 없음 → Keychain·알림·설정 파일이 실행 파일 경로 기준 | `core/app_identity.BUNDLE_ID`(`com.quantgeneration.quantgen`)는 `BUNDLE_ID_CONFIRMED = False`. 소유자 확인 뒤 넣음 | 소유자 |
-| 12 | 자격 증명 저장소 | `core/credentials` → keyring macOS backend(Keychain) | — | 패키지에 keyring 백엔드가 빠지면 키를 저장할 곳이 없음. PyInstaller `hook-keyring`이 모으지만 확인 단계가 없었음 | **고침**: selfcheck에 `os_credential_store`(win32·darwin 필수, Linux는 보고만; 비밀값은 읽거나 쓰지 않음) | OS |
+| 12 | 자격 증명 저장소 | `core/credentials` → keyring macOS backend(Keychain) | — | 패키지에 keyring 백엔드가 빠지면 키를 저장할 곳이 없음. PyInstaller `hook-keyring`이 모으지만 확인 단계가 없었음 | **고침**: selfcheck에 `os_credential_store`(지금은 모든 OS에서 **보고만**; 비밀값은 읽거나 쓰지 않음. Windows·macOS 빌드에서 `available: true`가 확인되면 필수로) | OS |
 | 13 | Keychain 허용 창 | — | — | ad-hoc 서명은 빌드마다 서명이 달라 **업데이트마다 Keychain 접근 허용을 다시 물을 수 있음** | Developer ID 서명 뒤 해결(LICENSE_COMPLIANCE_PREP 4절) | 소유자(법인 뒤) |
 | 14 | 자료 폴더 | `core/app_paths.py` | — | `~/Library/Application Support/QUANTGEN`, 이전은 `renamex_np(..., RENAME_EXCL=4)` | 값은 `<stdio.h>`의 RENAME_EXCL과 같음. 실제 Mac 실행은 미확인 | 확인만 |
 | 15 | 파일 잠금 | `core/quant/gate_ledger.py`, `run_registry_store.py`, `run_registry_series_files.py` | Windows `msvcrt`, 그 밖 `fcntl.flock` | macOS는 `flock` 지원(APFS). SMB 같은 네트워크 폴더에서는 잠금이 약함 | 없음(자료 폴더는 로컬) | — |
@@ -33,14 +33,14 @@
 ## 2. 고친 것 (이 브랜치)
 
 1. `packaging/quantgen_desktop.spec` (darwin 분기만): `icon`에 `assets/icon.png`(PyInstaller가 .icns로 변환, Pillow는 matplotlib 의존으로 설치됨). `info_plist`에 `CFBundleName`·`CFBundleDisplayName`·`CFBundleShortVersionString`·`CFBundleVersion`(모두 `pyproject.toml`의 version), `LSMinimumSystemVersion` "14.0". `bundle_identifier`는 소유자 확인 전이라 그대로 None.
-2. `packaging/selfcheck.py`: `os_credential_store` 점검. `core.credentials.keyring_available()`만 부르므로 Keychain 안의 값은 읽지 않습니다. Windows·macOS에서 OS 저장소가 없으면 실패, Linux는 결과만 적습니다.
+2. `packaging/selfcheck.py`: `os_credential_store` 점검. `core.credentials.keyring_available()`만 부르므로 Keychain 안의 값은 읽지 않습니다. **이번 판은 보고만** 합니다(메인 검토 2026-11-24): PyInstaller `hook-keyring`이 `keyring.backends`를 모으지만, 동결 빌드에서 참이 된다는 Windows·macOS 실측이 아직 없습니다(이 컨테이너의 Linux 빌드 환경에는 keyring이 설치되지 않아 근거가 되지 못함). `platform-build.yml` 실행에서 `available: true`가 나오면 win32·darwin 필수로 바꿉니다.
 
 ## 3. 확인한 것
 
 - spec 구문 확인(`ast.parse`). Windows·Linux 분기는 바뀌지 않음.
 - `tests.packaging_policy_acceptance`, `tests.third_party_notices_acceptance`, `tests.app_identity_acceptance`, `tests.credentials_acceptance` 통과(임시 HOME).
 - selfcheck를 소스에서 실행해 `os_credential_store`가 Linux에서 `{"available": false, "required_on_this_platform": false}`, ok로 기록됨을 봄.
-- 실제 .app 빌드·Dock 아이콘·Keychain은 Mac에서만 확인됩니다: `platform-build.yml`을 macos 입력으로 수동 실행(소유자 또는 메인이 정할 때) → selfcheck JSON의 `os_credential_store`가 ok, 내려받은 .app의 Dock 아이콘과 "정보 가져오기" 버전 2.0.0.
+- 실제 .app 빌드·Dock 아이콘·Keychain은 Mac에서만 확인됩니다: `platform-build.yml`을 macos 입력으로 수동 실행(소유자 또는 메인이 정할 때) → selfcheck JSON의 `os_credential_store` detail `available`이 true(그 뒤 필수 전환), 내려받은 .app의 Dock 아이콘과 "정보 가져오기" 버전 2.0.0.
 
 ## 4. UI 세션에 보낼 요청 (소유자 경유)
 
