@@ -1,13 +1,15 @@
 # 06 입력 양식 고지와 동의 관리
 
 - 문서 ID: QG-C06
-- 버전: 1.7
-- 기준일: 2026-11-19
+- 버전: 1.8
+- 기준일: 2026-11-24
 - 상태: review-required
 - 적용 예정일: {{policy.effective_date}}
 - 담당: {{privacy.form_owner}}
 
 ## 적용 범위와 현재 상태
+
+2026-11-24 정책 PR-2(회원 계정 서비스): 운영 사용자 풀(Amazon Cognito, 호주 시드니 `ap-southeast-2`)은 2026-11-20 운영자가 만들고 콘솔 시험(가입·확인·검색·정지·해제·재설정·삭제·CloudTrail 기록)을 마쳤다. 웹 가입·로그인·계정 화면은 website 저장소의 미리보기 단계로 기록되어 있으나 이 저장소에서 확인하지 않았다(미검증, 공개 전). 아래 계정 처리 값은 [계정 설정 묶음 4부](../commercial/accounts/ACCOUNT_SETUP.md)와 [관리자 안내서](../commercial/accounts/ADMIN_GUIDE.md) 기준의 제안이며, 웹 계정 화면 공개 전에 실제 화면·저장 위치와 다시 대조한다. 위 2026-11-19 줄의 '회원 계정 서비스는 아직 없음'은 그날의 사실 기록이다. 상태 `review-required`와 공개 준비 `BLOCKED`를 유지한다.
 
 2026-11-19 D11 Q1~Q3 반영: 운영자 개인 표기 QUANTGEN(운영자 고건). 회원 계정 서비스는 아직 없음(AWS 사용자 풀 미생성, 웹 계정 화면 미구현, 가입 화면 꺼짐); 계정 처리 항목은 서비스 구축 뒤 별도 PR.
 
@@ -101,6 +103,23 @@
 분류 칩, 하위 시장(전체·코스피·코스닥, 전체·나스닥·NYSE), 업종, "조건"(등락률 범위·거래대금 이상·시가총액 이상)과 그 칩·"모두 지우기", 검색어 입력, 열 머리 정렬, 언어 전환은 이미 받은 값을 기기 안에서 거르고 다시 그릴 뿐 새 요청을 만들지 않고 저장하지도 않습니다. 같은 시장 페이지가 보이는 동안 목록은 KIS 정규장 45초, 그 밖과 일별 경로(코인 포함) 5분마다, 지수 띠는 30분마다 다시 요청합니다. 자동 갱신이 꺼진 창(시험)에서는 어느 시장에서도 요청이 저절로 시작되지 않고 새로고침을 눌러야 합니다. 시장 페이지를 여는 행동을 개인정보·국외이전·광고의 포괄 동의로 쓰지 않습니다. [변경 사실](FACTS.md#ui-d10-markets-2026-11-11)
 
 ## 정책 또는 구현 기준
+
+### 회원 가입 화면 (2026-11-24 정책 PR-2)
+
+웹 가입 화면의 고지·동의 항목은 아래와 같이 둔다([계정 설정 4.4](../commercial/accounts/ACCOUNT_SETUP.md), D11 2.3절). 계정 제공에 필요한 처리는 동의 체크가 아니라 안내 문장으로 알리고, 선택 항목만 체크로 받으며 선택 체크는 기본 해제한다.
+
+| 항목 | 종류 | 한국어 | English |
+|---|---|---|---|
+| 약관 | 필수 체크 | [필수] 이용약관에 동의합니다. (보기) | [Required] I agree to the Terms of Service. (View) |
+| 연령 | 필수 체크 | [필수] 만 14세 이상입니다. | [Required] I am 14 or older. |
+| 개인정보 안내 | 체크 없음, 문장 | 가입하시면 계정 제공을 위해 이메일 주소와 비밀번호를 처리합니다. 정보는 호주 시드니에 있는 AWS 서버에 보관됩니다. 자세한 내용은 개인정보 처리방침에서 확인하실 수 있습니다. | When you sign up, we process your email address and password to provide your account. Your data is stored on AWS servers in Sydney, Australia. See our Privacy Policy for details. |
+| 소식 메일 | 선택 체크, 기본 해제 | [선택] QUANTGEN 소식·혜택 이메일(광고)을 받겠습니다. 언제든 끌 수 있습니다. | [Optional] Send me QUANTGEN news and offers by email (advertising). You can turn this off any time. |
+
+- 동의 기록은 Amazon Cognito 사용자 정의 속성에 남긴다: `custom:terms_ver`(이용약관 버전), `custom:privacy_ver`(처리방침 버전), `custom:age14`(`Y`), `custom:consent_at`(가입 동의 시각), `custom:mkt_opt`(`Y`/`N`), `custom:mkt_at`(소식 메일 선택·변경 시각). 이 속성에는 이메일·이름 등 개인정보를 넣지 않는다(CloudTrail이 값을 가리지 않음).
+- 소식 메일 선택은 계정 페이지에서 언제든 바꿀 수 있고, 바꾼 시각을 `custom:mkt_at`에 다시 기록한다. 광고 메일 운영 조건은 [18번](18-marketing-email.md)을 따른다.
+- 비밀번호 규칙(10자 이상, 숫자·소문자·대문자·특수문자)은 입력 중에 보여 준다.
+- "[필수] 개인정보 수집·이용 동의" 체크를 따로 둘지는 법률 확인 대상이다 〔법률 자문이 아닙니다. 근거: 계약 이행에 필요한 처리는 동의 대상이 아니라는 해설(개인정보 보호법 제15조 제1항 제4호, 원문 미확인), [계정 설정 4.4](../commercial/accounts/ACCOUNT_SETUP.md)〕.
+- 이 표는 웹 계정 화면이 공개되기 전 제안이며, 공개 전에 실제 화면 문구·체크 기본값·기록 속성과 대조한다(미검증).
 
 ### 양식 설계 규칙
 

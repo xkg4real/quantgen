@@ -1,8 +1,8 @@
 # 08. 외부 SDK·데이터 제공자 점검대장
 
 - 문서 ID: QG-C08
-- 버전: 1.8
-- 기준일: 2026-11-19
+- 버전: 1.9
+- 기준일: 2026-11-24
 - 상태: review-required
 - 관리 주체: QUANTGEN(운영자 고건)
 - 문의: contact@quantgeneration.com
@@ -10,6 +10,8 @@
 ## 적용 범위와 현재 상태
 
 2026-11-19 D11 Q1~Q3 반영: 운영자 개인 표기 QUANTGEN(운영자 고건), 문의 contact@quantgeneration.com(2026-11-19 소유자 수신 확인), 호스팅 사실(도메인·이메일 Cloudflare, 웹사이트 관리 AWS).
+
+2026-11-24 정책 PR-2(회원 계정 서비스): 운영 사용자 풀(Amazon Cognito, 호주 시드니 `ap-southeast-2`)은 2026-11-20 운영자가 만들고 콘솔 시험(가입·확인·검색·정지·해제·재설정·삭제·CloudTrail 기록)을 마쳤다. 웹 가입·로그인·계정 화면은 website 저장소의 미리보기 단계로 기록되어 있으나 이 저장소에서 확인하지 않았다(미검증, 공개 전). 아래 계정 처리 값은 [계정 설정 묶음 4부](../commercial/accounts/ACCOUNT_SETUP.md)와 [관리자 안내서](../commercial/accounts/ADMIN_GUIDE.md) 기준의 제안이며, 웹 계정 화면 공개 전에 실제 화면·저장 위치와 다시 대조한다. 위 2026-11-19 줄의 '회원 계정 서비스는 아직 없음'은 그날의 사실 기록이다. 상태 `review-required`와 공개 준비 `BLOCKED`를 유지한다.
 
 사진의 8번 ‘외부 SDK를 점검’에 대응한다. QUANTGEN의 직접 의존성, 외부 API, 인증정보, 제공 데이터의 이용권을 함께 관리한다. 패키지의 오픈소스 라이선스와 해당 패키지가 접속하는 서비스의 데이터·상업 이용 계약은 서로 다른 검토 대상이다.
 
@@ -135,8 +137,8 @@ Macro·Rates·FX·Bonds·Structuring은 기존 `auto` 경로(키 없이 FRED·Ya
 | 공급사 대조 도구(⑤-2), 소유자 PC 전용 | 소유자가 실행할 때만 파일럿 시계열(SPY, BTC-USD, DGS3MO)의 다른 공급사 사본을 수신. 앱·설치 wheel 밖 | 신규 목적지(키 없음): Coinbase Exchange, Bitstamp, 미국 재무부, 연준 H.15. 기존 목적지: FMP(`FMP_API_KEY` 쿼리), KIS 해외 일봉(기존 토큰·앱 키), Yahoo Finance, Binance, FRED. 종목·시계열 식별자와 날짜 구간만 전송 | 원자료는 git 작업 트리 밖 새 폴더에만 저장하고 요약은 값 없이 개수·판정만 담음. 공급사별 이용 조건, 캐시·보관 범위, 요약 커밋의 권리 승계 확인 |
 | DIDM 수집기(DS-4a·4d·4e, 초안), 소유자 PC 전용 | `tools/didm/collect_daily.py`를 소유자가 실행할 때만 GDELT 2.0의 최신 15분 파일(사건·GKG, 키 없음, `data.gdeltproject.org`), 선택 시 ALFRED 빈티지(`api.stlouisfed.org`, `FRED_API_KEY` 쿼리; 키가 없으면 소유자가 내려받은 파일만 읽음), SEC EDGAR 회사별 제출 목록(`data.sec.gov`, `SEC_EDGAR_USER_AGENT` 헤더, 초당 8회 이하), OpenDART 전체 공시 목록(기존 `OPENDART_API_KEY`), 한국은행 ECOS 통계(`ecos.bok.or.kr`, `ECOS_API_KEY`가 URL 경로에 들어감), Kalshi 공개 시장 확률(`external-api.kalshi.com`, 키·계정 없음, 조회만), Alpha Vantage 뉴스 감성(`www.alphavantage.co`, `ALPHAVANTAGE_API_KEY` 쿼리), Tiingo 뉴스(`api.tiingo.com`, `TIINGO_API_KEY` Authorization 헤더), CryptoPanic 게시물(`cryptopanic.com`, `CRYPTOPANIC_API_KEY` 쿼리)을 수신. 연구용 키는 `core.credentials`(환경변수 → OS 자격 증명 저장소 → 개발판 `.env`)에서 읽고, 저장소가 그 이름을 받기 전에는 환경변수만 읽음. 연구 전용. 연구 수집 CLI(`tools.didm`)는 설치 wheel 패키지 탐색 대상 밖이며, 보조 `core.didm`·`data.didm` 모듈은 `core*`·`data*` 탐색 대상 | GDELT에는 파일 경로만, ALFRED에는 시계열 ID·실시간 구간·키, EDGAR에는 CIK와 연락처 문자열, OpenDART에는 날짜 구간·키, ECOS에는 통계 코드·기간·키, Kalshi에는 시리즈·종목 기호만, 뉴스 세 곳에는 종목·통화 기호와 키 전송. 현재 파서는 공시·기사 본문과 공급사 요약을 저장하는 필드를 두지 않으며, 사건·기사·공시 메타데이터를 보존함. GDELT의 제목·URL·출처·시각·논조와 인물·기관·주제 태그(각 최대 50개), 국가·사건 코드·언급/출처/기사 수·Goldstein 점수, 뉴스 태그·공급사 점수, 공시의 회사·종목·보고서·제출인(filer) 등 식별정보와 목록 필드가 포함됨. 기사 URL을 따라 추가 기사 본문을 요청하는 코드 경로는 없으며, 공급사 실제 API 응답에 포함되는 내용의 범위는 이번 코드 검토만으로 검증하지 않음. 선택 FinBERT 기준 점수는 로컬 모델 | 수집 자료는 저장소 밖 사용자 폴더의 시점 저장소(`didm_store.sqlite`)에만 두고 커밋하지 않음. 키는 출력·예외 문구에 넣지 않음. GDELT는 공식 About 기준 상업 이용·재배포 허용, 인용과 링크 필수(`ATTRIBUTION` 문구); 기사 제목·본문 권리는 언론사. ALFRED는 시계열별 원권리자·상업 조건 확인. 법률 자문 아님 |
 | Anthropic Claude API | 이용자가 선택한 AI 해설 | 계산 결과·질문·분석 종류·고정 작성 지시문·해당 시 값 표기 설명, 모델명·출력 예산·인증 헤더. 알려진 계좌·잔액·키 필드명은 제외 | 자유 입력 질문의 개인정보 자동 제거는 보장하지 않음. 수신 법인·국가·보존·모델 학습 사용·하위처리자·삭제 방법은 계약으로 확인 |
-| Cloudflare — 도메인 등록·이메일 설정(2026-11-19 운영자 답) | 대한민국에서 서비스를 운영할 예정이라는 사용자 제공 정보. 실제 연결 구조는 별도 확인 | Workers·Pages·R2 등 제품, 계약 법인, 원본 서버, 처리 항목·보유기간·국가 미확정 | CDN·엣지·로그·백업·하위처리자와 국외 접근을 조사. 대한민국 운영을 모든 자료의 국내 보관으로 해석하지 않음 |
-| AWS — 웹사이트 관리(2026-11-19 운영자 답) | 웹사이트 관리를 AWS로 한다는 운영자 제공 정보. 실제 연결 구조는 별도 확인 | 이용 제품, 리전, 계약 법인, 처리 항목·로그·보유기간·처리 국가 확인 전 | AWS 제품·리전·계약 법인·로그·백업·하위처리자와 처리 국가를 조사. 대한민국 운영을 모든 자료의 국내 보관으로 해석하지 않음 |
+| Cloudflare — 도메인 등록·DNS·이메일 전달(2026-11-19 운영자 답, 2026-11-24 갱신) | `quantgeneration.com` DNS. Email Routing으로 문의 주소(contact@·ceo@)의 수신 메일을 운영자 메일함(Gmail)으로 전달, 나머지 주소 전달(catch-all)은 꺼짐 | 문의 메일의 주소·내용이 전달 경로를 통과. Workers·Pages·R2 등 다른 제품 사용 여부, 계약 법인, 메일 보존 여부, 처리 국가 미검증 | 메일 보존·로그·하위처리자와 국외 접근을 조사. 전달받은 메일이 Gmail(Google)에 보관되는 점을 1번 처리방침 위탁 표에 반영(미검증 표시). 대한민국 운영을 모든 자료의 국내 보관으로 해석하지 않음 |
+| AWS — 웹사이트·회원 계정(2026-11-19 운영자 답, 2026-11-24 갱신) | 회원 가입·로그인·계정 관리(Amazon Cognito 운영 풀 `quantgen-prod`, Essentials 요금제), 가입 확인·재설정 코드 메일(Amazon SES, 발신 `no-reply@quantgeneration.com`, 회신 `contact@quantgeneration.com`), 웹사이트 호스팅(AWS Amplify), 관리자 작업 기록(AWS CloudTrail → Amazon S3, 400일), 경보(Amazon CloudWatch·SNS → contact@). 리전 시드니 `ap-southeast-2` | 회원 계정 항목(이메일, Cognito가 보관하는 비밀번호, 계정 고유번호, 동의 기록 6개, 2단계 인증 등록 정보)과 보안 기록(시각·접속 IP·요청 종류). 웹 인증 화면에는 분석·추적 스크립트를 두지 않음(웹사이트 요청 ACC-7) | 계약 법인명(청구서 판매자 표기)·재위탁·하위처리자 미검증. 데스크톱 앱 로그인(PAY-1)은 아직 없음. 근거: [계정 설정 1부·4.4](../commercial/accounts/ACCOUNT_SETUP.md) |
 | 기타 CDN·메일·결제·오류 수집 | 실제 운영 구성을 아직 확정하지 못함 | 서비스가 추가될 경우 별도 입력 | 저장소에서 회원·결제·광고메일·추적 SDK 흐름을 확인하지 못했어도 배포 인프라가 없다고 단정하지 않음 |
 
 ### 직접 의존성 인벤토리
