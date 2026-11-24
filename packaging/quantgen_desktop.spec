@@ -52,7 +52,13 @@ hook.write_text((ROOT / "packaging" / "rthook_build_info.py.in").read_text(encod
                 .replace("@CALC_SHA256@", calc_sha256),
                 encoding="utf-8")
 
-LGPL_PURE_PYTHON = ("chardet",)  # found by tools/packaging/third_party_notices.py, 2026-11-17
+# Item 15-7 (sale build): packages only the flet-cli build tool needs (flet[all] -> flet-cli -> cookiecutter ->
+# python-slugify -> text-unidecode [Artistic], binaryornot/flet-cli -> chardet [LGPL]). The app never uses them;
+# requests falls back to charset-normalizer (MIT). Excluded so they are not shipped or licensed.
+FLET_CLI_ONLY = ["flet_cli", "cookiecutter", "slugify", "text_unidecode", "binaryornot", "chardet"]
+# LGPL pure-Python packages that are shipped stay plain .py files (below). chardet was the only one (found by
+# tools/packaging/third_party_notices.py, 2026-11-17) and is excluded above, so the list is empty today.
+LGPL_PURE_PYTHON = ()
 
 # Every allowlisted module of the app packages, so lazily imported screens are bundled too.
 hidden = sorted({n[:-3].replace("/", ".").removesuffix(".__init__") for n in names
@@ -64,7 +70,7 @@ a = Analysis(
     datas=datas,
     hiddenimports=hidden,
     runtime_hooks=[str(hook)],
-    excludes=OTHER + ["tkinter", "tests", "qa", "_legacy"],
+    excludes=OTHER + FLET_CLI_ONLY + ["tkinter", "tests", "qa", "_legacy"],
     noarchive=False,
     # LGPL pure-Python packages stay plain .py files next to the app (not inside the PYZ archive), so a user
     # can replace them like the Qt shared libraries (docs/platform/LICENSE_COMPLIANCE_PREP.md).
@@ -73,6 +79,9 @@ a = Analysis(
 # Third-party notices for what is actually inside (tools/packaging/third_party_notices.py), at licenses/.
 from tools.packaging.third_party_notices import notices_text  # noqa: E402
 collected = {name.split(".")[0] for name, *_ in a.pure} | {Path(dest).parts[0] for dest, *_ in a.binaries}
+# Packages kept as plain .py files (module_collection_mode "py") leave a.pure; list them too. Measured 2026-11-24:
+# main de32ea1 shipped chardet's 43 files with no chardet entry in the notices.
+collected |= set(LGPL_PURE_PYTHON)
 notice_text, notice_dists = notices_text(sorted(collected))
 notice_file = hook_dir / "THIRD_PARTY_NOTICES.txt"
 notice_file.write_text(notice_text, encoding="utf-8")
@@ -90,10 +99,21 @@ exe = EXE(
 )
 coll = COLLECT(exe, a.binaries, a.datas, name="QUANTGEN")
 if sys.platform == "darwin":
+    import tomllib
+    version = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
+    png = ROOT / "assets" / "icon.png"
     app = BUNDLE(
         coll,
         name="QUANTGEN.app",
-        icon=None,
+        # PyInstaller turns the PNG into the .icns the Dock and Finder show (needs Pillow: matplotlib brings it).
+        icon=str(png) if png.exists() else None,
         bundle_identifier=None,  # set from core/app_identity.BUNDLE_ID once the owner confirms it
-        info_plist={"NSHighResolutionCapable": True, "CFBundleShortVersionString": "2.0.0"},
+        info_plist={
+            "CFBundleName": "QUANTGEN",
+            "CFBundleDisplayName": "QUANTGEN",
+            "CFBundleShortVersionString": version,  # pyproject.toml, not a second copy of the number
+            "CFBundleVersion": version,
+            "LSMinimumSystemVersion": "14.0",  # PySide6 / PyQt6 6.12 wheels need macOS 14 (LICENSE_COMPLIANCE_PREP)
+            "NSHighResolutionCapable": True,
+        },
     )
