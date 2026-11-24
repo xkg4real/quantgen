@@ -14,7 +14,7 @@ task: data-source
 cycle: 2026-11-24
 done_ids: none
 next_ids: DS-5b, DS-5c, DS-5a
-updated_at: 2026-11-24T22:10:00+09:00
+updated_at: 2026-11-24T23:00:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/ds-home-reason-codes-20261124 (+ claude/ds-review-fixes-20261124@9663a99, claude/ds-fedwatch-20261124@5e971c0, claude/ds-edgar-history-20261124@927375b, claude/ds-5bc-news-20261124@4a646ce)
@@ -29,6 +29,13 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## DATA_SOURCE (Claude) 재확인 빈틈·D14 — 2026-11-24T23:00+09:00
+
+- 재확인 빈틈 2건 (통합 ②): `claude/ds-home-reason-codes-20261124` @ 9f9dbda (가드 자기점검 probe, .env 감사 훅·무력화 표식, 연구 키 이름 빈 값).
+- 통합 PR ① = #150 (메인이 엶). Windows CI 결과 대기.
+- D14: `claude/ds-sample-feasibility-20261124` @ d35cf2b — 문서 9절. **Massive 개인 약관: 개인·비상업만, AI·ML 학습 금지 (시장자료 약관 5(g)), Basic 뉴스 2년, insights 2024-07-02~.** KRX 계열 비상업 전용. Alpaca 약관은 files.alpaca.markets PDF라 미검증.
+- 소유자 결정 대기: Massive 자료 사용 중단·저장 200건 처리, files.alpaca.markets 허용, 표본 목표.
 
 ## DATA_SOURCE (Claude) DSF-1~12 — 2026-11-24T22:10+09:00
 
