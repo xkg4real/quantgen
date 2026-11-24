@@ -127,6 +127,7 @@ main `b872d8c` 줄 → #140 `3483b53`의 바뀐 코드. 모두 2.2와 같은 입
 | `login_needed` (route `company`) | 회사 서버 경유, 로그인 전 | `"<source> is served by the company route in profile <profile>"` (core 입구는 끝에 `": only through client()"`가 붙음) | 회사 서버 경유: 로그인 필요 |
 | FMP 막힘 (`core.gateway.feed.QuoteFeed.fmp_blocked`) | 시세 피드의 FMP | off: `"FMP market data is turned off. Check data-source settings."`<br>company: `"FMP market data is provided through the company connection. This device's key is not used."`<br>그 밖: `"FMP market data is unavailable. Check data-source settings."` | 위 off / company 문구와 같은 뜻 |
 | KRX·OpenDART 막힘 (`gw.krx_gateway()` 답의 `reason`) | `market_snapshot`·`filings`·`financials`·`quote`·`indices` | `OffClient.reason`이 답에 실림 (A1R3-1). "Set KRX_API_KEY" 대신 이 사유 | 위 off / company 문구와 같게 |
+| `RemoteFailed("not_entitled")` (route `company`) *(P7, 브랜치 `claude/payments-not-entitled-20261124` @ `75c56fb`, 병합 전)* | 회사 서버가 이 계정에 이 공급원 권한이 없다고 답함. 앱은 이 PC 키로 넘어가지 않음 | `str(exc) == "not_entitled"` | 이 상품에 포함되지 않은 데이터입니다 (요금제 확인) |
 | `error` 칸에 값 | routes.json을 읽지 못해 모두 막힘 | `_route_error` | 연결 설정 파일 오류: 공급사 사용 중지 |
 
 - **바뀜 반영:** 경로 설정을 다시 읽거나 키를 넣고 지우면 화면을 다시 그립니다. 방법은 `gw.on_change(listener)`이고, `listener(name)`의 `name`은 공급원 id 또는 키 이름이며 전체일 때는 `""`입니다.
