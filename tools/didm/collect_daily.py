@@ -3,8 +3,10 @@
     python -m tools.didm.collect_daily --data-dir <folder outside the repository> [--finbert]
     python -m tools.didm.collect_daily --data-dir <folder> --alfred CPIAUCSL PAYEMS
     python -I -m tools.didm.collect_daily --data-dir <folder> --alfred-file CPIAUCSL=<downloaded .xlsx>
+    python -m tools.didm.collect_daily --data-dir <folder> --no-gdelt --edgar-history 320193 --edgar-from 2015-01-01 --edgar-to 2024-12-31
     python -m tools.didm.collect_daily --data-dir <folder> --no-gdelt --edgar 320193 --opendart 20261117 20261118 \
         --ecos "722Y001,M,202401,202610,0101000" --kalshi KXFED
+    python -m tools.didm.collect_daily --data-dir <folder> --no-gdelt --kalshi-history KXFED --kalshi-from 2021-07-01 --kalshi-to 2024-12-31
 
 In PowerShell, quote every comma-separated value (--ecos "..."): unquoted, PowerShell
 reads it as an array and turns 0101000 into 101000 (owner run 2026-11-18).
@@ -26,7 +28,7 @@ from __future__ import annotations
 import argparse
 import os
 import sys
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Mapping
 
@@ -228,6 +230,44 @@ def collect_edgar(store: PointInTimeStore, ciks: list[str]) -> None:
         print(f"EDGAR CIK {int(cik)}: filings {len(rows)}, new {store.append_many(rows)}")
 
 
+def collect_edgar_history(store: PointInTimeStore, ciks: list[str], start: str | None, end: str | None,
+                          max_files: int, fetch_submissions=None, fetch_file=None) -> list[dict]:
+    """D6: filings between start and end (filing dates, inclusive) from filings.recent plus the older
+    submissions files that overlap the range. Same User-Agent and spacing as --edgar."""
+    if fetch_submissions is None or fetch_file is None:
+        from data.didm import edgar
+        fetch_submissions = fetch_submissions or edgar.fetch_submissions
+        fetch_file = fetch_file or edgar.fetch_history_file
+    lo = date.fromisoformat(start) if start else None
+    hi = date.fromisoformat(end) if end else None
+    if lo and hi and lo > hi:
+        raise SystemExit("--edgar-from must not be after --edgar-to")
+
+    def in_range(row: dict) -> bool:
+        d = date.fromisoformat(row["payload"]["filing_date"])
+        return (lo is None or d >= lo) and (hi is None or d <= hi)
+
+    results = []
+    for cik in ciks:
+        subs = fetch_submissions(int(cik))
+        received = _now()
+        rows = [r for r in filings_ingest.edgar_rows(subs, received) if in_range(r)]
+        files = filings_ingest.edgar_history_files(subs, lo, hi)
+        read = 0
+        for entry in files[:max_files]:
+            payload = fetch_file(entry["name"])
+            rows += [r for r in filings_ingest.edgar_history_rows(subs, entry, payload, _now()) if in_range(r)]
+            read += 1
+        dates = sorted(r["payload"]["filing_date"] for r in rows)
+        added = store.append_many(rows)
+        complete = read == len(files)
+        print(f"EDGAR history CIK {int(cik)} {start or '-'}..{end or '-'}: files {read}/{len(files)} "
+              f"(complete {complete}), filings {len(rows)}, first {dates[0] if dates else '-'}, "
+              f"last {dates[-1] if dates else '-'}, new {added}")
+        results.append({"cik": int(cik), "files": len(files), "read": read, "filings": len(rows), "added": added})
+    return results
+
+
 def collect_opendart(store: PointInTimeStore, bgn: str, end: str) -> None:
     from data.didm import opendart
     pages = opendart.fetch_listing(bgn, end)
@@ -362,6 +402,75 @@ def show_ecos_items(stat: str) -> None:
               f"{r.get('START_TIME')}-{r.get('END_TIME')}")
 
 
+def _epoch(day: str, end_of_day: bool = False) -> int:
+    d = datetime.combine(date.fromisoformat(day), datetime.min.time(), tzinfo=timezone.utc)
+    return int(d.timestamp()) + (86_399 if end_of_day else 0)
+
+
+def _market_ts(market: dict, key: str) -> int | None:
+    raw = market.get(key)
+    if not raw:
+        return None
+    try:
+        t = datetime.fromisoformat(str(raw).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return int((t if t.tzinfo else t.replace(tzinfo=timezone.utc)).timestamp())
+
+
+def collect_kalshi_history(store: PointInTimeStore, series_list: list[str], start: str, end: str | None,
+                           statuses: list[str], max_markets: int, max_pages: int = 20,
+                           list_markets=None, fetch_candles=None, window_days: int = 365) -> list[dict]:
+    """D7: daily candles (period 1440) of markets in a series that were alive between start and end,
+    closed and settled ones included. Market lists use the cursor checks of fetch_all_markets;
+    candle requests are split into windows of at most window_days."""
+    if list_markets is None or fetch_candles is None:
+        from data.didm import kalshi
+        list_markets = list_markets or kalshi.fetch_all_markets
+        fetch_candles = fetch_candles or kalshi.fetch_candlesticks
+    lo = _epoch(start)
+    hi = _epoch(end, end_of_day=True) if end else int(_now().timestamp())
+    if lo > hi:
+        raise SystemExit("--kalshi-from must not be after --kalshi-to")
+    results = []
+    for series in series_list:
+        markets, pages, complete = {}, 0, True
+        for status in statuses:
+            got = list_markets(series, status, max_pages, min_close_ts=lo)
+            pages += got["pages"]
+            complete = complete and got["complete"]
+            for m in got["markets"]:
+                opened = _market_ts(m, "open_time")
+                if m.get("ticker") and (opened is None or opened <= hi):
+                    markets.setdefault(m["ticker"], m)
+        tickers = sorted(markets)[:max_markets]
+        candles = added = with_candles = 0
+        first = last = None
+        for ticker in tickers:
+            m = markets[ticker]
+            a = max(lo, _market_ts(m, "open_time") or lo)
+            b = min(hi, _market_ts(m, "close_time") or hi)
+            rows = []
+            while a <= b:
+                w_end = min(b, a + window_days * 86_400 - 1)
+                rows += kalshi_ingest.candlestick_rows(ticker, fetch_candles(series, ticker, a, w_end, 1440), _now())
+                a = w_end + 1
+            if rows:
+                with_candles += 1
+                days = sorted(r["valid_at"].date().isoformat() for r in rows)
+                first = min(first or days[0], days[0])
+                last = max(last or days[-1], days[-1])
+            candles += len(rows)
+            added += store.append_many(rows)
+        capped = len(markets) > len(tickers)
+        print(f"Kalshi history {series} {start}..{end or 'now'}: markets {len(markets)} (pages {pages}, "
+              f"complete {complete}{', capped at ' + str(max_markets) if capped else ''}), "
+              f"with candles {with_candles}, candles {candles}, first {first or '-'}, last {last or '-'}, new {added}")
+        results.append({"series": series, "markets": len(markets), "read": len(tickers), "complete": complete,
+                        "candles": candles, "added": added})
+    return results
+
+
 def collect_kalshi(store: PointInTimeStore, series: str) -> None:
     from data.didm import kalshi
     got = kalshi.fetch_all_markets(series)
@@ -389,9 +498,21 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--alfred", nargs="*", default=[])
     ap.add_argument("--alfred-file", action="append", default=[], metavar="SERIES=PATH")
     ap.add_argument("--edgar", nargs="*", default=[], metavar="CIK")
+    ap.add_argument("--edgar-history", nargs="*", default=[], metavar="CIK",
+                    help="D6: older filings too (filings.files), limited by --edgar-from/--edgar-to")
+    ap.add_argument("--edgar-from", metavar="YYYY-MM-DD", help="earliest filing date for --edgar-history")
+    ap.add_argument("--edgar-to", metavar="YYYY-MM-DD", help="latest filing date for --edgar-history")
+    ap.add_argument("--edgar-max-files", type=int, default=10, help="older files per company (default 10)")
     ap.add_argument("--opendart", nargs=2, metavar=("BGN_YYYYMMDD", "END_YYYYMMDD"))
     ap.add_argument("--ecos", action="append", default=[], metavar="STAT,CYCLE,START,END[,ITEM...]")
     ap.add_argument("--kalshi", nargs="*", default=[], metavar="SERIES")
+    ap.add_argument("--kalshi-history", nargs="*", default=[], metavar="SERIES",
+                    help="D7: daily candles of open, closed and settled markets from --kalshi-from")
+    ap.add_argument("--kalshi-from", metavar="YYYY-MM-DD", help="first day for --kalshi-history (required)")
+    ap.add_argument("--kalshi-to", metavar="YYYY-MM-DD", help="last day for --kalshi-history (default now)")
+    ap.add_argument("--kalshi-status", nargs="+", default=["settled", "closed", "open"],
+                    choices=["open", "closed", "settled"])
+    ap.add_argument("--kalshi-max-markets", type=int, default=200, help="markets per series (default 200)")
     ap.add_argument("--alphavantage", nargs="*", metavar="TICKER",
                     help="paid NEWS_SENTIMENT endpoint; held by the current data plan")
     ap.add_argument("--tiingo", nargs="*", metavar="TICKER", help="paid news access; held by the current data plan")
@@ -427,6 +548,9 @@ def main(argv: list[str] | None = None) -> int:
             collect_alfred_file(store, spec)
         if args.edgar:
             _run("EDGAR", lambda: collect_edgar(store, args.edgar))
+        if args.edgar_history:
+            _run("EDGAR history", lambda: collect_edgar_history(store, args.edgar_history, args.edgar_from,
+                                                                args.edgar_to, args.edgar_max_files))
         if args.opendart:
             _run("OpenDART", lambda: collect_opendart(store, *args.opendart))
         for spec in args.ecos:
@@ -452,6 +576,12 @@ def main(argv: list[str] | None = None) -> int:
                                                                                 args.news_max_pages))
         for series in args.kalshi:
             _run("Kalshi", lambda series=series: collect_kalshi(store, series))
+        if args.kalshi_history:
+            if not args.kalshi_from:
+                ap.error("--kalshi-history needs --kalshi-from")
+            _run("Kalshi history", lambda: collect_kalshi_history(
+                store, args.kalshi_history, args.kalshi_from, args.kalshi_to, args.kalshi_status,
+                args.kalshi_max_markets))
     print(gdelt_ingest.ATTRIBUTION)
     return 0
 

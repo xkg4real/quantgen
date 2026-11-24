@@ -31,20 +31,33 @@ def _get(path: str, params: dict | None = None) -> dict:
     return resp.json()
 
 
+STATUSES = ("open", "closed", "settled")
+
+
 def fetch_markets(series_ticker: str, status: str = "open", limit: int = 200,
-                  cursor: str | None = None) -> dict:
+                  cursor: str | None = None, *, min_close_ts: int | None = None,
+                  max_close_ts: int | None = None) -> dict:
+    if status not in STATUSES:
+        raise ValueError(f"status must be one of {STATUSES}")
     params = {"series_ticker": _check(series_ticker), "status": status, "limit": int(limit)}
     if cursor:
         params["cursor"] = cursor
+    if min_close_ts is not None:
+        params["min_close_ts"] = int(min_close_ts)
+    if max_close_ts is not None:
+        params["max_close_ts"] = int(max_close_ts)
     return _get("/markets", params)
 
 
-def fetch_all_markets(series_ticker: str, status: str = "open", max_pages: int = 20) -> dict:
-    """Follow the response cursor; returns {"markets": [...], "pages": n, "complete": bool}."""
+def fetch_all_markets(series_ticker: str, status: str = "open", max_pages: int = 20, *,
+                      min_close_ts: int | None = None, max_close_ts: int | None = None) -> dict:
+    """Follow the response cursor; returns {"markets": [...], "pages": n, "complete": bool}.
+    D7: closed/settled markets and a close-time window for history (same cursor checks)."""
     markets, cursor = [], None
     seen_cursors = set()
+    window = {k: v for k, v in (("min_close_ts", min_close_ts), ("max_close_ts", max_close_ts)) if v is not None}
     for page in range(1, max_pages + 1):
-        payload = fetch_markets(series_ticker, status, cursor=cursor)
+        payload = fetch_markets(series_ticker, status, cursor=cursor, **window)
         if not isinstance(payload, Mapping) or not isinstance(payload.get("markets"), list):
             raise SourceError("Kalshi /markets: expected a markets list")
         batch = payload["markets"]
