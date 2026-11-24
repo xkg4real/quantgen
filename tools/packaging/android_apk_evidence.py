@@ -4,15 +4,22 @@ This records APK bytes and SDK signature verification, not phone startup,
 Flutter build mode, a release/debug key identity, or Android wheel compatibility.
 Optional dependency observations are limited to six distribution metadata headers
 in Flet's build/site-packages directory: entries directly in it and in its Android
-ABI folders (arm64-v8a, armeabi-v7a, x86_64, x86), where serious_python installs
-packages per ABI. They are not a lock file or proof of complete target dependency
-resolution. No key store is read.
+ABI folders (arm64-v8a, armeabi-v7a, x86_64, x86). The per-ABI layout is taken from
+reading serious_python's packaging source; no real Flet build has confirmed it yet.
+They are not a lock file or proof of complete target dependency resolution. No key
+store is read.
 
-Paths: each path given on the command line is a root. Its own ancestors may be
-symbolic links (macOS keeps temporary folders under /var -> /private/var); the root
-is resolved once and its resolved form must not contain a protected name. Entries
-found inside a root (APKs, apksigner, metadata) and the output file itself must not
-be symbolic links. A non-PASS result prints its fixed error codes on stderr.
+Paths: each path given on the command line (--apk-dir, --build-tools,
+--target-site-packages, and the folder of --output) is a root. A root must not itself
+be a symbolic link, but its ancestors may be (macOS keeps temporary folders under
+/var -> /private/var); the root is resolved once and must not contain a protected name
+as written or once resolved. Entries found inside a root (APKs, apksigner, ABI
+folders, dist-info folders, METADATA) and the output file itself must not be symbolic
+links. A non-PASS result prints its fixed error codes on stderr, each APK named only
+with the characters A-Z a-z 0-9 . _ - (others become _).
+
+Receipt schema quantgen.android-apk-evidence.v2 (2026-11-24): v1 had dependencies with
+'abi' and 'nested_layout' always NOT_OBSERVED / NOT_INSPECTED and only direct entries.
 """
 from __future__ import annotations
 
@@ -53,6 +60,8 @@ def _root(value: str | Path) -> Path:
     if ".." in raw.parts:
         raise EvidenceError("parent_traversal_path")
     _check_names(raw.absolute())
+    if raw.absolute().is_symlink():
+        raise EvidenceError("symlink_path")
     try:
         resolved = raw.absolute().resolve()
     except (RuntimeError, OSError):
@@ -253,7 +262,7 @@ def _dependencies(value: str | None) -> dict:
 
 def inspect(apk_dir: str, build_tools: str, target_site_packages: str | None = None) -> dict:
     report = {
-        "schema": "quantgen.android-apk-evidence.v1", "status": "FAIL", "status_scope": "APK_ARTIFACT_CHECKS_ONLY", "artifacts": [],
+        "schema": "quantgen.android-apk-evidence.v2", "status": "FAIL", "status_scope": "APK_ARTIFACT_CHECKS_ONLY", "artifacts": [],
         "build_mode": "NOT_OBSERVED", "device_validation": "NOT_PERFORMED",
         "dependencies": _dependencies(target_site_packages),
         "limits": "Signature evidence does not establish signer key identity, build mode, target imports or device startup.",
@@ -323,6 +332,8 @@ def main(argv: list[str] | None = None) -> int:
         target = _output(options.output)
         if target.exists():
             raise EvidenceError("output_exists")
+        if not target.parent.is_dir():
+            raise EvidenceError("output_parent_missing")    # before any signer run: no receipt could be written
         report = inspect(options.apk_dir, options.build_tools, options.target_site_packages)
         _write_new_report(options.output, report)
     except EvidenceError as exc:
@@ -333,9 +344,14 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     print(report["status"])
     if report["status"] != "PASS":
-        # Fixed public codes only (never tool output or paths), so a failed CI run shows why.
+        # APK file names (unsafe characters replaced) and fixed codes only, never tool output or paths,
+        # so a failed CI run shows why without letting a crafted name write its own log line.
         print(" ".join(error_codes(report)) or "no_error_code", file=sys.stderr)
     return 0 if report["status"] == "PASS" else 1
+
+
+def _safe_name(name: str) -> str:
+    return re.sub(r"[^A-Za-z0-9._-]", "_", name) or "_"
 
 
 def error_codes(report: dict) -> list[str]:
@@ -344,10 +360,10 @@ def error_codes(report: dict) -> list[str]:
         codes.append(f"report:{report['error']}")
     for item in report.get("artifacts", []):
         if item.get("error"):
-            codes.append(f"{item['file']}:{item['error']}")
+            codes.append(f"{_safe_name(item['file'])}:{item['error']}")
         signature = item.get("signature") or {}
         if signature.get("error"):
-            codes.append(f"{item['file']}:signature:{signature['error']}")
+            codes.append(f"{_safe_name(item['file'])}:signature:{signature['error']}")
     dependencies = report.get("dependencies") or {}
     if dependencies.get("error"):
         codes.append(f"dependencies:{dependencies['error']}")
