@@ -6,6 +6,7 @@ import io
 import json
 import tempfile
 import unittest
+from datetime import date
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 
@@ -115,6 +116,75 @@ class Summary(unittest.TestCase):
             with redirect_stdout(out):
                 self.assertEqual(cs.main(["--data-dir", tmp]), 0)
             self.assertEqual(out.getvalue().strip(), "store is empty")
+
+
+class ByEntity(unittest.TestCase):
+    """D13: items per company/series identifier, identifiers only."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.dir = Path(self.tmp.name)
+        with PointInTimeStore(self.dir / cs.STORE_FILE) as st:
+            for i, (cik, day) in enumerate((("320193", "2015-03-01"), ("320193", "2017-03-01"),
+                                            ("320193", "2019-03-01"), ("1000", "2020-06-01"))):
+                st.append(source_id="sec-edgar", item_id=f"acc{i}", kind="filing", published_at=day + "T12:00:00Z",
+                          received_at="2026-11-24T00:00:00Z", payload={"cik": cik, "company": TITLE})
+            # a correction of acc3 moves it to another cik: only the latest version counts
+            st.append(source_id="sec-edgar", item_id="acc3", kind="filing", published_at="2020-06-01T12:00:00Z",
+                      received_at="2026-11-25T00:00:00Z", payload={"cik": "2000", "company": TITLE})
+            st.append(source_id="alpaca-news", item_id="n1", kind="news", published_at="2024-01-02T00:00:00Z",
+                      received_at="2026-11-24T00:00:00Z", payload={"symbols": ["AAPL", "MSFT"], "headline": TITLE})
+            st.append(source_id="alpaca-news", item_id="n2", kind="news", published_at="2024-01-03T00:00:00Z",
+                      received_at="2026-11-24T00:00:00Z", payload={"symbols": [], "headline": TITLE})
+            st.append(source_id="gdelt-gkg2", item_id="g1", kind="gdelt_gkg", published_at="2024-01-03T00:00:00Z",
+                      received_at="2026-11-24T00:00:00Z", payload={"title": TITLE})
+
+    def run_cli(self, *args):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            self.assertEqual(cs.main(["--data-dir", str(self.dir), *args]), 0)
+        return out.getvalue()
+
+    def test_counts_latest_version_and_multi_tags(self):
+        db = cs.open_read_only(self.dir / cs.STORE_FILE)
+        try:
+            groups = {g["source_id"]: g for g in cs.by_entity(db)}
+        finally:
+            db.close()
+        self.assertNotIn("gdelt-gkg2", groups)
+        edgar = groups["sec-edgar"]
+        per = {e["entity"]: e for e in edgar["per_entity"]}
+        self.assertEqual({k: v["items"] for k, v in per.items()}, {"320193": 3, "2000": 1})
+        self.assertEqual((per["320193"]["first"], per["320193"]["last"]), ("2015-03-01", "2019-03-01"))
+        self.assertAlmostEqual(per["320193"]["items_per_year"], round(3 / ((date(2019, 3, 1) - date(2015, 3, 1)).days / 365.25), 3))
+        self.assertEqual(per["2000"]["items_per_year"], 1.0)          # one-day span counts as one year
+        self.assertEqual(edgar["items_per_entity"], {"min": 1, "median": 2.0, "max": 3})
+        news = groups["alpaca-news"]
+        self.assertEqual((news["entities"], news["untagged_items"]), (2, 1))
+
+    def test_text_and_json_hold_identifiers_only(self):
+        text = self.run_cli("--by-entity")
+        self.assertIn("by entity sec-edgar / filing: entities 2, untagged items 0, items per entity min 1 median 2 max 3",
+                      text)
+        self.assertIn("  320193: items 3, 2015-03-01..2019-03-01", text)
+        data = json.loads(self.run_cli("--by-entity", "--json"))
+        self.assertEqual({g["source_id"] for g in data["by_entity"]}, {"sec-edgar", "alpaca-news"})
+        for out in (text, json.dumps(data)):
+            self.assertNotIn(TITLE, out)
+
+    def test_off_by_default(self):
+        self.assertNotIn("by entity", self.run_cli())
+        self.assertNotIn("by_entity", json.loads(self.run_cli("--json")))
+
+    def test_long_list_trimmed_in_text(self):
+        with PointInTimeStore(self.dir / cs.STORE_FILE) as st:
+            for i in range(15):
+                st.append(source_id="kalshi", item_id=f"k{i}", kind="kalshi_candle", published_at="2024-01-01T00:00:00Z",
+                          received_at="2026-11-24T00:00:00Z", payload={"ticker": f"T{i:02d}"})
+        text = self.run_cli("--by-entity")
+        self.assertIn("(5 more in --json)", text)
+        self.assertEqual(len(json.loads(self.run_cli("--by-entity", "--json"))["by_entity"][1]["per_entity"]), 15)
 
 
 if __name__ == "__main__":

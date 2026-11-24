@@ -16,6 +16,7 @@ python -m tools.didm.collection_status --data-dir "$env:LOCALAPPDATA\QUANTGEN\di
 | `--since 2026-11-17` | 빠진 날을 이 날부터 셈 (기본: 그 공급원의 첫 수신일) |
 | `--sample 2015 2024` | 표본 연도 범위 (기본 2015~2024) |
 | `--json` | 같은 내용을 JSON으로 (메인·DIDM_DEV에 붙여 줄 때) |
+| `--by-entity` | (D13) 공급원별로 회사·계열 식별자 (CIK, corp_code, 뉴스 종목 기호, Kalshi 티커, ALFRED·ECOS 계열)마다 건수·기간·연간 건수. 식별자만 나오고 제목·값은 나오지 않음. GDELT처럼 식별자 필드가 없는 공급원은 빠짐. 대형주·소형주 사건율 비교용 (`SAMPLE_EXPANSION_FEASIBILITY_2026-11-24.md` 4절) |
 
 - 저장소 파일 `didm_store.sqlite`를 SQLite **읽기 전용** 모드로 엽니다. 파일이 없으면 만들지 않고 "no store"로 끝납니다 (시험이 확인: 쓰기 거부, 파일 해시 불변, 빈 폴더 그대로).
 - 출력은 공급원 이름·종류·건수·날짜뿐입니다. 기사 제목·URL·값·키는 출력하지 않습니다 (시험이 확인).
@@ -80,3 +81,5 @@ python -m unittest tests.didm_collection_status_acceptance
 2026-11-24: 7개 통과 (네트워크 없음). 합성 저장소 (GDELT 3일 중 하루 빔, ALFRED 3항목 × 2번 수신)로 건수·기간·빠진 날·표본 연도, `--since`·`--json`·`--sample`, 읽기 전용 (쓰기 거부, 파일 해시 불변, 없는 저장소를 만들지 않음), 본문 비출력, 빈 저장소를 확인.
 
 D6·D7 시험: `tests.didm_edgar_history_acceptance` 9개, `tests.didm_kalshi_history_acceptance` 7개 (오프라인).
+
+D13 시험: `tests.didm_collection_status_acceptance`에 4개 추가 (최신 판만 셈, 기사 하나가 여러 종목이면 각각 셈, 태그 없는 항목 수, 식별자만 출력, 긴 목록은 위·아래 5개만 글로).
