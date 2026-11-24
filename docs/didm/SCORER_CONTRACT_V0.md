@@ -57,7 +57,8 @@ ScoreRequest ─▶ Scorer.judge() ─▶ 판단(JSON) ─▶ validate_judgement
 | `ScorerInfo` | `model_version`, `prompt_sha256` |
 
 - `Assembly`에는 위 9개 값 말고 그 값들을 계산한 대상 (`article_id`, `target_kind`, `entity_id`)도 들어갑니다. 판단과 다르면 `assemble_record`가 거부합니다 (다른 기사·다른 종목의 참신성·관련성 값이 붙는 것을 막음).
-- 너무 큰 정수처럼 실수로 바꿀 수 없는 숫자: 판단 단계 (`run_scorer`)에서는 거부로 세고 묶음은 계속됩니다. 조립 단계 (`assemble_record`)는 `OverflowError` 대신 `JudgementError` (`SchemaError`의 하위)를 올리고, 세는 것은 호출하는 쪽의 일입니다 (조립용 묶음 함수는 아직 없음).
+- 너무 큰 정수처럼 실수로 바꿀 수 없는 숫자: 판단 단계 (`run_scorer`)에서는 거부로 세고 묶음은 계속됩니다. 조립 단계 (`assemble_record`)는 `OverflowError` 대신 `JudgementError` (`SchemaError`의 하위)를 올립니다. 여러 건을 조립할 때는 `assemble_batch`가 조립하지 못한 건을 고정 사유로 세고 나머지를 계속합니다.
+- **검증을 거친 판단만 조립됩니다.** `validate_judgement`가 돌려준 객체에는 그 값에 묶인 표식이 있고, 손으로 만든 `Judgement`나 `dataclasses.replace`로 고친 사본은 `assemble_record`가 거부합니다 (요청 대조와 합 검사를 건너뛴 판단이 레코드가 되지 않게; 보안 경계가 아니라 호출 실수를 막는 장치). 표식은 JSON 형식 (9개 필드)에 들어가지 않습니다.
 - **원값이 레코드에 그대로 들어가는 길 (보정기 없는 조립)** 에서는 레코드 스키마의 더 엄격한 조건 P(+1) + P(−1) ≤ 1 (오차 1e-9)이 적용됩니다. `run_scorer(..., calibrated=False)`는 이 조건에 걸리는 판단을 미리 거부로 세므로 (사유 고정 문구 `p_positive + p_negative exceeds 1`), 남긴 판단은 모두 조립됩니다. `calibrated=True`면 원값에는 1e-6만 적용합니다 (보정기가 벡터를 바꾸므로).
 - 거부 사유는 규칙마다 고정 문구 하나입니다 (빠진 키 목록이나 값에 따라 갈라지지 않음). 채점기 래퍼가 스스로 `SchemaError`를 올리면 그 글은 저장하지 않고 `scorer raised a schema error` 하나로 셉니다.
 - `p_subject`는 레코드에 그대로 들어가지 않습니다. 관련성 모형 (사전등록 4.1절, y = `is_subject`)의 설명변수이고, `relevance_0_100`은 그 모형의 출력입니다.
@@ -85,4 +86,4 @@ JSON Schema로 쓸 수 없는 규칙 (합 1, ESS·엔트로피 일치, 요청과
 python -B -m unittest tests.didm_contract_acceptance tests.didm_schema_acceptance
 ```
 
-2026-11-24 (두 번째 검토 반영 뒤): 계약 50 + 스키마 26 통과.
+2026-11-24 (두 번째 검토 반영 뒤): 계약 52 + 스키마 26 통과.

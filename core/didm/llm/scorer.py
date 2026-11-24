@@ -25,6 +25,7 @@ from core.didm.llm.judgement import (
     JudgementError,
     ScoreRequest,
     check_record_ready,
+    is_validated,
     validate_judgement,
 )
 from core.didm.llm.schema import (
@@ -139,8 +140,8 @@ def assemble_record(
     (uncalibrated probabilities are ranks only, PREREG_V0 1 A3). The assembled record is
     passed through ``validate_record``, so nothing leaves here that the schema rejects.
     """
-    if not isinstance(judgement, Judgement):
-        raise JudgementError("assemble_record needs a validated Judgement")
+    if not is_validated(judgement):
+        raise JudgementError("assemble_record needs a Judgement returned by validate_judgement, unchanged")
     if not isinstance(info, ScorerInfo) or not isinstance(assembly, Assembly):
         raise JudgementError("assemble_record needs a ScorerInfo and an Assembly")
     if not isinstance(calibration_version, str) or not calibration_version.strip():
@@ -233,6 +234,44 @@ def run_scorer(scorer: Scorer, requests: Sequence[ScoreRequest], *, calibrated: 
             continue
         kept.append((request, judgement))
     return Batch(tuple(kept), tuple(rejected))
+
+
+@dataclass(frozen=True)
+class AssembledBatch:
+    assembled: tuple[Assembled, ...]
+    rejected: tuple[tuple[str, str], ...]     # (article_id, fixed reason)
+
+    @property
+    def reject_counts(self) -> dict[str, int]:
+        return dict(Counter(reason for _, reason in self.rejected))
+
+
+def assemble_batch(pairs: Sequence[tuple[Judgement, Assembly]], info: ScorerInfo, *,
+                   calibrate_direction: DirectionCalibrator | None = None,
+                   calibration_version: str = UNCALIBRATED) -> AssembledBatch:
+    """Assemble many records; one that cannot be assembled is counted and the rest continue.
+
+    The stored reason is the rule text without the offending value. A mistake that concerns the whole
+    batch (no ScorerInfo, a calibrator without a version) is raised, not counted.
+    """
+    if not isinstance(info, ScorerInfo):
+        raise JudgementError("assemble_batch needs a ScorerInfo")
+    if (calibrate_direction is None) != (calibration_version == UNCALIBRATED):
+        raise JudgementError("a calibrator needs a calibration_version, and a version needs a calibrator")
+    done: list[Assembled] = []
+    rejected: list[tuple[str, str]] = []
+    for pair in pairs:
+        judgement, assembly = pair
+        label = judgement.article_id if isinstance(judgement, Judgement) else "?"
+        try:
+            done.append(assemble_record(judgement, info, assembly, calibrate_direction=calibrate_direction,
+                                        calibration_version=calibration_version))
+        except SchemaError as exc:
+            message = str(exc)
+            if message.startswith("unknown "):          # schema messages that quote a value: keep the rule only
+                message = message.split(":", 1)[0]
+            rejected.append((label, message))
+    return AssembledBatch(tuple(done), tuple(rejected))
 
 
 def _checked_probs(value: Any) -> tuple[float, float, float]:

@@ -357,6 +357,61 @@ class Assembly(unittest.TestCase):
         with self.assertRaises(j.JudgementError):
             j.validate_judgement(case["judgement"], case["request"])      # a raw mapping is not a ScoreRequest
 
+    def test_only_a_judgement_that_went_through_validation_is_assembled(self):
+        from dataclasses import replace
+        case = a_case()
+        request = j.validate_request(case["request"])
+        good = j.validate_judgement(case["judgement"], request)
+        info, asm = sc.ScorerInfo(**case["scorer_info"]), sc.Assembly(**case["assembly"])
+        self.assertTrue(j.is_validated(good))
+        by_hand = j.Judgement(article_id=good.article_id, target_kind=good.target_kind, entity_id=good.entity_id,
+                              p_subject=good.p_subject, event_type=good.event_type,
+                              event_type_probs=good.event_type_probs, direction_probs=good.direction_probs,
+                              claim_status=good.claim_status)
+        edited = replace(good, direction_probs=(0.9, 0.9, 0.9))            # never validated in this form
+        other_entity = replace(good, entity_id="US.CPI")
+        forged = replace(by_hand, seal="0" * 64)
+        self.assertEqual(by_hand, good)                                     # same values, but not validated
+        for bad in (by_hand, edited, other_entity, forged, case["judgement"], None):
+            with self.subTest(bad=type(bad).__name__):
+                self.assertFalse(j.is_validated(bad))
+                with self.assertRaisesRegex(j.JudgementError, "returned by validate_judgement"):
+                    sc.assemble_record(bad, info, asm)
+        self.assertNotIn("seal", good.as_dict())                            # the JSON shape is unchanged
+        self.assertEqual(tuple(good.as_dict()), j.JUDGEMENT_REQUIRED)
+        self.assertEqual(j.validate_judgement(good.as_dict(), request), good)
+
+    def test_assemble_batch_counts_what_it_cannot_assemble_and_goes_on(self):
+        cases = [case for _, case in load("accept") if case["kind"] == "judgement" and "calibrated_direction" not in case]
+        info = sc.ScorerInfo(**a_case()["scorer_info"])
+        pairs = []
+        for case in cases:
+            judgement = j.validate_judgement(case["judgement"], j.validate_request(case["request"]))
+            pairs.append((judgement, sc.Assembly(**case["assembly"])))
+        ok = sc.assemble_batch(pairs, info)
+        self.assertEqual((len(ok.assembled), ok.rejected), (len(pairs), ()))
+        broken = list(pairs)
+        j0, a0 = broken[0]
+        broken[0] = (j0, sc.Assembly(**dict(vars(a0), relevance_0_100=10 ** 400)))            # not a float
+        j1, a1 = broken[1]
+        broken[1] = (j1, sc.Assembly(**dict(vars(a1), market_confirmation="LEAKY VALUE " * 20)))
+        j2, a2 = broken[2]
+        broken[2] = (j2, sc.Assembly(**dict(vars(a2), article_id="art-other")))
+        out = sc.assemble_batch(broken, info)
+        self.assertEqual(len(out.assembled), len(pairs) - 3)
+        self.assertEqual(out.reject_counts, {"assembly values must be finite numbers": 1,
+                                             "unknown market_confirmation": 1, "assembly is for another article": 1})
+        self.assertEqual([a for a, _ in out.rejected], [j0.article_id, j1.article_id, j2.article_id])
+        for _, reason in out.rejected:
+            self.assertNotIn("LEAKY", reason)
+        with self.assertRaises(j.JudgementError):
+            sc.assemble_batch(pairs, info, calibrate_direction=lambda p: p)                    # no version
+        with self.assertRaises(j.JudgementError):
+            sc.assemble_batch(pairs, "not info")
+        calibrated = sc.assemble_batch(pairs[:2], info, calibrate_direction=lambda p: (0.2, 0.5, 0.3),
+                                       calibration_version="cal-fixture-1")
+        self.assertEqual({a.calibration_version for a in calibrated.assembled}, {"cal-fixture-1"})
+
     def test_unvalidated_judgement_is_refused(self):
         case = a_case()
         with self.assertRaises(j.JudgementError):
@@ -633,7 +688,7 @@ class Boundaries(unittest.TestCase):
     package, a validator library, the clock) is a finding, whatever its name."""
     FILES = ("core/didm/llm/judgement.py", "core/didm/llm/scorer.py", "core/didm/llm/cutoffs.py",
              "tools/didm/export_schema.py")
-    STDLIB = ("__future__", "argparse", "calendar", "collections", "dataclasses", "datetime", "enum", "json", "math",
+    STDLIB = ("__future__", "argparse", "calendar", "collections", "dataclasses", "datetime", "enum", "hashlib", "json", "math",
               "pathlib", "re", "sys", "typing")
     PROJECT = ("core.didm.llm",)
     DYNAMIC = ("importlib", "__import__", "exec", "eval", "import_module")

@@ -20,7 +20,9 @@ Pure standard library; no network, no clock reads, no model calls.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+import hashlib
+import json
+from dataclasses import dataclass, field, replace
 from typing import Any, Mapping
 
 from core.didm.llm.schema import (
@@ -87,6 +89,9 @@ class Judgement:
     direction_probs: tuple[float, float, float]     # raw (P(+1), P(-1), P(0)), before calibration
     claim_status: str
     judgement_version: str = JUDGEMENT_VERSION
+    # Set by validate_judgement only; not part of the JSON shape (as_dict) and not compared. It ties the
+    # object to the values that were validated, so a hand-built or edited copy is not "validated".
+    seal: str = field(default="", repr=False, compare=False)
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -178,7 +183,7 @@ def validate_judgement(raw: Mapping[str, Any], request: ScoreRequest) -> Judgeme
     if not isinstance(claim, str) or claim not in CLAIM_STATUSES:
         raise JudgementError(f"claim_status must be one of {list(CLAIM_STATUSES)}")
 
-    return Judgement(
+    checked = Judgement(
         article_id=article_id,
         target_kind=kind,
         entity_id=entity,
@@ -188,6 +193,22 @@ def validate_judgement(raw: Mapping[str, Any], request: ScoreRequest) -> Judgeme
         direction_probs=direction,  # type: ignore[arg-type]
         claim_status=claim,
     )
+    return replace(checked, seal=_seal(checked))
+
+
+def _seal(judgement: Judgement) -> str:
+    text = json.dumps(judgement.as_dict(), sort_keys=True, ensure_ascii=True)
+    return hashlib.sha256(("didm-judgement-validated|" + text).encode("utf-8")).hexdigest()
+
+
+def is_validated(judgement: Any) -> bool:
+    """True only for an object that validate_judgement returned and nobody has altered since.
+
+    A Judgement built by hand, or changed with dataclasses.replace, has no matching seal. This guards
+    against a caller's mistake (assembling something that skipped the request and sum checks); it is
+    not a security boundary.
+    """
+    return isinstance(judgement, Judgement) and bool(judgement.seal) and judgement.seal == _seal(judgement)
 
 
 def check_record_ready(judgement: Judgement) -> None:
@@ -255,5 +276,5 @@ def _type_probs(value: Any) -> tuple[tuple[str, float], ...]:
 
 __all__ = [
     "CLAIM_STATUSES", "JUDGEMENT_REQUIRED", "JUDGEMENT_VERSION", "LANGUAGES", "REQUEST_REQUIRED",
-    "Judgement", "JudgementError", "ScoreRequest", "check_record_ready", "validate_judgement", "validate_request",
+    "Judgement", "JudgementError", "ScoreRequest", "check_record_ready", "is_validated", "validate_judgement", "validate_request",
 ]
