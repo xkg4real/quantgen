@@ -162,7 +162,17 @@ class TableMatchesRegistry(unittest.TestCase):
         self.assertIsNotNone(c.REGISTRY.get("ProsusAI/finbert"))
 
     def test_registry_examples(self):
-        self.assertFalse(c.REGISTRY.eligibility("ProsusAI/finbert", date(2020, 1, 2)).eligible)   # not pinned yet
+        self.assertTrue(c.REGISTRY.eligibility("ProsusAI/finbert", date(2020, 1, 2)).eligible)    # pinned baseline
+        self.assertTrue(c.REGISTRY.eligibility("loughran-mcdonald", date(2015, 1, 2)).eligible)
+        self.assertFalse(c.REGISTRY.eligibility("qwen3-candidates", date(2099, 1, 1)).eligible)    # no public cutoff
+        chrono = [m for m in c.REGISTRY if m.family == "ChronoGPT 빈티지"]
+        self.assertEqual(len(chrono), 26)
+        self.assertEqual({len(m.snapshot_id) for m in chrono}, {40})
+        first = c.REGISTRY.get("manelalab/chrono-gpt-v1-19991231")
+        self.assertEqual((first.cutoff, first.eligible_from), (date(1999, 12, 31), date(2000, 3, 31)))
+        # the 2014 vintage may score 2015-03-31 onwards, not January 2015
+        self.assertFalse(c.REGISTRY.eligibility("manelalab/chrono-gpt-v1-20141231", date(2015, 1, 15)).eligible)
+        self.assertTrue(c.REGISTRY.eligibility("manelalab/chrono-gpt-v1-20141231", date(2015, 3, 31)).eligible)
         self.assertFalse(c.REGISTRY.eligibility("quantgpt-in-house", date(2099, 1, 1)).eligible)
         claude = c.REGISTRY.get("claude-fable-5-2")
         self.assertEqual((claude.cutoff, claude.eligible_from), (date(2026, 6, 30), date(2026, 9, 30)))
