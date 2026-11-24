@@ -311,6 +311,20 @@ class Assembly(unittest.TestCase):
                 self.assertEqual(got["direction_probs"], raw["direction_probs"])
         self.assertEqual(len(sc.ASSEMBLY_FIELDS), 9)
 
+    def test_side_values_follow_the_judgement(self):
+        """claim_status, the raw p_subject and the raw direction vector are kept beside the record as the
+        model gave them, for every value and not only for the first example."""
+        seen = set()
+        for name, case in load("accept"):
+            if case["kind"] != "judgement":
+                continue
+            out = assemble(case)
+            self.assertEqual(out.claim_status, case["judgement"]["claim_status"], name)
+            self.assertEqual(out.p_subject_raw, case["judgement"]["p_subject"], name)
+            self.assertEqual(out.raw_direction_probs, tuple(case["judgement"]["direction_probs"]), name)
+            seen.add(out.claim_status)
+        self.assertEqual(seen, set(j.CLAIM_STATUSES))
+
     def test_scorer_info_reaches_the_record(self):
         case = a_case()
         judgement = j.validate_judgement(case["judgement"], j.validate_request(case["request"]))
@@ -352,7 +366,7 @@ class Assembly(unittest.TestCase):
 
 class ScorerInfoRules(unittest.TestCase):
     def test_temperature_must_be_zero(self):
-        for bad in (0.7, 1, True, "0", None):
+        for bad in (0.7, 1, True, "0", None, 10 ** 400, -(10 ** 400), float("nan")):
             with self.subTest(bad=bad), self.assertRaises(j.JudgementError):
                 sc.ScorerInfo("m", "0" * 64, bad)
         self.assertEqual(sc.ScorerInfo("m", "0" * 64, 0).temperature, 0)
@@ -528,6 +542,16 @@ class Tolerances(unittest.TestCase):
             raw = reject[name]["judgement"]
             total = sum(raw["direction_probs"]) if "direction" in name else sum(raw["event_type_probs"].values())
             self.assertAlmostEqual(abs(total - 1), 2e-6, places=9)
+        # tight pair around 1e-6 on both sides of 1: 9e-7 passes, 1.2e-6 fails (a tolerance of 1.5e-6 would not)
+        tight_in = accept["judgement-sums-just-inside-tolerance.json"]["judgement"]
+        self.assertAlmostEqual(sum(tight_in["direction_probs"]) - 1, -9e-7, places=9)
+        self.assertAlmostEqual(sum(tight_in["event_type_probs"].values()) - 1, 9e-7, places=9)
+        self.assertAlmostEqual(sum(reject["judgement-direction-sum-just-outside-tight.json"]["judgement"]
+                                   ["direction_probs"]) - 1, -1.2e-6, places=9)
+        self.assertAlmostEqual(sum(reject["judgement-type-probs-sum-just-outside-tight.json"]["judgement"]
+                                   ["event_type_probs"].values()) - 1, 1.2e-6, places=9)
+        self.assertAlmostEqual(sum(reject["judgement-type-probs-sum-below-one.json"]["judgement"]
+                                   ["event_type_probs"].values()), 0.9, places=9)
 
     def test_exported_string_rules_equal_the_python_patterns(self):
         """No look-ahead and no end anchor in the export (regex engines disagree on both); the three
@@ -648,7 +672,9 @@ class Boundaries(unittest.TestCase):
                "import httpx", "import urllib3", "import aiohttp", "import asyncio", "import xmlrpc.client",
                "import os\nos.system('x')", "import subprocess", "import jsonschema", "from . import data",
                "import importlib\nimportlib.import_module('urllib.request')", "__import__('socket')",
-               "exec('import socket')", "eval('1')",
+               "exec('import socket')", "eval('1')", "x = __import__('socket')", "import os\nos.times()",
+               "import datetime as _dt\n_clock = _dt.datetime.now\n_clock()",
+               "from datetime import datetime as _d\n_clock = _d.now", "import time\ntime.time()",
                "from datetime import datetime\nx = datetime.now()", "import datetime\nx = datetime.date.today()",
                "from datetime import datetime, timezone\n_STARTED = datetime.now(timezone.utc)",
                "from datetime import datetime\nx = datetime.utcnow()",

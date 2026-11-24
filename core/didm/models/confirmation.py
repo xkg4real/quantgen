@@ -43,6 +43,26 @@ class ConfirmationError(ValueError):
 
 
 @dataclass(frozen=True)
+class ConfirmationConfig:
+    """Readings of the registered rule that are a choice (docs/didm/PREREG_V0_1_PROPOSAL_2026-11-24.md,
+    section 10). The registered numbers above are not part of this.
+
+    already_priced = "pre_window_alone": ALREADY_PRICED is decided from the five days before the event as
+    soon as they are known, even while the event window is still open ("먼저 판정" read as first in time too).
+    already_priced = "after_event_window": the same check, but nothing is decided until the event window has
+    finished; until then the status is PENDING.
+    """
+    already_priced: str = "pre_window_alone"
+
+    def __post_init__(self) -> None:
+        if self.already_priced not in ("pre_window_alone", "after_event_window"):
+            raise ConfirmationError("already_priced is pre_window_alone or after_event_window")
+
+
+DEFAULT_CONFIG = ConfirmationConfig()
+
+
+@dataclass(frozen=True)
 class MarketModel:
     alpha: float
     beta: float
@@ -90,7 +110,8 @@ def fit_market_model(asset: Sequence[float], market: Sequence[float]) -> MarketM
 
 
 def decide(*, predicted_direction: int, sigma: float, pre_move: float | None, pre_periods: int,
-           window_move: float | None, window_periods: int) -> Confirmation:
+           window_move: float | None, window_periods: int,
+           config: ConfirmationConfig = DEFAULT_CONFIG) -> Confirmation:
     """The registered decision from already-computed abnormal moves. ``window_move`` is None while the
     event window is unfinished; ``pre_move`` is None when the pre-event window is not available."""
     direction = _direction(predicted_direction)
@@ -104,6 +125,8 @@ def decide(*, predicted_direction: int, sigma: float, pre_move: float | None, pr
     if direction == 0:
         return Confirmation(MarketConfirmation.PENDING, "neutral prediction: nothing to confirm",
                             window_move=window_move, **common)
+    if config.already_priced == "after_event_window" and window_move is None:
+        return Confirmation(MarketConfirmation.PENDING, "event window not finished", **common)
     if pre_move is not None and abs(pre_move) > pre_threshold and pre_move * direction > 0:
         return Confirmation(MarketConfirmation.ALREADY_PRICED, "the move came in the five periods before the event",
                             window_move=window_move, **common)
@@ -120,7 +143,7 @@ def decide(*, predicted_direction: int, sigma: float, pre_move: float | None, pr
 
 
 def confirm_daily(asset: Sequence[float], market: Sequence[float], *, event_index: int, last_known_index: int,
-                  predicted_direction: int) -> Confirmation:
+                  predicted_direction: int, config: ConfirmationConfig = DEFAULT_CONFIG) -> Confirmation:
     """Firm (or macro without intraday data): daily returns of the asset and its index, aligned by trading day.
 
     ``event_index`` is the position of day 0. ``last_known_index`` is the last position whose return is
@@ -157,7 +180,8 @@ def confirm_daily(asset: Sequence[float], market: Sequence[float], *, event_inde
 
     return decide(predicted_direction=direction, sigma=model.sigma,
                   pre_move=abnormal(PRE_FIRST, PRE_LAST), pre_periods=PRE_LAST - PRE_FIRST + 1,
-                  window_move=abnormal(EVENT_FIRST, EVENT_LAST), window_periods=EVENT_LAST - EVENT_FIRST + 1)
+                  window_move=abnormal(EVENT_FIRST, EVENT_LAST), window_periods=EVENT_LAST - EVENT_FIRST + 1,
+                  config=config)
 
 
 def window_sigma(past_window_moves: Sequence[float]) -> float:
@@ -170,7 +194,8 @@ def window_sigma(past_window_moves: Sequence[float]) -> float:
 
 
 def confirm_intraday(*, window_move: float | None, past_window_moves: Sequence[float], pre_daily_move: float | None,
-                     daily_sigma: float | None, predicted_direction: int) -> Confirmation:
+                     daily_sigma: float | None, predicted_direction: int,
+                     config: ConfirmationConfig = DEFAULT_CONFIG) -> Confirmation:
     """Macro event with intraday data: the [0, +60 minutes] move against the spread of past 60-minute moves.
 
     The pre-event check still uses the five trading days before (daily sigma); pass None for both when
@@ -178,6 +203,9 @@ def confirm_intraday(*, window_move: float | None, past_window_moves: Sequence[f
     """
     sigma = window_sigma(past_window_moves)
     direction = _direction(predicted_direction)
+    if config.already_priced == "after_event_window" and window_move is None:
+        return decide(predicted_direction=direction, sigma=sigma, pre_move=None, pre_periods=1, window_move=None,
+                      window_periods=1, config=config)
     if direction != 0 and pre_daily_move is not None and daily_sigma is not None:
         pre = decide(predicted_direction=direction, sigma=daily_sigma, pre_move=pre_daily_move,
                      pre_periods=PRE_LAST - PRE_FIRST + 1, window_move=None, window_periods=1)

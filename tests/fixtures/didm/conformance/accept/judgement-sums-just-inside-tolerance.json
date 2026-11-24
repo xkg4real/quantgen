@@ -1,0 +1,87 @@
+{
+  "kind": "judgement",
+  "note": "probability sums 9e-7 away from 1, on both sides, are still inside 1e-6",
+  "request": {
+    "article_id": "art-0007",
+    "language": "en",
+    "title": "Synthetic headline: central bank holds its policy rate",
+    "body": null,
+    "target_kind": "macro",
+    "entity_id": "US.FFR",
+    "entity_name": "US policy rate"
+  },
+  "judgement": {
+    "judgement_version": "didm-judgement-v0",
+    "article_id": "art-0007",
+    "target_kind": "macro",
+    "entity_id": "US.FFR",
+    "p_subject": 0.92,
+    "event_type": "monetary_policy",
+    "event_type_probs": {
+      "monetary_policy": 0.8600009,
+      "inflation": 0.01,
+      "employment": 0.01,
+      "growth": 0.01,
+      "fiscal": 0.01,
+      "trade_tariffs": 0.01,
+      "geopolitics": 0.01,
+      "election_policy": 0.01,
+      "earnings": 0.01,
+      "mergers_acquisitions": 0.01,
+      "management": 0.01,
+      "regulation_litigation": 0.01,
+      "supply_chain": 0.01,
+      "crypto_regulation_hack": 0.01,
+      "none": 0.01
+    },
+    "direction_probs": [
+      0.1,
+      0.7,
+      0.1999991
+    ],
+    "claim_status": "reported"
+  },
+  "scorer_info": {
+    "model_version": "fixture-model-0",
+    "prompt_sha256": "a1b2c3d4e5f60718a1b2c3d4e5f60718a1b2c3d4e5f60718a1b2c3d4e5f60718",
+    "temperature": 0
+  },
+  "assembly": {
+    "article_id": "art-0007",
+    "target_kind": "macro",
+    "entity_id": "US.FFR",
+    "record_id": "conf-j-0007",
+    "source_id": "gdelt-gkg2",
+    "published_at": "2026-11-05T19:00:00Z",
+    "received_at": "2026-11-05T19:15:00Z",
+    "relevance_0_100": 88.0,
+    "novelty_0_100": 97.5,
+    "origin_cluster_id": "cl-20261105-0001",
+    "p_credibility": 0.9,
+    "market_confirmation": "PENDING"
+  },
+  "expected_record": {
+    "record_id": "conf-j-0007",
+    "source_id": "gdelt-gkg2",
+    "target_kind": "macro",
+    "entity_id": "US.FFR",
+    "published_at": "2026-11-05T19:00:00+00:00",
+    "received_at": "2026-11-05T19:15:00+00:00",
+    "relevance_0_100": 88.0,
+    "ess_like_0_100": 20.0,
+    "novelty_0_100": 97.5,
+    "origin_cluster_id": "cl-20261105-0001",
+    "event_type": "monetary_policy",
+    "direction_probs": [
+      0.1,
+      0.7,
+      0.1999991
+    ],
+    "uncertainty_entropy": 0.8018180040471912,
+    "p_credibility": 0.9,
+    "market_confirmation": "PENDING",
+    "model_version": "fixture-model-0",
+    "prompt_sha256": "a1b2c3d4e5f60718a1b2c3d4e5f60718a1b2c3d4e5f60718a1b2c3d4e5f60718",
+    "schema_version": "didm-score-v0"
+  }
+}

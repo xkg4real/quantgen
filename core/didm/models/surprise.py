@@ -17,6 +17,25 @@ from typing import Sequence
 
 KALSHI_MIN_VOLUME = 1000          # contracts (PREREG_V0 4)
 MIN_PAST_SURPRISES = 8
+
+
+@dataclass(frozen=True)
+class SurpriseConfig:
+    """Readings of "과거 표준편차" that are a choice (PREREG_V0_1_PROPOSAL_2026-11-24.md, section 10).
+
+    scale = "past_surprises": the standard deviation of past (released - consensus) of the same indicator.
+    scale = "past_releases" : the standard deviation of the past released values themselves.
+    Either way only values released before this one, and at least ``min_history`` of them.
+    """
+    scale: str = "past_surprises"
+    min_history: int = MIN_PAST_SURPRISES
+
+    def __post_init__(self) -> None:
+        if self.scale not in ("past_surprises", "past_releases"):
+            raise SurpriseError("scale is past_surprises or past_releases")
+        if isinstance(self.min_history, bool) or not isinstance(self.min_history, int) or self.min_history < 2:
+            raise SurpriseError("min_history must be an integer of at least 2")
+
 UNKNOWN = "unknown"               # "미상"
 STANDARDISED = "standardised"
 
@@ -62,28 +81,33 @@ class MacroSurprise:
     reason: str
 
 
-def standardised_surprise(released, consensus, past_surprises: Sequence[float]) -> float:
+def standardised_surprise(released, consensus, history_values: Sequence[float],
+                          min_history: int = MIN_PAST_SURPRISES) -> float:
+    """(released - consensus) / sample standard deviation of ``history_values`` (past surprises by default)."""
     actual, expected = _number(released, "released value"), _number(consensus, "consensus")
-    history = [_number(x, "past surprise") for x in past_surprises]
-    if len(history) < MIN_PAST_SURPRISES:
-        raise SurpriseError(f"need at least {MIN_PAST_SURPRISES} past surprises")
+    history = [_number(x, "past value") for x in history_values]
+    if len(history) < min_history:
+        raise SurpriseError(f"need at least {min_history} past values")
     mean = sum(history) / len(history)
     sd = math.sqrt(sum((x - mean) ** 2 for x in history) / (len(history) - 1))
     if sd <= 0.0:
-        raise SurpriseError("past surprises do not vary")
+        raise SurpriseError("past values do not vary")
     return (actual - expected) / sd
 
 
 def macro_surprise(*, released, consensus=None, past_surprises: Sequence[float] = (),
-                   probability: ProbabilityMove | None = None) -> MacroSurprise:
+                   past_releases: Sequence[float] = (), probability: ProbabilityMove | None = None,
+                   config: SurpriseConfig | None = None) -> MacroSurprise:
     """Standardised surprise when a consensus and enough history exist; otherwise "unknown", carrying the
     probability move of a liquid market if the caller has one. A missing consensus is never filled in."""
     _number(released, "released value")
     if probability is not None and not isinstance(probability, ProbabilityMove):
         raise SurpriseError("probability must be a ProbabilityMove")
+    config = config or SurpriseConfig()
     if consensus is None:
         return MacroSurprise(UNKNOWN, None, probability, "no consensus")
-    if len(past_surprises) < MIN_PAST_SURPRISES:
-        return MacroSurprise(UNKNOWN, None, probability, f"fewer than {MIN_PAST_SURPRISES} past surprises")
-    return MacroSurprise(STANDARDISED, standardised_surprise(released, consensus, past_surprises), probability,
-                         "consensus available")
+    history = past_surprises if config.scale == "past_surprises" else past_releases
+    if len(history) < config.min_history:
+        return MacroSurprise(UNKNOWN, None, probability, f"fewer than {config.min_history} past values")
+    return MacroSurprise(STANDARDISED, standardised_surprise(released, consensus, history, config.min_history),
+                         probability, "consensus available")

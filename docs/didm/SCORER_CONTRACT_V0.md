@@ -79,10 +79,10 @@ JSON Schema로 쓸 수 없는 규칙 (합 1, ESS·엔트로피 일치, 요청과
 
 ## 7. 적합성 예시
 
-`tests/fixtures/didm/conformance/accept/` 12개 (레코드 6, 판단 6), `reject/` 47개 (레코드 25, 판단 22). 거부 예시마다 `expect` (오류 글의 일부)와 `json_schema_detects` (JSON Schema만으로 잡히는지)가 있습니다. 판단 적합 예시에는 **기대 레코드 (`expected_record`)** 가 있어 조립 결과를 필드 하나하나 비교합니다 (기대값은 예시 생성 스크립트가 공식으로 따로 계산한 값이고 조립 함수를 부르지 않음). 경계 예시: 합이 1에서 5e-7 벗어난 것은 통과, 2e-6 벗어난 것은 거부; float32 소프트맥스 벡터는 보정 길에서 통과하고 무보정 길에서 거부 (`uncalibrated_expect`). 글은 모두 합성입니다. 새 채점기는 이 예시를 통과해야 합니다.
+`tests/fixtures/didm/conformance/accept/` 13개 (레코드 6, 판단 7), `reject/` 51개 (레코드 25, 판단 26). 거부 예시마다 `expect` (오류 글의 일부)와 `json_schema_detects` (JSON Schema만으로 잡히는지)가 있습니다. 판단 적합 예시에는 **기대 레코드 (`expected_record`)** 가 있어 조립 결과를 필드 하나하나 비교합니다 (기대값은 예시 생성 스크립트가 공식으로 따로 계산한 값이고 조립 함수를 부르지 않음). 경계 예시: 합이 1에서 5e-7·9e-7 벗어난 것은 통과, 1.2e-6·2e-6 벗어난 것은 거부 (1보다 큰 쪽과 작은 쪽 모두); float32 소프트맥스 벡터는 보정 길에서 통과하고 무보정 길에서 거부 (`uncalibrated_expect`). 글은 모두 합성입니다. 새 채점기는 이 예시를 통과해야 합니다.
 
 ```
 python -B -m unittest tests.didm_contract_acceptance tests.didm_schema_acceptance
 ```
 
-2026-11-24 (두 번째 검토 반영 뒤): 계약 49 + 스키마 26 통과.
+2026-11-24 (두 번째 검토 반영 뒤): 계약 50 + 스키마 26 통과.

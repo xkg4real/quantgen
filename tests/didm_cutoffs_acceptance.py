@@ -103,6 +103,17 @@ class InHouseModel(unittest.TestCase):
                             source_url=URL, checked_on=date(2026, 11, 24))
         self.assertFalse(m.verified)
 
+    def test_a_baseline_cannot_be_the_base_of_an_in_house_model(self):
+        """A valid, pinned baseline card (no cutoff, so its own constructor accepts it) is still refused as a base."""
+        base = card(key="ProsusAI/finbert", rule=c.Rule.BASELINE, cutoff=None)
+        self.assertTrue(base.verified)
+        with self.assertRaisesRegex(c.CutoffError, "base of an in-house model must follow the cutoff rule"):
+            c.in_house_card("own-1", base=base, finetune_through=date(2025, 1, 31), snapshot_id="s",
+                            source_url=URL, checked_on=date(2026, 11, 24))
+        with self.assertRaises(c.CutoffError):
+            c.in_house_card("own-1", base="not a card", finetune_through=date(2025, 1, 31), snapshot_id="s",
+                            source_url=URL, checked_on=date(2026, 11, 24))
+
     def test_base_must_follow_the_cutoff_rule(self):
         with self.assertRaises(c.CutoffError):
             c.in_house_card("own-1", base=card(rule=c.Rule.BASELINE), finetune_through=date(2025, 1, 31),
@@ -153,6 +164,16 @@ class BackfilledArticles(unittest.TestCase):
         # local date, not the UTC day: the documented reason to pass the record's datetimes
         self.assertFalse(c.eligibility(claude, published_at=moment.astimezone(timezone.utc).date(),
                                        received_at=later).eligible)
+
+    def test_registry_call_uses_each_argument_for_what_it_is(self):
+        """Through Registry.eligibility, with the receipt day EARLIER than the publication day (a vendor
+        clock ahead of ours): the receipt day decides. Swapping or duplicating an argument changes the answer."""
+        key = "claude-fable-5-2"                                         # eligible from 2026-09-30
+        early, late = date(2026, 9, 29), date(2026, 10, 5)
+        self.assertFalse(c.REGISTRY.eligibility(key, published_at=late, received_at=early).eligible)
+        self.assertFalse(c.REGISTRY.eligibility(key, published_at=early, received_at=late).eligible)
+        self.assertTrue(c.REGISTRY.eligibility(key, published_at=late, received_at=late).eligible)
+        self.assertFalse(c.REGISTRY.eligibility(key, published_at=early, received_at=early).eligible)
 
     def test_both_timestamps_are_required_by_keyword(self):
         m = card()

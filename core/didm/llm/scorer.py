@@ -79,7 +79,7 @@ class ScorerInfo:
         if not isinstance(self.prompt_sha256, str) or not _SHA256.fullmatch(self.prompt_sha256):
             raise JudgementError("prompt_sha256 must be 64 lowercase hex characters")
         if isinstance(self.temperature, bool) or not isinstance(self.temperature, (int, float)) \
-                or float(self.temperature) != 0.0:
+                or self.temperature != 0:          # compared as it is: float() of a huge integer would overflow
             raise JudgementError("temperature must be 0")
 
 

@@ -171,6 +171,50 @@ class DailyRule(unittest.TestCase):
         self.assertIsInstance(run(self.asset, self.market).status, MC)
 
 
+class Readings(unittest.TestCase):
+    """The two readings that can change a verdict live in config objects; the defaults are unchanged."""
+
+    def test_already_priced_timing(self):
+        asset, market = series()
+        leaked = shocked(asset, {-3: 0.03, -2: 0.02, 0: 0.05})
+        later = cf.ConfirmationConfig(already_priced="after_event_window")
+        self.assertEqual(cf.DEFAULT_CONFIG.already_priced, "pre_window_alone")
+
+        def status(known, config=cf.DEFAULT_CONFIG):
+            return cf.confirm_daily(leaked, market, event_index=EVENT, last_known_index=known,
+                                    predicted_direction=1, config=config).status
+        # before the event window has finished the two readings differ ...
+        self.assertEqual([status(k) for k in (EVENT - 1, EVENT)], [MC.ALREADY_PRICED, MC.ALREADY_PRICED])
+        self.assertEqual([status(k, later) for k in (EVENT - 1, EVENT)], [MC.PENDING, MC.PENDING])
+        # ... and once it has finished they agree
+        self.assertIs(status(EVENT + 1), MC.ALREADY_PRICED)
+        self.assertIs(status(EVENT + 1, later), MC.ALREADY_PRICED)
+        clean = shocked(asset, {0: 0.05})
+        for config in (cf.DEFAULT_CONFIG, later):
+            self.assertIs(cf.confirm_daily(clean, market, event_index=EVENT, last_known_index=EVENT + 1,
+                                           predicted_direction=1, config=config).status, MC.CONFIRMED)
+        with self.assertRaises(cf.ConfirmationError):
+            cf.ConfirmationConfig(already_priced="whenever")
+
+    def test_surprise_scale(self):
+        past_surprises = [0.1, -0.1, 0.2, -0.2, 0.1, -0.1, 0.2, -0.2]          # SD 0.169
+        past_releases = [2.4, 2.6, 2.9, 3.1, 3.0, 3.2, 3.5, 3.7]              # a trending indicator, SD 0.431
+        default = su.macro_surprise(released=3.4, consensus=3.1, past_surprises=past_surprises,
+                                    past_releases=past_releases)
+        other = su.macro_surprise(released=3.4, consensus=3.1, past_surprises=past_surprises,
+                                  past_releases=past_releases, config=su.SurpriseConfig(scale="past_releases"))
+        self.assertAlmostEqual(default.value, 1.775, places=3)
+        self.assertAlmostEqual(other.value, 0.696, places=3)
+        self.assertEqual(su.SurpriseConfig().scale, "past_surprises")
+        self.assertEqual(su.SurpriseConfig().min_history, 8)
+        short = su.macro_surprise(released=3.4, consensus=3.1, past_surprises=past_surprises[:6],
+                                  config=su.SurpriseConfig(min_history=6))
+        self.assertEqual(short.kind, su.STANDARDISED)
+        for bad in (dict(scale="range"), dict(min_history=1), dict(min_history=True)):
+            with self.subTest(bad=bad), self.assertRaises(su.SurpriseError):
+                su.SurpriseConfig(**bad)
+
+
 class IntradayRule(unittest.TestCase):
     def setUp(self):
         rng = np.random.default_rng(3)
