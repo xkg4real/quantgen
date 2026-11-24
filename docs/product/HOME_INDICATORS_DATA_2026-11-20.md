@@ -58,6 +58,7 @@ python -m core.research.markets
 
 - 여섯 줄 (지표마다 한 줄): `<기호> <상태> reason=<사유 코드> live=<실시간 상태>[ via=<yfinance가 남긴 원인>]`. 값·키·URL·공급사 문구는 나오지 않습니다. 늘 종료 코드 0.
 - `via=`: yfinance는 네트워크 막힘·TLS 가로채기·요청 제한을 "빈 결과"로 바꿔 돌려주므로 (`reason=no_observations`), 진단 때만 yfinance 자체 기록을 모아 원인을 붙입니다: `rate_limited` (Yahoo 요청 제한), `certificate_error` (보안 프로그램·프록시의 TLS 가로채기), `network_timeout`, `network_error`.
+- 명령은 먼저 앱 자료 폴더를 준비합니다 (`core.app_paths.ensure_user_data_dir`, 새 폴더는 본인만 읽기 권한 + QUANTGEN 표식). 준비가 거부되면 여섯 줄 모두 `reason=data_dir_unavailable`이고 공급사를 부르지 않습니다 (검토 PD-3).
 - **아무것도 출력되지 않고 끝나면 오래된 체크아웃**입니다 (이 명령이 들어가기 전 코드는 출력 없이 종료 코드 0). 2026-10-29 이전 체크아웃은 `No module named core.research.markets`로 실패합니다. 두 경우 모두 코드 수정 없이 최신 main으로 바꾸면 됩니다.
 - 읽는 법 (2026-11-24 검토 DS-3 반영, 명령이 실제로 내는 값 기준):
 
