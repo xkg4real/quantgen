@@ -1,6 +1,7 @@
 # DIDM 표본 확대 가능성 조사 (D12, 2026-11-24)
 
 - 작성: DATA_SOURCE 세션 (메인 지시 D12). **조사 문서**입니다. 공급사 호출·키·코드 변경 없음. 소유자 결정 전 사전 조사.
+- **2026-11-24 D14: 9절에 공급사 원문 확인 결과가 있고, 위 절과 다르면 9절이 우선합니다 (특히 Massive 약관 — 개인·비상업 전용, AI 학습 금지).**
 - 출발점: DIDM Stage 0 모의실험 — 지연 반영을 검정력 80%로 보려면 **종목 약 820개 × 2,500거래일** 또는 **500개 × 5,000거래일** (근거: 브랜치 `claude/didm-dev-20261124`의 `docs/didm/PREREG_V0_1_PROPOSAL_2026-11-24.md` 6절; 이 세션은 그 수치를 다시 계산하지 않음).
 - 표기: **확인** = 공급사 공식 문서·이 저장소 코드·소유자 PC 실측으로 본 것. **미검증** = 제3자 자료이거나 공식 문서를 직접 열지 못한 것. 가격은 공식 페이지에서 본 것만 적고, 못 본 것은 "공식 가격 못 봄".
 - 이번 조사에서 웹 검색 요약만 썼고 공급사 페이지를 직접 열지는 않았습니다. 막힌 호스트는 없었습니다 (검색 요약으로 충분했던 항목만 적음).
@@ -92,6 +93,7 @@
 4. D13 (종목별 건수 집계 옵션) 진행 여부 → 메인 승인 (2026-11-24), 진행 중.
 5. 별칭 사전 새 수집 옵션 8.4의 1~4 중 무엇을 할지, 공공데이터포털 키 발급 여부.
 6. 군집화 글을 제목만으로 시작할지 (8.3 권장).
+7. (D14) Massive 뉴스를 모형 학습·검증 자료에서 뺄지, 이미 저장한 200건 (2026-11-24 실측)을 보관할지 삭제할지 (9.2 1번). Alpaca 약관 PDF 확인을 위해 `files.alpaca.markets` 허용 여부 (9.2 2번).
 
 ## 7. 출처 (2026-11-24 검색 요약)
 
@@ -170,3 +172,47 @@
 | `massive.com` | 뉴스 약관, 무료 플랜 뉴스 이력 |
 
 이 문서의 8절 출처 (검색 요약): sec.gov/edgar/sec-api-documentation, data.catalyst.coop (PUDL sec10k name changelog, 제3자), data.go.kr/data/15094775/openapi.do, dart-fss.readthedocs.io (corp_code 필드, 제3자), firecrawl.dev/terms/third-party-data/benzinga/C-1.0.0 (Benzinga 약관 사본, 제3자), docs.alpaca.markets/us/docs/streaming-real-time-news.
+
+## 9. 원문 확인 (D14, 2026-11-24)
+
+소유자가 승인한 문서 호스트 6개 (`docs.alpaca.markets`, `alpaca.markets`, `massive.com`, `opendart.fss.or.kr`, `www.data.go.kr`, `openapi.krx.co.kr`)에서 **문서·약관 페이지만** 읽었습니다 (키가 필요한 API 호출·파일 내려받기 없음). 확인일은 모두 2026-11-24. 약관은 문구 인용까지만이며 **법률 자문이 아닙니다.** 이 절이 위 1~8절과 다르면 이 절이 우선합니다.
+
+### 9.1 확인한 사실
+
+| 공급원 | 항목 | 원문 (인용·요약) | URL | 상태 |
+|---|---|---|---|---|
+| Alpaca | 무료 계정 | Trading API 구독은 Basic (Free)·Algo Trader Plus ($99/월). "The Basic plan serves as the default option for both Paper and Live trading accounts ... with zero cost" | docs.alpaca.markets/docs/about-market-data-api | 확인. 소유자 PC 실측 (뉴스 60건)과 일치 |
+| Alpaca | 호출 한도 | 표의 "Historical API calls": Basic 200/min, Algo Trader Plus 10,000/min (주식·옵션 표). 뉴스 전용 한도는 이 표에 없음. 출시 블로그: "200 calls per minute for Free plans" (뉴스 API 베타 당시) | 위 + alpaca.markets/blog/introducing-news-api-for-real-time-fiancial-news | 주식 한도 확인; 뉴스 한도는 블로그 (옛 베타 문구) 기준 |
+| Alpaca | 과거 깊이 | 문서 v1.4.2: "historical news data dating back to 2015 ... average of 130+ news articles per day. All news data is currently provided directly by Benzinga". 현재 판 문서는 시작 연도를 적지 않음 | docs.alpaca.markets/us/v1.4.2/docs/historical-news-data, docs.alpaca.markets/us/docs/historical-news-data | 2015는 옛 판 문서 기준. 실제 첫 기사 날짜는 소유자 PC 실측 필요 |
+| Alpaca | 용도 안내 | 현재 판 문서 "Sentiment analysis: Build a labeled dataset from past headlines, summaries, and content, and train models that score the sentiment of new articles" | docs.alpaca.markets/us/docs/historical-news-data | 확인 (사용 예시일 뿐, 약관이 아님) |
+| Alpaca | 약관 (저장·파생) | 약관·시장자료 계약은 PDF로 `files.alpaca.markets`에 있음 (Terms and Conditions, NYSE/Nasdaq 시장자료 계약). 허용 호스트가 아니고 내려받기 금지 규칙이라 **열지 않음** | alpaca.markets/disclosures (목록) | **미검증** — 필요 호스트: `files.alpaca.markets` |
+| Massive | 과거 깊이 | "ticker news starts on 22 June 2016, with all history on Stocks Starter and above and **2 years on Stocks Basic**, but it is sparse until late April 2021" — 2016-06-22~2021-04-21 500건 미만, 2016~2019 연 50건 미만, 2020 약 200건 | massive.com/knowledge-base/article/how-far-back-does-massives-news-and-sentiment-data-go | 확인 |
+| Massive | 감성 (insights) | "the insights sentiment field starts with articles published on 2 July 2024" (17:46 UTC 이전 기사에는 없음, 과거 기사에 덧붙일 방법 없음). 뉴스 끝점은 1시간마다 갱신, 게재 뒤 1시간 미만~수 시간 늦게 도착 | 위 | 확인 |
+| Massive | Benzinga 묶음 | 지식베이스: 2009-04-27부터. 요금 페이지: "Benzinga ... $99/month per dataset" | 위 + massive.com/pricing | 확인 |
+| Massive | **이용 범위** | 개인 약관 (Last Updated 2026-11-03): "solely for your own personal, non-commercial, and non-business purposes". 시장자료 약관: 저장 허용은 "solely for your own personal, non-business and non-commercial use ... does not permit you to ... develop or provide a service or application to other users, use Information for an employer or any other organization, or use it in professional or commercial work" | massive.com/legal/individuals-terms-of-service, massive.com/legal/market-data-terms-of-service | 확인 |
+| Massive | **AI 학습** | 시장자료 약관 5(g): 금지 — "Use Information to train, fine-tune or distill an artificial-intelligence or machine-learning model unless expressly permitted and all applicable Third Party Provider requirements are satisfied" | massive.com/legal/market-data-terms-of-service | 확인 |
+| Massive | 종료 뒤 삭제 | "When your license to any Information ends, you must stop using it and delete it promptly, and in any event within thirty (30) days, including downloaded files, stored copies and caches" (자동 백업은 90일 이내) | 위 | 확인 |
+| OpenDART | 기간 제한 | 공시검색 `bgn_de`: "고유번호(corp_code)가 없는 경우 검색기간은 3개월로 제한" | opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS001&apiId=2019001 | 확인 |
+| OpenDART | 요청 한도 | 오류 020 "요청 제한을 초과하였습니다. 일반적으로는 20,000건 이상의 요청에 대하여 이 에러 메시지가 발생" (집계 기간은 이 페이지에 없음); 오류 021 "조회 가능한 회사 개수가 초과 (최대 100건)" | 위 | 한도 수치 확인, 기간 (일 단위인지) **미검증** |
+| OpenDART | 약관 | 제16조: 서비스·프로그램 저작권은 금융감독원, "약관에 명시되지 않은 저작권과 관련된 사항은 저작권법 및 공공데이터법에 따릅니다". 가입 정보에 "기업용으로 신청할 경우" 항목이 있음. 상업 이용을 금지하는 조항은 이 페이지 검색에서 찾지 못함 | opendart.fss.or.kr/intro/terms.do | 확인 (찾지 못한 것은 "없음"이 아니라 "이 페이지에 없음") |
+| 공공데이터포털 KRX상장종목정보 | 과거 기준일 | 요청변수 `basDt` (일치), `beginBasDt` ("기준일자가 검색값보다 크거나 같은"), `endBasDt` ("작은"), `likeBasDt` | www.data.go.kr/data/15094775/openapi.do | 기간 조회 변수 있음 확인. **자료가 언제부터 있는지는 미검증** (페이지 "시간범위 -") |
+| 공공데이터포털 KRX상장종목정보 | **이용 조건** | "공공누리 4유형 ... 출처표시 + 상업적 이용금지 + 변경금지", "상업적 목적 여부와 상관 없이 제3자 무단 제공 및 재배포가 엄격히 금지", "상업적 목적으로 이용할 경우 ... KRX Data Marketplace(data.krx.co.kr)에서 유료로 구매". 갱신: 기준일 다음 영업일 오후 1시 이후. 트래픽 개발계정 10,000 | 위 | 확인 |
+| KRX Open API | **이용 조건** | "API Users may only use the API Service for non-commercial purposes", "may not provide the data provided by the KRX to any third parties", 계약 종료 뒤 사용 금지, "maximum number of requests for one (1) key shall be 10,000 a day" | openapi.krx.co.kr/contents/OPP/INFO/OPPINFO005.jsp | 확인 |
+
+### 9.2 바뀌는 판단
+
+1. **Massive 무료 (개인) 플랜은 DIDM에 쓰기 어렵습니다.** QUANTGEN은 상업 앱이고 DIDM은 모형 학습이 목적인데, 개인 약관은 비상업·비업무 용도만 허용하고 시장자료 약관 5(g)는 AI·ML 학습을 금지합니다. 또 무료 Basic은 뉴스 2년치만, 감성은 2024-07-02부터입니다. → **제안: Massive 뉴스는 수집 연결 확인 (2026-11-24 실측) 까지로 두고, 모형 학습·검증 자료로는 쓰지 않음. 쓰려면 사업자 (Businesses) 약관·요금 확인이 먼저.** 이미 저장한 200건의 처리 (보관·삭제)는 소유자 결정 사항입니다.
+2. **Alpaca는 약관 미확인이 남습니다.** 문서는 무료 계정·과거 뉴스·감성 모형 학습 예시를 보여 주지만, 저장·파생·상업 이용 조항은 `files.alpaca.markets`의 PDF에 있어 아직 못 봤습니다. Massive와 같은 제약 (개인·비상업)이 있으면 2절의 "미국 820 × 2015~2024 (공시 + Alpaca 뉴스)" 경로도 공시 단독으로 줄어듭니다. → **표본 결정 전에 Alpaca 약관 확인이 필요.**
+3. **KRX 계열 (공공데이터포털·KRX Open API)은 비상업 전용입니다.** 8.4의 `--krx-listing`은 상업 앱 연구에 그대로 쓰기 어렵고, 상업 이용은 KRX Data Marketplace 유료 구매. → 한국 별칭 사전은 OpenDART (공시 목록의 날짜별 회사명 + corpCode.xml) 중심으로.
+4. **OpenDART 10년치 전체 목록:** 회사 지정 없이 3개월씩 (40구간 이상) + 쪽 나눔, 요청 한도 20,000건 (기간 미검증). 회사 지정 (corp_code, 최대 100개)이면 기간 제한이 풀리므로 표본 종목을 정한 뒤 회사별로 받는 편이 호출이 적을 수 있습니다.
+
+### 9.3 아직 미검증 (필요 호스트)
+
+| 항목 | 필요 호스트 |
+|---|---|
+| Alpaca 약관·시장자료 계약 (뉴스 저장·파생·상업 이용) | `files.alpaca.markets` (PDF, 내려받기 허용 필요) |
+| Massive 사업자 약관·요금 (상업·학습 허용 여부) | `massive.com` (허용됨, 이번 범위 밖이라 다음에) |
+| Benzinga 원 라이선스 (Alpaca 고객 적용 판) | Alpaca 약관 안에 있을 가능성 |
+| KRX상장종목정보 자료 시작일 | 키가 필요한 API 호출 (이번 규칙상 안 함) |
+| OpenDART 요청 한도의 집계 기간 | `opendart.fss.or.kr` 다른 안내 페이지 |
+| SEC formerNames 구조, EDGAR 시작 연도 | `www.sec.gov`·`data.sec.gov` (연락처 User-Agent 필요 → 소유자 PC) |
