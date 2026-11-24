@@ -8,8 +8,8 @@
   "sources": {
     ".github/workflows/compliance-review.yml": "795b2e9435c8eed43b08b98c709b3e2eeb3a7365ad2628855cb164cea0f94ab8",
     ".github/workflows/nautilus-registration.yml": "0f288458d889e2dde2bc3fd144ed6d0ba5f83e8c5f66c8fb3fd8558c2818f96a",
-    ".github/workflows/platform-build.yml": "95ef406f8c396e73721fbc07d868967d52e9148f84ed26a9e9a8f24ff665a5d4",
-    ".github/workflows/runtime-smoke.yml": "ad648e5c5b9b1f6d239a2498a800899a31a02d25dc97a729878ddf011b2f8cb2",
+    ".github/workflows/platform-build.yml": "47b96da16dd1b4dbe41efeabb271a8452d63b3db28d450c828fc253f49d4a20f",
+    ".github/workflows/runtime-smoke.yml": "d90d4ac3a673fb250aac93cfdfc3cc4788a9a6710e9ee70ca4cbb6aaf334d308",
     "README.md": "3d30cfad8a48c42f0862a8e422912bd9477bce540deebcfdba26b60d0c566348",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -95,9 +95,10 @@
     "core/didm/ingest/filings.py": "9b2d8d01942de98048ffd866312a15b4b850f459705c73f0d4bffb87adb6d6e2",
     "core/didm/ingest/gdelt.py": "99731a27e6597bfe4a8cd8ff443d60fc232fec708e262589bf740c882a9a3722",
     "core/didm/ingest/kalshi.py": "4f10f0581bd6aa13f0a9786d2f6b54ab97594b0c2d11b45189fa4ad8ce812bdd",
+    "core/didm/ingest/massive_news.py": "6ba428176099c2947581b45354c07e41c874b301e2b0441d3eb59161dc9bdccf",
     "core/didm/ingest/news.py": "37d84f3cb3bde56ed772235aee1283bca76057006e5044974663f22d80f72afd",
     "core/didm/llm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "core/didm/llm/schema.py": "110eb847575f0e9bf4b147fa17b97ff7c476cbdbd29de453d9fbe5ebcfcd4856",
+    "core/didm/llm/schema.py": "a8411c0ef82361c4e888ff5f06c3f7682ecc2a170c71fb1165e08679e2852af4",
     "core/didm/novelty.py": "840562fc43bea408254cfac625d22534408f85c85741015fc17fd4ddd311f590",
     "core/didm/store/__init__.py": "368bc91ce8edf904d874ed96be693136280bdf86c5fa81bb9590d24afad1eed3",
     "core/education/__init__.py": "d04a1be2039032cc6150e474930f58e9f5b1e882d8fad1a6b472c313b5456ad4",
@@ -325,6 +326,7 @@
     "data/didm/gdelt.py": "7623b420553c9f07d27e4b65ae61ef9510966ef6274438d718db101a0a671bde",
     "data/didm/kalshi.py": "da3685db53b509bd8c3915f6bc39d020c91a73d073d62548fa4e705c7c6bfffb",
     "data/didm/keys.py": "a712abbbbbd2a3af5e3332c1176c911529d33622ebbae7bd40c2a8c399939700",
+    "data/didm/massive_news.py": "712875c6a37d32a83ff6907e60b47b53ca445239b0498a6e130f5bf1d972c04b",
     "data/didm/opendart.py": "b571d9895fe6aec55412353d15debcc197f1375cf63ac0f6fa01a2921bf64b79",
     "data/didm/polymarket.py": "fe65bbd835d791add326ccdc4370f9336acd33920cb350b6f26d32585dcd0066",
     "data/didm/tiingo.py": "675ef2b89ffce14b0ae30c301090f6121f2b5da3c272b4e12c39f55a11868ee0",
@@ -342,7 +344,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "56daa8db2c21f99475d62a37ccdade7c423003cae3a5cfa68ac577f9fe33b333",
+    "docs/compliance/FACTS.md": "46b9963e121b0d88359e8352239d7725099c8d08055881ed64d296e1428f34a4",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "6786a4a0aa0438cd27e614a5df298aaf956b199bb96e50ef3f637e45679e486c",
     "docs/compliance/RELEASE_GAPS.md": "bfcbd27b9870aad4255c881844d21fd04b980db2bdb7966295ee2f495ac14702",
@@ -351,7 +353,7 @@
     "docs/product/A3_READING_LAYOUT_2026-11-06.md": "b0f6595caae843d4a912fc332adc78882f65f9eb579cd7f97f2d33519821cc64",
     "docs/product/ADOPTION_STRATEGY_CHECKS_2026-11-10.md": "995b2ee0508e86291b38735d57b064ecc78549759adb5dd654e5e64e6dd872d4",
     "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "0e854fc8af3bab5e75bc4690e4697ae3b11ebf0d07d762df2c8ab50ca97c13da",
-    "docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md": "aeb412d4e9a23bf6ec442c23187e046c3e12a9e4f3c10450075337a6710ad611",
+    "docs/product/ANDROID_INTERNAL_PREVIEW_VALIDATION_2026-11-23.md": "43e3b60a7b6784519901cf68957c8536eb634089c80ca04dd65718fe32ee0946",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
     "docs/product/BONDS_PORTFOLIO_LANGUAGE_2026-10-31.md": "469c32828b75b54797bf1ac81a8645688452bce5f0cf7c69132e7236f96f8e59",
@@ -541,7 +543,6 @@
     "tests/ai_connection_acceptance.py": "b074a2f0c8d708c68a28a19ff187b9e3ab1095c10c83c1a47cb6ede9d338f79f",
     "tests/ai_output_check_acceptance.py": "01c54460c470062df057d398b08233cae41c420115ee24693f19ab3711a02972",
     "tests/ai_payload_acceptance.py": "a4efa39af3a06c6859607306729a9190c4f44da320556a4567388f7ab107e138",
-    "tests/android_apk_evidence_acceptance.py": "225c5615faa41b22f12379b23374545bd0535ef21d7ee8616a516156c57d7e1f",
     "tests/app_identity_acceptance.py": "a204e6555d8170396616f9db2d893205fb484ab06c51dff81cfb23319f73cbf6",
     "tests/app_paths_acceptance.py": "55bc7df4746f15045a0ba895ef4fc7b26202616f3370b3ec832a47cd3e146f73",
     "tests/app_storage_startup_acceptance.py": "a941e834e6d28e2046bbebd950b57c52f00977d2805042f89a955e8ec7b2f339",
@@ -622,9 +623,10 @@
     "tests/didm_alpaca_news_acceptance.py": "56370ad5ebb6e834e8f73a5c60531daec48f72319cb5cac224d93dd70c9ffd09",
     "tests/didm_eodhd_acceptance.py": "b9af87bae6997d4df598005c896ec2357a8908c7ed76058885265312e2846e05",
     "tests/didm_ingest_acceptance.py": "b6c69236fce44daf5e5fc733b18a440f27abdbe4f4fdb3ee8dbb66108eb28a0c",
+    "tests/didm_massive_news_acceptance.py": "52e531178c88817191b1acca28b465d503742d674aac4dead82410a050e07ff0",
     "tests/didm_news_acceptance.py": "1280b0a97c7b48c9bd8610e891c048874d8503ad8a9dba4338068dfef2cda0ce",
     "tests/didm_novelty_acceptance.py": "ccefc838580aeab523770c0920afec71031b62980fcbdf16150cdaaabc9ed094",
-    "tests/didm_schema_acceptance.py": "5c32fdf9e5a9bc14d564782a21a4c69dec3d24595c72fcbbd65c2bfddbc50caa",
+    "tests/didm_schema_acceptance.py": "ef5892bbbc34d6980077a5f8ff6bfe6d34660fcbbd0abcaff269b46a774d645e",
     "tests/didm_sources_acceptance.py": "8574b9c822e4d7acfc849bd70ffcbd0d03fdca9b8ebf67c50ec0ff1c7f48b781",
     "tests/didm_store_acceptance.py": "3f54b0b04508850512776d6c6b4c836ed54e3c1e7fae2c91e53b349537c563da",
     "tests/didm_vendor_eval_acceptance.py": "5a134e1547f047358f33ce56c4cd59a46049154160591194e177e2e1c73e9089",
@@ -649,6 +651,7 @@
     "tests/gateway_same_answer_acceptance.py": "91e59d5ea698e283cd096873a508ddb95f8e4c8171051a9ccce5e016e552c2c5",
     "tests/glossary_search_acceptance.py": "058922190b05fc585dab3462848b40ea0444a43b4b5e96fdb512cd8ccfc0e64e",
     "tests/golden_tools.py": "24154d79aea43bc91b7c26c33c6b400cd9202cdb4915680a81b4f7cf0fa928ef",
+    "tests/handoff_doc_acceptance.py": "e7729c33edf0f05ea76db8bf66ae4463348a6e023d51cb00dab54ab360473ab2",
     "tests/history_best_source_acceptance.py": "cda3221001d11599c0b9dab6f71f59a20b7ac762d43adcd6c0b5f2fbce19310f",
     "tests/home_indicators_acceptance.py": "2585e4a8cd2437f838d94a52ecd2962117fd70e809e700dd14e9d5a87a691c74",
     "tests/home_watchlist_acceptance.py": "86956c94f3aa7a90f496bc5c2bea388a6b2b5f861b5d1ca4421045c55f19165c",
@@ -778,7 +781,7 @@
     "tools/handoff/auto_snapshot.py": "e79e3cc15572b0c4fae50784784f9fd234c75440d812104d0abf393bb2571cc6",
     "tools/handoff/mod/hooks/register.test.ts": "2709a0beb01e94689c5be2118f266138ad24b990648afbd58de8086e4d5628fb",
     "tools/handoff/mod/hooks/register.ts": "f7370a361aee2a53d4e1b8355f5a707b52a77d0e852a63bc3a1c743400b39d0b",
-    "tools/handoff/push_handoff.py": "45e2e3405d78087d5acb91ce4ea415a47fdcab3f13f3331708d07af856b91f29",
+    "tools/handoff/push_handoff.py": "0a125ce7efb1d09c1b3c050d8613cee6182b01b7dea4f30caf6e1fcccd3a1530",
     "tools/nautilus/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/nautilus/egress_probe.py": "e5189484cc5f4891c2278ffdf1d71dc065eface3019b31d4a1f263c4011ddc15",
     "tools/nautilus/launch.py": "3a7a9a3cbbb1f372dbf1598cd8c75eafbd7a116ee622cda259ee2e8aa7fe1577",
@@ -786,7 +789,6 @@
     "tools/nautilus/register_e1.py": "a32c9c6597c2ccbd7f4cb93631f60017b904a58585efe0ff5af0ecad8c65c264",
     "tools/nautilus/runner.py": "1d6fdd9d376a5991e1333b32f47d4d9af5297cfcab377a63f4924fcaf91c8ced",
     "tools/nautilus/sandbox.py": "fdbc0e51aa3e1abff737d96292c636ada8b82f59b8ffe4131c6471d202475b4e",
-    "tools/packaging/android_apk_evidence.py": "766483e964262ee9cab17a4426388ab4d959104ea49bf678e7051847dad2b0f3",
     "tools/packaging/smoke_desktop.py": "0d45bb20430e8f4b1a92d7c7db1badc054acf81ae4dedfe725729a6c11393373",
     "tools/packaging/smoke_installed.py": "0427690fbdc33f96095f4ead230f91f569f453c173f1b15ee7b57c49400c15b3",
     "tools/packaging/stage.py": "c3e2718385ca68c684678c5885f66bd9f6f3048399992baa09e4ef7df1215885",
@@ -865,163 +867,163 @@
   "reviews": {
     "1": {
       "document_sha256": "2ce2ef82ca7e3c0acd30f3d1cdf201ade123bb88b68b12fea000a703d332a9bf",
-      "source_digest": "1ca136565061f7935e0bda803acece263b693f69253035744fb707892f464096",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.651960+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.806777+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "2": {
       "document_sha256": "29233f1158b647424af0f2f95009cba834b5839f198bde6e8aeb0f52712aaf02",
-      "source_digest": "1ca136565061f7935e0bda803acece263b693f69253035744fb707892f464096",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.657412+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.810417+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "3": {
       "document_sha256": "fd7b7daa3269c9184de928241c00285e9004d5d3d6ce0300c3473d2b92db3c37",
-      "source_digest": "9096ab6c88449dbcd822d25694f8c7c5bd3b0f36222dd68d1bf1080fc12309db",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.659885+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "e3d5080d8d3fb0ecc6c03eaaaee5a5fb483c1368f3e3a056fa1e31cffb653bf1",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.812800+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "4": {
       "document_sha256": "a279e9ecb48fc53d77d5599bdfcfd950a6903b3620c155dc8391fd0ff49f2eb5",
-      "source_digest": "ef585c4ddc74e26c48008b01c726a8095cf5274a49eb4ac9fcfe2c371f3e8d6d",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.662674+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "3416f8fd43bf3c894c27adc917dcd557f728865ab3050f2ee4927a51ccae9807",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.815419+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "5": {
       "document_sha256": "c654550e59aa9efa62d18c66b44c3ab616fb60f34b4bdca6a8030c2fe045202b",
-      "source_digest": "d114216f2eddf8aa8478f3954ab4a089357e6bf1d4d7f0bb4cc26030469dd847",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.664685+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "af1a2aa65a55269190bc0fdf5638243c35319ecf05655e8a6c3ffd57a852c05d",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.818025+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "6": {
       "document_sha256": "046d212843788cbfd3bd98d874353c866c6461bcacd6b33263d458a0384669ff",
-      "source_digest": "54d3981b8c33026f55970ec837cc623530918041cc0a784da2ffe8803de11bf8",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.667096+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "23756f16786c9277a8059a8dddab0a77c2154818f42f260a48d3f8445a34e4e6",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.820438+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "7": {
       "document_sha256": "3cd6969d359eee34c87decd24d8605921e3b041f16b5850f71abfa6a8de687ff",
-      "source_digest": "1ca136565061f7935e0bda803acece263b693f69253035744fb707892f464096",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.669444+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.823480+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "8": {
       "document_sha256": "df2a8c16927904ba1d05722b8bdf3c98242b134775e593733b1ec43c19b129f4",
-      "source_digest": "54d3981b8c33026f55970ec837cc623530918041cc0a784da2ffe8803de11bf8",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.671706+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "23756f16786c9277a8059a8dddab0a77c2154818f42f260a48d3f8445a34e4e6",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.825737+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "9": {
       "document_sha256": "1e7ec776e5c5f4e547718ed1b2daaf5bfe453e36b84e49b967f2b309e26415a5",
-      "source_digest": "a26b5af80a15a14fda6b0ecdcb26e45d26cc53f5489c46f042ce98b521af6a85",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.674110+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "035ac5db860c8db69f4adf3993fa820f0f884a74668b83a6d7889b4ac8b70d13",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.828569+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "10": {
       "document_sha256": "8ac7cd4bebe370f24446d9dc664d1787196f2ecc30369c4eb41fa2f1614a253b",
-      "source_digest": "35b27bb971ab08a22154db4a6599cc99fd70806b2970fa0d840c1a61486a0a6c",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.676907+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "4f98a225a6e31dc02c76bfdb3e6141a485822d59f3cef5a54b97c4e307fac263",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.830740+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "11": {
       "document_sha256": "827703e6738ddfa7d8b0ee3e50b4c5c011917944ae4557b4a63ab9c2a3b36f0e",
-      "source_digest": "6b68b72f30a2625132bac24a4fddb86d90cff1ca36cfa7ed214767051e8d3d83",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.678889+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "ee51db6fdfcf54db77ccc519b94dbf75f8edf39c49684bc1cd96cc66b76f9557",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.833165+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "12": {
       "document_sha256": "0c3486ebbe3dd9d5cd4a9ec6c1a890ba86a853e15d6b16972ec092bc8fa32ba4",
-      "source_digest": "8fd59a45d64ebdf65d6fa435ff36033bf33c630a7880bb616d8eab85d1930c42",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.681320+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "1a4ce1f7d60ea570488e42a64c39ecc54ccce0dd0aa74da319459e39f6f3625c",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.835816+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "13": {
       "document_sha256": "6ed1a72c1fb3dcaabb8005bf842263770e82f03583c0a8de7b74bd4d5c2460e2",
-      "source_digest": "a26b5af80a15a14fda6b0ecdcb26e45d26cc53f5489c46f042ce98b521af6a85",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.683470+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "035ac5db860c8db69f4adf3993fa820f0f884a74668b83a6d7889b4ac8b70d13",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.838118+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "14": {
       "document_sha256": "8fd19519255efd53d51c543bcf925562cde6267f1787228f91f53f01506bc373",
-      "source_digest": "a26b5af80a15a14fda6b0ecdcb26e45d26cc53f5489c46f042ce98b521af6a85",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.685439+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "035ac5db860c8db69f4adf3993fa820f0f884a74668b83a6d7889b4ac8b70d13",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.840006+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "15": {
       "document_sha256": "df106158222dea4ee8a4e561c710a2031978d9e06b6924cf3171ac222cd9065b",
-      "source_digest": "a26b5af80a15a14fda6b0ecdcb26e45d26cc53f5489c46f042ce98b521af6a85",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.688116+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "035ac5db860c8db69f4adf3993fa820f0f884a74668b83a6d7889b4ac8b70d13",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.847308+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "16": {
       "document_sha256": "7f4332d607f5c6e09385852295a440bd73eed30b332338ad7db57907fafbccf0",
-      "source_digest": "799684230bcceba300a72c9bb683231bba05c646ce5bdcf523b06476ab00183b",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.690152+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "71c304d35736f42709c99e57e06291d66f7a76844d42887cd3932e0257f9cdc4",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.850440+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "17": {
       "document_sha256": "7aea3c1546e00b147daf1504a7215f372e6ae6592ba65b8af48b4fb4db0a1774",
-      "source_digest": "54d3981b8c33026f55970ec837cc623530918041cc0a784da2ffe8803de11bf8",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.692241+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "23756f16786c9277a8059a8dddab0a77c2154818f42f260a48d3f8445a34e4e6",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.852562+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "18": {
       "document_sha256": "33fa51e9d7070b82e53b8d30d70cdc36cbb15ec763fc15d6dfd609c28b66829a",
-      "source_digest": "1ca136565061f7935e0bda803acece263b693f69253035744fb707892f464096",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.694430+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.854657+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "19": {
       "document_sha256": "74a4c1edd55be5dc38d4581686c6de12899f55af62b4788b51ab939901bb4612",
-      "source_digest": "6e76ab7c744dfc15822536f78e1ec2edbaf15e9ec902e23a4df87e4a3cda70e4",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.696559+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "81cc7892956faa064afea5ea8bebdf170b688c2d36cab52addd714218e22225e",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.856655+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     },
     "20": {
       "document_sha256": "0cce7af30b08f6d1810bb7069dbe39572ffffd009f9d393a71c98181403a6ba5",
-      "source_digest": "1ca136565061f7935e0bda803acece263b693f69253035744fb707892f464096",
-      "reviewed_by": "GPT ai_policy_records with policy_unchanged_review: OS-A1 technical source-policy review 2026-11-23 KST",
-      "review_note": "Reviewed all20 policies against actual main5af plus frozen OS-A1 APK evidence helper/tests/workflow/docs. Internal CI records APK size/hash and SDK signer certificate verification only; mode/key identity/device validation remain unestablished. Six direct staging package metadata observations, missing/conflicting/error states and ABI limits are separate from APK status; no complete target resolution or rights claim. Preserve manual Android selection, other platform jobs, existing product behavior and numbered policies/profile. FACTS now distinguishes configured CI artifact upload and7-day retention from store release or observed deletion. Technical source/document consistency only; not actual APK build, phone, commercial, legal, licensing, API or full OS-A1 completion. HEAD is authenticated5af plus working-tree fingerprints.",
-      "reviewed_at": "2026-11-22T22:15:25.699128+00:00",
-      "source_commit": "5af378779b984153f8a5b8f7ad729869bdfbe70e"
+      "source_digest": "9a0121457081f99837bc8a9118879592537c8595d1425a27be8f73aa1209bba9",
+      "reviewed_by": "GPT ai_policy_records: T8-6 actual-post145-main source-policy consistency review",
+      "review_note": "Reviewed all20 policy impacts of the frozen manual named-lane handoff publishing option and synthetic local-Git tests against authenticated actual post145 main. Only an explicit invocation may publish one allowed lane document to the configured handoff remote with conflict/ownership checks and readback. This is not a schedule, disclosure approval, data redaction, or proof of live publication. Existing central CURRENT/LEDGER/AUTO_STATE behavior and source-policy/operator/licensing/publication conditions remain. Preserve all original policy text and65 publication blockers. Technical source/document consistency only; actual main HEAD plus working-tree fingerprints, not legal/operational certification or a clean-checkout attestation.",
+      "reviewed_at": "2026-11-23T01:30:53.858639+00:00",
+      "source_commit": "05f97df63b7357c614c699428f8a9fc3088eaa3e"
     }
   }
 }
