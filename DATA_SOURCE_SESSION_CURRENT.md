@@ -14,11 +14,11 @@ task: data-source
 cycle: 2026-11-24
 done_ids: none
 next_ids: DS-5b, DS-5c, DS-5a
-updated_at: 2026-11-24T21:10:00+09:00
+updated_at: 2026-11-24T21:40:00+09:00
 stale_after_hours: 3
 waiting_on: owner
-work_branch: claude/ds-5bc-news-20261124 (+ claude/ds-connector-fixes-20261124@241c0f4, claude/ds-home-diagnose-20261124@b70a78d, claude/ds-new-sources-plan-20261124@6a6516d)
-work_commit: 4a646ce
+work_branch: claude/ds-collection-status-20261124 (+ claude/ds-5bc-news-20261124@4a646ce, claude/ds-connector-fixes-20261124@241c0f4, claude/ds-home-diagnose-20261124@b70a78d, claude/ds-new-sources-plan-20261124@6a6516d)
+work_commit: b4d48bc
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -29,6 +29,15 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## DATA_SOURCE (Claude) D4·D5 — 2026-11-24T21:40+09:00
+
+- 메인 지시 (11-24): D4 수집 운영 점검 문서·요약 명령, D5 DS-4c 설계만. D1~D3은 메인 통합 PR에 들어감 (PR 열지 않음).
+- 브랜치 `claude/ds-collection-status-20261124` @ b4d48bc (origin/main de32ea1에서 분기).
+- D4: tools/didm/collection_status.py (SQLite mode=ro, 건수·날짜만), tests/didm_collection_status_acceptance.py 7 OK, docs/didm/COLLECTION_STATUS_GUIDE_2026-11-24.md (명령, 읽는 법, 2015~2024 표본 채움 가능 표). 소유자 명령: `python -m tools.didm.collection_status --data-dir "$env:LOCALAPPDATA\QUANTGEN\didm"`.
+- D5: docs/didm/DS4C_FEDWATCH_DESIGN_2026-11-24.md (내부 정규 형식, 시점 규칙, 파일 배치, 시험 T1~T10). 코드·호출 없음, OA-31 답 대기.
+- 검사: DIDM 11모듈 + gateway_boundary + packaging_policy 221 OK.
+- 메모: DS-5b/5c는 소유자가 이 세션에 직접 "N0 승인, Alpaca·Massive부터 진행하세요"라고 답해 코드까지 끝냄 (4a646ce). 메인의 "N0 답 전 시작 안 함" 지시보다 소유자 답이 먼저 왔음을 메인에 알림.
 
 ## DATA_SOURCE (Claude) DS-5b/5c 코드 — 2026-11-24T21:10+09:00
 
