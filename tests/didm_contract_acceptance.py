@@ -92,6 +92,40 @@ class ConformanceExamples(unittest.TestCase):
                     record = assemble(case).record
                 self.assertEqual(s.validate_record(record.as_dict()), record)
 
+    def test_every_assembled_record_equals_the_expected_record_field_by_field(self):
+        """The expected records were written out by hand (plain arithmetic), so a field taken from the
+        wrong place in assemble_record shows up here."""
+        seen = 0
+        for name, case in load("accept"):
+            if case["kind"] != "judgement":
+                continue
+            with self.subTest(name):
+                got, want = assemble(case).record.as_dict(), case["expected_record"]
+                self.assertEqual(set(got), set(want))
+                for field in want:
+                    if field in ("ess_like_0_100", "uncertainty_entropy"):
+                        self.assertAlmostEqual(got[field], want[field], places=12, msg=field)
+                    else:
+                        self.assertEqual(got[field], want[field], field)
+                seen += 1
+        self.assertGreaterEqual(seen, 5)
+
+    def test_examples_use_distinct_non_trivial_values(self):
+        """Fixtures where every case shares one value cannot tell where a field came from."""
+        cases = [case for _, case in load("accept") if case["kind"] == "judgement"]
+        hashes = {case["scorer_info"]["prompt_sha256"] for case in cases}
+        self.assertGreaterEqual(len(hashes), 2)
+        self.assertNotIn("0" * 64, hashes)
+        for field in ("event_type", "target_kind", "entity_id", "origin_cluster_id", "relevance_0_100",
+                      "model_version", "market_confirmation"):
+            self.assertGreaterEqual(len({str(case["expected_record"][field]) for case in cases}), 2, field)
+        with_target = [case for case in cases if case["judgement"]["target_kind"] != "none"]
+        self.assertGreaterEqual(len(with_target), 3)
+        for case in with_target:
+            self.assertNotEqual(case["expected_record"]["relevance_0_100"], 100 * case["judgement"]["p_subject"])
+        for case in cases:
+            self.assertNotEqual(case["expected_record"]["origin_cluster_id"], case["judgement"]["article_id"])
+
     def test_every_reject_example_raises_schema_error_with_the_stated_reason(self):
         for name, case in load("reject"):
             with self.subTest(name):
@@ -102,12 +136,11 @@ class ConformanceExamples(unittest.TestCase):
                         j.validate_judgement(case["judgement"], j.validate_request(case["request"]))
                 self.assertIn(case["expect"], str(caught.exception))
 
-    def test_reject_examples_fail_for_one_reason_only(self):
-        """Each reject example is an accept example with one thing wrong, so the reason is the one tested."""
+    def test_reject_examples_cover_many_distinct_reasons(self):
         reasons = [case["expect"] for _, case in load("reject")]
-        self.assertGreaterEqual(len(set(reasons)), 25)
+        self.assertGreaterEqual(len(set(reasons)), 30)
 
-    def test_examples_contain_no_secret_looking_or_long_text(self):
+    def test_example_article_text_is_short_and_marked_synthetic(self):
         for folder in ("accept", "reject"):
             for name, case in load(folder):
                 request = case.get("request") or {}
@@ -220,7 +253,7 @@ class Assembly(unittest.TestCase):
 
     def test_calibrator_and_version_come_together(self):
         case = a_case()
-        judgement = j.validate_judgement(case["judgement"])
+        judgement = j.validate_judgement(case["judgement"], j.validate_request(case["request"]))
         info, asm = sc.ScorerInfo(**case["scorer_info"]), sc.Assembly(**case["assembly"])
         with self.assertRaises(j.JudgementError):
             sc.assemble_record(judgement, info, asm, calibrate_direction=lambda p: p)
@@ -229,21 +262,77 @@ class Assembly(unittest.TestCase):
 
     def test_bad_calibrator_output_is_rejected(self):
         case = a_case()
-        judgement = j.validate_judgement(case["judgement"])
+        judgement = j.validate_judgement(case["judgement"], j.validate_request(case["request"]))
         info, asm = sc.ScorerInfo(**case["scorer_info"]), sc.Assembly(**case["assembly"])
-        for bad in ((0.5, 0.5, 0.5), (1.2, -0.2, 0.0), (0.5, 0.5), "abc", (float("nan"), 0.5, 0.5)):
+        for bad in ((0.5, 0.5, 0.5), (1.2, -0.2, 0.0), (0.5, 0.5), "abc", (float("nan"), 0.5, 0.5),
+                    (10 ** 400, 0.0, 0.0), (0.5000004, 0.5000004, 0.0)):
             with self.subTest(bad=bad), self.assertRaises(s.SchemaError):
                 sc.assemble_record(judgement, info, asm, calibrate_direction=lambda p, bad=bad: bad,
                                    calibration_version="cal-fixture-1")
 
     def test_bad_didm_side_values_are_rejected_by_the_record_schema(self):
         case = a_case()
-        judgement = j.validate_judgement(case["judgement"])
+        judgement = j.validate_judgement(case["judgement"], j.validate_request(case["request"]))
         info = sc.ScorerInfo(**case["scorer_info"])
         for field, bad in (("novelty_0_100", 120.0), ("received_at", "2026-11-05T19:15:00"),
-                           ("market_confirmation", "MAYBE"), ("p_credibility", -0.1), ("record_id", "")):
+                           ("market_confirmation", "MAYBE"), ("p_credibility", -0.1), ("record_id", ""),
+                           ("relevance_0_100", 10 ** 400), ("record_id", "conf-j-0001\n")):
             with self.subTest(field=field), self.assertRaises(s.SchemaError):
                 sc.assemble_record(judgement, info, sc.Assembly(**dict(case["assembly"], **{field: bad})))
+
+    def test_model_output_never_changes_a_didm_side_field(self):
+        """Whatever the model says, the nine ASSEMBLY_FIELDS of the record are the Assembly's."""
+        case = a_case()
+        request = j.validate_request(case["request"])
+        info, asm = sc.ScorerInfo(**case["scorer_info"]), sc.Assembly(**case["assembly"])
+        base = sc.assemble_record(j.validate_judgement(case["judgement"], request), info, asm).record.as_dict()
+        flat = {t.value: 1 / 15 for t in s.EventType}
+        variants = (dict(p_subject=0.0), dict(p_subject=1.0), dict(claim_status="reported"),
+                    dict(direction_probs=[0.9, 0.05, 0.05]), dict(event_type="none", event_type_probs=flat),
+                    dict(event_type="earnings", event_type_probs=flat))
+        for change in variants:
+            with self.subTest(change=sorted(change)):
+                raw = dict(case["judgement"], **change)
+                got = sc.assemble_record(j.validate_judgement(raw, request), info, asm).record.as_dict()
+                for field in sc.ASSEMBLY_FIELDS:
+                    self.assertEqual(got[field], base[field], field)
+                self.assertEqual((got["model_version"], got["prompt_sha256"]),
+                                 (info.model_version, info.prompt_sha256))
+                self.assertEqual(got["event_type"], raw["event_type"])
+                self.assertEqual(got["direction_probs"], raw["direction_probs"])
+        self.assertEqual(len(sc.ASSEMBLY_FIELDS), 9)
+
+    def test_scorer_info_reaches_the_record(self):
+        case = a_case()
+        judgement = j.validate_judgement(case["judgement"], j.validate_request(case["request"]))
+        info = sc.ScorerInfo("another-model-7", "5" * 64)
+        record = sc.assemble_record(judgement, info, sc.Assembly(**case["assembly"])).record
+        self.assertEqual((record.model_version, record.prompt_sha256), ("another-model-7", "5" * 64))
+
+    def test_assembly_for_another_article_or_target_is_refused(self):
+        """A judgement cannot be joined to DIDM-side values computed for something else."""
+        cases = dict(load("accept"))
+        macro, firm = cases["judgement-macro.json"], cases["judgement-firm-ko.json"]
+        judgement = j.validate_judgement(firm["judgement"], j.validate_request(firm["request"]))
+        info = sc.ScorerInfo(**firm["scorer_info"])
+        with self.assertRaisesRegex(j.JudgementError, "another article"):
+            sc.assemble_record(judgement, info, sc.Assembly(**macro["assembly"]))
+        for change, reason in ((dict(entity_id="KR:000660"), "another target"),
+                               (dict(target_kind="macro"), "another target"),
+                               (dict(target_kind="company"), "target_kind must be"),
+                               (dict(article_id="art-0002x"), "another article")):
+            with self.subTest(change=change), self.assertRaisesRegex(j.JudgementError, reason):
+                sc.assemble_record(judgement, info, sc.Assembly(**dict(firm["assembly"], **change)))
+        self.assertEqual(sc.ASSEMBLY_KEYS, ("article_id", "target_kind", "entity_id"))
+
+    def test_a_judgement_needs_its_request(self):
+        case = a_case()
+        with self.assertRaises(TypeError):
+            j.validate_judgement(case["judgement"])
+        with self.assertRaises(j.JudgementError):
+            j.validate_judgement(case["judgement"], None)
+        with self.assertRaises(j.JudgementError):
+            j.validate_judgement(case["judgement"], case["request"])      # a raw mapping is not a ScoreRequest
 
     def test_unvalidated_judgement_is_refused(self):
         case = a_case()
@@ -309,6 +398,48 @@ class RunScorer(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             sc.run_scorer(scorer, [self.request])
 
+    def test_reject_reasons_never_carry_model_output(self):
+        leak = "FULL ARTICLE TEXT " * 40
+        requests, answers = [], {}
+        bad_outputs = (dict(self.good, event_type=leak), dict(self.good, claim_status=leak),
+                       dict(self.good, target_kind=leak), {**self.good, leak: 1},
+                       dict(self.good, event_type_probs={**self.good["event_type_probs"], leak: 0.0}),
+                       dict(self.good, entity_id=leak), dict(self.good, article_id=leak),
+                       dict(self.good, judgement_version=leak), dict(self.good, p_subject=leak),
+                       dict(self.good, direction_probs=[leak, 0.5, 0.5]), leak, [leak])
+        for i, output in enumerate(bad_outputs):
+            request = j.validate_request(dict(a_case()["request"], article_id=f"art-leak-{i}"))
+            requests.append(request)
+            answers[request.article_id] = (dict(output, article_id=request.article_id)
+                                           if isinstance(output, dict) and output.get("article_id") != leak
+                                           else output)
+        batch = sc.run_scorer(FakeScorer(answers), requests)
+        self.assertEqual(len(batch.rejected), len(bad_outputs))
+        for article_id, reason in batch.rejected:
+            self.assertNotIn("FULL ARTICLE", reason, article_id)
+            self.assertLess(len(reason), 90, reason)
+        # one key per rule, not one per offending value
+        two = sc.run_scorer(FakeScorer({"art-leak-0": dict(self.good, article_id="art-leak-0", event_type="aaa"),
+                                        "art-leak-1": dict(self.good, article_id="art-leak-1", event_type="bbb")}),
+                            requests[:2])
+        self.assertEqual(two.reject_counts, {"unknown event_type": 2})
+
+    def test_a_huge_integer_is_a_counted_rejection_not_a_crash(self):
+        for field, value in (("p_subject", 10 ** 400), ("direction_probs", [10 ** 400, 0.0, 0.0]),
+                             ("event_type_probs", dict(self.good["event_type_probs"], none=10 ** 400))):
+            with self.subTest(field=field):
+                scorer = FakeScorer({"art-0001": dict(self.good, **{field: value})})
+                batch = sc.run_scorer(scorer, [self.request])
+                self.assertEqual(batch.judgements, ())
+                self.assertIn("must be finite", batch.rejected[0][1])
+
+    def test_a_kept_judgement_can_always_be_assembled(self):
+        """What run_scorer keeps, assemble_record accepts: P(+1) + P(-1) above 1 is rejected up front."""
+        scorer = FakeScorer({"art-0001": dict(self.good, direction_probs=[0.5000004, 0.5000004, 0.0])})
+        batch = sc.run_scorer(scorer, [self.request])
+        self.assertEqual(batch.judgements, ())
+        self.assertEqual(batch.reject_counts, {"p_positive + p_negative exceeds 1": 1})
+
     def test_object_without_info_is_not_a_scorer(self):
         class NoInfo:
             def judge(self, request):
@@ -323,30 +454,98 @@ class RunScorer(unittest.TestCase):
 class RequestRules(unittest.TestCase):
     def test_request_rejections(self):
         base = a_case()["request"]
-        cases = (dict(base, language="fr"), dict(base, title=" "), dict(base, body=5), dict(base, entity_name=None),
-                 dict(base, target_kind="none"), dict(base, extra=1),
-                 {k: v for k, v in base.items() if k != "body"})
-        for raw in cases:
-            with self.subTest(raw=raw), self.assertRaises(j.JudgementError):
+        cases = ((dict(base, language="fr"), "language must be"), (dict(base, title=" "), "title must be"),
+                 (dict(base, body=5), "body must be"), (dict(base, entity_name=None), "entity_name must be a non-empty"),
+                 (dict(base, target_kind="none"), "entity_id must be null"), (dict(base, extra=1), "unknown request fields"),
+                 (dict(base, target_kind="none", entity_id=None), "entity_name must be null"),
+                 (dict(base, target_kind="firm", entity_id=None), "entity_id must be an identifier"),
+                 ({k: v for k, v in base.items() if k != "body"}, "missing request field: body"))
+        for raw, reason in cases:
+            with self.subTest(reason=reason), self.assertRaisesRegex(j.JudgementError, reason):
                 j.validate_request(raw)
+        none = j.validate_request(dict(base, target_kind="none", entity_id=None, entity_name=None))
+        self.assertIsNone(none.entity_name)
+
+
+class Tolerances(unittest.TestCase):
+    def test_sum_tolerance_is_1e_6_and_the_schema_text_follows_the_code(self):
+        self.assertEqual(j.SUM_TOLERANCE, 1e-6)
+        rules = export_schema.judgement_schema()["x-didm-cross-field-rules"]
+        self.assertIn("event_type_probs sums to 1 within 1e-06", rules)
+        self.assertIn("direction_probs sums to 1 within 1e-06", rules)
+        original = j.SUM_TOLERANCE
+        try:
+            j.SUM_TOLERANCE = 1e-3
+            import importlib
+            importlib.reload(export_schema)
+            self.assertTrue(any("differs from the code" in line for line in export_schema.check()))
+        finally:
+            j.SUM_TOLERANCE = original
+            importlib.reload(export_schema)
+        self.assertEqual(export_schema.check(), [])
+
+    def test_boundary_examples_exist_on_both_sides(self):
+        accept, reject = dict(load("accept")), dict(load("reject"))
+        inside = accept["judgement-sums-inside-tolerance.json"]["judgement"]
+        self.assertAlmostEqual(abs(sum(inside["direction_probs"]) - 1), 5e-7, places=9)
+        self.assertAlmostEqual(abs(sum(inside["event_type_probs"].values()) - 1), 5e-7, places=9)
+        for name in ("judgement-direction-sum-just-outside.json", "judgement-type-probs-sum-just-outside.json"):
+            raw = reject[name]["judgement"]
+            total = sum(raw["direction_probs"]) if "direction" in name else sum(raw["event_type_probs"].values())
+            self.assertAlmostEqual(abs(total - 1), 2e-6, places=9)
+
+    def test_exported_patterns_refuse_a_trailing_newline_under_search(self):
+        import re
+        for pattern, good in ((export_schema.ID_PATTERN, "conf-0001"), (export_schema.SHA_PATTERN, "a" * 64)):
+            self.assertTrue(re.search(pattern, good))
+            self.assertFalse(re.search(pattern, good + "\n"))
+            self.assertFalse(re.search(pattern, good + "\n\n"))
 
 
 class Boundaries(unittest.TestCase):
-    FILES = ("core/didm/llm/judgement.py", "core/didm/llm/scorer.py", "tools/didm/export_schema.py")
-    BANNED = ("data", "requests", "urllib", "http", "socket", "jsonschema", "pydantic", "time", "anthropic", "openai",
-              "transformers", "torch")
+    FILES = ("core/didm/llm/judgement.py", "core/didm/llm/scorer.py", "core/didm/llm/cutoffs.py",
+             "tools/didm/export_schema.py")
+    BANNED = ("data", "requests", "urllib", "http", "socket", "ssl", "ftplib", "smtplib", "jsonschema", "pydantic",
+              "time", "anthropic", "openai", "transformers", "torch", "subprocess")
+    CLOCK_CALLS = ("now", "today", "utcnow", "fromtimestamp", "time", "monotonic", "perf_counter")
 
-    def test_no_provider_network_clock_or_validator_library_imports(self):
+    @staticmethod
+    def imported(tree: ast.AST) -> list[str]:
+        names = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                names += [a.name for a in node.names]
+            elif isinstance(node, ast.ImportFrom):
+                module = node.module or ""
+                names.append(module)
+                names += [f"{module}.{a.name}" if module else a.name for a in node.names]
+        return names
+
+    def problems(self, source: str) -> list[str]:
+        tree = ast.parse(source)
+        found = [f"import {name}" for name in self.imported(tree) if name.split(".")[0] in self.BANNED]
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Call):
+                func = node.func
+                name = func.attr if isinstance(func, ast.Attribute) else getattr(func, "id", "")
+                if name in self.CLOCK_CALLS:
+                    found.append(f"call {name}()")
+        return found
+
+    def test_no_provider_network_clock_or_validator_library(self):
         for rel in self.FILES:
-            tree = ast.parse((ROOT / rel).read_text(encoding="utf-8"))
-            for node in ast.walk(tree):
-                names = []
-                if isinstance(node, ast.Import):
-                    names = [a.name for a in node.names]
-                elif isinstance(node, ast.ImportFrom):
-                    names = [node.module or ""]
-                for name in names:
-                    self.assertNotIn(name.split(".")[0], self.BANNED, f"{rel} imports {name}")
+            with self.subTest(rel):
+                self.assertEqual(self.problems((ROOT / rel).read_text(encoding="utf-8")), [])
+
+    def test_the_check_sees_ordinary_import_and_clock_forms(self):
+        for line in ("from urllib.request import urlopen", "import http.client", "from data import didm",
+                     "import data.didm.keys as k", "import socket", "from time import sleep",
+                     "from datetime import datetime\nx = datetime.now()", "import datetime\nx = datetime.date.today()",
+                     "from datetime import datetime, timezone\n_STARTED = datetime.now(timezone.utc)",
+                     "from datetime import datetime\nx = datetime.utcnow()"):
+            with self.subTest(line=line):
+                self.assertNotEqual(self.problems(line), [])
+        self.assertEqual(self.problems("from datetime import date, datetime, timezone\nx = date(2026, 1, 1)"), [])
 
     def test_schema_py_still_has_the_v0_surface(self):
         self.assertEqual(s.SCHEMA_VERSION, "didm-score-v0")

@@ -1,0 +1,46 @@
+{
+  "kind": "judgement",
+  "note": "event_type 8e-7 below the top probability is not a tie",
+  "request": {
+    "article_id": "art-0001",
+    "language": "en",
+    "title": "Synthetic headline: central bank holds its policy rate",
+    "body": null,
+    "target_kind": "macro",
+    "entity_id": "US.FFR",
+    "entity_name": "US policy rate"
+  },
+  "judgement": {
+    "judgement_version": "didm-judgement-v0",
+    "article_id": "art-0001",
+    "target_kind": "macro",
+    "entity_id": "US.FFR",
+    "p_subject": 0.92,
+    "event_type": "inflation",
+    "event_type_probs": {
+      "monetary_policy": 0.5000004,
+      "inflation": 0.4999996,
+      "employment": 0.0,
+      "growth": 0.0,
+      "fiscal": 0.0,
+      "trade_tariffs": 0.0,
+      "geopolitics": 0.0,
+      "election_policy": 0.0,
+      "earnings": 0.0,
+      "mergers_acquisitions": 0.0,
+      "management": 0.0,
+      "regulation_litigation": 0.0,
+      "supply_chain": 0.0,
+      "crypto_regulation_hack": 0.0,
+      "none": 0.0
+    },
+    "direction_probs": [
+      0.1,
+      0.7,
+      0.2
+    ],
+    "claim_status": "confirmed"
+  },
+  "expect": "most probable key",
+  "json_schema_detects": false
+}
