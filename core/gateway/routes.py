@@ -10,6 +10,10 @@ from core.gateway.sources import ROUTES, SOURCES
 
 ROUTES_FILE = Path(__file__).with_name("routes.json")
 PROFILES = ("personal", "commercial")
+# D7-G display rights, pinned for the profile a public build runs (P10): no display right on this PC, so under
+# "commercial" these are only "company" (a later contract) or "off", never the user's key or keyless. An edited
+# routes.json that breaks this fails closed (RouteError: every source that is not fixed-local is off).
+NO_DISPLAY_RIGHT = ("yahoo", "fmp", "gs_marquee")
 # D7-G rule 2: no key-shaped text in the route file (long base64/hex runs, common key prefixes).
 _KEY_LIKE = re.compile(r"(sk-[A-Za-z0-9_-]{8,}|[A-Za-z0-9+/_-]{32,})")
 
@@ -48,6 +52,9 @@ def check_routes(data: object, raw_text: str = "") -> dict:
                 raise RouteError(f"profile {name}: {source} has no key; use keyless")
             if SOURCES[source].keys and "keyless" in order:
                 raise RouteError(f"profile {name}: {source} needs a key; keyless is not a route for it")
+    for source in NO_DISPLAY_RIGHT:
+        if {"local_key", "keyless"} & set(profiles["commercial"][source]):
+            raise RouteError(f"profile commercial: {source} has no display right on this PC; only company or off")
     return data
 
 

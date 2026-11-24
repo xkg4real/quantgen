@@ -162,11 +162,27 @@ def yfinance_ready() -> bool:
 # Network touchpoints — the only two. Tests patch these.
 # --------------------------------------------------------------------------- #
 Rows = list[tuple[str, float]]
+_GATEWAY_SOURCE = {"FRED": "fred", "YFINANCE": "yahoo"}
+
+
+def _gateway_refusal(provider: str) -> str:
+    """Why this PC may not reach `provider` now ("" when it may): core/gateway's verdict for its source (P10). Screens
+    that still import this module directly (the native Home and market summary, until KEY-5) then follow the active
+    profile too: a public build runs "commercial", where yahoo is off. Calls through core.gateway.ficc() are refused
+    there first and never get here for a blocked source; with nothing blocked (personal) this changes nothing."""
+    from core import gateway                          # when called: core/gateway wraps this module
+    source = _GATEWAY_SOURCE[provider]
+    why = gateway.blocked(source)
+    if not why:
+        return ""
+    return f"{source} is {'off' if why == 'off' else 'served by the company route'} in profile {gateway.profile()}"
 
 
 def _fred_fetch(ids: list[str], start: str) -> dict[str, Rows]:
     """One FRED call for `ids` from ISO `start`. Returns {id: [(date, value)]}, NaN
     and '.' observations dropped. Raises on transport failure."""
+    if why := _gateway_refusal("FRED"):
+        raise FICCError(why)
     ids = list(ids)
     if _pdr is not None:
         # FredReader, not DataReader: DataReader takes no timeout, so a silent network cost
@@ -202,6 +218,8 @@ def _fred_fetch(ids: list[str], start: str) -> dict[str, Rows]:
 
 def _yf_fetch(tickers: list[str], period: str) -> dict[str, Rows]:
     """One yfinance download for `tickers`. Returns {ticker: [(date, close)]}."""
+    if why := _gateway_refusal("YFINANCE"):
+        raise FICCError(why)
     if _yf is None:
         raise FICCError("yfinance is not installed.")
     tickers = list(tickers)
@@ -475,7 +493,12 @@ def _provider_rows(provider: str, ids: list[str], days: int, *, not_before: floa
     set that answers — a cache hit with its file's retrieved_at, a fresh fetch with `retrieved_at_utc` (the
     caller's pinned instant) — is handed to `pit_store.ingest_rows(provider, id, rows, retrieved_at_utc)`, which
     stamps value_status by the close + 10 min rule and appends only new content. `not_before` is the cache rule
-    of `_cache_get` (epoch seconds)."""
+    of `_cache_get` (epoch seconds).
+
+    A provider the gateway blocks (P10: yahoo in a public build) fails every id with that reason before the cache
+    is read, so an earlier run's cached file is not served either."""
+    if why := _gateway_refusal(provider):
+        return {}, {i: f"GatewayOff: {why}" for i in ids}
     rows: dict[str, Rows] = {}
     errors: dict[str, str] = {}
     missing = []

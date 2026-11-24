@@ -390,10 +390,124 @@ class PublicBuildProfileTest(Base):
     def test_shipped_commercial_table_keeps_no_display_right_sources_off_this_pc(self):
         """What a public build runs: yahoo, fmp and gs_marquee are never on the user's key or keyless in the shipped
         commercial table (a contract may later move one to "company"; then this test changes with routes.json)."""
+        self.assertEqual(routes.NO_DISPLAY_RIGHT, self.NO_DISPLAY_RIGHT)
         table = routes.load_routes()["profiles"]["commercial"]
         for sid in self.NO_DISPLAY_RIGHT:
             with self.subTest(source=sid):
                 self.assertFalse({"local_key", "keyless"} & set(table[sid]), table[sid])
+
+    def _edited_tables(self):
+        """routes.json edits that would turn a public build's yahoo, fmp or gs_marquee back on (review 2026-11-24,
+        blocker: the file ships as a plain data file in the install folder)."""
+        swapped = _valid()
+        swapped["profiles"]["personal"], swapped["profiles"]["commercial"] = (swapped["profiles"]["commercial"],
+                                                                              swapped["profiles"]["personal"])
+        yield "swapped", swapped
+        turned_on = _valid()
+        turned_on["profiles"]["commercial"].update(yahoo=["keyless"], fmp=["local_key"], gs_marquee=["local_key"])
+        yield "turned_on", turned_on
+        for sid, order in (("yahoo", ["keyless"]), ("fmp", ["local_key"]), ("gs_marquee", ["local_key"]),
+                           ("yahoo", ["company", "keyless"]), ("fmp", ["company", "local_key"])):
+            one = _valid()
+            one["profiles"]["commercial"][sid] = order
+            yield f"{sid}={order}", one
+
+    def test_edited_routes_file_cannot_turn_a_public_build_s_sources_back_on(self):
+        """check_routes pins the rule, not just the shipped file: under "commercial", yahoo, fmp and gs_marquee may
+        only be "company" or "off". An edited file fails closed: RouteError, so every source that is not fixed-local
+        is off; KIS and the Upbit account (rule 1) keep working."""
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            for name, table in self._edited_tables():
+                path = Path(tmp) / "routes.json"
+                path.write_text(json.dumps(table), encoding="utf-8")
+                with self.subTest(table=name):
+                    with self.assertRaises(routes.RouteError):
+                        routes.load_routes(path)
+                    with _build("public"), patch.object(gw, "load_routes", lambda: routes.load_routes(path)):
+                        gw.reload()
+                        self.assertEqual(gw.profile(), "commercial")
+                        for sid in self.NO_DISPLAY_RIGHT + ("fred", "crypto_public"):
+                            self.assertEqual(gw.route_of(sid), "off", sid)
+                        self.assertIsNotNone(gw._route_error)
+                        self.assertEqual(gw.route_of("kis_quote"), "local_key")
+                gw.reload()
+        for order in (["company"], ["off"]):                  # a later contract may still move one to "company"
+            ok = _valid()
+            for sid in self.NO_DISPLAY_RIGHT:
+                ok["profiles"]["commercial"][sid] = order
+            with self.subTest(order=order):
+                self.assertIs(routes.check_routes(ok), ok)
+
+    def test_build_info_without_a_channel_is_locked(self):
+        """Should-fix 2: build info with no CHANNEL (or a PyInstaller bundle with no build info at all) is not a source
+        run; it is "commercial" whatever the override, also when app_identity cannot be imported."""
+        no_channel = patch.dict(sys.modules, {"core._build_info": types.SimpleNamespace(GATEWAY_PROFILE="personal")})
+        with no_channel:
+            for override in ("personal", None):
+                gw._profile_override = override
+                self._assert_commercial()
+        import core
+        saved = core.app_identity
+        del core.app_identity
+        try:
+            with patch.dict(sys.modules, {"core.app_identity": None}), no_channel:
+                gw._profile_override = "personal"
+                self.assertEqual(gw.profile(), "commercial")
+            with patch.dict(sys.modules, {"core.app_identity": None, "core._build_info": None}), \
+                    patch.object(sys, "frozen", True, create=True), patch.object(sys, "_MEIPASS", "/b", create=True):
+                self.assertEqual(gw.profile(), "commercial")
+        finally:
+            core.app_identity = saved
+        with patch.dict(sys.modules, {"core._build_info": None}), patch.object(sys, "frozen", True, create=True), \
+                patch.object(sys, "_MEIPASS", "/b", create=True):
+            gw._profile_override = "personal"
+            self.assertEqual(gw.profile(), "commercial")
+
+    def test_screens_that_import_the_yahoo_and_fmp_clients_directly_follow_the_profile(self):
+        """Should-fix 3: until KEY-5 the native Home and market summary call core.ficc.data.load_series and the Paper
+        screen builds the frozen engine QuoteFeed (which builds data.fmp.FMPQuoteClient itself). In a public build those
+        entry points refuse Yahoo and FMP as the gateway does (a cached Yahoo file is not served either); in a source
+        run and in dev/beta builds they reach the provider exactly as before."""
+        from core.engine.feed import QuoteFeed as EngineFeed
+        from core.ficc import data as ficc_data
+        from data.fmp import FMPQuoteClient
+        calls = []
+
+        def download(*args, **kwargs):
+            calls.append(args)
+            raise RuntimeError("fake yahoo reached")
+
+        cached = [(f"2026-11-{d:02d}", 100.0 + d) for d in range(2, 12)]
+        fake = types.SimpleNamespace(download=download)
+        with patch.object(ficc_data, "_yf", fake), _no_keys():
+            with _build("public"), patch.object(ficc_data, "_cache_get", return_value=cached) as cache_get:
+                auto = ficc_data.load_series("^GSPC")
+                self.assertEqual(auto.source, "SYNTHETIC")
+                self.assertIn("yahoo is off in profile commercial", auto.note)
+                with self.assertRaises(ficc_data.FICCError) as ctx:
+                    ficc_data.load_series("^GSPC", source="yfinance")
+                self.assertIn("yahoo is off in profile commercial", str(ctx.exception))
+                self.assertEqual(ficc_data.load_fx_spot("EURUSD").source, "SYNTHETIC")
+                with self.assertRaises(ficc_data.FICCError):
+                    ficc_data._yf_fetch(["^GSPC"], "5d")
+                self.assertFalse(cache_get.called, "a cached Yahoo file is not served while Yahoo is off")
+                self.assertEqual(calls, [])
+                with self.assertRaises(gw.GatewayOff):
+                    FMPQuoteClient(api_key=FAKE)
+                self.assertIsNone(EngineFeed().fmp)                # the frozen feed stores None: "FMP client unavailable"
+            for build in (None, _build("dev"), _build("beta")):
+                with self.subTest(build=build and build.values), (build or patch.dict(sys.modules, {})):
+                    calls.clear()
+                    with patch.object(ficc_data, "_cache_get", return_value=None):
+                        with self.assertRaises(ficc_data.FICCError) as ctx:
+                            ficc_data.load_series("^GSPC", source="yfinance")
+                        self.assertIn("fake yahoo reached", str(ctx.exception))
+                    self.assertEqual(len(calls), 1)
+                    with patch.object(ficc_data, "_cache_get", return_value=cached):
+                        self.assertEqual(ficc_data.load_series("^GSPC").source, "YFINANCE")
+                    self.assertIsInstance(FMPQuoteClient(api_key=FAKE), FMPQuoteClient)
+                    self.assertIsInstance(EngineFeed().fmp, FMPQuoteClient)
 
 
 class LocalTest(Base):

@@ -1089,8 +1089,13 @@ Windows CI에서 창 핸들과 아이콘을 시험하며, 사용자 PC의 Explor
 - `core/app_paths.py`의 `user_data_dir()`과 `is_frozen()`은 경로를 계산만 합니다. 폴더를 만들거나 열거나 나열하지
   않습니다. 기존 `~/.nextgen`이 있으면 그 폴더를 그대로 씁니다. 아직 아무 호출처도 바꾸지 않았습니다(OS-F2, KEY-2 뒤).
 - `core/app_identity.py`는 이름·번들 ID 제안·빈 값(업데이트 주소, 계정 ID, 라이선스 공개키)과 D7-G 게이트웨이 값
-  `GATEWAY_PROFILE = "personal"`, `DATA_API_BASE = ""`(회사 서버 길 꺼짐)만 둡니다. 비밀값은 없고 "(주)" 표기도
-  없습니다. 공급원 호출 방식은 바뀌지 않았습니다.
+  `GATEWAY_PROFILE`(빌드 정보 `core._build_info.GATEWAY_PROFILE`에서 import 때 정함: 소스 실행·wheel·개발/베타 빌드
+  `personal`, 공개(public) 빌드는 `commercial` 고정 — P10, 2026-11-24)와 `DATA_API_BASE = ""`(회사 서버 길 꺼짐)만
+  둡니다. 비밀값은 없고 "(주)" 표기도 없습니다. 공급원 호출 방식은 바뀌지 않았습니다.
+- P10(2026-11-24)은 네트워크 전송을 더하지 않습니다. `commercial`은 표시권 없는 Yahoo·FMP·gs_marquee를 끄기만 합니다
+  (core 경로와, 화면이 직접 부르는 `core/ficc/data.py`·`data/fmp/quote_client.py` 입구). 공개 빌드에서는 그 값 대신
+  합성(SYNTHETIC) 표시나 사용 불가 사유가 보입니다. 설치 폴더의 `routes.json`을 고쳐 셋을 다시 켜면 게이트웨이가 그
+  파일을 거절해 고정 로컬(KIS·Upbit 잔고) 밖의 공급원을 모두 끕니다.
 - 패키지 앱(`packaging/`): PyInstaller onedir. 데이터 파일은 휠과 같은 허용 목록(`tools/packaging/stage.py`)으로만 넣어
   `.env`·연구 원장·캐시가 들어가지 않습니다. `QUANTGEN --selfcheck <파일>`은 사용자가 지정한 파일에만 점검 결과를
   쓰고 네트워크·창을 열지 않습니다. 빌드에 `licenses/THIRD_PARTY_NOTICES.txt`(설치된 패키지의 라이선스 원문)와

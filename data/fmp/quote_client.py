@@ -126,6 +126,16 @@ class FMPQuoteClient:
         # still be able to say what happened to the symbols it dropped;
         # otherwise the caller reports "no row" for a plan refusal.
         self._errors: dict[str, str] = {}
+        # P10: no client on this PC while core/gateway blocks FMP (off, or on the
+        # company route; a public build runs "commercial", where fmp is off), so a
+        # screen that still builds one itself (the Paper screen's frozen engine
+        # QuoteFeed, until KEY-5) gets none. Imported when called: core/gateway
+        # loads this module itself.
+        from core import gateway
+        why = gateway.blocked("fmp")
+        if why:
+            state = "off" if why == "off" else "served by the company route"
+            raise gateway.GatewayOff(f"fmp is {state} in profile {gateway.profile()}")
 
     @property
     def ready(self) -> bool:

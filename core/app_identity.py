@@ -10,6 +10,7 @@ Not here on purpose:
   article 20 on using a company-like name; not legal advice).
 Callers are wired later: QSettings names and windows_branding.py by the UI session, paths in OS-F2.
 """
+import sys
 
 SERVICE_NAME = "QUANTGEN"
 # Matches today's QApplication/QSettings names (quantgen_desktop/app.py) so stored preferences stay put.
@@ -55,21 +56,24 @@ IS_DEV_BUILD = build_channel() == "dev"
 
 
 def gateway_profile_locked() -> bool:
-    """P10 (rule "공개 빌드는 commercial 프로필 고정", GATEWAY_DESIGN.md section 2): True when build info fixes the
-    gateway profile to "commercial" whatever else says: CHANNEL "public", or a CHANNEL this code does not know (fails
-    closed; for .env build_channel() still calls that "dev"). Read at call time, like build_channel();
-    core/gateway profile() checks it before its test override."""
-    try:
-        from core import _build_info  # written by packaging/rthook_build_info.py.in only
-    except ImportError:
-        return False
-    return getattr(_build_info, "CHANNEL", "dev") not in ("dev", "beta")
+    """P10 (rule "공개 빌드는 commercial 프로필 고정", GATEWAY_DESIGN.md section 2): True when the gateway profile is fixed
+    to "commercial" whatever else says. Build info present: unless its CHANNEL is "dev" or "beta" (so "public", a value
+    this code does not know, or no CHANNEL at all: fails closed; for .env build_channel() still calls the last two
+    "dev"). No build info: only in a PyInstaller bundle (sys.frozen and sys._MEIPASS), whose runtime hook did not run.
+    Read at call time from sys.modules, with no import: packaging/rthook_build_info.py.in only ever puts build info
+    there, and a core/_build_info.py file is already there from build_channel() at import, so a source run pays no
+    failing import on each core/gateway profile() call (which checks this before its test override)."""
+    info = sys.modules.get("core._build_info")
+    if info is None:
+        return bool(getattr(sys, "frozen", False) and getattr(sys, "_MEIPASS", None))
+    return getattr(info, "CHANNEL", None) not in ("dev", "beta")
 
 
 def gateway_profile() -> str:
     """The data gateway profile from build info, read like build_channel(): field GATEWAY_PROFILE ("personal" or
-    "commercial"). No build info, or no such field: "personal". A locked build (public): "commercial" whatever the
-    field says. Any other value fails closed to "commercial", never "personal"."""
+    "commercial"). No build info (a source checkout or wheel), or CHANNEL "dev"/"beta" without the field: "personal".
+    A locked build (gateway_profile_locked: public, no or unknown CHANNEL, a bundle without build info): "commercial"
+    whatever the field says. Any other value fails closed to "commercial", never "personal"."""
     if gateway_profile_locked():
         return "commercial"
     try:

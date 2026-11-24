@@ -98,13 +98,15 @@ def _table() -> Optional[dict]:
 
 
 def _profile_locked() -> bool:
-    """P10: build info fixes the profile to "commercial" (a public build; core.app_identity.gateway_profile_locked).
-    If app_identity cannot be imported, the build info the runtime hook left in sys.modules is read directly."""
+    """P10: the profile is fixed to "commercial" (a public build; core.app_identity.gateway_profile_locked). If
+    app_identity cannot be imported, the same rule is applied to the build info the runtime hook left in sys.modules."""
     try:
         from core import app_identity
     except ImportError:
         info = sys.modules.get("core._build_info")
-        return info is not None and getattr(info, "CHANNEL", "dev") not in ("dev", "beta")
+        if info is None:
+            return bool(getattr(sys, "frozen", False) and getattr(sys, "_MEIPASS", None))
+        return getattr(info, "CHANNEL", None) not in ("dev", "beta")
     return app_identity.gateway_profile_locked()
 
 

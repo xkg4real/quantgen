@@ -120,7 +120,7 @@ class GatewayProfileFromBuildInfo(unittest.TestCase):
     def test_source_run_and_dev_or_beta_builds_keep_today_s_profile(self):
         cases = (
             (None, "personal"),                                   # source checkout or wheel: no build info
-            (_info("dev"), "personal"), (_info("beta"), "personal"), (_info(), "personal"),   # no profile field
+            (_info("dev"), "personal"), (_info("beta"), "personal"),                          # no profile field
             (_info("dev", "personal"), "personal"), (_info("beta", "personal"), "personal"),
             (_info("beta", "commercial"), "commercial"), (_info("dev", "commercial"), "commercial"),
         )
@@ -148,6 +148,56 @@ class GatewayProfileFromBuildInfo(unittest.TestCase):
             with self.subTest(channel=channel), patch.dict(sys.modules, {"core._build_info": _info(channel)}):
                 self.assertEqual(app_identity.build_channel(), "dev")
                 self.assertTrue(app_identity.gateway_profile_locked())
+
+    def test_build_info_without_a_channel_is_locked(self):
+        """Build info that exists but has no CHANNEL (a hook template edited without its CHANNEL line) is not a source
+        run: it locks to "commercial" whatever the profile field says (review 2026-11-24, should-fix 2). Only no build
+        info at all, or CHANNEL "dev"/"beta", leaves the profile open."""
+        for info in (_info(), _info(profile="personal"), _info(profile="commercial"), types.SimpleNamespace()):
+            with self.subTest(info=info):
+                self.assertEqual(_fresh_identity(info).GATEWAY_PROFILE, "commercial")
+                with patch.dict(sys.modules, {"core._build_info": info}):
+                    self.assertTrue(app_identity.gateway_profile_locked())
+                    self.assertEqual(app_identity.gateway_profile(), "commercial")
+                    self.assertEqual(app_identity.build_channel(), "dev")      # unchanged (.env: GATEWAY_DESIGN 9)
+
+    def test_packaged_app_without_build_info_is_locked(self):
+        """A PyInstaller bundle (sys.frozen and sys._MEIPASS) whose runtime hook never ran has no build info: it is not
+        a source run, so it locks to "commercial". A runtime that sets only sys.frozen (no _MEIPASS; e.g. if a mobile
+        packager did) keeps today's "personal", as the mobile APK row of GATEWAY_DESIGN.md section 2 says."""
+        with patch.object(sys, "frozen", True, create=True), patch.object(sys, "_MEIPASS", "/bundle", create=True):
+            self.assertEqual(_fresh_identity(None).GATEWAY_PROFILE, "commercial")
+            with patch.dict(sys.modules, {"core._build_info": None}):
+                self.assertTrue(app_identity.gateway_profile_locked())
+                self.assertEqual(app_identity.gateway_profile(), "commercial")
+            with patch.dict(sys.modules, {"core._build_info": _info("beta")}):   # the hook ran: build info decides
+                self.assertFalse(app_identity.gateway_profile_locked())
+                self.assertEqual(app_identity.gateway_profile(), "personal")
+        with patch.object(sys, "frozen", True, create=True), patch.dict(sys.modules, {"core._build_info": None}):
+            saved = sys.__dict__.pop("_MEIPASS", None)
+            try:
+                self.assertFalse(app_identity.gateway_profile_locked())
+                self.assertEqual(_fresh_identity(None).GATEWAY_PROFILE, "personal")
+            finally:
+                if saved is not None:
+                    sys._MEIPASS = saved
+
+    def test_source_run_never_retries_the_build_info_import(self):
+        """Review nit (cost): gateway_profile_locked() runs on every gateway profile() call; with no build info (a
+        source run) it reads sys.modules and attempts no import. The runtime hook only ever delivers build info through
+        sys.modules, and a core/_build_info.py file would already be there from build_channel() at import."""
+        import builtins
+        real_import, tried = builtins.__import__, []
+
+        def spy(name, globals=None, locals=None, fromlist=(), level=0):
+            if "_build_info" in name or "_build_info" in (fromlist or ()):
+                tried.append(name)
+            return real_import(name, globals, locals, fromlist, level)
+
+        with patch.dict(sys.modules, {"core._build_info": None}), patch.object(builtins, "__import__", spy):
+            for _ in range(3):
+                self.assertFalse(app_identity.gateway_profile_locked())
+        self.assertEqual(tried, [])
 
     def test_company_route_gate_follows_the_resolved_profile(self):
         public = _fresh_identity(_info("public"))
