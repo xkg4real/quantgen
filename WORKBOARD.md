@@ -1,3 +1,53 @@
+## 2026-11-24 21:05 KST 갱신 — 19:10 블록 뒤 보고·결정 (이 블록이 아래 블록보다 우선)
+
+git 기준: main `de32ea1` · 통합 ① PR [#150](https://github.com/xkg4real/quantgen/pull/150) head `4f53f86` (CI: 문서·임시 원장·문법 성공, 설치 작업 4건 진행 중) · 통합 ② `claude/integration2-20261124` @ `0dfd1aa` (origin).
+
+20:5x KST에 메인의 모델 사용 한도가 차서 검토 워크플로 4개와 연구 구현 3개가 멈췄다. 소유자가 모델을 바꿨고(21:0x), 같은 일을 다시 띄웠다: 통합 ② 독립 검토 8갈래(didm-sim, didm-pipeline, data-connectors, home-reasons, os, payments, portability, policy)를 `0dfd1aa` 기준으로, 연구 단위 3개(⑨-4/2/d, ⑨-3a/recorder/1/payload, ⑧-1/c)를 남은 초안에서 이어서.
+
+### B''. 19:10 뒤 받은 보고 (메인이 git에서 확인)
+
+| 세션 | 일 | 브랜치 @ 커밋 | 어디로 | 상태 |
+|---|---|---|---|---|
+| DATA_SOURCE | D11 홈 실패 사유 분류(DS-H/reasons) + 진단 시험 고정 | ds-home-reason-codes @ `9f9dbda` | 통합 ② | [x] 합침 |
+| DATA_SOURCE | D12 표본 확대 조사(DS-7), D14 약관 원문(9절), Massive 대안(10절) | ds-sample-feasibility @ `9c479a6` | 통합 ② | [x] 합침 |
+| DATA_SOURCE | D13 수집 현황 개체별 보기(DS-6/2) | ds-by-entity @ `93f23fd` | 통합 ② | [x] 합침 |
+| DATA_SOURCE | DS-5b/2 약관 보호장치(`core/didm/ingest/terms.py`, 수집기 종목 필수·안내 출력) | ds-terms-guard @ `60db667` | 통합 ② | [x] 합침 |
+| DATA_SOURCE | D15 Stage 2 사건 표본 계획(문서) | ds-stage2-events-plan @ `c5563ee` | 통합 ② | [x] 합침. GDELT 약관 원문 인용 보강 중(호스트 21:0x 승인) |
+| DATA_SOURCE | DS-8 곁기록 저장 래퍼 | ds-confirmations-store (예정) | 통합 ② | [ ] 배분함 (21:0x) |
+| DIDM_DEV | DIDM-3/b·4/a·4/b·5·7·8·9·2/2·9/e2e | didm-dev @ `9b81479` | 통합 ② | [x] 합침 |
+| DIDM_DEV | DIDM-8/a 시장 확인 곁기록 `didm-confirmation-v0` | didm-dev @ `0a1d6c9` | 통합 ② | [x] 합침 |
+| DIDM_DEV | DIDM-7/a, DIDM-9/b, DIDM-9/c, 판단 v1 입장·공식 절, DIDM-S2/a(공시+GDELT 영향 메모) | didm-dev | 다음 묶음 | [ ] 배분함 (20:3x, 21:0x) |
+| PAYMENTS | P10 판매 빌드 게이트웨이 프로필 | payments-gateway-profile @ `ea7f4b0` | **보류**: 소유자 답 3개(OA-63) 뒤, 메인 독립 검토 뒤 | [x] 보고 · [ ] 검토 |
+| OS | 통합 ① 검토 후속(OSF-2/5/7~10) | os-apk-followups (아직 원격에 없음) | 통합 ② | [ ] 진행 중 |
+| QUANTGPT | — (19:02부터 `waiting_on: main`, 다음 일 없음) | quantgpt-q0 @ `326f5a5` | — | [ ] **멈춤: 소유자 한 줄 붙여 넣기(OA-54) 필요** |
+
+### 메인 결정 (19:10 뒤)
+
+- **연구용 자료 약관(소유자 답 전까지, 되돌릴 수 있음):** Massive·Alpaca 무료 자료와 KRX 공공데이터(공공데이터포털 KRX상장종목정보, KRX Open API)는 DIDM 학습·검증·표본·제품에 쓰지 않는다. 근거: DATA_SOURCE D14가 읽은 약관 원문 — Massive "solely for your own personal, non-commercial, and non-business purposes", 5(g) AI·ML 학습 금지; Alpaca "solely for your own personal and non-commercial purposes"(상업 이용은 사전 서면 동의); KRX 계열 비상업 전용. 이미 받은 Massive 200건·Alpaca 60건은 그대로 둔다(보관/삭제는 소유자).
+- 시장 확인 곁기록 저장: 별도 파일 `didm_derived.sqlite`, `PointInTimeStore` 재사용, `source_id` "didm-confirmation-v0", `item_id` = record_id@rule_version, known_at은 실제로 쓴 시각(과거로 적지 않음), 읽기는 known_at과 수신 시각 중 늦은 쪽 기준, 과거 재계산은 다른 source_id.
+- DIDM 사건 식별자: 대상 + 유형 + 첫 보도 뒤 7일 창(원출처 묶음은 재게시 할인에만). 제안서 질문 14로 소유자 확인.
+- 환경: 소유자가 Default에 `www.gdeltproject.org`, `gdeltproject.org` 허용 승인(21:0x).
+
+### 메인 → PAYMENTS_ACCOUNT_KEYS (이어서, 아래 19:10 블록의 1~5 다음)
+
+6. (21:05) P10 `ea7f4b0` 받음. 병합은 소유자 답 3개(OA-63: ① 공개 빌드 commercial 고정 ② 베타 기본값 ③ 공개 빌드에서 Yahoo 계열 SYNTHETIC 표시·모의투자 FMP 해외 시세 불가를 받아들일지) 뒤. 메인이 따로 독립 검토한다(우회 시도·회귀). 그동안 이 브랜치에 더 커밋하지 말 것(고칠 것이 나오면 이 절에 적음).
+7. (21:05) OS에 넘길 한 줄(rthook·spec·selfcheck)은 소유자 답 뒤 메인이 OS에 보낸다. `may_read_dotenv`를 잠금에 맞추는 변경은 메인 승인 대기 — 메인 판단: 소유자 답 ①이 "예"이면 같은 묶음에서 맞춘다(공개 빌드가 .env를 읽지 않게).
+8. (21:05) P4 차례는 그대로(통합 ① 병합 뒤 MERGE_QUEUE 맨 위). P11(D12-A 메모) 보고가 아직 없다 — 진행 중이면 끝나는 대로 보고.
+
+### C''. 소유자 수동 작업 (새로 생긴 것)
+
+| ID | 내용 | 마감 | 근거 문서 |
+|---|---|---|---|
+| OA-54 (다시) | **QUANTGPT 세션에 한 줄 붙여 넣기**: "handoff 브랜치 WORKBOARD.md의 '메인 → QUANTGPT' 절을 읽고 따르세요." — 그 세션은 19:02부터 멈춰 있음 | 24시간 안(지금) | 이 문서 "메인 → QUANTGPT" 절 1~15 |
+| OA-55 (다시) | PAYMENTS 세션에 같은 한 줄("…'메인 → PAYMENTS_ACCOUNT_KEYS' 절을 읽고 따르세요.") | 24시간 안 | 위 절 1~8 |
+| OA-56 (갱신) | DIDM 사전등록 V0.1 제안 **14문항**(예/아니오, 권고 포함) | 24시간 밖 | `docs/didm/PREREG_V0_1_PROPOSAL_2026-11-24.md` 12절(통합 ②) |
+| OA-62 (새) | 연구용 뉴스 자료 약관: (a) Massive·Alpaca·KRX를 연구에서 빼는 메인 결정 수용 여부 (b) 표본 경로 "GDELT + EDGAR 8-K + OpenDART" 수용 여부 (c) Benzinga에 학습 권리 포함 견적 문의 여부 (d) 이미 받은 Massive 200건·Alpaca 60건 보관/삭제 | 표본 결정 전 | `docs/didm/SAMPLE_EXPANSION_FEASIBILITY_2026-11-24.md` 9·10절, `STAGE2_EVENT_SAMPLE_PLAN_2026-11-24.md` |
+| OA-63 (새) | 판매 빌드 게이트웨이 프로필 P10: ① 공개 빌드 commercial 고정 ② 베타 기본값 ③ 공개 빌드의 Yahoo 계열 SYNTHETIC·모의투자 FMP 해외 시세 불가 수용 | 판매 빌드 전 | `docs/commercial/GATEWAY_DESIGN.md` v0.3.4(P10 브랜치) |
+
+push_log (2026-11-24): 18:34 KST 1회(8건), 19:03 KST 1회(QUANTGPT 한 줄).
+
+---
+
 ## 2026-11-24 19:10 KST 갱신 — 하부 세션 보고 반영 (이 블록이 아래 18:45 블록보다 우선, 세션 지도 A는 아래 그대로)
 
 git 기준: main `de32ea1` (#147 GH-2 → `dfae585`, #149 PAY-0·PAY-2 → `de32ea1` 병합됨, 원장 3행 기록) · 통합 브랜치 `claude/integration-20261124` (로컬, 독립 검토 중).
