@@ -58,5 +58,17 @@ python -m core.research.markets
 
 - 여섯 줄 (지표마다 한 줄): `<기호> <상태> reason=<사유 코드> live=<실시간 상태>[ via=<yfinance가 남긴 원인>]`. 값·키·URL·공급사 문구는 나오지 않습니다. 늘 종료 코드 0.
 - `via=`: yfinance는 네트워크 막힘·TLS 가로채기·요청 제한을 "빈 결과"로 바꿔 돌려주므로 (`reason=no_observations`), 진단 때만 yfinance 자체 기록을 모아 원인을 붙입니다: `rate_limited` (Yahoo 요청 제한), `certificate_error` (보안 프로그램·프록시의 TLS 가로채기), `network_timeout`, `network_error`.
-- 명령 자체가 `No module named` 또는 `has no attribute 'load_home_indicators'`로 실패하면 **오래된 체크아웃**이 원인입니다 (DS-H 이전 코드). 이 경우 코드 수정 없이 최신 main으로 바꾸면 됩니다.
-- 읽는 법 (마스터 부록 H4와 같은 분류): 모든 줄 `network_error` → PC·회사망 차단; Yahoo 3줄만 `via=certificate_error` → 보안 프로그램; Yahoo 3줄만 `via=rate_limited` → Yahoo 제한 (잠시 뒤 다시); FRED 3줄 `network_timeout` → FRED 지연 (3회 × 12초 재시도라 카드가 1~3분 빔); `dependency_missing` → venv 패키지 설치.
+- **아무것도 출력되지 않고 끝나면 오래된 체크아웃**입니다 (이 명령이 들어가기 전 코드는 출력 없이 종료 코드 0). 2026-10-29 이전 체크아웃은 `No module named core.research.markets`로 실패합니다. 두 경우 모두 코드 수정 없이 최신 main으로 바꾸면 됩니다.
+- 읽는 법 (2026-11-24 검토 DS-3 반영, 명령이 실제로 내는 값 기준):
+
+| 출력 | 뜻 |
+|---|---|
+| FRED 3줄 `reason=network_error`, Yahoo 3줄 `via=network_error`, BTC `live=UNAVAILABLE/network_error` | 프록시를 거치는 연결이 막힘 (회사망·프록시 설정) |
+| FRED 3줄 `reason=provider_unavailable`, Yahoo 3줄 `via=network_error` 또는 `via=network_timeout` | **직접 연결 (보통 집 PC)에서 네트워크 실패** (DNS 실패·연결 거부·끊김·무응답). FRED 쪽은 지금 사유 코드가 전송 실패를 구분하지 못해 `provider_unavailable`로 나옵니다 |
+| FRED 3줄만 `provider_unavailable`, Yahoo 줄은 `OBSERVED` | FRED만 실패 (FRED 장애·차단) |
+| Yahoo 3줄만 `via=certificate_error` | 보안 프로그램·프록시의 TLS 가로채기 |
+| Yahoo 3줄만 `via=rate_limited` | Yahoo 요청 제한 (잠시 뒤 다시) |
+| `dependency_missing` | venv 패키지 설치 |
+| 출력 없음 | 오래된 체크아웃 (위) |
+
+- 무응답 네트워크에서는 FRED 재시도 때문에 **명령이 약 6분 동안 아무것도 출력하지 않다가** 여섯 줄을 냅니다 (검토 실측 359.9초). 앱의 홈 카드도 그동안 빕니다.

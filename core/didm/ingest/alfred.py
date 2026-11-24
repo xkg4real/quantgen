@@ -117,13 +117,14 @@ def rows_from_manual(series_id: str, rows: Iterable[tuple], received_at: datetim
     return out
 
 
-def value_as_known_on(rows: Iterable[Mapping[str, Any]], obs_date: str, known_on: str) -> float | None:
+def value_as_known_on(rows: Iterable[Mapping[str, Any]], obs_date, known_on) -> float | None:
     """The value for obs_date as it stood on known_on (vintage realtime window contains known_on)."""
     cutoff = _day(known_on, "known_on")
+    obs = _day(obs_date, "obs_date").date().isoformat()   # same accepted forms as known_on (review DS-9)
     hits = []
     for row in rows:
         payload = row["payload"]
-        if payload["date"] == obs_date:
+        if payload["date"] == obs:
             start, end = _vintage_period(payload["realtime_start"], payload["realtime_end"])
             if start <= cutoff <= end:
                 hits.append(payload)

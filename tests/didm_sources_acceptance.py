@@ -303,5 +303,48 @@ class IntoStore(unittest.TestCase):
             self.assertEqual(st.as_of("2026-11-18T00:59:59Z"), [])
 
 
+class KalshiBook(unittest.TestCase):
+    """Review DS-7/DS-8 (2026-11-24). The empty-side encoding is unverified until an owner-PC run."""
+
+    def snap(self, **fields):
+        return kalshi.market_snapshot_rows({"markets": [{"ticker": "X", **fields}]}, RECEIVED)[0]["payload"]
+
+    def test_empty_book_uses_last_price(self):
+        p = self.snap(yes_bid_dollars="0.0000", yes_ask_dollars="1.0000", last_price_dollars="0.0700",
+                      volume_fp="5000.00")
+        self.assertEqual((p["p_yes"], p["book_empty"], p["one_sided"]), (0.07, True, False))
+        p = self.snap(yes_bid_dollars="0.0000", yes_ask_dollars="1.0000")
+        self.assertEqual((p["p_yes"], p["book_empty"]), (None, True))
+
+    def test_one_sided_book_not_a_mid(self):
+        p = self.snap(yes_bid_dollars="0.4000", yes_ask_dollars="1.0000", last_price_dollars="0.4200")
+        self.assertEqual((p["p_yes"], p["one_sided"], p["book_empty"]), (0.42, True, False))
+        p = self.snap(yes_bid=0, yes_ask=30, last_price=25)                 # legacy cents, empty bid
+        self.assertEqual((p["p_yes"], p["one_sided"]), (0.25, True))
+
+    def test_two_sided_mid_unchanged(self):
+        p = self.snap(yes_bid_dollars="0.6100", yes_ask_dollars="0.6300")
+        self.assertEqual((p["p_yes"], p["book_empty"], p["one_sided"]), (0.62, False, False))
+
+    def test_ticker_and_object_checks(self):
+        for bad in ({"ticker": 123}, {"ticker": ["A", "B"]}, {"ticker": "lower"}, {}):
+            with self.subTest(bad=bad), self.assertRaises(kalshi.KalshiError):
+                kalshi.market_snapshot_rows({"markets": [bad]}, RECEIVED)
+        for payload in ({"markets": [None]}, {"markets": ["X"]}):
+            with self.assertRaises(kalshi.KalshiError):
+                kalshi.market_snapshot_rows(payload, RECEIVED)
+        for candles in ([None], [{"end_period_ts": 1763337600, "price": "x"}]):
+            with self.assertRaises(kalshi.KalshiError):
+                kalshi.candlestick_rows("T", {"candlesticks": candles}, RECEIVED)
+        with self.assertRaises(kalshi.KalshiError):
+            kalshi.candlestick_rows(5, CANDLES, RECEIVED)
+
+    def test_negative_zero_stored_as_zero(self):
+        import math
+        p = self.snap(last_price_dollars="-0.0000", volume_fp="-0.00")
+        for key in ("last_price", "p_yes", "volume"):
+            self.assertEqual(math.copysign(1, p[key]), 1.0, key)
+
+
 if __name__ == "__main__":
     unittest.main()
