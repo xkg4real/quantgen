@@ -238,6 +238,38 @@ class FakeServerTest(unittest.TestCase):
             with self.subTest(code=code):
                 self.assertEqual(remote._code(code), "bad_answer")
 
+    def test_not_entitled_reaches_the_caller_and_never_falls_back(self):
+        """PAY-3 S-6 (docs/commercial/server/COMPANY_DATA_SERVER_DESIGN.md): the company server answers ``not_entitled``
+        when the account has no right to the source. The code reaches the caller as RemoteFailed("not_entitled"), and
+        the app does not quietly use this PC's key instead: the route is chosen once (route_of) and a company error is
+        raised, not retried on the next route -- with ["company"] and with ["company", "local_key"] alike."""
+        self.assertEqual(remote._code("not_entitled"), "not_entitled")
+        with self.assertRaises(remote.RemoteFailed) as ctx:
+            remote.RemoteRoute(lambda req: {"ok": False, "error": "not_entitled"}).call("fmp", "quote", "TEST")
+        self.assertEqual(str(ctx.exception), "not_entitled")
+
+        used_here = []
+
+        class CountingFMP(FakeFMP):
+            def quote(self, symbol):
+                used_here.append(symbol)
+                return super().quote(symbol)
+
+        gw.LOCAL.override("fmp", CountingFMP)
+        refusing = remote.RemoteRoute(lambda req: {"ok": False, "error": "not_entitled"})
+        for order in (["company"], ["company", "local_key"]):
+            with self.subTest(order=order):
+                table = copy.deepcopy(gw._table())
+                table["profiles"]["commercial"]["fmp"] = order
+                gw._routes = routes.check_routes(table)
+                gw._profile_override = "commercial"
+                gw._remote_override = refusing
+                self.assertEqual(gw.route_of("fmp"), "company")
+                with self.assertRaises(remote.RemoteFailed) as ctx:
+                    gw.client("fmp").quote("AAPL")
+                self.assertEqual(str(ctx.exception), "not_entitled")
+                self.assertEqual(used_here, [])                  # this PC's FMP key was never used
+
     def test_requests_exception_types_have_fixed_transport_codes(self):
         from requests import exceptions as req
         for typ, expected in ((req.ProxyError, "transport_connection"), (req.ConnectionError, "transport_connection"),
