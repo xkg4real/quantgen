@@ -6,11 +6,15 @@ Rule (PREREG_V0 5.2-5.4, owner answer P4):
   is not used for historical validation.
 * In-house model: cutoff = the later of the base model's pre-training cutoff and the
   last day of the fine-tuning data. If either is unknown the cutoff is unknown.
-* A model's scores validate only articles received on or after cutoff + 3 months.
+* A model's scores validate only articles dated on or after cutoff + 3 months. The article's
+  date is the EARLIER of the day it was published and the day we received it: an old article
+  fetched today has a received_at of today (PREREG_V0 5.1), but the model may have been trained
+  on it, so the publication day decides.
 * The same rule holds for commercial API models; nothing here loosens it.
 * The baselines PREREG_V0 5.4 names for the period before an LLM's cutoff (the
   Loughran-McDonald dictionary, FinBERT) are usable at any article date, but only as a
-  pinned, sourced snapshot.
+  pinned, sourced snapshot, and only under the keys in BASELINE_KEYS: labelling some other
+  model a baseline does not exempt it.
 
 The registry below is the machine-readable twin of docs/didm/MODEL_CUTOFFS.md; the
 acceptance test compares the two. A row is "verified" only with a snapshot id, a source
@@ -29,6 +33,8 @@ from enum import Enum
 
 MARGIN_MONTHS = 3            # PREREG_V0 5.3, owner answer P4 (2026-11-18)
 NOT_VERIFIED = "미검증, 자격 없음"
+# The only models PREREG_V0 5.4 names as usable before an LLM's cutoff without a cutoff of their own.
+BASELINE_KEYS = frozenset({"loughran-mcdonald", "ProsusAI/finbert"})
 
 
 class CutoffError(ValueError):
@@ -55,6 +61,11 @@ class ModelCard:
     in_house: bool = False
     note: str = ""
 
+    def __post_init__(self) -> None:
+        if self.rule is Rule.BASELINE and (self.cutoff is not None or self.in_house
+                                           or self.base_cutoff is not None or self.finetune_through is not None):
+            raise CutoffError("a baseline card carries no cutoff; a model with a cutoff follows the cutoff rule")
+
     @property
     def effective_cutoff(self) -> date | None:
         if self.in_house:
@@ -67,7 +78,9 @@ class ModelCard:
     def verified(self) -> bool:
         if not (self.snapshot_id and self.source_url and self.checked_on):
             return False
-        return self.rule is Rule.BASELINE or self.effective_cutoff is not None
+        if self.rule is Rule.BASELINE:
+            return self.key in BASELINE_KEYS
+        return self.effective_cutoff is not None
 
     @property
     def eligible_from(self) -> date | None:
@@ -134,20 +147,30 @@ def in_house_card(key: str, *, base: ModelCard, finetune_through: date | None, s
     )
 
 
-def article_day(received_at: date | datetime) -> date:
-    """The UTC calendar day an article was received. A datetime must carry a timezone."""
-    if isinstance(received_at, datetime):
-        if received_at.tzinfo is None or received_at.utcoffset() is None:
-            raise CutoffError("received_at must carry a timezone")
-        return received_at.astimezone(timezone.utc).date()
-    if isinstance(received_at, date):
-        return received_at
-    raise CutoffError("received_at must be a date or a timezone-aware datetime")
+def _utc_day(value: date | datetime, name: str) -> date:
+    """The UTC calendar day of a timestamp. A datetime must carry a timezone."""
+    if isinstance(value, datetime):
+        if value.tzinfo is None or value.utcoffset() is None:
+            raise CutoffError(f"{name} must carry a timezone")
+        return value.astimezone(timezone.utc).date()
+    if isinstance(value, date):
+        return value
+    raise CutoffError(f"{name} must be a date or a timezone-aware datetime")
 
 
-def eligibility(card: ModelCard | None, received_at: date | datetime) -> Eligibility:
-    """May this model's score validate an article received at ``received_at``? Fails closed."""
-    day = article_day(received_at)
+def article_day(published_at: date | datetime, received_at: date | datetime) -> date:
+    """The day the cutoff rule compares: the earlier of the publication day and the receipt day (UTC)."""
+    return min(_utc_day(published_at, "published_at"), _utc_day(received_at, "received_at"))
+
+
+def eligibility(card: ModelCard | None, *, published_at: date | datetime,
+                received_at: date | datetime) -> Eligibility:
+    """May this model's score validate this article? Fails closed.
+
+    Both timestamps are required and the earlier day decides, so a backfilled article (published
+    before the model's cutoff, received today) is not eligible.
+    """
+    day = article_day(published_at, received_at)
     if card is None:
         return Eligibility(False, "model is not in the cutoff registry")
     if not card.verified:
@@ -156,8 +179,9 @@ def eligibility(card: ModelCard | None, received_at: date | datetime) -> Eligibi
         return Eligibility(True, "baseline named in PREREG_V0 5.4")
     first = card.eligible_from
     if day >= first:
-        return Eligibility(True, f"received on or after cutoff + {MARGIN_MONTHS} months", first)
-    return Eligibility(False, f"received before cutoff + {MARGIN_MONTHS} months ({first.isoformat()})", first)
+        return Eligibility(True, f"published and received on or after cutoff + {MARGIN_MONTHS} months", first)
+    return Eligibility(False, f"published or received before cutoff + {MARGIN_MONTHS} months ({first.isoformat()})",
+                       first)
 
 
 class Registry:
@@ -176,8 +200,9 @@ class Registry:
     def get(self, model_version: str) -> ModelCard | None:
         return self._cards.get(model_version)
 
-    def eligibility(self, model_version: str, received_at: date | datetime) -> Eligibility:
-        return eligibility(self.get(model_version), received_at)
+    def eligibility(self, model_version: str, *, published_at: date | datetime,
+                    received_at: date | datetime) -> Eligibility:
+        return eligibility(self.get(model_version), published_at=published_at, received_at=received_at)
 
     def with_card(self, card: ModelCard) -> "Registry":
         return Registry((*self._cards.values(), card))

@@ -25,6 +25,7 @@ from core.didm.llm.schema import (
     SCHEMA_VERSION,
     ScoreRecord,
     SchemaError,
+    TargetKind,
     entropy,
     ess_like,
     validate_record,
@@ -45,6 +46,8 @@ ASSEMBLY_FIELDS = (
     "p_credibility",
     "market_confirmation",
 )
+# What an Assembly says it belongs to (not record fields of their own): checked against the judgement.
+ASSEMBLY_KEYS = ("article_id", "target_kind", "entity_id")
 # Record fields computed during assembly from the (calibrated) direction probabilities.
 DERIVED_FIELDS = ("ess_like_0_100", "uncertainty_entropy")
 # Record fields copied from the judgement or from the scorer's ScorerInfo.
@@ -84,7 +87,11 @@ class Scorer(Protocol):
 
 @dataclass(frozen=True)
 class Assembly:
-    """The DIDM-side values for one record (keys = ASSEMBLY_FIELDS)."""
+    """The DIDM-side values for one record (ASSEMBLY_FIELDS), and the article and target they were
+    computed for (ASSEMBLY_KEYS). assemble_record refuses a judgement for another article or target."""
+    article_id: str
+    target_kind: str             # firm | macro | none
+    entity_id: str | None
     record_id: str
     source_id: str
     published_at: str            # ISO 8601 with timezone
@@ -135,6 +142,13 @@ def assemble_record(
     if (calibrate_direction is None) != (calibration_version == UNCALIBRATED):
         raise JudgementError("a calibrator needs a calibration_version, and a version needs a calibrator")
 
+    if not isinstance(assembly.target_kind, str) or assembly.target_kind not in [k.value for k in TargetKind]:
+        raise JudgementError("assembly target_kind must be firm, macro or none")
+    if assembly.article_id != judgement.article_id:
+        raise JudgementError("assembly is for another article")
+    if assembly.target_kind != judgement.target_kind.value or assembly.entity_id != judgement.entity_id:
+        raise JudgementError("assembly is for another target")
+
     direction = judgement.direction_probs
     if calibrate_direction is not None:
         direction = _checked_probs(calibrate_direction(direction))
@@ -151,8 +165,12 @@ def assemble_record(
         prompt_sha256=info.prompt_sha256,
         schema_version=SCHEMA_VERSION,
     )
+    try:
+        record = validate_record(raw)
+    except OverflowError:            # an integer too large for a float among the DIDM-side values
+        raise JudgementError("assembly values must be finite numbers") from None
     return Assembled(
-        record=validate_record(raw),
+        record=record,
         calibration_version=calibration_version,
         raw_direction_probs=judgement.direction_probs,
         p_subject_raw=judgement.p_subject,
@@ -163,7 +181,8 @@ def assemble_record(
 @dataclass(frozen=True)
 class Batch:
     judgements: tuple[tuple[ScoreRequest, Judgement], ...]
-    rejected: tuple[tuple[str, str], ...]     # (article_id, reason); no article text
+    rejected: tuple[tuple[str, str], ...]     # (article_id, reason); the reason is a fixed rule text and
+    #                                            never contains model output or article text
 
     @property
     def reject_counts(self) -> dict[str, int]:
@@ -191,7 +210,12 @@ def _checked_probs(value: Any) -> tuple[float, float, float]:
         raise JudgementError("calibrated direction_probs must be three numbers")
     out = []
     for p in value:
-        if isinstance(p, bool) or not isinstance(p, (int, float)) or not math.isfinite(p) or not 0.0 <= p <= 1.0:
+        try:
+            ok = (not isinstance(p, bool) and isinstance(p, (int, float)) and math.isfinite(p)
+                  and 0.0 <= p <= 1.0)
+        except OverflowError:
+            ok = False
+        if not ok:
             raise JudgementError("calibrated direction_probs must be numbers in [0, 1]")
         out.append(float(p))
     if abs(sum(out) - 1.0) > 1e-6:

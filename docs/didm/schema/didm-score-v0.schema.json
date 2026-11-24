@@ -27,11 +27,11 @@
   "properties": {
     "record_id": {
       "type": "string",
-      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:\\-/]{0,127}$"
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:\\-/]{0,127}$(?!\\n)"
     },
     "source_id": {
       "type": "string",
-      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:\\-/]{0,127}$"
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:\\-/]{0,127}$(?!\\n)"
     },
     "target_kind": {
       "enum": [
@@ -73,7 +73,7 @@
     },
     "origin_cluster_id": {
       "type": "string",
-      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:\\-/]{0,127}$"
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:\\-/]{0,127}$(?!\\n)"
     },
     "event_type": {
       "enum": [
@@ -139,7 +139,7 @@
     },
     "prompt_sha256": {
       "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
+      "pattern": "^[0-9a-f]{64}$(?!\\n)"
     },
     "schema_version": {
       "const": "didm-score-v0"
@@ -168,7 +168,7 @@
         "properties": {
           "entity_id": {
             "type": "string",
-            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:\\-/]{0,127}$"
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:\\-/]{0,127}$(?!\\n)"
           }
         }
       }
@@ -176,6 +176,7 @@
   ],
   "x-didm-cross-field-rules": [
     "direction_probs sums to 1 within 1e-6",
+    "P(+1) + P(-1) does not exceed 1 (tolerance 1e-9)",
     "ess_like_0_100 equals 50 + 50*(P(+1) - P(-1)) within 1e-6",
     "uncertainty_entropy equals the Shannon entropy (nats) of direction_probs within 1e-6",
     "published_at and received_at carry a timezone"
