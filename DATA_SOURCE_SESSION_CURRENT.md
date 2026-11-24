@@ -14,7 +14,7 @@ task: data-source
 cycle: 2026-11-24
 done_ids: none
 next_ids: DS-5b, DS-5c, DS-5a
-updated_at: 2026-11-24T23:00:00+09:00
+updated_at: 2026-11-24T23:40:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/ds-home-reason-codes-20261124 (+ claude/ds-review-fixes-20261124@9663a99, claude/ds-fedwatch-20261124@5e971c0, claude/ds-edgar-history-20261124@927375b, claude/ds-5bc-news-20261124@4a646ce)
@@ -29,6 +29,12 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## DATA_SOURCE (Claude) Alpaca 약관·Massive 대안 — 2026-11-24T23:40+09:00
+
+- 소유자 원문: "Massive의 대안을 찾아주시고, Alpaca 약관 pdf 확인 허용합니다".
+- `claude/ds-sample-feasibility-20261124` @ 9c479a6: Alpaca 약관 = 개인·비상업 (상업은 30일 전 통지·서면 동의). 10절 대안: Go GDELT·EDGAR 8-K·OpenDART, 조건부 Benzinga 직접 계약, 보류 Tiingo·EODHD, No-go RavenPack·FNSPID·Finnhub 무료·Massive/Alpaca Basic·KRX.
+- 소유자 결정 대기: 권장 수용, Benzinga 견적, Massive 200·Alpaca 60건 처리.
 
 ## DATA_SOURCE (Claude) 재확인 빈틈·D14 — 2026-11-24T23:00+09:00
 
