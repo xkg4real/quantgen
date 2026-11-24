@@ -25,7 +25,18 @@ git 기준: main `de32ea1` (#147 GH-2 → `dfae585`, #149 PAY-0·PAY-2 → `de32
 | DIDM_DEV | DIDM-3/a 마감일 규칙·표 (9행 중 5행 미검증) | didm-dev @ `3626913` | 통합 PR ① | [x] 보고 · [ ] 병합 |
 | DIDM_DEV | DIDM-3/b 미검증 행 채우기 (출처 호스트 열림), DIDM-4 Stage 0 모의실험, DIDM-5 | didm-dev (진행) | 통합 PR ② 이후 | [ ] 진행 중 |
 | QUANTGPT | QGPT-01/a `c7e7494`, QGPT-02 `073725b`, QGPT-04 `3e76b35`, QGPT-05 `735e2c0`, QGPT-21 `30b3279`, QGPT-03 `7478f82` | quantgpt-q0 (main PR 없음) | 원장 행은 REMAINING_WORK 2026-11-24판이 main에 들어간 뒤 | [x] 보고 6건 · [ ] 원장 |
-| QUANTGPT | 재생 점검 → QGPT-11 채점기 → QGPT-20 색인 | quantgpt-q0 | — | [ ] 진행 중 |
+| QUANTGPT | QGPT-replay `88e42d3`, QGPT-20 `273cdec`, QGPT-11 `326f5a5` | quantgpt-q0 @ `326f5a5` (메인이 122 OK, `qgpt/` 밖 변경 없음 확인) | 원장 행은 위와 같이 | [x] 보고 3건 · [ ] 원장 |
+| QUANTGPT | QGPT-04/2, QGPT-62/a, QGPT-10/a, QGPT-12/prep, QGPT-01/b, QGPT-02/2 | quantgpt-q0 | — | [ ] 배분함 (아래 "메인 → QUANTGPT" 8번, 소유자의 한 줄 전달 뒤 시작) |
+| DATA_SOURCE | D6 EDGAR 과거 목록 `f2429cd`, D7 Kalshi 과거 일봉 `e620574`, D8 표 갱신 `927375b` (D1·D4·D5 포함) | ds-edgar-history @ `927375b` | 통합 PR ② | [x] 보고 · [ ] 병합 |
+| DATA_SOURCE | D9 DS-4c FedWatch 코드(오프라인), D10 소유자 PC 첫 실행 안내 | ds-fedwatch (예정) | 다음 묶음 | [ ] 배분함 (19:1x) |
+| PAYMENTS | P4 보완(미확인 문장 표시, O3 답 반영) | policy-pr2 @ `4725c15` | 단독 PR (차례 대기) | [x] 보고 |
+| PAYMENTS | P7 not_entitled `75c56fb`, P8 연구용 키 이름 3개 `26768ed` | payments-not-entitled, payments-research-keys | 통합 PR ② | [x] 보고 · [ ] 병합 |
+| PAYMENTS | P9 결정 목록 한 장 | handoff `plans/2026-11-24/PAYMENTS_OWNER_DECISIONS.md` (`76636e1`) | — | [x] 끝 |
+| PAYMENTS | P10 판매 빌드의 게이트웨이 프로필(공개 빌드가 personal로 나감) | payments-gateway-profile (예정) | 소유자 확인 뒤 병합 | [ ] 배분함 (19:1x) |
+| OS | O4 보강(키 보관함 점검을 "보고만"으로) `558a613`, O5 15-7 판매 빌드 점검(chardet 고지 누락 닫음, 안 쓰는 패키지·로고 제외) | os-sale-build-check @ `4b88a05` (O4 포함) | 통합 PR ② (메인 독립 검토 뒤) | [x] 보고 · [ ] 검토 |
+| OS | O6 OS-F3 Linux 차이 조사 | (예정) | 다음 묶음 | [ ] 배분함 (19:1x) |
+| DIDM_DEV | DIDM-3/b 마감일 표 35행 중 33행 검증(LM 사전, FinBERT, ChronoGPT 26개; Qwen3·자체 LLM 미검증 유지) | didm-dev @ `e01bb08` | 통합 PR ② | [x] 보고 · [ ] 병합 |
+| DIDM_DEV | 통합 PR ① 검토 지적 13건 수정 | didm-contract-fixes (3626913에서) | 통합 PR ① | [ ] 진행 중 |
 | MAIN | 통합 PR ①: 위 7브랜치 + REMAINING_WORK 2026-11-24판, CLAUDE.md, 인계 도구 세션 칸 2개, 결정 기록, CI 시험 목록 | integration @ `3e2af60` | PR → CI → 병합 | [ ] 독립 검토 중 (5갈래) |
 | MAIN | 출처 호스트 5개 환경 승인 | — | — | [x] 2026-11-24 19:0x 소유자 승인 (sraf.nd.edu, huggingface.co, arxiv.org, trec.nist.gov, econ.korea.ac.kr) |
 | MAIN | PR #148 스킬 | quant-skills @ `462f7df` | 보류 | [ ] 막는 지적 1 + 큰 지적 4 (`plans/2026-11-24/PR148_REVIEW.md`) 고친 뒤 |
@@ -48,6 +59,10 @@ git 기준: main `de32ea1` (#147 GH-2 → `dfae585`, #149 PAY-0·PAY-2 → `de32
    - QGPT-12/prep: 기준선 실행 준비. 실행 선언서 형식(모델 ID·판·양자화·시드·프롬프트 판·요청 해시), 로컬 추론 서버용 백엔드 어댑터의 인터페이스와 가짜 서버 시험(실제 호출·가중치 없음), 소유자 작업 목록(계정·예산·PC)을 한 장으로.
    - QGPT-01/b: 후보 모델의 라이선스·학습 마감일 근거를 직접 연 모델 카드 페이지와 확인일로 바꾼다(호스트 열림). 후보표가 저장소 밖에 있으면 밖에 둔 채로, 공개 저장소에는 넣지 않는다.
    규칙 그대로: 바뀌는 파일은 `qgpt/` 아래만, main PR 없음, 명세서 본문·전체 규칙·전체 문항은 공개 저장소에 넣지 않음, 주문·계좌·키 함수 없음.
+9. (19:20) 소유자가 물은 "명세서 파일"의 답: OA-49의 명세서는 소유자가 2026-11-24에 메인 세션에 첨부한 .md 파일 그 자체다(첫 줄 "# QuantGPT 설계·실행 명세서 v1.0", 약 46.6KB). 메인이 만든 문서가 아니다. 메인이 그 파일과, 그 세션에 닿지 않은 메인의 글 3건(착수 보충, 알림 2가지, 보고 5건의 답)을 묶은 파일을 메인 세션에서 소유자에게 파일로 다시 건넸다. 소유자가 그 두 파일을 QUANTGPT 세션에 첨부하면 된다. 공개 저장소에는 올리지 않는다.
+10. (19:20) DIDM_DEV가 확인한 사실(DIDM-3/b, `claude/didm-dev-20261124` @ `e01bb08`의 `docs/didm/MODEL_CUTOFFS.md`): Qwen3은 모델 카드와 기술 보고서에 학습 마감일이 없어 사전 등록 규칙상 과거 검증 자격이 없다. Qwen3을 기반으로 한 자체 모델도 같은 이유로 자격이 없다(미세조정 자료 날짜와 무관). 과거 검증에 쓸 모델이면 마감일이 공개된 기반 모델이 필요하다. 앞으로 받는 기사만 채점하는 용도는 이 규칙과 별개다. QGPT-01/b의 후보 근거 확인에 이 조건을 넣는다(후보마다 "공식 출처에 학습 마감일이 있는가"). 기반 모델을 무엇으로 할지는 소유자 결정(OA-10 (b), OA-52)이다.
+11. (19:20) TRADEGEN 메인 세션이 요청(M11-T7)을 보냈다: QuantGPT·DIDM 출력 스냅샷을 정해진 주기로 남겨 오프라인으로 전달. 메인의 답은 `QUANTGPT_TRADEGEN.md` v0.2 9절(handoff `ae10345`): 접수, 아직 시작하지 않음, 특성 스냅샷 형식 제안, 시작 전 소유자 확인 4가지. QUANTGPT는 주기 실행을 시작하지 않는다. 받는 쪽 계약은 tradegen main `b828b2d`의 `docs/direction-forecast-contract.md`이며 그쪽 7절이 v0.1의 차이를 적어 두었다(경계는 D14 닫힘 전체, `issued_at` 구분, 요청 해시와 스냅샷 해시 구분). 봉투에 `issued_at`, 디코딩 설정, `rag_index_version`, 확신 점수를 더하는 일(그 세션 제안 ②)은 8번 목록 뒤에 QGPT-02/2로 진행한다. 인용·시점 누출을 owner 모드에서도 기권으로 두는 것은 그대로 둔다.
+12. (19:20) OA-50(TRADEGEN 공유)은 닫는다: QUANTGPT의 전달이 "delivered"였고 TRADEGEN 쪽 계약 문서가 답으로 왔다.
 
 ### C'. 소유자 수동 작업
 
