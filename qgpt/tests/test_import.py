@@ -2,13 +2,10 @@
 import importlib
 import sys
 import unittest
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+from _path import ROOT
 
-import quantgpt  # noqa: E402
+import quantgpt
 
 
 class ImportTests(unittest.TestCase):
