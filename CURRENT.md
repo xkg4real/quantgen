@@ -6,11 +6,11 @@ task: claude-resume-20261103
 cycle: 2026-11-24
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a, GH-2, PAY-0, PAY-2
 next_ids: DS-H, DS-1, KEY-5, OS-F1, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-24T18:50:00+09:00
+updated_at: 2026-11-24T19:08:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: main
-work_commit: de32ea1
+work_branch: claude/integration-20261124
+work_commit: 3e2af60
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -81,8 +81,13 @@ GPT가 2026-11-20..23에 병합한 PR 10개를 git·CI로 확인했고(모두 �
 - [x] PR #148 독립 검토 → 병합 보류, `plans/2026-11-24/PR148_REVIEW.md` (`d08e944`)
 - [x] GH-2: PR #147 (head `c6f3874`, 기준선 갱신 포함) → main `dfae585` (2026-11-24 18:43 KST, 문서 정합성 검사 성공, Runtime은 경로 조건으로 돌지 않음), 원장 GH-2
 - [x] PAY-0·PAY-2: PAYMENTS PR #149 (head `96e93b6`, 문서 12개) → main `de32ea1` (메인 확인: 12개 경로만, 식별자 없음, 문서 정합성 검사 성공), 원장 PAY-0, PAY-2. 문의 발송과 결정 P2-01~P2-15는 소유자 대기
-- [ ] 하부 세션 1차 보고 처리(QGPT-01/a·02·04·05·21, DIDM-2·3/a, D1~D3, O1·O3, P2·P3): git 확인과 다음 병합 차례 ← **여기 진행 중**
-- [ ] 메인 문서 PR(대기열 14)
+- [x] 하부 세션 1·2차 보고 처리: 보고 24건을 git에서 확인, 표는 handoff `WORKBOARD.md` 맨 위 블록(B')
+- [x] 통합 브랜치 ① `claude/integration-20261124` @ `3e2af60` (origin에 올림, PR 아직 없음): os-android-apk-evidence `94f257d`, os-data-folder-guide `000e210`, ds-connector-fixes `241c0f4`, ds-home-diagnose `b70a78d`, ds-new-sources-plan `6a6516d`, payments-key5a-closeout `502802e`, didm-dev `3626913` 병합 + 메인 문서(REMAINING_WORK 2026-11-24판, CLAUDE.md, `push_handoff.py` 세션 칸 2개와 시험, OWNER_RULINGS_LOG 2026-11-24 절, runtime-smoke에 DIDM 시험 2개). 관련 시험 570 OK(건너뜀 3), 오프라인
+- [x] 통합 브랜치 ② 시험 묶음 `claude/integration2-20261124` @ `5253613` (①의 3e2af60 위): os-qt-lint-shadow `0a92e58`, payments-design `31bd651`, ds-collection-status `b4d48bc`, ds-5bc-news `4a646ce`. runtime-smoke 한 줄 충돌 2번은 합집합으로 정리. DIDM·경계 시험 300 OK
+- [x] 환경: 소유자가 Default에 호스트 5개 추가 승인(sraf.nd.edu, huggingface.co, arxiv.org, trec.nist.gov, econ.korea.ac.kr)
+- [x] 소유자의 N0 승인("N0 승인, Alpaca·Massive부터 진행하세요", 2026-11-24 18:41 KST, DATA_SOURCE 세션, 데스크톱 앱 사람 입력, 문구는 세션이 띄운 제안과 같음)을 세션 기록에서 확인. N1(EODHD)은 답 없음
+- [ ] 통합 PR ① 독립 검토(5갈래) ← **여기 진행 중**. DIDM 갈래 끝남: 큰 지적 3(자격 판정이 received_at만 봄, 조립 필드 출처를 시험이 안 봄, 기준선), 작은 지적 8 → `plans/2026-11-24/INTEGRATION1_REVIEW.md`, DIDM_DEV가 `claude/didm-contract-fixes-20261124`(3626913에서)로 고치는 중. 나머지 4갈래(data, os-pay, main, policy) 진행 중
+- [ ] QUANTGPT: 9건 끝남(`quantgpt-q0` @ `326f5a5`, 메인이 122 OK와 `qgpt/` 밖 변경 없음 확인). 그 세션이 "신뢰 기기 전용"이 되어 메인의 직접 전달이 거절됨 → 전달은 `WORKBOARD.md`의 "메인 → QUANTGPT" 절, 소유자에게 한 줄 붙여 넣기 요청(OA-54)
 
 **마지막으로 통과한 검증:**
 
@@ -95,16 +100,17 @@ Ran 40 tests ... OK
 
 ## 5. 중단 지점
 
-멈추지 않았다. 커밋되지 않은 변경 없음. 열린 것: PR #147(CI 진행 중), PR #148(고칠 것 있음), PR #140(UI 초안, 담당 미정), PR #12(오래된 것).
+멈추지 않았다. 커밋되지 않은 변경 없음. 통합 브랜치 두 개는 origin에 있고 PR은 아직 없다. 준법 기준선(`docs/compliance/source-review.json`)은 통합 ①에서 아직 갱신하지 않았다(지금 `--check`는 FAIL: 새 소스 때문에 20개 문서 재검토 표시, 검토 뒤 마지막 커밋으로 갱신). 열린 PR: #148(고칠 것 있음, 보류), #140(UI 초안, 담당 미정), #12(오래된 것).
 
 ## 6. 다음 할 일 (순서대로)
 
-1. GH-2 PR #147: CI(문서 정합성, Runtime이 돌면 그것까지)가 녹색이면 merge commit으로 병합(Vercel 무시) → `--done "GH-2 | ..."` → MERGE_QUEUE 11 완료 표시 → 12번에 "병합: OS" — 완료 기준: main에 `test_npu.py`, `mindmap/`, launch.json의 godseye-dev 항목이 없음, `--check` PASS
-2. 하부 세션 보고 처리: 보고마다 git 확인 → WORKBOARD 표시 → 다음 일 발송. PAYMENTS의 PAY-0·PAY-2 PR은 병합 차례를 이미 받음(MERGE_QUEUE 10) — 완료 기준: PR CI 녹색, 병합, 원장 PAY-0, PAY-2
-3. DS-H, DS-1: DATA_SOURCE의 D1·D2 보고와 소유자 OA-09·OA-10(c) 답으로 닫음. KEY-5·OS-F1은 UI PR #140(OA-48) 뒤
-4. 메인 문서 PR(대기열 14): `docs/nautilus_bridge/REMAINING_WORK_2026-11-24.md`(QGPT-, DIDM-2~9, DIDM-S1~S5, DS-5a~5c를 한 줄 범위로 등록, 명세서 본문 없이), `CLAUDE.md` 세션 5개, `tools/handoff/push_handoff.py` LANE_DOCS에 `DIDM_SESSION_CURRENT.md`·`QUANTGPT_SESSION_CURRENT.md`, `OWNER_RULINGS_LOG.md` 2026-11-24 절(지시 원문과 결정 3개)
-5. 빠진 원장 행(#146 병합, DS-1, DIDM-0, DS-4d, DS-4e): 근거 확인 뒤 `--done`
-6. PR #148: 고친 커밋이 오면 `PR148_REVIEW.md`의 "병합 전 다시 볼 것" 3가지 확인 뒤 병합
+1. 통합 PR ①: 남은 검토 4갈래 결과를 `plans/2026-11-24/INTEGRATION1_REVIEW.md`에 덧붙이고, 지적은 해당 세션이 자기 브랜치에 고친 커밋을 올리면 `claude/integration-20261124`에 합친다. 그 뒤 `python -B -m tools.compliance.check --refresh-baseline --reviewed-by "<검토자>" --review-note "<실제 검토 내용>"` → `--check` PASS → PR → CI 녹색 → merge commit 병합(Vercel 무시) — 완료 기준: main에 7개 브랜치와 메인 문서가 있음, `tests.handoff_doc_acceptance` 17 OK, DIDM 시험이 CI 목록에 있음
+2. 병합 뒤 원장 기록(`--done`, REMAINING_WORK 2026-11-24판이 main에 있어야 ID가 유효): QGPT-01/a `c7e7494`, QGPT-02 `073725b`, QGPT-04 `3e76b35`, QGPT-05 `735e2c0`, QGPT-21 `30b3279`, QGPT-03 `7478f82`, QGPT-20 `273cdec`, QGPT-11 `326f5a5`(이상 `quantgpt-q0` 브랜치, main 병합 없음), DIDM-2, DIDM-3/a, DS-4a/2, DS-4e/2, DS-H/diag, KEY-5/a/2, OS-A1/apk-evidence, OS-F2/guide, SESSION-PIPELINE/2
+3. MERGE_QUEUE에 "병합: PAYMENTS_ACCOUNT_KEYS (P4)" 적고 알림 → 정책 문서 PR-2 `policy-pr2` @ `ba16dce` 단독 PR(확인 안 된 사실은 문장마다 미검증 표시)
+4. 통합 PR ②: `claude/integration2-20261124`에 최신 main을 합치고, os-macos-differences `530bcf6`(OS가 동결 빌드의 키 보관함 점검 근거를 내거나 "보고만"으로 낮춘 뒤), DIDM의 3626913 뒤 커밋(보고된 것), P7·P8·D6·D7이 오면 함께 → 기준선 갱신 → PR → CI → 병합
+5. DATA_SOURCE에 병합 알림 → OA-09 한 줄 명령을 main 기준으로 다시 받아 소유자에게 전달. DS-H, DS-1은 소유자 OA-09·OA-10(c) 답으로 닫음. KEY-5·OS-F1은 UI PR #140(OA-48) 뒤
+6. 연구·제품 ID(⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑧-1): 지금 시작할 수 있는 것을 가려 배분(조사 진행 중)
+7. PR #148: 고친 커밋이 오면 `PR148_REVIEW.md`의 "병합 전 다시 볼 것" 3가지 확인 뒤 병합. Notion REMAINING WORK 갱신
 
 ## 7. 주의사항 / 하지 말 것
 
