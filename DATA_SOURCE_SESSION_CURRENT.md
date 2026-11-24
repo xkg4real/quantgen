@@ -14,11 +14,11 @@ task: data-source
 cycle: 2026-11-24
 done_ids: none
 next_ids: DS-5b, DS-5c, DS-5a
-updated_at: 2026-11-24T21:40:00+09:00
+updated_at: 2026-11-24T22:10:00+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/ds-home-reason-codes-20261124 (+ claude/ds-review-fixes-20261124@9663a99, claude/ds-fedwatch-20261124@5e971c0, claude/ds-edgar-history-20261124@927375b, claude/ds-5bc-news-20261124@4a646ce)
-work_commit: 93f23fd (D13) / 408d8b4 (D12)
+work_commit: 42795e6 (review fixes) / 9085ac3 (D11) / 93f23fd (D13) / 408d8b4 (D12)
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -29,6 +29,12 @@ execution_id: 2f27d0c2-57cc-46e7-97d6-fc141d4065c9
 handoff_to: QUANTGEN_MAIN_CODEX
 implementation_stopped: yes
 ---
+
+## DATA_SOURCE (Claude) DSF-1~12 — 2026-11-24T22:10+09:00
+
+- 통합 PR ① 마지막 수정: `claude/ds-review-fixes-20261124` d6f6847 (Kalshi 한쪽 호가·없는 칸, 티커 fullmatch, ALFRED 날짜 규칙), 42795e6 (진단 시험 deps 표식·시험 포트·가드 보강, 안내 TLS·앱 문장·오류 문구, curl 28). 453 OK.
+- D11 브랜치에 병합 9085ac3 (안내 표 충돌 해결). 525 OK.
+- Kalshi 결정 (메인): 한쪽 호가는 last가 서 있는 쪽을 지킬 때만, 아니면 None.
 
 ## DATA_SOURCE (Claude) D12 별칭 절·D13 — 2026-11-24T21:40+09:00
 
