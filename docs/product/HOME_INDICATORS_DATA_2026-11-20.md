@@ -59,8 +59,8 @@ python -m core.research.markets
 - 여섯 줄 (지표마다 한 줄): `<기호> <상태> reason=<사유 코드> live=<실시간 상태>[ via=<yfinance가 남긴 원인>]`. 값·키·URL·공급사 문구는 나오지 않습니다. 늘 종료 코드 0.
 - `via=`: yfinance는 네트워크 막힘·TLS 가로채기·요청 제한을 "빈 결과"로 바꿔 돌려주므로 (`reason=no_observations`), 진단 때만 yfinance 자체 기록을 모아 원인을 붙입니다: `rate_limited` (Yahoo 요청 제한), `certificate_error` (보안 프로그램·프록시의 TLS 가로채기), `network_timeout`, `network_error`.
 - 명령은 먼저 앱 자료 폴더를 준비합니다 (`core.app_paths.ensure_user_data_dir`, 새 폴더는 본인만 읽기 권한 + QUANTGEN 표식). 준비가 거부되면 여섯 줄 모두 `reason=data_dir_unavailable`이고 공급사를 부르지 않습니다 (검토 PD-3).
-- **아무것도 출력되지 않고 끝나면 오래된 체크아웃**입니다 (이 명령이 들어가기 전 코드는 출력 없이 종료 코드 0). 2026-10-29 이전 체크아웃은 `No module named core.research.markets`로 실패합니다. 두 경우 모두 코드 수정 없이 최신 main으로 바꾸면 됩니다.
-- 읽는 법 (2026-11-24 검토 DS-3 + D11 사유 코드 분류 반영, 명령이 실제로 내는 값 기준):
+- **아무것도 출력되지 않고 끝나면 오래된 체크아웃**입니다 (이 명령이 들어가기 전 코드는 출력 없이 종료 코드 0). 2026-10-29 이전 체크아웃은 `No module named`가 들어간 오류 (그때는 `core.research` 패키지 자체가 없음)로 실패합니다. 두 경우 모두 코드 수정 없이 최신 main으로 바꾸면 됩니다.
+- 읽는 법 (2026-11-24 검토 DS-3·DSF-4 + D11 사유 코드 분류 반영, 명령이 실제로 내는 값 기준):
 
 | 출력 | 뜻 |
 |---|---|
@@ -68,9 +68,10 @@ python -m core.research.markets
 | FRED 3줄 `reason=network_error`, Yahoo 3줄 `via=network_error` | **직접 연결 (보통 집 PC)에서 네트워크 실패**: DNS 실패·연결 거부·연결 끊김 (D11부터 FRED도 구분; 그 전 코드는 `provider_unavailable`) |
 | FRED 3줄 `reason=network_timeout`, Yahoo 3줄 `via=network_timeout` 또는 `via=network_error` | 응답 없는 네트워크 (방화벽이 조용히 버림, 매우 느린 망). 아래 6분 주의 |
 | FRED 3줄만 `provider_unavailable`, Yahoo 줄은 `OBSERVED` | FRED 쪽 오류 (서버 5xx 재시도 소진 등 전송이 아닌 실패) |
-| Yahoo 3줄만 `via=certificate_error` | 보안 프로그램·프록시의 TLS 가로채기 |
+| FRED 3줄 `reason=certificate_error`, Yahoo 3줄 `via=certificate_error`, BTC `live=UNAVAILABLE/certificate_error` | 보안 프로그램·프록시가 모든 사이트의 TLS를 가로챔 |
+| Yahoo 3줄만 `via=certificate_error` | 가로채기 대상이 Yahoo뿐 |
 | Yahoo 3줄만 `via=rate_limited` | Yahoo 요청 제한 (잠시 뒤 다시) |
 | `dependency_missing` | venv 패키지 설치 |
 | 출력 없음 | 오래된 체크아웃 (위) |
 
-- 무응답 네트워크에서는 FRED 재시도 때문에 **명령이 약 6분 동안 아무것도 출력하지 않다가** 여섯 줄을 냅니다 (검토 실측 359.9초). 앱의 홈 카드도 그동안 빕니다.
+- 무응답 네트워크에서는 FRED 재시도 때문에 **명령이 약 6분 동안 아무것도 출력하지 않다가** 여섯 줄을 냅니다 (검토 실측 359.9초, 이 명령 기준). 앱 화면이 같은 함수를 쓰면 같은 시간 동안 빌 수 있으나, 지금 데스크톱 홈은 다른 경로 (`load_series`)라 **미검증**입니다.

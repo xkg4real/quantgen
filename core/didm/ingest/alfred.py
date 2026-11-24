@@ -118,7 +118,11 @@ def rows_from_manual(series_id: str, rows: Iterable[tuple], received_at: datetim
 
 
 def value_as_known_on(rows: Iterable[Mapping[str, Any]], obs_date, known_on) -> float | None:
-    """The value for obs_date as it stood on known_on (vintage realtime window contains known_on)."""
+    """The value for obs_date as it stood on known_on (vintage realtime window contains known_on).
+
+    Both dates accept the same forms (date, datetime, ISO date, basic YYYYMMDD, timestamp string). An aware
+    datetime or an offset string counts by its **written** calendar date, not its UTC date: ALFRED periods
+    and vintages are calendar dates without a clock (review DSF-11)."""
     cutoff = _day(known_on, "known_on")
     obs = _day(obs_date, "obs_date").date().isoformat()   # same accepted forms as known_on (review DS-9)
     hits = []

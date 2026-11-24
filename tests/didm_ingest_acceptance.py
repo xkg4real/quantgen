@@ -216,7 +216,10 @@ class AlfredObsDateForms(unittest.TestCase):
     def test_obs_date_forms(self):
         from datetime import date
         rows = alfred.rows_from_manual("CPIAUCSL", [("2024-01-01", "101", "2024-03-01", None)], RECEIVED)
-        for obs in ("2024-01-01", date(2024, 1, 1), "2024-01-01T00:00:00Z", datetime(2024, 1, 1)):
+        from datetime import timedelta, timezone as tz
+        written = ("2024-01-01T23:00:00-05:00", datetime(2024, 1, 1, 23, tzinfo=tz(timedelta(hours=-5))),
+                   datetime(2024, 1, 1, 1, tzinfo=tz(timedelta(hours=9))))   # UTC days differ; written day counts
+        for obs in ("2024-01-01", date(2024, 1, 1), "2024-01-01T00:00:00Z", datetime(2024, 1, 1)) + written:
             with self.subTest(obs=obs):
                 self.assertEqual(alfred.value_as_known_on(rows, obs, "2024-03-12"), 101)
         with self.assertRaises(alfred.AlfredError):

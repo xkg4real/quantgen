@@ -10,11 +10,20 @@ no price and volume 0; those 200 rows stay in the append-only store without
 ``parser`` and are superseded by rows carrying ``parser = PARSER``.
 Both forms are read; a missing volume is recorded as missing (None), never as 0.
 
-v0.3 (integration review DS-7/DS-8, 2026-11-24): a side quoted at bid 0 or ask 100 cents is read as an
-empty side (no resting orders), so ``p_yes`` falls back to the last price (else None) instead of a mid such
-as 0.5 from 0/100; ``book_empty``/``one_sided`` record it. Whether Kalshi really writes an empty side as
-0.0000 / 1.0000 is **unverified** until an owner-PC run. Tickers must be strings of the client's ticker
-pattern; a market or candle that is not an object raises KalshiError; -0.0 is stored as 0.0.
+v0.3 (integration reviews DS-7/DS-8 and DSF-2/DSF-3/DSF-10, 2026-11-24): a side quoted at bid 0 or
+ask 100 cents is read as an empty side (no resting orders); whether Kalshi really writes an empty side as
+0.0000 / 1.0000 is **unverified** until an owner-PC run. ``p_yes``:
+* both sides quoted (and not crossed): the mid;
+* one side quoted: the last price only if it respects that side (last >= bid when a bid stands, last <= ask
+  when an ask stands), else None -- never pulled into range;
+* no side quoted: the last price, else None.
+Flags record what the response said, and say nothing when it did not report: ``book_empty`` / ``one_sided``
+are None when the bid or ask field is absent (``quotes_missing`` True), so a renamed field is not stored as
+"no resting orders". Tickers must fully match the client's ticker pattern (``fullmatch``, no trailing
+newline); a market or candle that is not an object raises KalshiError; -0.0 is stored as 0.0.
+Reading stored kalshi-v0.2 rows: they have no book_empty/one_sided/quotes_missing keys and a p_yes taken
+from the mid even for 0/100 quotes; recompute p_yes from their stored yes_bid/yes_ask/last_price with the
+rule above before use.
 
 Prices are kept in cents (0-100) = implied probability x 100. Thin markets are noisy:
 each row carries volume and open interest, and ``liquid`` is set against a
@@ -31,7 +40,7 @@ from typing import Any, Mapping
 SOURCE_ID = "kalshi"
 PARSER = "kalshi-v0.3"
 MIN_VOLUME = 1_000
-_TICKER = re.compile(r"^[A-Z0-9][A-Z0-9_.\-]{0,99}$")   # same pattern as data/didm/kalshi.py
+_TICKER = re.compile(r"[A-Z0-9][A-Z0-9_.\-]{0,99}")     # data/didm/kalshi.py pattern, used with fullmatch
 
 
 class KalshiError(ValueError):
@@ -44,7 +53,7 @@ def _aware(received_at: datetime) -> None:
 
 
 def _ticker(value: Any) -> str:
-    if not isinstance(value, str) or not _TICKER.match(value):
+    if not isinstance(value, str) or not _TICKER.fullmatch(value):
         raise KalshiError(f"bad ticker {str(value)[:40]!r}")
     return value
 
@@ -106,6 +115,25 @@ def _count(obj: Mapping[str, Any], name: str) -> float | None:
     return None
 
 
+def _book(bid: float | None, ask: float | None, last: float | None):
+    """(p_yes in cents or None, book_empty, one_sided, quotes_missing) -- see the module docstring."""
+    has_bid = bid is not None and bid > 0
+    has_ask = ask is not None and ask < 100
+    if has_bid and has_ask:
+        prob = (bid + ask) / 2 if ask >= bid else None
+    elif has_bid or has_ask:
+        ok = last is not None and (not has_bid or last >= bid) and (not has_ask or last <= ask)
+        prob = last if ok else None
+    else:
+        prob = last
+    if bid is None and ask is None:
+        return prob, None, None, True
+    if bid is None or ask is None:
+        # one field absent: a quoted side still proves the book is not empty; anything else is unknown
+        return prob, (False if has_bid or has_ask else None), None, True
+    return prob, not has_bid and not has_ask, has_bid != has_ask, False
+
+
 def market_snapshot_rows(payload: Mapping[str, Any], received_at: datetime) -> list[dict]:
     """GET /markets response -> one snapshot row per market (probability as of receipt)."""
     _aware(received_at)
@@ -119,10 +147,7 @@ def market_snapshot_rows(payload: Mapping[str, Any], received_at: datetime) -> l
         ticker = _ticker(m.get("ticker"))
         bid, ask = _price(m, "yes_bid"), _price(m, "yes_ask")
         last = _price(m, "last_price")
-        has_bid = bid is not None and bid > 0
-        has_ask = ask is not None and ask < 100
-        mid = (bid + ask) / 2 if has_bid and has_ask and ask >= bid else None
-        prob = mid if mid is not None else last
+        prob, book_empty, one_sided, quotes_missing = _book(bid, ask, last)
         volume = _count(m, "volume")
         out.append({
             "source_id": SOURCE_ID,
@@ -136,7 +161,7 @@ def market_snapshot_rows(payload: Mapping[str, Any], received_at: datetime) -> l
                 "status": m.get("status"), "close_time": m.get("close_time"),
                 "yes_bid": bid, "yes_ask": ask, "last_price": last,
                 "p_yes": prob / 100 if prob is not None else None,
-                "book_empty": not has_bid and not has_ask, "one_sided": has_bid != has_ask,
+                "book_empty": book_empty, "one_sided": one_sided, "quotes_missing": quotes_missing,
                 "volume": volume, "volume_24h": _count(m, "volume_24h"),
                 "open_interest": _count(m, "open_interest"),
                 "liquid": volume is not None and volume >= MIN_VOLUME,

@@ -322,6 +322,42 @@ class KalshiBook(unittest.TestCase):
         p = self.snap(yes_bid=0, yes_ask=30, last_price=25)                 # legacy cents, empty bid
         self.assertEqual((p["p_yes"], p["one_sided"]), (0.25, True))
 
+    def test_one_sided_last_must_respect_the_standing_side(self):
+        """DSF-2 (main decision 2026-11-24): never a p_yes that contradicts the quote, never clamped."""
+        cases = [
+            ({"yes_bid_dollars": "0.0000", "yes_ask_dollars": "0.0100", "last_price_dollars": "0.0500"}, None),
+            ({"yes_bid_dollars": "0.0000", "yes_ask_dollars": "0.0100"}, None),
+            ({"yes_bid_dollars": "0.9900", "yes_ask_dollars": "1.0000", "last_price_dollars": "0.6000"}, None),
+            ({"yes_bid_dollars": "0.9900", "yes_ask_dollars": "1.0000"}, None),
+            ({"yes_bid_dollars": "0.9900", "yes_ask_dollars": "1.0000", "last_price_dollars": "0.9950"}, 0.995),
+            ({"yes_bid_dollars": "0.0000", "yes_ask_dollars": "0.0100", "last_price_dollars": "0.0100"}, 0.01),
+        ]
+        for fields, expected in cases:
+            with self.subTest(fields=fields):
+                p = self.snap(**fields)
+                self.assertEqual((p["p_yes"], p["one_sided"], p["book_empty"]), (expected, True, False))
+
+    def test_absent_quote_fields_are_not_an_empty_book(self):
+        """DSF-3: a field the response did not carry is 'not reported', not 'no resting orders'."""
+        p = self.snap(last_price_dollars="0.3000")
+        self.assertEqual((p["book_empty"], p["one_sided"], p["quotes_missing"], p["p_yes"]), (None, None, True, 0.3))
+        p = self.snap(yes_ask_dollars="0.4000", last_price_dollars="0.3500")      # bid field absent
+        self.assertEqual((p["book_empty"], p["one_sided"], p["quotes_missing"], p["p_yes"]), (False, None, True, 0.35))
+        p = self.snap(yes_ask_dollars="1.0000")                                     # absent bid, empty ask
+        self.assertEqual((p["book_empty"], p["one_sided"], p["quotes_missing"]), (None, None, True))
+        p = self.snap(yes_bid_dollars="0.6100", yes_ask_dollars="0.6300")
+        self.assertIs(p["quotes_missing"], False)
+
+    def test_parser_tag_and_legacy_negative_zero(self):
+        import math
+        p = self.snap(yes_bid=-0.0, yes_ask=40, last_price=-0.0)
+        self.assertEqual(p["parser"], "kalshi-v0.3")
+        self.assertEqual((math.copysign(1, p["yes_bid"]), math.copysign(1, p["last_price"])), (1.0, 1.0))
+
+    def test_trailing_newline_ticker_rejected(self):
+        with self.assertRaises(kalshi.KalshiError):
+            kalshi.market_snapshot_rows({"markets": [{"ticker": "KXFED\n"}]}, RECEIVED)
+
     def test_two_sided_mid_unchanged(self):
         p = self.snap(yes_bid_dollars="0.6100", yes_ask_dollars="0.6300")
         self.assertEqual((p["p_yes"], p["book_empty"], p["one_sided"]), (0.62, False, False))

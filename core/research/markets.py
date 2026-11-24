@@ -304,7 +304,8 @@ def load_home_indicators(days=30, *, series_loader=None, btc_live=None, kospi_li
 # Six lines, one per indicator: symbol, status, reason code, live status. No values, keys, URLs or provider
 # text. Always exits 0: a failure is reported as a reason code, not a traceback. On an older checkout the
 # command prints nothing and exits 0 (this file had no __main__ block before OA-09), or fails with
-# "No module named core.research.markets" before 2026-10-29: no output at all is the diagnosis.
+# an error containing "No module named" (the core.research package) before 2026-10-29: no output at all
+# is the diagnosis.
 # --------------------------------------------------------------------------------------------------------------
 def diagnose_lines(rows):
     lines = []
@@ -348,7 +349,7 @@ class _LogCapture:
         # around a connection reset too) only after the transport rules (review DS-3, 2026-11-24).
         if re.search(r"CERTIFICATE_VERIFY_FAILED|certificate|SSLCertVerificationError|curl: \(60\)", text):
             return "certificate_error"
-        if re.search(r"timed out|Timeout", text):
+        if re.search(r"timed out|Timeout|timeout after|curl: \(28\)", text):
             return "network_timeout"
         if re.search(r"ConnectionError|Connection reset|ConnectionResetError|CONNECT tunnel failed|curl: \(\d+\)"
                      r"|Could not resolve|getaddrinfo|Name or service not known|NameResolution|NewConnectionError",
