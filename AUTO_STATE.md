@@ -1,19 +1,19 @@
 ---
 kind: auto_snapshot
-reason: periodic
-created_at: 2026-11-24T18:29:20+09:00
-source_branch: main
-source_head: b872d8c
-upstream: origin/main
-patch_base: b872d8c
+reason: usage_limit_weekly
+created_at: 2026-11-26T00:21:50+09:00
+source_branch: claude/amazing-gauss-tdiguu
+source_head: 3a0371b
+upstream: none
+patch_base: 3a0371b
 unpushed_commits: 0
 uncommitted_files: 0
 patch: none
-usage_pct: unknown
-usage_resets_at: unknown
-session: cf39df7b-5d27-5d98-b216-678a972eddad
-snapshot_key: none
-current_md_updated_at: 2026-11-24T18:45:00+09:00
+usage_pct: 100.0
+usage_resets_at: 2026-12-01T08:00:00.000Z
+session: 244a07c1-ef5e-50fd-a9f1-360db0f46038
+snapshot_key: seven_day@2026-12-01T08:00:00.000Z
+current_md_updated_at: 2026-11-24T20:52:00+09:00
 current_md_status: checkpoint
 ---
 
@@ -26,21 +26,21 @@ current_md_status: checkpoint
 ## 최근 커밋
 
 ```
-b872d8c Merge pull request #146 from xkg4real/gpt/handoff-doc-20261123
-5200b6c handoff: integrate the current main and retain the selected-document acceptance tests
-05f97df Merge pull request #145 from xkg4real/gpt/didm-v0-id-validation-20261123
-91be74d Merge the verified Massive main into DIDM V0 input validation
-51b8298 Merge pull request #144 from xkg4real/gpt/didm-b6-massive-news-20261123
-aa25d27 Merge current main and retain both DIDM news adapter tests
-5af3787 Merge pull request #143 from xkg4real/gpt/didm-b6-alpaca-news-20261123
-5039835 Merge verified Android preview from main into the Alpaca news input branch
-666e006 Merge pull request #141 from xkg4real/gpt/android-commercial-preview-20261123
-2d2e7ad handoff: publish a lane document manually without replacing central state
-270f5da DIDM: keep URL handling in the Massive response adapter
-21a0fbf DIDM: require whole-string matches for V0 identifiers and prompt hashes
-6a0336e DIDM: parse supplied Massive ticker-news metadata and preserve receipt times
-a35b2f8 Android: run the supplied GBM example offline and integrate current main
-3b8f39c didm: validate supplied Alpaca News metadata and revision times
+3a0371b docs: session pipeline in CLAUDE.md; owner rulings of 2026-11-19/20 in OWNER_RULINGS_LOG
+8445187 Merge pull request #133 from xkg4real/claude/payments-key4-20261119
+d6a1997 OWNER_STEPS 3-A: T3-T8 click-by-click (owner request)
+3e938d2 KEY-4: PR #133 review 3 (A1-A5, B1-B5) and owner AWS results
+148504a compliance: refresh the source review baseline for the compact same-answer fixture
+62b1d03 same-answer fixture: long lists as length, ends and checksums (1.3 MB -> 142 KB)
+28d0f63 compliance: refresh the source review baseline for the KEY-4 second review fixes
+2e2462e Account docs: owner decision 2026-11-19, keep email MFA; admin temporary password for email-MFA members
+6afed28 KEY-4 second review fixes (PR #133): app starts whatever routes say, paper.py tracked
+6a489aa Account docs: owner decisions 2026-11-19 (special characters in passwords, HTML verification mail)
+a65408b compliance: refresh the source review baseline for the same-answer tolerance
+da3c344 same-answer test: report every difference, floats within rel 1e-6 / abs 1e-9
+5ccec17 compliance: refresh the source review baseline for the same-answer test fix
+574966a same-answer test: floats within 1e-9, library-dependent crypto statistics left out
+3d61aee compliance: refresh the source review baseline for the KEY-4 review fixes
 ```
 
 ## 푸시되지 않은 커밋
