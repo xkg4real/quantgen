@@ -1,3 +1,15 @@
+## 종목 상세 우측 3카드 · 지표 리딩법(`봉` 제거) · `installed-ui` CI 분할 마감 — 2026-11-25T20:23:00+09:00
+
+```
+[UI_UX → 메인] 완료: ⑬-2/stock-cards-lessons-2026-11-24 종목 상세 우측 3개 카드 개편, 지표 리딩법 `봉` 제거 자연어화, `installed-ui` 병렬 분할 검증 및 PR #151 오픈
+- 브랜치/커밋/PR: `claude/friendly-bardeen-r6xe8f` @ `79447b2c` (기능·기준표 커밋 `0df31d69`, `3128216e`, `ebdeebdc`, `1b36ad57`, `d4f573fc`, `d882f250`, `3cde28d6` + 웹사이트 큐 `79447b2c`), PR https://github.com/xkg4real/quantgen/pull/151 (기존 초안 PR #140 `3483b53e` 계승 및 최신 `main` `de32ea10` 통합)
+- 확인한 검사와 결과: (1) 분리된 `installed-ui` 전체 58개 모듈 818건 통과(실패 0건, `desktop_stock_detail_acceptance` 1527행 포커스 회귀 포함) (2) `installed` 내 종목 상세·지표 리딩법·위험 설명 10개 모듈 75건 통과(실패 0건) (3) 휠 스테이징·빌드 및 체크아웃 외부 `smoke_installed.py`·`smoke_desktop.py` PASS (4) `compliance_acceptance`·`compliance_export_acceptance`·`gateway_boundary_acceptance` 62건 통과, `tools.compliance.check --check` 정합성 PASS / 공개준비 BLOCKED (20문서 / 882소스) (5) `tools/qt_port/switch_day.py --check` 7곳 모두 정상 일치 (6) PR #151 원격 GitHub Actions 실행 시작
+- 남은 것/다음 제안: (1) **이번 범위 밖으로 남겨 둔 `봉` 표기 3곳(기존 합의대로 별도 지시 전 미수정):** ① 용어집 정의 1곳(`core/education/glossary.py` `candlestick` 항목) ② 구버전 Flet 차트 화면 및 메시지 1곳(`ui/market_chart_page.py`, `core/ui_page_messages/market_chart.py`) ③ 공용 차트 SVG 렌더러 1곳(`core/market/presentation.py` 435·513행) (2) PySide6 전환(`OS-F1`) 적용 시 `quantgen_desktop/stock_insights.py` 내 `ValuationReferenceStrip.metric` 인스턴스 속성명 변경(`16-shadow` 대응, `UI_RELAY_FROM_MAIN.md` 1번) 및 `KEY5_UI_REQUEST_V2.md` 후속 진행 (3) 웹사이트 작업공간(AWS) 전달 레코드 `docs/product/ui_website_updates/PR-151.json`은 교차 채팅 전송 도구가 없어 `queued` 상태로 보존됨(웹 HTML 미수정·미배포)
+- 소유자 손이 필요한 일: PR #151 GitHub Actions 완주 확인 후 Windows 실화면(`PC7`) 점검 및 `MERGE_QUEUE.md` 순서에 따른 `main` 병합 판정(`config.py` 내 `inquire-ccnl` 허용 목록 포함으로 병합 시 Nautilus `code_sha256` 지문 변경 — 다음 기록 실행 전 `owner_confirmed` 갱신 대상, `OA-53`)
+```
+
+---
+
 ## UI 창 깜빡임 · 2026-11-23T04:33:36+09:00
 
 수정 전에는 화면을 구성할 때 홈·가이드·전략 작성·라이브러리·시스템의 배지 다섯 개가 각각 부모 없는 Qt 창으로 잠시 나타났습니다. 툴바에 배지를 먼저 붙이고 문구를 설정하도록 수정했습니다. 같은 Linux Qt offscreen 조건에서 합성 서비스를 주입한 실제 8페이지 주창을 두 번 비교했습니다. 별도로 나타난 배지 창은 5개에서 0개로 줄었고, 두 실행 모두 메인 창은 한 번만 표시돼 화면 캡처와 유휴 시점까지 유지됐습니다. 배지 회귀시험 5개와 독립 이벤트 비교를 통과했습니다.
