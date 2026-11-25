@@ -2,6 +2,7 @@
 from PyQt6.QtCore import QObject, QEvent, QSignalBlocker, QTimer, Qt, QLocale
 from PyQt6.QtWidgets import (QAbstractButton, QComboBox, QLabel, QLineEdit,
                              QTableWidget, QTabWidget, QPlainTextEdit, QWidget)
+from .qt_compat import call_later
 from .translations import display
 from .wheel_guard import guard as guard_wheel
 from .status_language import STATUS_ROLE, status_text
@@ -77,7 +78,11 @@ class LanguageController(QObject):
     def schedule(self, *args):
         if not self.applying and not self.pending:
             self.pending = True
-            QTimer.singleShot(0, self.apply)
+            # Posted to a child of this controller, so it can never run after the window (its parent) is deleted:
+            # a bound-method QTimer.singleShot is dropped by PyQt6 once the object is gone but still called by
+            # PySide6, where it touched the deleted window (PySide6 trial 2026-11-17: segfault, memory blow-up).
+            # It runs where singleShot(0) ran, before the repaint, so no frame shows untranslated text.
+            call_later(self, 0, self.apply)
 
     def eventFilter(self, watched, event):
         if event.type() in (QEvent.Type.LayoutRequest, QEvent.Type.ChildAdded,

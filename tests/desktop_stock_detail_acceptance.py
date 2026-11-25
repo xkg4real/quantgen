@@ -806,7 +806,25 @@ class StockDetailTests(unittest.TestCase):
         self.assertIn("30일 평균", card.volume_ratio.text())
         self.assertTrue(card.volume_bar.isVisible())
         titles = [section.title.text() for section in view.section_panels]
-        self.assertEqual(titles, ["주요 지표", "가격 범위·기간 수익률", "위험", "기술 지표", "공매도·수급"])
+        self.assertEqual(titles, ["주요 지표", "가격 범위·기간 수익률", "위험", "기술 지표"])
+        self.assertIs(view.insights.parent(), view.side.stock_page)
+        self.assertTrue(view.insights.isVisibleTo(view.side))
+        self.assertEqual(view.insights.covered_sections, frozenset({"flows", "short_selling"}))
+        self.assertFalse(view.side.sections["supply"].isVisibleTo(view.side))
+        window = profile.values["flows"]["windows"][20]
+        for item in view.insights.model["flows"]:
+            self.assertEqual(item["net_qty"], window[item["group"]])
+            self.assertEqual(item["net_reported"], window["reported"][item["group"]])
+            self.assertIsNone(item["buy_fraction"])  # net-only input is never a fabricated gross split
+        short = view.insights.model["shorts"]
+        self.assertEqual((short["date"], short["ratio_pct"], short["qty"]),
+                         (profile.values["short_selling"]["latest"]["date"],
+                          profile.values["short_selling"]["latest"]["short_ratio_pct"],
+                          profile.values["short_selling"]["latest"]["short_qty"]))
+        self.assertEqual(short["average"], profile.values["short_selling"]["average"])
+        legacy = [r.label for r in view.side.sections["key_figures"]._entries if hasattr(r, "label")]
+        self.assertNotIn("PER", legacy)
+        self.assertTrue({"EPS", "업종", "상장 주식 수", "시가총액 (계산값)"}.issubset(legacy))
         for section in view.section_panels:
             shown = [w for w in section._widgets if w.isVisibleTo(section) and section.body.isVisibleTo(section)]
             rows = len([w for w in shown if w.property("sd") == "rowValue"]) or len(shown)
@@ -1417,9 +1435,22 @@ class StockDetailTests(unittest.TestCase):
         # Figures explain themselves; no internal engine name.
         hints = {row.label: row.hint for key in ("key_figures", "risk")
                  for row in view.side.sections[key]._entries if hasattr(row, "label")}
-        for label_text, start in (("PER", "PER —"), ("EPS", "EPS —"), ("1일 VaR 95%", "위험가치(VaR)"),
-                                  ("1일 CVaR 95%", "조건부 VaR(CVaR)")):
+        from quantgen_desktop.metric_help import stock_risk_help
+        confidence = view.profile.values["risk"]["var_level"]
+        risk_labels = [stock_risk_help(kind, "ko", confidence=confidence, horizon_days=1,
+                                      unit="%", basis="historical_log_loss").label for kind in ("var", "cvar")]
+        for label_text, start in (("EPS", "EPS —"), (risk_labels[0], "위험가치(VaR)"),
+                                  (risk_labels[1], "조건부 VaR(CVaR)")):
             self.assertTrue(hints[label_text].startswith(start), (label_text, hints[label_text]))
+        per_values = [w for w in view.insights.findChildren(QLabel)
+                      if w.property("insightRole") == "value" and w.toolTip().startswith("PER —")]
+        self.assertEqual(len(per_values), 1)
+        self.assertEqual(per_values[0].text(), f"{view.profile.values['key_figures']['per']:,.2f}배")
+        self.assertIn(view.profile.sources["quote"], per_values[0].toolTip())
+        self.assertIn(view.profile.fetched["quote"], per_values[0].toolTip())
+        self.assertNotIn("PER", hints)
+        self.assertTrue(any("회계 기준·기준일은 확인되지" in w.toolTip()
+                            for w in view.insights.findChildren(QLabel)))
         self.assertFalse([h for h in hints.values() if "gs_quant" in h or "계산 엔진" in h])
         # Register and pointers: the full watchlist, the Q-SCORE chip, the key hint.
         self.assertEqual(text("ko", "watch_full", limit=20), "관심종목은 20개까지 담을 수 있어요.")

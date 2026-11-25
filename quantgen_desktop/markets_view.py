@@ -28,6 +28,7 @@ from PyQt6.QtCore import (QAbstractListModel, QByteArray, QModelIndex, QObject, 
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (QComboBox, QCompleter, QFrame, QGridLayout, QHBoxLayout, QLineEdit, QPushButton,
                              QSizePolicy, QVBoxLayout, QWidget)
+from .qt_compat import call_later
 
 from core.i18n import LocaleContext
 from core.market import rankings as _rankings
@@ -619,7 +620,7 @@ class WatchlistGrid(QWidget):
         self._arrange(order)
         self.render()
         if self.isVisible() and self.auto_load and any(card.attempted_at is None for card in order):
-            QTimer.singleShot(0, self.refresh)
+            call_later(self, 0, self.refresh)
 
     def _arrange(self, order=None):
         order = order if order is not None else list(self.cards.values())
@@ -716,7 +717,7 @@ class WatchlistGrid(QWidget):
         super().showEvent(event)
         if self.auto_load:
             self.poll_timer.start()
-            QTimer.singleShot(0, self.refresh)
+            call_later(self, 0, self.refresh)
 
     def hideEvent(self, event):
         self.poll_timer.stop()
@@ -834,7 +835,7 @@ class MarketsWorkspace(QWidget):
         self.stock = StockView(chart, store=store, profile_loader=profile_loader, name_fn=name_fn, locale=self.ctx,
                                auto_load=auto_load, directory=directory, directory_loader=directory_loader)
         self.stock.back_requested.connect(self.show_rankings)
-        self.stock.open_requested.connect(self.open_instrument)
+        self.stock.route_opens_to(self.open_instrument)
         self.pages.addWidget(self.rankings)
         self.pages.addWidget(self.stock)
         layout.addWidget(self.pages)

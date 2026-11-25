@@ -799,10 +799,12 @@ class WatchlistPanel(QWidget):
         outer.addLayout(live_controls)
         self.table = _WatchlistTable(0, 10)
         self.detail_column, self.score_column = DETAIL_COLUMN, SCORE_COLUMN
-        self.table.setHorizontalHeader(_WatchlistHeader(self.table))
+        self.table_header = _WatchlistHeader(self.table)   # header and delegates kept (PySide6 checklist item 9)
+        self.table.setHorizontalHeader(self.table_header)
         self.score_help = self.table.horizontalHeader().help_button
         self.score_help.clicked.connect(self.open_score_help)
-        self.table.setItemDelegateForColumn(0, _IdentityDelegate(self.table))
+        self.identity_delegate = _IdentityDelegate(self.table)
+        self.table.setItemDelegateForColumn(0, self.identity_delegate)
         self.cell_delegate = _CellDelegate(self)
         for column in (*NUMERIC_COLUMNS, 7, SCORE_COLUMN):
             self.table.setItemDelegateForColumn(column, self.cell_delegate)

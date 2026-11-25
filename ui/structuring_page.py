@@ -22,7 +22,7 @@ from core.ficc import insights, structured
 from core.research.structured_disclosure import cms_coupon_context
 from core.ficc.common import BP, FICCError, parse_tenor, pct_text, tenor_label
 from core.ficc.curves import METHOD_NAMES, curve_from_snapshot
-from core.ficc.data import load_treasury_curve
+from core import gateway
 from core.theme import RADII, active
 from core.ui_legacy_messages import static_text
 from ui.ai_panel import analysis_panel
@@ -370,7 +370,7 @@ def build_structuring_page(page: ft.Page,
                 N = _parse({"n": ("Notional", notional.value)})["n"]
                 fut = _parse({"f": ("Futures DV01 / contract", futures.value)})["f"] \
                     if (futures.value or "").strip() else None
-                panel = load_treasury_curve(source=source.value or "auto")
+                panel = gateway.ficc().load_treasury_curve(source=source.value or "auto")
                 curve = curve_from_snapshot(panel.latest())
                 report = _price(k, curve, maturity=T, notional=N,
                                 underlying=underlying.value or "FX", v=v)
@@ -413,7 +413,7 @@ if __name__ == "__main__":
     from types import SimpleNamespace
 
     fake = SimpleNamespace(update=lambda: None, run_thread=lambda fn: fn())
-    panel = load_treasury_curve(source="synthetic")
+    panel = gateway.ficc().load_treasury_curve(source="synthetic")
     curve = curve_from_snapshot(panel.latest())
     for k, _ in _TOOLS:
         v = _parse({key: (label, default) for key, label, default, _ in _FIELDS[k]})

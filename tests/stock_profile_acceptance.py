@@ -233,12 +233,11 @@ class DomesticProfileTests(Base):
 
     def test_real_kis_parsers_are_called_with_allowlisted_paths_and_keyword_days(self):
         from data.kis_markets import KISMarkets
-        paths = []
+        calls = []
         days = session_days(20)
 
-        def fake_get(path, tr_id, params, **_):
-            paths.append(path)
-            self.assertIn(path, config.KIS_QUOTATION_ALLOWLIST)
+        def fake_get(path, tr_id, params, **kwargs):
+            calls.append((path, tr_id, params.copy(), kwargs))
             if path.endswith("inquire-price"):
                 return {"output": {"hts_kor_isnm": "삼성전자", "stck_prpr": "61000", "prdy_vrss": "1000",
                                    "prdy_ctrt": "1.67", "acml_vol": "12345678", "stck_oprc": "60200",
@@ -252,6 +251,12 @@ class DomesticProfileTests(Base):
                 return {"output2": [{"stck_bsop_date": d.strftime("%Y%m%d"), "stck_clpr": "61000",
                                      "acml_vol": "1000", "ssts_cntg_qty": "30", "ssts_vol_rlim": "3.00",
                                      "acml_ssts_cntg_qty": "999"} for d in days]}
+            if path.endswith("inquire-asking-price-exp-ccn"):
+                return {"output1": {"askp1": "61100", "askp_rsqn1": "225", "bidp1": "61000",
+                                    "bidp_rsqn1": "480", "aspr_acpt_hour": "095959"}}
+            if path.endswith("inquire-ccnl"):
+                return {"output": [{"stck_prpr": "61000", "cntg_vol": "12", "tday_rltv": "105.40",
+                                    "stck_cntg_hour": "100000"}]}
             raise AssertionError(path)
 
         client = KISClient.__new__(KISClient)
@@ -259,14 +264,36 @@ class DomesticProfileTests(Base):
         client._get = fake_get
         with patch("data.krx.kis_client._now", return_value=NOW.isoformat()):
             profile = self.full(quote_client=client, markets=KISMarkets(client=client))
-        self.assertEqual(paths, ["/uapi/domestic-stock/v1/quotations/inquire-price",
-                                 "/uapi/domestic-stock/v1/quotations/investor-trade-by-stock-daily",
-                                 "/uapi/domestic-stock/v1/quotations/daily-short-sale"])
+        prefix = "/uapi/domestic-stock/v1/quotations/"
+        self.assertEqual([(path, tr_id) for path, tr_id, _, _ in calls], [
+            (prefix + "inquire-price", "FHKST01010100"),
+            (prefix + "investor-trade-by-stock-daily", "FHPTJ04160001"),
+            (prefix + "daily-short-sale", "FHPST04830000"),
+            (prefix + "inquire-asking-price-exp-ccn", "FHKST01010200"),
+            (prefix + "inquire-ccnl", "FHKST01010300"),
+        ])
+        for path, _, _, _ in calls:
+            self.assertIn(path, config.KIS_QUOTATION_ALLOWLIST)
+        for path, _, params, kwargs in calls[-2:]:
+            with self.subTest(path=path):
+                self.assertEqual(params, {"FID_COND_MRKT_DIV_CODE": "J", "FID_INPUT_ISCD": "005930"})
+                self.assertEqual(set(kwargs), {"retry"})
+                self.assertIs(kwargs["retry"], False)
         flows = profile.values["flows"]["windows"]
         self.assertEqual((flows[5]["foreign"], flows[20]["individual"], flows[20]["institution"]),
                          (500.0, -800.0, -1200.0))
         self.assertEqual(profile.values["short_selling"]["average"]["short_ratio_pct"], 3.0)
         self.assertEqual(profile.values["key_figures"]["listed_shares"], 5_969_782_550)
+        book = profile.values["orderbook"]
+        self.assertEqual(book["levels"][0], {"level": 1, "ask_price": 61100, "ask_qty": 225,
+                                             "bid_price": 61000, "bid_qty": 480})
+        self.assertEqual((book["price_unit"], book["quantity_unit"], book["provider_time"], book["market_date"]),
+                         ("KRW", "shares", "095959", ""))
+        trades = profile.values["executions"]
+        self.assertEqual(trades["rows"], ({"price": 61000, "volume": 12, "strength": 105.4,
+                                           "provider_time": "100000"},))
+        self.assertEqual((trades["strength_unit"], trades["market_date"]), ("provider value", ""))
+        self.assertEqual((profile.sources["orderbook"], profile.sources["executions"]), ("KIS", "KIS"))
 
     def test_flow_and_short_sale_numbers_match_hand_sums(self):
         flows, shorts = flow_rows(25), short_rows(25)
@@ -450,7 +477,7 @@ class SourceFailureTests(Base):
         en = by_key(profile, "en")
         self.assertEqual([r.label for r in en["key_figures"].rows], ["Open", "High", "Low", "Volume"])
         self.assertEqual(profile.sources["quote"], "KIS REST")
-        fundamentals = row(en["unavailable"], "Fundamentals (PER, EPS, sector, listed shares, market cap)")
+        fundamentals = row(en["unavailable"], "Fundamentals (PER, PBR, EPS, BPS, sector, listed shares, market cap)")
         self.assertEqual(fundamentals.value, "Request failed")
         self.assertIn("KISError", fundamentals.hint)
         self.assertEqual(profile.name, "삼성전자")  # the bundled name, since the quote carried none
@@ -478,7 +505,7 @@ class SourceFailureTests(Base):
                              dict.fromkeys(("fundamentals", "flows", "short_selling"), "connection_not_configured"))
             missing = {r.label: r.value for r in by_key(profile, "en")["unavailable"].rows}
             self.assertEqual(missing["Investor net buying"], "KIS connection not configured")
-            self.assertEqual(missing["Fundamentals (PER, EPS, sector, listed shares, market cap)"],
+            self.assertEqual(missing["Fundamentals (PER, PBR, EPS, BPS, sector, listed shares, market cap)"],
                              "KIS connection not configured")
         unready = FakeQuoteClient(ready=False)
         self.full(quote_client=unready)

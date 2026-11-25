@@ -48,8 +48,8 @@ class QScoreController(QObject):
     def __init__(self, parent=None, *, service=None, now=None):
         super().__init__(parent)
         if service is None:
-            from data.kis_workspace import MarketDataService
-            service = MarketDataService()
+            from core import gateway
+            service = gateway.provider('data.kis_workspace').MarketDataService()
         self.service = service
         self._now = now or (lambda: datetime.now(timezone.utc))
         self._histories = OrderedDict()

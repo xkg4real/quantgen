@@ -88,6 +88,7 @@ KIS_QUOTATION_ALLOWLIST = frozenset({
     "/uapi/domestic-stock/v1/quotations/inquire-index-price",
     "/uapi/domestic-stock/v1/quotations/inquire-daily-indexchartprice",
     "/uapi/domestic-stock/v1/quotations/inquire-asking-price-exp-ccn",
+    "/uapi/domestic-stock/v1/quotations/inquire-ccnl",
     "/uapi/domestic-stock/v1/quotations/comp-interest",
     "/uapi/domestic-stock/v1/quotations/investor-trade-by-stock-daily",
     "/uapi/domestic-stock/v1/quotations/daily-short-sale",

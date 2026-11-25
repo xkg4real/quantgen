@@ -8,6 +8,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
+from tests.qt_fixture_cleanup import delete_owned_widget
 from zipfile import ZipFile
 
 import dotenv
@@ -104,8 +105,8 @@ class NativeMarketTests(unittest.TestCase):
 
     def cleanup(self):
         self.wait_idle()
-        with patch.object(QMessageBox,'question',return_value=QMessageBox.StandardButton.Yes):self.window.close()
-        self.window.deleteLater();self.app.processEvents()
+        with patch.object(QMessageBox,'question',return_value=QMessageBox.StandardButton.Yes):self.assertTrue(self.window.close(), "The fixture window refused to close")
+        delete_owned_widget(self.window);self.app.processEvents()
 
     def wait_idle(self):
         for _ in range(2000):

@@ -10,13 +10,14 @@ no Qt and draws nothing.
       (core.market.routing.ChartRouter: KIS first, then Yahoo for stocks). Synthetic data never takes part:
       `load_history(source="auto")` is not used.
     - domestic stocks only: `quote_client.quote(code)` (KISClient.quote, the inquire-price endpoint: name, OHLC,
-      volume, PER, EPS, sector, listed shares), `markets.investor_daily(code, days=20)` and
+      volume, PER/PBR, EPS/BPS, sector, listed shares), `markets.investor_daily(code, days=20)` and
       `markets.short_sale_daily(code, days=20)` (data.kis_markets.KISMarkets).
-  No new KIS endpoint is used; every call above already exists in the allowlisted client code.
+      Optional `quote_client.orderbook(code)` and `executions(code)` each make one read-only
+      REST snapshot attempt (retry=False); no added timer, paging or WebSocket connection.
 
 Every source is optional. A missing or failing source empties only its own sections and leaves a short authored
 reason code (never provider text, a URL or a credential); the 'unavailable' section states each such gap plainly,
-together with what QUANTGEN does not provide at all (news, analyst ratings, dividends, order book, overseas
+together with what QUANTGEN does not provide at all (news, analyst ratings, dividends, overseas
 fundamentals). Nothing raises except programming errors (for example a non-stock instrument).
 
 Provider names and timestamps appear only in row hints (tooltips): the owner removed the provider and
@@ -35,6 +36,8 @@ from core.i18n import LocaleContext
 from core.numfmt import compact_large_number
 from core.market.models import Candle, ChartRequest, Instrument, MarketSnapshot, utc_now
 from core.market.presentation import indicator_values
+from core.market.detail_insights import (StockPeerComparisons, normalize_executions, normalize_orderbook,
+                                        stock_peer_comparisons)
 from core.market.routing import ProvidersNotRun, ProvidersUnavailable, describe
 from core.quant.history import History
 from core.quant.risk import analyze_history
@@ -57,7 +60,7 @@ STALE_DAYS = 7                   # the Q-SCORE history-age limit
 RETURN_PERIODS = (("1W", 5), ("1M", 21), ("3M", 63), ("6M", 126), ("1Y", 252))
 SECTION_KEYS = ("key_figures", "range", "returns", "risk", "signals", "indicators", "flows",
                 "short_selling", "unavailable")
-SOURCE_KEYS = ("history", "quote", "flows", "short_selling")
+SOURCE_KEYS = ("history", "quote", "flows", "short_selling", "orderbook", "executions")
 _HISTORY_SECTIONS = ("range", "returns", "risk", "signals", "indicators")
 _INVESTOR_KEYS = ("foreign", "institution", "individual")
 _KIS_SOURCES = frozenset({"KIS", "KIS REST"})
@@ -95,7 +98,7 @@ class StockProfile:
 
     `values` maps a section key to its raw numbers. `reasons` maps a section key (and 'fundamentals') to an
     authored code saying why it is empty; `errors` holds the exception class name when a source failed.
-    `sources` and `fetched` map a source key ('history', 'quote', 'flows', 'short_selling') to the provider and
+    `sources` and `fetched` map a source key (SOURCE_KEYS) to the provider and
     the ISO UTC time it was received. Treat the mappings as read-only.
     """
     instrument: Instrument
@@ -118,6 +121,7 @@ class StockProfile:
     sources: dict = field(default_factory=dict, hash=False)
     fetched: dict = field(default_factory=dict, hash=False)
     attempts: tuple = ()              # core.market.routing.Attempt records of the history load
+    peer_comparisons: StockPeerComparisons | None = field(default=None, hash=False)
 
     @property
     def symbol(self) -> str:
@@ -292,10 +296,11 @@ def _quote_view(instrument, quote):
     if view["volume"] is not None and view["volume"] < 0:
         view["volume"] = None
     if (instrument.asset == "domestic_stock" and source.upper() == "KIS"
-            and any(_has(quote, k) for k in ("per", "eps", "sector", "listed_shares"))):
+            and any(_has(quote, k) for k in ("per", "pbr", "eps", "bps", "sector", "listed_shares"))):
         # Only the KISClient Quote carries these (the chart's MarketQuote does not). They come from the same
         # inquire-price payload; no TTM, consolidation or dilution basis is supplied with them.
         view["fundamentals"] = {"per": _finite(_field(quote, "per")), "eps": _finite(_field(quote, "eps")),
+                                "pbr": _finite(_field(quote, "pbr")), "bps": _finite(_field(quote, "bps")),
                                 "sector": _text(_field(quote, "sector")),
                                 "listed_shares": _shares(_field(quote, "listed_shares"))}
     return view, None
@@ -388,8 +393,16 @@ def _flows(rows):
             reported = [r[investor] for r in window if r[investor] is not None]
             entry[investor] = sum(reported) if reported else None
             entry["reported"][investor] = len(reported)
+        entry["gross"] = {}
+        for investor in _INVESTOR_KEYS:
+            pairs = [(r.get(investor + "_buy"), r.get(investor + "_sell")) for r in window]
+            pairs = [(b, s) for b, s in pairs if b is not None and s is not None and b >= 0 and s >= 0]
+            entry["gross"][investor] = {"buy": _finite(sum(b for b, _ in pairs)) if pairs else None,
+                                       "sell": _finite(sum(s for _, s in pairs)) if pairs else None,
+                                       "reported_pairs": len(pairs)}
         out["windows"][length] = entry
-    if not any(entry[k] is not None for entry in out["windows"].values() for k in _INVESTOR_KEYS):
+    if not any(entry[k] is not None or entry["gross"][k]["reported_pairs"]
+               for entry in out["windows"].values() for k in _INVESTOR_KEYS):
         return None
     # The rows themselves, for the chart's supply/demand studies (UI-D8): (date, foreign, institution, individual).
     out["daily"] = tuple((r["date"], r["foreign"], r["institution"], r["individual"]) for r in rows)
@@ -397,6 +410,10 @@ def _flows(rows):
 
 
 def _shorts(rows):
+    rows = [dict(row,
+                 short_qty=row["short_qty"] if row["short_qty"] is not None and row["short_qty"] >= 0 else None,
+                 short_ratio_pct=row["short_ratio_pct"] if row["short_ratio_pct"] is not None and 0 <= row["short_ratio_pct"] <= 100 else None)
+            for row in rows]
     latest = next((r for r in reversed(rows) if r["short_ratio_pct"] is not None or r["short_qty"] is not None), None)
     if latest is None:
         return None
@@ -414,14 +431,15 @@ def _shorts(rows):
 
 def build_profile(instrument, *, candles, quote=None, flows=None, shorts=None, name="", today=None,
                   source="", adjusted=True, fetched_at="", reasons=None, errors=None, fetched=None,
-                  attempts=()) -> StockProfile:
+                  attempts=(), orderbook=None, executions=None, peer_comparisons=()) -> StockProfile:
     """Compute a profile from supplied data; no I/O.
 
     `candles`: daily bars (Candle, or objects/mappings with timestamp/open/high/low/close/volume), adjusted unless
     `adjusted=False`; a Yahoo `source` is always treated as unadjusted. `quote`: a KISClient Quote (domestic; the
     only quote that carries fundamentals) or a chart MarketQuote. `flows`/`shorts`: rows as returned by
     KISMarkets.investor_daily / short_sale_daily. `reasons`/`errors`/`fetched` (keyed by SOURCE_KEYS) let a loader
-    say why a source is missing and when the others arrived.
+    say why a source is missing and when the others arrived. Optional `peer_comparisons` are explicitly supplied
+    financial snapshots for this instrument, dated independently of quotes and daily bars.
     """
     _check_instrument(instrument)
     today = _today(today)
@@ -483,7 +501,7 @@ def build_profile(instrument, *, candles, quote=None, flows=None, shorts=None, n
         cap = _finite(view["price"] * shares) if shares is not None else None
         figures.update(fundamentals, market_cap=cap, market_cap_unit="KRW" if cap is not None else None,
                        market_cap_basis="price_x_listed_shares" if cap is not None else None)
-        if not any(fundamentals[k] is not None for k in ("per", "eps", "sector", "listed_shares")):
+        if not any(fundamentals[k] is not None for k in ("per", "pbr", "eps", "bps", "sector", "listed_shares")):
             why["fundamentals"] = "no_observations"
     if figures:
         values["key_figures"] = figures
@@ -532,7 +550,9 @@ def build_profile(instrument, *, candles, quote=None, flows=None, shorts=None, n
     # Investor flows and short selling (domestic KIS only) -------------------------------
     for key, data, columns, compute in (
             ("flows", flows, (("foreign", "foreign_net_qty"), ("institution", "institution_net_qty"),
-                              ("individual", "individual_net_qty")), _flows),
+                              ("individual", "individual_net_qty"),
+                              *((group + "_" + side, group + "_" + side + "_qty")
+                                for group in _INVESTOR_KEYS for side in ("buy", "sell"))), _flows),
             ("short_selling", shorts, (("short_qty", "short_qty"), ("short_ratio_pct", "short_ratio_pct"),
                                        ("volume", "volume")), _shorts)):
         if not domestic:
@@ -552,6 +572,19 @@ def build_profile(instrument, *, candles, quote=None, flows=None, shorts=None, n
             sources[key] = "KIS"
             stamps[key] = _stamp_text(fetched_in.get(key))
 
+    # Optional REST-only microstructure snapshots. Missing data never substitutes zero.
+    for key, data, normalize in (("orderbook", orderbook, normalize_orderbook),
+                                 ("executions", executions, normalize_executions)):
+        if not domestic:
+            why[key] = "domestic_only"
+            continue
+        result = normalize(data, received_at=_stamp_text(fetched_in.get(key)))
+        if result is None:
+            missing(key, key, "not_provided" if data is None else "no_observations")
+        else:
+            values[key], sources[key] = result, "KIS"
+            stamps[key] = result["received_at"]
+
     supplied = _text(str(name or ""), 120) or ""
     return StockProfile(
         instrument=instrument, name=supplied or (view or {}).get("name") or _known_name(instrument, "ko"),
@@ -559,7 +592,8 @@ def build_profile(instrument, *, candles, quote=None, flows=None, shorts=None, n
         change_pct=change_pct, price_basis=basis, candles=bars, adjusted=adjusted and bool(bars),
         as_of=dates[-1] if bars else "", today=today, stale=stale,
         live_eligible=bool(bars) and source.upper() in _KIS_SOURCES, values=values, reasons=why, errors=failed,
-        sources=sources, fetched=stamps, attempts=tuple(attempts or ()))
+        sources=sources, fetched=stamps, attempts=tuple(attempts or ()),
+        peer_comparisons=stock_peer_comparisons(instrument, today, peer_comparisons))
 
 
 # --------------------------------------------------------------------------- #
@@ -587,6 +621,8 @@ def load_profile(instrument, *, router, quote_client=None, markets=None, today=N
 
     Calls, in order: router.load(ChartRequest(instrument, "1d", 260, adjusted=True)); for domestic stocks only,
     quote_client.quote(code), markets.investor_daily(code, days=20), markets.short_sale_daily(code, days=20).
+    Then optional orderbook and executions snapshots: at most one method call each,
+    no paging/retry or new polling. OAuth setup is separate from the quotation-attempt budget.
     Each is optional and failure-tolerant. When the KIS quote is unavailable the chart snapshot's own quote
     still supplies price and OHLC (never fundamentals).
     """
@@ -606,7 +642,7 @@ def load_profile(instrument, *, router, quote_client=None, markets=None, today=N
                                      or snapshot.request.instrument != instrument
                                      or snapshot.request.interval != "1d"):
             snapshot, reasons["history"] = None, "invalid_response"
-    quote = flows = shorts = None
+    quote = flows = shorts = orderbook = executions = None
     if instrument.asset == "domestic_stock":
         code = instrument.code
         quote = _ask("quote", quote_client, lambda c: c.quote(code), reasons, errors, fetched)
@@ -617,6 +653,15 @@ def load_profile(instrument, *, router, quote_client=None, markets=None, today=N
         flows = _ask("flows", markets, lambda m: m.investor_daily(code, days=FLOW_SESSIONS), reasons, errors, fetched)
         shorts = _ask("short_selling", markets, lambda m: m.short_sale_daily(code, days=FLOW_SESSIONS),
                       reasons, errors, fetched)
+        optional = {}
+        for key in ("orderbook", "executions"):
+            # Preserve old injected clients that implement only quote(); no new constructor.
+            if quote_client is not None and not callable(getattr(quote_client, key, None)):
+                reasons[key] = "not_provided"
+                optional[key] = None
+            else:
+                optional[key] = _ask(key, quote_client, lambda c, k=key: getattr(c, k)(code), reasons, errors, fetched)
+        orderbook, executions = optional["orderbook"], optional["executions"]
     if quote is None and snapshot is not None and snapshot.quote is not None:
         quote = snapshot.quote          # price and OHLC only; fundamentals stay with reasons["quote"]
     source = str(snapshot.source) if snapshot is not None else ""
@@ -625,7 +670,7 @@ def load_profile(instrument, *, router, quote_client=None, markets=None, today=N
         shorts=shorts, today=today, source=source,
         adjusted=bool(snapshot is not None and snapshot.request.adjusted and source.upper() in _KIS_SOURCES),
         fetched_at=snapshot.fetched_at if snapshot is not None else "", reasons=reasons, errors=errors,
-        fetched=fetched, attempts=attempts)
+        fetched=fetched, attempts=attempts, orderbook=orderbook, executions=executions)
 
 
 # --------------------------------------------------------------------------- #
@@ -680,9 +725,9 @@ _NOT_ADVICE = ("매수·매도 추천이 아닙니다.", "Not a buy or sell reco
 _SECTORS_EN = {"전기전자": "Electronics", "전기,전자": "Electronics", "전기·전자": "Electronics",
                "운수장비": "Transport equipment", "금융업": "Financials", "의약품": "Pharmaceuticals",
                "서비스업": "Services", "기계": "Machinery", "화학": "Chemicals"}
-_PER_EPS_CAVEAT = ("KIS 제공값 · 회계 기준과 기준일은 확인되지 않았습니다. EPS 단위·희석 여부도 확인되지 않았습니다.",
+_PER_EPS_CAVEAT = ("KIS 제공값 · 회계 기준과 기준일은 확인되지 않았습니다. EPS/BPS 단위·희석 여부도 확인되지 않았습니다.",
                    "KIS-provided value. Accounting basis and reference date are unconfirmed; "
-                   "EPS unit and dilution basis are also unconfirmed.")
+                    "EPS/BPS unit and dilution basis are also unconfirmed.")
 _RETURN_LABELS = {"1W": ("1주", "1W"), "1M": ("1개월", "1M"), "3M": ("3개월", "3M"), "6M": ("6개월", "6M"),
                   "1Y": ("1년", "1Y")}
 _INDICATORS = (("SMA20", ("SMA 20", "SMA 20"), True), ("EMA12", ("EMA 12", "EMA 12"), True),
@@ -700,7 +745,6 @@ _ALWAYS_MISSING = (
     (("배당", "Dividends"),
      ("배당 자료를 읽지 않습니다. 기간 수익률은 배당을 뺀 가격 기준입니다.",
       "Dividend data is not read; returns here are price-only.")),
-    (("호가", "Order book"), ("호가 잔량은 이 화면에서 조회하지 않습니다.", "Bid and ask depth is not loaded in this view.")),
 )
 
 
@@ -868,9 +912,9 @@ def _key_figures(w):
             w.t("가격 × 상장 주식 수로 계산한 값입니다. 실제 가격 관측 시각은 제공되지 않았습니다.",
                 "Calculated as price × listed shares; the actual price observation time was not supplied.")
             + "\n" + w.num(data["market_cap"], 0) + " KRW\n" + fundamentals))
-    for key, label in (("per", "PER"), ("eps", "EPS")):
+    for key, label in (("per", "PER"), ("pbr", "PBR"), ("eps", "EPS"), ("bps", "BPS")):
         if data.get(key) is not None:
-            value = w.num(data[key], 2) if key == "per" else w.plain(data[key])
+            value = w.num(data[key], 2) if key in ("per", "pbr") else w.plain(data[key])
             rows.append(ProfileRow(label, value, None, w.pair(_PER_EPS_CAVEAT) + "\n" + fundamentals))
     if data.get("sector"):
         raw = data["sector"]
@@ -1042,8 +1086,8 @@ def _unavailable_rows(w, skipped):
     if "fundamentals" in p.reasons and "key_figures" not in skipped:
         if p.instrument.asset == "domestic_stock":
             hint = w.t("오류 유형: ", "Error type: ") + p.errors["fundamentals"] if "fundamentals" in p.errors else ""
-            rows.append(ProfileRow(w.t("재무 지표 (PER·EPS·업종·상장 주식 수·시가총액)",
-                                       "Fundamentals (PER, EPS, sector, listed shares, market cap)"),
+            rows.append(ProfileRow(w.t("재무 지표 (PER·PBR·EPS·BPS·업종·상장 주식 수·시가총액)",
+                                       "Fundamentals (PER, PBR, EPS, BPS, sector, listed shares, market cap)"),
                                    w.reason("fundamentals"), None, hint))
     if p.instrument.asset == "overseas_stock":
         rows.append(ProfileRow(w.t("해외 종목 재무 지표", "Overseas fundamentals"), w.t("제공되지 않음", "Not provided"),

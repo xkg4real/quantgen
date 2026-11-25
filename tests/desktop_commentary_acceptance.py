@@ -5,6 +5,7 @@ from copy import deepcopy
 import threading
 import unittest
 from unittest.mock import patch,Mock
+from tests.qt_fixture_cleanup import delete_owned_widget
 import dotenv
 with patch.object(dotenv,'load_dotenv',return_value=False):
     from quantgen_desktop.app import ResearchWindow
@@ -34,8 +35,8 @@ class NativeCommentaryTests(unittest.TestCase):
 
     def cleanup(self):
         self.wait()
-        with patch.object(QMessageBox,'question',return_value=QMessageBox.StandardButton.Yes):self.window.close()
-        self.window.deleteLater();self.app.processEvents()
+        with patch.object(QMessageBox,'question',return_value=QMessageBox.StandardButton.Yes):self.assertTrue(self.window.close(), "The fixture window refused to close")
+        delete_owned_widget(self.window);self.app.processEvents()
 
     def wait(self):
         for _ in range(300):
