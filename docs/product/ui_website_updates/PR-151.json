@@ -1,0 +1,107 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "PR-151",
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "claude/friendly-bardeen-r6xe8f",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/151",
+    "supersedes_draft_pr": "https://github.com/xkg4real/quantgen/pull/140",
+    "implementation_commit": "3cde28d627cb49e70626321d6d475fc7ba164515",
+    "feature_commits": [
+      "0df31d69caf6cbf9938b04ecad457c687206919e",
+      "3128216ec615d9050d5c6ef0c6dfe02520dbbd84",
+      "ebdeebdc439b459792b149ce24645406299b9aa6",
+      "1b36ad5753b5b7714bf97cacd307ed4f1765ae2e",
+      "d4f573fcf2c4496ab92d9f85dd5831b58aafad62",
+      "d882f250b00805ed9494047c71856827f9e3ca7e",
+      "3cde28d627cb49e70626321d6d475fc7ba164515"
+    ],
+    "remote_status": "OPEN",
+    "merge_commit": null
+  },
+  "summary_ko": [
+    "종목 상세 우측 3개 카드 개편: (1) 호가 카드에 진한 잔량 막대(작은 숫자를 가리던 끝선 제거), 매도·매수 사이 현재가/마지막 거래일 종가 줄(price_basis 구분), 매도·매수 총잔량(미제공 시 10단계 잔량 합) 비교 막대를 추가했습니다.",
+    "투자자 수급 카드를 51%:49% 비율 막대에서 개인·외국인·기관별 20거래일 일별 순매수 막대(공통 눈금)와 20일·5일 만주 단위 합계(264px/282px 잘림 0건)로 개편했습니다.",
+    "기업 가치(PER·PBR) 카드를 이름·수치 한 줄 배치, 전체 폭 3구간 색조 막대, 자연어 설명 문장, 미연결 ROE·PSR 단일 안내 줄로 개선하고 재렌더 시 분리된 카드가 임시 창으로 떠 포커스를 뺏던 버그(0df31d69)를 수정했습니다.",
+    "지표 리딩법(guide_lessons.py) 내 '봉' 49회 및 reading_cues.py 내 2회를 R-D9-2 규칙에 따라 일수·5분 등 자연어 해요체 해설로 교체하고(RSI·ATR 와일더 평활 설명 정합화), Windows 120분 제한 해소를 위해 runtime-smoke.yml에 병렬 installed-ui 단계를 분리했습니다."
+  ],
+  "website_impact": {
+    "classification": "native_ui_and_shared_market_education_copy_review",
+    "browser_code_changed": true,
+    "shared_sources": [
+      "core/education/reading_cues.py",
+      "core/market/detail_insights.py",
+      "core/research/stock_profile.py"
+    ],
+    "out_of_scope_bong_preserved": [
+      "core/education/glossary.py (용어집 캔들·봉 정의 1곳)",
+      "ui/market_chart_page.py, core/ui_page_messages/market_chart.py (구버전 Flet 차트 화면 1곳)",
+      "core/market/presentation.py (공용 차트 SVG 렌더러 1곳)"
+    ],
+    "requested_actions_ko": [
+      "웹사이트 작업공간(AWS)에서 소개 페이지·문서 화면에 종목 상세 수급·호가·가치평가 카드 설명이나 지표 리딩법 문구('봉' 없는 자연어 표기)를 반영할 대상이 있는지 검토하세요.",
+      "PyQt 전용 위젯 드로잉 코드(quantgen_desktop/stock_insights.py, quantgen_desktop/guide_lessons.py)를 브라우저 코드로 직접 복제하지 마세요.",
+      "이 작업에서는 웹사이트 HTML이나 AWS 배포를 수정하지 않았습니다."
+    ]
+  },
+  "verification": {
+    "local_env": "Ubuntu 24.04 offscreen, Python 3.12.16, installed quantgen 2.0.0 wheel + PyQt6 6.12.0",
+    "tests": [
+      {
+        "suite": "installed-ui full 58-module native & locale acceptance suite (U1..U7)",
+        "passed": 818,
+        "failures": 0,
+        "errors": 0
+      },
+      {
+        "suite": "installed beginner chart, guide lessons, risk explanations & stock insights suite (10 modules)",
+        "passed": 75,
+        "failures": 0,
+        "errors": 0
+      },
+      {
+        "suite": "compliance_acceptance, compliance_export_acceptance, gateway_boundary_acceptance",
+        "passed": 62,
+        "failures": 0,
+        "errors": 0
+      },
+      {
+        "suite": "smoke_installed.py, smoke_desktop.py, tools/qt_port/switch_day.py --check",
+        "status": "PASS (7/7 binding switch sites clean)"
+      }
+    ],
+    "source_review": "consistency_status PASS, publication_status BLOCKED (20 documents / 882 source files)",
+    "ci": "RUNNING_ON_PR_151",
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "Owner Windows PC7 visual/startup check remains separate before main merge."
+  },
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "Supported cross-workspace chat messaging tool to '웹사이트 작업공간(AWS)' is unavailable in this environment; retained as queued record only.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/UI_SESSION_CURRENT.md"
+  },
+  "website_application": {
+    "status": "unverified",
+    "applied": false,
+    "deployed": false,
+    "receipt": null
+  },
+  "limits_ko": [
+    "Linux offscreen 합성 프로필·가상 학습 데이터 검증이며 소유자 Windows 실화면(PC7)·실시간 KIS 응답·상업 표시권/법률 승인을 대체하지 않습니다.",
+    "범위 밖으로 합의된 '봉' 표기 3곳(용어집 core/education/glossary.py, 구버전 Flet ui/market_chart_page.py·core/ui_page_messages/market_chart.py, 공용 렌더러 core/market/presentation.py)은 별도 지시 전 유지합니다.",
+    "PySide6 전환(OS-F1) 시 quantgen_desktop/stock_insights.py의 ValuationReferenceStrip.metric 속성명 변경(16-shadow) 및 config.py의 inquire-ccnl 허용 목록 추가에 따른 Nautilus code_sha256 지문 갱신(OA-53) 사항을 PR 본문에 명시했습니다."
+  ],
+  "changed_files": [
+    ".github/workflows/runtime-smoke.yml",
+    "core/education/reading_cues.py",
+    "core/market/detail_insights.py",
+    "docs/compliance/source-review.json",
+    "quantgen_desktop/guide_lessons.py",
+    "quantgen_desktop/metric_help.py",
+    "quantgen_desktop/stock_insights.py",
+    "tests/guide_lessons_acceptance.py",
+    "tests/stock_insights_owner_items_acceptance.py"
+  ]
+}
