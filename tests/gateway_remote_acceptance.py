@@ -228,6 +228,16 @@ class FakeServerTest(unittest.TestCase):
                     remote.RemoteRoute(lambda req: {"ok": False, "error": code}).call("fmp", "quote", "TEST")
                 self.assertEqual(str(ctx.exception), code)
 
+    def test_class_name_word_length_limits(self):
+        """KEY-5/a review S4 (F5): the class-name shape is exact at its edges -- an all-capitals acronym word of 5
+        letters passes and one of 6 does not; any other word needs at least 3 letters."""
+        for code in ("ABCDEError", "HTTPError", "IOError", "ConnectTimeout", "KeyError", "MaxRetryError"):
+            with self.subTest(code=code):
+                self.assertEqual(remote._code(code), code)
+        for code in ("ABCDEFError", "XyError", "ABCDEFGHException", "AbcXyTimeout"):
+            with self.subTest(code=code):
+                self.assertEqual(remote._code(code), "bad_answer")
+
     def test_requests_exception_types_have_fixed_transport_codes(self):
         from requests import exceptions as req
         for typ, expected in ((req.ProxyError, "transport_connection"), (req.ConnectionError, "transport_connection"),

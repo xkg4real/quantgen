@@ -294,6 +294,73 @@ class OwnerItemsTests(unittest.TestCase):
                                 and widget.sizePolicy().horizontalPolicy().name != "Ignored":
                             self.assertGreaterEqual(widget.width(), widget.sizeHint().width(), widget.text())
 
+
+    def test_short_share_compares_percentage_points_only_for_matching_reported_window(self):
+        from PyQt6.QtWidgets import QLabel
+        for language, unit in (("ko", "%p"), ("en", "pp")):
+            with self.subTest(language=language):
+                latest = {"date": "2026-11-24", "short_ratio_pct": 4.31}
+                average = {"first_date": "2026-10-28", "last_date": latest["date"], "sessions": 20,
+                           "reported_ratio": 18, "short_ratio_pct": 3.0}
+                profile = SimpleNamespace(values={"short_selling": {"latest": latest, "average": average}})
+                host, panel = self.panel(profile, language=language, width=264)
+                def rendered_comparison():
+                    label = panel.findChild(QLabel, "shortShareComparison")
+                    return label.text() if label is not None and label.isVisible() else ""
+                self.assertRegex(rendered_comparison(), rf"1\.31\s*{unit}")
+                self.assertIn("3.00%", rendered_comparison())
+                for change in ({"reported_ratio": 1}, {"reported_ratio": 21}, {"last_date": "2026-11-25"},
+                               {"short_ratio_pct": None}):
+                    with self.subTest(change=change):
+                        profile.values["short_selling"]["average"] = {**average, **change}
+                        panel.set_profile(profile, language=language)
+                        self.settle()
+                        self.assertNotRegex(rendered_comparison(), rf"[\d.]\s*{unit}")
+
+    def test_orderbook_spread_uses_only_valid_best_prices_and_clears_on_rerender(self):
+        from PyQt6.QtWidgets import QLabel
+        for language in ("ko", "en"):
+            with self.subTest(language=language):
+                raw = {"askp1": "71100", "bidp1": "71000", "askp_rsqn1": "500", "bidp_rsqn1": "700",
+                       "askp2": "71200", "bidp2": "70900", "askp_rsqn2": "500", "bidp_rsqn2": "700"}
+                profile = SimpleNamespace(values={"orderbook": {"output1": raw}})
+                host, panel = self.panel(profile, language=language, width=264)
+                def rendered_spread():
+                    label = panel.findChild(QLabel, "orderBookSpread")
+                    return label.text() if label is not None and label.isVisible() else ""
+                self.assertRegex(rendered_spread(), r"(?<![\d,])100\b|100원")
+                self.assertIn("원" if language == "ko" else "KRW", rendered_spread())
+                for change in ({"askp1": "70900"}, {"askp1": ""}, {"bidp_rsqn1": ""}):
+                    with self.subTest(change=change):
+                        profile.values["orderbook"] = {"output1": {**raw, **change}}
+                        panel.set_profile(profile, language=language)
+                        self.settle()
+                        self.assertNotRegex(rendered_spread(), r"\d[\d,.]*\s*(?:원|KRW)|KRW\s*[\d,.]+")
+
+    def test_valuation_reading_expands_in_place_and_preserves_illustrative_bands(self):
+        from PyQt6.QtWidgets import QLabel, QPushButton
+        from quantgen_desktop.stock_insights import ValuationReferenceStrip
+        for language, heading, industry, loss in (("ko", "PER·PBR 읽는 법", "같은 업종", "적자"),
+                                                  ("en", "Reading PER and PBR", "same industry", "loss")):
+            with self.subTest(language=language):
+                profile = SimpleNamespace(values={"key_figures": {"per": 15, "pbr": 2}})
+                host, panel = self.panel(profile, language=language, width=264)
+                button = next(b for b in panel.findChildren(QPushButton) if b.text() == heading)
+                self.assertTrue(button.isVisible())
+                self.assertFalse(button.isChecked())
+                visible_before = [label for label in panel.findChildren(QLabel) if label.isVisible()]
+                button.click()
+                self.settle()
+                revealed = [label for label in panel.findChildren(QLabel) if label.isVisible() and label not in visible_before]
+                text = " ".join(label.text() for label in revealed).casefold()
+                for term in (industry, loss, "roe"):
+                    self.assertIn(term, text)
+                bands = {s.metric: s.reference.band_index for s in panel.findChildren(ValuationReferenceStrip)}
+                self.assertEqual(bands, {"per": 1, "pbr": 1})
+                button.click()
+                self.settle()
+                self.assertTrue(all(not label.isVisible() for label in revealed))
+
     # ---------------------------------------------------------- window life
     def test_rerendering_a_visible_panel_opens_no_top_level_window(self):
         from PyQt6.QtWidgets import QApplication

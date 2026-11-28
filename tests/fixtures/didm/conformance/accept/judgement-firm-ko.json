@@ -1,0 +1,87 @@
+{
+  "kind": "judgement",
+  "note": "Korean-language firm judgement; a second scorer with its own prompt hash",
+  "request": {
+    "article_id": "art-0002",
+    "language": "ko",
+    "title": "합성 제목: 가상 회사 분기 실적 발표",
+    "body": "합성 본문입니다.",
+    "target_kind": "firm",
+    "entity_id": "KR:005930",
+    "entity_name": "가상 회사"
+  },
+  "judgement": {
+    "judgement_version": "didm-judgement-v0",
+    "article_id": "art-0002",
+    "target_kind": "firm",
+    "entity_id": "KR:005930",
+    "p_subject": 0.81,
+    "event_type": "earnings",
+    "event_type_probs": {
+      "monetary_policy": 0.028571428571428574,
+      "inflation": 0.028571428571428574,
+      "employment": 0.028571428571428574,
+      "growth": 0.028571428571428574,
+      "fiscal": 0.028571428571428574,
+      "trade_tariffs": 0.028571428571428574,
+      "geopolitics": 0.028571428571428574,
+      "election_policy": 0.028571428571428574,
+      "earnings": 0.6,
+      "mergers_acquisitions": 0.028571428571428574,
+      "management": 0.028571428571428574,
+      "regulation_litigation": 0.028571428571428574,
+      "supply_chain": 0.028571428571428574,
+      "crypto_regulation_hack": 0.028571428571428574,
+      "none": 0.028571428571428574
+    },
+    "direction_probs": [
+      0.55,
+      0.15,
+      0.3
+    ],
+    "claim_status": "reported"
+  },
+  "scorer_info": {
+    "model_version": "fixture-model-1",
+    "prompt_sha256": "0f1e2d3c4b5a69780f1e2d3c4b5a69780f1e2d3c4b5a69780f1e2d3c4b5a6978",
+    "temperature": 0
+  },
+  "assembly": {
+    "article_id": "art-0002",
+    "target_kind": "firm",
+    "entity_id": "KR:005930",
+    "record_id": "conf-j-0002",
+    "source_id": "opendart",
+    "published_at": "2026-11-06T09:00:00+09:00",
+    "received_at": "2026-11-06T09:03:10+09:00",
+    "relevance_0_100": 71.5,
+    "novelty_0_100": 12.25,
+    "origin_cluster_id": "cl-20261106-0007",
+    "p_credibility": 0.6,
+    "market_confirmation": "CONFIRMED"
+  },
+  "expected_record": {
+    "record_id": "conf-j-0002",
+    "source_id": "opendart",
+    "target_kind": "firm",
+    "entity_id": "KR:005930",
+    "published_at": "2026-11-06T09:00:00+09:00",
+    "received_at": "2026-11-06T09:03:10+09:00",
+    "relevance_0_100": 71.5,
+    "ess_like_0_100": 70.0,
+    "novelty_0_100": 12.25,
+    "origin_cluster_id": "cl-20261106-0007",
+    "event_type": "earnings",
+    "direction_probs": [
+      0.55,
+      0.15,
+      0.3
+    ],
+    "uncertainty_entropy": 0.9745701894462542,
+    "p_credibility": 0.6,
+    "market_confirmation": "CONFIRMED",
+    "model_version": "fixture-model-1",
+    "prompt_sha256": "0f1e2d3c4b5a69780f1e2d3c4b5a69780f1e2d3c4b5a69780f1e2d3c4b5a6978",
+    "schema_version": "didm-score-v0"
+  }
+}

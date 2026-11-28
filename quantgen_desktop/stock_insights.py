@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
+from datetime import date
 
 from PyQt6.QtCore import QEvent, QRect, QRectF, QSize, Qt
 from PyQt6.QtGui import QColor, QPainter, QPainterPath, QPen
@@ -661,6 +662,16 @@ class StockInsightsPanel(QFrame):
                                      "Peer average unavailable: verified membership and matching period/unit data are needed.")
         self._note(body, self._t('구간은 설명용 예시예요 · 낮은 배수만으로 우량 판단은 어려워요',
                                  'Illustrative ranges · low multiples alone do not mean quality'), detail)
+        guide = self._label(self._t(
+            "PER은 같은 업종 기업의 같은 기간 이익으로 비교해요. 이번에만 큰 이익이 나면 PER이 낮아 보여요. "
+            "적자이거나 이익이 0이면 이 배수로 싼지 판단하기 어려워요.\n\n"
+            "PBR 1배는 주가와 장부상 주당 순자산이 같다는 뜻이에요. 1배 아래라면 회사가 자기 자본으로 "
+            "이익을 얼마나 내는지(ROE), 손실이 이어지는지 함께 보세요.",
+            "For PER, compare companies in the same industry using earnings from the same period. A one-off "
+            "profit can make PER look low. With a loss or zero earnings, PER is not a useful price comparison.\n\n"
+            "At 1x PBR, price equals book value per share. Below 1x, check how much profit the company earns "
+            "on its own equity (ROE) and whether losses persist."), role="muted")
+        self._expand(body, self._t("PER·PBR 읽는 법", "Reading PER and PBR"), guide)
 
     def _flow_daily_rows(self, body, days):
         """Owner, 2026-11-24: 외국인·개인 일별 순매수 막대 (one column per session)."""
@@ -794,6 +805,10 @@ class StockInsightsPanel(QFrame):
             body.addWidget(self._label(" · ".join(parts), role="value"))
             body.addWidget(self._label(row["date"], role="muted", tip=self._provenance(row)))
         avg = row["average"]
+        if row["ratio_pct"] is not None or avg.get("short_ratio_pct") is not None:
+            reading = self._label(self._short_comparison(row), role="muted")
+            reading.setObjectName("shortShareComparison")
+            body.addWidget(reading)
         if number(avg.get("short_ratio_pct")) is not None or number(avg.get("short_qty")) is not None:
             detail = QWidget()
             layout = QVBoxLayout(detail)
@@ -806,9 +821,34 @@ class StockInsightsPanel(QFrame):
                                                     f"Mean volume {_fmt(avg['short_qty'], 0)} shares · {avg.get('reported_qty', 0)} reported days")))
             layout.addWidget(self._label(f"{avg.get('first_date', '')} – {avg.get('last_date', '')}", role="muted", tip=self._provenance(row)))
             self._expand(body, self._t(f"최근 {avg.get('sessions', 0)}거래일 단순평균", f"Arithmetic average · {avg.get('sessions', 0)} sessions"), detail)
-        self._note(body, self._t("거래 비중이며 잔고가 아니에요 · 자세히는 올려보세요", "Trading share, not outstanding positions · hover for context"),
+        self._note(body, self._t("거래량 중 빌린 주식을 판 비중이에요. 평소보다 높으면 주가와 전체 거래량도 함께 보세요.",
+                                "This is the share of trading volume sold short. If it rises above its usual level, check the price and total volume too."),
                    self._t("그날 거래 중 공매도 비중이에요. 공매도 잔고·대차 잔고와 달라요. 가격 하락·거래량 변화와 같이 살피되, 헤지·차익거래도 있어 하락 신호로 단정하지 마세요.",
                            "This is the day's short-sale trading share, not outstanding short or borrowed positions. Compare price/volume context; hedging and arbitrage mean it is not a certain bearish signal."))
+
+    def _short_comparison(self, row):
+        avg = row["average"]
+        sessions, reported = avg.get("sessions"), avg.get("reported_ratio")
+        latest, mean = row["ratio_pct"], avg.get("short_ratio_pct")
+        try:
+            first = date.fromisoformat(avg.get("first_date"))
+            last = date.fromisoformat(avg.get("last_date"))
+        except (TypeError, ValueError):
+            first = last = None
+        if (latest is None or mean is None or type(reported) is not int or type(sessions) is not int
+                or not 2 <= reported <= sessions or first is None or first >= last
+                or row["date"] != last.isoformat()):
+            return self._t("같은 기간에 보고된 비중이 충분해야 평균과 비교할 수 있어요.",
+                           "A comparison needs reported shares from the same period.")
+        baseline = self._t(f"최근 {sessions}거래일 중 {reported}일 평균 {_fmt(mean)}%",
+                           f"{_fmt(mean)}% average over {reported} reported days in {sessions} sessions")
+        diff = round(latest, 2) - round(mean, 2)
+        if diff == 0:
+            return self._t(f"{baseline}와 같아요.", f"Matches the {baseline}.")
+        delta = _fmt(abs(diff))
+        if diff > 0:
+            return self._t(f"{baseline}보다 {delta}%p 높아요.", f"{delta} pp above the {baseline}.")
+        return self._t(f"{baseline}보다 {delta}%p 낮아요.", f"{delta} pp below the {baseline}.")
 
     def _book(self):
         body = self._card(self._t("호가 · 조회 스냅숏", "Order book · REST snapshot"))
@@ -822,6 +862,20 @@ class StockInsightsPanel(QFrame):
                                  price_basis=self.model.get('price_basis', ''))
             self.depth_ladder = ladder
             body.addWidget(ladder)
+            best = book["levels"][0]
+            ask, bid = best["ask_price"], best["bid_price"]
+            if (ask is not None and bid is not None and ask >= bid
+                    and best["ask_qty"] > 0 and best["bid_qty"] > 0):
+                spread = ask - bid
+                gap = _fmt(spread, 0 if spread.is_integer() else 2)
+                spread_text = self._t(f"최우선 매도·매수 가격 차이 {gap}원", f"Best ask–bid spread: KRW {gap}")
+            else:
+                spread_text = self._t("최우선 호가 차이 확인 불가", "Best ask–bid spread unavailable")
+            reading = self._label(spread_text, role="muted",
+                                  tip=self._t("가장 낮은 매도 가격에서 가장 높은 매수 가격을 뺀 값이에요.",
+                                              "The lowest sell price minus the highest buy price."))
+            reading.setObjectName("orderBookSpread")
+            body.addWidget(reading)
             self._depth_totals(body, book)
             toggle = QPushButton()
             toggle.setProperty('sd', 'link')
@@ -845,7 +899,8 @@ class StockInsightsPanel(QFrame):
             body.addWidget(self._label(self._t("가격 원 · 잔량 주", "Prices KRW · sizes shares"), role="muted"))
             body.addWidget(self._label(self._t(f"공급자 시각 {book['provider_time'] or '미제공'} · 날짜 미제공",
                                               f"Provider clock {book['provider_time'] or 'unavailable'} · date unavailable"), role="muted", tip=self._provenance(book)))
-        self._note(body, self._t("잔량은 체결 전 주문 · 취소될 수 있어요", "Depth is unfilled orders and may be cancelled"),
+        self._note(body, self._t("같은 종목에서 호가 차이가 클수록 즉시 사고팔 때 가격 부담이 커져요. 대기 주문은 취소될 수 있어 실제 체결도 함께 보세요.",
+                                "A wider spread in the same stock makes an immediate round trip more costly. Waiting orders can be cancelled. Check actual trades too."),
                    self._t("잔량은 아직 체결되지 않은 주문이라 취소·이동할 수 있어요. 큰 매수벽을 확정 지지로 보지 말고, 가격 간격과 실제 체결을 함께 보세요. 예상체결가는 실제 체결과 달라요.",
                            "Depth is unfilled orders that can move or be cancelled. A large bid wall is not confirmed support: compare the spread and actual trades. Indicative auction prices are not executions."))
 
