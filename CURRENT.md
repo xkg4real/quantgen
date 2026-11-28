@@ -8,13 +8,13 @@ execution_id: cda27633-0e0d-4fe5-8297-b415a7c9bd0c
 handoff_id: 2026-11-24/claude-resume-20261103/21ea592d0a42cec932bb7e69336bb63083f49a09
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a, GH-2, PAY-0, PAY-2, DIDM-2, DIDM-3/a, DS-4a/2, DS-4e/2, DS-H/diag, KEY-5/a/2, OS-A1/apk-evidence, OS-F2/guide, SESSION-PIPELINE/2, QGPT-01/a, QGPT-02, QGPT-04, QGPT-05, QGPT-21, QGPT-03, QGPT-02/replay, QGPT-20, P4/customer-docs
 next_ids: DS-H, DS-1, KEY-5, OS-F1, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-28T13:52:23+09:00
+updated_at: 2026-11-28T13:57:14+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/p4-customer-docs-20261128
-work_commit: f362fa0f7c92f878362a3db22d4bc32662bce556
+work_branch: gpt/ui151-main-20261128
+work_commit: 79447b2c87c699006ca86a75999323ff91f6d3be
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/153
+pr: https://github.com/xkg4real/quantgen/pull/151
 ---
 
 # 메인 세션 수동 인계
@@ -57,3 +57,5 @@ pr: https://github.com/xkg4real/quantgen/pull/153
 ## 11월 28일 최신 UI 병합 준비
 
 소유자 요청에 따라 UI #151 `79447b2c`를 최신 main `ba021da5`에 맞춰 통합하는 작업을 인수했다. Windows 실화면 PC7은 소유자가 아직 점검 전이라고 확인했다. 실화면 확인 전에는 병합을 보류하고, 충돌 해결과 검사 준비를 진행한다.
+
+- `gpt/ui151-main-20261128`를 Claude UI와 같은 `79447b2c`에 생성하고 원격 커밋을 대조했다. 추가 지시로 공매도·호가·PER·PBR의 초보자 판단 기준을 구현하고 검사한 뒤 병합 후보로 제공한다. 사용자가 PC에서 앱 실행을 확인했으며 PC7 항목 결과는 대기 중이다.
