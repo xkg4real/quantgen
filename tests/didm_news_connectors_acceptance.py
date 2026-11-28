@@ -96,6 +96,33 @@ class MassiveClient(unittest.TestCase):
         self.assertNotIn("MKEY789", str(cm.exception))
 
 
+class ConnectionOnly(unittest.TestCase):
+    def test_cli_uses_single_request_transport_and_leaves_existing_store_untouched(self):
+        from contextlib import redirect_stdout
+        from io import StringIO
+        from tools.didm import collect_daily as cd
+        replies = [response(body={"news": [], "next_page_token": "keep-private"}),
+                   response(body={"results": [], "next_url": "https://example.invalid/next"})]
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.dict(os.environ, ENV), \
+                mock.patch.object(massive, "_last_call", [0.0]), \
+                mock.patch("requests.get", side_effect=replies) as get, \
+                mock.patch("data.net.session.get", side_effect=AssertionError("unexpected retrying transport")):
+            path = Path(tmp) / "didm_store.sqlite"
+            with PointInTimeStore(path) as store:
+                store.append(source_id="alpaca-news", item_id="prior", kind="news",
+                             published_at="2024-01-01T00:00:00Z", received_at="2024-01-02T00:00:00Z",
+                             payload={"fixture": "preexisting"})
+            before = path.read_bytes()
+            with redirect_stdout(StringIO()):
+                self.assertEqual(cd.main(["--data-dir", tmp, "--no-gdelt", "--alpaca-news", "AAPL",
+                                          "--massive-news", "AAPL", "--news-max-pages", "50"]), 0)
+            self.assertEqual(path.read_bytes(), before)
+            self.assertEqual([c.args[0] for c in get.call_args_list], [alpaca_http.NEWS_URL, massive.NEWS_URL])
+            for call in get.call_args_list:
+                self.assertEqual(call.kwargs["params"]["limit"], 1)
+                self.assertIs(call.kwargs["allow_redirects"], False)
+
+
 class StoreRows(unittest.TestCase):
     def test_alpaca_rows_and_revisions(self):
         from datetime import datetime, timezone
@@ -125,6 +152,13 @@ class StoreRows(unittest.TestCase):
 
 
 class CollectorPaging(unittest.TestCase):
+    def test_replay_requires_explicit_fetch(self):
+        from tools.didm import collect_daily as cd
+        for fn, args in ((cd.collect_alpaca_news, (None, ["TEST"], None, None, 1)),
+                         (cd.collect_massive_news, (None, "TEST", None, 1))):
+            with self.subTest(function=fn.__name__), self.assertRaises(TypeError):
+                fn(*args)
+
     def test_alpaca_follows_tokens_to_the_end(self):
         from tools.didm import collect_daily as cd
         pages = {None: {"news": [supplied(id=1)], "next_page_token": "t1"},
@@ -136,7 +170,7 @@ class CollectorPaging(unittest.TestCase):
             return pages[page_token]
         with tempfile.TemporaryDirectory() as tmp, PointInTimeStore(Path(tmp) / "s.sqlite") as st, \
                 mock.patch("builtins.print"):
-            out = cd.collect_alpaca_news(st, ["TEST"], "2026-11-01", None, max_pages=2, fetch=fetch)
+            out = cd.collect_alpaca_news(st, ["TEST"], "2026-11-01", None, 2, fetch)
         self.assertEqual(calls, [None, "t1"])
         self.assertEqual((out["pages"], out["articles"], out["added"]), (2, 2, 2))
 
@@ -164,7 +198,7 @@ class CollectorPaging(unittest.TestCase):
             return pages[cursor]
         with tempfile.TemporaryDirectory() as tmp, PointInTimeStore(Path(tmp) / "s.sqlite") as st, \
                 mock.patch("builtins.print") as pr:
-            out = cd.collect_massive_news(st, "QGA", "2024-01-01", max_pages=5, fetch=fetch)
+            out = cd.collect_massive_news(st, "QGA", "2024-01-01", 5, fetch)
         self.assertEqual(calls, [None, "c1"])
         self.assertEqual((out["articles"], out["added"]), (2, 2))
         self.assertIn("complete True", pr.call_args.args[0])

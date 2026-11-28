@@ -51,6 +51,8 @@
 
 - 약관상 연구 표본 제외 (source_id): `alpaca-news`, `krx-listing-datagokr`, `krx-openapi`, `massive-news` — 개인·비상업 약관: 연결 확인용, 연구 표본·학습 불가. 근거: `SAMPLE_EXPANSION_FEASIBILITY_2026-11-24.md` 9·10절 (2026-11-24 원문 확인, 법률 자문 아님). 목록은 `core/didm/ingest/terms.py` 한 곳에 있고, 이 줄과 다르면 `tests.didm_terms_guard_acceptance`가 실패합니다.
 
+현재 이 두 공급사의 CLI는 공급사마다 기사 1건 이내의 연결 확인만 수행합니다. 페이지 순회와 기사 저장은 중단했습니다. 아래 4절의 행 수와 이력 확인 항목은 최초 계획입니다.
+
 ## 4. 범위 (DS-5a·5b·5c) — 소유자 확인 전에는 시작하지 않음
 
 | ID | 시작 조건 | 할 일 | 완료 조건 |

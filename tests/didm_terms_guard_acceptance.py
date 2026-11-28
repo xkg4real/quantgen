@@ -45,6 +45,13 @@ class List(unittest.TestCase):
         kept = terms.research_rows(rows)
         self.assertEqual([terms._source(r) for r in kept], ["sec-edgar", "gdelt-gkg2"])
 
+    def test_research_rows_require_named_sources_and_honor_exclusions(self):
+        for value in (None, False, 42, b"source", " \t", " Massive-News ", "ALPACA-NEWS", " KRX-OpenAPI "):
+            with self.subTest(source_id=value):
+                self.assertEqual(terms.research_rows([{"source_id": value}, SimpleNamespace(source_id=value)]), [])
+        allowed = {"source_id": "new-provider"}
+        self.assertIs(terms.research_rows([allowed])[0], allowed)
+
 
 class Collector(unittest.TestCase):
     def test_names_required(self):
@@ -53,26 +60,51 @@ class Collector(unittest.TestCase):
                     redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
                 cd.main(["--data-dir", tmp, "--no-gdelt", flag])
 
-    def test_notice_printed_when_run(self):
-        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(cd, "collect_alpaca_news") as a, \
-                mock.patch.object(cd, "collect_massive_news") as m:
+    def test_opted_in_probes_request_one_record_and_do_not_persist_or_echo_it(self):
+        alpaca = {"news": [{"headline": "private fixture text"}], "next_page_token": "next"}
+        massive = {"results": [{"title": "private fixture text"}], "next_url": "https://example.invalid/next"}
+        with tempfile.TemporaryDirectory() as tmp, \
+                mock.patch("data.didm.alpaca_news.fetch_page", return_value=alpaca) as a, \
+                mock.patch("data.didm.massive_news.fetch_page", return_value=massive) as m:
             out = io.StringIO()
             with redirect_stdout(out):
-                self.assertEqual(cd.main(["--data-dir", tmp, "--no-gdelt", "--alpaca-news", "AAPL",
-                                          "--massive-news", "AAPL"]), 0)
+                code = cd.main(["--data-dir", tmp, "--no-gdelt", "--alpaca-news", "AAPL",
+                                "--massive-news", "AAPL", "MSFT", "--news-max-pages", "100"])
+            self.assertEqual(code, 0)
+            self.assertFalse(list(Path(tmp).iterdir()))
+        a.assert_called_once_with(["AAPL"], start=None, end=None, limit=1, get=mock.ANY)
+        m.assert_called_once_with("AAPL", published_gte=None, limit=1, get=mock.ANY)
         self.assertIn(terms.NOTICE, out.getvalue())
-        a.assert_called_once()
-        self.assertEqual(m.call_args.args[1], "AAPL")
+        self.assertIn("first ticker only (AAPL)", out.getvalue())
+        self.assertNotIn("private fixture text", out.getvalue())
+        self.assertNotIn("example.invalid", out.getvalue())
+
+    def test_invalid_later_ticker_is_rejected_before_any_call(self):
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(cd, "_probe_news") as probe, \
+                redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+            cd.main(["--data-dir", tmp, "--no-gdelt", "--alpaca-news", "AAPL",
+                     "--massive-news", "MSFT", "bad ticker"])
+        probe.assert_not_called()
+
+    def test_failure_does_not_suppress_other_probe_or_expose_provider_message(self):
+        with tempfile.TemporaryDirectory() as tmp, \
+                mock.patch("data.didm.alpaca_news.fetch_page", side_effect=RuntimeError("Alpaca news: HTTP 403 (private)")), \
+                mock.patch("data.didm.massive_news.fetch_page", return_value={"results": []}) as m:
+            out = io.StringIO()
+            with redirect_stdout(out):
+                code = cd.main(["--data-dir", tmp, "--no-gdelt", "--alpaca-news", "A", "--massive-news", "A"])
+            self.assertEqual(code, 1)
+        m.assert_called_once()
+        self.assertIn("HTTP 403", out.getvalue())
+        self.assertNotIn("private", out.getvalue())
 
     def test_not_in_default_run(self):
-        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(cd, "collect_alpaca_news") as a, \
-                mock.patch.object(cd, "collect_massive_news") as m, mock.patch.object(cd, "collect_gdelt",
-                                                                                    return_value=(0, [])):
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(cd, "_probe_news") as probe, \
+                mock.patch.object(cd, "collect_gdelt", return_value=(0, [])):
             out = io.StringIO()
             with redirect_stdout(out):
                 cd.main(["--data-dir", tmp])
-        a.assert_not_called()
-        m.assert_not_called()
+        probe.assert_not_called()
         self.assertNotIn(terms.NOTICE, out.getvalue())
 
 

@@ -21,9 +21,11 @@ _SYMBOL = re.compile(r"^[A-Z0-9./\-]{1,20}$")
 
 
 def fetch_page(symbols: list[str] | None = None, *, start: str | None = None, end: str | None = None,
-               limit: int = MAX_LIMIT, page_token: str | None = None) -> dict:
+               limit: int = MAX_LIMIT, page_token: str | None = None, get=None) -> dict:
     """One page, oldest first. Returns the JSON; parse with core.didm.ingest.alpaca_news.parse_page."""
-    from data.net import session
+    if get is None:
+        from data.net import session
+        get = session.get
     key_id, secret = require(KEY_ID_NAME), require(SECRET_NAME)
     if not 1 <= int(limit) <= MAX_LIMIT:
         raise ValueError("limit must be 1..50")
@@ -38,7 +40,7 @@ def fetch_page(symbols: list[str] | None = None, *, start: str | None = None, en
         params["end"] = end
     if page_token:
         params["page_token"] = page_token
-    resp = session.get(NEWS_URL, params=params, timeout=TIMEOUT_SECONDS,
+    resp = get(NEWS_URL, params=params, timeout=TIMEOUT_SECONDS,
                        headers={"APCA-API-KEY-ID": key_id, "APCA-API-SECRET-KEY": secret})
     if resp.status_code != 200:
         try:

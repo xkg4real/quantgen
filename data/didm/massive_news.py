@@ -126,12 +126,18 @@ _TICKER_RE = re.compile(r"^[A-Z0-9.\-:]{1,20}$")
 _last_call = [0.0]
 
 
+def valid_ticker(ticker: str) -> bool:
+    return _TICKER_RE.fullmatch(ticker) is not None
+
+
 def fetch_page(ticker: str | None = None, *, published_gte: str | None = None, limit: int = 100,
-               cursor: str | None = None, sleep=_time.sleep, clock=_time.monotonic) -> dict:
+               cursor: str | None = None, sleep=_time.sleep, clock=_time.monotonic, get=None) -> dict:
     """One page of /v2/reference/news (ascending by published_utc). Returns the JSON; parse with parse_page."""
-    from data.net import session
+    if get is None:
+        from data.net import session
+        get = session.get
     key = require(KEY_NAME)
-    if ticker is not None and not _TICKER_RE.match(ticker):
+    if ticker is not None and not valid_ticker(ticker):
         raise ValueError("bad ticker")
     if not 1 <= int(limit) <= 1000:
         raise ValueError("limit must be 1..1000")
@@ -146,7 +152,7 @@ def fetch_page(ticker: str | None = None, *, published_gte: str | None = None, l
     if _last_call[0] and wait > 0:
         sleep(wait)
     _last_call[0] = clock()
-    resp = session.get(NEWS_URL, params=params, timeout=TIMEOUT_SECONDS,
+    resp = get(NEWS_URL, params=params, timeout=TIMEOUT_SECONDS,
                        headers={"Authorization": f"Bearer {key}"})
     if resp.status_code != 200:
         try:

@@ -27,8 +27,11 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import sys
+from contextlib import ExitStack
 from datetime import date, datetime, timezone
+from functools import cache
 from pathlib import Path
 from typing import Mapping
 
@@ -361,14 +364,29 @@ def collect_cryptopanic(store: PointInTimeStore, codes: list[str]) -> None:
         print(f"CryptoPanic field names (first post): {', '.join(first)}")
 
 
+def _probe_news(label: str, items_key: str, fetch) -> bool:
+    """Check one capped response. Never print provider content or open an article store."""
+    from data.didm.news_probe import get_once
+    try:
+        response = fetch(get_once)
+        if not isinstance(response, dict) or not isinstance(response.get(items_key), list):
+            print(f"{label}: unexpected response")
+            return False
+    except Exception as exc:
+        # SourceError includes provider-supplied text. Only report its HTTP status.
+        status = re.match(r"(?:Alpaca|Massive) news: HTTP ([1-5][0-9]{2})\b", str(exc))
+        reason = f"HTTP {status[1]}" if status else type(exc).__name__
+        print(f"{label}: connection check failed ({reason})")
+        return False
+    print(f"{label}: connection OK")
+    return True
+
+
 def collect_alpaca_news(store: PointInTimeStore, symbols: list[str], start: str | None, end: str | None,
-                        max_pages: int, fetch=None) -> dict:
-    """DS-5b: Alpaca News pages oldest first, until no next token or ``max_pages``. Receipt = after each page."""
+                        max_pages: int, fetch) -> dict:
+    """Offline replay of supplied pages. DS-5b: Alpaca News pages oldest first, until no next token or ``max_pages``. Receipt = after each page."""
     from core.didm.ingest import alpaca_news
     from core.didm.ingest import news_store
-    if fetch is None:
-        from data.didm import alpaca_news as alpaca_http
-        fetch = alpaca_http.fetch_page
     token, seen, pages, articles, added, first, last = None, (), 0, 0, 0, None, None
     while pages < max_pages:
         payload = fetch(symbols or None, start=start, end=end, limit=50, page_token=token)
@@ -391,11 +409,10 @@ def collect_alpaca_news(store: PointInTimeStore, symbols: list[str], start: str 
 
 
 def collect_massive_news(store: PointInTimeStore, ticker: str | None, start: str | None, max_pages: int,
-                         fetch=None) -> dict:
-    """DS-5c: Massive ticker news, oldest first, following next_url cursors (free plan: spaced 12.5 s)."""
+                         fetch) -> dict:
+    """Offline replay of supplied pages. DS-5c: Massive ticker news, oldest first, following next_url cursors (free plan: spaced 12.5 s)."""
     from core.didm.ingest import news_store
     from data.didm import massive_news
-    fetch = fetch or massive_news.fetch_page
     cursor, seen, pages, articles, added, insights, first, last = None, [], 0, 0, 0, 0, None, None
     while pages < max_pages:
         payload = fetch(ticker, published_gte=start, cursor=cursor)
@@ -555,16 +572,20 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--alpaca-news", nargs="+", metavar="SYMBOL",
                     help="DS-5b Alpaca News, connection check only (personal non-commercial terms); symbols required")
     ap.add_argument("--massive-news", nargs="+", metavar="TICKER",
-                    help="DS-5c Massive ticker news, connection check only (personal non-commercial terms); tickers required")
+                    help="DS-5c Massive ticker news, connection check only (personal non-commercial terms); only the first ticker is queried")
     ap.add_argument("--news-start", metavar="YYYY-MM-DD", help="oldest article date for --alpaca-news/--massive-news")
     ap.add_argument("--news-end", metavar="YYYY-MM-DD", help="newest article date for --alpaca-news")
-    ap.add_argument("--news-max-pages", type=int, default=5, help="page cap per source/ticker (default 5)")
+    ap.add_argument("--news-max-pages", type=int, help="legacy option; connection probes always request one page")
     ap.add_argument("--gdelt-day", metavar="YYYYMMDD", help="fetch all 96 fifteen-minute files of a UTC day")
     ap.add_argument("--gdelt-gkg", action="store_true", help="with --gdelt-day, also GKG files (large)")
     ap.add_argument("--ecos-probe", action="append", default=[], metavar="STAT,CYCLE,START,END[,ITEM]")
     ap.add_argument("--ecos-items", nargs="*", default=[], metavar="STAT_CODE",
                     help="list an ECOS table's item codes and cycles (no data stored)")
     args = ap.parse_args(argv)
+    if args.massive_news is not None:
+        from data.didm import massive_news
+        if not all(massive_news.valid_ticker(ticker) for ticker in args.massive_news):
+            ap.error("--massive-news: invalid ticker")
     if args.env_file:
         load_env_file(args.env_file)
     if args.check_keys:
@@ -573,60 +594,69 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if not args.data_dir:
         ap.error("--data-dir is required")
-    with PointInTimeStore(_data_dir(args.data_dir) / "didm_store.sqlite") as store:
+    probe_ok = True
+    if args.alpaca_news is not None or args.massive_news is not None:
+        print(f"Alpaca/Massive news: {terms.NOTICE}")
+    if args.alpaca_news is not None:
+        from data.didm import alpaca_news
+        probe_ok = _probe_news("Alpaca news", "news", lambda get: alpaca_news.fetch_page(
+            args.alpaca_news, start=args.news_start, end=args.news_end, limit=1, get=get))
+    if args.massive_news is not None:
+        ticker = args.massive_news[0]
+        if len(args.massive_news) > 1:
+            print(f"Massive news: checking the first ticker only ({ticker})")
+        massive_ok = _probe_news("Massive news", "results", lambda get: massive_news.fetch_page(
+            ticker, published_gte=args.news_start, limit=1, get=get))
+        probe_ok = probe_ok and massive_ok
+    with ExitStack() as stack:
+        @cache
+        def store():
+            return stack.enter_context(PointInTimeStore(_data_dir(args.data_dir) / "didm_store.sqlite"))
+
         rows: list[dict] = []
         if not args.no_gdelt:
-            _, rows = collect_gdelt(store)
+            _, rows = collect_gdelt(store())
         if args.finbert:
-            print(f"FinBERT baseline: {finbert_baseline(store, rows)}")
+            print(f"FinBERT baseline: {finbert_baseline(store(), rows)}")
         if args.alfred:
-            _run("ALFRED", lambda: collect_alfred_api(store, args.alfred))
+            _run("ALFRED", lambda: collect_alfred_api(store(), args.alfred))
         for spec in args.alfred_file:
-            collect_alfred_file(store, spec)
+            collect_alfred_file(store(), spec)
         if args.gdelt_file:
-            _run("GDELT file", lambda: collect_gdelt_files(store, args.gdelt_file))
+            _run("GDELT file", lambda: collect_gdelt_files(store(), args.gdelt_file))
         for path in args.fedwatch_file:
-            _run("FedWatch file", lambda path=path: collect_fedwatch_file(store, path))
+            _run("FedWatch file", lambda path=path: collect_fedwatch_file(store(), path))
         if args.edgar:
-            _run("EDGAR", lambda: collect_edgar(store, args.edgar))
+            _run("EDGAR", lambda: collect_edgar(store(), args.edgar))
         if args.edgar_history:
-            _run("EDGAR history", lambda: collect_edgar_history(store, args.edgar_history, args.edgar_from,
+            _run("EDGAR history", lambda: collect_edgar_history(store(), args.edgar_history, args.edgar_from,
                                                                 args.edgar_to, args.edgar_max_files))
         if args.opendart:
-            _run("OpenDART", lambda: collect_opendart(store, *args.opendart))
+            _run("OpenDART", lambda: collect_opendart(store(), *args.opendart))
         for spec in args.ecos:
-            _run("ECOS", lambda spec=spec: collect_ecos(store, spec))
+            _run("ECOS", lambda spec=spec: collect_ecos(store(), spec))
         if args.alphavantage is not None:
-            _run("Alpha Vantage", lambda: collect_alphavantage(store, args.alphavantage))
+            _run("Alpha Vantage", lambda: collect_alphavantage(store(), args.alphavantage))
         if args.tiingo is not None:
-            _run("Tiingo", lambda: collect_tiingo(store, args.tiingo))
+            _run("Tiingo", lambda: collect_tiingo(store(), args.tiingo))
         if args.cryptopanic is not None:
-            _run("CryptoPanic", lambda: collect_cryptopanic(store, args.cryptopanic))
+            _run("CryptoPanic", lambda: collect_cryptopanic(store(), args.cryptopanic))
         if args.gdelt_day:
-            _run("GDELT day", lambda: collect_gdelt_day(store, args.gdelt_day, args.gdelt_gkg))
+            _run("GDELT day", lambda: collect_gdelt_day(store(), args.gdelt_day, args.gdelt_gkg))
         for spec in args.ecos_probe:
             _run("ECOS probe", lambda spec=spec: probe_ecos(spec))
         for stat in args.ecos_items:
             _run("ECOS items", lambda stat=stat: show_ecos_items(stat))
-        if args.alpaca_news is not None or args.massive_news is not None:
-            print(f"Alpaca/Massive news: {terms.NOTICE} (DS-5b/2; core/didm/ingest/terms.py)")
-        if args.alpaca_news is not None:
-            _run("Alpaca news", lambda: collect_alpaca_news(store, args.alpaca_news, args.news_start, args.news_end,
-                                                            args.news_max_pages))
-        if args.massive_news is not None:
-            for ticker in args.massive_news:
-                _run("Massive news", lambda ticker=ticker: collect_massive_news(store, ticker, args.news_start,
-                                                                                args.news_max_pages))
         for series in args.kalshi:
-            _run("Kalshi", lambda series=series: collect_kalshi(store, series))
+            _run("Kalshi", lambda series=series: collect_kalshi(store(), series))
         if args.kalshi_history:
             if not args.kalshi_from:
                 ap.error("--kalshi-history needs --kalshi-from")
             _run("Kalshi history", lambda: collect_kalshi_history(
-                store, args.kalshi_history, args.kalshi_from, args.kalshi_to, args.kalshi_status,
+                store(), args.kalshi_history, args.kalshi_from, args.kalshi_to, args.kalshi_status,
                 args.kalshi_max_markets))
     print(gdelt_ingest.ATTRIBUTION)
-    return 0
+    return 0 if probe_ok else 1
 
 
 if __name__ == "__main__":

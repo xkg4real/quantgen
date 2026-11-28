@@ -52,8 +52,8 @@ gdelt-gkg2 / gdelt_gkg: items 3 (versions 3), valid 2026-11-17..2026-11-20, rece
 | SEC EDGAR (`sec-edgar`) | **가능 (D6 뒤)** | `--edgar-history CIK --edgar-from 2015-01-01 --edgar-to 2024-12-31`: `filings.recent`와 기간에 겹치는 과거 파일 (`filings.files`)을 함께 읽음. 회사당 과거 파일 상한 `--edgar-max-files` (기본 10), 출력의 `complete False`면 상한을 올려 다시. 기본 서식 8-K·6-K·10-Q·10-K. D6 전 `--edgar`는 최근 약 1,000건만 | 접수 시각 (`acceptanceDateTime`) = 공개 시각. 없으면 접수일 00:00 뉴욕 시각 + `time_precision` "date" (+1 거래일 지연, OpenDART와 같음) |
 | OpenDART (`opendart`) | **가능 (나눠 받기)** | `--opendart BGN END`. 회사 지정 없는 전체 목록은 한 번에 짧은 기간만 허용되므로 (OpenDART 안내, 이 세션에서 다시 확인 못함) 기간을 잘라 여러 번 | 접수일만 있음 (시각 없음) |
 | Kalshi (`kalshi`) | **불가 (2015~2020)**, 2021~ **가능 (D7 뒤, 미검증)** | Kalshi 시장은 2021년 이후. `--kalshi-history KXFED --kalshi-from 2021-07-01 --kalshi-to 2024-12-31`: 정산·마감·진행 중 시장의 일봉 (개장~마감, 365일 창). 시리즈당 시장 상한 `--kalshi-max-markets` (기본 200). 오래된 시장의 일봉을 지금 API가 주는지, `min_close_ts` 필터가 있는지는 소유자 PC 첫 실행으로 확인 | 일봉은 기간 끝 시각 = 공개 시각 (`end_period_ts`). 현재 스냅샷 (`--kalshi`)은 받은 시각 기준이라 과거 재현 불가 |
-| Alpaca 뉴스 (`alpaca-news`, DS-5b 브랜치) | **미확인** | `--alpaca-news SYM --news-start 2015-01-01`. 공급사 안내상 2015년부터 있으나 무료 계정이 REST 뉴스를 허용하는지 소유자 실행 전 모름 | 기사 `updated_at` 정정은 새 행으로 쌓임. 되받은 날 `received_at`은 오늘 |
-| Massive 뉴스 (`massive-news`, DS-5c 브랜치) | **미확인** | `--massive-news TICKER --news-start ...`, 무료 분당 5회. 무료 플랜의 과거 깊이 모름 | 위와 같음 |
+| Alpaca 뉴스 (`alpaca-news`) | 연구 수집 중단 | `--alpaca-news SYM`은 연결 확인 1회 | 추가 저장 없음. 기존 저장분은 소유자 결정 대기 |
+| Massive 뉴스 (`massive-news`) | 연구 수집 중단 | `--massive-news TICKER`는 연결 확인 1회 | 추가 저장 없음. 기존 저장분은 소유자 결정 대기 |
 | Alpha Vantage·Tiingo·CryptoPanic 뉴스 | **보류** | 무료로 과거 뉴스 안 됨 (OA-08 결과, DS-4b 보류) | — |
 | EODHD (DS-5a) | **보류** | 유료, 소유자 N1 답 대기 | — |
 | FinBERT 기준 점수 (`finbert-baseline`) | 표본 기사에 따라감 | `--finbert` (GKG 제목에만) | 계산 시각 = 수신 시각 |

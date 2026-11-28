@@ -26,19 +26,21 @@ def excluded_sources() -> frozenset[str]:
 
 
 def is_research_excluded(source_id: str) -> bool:
-    return source_id in RESEARCH_EXCLUDED
+    return isinstance(source_id, str) and source_id.strip().casefold() in RESEARCH_EXCLUDED
 
 
 def _source(row: Any) -> str:
     if isinstance(row, Mapping):
-        return str(row.get("source_id", ""))
-    return str(getattr(row, "source_id", ""))
+        source_id = row.get("source_id")
+    else:
+        source_id = getattr(row, "source_id", None)
+    return source_id.strip() if isinstance(source_id, str) else ""
 
 
 def research_rows(rows: Iterable[Any]) -> list:
     """Rows (store dicts or StoredItem) a research sample may use: every row whose source_id is not excluded.
     A row without a source_id is kept out too (cannot be shown to be allowed)."""
-    return [r for r in rows if _source(r) and not is_research_excluded(_source(r))]
+    return [row for row in rows if (source_id := _source(row)) and not is_research_excluded(source_id)]
 
 
 def doc_line() -> str:

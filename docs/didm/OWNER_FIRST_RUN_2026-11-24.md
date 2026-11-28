@@ -12,10 +12,10 @@
 | 단계 | 할 일 | 걸리는 시간 | 실패해도 다음 단계 |
 |---|---|---|---|
 | 0 | main 받기 | 1분 | 안 됨 (먼저 해결) |
-| 1 | Alpaca 무료 키 발급 | 5분 | 됨 (4단계 Alpaca 줄만 실패) |
+| 1 | 4단계의 Alpaca 연결을 확인할 경우 무료 키 발급 | 5분 | 됨 (4단계 Alpaca 줄만 실패) |
 | 2 | Massive 무료 키 발급 | 5분 | 됨 |
 | 3 | 키 등록·확인 | 2분 | 됨 |
-| 4 | 뉴스 수집 1회 | 1~2분 | 됨 |
+| 4 | Alpaca·Massive 뉴스 연결 확인 (저장 없음) | 1~2분 | 됨 |
 | 5 | EDGAR 2015~2024 | 1분 안팎 | 됨 |
 | 6 | Kalshi 과거 일봉 | 1~3분 | 됨 |
 | 7 | 수집 현황 확인 | 수 초 | — |
@@ -62,28 +62,15 @@ python -m tools.didm.collect_daily --check-keys
 - 기대: `ALPACA_API_KEY_ID: True`, `ALPACA_API_SECRET_KEY: True`, `MASSIVE_API_KEY: True`, `SEC_EDGAR_USER_AGENT: True` (값은 나오지 않음).
 - 실패 때: False면 새 창을 열었는지, `setx` 이름 철자를 확인. 따옴표 안에 키 앞뒤 공백이 있어도 지워서 읽습니다.
 
-## 4. 뉴스 수집 1회 (DS-5b/5c, 연결 확인용)
+## 4. Alpaca·Massive 연결 확인 (선택)
 
-이 단계는 **연결 확인만**입니다. 받은 기사는 연구 표본·학습에 쓰지 않습니다 (위 "약관상 연구 표본 제외" 줄). 종목을 반드시 적어야 하며 (시장 전체 수집 안 함), 실행하면 첫 줄에 그 안내가 나옵니다.
+각 공급사에 종목을 지정해 기사 1건 이내를 요청합니다. Massive에 여러 종목을 적으면 입력한 종목 기호를 모두 검사한 뒤 첫 종목으로 한 번만 연결을 확인합니다. 연결 결과만 표시하며 기사를 저장하거나 다음 쪽을 요청하지 않습니다. 빈 기사 목록도 연결 성공입니다. 기존 저장분의 처리와 연구 이용은 소유자 결정 대기입니다.
 
 ```
-python -m tools.didm.collect_daily --data-dir "$env:LOCALAPPDATA\QUANTGEN\didm" --no-gdelt --alpaca-news AAPL --massive-news AAPL --news-start 2026-11-01 --news-max-pages 2
+python -m tools.didm.collect_daily --data-dir "$env:LOCALAPPDATA\QUANTGEN\didm" --no-gdelt --alpaca-news AAPL --massive-news AAPL
 ```
 
-- 기대 (숫자는 다름):
-  - `Alpaca news AAPL: pages 1 (complete True), articles 37, first 2026-11-01..., last 2026-11-24..., new 37`
-  - `Massive news AAPL: pages 2 (complete False), articles 200, with insights 180, first ..., last ..., new 200`
-- Massive는 무료 한도 (분당 5회) 때문에 쪽마다 12.5초씩 기다립니다. 멈춘 것이 아닙니다.
-- `complete False` = 쪽 상한 (2쪽)에 걸림. 오류 아님.
-- 실패 때 (한 줄로 나옴, 키 값은 가려짐):
-
-| 출력 | 뜻 | 할 일 |
-|---|---|---|
-| `Alpaca news failed: SourceError: Alpaca news: HTTP 403 (... not permit ...)` | 무료 계정이 뉴스 조회를 막음 | 그 줄 그대로 전달 → 유료 단계 판단 근거로 기록 |
-| `... HTTP 401` | 키가 틀림 | 1·3단계 다시 (Paper 키인지 확인) |
-| `... failed: MissingKey: ... is not set` | 키 이름이 안 읽힘 | 3단계 새 창 확인 |
-| `Massive news failed: SourceError: Massive news: HTTP 403 (...)` | 무료 플랜 범위 밖 | 그대로 전달 |
-| `... HTTP 429` | 호출 한도 초과 | 1분 뒤 다시 |
+성공 시 공급사마다 `connection OK`가 표시됩니다. `HTTP 401`은 인증 정보, `HTTP 403`은 계정의 조회 권한, `HTTP 429`는 호출 한도를 확인하세요. `MissingKey`면 1·3절에서 설정한 키 이름을 확인하세요. 하나라도 실패하면 명령의 종료 코드는 1입니다.
 
 ## 5. EDGAR 2015~2024 (D6)
 
@@ -119,7 +106,7 @@ python -m tools.didm.collection_status --data-dir "$env:LOCALAPPDATA\QUANTGEN\di
 
 - 기대: 공급원·종류별 한 줄, 예 `sec-edgar / filing: items N (versions N), valid 2015-..2024-.., received 2026-11-..2026-11-.. on 1 days, missing 0 days, sample years with data 10/10`.
 - 읽기만 합니다 (저장소를 바꾸지 않음). 본문·키는 나오지 않습니다.
-- 실패 때: `no store at ...` = 4~6단계가 한 번도 저장하지 않음.
+- 실패 때: `no store at ...` = 5·6단계 등의 수집으로 아직 저장소를 만들지 않았음. 4단계 연결 확인은 저장소를 만들지 않습니다.
 
 ## 8. 결과 전달
 
