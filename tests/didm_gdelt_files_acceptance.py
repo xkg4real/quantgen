@@ -57,6 +57,23 @@ class Reading(unittest.TestCase):
         with self.assertRaises(gdelt.GdeltError):
             gf.read_file(f"{STAMP}.gkg.csv", b"a\tb\tc\n", RECEIVED)
 
+    def test_only_valid_quarter_hour_files_can_have_been_received(self):
+        for stamp in ("20261105190900", "20261105191507", "20260230190000"):
+            with self.subTest(stamp=stamp), self.assertRaises(gdelt.GdeltError):
+                gf.read_file(f"{stamp}.gkg.csv", b"", RECEIVED)
+        with self.assertRaises(gdelt.GdeltError):
+            gf.read_file(f"{STAMP}.gkg.csv", b"", T - timedelta(seconds=1))
+
+    def test_release_may_follow_but_cannot_precede_a_rows_publication(self):
+        for suffix, line in (("gkg.csv", gkg_line()), ("export.CSV", events_line())):
+            with self.subTest(suffix=suffix):
+                with self.assertRaises(gdelt.GdeltError):
+                    gf.read_file(f"20261105184500.{suffix}", line.encode(), RECEIVED)
+                later = T + timedelta(minutes=15)
+                rows = gf.read_file(f"20261105191500.{suffix}", line.encode(), later)
+                self.assertEqual(gf.select(rows, T, T), [])
+                self.assertEqual(gf.select(rows, later, later)[0].row["published_at"], T)
+
 
 class Selecting(unittest.TestCase):
     def setUp(self):
@@ -86,6 +103,15 @@ class Selecting(unittest.TestCase):
         self.assertEqual(len(gf.select(self.events, T, T, countries=["chn"])), 1)
         self.assertEqual(gf.select(self.events, T, T, countries=["KOR"]), [])
         self.assertEqual(gf.select(self.events, T, T, countries=["CHN"])[0].entity_ids, ())
+
+    def test_legacy_file_chronology_is_checked_when_selecting(self):
+        row = self.gkg[0]
+        for stamp in ("20261105184500", "20261105190001", "20261201000000"):
+            old = dict(row, payload={**row["payload"], "file_stamp": stamp})
+            with self.subTest(stamp=stamp), self.assertRaises(gdelt.GdeltError):
+                gf.select([old], T - timedelta(days=60), T + timedelta(days=60))
+        without_stamp = dict(row, payload={})
+        self.assertEqual(gf.available_at(without_stamp), T)
 
 
 class Collector(unittest.TestCase):

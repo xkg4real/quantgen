@@ -28,15 +28,25 @@ from typing import Iterable, Mapping
 from core.didm.ingest import gdelt
 
 CITATION = "GDELT Project, https://www.gdeltproject.org/"
-_NAME = re.compile(r"^(\d{14})\.(export\.csv|gkg\.csv)(\.zip)?$", re.IGNORECASE)
+_NAME = re.compile(r"^([0-9]{14})\.(export\.csv|gkg\.csv)(\.zip)?$", re.IGNORECASE)
 MIN_ALIAS = 3
+
+
+def _release_time(stamp: str) -> datetime:
+    try:
+        release = gdelt.gdelt_time(stamp)
+    except ValueError as exc:
+        raise gdelt.GdeltError(f"invalid GDELT file timestamp {stamp!r}") from exc
+    if release.minute % 15 or release.second:
+        raise gdelt.GdeltError("GDELT file timestamp must be on a UTC quarter hour")
+    return release
 
 
 def kind_and_stamp(name: str) -> tuple[str, str]:
     m = _NAME.fullmatch(name or "")
     if not m:
         raise gdelt.GdeltError("not a GDELT 2.0 events or GKG file name (YYYYMMDDHHMMSS.export.CSV / .gkg.csv)")
-    gdelt.gdelt_time(m.group(1))
+    _release_time(m.group(1))
     return ("events" if m.group(2).lower() == "export.csv" else "gkg"), m.group(1)
 
 
@@ -53,17 +63,32 @@ def read_file(name: str, data: bytes, received_at: datetime, *, md5: str | None 
     if not isinstance(received_at, datetime) or received_at.tzinfo is None:
         raise gdelt.GdeltError("received_at must be timezone-aware")
     kind, stamp = kind_and_stamp(name)
+    release = gdelt.gdelt_time(stamp)
+    if release > received_at:
+        raise gdelt.GdeltError("GDELT file timestamp is later than received_at")
     text = _text(name, data, md5)
     rows = gdelt.parse_events(text, received_at) if kind == "events" else gdelt.parse_gkg(text, received_at)
     for r in rows:
+        _check_publication(r, release)
         r["payload"].update(citation=CITATION, file_stamp=stamp, md5_verified=md5 is not None)
     return rows
+
+
+def _check_publication(row: Mapping, release: datetime) -> None:
+    if row["published_at"] > release:
+        raise gdelt.GdeltError("GDELT row published_at is later than its file timestamp")
 
 
 def available_at(row: Mapping) -> datetime:
     """When the row was public: its file's stamp (falls back to published_at for rows without one)."""
     stamp = (row.get("payload") or {}).get("file_stamp")
-    return gdelt.gdelt_time(stamp) if stamp else row["published_at"]
+    if not stamp:
+        return row["published_at"]
+    release = _release_time(stamp)
+    _check_publication(row, release)
+    if row.get("received_at") is not None and release > row["received_at"]:
+        raise gdelt.GdeltError("GDELT file timestamp is later than received_at")
+    return release
 
 
 @dataclass(frozen=True)
