@@ -263,3 +263,20 @@ UI 세션도 따로 확인했습니다: tcache 끔에서 고치기 전 32번 중
 같은 `414eceb`에서 PyQt6 6.12.0으로 CI 18단계 묶음(6절 방법)을 다시 돌렸습니다(2026-11-20). 단계별 종료 코드가 `5025c6f` PyQt6 결과와 18단계 모두 같습니다: 9·13단계는 시간 초과(1500초, 두 번 모두 같음), 12단계(`strategy_lab_display_acceptance` 실패 3·오류 1)와 18단계(`indicator_guide_acceptance`, 이 클론에 없는 `docs/product/DATA_READINESS_2026-10-29.json` 1건)는 같은 시험이 같게 실패, 나머지 14단계는 통과. 비정상 종료는 없습니다. 즉 고침은 PyQt6 쪽 결과를 바꾸지 않았습니다.
 
 **판정: 9절 판정을 되살립니다.** Linux 기준으로 UI 브랜치는 PySide6 전환 준비가 끝났습니다. Windows·macOS 실행은 병합 뒤 `platform-build.yml`(수동 실행)과 소유자 PC에서 확인합니다.
+
+### 10-3. UI PR #140 head 재확인 (UI `3483b53`, 2026-11-24) — 9절 판정 유지
+
+메인 지시 O2(2026-11-24). UI 브랜치 `gpt/ui-guide-chart-first-20261121`(PR #140, 초안)의 head `3483b53`을 `git archive`로 저장소 밖에 꺼내 `pyqt6_to_pyside6.py --apply`로 바꾸고, PySide6-Essentials 6.12.0과 PyQt6를 막는 빈 모듈로 돌렸습니다. UI 브랜치에는 아무것도 push하지 않았습니다.
+
+| 확인 | 결과 |
+|---|---|
+| `tests.desktop_market_tabs_acceptance`, 4개 동시, 일반 | **160번 통과, 비정상 종료 0** (60 + 100; 첫 실행이 백그라운드 30분 제한에 걸려 도중에 끊긴 4번은 셈에서 뺌) |
+| 같은 시험, tcache 끔(고치기 전 약 8~20%) | **160번 통과, 비정상 종료 0** |
+| `--lint` 규칙별 건수 (`414eceb` → `3483b53`) | 4-combo-data 25 → 25, 6-deferred 11 → 11, 8-font 2 → 2, **16-shadow 0 → 1**, 나머지 규칙 0 → 0. 합계 38 → 39 (규칙 16과 도구 자기 이름 오탐 수정은 `claude/os-qt-lint-shadow-20261124`의 도구 기준) |
+| `switch_day.py --check` | 7곳 모두 "to do", 어긋남(missing·ambiguous) 0 |
+
+**새로 나온 PySide6 전용 문제 1건**: `quantgen_desktop/stock_insights.py:82`의 `ValuationReferenceStrip`이 `self.metric`에 문자열을 담습니다(`657523d`에서 생김). PySide6는 인스턴스 속성을 C++ 가상 함수 `QWidget::metric()`의 재정의로 보고 불러 `TypeError`가 납니다. PyQt6는 클래스만 봅니다. 저장소 밖 사본에서 이름만 `_metric`으로 바꾸면 사라집니다. lint 규칙 16(`16-shadow`)이 이것을 잡습니다. 고침은 UI 세션 몫입니다(메인이 소유자를 거쳐 전달).
+
+**PR #140의 CI 실패(`tests/desktop_stock_detail_acceptance.py:1527` 포커스 검사)는 PySide6 전환과 관계없습니다**: PyQt6 원본에서 5번 모두 같은 단언이 실패하고, PySide6 사본도 위 속성 이름만 바꾸면 3번 모두 같은 단언에서 실패합니다.
+
+**판정: 9절 판정을 유지합니다.** 위 한 건(`self.metric`)을 고치면 `3483b53`도 Linux 기준으로 PySide6 전환 준비가 된 상태입니다.

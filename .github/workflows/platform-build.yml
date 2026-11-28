@@ -199,7 +199,7 @@ jobs:
             --target-site-packages "$mobile/build/site-packages" \
             --output "$mobile/build/apk/apk-evidence.json"
       - name: Show the APK evidence receipt when verification fails
-        # The receipt holds only file names, sizes, digests and fixed error codes; the APK itself is not uploaded.
+        # The receipt holds file names, sizes, digests, observed package versions, ABI names and fixed error codes; the APK itself is not uploaded.
         if: failure()
         shell: bash
         run: cat "$RUNNER_TEMP/quantgen-mobile/build/apk/apk-evidence.json" || echo "no apk-evidence.json was written"

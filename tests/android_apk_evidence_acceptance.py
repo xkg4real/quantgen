@@ -144,7 +144,7 @@ class AndroidApkEvidenceAcceptance(unittest.TestCase):
             f"Description: {'x' * 8193}\n", encoding="utf-8")
 
     def test_six_packages_are_read_per_android_abi_folder(self):
-        # OSPAY-4: serious_python installs into build/site-packages/<abi>/ (arm64-v8a, armeabi-v7a, x86_64).
+        # OSPAY-4: per serious_python's packaging source (not yet a real Flet build), packages go to build/site-packages/<abi>/.
         (self.apks / "app.apk").write_bytes(b"synthetic")
         version_by_name = {"flet": "1.2.1", "PyYAML": "5.1", "Babel": "2.3",
                            "requests": "2.4", "numpy": "1.5", "pandas": "2.6"}
@@ -318,13 +318,13 @@ class AndroidApkEvidenceAcceptance(unittest.TestCase):
         # OSPAY-7: macOS keeps temporary folders below /var -> /private/var.
         (self.root / "private").mkdir()
         self.symlink_or_skip(self.root / "var", self.root / "private", directory=True)
-        for name in ("apk", "build-tools"):
+        for name in ("apk", "build-tools", "out"):
             (self.root / "private" / name).mkdir()
         (self.root / "private" / "apk" / "app.apk").write_bytes(b"fixture")
         signer = self.root / "private" / "build-tools" / self.signer.name
         signer.touch()
         self.apks, self.tools = self.root / "var" / "apk", self.root / "var" / "build-tools"
-        self.output = self.root / "var" / "evidence.json"
+        self.output = self.root / "var" / "out" / "evidence.json"
         self.assertEqual(self.invoke(self.signed), 0)
         self.assertEqual(self.receipt()["status"], "PASS")
 
@@ -332,7 +332,7 @@ class AndroidApkEvidenceAcceptance(unittest.TestCase):
         (self.apks / "app.apk").write_bytes(b"fixture")
         self.assertEqual(self.invoke(self.signed), 0)
         result = self.receipt()
-        self.assertEqual(result["schema"], "quantgen.android-apk-evidence.v1")
+        self.assertEqual(result["schema"], "quantgen.android-apk-evidence.v2")
         self.assertEqual(result["status_scope"], "APK_ARTIFACT_CHECKS_ONLY")
         self.assertEqual(self.stderr.getvalue(), "")
 
@@ -432,8 +432,9 @@ class AndroidApkEvidenceAcceptance(unittest.TestCase):
         hidden = self.root / ".nextgen" / "apk"
         hidden.mkdir(parents=True)
         (hidden / "app.apk").write_bytes(b"fixture")
-        self.symlink_or_skip(self.root / "innocent", hidden, directory=True)
-        self.apks = self.root / "innocent"
+        # The link is an ancestor of the root (a root that is itself a link is refused earlier as symlink_path).
+        self.symlink_or_skip(self.root / "innocent", hidden.parent, directory=True)
+        self.apks = self.root / "innocent" / "apk"
         runner = Mock()
         self.invoke_result = self.invoke(runner)
         runner.assert_not_called()
@@ -484,6 +485,154 @@ class AndroidApkEvidenceAcceptance(unittest.TestCase):
         dependencies = self.receipt()["dependencies"]
         self.assertEqual(dependencies["direct_abi_disagreements"], ["numpy"])
         self.assertEqual(dependencies["status"], "CONFLICTING_METADATA")
+
+    # -- 2026-11-24 fresh review follow-ups (OSF-2, OSF-5, OSF-7, OSF-8) ------------------------------------------
+    def test_root_that_is_itself_a_link_is_refused(self):
+        # OSF-8: ancestors may be links (macOS /var), the root itself may not.
+        real = self.root / "real_apk"
+        real.mkdir()
+        (real / "app.apk").write_bytes(b"fixture")
+        self.symlink_or_skip(self.root / "linked_apk", real, directory=True)
+        self.apks = self.root / "linked_apk"
+        runner = Mock()
+        self.invoke_result = self.invoke(runner)
+        runner.assert_not_called()
+        self.assert_failed("symlink_path", where="report")
+
+    def test_linked_build_tools_root_is_refused(self):
+        (self.apks / "app.apk").write_bytes(b"fixture")
+        self.symlink_or_skip(self.root / "linked_tools", self.tools, directory=True)
+        self.tools = self.root / "linked_tools"
+        runner = Mock()
+        self.invoke_result = self.invoke(runner)
+        runner.assert_not_called()
+        self.assert_failed("symlink_path", where="report")
+
+    def test_symlinked_apksigner_is_refused(self):
+        (self.apks / "app.apk").write_bytes(b"fixture")
+        real = self.root / "real-apksigner"
+        self.signer.rename(real)
+        self.symlink_or_skip(self.signer, real)
+        runner = Mock()
+        self.invoke_result = self.invoke(runner)
+        runner.assert_not_called()
+        self.assert_failed("symlink_path", where="report")
+
+    def exit_two(self, code):
+        runner = Mock()
+        self.assertEqual(self.invoke(runner), 2)
+        runner.assert_not_called()
+        self.assertEqual(self.stderr.getvalue(), code + "\n")      # the fixed code alone, no OS error text
+
+    def test_output_that_is_a_link_is_refused_and_nothing_is_written(self):
+        (self.apks / "app.apk").write_bytes(b"fixture")
+        target = self.root / "elsewhere.json"
+        self.symlink_or_skip(self.output, target)
+        self.exit_two("symlink_path")
+        self.assertFalse(target.exists())
+
+    def test_output_with_parent_component_is_refused(self):
+        (self.apks / "app.apk").write_bytes(b"fixture")
+        self.output = self.root / "apk" / ".." / "evidence.json"
+        self.exit_two("parent_traversal_path")
+        self.assertFalse((self.root / "evidence.json").exists())
+
+    def test_output_in_a_missing_folder_reports_only_the_code(self):
+        (self.apks / "app.apk").write_bytes(b"fixture")
+        self.output = self.root / "missing" / "evidence.json"
+        self.exit_two("output_parent_missing")
+
+    def test_protected_name_inside_the_apk_folder_is_refused(self):
+        (self.apks / ".env.apk").write_bytes(b"fixture")
+        runner = Mock()
+        self.invoke_result = self.invoke(runner)
+        runner.assert_not_called()
+        self.assert_failed("protected_path")
+
+    def test_env_prefixed_component_is_refused(self):
+        hidden = self.root / ".env.local" / "apk"
+        hidden.mkdir(parents=True)
+        (hidden / "app.apk").write_bytes(b"fixture")
+        self.apks = hidden
+        runner = Mock()
+        self.invoke_result = self.invoke(runner)
+        runner.assert_not_called()
+        self.assert_failed("protected_path", where="report")
+
+    def test_symlinked_abi_folder_is_refused(self):
+        target = self.root / "build" / "site-packages"
+        real = self.root / "real-abi"
+        self.distribution(real, "numpy", "1.0")
+        target.mkdir(parents=True)
+        self.symlink_or_skip(target / "arm64-v8a", real, directory=True)
+        self.assertEqual(self.dependency_error(target), "symlink_path")
+
+    def test_symlinked_dist_info_is_refused(self):
+        target = self.root / "build" / "site-packages"
+        real = self.root / "real-info"
+        self.metadata(real, "Name: numpy\nVersion: 1.0\n")
+        (target / "arm64-v8a").mkdir(parents=True)
+        self.symlink_or_skip(target / "arm64-v8a" / "numpy-1.0.dist-info", real, directory=True)
+        self.assertEqual(self.dependency_error(target), "symlink_path")
+
+    def test_symlinked_metadata_file_is_refused(self):
+        target = self.root / "build" / "site-packages"
+        real = self.root / "REAL_METADATA"
+        real.write_text("Name: numpy\nVersion: 1.0\n", encoding="utf-8")
+        info = target / "arm64-v8a" / "numpy-1.0.dist-info"
+        info.mkdir(parents=True)
+        self.symlink_or_skip(info / "METADATA", real)
+        self.assertEqual(self.dependency_error(target), "symlink_path")
+
+    def test_dependency_error_reaches_stderr_on_a_failed_run(self):
+        (self.apks / "app.apk").write_bytes(b"")                       # empty APK makes the run FAIL
+        target = self.root / "build" / "site-packages"
+        self.metadata(target / "arm64-v8a" / "numpy-1.0.dist-info", "Name: pandas\nVersion: 1.0\n")
+        self.assertEqual(self.invoke(Mock(), "--target-site-packages", target), 1)
+        self.assertIn("dependencies:package_metadata_name_mismatch", self.stderr.getvalue())
+
+    def test_unsafe_characters_in_apk_names_are_replaced_on_stderr(self):
+        # OSF-5: a crafted name must not start its own CI log line (for example a GitHub '::error::' command).
+        name = "x\x1b[31m::error::injected.apk" if os.name != "nt" else "x;::error::injected.apk"
+        try:
+            (self.apks / name).write_bytes(b"")
+        except OSError:
+            self.skipTest("this file system refuses the name")
+        self.invoke(Mock())
+        err = self.stderr.getvalue()
+        self.assertEqual(err.count("\n"), 1)
+        self.assertNotIn("\x1b", err)
+        self.assertRegex(err.strip(), r"^[A-Za-z0-9._:_-]+(?: [A-Za-z0-9._:_-]+)*$")
+        self.assertIn(":empty_apk", err)
+
+    def test_six_direct_entries_without_abi_folders_are_observed(self):
+        # OSF-7: kept from the 703aa01 test that was replaced.
+        (self.apks / "app.apk").write_bytes(b"synthetic")
+        target = self.apks.parent / "build/site-packages"
+        versions = {"flet": "1.2.1", "PyYAML": "5.1", "Babel": "2.3", "requests": "2.4", "numpy": "1.5", "pandas": "2.6"}
+        for name, version in versions.items():
+            self.distribution(target, name, version)
+        self.assertEqual(self.invoke(self.signed, "--target-site-packages", target), 0)
+        dependencies = self.receipt()["dependencies"]
+        self.assertEqual((dependencies["status"], dependencies["abi"], dependencies["nested_layout"]),
+                         ("OBSERVED_METADATA", "NOT_OBSERVED", "NO_ABI_FOLDERS"))
+        self.assertEqual(dependencies["packages"], {n.lower(): [v] for n, v in versions.items()})
+
+    def test_direct_and_abi_entries_together_are_both_counted(self):
+        # OSF-7: a package only in the direct location still counts when ABI folders exist; the same version in
+        # both places is not a disagreement.
+        (self.apks / "app.apk").write_bytes(b"synthetic")
+        target = self.apks.parent / "build/site-packages"
+        self.distribution(target, "pandas", "2.6")
+        self.distribution(target, "numpy", "1.5")
+        for name, version in {"flet": "1.2.1", "PyYAML": "5.1", "Babel": "2.3", "requests": "2.4", "numpy": "1.5"}.items():
+            self.distribution(target / "arm64-v8a", name, version)
+        self.assertEqual(self.invoke(self.signed, "--target-site-packages", target), 0)
+        dependencies = self.receipt()["dependencies"]
+        self.assertEqual(dependencies["status"], "OBSERVED_METADATA")
+        self.assertEqual(dependencies["packages"]["pandas"], ["2.6"])
+        self.assertEqual(dependencies["packages"]["numpy"], ["1.5"])
+        self.assertEqual((dependencies["direct_abi_disagreements"], dependencies["abi_missing"]), ([], {}))
 
 
 if __name__ == "__main__":

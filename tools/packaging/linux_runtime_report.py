@@ -8,6 +8,7 @@ Reads only the built app folder (never the user's home or data folder) and repor
     not start on an older one (measured 2026-11-24: an Ubuntu 24.04 build needs GLIBC_2.38).
   * qt_platform_plugins: for libqxcb.so (X11) and libqwayland*.so (Wayland), the shared libraries `ldd` cannot
     find on this machine (for X11 Qt 6 needs, among others, libxcb-cursor0, which many desktops lack).
+    qt_platform_plugins_unchecked records each plugin whose dependencies could not be inspected.
 Needs `objdump` (binutils) and `ldd`; a missing tool is reported, not fatal. Exit code 0 always: it is a report.
 """
 from __future__ import annotations
@@ -56,11 +57,20 @@ def missing_libraries(ldd_output: str) -> list[str]:
     return out
 
 
-def _run(cmd) -> str:
+def _run(cmd) -> tuple[str, str | None]:
     try:
-        return subprocess.run(cmd, capture_output=True, text=True, timeout=60).stdout
-    except (OSError, subprocess.SubprocessError):
-        return ""
+        result = subprocess.run(cmd, capture_output=True, text=True, errors="replace", timeout=60)
+    except FileNotFoundError:
+        return "", "tool unavailable"
+    except subprocess.TimeoutExpired:
+        return "", "timed out"
+    except OSError:
+        return "", "could not start tool"
+    if result.returncode:
+        return "", f"exit {result.returncode}"
+    if not result.stdout.strip():
+        return "", "no standard output"
+    return result.stdout + "\n" + result.stderr, None
 
 
 def report(app_dir: Path) -> dict:
@@ -70,7 +80,8 @@ def report(app_dir: Path) -> dict:
     newest, holders = None, []
     if tools["objdump"]:
         for path in elves:
-            v = newest_glibc(_run(["objdump", "-T", str(path)]))
+            output, _ = _run(["objdump", "-T", str(path)])
+            v = newest_glibc(output)
             if v is None:
                 continue
             if newest is None or v > newest:
@@ -78,10 +89,19 @@ def report(app_dir: Path) -> dict:
             elif v == newest:
                 holders.append(path)
     plugins = {}
-    if tools["ldd"]:
-        for path in elves:
-            if path.name.startswith(PLATFORM_PLUGINS):
-                plugins[str(path.relative_to(app_dir))] = missing_libraries(_run(["ldd", str(path)]))
+    unchecked = {}
+    for path in elves:
+        if not path.name.startswith(PLATFORM_PLUGINS):
+            continue
+        name = str(path.relative_to(app_dir))
+        if not tools["ldd"]:
+            unchecked[name] = "tool unavailable"
+            continue
+        output, error = _run(["ldd", str(path)])
+        if error:
+            unchecked[name] = error
+        else:
+            plugins[name] = missing_libraries(output)
     return {
         "app_dir": str(app_dir),
         "tools": tools,
@@ -90,6 +110,7 @@ def report(app_dir: Path) -> dict:
         "glibc_holders": [str(p.relative_to(app_dir)) for p in holders[:15]],
         "glibc_holders_total": len(holders),
         "qt_platform_plugins_missing": plugins,
+        "qt_platform_plugins_unchecked": unchecked,
     }
 
 

@@ -1,8 +1,10 @@
 """tools/packaging/linux_runtime_report.py (OS-F3): glibc floor and Qt platform plugin gaps of a Linux build."""
 from pathlib import Path
 import shutil
+import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from tools.packaging import linux_runtime_report as lr
 
@@ -24,6 +26,31 @@ class ParseTests(unittest.TestCase):
 
 
 class ReportTests(unittest.TestCase):
+    def test_checked_and_unchecked_plugin_reports(self):
+        cases = (
+            (subprocess.CompletedProcess([], 0, "libc.so => /lib/libc.so", ""), [], None),
+            (subprocess.CompletedProcess([], 0, "linux-vdso.so.1", "libxcb.so => not found"), ["libxcb.so"], None),
+            (subprocess.CompletedProcess([], 1, "", "inspection failed"), None, "exit 1"),
+            (subprocess.CompletedProcess([], 0, "", "inspection warning"), None, "no standard output"),
+            (subprocess.TimeoutExpired("ldd", 60), None, "timed out"),
+            (FileNotFoundError(), None, "tool unavailable"),
+            (PermissionError(), None, "could not start tool"),
+        )
+        name = "libqxcb.so"
+        with tempfile.TemporaryDirectory() as d:
+            (Path(d) / name).write_bytes(b"\x7fELFfixture")
+            with patch.object(shutil, "which", side_effect=lambda tool: "/test/ldd" if tool == "ldd" else None):
+                for response, missing, error in cases:
+                    with self.subTest(response=response), patch.object(subprocess, "run", side_effect=[response]):
+                        result = lr.report(Path(d))
+                        self.assertEqual(result["qt_platform_plugins_missing"], {name: missing} if not error else {})
+                        self.assertEqual(result["qt_platform_plugins_unchecked"], {name: error} if error else {})
+            with patch.object(shutil, "which", return_value=None), patch.object(subprocess, "run") as run:
+                result = lr.report(Path(d))
+                run.assert_not_called()
+                self.assertEqual(result["qt_platform_plugins_missing"], {})
+                self.assertEqual(result["qt_platform_plugins_unchecked"], {name: "tool unavailable"})
+
     def test_folder_without_libraries(self):
         with tempfile.TemporaryDirectory() as d:
             (Path(d) / "README.txt").write_text("x", encoding="utf-8")

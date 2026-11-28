@@ -45,9 +45,14 @@ a package seen in some ABI folders but not in others, `abi_missing`, which makes
 two versions in one place (`conflicting_versions`), ABIs that disagree (`abi_disagreements`) and a direct entry
 whose version differs from the ABI folders (`direct_abi_disagreements`); the last three make it
 `CONFLICTING_METADATA`. The per-ABI layout comes from
-reading serious_python's packaging source; no real Flet build has confirmed it yet, so `nested_layout:
-NO_ABI_FOLDERS` with empty package lists on a real run means the layout differs and the versions were not seen.
-When verification fails, the job prints the receipt in the log and the tool prints its fixed error codes. Confirm these versions separately. On the phone, measure startup and run the example above.
+reading serious_python's packaging source; no real Flet build has confirmed it yet. On a real run,
+`nested_layout: NO_ABI_FOLDERS` with empty package lists means the folder exists but the layout differs, and
+`nested_layout: NOT_OBSERVED` with status `NOT_OBSERVED` means `build/site-packages` itself was absent; in both
+cases the versions were not seen.
+The receipt's schema id is `quantgen.android-apk-evidence.v2` (2026-11-24). A `v1` receipt (earlier builds of this
+tool) read only direct entries and always showed `abi: NOT_OBSERVED` and `nested_layout: NOT_INSPECTED`.
+When verification fails, the job prints the receipt in the log (file names, sizes, digests, package versions, ABI
+names and fixed error codes) and the tool prints its fixed error codes, with APK names reduced to safe characters. Confirm these versions separately. On the phone, measure startup and run the example above.
 Record the results alongside the build revision.
 
 ## Initial layout-only preview at PR #141
