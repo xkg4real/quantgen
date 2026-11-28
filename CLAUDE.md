@@ -1,5 +1,18 @@
 # Notes for Claude sessions in this repository
 
+## Quant skills and agent (2026-11-23)
+
+Project skills live in `.claude/skills/`, the `quant-analyst` subagent in `.claude/agents/quant-analyst.md`;
+sources, audit removals and licenses are in `.claude/THIRD_PARTY_NOTICES.md`.
+
+- For any work that touches NautilusTrader, a backtest, a strategy, validation, a portfolio or a risk number, load
+  `nautilus-portfolio-bridge` first. It maps this codebase and carries the bridge spec's rules
+  (`docs/superpowers/specs/2026-10-26-nautilus-bridge-design.md`): research only, no `TradingNode`, adapters or keys,
+  one order call in `tools/nautilus/sandbox.py`, Nautilus only in its pinned venv, register before run.
+- The generic skills `nautilus-trader`, `nautilus-authoring`, `strategy-workflow`, `tearsheet-generator` and
+  `portfolio-optimizer` are references under it; where they disagree with it or the spec, the bridge skill wins.
+- Delegate open-ended quant research to `quant-analyst`, which follows the same rules.
+
 ## Handoff protocol
 
 The code-free `handoff` branch holds `CURRENT.md`, the one live handoff document, and `LEDGER.md`, the
