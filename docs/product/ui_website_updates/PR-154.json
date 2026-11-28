@@ -1,0 +1,68 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "PR-154",
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "gpt/ui151-main-20261128",
+    "supersedes_draft_pr": "https://github.com/xkg4real/quantgen/pull/151",
+    "source_ui_commit": "79447b2c87c699006ca86a75999323ff91f6d3be",
+    "remote_status": "OPEN",
+    "merge_commit": null,
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/154",
+    "implementation_commit": "219d1f1c4dc589a61e3fa20d120e2b1b4b44636f"
+  },
+  "summary_ko": [
+    "기업 가치 카드에서 PER·PBR 읽는 법을 펼치면 동종 업종과 같은 기간의 이익 비교, 일회성 이익·적자, PBR 1배와 ROE의 관계를 볼 수 있습니다.",
+    "공매도 카드는 같은 기간에 실제 보고된 평균과 당일 거래 비중 차이를 퍼센트포인트로 보여줍니다. 호가 카드는 잔량이 있는 최우선 매도·매수 가격의 차이를 원 단위로 표시합니다."
+  ],
+  "website_impact": {
+    "classification": "native_ui_and_shared_market_education_copy_review",
+    "browser_code_changed": false,
+    "scope": "increment since source UI PR 151",
+    "shared_sources": [],
+    "requested_actions_ko": [
+      "웹에 해당 종목 지표 설명이 있다면 같은 업종·기간, 실제 보고일과 단위를 명시하는 문구를 검토하세요. 기존 #151의 종목 상세·가이드 웹 영향은 그 기록을 따릅니다."
+    ]
+  },
+  "verification": {
+    "local_env": "Linux Qt offscreen, synthetic market inputs",
+    "tests": [
+      {
+        "suite": "new acceptance regressions",
+        "passed": 3
+      },
+      {
+        "suite": "independent Korean/English Qt rendering and missing-data states",
+        "passed": 22
+      },
+      {
+        "suite": "compliance, export and gateway boundary acceptance",
+        "passed": 62
+      }
+    ],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "Owner confirmed startup on prior UI; Windows PC7 pending on this PR.",
+    "source_review": "PASS on 20 policy documents and 892 source files. Publication review remains open."
+  },
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "No delivery receipt for the website workspace.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/UI_SESSION_CURRENT.md"
+  },
+  "website_application": {
+    "status": "unverified",
+    "applied": false,
+    "deployed": false,
+    "receipt": null
+  },
+  "limits_ko": [
+    "Linux 합성 화면 검증 완료. Windows 소유자 실화면, 데이터 표시권과 상업 공개는 별도 확인 대상입니다.",
+    "원래 UI PR의 읽기 전용 inquire-ccnl 경로가 포함됩니다. 다음 Nautilus 기록 실행 전 OA-53의 소유자 확인이 필요합니다."
+  ],
+  "changed_files": [
+    "quantgen_desktop/stock_insights.py",
+    "tests/stock_insights_owner_items_acceptance.py"
+  ]
+}
