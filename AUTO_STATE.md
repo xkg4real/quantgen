@@ -1,7 +1,7 @@
 ---
 kind: auto_snapshot
-reason: usage_limit_weekly
-created_at: 2026-11-26T00:21:50+09:00
+reason: rate_limit_error
+created_at: 2026-11-28T12:20:50+09:00
 source_branch: claude/amazing-gauss-tdiguu
 source_head: 3a0371b
 upstream: none
@@ -9,12 +9,12 @@ patch_base: 3a0371b
 unpushed_commits: 0
 uncommitted_files: 0
 patch: none
-usage_pct: 100.0
-usage_resets_at: 2026-12-01T08:00:00.000Z
+usage_pct: unknown
+usage_resets_at: unknown
 session: 244a07c1-ef5e-50fd-a9f1-360db0f46038
-snapshot_key: seven_day@2026-12-01T08:00:00.000Z
-current_md_updated_at: 2026-11-24T20:52:00+09:00
-current_md_status: checkpoint
+snapshot_key: none
+current_md_updated_at: 2026-11-28T12:03:53+09:00
+current_md_status: returned
 ---
 
 # 자동 스냅샷 (모델 없이 생성)
@@ -62,3 +62,11 @@ da3c344 same-answer test: report every difference, floats within rel 1e-6 / abs 
 ```
 
 전체 diff: none
+
+## Claude의 마지막 메시지
+
+```
+You've hit your monthly spend limit · your weekly limit resets Dec 1, 8am (UTC)
+```
+
+이 스냅샷은 턴이 `rate_limit` 오류로 끝나서 만들어졌습니다.
