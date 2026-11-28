@@ -36,12 +36,26 @@ def _day(value: Any, name: str) -> datetime:
         d = value
     elif isinstance(value, str):
         try:
-            d = date.fromisoformat(value[:10])
+            if len(value) <= 10:
+                d = date.fromisoformat(value)
+            else:
+                if value[10] not in ("T", "t", " "):
+                    raise ValueError
+                timestamp = value[:-1] + "+00:00" if value.endswith(("Z", "z")) else value
+                d = datetime.fromisoformat(timestamp).date()
         except ValueError:
             raise AlfredError(f"{name}: bad date {value!r}") from None
     else:
         raise AlfredError(f"{name}: bad date {value!r}")
     return datetime(d.year, d.month, d.day, tzinfo=timezone.utc)
+
+
+def _vintage_period(start, end) -> tuple[datetime, datetime]:
+    first = _day(start, "realtime_start")
+    last = _day(end, "realtime_end")
+    if last < first:
+        raise AlfredError("realtime_end precedes realtime_start")
+    return first, last
 
 
 def _value(raw: Any) -> float | None:
@@ -55,8 +69,7 @@ def _value(raw: Any) -> float | None:
 
 def _row(series_id: str, obs_date, value, rt_start, rt_end, received_at: datetime) -> dict:
     valid = _day(obs_date, "date")
-    vintage = _day(rt_start, "realtime_start")
-    end = rt_end if isinstance(rt_end, str) else _day(rt_end, "realtime_end").date().isoformat()
+    vintage, end = _vintage_period(rt_start, rt_end)
     return {
         "source_id": SOURCE_ID,
         "item_id": f"{series_id}:{valid.date().isoformat()}:{vintage.date().isoformat()}",
@@ -68,7 +81,7 @@ def _row(series_id: str, obs_date, value, rt_start, rt_end, received_at: datetim
             "series_id": series_id,
             "date": valid.date().isoformat(),
             "realtime_start": vintage.date().isoformat(),
-            "realtime_end": end[:10],
+            "realtime_end": end.date().isoformat(),
             "value": _value(value),
         },
     }
@@ -104,11 +117,21 @@ def rows_from_manual(series_id: str, rows: Iterable[tuple], received_at: datetim
     return out
 
 
-def value_as_known_on(rows: Iterable[Mapping[str, Any]], obs_date: str, known_on: str) -> float | None:
-    """The value for obs_date as it stood on known_on (vintage realtime window contains known_on)."""
-    hits = [r["payload"] for r in rows
-            if r["payload"]["date"] == obs_date
-            and r["payload"]["realtime_start"] <= known_on <= r["payload"]["realtime_end"]]
+def value_as_known_on(rows: Iterable[Mapping[str, Any]], obs_date, known_on) -> float | None:
+    """The value for obs_date as it stood on known_on (vintage realtime window contains known_on).
+
+    Both dates accept the same forms (date, datetime, ISO date, basic YYYYMMDD, timestamp string). An aware
+    datetime or an offset string counts by its **written** calendar date, not its UTC date: ALFRED periods
+    and vintages are calendar dates without a clock (review DSF-11)."""
+    cutoff = _day(known_on, "known_on")
+    obs = _day(obs_date, "obs_date").date().isoformat()   # same accepted forms as known_on (review DS-9)
+    hits = []
+    for row in rows:
+        payload = row["payload"]
+        if payload["date"] == obs:
+            start, end = _vintage_period(payload["realtime_start"], payload["realtime_end"])
+            if start <= cutoff <= end:
+                hits.append(payload)
     if len(hits) > 1:
         raise AlfredError(f"overlapping vintages for {obs_date} on {known_on}")
     return hits[0]["value"] if hits else None

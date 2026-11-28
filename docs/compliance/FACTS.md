@@ -235,6 +235,8 @@ Q-SCORE 한영 소개는 실제 기술신호·위험분석 엔진, 입력 이력
 
 [Home 시장 조회](../../core/research/markets.py)는 기존 예외·상태·관측 수를 허용된 `reason_code`로 분류하고 [목록 조회](../../core/research/watchlist.py)가 이를 보존합니다. 예외 텍스트는 최대1500자를 실행 중 분류에만 사용하고 원문·URL·키를 UI 진단으로 반환하거나 새 파일에 저장하지 않습니다. 빈 Yahoo 응답은 `no_observations`이며 원인을 추정하지 않습니다. 새 외부 요청·데이터 공급자·폴백·캐시 경로는 없고, 원래의 KIS/FRED/yfinance 흐름을 유지합니다. 유한한 입력에서도 변화율이 무한대로 계산되면 정상 관측으로 표시하지 않습니다.
 
+2026-11-24 덧붙임: 위 "원인을 추정하지 않습니다"는 Home 화면의 조회 경로에 대한 문장으로 그대로입니다. 소유자가 손으로 실행하는 진단 명령 `python -m core.research.markets`만 다릅니다. 이 명령은 Yahoo 행이 비었을 때에 한해 yfinance 자체 로그에서 읽은 원인 코드를 그 줄 끝에 `via=`로 덧붙입니다. 행의 `reason_code`는 바뀌지 않고, 로그 글은 실행 중 메모리에만 두며(메시지마다 최대 2000자) 화면에 찍거나 파일에 저장하지 않습니다. 명령의 범위는 아래 "2026-11-24 통합 묶음" 절에 적었습니다.
+
 ### Home 종목 정보·글꼴 확장 — 2026-11-02
 
 PR61의 `5b52e3d` 이후 작업 트리는 같은 Home을 종목·가격·변동·거래량·시가총액·PER·EPS·업종·상세·Q-SCORE의10열로 정리합니다. 출처·관측/체결·앱 수신 시각·연결 상태·안전한 오류 안내는 가격 hover/접근성 설명과 상세 버튼·행 Enter로 여는 본문에서 유지합니다. 표시 열을 줄인 사실을 출처나 오래된 자료 상태의 삭제로 기록하지 않습니다.
@@ -1097,8 +1099,10 @@ Windows CI에서 창 핸들과 아이콘을 시험하며, 사용자 PC의 Explor
   LGPL-3.0·GPL-3.0 원문을 넣고, Qt 라이브러리와 LGPL 순수 파이썬 패키지(chardet)는 교체 가능한 별도 파일로 둡니다.
   이것이 LGPL 의무를 충족하는지는 변호사 확인이 필요합니다(법률 자문이 아닙니다,
   `docs/platform/LICENSE_COMPLIANCE_PREP.md`).
-- `.github/workflows/platform-build.yml`은 수동 실행과 `v*` 태그에서만 돌고, 서명·배포·업로드를 하지 않습니다
-  (macOS는 ad-hoc 서명만). `runtime-smoke.yml`에는 새 시험 모듈과 경로만 더했습니다.
+- `.github/workflows/platform-build.yml`은 수동 실행 또는 `v*` 태그로 시작합니다. Android 빌드는 수동 입력에서 선택하며,
+  산출물은 GitHub Actions에 업로드하도록 구성되어 있습니다. 설정된 보관 기간은 7일입니다. macOS는 ad-hoc 서명을 사용합니다. 실제 인증서 서명과 스토어·웹 배포는 하지 않습니다.
+  (2026-11-24 고침: 이 항목의 예전 문장 "서명·배포·업로드를 하지 않습니다"는 워크플로와 달라 바로잡았습니다. 워크플로는 산출물을 GitHub Actions에 올립니다. 저장소가 공개 상태라서 보관 기간 동안 GitHub에 로그인한 사람은 실행 기록의 산출물(Windows onedir, macOS .app, Android APK와 검사 영수증 `apk-evidence.json`)을 내려받을 수 있습니다. 이 접근 규칙은 `docs/compliance/README.md`의 준법 산출물 설명과 같은 것이며 이날 GitHub 문서로 다시 확인하지는 않았습니다. 내려받을 수 있는 산출물이 오픈소스 고지 의무에 주는 영향은 [19번](19-licenses.md)에서 다룹니다. Android 작업은 빌드 뒤 `apksigner verify`로 서명을 확인하고 그 영수증을 함께 올립니다.)
+  `runtime-smoke.yml`에는 새 시험 모듈과 경로만 더했습니다.
 - `mobile/pyproject.toml`과 `stage.py --profile mobile`은 Android 시험용 묶음 초안입니다. 아직 빌드·배포한 적이 없습니다.
 - 화면·계산·요청·전송·저장 동작은 바뀌지 않았습니다. 01–20의 미확정 사업자·개인정보·권리·요금·환불·접근성 조건과
   공개 보류(publication BLOCKED)를 유지합니다.
@@ -1141,3 +1145,18 @@ Windows CI에서 창 핸들과 아이콘을 시험하며, 사용자 PC의 Explor
 실제 자료를 자동 이전하거나 삭제하지 않습니다. 분리된 이전 API는 명시적 동의 뒤에만 같은 파일시스템의 독점 rename을 시도하며, 목적지 경합·미지원·파일시스템 차이는 복사/삭제 없이 거절합니다. 거절 때 기존 폴더에 작은 표시 파일이 남을 수 있습니다. 기존 legacy 폴더를 옮기면 다른 앱과의 토큰 파일 공유가 끝남을 동의 안내에 포함해야 합니다. standalone 저장소 호출자는 먼저 명시적 준비 API를 호출해야 하고 동결 엔진은 변경하지 않습니다. 새로운 삭제·보유기한·암호화·운영 권한 검증이나 실제 PC 검증을 완료한 변경이 아닙니다.
 
 [구현 범위와 한계](../product/OS_DATA_STORAGE_2026-11-21.md), [경로 API](../../core/app_paths.py), [쓰기·시작 검사](../../tests/app_storage_startup_acceptance.py).
+
+## 2026-11-24 통합 묶음 — 소스 검토 (메인 세션)
+
+범위는 main `de32ea1`과 통합 브랜치 `claude/integration-20261124`의 차이입니다. 다섯 갈래 독립 검토의 지적과 처리 결과는 handoff 브랜치 `plans/2026-11-24/INTEGRATION1_REVIEW.md`에 있습니다. 문서 상태·가격·환불·운영자 사실·공개 준비 상태는 바꾸지 않았습니다.
+
+- 홈 지표 진단 명령 `python -m core.research.markets`: 소유자가 손으로 실행할 때만 동작합니다. 설치 wheel의 `core`에 들어 있습니다. 먼저 자료 폴더 준비 API(`core.app_paths.ensure_user_data_dir`)를 부르고, 거부되면 공급사를 부르지 않고 여섯 줄 모두 `data_dir_unavailable`로 끝냅니다. 조회는 Home 화면과 같은 여섯 계열을 같은 경로로 한 번 합니다: Yahoo Finance(`^GSPC`, `^KS11`, `BTC-USD`), FRED(`DEXKOUS`, `DGS10`, `VIXCLS`), Upbit 공개 시세(`KRW-BTC`), KIS 키가 설정된 PC에서는 KIS 토큰(저장된 것이 없으면 발급)과 국내 지수 현재가. 새 목적지와 새 전송 항목은 없습니다. 출력은 기호·상태·사유 코드 여섯 줄이며 값·키·URL·공급사 오류 원문을 찍지 않고 항상 종료 0입니다. 부수 효과는 Home과 같습니다(FICC 캐시, yfinance 사용자 캐시, KIS 토큰 저장 위치). 이 명령의 자동 시험은 죽은 프록시, 소켓 가드, 임시 홈, 빈 자격 증명으로 돌아 실제 공급사에 닿지 않습니다(검토 지적 DS-1로 고침).
+- Home 화면이 Bitcoin 현재가에 Upbit 공개 시세 `KRW-BTC`를, KOSPI 현재가에 KIS 국내 지수 조회를 쓰는 것은 2026-11-21 병합(DS-H, PR #137)에서 들어온 동작이며 이 묶음이 바꾸지 않았습니다. 08의 Upbit 공개 API 행과 KIS 행이 이 두 목적지를 이미 포함하지만 Home에서 쓴다는 문장은 01·07·08에 따로 없습니다. 다음 정책 문구 개정 때 반영할 사실로 여기에 적어 둡니다.
+- Kalshi·ALFRED 연결기(`core/didm/ingest/`, `data/didm/kalshi.py`): 입력 검사만 강화했습니다(가격 범위, 건수, 쪽 넘김 커서, 개정값 유효기간, 식별자 형태). Kalshi의 빈 호가 쪽은 중간값 대신 마지막 체결가를 쓰고 표시를 남깁니다. 새 목적지·새 전송 항목·저장 위치 변화는 없고, 소유자 PC에서 소유자가 수집기를 실행할 때만 동작합니다.
+- DIDM 채점기 계약과 모델 학습 마감일 규칙(`core/didm/llm/judgement.py`, `scorer.py`, `cutoffs.py`): wheel의 `core`에 실리지만 앱 코드는 import하지 않습니다(검토에서 저장소 전체 검색으로 확인). 모델 호출, 네트워크 호출, 파일 쓰기가 없습니다. `docs/didm/MODEL_CUTOFFS.md`의 날짜는 출처 페이지에서 직접 읽은 값만 적습니다.
+- Android APK 검사 도구(`tools/packaging/android_apk_evidence.py`)와 `platform-build.yml`: 패키징 전용이며 wheel 밖입니다. APK를 풀지 않고 크기와 SHA-256을 읽은 뒤 `apksigner verify`를 실행하고, 파일 이름·크기·해시·고정 오류 코드만 담은 영수증을 씁니다. 네트워크와 서명 키를 다루지 않습니다. 검사가 실패하면 워크플로가 영수증 내용을 실행 로그에 찍습니다(공개 저장소의 실행 로그는 GitHub 로그인 사용자가 볼 수 있습니다).
+- 자료 폴더 안내서(`docs/product/OS_DATA_FOLDER_OWNER_GUIDE_2026-11-24.md`): 문서만입니다. 앱이 자료를 자동으로 옮기지 않는 것은 그대로입니다. 안내서의 옮기기 명령은 지금 위치와 옮길 위치를 보여 준 뒤 `MOVE`를 입력해야 옮기고, 되돌리기 명령은 대상 폴더가 이미 있으면 멈춥니다. 폴더 전체가 옮겨진다는 것과 먼저 내용을 확인하라는 단계를 적었습니다(01·07·20의 공유 폴더 서술과 같은 방향).
+- 게이트웨이: 시험만 더했습니다(오류 이름 길이 경계). 동작 변화는 없습니다.
+- 인계 도구와 문서(`tools/handoff/push_handoff.py`, `CLAUDE.md`, `docs/nautilus_bridge/`): 자료 흐름이 없고 wheel 밖입니다.
+- 번호 문서 본문은 08에 진단 명령 행 하나를 더한 것 말고는 바꾸지 않았습니다(새 목적지 없음). 이 문서의 2026-11-02 Home 조회 문단과 2026-11-19 플랫폼 빌드 항목에 2026-11-24 덧붙임을 달았습니다.
+- 확인하지 못한 것: 실제 공급사 응답, 실제 Android 빌드와 APK, Windows·macOS에서의 폴더 이동, 공개 저장소 산출물 접근 규칙의 이날 재확인.

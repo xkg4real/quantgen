@@ -29,6 +29,27 @@ Record the APK size, signature and resolved dependencies, install it on the owne
 start, check layout and scrolling, then press **예시 계산하기** and compare the three displayed values.
 The build, dependency installation on Android and phone result remain pending.
 
+### Reading the internal build artifact
+
+After an owner-approved Android build, download the Android artifact from the workflow run. Open
+`apk-evidence.json` beside the APK. Match the filename, byte size and SHA-256 to the downloaded APK.
+The signer certificate SHA-256 identifies the certificate that Android SDK verification observed.
+The artifact name retains `debug` for compatibility. The receipt records the Flutter build mode as
+`NOT_OBSERVED`. Identifying that mode requires separate evidence from the Flutter build.
+
+The receipt's overall status covers APK integrity and signature verification. Its dependencies section
+lists selected package versions observed in Flet's target staging directory, read from entries directly in
+`build/site-packages` and from its Android ABI folders (`arm64-v8a`, `armeabi-v7a`, `x86_64`, `x86`), where
+serious_python installs packages per ABI (`abi`, `abi_packages`). It flags missing evidence (a package not seen at all;
+a package seen in some ABI folders but not in others, `abi_missing`, which makes the status `PARTIAL_METADATA`),
+two versions in one place (`conflicting_versions`), ABIs that disagree (`abi_disagreements`) and a direct entry
+whose version differs from the ABI folders (`direct_abi_disagreements`); the last three make it
+`CONFLICTING_METADATA`. The per-ABI layout comes from
+reading serious_python's packaging source; no real Flet build has confirmed it yet, so `nested_layout:
+NO_ABI_FOLDERS` with empty package lists on a real run means the layout differs and the versions were not seen.
+When verification fails, the job prints the receipt in the log and the tool prints its fixed error codes. Confirm these versions separately. On the phone, measure startup and run the example above.
+Record the results alongside the build revision.
+
 ## Initial layout-only preview at PR #141
 
 The following record describes the original preview through commit `693e7cbb`, before the calculation

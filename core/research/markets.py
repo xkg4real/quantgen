@@ -281,3 +281,109 @@ def load_home_indicators(days=30, *, series_loader=None, btc_live=None, kospi_li
         rows.append(row)
     return rows
 
+
+
+# --------------------------------------------------------------------------------------------------------------
+# Home indicator diagnosis for the owner's PC (OA-09; replaces the H4 command of the 2026-11-17 plan)
+#     python -m core.research.markets
+# Six lines, one per indicator: symbol, status, reason code, live status. No values, keys, URLs or provider
+# text. Always exits 0: a failure is reported as a reason code, not a traceback. On an older checkout the
+# command prints nothing and exits 0 (this file had no __main__ block before OA-09), or fails with
+# an error containing "No module named" (the core.research package) before 2026-10-29: no output at all
+# is the diagnosis.
+# --------------------------------------------------------------------------------------------------------------
+def diagnose_lines(rows):
+    lines = []
+    for row in rows:
+        live = row.get("live")
+        live_part = "-" if live is None else live["status"] + (f"/{live['reason_code']}" if live.get("reason_code") else "")
+        lines.append(f"{row['symbol']} {row['status']} reason={row.get('reason_code') or '-'} live={live_part}")
+    return lines
+
+
+class _LogCapture:
+    """Collects yfinance's own log lines during a diagnosis (bounded) instead of printing them."""
+
+    def __init__(self, limit=20000):
+        import logging
+        self.logging, self.limit, self.text = logging, limit, []
+        self.handler = logging.Handler()
+        self.handler.emit = lambda record: self.text.append(record.getMessage()[:2000])
+        self.logger = logging.getLogger("yfinance")
+
+    def __enter__(self):
+        self.saved = (self.logger.propagate, self.logger.level)
+        self.logger.addHandler(self.handler)
+        self.logger.propagate = False
+        self.logger.setLevel(self.logging.DEBUG)
+        return self
+
+    def __exit__(self, *exc):
+        self.logger.removeHandler(self.handler)
+        self.logger.propagate, level = self.saved
+        self.logger.setLevel(level)
+
+    def reason(self):
+        """A reason code from what yfinance logged, or None (Yahoo hides transport errors behind empty data)."""
+        text = "\n".join(self.text)[: self.limit]
+        if not text:
+            return None
+        if re.search(r"Too Many Requests|YFRateLimitError|\b429\b", text):
+            return "rate_limited"
+        # A certificate word first (curl 60 = certificate problem); a bare "SSL" (yfinance writes "(SSLError)"
+        # around a connection reset too) only after the transport rules (review DS-3, 2026-11-24).
+        if re.search(r"CERTIFICATE_VERIFY_FAILED|certificate|SSLCertVerificationError|curl: \(60\)", text):
+            return "certificate_error"
+        if re.search(r"timed out|Timeout|timeout after|curl: \(28\)", text):
+            return "network_timeout"
+        if re.search(r"ConnectionError|Connection reset|ConnectionResetError|CONNECT tunnel failed|curl: \(\d+\)"
+                     r"|Could not resolve|getaddrinfo|Name or service not known|NameResolution|NewConnectionError",
+                     text):
+            return "network_error"
+        if re.search(r"SSL", text):
+            return "certificate_error"
+        return None
+
+
+def diagnose(capture_yahoo_log=True, **kwargs):
+    """Six lines. With ``capture_yahoo_log`` an empty Yahoo row also shows what yfinance itself logged
+    (``via=<reason>``), since yfinance turns network, TLS and rate-limit failures into an empty download."""
+    capture = _LogCapture() if capture_yahoo_log else None
+    try:
+        if capture:
+            with capture:
+                rows = load_home_indicators(**kwargs)
+        else:
+            rows = load_home_indicators(**kwargs)
+    except Exception as exc:  # whole call failed before any row: every line carries the same reason code
+        reason = provider_failure_reason(exc)
+        rows = [{"symbol": spec[1], "status": "UNAVAILABLE", "reason_code": reason, "live": None} for spec in SPECS]
+    lines = diagnose_lines(rows)
+    hint = capture.reason() if capture else None
+    if hint:
+        for i, row in enumerate(rows):
+            if row.get("provider") == "YFINANCE" and row.get("reason_code") in ("no_observations",
+                                                                               "insufficient_observations"):
+                lines[i] += f" via={hint}"
+    return lines
+
+
+DATA_DIR_REFUSED = "data_dir_unavailable"   # diagnosis-only line code (not a FAILURE_REASONS member)
+
+
+def main(ensure_data_dir=None, run=None) -> list:
+    """The command: prepare the user data folder first (policy docs 01/07/20: a standalone caller calls the
+    preparation API before anything can write the FICC or yfinance cache; review PD-3, 2026-11-24), then
+    diagnose. A refused folder gives six lines with ``reason=data_dir_unavailable`` and no provider call."""
+    if ensure_data_dir is None:
+        from core.app_paths import ensure_user_data_dir as ensure_data_dir
+    try:
+        ensure_data_dir()
+    except Exception:  # OSError, marker errors: the folder is not usable, so nothing may be written
+        return [f"{spec[1]} UNAVAILABLE reason={DATA_DIR_REFUSED} live=-" for spec in SPECS]
+    return (run or diagnose)()
+
+
+if __name__ == "__main__":
+    for _line in main():
+        print(_line)

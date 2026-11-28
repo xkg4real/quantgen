@@ -1,0 +1,28 @@
+{
+  "kind": "record",
+  "note": "target_kind none carries a null entity_id and event type none",
+  "record": {
+    "record_id": "conf-0003",
+    "source_id": "gdelt-gkg2",
+    "target_kind": "none",
+    "entity_id": null,
+    "published_at": "2026-11-05T19:00:00Z",
+    "received_at": "2026-11-05T19:15:00Z",
+    "relevance_0_100": 0.0,
+    "ess_like_0_100": 50.0,
+    "novelty_0_100": 100.0,
+    "origin_cluster_id": "cl-20261105-0001",
+    "event_type": "none",
+    "direction_probs": [
+      0.3333333333333333,
+      0.3333333333333333,
+      0.3333333333333333
+    ],
+    "uncertainty_entropy": 1.0986122886681096,
+    "p_credibility": 0.95,
+    "market_confirmation": "PENDING",
+    "model_version": "fixture-model-0",
+    "prompt_sha256": "a1b2c3d4e5f60718a1b2c3d4e5f60718a1b2c3d4e5f60718a1b2c3d4e5f60718",
+    "schema_version": "didm-score-v0"
+  }
+}
