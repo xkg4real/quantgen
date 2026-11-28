@@ -37,3 +37,11 @@ QGPT-11은 부분 완료다. 연구 브랜치에서 채점기의 합성 시험 5
 - [PR #153](https://github.com/xkg4real/quantgen/pull/153) `f362fa0f7c92f878362a3db22d4bc32662bce556`의 고객용 두 파일은 회원 개인정보 안내 및 가입·광고 수신 문구다. 원본 10개와 운영 근거는 비공개로 보존했다. [#152](https://github.com/xkg4real/quantgen/pull/152)는 대체되어 병합 없이 닫았다.
 - 사용자 문구를 정책 7종과 대조했다. 로컬 테스트 62개, 정책 20종·소스 865개 정합성 검사, 원격 [문서 검사](https://github.com/xkg4real/quantgen/actions/runs/46104907296) 통과. 전체 정책 묶음의 공개 전 확인 65건이 남았다.
 - #153은 열려 있다. 자동 승인 검토에서 기본 브랜치로의 병합을 차단했다. 차례 16은 계속 대기한다. 회원 화면과 동의 절차를 서비스에 게시하는 결정은 별도다.
+
+## 차례 15 완료 · 13:04 KST
+
+소유자의 명시적 승인 뒤 [#153](https://github.com/xkg4real/quantgen/pull/153)을 `main`에 병합했다. 원격 main과 병합 커밋 `ba021da5c33251d7661a2403a473628df4b0247a`이 일치한다. 검사한 head와 병합 결과 사이에 파일 차이가 없다. 직전 main과 비교한 변경은 고객용 문서 두 편이다. 두 파일은 `review-required`, 시행일 미정이다. 다음 병합 차례는 16번 통합 ②의 검토다.
+
+| ID | 완료 시각 KST | 주기 | 담당 | 완료 범위 | 변경 파일 | 커밋 | 확인 |
+|---|---|---|---|---|---|---|---|
+| P4/customer-docs | 2026-11-28T13:04:29+09:00 | 2026-11-24 | gpt | 회원 개인정보 안내와 가입·광고 수신 문구 분리 및 main 반영 | docs/commercial/accounts/customer/member-privacy.md, docs/commercial/accounts/customer/member-consent.md | f362fa0f7c92f878362a3db22d4bc32662bce556 → ba021da5c33251d7661a2403a473628df4b0247a | PR #153 병합; 문서 CI 46104907296 성공, 두 blob과 main 대조, 검토용 초안·시행일 미정 |
