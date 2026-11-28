@@ -1,5 +1,5 @@
 ---
-status: taken
+status: returned
 reason: manual
 from: gpt
 task: claude-resume-20261103
@@ -8,9 +8,9 @@ execution_id: 4e25137a-5d91-4445-bf97-60417b700a0d
 handoff_id: 2026-11-24/claude-resume-20261103/21ea592d0a42cec932bb7e69336bb63083f49a09
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑤-2/b, ⑨-3a/series-files/3, ⑤-2/b/2, ⑥-1/prep, ⑤-2/d, ⑤-2/f, ⑥-1/rulings, ⑨-1/2/d/2, ⑨-1/2/e, ⑥-1/prep/2, ⑥-1/rulings/2, ⑤-2/g, ⑤-2/e, ⑨-4/2/c, ⑥-1, ⑥-1/readout, ⑤-2/e/2, M-12/design-draft/1, ⑥-2, ⑥-2/readout, ⑦-1/E-readout, ⑨-3a/recorder/1/lifecycle, ⑦-1, ⑨-3a/recorder/1/outage, ⑦-1/rulings, ⑦-1/rulings/2, ⑬-2/market-hub/main, ⑦-2/p3, ⑦-2, ⑦-2/a, OS-P0-a, OS-P0-b, OS-P0-c, OS-P0-d, OS-P0-e, OS-P0-f, KEY-2, KEY-2/b, KEY-1, PAY-A1, PAY-A2, PAY-A2/a, GH-1, KEY-3/design, KEY-3, KEY-4, KEY-4/a, OS-F2, DS-H/code, DIDM-1, DS-4a, KEY-5/a, GH-2, PAY-0, PAY-2, DIDM-2, DIDM-3/a, DS-4a/2, DS-4e/2, DS-H/diag, KEY-5/a/2, OS-A1/apk-evidence, OS-F2/guide, SESSION-PIPELINE/2, QGPT-01/a, QGPT-02, QGPT-04, QGPT-05, QGPT-21, QGPT-03, QGPT-02/replay, QGPT-20
 next_ids: DS-H, DS-1, KEY-5, OS-F1, ⑨-3a/recorder/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-28T12:53:03+09:00
+updated_at: 2026-11-28T12:55:26+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: owner
 work_branch: gpt/p4-customer-docs-20261128
 work_commit: f362fa0f7c92f878362a3db22d4bc32662bce556
 uncommitted_changes: no
@@ -38,10 +38,12 @@ pr: https://github.com/xkg4real/quantgen/pull/153
 
 ## 이어갈 작업
 
-소유자 지시로 다음 담당자가 [상세 인계](WEEKLY_HANDOFF_2026-11-28_main.md)와 [항목별 완료 증거](plans/2026-11-28/MAIN_PROGRESS.md)를 확인한다. P4의 원격 반영 경로 및 CI가 우선이고, 통합 ②는 그 다음이다.
+소유자 지시로 다음 담당자가 [상세 인계](WEEKLY_HANDOFF_2026-11-28_main.md)와 [항목별 완료 증거](plans/2026-11-28/MAIN_PROGRESS.md)를 확인한다. 차례 15의 최신 진행은 아래 P4 문서 분리 기록을 따른다. 통합 ②는 다음 차례다.
 
 ### P4 문서 분리
 
 소유자가 회원 정책 문서 분리를 승인했다. 이번 작업은 차례 15의 고객용 초안과 비공개 운영 근거 분리다. 실제 게시와 가입 개방은 별도다.
 
 - 고객용 초안 [#153](https://github.com/xkg4real/quantgen/pull/153)은 `main`에서 분기했고 변경 내역 두 파일을 원격에서 대조했다. 원본과 운영 근거는 비공개로 보관했다. 로컬 테스트 62개 통과. 차례 15의 원격 검사를 확인한다.
+
+- 차례 15 최종 인계. 고객용 문서 두 개의 검증을 마쳤다. [#153](https://github.com/xkg4real/quantgen/pull/153) 문서 CI 성공(46104907296). #152는 병합 없이 종료. #153의 `main` 병합은 자동 승인 검토로 차단되어 소유자 결정을 기다린다. 기본 브랜치 e5102983, 전체 문서 게시 전 확인 65건. 분리·검증 범위만 완료. [항목별 결과](plans/2026-11-28/MAIN_PROGRESS.md).
