@@ -31,3 +31,9 @@
 QGPT-11은 부분 완료다. 연구 브랜치에서 채점기의 합성 시험 5개가 통과했다. 평가·학습·보정 데이터 간 중복 검사와 공통 ID 규칙(QGPT-10/a)이 남았다. 실제 학습, 공급사 이용권, 기기 실행과 출시 판정은 이 기록의 완료 범위 밖이다.
 
 [이전 메인 인계](https://github.com/xkg4real/quantgen/blob/3f4741a5a6ada80cca1814f6b715be90f17d066b/CURRENT.md) · [PR #150](https://github.com/xkg4real/quantgen/pull/150)
+
+## 차례 15 회원 정책 문서 분리 · 12:54 KST
+
+- [PR #153](https://github.com/xkg4real/quantgen/pull/153) `f362fa0f7c92f878362a3db22d4bc32662bce556`의 고객용 두 파일은 회원 개인정보 안내 및 가입·광고 수신 문구다. 원본 10개와 운영 근거는 비공개로 보존했다. [#152](https://github.com/xkg4real/quantgen/pull/152)는 대체되어 병합 없이 닫았다.
+- 사용자 문구를 정책 7종과 대조했다. 로컬 테스트 62개, 정책 20종·소스 865개 정합성 검사, 원격 [문서 검사](https://github.com/xkg4real/quantgen/actions/runs/46104907296) 통과. 전체 정책 묶음의 공개 전 확인 65건이 남았다.
+- #153은 열려 있다. 자동 승인 검토에서 기본 브랜치로의 병합을 차단했다. 차례 16은 계속 대기한다. 회원 화면과 동의 절차를 서비스에 게시하는 결정은 별도다.
