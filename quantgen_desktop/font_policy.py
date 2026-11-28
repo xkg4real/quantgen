@@ -9,8 +9,12 @@ QG Interface) stay in assets/fonts unused, for rollback only.
 """
 from pathlib import Path
 import logging
-from PyQt6.QtCore import QChar
+from PyQt6 import QtCore
 from PyQt6.QtGui import QFont,QFontDatabase
+# PySide6 has neither QChar nor the application fallback-family functions (PySide6 checklist item 8). With PyQt6
+# the fallback registration below runs exactly as before; without them the same faces are put behind the
+# interface family and the platform's own font with QFont.insertSubstitutions (Linux probe: same glyphs).
+_SCRIPT=getattr(getattr(QtCore,'QChar',None),'Script',None)
 INTERFACE_FAMILY='QG Interface'
 NUMBER_FAMILY='QG Interface'
 SYMBOL_FAMILY='QG Symbols'
@@ -47,10 +51,16 @@ def configure_interface_font(app,font_directory,*,logger=None):
     if not complete:
         for fid in registered:QFontDatabase.removeApplicationFont(fid)
         logger.warning('QUANTGEN interface font bundle incomplete; using the platform font');return None
-    for script in (QChar.Script.Script_Common,QChar.Script.Script_Greek,QChar.Script.Script_Hangul):
-        for family in dict.fromkeys((NUMBER_FAMILY,SYMBOL_FAMILY)):
-            if family not in QFontDatabase.applicationFallbackFontFamilies(script):
-                QFontDatabase.addApplicationFallbackFontFamily(script,family)
+    if _SCRIPT is not None and hasattr(QFontDatabase,'addApplicationFallbackFontFamily'):
+        for script in (_SCRIPT.Script_Common,_SCRIPT.Script_Greek,_SCRIPT.Script_Hangul):
+            for family in dict.fromkeys((NUMBER_FAMILY,SYMBOL_FAMILY)):
+                if family not in QFontDatabase.applicationFallbackFontFamilies(script):
+                    QFontDatabase.addApplicationFallbackFontFamily(script,family)
+    else:
+        QFont.insertSubstitutions(INTERFACE_FAMILY,[SYMBOL_FAMILY])
+        platform=QFontDatabase.systemFont(QFontDatabase.SystemFont.GeneralFont).family()
+        if platform and platform not in (INTERFACE_FAMILY,SYMBOL_FAMILY):
+            QFont.insertSubstitutions(platform,list(dict.fromkeys([INTERFACE_FAMILY,NUMBER_FAMILY,SYMBOL_FAMILY])))
     font=QFont(INTERFACE_FAMILY);font.setFamilies(list(dict.fromkeys([INTERFACE_FAMILY,NUMBER_FAMILY,SYMBOL_FAMILY])))
     font.setPixelSize(14);font.setWeight(QFont.Weight.Normal)
     font.setHintingPreference(QFont.HintingPreference.PreferFullHinting)

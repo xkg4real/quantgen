@@ -128,7 +128,10 @@ class NativeStudyTests(unittest.TestCase):
             text.setWordWrap(True);guide.layout().addWidget(text)
             self.app.processEvents()
             before=(guide.keys,guide.series.dates,guide.cursor)
-            self.assertEqual(guide.study.split.direction(),QBoxLayout.Direction.LeftToRight)
+            # Approved page draft (owner 2026-11-17, draft_03_guide): the guide page puts the chart in the canvas and
+            # the reading in the right column beside it at every width (the old chart|reading split is not used there).
+            space=guide.workspace
+            self.assertLess(space.canvas_stack.geometry().right(),space.side_stack.geometry().left())
             window.theme.setCurrentIndex(1);self.app.processEvents()
             self.assertEqual(settings.value('ui/theme'),'dark')
             self.assertEqual(window.colors,DARK)
@@ -139,9 +142,11 @@ class NativeStudyTests(unittest.TestCase):
             QTest.qWait(150)
             geometry = (window.width(), window.stack.currentWidget().viewport().width(),
                         guide.width(), guide.minimumSizeHint().width(),
-                        guide.study.width(), guide.study.minimumSizeHint().width())
-            self.assertEqual(guide.study.split.direction(),QBoxLayout.Direction.TopToBottom,
-                             f'window/viewport/guide/min/study/min={geometry}')
+                        space.canvas_stack.width(), space.side_stack.width())
+            # Narrow: the right column takes its smallest width and stays beside the canvas (page kit SIDE_WIDTHS).
+            self.assertLess(space.canvas_stack.geometry().right(),space.side_stack.geometry().left(),
+                            f'window/viewport/guide/min/canvas/side={geometry}')
+            self.assertLessEqual(space.side_stack.width(),340,f'window/viewport/guide/min/canvas/side={geometry}')
             self.assertLessEqual(guide.width(),window.stack.currentWidget().viewport().width())
             self.assertLessEqual(text.width(),guide.width())
             reopened=ResearchWindow(auto_refresh=False,theme_mode=settings.value('ui/theme'))

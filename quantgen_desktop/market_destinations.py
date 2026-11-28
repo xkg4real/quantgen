@@ -157,8 +157,13 @@ class MarketToolPage(QWidget):
         from .shell_rail import market_section_text
         self.title.setText(('시장 / ' if ctx.language=='ko' else 'Markets / ')+market_section_text(self.category,ctx.language))
         self.guide.set_key(self.name)
+        # The bond result's key figures and cards (owner-approved draft 2026-11-17) follow the window language.
+        if hasattr(self.pane,'set_language'):self.pane.set_language(ctx.language)
 
     def set_theme(self,colors):
-        from .research_style import apply
+        from .page_kit import kit_sheet
+        from .research_style import sheet
         from .typography import is_dark
-        apply(self,colors,is_dark(colors))
+        # The page kit's cards and key figures used by the bond result, then the research surfaces as before (last, so
+        # their rules keep precedence over the shared base both sheets start from).
+        self.setStyleSheet(kit_sheet(colors,is_dark(colors))+sheet(colors,is_dark(colors)))

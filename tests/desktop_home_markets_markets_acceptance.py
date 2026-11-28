@@ -43,7 +43,7 @@ from PyQt6.QtWidgets import QApplication, QComboBox, QLabel, QPushButton, QWidge
 from core.i18n import LocaleContext
 from core.market import rankings as R
 from core.market.directory import SymbolDirectory
-from tests.qt_fixture_cleanup import delete_owned_widget
+from tests.qt_fixture_cleanup import delete_owned_widget, dispose_market_fixture
 
 NOW = datetime(2026, 11, 11, 5, 20, 0, tzinfo=timezone.utc)  # Wednesday 14:20 KST
 
@@ -163,7 +163,7 @@ class WindowBase(Base):
                                      profile_loader=Mock(side_effect=AssertionError("No profile")))
         self.window.resize(1440, 940); self.window.show(); self.window.navigate("markets")
         self.app.processEvents()
-        self.addCleanup(self.window.deleteLater); self.addCleanup(self.window.hide)
+        self.addCleanup(dispose_market_fixture, self.window)
         self.view = self.window.markets_view
         self.board = self.view.rankings
         self.loader = FakeLoader({"kr": kr_batch(), "us": us_batch()})

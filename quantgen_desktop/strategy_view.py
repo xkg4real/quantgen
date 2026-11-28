@@ -24,6 +24,7 @@ from PyQt6.QtGui import QColor, QFontMetrics
 from PyQt6.QtWidgets import (QAbstractItemView, QComboBox, QFrame, QGridLayout, QHBoxLayout, QHeaderView,
                              QScrollArea, QSizePolicy, QStyle, QTableWidget, QTableWidgetItem, QToolButton,
                              QVBoxLayout, QWidget)
+from .qt_compat import call_later
 
 from core.research import strategy_display as D
 from core.research.strategy_exposure import exposure_lines
@@ -200,6 +201,8 @@ class Fold(QWidget):
         self.toggle.setCheckable(True)
         self.toggle.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
         self.toggle.toggled.connect(self._toggled)
+        # A long title shortens with '…' in a narrow column (the right column of 설계/검증) instead of widening it.
+        self.toggle.setSizePolicy(QSizePolicy.Policy.Ignored, self.toggle.sizePolicy().verticalPolicy())
         layout.addWidget(self.toggle, 0, Qt.AlignmentFlag.AlignLeft)
         self.body = _Plain()
         body = QVBoxLayout(self.body)
@@ -215,10 +218,25 @@ class Fold(QWidget):
         self.toggle.setArrowType(Qt.ArrowType.DownArrow if expanded else Qt.ArrowType.RightArrow)
         self.body.setVisible(expanded)
 
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._reserve_text_space()
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        self._reserve_text_space()
+
     def _reserve_text_space(self):
         shown = pick(self.title, language_of(self))
-        if self.toggle.text() != shown:
-            self.toggle.setText(shown)
+        room = self.width() - 34            # the arrow and the button's padding
+        metrics = self.toggle.fontMetrics()
+        text = shown
+        if self.isVisible() and room > 60 and metrics.horizontalAdvance(shown) > room:
+            text = metrics.elidedText(shown, Qt.TextElideMode.ElideRight, room)
+        if self.toggle.text() != text:
+            self.toggle.setText(text)
+        self.toggle.setToolTip(shown if text != shown else "")
+        if self.toggle.accessibleName() != shown:
             self.toggle.setAccessibleName(shown)
 
 
@@ -774,7 +792,7 @@ class CardsView(ToneScope):
     def pick_row(self, row: int, column: int = 0):
         """A clicked row opens that card below and scrolls its details into view."""
         self.picker.setCurrentIndex(row)
-        QTimer.singleShot(0, self._scroll_to_details)
+        call_later(self, 0, self._scroll_to_details)
 
     def _scroll_to_details(self):
         area = self.parentWidget()

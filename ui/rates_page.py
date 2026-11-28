@@ -37,7 +37,7 @@ from core.ficc.bonds import Bond
 from core.ficc.common import BP, FICCError, parse_forward_tenor, parse_tenor, tenor_label
 from core.ficc.curves import (CURVE_METHODS, EXACT_METHODS, METHOD_NAMES, analyze_curve,
                               curve_from_snapshot, curve_pca)
-from core.ficc.data import load_short_rate, load_treasury_curve
+from core import gateway
 from core.ficc.ratesim import MODELS, calibrate, horizon_pv_distribution, simulate
 from core.ficc.swaps import Swap, Swaption, analyze_swap, price_cap_floor, price_swaption
 from core.i18n import LocaleContext
@@ -280,7 +280,7 @@ def _curve_summary(report) -> ft.Control:
 
 
 def _curve(source: str, method: str = "bootstrap"):
-    panel = load_treasury_curve(source=source)
+    panel = gateway.ficc().load_treasury_curve(source=source)
     return panel, curve_from_snapshot(panel.latest(), method=method)
 
 
@@ -289,7 +289,7 @@ def _curve(source: str, method: str = "bootstrap"):
 # can drive them without a Flet page.
 # --------------------------------------------------------------------------- #
 def _run_curve(page, *, source: str, method: str, lookback: int) -> list[ft.Control]:
-    panel = load_treasury_curve(source=source)
+    panel = gateway.ficc().load_treasury_curve(source=source)
     report = analyze_curve(panel, lookback=lookback, method=method)
     try:
         pca = curve_pca(panel)
@@ -526,7 +526,7 @@ def _run_sim(page, *, source: str, model: str, horizon: float, n_paths: int,
              threshold_pct: float | None, instrument: str, instr_tenor_text: str,
              coupon_pct: float) -> list[ft.Control]:
     """instrument: none | bond | swap — what to revalue at the horizon."""
-    series = load_short_rate("USD", source=source)
+    series = gateway.ficc().load_short_rate("USD", source=source)
     panel, curve = _curve(source)
     params = calibrate(series, model=model)
     thr = None if threshold_pct is None else threshold_pct / 100.0

@@ -5,6 +5,7 @@ from copy import deepcopy
 from dataclasses import replace
 import unittest
 from unittest.mock import patch, Mock
+from tests.qt_fixture_cleanup import delete_owned_widget
 import dotenv
 with patch.object(dotenv, 'load_dotenv', return_value=False):
     from core.research.strategy_analysis import StrategyRequest, execute_strategy
@@ -105,8 +106,8 @@ class NativeStrategyTests(unittest.TestCase):
                 self.assertIn('REJECT', str(p.sections))
                 self.assertEqual(p.tables['Study scorecard'].rowCount(), 1)
             finally:
-                with patch.object(QMessageBox, 'question', return_value=QMessageBox.StandardButton.Yes): w.close()
-                w.deleteLater(); self.app.processEvents()
+                with patch.object(QMessageBox, 'question', return_value=QMessageBox.StandardButton.Yes): self.assertTrue(w.close(), "The fixture window refused to close")
+                delete_owned_widget(w); self.app.processEvents()
 
 
 if __name__ == '__main__': unittest.main()

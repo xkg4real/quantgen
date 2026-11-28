@@ -19,6 +19,7 @@ from PyQt6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFileDialo
     QFrame, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QMainWindow,
     QMessageBox, QPushButton, QScrollArea, QSpinBox, QStackedWidget, QTableWidget,
     QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView, QAbstractItemView, QTabWidget, QButtonGroup, QSizePolicy)
+from .qt_compat import call_later
 
 from core.app_paths import application_root
 from core.research.analysis import AnalysisRequest, execute_analysis
@@ -62,7 +63,8 @@ TOOL_PANES = (('bonds', 'Bonds'), ('rates', 'Rates'), ('structuring', 'Structuri
 def _production_card_router():
     """Watchlist cards: their own KIS service, KIS first and Yahoo for stocks when KIS cannot answer."""
     from core.market.routing import default_chart_router
-    from data.kis_workspace import MarketDataService
+    from core import gateway
+    MarketDataService = gateway.provider('data.kis_workspace').MarketDataService
     service = MarketDataService()
     return default_chart_router(lambda: service)
 
@@ -77,7 +79,8 @@ class _ProductionProfileLoader:
     def __call__(self, instrument):
         from core.market.routing import default_chart_router
         from core.research.stock_profile import load_profile
-        from data.kis_workspace import MarketDataService
+        from core import gateway
+        MarketDataService = gateway.provider('data.kis_workspace').MarketDataService
         with self._lock:
             if self._service is None:
                 self._service = MarketDataService()
@@ -173,6 +176,13 @@ class ResearchWindow(QMainWindow):
         from . import use_fusion_style, use_interface_fonts
         use_fusion_style()  # the look the style sheets and captures were made for, on Windows too
         use_interface_fonts()  # main() loads them first; a window built elsewhere gets the same face
+        app = QApplication.instance()
+        if (app is not None and getattr(app, "_qg_tooltip_theme_filter", None) is None
+                and all(widget is self for widget in app.topLevelWidgets())):
+            # Install the shared tooltip rules before the first window's child
+            # tree exists. Existing windows/popups keep their usual update time;
+            # change_theme still handles later font, screen and stylesheet changes.
+            typography.apply_tooltip_theme(app, DARK if theme_mode == "dark" else LIGHT)
         self.ctx = LocaleContext(locale or ("ko_KR" if language == "ko" else "en_US"))
         self.auto_refresh = auto_refresh
         self.ui_language = self.ctx.language
@@ -362,7 +372,7 @@ class ResearchWindow(QMainWindow):
         from .reading_panel import install_reading_help
         self.reading_help = install_reading_help(self)
         if auto_refresh:
-            QTimer.singleShot(0, self.refresh_markets)
+            call_later(self, 0, self.refresh_markets)
 
     def set_language(self, language):
         if language not in ("en", "ko"):
@@ -645,7 +655,7 @@ class ResearchWindow(QMainWindow):
             self._page_position = (bar, position)
             self.centralWidget().layout().activate()
             self.restore_page_position(final=False)
-            QTimer.singleShot(0, self.restore_page_position)
+            call_later(self, 0, self.restore_page_position)
         return collapsed
 
     def restore_page_position(self, final=True):
@@ -702,11 +712,22 @@ class ResearchWindow(QMainWindow):
         return layout
 
     def make_home(self):
-        """Research Home (owner, 2026-11-11, UI-D7 point 4): no big table. Market cards that page with arrows
-        (TradingView style) and the selected market's large chart, the watchlist chart cards (moved here from
-        Markets), the research sections, then the full quotes table in a closed fold. See home_view."""
-        layout = self.page("Research Home", "관측된 시장과 내가 실행한 연구를 한눈에 확인하세요.")
-        from .home_view import HomeView, QuotesFold, SECTION_GAP, directory_name
+        """Research Home (owner, 2026-11-11, UI-D7 point 4: no big table; owner-approved draft 2026-11-17,
+        docs/product/ui_drafts_2026-11-17/draft_01_home.png): the stock detail's frame. Toolbar: title, today's date,
+        a '지연 · 일별 종가' badge, '전체 시세 표' (opens the quotes table below the chart) and 새로고침. Canvas: the
+        market tiles that page with arrows (TradingView style), the selected market's key figures and its large
+        chart. Right column, 내 목록: the watchlist rows, the latest research runs with the three counts and the
+        small fan card; 읽는 법: how to read the page and the data-use terms. '설계/검증에서 연구 시작' is pinned at the
+        bottom. Every attribute, signal and request is as before. See home_view."""
+        from .home_view import (HomeSide, HomeView, MiniFan, QuotesFold, RecentRuns, TodayText, directory_name,
+                                style_link)
+        from .page_kit import Button, Fold, Soft, Text, Workspace, rule
+        from .stock_detail_style import numbers
+        outer = self.page(None, None)
+        scroll = self.stack.widget(self.stack.count() - 1)
+        self.home_workspace = ws = Workspace(("Research Home", "연구 홈"))
+        outer.addWidget(ws)
+        ws.fit_to(scroll)
         from .markets_view import WatchlistStore
         from .watchlist import WatchlistPanel
         # The live-quote table stays the window's (live feed, Q-SCORE, details); it is no longer the main surface.
@@ -744,72 +765,211 @@ class ResearchWindow(QMainWindow):
         self.home_view = HomeView(
             store=self.watchlist_store, card_router_factory=self.card_router_factory or _production_card_router,
             name_fn=lambda instrument, language: directory_name(self.symbol_directory, instrument, language),
-            rows_source=lambda: self.watchlist.rows, locale=self.ctx, auto_load=self.auto_refresh)
+            rows_source=lambda: self.watchlist.rows, locale=self.ctx, auto_load=self.auto_refresh, docked=True)
         self.home_view.refresh_requested.connect(self.refresh_markets)
         self.home_view.stock_requested.connect(open_watch)
         self.home_view.add_requested.connect(add_watch)
         self.jobs.busy_changed.connect(self.home_view.set_busy)
-        layout.addWidget(self.home_view)
-        layout.addSpacing(SECTION_GAP)
+        hv = self.home_view
 
-        # Research: run counts, the latest Monte Carlo fan chart and the links.
-        head = QHBoxLayout()
-        head.setSpacing(8)
-        head.addWidget(label("My research", "heading", wrap=False), 0, Qt.AlignmentFlag.AlignVCenter)
-        head.addStretch(1)
-        rights_button = QPushButton(self.ctx.t('data_rights'))
-        rights_button.clicked.connect(self.open_data_rights)
-        head.addWidget(rights_button, 0, Qt.AlignmentFlag.AlignVCenter)
-        b = QPushButton("Quant Lab에서 연구 시작 →")
-        b.setProperty("primary", True)
-        b.clicked.connect(lambda: self.navigate("quant"))
-        head.addWidget(b, 0, Qt.AlignmentFlag.AlignVCenter)
-        layout.addLayout(head)
-        layout.addSpacing(8)
-        summary = QHBoxLayout()
-        summary.setSpacing(20)
-        self.count_labels = []
-        for title in ("완료한 분석", "진행 중", "확인할 실행"):
-            box, inner = panel(title)
-            inner.setContentsMargins(20, 18, 20, 18)
-            number = label("0", "number")
-            inner.addWidget(number)
-            summary.addWidget(box)
-            self.count_labels.append(number)
-        layout.addLayout(summary)
-        notice = label("이번 세션의 Monte Carlo · 투자 판정과 별개", "caption")
-        notice.setProperty("reading_help_keep_visible", True)
-        layout.addWidget(notice)
-        layout.addSpacing(16)
-        box, inner = panel("가능성을 하나의 숫자로 좁히지 마세요")
-        inner.setContentsMargins(28, 24, 28, 24)
-        inner.setSpacing(14)
-        self.home_chart = FanChart()
-        self.home_summary = label("분석을 실행하면 최신 결과와 데이터 근거가 연결됩니다.")
-        self.home_summary.setProperty("reading_help_keep_visible", True)
-        from .chart_study import ChartStudy
-        inner.addWidget(ChartStudy(self.home_chart,self.home_summary))
-        notice = label("P5–P95는 시뮬레이션 분포의 중앙 90% 구간입니다. 수익 보장이나 95% 신뢰구간이 아닙니다.", "caption")
-        notice.setProperty("reading_help_keep_visible", True)
-        inner.addWidget(notice)
-        layout.addWidget(box)
-        layout.addSpacing(SECTION_GAP)
-
-        # The full quotes table, folded (owner: "표에 종목 너무많이 때려박는거 자체의 구조적 문제").
+        # Toolbar: date, the data badge, then the quotes table and the page's refresh on the right.
+        self.home_date = ws.add_toolbar(TodayText())
+        self.home_badge = ws.add_badge(("Delayed · daily closes", "지연 · 일별 종가"))
+        # The full quotes table, folded (owner: "표에 종목 너무많이 때려박는거 자체의 구조적 문제"); its toggle is the
+        # toolbar's '전체 시세 표' and the table opens below the chart.
         self.quotes_fold = QuotesFold("All quotes table", self.watchlist,
                                       "Markets and Korean stocks, live connection and Q-SCORE")
-        layout.addWidget(self.quotes_fold)
-        layout.addStretch()
+        ws.add_toolbar(self.quotes_fold.dock_toggle(), right=True)
+        hv.refresh_button.setProperty("kit", "secondary")
+        hv.refresh_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        ws.add_toolbar(hv.refresh_button, right=True)
+        self.quotes_fold.toggle.toggled.connect(self.home_reveal_quotes)
+
+        # Canvas: tiles, key figures and the chart (HomeView), then the folded quotes table.
+        ws.canvas.addWidget(hv, 1)
+        ws.canvas.addWidget(self.quotes_fold)
+
+        # Right column, 내 목록: watchlist rows, recent research, the latest fan.
+        side = HomeSide()
+        mine = ws.side.add_page(("My list", "내 목록"))
+        mine.addWidget(side)
+        self.home_watch_fold = Fold(("Watchlist", "관심종목"))
+        self.home_watch_fold.head.layout().addWidget(style_link(hv.add_button), 0, Qt.AlignmentFlag.AlignVCenter)
+        self.home_watch_fold.body.setContentsMargins(0, 0, 0, 2)
+        self.home_watch_fold.body.addWidget(hv.grid)
+        side.column.addWidget(self.home_watch_fold)
+        self.watchlist_store.changed.connect(self.home_watch_count)
+        self.home_watch_count()
+        side.column.addWidget(rule())
+        self.home_research_fold = Fold(("Recent research", "최근 연구"), count="0")
+        library = Button(("Library ›", "연구 보관함 ›"), "")
+        library.setProperty("kit", None)
+        style_link(library, quiet=True)
+        library.clicked.connect(lambda: self.navigate('library'))
+        self.home_research_fold.head.layout().addWidget(library, 0, Qt.AlignmentFlag.AlignVCenter)
+        counts = QWidget()
+        line = QHBoxLayout(counts)
+        line.setContentsMargins(2, 0, 0, 0)
+        line.setSpacing(5)
+        self.count_labels = []
+        for pair in (("Completed", "완료한 분석"), ("In progress", "진행 중"), ("To review", "확인할 실행")):
+            key = Text(pair)
+            key.setProperty("homeRole", "countKey")
+            number = numbers(QLabel("0"))
+            number.setProperty("homeRole", "countValue")
+            number.setProperty("qg_literal", True)
+            line.addWidget(key)
+            line.addWidget(number)
+            line.addSpacing(10)
+            self.count_labels.append(number)
+        line.addStretch(1)
+        self.home_research_fold.body.addWidget(counts)
+        self.home_runs = RecentRuns(lambda: self.session.runs())
+        self.home_runs.changed.connect(self.home_runs_changed)
+        self.home_research_fold.body.addWidget(self.home_runs)
+        side.column.addWidget(self.home_research_fold)
+        fan = QFrame()
+        fan.setProperty("kit", "soft")
+        fan.setProperty("reading_help_keep_visible", True)
+        box = QVBoxLayout(fan)
+        box.setContentsMargins(14, 12, 14, 12)
+        box.setSpacing(7)
+        head = QHBoxLayout()
+        head.setSpacing(8)
+        head.addWidget(Text(("Do not narrow the possibilities to one number", "가능성을 하나의 숫자로 좁히지 마세요"),
+                            "softTitle", wrap=True), 1)
+        self.home_fan_note = numbers(Text("", "fine"))
+        head.addWidget(self.home_fan_note, 0, Qt.AlignmentFlag.AlignTop)
+        box.addLayout(head)
+        self.home_chart = MiniFan()
+        box.addWidget(self.home_chart)
+        box.addWidget(Text(("P5–P95 is the central 90% of the simulated distribution · not a return guarantee",
+                            "P5–P95는 시뮬레이션 분포의 중앙 90% 구간이에요 · 수익 보장 아님"), "fine", wrap=True))
+        self.home_summary = label("분석을 실행하면 최신 결과와 데이터 근거가 연결됩니다.")
+        self.home_summary.localized_text = {'ko': '분석을 실행하면 최신 결과와 데이터 근거가 여기에 연결돼요.',
+                                            'en': 'Run an analysis to connect its results and data evidence here.'}
+        self.home_summary.retranslate()
+        self.home_summary.setProperty("kit", "hint")
+        self.home_summary.setProperty("reading_help_keep_visible", True)
+        box.addWidget(self.home_summary)
+        side.column.addWidget(fan)
+
+        # Right column, 읽는 법: how to read the page, the data-use terms.
+        guide = ws.side.add_page(("How to read", "읽는 법"))
+        for title, body in (
+                (("Major markets", "주요 시장"),
+                 ("Each tile is its provider's latest daily observation (delayed). Prices change against the previous "
+                  "close; yields move in basis points (bp). A tile's line is drawn from closes already loaded.",
+                  "타일마다 공급자의 최근 일별 관측값이에요(지연). 가격은 전일 대비, 금리는 bp로 변해요. 타일의 선은 이미 불러온 "
+                  "종가로만 그려요.")),
+                (("The chart", "차트"),
+                 ("The line is the daily close; the dashed line is the range's first close, the line its change is read "
+                  "against. Point at the chart for a date and its close.",
+                  "선은 일별 종가, 점선은 기간 첫 종가예요. 기간 변동은 이 점선과 견줘 읽어요. 차트 위에 마우스를 올리면 날짜와 "
+                  "종가가 보여요.")),
+                (("Watchlist", "관심종목"),
+                 ("Open a stock on Markets and press ☆ to add it. Click a row to open its screen; Delete removes it.",
+                  "시장에서 종목을 열고 ☆를 누르면 추가돼요. 행을 누르면 그 종목 화면이 열리고, Delete 키로 뺄 수 있어요.")),
+                (("Monte Carlo", "몬테카를로"),
+                 ("This session's runs only. P5–P95 is the central 90% of the simulated distribution, not a return "
+                  "guarantee or a 95% confidence interval. Results stay NOT_RUN, separate from investment validation.",
+                  "이번 세션의 실행만 보여요. P5–P95는 시뮬레이션 분포의 중앙 90% 구간이에요. 수익 보장이나 95% 신뢰구간이 "
+                  "아니에요. 결과는 투자 판정과 별개로 NOT_RUN을 유지해요."))):
+            note = Soft(title, body)
+            note.setProperty("reading_help_keep_visible", True)
+            guide.addWidget(note)
+        rights = Button(("Market data usage review", "시장 데이터 이용 조건"), "secondary")
+        rights.clicked.connect(self.open_data_rights)
+        guide.addWidget(rights, 0, Qt.AlignmentFlag.AlignLeft)
+
+        # Pinned: the way into Build & Test, and the quiet no-guarantee line.
+        start = Button(("Start research in Build & Test", "설계/검증에서 연구 시작"), "primary")
+        start.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        start.clicked.connect(lambda: self.navigate("quant"))
+        self.home_start = start
+        ws.side.foot.addWidget(start)
+        caption = Text(("Monte Carlo results are separate from investment validation · no future guarantee · "
+                        "not investment advice",
+                        "몬테카를로 결과는 투자 판정과 별개예요 · 미래 보장 아님 · 투자 권유 아님"), "fine", wrap=True)
+        caption.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        caption.setProperty("reading_help_keep_visible", True)
+        ws.side.foot.addWidget(caption)
+        ws.finish()
+        self.home_library_link = library
+        self.home_focus_chain()
+        ws.set_language(self.ui_language)
+
+    def home_focus_chain(self):
+        """Tab order: the toolbar, the canvas (arrows, tiles, periods), the right column (watchlist rows included,
+        as they come and go), then the pinned action."""
+        hv = self.home_view
+        chain = [self.quotes_fold.toggle, hv.refresh_button, hv.previous_button, hv.next_button,
+                 *hv.cards.values(), *hv.range_buttons.values(), *self.home_workspace.side.segment.buttons,
+                 self.home_watch_fold.head, hv.add_button, *hv.grid.cards.values(), self.home_research_fold.head,
+                 self.home_library_link, self.home_start]
+        for first, second in zip(chain, chain[1:]):
+            QWidget.setTabOrder(first, second)
+
+    def home_watch_count(self):
+        """The 관심종목 fold's count ('6/20'), after every change to the shared watchlist."""
+        store = self.watchlist_store
+        self.home_watch_fold.set_count(f"{len(store.items())}/{store.limit}")
+        if hasattr(self, 'home_library_link'):
+            self.home_focus_chain()
+
+    def home_runs_changed(self, count, latest):
+        """The 최근 연구 fold's count and the fan card's note ('AAPL · 126거래일') from the latest completed run."""
+        self.home_research_fold.set_count(str(count))
+        if latest:
+            params = latest.get("parameters") or {}
+            days = params.get("horizon_days")
+            symbol = str(params.get("symbol") or "")
+            self.home_fan_note.set_pair((f"{symbol} · {days} sessions" if days else symbol,
+                                         f"{symbol} · {days}거래일" if days else symbol))
+        else:
+            self.home_fan_note.set_pair("")
+        self.home_fan_note.set_language(getattr(self, "ui_language", "ko"))
+
+    def home_reveal_quotes(self, expanded):
+        """'전체 시세 표' opens the table below the chart and scrolls the canvas to it."""
+        if not expanded:
+            return
+        timer = getattr(self, '_home_reveal_timer', None)
+        if timer is None:          # owned by the window: it cannot fire after the window is deleted
+            timer = self._home_reveal_timer = QTimer(self)
+            timer.setSingleShot(True)
+            timer.timeout.connect(self._home_reveal_now)
+        timer.start(30)
+
+    def _home_reveal_now(self):
+        try:
+            if self.quotes_fold.expanded():
+                self.home_workspace.canvas_scroll.verticalScrollBar().setValue(max(0, self.quotes_fold.y() - 8))
+        except RuntimeError:       # the window is being destroyed
+            pass
 
     def make_indicator_guide(self):
+        """기술지표 가이드 (owner-approved draft 2026-11-17, docs/product/ui_drafts_2026-11-17/draft_03_guide.png): the
+        stock detail's frame. Toolbar: title, 기술지표 27 | 투자 용어, the education badge, 모두 해제 and 보고서 저장.
+        Canvas: the example's name line and price figures, the chart card (indicator tags with their values, the
+        chart with the reading date, the date slider, the signals that missed) and the provenance in small print.
+        Right column: 지표 | 해석 with the combined reading and the education note pinned at the foot. The guide
+        keeps its widgets, signals, calculations and export (IndicatorGuide.dock_into)."""
         from .indicator_guide import IndicatorGuide
-        layout = self.page("Technical indicator guide", '')
-        self.guide_subtitle = layout.itemAt(1).widget()
+        from .page_kit import Workspace
+        outer = self.page(None, None)
+        outer.setContentsMargins(0, 0, 0, 0)
+        scroll = self.stack.widget(self.stack.count() - 1)
         self.indicator_guide = IndicatorGuide(locale=self.ctx)
+        self.guide_workspace = ws = Workspace(("Technical indicator guide", "기술지표 가이드"))
+        self.indicator_guide.dock_into(ws)
+        outer.addWidget(self.indicator_guide)
+        ws.fit_to(scroll)
+        # The empty chart's hint ('오른쪽 지표 목록에서 고르면 …'); the language change sets its text.
+        self.guide_subtitle = self.indicator_guide.hint
         self.guide_subtitle.setText(self.indicator_guide.intro_text())
         self.indicator_guide.intro.hide()
-        layout.addWidget(self.indicator_guide)
-        layout.addStretch()
+        self.kit_language()
 
     def make_markets(self):
         """Markets: one page per market (owner ruling UI-D10, 2026-11-11; since UI-D11, 2026-11-12: 국내 주식, 미국 주식,
@@ -844,6 +1004,11 @@ class ResearchWindow(QMainWindow):
             summary_loader=getattr(self, "summary_loader", None) or production_series,
             locale=self.ctx, auto_load=self.auto_refresh)
         self.markets_view.setProperty("reading_help_keep_visible", True)
+        if self.market_chart.parent() is None:
+            # Until a stock screen adopts it the shared chart has no parent; parked here it is deleted with the
+            # window instead of outliving it (PySide6 checklist item 10).
+            self.market_chart.setParent(self.markets_view)
+            self.market_chart.hide()   # in no layout: explicitly hidden until StockDetailView.adopt_chart shows it
         from .tools import CurrentPageStack
         self.markets_content=CurrentPageStack()
         self.markets_content.addWidget(self.markets_view)
@@ -866,7 +1031,12 @@ class ResearchWindow(QMainWindow):
         layout.addStretch()
 
     def make_tools(self):
-        """Analysis tools on their own page: a visible button grid, no scrolling tabs (owner, 2026-11-04)."""
+        """Analysis tools (owner-approved draft 2026-11-17, docs/product/ui_drafts_2026-11-17/draft_02_tools.png): the
+        stock detail's frame. Toolbar: the title, the ten tools as pill tabs (`tool_buttons`, which drive `tool_host`)
+        and a status badge. Canvas: the selected tool's result (Bonds: the lead line, key figures, the price–yield chart
+        card, the scenario and hedge cards, every metric; the other tools: the status line with their exports, then the
+        result in one card). Right column, one per tool: 설정 (the docked form, its run button pinned at the bottom) and
+        읽는 법 (`tools_guide`, which follows the selected tool). Every pane, signal, request and export is as before."""
         from .bonds import BondsPane
         from .rates import RatesPane
         from .fx import FXPane
@@ -875,14 +1045,19 @@ class ResearchWindow(QMainWindow):
         from .macro_records import MacroRecordsPane
         from .market_tools import DerivativesPane, ETFPane, CryptoPane, KRXPane
         from .tools import CurrentPageStack
-        layout = self.page("Analysis tools", "채권·금리·외환·파생·ETF·KRX·가상자산·매크로 분석 도구")
-        self.tools_page=layout.parentWidget()
-        layout.itemAt(1).widget().hide()  # contextual guidance below the picker replaces the category inventory
-        self.tools_subtitle = layout.itemAt(1).widget()
-        self.tools_subtitle.localized_text = {
-            "ko": "채권·금리·외환·파생·ETF·KRX·가상자산·매크로 분석 도구입니다. 아래에서 하나를 고르세요.",
-            "en": "Bonds, rates, FX, derivatives, ETF, KRX, crypto and macro tools. Pick one below."}
-        self.tools_subtitle.retranslate()
+        from .page_kit import Text, Workspace
+        titles = {'bonds': ('Bonds', '채권'), 'rates': ('Rates', '금리'), 'structuring': ('Structuring', '구조화 상품'),
+                  'fx': ('FX', '외환'), 'derivatives': ('Derivatives', '파생상품'), 'etf': ('ETF', 'ETF'),
+                  'krx': ('KRX', 'KRX'), 'crypto': ('Crypto', '가상자산'), 'macro': ('Macro', '매크로 지표'),
+                  'macro_records': ('Macro v2', '매크로 v2')}
+        outer = self.page(None, None)
+        from .research_style import prepare_page
+        self.tools_page = prepare_page(outer)
+        self.tools_page.setMaximumWidth(16777215)
+        scroll = self.stack.widget(self.stack.count() - 1)
+        self.tools_workspace = ws = Workspace(("Analysis tools", "분석 도구"))
+        outer.addWidget(ws)
+        ws.fit_to(scroll)
         self.bonds=BondsPane();self.bonds.requested.connect(self.run_bond)
         self.rates=RatesPane(); self.rates.requested.connect(lambda q:self.run_tool('rates',q))
         self.fx=FXPane(); self.fx.requested.connect(lambda q:self.run_tool('fx',q))
@@ -897,36 +1072,65 @@ class ResearchWindow(QMainWindow):
         for pane in (self.rates,self.fx,self.structuring,self.macro,self.derivatives,self.etf,self.crypto,self.krx):
             pane.hide_source()
         self.macro_records.set_source_caption('Record set')
-        picker = QWidget()
-        picker.setObjectName('toolPicker')
-        from .category_picker import CategoryFlow
-        categories = CategoryFlow(picker)
-        # Fixed caps the picker at its single-row sizeHint, even when translated
-        # buttons wrap. Let CategoryFlow's heightForWidth reserve every row.
-        picker.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-        self.tool_group = QButtonGroup(self)
-        self.tool_group.setExclusive(True)
         self.tool_host = CurrentPageStack()
         self.tool_host.setObjectName('toolHost')
-        self.tool_buttons = {}
-        for index, (name, title) in enumerate(TOOL_PANES):
-            pane = getattr(self, name)
-            button = QPushButton(title)
-            button.setCheckable(True)
-            button.setProperty('tool', True)
-            button.setAccessibleName(title)
-            button.clicked.connect(lambda checked=False, p=pane: self.show_tool(p))
-            self.tool_group.addButton(button)
-            categories.addWidget(button)
-            self.tool_buttons[name] = button
-            self.tool_host.addWidget(pane)
-        self.tool_buttons[TOOL_PANES[0][0]].setChecked(True)
-        layout.addWidget(picker)
         from .workspace_guide import WorkspaceGuide
         self.tools_guide = WorkspaceGuide('bonds')
-        layout.addWidget(self.tools_guide)
-        layout.addWidget(self.tool_host)
-        layout.addStretch()
+        sides, self.tools_guide_pages = [], []
+        for index, (name, _title) in enumerate(TOOL_PANES):
+            pane = getattr(self, name)
+            self.tool_host.addWidget(pane)
+            side = ws.side if index == 0 else ws.add_side()
+            pane.result_changed.connect(self.tools_show_badge)
+            if pane is self.bonds:
+                pane.dock_into(side, title=("Settings", "설정"))
+                ws.follow(pane)          # its key figures carry units in the window language
+            else:
+                pane.dock_tool(side, title=("Settings", "설정"))
+            self.tools_guide_pages.append(side.add_page(("How to read", "읽는 법")))
+            side.foot.addWidget(Text(("Research calculation · not investment advice", "연구용 계산 · 투자 권유 아님"),
+                                     "fine"))
+            sides.append(side)
+        self.tools_guide_pages[0].addWidget(self.tools_guide)
+        ws.finish()
+        ws.canvas.addWidget(self.tool_host)
+        ws.canvas.addStretch(1)
+        # The pill tabs drive the existing stack (kept for show_tool, current_market_pane and tests).
+        self.tool_switch = ws.bind_tabs(self.tool_host, [titles[name] for name, _ in TOOL_PANES], sides=sides,
+                                        kind="pills", on_change=self.tools_follow)
+        self.tool_group = self.tool_switch.group
+        self.tool_buttons = {}
+        for (name, _title), button in zip(TOOL_PANES, self.tool_switch.buttons):
+            button.setProperty('tool', True)
+            self.tool_buttons[name] = button
+        from .page_kit import Badge
+        self.tools_badge = ws.add_toolbar(Badge(), right=True)
+        self.tools_follow(self.tool_host.currentIndex())
+        self.kit_language()
+
+    def tools_follow(self, index):
+        """The selected tool's right column opens on the same tab (설정 or 읽는 법) as the one it replaces, the workflow
+        guide moves into it, and the badge says whether this tool has a result."""
+        if not hasattr(self, 'tools_badge') or not 0 <= index < len(TOOL_PANES):
+            return
+        side = self.tools_workspace.side
+        previous = getattr(self, '_tools_side', None)
+        if previous is not None and previous is not side:
+            side.show_page(previous.pages.currentIndex())
+        self._tools_side = side
+        self.tools_guide.set_key(TOOL_PANES[index][0])
+        self.tools_guide_pages[index].insertWidget(0, self.tools_guide)
+        self.tools_show_badge()
+
+    def tools_show_badge(self, *args):
+        """'● 계산 완료' once the selected tool has a result, '● 실행 전' before."""
+        badge = getattr(self, 'tools_badge', None)
+        if badge is None:
+            return
+        if getattr(self.tool_host.currentWidget(), 'has_result', False):
+            badge.set_pair(("Run complete", "계산 완료")); badge.set_tone("ok")
+        else:
+            badge.set_pair(("Not run yet", "실행 전")); badge.set_tone("")
 
     def attach_symbol_searches(self):
         """Code-or-name search on every symbol field that loads a chart or one instrument's data
@@ -979,28 +1183,41 @@ class ResearchWindow(QMainWindow):
         return self.market_chart if self.markets_view.showing_stock() else self.markets_view.rankings
 
     def make_quant(self):
-        outer = self.page("Build & Test", "Quant Lab · 기존 계산 엔진으로 가격 분포 분석")
+        """Build & Test (owner-approved draft 2026-11-17, docs/product/ui_drafts_2026-11-17/draft_04_quant.png): the
+        stock detail's frame. Toolbar: title, 몬테카를로 | 전략 실험실, a status badge. Canvas: the run's lead line, its key
+        figures, the fan chart with its reading, then the metrics table. Right column: the settings in two folds
+        (종목·기간, 모형 가정) and a reading note, with the run button pinned at the bottom; the 읽는 법 tab holds the
+        workflow guide. Strategy Lab keeps its pane; its form docks into its own right column (ToolPane.dock_into).
+        Every attribute, signal and calculation is as before."""
+        from .page_kit import Badge, Card, Fold, KeyFigures, Soft, Text, Workspace
+        outer = self.page(None, None)
         from .research_style import prepare_page
         self.quant_page = prepare_page(outer)
-        outer.itemAt(1).widget().hide()
+        self.quant_page.setMaximumWidth(16777215)
+        scroll = self.stack.widget(self.stack.count() - 1)
+        self.quant_workspace = ws = Workspace(("Build & Test", "설계/검증"))
+        outer.addWidget(ws)
+        ws.fit_to(scroll)
         from .workspace_guide import WorkspaceGuide
         self.quant_guide = WorkspaceGuide('monte_carlo')
-        outer.addWidget(self.quant_guide)
         # Only the selected page sets the scroll width. The inactive Strategy
         # form has platform-dependent font/combobox hints of its own.
         self.quant_tabs = CurrentPageTabs()
-        outer.addWidget(self.quant_tabs)
         host = QWidget()
         layout = QVBoxLayout(host)
-        layout.setContentsMargins(0, 4, 0, 0)
-        layout.setSpacing(16)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(12)
         self.quant_tabs.addTab(host, 'Monte Carlo')
         from .strategy import StrategyPane
         self.strategy = StrategyPane()
         self.strategy.requested.connect(lambda q: self.run_tool('strategy', q))
         self.quant_tabs.addTab(self.strategy, 'Strategy Lab')
-        self.quant_tabs.currentChanged.connect(lambda i:self.quant_guide.set_key(('monte_carlo','strategy')[i]))
-        box, inner = panel("분석 설정")
+        ws.canvas.addWidget(self.quant_tabs, 1)
+        mc_side, strategy_side = ws.side, ws.add_side()
+        ws.bind_tabs(self.quant_tabs, (("Monte Carlo", "몬테카를로"), ("Strategy Lab", "전략 실험실")),
+                     sides=(mc_side, strategy_side),
+                     on_change=self.quant_tab_changed)
+        self.quant_badge = ws.add_badge(("Simulation · not a guarantee", "시뮬레이션 · 미래 보장 아님"))
         self.symbol = QLineEdit("AAPL")
         self.symbol.setMaxLength(120)
         # Owner issues 04/12: no data-source selector; the app fetches by itself ("best": keyless Yahoo
@@ -1026,16 +1243,15 @@ class ResearchWindow(QMainWindow):
         for name, widget in (*fields, ("Data source", self.source)):
             widget.setAccessibleName(name)
             if isinstance(widget, QComboBox):
-                # Match the shared tool header: native option/font widths must
-                # not make this three-column form wider than its scroll page.
-                # Full option labels stay in the popup and selected tooltip.
+                # Full option labels stay in the popup and selected tooltip; the column is narrow.
                 widget.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)
-                widget.setMinimumContentsLength(12)
+                widget.setMinimumContentsLength(8)
                 widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
                 widget.setToolTip(widget.currentText())
                 widget.currentTextChanged.connect(widget.setToolTip)
                 widget.model().dataChanged.connect(lambda *args, combo=widget: combo.setToolTip(combo.currentText()))
-        from .form_layout import CompactFieldGrid, bound_input_panel, add_compact_action
+        from .form_layout import CompactFieldGrid, bound_input_panel
+        box, inner = panel("분석 설정")
         bound_input_panel(box)
         self.quant_form = CompactFieldGrid([(label(name, "caption"), widget) for name, widget in fields])
         inner.addWidget(self.quant_form)
@@ -1044,100 +1260,578 @@ class ResearchWindow(QMainWindow):
         self.run_button = QPushButton("분포 분석 실행")
         self.run_button.setProperty("primary", True)
         self.run_button.clicked.connect(self.run_analysis)
-        add_compact_action(inner, self.run_button)
-        self.analysis_status = label("데이터 출처·시드·모델 가정을 기록합니다.", "muted")
+        inner.addWidget(self.run_button)
+        from .tools import dock_form
+        settings = mc_side.add_page(("Settings", "설정"))
+        dock_form(box, self.run_button, mc_side, page=settings)
+        reading = Soft(("Reading the result", "결과를 읽는 법"),
+                       ("Half of the paths stay inside the dark band and 90% inside the light one. A wider band means "
+                        "the assumed volatility is larger.",
+                        "진한 띠 안에 경로의 절반이, 옅은 띠 안에 90%가 들어와요. 띠가 넓을수록 가정한 변동성이 커요."))
+        settings.addWidget(reading)
+        guide_page = mc_side.add_page(("How to read", "읽는 법"))
+        guide_page.addWidget(self.quant_guide)
+        self.quant_guide_pages = [guide_page]
+        self.analysis_status = label("데이터 출처·시드·모델 가정을 기록합니다.", "caption")
         self.analysis_status.setProperty("reading_help_keep_visible", True)
-        inner.addWidget(self.analysis_status)
-        layout.addWidget(box)
-        box, inner = panel("분포와 근거")
+        mc_side.foot.addWidget(self.analysis_status)
+        self.strategy.dock_into(strategy_side, title=("Settings", "설정"))
+        strategy_guide = strategy_side.add_page(("How to read", "읽는 법"))
+        strategy_guide.addWidget(Soft(("Strategy Lab", "전략 실험실"),
+                                      ("A backtest of the chosen rule on past prices, with costs. Past results are not a "
+                                       "promise of future ones.",
+                                       "고른 규칙을 과거 가격에 비용과 함께 시험해요. 과거 성과가 미래를 약속하지 않아요.")))
+        self.quant_guide_pages.append(strategy_guide)   # the workflow guide follows the tab (purpose, scope, steps)
+        ws.finish()
+        # Canvas (Monte Carlo): lead line and key figures, the fan chart card, the metrics.
+        self.quant_lead = Text("", "lead")
+        self.quant_lead_note = Text("", "leadNote")
+        self.quant_lead_row = QWidget()
+        lead = QHBoxLayout(self.quant_lead_row); lead.setContentsMargins(0, 0, 0, 0); lead.setSpacing(8)
+        lead.addWidget(self.quant_lead); lead.addWidget(self.quant_lead_note); lead.addStretch(1)
+        self.quant_lead_row.hide()
+        layout.addWidget(self.quant_lead_row)
+        self.quant_figures = KeyFigures()
+        self.quant_figures.hide()
+        layout.addWidget(self.quant_figures)
+        chart_card = Card(margins=(16, 16, 16, 16))   # 2×16 + the fan chart's 350 px fits a 1000 px English window
+        result_heading = label("분포와 근거", "heading")   # the result block's title (A3 contract)
+        result_heading.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
+        chart_card.body.addWidget(result_heading, 0, Qt.AlignmentFlag.AlignTop)   # the accent bar stays at text height
         self.quant_chart = FanChart()
+        self.quant_notes = label("아직 실행한 분석이 없습니다.", "muted")
+        self.quant_notes.setProperty('reading_help_keep_visible', True)
+        from .chart_study import ChartStudy, LocalLabel
+        self.quant_study = ChartStudy(self.quant_chart, self.quant_notes)
+        self.quant_empty = LocalLabel({'ko':'분석을 실행하면 가격 분포와 위험 지표가 여기에 나타나요.',
+                                      'en':'Run the analysis to see the price distribution and risk metrics here.'}, 'muted')
+        self.quant_empty.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.quant_empty.setMinimumHeight(280)
+        chart_card.body.addWidget(self.quant_empty)
+        chart_card.body.addWidget(self.quant_study)
         self.quant_metrics = table(["지표", "값"])
         self.quant_metrics.horizontalHeaderItem(0).setData(CAPTION_ROLE, 'Metric')
         self.quant_metrics.setProperty("localized_columns", [0])
         from .result_layout import fit_result_table
         fit_result_table(self.quant_metrics)
-        self.quant_notes = label("아직 실행한 분석이 없습니다.", "muted")
-        self.quant_notes.setProperty('reading_help_keep_visible', True)
-        from .chart_study import ChartStudy
-        self.quant_study = ChartStudy(self.quant_chart, self.quant_notes)
-        from .chart_study import LocalLabel
-        self.quant_empty = LocalLabel({'ko':'분석을 실행하면 가격 분포와 위험 지표가 여기에 나타나요.',
-                                      'en':'Run the analysis to see the price distribution and risk metrics here.'}, 'muted')
-        inner.addWidget(self.quant_empty)
-        inner.addWidget(self.quant_study)
-        inner.addWidget(self.quant_metrics)
+        chart_card.body.addWidget(self.quant_metrics)
         self.quant_study.hide();self.quant_metrics.hide()
         notice = label("계산 완료 ≠ 투자 검증. 이 화면은 NOT_RUN 판정을 유지하며 주문이나 전략 원장을 생성하지 않습니다.", "caption")
         notice.setProperty('reading_help_keep_visible', True)
-        inner.addWidget(notice)
-        layout.addWidget(box)
-        layout.addStretch()
+        chart_card.body.addWidget(notice)
+        layout.addWidget(chart_card, 1)
+        self.quant_kit_language()
+
+    def quant_tab_changed(self, index):
+        """Monte Carlo | Strategy Lab: the workflow guide moves into the selected tab's 읽는 법 page with that tab's
+        steps, and the simulation badge belongs to Monte Carlo only."""
+        self.quant_guide.set_key(('monte_carlo', 'strategy')[index])
+        pages = getattr(self, 'quant_guide_pages', ())
+        if index < len(pages):
+            for page in pages:
+                page.removeWidget(self.quant_guide)
+            pages[index].insertWidget(0, self.quant_guide)
+            self.quant_guide.show()
+        if getattr(self, 'quant_badge', None) is not None:
+            self.quant_badge.suppress(index != 0)
+
+    def quant_kit_language(self):
+        self.kit_language()
+
+    def kit_language(self):
+        """The page kit's pieces (page_kit.Workspace) follow the window language; the rest of each page is translated by
+        the LanguageController as before."""
+        from .page_kit import Workspace
+        for workspace in self.findChildren(Workspace):
+            workspace.set_language(getattr(self, "ui_language", "ko"))
+
+    def quant_show_figures(self, value):
+        """The run's lead line and key figures over the fan chart (draft: 'AAPL · GARCH(1,1)-t · 126거래일 · 경로 5,000개',
+        then 시작 · 중앙값 · 하위 5% · 상위 5% · 손실 확률 · 95% VaR)."""
+        r = value.result
+        params = value.run.get("parameters", {})
+        from .risk_display import MC_MODEL_LABELS, ko
+        model_id = params.get("model", self.model.currentData())
+        model = MC_MODEL_LABELS.get(model_id, str(model_id))       # in each language, not the combo's current text
+        self.quant_lead.set_pair(str(params.get("symbol", "")))
+        self.quant_lead_note.set_pair((f"· {model} · {r.horizon_days} sessions · {r.n_paths:,} paths",
+                                       f"· {ko(model)} · {r.horizon_days}거래일 · 경로 {r.n_paths:,}개"))
+        from .metric_help import mc_metadata, risk_pair
+        var_label, var_hover = risk_pair('var', 'mc_terminal_loss', **mc_metadata(value.run, r))
+        self.quant_figures.set_items((
+            (("Start", "시작"), f"{r.spot:,.2f}", ""),
+            (("Median", "중앙값"), f"{r.median_terminal:,.2f}", ""),
+            (("Lower 5%", "하위 5%"), f"{r.p05:,.2f}", "down"),
+            (("Upper 5%", "상위 5%"), f"{r.p95:,.2f}", "up"),
+            (("P(loss)", "손실 확률"), f"{r.prob_loss:.1%}", ""),
+            (var_label, f"{r.var_pct:.1%}".replace("-", "−"), "", var_hover)))
+        self.quant_figures.show()
+        self.quant_lead_row.show()
+        self.quant_badge.set_pair(("Run complete · NOT_RUN", "계산 완료 · 검증 NOT_RUN"))
+        self.quant_badge.set_tone("ok")
+        self.quant_kit_language()
 
     def make_risk(self):
+        """Portfolio & Risk (owner-approved draft 2026-11-17, docs/product/ui_drafts_2026-11-17/draft_05_risk.png): the
+        stock detail's frame, as Build & Test. Toolbar: title, 포트폴리오 | 기술적 분석 | 모의투자 driving risk_tabs (kept
+        for callers and tests), the tab's scope badge, then the portfolio run's status badge and its exports (결과 저장 ·
+        보고서 ZIP). 포트폴리오: the canvas reads the result (PortfolioPane: lead line, key figures, frontier, weights and
+        comparison cards, the reading); the right column holds the settings in two folds and the per-symbol Monte Carlo
+        rows (risk_table / risk_empty) in a third, the run button pinned with the scope line; 읽는 법 holds the workspace
+        guide, which follows the tab. 기술적 분석: SignalsPane docked (ToolPane.dock_into). 모의투자: PaperPane, its engine
+        controls in the right column (PaperPane.dock_into); the rail's emergency stop stays. Every attribute, signal,
+        request, calculation and export is as before."""
+        from .page_kit import Badge, Button, Card, EmptyState, Fold, Soft, Workspace, rule
         from .portfolio import PortfolioPane
         from .signals import SignalsPane
-        layout = self.page("Portfolio & Risk", "현재 세션 분석의 분포 위험을 확인하세요.")
+        from .paper import PaperPane
         from .research_style import prepare_page
-        self.risk_page = prepare_page(layout)
-        layout.itemAt(1).widget().hide()
+        from .workspace_guide import WorkspaceGuide
+        from .risk_page import READINGS, EnabledMirror, ResultEmptyState, ToolbarFit, run_rows_table
+        outer = self.page(None, None)
+        self.risk_page = prepare_page(outer)
+        self.risk_page.setMaximumWidth(16777215)
+        scroll = self.stack.widget(self.stack.count() - 1)
+        self.risk_workspace = ws = Workspace(("Portfolio & Risk", "분석"))
+        outer.addWidget(ws)
+        ws.fit_to(scroll)
         self.portfolio = PortfolioPane()
         self.portfolio.requested.connect(self.run_portfolio)
         self.signals=SignalsPane();self.signals.requested.connect(lambda q:self.run_tool('signals',q))
-        self.risk_tabs=CurrentPageTabs();self.risk_tabs.addTab(self.portfolio,'Portfolio');self.risk_tabs.addTab(self.signals,'Signals')
-        # As tall as the selected page: spare height goes below the risk notes, not inside a short tab.
-        self.risk_tabs.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        from .paper import PaperPane
         self.paper = PaperPane(self.paper_session)
         self.paper.setProperty("reading_help_keep_visible", True)
+        self.risk_tabs=CurrentPageTabs();self.risk_tabs.addTab(self.portfolio,'Portfolio');self.risk_tabs.addTab(self.signals,'Signals')
         self.risk_tabs.addTab(self.paper, 'Paper Trading')
-        from .workspace_guide import WorkspaceGuide
+        # As tall as the selected page: the canvas scrolls by itself when a result is longer than the window.
+        self.risk_tabs.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        ws.canvas.addWidget(self.risk_tabs, 1)
+        portfolio_side, signals_side, paper_side = ws.side, ws.add_side(), ws.add_side()
         self.risk_guide = WorkspaceGuide('portfolio')
-        self.risk_tabs.currentChanged.connect(lambda i:self.risk_guide.set_key(('portfolio','signals','paper')[i]))
-        layout.addWidget(self.risk_guide)
-        layout.addWidget(self.risk_tabs)
-        layout.addWidget(label("개별 가격 시뮬레이션 위험", "heading"))
-        self.risk_table = table(["Symbol", "Model", "P(loss)", "VaR 95", "CVaR", "Source"])
+        # 포트폴리오, right column: 자산 구성 · 목적함수·제약 (PortfolioPane) and the Monte Carlo rows; 읽는 법.
+        settings = portfolio_side.add_page(("Settings", "설정"))
+        self.portfolio.dock_into(portfolio_side, page=settings)
+        settings.addWidget(rule())
+        self.risk_fold = Fold(("Individual price simulation risk", "개별 가격 시뮬레이션 위험"))
+        self.risk_table = run_rows_table(["Symbol", "Model", "P(loss)", "VaR", "CVaR", "Source"])
         self.risk_table.setProperty('localized_columns', [1])
         self.risk_table._qg_status_columns = {5: 'official'}   # SYNTHETIC -> 합성 데이터(SYNTHETIC)
-        from .result_layout import fit_result_table
-        fit_result_table(self.risk_table)   # as tall as its rows; no empty body
-        layout.addWidget(self.risk_table)
+        self.risk_fold.body.addWidget(self.risk_table)
         # Until a Monte Carlo run completes, say where the rows come from instead of an empty table.
         self.risk_empty = label("No Monte Carlo run in this session yet. Run one under Build & Test → Monte Carlo; "
-                                "each completed run adds a row here.", "muted")
+                                "each completed run adds a row here.", "caption")
+        self.risk_empty.localized_text = {
+            "ko": "이번 세션에 실행한 몬테카를로 분석이 아직 없어요. 설계/검증 → 몬테카를로에서 분석을 실행하면 완료된 "
+                  "실행마다 여기에 한 줄씩 추가돼요.",
+            "en": self.risk_empty.source_text}
+        self.risk_empty.retranslate()
         self.risk_empty.setProperty("reading_help_keep_visible", True)
-        layout.addWidget(self.risk_empty)
-        notice = label("각 행은 개별 가격 시뮬레이션입니다. 포트폴리오 전체 위험이나 전략 백테스트가 아닙니다.", "muted")
+        self.risk_fold.body.addWidget(self.risk_empty)
+        notice = label("각 행은 개별 가격 시뮬레이션입니다. 포트폴리오 전체 위험이나 전략 백테스트가 아닙니다.", "caption")
+        notice.localized_text = {"ko": "설계/검증에서 실행한 개별 가격 시뮬레이션이에요. 포트폴리오 전체 위험이나 "
+                                       "전략 백테스트가 아니에요.",
+                                 "en": "Individual price simulations run under Build & Test; not portfolio-wide risk "
+                                       "or a strategy backtest."}
+        notice.retranslate()
         notice.setProperty("reading_help_keep_visible", True)
-        layout.addWidget(notice)
-        layout.addStretch()
+        self.risk_fold.body.addWidget(notice)
+        holder = QFrame(); holder.setObjectName("dockedForm")      # the column's transparent form surface
+        box = QVBoxLayout(holder); box.setContentsMargins(2, 0, 2, 0); box.addWidget(self.risk_fold)
+        settings.addWidget(holder)
+        model = self.risk_table.model()
+        for signal in (model.rowsInserted, model.rowsRemoved, model.modelReset):
+            signal.connect(self.risk_count_runs)
+        self.risk_guide_pages = [portfolio_side.add_page(("How to read", "읽는 법"))]
+        # 기술적 분석: the form in the right column, the run button pinned; the result and its exports in the canvas.
+        self.signals.dock_into(signals_side, title=("Settings", "설정"))
+        self.signals_empty = Card()
+        self.signals_empty.setMinimumHeight(320)
+        self.signals_empty.body.addWidget(EmptyState(
+            ("Press [Run analysis] to see the composite score, each indicator's score and a costed backtest here.",
+             "[분석 실행]을 누르면 종합 점수, 지표별 점수, 비용을 뺀 백테스트가 여기에 나타나요.")))
+        self.signals.layout().insertWidget(1, self.signals_empty)
+        ResultEmptyState(self.signals, self.signals_empty)
+        self.risk_guide_pages.append(signals_side.add_page(("How to read", "읽는 법")))
+        # 모의투자: engine controls in the right column, 모의 세션 읽기 pinned; the tables in the canvas.
+        self.paper.dock_into(paper_side, title=("Controls", "제어"))
+        self.risk_guide_pages.append(paper_side.add_page(("How to read", "읽는 법")))
+        self.risk_guide_pages[0].addWidget(self.risk_guide)
+        for page, (title, text) in zip(self.risk_guide_pages, READINGS):
+            page.addWidget(Soft(title, text))
+        ws.finish()
+        ws.bind_tabs(self.risk_tabs, (("Portfolio", "포트폴리오"), ("Technical analysis", "기술적 분석"),
+                                      ("Paper trading", "모의투자")),
+                     sides=(portfolio_side, signals_side, paper_side), on_change=self.risk_tab_changed)
+        scope = QWidget()                      # the tab's scope badge; steps aside when the toolbar is narrow
+        scope_row = QHBoxLayout(scope); scope_row.setContentsMargins(0, 0, 0, 0)
+        self.risk_scope_badge = Badge()
+        scope_row.addWidget(self.risk_scope_badge, 0, Qt.AlignmentFlag.AlignVCenter)
+        ws.add_toolbar(scope)
+        # The portfolio run's status and its exports (the pane's own buttons stay, hidden, for the same report).
+        actions = QWidget()
+        row = QHBoxLayout(actions); row.setContentsMargins(0, 0, 0, 0); row.setSpacing(8)
+        row.addWidget(self.portfolio.badge, 0, Qt.AlignmentFlag.AlignVCenter)
+        self.risk_save = Button(("Save result", "결과 저장"), "ghost")
+        self.risk_zip = Button(("Report ZIP", "보고서 ZIP"), "secondary")
+        exports = self.portfolio.exports
+        for button, source, bundle in ((self.risk_save, exports.json_button, False), (self.risk_zip, exports.zip_button, True)):
+            button.clicked.connect(lambda checked=False, b=bundle: self.portfolio.exports.save(b))
+            EnabledMirror(source, button)
+            row.addWidget(button, 0, Qt.AlignmentFlag.AlignVCenter)
+        exports.hide()
+        self.risk_portfolio_actions = ws.add_toolbar(actions, right=True)
+        self.risk_toolbar_fit = ToolbarFit(ws, scope, actions, ws.toolbar_right, self.portfolio.lead_actions)
+        self.risk_tab_changed(self.risk_tabs.currentIndex())
+        self.kit_language()
+
+    def risk_count_runs(self, *args):
+        """'개별 가격 시뮬레이션 위험 2건': the fold's count follows the rows refresh_views writes."""
+        try:
+            rows = self.risk_table.rowCount()
+            self.risk_fold.set_count((f"{rows}", f"{rows}건") if rows else "")
+        except RuntimeError:   # the window is being destroyed
+            pass
+
+    def risk_tab_changed(self, index):
+        """The guide follows the tab (its key and its place in that tab's 읽는 법); the toolbar shows the tab's scope
+        badge, and the portfolio's status and exports only on 포트폴리오."""
+        from .risk_page import SCOPE_BADGES, TAB_KEYS
+        if not 0 <= index < len(TAB_KEYS):
+            return
+        self.risk_guide.set_key(TAB_KEYS[index])
+        pages = getattr(self, 'risk_guide_pages', ())
+        if index < len(pages) and pages[index].indexOf(self.risk_guide) < 0:
+            for page in pages:
+                page.removeWidget(self.risk_guide)
+            pages[index].insertWidget(0, self.risk_guide)
+        if hasattr(self, 'risk_scope_badge'):
+            self.risk_scope_badge.set_pair(SCOPE_BADGES[index])
+        if hasattr(self, 'risk_portfolio_actions'):
+            self.risk_portfolio_actions.setVisible(index == 0)
+        if hasattr(self, 'risk_toolbar_fit'):
+            self.risk_toolbar_fit.schedule()       # the scope badge may fit again once the actions are hidden
 
     def make_library(self):
-        layout = self.page("Research Library", "이번 앱 세션의 실행 근거 · 종료 전에 필요한 결과를 저장하세요.")
+        """Research Library (owner-approved draft 2026-11-17, docs/product/ui_drafts_2026-11-17/draft_06_library.png).
+        Toolbar: title, '이번 앱 세션의 실행 근거', the no-autosave badge and a search over the runs. Canvas: the session's
+        lead line and counts, the runs card (filter pills 전체 · 몬테카를로 · 포트폴리오 · 전략 and the run rows), then a
+        preview of the selected run. Right column: 실행 상세 (run information, the reproducibility checklist read from
+        the record, the AI 해설 fold) | 읽는 법, with the two exports pinned at the bottom. `run_table` keeps the
+        ResearchRun rows, their status roles and the selection the exports save; it is hidden behind the row list, which
+        drives it. Nothing is saved automatically and nothing is sent without the user's action."""
+        from .commentary import CommentaryPane
+        from .library_view import (KINDS, CheckList, ExportRow, InfoGrid, LibraryWorkspace, RunList, SearchField,
+                                   preview_chart)
+        from .page_kit import Button, Card, EmptyState, Fold, KeyFigures, Pill, PillTabs, Soft, Text, rule
+        outer = self.page(None, None)
+        scroll = self.stack.widget(self.stack.count() - 1)
+        self.library_workspace = ws = LibraryWorkspace(("Research Library", "연구 보관함"))
+        outer.addWidget(ws)
+        ws.fit_to(scroll)
+        self.library_saved = set()               # ResearchRun ids saved from this page in this session
+        self.library_started = datetime.now(timezone.utc)
+        self.library_selected = ""
+        self.library_chosen = False              # True once the user picked a row; until then the newest result shows
+        self.library_rows = []
+        self._library_syncing = False
+        # Toolbar
+        self.library_caption = ws.add_toolbar(Text(("Run evidence of this app session", "이번 앱 세션의 실행 근거"), "sub"))
+        self.library_badge = ws.add_badge(("No autosave · save before closing", "자동 저장 안 함 · 종료 전에 저장하세요"),
+                                          "warn")
+        ws.optional_toolbar.append(self.library_caption)
+        self.library_search = SearchField()
+        ws.add_toolbar(self.library_search, right=True)
+        ws.on_theme(self.library_search)
+        # Canvas: lead line, counts, the runs card, the preview card.
+        lead_row = QWidget()
+        lead = QHBoxLayout(lead_row)
+        lead.setContentsMargins(2, 0, 0, 0)
+        lead.setSpacing(8)
+        self.library_lead = Text("", "lead")
+        self.library_lead_note = Text("", "leadNote", wrap=True)
+        lead.addWidget(self.library_lead, 0, Qt.AlignmentFlag.AlignTop)
+        lead.addWidget(self.library_lead_note, 1)
+        ws.canvas.addWidget(lead_row)
+        self.library_counts = KeyFigures()
+        ws.canvas.addWidget(self.library_counts)
+        runs_card = Card(margins=(10, 10, 10, 8), spacing=4)
+        head = QHBoxLayout()
+        head.setContentsMargins(2, 0, 6, 0)
+        head.setSpacing(8)
+        self.library_filter = PillTabs([("All", "전체")] + [("", "") for _ in KINDS])
+        head.addWidget(self.library_filter, 1)
+        sort = Text(("Newest first", "최신순"), "")
+        sort.setProperty("lib", "sort")
+        head.addWidget(sort, 0, Qt.AlignmentFlag.AlignVCenter)
+        runs_card.body.addLayout(head)
+        self.library_list = RunList()
+        ws.follow(self.library_list)
+        ws.on_theme(self.library_list)
+        self.library_list.selected.connect(self.library_select)
+        self.library_filter.changed.connect(lambda index: (self.library_list.set_kind((("all",) + KINDS)[index]),
+                                                           self.library_empty_text()))
+        self.library_search.textChanged.connect(lambda text: (self.library_list.set_query(text), self.library_empty_text()))
+        runs_card.body.addWidget(self.library_list)
+        runs_card.body.addWidget(rule())
+        list_note = Text(("Only results calculated in this session · verdict NOT_RUN · frozen studies, past ledgers and "
+                          "secret settings are not inspected",
+                          "이번 세션에서 계산한 결과만 보여요 · 검증 NOT_RUN · 동결 연구·과거 원장·비밀 설정은 탐색하지 않아요"),
+                         "", wrap=True)
+        list_note.setProperty("lib", "foot")
+        list_note.setContentsMargins(6, 0, 6, 0)
+        list_note.setProperty("reading_help_keep_visible", True)
+        runs_card.body.addWidget(list_note)
+        ws.canvas.addWidget(runs_card)
+        # The ResearchRun table keeps its columns, status roles and selection for callers, tests and the two exports.
+        # Owner-approved draft 2026-11-17: the row list above shows the same runs in the approved look and selects here.
         self.run_table = table(["Symbol", "Model", "실행 상태", "검증 판정", "생성 시각 · UTC"])
         self.run_table._qg_status_columns = {2: 'execution', 3: 'official'}
         self.run_table.setProperty('localized_columns', [1])
         self.run_table.setMinimumHeight(280)
-        layout.addWidget(self.run_table)
-        buttons = QHBoxLayout()
-        self.save_json = QPushButton("선택한 ResearchRun JSON 저장")
-        self.save_bundle = QPushButton("선택한 보고서 + JSON ZIP 저장")
-        self.save_json.clicked.connect(lambda:self.export_selected(False))
-        self.save_bundle.clicked.connect(lambda:self.export_selected(True))
-        buttons.addWidget(self.save_json); buttons.addWidget(self.save_bundle)
-        layout.addLayout(buttons)
-        self.export_status = label("현재 저장 대상은 Monte Carlo 실행입니다. 자동 저장되지 않으며 경로는 직접 선택합니다.", "muted")
-        self.export_status.setProperty("reading_help_keep_visible", True)
-        layout.addWidget(self.export_status)
-        notice = label("재현성 PARTIAL · 데이터 빈티지/라이선스 미검증 · 비용 NOT_APPLIED · 검증 NOT_RUN\n동결 연구·과거 원장·비밀 설정을 탐색하지 않습니다.", "caption")
-        notice.setProperty("reading_help_keep_visible", True)
-        layout.addWidget(notice)
-        from .commentary import CommentaryPane
+        self.run_table.itemSelectionChanged.connect(self.library_table_selected)
+        self.run_table.hide()
+        ws.canvas.addWidget(self.run_table)
+        self.library_preview = Card(("", ""), ("", ""), margins=(18, 12, 16, 10), spacing=6)
+        self.library_preview.note.setWordWrap(True)     # a narrow canvas wraps the run's settings, never widens it
+        head = self.library_preview.head
+        head.takeAt(head.count() - 1)                   # the note, not a spacer, takes the head's spare width
+        head.setStretchFactor(self.library_preview.note, 1)
+        self.library_open = Button(("Go to Build & Test ›", "설계/검증으로 이동 ›"), "")
+        self.library_open.setProperty("lib", "link")
+        self.library_open.clicked.connect(self.library_open_source)
+        self.library_preview.add_head_widget(self.library_open)
+        self.library_preview_figures = KeyFigures()
+        self.library_preview.body.addWidget(self.library_preview_figures)
+        self.library_chart = preview_chart()
+        self.library_preview.body.addWidget(self.library_chart, 1)
+        self.library_preview_text = Text("", "hint", wrap=True)
+        self.library_preview.body.addWidget(self.library_preview_text)
+        self.library_preview_empty = EmptyState("")
+        self.library_preview_empty.setMinimumHeight(170)
+        self.library_preview.body.addWidget(self.library_preview_empty, 1)
+        self.library_preview_note = Text("", "fine", wrap=True)
+        self.library_preview_note.setProperty("reading_help_keep_visible", True)
+        self.library_preview.body.addWidget(self.library_preview_note)
+        self.library_preview.body.addStretch(0)       # without a chart the preview's lines sit at the top
+        ws.canvas.addWidget(self.library_preview, 1)
+        # Right column: 실행 상세 | 읽는 법, the exports pinned at the bottom.
+        details = ws.side.add_page(("Run details", "실행 상세"))
+        self.library_side_empty = Soft(("Run details", "실행 상세"),
+                                       ("Choose a run in the list: its information and reproducibility records show here.",
+                                        "목록에서 실행을 고르면 그 실행의 정보와 재현성 기록이 여기에 보여요."))
+        details.addWidget(self.library_side_empty)
+        self.library_info_fold = Fold(("Run information", "실행 정보"))
+        self.library_info_pill = Pill("", "ok")
+        self.library_info_fold.head.layout().addWidget(self.library_info_pill, 0, Qt.AlignmentFlag.AlignVCenter)
+        self.library_info = InfoGrid()
+        self.library_info_fold.body.addWidget(self.library_info)
+        self.library_rules = (rule(), rule())
+        self.library_repro_fold = Fold(("Reproducibility", "재현성"))
+        self.library_repro_pill = Pill("", "warn")
+        self.library_repro_fold.head.layout().addWidget(self.library_repro_pill, 0, Qt.AlignmentFlag.AlignVCenter)
+        self.library_repro_fold.head.digest.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
+        self.library_checks = CheckList()
+        self.library_repro_fold.body.addWidget(self.library_checks)
+        self.library_ai_fold = Fold(("AI commentary", "AI 해설"), count=("optional", "선택 기능"))
         options = {'runner': self.commentary_runner} if self.commentary_runner else {}
         self.commentary = CommentaryPane(self.commentary_sources, **options)
         self.commentary.setProperty("reading_help_keep_visible", True)
-        layout.addWidget(self.commentary)
-        layout.addStretch()
+        self.library_ai_fold.body.addWidget(self.commentary)
+        self.commentary.dock(self.library_ai_fold)
+        ws.follow(self.commentary)
+        for widget in (self.library_info_fold, self.library_rules[0], self.library_repro_fold, self.library_rules[1],
+                       self.library_ai_fold):
+            details.addWidget(widget)
+        for fold in (self.library_info_fold, self.library_repro_fold, self.library_ai_fold):
+            fold.body_host.setProperty("lib", "plain")
+        reading = ws.side.add_page(("How to read", "읽는 법"))
+        for title, text in (
+                (("What the list holds", "이 목록에 있는 것"),
+                 ("Only calculations run in this app session: one row per Monte Carlo run, and the latest portfolio and "
+                  "strategy result of their pages. The list empties when the app closes.",
+                  "이번 앱 세션에서 실행한 계산만 보여요. 몬테카를로는 실행마다 한 줄, 포트폴리오와 전략은 각 화면의 마지막 결과가 "
+                  "한 줄이에요. 앱을 닫으면 목록이 비워져요.")),
+                (("Status and verdict", "상태와 판정"),
+                 ("Completed means the calculation finished. Verdict NOT_RUN means no official validation ran; a result "
+                  "is neither an investment validation nor advice.",
+                  "완료는 계산이 끝났다는 뜻이에요. 검증 판정 NOT_RUN은 공식 검증을 하지 않았다는 뜻이고, 결과는 투자 검증이나 "
+                  "권유가 아니에요.")),
+                (("Reproducibility", "재현성"),
+                 ("Each run records its seed, a hash of the calculation code, a fingerprint of the prices and the runtime. "
+                  "Data vintage and licence are not verified, so reproducibility stays PARTIAL.",
+                  "실행마다 난수 시드, 계산 코드 해시, 가격 자료 지문, 실행 환경을 기록해요. 데이터 빈티지와 라이선스는 확인하지 "
+                  "않아 재현성은 PARTIAL로 남아요.")),
+                (("Saving", "저장"),
+                 ("Nothing is saved automatically. Save the selected run as ResearchRun JSON or as a report ZIP; you "
+                  "choose the path.",
+                  "자동으로 저장하지 않아요. 고른 실행을 ResearchRun JSON이나 보고서 ZIP으로 저장하세요. 경로는 직접 골라요."))):
+            reading.addWidget(Soft(title, text))
+        codes = Text(("Reproducibility PARTIAL · data vintage/licence unverified · costs NOT_APPLIED · verdict NOT_RUN",
+                      "재현성 PARTIAL · 데이터 빈티지/라이선스 미검증 · 비용 NOT_APPLIED · 검증 NOT_RUN"), "fine", wrap=True)
+        codes.setProperty("reading_help_keep_visible", True)
+        reading.addWidget(codes)
+        self.save_json = Button(("Save ResearchRun JSON", "ResearchRun JSON 저장"), "secondary")
+        self.save_bundle = Button(("Save report + JSON ZIP", "보고서 + JSON ZIP 저장"), "primary")
+        self.save_json.clicked.connect(lambda:self.export_selected(False))
+        self.save_bundle.clicked.connect(lambda:self.export_selected(True))
+        self.library_exports = ExportRow((self.save_json, self.save_bundle))
+        ws.side.foot.addWidget(self.library_exports)
+        ws.follow(self.library_exports)
+        self.library_export_hint = Text(("Save this result with the export on its own page.",
+                                         "이 결과는 해당 화면의 저장 버튼으로 저장해요."), "fine", wrap=True)
+        self.library_export_hint.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        self.library_export_hint.hide()
+        ws.side.foot.addWidget(self.library_export_hint)
+        self.export_status = label("선택한 실행만 저장해요 · 자동 저장되지 않으며 경로는 직접 골라요", "caption")
+        self.export_status.localized_text = {"ko": "선택한 실행만 저장해요 · 자동 저장되지 않으며 경로는 직접 골라요",
+                                             "en": "Only the selected run is saved · nothing is saved automatically and you "
+                                                   "choose the path"}
+        self.export_status.retranslate()
+        self.export_status.setProperty("kit", "fine")
+        self.export_status.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        self.export_status.setProperty("reading_help_keep_visible", True)
+        ws.side.foot.addWidget(self.export_status)
+        ws.finish()
+        self.setTabOrder(self.library_search, self.library_filter.buttons[0])
+        self.setTabOrder(self.library_filter.buttons[-1], self.library_list)
+        self.setTabOrder(self.library_list, self.library_open)
+        self.library_workspace.set_language(self.ui_language)
+
+    def library_refresh(self):
+        """Fill the Research Library from the session (display only; nothing is fetched): the lead line, the counts, the
+        filter counts, the rows, then the selected run, which the run table follows."""
+        from .library_view import KIND_NAMES, KINDS, counts, entries
+        rows = entries(self.session.runs(), saved=self.library_saved, portfolio=self.portfolio.exports.report,
+                       strategy=self.strategy.report)
+        self.library_rows = rows
+        self.library_list.set_entries(rows)
+        language = self.library_workspace.language
+        n = len(rows)
+        self.library_lead.set_pair((f"{n} run{'s' if n != 1 else ''} this session", f"이번 세션 실행 {n}건"))
+        started = self.library_started.strftime("%Y-%m-%d %H:%M")
+        self.library_lead_note.set_pair((f"· started {started} UTC · the list empties when the app closes",
+                                         f"· {started} UTC 시작 · 앱을 닫으면 목록이 비워져요"))
+        c = counts(rows, self.library_saved)
+        items = [(("Completed", "완료"), str(c["completed"]), ""), (("Running", "실행 중"), str(c["running"]), ""),
+                 (("Failed", "실패"), str(c["failed"]), "err" if c["failed"] else ""),
+                 (("Saved", "저장함"), str(c["saved"]), ""), (("Not saved", "저장 전"), str(c["unsaved"]), "")]
+        if c["reproducibility"]:
+            items.append((("Reproducibility", "재현성"), c["reproducibility"], ""))
+        if c["verdict"]:
+            items.append((("Verdict", "검증 판정"), c["verdict"], ""))
+        self.library_counts.set_items(items)
+        per = {kind: sum(row.kind == kind for row in rows) for kind in KINDS}
+        pairs = [(f"All  {n}", f"전체  {n}")] + [(f"{KIND_NAMES[k][0]}  {per[k]}", f"{KIND_NAMES[k][1]}  {per[k]}")
+                                                for k in KINDS]
+        for button, pair in zip(self.library_filter.buttons, pairs):
+            button.set_pair(pair)
+        self.library_filter.set_language(language)
+        self.library_empty_text()
+        keys = [row.key for row in rows]
+        if self.library_selected not in keys or not self.library_chosen:
+            self.library_selected = next((row.key for row in rows if row.status == "COMPLETED"), keys[0] if keys else "")
+        self.library_list.select(self.library_selected)
+        self._library_sync_table()
+        self.library_show()
+
+    def library_empty_text(self):
+        searching = bool(self.library_search.text().strip()) or self.library_filter.current() > 0
+        self.library_list.set_empty(("No run matches the filter.", "조건에 맞는 실행이 없어요.")
+                                    if searching and self.library_rows else
+                                    ("No calculation has run in this session yet.", "아직 이번 세션에 실행한 계산이 없어요."))
+
+    def library_select(self, key):
+        """A row chosen in the list: the run table follows (its selection is what the two exports save)."""
+        self.library_selected, self.library_chosen = key, True
+        self.library_list.select(key)
+        self._library_sync_table()
+        self.library_show()
+
+    def _library_sync_table(self):
+        self._library_syncing = True
+        try:
+            for row in range(self.run_table.rowCount()):
+                item = self.run_table.item(row, 0)
+                if item is not None and item.data(Qt.ItemDataRole.UserRole) == self.library_selected:
+                    self.run_table.selectRow(row)
+                    break
+            else:
+                self.run_table.clearSelection()
+                self.run_table.setCurrentItem(None)
+        finally:
+            self._library_syncing = False
+
+    def library_table_selected(self):
+        """A run selected in the run table (by a caller or a test): the list and the preview follow."""
+        if self._library_syncing:
+            return
+        row = self.run_table.currentRow()
+        item = self.run_table.item(row, 0) if row >= 0 else None
+        key = item.data(Qt.ItemDataRole.UserRole) if item is not None else None
+        if key and key != self.library_selected:
+            self.library_selected, self.library_chosen = key, True
+            self.library_list.select(key)
+            self.library_show()
+
+    def library_show(self):
+        """The selected row's preview card and its evidence in the right column, read from its record."""
+        from .library_view import preview_content, side_content
+        from .page_kit import pick
+        entry = self.library_list.entry(self.library_selected)
+        language = self.library_workspace.language
+        chosen = entry is not None
+        self.library_side_empty.setVisible(not chosen)
+        for widget in (self.library_info_fold, self.library_repro_fold, *self.library_rules):
+            widget.setVisible(chosen)
+        report_row = chosen and entry.kind != "monte_carlo"
+        for button in (self.save_json, self.save_bundle):
+            button.setEnabled(not report_row)
+        self.library_export_hint.setVisible(report_row)
+        content = preview_content(entry, bool(self.library_rows))
+        preview = self.library_preview
+        preview.title.set_pair(content["title"])
+        preview.note.set_pair(content["note"])
+        preview.note.setVisible(chosen)
+        self.library_open.set_pair(content["open"])
+        self.library_open.setVisible(chosen)
+        self.library_preview_empty.text.set_pair(content["empty"])
+        self.library_preview_empty.setVisible(not chosen)
+        self.library_preview_figures.set_items(content["figures"])
+        output = self.outputs.get(entry.record.get("run_id")) if content["chart"] else None
+        result = getattr(output, "result", None)
+        self.library_chart.set_result(result)
+        self.library_chart.setVisible(result is not None)
+        self.library_preview_text.set_pair(content["text"])
+        self.library_preview_text.setVisible(bool(content["text"][0]))
+        self.library_preview_note.set_pair(content["foot"])
+        self.library_preview_note.setVisible(bool(content["foot"][0]))
+        if chosen:
+            side = side_content(entry)
+            self.library_info_pill.set_pair(side["status"])
+            self.library_info_pill.set_tone(side["status_tone"])
+            from .stock_detail_style import set_prop
+            set_prop(self.library_info_pill, "pill", "live" if entry.status == "RUNNING" else "")
+            self.library_info.set_rows(side["info"], language)
+            self.library_checks.set_checks(side["checks"], language)
+            # In the head's digest, which shortens before it would push the pill out of a narrow column.
+            self.library_repro_fold.head.digest.set_choices([pick(language, pair) for pair in side["count"]])
+            self.library_repro_pill.set_pair(side["reproducibility"])
+            self.library_repro_pill.set_tone(side["reproducibility_tone"])
+        for widget in (preview, self.library_open, self.library_info_pill, self.library_repro_pill,
+                       self.library_repro_fold, self.library_preview_empty, self.library_preview_text,
+                       self.library_preview_note):
+            widget.set_language(language)
+
+    def library_open_source(self):
+        """'…으로 이동 ›': the page the selected result came from (navigation only; nothing is re-run)."""
+        entry = self.library_list.entry(self.library_selected)
+        if entry is None:
+            return
+        if entry.kind == "portfolio":
+            self.navigate("risk")
+            self.risk_tabs.setCurrentIndex(0)
+        else:
+            self.navigate("quant")
+            self.quant_tabs.setCurrentIndex(1 if entry.kind == "strategy" else 0)
 
     def commentary_sources(self):
         """Only explicit calculation results, never stores/settings/owner records."""
@@ -1158,33 +1852,43 @@ class ResearchWindow(QMainWindow):
         return result
 
     def make_system(self):
-        layout = self.page("System", "기록된 근거와 이번 실행 결과를 구분합니다.")
+        """System (owner-approved draft 2026-11-17, docs/product/ui_drafts_2026-11-17/draft_07_system.png): the page
+        kit's frame. Toolbar: title, 연결 | 규칙 | 시장 데이터 이용 조건 (it drives `system_tabs`, kept for callers),
+        a read-only badge and when the settings were read. 연결: the lead line, the summary line and one list of the
+        providers config reports (setting names, never values; a row's 확인 runs the pane's access test), the pane's
+        result, then the recorded project status and the desktop migration note. 규칙 and 시장 데이터 이용 조건 keep
+        their panes. Right column, shared by the tabs: 설정 (언어·지역, 화면 and, on 연결, the docked connection form with
+        its run button pinned at the bottom) and 읽는 법. Every attribute, signal and request is as before."""
+        from .connections import (ConnectionsPane, ConnectionsView, ThemeFollower, ToolbarFit, dock_connection_form,
+                                  focus_order, locale_samples, plain_backgrounds)
+        from .data_rights import DataRightsPane
         from .localization import locale_picker
-        box,inner=panel(self.ctx.t('language'))
-        self.locale_picker=locale_picker(self.ctx)
-        self.locale_picker.setAccessibleName(self.ctx.t('language'))
-        self.locale_picker.currentIndexChanged.connect(self.change_language)
-        inner.addWidget(self.locale_picker)
-        self.locale_notice=label(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'),'caption')
-        self.locale_notice.setProperty("reading_help_keep_visible", True)
-        inner.addWidget(self.locale_notice)
-        layout.addWidget(box)
-        from .connections import ConnectionsPane
+        from .page_kit import Card, FieldGrid, Fold, Segmented, Soft, Workspace, field, rule
+        from .paper import RulesPane
+        outer = self.page(None, None)
+        stack = getattr(self, 'stack', None)   # a test host builds this page without the window around it
+        self.system_workspace = ws = Workspace(("System", "시스템"))
+        outer.addWidget(ws)
+        if stack is not None:
+            ws.fit_to(stack.widget(stack.count() - 1))
+        side = ws.side
+        # Canvas: one page per tab, in the existing tab container (its own bar hidden; the toolbar drives it).
+        self.system_tabs = CurrentPageTabs()
+        self.connections_view = view = ConnectionsView()
+        self.system_tabs.addTab(view, 'Connections')
         self.connections = ConnectionsPane()
         self.connections.setProperty("reading_help_keep_visible", True)
         self.connections.requested.connect(lambda q: self.run_tool('connections', q))
-        from .paper import RulesPane
+        view.attach(self.connections)
         self.rules = RulesPane(self.paper_session)
         self.rules.setProperty("reading_help_keep_visible", True)
-        self.system_tabs = QTabWidget()
-        self.system_tabs.addTab(self.connections, 'Connections')
         self.system_tabs.addTab(self.rules, 'Rules')
-        from .data_rights import DataRightsPane
         self.data_rights=DataRightsPane(self.ctx)
         self.data_rights.setProperty("reading_help_keep_visible", True)
         self.system_tabs.addTab(self.data_rights,self.ctx.t('data_rights'))
-        layout.addWidget(self.system_tabs)
-        box, inner = panel("프로젝트 상태")
+        ws.canvas.addWidget(self.system_tabs, 1)
+        box = Card(("Project status", "프로젝트 상태"))
+        box.setProperty('sys', 'record')
         box.setProperty("reading_help_keep_visible", True)
         box.setProperty("recorded_project_status", True)
         try:
@@ -1194,15 +1898,102 @@ class ResearchWindow(QMainWindow):
         for line in recorded_status_display(status):
             item = label(line.en, 'muted' if line.muted else '')
             item.localized_text = {'en': line.en, 'ko': line.ko}
-            inner.addWidget(item)
+            box.body.addWidget(item)
             item.retranslate()
-        layout.addWidget(box)
-        box, inner = panel("데스크톱 이전 상태")
+        view.column.addWidget(box)
+        box = Card(("Desktop migration status", "데스크톱 이전 상태"))
+        box.setProperty('sys', 'record')
         box.setProperty("reading_help_keep_visible", True)
-        inner.addWidget(label("PyQt6 네이티브: Home, Markets(관심종목 차트·종목 한 화면), 분석 도구(Bonds, Rates, FX, Structuring, Macro sheet, Macro v2, Derivatives, ETF, Crypto, KRX), 기술지표 가이드, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\n모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다."))
-        inner.addWidget(label("이번 데스크톱은 선택 실행하는 미리보기입니다. 전체 기능 이전 완료본이 아닙니다.", "muted"))
-        layout.addWidget(box)
-        layout.addStretch()
+        box.body.addWidget(label("PyQt6 네이티브: Home, Markets(관심종목 차트·종목 한 화면), 분석 도구(Bonds, Rates, FX, Structuring, Macro sheet, Macro v2, Derivatives, ETF, Crypto, KRX), 기술지표 가이드, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\n모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다."))
+        box.body.addWidget(label("이번 데스크톱은 선택 실행하는 미리보기입니다. 전체 기능 이전 완료본이 아닙니다.", "muted"))
+        view.column.addWidget(box)
+        view.column.addStretch(1)
+        # Right column, 설정: 언어·지역, 화면, then the connection form (연결 only).
+        settings = side.add_page(("Settings", "설정"))
+        settings.setSpacing(8)
+        reading = side.add_page(("How to read", "읽는 법"))
+        region = Fold(("Language · region", "언어·지역"))
+        self.locale_picker=locale_picker(self.ctx)
+        self.locale_picker.setAccessibleName(self.ctx.t('language'))
+        self.locale_picker.currentIndexChanged.connect(self.change_language)
+        region.body.addWidget(field(("Display language", "표시 언어"), self.locale_picker))
+        formats = FieldGrid()
+        sample_date, sample_number = locale_samples(self)
+        formats.add(("Dates", "날짜 표기"), sample_date)
+        formats.add(("Numbers", "숫자 표기"), sample_number)
+        region.body.addWidget(formats)
+        self.locale_notice=label(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'),'caption')
+        self.locale_notice.setProperty("reading_help_keep_visible", True)
+        self.locale_notice.setProperty('sys', 'note')
+        region.body.addWidget(self.locale_notice)
+        settings.addWidget(region)
+        settings.addWidget(rule())
+        screen = Fold(("Display", "화면"))
+        self.system_theme = Segmented((("Light", "밝게"), ("Dark", "어둡게")), full=True)
+        theme = getattr(self, 'theme', None)   # the rail's theme selector stays the one setting; this drives it
+        if theme is not None:
+            self.system_theme.set_current(theme.currentIndex())
+            self.system_theme.changed.connect(theme.setCurrentIndex)
+            theme.currentIndexChanged.connect(self.system_theme.set_current)
+        screen.body.addWidget(field(("Theme", "테마"), self.system_theme))
+        settings.addWidget(screen)
+        connection_rule = rule()
+        settings.addWidget(connection_rule)
+        checks = Fold(("Data connection check", "데이터 연결 확인"))
+        if hasattr(self.connections, 'input_box'):
+            # 도구 and 데이터 출처 in the fold, 선택한 연결 확인 pinned at the bottom with the pane's status under it.
+            dock_connection_form(self.connections, side, checks.body)
+        checks.body.addWidget(Soft(("What each check does", "검사 범위"), (
+            "Check configuration: only looks at whether each setting exists; nothing goes over the network.\n"
+            "Access test: sends light read-only calls to KRX · KIS · FRED/Yahoo · Upbit/Binance.\n"
+            "Key values are never shown or saved; the list shows setting names only.",
+            "설정 여부 확인: 설정이 있는지만 봐요. 네트워크에 묻지 않아요.\n"
+            "접속 검사: KRX · KIS · FRED/Yahoo · Upbit/Binance에 가벼운 읽기 전용 호출을 보내요.\n"
+            "키 값은 표시하거나 저장하지 않아요. 목록에는 설정 이름만 보여요.")))
+        settings.addWidget(checks)
+        # 읽는 법: one note per tab.
+        notes = (Soft(("Reading the list", "목록 읽는 법"), (
+                     "Configured: the settings a provider needs are present (keyless providers: the library is "
+                     "available). Not set: a setting is empty. Check needed: the last access test got no answer, or "
+                     "only part of one.\nAn access test result belongs to this session only; nothing is saved.",
+                     "설정됨: 공급처에 필요한 설정이 있어요(키가 필요 없는 공급처는 라이브러리를 쓸 수 있어요). "
+                     "미설정: 설정이 비어 있어요. 확인 필요: 마지막 접속 검사에서 응답이 없거나 일부만 왔어요.\n"
+                     "접속 검사 결과는 이번 세션에만 보여요. 저장하지 않아요.")),
+                 Soft(("Rules", "규칙"), (
+                     "Rules run in the paper engine only; no real order is sent. Save, confirm, activate and arm "
+                     "the engine are separate steps, and nothing runs until you arm it.",
+                     "규칙은 모의 실행 전용이에요. 실제 주문은 보내지 않아요. 저장 → 확인 → 활성화 → 엔진 Arm을 "
+                     "따로 거치고, Arm하기 전에는 아무것도 실행되지 않아요.")),
+                 Soft(("Market data terms", "시장 데이터 이용 조건"), (
+                     "Search a series, then choose a row to read its display terms below the list. Choosing a row "
+                     "never requests market data.",
+                     "시리즈를 찾아 행을 고르면 목록 아래에 표시 조건이 나와요. 행을 골라도 시장 데이터를 요청하지 "
+                     "않아요.")))
+        for note in notes:
+            reading.addWidget(note)
+        ws.finish()
+
+        def tab_changed(index):
+            connection_rule.setVisible(index == 0)
+            checks.setVisible(index == 0)
+            side.foot_host.setVisible(index == 0 and side.foot.count() > 0)
+            for number, note in enumerate(notes):
+                note.setVisible(number == index)
+        ws.bind_tabs(self.system_tabs, (("Connections", "연결"), ("Rules", "규칙"),
+                                        ("Market data terms", "시장 데이터 이용 조건")),
+                     sides=(side, side, side), on_change=tab_changed)
+        ws.add_badge(("Read-only · key values never shown", "읽기 전용 · 키 값 표시 안 함"))
+        ws.add_toolbar(view.stamp, right=True)
+        ws.follow(view)
+        ws.follow(ToolbarFit(ws, view.stamp))
+        focus_order(ws.toolbar_host, view, self.rules, self.data_rights, side.segment, region, screen, checks,
+                    side.foot_host)
+        plain_backgrounds(view)
+        plain_backgrounds(side)
+        ThemeFollower(ws, (view, side))
+        kit_language = getattr(self, 'kit_language', None)
+        if kit_language is not None:
+            kit_language()
 
     def navigate(self, route):
         """Show a page and close the market disclosure; keep each page's reading position."""
@@ -1401,6 +2192,7 @@ class ResearchWindow(QMainWindow):
         self.market_chart.set_locale(self.ctx)
         self.markets_view.set_locale(self.ctx)
         for destination in self.market_destinations.values():destination.set_locale(self.ctx)
+        self.kit_language()
         for completer in self.symbol_completers:
             completer.set_locale(self.ctx)
         self.locale_notice.setText(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'))
@@ -1467,14 +2259,21 @@ class ResearchWindow(QMainWindow):
             self.outputs[value.run["run_id"]] = value
             self.quant_chart.set_result(value.result)
             self.quant_empty.hide();self.quant_study.show();self.quant_metrics.show()
+            self.quant_show_figures(value)
             r, h = value.result, value.history
             vol_info = volatility_disclosure(r)
             table_rows(self.quant_metrics, [("Spot", f"{r.spot:,.2f}"), ("P5 / P50 / P95", f"{r.p05:,.2f} / {r.median_terminal:,.2f} / {r.p95:,.2f}"),
                 (vol_info["label"], f"{vol_info['value']:.1%}"),
-                ("P(loss)", f"{r.prob_loss:.1%}"), ("VaR 95 / CVaR", f"{r.var_pct:.1%} / {r.cvar_pct:.1%}"),
+                ("P(loss)", f"{r.prob_loss:.1%}"), ("VaR / CVaR", f"{r.var_pct:.1%} / {r.cvar_pct:.1%}"),
                 ("Paths / horizon / seed", f"{r.n_paths:,} / {r.horizon_days} / {value.run['parameters']['seed']}"),
                 ("P(terminal ≥ target)", "—" if r.prob_target is None else f"{r.prob_target:.1%}")] +
                 ([("Horizon-average vol (ann.)", f"{r.garch_horizon_vol:.1%}")] if r.garch is not None else []))
+            from .metric_help import mc_metadata, risk_pair
+            from .page_kit import set_cell_help
+            metadata = mc_metadata(value.run, r)
+            var_hover = risk_pair('var', 'mc_terminal_loss', **metadata)[1]
+            cvar_hover = risk_pair('cvar', 'mc_terminal_loss', **metadata)[1]
+            set_cell_help(self.quant_metrics, 4, (0, 1), tuple(a + "\n\n" + b for a, b in zip(var_hover, cvar_hover)))
             # (group, line): the plain lines are the source text; the display groups them under short
             # headings with a Korean reading per line (owner issues 11 and 14). Display only.
             entries = [("data", f"{'합성 데이터 · ' if h.source=='SYNTHETIC' else ''}{h.source} · {h.first_date} → {h.last_date}"),
@@ -1517,6 +2316,7 @@ class ResearchWindow(QMainWindow):
             self.statusBar().showMessage(f"시장 조회 실패: {code}")
         elif self.pending == "portfolio":
             self.portfolio.status.setText(f"FAILED · {code} · 입력/데이터를 확인하세요.")
+            self.portfolio.set_state("failed")
         elif self.pending == "bonds":
             self.bonds.status.setText(f"FAILED · {code} · Price/Yield와 곡선 출처를 확인하세요.")
         elif self.pending in self.tool_names:
@@ -1532,7 +2332,10 @@ class ResearchWindow(QMainWindow):
         self.watchlist.set_busy(busy)
         self.portfolio.run.setEnabled(not busy)
         self.bonds.run.setEnabled(not busy)
-        for name in self.tool_names:getattr(self,name).input_box.setEnabled(not busy)
+        for name in self.tool_names:
+            pane = getattr(self, name)
+            pane.input_box.setEnabled(not busy)
+            pane.run.setEnabled(not busy)   # a docked pane's run button sits in the right column's foot, outside its box
         if not busy:
             self.pending = None
             self.active_run = None
@@ -1543,6 +2346,7 @@ class ResearchWindow(QMainWindow):
         self.portfolio.clear_result()
         self.pending = "portfolio"
         self.portfolio.status.setText("최적화 중… 화면을 이동해도 계속됩니다.")
+        self.portfolio.set_state("running")
         self.jobs.start(lambda:self.portfolio_runner(request))
 
     @pyqtSlot(object)
@@ -1576,12 +2380,15 @@ class ResearchWindow(QMainWindow):
             self.watchlist.update_score(symbol, score)
         table_rows(self.run_table, [[r["parameters"].get("symbol", "—"), r["parameters"].get("model", "—"),
             r["execution_status"], r["verdict"], self.ctx.timestamp(r["created_at"])] for r in runs], [r["run_id"] for r in runs])
+        self.library_refresh()   # the Research Library's rows, counts and preview (display only)
         complete = [r for r in runs if r["execution_status"] == "COMPLETED"]
         from .risk_display import MC_MODEL_LABELS, ko, source_name, status_ko
         table_rows(self.risk_table, [[r["parameters"]["symbol"],
             MC_MODEL_LABELS.get(r["parameters"]["model"], r["parameters"]["model"]),
             f"{r['metrics']['prob_loss']:.1%}", f"{r['metrics']['var_pct']:.1%}", f"{r['metrics']['cvar_pct']:.1%}",
             r["data"]["source"]] for r in complete])
+        from .risk_page import set_run_help
+        set_run_help(self.risk_table, complete, self.outputs)
         self.risk_table.setVisible(bool(complete))
         self.risk_empty.setVisible(not complete)
         if complete:
@@ -1627,6 +2434,9 @@ class ResearchWindow(QMainWindow):
             self.export_status.setText(f"저장 실패: {type(exc).__name__} · 경로와 확장자를 확인하세요.")
             return
         self.export_status.setText("저장 완료 · " + Path(filename).name)
+        # The library counts this run as saved (its row and the 저장함 / 저장 전 counts); nothing else changes.
+        self.library_saved.add(run_id)
+        self.library_refresh()
 
     def change_theme(self, index):
         # Preserve the F1 geometry; use a legible foreground on dark surfaces.
@@ -1641,6 +2451,9 @@ class ResearchWindow(QMainWindow):
         from .research_style import apply
         for workspace in (self.tools_page, self.quant_page, self.risk_page):
             apply(workspace,p,bool(index))
+        from .page_kit import Workspace
+        for workspace in self.findChildren(Workspace):
+            workspace.set_theme(p, bool(index))
         self.indicator_guide.set_theme(p)
         for destination in self.market_destinations.values():
             if hasattr(destination,'set_theme'):destination.set_theme(p)
@@ -1649,6 +2462,7 @@ class ResearchWindow(QMainWindow):
         if self.language_store is not None:
             self.language_store.setValue("ui/theme", "dark" if index else "light")
         self.setStyleSheet(typography.window_stylesheet(p, bool(index)))
+        typography.apply_tooltip_theme(QApplication.instance(), p)
         for chart in [*self.findChildren(FanChart), *self.findChildren(FrontierChart), *self.findChildren(LineChart), *self.findChildren(SignedBars)]:
             chart.colors = p
             chart.update()

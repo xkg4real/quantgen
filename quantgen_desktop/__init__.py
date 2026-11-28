@@ -12,11 +12,18 @@ def use_fusion_style():
     chosen in between (QT_STYLE_OVERRIDE, a test's own QApplication) cannot leave the app in another style.
     """
     try:
-        from PyQt6.QtWidgets import QApplication
+        from PyQt6.QtCore import Qt
+        from PyQt6.QtWidgets import QApplication, QStyle
     except ImportError:  # the Flet entry point imports nothing from Qt
         return
     app = QApplication.instance()
-    if app is None or app.style() is None or app.style().name().lower() != "fusion":
+    style = app.style() if app is not None else None
+    if style is not None and app.styleSheet() and style.metaObject().className() == "QStyleSheetStyle":
+        # Global QSS hides the base style's name. Only trust an unambiguous Fusion
+        # child of Qt's own wrapper; a custom proxy may contain incidental styles.
+        children = style.findChildren(QStyle, options=Qt.FindChildOption.FindDirectChildrenOnly)
+        style = children[0] if len(children) == 1 else None
+    if style is None or style.metaObject().className() != "QFusionStyle" or style.name().lower() != "fusion":
         QApplication.setStyle("Fusion")
 
 

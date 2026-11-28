@@ -232,7 +232,7 @@ class PageWiring(unittest.TestCase):
     # ---------------------------------------------------------------- Rates (five tools)
     def test_rates_every_tool(self):
         panels = self.capture(rates_page)
-        self.stack.enter_context(patch.object(rates_page, "load_treasury_curve", return_value=self.panel))
+        self.stack.enter_context(patch("core.ficc.data.load_treasury_curve", return_value=self.panel))
         spies = {n: self.spy(rates_page, n) for n in ("curve_korean", "swap_korean", "swaption_korean",
                                                        "cap_floor_korean", "simulation_korean")}
         p = page()
@@ -285,7 +285,7 @@ class PageWiring(unittest.TestCase):
     # ---------------------------------------------------------------- Bonds (three tools)
     def test_bonds_every_tool(self):
         panels = self.capture(bonds_page)
-        self.stack.enter_context(patch.object(bonds_page, "load_treasury_curve", return_value=self.panel))
+        self.stack.enter_context(patch('core.ficc.data.load_treasury_curve', return_value=self.panel))
         bond = self.spy(bonds_page, "bond_korean")
         root = bonds_page.build_bonds_page(page())
         for tool in ("calc", "scenarios", "hedge"):
@@ -393,7 +393,7 @@ class PageWiring(unittest.TestCase):
 
     def test_structuring_every_product(self):
         panels = self.capture(structuring_page)
-        self.stack.enter_context(patch.object(structuring_page, "load_treasury_curve", return_value=self.panel))
+        self.stack.enter_context(patch("core.ficc.data.load_treasury_curve", return_value=self.panel))
         self.stack.enter_context(patch.object(structuring_page.fcharts, "payoff_chart",
                                               side_effect=lambda *a, **k: ft.Text("chart")))
         spy = self.spy(structuring_page, "structured_korean")

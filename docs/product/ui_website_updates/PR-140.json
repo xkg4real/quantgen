@@ -1,0 +1,477 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-beginner-chart-risk-pr-140",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "Website HTML remains owner-applied; this record is not delivery, application or deployment evidence.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "gpt/ui-guide-chart-first-20261121",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/140",
+    "implementation_commit": "bb32d03be3528f6a048fc09eb657a0efd794d771",
+    "remote_status": "DRAFT",
+    "merge_commit": null,
+    "verified_head": "bb32d03be3528f6a048fc09eb657a0efd794d771"
+  },
+  "summary_ko": [
+    "기술지표27을 가상 학습 차트의 선·주석으로 설명하고 원사례·보고서 입력과 분리했습니다.",
+    "툴팁 공통 폰트·색상·줄바꿈과 PER/PBR/ROE/PSR·VaR/CVaR의 짧은 뜻/상세설명을 보강했습니다.",
+    "투자자 매수·매도 막대·공매도 구분·읽기전용 호가/체결강도 스냅샷과 해석을 추가했습니다. 검증되지 않은 ROE/PSR 수치·테마 평균은 만들지 않습니다.",
+    "선택된 지표를 도킹할 때의 기존 칩 오류와 교육 화면의 과도한 세로 여백을 고쳤습니다."
+  ],
+  "website_impact": {
+    "classification": "native_ui_and_existing_browser_gateway_followup",
+    "browser_code_changed": true,
+    "shared_sources": [
+      "core/research/stock_profile.py",
+      "core/market/detail_insights.py",
+      "data/kis_markets.py"
+    ],
+    "requested_actions_ko": [
+      "소개 사이트/Docs에 위 교육·지표 설명과 실제 제공 범위/미제공 범위를 반영할지 검토하세요.",
+      "이 PR에 보존된 기존 K2d 브라우저 gateway 전환과 원 strict FAIL/보조판독의 한계는 UI 후보 기록을 따르세요.",
+      "웹 HTML/실제 사이트는 이 작업에서 수정·배포하지 않았습니다."
+    ]
+  },
+  "verification": {
+    "tests": [
+      {
+        "suite": "final integrated synthetic public regressions (guide5/data19/risk8/glue2/dock1)",
+        "passed": 35,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0
+      },
+      {
+        "suite": "actual Guide/Workspace component contracts",
+        "passed": 8,
+        "captures": 3
+      },
+      {
+        "suite": "stdlib-only integrated gateway boundary",
+        "passed": 15
+      }
+    ],
+    "counts_note": "Groups overlap and are not summed. Linux offscreen synthetic component coverage; no full-app or owner Windows acceptance.",
+    "source_review": "20 documents / 866 source inputs consistent; publication BLOCKED65",
+    "ci": "PENDING",
+    "ci_runs": [],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "PC7 remains required before UI main merge."
+  },
+  "website_application": {
+    "status": "not_applied",
+    "applied": false,
+    "deployed": false,
+    "receipt": null
+  },
+  "limits_ko": [
+    "전체UI/main 병합은 아직 하지 않았습니다. PC7·OSgo와 실제 API/권리/법률/라이선스 조건을 유지합니다.",
+    "동봉 폰트32관측은 모두맞았으나 전체64중 미등록fallback2개는2x에서잘렸고 기록을보존했습니다.",
+    "실제 ROE/PSR 회계·단위/테마구성 근거와 실제API/Windows 검증을 코드·합성검증으로 대신하지 않습니다."
+  ],
+  "changed_files": [
+    ".github/workflows/runtime-smoke.yml",
+    "config.py",
+    "data/krx/kis_client.py",
+    "docs/compliance/08-third-parties.md",
+    "docs/compliance/FACTS.md",
+    "quantgen_desktop/app.py",
+    "docs/product/BEGINNER_CHART_AND_RISK_UI_2026-11-21.md",
+    "quantgen_desktop/guide_lessons.py",
+    "quantgen_desktop/indicator_guide.py",
+    "quantgen_desktop/library_view.py",
+    "quantgen_desktop/market_tools.py",
+    "quantgen_desktop/metric_help.py",
+    "quantgen_desktop/owner_ui_language/stock.py",
+    "quantgen_desktop/page_kit.py",
+    "quantgen_desktop/rates.py",
+    "quantgen_desktop/risk_page.py",
+    "tests/desktop_risk_explanations_acceptance.py",
+    "tests/desktop_stock_detail_acceptance.py",
+    "tests/guide_docking_acceptance.py",
+    "tests/guide_lessons_acceptance.py",
+    "tests/stock_insights_glue_acceptance.py",
+    "docs/compliance/source-review.json"
+  ],
+  "revisions": [
+    {
+      "date": "2026-11-22",
+      "execution_id": "47c97545-1d6c-4871-8a44-fbaca1eb2f82",
+      "supersedes_presentation": "Original case chart now stays first and visible; invented lesson is optional below.",
+      "changes_ko": [
+        "기존 사례 차트를 첫 화면에 유지하고 그 사례의 선·값 좌표에 짧은 안내를 표시합니다.",
+        "모든 신규 안내·수급·공매도·호가 카드의 글꼴·역할·버튼을 기존 시장 종목 상세 스타일로 통일합니다."
+      ],
+      "source_freeze": "60246ef70896fee07a81f380d8d0335d5c15daaf4c6f51fbea572d71335cef82",
+      "local_validation": {
+        "unique_tests": 45,
+        "passed": 45,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "scope": "Fixed synthetic/native Qt components; not full app or Windows",
+        "report": "FINAL_AUTHORITATIVE45_RUNTIME_6a10bc2d61e7.json",
+        "prior_failures_preserved": true
+      },
+      "full_runtime_ci": "PENDING",
+      "owner_windows": "NOT_PERFORMED",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false,
+      "previous_source_freeze": "e2f325b874daafa4cbed34eb9f71356ed37d1c3a0e9e7dab1f02a9eb480778cd",
+      "source_review": "20 documents / 869 source inputs consistent; publication BLOCKED65",
+      "stock_host_visual": "Authoritative sdSide/sdPage host: KO/light normal, EN/dark normal and wide prices; collapsed3/expanded10 all cell bounds fit. Original standalone contrast/cropping findings preserved.",
+      "previous_local_validation": {
+        "unique_tests": 45,
+        "passed": 45,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "scope": "Fixed synthetic/native Qt components; not full app or Windows",
+        "report_sha256": "66fb537b4728850a2445012dd23cc1213797ce1982794350f3a4f67f542578ac",
+        "prior_failure_preserved": true
+      },
+      "host_probes": {
+        "cases": 3,
+        "states_per_case": 2,
+        "violations": 0,
+        "stock_captures": 6,
+        "guide_captures": 17,
+        "not_added_to_test_count": true
+      }
+    },
+    {
+      "date": "2026-11-22",
+      "execution_id": "6e1ca7eb-74bb-41c3-b056-313bbe8b141c",
+      "supersedes_presentation": "Original case first; compact bottom-right actual-stroke samples replace large chart callouts; existing market stock-detail typography remains authoritative.",
+      "source_parent": "fed639d27268defe13969d9718757718bd876df4",
+      "source_freeze": "fc4075e5a342a27ea0da582ce4a43d270bed21a3ba85cfb2079d537fedc1bad4",
+      "changes_ko": [
+        "숨김 구성요소는 부모에 추가한 뒤 표시하도록 수정했습니다.",
+        "기존 사례 차트를 먼저 보여주며 우측 하단에 실제 선·점·막대 견본과 짧은 이름만 표시합니다.",
+        "PER/PBR 교육용 예시 구간·현재 위치를 표시하고 낮은 배수만으로 우량·매수 판단을 하지 않는 한계를 함께 둡니다.",
+        "파란 매도·빨간 매수 수량 막대와 가운데 가격을 표시합니다. 기본3/확장10단계씩, 전체20수량 공통 척도를 유지합니다.",
+        "긴 가격·수량은 동일한 글꼴과 전체 문자열을 보존하며 필요한 경우 가로로 이동해 볼 수 있습니다."
+      ],
+      "local_validation": {
+        "unique_tests": 53,
+        "passed": 53,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "scope": "Fixed synthetic/native Qt components only; not full app or owner Windows",
+        "report": "FOLLOWUP53_AFTER_R2_RUNTIME_402bb81551b1.json",
+        "report_sha256": "6e2ab1a5b306395cdd54a67e4c620787ffa451820134ee484263c20e914d40e3",
+        "execution_receipt_sha256": "3d374442624d0a8deda6ee47673e897b64c7533b0e2d896c43fe617eb0b1a6a1",
+        "source_inputs_unchanged": 871,
+        "unintended_component_show_events": 0,
+        "prior_failures_preserved": true
+      },
+      "host_probes": {
+        "cases": 3,
+        "states_per_case": 2,
+        "violations": 0,
+        "visible_rows_collapsed": 6,
+        "visible_rows_expanded": 20,
+        "stock_captures": 12,
+        "guide_captures": 17,
+        "not_added_to_test_count": true
+      },
+      "previous_full_runtime": {
+        "head": "fed639d27268defe13969d9718757718bd876df4",
+        "run_id": 44982209688,
+        "status": "FAILURE",
+        "windows": "Three environments failed old normal330 no-horizontal-scroll check; original logs preserved",
+        "linux": "Focused45 passed; later full job cancelled"
+      },
+      "source_review": "20 documents / 871 source inputs consistent; publication BLOCKED65; policy bodies/rights/approvals unchanged",
+      "full_runtime_ci": "PENDING_NEW_HEAD",
+      "owner_windows": "NOT_PERFORMED",
+      "OS_F1": "PyQt6-to-PySide6 Qt binding migration still requires OS go; OS-F2 storage code already main",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false
+    },
+    {
+      "date": "2026-11-22",
+      "execution_id": "771b8c78-a4da-492e-bdf3-309980124cbc",
+      "source_parent": "0e78c0897a43cf46bd92ab42ceca311feecd0d14",
+      "source_freeze": "b6422742090b7ba5f3581bc887b588603a48a98c8f7e7edbc0a88eab03628353",
+      "scope": "Three test fixture isolation files only; production868 inputs unchanged",
+      "changes_ko": [
+        "전체sys.modules 되돌림으로 카탈로그/범례/Supply 클래스가 달라지는 시험 격리 오류를 수정했습니다.",
+        "가짜 모듈 항목만 복원하고 다른 정상 import 유지·기존항목 복원·미존재항목 제거·canonical registry 동일성을 기존53시험에서 검사합니다.",
+        "실제 자료 가용성·폰트·폭·수치·네트워크/보호입력 제한은 변경하지 않았습니다."
+      ],
+      "previous_full_runtime": {
+        "head": "0e78c0897a43cf46bd92ab42ceca311feecd0d14",
+        "run_id": 44993932277,
+        "status": "FAILURE",
+        "jobs": 4,
+        "collected_each": 53,
+        "failed_subtests_each": 52,
+        "failure_scope": "Three guide tests for supply identities/empty legend geometry",
+        "log_evidence_preserved": true
+      },
+      "local_validation": {
+        "unique_tests": 53,
+        "passed": 53,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "report_sha256": "7f73b0e607dd52073664247d262b6bd71377dd65abedf660f36295f845a03ce0",
+        "execution_receipt_sha256": "a607a3ea026c4ea3d6afbf4351c013ed76f9fb7f4e0f41f9fe8d2c76a7844676",
+        "scope": "Same guarded preloaded synthetic Qt runtime; actual fresh CI still required",
+        "source_inputs_unchanged": 871
+      },
+      "source_review": "Original checker PASS20docs/871sources; technical record12 only refreshed, other19 unchanged; publicationBLOCKED65",
+      "actual_fresh_CI": "PENDING_NEW_HEAD",
+      "owner_windows_PC7": "NOT_PERFORMED",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false
+    },
+    {
+      "date": "2026-11-23",
+      "execution_id": "bf4cc1f1-ed41-4ead-b7fe-fc3003a49439",
+      "source_parent": "b1a421a565a1d37245a089fc4ef863e58f3e7791",
+      "changes_ko": [
+        "툴팁 색·글꼴·폭이 같을 때 앱 전체 스타일을 다시 적용하는 동작을 바로잡았습니다. 테마나 글꼴이 실제로 바뀌면 새 스타일을 적용합니다.",
+        "Qt 창을 쓰는 시험 여섯 곳이 작업 종료와 닫힘 승인을 확인한 뒤 해당 창만 정리합니다."
+      ],
+      "local_validation": {
+        "repeated_stylesheet_style_events_before": 81,
+        "repeated_stylesheet_style_events_after": 0,
+        "real_theme_switch_events_after": 81,
+        "fixture_cleanup_observed_cases": 6,
+        "close_veto_preserved_cases": 6,
+        "scope": "Isolated offscreen Qt widgets; Windows end-user visual confirmation pending."
+      },
+      "previous_runtime": {
+        "id": 45031992373,
+        "conclusion": "cancelled"
+      },
+      "actual_fresh_CI": "PENDING_NEW_HEAD",
+      "owner_windows_PC7": "NOT_PERFORMED",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false
+    },
+    {
+      "date": "2026-11-23",
+      "execution_id": "17930ecd-9205-4805-bd8f-4059334baf6b",
+      "source_parent": "97152abd2ed5159914adbc38f67eabc16f6f71da",
+      "scope": "Native Workspace.add_badge first-label ordering; existing component design retained.",
+      "changes_ko": [
+        "툴바 배지를 부모에 연결한 뒤 첫 문구를 표시해 독립된 최상위 창으로 잠깐 표시되는 동작을 수정했습니다.",
+        "기존 문구·한영 전환·톤과 숨김/복원 동작은 유지하고 기존 visibility 시험에 회귀 사례 하나를 추가했습니다."
+      ],
+      "source_pins": {
+        "quantgen_desktop/page_kit.py": {
+          "sha256": "890fb54b1c767720fa3e614ccf66248732f473d9d1dcbb95ea8667d2317ef0a5",
+          "git_blob": "2fa2c52486eb9b72b7318cf56c58b5cfb55cb602"
+        },
+        "tests/desktop_startup_visibility_acceptance.py": {
+          "sha256": "07f026c479f0048aa4b99377ba63e10e8d42b063ee837f09373c5200e5b60f99",
+          "git_blob": "bdb097f836be4189d017cdbc2a1514719a806bed"
+        }
+      },
+      "website_impact": {
+        "classification": "native_only_component_lifecycle_fix",
+        "browser_code_changed": false,
+        "requested_action_ko": "기존 PR140 교육·차트/종목 상세 변경 기록을 유지하세요. 이번 배지 생성 순서 수정은 네이티브 Qt 구성요소에 한정되며 브라우저 구현 변경을 요구하지 않습니다."
+      },
+      "local_validation": {
+        "measured_utc": "2026-11-22T19:26:47.806036+00:00",
+        "component_suite_before": {
+          "passed": 4,
+          "total": 5,
+          "correctly_failing_new_regression": 1
+        },
+        "component_suite_after": {
+          "passed": 5,
+          "total": 5,
+          "failures": 0,
+          "errors": 0,
+          "skips": 0
+        },
+        "top_level_badge_show_counts": {
+          "home_call_while_workspace_hidden": {
+            "before": 1,
+            "after": 0
+          },
+          "add_while_workspace_visible": {
+            "before": 1,
+            "after": 0
+          },
+          "initially_empty_badge": {
+            "before": 0,
+            "after": 0
+          }
+        },
+        "functional_checks": "Toolbar parent, visible/empty states, Korean/English label and tone, suppression and restoration passed.",
+        "scope": "Real Workspace.add_badge and dependencies on Linux Qt6.12 offscreen; no full ResearchWindow, Windows compositor, desktop executable or whole-flicker conclusion.",
+        "independent_receipt": "INDEPENDENT_BADGE_QA.json",
+        "independent_receipt_sha256": "f03d0c14a88a1901b84c6765d215ea3e837619dc23a163d0b9f10a03046ca07d"
+      },
+      "actual_fresh_CI": "PENDING_NEW_HEAD",
+      "owner_windows_PC7": "NOT_PERFORMED",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false
+    },
+    {
+      "date": "2026-11-23",
+      "execution_id": "4470390e-a716-4d3f-a20a-871b89a81151",
+      "source_parent": "f17df92bd59e446fa189168c1273e0b7116e7e3d",
+      "scope": "Stock valuation comparisons from explicitly supplied data",
+      "changes_ko": [
+        "기업 가치 카드에서 자료가 확인된 지표 옆에 테마 또는 업종 평균, 기준일과 표본 수를 표시합니다. 툴팁에서 비교 집단과 기간, 회계 기준, 구성 출처 및 제외된 종목별 사유를 확인할 수 있습니다.",
+        "종목·시장이나 구성일이 맞지 않는 비교는 표시하지 않습니다. 실제 공급 자료가 없는 경우 평균과 개별 ROE·PSR은 미제공입니다."
+      ],
+      "source_pins": {
+        "core/market/detail_insights.py": "8900b20c45a811aae2996dc2766a9196b72e0a99",
+        "core/research/stock_profile.py": "262e161babe1b594711fac59ee0a647542fef3e8",
+        "quantgen_desktop/stock_insights.py": "bffedfe19939a06c711bad10b21648effd269e80",
+        "tests/detail_insights_acceptance.py": "cba30a67283fc3136de1e3f60550d7774749b563"
+      },
+      "website_impact": "If documenting the desktop display, identify the selected stock, dated group and sample count. Use the unavailable state when there is no verified source. Website delivery is owner-managed.",
+      "local_validation": {
+        "original_suite": {
+          "passed": 23,
+          "total": 23,
+          "skipped": 0
+        },
+        "native_stock_detail": {
+          "synthetic_user_scenarios": 13,
+          "existing_peer_methods": 7,
+          "host": "Linux Qt offscreen"
+        },
+        "scope": "Counts may overlap. Includes Korean/English, selected stock/market/date, missing inputs and reasons for exclusion. No live feed or commercial display rights established."
+      },
+      "actual_fresh_CI": "PENDING_NEW_HEAD",
+      "owner_windows_PC7": "NOT_PERFORMED",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false
+    },
+    {
+      "date": "2026-11-23",
+      "execution_id": "4470390e-a716-4d3f-a20a-871b89a81151",
+      "source_parent": "657523d9302a1dc55a726d1c618fe2523aa58e9c",
+      "scope": "Desktop Qt style handling when opening additional windows",
+      "changes_ko": [
+        "스타일시트를 켠 상태에서 새 창을 열 때 이미 적용한 Fusion 스타일을 전체 앱에 다시 적용하는 문제를 고쳤습니다.",
+        "다른 스타일로 바뀐 경우에는 기존 화면 규칙에 맞게 Fusion으로 복구합니다."
+      ],
+      "source_pins": {
+        "quantgen_desktop/__init__.py": "1b75ab11a33617c2c571e793e3c64a8404ed64bb",
+        "tests/desktop_startup_visibility_acceptance.py": "2acb08142265826248e16715ed364f1fc3ced243"
+      },
+      "website_impact": "Desktop runtime behavior. The owner can describe reduced redundant style changes when reopening a window.",
+      "local_validation": {
+        "regression": {
+          "passed": 6,
+          "total": 6,
+          "host": "Linux Qt offscreen"
+        },
+        "same_style": {
+          "widgets": 3,
+          "events_before": 3,
+          "events_after": 0
+        },
+        "alternate_style_recovered": true,
+        "preference_restore": {
+          "single_linux_offscreen_run_each": true,
+          "source_files": 214,
+          "changed_files": 1,
+          "prior_seconds": [
+            36.577,
+            51.205,
+            120.462
+          ],
+          "candidate_seconds": [
+            36.631,
+            22.783,
+            30.028
+          ],
+          "prior_test": "PASS",
+          "candidate_test": "PASS",
+          "modal_waits": 0
+        }
+      },
+      "actual_fresh_CI": "PENDING_NEW_HEAD",
+      "owner_windows_PC7": "NOT_PERFORMED",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false
+    },
+    {
+      "date": "2026-11-23",
+      "execution_id": "54d3ec35-f4ea-4d4e-a197-4402df53814b",
+      "source_parent": "e9950e346d0b77bebaa5a77faea0d1ad1169c22c",
+      "scope": "Desktop stock-detail tooltips and market-window test cleanup",
+      "changes_ko": [
+        "종목 상세에서 밝은 테마와 어두운 테마를 바꾸면 화면에 떠 있는 도움말 색상이 바로 바뀝니다. 본문 글꼴과 기존 도움말 크기·테두리는 유지합니다."
+      ],
+      "source_pins": {
+        "quantgen_desktop/typography.py": "f814fd8840cc202fd08bf45080c38d7130be001b",
+        "tests/stock_insights_style_acceptance.py": "1450afa649b99fe865fc41462d0b7b92dfd9d0b7",
+        "tests/desktop_home_markets_markets_acceptance.py": "2e47bc8bec2244978b3e5e161c730a7fdb640318"
+      },
+      "website_impact": "Owner copy for the desktop update. The visible Windows startup result requires a separate PC check.",
+      "local_validation": {
+        "platform": "Linux Qt 6.12 offscreen",
+        "paired_matching_tooltip_captures": 16,
+        "stock_style_cases_passed": 5,
+        "unrelated_widgets_observed": 20,
+        "style_changes_on_light_dark_switch": 0,
+        "market_window_test_cleanup": {
+          "original_live_after_two_cases": 2,
+          "candidate_live_after_two_cases": 0
+        }
+      },
+      "actual_fresh_CI": "PENDING_NEW_HEAD",
+      "owner_windows_PC7": "NOT_PERFORMED",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false
+    },
+    {
+      "date": "2026-11-23",
+      "execution_id": "c410c8b6-5827-4c19-b9f1-19bb911b41e3",
+      "source_parent": "a7ebfe1fe92e3d9f45b8ed69f871c1ab2241176d",
+      "scope": "First desktop window tooltip setup",
+      "changes_ko": [
+        "데스크톱 앱의 첫 창에서 차트와 입력칸을 만들기 전에 도움말 스타일을 적용하도록 수정했습니다."
+      ],
+      "source_pins": {
+        "quantgen_desktop/app.py": "d39b4c71d1ebf018488f1c446f1d9c263282d416"
+      },
+      "website_impact": "Owner copy for the desktop startup update.",
+      "local_validation": {
+        "platform": "Linux Qt 6.12 offscreen",
+        "paired_focus_runs_per_version": 1,
+        "instrumented_constructor_seconds": {
+          "before": 69.839,
+          "after": 33.682
+        },
+        "paired_matching_tooltip_captures": 16,
+        "paired_component_scenarios": 13,
+        "keyboard_focus_and_cleanup": "PASS",
+        "paired_measurement_sha256": "e7643197b5e3828f49f61e2f170d4dc51a0fe3cea4ccd364416bf7e97e2ec7fd",
+        "independent_visual_sha256": "d3082396b56446e20084227a8ba89acfdd90a8584e486b6bb052e3497beb7f44"
+      },
+      "actual_fresh_CI": "PENDING_NEW_HEAD",
+      "owner_windows_PC7": "NOT_PERFORMED",
+      "delivery": "NOT_SENT",
+      "applied": false,
+      "deployed": false
+    }
+  ]
+}

@@ -9,6 +9,7 @@ Checked here: market cards that page with arrows (four on a wide window, fewer w
 card's large chart (about half as tall as wide) fed off the UI thread from the card row's own provider, the
 watchlist chart cards on Home opening the stock on Markets, the research sections below, and the quotes table
 in a closed fold. Offline: HTTP, Yahoo and the KIS master download fail the test; loaders are fixtures.
+Since the owner-approved draft (2026-11-17) the watchlist and the research sections sit in the right column.
 """
 import os
 import re
@@ -141,10 +142,19 @@ class ResearchHomeTests(unittest.TestCase):
         w = self.window()
         page = w.stack.widget(w.route_indices["home"]).widget()
         top = lambda widget: widget.mapTo(page, widget.rect().topLeft()).y()
+        left = lambda widget: widget.mapTo(page, widget.rect().topLeft()).x()
         hv = w.home_view
-        order = [top(hv.strip), top(hv.chart), top(hv.grid), top(w.count_labels[0]), top(w.home_chart),
-                 top(w.quotes_fold)]
-        self.assertEqual(order, sorted(order))
+        # Owner-approved draft (2026-11-17, docs/product/ui_drafts_2026-11-17/draft_01_home.png): the tiles, the chart
+        # and the folded quotes table run down the canvas on the left; the watchlist rows, the research counts and
+        # the fan sit in that order in the right column. (Before the draft all six ran down one column.)
+        canvas = [top(hv.strip), top(hv.chart), top(w.quotes_fold)]
+        self.assertEqual(canvas, sorted(canvas))
+        side = [top(hv.grid), top(w.count_labels[0]), top(w.home_chart)]
+        self.assertEqual(side, sorted(side))
+        chart_right = left(hv.chart) + hv.chart.width()
+        for widget in (hv.grid, w.count_labels[0], w.home_chart):
+            self.assertGreater(left(widget), chart_right)
+        self.assertTrue(hv.grid.isVisible() and w.home_chart.isVisible())
         self.assertEqual(len(hv.cards), 6)
         self.assertEqual([c.info.symbol for c in hv.cards.values()], [info.symbol for info in HOME_MARKETS])
         # The table is the window's live-quote table, still wired, but folded away under its own title.
