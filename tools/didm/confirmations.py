@@ -98,21 +98,22 @@ class ConfirmationStore:
         """Write one verdict. True if written, False if the identical line was already there."""
         if not isinstance(entry, cl.Entry):
             raise ConfirmationStoreError("only entries built by core.didm.models.confirmation_log")
-        now = _utc(self.clock())
-        if not self.replay and abs(_utc(entry.known_at) - now) > MAX_SKEW:
-            raise ConfirmationStoreError("known_at must be the time of writing (use replay=True for re-computation)")
         line = cl.dumps(entry)
         item_id = f"{entry.record_id}@{entry.rule_version}"
-        for row in self.store.history(self.source_id, item_id):
-            old = cl.loads(row.payload["line"])
-            if old.known_at == entry.known_at:
-                if row.payload["line"] == line:
-                    return False
-                raise ConfirmationStoreError("a different line for the same record, rule version and known_at")
-        cl.append(self.entries(entry.record_id), entry)       # DIDM_DEV's rules on the stored history
-        return self.store.append(source_id=self.source_id, item_id=item_id, kind=KIND,
-                                 published_at=entry.known_at, received_at=now, valid_at=record_published_at,
-                                 payload={"line": line})
+        with self.store.write_transaction():
+            now = _utc(self.clock())
+            if not self.replay and abs(_utc(entry.known_at) - now) > MAX_SKEW:
+                raise ConfirmationStoreError("known_at must be the time of writing (use replay=True for re-computation)")
+            for row in self.store.history(self.source_id, item_id):
+                old = cl.loads(row.payload["line"])
+                if old.known_at == entry.known_at:
+                    if row.payload["line"] == line:
+                        return False
+                    raise ConfirmationStoreError("a different line for the same record, rule version and known_at")
+            cl.append(self.entries(entry.record_id), entry)       # DIDM_DEV's rules on the stored history
+            return self.store.append(source_id=self.source_id, item_id=item_id, kind=KIND,
+                                     published_at=entry.known_at, received_at=now, valid_at=record_published_at,
+                                     payload={"line": line})
 
 
 def append_many(target: ConfirmationStore, pairs: Iterable[tuple[cl.Entry, datetime]]) -> int:

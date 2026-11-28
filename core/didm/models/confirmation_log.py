@@ -148,7 +148,6 @@ def append(log: Sequence[Entry], entry: Entry) -> tuple[Entry, ...]:
         if (old.rule_version == entry.rule_version and old.status is not MarketConfirmation.PENDING
                 and entry.status is not old.status):
             raise ConfirmationLogError("a final verdict cannot change under the same rule version")
-        break
     return (*log, entry)
 
 

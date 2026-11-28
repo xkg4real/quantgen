@@ -18,10 +18,11 @@ from __future__ import annotations
 import hashlib
 import json
 import sqlite3
+from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable, Mapping
+from typing import Any, Iterable, Iterator, Mapping
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS items (
@@ -90,6 +91,16 @@ class PointInTimeStore:
     def __exit__(self, *exc) -> None:
         self.close()
 
+    @contextmanager
+    def write_transaction(self) -> Iterator[None]:
+        """Reserve the SQLite writer before reading history. The outermost caller commits or rolls back."""
+        if self._db.in_transaction:
+            yield
+            return
+        with self._db:
+            self._db.execute("BEGIN IMMEDIATE")
+            yield
+
     def append(self, *, source_id: str, item_id: str, kind: str, published_at,
                received_at, payload: Mapping[str, Any], valid_at=None) -> bool:
         """Append one version; False only for an identical normalized record already stored.
@@ -108,22 +119,21 @@ class PointInTimeStore:
             raise StoreError("payload must be a mapping")
         body = canonical_json(payload)
         digest = hashlib.sha256(body.encode("utf-8")).hexdigest()
-        cur = self._db.execute(
-            "INSERT OR IGNORE INTO items (source_id, item_id, kind, published_at, valid_at,"
-            " received_at, payload, payload_sha256) VALUES (?,?,?,?,?,?,?,?)",
-            (source_id, item_id, kind, pub, valid, rec, body, digest),
-        )
-        if cur.rowcount == 0:
-            existing = self._db.execute(
-                "SELECT kind, published_at, valid_at, payload FROM items"
-                " WHERE source_id = ? AND item_id = ? AND received_at = ? AND payload_sha256 = ?",
-                (source_id, item_id, rec, digest),
-            ).fetchone()
-            if existing != (kind, pub, valid, body):
-                self._db.rollback()
-                raise StoreError("conflicting metadata for an already stored version")
-        self._db.commit()
-        return cur.rowcount == 1
+        with self.write_transaction():
+            cur = self._db.execute(
+                "INSERT OR IGNORE INTO items (source_id, item_id, kind, published_at, valid_at,"
+                " received_at, payload, payload_sha256) VALUES (?,?,?,?,?,?,?,?)",
+                (source_id, item_id, kind, pub, valid, rec, body, digest),
+            )
+            if cur.rowcount == 0:
+                existing = self._db.execute(
+                    "SELECT kind, published_at, valid_at, payload FROM items"
+                    " WHERE source_id = ? AND item_id = ? AND received_at = ? AND payload_sha256 = ?",
+                    (source_id, item_id, rec, digest),
+                ).fetchone()
+                if existing != (kind, pub, valid, body):
+                    raise StoreError("conflicting metadata for an already stored version")
+            return cur.rowcount == 1
 
     def append_many(self, rows: Iterable[Mapping[str, Any]]) -> int:
         return sum(1 for row in rows if self.append(**row))

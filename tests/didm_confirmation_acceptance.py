@@ -353,6 +353,17 @@ class ConfirmationSideRecord(unittest.TestCase):
         self.assertIs(cl.status_as_of(both, "art-1/SYN:001", when, rule=cl.rule_version()), MC.CONFIRMED)
         self.assertIs(cl.status_as_of(both, "art-1/SYN:001", when, rule=cl.rule_version(later)), MC.ALREADY_PRICED)
 
+    def test_interleaved_rules_preserve_each_final_verdict(self):
+        later = cf.ConfirmationConfig(already_priced="after_event_window")
+        both = cl.append(self.log, entry(MC.PENDING, 72, config=later))
+        both = cl.append(both, entry(MC.CONFIRMED, 75))  # same verdict under the original rule
+        both = cl.append(both, entry(MC.ALREADY_PRICED, 80, config=later))
+        for status in (MC.CONTRADICTED, MC.PENDING):
+            with self.subTest(status=status), self.assertRaisesRegex(cl.ConfirmationLogError, "final verdict"):
+                cl.append(both, entry(status, 85))
+        with self.assertRaisesRegex(cl.ConfirmationLogError, "before the record's last entry"):
+            cl.append(both, entry(MC.CONFIRMED, 79))
+
     def test_line_round_trip_and_field_list(self):
         line = cl.dumps(self.log[1])
         self.assertEqual(cl.loads(line), self.log[1])

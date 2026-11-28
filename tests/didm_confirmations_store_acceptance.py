@@ -3,8 +3,11 @@ from __future__ import annotations
 
 import tempfile
 import unittest
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from threading import Event
+from unittest.mock import patch
 
 from core.didm.llm.schema import MarketConfirmation as MC
 from core.didm.models import confirmation as cf
@@ -40,6 +43,37 @@ class Base(unittest.TestCase):
 
 
 class Writing(Base):
+    def test_concurrent_conflicting_verdicts_keep_the_first_final_verdict(self):
+        first_validated, second_write_started = Event(), Event()
+
+        def first_writer():
+            with c.ConfirmationStore.open(self.tmp.name, clock=self.clock) as first:
+                append = first.store.append
+
+                def pause_before_insert(**row):
+                    first_validated.set()
+                    self.assertTrue(second_write_started.wait(5))
+                    return append(**row)
+
+                with patch.object(first.store, "append", side_effect=pause_before_insert):
+                    return first.append(entry(MC.CONFIRMED), record_published_at=PUB)
+
+        def observe_second_writer(statement):
+            if statement.startswith("BEGIN"):
+                second_write_started.set()
+
+        self.cs.store._db.set_trace_callback(observe_second_writer)
+        try:
+            with ThreadPoolExecutor(max_workers=1) as pool:
+                first = pool.submit(first_writer)
+                self.assertTrue(first_validated.wait(5))
+                with self.assertRaises(c.ConfirmationStoreError):
+                    self.cs.append(entry(MC.CONTRADICTED), record_published_at=PUB)
+                self.assertTrue(first.result(timeout=5))
+        finally:
+            self.cs.store._db.set_trace_callback(None)
+        self.assertEqual(self.cs.entries("rec-1"), [entry(MC.CONFIRMED)])
+
     def test_row_shape(self):
         self.assertTrue(self.cs.append(entry(), record_published_at=PUB))
         self.assertTrue((Path(self.tmp.name) / "didm_derived.sqlite").is_file())
